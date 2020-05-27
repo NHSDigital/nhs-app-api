@@ -1,4 +1,5 @@
 enum UserContent: String, CaseIterable {
+    case addEventToCalendar = "addEventToCalendar"
     case getNotificationsStatus = "getNotificationsStatus"
     case attemptBiometricLogin = "attemptBiometricLogin"
     case clearMenuBarItem = "clearMenuBarItem"

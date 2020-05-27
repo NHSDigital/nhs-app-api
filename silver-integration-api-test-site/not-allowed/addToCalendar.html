@@ -20,23 +20,58 @@
     </div>
 
     <fieldset>
-        <legend>Add appointment details:</legend>
-        <label for="subject">Title</label><br>
-        <input type="text" id="subject" name="subject"><br>
+      <legend>Add appointment details:</legend>
+      <label for="subject">Title</label><br>
+      <input type="text" id="subject" name="subject"><br>
     
-        <label for="body">Notes</label><br>
-        <textarea type="text" id="body" name="body" rows="4" cols="50"></textarea><br>
+      <label for="body">Notes</label><br>
+      <textarea id="body" name="body" rows="4" cols="50"></textarea><br>
     
-        <label for="location">Location</label><br>
-        <input type="text" id="location" name="location"><br>
+      <label for="location">Location</label><br>
+      <input type="text" id="location" name="location"><br><br>
     
-        <label for="startDate">Start Date and Time</label><br>
-        <small>If no datepicker enter in format YYYY-MM-DD[T]hh:mm</small><br><small>eg 2020-01-31T12:00</small><br>
-        <input type="datetime-local" id="startdate" name="startdate"><br>
-    
-        <label for="endDate">End Date and Time</label><br>
-        <small>If no datepicker enter in format YYYY-MM-DD<b>[T]</b>hh:mm</small><br><small>eg 2020-01-31T12:00</small><br>
-        <input type="datetime-local" id="enddate" name="enddate"><br><br>
+      <label for="startYear">Start Date and Time</label>
+      <small>(year, month, day, hour, minute)</small><br>
+
+      <select name="startYear" id="startYear">
+        <option value="">---</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+      </select>
+
+      <select name="startMonth" id="startMonth">
+      </select>
+        
+      <select name="startDay" id="startDay">
+      </select>
+      @
+      <select name="startHour" id="startHour">
+      </select>
+
+      <select name="startMin" id="startMin">
+      </select>
+      <br>
+
+      <label for="endYear">End Date and Time</label>
+      <small>(year, month, day, hour, minute)</small><br>
+
+      <select name="endYear" id="endYear">
+        <option value="">---</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+      </select>
+
+      <select name="endMonth" id="endMonth">
+      </select>
+
+      <select name="endDay" id="endDay">
+      </select>
+      @
+      <select name="endHour" id="endHour">
+      </select>
+
+      <select name="endMin" id="endMin">
+      </select><br><br>
     
         <input class="nhsuk-button" id="testCal" type="button" value="Add To Calendar" onclick="getAppointmentDetails()"/>
     </fieldset>
@@ -50,18 +85,68 @@
       script.src = env + "/js/v1/nhsapp.js";
       document.head.appendChild(script);
       
+      fillDropdown(document.getElementById("startDay"), 1, 31, 1);
+      fillDropdown(document.getElementById("endDay"), 1, 31, 1);
+      fillMonthDropdown(document.getElementById("startMonth"));
+      fillMonthDropdown(document.getElementById("endMonth"));
+      fillDropdown(document.getElementById("startHour"), 0, 23, 1);
+      fillDropdown(document.getElementById("endHour"), 0, 23, 1);
+      fillDropdown(document.getElementById("startMin"), 0, 55, 5);
+      fillDropdown(document.getElementById("endMin"), 0, 55, 5);
+      
       function getAppointmentDetails() {
         const subject = document.getElementById("subject").value;
         const body = document.getElementById("body").value;
         const location = document.getElementById("location").value;
-        const startDate = document.getElementById("startdate").value.trim();
-        const endDate = document.getElementById("enddate").value.trim();
-        const startDateTimeEpoch = new Date(startDate).getTime();
-        const endDateTimeEpoch = new Date(endDate).getTime();
+        const startDateTimeEpoch = getEpochInSeconds("startYear", "startMonth", "startDay", "startHour", "startMin");
+        const endDateTimeEpoch = getEpochInSeconds("endYear", "endMonth", "endDay", "endHour", "endMin");
 
-        nhsapp.storage.addEventToCalendar(subject, body, location, startDateTimeEpoch/1000, endDateTimeEpoch/1000);
+        nhsapp.storage.addEventToCalendar(subject, body, location, startDateTimeEpoch, endDateTimeEpoch);
+      }
+      
+      function fillDropdown(element, start, finish, interval) {
+        addDefaultToDropdown(element);
+        for (var i = start; i <=finish ; i+=interval) {
+          var option = document.createElement("option");
+          option.setAttribute("value", i);
+          option.text = i < 10 ? "0"+i : i;
+          element.appendChild(option);
+        }
       }
 
+      function fillMonthDropdown(element) {
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        addDefaultToDropdown(element);
+        for (var i = 0; i < months.length ; i++) {
+          var option = document.createElement("option");
+          option.setAttribute("value", i);
+          option.text = months[i];
+          element.appendChild(option);
+        }
+      }
+      
+      function addDefaultToDropdown(element) {
+        var option = document.createElement("option");
+        option.setAttribute("value", "---");
+        option.text = "---";
+        element.appendChild(option);
+      }
+
+      function getEpochInSeconds(yearElement, monthElement, dayElement, hourElement, minuteElement) {
+        let epoch = "";
+        try {
+          const date = new Date(document.getElementById(yearElement).value,
+                  document.getElementById(monthElement).value,
+                  document.getElementById(dayElement).value,
+                  document.getElementById(hourElement).value,
+                  document.getElementById(minuteElement).value, 0);
+
+          epoch = new Date(date).getTime() / 1000;
+        } catch(e) {
+          epoch = NaN;
+        }
+        return epoch;
+      }
     </script>
   </body>
 </html>

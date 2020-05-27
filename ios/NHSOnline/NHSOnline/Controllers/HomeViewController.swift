@@ -5,8 +5,10 @@ import LocalAuthentication
 import UIKit
 import WebKit
 import FidoClientIOS
+import EventKit
+import EventKitUI
 
-class HomeViewController : UIViewController {
+class HomeViewController : UIViewController, EKEventEditViewDelegate {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     var progressSpinner: ProgressSpinner?
@@ -685,5 +687,120 @@ class HomeViewController : UIViewController {
     func handleGoToPage(page: String) {
         let redirectUrl = UrlHelper.createRedirectToPageUrl(page: page)
         webViewController?.loadPage(url: redirectUrl!)
+    }
+   
+    func eventEditViewController(_ controller: EKEventEditViewController, didCompleteWith action: EKEventEditViewAction) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func addEventToCalendar(calendarData: CalendarData) {
+
+        if (!isCalendarDataValid(subject: calendarData.subject,
+                                 startTimeEpochInSeconds: calendarData.startTimeEpochSeconds,
+                                 endTimeEpochInSeconds: calendarData.endTimeEpochSeconds)) {
+            
+            showErrorDialog()
+            return
+        }
+        
+        let eventStore = EKEventStore()
+        eventStore.requestAccess( to: EKEntityType.event, completion:{(granted, error) in
+            DispatchQueue.main.async {
+                if (error == nil) {
+                    if (granted) {
+                        self.addCalendarEvent(eventStore: eventStore, calendarData: calendarData)
+                    } else {
+                        self.showOpenSettingsAlert()
+                    }
+                }
+            }
+        })
+    }
+    
+    private func addCalendarEvent(eventStore: EKEventStore, calendarData: CalendarData) {
+        let event = EKEvent(eventStore: eventStore)
+            
+        event.title = calendarData.subject
+        event.startDate = Date(timeIntervalSince1970: TimeInterval(calendarData.startTimeEpochSeconds!))
+        event.endDate = Date(timeIntervalSince1970: TimeInterval(calendarData.endTimeEpochSeconds!))
+        event.location = calendarData.location
+        event.notes = calendarData.body
+
+        let eventController = EKEventEditViewController()
+        eventController.event = event
+        eventController.eventStore = eventStore
+
+        eventController.editViewDelegate = self
+        self.present(eventController, animated: true, completion: nil)
+    }
+
+    private func showOpenSettingsAlert() {
+        let showSettingTitle = NSLocalizedString("AllowCalendarAccessTitle", comment: "")
+        let showSettingsMessage = NSLocalizedString("AllowCalendarAccessMessage", comment: "")
+        let showSettingsDismissButtonText = NSLocalizedString("AllowCalendarAccessDismissText", comment: "")
+        let showSettingGoToSettingsButtonText = NSLocalizedString("AllowCalendarAccessGoToSettingsText", comment: "")
+
+        let alertController = UIAlertController(title: showSettingTitle, message: showSettingsMessage, preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: showSettingsDismissButtonText, style: .default, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        if #available(iOS 10.0, *) {
+            let settingsAction = UIAlertAction(title: showSettingGoToSettingsButtonText, style: .default) { (_) -> Void in
+                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                    return
+                }
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
+                }
+            }
+            alertController.addAction(settingsAction)
+        }
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func isCalendarDataValid(subject: String?, startTimeEpochInSeconds: Int64?, endTimeEpochInSeconds: Int64?) -> Bool {
+        if (subject == nil || subject!.isEmpty || startTimeEpochInSeconds == nil || endTimeEpochInSeconds == nil ||
+            startTimeEpochInSeconds! > endTimeEpochInSeconds!) {
+            
+            return false
+        }
+        return true
+    }
+    
+    private func showErrorDialog()  {
+        let addToCalErrorDialogTitle = NSLocalizedString("AddToCalendarErrorTitle", comment: "")
+        let addToCalErrorDialogMessage = NSLocalizedString("AddToCalendarErrorMessage", comment: "")
+        let addToCalErrorDialogDismissButtonText = NSLocalizedString("AddToCalendarErrorDismissButtonText", comment: "")
+        let addToCalErrorDialogAddEventButtonText = NSLocalizedString("AddToCalendarErrorAddEventButtonText", comment: "")
+        
+        let okAction = UIAlertAction(title: addToCalErrorDialogDismissButtonText, style: .cancel, handler: nil)
+        let goToCalendarAction = UIAlertAction(title: addToCalErrorDialogAddEventButtonText, style: .default) {
+            UIAlertAction in
+            let eventStore = EKEventStore()
+            eventStore.requestAccess( to: EKEntityType.event, completion:{(granted, error) in
+                DispatchQueue.main.async {
+                    if (granted) && (error == nil) {
+                        
+                        let event = EKEvent(eventStore: eventStore)
+
+                        let eventController = EKEventEditViewController()
+                        eventController.event = event
+                        eventController.eventStore = eventStore
+
+                        eventController.editViewDelegate = self
+                        self.present(eventController, animated: true, completion: nil)
+                    }
+                }
+            })
+        }
+
+        let alert = UIAlertController(title: addToCalErrorDialogTitle, message: addToCalErrorDialogMessage, preferredStyle: .alert)
+
+        alert.addAction(okAction)
+        alert.addAction(goToCalendarAction)
+
+        self.present(alert, animated: true)
     }
 }

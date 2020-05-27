@@ -243,6 +243,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if (knownService.javaScriptInteractionMode == .SilverThirdParty){
             switch message.name {
+            case UserContent.addEventToCalendar.rawValue:
+                handleCalendarData(calendarData: message.body as! String)
+                break
             case UserContent.goToPage.rawValue:
                 viewController.handleGoToPage(page: message.body as! String)
                 break;
@@ -442,8 +445,39 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if (url!.contains(config().CidUrlSuffix)) {
             return true
         }
-   
-
         return false
+    }
+    
+    private func handleCalendarData(calendarData: String) {
+        let eventData = Data(String(calendarData).utf8);
+
+         do {
+             if let json = try JSONSerialization.jsonObject(with: eventData, options: []) as? [String: Any] {
+                 let subject = json["subject"] as? String
+                 let body = json["body"] as? String
+                 let location = json["location"] as? String
+                 let startTimeEpochInSeconds = json["startTimeEpochInSeconds"] as? NSNumber
+                 let endTimeEpochInSeconds = json["endTimeEpochInSeconds"] as? NSNumber
+
+                 var start: Int64? = nil
+                 if (startTimeEpochInSeconds != nil) {
+                     start = startTimeEpochInSeconds?.int64Value
+                 }
+                 
+                 var end: Int64? = nil
+                 if (endTimeEpochInSeconds != nil) {
+                     end = endTimeEpochInSeconds?.int64Value
+                 }
+      
+                 viewController.addEventToCalendar(
+                    calendarData: CalendarData(subject: subject,
+                                               body: body,
+                                               location: location,
+                                               startTimeEpochSeconds: start,
+                                               endTimeEpochSeconds: end))
+             }
+         } catch let error as NSError {
+             print("Failed to load: \(error.localizedDescription)")
+         }
     }
 }

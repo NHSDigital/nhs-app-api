@@ -58,3 +58,14 @@
 "FaceIdInvalidatedTitle" = "You need to turn on Face ID again";
 "FaceIdInvalidatedMessage" = "We have turned it off as something has changed. \nLog in using your email, password and security code, then turn Face ID on in the NHS App settings.";
 "FaceIdRegistrationErrorMessage" = "We have been unable to turn on Face ID.\nIt wasn't your fault.";
+
+/*AddToCalendar error*/
+"AddToCalendarErrorTitle" = "Cannot save event";
+"AddToCalendarErrorMessage" = "You can try adding the event to your calendar yourself.";
+"AddToCalendarErrorDismissButtonText" = "OK";
+"AddToCalendarErrorAddEventButtonText" = "Add event";
+
+"AllowCalendarAccessTitle" = "Give NHS App calendar access";
+"AllowCalendarAccessMessage" = "NHS App does not have permission to add events to your calendar.\nGo to your device settings and allow access, then try again.";
+"AllowCalendarAccessDismissText" = "OK";
+"AllowCalendarAccessGoToSettingsText" = "Go to settings";

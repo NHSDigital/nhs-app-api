@@ -172,6 +172,12 @@
     <string name="sessionExpiryWarningStayLoggedIn">Stay logged in</string>
     <string name="sessionExpiryWarningLogOut">Log out</string>
 
+    <!-- Add calendar event texts -->
+    <string name="add_calendar_event_dialog_title">Cannot save event</string>
+    <string name="add_calendar_event_dialog_message">You can try adding the event to your calendar yourself.</string>
+    <string name="add_calendar_event_dialog_negative_button_text">OK</string>
+    <string name="add_calendar_event_dialog_positive_button_text">Add event</string>
+
     <!-- Local fonts -->
     <string name="frutiger45Light">FrutigerLTW01\-45Light.woff2</string>
     <string name="frutiger46LightItalic">FrutigerLTW01\-46LightItalic.woff2</string>

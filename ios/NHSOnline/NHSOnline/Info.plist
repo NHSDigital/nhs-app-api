@@ -162,6 +162,8 @@
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>Nhs111Url</key>
 	<string>https://$(NHS_111_URL)</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>So we can add events to your calendar, like appointments.</string>
 	<key>LinkPropertyName</key>
 	<string>url</string>
 	<key>OpenSourceLicencesURL</key>

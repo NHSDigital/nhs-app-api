@@ -17,6 +17,7 @@ import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
+import com.nhs.online.nhsonline.support.AddToCalendarHandler
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
@@ -80,8 +81,10 @@ class NhsWeb(
         val webInterceptor =
             WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
 
+        val addToCalendarHandler = AddToCalendarHandler(activity)
+
         val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
-        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this)
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, addToCalendarHandler)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
 

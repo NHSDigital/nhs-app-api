@@ -8,6 +8,7 @@ class HomeViewControllerMocks: HomeViewController {
      var stopActivityIndicatorWasCalled = false
      var goToPageCalled = false
      var goToPageValue = ""
+     var capturedCalendarData: CalendarData?
      
      override func showWebViewContainer() {
          showWebViewContainerCalled = true
@@ -40,5 +41,9 @@ class HomeViewControllerMocks: HomeViewController {
     override func handleGoToPage(page: String) {
         goToPageCalled = true
         goToPageValue = page
+    }
+
+    override func addEventToCalendar(calendarData: CalendarData) {
+        capturedCalendarData = calendarData
     }
 }

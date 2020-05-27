@@ -25,6 +25,24 @@ window.nhsapp = {
     },
     isOpenInNHSApp: () => navigator.userAgent.indexOf('nhsapp') !== -1,
   },
+  storage: {
+    addEventToCalendar(subject, body, location, startTimeEpochInSeconds, endTimeEpochInSeconds) {
+      // if end time is not defined, set it to the start time
+      let validEndTimeEpochInSeconds = endTimeEpochInSeconds;
+      if (!endTimeEpochInSeconds) {
+        validEndTimeEpochInSeconds = startTimeEpochInSeconds;
+      }
+
+      const calendarEvent = JSON.stringify({
+        subject,
+        body,
+        location,
+        startTimeEpochInSeconds,
+        endTimeEpochInSeconds: validEndTimeEpochInSeconds,
+      });
+      window.nhsappNative.addEventToCalendar(calendarEvent);
+    },
+  },
 };
 
 window.nhsapp.navigation.AppPage = AppPage;

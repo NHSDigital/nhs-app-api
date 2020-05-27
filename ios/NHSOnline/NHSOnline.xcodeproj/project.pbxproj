@@ -64,6 +64,7 @@
 		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
 		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
+		993DCD87249A4837000D87BB /* CalendarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DCD86249A4837000D87BB /* CalendarData.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
 		C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C20578092028B94800CDBDC5 /* Assets.xcassets */; };
@@ -297,6 +298,7 @@
 		981E9E33214E8EA200DA80EB /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		981E9E34214E8F1000DA80EB /* Demo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Demo.xcconfig; sourceTree = "<group>"; };
 		981E9E35214E8F2000DA80EB /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		993DCD86249A4837000D87BB /* CalendarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarData.swift; sourceTree = "<group>"; };
 		9BAA5516DB0DD43B44D0F87D /* Pods-NHSOnlineTests.scratch13.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch13.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch13.xcconfig"; sourceTree = "<group>"; };
 		A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NHSOnlineTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F941B746EA5FF8E45C7CF6 /* Pods-NHSOnline.scratch21.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch21.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch21.xcconfig"; sourceTree = "<group>"; };
@@ -759,6 +761,7 @@
 				F381C9539D60A22E031DD16B /* SubService.swift */,
 				F381C196F8E47FBE97B3025B /* Enum */,
 				F94E3474248518F8009CAAC0 /* BiometricErrors.swift */,
+				993DCD86249A4837000D87BB /* CalendarData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1357,6 +1360,7 @@
 				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
+				993DCD87249A4837000D87BB /* CalendarData.swift in Sources */,
 				14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				F9EBD656237C3D3C006FFA8C /* DataDownloadAlert.swift in Sources */,

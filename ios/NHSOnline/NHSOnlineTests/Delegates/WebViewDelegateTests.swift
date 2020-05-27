@@ -124,4 +124,63 @@ class WebViewDelegateTests: XCTestCase {
         // Assert
         assert(homeViewController?.goToPageCalled == false)
     }
+    
+    func test_addEventToCalendar_deserializesJsonAndCallsViewControllerWithCorrectData() {
+         
+        let url = "http://www.example.com"
+        let message = AddEventToCalendarWKScriptMessageMock(
+            subject: "appt checkup", messageBody: "please attend", location: "clinic room 1", startTimeEpochSeconds: 1591788300, endTimeEpochSeconds: 1591789860)
+
+        let knownServices = CompleteKnownServicesMock(url: url, javaScriptInteractionMode: JavaScriptInteractionMode.SilverThirdParty)
+        knownServicesProvider?.knownServicesMock = knownServices
+
+        webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
+        
+        // assert
+        assert(homeViewController?.capturedCalendarData != nil)
+        assert(homeViewController?.capturedCalendarData!.subject == message.subject)
+        assert(homeViewController?.capturedCalendarData!.body == message.messageBody)
+        assert(homeViewController?.capturedCalendarData!.location == message.location)
+        assert(homeViewController?.capturedCalendarData!.startTimeEpochSeconds == message.startTimeEpochSeconds!.int64Value)
+        assert(homeViewController?.capturedCalendarData!.endTimeEpochSeconds == message.endTimeEpochSeconds!.int64Value)
+     }
+     
+     func test_addEventToCalendar_deserializesJsonAndCanHandleDecmialPointsInTimeFields() {
+         let url = "http://www.example.com"
+         let message = AddEventToCalendarWKScriptMessageMock(
+             subject: "appt checkup", messageBody: "please attend", location: "clinic room 1", startTimeEpochSeconds: 1591788300.5, endTimeEpochSeconds: 1591789860.5)
+
+         let knownServices = CompleteKnownServicesMock(url: url, javaScriptInteractionMode: JavaScriptInteractionMode.SilverThirdParty)
+         knownServicesProvider?.knownServicesMock = knownServices
+
+         webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
+         
+         // assert
+         assert(homeViewController?.capturedCalendarData != nil)
+         assert(homeViewController?.capturedCalendarData!.subject == message.subject)
+         assert(homeViewController?.capturedCalendarData!.body == message.messageBody)
+         assert(homeViewController?.capturedCalendarData!.location == message.location)
+         assert(homeViewController?.capturedCalendarData!.startTimeEpochSeconds == message.startTimeEpochSeconds!.int64Value)
+         assert(homeViewController?.capturedCalendarData!.endTimeEpochSeconds == message.endTimeEpochSeconds!.int64Value)
+     }
+
+     func test_addEventToCalendar_deserializesNullValues() {
+         let url = "http://www.example.com"
+         let message = AddEventToCalendarWKScriptMessageMock(
+             subject: nil, messageBody: nil, location: nil, startTimeEpochSeconds: nil, endTimeEpochSeconds: nil)
+
+         let knownServices = CompleteKnownServicesMock(url: url, javaScriptInteractionMode: JavaScriptInteractionMode.SilverThirdParty)
+         knownServicesProvider?.knownServicesMock = knownServices
+
+         webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
+        
+         // assert
+         assert(homeViewController?.capturedCalendarData != nil)
+         assert(homeViewController?.capturedCalendarData!.subject == nil)
+         assert(homeViewController?.capturedCalendarData!.body == nil)
+         assert(homeViewController?.capturedCalendarData!.location == nil)
+         assert(homeViewController?.capturedCalendarData!.startTimeEpochSeconds == nil)
+         assert(homeViewController?.capturedCalendarData!.endTimeEpochSeconds == nil)
+     }
+
 }

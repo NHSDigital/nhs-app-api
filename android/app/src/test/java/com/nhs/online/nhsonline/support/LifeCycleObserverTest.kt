@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.support
 
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
@@ -28,8 +29,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
         appWebInterfaceMock = mock()
         knownServicesMock = mock()
 
-        whenever(context.getString(2131623989)).doReturn("/auth-return")
-        whenever(context.getString(2131624056)).doReturn("fidoAuthResponse")
+        whenever(context.getString(R.string.authRedirectPath)).doReturn("/auth-return")
+        whenever(context.getString(R.string.fidoAuthQueryKey)).doReturn("fidoAuthResponse")
 
         lifeCycleObserver = LifeCycleObserver(context, appWebInterfaceMock, knownServicesMock)
     }
