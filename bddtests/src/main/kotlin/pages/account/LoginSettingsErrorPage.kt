@@ -16,8 +16,8 @@ class LoginSettingsErrorPage : HybridPageObject() {
     private val cannotFindTextLocator = "//p[@data-sid='cannotFindBiometrics']"
     private val cannotChangeParagraphLocator = "//p[@data-sid='%s']"
 
-    private val expectedCannotFindFirstParagraph = "Go back and try again"
-    private val expectedCannotChangeSecondParagraph = "If you keep seeing this message, return to your settings later"
+    private val expectedCannotFindFirstParagraph = "Go back and try again."
+    private val expectedCannotChangeSecondParagraph = "If you keep seeing this message, return to your settings later."
 
     fun assertCannotFindContentDisplayed(biometricType: String) {
         val text by lazy {
@@ -31,17 +31,17 @@ class LoginSettingsErrorPage : HybridPageObject() {
             "Touch ID" -> {
                 assertDisplayWithInfoText(text,
                         String.format(cannotFindTitleLocator, "Touch ID"),
-                        "Check that you have added a fingerprint in your devices' Touch ID settings")
+                        "Check that you have added a fingerprint in your device's Touch ID settings.")
             }
             "Face ID" -> {
                 assertDisplayWithInfoText(text,
                         String.format(cannotFindTitleLocator, "Face ID"),
-                        "Check that you have added a face scan in your devices' Face ID settings")
+                        "Check that you have added a face scan in your device's Face ID settings.")
             }
             "Fingerprint" -> {
                 assertDisplayWithInfoText(text,
-                        String.format(cannotFindTitleLocator, "Fingerprint"),
-                        "Check that you have added a fingerprint in your devices' security settings")
+                        String.format(cannotFindTitleLocator, "fingerprint"),
+                        "Check that you have added a fingerprint in your device's security settings.")
             }
         }
     }
@@ -50,7 +50,7 @@ class LoginSettingsErrorPage : HybridPageObject() {
         when (biometricType) {
             "Touch ID" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "Touch ID"))
             "Face ID" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "Face ID"))
-            "Fingerprint" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "Fingerprint"))
+            "Fingerprint" -> assertDisplayWithNoInfoText(String.format(cannotChangeTitleLocator, "fingerprint"))
         }
 
         val firstParagraphLocator =
