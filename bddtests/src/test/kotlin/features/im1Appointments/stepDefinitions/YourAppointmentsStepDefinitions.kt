@@ -278,13 +278,4 @@ class YourAppointmentsStepDefinitions {
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }
-
-    @Then("^I see appropriate error message when there is an error with '(.*)'$")
-    fun iSeeAppropriateErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val goBackParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getGoBackAndTryAgainParagraph(prefix)
-        errorDialogPage.assertParagraphText(goBackParagraph)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemHeader)
-                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemTitle)
-    }
 }

@@ -15,7 +15,7 @@ Feature: Patient to practice messaging
       | EMIS      |
       | TPP       |
 
-  Scenario Outline: A user receives a service unavailable message if they do not have access to their messages
+  Scenario Outline: A <GP System> user receives a service unavailable message if they do not have access to their messages
     Given I am a <GP System> user who can access patient practice messaging
     And I am logged in
     And there is a forbidden error getting patient practice messages

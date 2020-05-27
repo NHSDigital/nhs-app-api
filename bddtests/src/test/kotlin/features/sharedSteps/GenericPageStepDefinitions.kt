@@ -87,4 +87,13 @@ class GenericPageStepDefinitions {
     fun thePageNotFoundErrorIsDisplayed() {
         notFoundErrorPage.assertNotFoundErrorPage()
     }
+
+    @When("^I click the '(.*)' radio button$")
+    fun iClickTheRadioButton(labelText: String) {
+        val label = genericPage.getElement("label")
+                .withText(labelText, exact = false)
+
+        genericPage.getElement("//input[@type='radio'][following-sibling::${label.webDesktopLocator}]")
+                .click()
+    }
 }

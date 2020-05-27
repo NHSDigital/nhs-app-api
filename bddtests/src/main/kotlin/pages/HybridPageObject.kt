@@ -29,12 +29,10 @@ open class HybridPageObject : PageObject() {
 
     val pageLogging by lazy { PageLogging(driver) }
 
-    val spinner = HybridPageElement(
+    val spinner = getElement(
             webDesktopLocator = "//*[@id='loading-spinner']",
-            webMobileLocator = "//*[@id='loading-spinner']",
             androidLocator = "//ProgressBar",
-            iOSLocator = "//*[@class='nuxt-progress']",
-            page = this
+            iOSLocator = "//*[@class='nuxt-progress']"
     )
 
     fun findAllByXpath(xpath: String): List<WebElementFacade> {
@@ -53,6 +51,27 @@ open class HybridPageObject : PageObject() {
             throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
         }
         return element
+    }
+
+    fun getElement(webDesktopLocator: String,
+                   androidLocator: String? = null,
+                   iOSLocator: String? = null,
+                   helpfulName: String? = null,
+                   timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator,
+                androidLocator = androidLocator,
+                iOSLocator = iOSLocator,
+                page = this,
+                helpfulName = helpfulName,
+                timeToWaitForElement = timeToWaitForElement)
+    }
+
+    open fun assertPageHeader(headerText: String): HybridPageObject {
+        getElement("//div[@id='content-header']//h1", helpfulName = "Page header")
+                .withNormalisedText(headerText)
+                .assertSingleElementPresent()
+        return this
     }
 
     fun switchWebview() {
@@ -104,18 +123,14 @@ open class HybridPageObject : PageObject() {
     }
 
     fun clickOnButtonContainingText(text: String) {
-        HybridPageElement(
+        getElement(
                 webDesktopLocator = "//button",
-                page = this,
                 timeToWaitForElement = 30
         ).withText(text, false).assertIsVisible().click()
     }
 
     fun clickOnBackLink() {
-        HybridPageElement(
-                webDesktopLocator = "//a[@data-purpose='main-back-button']",
-                page = this
-        ).click()
+        getElement("//a[@data-purpose='main-back-button']").click()
     }
 
     fun WebElementFacade.getTextWithoutUnicodeSuffix(): String{
@@ -124,10 +139,7 @@ open class HybridPageObject : PageObject() {
     }
 
     fun assertLinkExists(linkTitle: String, url: String, internal: Boolean): HybridPageElement {
-        val link = HybridPageElement(
-                webDesktopLocator = "//a[contains(.,'$linkTitle')]",
-                page = this
-        )
+        val link = getElement("//a[contains(.,'$linkTitle')]")
         val expectedLink = if(internal) { Config.instance.url + url} else {url}
         link.actOnTheElement { l -> Assert.assertEquals("link", expectedLink, l.getAttribute("href")) }
         return link

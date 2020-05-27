@@ -7,8 +7,9 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
+import pages.withNormalisedText
 
-class BannerObject private constructor(page : HybridPageObject,
+class BannerObject private constructor(private val page : HybridPageObject,
                                        private val title: String,
                                        dialogId :String) {
 
@@ -43,6 +44,22 @@ class BannerObject private constructor(page : HybridPageObject,
             Assert.assertEquals(message, expectedText.count(), bannerText.count())
             Assert.assertTrue(message, expectedText.containsAll(bannerText))
         }
+    }
+
+    fun assertMessage(message: String) {
+        assertMessage("/p", message)
+    }
+
+    fun assertMessageItem(message: String) {
+        assertMessage("/ul/li", message)
+    }
+
+    private fun assertMessage(locator: String, message: String) {
+        val element = HybridPageElement(
+                "//$innerXPath$locator",
+                page = page).withNormalisedText(message)
+
+        element.assertIsVisible()
     }
 
     companion object {

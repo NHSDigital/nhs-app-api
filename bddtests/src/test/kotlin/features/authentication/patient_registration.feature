@@ -19,6 +19,9 @@ Feature: Patient Registration Frontend
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
+    Then the User Research page is displayed
+    When I click the 'No' radio button
+    And I click the 'Continue' button
     Then I see the signed in home page
     And I see a welcome message
     And I see the navigation menu

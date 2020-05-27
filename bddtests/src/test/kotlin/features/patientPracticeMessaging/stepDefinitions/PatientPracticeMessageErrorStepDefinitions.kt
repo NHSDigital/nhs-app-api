@@ -49,7 +49,7 @@ class PatientPracticeMessageErrorStepDefinitions {
 
     @Then("^I see the appropriate forbidden error for patient practice messaging$")
     fun iSeeTheAppropriateForbiddenErrorForPatientPracticeMessaging() {
-        errorPage.assertPageHeader("Service unavailable")
+        errorPage.assertPageHeader("Messaging unavailable")
                 .assertNoSubHeader()
                 .assertHeaderText("You are not currently able to use messaging.")
                 .assertMessageText("Contact your GP surgery for more information. For urgent medical advice, " +

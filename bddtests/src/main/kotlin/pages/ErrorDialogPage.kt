@@ -1,7 +1,7 @@
 package pages
 
-import org.junit.Assert
-import pages.navigation.WebHeader
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import worker.models.ErrorCodeParagraph
 
 class ErrorDialogPage : HybridPageObject() {
@@ -9,35 +9,32 @@ class ErrorDialogPage : HybridPageObject() {
     private val errorTextFinderFormat = "$errorContainerLocator//p[@data-purpose='%s']"
 
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
-    private val pageHeader = findElementByLocator("//div[@id='content-header']//h1")
 
-    lateinit var webHeader: WebHeader
-
-    fun assertPageTitle(pageTitleText: String): ErrorDialogPage {
-        webHeader.getPageTitle().withText(pageTitleText)
+    fun assertPageTitle(title: String): ErrorDialogPage {
+        assertEquals("$title - NHS App", this.title)
         return this
     }
 
-    fun assertPageHeader(pageHeaderText: String): ErrorDialogPage {
-        Assert.assertEquals("Page header incorrect. ", pageHeaderText, pageHeader.text)
+    override fun assertPageHeader(headerText: String): ErrorDialogPage {
+        super.assertPageHeader(headerText)
         return this
     }
 
     fun assertParagraphText(paragraphText: String): ErrorDialogPage {
-        val message = findElementByLocator("$messageTextLocator[normalize-space()=\"$paragraphText\"]")
+        val message = getElement("$messageTextLocator[normalize-space()=\"$paragraphText\"]")
         message.assertIsVisible()
         return this
     }
 
     fun assertSubHeader(paragraphText: String): ErrorDialogPage {
-        val message = findElementByLocator("//h2[normalize-space()=\"$paragraphText\"]")
+        val message = getElement("//h2[normalize-space()=\"$paragraphText\"]")
         message.assertIsVisible()
         return this
     }
 
     fun assertParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
         val locator = "$messageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
-        val message = findElementByLocator(locator)
+        val message = getElement(locator)
         message.assertIsVisible()
 
         val regex = ("${Regex.escape(paragraph.startText)} " +
@@ -45,7 +42,7 @@ class ErrorDialogPage : HybridPageObject() {
                 "${Regex.escape(paragraph.endText)}")
                 .toRegex()
 
-        Assert.assertTrue("Expected '${message.text}' text to match '${regex.toPattern()}' pattern",
+        assertTrue("Expected '${message.text}' text to match '${regex.toPattern()}' pattern",
                 regex.matches(message.text))
         return this
     }
@@ -58,16 +55,6 @@ class ErrorDialogPage : HybridPageObject() {
             locator += "[starts-with(@href, '$url')]"
             message = "Expected the link called $linkText with target of $url to be available"
         }
-        return findElementByLocator(locator, message).assertIsVisible()
-    }
-
-    private fun findElementByLocator(locator: String, iOSLocator: String? = null,
-                                     androidLocator: String? = null): HybridPageElement {
-        return HybridPageElement(
-                webDesktopLocator = locator,
-                iOSLocator = iOSLocator,
-                androidLocator = androidLocator,
-                page = this
-        )
+        return getElement(locator).assertIsVisible(message)
     }
 }

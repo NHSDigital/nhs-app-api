@@ -24,7 +24,7 @@ Feature: Use Terms and conditions page
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
-    Then I see the home page
+    Then the User Research page is displayed
 
   Scenario: A patient can proceed to the app after accepting updated terms and conditions
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
@@ -63,7 +63,11 @@ Feature: Use Terms and conditions page
     When I check the agree to cookies checkbox
     And I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
-    And I navigate to the Manage cookies page
+    Then the User Research page is displayed
+    When I click the 'Yes' radio button
+    And I click the 'Continue' button
+    Then I see the home page
+    When I navigate to the Manage cookies page
     Then I can see the toggle button is set to 'on'
 
   Scenario: A user with proof level 5 is able to accept terms and conditions
@@ -72,7 +76,7 @@ Feature: Use Terms and conditions page
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
-    Then I see the home page
+    Then the User Research page is displayed
 
   Scenario: A user with proof level 5 that does not accept cookies is able to do so from the Manage cookies page
     Given I am a patient with proof level 5 who has not already accepted terms and conditions
@@ -80,7 +84,11 @@ Feature: Use Terms and conditions page
     And the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
-    And I navigate to the Manage cookies page
+    Then the User Research page is displayed
+    When I click the 'Yes' radio button
+    And I click the 'Continue' button
+    Then I see the home page
+    When I navigate to the Manage cookies page
     Then I can see the toggle button is set to 'off'
     When I change the cookie consent toggle to 'on'
     Then I can see the toggle button is set to 'on'
@@ -94,7 +102,11 @@ Feature: Use Terms and conditions page
     Then I see error messages indicating I have not yet accepted the terms and conditions
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
-    And I navigate to the Manage cookies page
+    Then the User Research page is displayed
+    When I click the 'Yes' radio button
+    And I click the 'Continue' button
+    Then I see the home page
+    When I navigate to the Manage cookies page
     Then I can see the toggle button is set to 'on'
     And I change the cookie consent toggle to 'off'
     And I can see the toggle button is set to 'off'
@@ -114,5 +126,5 @@ Feature: Use Terms and conditions page
     Then the updated Terms and Conditions page is displayed
     When I agree to the updated terms and conditions
     Then I see the home page
-    And I navigate to the Manage cookies page
-    And I can see the toggle button is set to 'on'
+    When I navigate to the Manage cookies page
+    Then I can see the toggle button is set to 'on'

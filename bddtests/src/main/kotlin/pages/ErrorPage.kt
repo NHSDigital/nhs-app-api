@@ -1,6 +1,5 @@
 package pages
 
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
@@ -48,11 +47,11 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertHasButton(expectedText: String) {
         button.assertSingleElementPresent()
-        Assert.assertEquals("Expected button text", expectedText, button.text)
+        assertEquals("Expected button text", expectedText, button.text)
     }
 
-    fun assertPageHeader(pageHeaderText: String): ErrorPage {
-        webHeader.getPageTitle().withText(pageHeaderText)
+    override fun assertPageHeader(headerText: String): ErrorPage {
+        super.assertPageHeader(headerText)
         return this
     }
 
