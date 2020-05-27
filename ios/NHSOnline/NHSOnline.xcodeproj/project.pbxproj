@@ -13,19 +13,14 @@
 		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
 		1381D48621BFFFD300B54300 /* AAID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47821BFFFD000B54300 /* AAID.swift */; };
 		1381D48E21BFFFD300B54300 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48021BFFFD200B54300 /* Policy.swift */; };
-		139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */; };
 		139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331121F71B2200E6C92C /* BiometricAlert.swift */; };
-		139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */; };
 		139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331521F71B8200E6C92C /* BiometricAlertType.swift */; };
-		139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331721F71C0700E6C92C /* BiometricResultStrings.swift */; };
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
-		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
-		13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F588AD21BA863D002857EA /* BiometricsViewController.swift */; };
+		139F192A2181DCC600ED59A1 /* HeaderBarSlimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlimView.swift */; };
 		1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */; };
 		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
 		14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
-		14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */; };
 		14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */; };
 		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
 		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
@@ -37,7 +32,7 @@
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
 		2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1F147F2417B57600788F25 /* KnownServicesProtocol.swift */; };
 		2EA7BDA52418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */; };
-		2EA7BDA72418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA62418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift */; };
+		2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */; };
 		2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF7D81B23C76377005C03ED /* HeaderEnum.swift */; };
 		30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
@@ -50,9 +45,7 @@
 		4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0C219AF18500C95F51 /* CustomNotifications.swift */; };
 		4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0F219C319A00C95F51 /* ConfigurationService.swift */; };
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
-		4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */; };
 		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
-		4AAEDF1F235744BE00439EC7 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
 		4BF31A1F435C7F730D9BC6A3 /* UrlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF312899B19527799A781CD /* UrlHelper.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		647D0C5524694EAC00336949 /* WebEventsThirdParty.js in Resources */ = {isa = PBXBuildFile; fileRef = 647D0C5424694EAC00336949 /* WebEventsThirdParty.js */; };
@@ -61,8 +54,8 @@
 		64C1C76B23E2E33600FCBA57 /* TelSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */; };
 		64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76C23E2E56E00FCBA57 /* UrlHelperTests.swift */; };
 		64C1C76F23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */; };
-		7992275824212AF70057D406 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7992275724212AF70057D406 /* SplashScreen.swift */; };
-		79B916E5240D1BCA008CD587 /* ProgressSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */; };
+		7992275824212AF70057D406 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7992275724212AF70057D406 /* SplashScreenView.swift */; };
+		79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */; };
 		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
 		8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */; };
 		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
@@ -74,15 +67,11 @@
 		C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */; };
 		C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */; };
 		C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2697F2820C66B8E001DD790 /* ErrorTextView.swift */; };
-		C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D563207B638400F3B1E5 /* HeaderBar.swift */; };
+		C276D564207B638400F3B1E5 /* HeaderBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D563207B638400F3B1E5 /* HeaderBarView.swift */; };
 		C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */; };
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
 		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
-		DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */; };
-		DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
-		DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */; };
-		DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */; };
 		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
 		F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026199A2050AFE100EDDFE0 /* WebViewController.swift */; };
 		F057336920A72F040059032D /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = F057336B20A72F040059032D /* HeaderBar.xib */; };
@@ -105,7 +94,28 @@
 		F381CB161F572192394126D1 /* SchemeHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C6E851F503B59F4449F3 /* SchemeHandlersTests.swift */; };
 		F381CB4C747B08D2BC4ADB45 /* MailToSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C5DF75EABE8A1979D4BD /* MailToSchemeHandlerTests.swift */; };
 		F381CE46D03B8D3A42FC7693 /* TelSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C4477069757EE3EB44DC /* TelSchemeHandlerTests.swift */; };
+		F91E2170248660480067A1C5 /* BiometricActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E216F248660480067A1C5 /* BiometricActions.swift */; };
+		F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */; };
+		F91E2176248663C90067A1C5 /* BiometricErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */; };
+		F91E21782486666D0067A1C5 /* BiometricTypeWebReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */; };
+		F91E217A248667690067A1C5 /* UserContentControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2179248667690067A1C5 /* UserContentControllers.swift */; };
+		F94E3475248518F8009CAAC0 /* BiometricErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94E3474248518F8009CAAC0 /* BiometricErrors.swift */; };
+		F94E3477248547D9009CAAC0 /* BiometricServiceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */; };
+		F975F4962481082E00D3957F /* BiometricServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F4952481082E00D3957F /* BiometricServiceTests.swift */; };
+		F975F49A24810C1100D3957F /* FidoEndpointHelperMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F49924810C1100D3957F /* FidoEndpointHelperMocks.swift */; };
+		F975F49E2481224F00D3957F /* FidoClientMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F49D2481224F00D3957F /* FidoClientMocks.swift */; };
+		F975F4A124813C6B00D3957F /* AppWebInterfaceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F4A024813C6B00D3957F /* AppWebInterfaceMocks.swift */; };
+		F975F4A82481430D00D3957F /* LocalAuthenticationMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F4A72481430D00D3957F /* LocalAuthenticationMocks.swift */; };
+		F98EB0BF2486AAE100BD06A8 /* WebViewDelegateMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98EB0BE2486AAE100BD06A8 /* WebViewDelegateMocks.swift */; };
 		F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8E33247BDD09008978B3 /* WebAppInterfacesTests.swift */; };
+		F9BAFC33247FB6B000BF1CAE /* TabBarDelegateMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC32247FB6B000BF1CAE /* TabBarDelegateMocks.swift */; };
+		F9BAFC37247FB7A600BF1CAE /* WebViewMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC36247FB7A600BF1CAE /* WebViewMocks.swift */; };
+		F9BAFC39247FB82200BF1CAE /* HomeViewControllerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC38247FB82200BF1CAE /* HomeViewControllerMocks.swift */; };
+		F9BAFC3B247FBA0700BF1CAE /* SplashScreenViewMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC3A247FBA0700BF1CAE /* SplashScreenViewMocks.swift */; };
+		F9BAFC3E247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC3D247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift */; };
+		F9BAFC40247FBA8100BF1CAE /* ApplicationStateMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC3F247FBA8100BF1CAE /* ApplicationStateMocks.swift */; };
+		F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC41247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift */; };
+		F9BAFC45247FBB5900BF1CAE /* ConfigurationServiceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */; };
 		F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C3FC53247AD1A80024F375 /* AppWebInterfaceTests.swift */; };
 		F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */; };
 		F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */; };
@@ -160,20 +170,15 @@
 		1381D46221BFFAE100B54300 /* Scratch12.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch12.xcconfig; sourceTree = "<group>"; };
 		1381D47821BFFFD000B54300 /* AAID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAID.swift; sourceTree = "<group>"; };
 		1381D48021BFFFD200B54300 /* Policy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Policy.swift; sourceTree = "<group>"; };
-		139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsResultViewController.swift; sourceTree = "<group>"; };
 		139D331121F71B2200E6C92C /* BiometricAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlert.swift; sourceTree = "<group>"; };
-		139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricControllerStrings.swift; sourceTree = "<group>"; };
 		139D331521F71B8200E6C92C /* BiometricAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlertType.swift; sourceTree = "<group>"; };
-		139D331721F71C0700E6C92C /* BiometricResultStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricResultStrings.swift; sourceTree = "<group>"; };
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
-		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
-		13F588AD21BA863D002857EA /* BiometricsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewController.swift; sourceTree = "<group>"; };
+		139F19292181DCC600ED59A1 /* HeaderBarSlimView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlimView.swift; sourceTree = "<group>"; };
 		1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationResponse.swift; sourceTree = "<group>"; };
 		1417702521F5D334003E3EAB /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
 		14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarDelegateTests.swift; sourceTree = "<group>"; };
 		14B849312226E95F002E6851 /* BrowserStack.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserStack.xcconfig; sourceTree = "<group>"; };
 		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
-		14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewControllerTests.swift; sourceTree = "<group>"; };
 		14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationControllerExtensions.swift; sourceTree = "<group>"; };
 		14F1A89F238C264D00826714 /* Scratch19.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Scratch19.xcconfig; sourceTree = "<group>"; };
 		14F1A8A0238C264D00826714 /* Scratch18.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Scratch18.xcconfig; sourceTree = "<group>"; };
@@ -193,7 +198,7 @@
 		2E1F147F2417B57600788F25 /* KnownServicesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServicesProtocol.swift; sourceTree = "<group>"; };
 		2E66859A238EDC3000DD79ED /* UrlHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlHelper.swift; sourceTree = "<group>"; };
 		2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServiceProtocolMocks.swift; sourceTree = "<group>"; };
-		2EA7BDA62418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationProtocolMocks.swift; sourceTree = "<group>"; };
+		2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceProtocolMocks.swift; sourceTree = "<group>"; };
 		2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
 		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2EF7D81B23C76377005C03ED /* HeaderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderEnum.swift; sourceTree = "<group>"; };
@@ -217,7 +222,6 @@
 		4793CF0C219AF18500C95F51 /* CustomNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotifications.swift; sourceTree = "<group>"; };
 		4793CF0F219C319A00C95F51 /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		47D88A4521998CBD004771B5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrorStrings.swift; sourceTree = "<group>"; };
 		4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsStringsHandler.swift; sourceTree = "<group>"; };
 		4BF312899B19527799A781CD /* UrlHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlHelper.swift; sourceTree = "<group>"; };
 		509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.development.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.development.xcconfig"; sourceTree = "<group>"; };
@@ -245,8 +249,8 @@
 		76888F1C9DE3FF4C8C704D35 /* Pods-NHSOnlineTests.scratch18.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch18.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch18.xcconfig"; sourceTree = "<group>"; };
 		76958DC8A60575B9E5D140D4 /* Pods-NHSOnlineTests.scratch7.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch7.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch7.xcconfig"; sourceTree = "<group>"; };
 		772E2411D84FBB442C97198E /* Pods-NHSOnlineTests.scratch3.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch3.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch3.xcconfig"; sourceTree = "<group>"; };
-		7992275724212AF70057D406 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
-		79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressSpinner.swift; sourceTree = "<group>"; };
+		7992275724212AF70057D406 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressSpinnerView.swift; sourceTree = "<group>"; };
 		7D0FAE6F7F153865CB3B7553 /* Pods-NHSOnlineTests.scratch15.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch15.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch15.xcconfig"; sourceTree = "<group>"; };
 		7EB00BFC273B621D0B251911 /* Pods-NHSOnline.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstack.xcconfig"; sourceTree = "<group>"; };
 		7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch4.xcconfig"; sourceTree = "<group>"; };
@@ -307,7 +311,7 @@
 		C2466F492243ECD5006C336F /* Scratch15.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch15.xcconfig; sourceTree = "<group>"; };
 		C2466F4A2243ECE5006C336F /* Scratch16.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch16.xcconfig; sourceTree = "<group>"; };
 		C2697F2820C66B8E001DD790 /* ErrorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextView.swift; sourceTree = "<group>"; };
-		C276D563207B638400F3B1E5 /* HeaderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBar.swift; sourceTree = "<group>"; };
+		C276D563207B638400F3B1E5 /* HeaderBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarView.swift; sourceTree = "<group>"; };
 		C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Extension.swift; sourceTree = "<group>"; };
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
@@ -317,10 +321,6 @@
 		D6A0B15FD76D69A0D2903909 /* Pods-NHSOnline.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch10.xcconfig"; sourceTree = "<group>"; };
 		D951DD71E68B6779AC303B2C /* Pods-NHSOnlineTests.scratch10.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch10.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch10.xcconfig"; sourceTree = "<group>"; };
 		D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstacklocal.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstacklocal.xcconfig"; sourceTree = "<group>"; };
-		DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BiometricBreadcrumb.xib; sourceTree = "<group>"; };
-		DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumb.swift; sourceTree = "<group>"; };
-		DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedLabel.swift; sourceTree = "<group>"; };
-		DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricBreadcrumbTests.swift; sourceTree = "<group>"; };
 		E49C2A4CC93A9A1D7993225E /* Pods-NHSOnline.scratch11.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch11.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch11.xcconfig"; sourceTree = "<group>"; };
 		E5E4F96D584FE2B06DF6ED3F /* Pods-NHSOnline.scratch18.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch18.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch18.xcconfig"; sourceTree = "<group>"; };
 		E6A814743967DAFCCAEADEDE /* Pods-NHSOnline.scratch20.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch20.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch20.xcconfig"; sourceTree = "<group>"; };
@@ -352,7 +352,28 @@
 		F381CB87FC6B3F0BDA06A19A /* MenuTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTab.swift; sourceTree = "<group>"; };
 		F381CC2349A20B18DF372019 /* ConfigurationServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceProtocol.swift; sourceTree = "<group>"; };
 		F381CE2A5A0DDC8165E4F04A /* KnownService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
+		F91E216F248660480067A1C5 /* BiometricActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricActions.swift; sourceTree = "<group>"; };
+		F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricOutcomes.swift; sourceTree = "<group>"; };
+		F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrorCodes.swift; sourceTree = "<group>"; };
+		F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricTypeWebReferences.swift; sourceTree = "<group>"; };
+		F91E2179248667690067A1C5 /* UserContentControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentControllers.swift; sourceTree = "<group>"; };
+		F94E3474248518F8009CAAC0 /* BiometricErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrors.swift; sourceTree = "<group>"; };
+		F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricServiceMocks.swift; sourceTree = "<group>"; };
+		F975F4952481082E00D3957F /* BiometricServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricServiceTests.swift; sourceTree = "<group>"; };
+		F975F49924810C1100D3957F /* FidoEndpointHelperMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEndpointHelperMocks.swift; sourceTree = "<group>"; };
+		F975F49D2481224F00D3957F /* FidoClientMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoClientMocks.swift; sourceTree = "<group>"; };
+		F975F4A024813C6B00D3957F /* AppWebInterfaceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterfaceMocks.swift; sourceTree = "<group>"; };
+		F975F4A72481430D00D3957F /* LocalAuthenticationMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthenticationMocks.swift; sourceTree = "<group>"; };
+		F98EB0BE2486AAE100BD06A8 /* WebViewDelegateMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegateMocks.swift; sourceTree = "<group>"; };
 		F9AD8E33247BDD09008978B3 /* WebAppInterfacesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterfacesTests.swift; sourceTree = "<group>"; };
+		F9BAFC32247FB6B000BF1CAE /* TabBarDelegateMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarDelegateMocks.swift; sourceTree = "<group>"; };
+		F9BAFC36247FB7A600BF1CAE /* WebViewMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewMocks.swift; sourceTree = "<group>"; };
+		F9BAFC38247FB82200BF1CAE /* HomeViewControllerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerMocks.swift; sourceTree = "<group>"; };
+		F9BAFC3A247FBA0700BF1CAE /* SplashScreenViewMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewMocks.swift; sourceTree = "<group>"; };
+		F9BAFC3D247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSpinnerViewMocks.swift; sourceTree = "<group>"; };
+		F9BAFC3F247FBA8100BF1CAE /* ApplicationStateMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStateMocks.swift; sourceTree = "<group>"; };
+		F9BAFC41247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInteractionsControllerMocks.swift; sourceTree = "<group>"; };
+		F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceMocks.swift; sourceTree = "<group>"; };
 		F9C3FC53247AD1A80024F375 /* AppWebInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterfaceTests.swift; sourceTree = "<group>"; };
 		F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadErrorStrings.swift; sourceTree = "<group>"; };
 		F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadStringHandler.swift; sourceTree = "<group>"; };
@@ -430,17 +451,6 @@
 			path = BiometricsAlertHandling;
 			sourceTree = "<group>";
 		};
-		131999FF21FF5BB50039DADB /* BiometricsViewHelpers */ = {
-			isa = PBXGroup;
-			children = (
-				139D331721F71C0700E6C92C /* BiometricResultStrings.swift */,
-				139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */,
-				4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */,
-				13730A21220454FF00437FC1 /* BiometricType.swift */,
-			);
-			path = BiometricsViewHelpers;
-			sourceTree = "<group>";
-		};
 		13199A0021FF5C200039DADB /* Fido */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,23 +461,11 @@
 			path = Fido;
 			sourceTree = "<group>";
 		};
-		1381D45721BFF90300B54300 /* Biometrics */ = {
-			isa = PBXGroup;
-			children = (
-				131999FF21FF5BB50039DADB /* BiometricsViewHelpers */,
-				131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */,
-				14D4D21821E8D711008A65E0 /* BiometricService.swift */,
-				13199A0021FF5C200039DADB /* Fido */,
-			);
-			path = Biometrics;
-			sourceTree = "<group>";
-		};
 		1381D47421BFFFC400B54300 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				1381D47821BFFFD000B54300 /* AAID.swift */,
 				1381D48021BFFFD200B54300 /* Policy.swift */,
-				8A78F38122F9B58A00BB161F /* BiometricState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -475,8 +473,15 @@
 		2EA7BDA32418FCAD00CFEDC8 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */,
-				2EA7BDA62418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift */,
+				F975F4A6248142FA00D3957F /* Core */,
+				F975F49F24813C5500D3957F /* HybridApplicationInteractions */,
+				F975F49724810BEA00D3957F /* AdditionalServices */,
+				F9BAFC4D247FC3C800BF1CAE /* InteractionControllers */,
+				F9BAFC4C247FC35600BF1CAE /* Controllers */,
+				F9BAFC4B247FC34800BF1CAE /* Views */,
+				F9BAFC4A247FC32900BF1CAE /* Delegates */,
+				F9BAFC49247FC30900BF1CAE /* Services */,
+				F9BAFC3F247FBA8100BF1CAE /* ApplicationStateMocks.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -655,12 +660,12 @@
 		C20577F62028B94800CDBDC5 = {
 			isa = PBXGroup;
 			children = (
+				8A87FBC822E9B58B00AF3E93 /* Frameworks */,
+				107EA7B621CCE3CC006C675B /* nativeAppAssets */,
 				C20578012028B94800CDBDC5 /* NHSOnline */,
 				C20578162028B94800CDBDC5 /* NHSOnlineTests */,
-				C20578002028B94800CDBDC5 /* Products */,
-				107EA7B621CCE3CC006C675B /* nativeAppAssets */,
-				8A87FBC822E9B58B00AF3E93 /* Frameworks */,
 				7282DE3DA4E658F6DCAAB637 /* Pods */,
+				C20578002028B94800CDBDC5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -676,32 +681,22 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
-				C20578092028B94800CDBDC5 /* Assets.xcassets */,
-				1381D45721BFF90300B54300 /* Biometrics */,
-				F0B7D860204E8B8A0078D56E /* ContainerViewControllers */,
-				105BB9752178DC1700571671 /* Configurations */,
+				F9BAFC53247FD42600BF1CAE /* AddtionalServices */,
+				F9BAFC2C247FB32300BF1CAE /* AlertHandling */,
+				F9BAFC50247FD0B600BF1CAE /* Application */,
+				F9BAFC2D247FB47D00BF1CAE /* Controllers */,
+				F0B7D86D204EA0F40078D56E /* CoreExtensions */,
 				C2BFD3BD20C9358F00D3E361 /* Data */,
 				F0D2E5D2205007200067DEC4 /* Delegates */,
-				F9EBD64B237C25AD006FFA8C /* Download */,
 				8A55006E23D89AF600795739 /* Entitlements */,
-				F0B7D86D204EA0F40078D56E /* Extensions */,
-				3E5BD2D3219EE5CC00774F06 /* Interfaces */,
-				F07607F120B44B6900069F7F /* JavaScript */,
-				4649682420C7D94B00FDDE87 /* Lifecycle */,
+				C205780E2028B94800CDBDC5 /* Info.plist */,
 				9200DC9D2142854C009EFFEF /* Network */,
+				F9BAFC52247FD17100BF1CAE /* Resources */,
 				C276D5542076557400F3B1E5 /* Services */,
+				F9BAFC51247FD10C00BF1CAE /* Storyboards */,
 				64C1C76723E2E0C400FCBA57 /* Support */,
 				F07607F420B4655B00069F7F /* Utils */,
 				C276D560207B571A00F3B1E5 /* Views */,
-				C20578022028B94800CDBDC5 /* AppDelegate.swift */,
-				981E9E31214E5FB300DA80EB /* Config.swift */,
-				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
-				2EF7D81B23C76377005C03ED /* HeaderEnum.swift */,
-				F065B3D7205FCFFE004EF388 /* HomeViewController.swift */,
-				C205780E2028B94800CDBDC5 /* Info.plist */,
-				C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */,
-				F0B4B8BA204D68DC004E4120 /* Localizable.strings */,
-				C20578062028B94800CDBDC5 /* Main.storyboard */,
 			);
 			path = NHSOnline;
 			sourceTree = "<group>";
@@ -709,20 +704,16 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
-				F9C3FC52247AD1630024F375 /* Interfaces */,
-				2EA7BDA32418FCAD00CFEDC8 /* Mocks */,
-				14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */,
-				2EC6C6C82243128900EE49B9 /* Utils */,
-				3067F25321E39BF7009734AF /* Lifecycle */,
+				F9BAFC34247FB76000BF1CAE /* Delegates */,
+				F9BAFC35247FB77800BF1CAE /* HybridApplicationInteractions */,
 				F01745A6207B700700877E4D /* Info.plist */,
-				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
-				C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */,
-				30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */,
-				14E3FDF02295768200CA280C /* BiometricsViewControllerTests.swift */,
-				14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */,
-				DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */,
+				3067F25321E39BF7009734AF /* Lifecycle */,
+				2EA7BDA32418FCAD00CFEDC8 /* Mocks */,
 				F381C3AFAB024BF56A9DAA6E /* Services */,
 				F381CA47FB67F4660F08CD08 /* Support */,
+				2EC6C6C82243128900EE49B9 /* Utils */,
+				F9BAFC48247FC2DE00BF1CAE /* Controllers */,
+				F9BAFC4E247FC40B00BF1CAE /* Views */,
 			);
 			path = NHSOnlineTests;
 			sourceTree = "<group>";
@@ -730,6 +721,7 @@
 		C276D5542076557400F3B1E5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				14D4D21821E8D711008A65E0 /* BiometricService.swift */,
 				64C1C76323DB4E2400FCBA57 /* KnownServices.swift */,
 				4793CF0F219C319A00C95F51 /* ConfigurationService.swift */,
 				3E60CCB72316D70D000AFA17 /* NotificationsService.swift */,
@@ -742,11 +734,10 @@
 		C276D560207B571A00F3B1E5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */,
-				DB4B657C22F9AB2900C8EE99 /* BreadcrumbTextView */,
+				79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */,
 				C2D9864320C8003800F19792 /* ErrorTextView */,
 				C2D9864220C8000C00F19792 /* HeaderBar */,
-				7992275724212AF70057D406 /* SplashScreen.swift */,
+				7992275724212AF70057D406 /* SplashScreenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -761,6 +752,8 @@
 				F381C61C0030D00601B9984A /* RootService.swift */,
 				F381C9539D60A22E031DD16B /* SubService.swift */,
 				F381C196F8E47FBE97B3025B /* Enum */,
+				F94E3474248518F8009CAAC0 /* BiometricErrors.swift */,
+				F91E2179248667690067A1C5 /* UserContentControllers.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -770,8 +763,8 @@
 			children = (
 				139F19262181D73300ED59A1 /* HeaderBarSlim.xib */,
 				F057336B20A72F040059032D /* HeaderBar.xib */,
-				C276D563207B638400F3B1E5 /* HeaderBar.swift */,
-				139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */,
+				C276D563207B638400F3B1E5 /* HeaderBarView.swift */,
+				139F19292181DCC600ED59A1 /* HeaderBarSlimView.swift */,
 			);
 			path = HeaderBar;
 			sourceTree = "<group>";
@@ -782,16 +775,6 @@
 				C2697F2820C66B8E001DD790 /* ErrorTextView.swift */,
 			);
 			path = ErrorTextView;
-			sourceTree = "<group>";
-		};
-		DB4B657C22F9AB2900C8EE99 /* BreadcrumbTextView */ = {
-			isa = PBXGroup;
-			children = (
-				DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */,
-				DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */,
-				DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */,
-			);
-			path = BreadcrumbTextView;
 			sourceTree = "<group>";
 		};
 		F07607F120B44B6900069F7F /* JavaScript */ = {
@@ -815,21 +798,10 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		F0B7D860204E8B8A0078D56E /* ContainerViewControllers */ = {
+		F0B7D86D204EA0F40078D56E /* CoreExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */,
-				13F588AD21BA863D002857EA /* BiometricsViewController.swift */,
-				139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */,
-				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
 				14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */,
-			);
-			path = ContainerViewControllers;
-			sourceTree = "<group>";
-		};
-		F0B7D86D204EA0F40078D56E /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
 				F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */,
 				C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */,
 				C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */,
@@ -838,7 +810,7 @@
 				3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */,
 				1417702521F5D334003E3EAB /* String_Extensions.swift */,
 			);
-			path = Extensions;
+			path = CoreExtensions;
 			sourceTree = "<group>";
 		};
 		F0D2E5D2205007200067DEC4 /* Delegates */ = {
@@ -853,9 +825,17 @@
 		F381C196F8E47FBE97B3025B /* Enum */ = {
 			isa = PBXGroup;
 			children = (
+				F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */,
+				8A78F38122F9B58A00BB161F /* BiometricState.swift */,
+				2EF7D81B23C76377005C03ED /* HeaderEnum.swift */,
+				13730A21220454FF00437FC1 /* BiometricType.swift */,
 				F381CB87FC6B3F0BDA06A19A /* MenuTab.swift */,
 				F381C8DAF590F5EFD99E06A0 /* JavaScriptInteractionMode.swift */,
 				F381C8D1CE9594F361298C57 /* ViewMode.swift */,
+				F91E216F248660480067A1C5 /* BiometricActions.swift */,
+				F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */,
+				F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */,
+				F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -874,6 +854,7 @@
 			isa = PBXGroup;
 			children = (
 				F381C32BC0511A0BF493AFD7 /* KnownServicesTests.swift */,
+				F975F4952481082E00D3957F /* BiometricServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -884,6 +865,221 @@
 				F381C21CE00D37602BC492AE /* SchemeHandlers */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		F975F4942480FBC700D3957F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		F975F49724810BEA00D3957F /* AdditionalServices */ = {
+			isa = PBXGroup;
+			children = (
+				F975F49824810BF300D3957F /* Fido */,
+			);
+			path = AdditionalServices;
+			sourceTree = "<group>";
+		};
+		F975F49824810BF300D3957F /* Fido */ = {
+			isa = PBXGroup;
+			children = (
+				F975F49924810C1100D3957F /* FidoEndpointHelperMocks.swift */,
+				F975F49D2481224F00D3957F /* FidoClientMocks.swift */,
+			);
+			path = Fido;
+			sourceTree = "<group>";
+		};
+		F975F49F24813C5500D3957F /* HybridApplicationInteractions */ = {
+			isa = PBXGroup;
+			children = (
+				F975F4A024813C6B00D3957F /* AppWebInterfaceMocks.swift */,
+			);
+			path = HybridApplicationInteractions;
+			sourceTree = "<group>";
+		};
+		F975F4A6248142FA00D3957F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F975F4A72481430D00D3957F /* LocalAuthenticationMocks.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		F9BAFC2C247FB32300BF1CAE /* AlertHandling */ = {
+			isa = PBXGroup;
+			children = (
+				F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */,
+				131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */,
+			);
+			path = AlertHandling;
+			sourceTree = "<group>";
+		};
+		F9BAFC2D247FB47D00BF1CAE /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F065B3D7205FCFFE004EF388 /* HomeViewController.swift */,
+				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
+				F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F9BAFC2F247FB4D800BF1CAE /* StringHandlers */ = {
+			isa = PBXGroup;
+			children = (
+				F9EBD653237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift */,
+				F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */,
+			);
+			path = StringHandlers;
+			sourceTree = "<group>";
+		};
+		F9BAFC30247FB50800BF1CAE /* StringStructures */ = {
+			isa = PBXGroup;
+			children = (
+				F975F4942480FBC700D3957F /* Notifications */,
+				F9EBD64B237C25AD006FFA8C /* Download */,
+			);
+			path = StringStructures;
+			sourceTree = "<group>";
+		};
+		F9BAFC31247FB54A00BF1CAE /* HybridApplicationInteractions */ = {
+			isa = PBXGroup;
+			children = (
+				F07607F120B44B6900069F7F /* JavaScript */,
+				3E5BD2D3219EE5CC00774F06 /* Interfaces */,
+			);
+			path = HybridApplicationInteractions;
+			sourceTree = "<group>";
+		};
+		F9BAFC34247FB76000BF1CAE /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */,
+				14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		F9BAFC35247FB77800BF1CAE /* HybridApplicationInteractions */ = {
+			isa = PBXGroup;
+			children = (
+				F9C3FC52247AD1630024F375 /* Interfaces */,
+			);
+			path = HybridApplicationInteractions;
+			sourceTree = "<group>";
+		};
+		F9BAFC48247FC2DE00BF1CAE /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F9BAFC49247FC30900BF1CAE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */,
+				2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */,
+				2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */,
+				F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F9BAFC4A247FC32900BF1CAE /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC32247FB6B000BF1CAE /* TabBarDelegateMocks.swift */,
+				F98EB0BE2486AAE100BD06A8 /* WebViewDelegateMocks.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		F9BAFC4B247FC34800BF1CAE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC3D247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift */,
+				F9BAFC3A247FBA0700BF1CAE /* SplashScreenViewMocks.swift */,
+				F9BAFC36247FB7A600BF1CAE /* WebViewMocks.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F9BAFC4C247FC35600BF1CAE /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC38247FB82200BF1CAE /* HomeViewControllerMocks.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F9BAFC4D247FC3C800BF1CAE /* InteractionControllers */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC41247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift */,
+			);
+			path = InteractionControllers;
+			sourceTree = "<group>";
+		};
+		F9BAFC4E247FC40B00BF1CAE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */,
+				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F9BAFC4F247FCA9A00BF1CAE /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				F0B4B8BA204D68DC004E4120 /* Localizable.strings */,
+				F9BAFC2F247FB4D800BF1CAE /* StringHandlers */,
+				F9BAFC30247FB50800BF1CAE /* StringStructures */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
+		F9BAFC50247FD0B600BF1CAE /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAFC31247FB54A00BF1CAE /* HybridApplicationInteractions */,
+				4649682420C7D94B00FDDE87 /* Lifecycle */,
+				981E9E31214E5FB300DA80EB /* Config.swift */,
+				105BB9752178DC1700571671 /* Configurations */,
+				C20578022028B94800CDBDC5 /* AppDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		F9BAFC51247FD10C00BF1CAE /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */,
+				C20578062028B94800CDBDC5 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		F9BAFC52247FD17100BF1CAE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C20578092028B94800CDBDC5 /* Assets.xcassets */,
+				F9BAFC4F247FCA9A00BF1CAE /* Strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F9BAFC53247FD42600BF1CAE /* AddtionalServices */ = {
+			isa = PBXGroup;
+			children = (
+				13199A0021FF5C200039DADB /* Fido */,
+			);
+			path = AddtionalServices;
 			sourceTree = "<group>";
 		};
 		F9C3FC52247AD1630024F375 /* Interfaces */ = {
@@ -898,9 +1094,7 @@
 		F9EBD64B237C25AD006FFA8C /* Download */ = {
 			isa = PBXGroup;
 			children = (
-				F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */,
 				F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */,
-				F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */,
 			);
 			path = Download;
 			sourceTree = "<group>";
@@ -908,8 +1102,6 @@
 		F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */ = {
 			isa = PBXGroup;
 			children = (
-				F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */,
-				F9EBD653237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift */,
 				F9EBD655237C3D3C006FFA8C /* DataDownloadAlert.swift */,
 			);
 			path = DownloadAlertHandling;
@@ -1021,7 +1213,6 @@
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */,
-				DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
 				2485C4E4246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig in Resources */,
 				647D0C5524694EAC00336949 /* WebEventsThirdParty.js in Resources */,
@@ -1121,31 +1312,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7992275824212AF70057D406 /* SplashScreen.swift in Sources */,
+				F91E2170248660480067A1C5 /* BiometricActions.swift in Sources */,
+				7992275824212AF70057D406 /* SplashScreenView.swift in Sources */,
 				3E60CCB82316D70D000AFA17 /* NotificationsService.swift in Sources */,
 				F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */,
 				4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
-				139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */,
-				4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */,
+				F94E3475248518F8009CAAC0 /* BiometricErrors.swift in Sources */,
+				139F192A2181DCC600ED59A1 /* HeaderBarSlimView.swift in Sources */,
 				8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */,
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
-				139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
-				DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
 				3E60CCBA2317C222000AFA17 /* Logger.swift in Sources */,
 				64C1C76B23E2E33600FCBA57 /* TelSchemeHandler.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
+				F91E2176248663C90067A1C5 /* BiometricErrorCodes.swift in Sources */,
 				3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */,
 				3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */,
 				14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */,
+				F91E21782486666D0067A1C5 /* BiometricTypeWebReferences.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
 				F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */,
@@ -1155,7 +1347,7 @@
 				F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */,
 				64C1C76F23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
-				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
+				F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */,
 				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
@@ -1165,17 +1357,16 @@
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
-				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,
-				79B916E5240D1BCA008CD587 /* ProgressSpinner.swift in Sources */,
+				79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
+				F91E217A248667690067A1C5 /* UserContentControllers.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
-				13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */,
 				8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */,
 				8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */,
 				135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */,
-				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
+				C276D564207B638400F3B1E5 /* HeaderBarView.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
 				3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
@@ -1183,7 +1374,6 @@
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
 				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
-				DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */,
 				4BF31A1F435C7F730D9BC6A3 /* UrlHelper.swift in Sources */,
 				64C1C76423DB4E2400FCBA57 /* KnownServices.swift in Sources */,
 				F381C09CCA60457CD0421BB2 /* KnownService.swift in Sources */,
@@ -1200,23 +1390,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AAEDF1F235744BE00439EC7 /* BiometricBreadcrumb.swift in Sources */,
-				DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */,
+				F9BAFC40247FBA8100BF1CAE /* ApplicationStateMocks.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
+				F975F49A24810C1100D3957F /* FidoEndpointHelperMocks.swift in Sources */,
+				F9BAFC39247FB82200BF1CAE /* HomeViewControllerMocks.swift in Sources */,
+				F9BAFC3E247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift in Sources */,
+				F975F49E2481224F00D3957F /* FidoClientMocks.swift in Sources */,
+				F98EB0BF2486AAE100BD06A8 /* WebViewDelegateMocks.swift in Sources */,
+				F975F4A124813C6B00D3957F /* AppWebInterfaceMocks.swift in Sources */,
 				64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */,
 				F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */,
-				2EA7BDA72418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift in Sources */,
+				2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */,
+				F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */,
 				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,
+				F9BAFC37247FB7A600BF1CAE /* WebViewMocks.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
 				2EA7BDA52418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift in Sources */,
+				F9BAFC45247FBB5900BF1CAE /* ConfigurationServiceMocks.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
+				F9BAFC33247FB6B000BF1CAE /* TabBarDelegateMocks.swift in Sources */,
 				30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */,
 				14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */,
+				F9BAFC3B247FBA0700BF1CAE /* SplashScreenViewMocks.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
-				14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */,
+				F975F4A82481430D00D3957F /* LocalAuthenticationMocks.swift in Sources */,
 				F381C7AB1F32D5FDAAD348F6 /* KnownServicesTests.swift in Sources */,
 				F381CB4C747B08D2BC4ADB45 /* MailToSchemeHandlerTests.swift in Sources */,
 				F381CB161F572192394126D1 /* SchemeHandlersTests.swift in Sources */,
+				F975F4962481082E00D3957F /* BiometricServiceTests.swift in Sources */,
+				F94E3477248547D9009CAAC0 /* BiometricServiceMocks.swift in Sources */,
 				F381CE46D03B8D3A42FC7693 /* TelSchemeHandlerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

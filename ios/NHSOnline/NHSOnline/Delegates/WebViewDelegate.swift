@@ -1,6 +1,7 @@
 import UIKit
 import SafariServices
 import WebKit
+import LocalAuthentication
 import os.log
 import iProov
 
@@ -269,9 +270,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "fetchNativeAppVersion":
                 self.viewController.setupAppVersion()
                 break
-            case "goToLoginOptions":
-                goToLoginOptions()
-                break
             case "hideHeader":
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
@@ -334,15 +332,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
+            case "updateBiometricRegistration":
+                let biometricState = UserDefaultsManager.getBiometricAvailability()
+                viewController.handleBiometricStatusChangeRequest(biometricState: biometricState)
             default:
                 break
             }
         }
-    }
-
-    func goToLoginOptions() {
-        CookieHandler().readAccessTokenFromCookie()
-        viewController.showBiometricViewContainer()
     }
 
     func setMenuBarItem(index: Int) {

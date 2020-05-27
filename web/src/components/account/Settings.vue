@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     goToLoginOptions() {
-      if (this.webBiometricsEnabled) {
+      if (this.webBiometricsEnabled || this.$store.state.device.source === 'ios') {
         this.$router.push(LOGIN_SETTINGS.path);
       } else {
         this.configureWebContext(findByName('Login').helpUrl);

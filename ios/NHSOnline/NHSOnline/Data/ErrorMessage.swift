@@ -20,10 +20,6 @@ struct ErrorMessage{
             title = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
             message = NSLocalizedString("APIUnavailableErrorMessage", comment: "")
             accessibleMessage = NSLocalizedString("AccessibilityAPIUnavailableErrorMessage", comment: "")
-        case .BiometricRegistrationError:
-             title = NSLocalizedString("BiometricRegistrationErrorHeader", comment: "")
-             message = BiometricStringHandler().getErrorStrings().BiometricRegistrationErrorMessage
-             accessibleMessage = BiometricStringHandler().getErrorStrings().BiometricRegistrationErrorMessage
         case .BiometricLoginSessionError:
             title = NSLocalizedString("BiometricSessionTimeoutHeader", comment: "")
             message = NSLocalizedString("BiometricSessionTimeoutMessage", comment: "")
@@ -38,7 +34,6 @@ struct ErrorMessage{
         case NoInternetConnection
         case ServiceUnavailable
         case APICallFailure
-        case BiometricRegistrationError
         case BiometricLoginSessionError
         case DownloadError
     }

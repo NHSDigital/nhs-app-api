@@ -11,11 +11,17 @@ describe('Settings', () => {
     showBiometrics = true,
     showNotifications = true,
     showLinkedProfiles = true,
-    webBiometrics = false } = {}) => {
+    webBiometrics = false,
+    source = 'ios' } = {}) => {
     $router = createRouter();
     $store = createStore({
       $env: {
         WEB_BIOMETRICS_ENABLED: webBiometrics,
+      },
+      state: {
+        device: {
+          source,
+        },
       },
     });
     return mount(Settings, {
@@ -116,16 +122,32 @@ describe('Settings', () => {
     });
 
     describe('biometrics web disabled', () => {
-      let biometricsLink;
+      describe('android', () => {
+        let biometricsLink;
 
-      beforeEach(() => {
-        wrapper = mountSettings({ webBiometrics: false });
-        biometricsLink = wrapper.find('#btn_passwordOptions');
+        beforeEach(() => {
+          wrapper = mountSettings({ webBiometrics: false, source: 'android' });
+          biometricsLink = wrapper.find('#btn_passwordOptions');
+        });
+
+        it('will not navigate to the web biometrics', () => {
+          biometricsLink.trigger('click');
+          expect($router.push).not.toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+        });
       });
 
-      it('will navigate to the native biometrics', () => {
-        biometricsLink.trigger('click');
-        expect($router.push).not.toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+      describe('ios', () => {
+        let biometricsLink;
+
+        beforeEach(() => {
+          wrapper = mountSettings({ webBiometrics: false });
+          biometricsLink = wrapper.find('#btn_passwordOptions');
+        });
+
+        it('will navigate to the web biometrics', () => {
+          biometricsLink.trigger('click');
+          expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+        });
       });
     });
   });
