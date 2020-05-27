@@ -22,8 +22,7 @@ Feature: Hospital Appointments
     | /appointments/hospital-appointments  | /appointments |
 
   Scenario: A user with pkb access but no ers access can navigate to the hospital appointments page
-    Given I am using the native app user agent
-    And I am a user who can manage their pkb hospital appointments but not ers
+    Given I am a user who can manage their pkb hospital appointments but not ers
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
@@ -32,8 +31,7 @@ Feature: Hospital Appointments
     And the Hospital Appointments links are displayed
 
   Scenario: A user with ers access but no pkb access can navigate to the hospital appointments page
-    Given I am using the native app user agent
-    And I am a user who can manage their pkb hospital appointments but not ers
+    Given I am a user who can manage their pkb hospital appointments but not ers
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed

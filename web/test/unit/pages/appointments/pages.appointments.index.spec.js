@@ -10,14 +10,11 @@ describe('appointments hub', () => {
     isProxy = false,
     apptsProviders = [],
     context = false,
-    isNativeApp = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
-        device: {
-          isNativeApp,
-        },
+        device: { isNativeApp: false },
         serviceJourneyRules: {
           isLoaded: false,
           rules: {
@@ -73,7 +70,7 @@ describe('appointments hub', () => {
     describe('sjr secondary appointments enabled and proxy false', () => {
       let hospitalAppointmentsLink;
       it('will show link for pkb', () => {
-        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false, isNativeApp: true });
+        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false });
         hospitalAppointmentsLink = getHospitalLink(wrapper);
         expect(hospitalAppointmentsLink.exists()).toBe(true);
       });

@@ -84,8 +84,7 @@ export default {
       return this.$store.state.device.isNativeApp;
     },
     showHospitalAppointments() {
-      return !this.isProxying && (this.hasErsAppointments ||
-        (this.hasPkbAppointments && this.isNativeApp));
+      return !this.isProxying && (this.hasErsAppointments || this.hasPkbAppointments);
     },
   },
   mounted() {
