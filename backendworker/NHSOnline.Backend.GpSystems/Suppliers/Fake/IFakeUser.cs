@@ -1,9 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Session;
@@ -12,7 +15,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
 {
     public interface IFakeUser
     {
+        Guid Id { get; }
         string NhsNumber { get; }
+        string OdsCode { get; }
         string GivenName { get; }
         string FamilyName { get; }
         DateTime DateOfBirth { get; }
@@ -20,6 +25,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         DemographicsAddress AddressParts { get; }
         string Address { get; }
         string Name { get;  }
+
+        IEnumerable<string> LinkedAccountsNhsNumbers { get; }
 
         IAppointmentsBehaviour AppointmentsBehaviour { get; }
         IAppointmentSlotsBehaviour AppointmentSlotsBehaviour { get; }
@@ -29,6 +36,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         IIm1ConnectionBehaviour Im1ConnectionBehaviour { get; }
 
         ILinkageBehaviour LinkageBehaviour { get; }
+
+        ILinkedAccountsBehaviour LinkedAccountsBehaviour { get; }
 
         IPatientRecordBehaviour PatientRecordBehaviour { get; }
 

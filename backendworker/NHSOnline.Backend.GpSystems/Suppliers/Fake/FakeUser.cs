@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Session;
@@ -22,13 +23,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             _serviceProvider = serviceProvider;
         }
 
+        public abstract Guid Id { get; }
         public abstract string NhsNumber { get ; }
+        public virtual string OdsCode => "A20047";
         public abstract string GivenName { get; }
         public abstract string FamilyName { get; }
         public abstract DateTime DateOfBirth { get; }
         public abstract string Sex { get; }
 
         public virtual string Name => $"{GivenName} {FamilyName}";
+
+        public virtual IEnumerable<string> LinkedAccountsNhsNumbers => Enumerable.Empty<string>();
+
         public virtual DemographicsAddress AddressParts => new DemographicsAddress
         {
             HouseName = "Richmond House",
@@ -70,13 +76,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         public virtual ILinkageBehaviour LinkageBehaviour =>
             _serviceProvider.GetService<DefaultLinkageBehaviour>();
 
+        public virtual ILinkedAccountsBehaviour LinkedAccountsBehaviour =>
+            _serviceProvider.GetService<DefaultLinkedAccountsBehaviour>();
+
         public virtual IPatientRecordBehaviour PatientRecordBehaviour =>
             _serviceProvider.GetService<DefaultPatientRecordBehaviour>();
 
-        public virtual ICourseBehaviour CourseBehaviour => new DefaultCourseBehaviour();
-        public virtual IPrescriptionBehaviour PrescriptionBehaviour => new DefaultPrescriptionBehaviour();
+        public virtual ICourseBehaviour CourseBehaviour =>
+            _serviceProvider.GetService<DefaultCourseBehaviour>();
+        public virtual IPrescriptionBehaviour PrescriptionBehaviour =>
+            _serviceProvider.GetService<DefaultPrescriptionBehaviour>();
 
-        public virtual ISessionBehaviour SessionBehaviour => new DefaultSessionBehaviour();
-        public virtual ISessionExtendBehaviour SessionExtendBehaviour => new DefaultSessionExtendBehaviour();
+        public virtual ISessionBehaviour SessionBehaviour =>
+            _serviceProvider.GetService<DefaultSessionBehaviour>();
+        public virtual ISessionExtendBehaviour SessionExtendBehaviour =>
+            _serviceProvider.GetService<DefaultSessionExtendBehaviour>();
     }
 }

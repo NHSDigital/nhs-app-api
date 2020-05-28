@@ -8,10 +8,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
 {
     public class FakeUser9658218903ArnoldOlley : FakeUser
     {
-        public override string NhsNumber => "9658218903";
+        public FakeUser9658218903ArnoldOlley(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
+        internal const string NhsNumberInternal = "9658218903";
+
+        public override Guid Id => Guid.Parse("11719623-7a50-4ec0-8a58-67ad08de8834");
+
+        public override string NhsNumber => NhsNumberInternal;
+
         public override string GivenName => "Arnold";
+
         public override string FamilyName => "Olley";
+
         public override DateTime DateOfBirth => new DateTime(1939,7,21);
+
         public override string Sex => "Male";
 
         public override IAppointmentSlotsBehaviour AppointmentSlotsBehaviour
@@ -24,10 +36,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             {
                 return await Task.FromResult<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
             }
-        }
-
-        public FakeUser9658218903ArnoldOlley(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
         }
     }
 }

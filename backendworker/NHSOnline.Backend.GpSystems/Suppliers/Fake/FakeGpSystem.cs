@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Session;
@@ -77,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             _serviceProvider.GetService<FakeLinkageValidationService>();
 
         public ILinkedAccountsService GetLinkedAccountsService() =>
-            throw new NotImplementedException();
+            _serviceProvider.GetService<FakeLinkedAccountsService>();
 
         public IPatientMessagesService GetPatientMessagesService() =>
             throw new NotImplementedException();
@@ -85,6 +86,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         public IRecreateSessionMapperService GetRecreateSessionMapperService() =>
             throw new NotImplementedException();
 
-        public bool SupportsLinkedAccounts => false;
+        public bool SupportsLinkedAccounts => true;
     }
 }
