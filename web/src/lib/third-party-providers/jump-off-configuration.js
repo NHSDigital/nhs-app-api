@@ -29,7 +29,7 @@ export default {
       },
       medicines: {
         type: 'medicines',
-        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action',
+        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments',
       },
     },
     testProvider: {

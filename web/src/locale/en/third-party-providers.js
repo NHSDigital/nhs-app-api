@@ -101,7 +101,7 @@ export default {
       },
       {
         id: 'medicines',
-        path: '/nhs-login/login?phrPath=/auth/manageMedications.action',
+        path: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments',
         jumpOffContent: {
           headerText: 'Hospital and other prescriptions',
           descriptionText: 'See your current and past prescriptions',
