@@ -5,3 +5,12 @@ services:
   web.local.bitraft.io:
     env_file:
       - ./docker/android/env/web.env
+
+  dns:
+    image: andyshinn/dnsmasq:2.78
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    cap_add:
+      - NET_ADMIN
+    command: --log-facility=- -h -A /web.local.bitraft.io/10.0.2.2 -A /api.local.bitraft.io/10.0.2.2 -A /stubs.local.bitraft.io/10.0.2.2

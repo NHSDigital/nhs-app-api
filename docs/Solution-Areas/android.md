@@ -2,6 +2,10 @@
 
 [Setup instructions on Confluence](https://confluence.service.nhs.uk/display/NO/Android)
 
+## Update Path to include emulator
+
+Add the SDK emulator directory (`C:\Users\<username>\AppData\Local\Android\Sdk\emulator` on Windows or `/Users/<username>/Library/Android/sdk/emulator` on mac) to your PATH.
+
 ## FIDO Client Library
 
 The Fido client library is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://confluence.service.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
@@ -15,31 +19,29 @@ In order to build the app, access to a common debug keystore is required. The fo
 
 ## Running in Emulator
 
-The emulator uses the IP address 10.0.2.2 to access the host machine. To support this a DNS entry `android.local.bitraft.io` has been created pointing at 10.0.0.2.
+The emulator runs in its own network which, by default, uses the DNS servers configured on the host machine. It does not use the `hosts` file from the host machine. Access to the host machine is done through the IP address `10.0.2.2`. In order to route requests to the application running on the host machine (e.g. `web.local.bitraft.io`, `api.local.bitraft.io`) a DNS server is spun up in docker which returns `10.0.2.2` for those hosts (see [android/docker-compose.yml](/docker/android/docker-compose.yml)). The emulator is started via the command line to specify that it should use this DNS server.
 
-1. Start the web and backend configured for android app
+1. Start the emulator
+
+   ```bash
+   emulator @pixel_2 -dns-server 127.0.0.1
+   ```
+
+   Replace `pixel_2` with the name of the emulator you wish to use (select from `emulator -list-avds`). Make sure you've [updated your path to include the SDK emulator](#update-path-to-include-emulator).
+
+2. Start the web and backend configured for android app
 
    ```bash
    make run-android
    ```
 
-   or
+   or (to use the dev stubs)
 
    ```bash
-   make run-android-https
+   make run-android-stubs
    ```
 
-2. Set the Active Build Variant in Android Studio to be `localHttp` or `localHttps` (to match the `make run-` comand above)
-
-3. Select (or create) an virtual device.
-
-   If running with HTTPS ensure you have installed your local dev certificate onto the device:
-
-   1. Drag and drop \$HOME/.nhsonline/local-development-certificate/local-development-https.crt into the emulator
-   2. Navigate to Settings \> Security and Location \> Encryption and Credentials \> Install from SD Card
-   3. Select the certificate that was just copied to the phone \(in downloads\)
-   4. Give the certificate a name, say "LocalDevCert"
-   5. Follow the instructions to set a pin \(a fingerprint is not needed\)
+3. Set the Active Build Variant in Android Studio to be `localHttp`
 
 4. Click the green play button
 
