@@ -107,26 +107,16 @@ spec:
           value: "{{ $.Values.cid.containerPort }}"
         - name: ASPNETCORE_URLS
           value: "http://*:{{ $.Values.cid.containerPort }}"
-        {{- if $.Values.emisEnabled }}
         - name: GP_PROVIDER_ENABLED_EMIS
-          value: "true"
-        {{- end }}
-        {{- if $.Values.fakeGpSystemEnabled }}
+          value: "{{ $.Values.emisEnabled }}"
         - name: GP_PROVIDER_ENABLED_FAKE
-          value: "true"
-        {{- end }}
-        {{- if $.Values.tppEnabled }}
+          value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: GP_PROVIDER_ENABLED_TPP
-          value: "true"
-        {{- end }}
-        {{- if $.Values.visionEnabled }}
+          value: "{{ $.Values.tppEnabled }}"
         - name: GP_PROVIDER_ENABLED_VISION
-          value: "true"
-        {{- end }}
-        {{- if $.Values.visionEnabled }}
+          value: "{{ $.Values.visionEnabled }}"
         - name: GP_PROVIDER_ENABLED_MICROTEST
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.visionEnabled }}"
         {{- if $.Values.emisEnabled }}
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"

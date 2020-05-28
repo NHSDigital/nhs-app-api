@@ -58,13 +58,13 @@ spec:
         - name: CID_REDIRECT_URI
   {{- if $.Values.web.publicURL }}
           value: "https://{{ $.Values.web.publicURL }}/auth-return"
-  {{- else}}
+  {{- else }}
           value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/auth-return"
   {{- end }}
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: MockSettings__CitizenId__CitizenIdTokenIssuer
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
-        {{- else}}
+        {{- else }}
         - name: MockSettings__CitizenId__CitizenIdTokenIssuer
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}

@@ -120,10 +120,8 @@ spec:
           value: "{{ $.Values.api.containerPort }}"
         - name: ASPNETCORE_URLS
           value: "http://*:{{ $.Values.api.containerPort }}"
-        {{- if $.Values.throttlingEnabled }}
         - name: ConfigurationSettings__ThrottlingEnabled
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.throttlingEnabled }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
         - name: NHS_SEARCH_BASE_URL
@@ -148,26 +146,16 @@ spec:
           value: "{{ $.Values.brotherMailerUserID }}"
         - name: BROTHER_MAILER_SIG
           value: "{{ $.Values.brotherMailerSIG }}"
-        {{- if $.Values.emisEnabled }}
         - name: GP_PROVIDER_ENABLED_EMIS
-          value: "true"
-        {{- end }}
-        {{- if $.Values.fakeGpSystemEnabled }}
+          value: "{{ $.Values.emisEnabled }}"
         - name: GP_PROVIDER_ENABLED_FAKE
-          value: "true"
-        {{- end }}
-        {{- if $.Values.microtestEnabled }}
+          value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: GP_PROVIDER_ENABLED_MICROTEST
-          value: "true"
-        {{- end }}
-        {{- if $.Values.tppEnabled }}
+          value: "{{ $.Values.microtestEnabled }}"
         - name: GP_PROVIDER_ENABLED_TPP
-          value: "true"
-        {{- end }}
-        {{- if $.Values.visionEnabled }}
+          value: "{{ $.Values.tppEnabled }}"
         - name: GP_PROVIDER_ENABLED_VISION
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.visionEnabled }}"
         - name: ODS_REMAP_ENABLED
           value: "{{ $.Values.odsRemapEnabled }}"
         - name: ODS_REMAP_MAP

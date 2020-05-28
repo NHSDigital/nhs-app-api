@@ -86,10 +86,8 @@ spec:
           {{- end }}
         - name: CID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
-        {{- if $.Values.cidP5VectorOfTrustEnabled }}
         - name: CID_P5_VECTOR_OF_TRUST_ENABLED
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.cidP5VectorOfTrustEnabled }}"
         - name: HOTJAR_SITE_ID
           value: "{{ $.Values.web.hotjarSiteId }}"
         - name: NODE_EXTRA_CA_CERTS
@@ -102,18 +100,12 @@ spec:
         {{- end }}
         - name: VERSION_TAG
           value: "{{ $.Values.web.image_tag }}"
-        {{- if $.Values.biometricsEnabled }}
         - name: BIOMETRICS_ENABLED
-          value: "true"
-        {{- end }}
-        {{- if $.Values.webBiometricsEnabled }}
+          value: "{{ $.Values.biometricsEnabled }}"
         - name: WEB_BIOMETRICS_ENABLED
-          value: "true"
-        {{- end }}
-        {{- if $.Values.throttlingEnabled }}
+          value: "{{ $.Values.webBiometricsEnabled }}"
         - name: THROTTLING_ENABLED
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.throttlingEnabled }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
         - name: ORGAN_DONATION_INTEGRATION_ENABLED
@@ -130,10 +122,8 @@ spec:
           value: "[{{ join ","  $.Values.web.myRecordDocumentsEnabledSuppliers }}]"
         - name: GP_MESSAGES_ENABLED
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
-        {{- if $.Values.userResearchEnabled }}
         - name: USER_RESEARCH_ENABLED
-          value: "true"
-        {{- end }}
+          value: "{{ $.Values.userResearchEnabled }}"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates
