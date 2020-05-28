@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 ARG WIREMOCK_VERSION=2.22.0
 
 FROM nhsapp.azurecr.io/nhsonline-int-tests-base:jdk8-node12-1.0 as mappings
@@ -19,7 +20,8 @@ RUN mkdir -p /var/wiremock/lib/ && \
 
 COPY . .
 
-RUN java -cp /var/wiremock/lib/* com.github.tomakehurst.wiremock.standalone.WireMockServerRunner & \
+RUN --mount=type=secret,id=maven,dst=/root/.m2/settings.xml \
+    java -cp /var/wiremock/lib/* com.github.tomakehurst.wiremock.standalone.WireMockServerRunner & \
     ./gradlew --no-daemon mock && \
     curl -X POST ${wiremockUrl}__admin/mappings/save
 

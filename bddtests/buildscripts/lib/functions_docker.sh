@@ -20,7 +20,9 @@ function cleanup_docker_containers () {
 function set_docker_compose_files_args () {
   local DOCKER_COMPOSE_FILES PORT_FILE
 
-  DOCKER_COMPOSE_FILES=(../docker-compose.yml ../docker/stubbed/docker-compose.yml ../docker/bddtests/docker-compose.yml "${DOCKER_COMPOSE_FILES_TRANCHE[@]}")
+  DOCKER_COMPOSE_FILES=(../docker-compose.yml)
+  DOCKER_COMPOSE_FILES+=(../docker/stubbed/docker-compose.yml ../docker/docker-compose.nhslogin-stubbed.yml)
+  DOCKER_COMPOSE_FILES+=(../docker/bddtests/docker-compose.yml "${DOCKER_COMPOSE_FILES_TRANCHE[@]}")
 
   if [ "$RUN_LOCAL_BDD" == 1 ]
   then

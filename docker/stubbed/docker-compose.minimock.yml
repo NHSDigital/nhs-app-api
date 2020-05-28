@@ -2,11 +2,7 @@ version: "3.4"
 
 services:
 
-  pfs.local.bitraft.io:
-    env_file:
-      - ./docker/stubbed/env/nhslogin_connectivity.minimock.env
-
   stubs.local.bitraft.io:
-    image: ${STUBS_DOCKER_REGISTRY:-local}/nhsonline-minimock:${STUBS_DOCKER_TAG:-latest}
+    image: ${MINIMOCK_DOCKER_REGISTRY:-nhsapp.azurecr.io}/nhsonline-minimock:${MINIMOCK_DOCKER_TAG:-latest}
     env_file:
       - ./docker/stubbed/env/minimock.env

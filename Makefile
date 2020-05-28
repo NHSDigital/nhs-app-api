@@ -43,12 +43,12 @@ run: run-deps	## Run in docker
 $(eval $(call expand_run_options_docker_images,run-dev-stubs))
 $(call expand_run_options_docker_image,run-dev-stubs,STUBS)
 run-dev-stubs:	## Run in docker with dev stubs
-	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml
+	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml
 
 $(eval $(call expand_run_options_docker_images,run-perf-stubs))
 $(call expand_run_options_docker_image,run-perf-stubs,STUBS)
 run-perf-stubs:	 ## Run performance stubs in docker
-	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.minimock.yml
+	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.minimock.yml
 
 $(eval $(call expand_run_options_docker_images,run-https))
 run-https: $(SSL_CERT)	## Run in docker with https
@@ -57,6 +57,11 @@ run-https: $(SSL_CERT)	## Run in docker with https
 $(eval $(call expand_run_options_docker_images,run-android))
 run-android:	## Run in docker for android
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/android/docker-compose.yml
+
+$(eval $(call expand_run_options_docker_images,run-android-stubs))
+$(call expand_run_options_docker_image,run-android-stubs,STUBS)
+run-android-stubs:	## Run in docker with dev stubs for android
+	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml docker/android/docker-compose.yml
 
 $(eval $(call expand_run_options_docker_images,run-android-https))
 run-android-https: $(SSL_CERT)	## Run in docker with https for android

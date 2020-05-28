@@ -89,7 +89,7 @@ class Config private constructor() {
         isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
-        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.ext.signin.nhs.uk")
+        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "http://stubs.local.bitraft.io:8080/citizenid/")
         val cidHostname = envOrDefault("CID_HOST", "stubs.local.bitraft.io")
         val webHostname = envOrDefault("WEB_HOST", "web.local.bitraft.io")
         val appScheme = envOrDefault("APP_SCHEME", "http")

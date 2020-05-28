@@ -6,7 +6,8 @@ open class MockDataPopulate {
 
     companion object {
         @JvmStatic
-        fun main() {
+        fun main(args : Array<String>) {
+            println(args)
             StubbedEnvironment().generateStubs()
         }
     }
