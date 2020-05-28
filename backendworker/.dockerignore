@@ -9,8 +9,8 @@ SwaggerGenerated
 docker-compose.yml
 docker-compose.*.yml
 
-bin
-obj
+*/bin
+*/obj
 !obj/Docker/publish/*
 !obj/Docker/empty/
 **/*.assets.json
