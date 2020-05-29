@@ -1,119 +1,76 @@
 import get from 'lodash/fp/get';
 import NativeCallbacks from '@/services/native-app';
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('lodash/fp/get');
+jest.mock('@/services/event-bus');
+jest.mock('@/services/native-app');
+
+const $route = { path: '/test-url-path' };
+const mountMixin = ({ isNativeApp }) => {
+  const $store = createStore({
+    state: {
+      device: {
+        isNativeApp,
+      },
+    },
+  });
+  mount({ template: '<div></div>', mixins: [ResetPageFocusMixin] }, { $store, $route });
+};
 
 describe('resetPageFocus mounted mixin', () => {
-  let $store;
-  let $route;
-  let spy;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    $store = {};
-    $route = {
-      path: '/test-url-path',
-    };
-    spy = jest.spyOn(NativeCallbacks, 'resetPageFocus');
-  });
-
-  it('will call NativeCallbacks.resetPageFocus when client side, native, page loads', () => {
-    // arrange
-    const component = {
-      template: '<div></div>',
-      mixins: [ResetPageFocusMixin],
-    };
-
-    const keyPathFunction = jest.fn().mockImplementation(() => '/test-url-path');
-
-    get.mockImplementation(() => keyPathFunction);
-
-    process.client = true;
-
-    $store = createStore({
-      state: {
-        device: {
-          isNativeApp: true,
-        },
-      },
+  describe('not a page loading', () => {
+    beforeEach(() => {
+      get.mockImplementation(() => jest.fn().mockImplementation(() => '/test-component-url-path'));
+      mountMixin({ isNativeApp: true });
     });
 
-    // act
-    mount(component, { $store, $route });
-
-    // assert
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('will not call NativeCallbacks.resetPageFocus when not native app', () => {
-    // arrange
-    const component = {
-      template: '<div></div>',
-      mixins: [ResetPageFocusMixin],
-    };
-
-    process.client = true;
-
-    $store = createStore({
-      state: {
-        device: {
-          isNativeApp: false,
-        },
-      },
+    it('will not call `NativeCallbacks.resetPageFocus`', () => {
+      expect(NativeCallbacks.resetPageFocus).not.toBeCalled();
     });
 
-    // act
-    mount(component, { $store, $route });
-
-    // assert
-    expect(spy).not.toHaveBeenCalled();
+    it('will not emit', () => {
+      expect(EventBus.$emit).not.toBeCalled();
+    });
   });
 
-  it('will not call NativeCallbacks when running server side', () => {
-    // arrange
-    const component = {
-      template: '<div></div>',
-      mixins: [ResetPageFocusMixin],
-    };
-
-    process.client = false;
-
-    // act
-    mount(component, { $store, $route });
-
-    // assert
-    expect(spy).not.toHaveBeenCalled();
-  });
-
-  it('will not call NativeCallbacks.resetPageFocus when not a page', () => {
-    // arrange
-    const component = {
-      template: '<div></div>',
-      mixins: [ResetPageFocusMixin],
-    };
-
-    process.client = true;
-
-    $store = createStore({
-      state: {
-        device: {
-          isNativeApp: true,
-        },
-      },
+  describe('page loading', () => {
+    beforeEach(() => {
+      get.mockImplementation(() => jest.fn().mockImplementation(() => $route.path));
     });
 
-    const keyPathFunction = jest
-      .fn()
-      .mockImplementation(() => '/not-matching-test-url-path');
+    describe('is native', () => {
+      beforeEach(() => {
+        mountMixin({ isNativeApp: true });
+      });
 
-    get.mockImplementation(() => keyPathFunction);
+      it('will call `NativeCallbacks.resetPageFocus`', () => {
+        expect(NativeCallbacks.resetPageFocus).toHaveBeenCalled();
+      });
 
-    // act
-    mount(component, { $store, $route });
+      it('will emit `FOCUS_NHSAPP_ROOT`', () => {
+        expect(EventBus.$emit).toBeCalledWith(FOCUS_NHSAPP_ROOT);
+      });
+    });
 
-    // assert
-    expect(spy).not.toHaveBeenCalled();
+    describe('is not native', () => {
+      beforeEach(() => {
+        mountMixin({ isNativeApp: false });
+      });
+
+      it('will not call `NativeCallbacks.resetPageFocus`', () => {
+        expect(NativeCallbacks.resetPageFocus).not.toBeCalled();
+      });
+
+      it('will emit `FOCUS_NHSAPP_ROOT`', () => {
+        expect(EventBus.$emit).toBeCalledWith(FOCUS_NHSAPP_ROOT);
+      });
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 });

@@ -58,7 +58,6 @@ PLEASE INSTEAD USE nhsuk-layout.vue
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -67,17 +66,19 @@ import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import HotJar from '@/components/widgets/HotJar';
 import Modal from '@/components/modal/Modal';
 import NativeCallbacks from '@/services/native-app';
-import NativeVersionSetup from '../services/nativeVersionSetup';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
+import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
 import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import {
-  findByName,
-  INDEX,
-  isAnonymous,
+
   LOGIN,
+  INDEX,
+  findByName,
+  isAnonymous,
 } from '@/lib/routes';
 import isFunction from 'lodash/fp/isFunction';
 
@@ -95,6 +96,7 @@ export default {
     WebFooter,
     WebHeader,
   },
+  mixins: [ResetSpinnerMixin],
   head() {
     let platform = this.$store.state.device.source;
     const { nativeVersion } = this.$store.state.appVersion;
@@ -139,7 +141,6 @@ export default {
   data() {
     return {
       surveyBarOpen: true,
-      pathChanged: false,
       resetTimeoutId: undefined,
     };
   },
@@ -220,11 +221,9 @@ export default {
       return !!this.$store.state.session.csrfToken;
     },
   },
-
   watch: {
     $route(to, from) {
       if (from !== to) {
-        this.pathChanged = true;
         this.configureWebContext(this.currentHelpUrl);
       }
     },
@@ -252,20 +251,13 @@ export default {
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
-
-    this.$store.dispatch('spinner/prevent', false);
+  },
+  beforeMount() {
+    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   mounted() {
-    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.dismissProgressBar();
-    }
-  },
-  updated() {
-    if (this.pathChanged) {
-      this.focusNhsAppRoot();
-      this.pathChanged = false;
-      this.$store.dispatch('spinner/prevent', false);
     }
   },
   beforeDestroy() {

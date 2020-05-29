@@ -1,7 +1,7 @@
 <template>
   <div>
     <cookie-banner v-if="!loggedIn"/>
-    <skip-link />
+    <skip-link v-if="!$store.state.device.isNativeApp" />
     <header class="nhsuk-header" role="banner">
       <div class="nhsuk-width-container nhsuk-header__container">
         <NhsHeaderLogo :index-path="indexPath"/>

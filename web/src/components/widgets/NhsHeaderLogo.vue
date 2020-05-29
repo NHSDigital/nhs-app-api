@@ -1,9 +1,11 @@
 <template>
   <div class="nhsuk-header__logo">
-    <nuxt-link id="nhs_logo" ref="homeLogoEl"
-               :class="'nhsuk-header__link'"
-               :to="indexPath"
-               :aria-label="$t('webHeader.nhsLogoAriaLabel')">
+    <a id="nhs_logo"
+       ref="homeLogoEl"
+       :href="indexPath"
+       :class="'nhsuk-header__link'"
+       :aria-label="$t('webHeader.nhsLogoAriaLabel')"
+       @click.stop.prevent="onClick">
       <svg class="nhsuk-logo nhsuk-logo--white"
            xmlns="http://www.w3.org/2000/svg"
            focusable="false"
@@ -19,12 +21,14 @@
           4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7
           3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"/>
       </svg>
-    </nuxt-link>
+    </a>
   </div>
 </template>
 
 <script>
+import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import { INDEX } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'NhsHeaderLogo',
@@ -32,6 +36,22 @@ export default {
     indexPath: {
       default: INDEX.path,
       type: String,
+    },
+  },
+  beforeMount() {
+    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focus);
+  },
+  beforeDestroy() {
+    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focus);
+  },
+  methods: {
+    focus() {
+      if (this.$store.state.device.isNativeApp) {
+        this.$refs.homeLogoEl.focus();
+      }
+    },
+    onClick() {
+      redirectTo(this, this.indexPath);
     },
   },
 };

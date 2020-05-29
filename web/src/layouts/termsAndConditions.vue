@@ -1,5 +1,8 @@
 <template>
-  <div id="app" :class="{ [$style['no-footer']]: !shouldShowFooter }">
+  <div id="app"
+       ref="nhsAppRoot"
+       :class="{ [$style['no-footer']]: !shouldShowFooter }"
+       tabindex="-1">
     <div>
       <web-header :show-menu="false"
                   :show-links="false"
@@ -9,7 +12,7 @@
                     :show-bread-crumb="false"
                     :show-content-header="true"
                     class="nhsuk-u-margin-bottom-3"/>
-    <main id="maincontent" ref="mainContent">
+    <main id="maincontent" ref="mainContent" tabindex="-1">
       <spinner/>
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
@@ -41,6 +44,7 @@ import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
 import Spinner from '@/components/widgets/Spinner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
+import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import { findByName } from '@/lib/routes';
 
 
@@ -51,8 +55,8 @@ export default {
     ContentHeader,
     FlashMessage,
     Spinner,
-    WebHeader,
     WebFooter,
+    WebHeader,
   },
   mixins: [ResetSpinnerMixin],
   head() {
@@ -105,15 +109,6 @@ export default {
       return !this.$store.state.device.isNativeApp;
     },
   },
-  mounted() {
-    NativeVersionSetup(this.$store);
-    window.validateSession =
-      window.validateSession || (() => this.$store.dispatch('session/validate'));
-    this.configureWebContext(this.currentHelpUrl);
-    if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.dismissProgressBar();
-    }
-  },
   created() {
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
@@ -123,6 +118,26 @@ export default {
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
+  },
+  beforeMount() {
+    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+  },
+  mounted() {
+    NativeVersionSetup(this.$store);
+    window.validateSession =
+      window.validateSession || (() => this.$store.dispatch('session/validate'));
+    this.configureWebContext(this.currentHelpUrl);
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.dismissProgressBar();
+    }
+  },
+  beforeDestroy() {
+    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+  },
+  methods: {
+    focusNhsAppRoot() {
+      this.$refs.nhsAppRoot.focus();
+    },
   },
 };
 </script>

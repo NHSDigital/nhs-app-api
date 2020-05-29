@@ -62,8 +62,8 @@ import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
+import isFunction from 'lodash/fp/isFunction';
 import showShutterPage from '@/lib/proxy/shutter';
-import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import {
   DOCUMENT_DETAIL,
   INDEX,
@@ -71,7 +71,7 @@ import {
   findByName,
   isAnonymous,
 } from '@/lib/routes';
-import isFunction from 'lodash/fp/isFunction';
+import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'NhsUkLayout',
@@ -84,8 +84,8 @@ export default {
     Modal,
     Spinner,
     SurveyBar,
-    WebHeader,
     WebFooter,
+    WebHeader,
   },
   mixins: [ResetSpinnerMixin],
   head() {
@@ -134,9 +134,8 @@ export default {
   },
   data() {
     return {
-      surveyBarOpen: true,
-      pathChanged: false,
       resetTimeoutId: undefined,
+      surveyBarOpen: true,
     };
   },
   computed: {
@@ -232,7 +231,6 @@ export default {
   watch: {
     $route(to, from) {
       if (from !== to) {
-        this.pathChanged = true;
         this.configureWebContext(this.currentHelpUrl);
       }
     },
@@ -267,16 +265,12 @@ export default {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
   },
-  mounted() {
+  beforeMount() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+  },
+  mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.dismissProgressBar();
-    }
-  },
-  updated() {
-    if (this.pathChanged) {
-      this.focusNhsAppRoot();
-      this.pathChanged = false;
     }
   },
   beforeDestroy() {
