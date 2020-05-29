@@ -18,8 +18,6 @@ rebuild_image_with_user "${DOCKER_IMAGE}"
 
 configure_npmrc_and_m2_volumes
 
-set -x
-
 docker run \
   --name "${DOCKER_PROJECT_NAME}_test_runner" \
   --network "${DOCKER_NETWORK}" \
