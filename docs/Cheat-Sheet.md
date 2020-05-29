@@ -88,7 +88,7 @@ make run WEB=host
 make run PFSAPI=host
 ```
 
-A `launchsettings.json` file will be automatically generated for any backend API services which are set to run on the host. This will match the specified run configuration. The list of available APIs can be found in the [IMAGE_SETTING_NAMES](/buildscripts/lib/set_env.sh) variable. Mulitiple may be specifed to debug more than one API concurrently.
+A `launchsettings.json` file will be automatically generated for any backend API services which are set to run on the host. This will match the specified run configuration. The list of available APIs can be found in the [IMAGE_SETTING_NAMES](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/buildscripts/lib/set_env.sh&version=GBdevelop) variable. Mulitiple may be specifed to debug more than one API concurrently.
 
 ### Debugging web locally with develop versions of the rest
 

@@ -19,7 +19,7 @@ In order to build the app, access to a common debug keystore is required. The fo
 
 ## Running in Emulator
 
-The emulator runs in its own network which, by default, uses the DNS servers configured on the host machine. It does not use the `hosts` file from the host machine. Access to the host machine is done through the IP address `10.0.2.2`. In order to route requests to the application running on the host machine (e.g. `web.local.bitraft.io`, `api.local.bitraft.io`) a DNS server is spun up in docker which returns `10.0.2.2` for those hosts (see [android/docker-compose.yml](/docker/android/docker-compose.yml)). The emulator is started via the command line to specify that it should use this DNS server.
+The emulator runs in its own network which, by default, uses the DNS servers configured on the host machine. It does not use the `hosts` file from the host machine. Access to the host machine is done through the IP address `10.0.2.2`. In order to route requests to the application running on the host machine (e.g. `web.local.bitraft.io`, `api.local.bitraft.io`) a DNS server is spun up in docker which returns `10.0.2.2` for those hosts (see [android/docker-compose.yml](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/android/docker-compose.yml&version=GBdevelop)). The emulator is started via the command line to specify that it should use this DNS server.
 
 1. Start the emulator
 
@@ -56,7 +56,7 @@ Update all IP address in the following files (replace 10.0.2.2 with your IP addr
 * android/app/src/debug/res/values/configstrings.xml
 * bddtests/docker-compose.local-appium.yml
 
-Update `bddtests/src/main/kotlin/config/Config.kt` variable name `cidHostname` (or set env variable `CID_HOST`) to be your machine IP address.
+Update [bddtests/src/main/kotlin/config/Config.kt](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/bddtests/src/main/kotlin/config/Config.kt&version=GBdevelop) variable name `cidHostname` (or set env variable `CID_HOST`) to be your machine IP address.
 
 From bddtests run:
 

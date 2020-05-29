@@ -95,7 +95,7 @@ You require a token to access the feeds, to generate a new one:
 
 - Fill in the placeholder `<TOKEN>`
 
-## Maven/Gradle Config 
+## Maven/Gradle Config
 
 *Used in:* android, bddtests
 
@@ -129,7 +129,7 @@ Secrets required for running the app locally are stored in Keybase (`team/nhsonl
 ### Adding Secrets
 
 1. Add a file containing the secret to the `development_secrets` directory in keybase
-2. Add a line to `buildscripts/validate_local_secrets.sh` containing the name of the secret. e.g.
+2. Add a line to [buildscripts/validate_local_secrets.sh](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/buildscripts/validate_local_secrets.sh&version=GBdevelop) containing the name of the secret. e.g.
 
     ```bash
     validate_secret my_new_secret
@@ -165,10 +165,22 @@ Secrets required for running the app locally are stored in Keybase (`team/nhsonl
       - "--"
     ```
 
-6. Create a suitable dummy secret file in `bddtests/dummysecrets`. This must *not* contain a real secret but a dummy value for the secret expected by the tests.
-7. Update `bddtests/docker-compose.yml` to reference the dummy secret. e.g.
+6. Configure stubbed environment
 
-    ```bash
-    my_new_secret:
-        file: "./bddtests/dummysecrets/my_new_secret"
-    ```
+   If the secret is a certificate or key update [docker/stubbed/docker-compose.yml](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/stubbed/docker-compose.yml&version=GBdevelop) to reference the appropriate files in [docker/stubbed/certs](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/stubbed/certs&version=GBdevelop)
+
+      ```bash
+      my_new_secret:
+          file: "./docker/stubbed/certs/TestCert.pfx"
+      ```
+
+7. Configure Integration Tests
+
+    If a specific value (different to the default) is required for integration tests create a suitable dummy secret file in [docker/bddtests/secrets](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/bddtests/secrets&version=GBdevelop). This must *not* contain a real secret but a dummy value for the secret expected by the tests.
+
+    Update [docker/bddtests/docker-compose.yml](https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp?path=/docker/bddtests/docker-compose.yml&version=GBdevelop) to reference the dummy secret.
+
+      ```bash
+      my_new_secret:
+          file: "./docker/bddtests/secrets/my_new_secret"
+      ```
