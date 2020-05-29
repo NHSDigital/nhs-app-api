@@ -77,6 +77,10 @@ open class HomeSteps {
         return homePage.assertLinkIsVisible(link.linkText);
     }
 
+    fun assertUnreadMessageIndicatorIsDisplayed() {
+        homePage.assertUnreadIndicatorPresent()
+    }
+
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
         return arrayListOf(
                 "Age: ${proxyPatient.profile.age.formattedAge()}",

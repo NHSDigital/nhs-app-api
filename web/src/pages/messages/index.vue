@@ -7,10 +7,10 @@
                    data-sid="im1-messaging-list-item"
                    header-tag="h2"
                    :href="im1MessagingPath"
+                   :has-unread-messages="hasUnreadGPMessages"
                    :text="$t('messagesHub.im1Messaging.subheader')"
                    :description="$t('messagesHub.im1Messaging.body')"
-                   :aria-label="$t('messagesHub.im1Messaging.subheader') |
-                     join($t('messagesHub.im1Messaging.body'), '. ')"
+                   :aria-label="ariaLabel('im1Messaging')"
                    :click-func="navigate"/>
         <third-party-jump-off-button v-if="pkbEnabled"
                                      id="btn_pkb_messages_and_consultations"
@@ -29,11 +29,11 @@
                    header-tag="h2"
                    data-purpose="text_link"
                    :href="appMessagingPath"
+                   :has-unread-messages="hasUnreadAppMessages"
                    :text="$t('messagesHub.appMessaging.subHeader')"
                    :description="$t('messagesHub.appMessaging.body')"
                    :click-func="navigate"
-                   :aria-label="$t('messagesHub.appMessaging.subHeader') |
-                     join($t('messagesHub.appMessaging.body') ,'. ')"/>
+                   :aria-label="ariaLabel('appMessaging')"/>
       </menu-item-list>
       <p v-else data-purpose="no-messages-available">
         {{ $t('messagesHub.noMessages') }}
@@ -61,6 +61,8 @@ export default {
   },
   data() {
     return {
+      hasUnreadAppMessages: false,
+      hasUnreadGPMessages: false,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       im1MessagingPath: GP_MESSAGES.path,
@@ -103,10 +105,33 @@ export default {
       return this.hasTestProviderMessages && this.isProofLevel9;
     },
   },
+  async mounted() {
+    const params = { ignoreError: true };
+
+    if (this.gpMessagesEnabled) {
+      await this.$store.dispatch('gpMessages/loadMessages', params);
+    }
+
+    if (this.appMessagingSjrEnabled) {
+      await this.$store.dispatch('messaging/load', params);
+    }
+
+    this.hasUnreadGPMessages = this.$store.state.gpMessages.hasUnread;
+    this.hasUnreadAppMessages = this.$store.state.messaging.hasUnread;
+  },
   methods: {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
+    },
+    ariaLabel(type) {
+      const { hasUnreadGPMessages, hasUnreadAppMessages } = this;
+      return (hasUnreadGPMessages || hasUnreadAppMessages) ?
+        `${this.$t(`messagesHub.${type}.subheader`)}
+          ${this.$t(`messagesHub.${type}.body`)}.
+          ${this.$t('messagesHub.unreadMessages')}`
+        : `${this.$t(`messagesHub.${type}.subheader`)}
+          ${this.$t(`messagesHub.${type}.body`)}.`;
     },
   },
 };

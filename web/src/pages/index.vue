@@ -15,7 +15,8 @@
       :title="publicHealthNotification.title"
       :body="publicHealthNotification.body"/>
     <biometric-banner v-if="!isProxying" />
-    <navigation-list-menu v-if="!isProxying" />
+    <navigation-list-menu v-if="!isProxying"
+                          :has-message-indicator="hasUnreadMessages"/>
     <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
@@ -29,6 +30,7 @@ import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 import ProxyWelcomeSection from '@/components/ProxyWelcomeSection';
 import PublicHealthNotification from '@/components/widgets/PublicHealthNotification';
 import WelcomeSection from '@/components/WelcomeSection';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   layout: 'nhsuk-layout',
@@ -44,6 +46,8 @@ export default {
   data() {
     return {
       publicHealthNotifications: get('publicHealthNotifications', this.$store.state.serviceJourneyRules.rules.homeScreen),
+      hasUnreadMessages: false,
+      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
     };
   },
   computed: {
@@ -71,8 +75,25 @@ export default {
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
+    gpMessagesEnabled() {
+      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
+    },
   },
-  mounted() {
+  async mounted() {
+    const params = { ignoreError: true };
+
+    if (this.gpMessagesEnabled) {
+      await this.$store.dispatch('gpMessages/loadMessages', params);
+    }
+
+    if (this.appMessagingEnabled) {
+      await this.$store.dispatch('messaging/load', params);
+    }
+
+    this.hasUnreadMessages =
+      this.$store.state.gpMessages.hasUnread ||
+      this.$store.state.messaging.hasUnread;
+
     window.scrollTo(0, 0);
   },
 };

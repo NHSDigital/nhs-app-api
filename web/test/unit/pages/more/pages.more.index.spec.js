@@ -13,11 +13,15 @@ describe('more', () => {
     isProxying = false,
     isNativeApp = false,
     context = true,
+    hasUnreadGpMessages = false,
+    hasUnreadAppMessages = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
         device: { isNativeApp },
+        gpMessages: { hasUnread: hasUnreadGpMessages },
+        messaging: { hasUnread: hasUnreadAppMessages },
         knownServices: {
           knownServices: [{
             id: 'pkb',
@@ -119,6 +123,26 @@ describe('more', () => {
       it('will not show link', () => {
         expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
       });
+    });
+  });
+
+  describe('unread messages indicator', () => {
+    const getUnreadIndicator = wrapperObj =>
+      wrapperObj.find('#btn_messages_unreadIndicator');
+
+    describe('has unread indicators', () => {
+      beforeEach(async () => {
+        wrapper = mountAs({ hasUnreadAppMessages: true, hasUnreadGpMessages: true });
+        await wrapper.vm.$nextTick();
+      });
+
+      it('will show the the unread indicator', () => {
+        expect(getUnreadIndicator(wrapper).exists()).toBe(true);
+      });
+    });
+
+    it('will not show the unread indicators when there are no unread messages', () => {
+      expect(getUnreadIndicator(wrapper).exists()).toBe(false);
     });
   });
 

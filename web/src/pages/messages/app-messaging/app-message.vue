@@ -74,7 +74,7 @@ export default {
       return;
     }
 
-    await store.dispatch('messaging/load', sender);
+    await store.dispatch('messaging/load', { sender });
   },
   created() {
     if (!this.messages.length) {

@@ -16,6 +16,7 @@ import {
   CLEAR_SELECTED_MESSAGE_DETAILS,
   CLEAR_SELECTED_RECIPIENT,
   SET_ATTACHMENT_ID,
+  SET_HAS_UNREAD,
   initialState,
 } from './mutation-types';
 import buildMessageMetadata from '@/lib/gp-messages/build-message-metadata';
@@ -86,5 +87,10 @@ export default {
   },
   [SET_ATTACHMENT_ID](state, attachmentId) {
     state.attachmentId = attachmentId;
+  },
+  [SET_HAS_UNREAD](state, data) {
+    if (data) {
+      state.hasUnread = data.some(message => message.unreadReplyInfo.present);
+    }
   },
 };

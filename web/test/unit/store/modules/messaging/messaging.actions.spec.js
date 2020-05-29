@@ -52,7 +52,7 @@ describe('messaging actions', () => {
       const sender = 'test sender';
 
       beforeEach(async () => {
-        await actions.load({ commit }, sender);
+        await actions.load({ commit }, { sender });
       });
 
       it('will call the `getV1ApiUsersMeMessages` endpoint with sender', () => {

@@ -7,9 +7,9 @@
                  :href="messagesPath"
                  :text="$t('sc04.messages.subheader')"
                  :description="$t('sc04.messages.body')"
+                 :has-unread-messages="hasUnreadMessages"
                  :click-func="navigate"
-                 :aria-label="$t('sc04.messages.subheader') |
-                   join($t('sc04.messages.body') ,'. ')"/>
+                 :aria-label="ariaLabel"/>
 
       <menu-item v-if="adminHelpEnabled"
                  id="btn_gp_help"
@@ -69,11 +69,13 @@ export default {
   },
   data() {
     return {
+      hasUnreadMessages: false,
       adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
       adminHelpPath: createUri({
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
       }),
+      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       morePath: MORE.path,
@@ -100,8 +102,33 @@ export default {
     showPkbSharedLinks() {
       return this.hasPkbSharedLinks && !this.isProxying;
     },
+    gpMessagesEnabled() {
+      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
+    },
+    ariaLabel() {
+      return (this.hasUnreadMessages) ?
+        `${this.$t('sc04.messages.subheader')}
+          ${this.$t('sc04.messages.body')}.
+          ${this.$t('sc04.messages.unreadMessages')}`
+        : `${this.$t('sc04.messages.subheader')}
+          ${this.$t('sc04.messages.body')}.`;
+    },
   },
-  mounted() {
+  async mounted() {
+    const params = { ignoreError: true };
+
+    if (this.gpMessagesEnabled) {
+      await this.$store.dispatch('gpMessages/loadMessages', params);
+    }
+
+    if (this.appMessagingEnabled) {
+      await this.$store.dispatch('messaging/load', params);
+    }
+
+    this.hasUnreadMessages =
+      this.$store.state.gpMessages.hasUnread ||
+      this.$store.state.messaging.hasUnread;
+
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {

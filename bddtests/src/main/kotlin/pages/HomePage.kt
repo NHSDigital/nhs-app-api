@@ -29,6 +29,12 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Dismiss Button"
     ).withText("Dismiss", false)
 
+    private val unreadIndicator = HybridPageElement(
+            webDesktopLocator = "//*[@id='btn_messages_unreadIndicator']",
+            androidLocator = null,
+            page = this,
+            helpfulName = "Unread Indicator")
+
     private val surveyPath = "//div[@data-purpose='survey']"
 
     private val surveyLinkTab = HybridPageElement(
@@ -98,6 +104,10 @@ open class HomePage : HybridPageObject() {
     val linkedProfilesLink = link("Linked profiles")
 
     val messagesLink = link("View your messages")
+
+    fun assertUnreadIndicatorPresent() {
+        unreadIndicator.assertIsVisible()
+    }
 
     fun assertHasWelcomeMessageFor(patient: Patient) {
         val name = patient.formattedFullName()

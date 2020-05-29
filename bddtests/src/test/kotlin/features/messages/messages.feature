@@ -25,6 +25,22 @@ Feature: Messages
     Then the Messages page is displayed
     And my messages from the sender are displayed as read
 
+  Scenario: A user can see they have unread messages on the More page
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
+    And I am logged in
+    And I can see I have unread messages on the home page
+    When I navigate to the More page
+    Then I see the unread indicator on the More page
+
+  Scenario: A user can see they have unread messages on the Messages Hub
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
+    And I am logged in
+    And I can see I have unread messages on the home page
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed with the unread indicator for app messaging
+
   Scenario: A user can see their messages and follow an internal link
     Given I am using the native app user agent
     And I am a user wishing to view my appointments and my messages with content
@@ -162,11 +178,11 @@ Feature: Messages
     Then the Messages page is displayed
     And my messages from the sender are displayed
 
-Scenario: A desktop user can see their messages if enabled
-  Given I am a user wishing to view my messages
-  And I am logged in
-  When I navigate to the More page
-  And I click the Messages link on the More page
-  Then the Messages Hub page is displayed
-  And I click on the NHS App Messages link on the Messages Hub page
-  And the Messages Inbox page is displayed
+  Scenario: A desktop user can see their messages if enabled
+    Given I am a user wishing to view my messages
+    And I am logged in
+    When I navigate to the More page
+    And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
+    And the Messages Inbox page is displayed

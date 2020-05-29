@@ -59,9 +59,11 @@ export default {
     },
   },
   updated() {
-    this.$store.dispatch('errors/setConnectionProblem', process.client && !navigator.onLine);
-    this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
-    this.$store.dispatch('pageTitle/updatePageTitle', this.getMessage('header'));
+    if (this.showError()) {
+      this.$store.dispatch('errors/setConnectionProblem', process.client && !navigator.onLine);
+      this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
+      this.$store.dispatch('pageTitle/updatePageTitle', this.getMessage('header'));
+    }
   },
   methods: {
     onRetryButtonClicked() {

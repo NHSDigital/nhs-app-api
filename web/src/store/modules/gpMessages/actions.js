@@ -16,23 +16,34 @@ import {
   CLEAR_SELECTED_MESSAGE_DETAILS,
   CLEAR_SELECTED_RECIPIENT,
   SET_ATTACHMENT_ID,
+  SET_HAS_UNREAD,
 } from './mutation-types';
 
 export default {
   init({ commit }) {
     commit(INIT);
   },
-  async loadMessages({ commit }, clearApiError) {
+  async loadMessages({ commit }, parameters) {
+    let clearApiError;
+    let ignoreError;
+
+    if (parameters) {
+      ({ clearApiError, ignoreError } = parameters);
+    }
+
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
 
       commit(LOADED_MESSAGES, false);
     }
 
+    const request = { ignoreError };
+
     try {
-      const response = await this.app.$http.getV1PatientMessages();
+      const response = await this.app.$http.getV1PatientMessages(request);
 
       commit(SET_SUMMARIES, get('messageSummaries', response));
+      commit(SET_HAS_UNREAD, get('messageSummaries', response));
       commit(LOADED_MESSAGES, true);
     } catch {
       // Nothing to do. A server error / messages error is displayed
@@ -69,6 +80,7 @@ export default {
 
       commit(SET_DETAILS, response);
       commit(LOADED_MESSAGE, true);
+      commit(SET_HAS_UNREAD, response);
     } catch {
       // Nothing to do. A server error / messages error is displayed
     }

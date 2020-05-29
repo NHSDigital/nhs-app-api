@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies import/imports-first */
 import Vuex from 'vuex';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import WebHeader from '@/components/widgets/WebHeader';

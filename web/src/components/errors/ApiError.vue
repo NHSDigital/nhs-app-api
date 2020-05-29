@@ -60,7 +60,6 @@
   </div>
 </template>
 <script>
-/* eslint-disable import/extensions */
 import isObject from 'lodash/fp/isObject';
 import ContactOrganDonation from '@/components/errors/additional-info/ContactOrganDonation';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
@@ -72,7 +71,6 @@ import MessagesSenderError from '@/components/errors/additional-info/MessagesSen
 import MessageText from '@/components/widgets/MessageText';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { getMessage, getComponentErrorCodeKey, getComponentKey } from '@/lib/errors';
-import PageTitle from '@/components/widgets/PageTitle';
 import NativeApp from '@/services/native-app';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
@@ -88,7 +86,6 @@ const getMappedValue = ({ map, statusCode, errorCode }) => {
 export default {
   name: 'ApiError',
   components: {
-    PageTitle,
     ContactOrganDonation,
     DesktopGenericBackLink,
     GenericButton,
@@ -99,13 +96,6 @@ export default {
     NativeApp,
   },
   mixins: [ErrorMessageMixin],
-  props: {
-    withTitle: {
-      type: Boolean,
-      required: false,
-      default: () => false,
-    },
-  },
   computed: {
     additionalInfo() {
       return getMessage(this, 'additionalInfo');

@@ -177,7 +177,7 @@ export default {
         @include nhsuk-responsive-padding(1, "right");
         @include nhsuk-typography-responsive(14);
         font-weight: $nhsuk-font-bold;
-        background-color: $color_nhsuk-warm-yellow;
+        background-color: $color_nhsuk-yellow;
         border-radius: nhsuk-spacing(3);
         color: $nhsuk-text-color;
         border: 1px solid #B58F1C;

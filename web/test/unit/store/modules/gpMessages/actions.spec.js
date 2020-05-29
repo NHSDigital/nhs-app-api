@@ -50,7 +50,7 @@ describe('gpMessages store actions', () => {
 
     describe('clearApiErrors param is set to true', () => {
       beforeEach(async () => {
-        await actions.loadMessages.call(store(), { commit }, true);
+        await actions.loadMessages.call(store(), { commit }, { clearApiError: true });
       });
 
       it('will clear api errors and set loaded false then set summaries with the api response', () => {

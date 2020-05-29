@@ -24,6 +24,12 @@
              :id="descriptionId"
              :data-sid="descriptionDataSid"
              class="nhsuk-u-margin-bottom-3">{{ description }}</p>
+          <div v-if="hasUnreadMessages"
+               :id="id+`_unreadIndicator`"
+               :class="[$style['nhs-app-message__meta'], $style['count']]">
+            <span id="unreadIndicator"
+                  :class="$style['nhs-app-message__count']"/>
+          </div>
         </div>
         <slot/>
       </span>
@@ -91,6 +97,10 @@ export default {
       type: [String, Object],
       default: undefined,
     },
+    hasUnreadMessages: {
+      type: Boolean,
+      default: false,
+    },
     count: {
       type: Number,
       default: undefined,
@@ -101,6 +111,9 @@ export default {
       return this.count !== undefined;
     },
     ariaText() {
+      if (this.hasUnreadMessages) {
+        return `${this.text}.${this.$t('messagesHub.unreadMessages')}`;
+      }
       return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('my_record.records')})` : this.text;
     },
 
@@ -110,10 +123,40 @@ export default {
 <style module lang="scss" scoped>
   @import '../style/arrow';
   @import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
+  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+  @import '~nhsuk-frontend/packages/core/settings/typography';
+  @import '~nhsuk-frontend/packages/core/tools/typography';
 
   @mixin outlineStyle {
     outline: 4px solid transparent;
     outline-offset: -6px;
+  }
+
+  .nhs-app-message__meta{
+    flex-shrink: 0;
+    margin-left: nhsuk-spacing(3);
+    vertical-align: middle;
+    margin-top: nhsuk-spacing(1);
+    .nhs-app-message__count {
+      @include nhsuk-responsive-padding(1, "left");
+      @include nhsuk-responsive-padding(1, "right");
+      @include nhsuk-typography-responsive(14);
+      font-weight: $nhsuk-font-bold;
+      background-color: $color_nhsuk-yellow;
+      border-radius: nhsuk-spacing(3);
+      color: $nhsuk-text-color;
+      border: 1px solid #B58F1C;
+      display: inline-block;
+      min-width: nhsuk-spacing(4);
+      min-height: nhsuk-spacing(4);
+      text-align: center;
+      @include govuk-media-query($until: tablet) {
+        padding-top: 1px;
+        padding-bottom: 1px;
+      }
+    }
   }
 
   .listMenuItemLink {

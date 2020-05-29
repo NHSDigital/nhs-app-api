@@ -20,6 +20,7 @@ export default {
     if (error == null) {
       return;
     }
+
     if (error.response) {
       const { status, data } = error.response;
       statusCode = status;

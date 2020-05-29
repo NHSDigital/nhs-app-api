@@ -43,6 +43,15 @@ open class MorePage : HybridPageObject() {
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle, requestGpHelpDescription) }
     val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
 
+    private val unreadIndicator = HybridPageElement(
+            webDesktopLocator = "//*[@id='btn_messages_unreadIndicator']",
+            androidLocator = null,
+            page = this)
+
+    fun assertUnreadIndicatorVisible() {
+        unreadIndicator.assertIsVisible()
+    }
+
     fun assertProxyText(patientName: String){
         val expectedText = arrayListOf(
                 "It's not possible to access this section while acting on $patientName's behalf.",

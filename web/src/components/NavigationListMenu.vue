@@ -43,8 +43,9 @@
                :header-tag="headerTag"
                data-purpose="messages-menu-item"
                :href="messagesPath"
+               :has-unread-messages="hasMessageIndicator"
                :text="$t('navigationMenuList.messages')"
-               :aria-label="$t('navigationMenuList.messages')"
+               :aria-label="ariaLabel"
                :click-func="goToUrl"
                :click-param="messagesPath"/>
 
@@ -86,6 +87,10 @@ export default {
       type: String,
       default: 'h2',
     },
+    hasMessageIndicator: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -105,6 +110,12 @@ export default {
     },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
+    },
+    ariaLabel() {
+      return (this.hasMessageIndicator) ?
+        `${this.$t('navigationMenuList.messages')}
+          ${this.$t('navigationMenuList.unreadMessages')}` :
+        this.$t('navigationMenuList.messages');
     },
   },
   methods: {

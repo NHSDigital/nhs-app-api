@@ -36,6 +36,11 @@ class MoreStepDefinitions {
         morePage.btnSharedLinks.click()
     }
 
+    @When("^I see the unread indicator on the More page")
+    fun iSeeTheUnreadIndicatorOnTheMorePage() {
+        morePage.assertUnreadIndicatorVisible()
+    }
+
     @When("^I click the Data Sharing link on the More page")
     fun iClickTheDataSharingLinkOnTheMorePage() {
         morePage.btnDataSharing.click()

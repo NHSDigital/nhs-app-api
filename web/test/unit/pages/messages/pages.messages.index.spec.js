@@ -13,12 +13,16 @@ const mountPage = ({
   context = true,
   isProxying = false,
   isProofLevel9 = true,
+  hasUnreadAppMessages = false,
+  hasUnreadGPMessages = false,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
     state: {
       practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
       device: { isNativeApp: false },
+      gpMessages: { hasUnread: hasUnreadGPMessages },
+      messaging: { hasUnread: hasUnreadAppMessages },
       knownServices: {
         knownServices: [{
           id: 'pkb',
@@ -148,6 +152,26 @@ describe('messages page', () => {
       it('will not show link', () => {
         expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
       });
+    });
+  });
+
+  describe('unread message indicators', () => {
+    each([
+      ['show the indicator when there is unread GP messages', true, true],
+      ['show the indicator when there is no unread GP messages', false, false],
+    ]).it('will %s', async (_, hasUnread, indicatorShown) => {
+      mountPage({ hasUnreadGPMessages: hasUnread });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('#btn_im1_messaging_unreadIndicator').exists()).toBe(indicatorShown);
+    });
+
+    each([
+      ['show the indicator when there is unread app messages', true, true],
+      ['not show the indicator when there is no unread app messages', false, false],
+    ]).it('will %s', async (_, hasUnread, indicatorShown) => {
+      mountPage({ hasUnreadAppMessages: hasUnread });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('#btn_appMessaging_unreadIndicator').exists()).toBe(indicatorShown);
     });
   });
 });

@@ -71,12 +71,12 @@ export default {
       redirectTo(this, this.setUpUnreadAnchor(senderMessage.unreadCount));
     },
     messageLabel(senderMessage, message) {
-      let label = this.$t('messaging.index.hidden.intro')
+      let label = this.$t('app_messaging.index.hidden.intro')
         .replace('{sender}', senderMessage.sender)
         .replace('{date}', formatDate(message.sentTime, 'DD MMMM YYYY'));
 
       if (this.unreadCount > 0) {
-        label += this.$t('messaging.index.hidden.unread')
+        label += this.$t('app_messaging.index.hidden.unread')
           .replace('{count}', senderMessage.unreadCount)
           .replace('{plural}', senderMessage.unreadCount > 1 ? 's' : '');
       }

@@ -64,7 +64,7 @@ describe('messaging messages', () => {
       });
 
       it('will dispatch `messaging/load` with selected sender', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/load', selectedSender);
+        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: selectedSender });
       });
 
       it('will not redirect', () => {

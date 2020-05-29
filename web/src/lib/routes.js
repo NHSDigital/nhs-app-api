@@ -633,7 +633,6 @@ const routes = {
     path: '/messages/app-messaging/app-message',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
-    shouldShowContentHeader: false,
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MORE,

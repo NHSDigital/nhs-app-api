@@ -1,12 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies import/imports-first */
 import ContentHeader from '@/components/widgets/ContentHeader';
+import TsAndCsPage from '@/layouts/termsAndConditions';
 import { create$T, createStore, shallowMount } from '../helpers';
 
 const $t = create$T();
-
-/* eslint-disable import/first */
-import TsAndCsPage from '@/layouts/termsAndConditions';
-
 const $http = jest.fn();
 const $env = {};
 const $style = {};

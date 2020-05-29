@@ -6,7 +6,6 @@ import {
   APPOINTMENT_CONFIRMATIONS,
   DOCUMENT_DETAIL,
   GP_MEDICAL_RECORD,
-  HEALTH_INFORMATION_UPDATES_MESSAGES,
   HEALTH_RECORDS,
   INDEX,
   LOGIN,
@@ -201,7 +200,6 @@ describe('NhsUkLayout', () => {
     describe.each([
       [LOGIN.name, LOGIN],
       [DOCUMENT_DETAIL.name, DOCUMENT_DETAIL],
-      [HEALTH_INFORMATION_UPDATES_MESSAGES.name, HEALTH_INFORMATION_UPDATES_MESSAGES],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         wrapper = createPage($store, page);

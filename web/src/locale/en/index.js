@@ -1949,6 +1949,7 @@ export default {
     messages: {
       subheader: 'Messages',
       body: 'Send or view messages from your GP surgery and other health services',
+      unreadMessages: 'You have unread messages',
     },
   },
   webHeader: {
@@ -1989,6 +1990,7 @@ export default {
     organDonation: 'Manage your organ donation decision',
     linkedProfiles: 'Linked profiles',
     messages: 'View your messages',
+    unreadMessages: 'You have unread messages',
   },
   gpPrescriptionsHub: {
     menuOptions: {
@@ -2465,6 +2467,7 @@ export default {
   },
   messagesHub: {
     noMessages: 'You have no messages.',
+    unreadMessages: 'You have unread messages.',
     im1Messaging: {
       subheader: 'GP surgery messages',
       body: 'Send or view messages from your GP surgery',

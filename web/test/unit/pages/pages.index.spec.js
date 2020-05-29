@@ -1,5 +1,6 @@
 import Index from '@/pages/index';
 import { createStore, mount, createRouter } from '../helpers';
+import each from 'jest-each';
 
 describe('index', () => {
   let wrapper;
@@ -18,13 +19,18 @@ describe('index', () => {
     isProxying = false,
     homeScreen = {},
     isNativeApp = false,
-    isProofLevel9 = true } = {}) => {
+    isProofLevel9 = true,
+    hasUnreadAppMessages = false,
+    hasUnreadGpMessages = false,
+  } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
         practiceSettings: {
           im1MessagingEnabled: false,
         },
+        gpMessages: { hasUnread: hasUnreadGpMessages },
+        messaging: { hasUnread: hasUnreadAppMessages },
         linkedAccounts: {
           actingAsUser: {
             id: 'user-id-0',
@@ -109,4 +115,16 @@ describe('index', () => {
     expect(publicHealthNotification1.find('[data-purpose="warning-callout-body"]').text()).toEqual(notification1.body);
     expect(publicHealthNotification2.find('[data-purpose="warning-callout-body"]').text()).toEqual(notification2.body);
   });
+
+  each([
+    ['will show the indicator when there is unread messages', true, true, true],
+    ['will show the indicator when there is only unread app messages', false, true, true],
+    ['will show the indicator when there is only unread GP messages', true, false, true],
+    ['will not show the indicator when there is no unread messages', false, false, false],
+  ]).it('%s',
+    async (_, hasUnreadGpMessages, hasUnreadAppMessages, showIndicator) => {
+      wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages });
+      await wrapper.vm.$nextTick();
+      expect(wrapper.find('#btn_messages_unreadIndicator').exists()).toBe(showIndicator);
+    });
 });

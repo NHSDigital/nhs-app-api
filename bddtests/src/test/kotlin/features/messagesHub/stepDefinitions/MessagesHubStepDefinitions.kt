@@ -36,4 +36,16 @@ class MessagesHubStepDefinitions {
     fun assertIsDisplayed() {
         messagesHubPage.assertMessagesHubPageDisplayed()
     }
+
+    @Then("^the Messages Hub page is displayed with the unread indicator for GP messaging")
+    fun assertIsDisplayedWithUnreadIndicatorGPMessaging() {
+        messagesHubPage.assertUnreadGPIndicatorDisplayed()
+    }
+
+    @Then("^the Messages Hub page is displayed with the unread indicator for app messaging")
+    fun assertIsDisplayedWithUnreadIndicatorAppMessaging() {
+        messagesHubPage.assertUnreadAppIndicatorDisplayed()
+    }
+
+
 }

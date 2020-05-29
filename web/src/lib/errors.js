@@ -21,12 +21,11 @@ export const getMessage = ({ $store, $i18n }, type) => {
   const showError = $store.getters['errors/showApiError'];
   const domain = showError ? 'errors' : 'noConnection';
   const component = $store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
-
   if (showError) {
     return getComponentErrorCodeKey({ $i18n }, showError, component, type, error, status)
-      || getText({ $i18n }, `${component}.${domain}.${type}`)
-      || getText({ $i18n }, `errors.${status}.${type}`)
-      || getText({ $i18n }, `${domain}.${type}`);
+    || getText({ $i18n }, `${component}.${domain}.${type}`)
+    || getText({ $i18n }, `errors.${status}.${type}`)
+    || getText({ $i18n }, `${domain}.${type}`);
   }
   return '';
 };

@@ -77,6 +77,11 @@ class HomePageStepDefinitions {
         homeSteps.assertLinkIsVisible(NavigationLinkText.MESSAGES).click()
     }
 
+    @When("^I can see I have unread messages on the home page$")
+    fun iCanSeeUnreadMessageIndicatorOnTheHomePage() {
+        homeSteps.assertUnreadMessageIndicatorIsDisplayed()
+    }
+
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         homeSteps.assertHeaderVisible()
