@@ -529,8 +529,8 @@ const routes = {
     }],
   },
   EVENTS: {
-    name: 'health-records-events',
-    path: '/health-records/events',
+    name: 'health-records-gp-medical-record-events',
+    path: '/health-records/gp-medical-record/events',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
