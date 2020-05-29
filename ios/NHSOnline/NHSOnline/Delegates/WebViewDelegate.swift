@@ -103,12 +103,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            if !Reachability.isConnectedToNetwork() {
-                decisionHandler(.cancel)
-                self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
-                return
-            }
-
             self.failedUrl = url
             
             var knownService: KnownService

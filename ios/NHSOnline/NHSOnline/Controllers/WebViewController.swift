@@ -25,7 +25,16 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
         webView.allowsLinkPreview = false
+        
+        webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+        
         view = webView
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if !Reachability.isConnectedToNetwork() {
+            webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+        }
     }
 
     func LoadUserScript(name: String, contentController: WKUserContentController){
@@ -102,11 +111,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         case .success(let knownServicesResponse):
             knownServices = knownServicesResponse
         default:
-            webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
-            return
-        }
-
-        if (!isConnectedToNetwork) {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
             return
         }
