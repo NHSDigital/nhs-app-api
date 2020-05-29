@@ -1,6 +1,6 @@
 # nhsapp
 
-> NHS App
+[[_TOC_]]
 
 ## Get code
 
@@ -10,111 +10,9 @@ Clone the repo: https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 ```
 
-## Build code
-
-Before running this for the first time, read the `Azure DevOps Feeds` section below to configure your local environment.
-
-```bash
-make build
-```
-
 ## Commit code
 
 Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy).
-
-## Unit tests
-
-```bash
-make test
-```
-
-## Running code
-
-Before running any of the below options for the first time, read the `Secrets` section below to configure your local environment.
-
-### Run the latest develop (no need to build locally)
-
-```bash
-make run TAG=develop
-```
-
-### Run everything built locally
-
-```bash
-make run
-```
-
-### Run everything built locally using the NHS login dev environment (without this defaults to ext)
-
-```bash
-make run LOGINENV=dev
-```
-
-### Debugging web locally
-
-```bash
-make run WEB=host
-```
-
-### Debugging API locally
-
-```bash
-make run PFSAPI=host
-```
-
-A `launchsettings.json` file will be automatically generated for any backend API services which are set to run on the host. This will match the specified run configuration.
-
-### Debugging web locally with develop versions of the rest
-
-```bash
-make run TAG=develop WEB=host
-```
-
-## Integration Tests (BDD)
-
-### Run Locally
-
-To build and start the application ready to run the Integration tests against (e.g. in IntelliJ)
-
-```bash
-make localbdd
-```
-
-To start the locally built application ready to run the Integration tests against
-
-```bash
-make run-localbdd
-```
-
-To start a CI built application version ready to run the Integration tests against
-
-```bash
-make run-localbdd TAG=[tag]
-```
-
-Where \[tag\] is the CI tag to run, e.g. develop, `3355` (for a PR), or `08cafda6ed4f1ce3bd24ac3ec98810a27ee6f62c` (for a specific commit). By default the latest version of any remote images will be pulled before running. To override this behaviour add `NO_PULL=1` to the make command.
-
-Run make with no arguments for more details on the available options.
-
-### Run Pipeline
-
-To run the Integration tests in a fully containerised environment as is done in CI
-
-```bash
-make run-bdd
-```
-
-The Makefile in the `bddtests` contains additional targets for common configurations (e.g. running native tests via BrowserStack).
-
-#### Options
-
-The following can be specified with `make run-bdd` to customise the behaviour
-
-| Option             | Description                                                                                                           |
-| ---------------    | -----------                                                                                                           |
-| `RUN_LOCAL_BDD=1`  | Starts the containers configured as specified but with ports exposed to allow local running of the Integration tests. |
-| `SKIP_ANALYSIS=1`  | Bypasses the gradle code analysis step.                                                                               |
-| `TAG=[dockertag]`  | Pull images with the specified \[dockertag\] to run the tests against.                                                |
 
 ## Azure DevOps Feeds
 
@@ -136,12 +34,12 @@ You require a token to access the feeds, to generate a new one:
 
 ### NPM Config
 
-*Used in: bddtests, backendworker contracts and web*
+*Used in:* bddtests, backendworker contracts and web
 
 - Create a new file:
 
-    - `${HOME}/.npmrc ` (OSX/Linux)
-    - `%USERPROFILE%\.npmrc` (Windows)
+  - `${HOME}/.npmrc` (OSX/Linux)
+  - `%USERPROFILE%\.npmrc` (Windows)
 
 - Add the following content:
 
@@ -157,69 +55,70 @@ You require a token to access the feeds, to generate a new one:
 
 - Create a Base64 encoded version of your personal access token:
 
-    - Open a bash terminal in the directory containing the above file
-    - Run:
+  - Open a bash terminal in the directory containing the above file
+  - Run:
 
-        ```bash
-        echo -n "<TOKEN>" | base64
-        ```
-    - Copy your encoded token
+      ```bash
+      echo -n "<TOKEN>" | base64
+      ```
+
+  - Copy your encoded token
 
 - Fill in the placeholders `<BASE_64_ENCODED_TOKEN>` & `<HSCIC_EMAIL>`
 
 ### NuGet Config
 
-*Used in: Backendworker*
+*Used in:* Backendworker
 
 - Create a new file:
 
-    - `${HOME}/.nuget/NuGet/NuGet.Config` (OSX/Linux)
-    - `%APPDATA%\NuGet\NuGet.Config` (Windows)
+  - `${HOME}/.nuget/NuGet/NuGet.Config` (OSX/Linux)
+  - `%APPDATA%\NuGet\NuGet.Config` (Windows)
 
 - Add the following content:
 
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-      </packageSources>
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+    <packageSources>
+      <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+    </packageSources>
 
-      <packageSourceCredentials>
-        <nhsapp-nuget-feed>
-          <add key="Username" value="nhsapp" />
-          <add key="ClearTextPassword" value="<TOKEN>" />
-        </nhsapp-nuget-feed>
-      </packageSourceCredentials>
-    </configuration>  
-    ```
+    <packageSourceCredentials>
+      <nhsapp-nuget-feed>
+        <add key="Username" value="nhsapp" />
+        <add key="ClearTextPassword" value="<TOKEN>" />
+      </nhsapp-nuget-feed>
+    </packageSourceCredentials>
+  </configuration>  
+  ```
 
 - Fill in the placeholder `<TOKEN>`
 
 ## Maven/Gradle Config 
 
-*Used in: android, bddtests*
+*Used in:* android, bddtests
 
 - Create a new file:
 
-    - `${HOME}/.m2/settings.xml` (OSX/Linux)
-    - `%USERPROFILE%\.m2\settings.xml` (Windows)
+  - `${HOME}/.m2/settings.xml` (OSX/Linux)
+  - `%USERPROFILE%\.m2\settings.xml` (Windows)
 
 - Add the following content:
 
-    ```xml  
-    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-      <servers>
-          <server>
-          <id>nhsapp</id>
-          <username>nhsapp</username>
-          <password>TOKEN</password>
-          </server>
-      </servers>
-    </settings>
-    ```
+  ```xml  
+  <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+        <id>nhsapp</id>
+        <username>nhsapp</username>
+        <password>TOKEN</password>
+        </server>
+    </servers>
+  </settings>
+  ```
 
 - Fill in the placeholder `TOKEN`
 
