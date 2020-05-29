@@ -42,17 +42,22 @@
                  class="nhsuk-body nhsuk-u-margin-bottom-2"
                  data-purpose="record-item-detail">
                 {{ testResult.description }}</p>
-              <ul v-if="testResult.associatedTexts.length > 0"
-                  class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
-                <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
-                    :key="`associatedText-${associatedTextItemIndex}`">
-                  {{ associatedText }}</li>
-              </ul>
+              <div v-if="testResult.associatedTexts.length > 0"
+                   class="nhsuk-body nhsuk-u-margin-bottom-2">
+                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                  {{ $t('my_record.testResults.commentHeader') }}
+                </p>
+                <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
+                   :key="`associatedText-${associatedTextItemIndex}`"
+                   class="nhsuk-u-margin-bottom-0">
+                  {{ associatedText }}</p>
+              </div>
               <ul v-if="testResult.testResultChildLineItems.length > 0"
                   class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">
                 <li v-for="(lineItem, lineItemIndex)
                       in testResult.testResultChildLineItems"
-                    :key="`line-${lineItemIndex}`">
+                    :key="`line-${lineItemIndex}`"
+                    data-purpose="record-item-child-detail">
                   {{ lineItem.description }}
                   <ul v-if="lineItem.associatedTexts.length > 0"
                       class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-0">

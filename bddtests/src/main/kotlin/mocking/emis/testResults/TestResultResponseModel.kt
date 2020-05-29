@@ -21,12 +21,18 @@ data class EffectiveDate(
 data class TestResultValue(
         var effectiveDate: EffectiveDate?,
         var term: String,
-        var textValue: String,
-        var numericUnits: String,
-        var range: TestResultRange?
+        var textValue: String? = null,
+        var numericUnits: String? = null,
+        var range: TestResultRange? = null,
+        var associatedText: MutableList<AssociatedText> = arrayListOf()
 )
 
 data class TestResultRange(
         var minimumText: String,
         var maximumText: String
+)
+
+data class AssociatedText(
+        var text: String,
+        var textType: String
 )

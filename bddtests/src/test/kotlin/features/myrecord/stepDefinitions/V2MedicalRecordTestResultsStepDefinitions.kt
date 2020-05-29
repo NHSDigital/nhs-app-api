@@ -38,27 +38,33 @@ open class V2MedicalRecordTestResultsStepDefinitions {
     fun thenISeeOneTestResultWithOneValueV2() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
-        val childElementsMapped = testResultsPage.getTestResultChildren().map { element ->
-            element.textValue }[0]
+        val childElementsMapped = childElements.map { element -> element.textValue }[0]
+        val commentElements = testResultsPage.getTestResultParentComments()
+        val commentElementsMapped = commentElements.map { element -> element.textValue }[0]
 
         assertEquals("Expected test result", 1, mainElements.size)
         assertEquals("Expected test result", "15 May 2006", mainElements[0].label)
         assertEquals("Expected child test result", 1, childElements.size)
-        assertEquals("Expected child test result", "Basophil count: 5.58 x10^9/L", childElementsMapped)
+        assertEquals("Expected child test result", "Test result component term: 5.58 x10^9/L", childElementsMapped)
+        assertEquals("Expected test result comment", 1, commentElements.size)
+        assertEquals("Expected test result comment", "Test result comment", commentElementsMapped)
     }
 
     @Then("^I see one test result with one value and a range - Medical Record v2$")
     fun thenISeeOneTestResultWithOneValueAndARangeV2() {
         val mainElements = testResultsPage.getTestResultsElements()
         val childElements = testResultsPage.getTestResultChildren()
-        val childElementsMapped = testResultsPage.getTestResultChildren().map { element ->
-            element.textValue }[0]
+        val childElementsMapped = childElements.map { element -> element.textValue }[0]
+        val commentElements = testResultsPage.getTestResultParentComments()
+        val commentElementsMapped = commentElements.map { element -> element.textValue }[0]
 
         assertEquals("Expected test result", 1, mainElements.size)
         assertEquals("Expected test result", "15 May 2006", mainElements[0].label)
         assertEquals("Expected child test result", 1, childElements.size)
-        assertEquals("Expected child test result", "Basophil count: 5.58 x10^9/L (normal range: " +
+        assertEquals("Expected child test result", "Test result component term: 5.58 x10^9/L (normal range: " +
                 "3.6 - 10)", childElementsMapped)
+        assertEquals("Expected test result comment", 1, commentElements.size)
+        assertEquals("Expected test result comment", "Test result comment", commentElementsMapped)
     }
 
     @Then("^I see one test result with multiple child values - Medical Record v2$")
@@ -83,7 +89,7 @@ open class V2MedicalRecordTestResultsStepDefinitions {
                 mainElements.isNotEmpty())
         Assert.assertTrue("Expected child test result greater than 1",
                 childElements.size > 1)
-        assertEquals("Expected child test result", "Basophil count: 5.58 x10^9/L (normal range: " +
+        assertEquals("Expected child test result", "Test result component term: 5.58 x10^9/L (normal range: " +
                 "3.6 - 10)", childElementsMapped)
     }
 

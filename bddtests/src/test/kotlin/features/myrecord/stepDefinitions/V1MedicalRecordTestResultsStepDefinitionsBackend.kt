@@ -44,7 +44,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
     fun thenIReceiveATestResultWithTermSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         val testResultValue =
-                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
         assertEquals(testResultValue.term, result.response.testResults.data.first().description)
     }
 
@@ -52,7 +52,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         val testResultValue =
-                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT_CHILD.getOrFail<TestResultValue>()
         val lowerRange = testResultValue.range!!.minimumText
         val upperRange = testResultValue.range!!.maximumText
         assertEquals("Child LineItem Description does not match",
@@ -65,7 +65,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         val testResultValue =
-                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT_CHILD.getOrFail<TestResultValue>()
         assertEquals("Child LineItem Description does not match",
                 "${testResultValue.term}: ${testResultValue.textValue} " +
                         "${testResultValue.numericUnits}",
@@ -84,7 +84,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         val testResultValue =
-                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
         assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +
                 "${testResultValue.numericUnits}", result.response.testResults.data.first().description)
     }
@@ -93,7 +93,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         val testResultValue =
-                MyRecordSerenityHelpers.EXPECTED_TEST_RESULTS_TERM.getOrFail<TestResultValue>()
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
         val lowerRange = testResultValue.range!!.minimumText
         val upperRange = testResultValue.range!!.maximumText
         assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +

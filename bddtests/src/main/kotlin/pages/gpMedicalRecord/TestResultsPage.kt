@@ -2,13 +2,14 @@ package pages.gpMedicalRecord
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import org.openqa.selenium.By
 import pages.HybridPageObject
 import pages.myrecord.RecordItem
 
 @DefaultUrl("http://web.local.bitraft.io:3000/health-records/test-results")
 class TestResultsPage : HybridPageObject() {
 
+    private val testResultsChildXpath = "//li[@data-purpose='record-item-child-detail']"
+    private val testResultsParentCommentXpath = "//p[contains(text(),'Comment')]/following-sibling::p"
     private val testResultsParentXpath = "//div[@data-purpose='record-item']"
     private val testResultXpath = "//a[contains(text(),'Pathology 1 - Anticoag Control (Warfarin), Read 1')]"
 
@@ -23,8 +24,11 @@ class TestResultsPage : HybridPageObject() {
     }
 
     fun getTestResultChildren(): List<WebElementFacade> {
-        return getTestResultsElements().first().element.findBy<WebElementFacade>(
-                By.xpath("..")).thenFindAll(By.tagName("li"))
+        return findAllByXpath(testResultsChildXpath)
+    }
+
+    fun getTestResultParentComments(): List<WebElementFacade> {
+        return findAllByXpath(testResultsParentCommentXpath)
     }
 
     fun clickTestResult() {

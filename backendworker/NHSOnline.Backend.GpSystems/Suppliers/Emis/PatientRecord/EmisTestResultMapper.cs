@@ -57,14 +57,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     DatePart = response.Value.EffectiveDate.DatePart
                 } 
                 : new MyRecordDate();
-        
+
+            testResultItem.AssociatedTexts = BuildParentAssociatedTexts(response);
+
             if (response.ChildValues == null || !response.ChildValues.Any())
             {
-                var itemDescription = BuildItemDescriptionWithNoChildValues(response);
-                testResultItem.Description = itemDescription;
-
-                var associatedTexts = BuildAssociatedTextsWithNoChildValues(response);
-                testResultItem.AssociatedTexts = associatedTexts;
+                testResultItem.Description = BuildItemDescriptionWithNoChildValues(response);
             }
             else
             {
@@ -74,13 +72,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 {
                     foreach (var childValue in response.ChildValues)
                     {
-                        var description = BuildDescriptionWithChildValues(childValue);
-                        var associatedTexts = BuildAssociatedTextsWithChildValues(childValue);
-
                         testResultItem.TestResultChildLineItems.Add(new TestResultChildLineItem
                         {
-                            Description = description,
-                            AssociatedTexts = associatedTexts
+                            Description = BuildDescriptionWithChildValues(childValue),
+                            AssociatedTexts = BuildAssociatedTextsWithChildValues(childValue)
                         });
                     }
                 }
@@ -124,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return lineItem.ToString();
         }
 
-        private static List<string> BuildAssociatedTextsWithNoChildValues(TestResult response)
+        private static List<string> BuildParentAssociatedTexts(TestResult response)
         {
              var associatedTexts = new List<string>();
 

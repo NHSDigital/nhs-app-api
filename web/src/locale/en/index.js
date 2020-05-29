@@ -1205,6 +1205,7 @@ export default {
       ubrn: 'UBRN: ',
     },
     testResults: {
+      commentHeader: 'Comment',
       sectionHeader: {
         tpp: 'Test results (past 6 months)',
         default: 'Test results',
