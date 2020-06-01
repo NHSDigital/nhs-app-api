@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.services
 
+import android.app.Activity
 import android.content.Context
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.clients.HttpClient
@@ -25,6 +26,7 @@ import java.io.IOException
 @RunWith(RobolectricTestRunner::class)
 class ConfigurationServiceTest : ResourceMockingClass() {
 
+    private lateinit var activity: Activity
     private lateinit var uiIInteractor: IInteractor
     private lateinit var context: Context
     private lateinit var httpClientMock: HttpClient
@@ -37,7 +39,8 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         errorMessageHandler = ErrorMessageHandler(context.resources)
         httpClientMock = mock()
         uiIInteractor = mock()
-        configurationService = ConfigurationService("configurationUrlMock", uiIInteractor, errorMessageHandler, httpClientMock)
+        activity = mock()
+        configurationService = ConfigurationService(activity, "configurationUrlMock", uiIInteractor, errorMessageHandler, httpClientMock)
         MockConnectionStateMonitor().mockNetworkCallback(context)
     }
 
@@ -46,7 +49,11 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         whenever(httpClientMock.readText(any())).thenAnswer { throw IOException() }
         MockConnectionStateMonitor().mockNetworkCallback(mockDisconnectedContext())
 
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
+
+        verify(activity).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
         verify(uiIInteractor).showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
         assertNull(configuration)
     }
@@ -55,7 +62,11 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     fun getConfigurationResponse_WhenResponseIsEmpty_ItShowsApiCallErrorAndReturnsNull() {
         whenever(httpClientMock.readText(any())).thenReturn("")
 
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
+
+        verify(activity).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
         verify(uiIInteractor).showUnavailabilityError(apiCallFailureError())
         assertNull(configuration)
     }
@@ -64,8 +75,11 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     fun getConfigurationResponse_WhenResponseIsEmptyObject_ItShowsApiCallErrorAndReturnsNull() {
         whenever(httpClientMock.readText(any())).thenReturn("{}")
 
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
 
+        verify(activity).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
         verify(uiIInteractor).showUnavailabilityError(apiCallFailureError())
         assertNull(configuration)
     }

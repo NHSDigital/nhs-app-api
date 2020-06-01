@@ -128,8 +128,9 @@ class MainActivity :
         connectionStateMonitor = ConnectionStateMonitor(this)
         connectionStateMonitor.registerNetworkCallback()
 
-        configService = ConfigurationService(resources.getString(R.string.baseApiURL) +
-                resources.getString(R.string.configurationApiPath),
+        configService = ConfigurationService(
+                this,
+                resources.getString(R.string.baseApiURL) + resources.getString(R.string.configurationApiPath),
                 this,
                 ErrorMessageHandler(this.resources),
                 HttpClient()
@@ -142,7 +143,12 @@ class MainActivity :
 
         initialiseNhsWeb()
         initialiseBiometrics()
-        loadWelcomePage()
+
+        if (configurationResponse.callSuccessful) {
+            loadWelcomePage()
+        } else {
+            dismissSplashScreen()
+        }
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
 
@@ -205,6 +211,8 @@ class MainActivity :
             if (configurationResponse.callSuccessful) {
                 initialiseActivityElements()
                 initialiseNhsWeb()
+                initialiseBiometrics()
+                loadWelcomePage()
             } else {
                 logger.info(
                         "${this::class.java.simpleName}: Leaving OnErrorRetryButton as getConfigurationResponse didn't work")

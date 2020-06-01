@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.services
 
+import android.app.Activity
 import android.util.Log
 import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
@@ -17,6 +18,7 @@ import java.util.concurrent.Callable
 private val TAG = ConfigurationService::class.java.simpleName
 
 class ConfigurationService(
+        private val activity: Activity,
         private val configurationUrl: String,
         private val uiInteractor: IInteractor,
         private val errorMessageHandler: ErrorMessageHandler,
@@ -50,7 +52,9 @@ class ConfigurationService(
             false -> errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
         }
 
-        uiInteractor.showUnavailabilityError(errorMessage)
+        activity.runOnUiThread {
+            uiInteractor.showUnavailabilityError(errorMessage)
+        }
     }
 
     override fun call(): Configuration? {
