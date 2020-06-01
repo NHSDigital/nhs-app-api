@@ -20,7 +20,7 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UserInfoApi

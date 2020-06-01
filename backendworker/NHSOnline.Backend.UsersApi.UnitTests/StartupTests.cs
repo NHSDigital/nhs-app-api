@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Settings;
 using UnitTestHelper;
 

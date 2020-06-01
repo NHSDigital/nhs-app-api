@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 

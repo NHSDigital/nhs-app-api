@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public class ApiMongoClient<TConfiguration> : MongoClient, IApiMongoClient<TConfiguration> where TConfiguration : IMongoConfiguration
     {

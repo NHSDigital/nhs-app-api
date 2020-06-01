@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public abstract class RepositoryFindResult<TRecord>
     {

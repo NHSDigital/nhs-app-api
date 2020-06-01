@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {

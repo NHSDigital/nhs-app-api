@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Notifications.Azure;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {

@@ -11,7 +11,7 @@ using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public abstract class MongoRepositoryBase<TConfig, TRecord>
         where TRecord : MongoRecord

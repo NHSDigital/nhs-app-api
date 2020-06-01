@@ -7,7 +7,7 @@ using NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi
 {

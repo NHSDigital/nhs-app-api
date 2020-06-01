@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public interface IRepositoryCreateResultVisitor<TRecord, out T>
     {

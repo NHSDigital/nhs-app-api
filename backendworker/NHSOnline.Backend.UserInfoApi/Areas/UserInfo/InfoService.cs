@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 

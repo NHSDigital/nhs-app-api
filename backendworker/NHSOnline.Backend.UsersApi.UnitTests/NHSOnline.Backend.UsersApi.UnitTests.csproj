@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.Repository\NHSOnline.Backend.Repository.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj" />
     <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />

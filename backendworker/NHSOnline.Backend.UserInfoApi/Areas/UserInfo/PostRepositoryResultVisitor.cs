@@ -1,4 +1,4 @@
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UserInfoApi.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo

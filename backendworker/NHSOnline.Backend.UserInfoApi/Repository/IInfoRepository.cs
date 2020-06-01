@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Repository
 {

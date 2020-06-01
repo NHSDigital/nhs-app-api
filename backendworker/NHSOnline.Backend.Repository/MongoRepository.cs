@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public abstract class MongoRepository<TConfig, TRecord>
         where TRecord : MongoRecord

@@ -1,7 +1,7 @@
 using System;
 using MongoDB.Bson.Serialization.Attributes;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {

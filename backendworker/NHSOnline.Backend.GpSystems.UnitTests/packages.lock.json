@@ -2327,6 +2327,7 @@
           "Microsoft.Azure.DocumentDB.Core": "1.9.1",
           "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
           "NHSOnline.Backend.Auth": "1.0.0",
+          "NHSOnline.Backend.Repository": "1.0.0",
           "NHSOnline.Backend.Support": "1.0.0"
         }
       },
@@ -2366,6 +2367,15 @@
           "Open-XML-SDK": "2.9.0",
           "System.Security.Cryptography.Xml": "4.7.0",
           "Wkhtmltopdf.NetCore": "3.0.0"
+        }
+      },
+      "nhsonline.backend.repository": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
+          "Microsoft.Extensions.Configuration": "3.1.3",
+          "Microsoft.Extensions.Logging": "3.1.3",
+          "MongoDB.Driver": "2.10.3"
         }
       },
       "nhsonline.backend.servicejourneyrules.common": {

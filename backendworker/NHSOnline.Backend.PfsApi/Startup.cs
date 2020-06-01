@@ -41,7 +41,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using Wkhtmltopdf.NetCore;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 

@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions

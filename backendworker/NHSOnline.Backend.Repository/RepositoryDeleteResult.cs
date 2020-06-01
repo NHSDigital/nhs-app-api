@@ -1,6 +1,6 @@
 using System;
 
-namespace NHSOnline.Backend.Support.Repository
+namespace NHSOnline.Backend.Repository
 {
     public abstract class RepositoryDeleteResult<TRecord>
     {

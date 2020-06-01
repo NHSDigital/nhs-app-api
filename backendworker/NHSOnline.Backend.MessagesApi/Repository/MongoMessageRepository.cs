@@ -7,7 +7,7 @@ using MongoDB.Bson;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Repository;
+using NHSOnline.Backend.Repository;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.MessagesApi.Repository
