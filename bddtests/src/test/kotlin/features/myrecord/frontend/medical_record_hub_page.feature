@@ -1,7 +1,7 @@
 Feature: Medical record hub page
 
-  Scenario: Redirect to GP medical record page if I don't have access to PKB care plans or health tracker
-    Given I am an EMIS patient with no access to PKB
+  Scenario: Redirect to GP medical record page if I don't have access to any third party care plans or health tracker
+    Given I am an EMIS patient with no access to any Third Party Health Record Hub Features
     And I am logged in
     When I retrieve the 'health record hub' page directly
     Then I am redirected to the 'health record hub' page
@@ -11,7 +11,14 @@ Feature: Medical record hub page
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And I see the PKB menu item 'Care plans'
+    And I see the Third Party menu item 'Care plans'
+
+  Scenario: A user can access the health record hub page if CIE Care Plans is available
+    Given I am an EMIS patient and I have access to Care Information Exchange Care Plans
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I see the Third Party menu item 'Care plans'
 
   Scenario: A user can access the medical record hub page if PKB Health Tracker is available
     Given I am using the native app user agent
@@ -19,7 +26,15 @@ Feature: Medical record hub page
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And I see the PKB menu item 'Track your health'
+    And I see the Third Party menu item 'Track your health'
+
+  Scenario: A user can access the medical record hub page if CIE Health Tracker is available
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have access to Care Information Exchange Health Tracker
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I see the Third Party menu item 'Track your health'
 
   Scenario: The GP medical record button redirects to GP medical record page
     Given I am an EMIS patient and I have access to Patients Know Best Care Plans

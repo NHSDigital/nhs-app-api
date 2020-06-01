@@ -1,6 +1,5 @@
 @silverIntegration
 @patientsKnowBest
-@runnow
 Feature: Patients Know Best Medicines
 
   Scenario: A user navigates to PKB Medicines and sees the warning message
@@ -21,14 +20,6 @@ Feature: Patients Know Best Medicines
     Given I navigate to the your prescriptions page
     Then the Prescriptions Hub page is displayed
     And the PKB View Medicines link is available on the Prescriptions Hub
-
-  Scenario: A user with no access to PKB cannot see the Medicines link on the Prescriptions Hub
-    Given I am a user who cannot view Medicines from Patients Know Best
-    And I am logged in
-    Then I see the home page
-    Given I navigate to the your prescriptions page
-    Then the Prescriptions Hub page is displayed
-    And the PKB View Medicines link is not available on the Prescriptions Hub
 
   Scenario: A user navigates to an external partner site and will see a warning page
     Given I am a EMIS patient

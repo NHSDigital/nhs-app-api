@@ -1,6 +1,6 @@
 @appointmentsHub
 Feature: Appointments Hub Frontend
-  Users can see the Appointments Hub page and use thethird party silver partner links
+  Users can see the Appointments Hub page and use the third party silver partner links
 
   Scenario: An Emis can see the Appointments Hub page and navigate to GP Appointments
     Given I have no booked appointments for EMIS

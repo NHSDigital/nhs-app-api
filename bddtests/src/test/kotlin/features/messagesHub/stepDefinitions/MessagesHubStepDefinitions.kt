@@ -12,9 +12,14 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_appMessaging")
     }
 
-    @When("^I click the Messages and online consultations link on the Messages Hub page$")
-    fun clickOnMessagesConsultations() {
+    @When("^I click the PKB Messages and online consultations link on the Messages Hub page$")
+    fun clickOnPkbMessagesConsultations() {
         messagesHubPage.clickOnMenuItem("btn_pkb_messages_and_consultations")
+    }
+
+    @When("^I click the CIE Messages and online consultations link on the Messages Hub page$")
+    fun clickOnCieMessagesConsultations() {
+        messagesHubPage.clickOnMenuItem("btn_pkb_cie_messages_and_consultations")
     }
 
     @When("^I click on the patient practice Messages link on the Messages Hub page$")

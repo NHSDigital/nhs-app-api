@@ -12,7 +12,7 @@ class MedicalRecordHubPage : HybridPageObject() {
                 androidLocator = webDesktopLocator,
                 iOSLocator = webDesktopLocator,
                 page = this,
-                helpfulName = "Health Records"
+                helpfulName = "Your GP medical record"
         )
     }
 
@@ -34,7 +34,7 @@ class MedicalRecordHubPage : HybridPageObject() {
                 androidLocator = locator,
                 iOSLocator = locator,
                 page = this,
-                helpfulName = "Health Records"
+                helpfulName = title
         )
     }
 
@@ -45,7 +45,7 @@ class MedicalRecordHubPage : HybridPageObject() {
                 androidLocator = locator,
                 iOSLocator = locator,
                 page = this,
-                helpfulName = "Health Records"
+                helpfulName = pageTitle
         )
     }
 }

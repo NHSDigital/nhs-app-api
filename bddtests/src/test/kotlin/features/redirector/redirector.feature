@@ -34,7 +34,7 @@ Feature: Redirector
     When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
-    And I click the Messages and online consultations link on the Messages Hub page
+    And I click the PKB Messages and online consultations link on the Messages Hub page
     And I am redirected to the redirector page with the header 'Messages and online consultations'
     When I click the 'Back' breadcrumb
     Then I see the more page header

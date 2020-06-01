@@ -82,29 +82,19 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
-    @Then("the link to Track your health is not available on the health record hub page")
-    fun theLinkToHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
+    @Then("the link to PKB Track your health is not available on the health record hub page")
+    fun theLinkToPkbHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
-    @Then("the link to Care plans is not available on the health record hub page")
-    fun theLinkToCarePlansIsNotAvailableOnTheHealthRecordHubPage() {
+    @Then("the link to PKB Care plans is not available on the health record hub page")
+    fun theLinkToPkbCarePlansIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Care plans").assertElementNotPresent()
-    }
-
-    @When("^I click the 'Continue' button on the redirector page with a url starting with '(.*)'$")
-    fun iClickTheContinueButtonOnTheRedirectorPageWithAUrlOf(continueUrl: String) {
-        redirector.interruptionCard.assertContinueAndClick(continueUrl)
     }
 
     @When("^I click the PKB View Appointments link on the Appointments page")
     fun iClickThePkbViewAppointmentsLinkOnTheAppointmentsPage() {
         hospitalAppointmentsPage.btnPkbAppointments.click()
-    }
-
-    @Then("I am redirected to the redirector page with the header '(.*)'$")
-    fun assertRedirectorPageIsVisible(header: String) {
-        redirector.title(header).waitForElement()
     }
 
     @Then("the warning message on the Redirector page explains the service is from Patients Know Best$")

@@ -92,6 +92,15 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
+                .add(Supplier.EMIS, "B86013",
+                        EnumSet.of(
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_MEDICINES_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_CIE,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_CIE))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,

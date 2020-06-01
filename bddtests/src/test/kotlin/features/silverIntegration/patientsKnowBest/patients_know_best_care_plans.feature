@@ -17,7 +17,7 @@ Feature: Patients Know Best Care Plans
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And the link to Care plans is not available on the health record hub page
+    And the link to PKB Care plans is not available on the health record hub page
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view care plans from Patients Know Best

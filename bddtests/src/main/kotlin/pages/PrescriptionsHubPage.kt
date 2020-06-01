@@ -14,29 +14,30 @@ open class PrescriptionsHubPage : HybridPageObject() {
 
     val pharmacyName = HybridPageElement(
             webDesktopLocator = "//*[@id='nominated-pharmacy']//p",
-            webMobileLocator = "//*[@id='nominated-pharmacy']//p",
             page = this
     )
 
     val viewOrdersPanel = HybridPageElement(
-                webDesktopLocator = "//*[@id='view-orders']",
-                webMobileLocator = "//*[@id='view-orders']",
-                page = this
+            webDesktopLocator = "//*[@id='view-orders']",
+            page = this
     )
 
     val nominatedPharmacyLink = HybridPageElement(
             webDesktopLocator = "//*[@id='nominated-pharmacy']",
-            webMobileLocator = "//*[@id='nominated-pharmacy']",
             page = this
     )
 
     val pkbMedicinesJumpOffButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_pkb_medicines']",
-            webMobileLocator = "//*[@id='nominated-pharmacy']",
             helpfulName = "pkb jump off point",
             page = this
     )
 
+    val cieMedicinesJumpOffButton = HybridPageElement(
+            webDesktopLocator = "//*[@id='btn_pkb_cie_medicines']",
+            helpfulName = "cie jump off point",
+            page = this
+    )
 
     fun assertPrescriptionsHubIsDisplayed() {
         pageTitle.assertIsVisible()

@@ -21,8 +21,8 @@ Feature: Hospital Appointments
     And I browse to the pages at the following urls I see the relevant page
     | /appointments/hospital-appointments  | /appointments |
 
-  Scenario: A user with pkb access but no ers access can navigate to the hospital appointments page
-    Given I am a user who can manage their pkb hospital appointments but not ers
+  Scenario: A user with cie access only can navigate to the hospital appointments page
+    Given I am a user who can manage their cie hospital appointments only
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed
@@ -30,8 +30,17 @@ Feature: Hospital Appointments
     Then the Hospital Appointments page is displayed
     And the Hospital Appointments links are displayed
 
-  Scenario: A user with ers access but no pkb access can navigate to the hospital appointments page
-    Given I am a user who can manage their pkb hospital appointments but not ers
+  Scenario: A user with pkb access only can navigate to the hospital appointments page
+    Given I am a user who can manage their pkb hospital appointments only
+    And I am logged in
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the 'Hospital and other services' link on the Appointments Hub
+    Then the Hospital Appointments page is displayed
+    And the Hospital Appointments links are displayed
+
+  Scenario: A user with ers access only can navigate to the hospital appointments page
+    Given I am a user who can manage their ers hospital appointments only
     And I am logged in
     When I retrieve the 'appointment hub' page directly
     Then the Appointments Hub page is displayed

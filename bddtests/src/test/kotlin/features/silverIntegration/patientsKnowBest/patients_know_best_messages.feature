@@ -10,7 +10,7 @@ Feature: Patients Know Best Messages
     Then I am on the More Page
     And I click the Messages link on the More page
     And the Messages Hub page is displayed
-    And I click the Messages and online consultations link on the Messages Hub page
+    And I click the PKB Messages and online consultations link on the Messages Hub page
     And I am redirected to the redirector page with the header 'Messages and online consultations'
     And the warning message on the Redirector page explains the service is from Patients Know Best
 

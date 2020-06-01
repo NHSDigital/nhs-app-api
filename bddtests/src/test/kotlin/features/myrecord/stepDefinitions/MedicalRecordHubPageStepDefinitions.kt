@@ -15,7 +15,7 @@ import pages.assertSingleElementPresent
 open class MedicalRecordHubPageStepDefinitions {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
 
-    @Given("I am an (.*) patient with no access to PKB")
+    @Given("I am an (.*) patient with no access to any Third Party Health Record Hub Features")
     fun setupUser(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, supplier)
     }
@@ -28,6 +28,16 @@ open class MedicalRecordHubPageStepDefinitions {
     @Given("I am an (.*) patient and I have access to Patients Know Best Health Tracker")
     fun setupPKBHealthTrackerPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB, supplier)
+    }
+
+    @Given("I am an (.*) patient and I have access to Care Information Exchange Care Plans")
+    fun setupCIECarePlansPatient(supplier: String) {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE, supplier)
+    }
+
+    @Given("I am an (.*) patient and I have access to Care Information Exchange Health Tracker")
+    fun setupCIEHealthTrackerPatient(supplier: String) {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE, supplier)
     }
 
     @When("I click the menu item '(.*)'$")
@@ -45,12 +55,12 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.pageTitleHealthRecords().assertSingleElementPresent()
     }
 
-    @Then("^I see the PKB menu item '(.*)'$")
+    @Then("^I see the Third Party menu item '(.*)'$")
     fun assertISeeTheseMenuItems(item: String) {
         medicalRecordHubPage.getHeaderElement(item).assertSingleElementPresent()
     }
 
-    @Then("^I do not see the PKB menu item '(.*)'$")
+    @Then("^I do not see the Third Party menu item '(.*)'$")
     fun assertIDontSeeTheseMenuItems(item: String) {
         medicalRecordHubPage.getHeaderElement(item).assertElementNotPresent()
     }
