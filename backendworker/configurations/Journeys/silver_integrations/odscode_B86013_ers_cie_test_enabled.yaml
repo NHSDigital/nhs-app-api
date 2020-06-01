@@ -1,0 +1,21 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "B86013"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbCie
+    consultations:
+      - pkbCie
+    healthTrackers:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+      - testSilverThirdPartyProvider
+    secondaryAppointments:
+      - ers
+      - pkbCie

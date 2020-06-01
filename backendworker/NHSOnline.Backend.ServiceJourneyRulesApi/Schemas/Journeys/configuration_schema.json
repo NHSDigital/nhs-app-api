@@ -143,49 +143,49 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb"]
+            "enum": ["pkb", "pkbCie"]
           }
         },
         "consultations": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb" ]
+            "enum": [ "pkb", "pkbCie" ]
           }
         },
         "healthTrackers": {
           "type":"array",
           "items": {
             "type": "string",
-            "enum": ["pkb"]
+            "enum": ["pkb", "pkbCie"]
           }
         },
         "libraries": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb"]
+            "enum": ["pkb", "pkbCie"]
           }
         },
         "medicines": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb"]
+            "enum": ["pkb", "pkbCie"]
           }
         },
         "messages": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "testSilverThirdPartyProvider" ]
+            "enum": [ "pkb", "testSilverThirdPartyProvider", "pkbCie" ]
           }
         },
         "secondaryAppointments": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb" ]
+            "enum": [ "ers", "pkb", "pkbCie" ]
           }
         }
       },

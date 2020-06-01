@@ -1,21 +1,16 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "C83615"
+  odsCode: "A10006"
 journeys:
   silverIntegrations:
     carePlans:
-      - pkb
-    consultations:
-      - pkb
-    healthTrackers:
-      - pkb
+      - pkbCie
     libraries:
-      - pkb
+      - pkbCie
     medicines:
-      - pkb
+      - pkbCie
     messages:
-      - pkb
+      - pkbCie
       - testSilverThirdPartyProvider
     secondaryAppointments:
       - ers
-      - pkb

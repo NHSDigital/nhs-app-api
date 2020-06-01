@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     /// </summary>
     public enum HealthTrackersProvider
     {
-        pkb
+        pkb,
+        pkbCie
     }
 }

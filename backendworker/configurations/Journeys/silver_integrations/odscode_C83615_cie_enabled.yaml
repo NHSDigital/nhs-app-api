@@ -1,0 +1,19 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "C83615"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbCie
+    consultations:
+      - pkbCie
+    healthTrackers:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+    secondaryAppointments:
+      - pkbCie

@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum SecondaryAppointmentsProvider
     {
         ers,
-        pkb
+        pkb,
+        pkbCie
     }
 }
