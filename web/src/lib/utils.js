@@ -1,7 +1,8 @@
-import { get, capitalize, isEqual } from 'lodash/fp';
-import moment from 'moment-timezone';
-import Mime from 'mime/Mime';
+import { capitalize, get, isEqual } from 'lodash/fp';
 import { getType as lookupMimeType } from 'mime';
+import Mime from 'mime/Mime';
+import moment from 'moment-timezone';
+import 'url-polyfill';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
