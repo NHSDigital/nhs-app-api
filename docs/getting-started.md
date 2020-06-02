@@ -18,6 +18,11 @@ Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO
 
 NPM, NuGet and some Gradle packages (Android/BDD Tests) are pulled from DevOps feeds. These proxy internet sources, prevent tampering of packages and avoid build failures during downtime of services such as NPM.
 
+### Configuring Feeds
+
+All the feeds can be configured by running the command `make configure-package-feed` from the root of the repo.
+You will be prompted for parameters when needed or you can manually follow the below instructions.
+
 ### Personal Access Token
 
 You require a token to access the feeds, to generate a new one:
@@ -64,7 +69,7 @@ You require a token to access the feeds, to generate a new one:
 
   - Copy your encoded token
 
-- Fill in the placeholders `<BASE_64_ENCODED_TOKEN>` & `<HSCIC_EMAIL>`
+- Fill in the placeholder `<BASE_64_ENCODED_TOKEN>` with the encoded token & `<HSCIC_EMAIL>`
 
 ### NuGet Config
 
@@ -90,10 +95,10 @@ You require a token to access the feeds, to generate a new one:
         <add key="ClearTextPassword" value="<TOKEN>" />
       </nhsapp-nuget-feed>
     </packageSourceCredentials>
-  </configuration>  
+  </configuration>
   ```
 
-- Fill in the placeholder `<TOKEN>`
+- Fill in the placeholder with the actual token `<TOKEN>`
 
 ## Maven/Gradle Config
 
@@ -106,7 +111,7 @@ You require a token to access the feeds, to generate a new one:
 
 - Add the following content:
 
-  ```xml  
+  ```xml
   <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
@@ -120,7 +125,7 @@ You require a token to access the feeds, to generate a new one:
   </settings>
   ```
 
-- Fill in the placeholder `TOKEN`
+- Fill in the placeholder with the actual token `TOKEN`
 
 ## Secrets
 

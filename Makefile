@@ -75,6 +75,9 @@ run-bdd:	## Run the BDD tests as they are run in the CI build
 
 run-deps: validate_local_secrets validate_local_images
 
+configure-package-feed:
+	./buildscripts/configure_package_feed.sh
+
 validate_local_secrets:
 	./buildscripts/validate_local_secrets.sh
 
@@ -85,6 +88,6 @@ validate_local_images:
 $(SSL_CERT):
 	./buildscripts/create-certificate.sh
 
-.PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images
+.PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images configure-package-feed
 
 -include buildscripts/util.make
