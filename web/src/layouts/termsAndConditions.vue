@@ -9,8 +9,8 @@
                     :show-bread-crumb="false"
                     :show-content-header="true"
                     class="nhsuk-u-margin-bottom-3"/>
-    <main id="maincontent"
-          ref="mainContent">
+    <main id="maincontent" ref="mainContent">
+      <spinner/>
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-two-thirds
@@ -33,24 +33,28 @@
 <script>
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
+import ContentHeader from '@/components/widgets/ContentHeader';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import NativeCallbacks from '@/services/native-app';
-import NativeVersionSetup from '../services/nativeVersionSetup';
-import { findByName } from '@/lib/routes';
-import ContentHeader from '@/components/widgets/ContentHeader';
-import WebHeader from '@/components/widgets/WebHeader';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
+import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
+import Spinner from '@/components/widgets/Spinner';
 import WebFooter from '@/components/widgets/WebFooter';
+import WebHeader from '@/components/widgets/WebHeader';
+import { findByName } from '@/lib/routes';
 
 
 export default {
   components: {
     ApiError,
     ConnectionError,
-    FlashMessage,
     ContentHeader,
+    FlashMessage,
+    Spinner,
     WebHeader,
     WebFooter,
   },
+  mixins: [ResetSpinnerMixin],
   head() {
     let head = {};
     if (this.$store.state.termsAndConditions.analyticsCookieAccepted) {

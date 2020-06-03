@@ -1,7 +1,7 @@
 import get from 'lodash/fp/get';
 import NativeCallbacks from '@/services/native-app';
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
-import { createStore, mount } from '../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('lodash/fp/get');
 

@@ -1,5 +1,5 @@
-import { createStore, mount } from '../helpers';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
+import { createStore, mount } from '../../helpers';
 
 describe('calculate age in years and months mixin', () => {
   let $store;
