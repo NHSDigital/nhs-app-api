@@ -29,7 +29,8 @@ namespace NHSOnline.Backend.Auditing
                 case "MONGO":
                     services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
                     services.AddSingleton<MongoDbAuditSinkConfiguration>();
-                    services.AddSingleton<IAuditSink, MongoDbAuditorSink>();
+                    services.AddSingleton<IAuditSink, DbAuditorSink>();
+                    services.AddSingleton<IRepository<AuditRecord>, MongoRepositoryBase<MongoDbAuditSinkConfiguration, AuditRecord>>();
                     break;
                 default:
                     services.AddSingleton<IAzureCosmosDbAuditorSinkConfig, AzureCosmosDbAuditorSinkConfig>();
