@@ -1,4 +1,4 @@
-{{- if and ($.Values.iproxy_microtest.deployMicrotest) ($.Values.iproxy_microtest.createService) -}}
+{{- if ($.Values.iproxy_microtest.deployMicrotest) }}
 ---
 apiVersion: v1
 kind: Service

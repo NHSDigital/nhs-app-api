@@ -1,4 +1,3 @@
-{{- if $.Values.cid.createIngress -}}
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -31,4 +30,3 @@ spec:
     - hosts:
         - cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
-{{- end }}

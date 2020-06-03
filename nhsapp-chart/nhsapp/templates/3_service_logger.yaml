@@ -1,4 +1,4 @@
-{{- if and ($.Values.logger.createService) ($.Values.loggerEnabled) -}}
+{{- if ($.Values.loggerEnabled) }}
 ---
 apiVersion: v1
 kind: Service

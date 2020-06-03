@@ -1,4 +1,3 @@
-{{- if $.Values.web.createIngress -}}
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -48,4 +47,3 @@ spec:
         - www-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
         - www.{{ $.Values.zone }}.{{ $.Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
-{{- end }}

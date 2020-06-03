@@ -1,4 +1,4 @@
-{{- if (and ($.Values.usersEnabled) ($.Values.users.createService)) }}
+{{- if ($.Values.usersEnabled) }}
 ---
 apiVersion: v1
 kind: Service

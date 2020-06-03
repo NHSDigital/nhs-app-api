@@ -1,4 +1,4 @@
-{{- if and ($.Values.environmentStubbed.deployWiremock) ($.Values.wiremock.createService) }}
+{{- if ($.Values.environmentStubbed.deployWiremock) }}
 ---
 apiVersion: v1
 kind: Service

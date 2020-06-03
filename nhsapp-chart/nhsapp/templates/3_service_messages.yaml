@@ -1,4 +1,4 @@
-{{- if (and ($.Values.messagesEnabled) ($.Values.messages.createService)) }}
+{{- if ($.Values.messagesEnabled) }}
 ---
 apiVersion: v1
 kind: Service

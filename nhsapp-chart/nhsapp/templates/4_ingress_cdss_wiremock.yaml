@@ -1,4 +1,4 @@
-{{- if and ($.Values.cdsswiremock.createIngress) ($.Values.environmentStubbed.cdssStubbed) -}}
+{{- if ($.Values.environmentStubbed.cdssStubbed) }}
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

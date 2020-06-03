@@ -11,7 +11,6 @@ dockerRegistrySecret: placeholder
 
 
 sjr:
-  createIngress: true
   createService: true
   containerPort: 8080
   publicURL: null

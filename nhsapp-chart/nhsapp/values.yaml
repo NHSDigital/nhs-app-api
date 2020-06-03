@@ -66,7 +66,6 @@ emisApplicationID: "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7"
 fakeGpSystemEnabled: false
 
 organDonationIPTrust: "13.73.176.25/32"
-organDonationEnabled: false
 organDonationProtocol: https
 organDonationHostname: nhsbt-apim-dev01.azure-api.net
 organDonationPort: 443
@@ -179,7 +178,6 @@ microtestHostname: nhsapp-test.microtest.co.uk
 microtestProtocol: https
 microtestEnabled: false
 
-throttlingEnabled: false
 odsRemapEnabled: false
 odsRemapMap: ""
 
@@ -289,8 +287,6 @@ sidecar_proxy:
   imagePullPolicy: IfNotPresent
 
 web:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   hyphenatedHostname: true
@@ -318,8 +314,6 @@ web:
   environmentVariables:
 
 api:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   hyphenatedHostname: true
@@ -355,8 +349,6 @@ api:
       value: http://api.local.bitraft.io:8091/v1/api/me/info
 
 cid:
-  createIngress: true
-  createService: true
   containerPort: 8080
   clientAuth: true
   publicURL: null
@@ -387,8 +379,6 @@ cid:
       value: im1cache
 
 logger:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   role: logger
@@ -408,8 +398,6 @@ logger:
       value: "Production"
 
 cdsswiremock:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   role: cdsswiremock
@@ -447,7 +435,6 @@ iproxy:
 
 iproxy_microtest:
   deployMicrotest: true
-  createService: true
   containerPort: 8443
   role: iproxy-microtest
   image: nhsonline-nginx-microtest
@@ -464,8 +451,6 @@ iproxy_microtest:
   environmentVariables:
 
 wiremock:
-  createIngress: true
-  createService: true
   containerPort: 8080
   role: wiremock
   image: wiremock
@@ -484,8 +469,6 @@ wiremock:
       value: "60"
 
 users:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   role: users
@@ -507,8 +490,6 @@ users:
       value: "Production"
 
 messages:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   role: messages
@@ -530,8 +511,6 @@ messages:
       value: "Production"
 
 info:
-  createIngress: true
-  createService: true
   containerPort: 8080
   publicURL: null
   role: info

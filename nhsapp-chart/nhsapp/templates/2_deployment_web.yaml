@@ -103,13 +103,9 @@ spec:
         - name: BIOMETRICS_ENABLED
           value: "{{ $.Values.biometricsEnabled }}"
         - name: WEB_BIOMETRICS_ENABLED
-          value: "{{ $.Values.webBiometricsEnabled }}"
-        - name: THROTTLING_ENABLED
-          value: "{{ $.Values.throttlingEnabled }}"
+          value: "false"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
-        - name: ORGAN_DONATION_INTEGRATION_ENABLED
-          value: "{{ $.Values.organDonationEnabled }}"
         - name: ORGAN_DONATION_THROTTLING_URL
           value: "{{ $.Values.web.organDonationThrottlingUrl }}"
         - name: BLOOD_DONATION_URL

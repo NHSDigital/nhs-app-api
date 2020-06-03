@@ -67,11 +67,9 @@ spec:
         secret:
           secretName: spine-cert-{{ .Chart.AppVersion }}
       {{- end }}
-      {{- if $.Values.organDonationEnabled }}
       - name: organdonation-cert
         secret:
           secretName: organdonation-cert-{{ .Chart.AppVersion }}
-      {{- end }}
       - name: nhslogin-key
         secret:
           secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
@@ -120,8 +118,6 @@ spec:
           value: "{{ $.Values.api.containerPort }}"
         - name: ASPNETCORE_URLS
           value: "http://*:{{ $.Values.api.containerPort }}"
-        - name: ConfigurationSettings__ThrottlingEnabled
-          value: "{{ $.Values.throttlingEnabled }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
         - name: NHS_SEARCH_BASE_URL
@@ -406,8 +402,6 @@ spec:
             secretKeyRef:
               name: organdonation-subscription-{{ .Chart.AppVersion }}
               key: password
-        - name: ORGAN_DONATION_INTEGRATION_ENABLED
-          value: "{{ $.Values.organDonationEnabled }}"
         - name: ORGAN_DONATION_CERT_PATH
           value: "/secrets/organdonation-cert/organdonation.pfx"
         - name: ORGAN_DONATION_CERT_PASSPHRASE
@@ -471,11 +465,9 @@ spec:
           mountPath: "/secrets/spine-cert"
           readOnly: true
     {{- end }}
-    {{- if $.Values.organDonationEnabled }}
         - name: organdonation-cert
           mountPath: "/secrets/organdonation-cert"
           readOnly: true
-    {{- end }}
         - name: session-key
           mountPath: "/secrets/session-key"
           readOnly: true
