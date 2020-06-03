@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ [$style['no-footer']]: !shouldShowFooter }">
     <div>
       <web-header :show-menu="false"
                   :show-links="false"
@@ -102,9 +102,7 @@ export default {
       return findByName(this.$route.name).helpUrl;
     },
     shouldShowFooter() {
-      return (
-        !this.$store.state.device.isNativeApp
-      );
+      return !this.$store.state.device.isNativeApp;
     },
   },
   mounted() {
@@ -131,4 +129,8 @@ export default {
 
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
+</style>
+
+<style module lang="scss" scoped>
+  @import "../style/nofooter";
 </style>

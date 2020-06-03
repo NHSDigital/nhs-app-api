@@ -1,0 +1,8 @@
+  @import  "~nhsuk-frontend/packages/core/settings/colours";
+
+  .no-footer {
+    overflow-y: auto;
+    min-height: 100vh;
+    height: 100%;
+    position: relative;
+  }

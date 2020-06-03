@@ -4,22 +4,20 @@
       <connection-error/>
       <api-error/>
     </div>
-    <div v-else id="app">
-      <corona-virus-banner v-if="this.$store.state.device.isNativeApp"
+    <div v-else id="app" :class="{ [$style['no-footer']]: isNativeApp }">
+      <corona-virus-banner v-if="isNativeApp"
                            :should-be-floating="true"/>
       <div :class="dynamicStyle('login-app-header-flex-container')">
-        <home-header v-if="this.$store.state.device.isNativeApp"/>
+        <home-header v-if="isNativeApp"/>
         <div v-else>
           <web-header :show-menu="false" :show-links="false" :show-header-buttons="false"/>
           <corona-virus-banner/>
         </div>
         <session-expired-banner v-if="showSessionExpiredBanner"/>
-        <div v-if="this.$store.state.device.isNativeApp">
-          <main :class="this.$style.homeMain">
-            <flash-message/>
-            <nuxt/>
-          </main>
-        </div>
+        <main v-if="isNativeApp" :class="$style.homeMain">
+          <flash-message/>
+          <nuxt id="mainContent"/>
+        </main>
         <div v-else id="mainContent" ref="mainContent" tabindex="-1"
              class="nhsuk-width-container">
           <div class="nhsuk-grid-row">
@@ -45,7 +43,7 @@
             </div>
           </div>
           <pre-registration-information :should-show-header="shouldShowPreRegistrationHeader"/>
-          <main :class="[this.$style['homeMain-desktop'], this.$style['pull-content']]">
+          <main :class="[$style['homeMain-desktop'], $style['pull-content']]">
             <flash-message/>
             <nuxt/>
             <div class="nhsuk-grid-row">
@@ -59,7 +57,7 @@
             <other-services/>
           </main>
         </div>
-        <div v-if="!this.$store.state.device.isNativeApp"
+        <div v-if="!isNativeApp"
              :class="$style['footer-container-desktop']">
           <web-footer/>
         </div>
@@ -87,7 +85,6 @@ import OtherServices from '../components/OtherServices';
 
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     OtherServices,
     PreRegistrationInformation,
@@ -104,6 +101,7 @@ export default {
   data() {
     return {
       currentHelpUrl: findByName(this.$route.name).helpUrl,
+      isNativeApp: this.$store.state.device.isNativeApp,
       symptomButtonId: 'btn_home_symptoms',
       symptomsUrl: CHECKYOURSYMPTOMS.path,
       shouldShowPreRegistrationHeader: true,
@@ -150,10 +148,15 @@ export default {
 };
 </script>
 
+<style lang="scss">
+  @import "~nhsuk-frontend/packages/nhsuk";
+</style>
+
 <style module lang="scss" scoped>
   @import "../style/home";
   @import "../style/spacings";
   @import "../style/webshared";
+  @import "../style/nofooter";
 
   .error-container {
     @include space(padding, all, 1em);

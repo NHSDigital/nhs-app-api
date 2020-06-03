@@ -1,7 +1,10 @@
 <template>
   <div>
     <modal/>
-    <div id="app" ref="nhsAppRoot" :tabindex="!$store.state.device.isNativeApp ? -1 : false">
+    <div id="app"
+         ref="nhsAppRoot"
+         :tabindex="!$store.state.device.isNativeApp ? -1 : false"
+         :class="{ [$style['no-footer']]: !hasFooter }">
 
       <slot name="header">
         <div v-if="shouldShowFullDesktopHeader">
@@ -145,6 +148,9 @@ export default {
     },
     currentCrumb() {
       return (this.currentRoute || INDEX).crumb;
+    },
+    hasFooter() {
+      return !!this.$slots.footer;
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
@@ -292,3 +298,7 @@ export default {
   },
 };
 </script>
+
+<style module lang="scss" scoped>
+  @import "../../style/nofooter";
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="maincontent" :class="dynamicStyle('loginMain')">
+  <div :class="dynamicStyle('loginMain')">
     <div>
       <h2 v-if="isUsingNativeApp" id="native-header"
           class="nhsuk-u-margin-bottom-2">
