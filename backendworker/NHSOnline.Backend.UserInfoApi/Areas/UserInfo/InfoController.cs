@@ -8,8 +8,8 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
-using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
@@ -20,48 +20,44 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {
     public class InfoController : Controller
     {
+        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IInfoService _infoService;
         private readonly IUserResearchService _userResearchService;
-        private readonly ICitizenIdService _citizenIdService;
         private readonly IMapper<UserProfile, InfoUserProfile> _userProfileMapper;
         private readonly ILogger<InfoController> _logger;
         private readonly IAuditor _auditor;
+        private readonly IMetricLogger _metricLogger;
 
         public InfoController
         (
+            IAccessTokenProvider accessTokenProvider,
             IInfoService infoService,
             IUserResearchService userResearchService,
-            ICitizenIdService citizenIdService,
             IMapper<UserProfile, InfoUserProfile> userProfileMapper,
             ILogger<InfoController> logger,
-            IAuditor auditor)
+            IAuditor auditor,
+            IMetricLogger metricLogger)
         {
+            _accessTokenProvider = accessTokenProvider;
             _infoService = infoService;
             _userResearchService = userResearchService;
-            _citizenIdService = citizenIdService;
             _userProfileMapper = userProfileMapper;
             _logger = logger;
             _auditor = auditor;
+            _metricLogger = metricLogger;
         }
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/info")]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post([UserProfile] UserProfile userProfile)
         {
             try
             {
                 _logger.LogEnter();
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
-
-                var userProfile = await GetUserProfile(accessToken);
-
-                if (userProfile == null)
-                {
-                    return new StatusCodeResult(StatusCodes.Status502BadGateway);
-                }
-                var result = await _infoService.Send(accessToken, userProfile);
+                var userInfo = _userProfileMapper.Map(userProfile);
+                var result = await _infoService.Send(_accessTokenProvider.AccessToken, userInfo);
 
                 return result.Accept(new PostInfoResultVisitor());
             }
@@ -84,13 +80,12 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             try
             {
                 _logger.LogEnter();
-                var accessToken = HttpContext.GetAccessToken(_logger);
-                var result = await _infoService.GetInfo(accessToken);
+                var result = await _infoService.GetInfo(_accessTokenProvider.AccessToken);
                 return result.Accept(new GetMeInfoResultVisitor());
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get info with exception: {e}");
+                _logger.LogError(e,"Failed to get info with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -135,7 +130,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
         [HttpPost]
         [Route("api/me/info/userresearch")]
-        public async Task<IActionResult> PostUserResearchPreference([FromBody] UserResearchRequest userResearchRequest)
+        public async Task<IActionResult> PostUserResearchPreference([FromBody] UserResearchRequest userResearchRequest,
+            [UserProfile] UserProfile userProfile)
         {
             try
             {
@@ -148,20 +144,22 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 if (userResearchRequest.Preference == UserResearchPreference.OptOut)
                 {
+                    await _metricLogger.UserResearchOptOut();
                     return new NoContentResult();
                 }
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
-                var userProfile = await GetUserProfile(accessToken);
+                var accessToken = _accessTokenProvider.AccessToken;
+                var userInfo = _userProfileMapper.Map(userProfile);
                 var result = await _auditor.Audit()
                     .AccessToken(accessToken)
                     .NhsNumber(userProfile.NhsNumber)
                     .Supplier(Supplier.Qualtrics)
                     .Operation(AuditingOperations.UserResearchPreferencePost)
                     .Details("Attempting to create Session")
-                    .Execute(async () => await _userResearchService.Post(userProfile, accessToken));
+                    .Execute(async () => await _userResearchService.Post(userInfo,
+                        _accessTokenProvider.AccessToken));
 
-                return result.Accept(new PostUserResearchResultVisitor());
+                return result.Accept(new PostUserResearchResultVisitor(_metricLogger));
             }
             catch (Exception e)
             {
@@ -172,20 +170,6 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             {
                 _logger.LogExit();
             }
-        }
-
-        private async Task<InfoUserProfile> GetUserProfile(AccessToken accessToken)
-        {
-            var userProfileResult = await _citizenIdService.GetUserProfile(accessToken.ToString());
-            var cidUserProfileOption = userProfileResult.UserProfile;
-
-            if (!cidUserProfileOption.HasValue)
-            {
-                _logger.LogError("No CID profile was found for access code");
-                return null;
-            }
-
-            return _userProfileMapper.Map(cidUserProfileOption.ValueOrFailure());
         }
     }
 }

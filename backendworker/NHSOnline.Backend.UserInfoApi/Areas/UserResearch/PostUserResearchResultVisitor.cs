@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Metrics;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
 {
     public class PostUserResearchResultVisitor : IUserResearchResultVisitor<IActionResult>
     {
+        private readonly IMetricLogger _metricLogger;
+
+        public PostUserResearchResultVisitor(IMetricLogger metricLogger)
+        {
+            _metricLogger = metricLogger;
+        }
         public IActionResult Visit(PostUserResearchResult.Success result)
         {
+            _metricLogger.UserResearchOptIn();
             return new NoContentResult();
         }
 
