@@ -391,5 +391,5 @@ Feature: Organ Donation Frontend
     And I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    And I click the link called 'changes to the law around organ donation may affect you' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    And I click the link called 'changes to the law around organ donation may affect you' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
     Then a new tab has been opened by the link

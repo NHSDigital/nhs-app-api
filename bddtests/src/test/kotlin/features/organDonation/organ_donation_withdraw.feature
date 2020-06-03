@@ -117,7 +117,7 @@ Feature: Organ Donation Withdraw Frontend
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
     When I choose to withdraw my organ donation decision
     Then the Organ Donation Withdraw Decision page is displayed
-    When I click the link called 'law and excluded groups' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    When I click the link called 'law and excluded groups' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
     Then a new tab has been opened by the link
 
   Scenario: A user can decide to amend their decision when withdrawing
@@ -146,5 +146,5 @@ Feature: Organ Donation Withdraw Frontend
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     When I click the 'Submit my decision' button on an Organ Donation page
     Then the Organ Donation View Registration page is displayed with my decision to withdraw
-    When I click the link called 'More information about these changes to the law around organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    When I click the link called 'More information about these changes to the law around organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-law/'
     Then a new tab has been opened by the link

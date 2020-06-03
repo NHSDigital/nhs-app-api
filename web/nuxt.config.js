@@ -101,7 +101,7 @@ const config = {
     ORGAN_DONATION_SHARE_DECISION_URL: 'https://www.organdonation.nhs.uk/app/app-share/',
     ORGAN_DONATION_TELL_FAMILY_URL: 'https://www.organdonation.nhs.uk/app/app-tell/',
     ORGAN_DONATION_PRIVACY_URL: 'https://www.organdonation.nhs.uk/app/app-privacy/',
-    ORGAN_DONATION_LAW_CHANGE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/#law',
+    ORGAN_DONATION_LAW_CHANGE_URL: 'https://www.organdonation.nhs.uk/app/app-law/',
     // Data Opt-Out
     DATA_PREFERENCES_URL: 'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
     // Symptom Checker
