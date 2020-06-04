@@ -100,21 +100,6 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "jose-jwt": {
-        "type": "Transitive",
-        "resolved": "2.5.0",
-        "contentHash": "w3CMPl5CPDZaPfkcDvlgs61FXdgAs9c9R/CvfYXtYEM+I6ceFT2BhlVC76zMqZZdpgj8Nw/ShnqndFXZoqO9Fw==",
-        "dependencies": {
-          "Newtonsoft.Json": "9.0.1",
-          "System.IO.Compression": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Cng": "4.3.0",
-          "System.Security.Cryptography.Csp": "4.3.0",
-          "System.Security.Cryptography.X509Certificates": "4.3.0"
-        }
-      },
       "Microsoft.AspNetCore.Mvc.Versioning": {
         "type": "Transitive",
         "resolved": "4.1.1",
@@ -378,11 +363,6 @@
         "type": "Transitive",
         "resolved": "12.0.3",
         "contentHash": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg=="
-      },
-      "Portable.BouncyCastle": {
-        "type": "Transitive",
-        "resolved": "1.8.6.7",
-        "contentHash": "RBCAkzkBkur4w1YXFpwVdYvdm4ez7PUNyl5DsqPKDe0QSoH9xt6Mwzy1NSFSrrw4T7bCkxi06nSHCuBEuMEgfw=="
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
@@ -1615,24 +1595,6 @@
           "System.Xml.ReaderWriter": "4.3.0",
           "System.Xml.XPath": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
-        }
-      },
-      "nhsonline.backend.auth": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Metrics": "1.0.0",
-          "NHSOnline.Backend.Support": "1.0.0",
-          "Portable.BouncyCastle": "1.8.6.7",
-          "System.IdentityModel.Tokens.Jwt": "6.5.0",
-          "jose-jwt": "2.5.0"
-        }
-      },
-      "nhsonline.backend.metrics": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Support": "1.0.0"
         }
       },
       "nhsonline.backend.support": {

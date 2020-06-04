@@ -2132,7 +2132,6 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Metrics": "1.0.0",
           "NHSOnline.Backend.Support": "1.0.0",
           "Portable.BouncyCastle": "1.8.6.7",
           "System.IdentityModel.Tokens.Jwt": "6.5.0",
@@ -2153,13 +2152,6 @@
           "Open-XML-SDK": "2.9.0",
           "System.Security.Cryptography.Xml": "4.7.0",
           "Wkhtmltopdf.NetCore": "3.0.0"
-        }
-      },
-      "nhsonline.backend.metrics": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Support": "1.0.0"
         }
       },
       "nhsonline.backend.repository": {

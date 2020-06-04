@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 
 namespace UnitTestHelper
 {
@@ -20,7 +19,7 @@ namespace UnitTestHelper
             var claimsPrincipal = new ClaimsPrincipal(identity);
             mockHttpContext.Setup(x => x.User)
                 .Returns(claimsPrincipal);
-
+            
             var mockHttpRequest = new Mock<HttpRequest>();
             mockHttpRequest
                 .Setup(x => x.Headers)

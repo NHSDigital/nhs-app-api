@@ -19,10 +19,6 @@ namespace NHSOnline.Backend.Metrics
 
         public Task UpliftStarted() => LogMetric();
 
-        public Task UserResearchOptIn() => LogMetric();
-
-        public Task UserResearchOptOut() => LogMetric();
-
         private Task LogMetric([CallerMemberName] string action = "")
         {
             var metricLog = string.Join(" ", MetricData(action).Select(kvp => $"{kvp.Key}={kvp.Value}"));

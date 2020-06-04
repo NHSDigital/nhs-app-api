@@ -140,21 +140,6 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "jose-jwt": {
-        "type": "Transitive",
-        "resolved": "2.5.0",
-        "contentHash": "w3CMPl5CPDZaPfkcDvlgs61FXdgAs9c9R/CvfYXtYEM+I6ceFT2BhlVC76zMqZZdpgj8Nw/ShnqndFXZoqO9Fw==",
-        "dependencies": {
-          "Newtonsoft.Json": "9.0.1",
-          "System.IO.Compression": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Cng": "4.3.0",
-          "System.Security.Cryptography.Csp": "4.3.0",
-          "System.Security.Cryptography.X509Certificates": "4.3.0"
-        }
-      },
       "Microsoft.AspNetCore.JsonPatch": {
         "type": "Transitive",
         "resolved": "3.1.3",
@@ -497,11 +482,6 @@
           "Namotion.Reflection": "1.0.11",
           "Newtonsoft.Json": "9.0.1"
         }
-      },
-      "Portable.BouncyCastle": {
-        "type": "Transitive",
-        "resolved": "1.8.6.7",
-        "contentHash": "RBCAkzkBkur4w1YXFpwVdYvdm4ez7PUNyl5DsqPKDe0QSoH9xt6Mwzy1NSFSrrw4T7bCkxi06nSHCuBEuMEgfw=="
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
@@ -1873,24 +1853,6 @@
         "resolved": "6.1.1",
         "contentHash": "RsLcGUuReR1b2TghYl3heRMTE+Ry6Kt+pvoRRfOnGG45ik8W4S1mQaXlgMOwBYeTFyeyVCATrdAKRbRcHdI6oQ=="
       },
-      "nhsonline.backend.auth": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Metrics": "1.0.0",
-          "NHSOnline.Backend.Support": "1.0.0",
-          "Portable.BouncyCastle": "1.8.6.7",
-          "System.IdentityModel.Tokens.Jwt": "6.5.0",
-          "jose-jwt": "2.5.0"
-        }
-      },
-      "nhsonline.backend.metrics": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Support": "1.0.0"
-        }
-      },
       "nhsonline.backend.servicejourneyrulesapi": {
         "type": "Project",
         "dependencies": {
@@ -1929,7 +1891,6 @@
           "MSTest.TestFramework": "1.4.0",
           "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
           "Moq": "4.13.1",
-          "NHSOnline.Backend.Auth": "1.0.0",
           "NHSOnline.Backend.Support": "1.0.0",
           "System.IdentityModel.Tokens.Jwt": "6.5.0"
         }

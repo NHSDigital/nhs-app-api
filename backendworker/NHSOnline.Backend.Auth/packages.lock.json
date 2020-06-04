@@ -1534,13 +1534,6 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "nhsonline.backend.metrics": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
-          "NHSOnline.Backend.Support": "1.0.0"
-        }
-      },
       "nhsonline.backend.support": {
         "type": "Project",
         "dependencies": {
