@@ -182,7 +182,6 @@ odsRemapMap: ""
 
 patientPracticeMessagingEnabled: true
 
-ndopEnabled: false
 ndopClaimAudience: https://app.your-data-matters.service.nhs.uk
 ndopClaimIssuer: false
 

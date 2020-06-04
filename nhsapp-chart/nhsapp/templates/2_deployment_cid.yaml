@@ -55,11 +55,9 @@ spec:
       - name: session-key
         secret:
           secretName: session-key-{{ .Chart.AppVersion }}
-      {{- if $.Values.ndopEnabled }}
       - name: ndop-cert
         secret:
           secretName: ndop-cert-{{ .Chart.AppVersion }}
-      {{- end }}
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
@@ -219,7 +217,6 @@ spec:
         - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
-        {{- if $.Values.ndopEnabled }}
         - name: NDOP_CERTIFICATE_PATH
           value: "/secrets/ndop-cert/ndop.pfx"
         - name: NDOP_CERTIFICATE_PASSWORD
@@ -230,11 +227,10 @@ spec:
         - name: NDOP_CLAIM_AUDIENCE
           value: "{{ $.Values.ndopClaimAudience }}"
         - name: NDOP_CLAIM_ISSUER
-          {{- if ($.Values.web.publicURL) }}
+        {{- if ($.Values.web.publicURL) }}
           value: "https://{{ $.Values.web.publicURL }}"
-          {{- else }}
+        {{- else }}
           value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
-          {{- end }}
         {{- end }}
         - name: AUDIT_COSMOS_URI
           value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
@@ -289,11 +285,9 @@ spec:
           mountPath: "/secrets/vision-client-cert-pfx"
           readOnly: true
     {{- end }}
-    {{- if $.Values.ndopEnabled }}
         - name: ndop-cert
           mountPath: "/secrets/ndop-cert"
           readOnly: true
-    {{- end }}
         - name: session-key
           mountPath: "/secrets/session-key"
           readOnly: true
