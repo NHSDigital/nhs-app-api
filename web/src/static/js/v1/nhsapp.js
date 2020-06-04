@@ -1,18 +1,33 @@
-window.nhsapp = window.nhsapp || {};
-window.nhsapp.tools = window.nhsapp.tools || {};
-window.nhsapp.navigation = window.nhsapp.navigation || {};
-
-window.nhsapp.tools.isOpenInNHSApp = () => (navigator.userAgent.indexOf('nhsapp') !== -1);
-
-window.nhsapp.tools.getAppPlatform = () => {
-  if (navigator.userAgent.indexOf('nhsapp-android') !== -1) {
-    return 'android';
-  } if (navigator.userAgent.indexOf('nhsapp-ios') !== -1) {
-    return 'ios';
-  }
-  return 'none';
+const AppPage = {
+  HOME_PAGE: 'homePage',
+  APPOINTMENTS: 'appointments',
+  PRESCRIPTIONS: 'prescriptions',
+  HEALTH_RECORDS: 'healthRecords',
+  SYMPTOMS: 'symptoms',
+  MESSAGING: 'messaging',
 };
 
-window.nhsapp.navigation.goToHomePage = () => {
-  window.nhsappNative.goToHomepage();
+window.nhsapp = {
+  navigation: {
+    goToHomePage() {
+      // TODO: refactor to use goToPage(AppPage.HOME_PAGE)
+      window.nhsappNative.goToHomePage();
+    },
+    goToPage(appPage) {
+      window.nhsappNative.goToPage(appPage);
+    },
+  },
+  tools: {
+    getAppPlatform() {
+      if (navigator.userAgent.indexOf('nhsapp-android') !== -1) {
+        return 'android';
+      } if (navigator.userAgent.indexOf('nhsapp-ios') !== -1) {
+        return 'ios';
+      }
+      return 'none';
+    },
+    isOpenInNHSApp: () => navigator.userAgent.indexOf('nhsapp') !== -1,
+  },
 };
+
+window.nhsapp.navigation.AppPage = AppPage;
