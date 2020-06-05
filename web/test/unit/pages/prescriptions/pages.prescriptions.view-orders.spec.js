@@ -233,12 +233,29 @@ describe('prescriptions/view-orders.vue -', () => {
             prescriptionCourses: {
               Approved: [{
                 courseId: 'abc',
-              }],
+                orderDate: '2020-04-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'def',
+                orderDate: '2019-0-01T00:00:00+00:00',
+              },
+              ],
               Requested: [{
                 courseId: 'pqr',
-              }],
+                orderDate: '2020-04-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'ghi',
+                orderDate: '2018-04-10T00:00:00+00:00',
+              },
+              ],
               Rejected: [{
                 courseId: 'xyz',
+                orderDate: '2020-04-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'mno',
+                orderDate: '2017-04-01T00:00:00+00:00',
               }],
             },
           },
@@ -258,9 +275,12 @@ describe('prescriptions/view-orders.vue -', () => {
       const page = createViewOrdersPrescriptionsPage($store);
 
       expect(page.vm.prescriptionCoursesToDisplay).toEqual({
-        Requested: [{ courseId: 'pqr' }],
-        Approved: [{ courseId: 'abc' }],
-        Rejected: [{ courseId: 'xyz' }],
+        Requested: [{ courseId: 'pqr', orderDate: '2020-04-01T00:00:00+00:00' }, {
+          courseId: 'ghi', orderDate: '2018-04-10T00:00:00+00:00' }],
+        Approved: [{ courseId: 'abc', orderDate: '2020-04-01T00:00:00+00:00' }, {
+          courseId: 'def', orderDate: '2019-0-01T00:00:00+00:00' }],
+        Rejected: [{ courseId: 'xyz', orderDate: '2020-04-01T00:00:00+00:00' }, {
+          courseId: 'mno', orderDate: '2017-04-01T00:00:00+00:00' }],
       });
     });
   });

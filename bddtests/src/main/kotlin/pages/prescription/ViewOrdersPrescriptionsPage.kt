@@ -88,7 +88,7 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
         val orderDateXpath = ".//*[@data-label='order-date']"
         val courseNameXpath = ".//*[@data-label='course-name']"
         val dosageXpath = ".//*[@data-label='detail']"
-        val statusXpath = ".//*[@data-label='status-icon']"
+        val statusPath = ".//*[@data-label='status-text']"
 
         prescriptions.forEach { el ->
 
@@ -100,7 +100,7 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
                         dosage = el.findElement<WebElement>(By.xpath(dosageXpath)).asciiText)
 
                 p.orderDate = el.findElement<WebElement>(By.xpath(orderDateXpath)).asciiText
-                p.status = el.findElement<WebElement>(By.xpath(statusXpath)).getAttribute("data-status")
+                p.status = el.findElement<WebElement>(By.xpath(statusPath)).asciiText
             } else {
                 p = HistoricPrescription(
                         name = el.findElement<WebElement>(By.xpath(courseNameXpath)).asciiText,

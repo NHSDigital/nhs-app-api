@@ -1549,7 +1549,7 @@ const routes = {
       nativeDisabled: true,
       i18nKey: 'prescriptions',
       get defaultCrumb() {
-        return [];
+        return [this.allRoutes.INDEX];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,

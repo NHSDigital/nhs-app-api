@@ -35,7 +35,7 @@ object VisionPrescriptionMapper {
             }
 
             val prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString(
-                    DateTimeFormats.frontendBasicDateFormat)
+                    DateTimeFormats.frontendDateFormat)
 
             for (course in repeatPrescription.repeat) {
                 val historicPrescription = HistoricPrescription(

@@ -48,7 +48,7 @@ object EmisPrescriptionMapper {
                 break
             }
 
-            val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendBasicDateFormat)
+            val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendDateFormat)
 
             val filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
                 it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
