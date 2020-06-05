@@ -233,6 +233,10 @@ export default {
     isLoading() {
       return this.$store.getters['http/isLoading'];
     },
+    canVersionHandleBiometricsWeb() {
+      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
+      return !this.$store.state.device.isNativeApp || isNativeVersionAfter('1.34.0');
+    },
   },
   watch: {
     $route(to, from) {
@@ -251,6 +255,13 @@ export default {
       this.$store.dispatch('session/updateLastCalledAt');
 
       NativeVersionSetup(this.$store);
+      if (process.client
+        && this.canVersionHandleBiometricsWeb
+        && this.$store.state.loginSettings.biometricType === undefined) {
+        NativeCallbacks.fetchBiometricSpec();
+      }
+
+      this.$store.dispatch('loginSettings/nativeLogin');
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
         window.validateSession =

@@ -48,9 +48,8 @@ struct BiometricErrors {
             return
         }
         
-        // handle cancel on face ID which should cause login biometric error
-        if (action == BiometricActions.authentication.rawValue && outcome == BiometricOutcomes.cancelled.rawValue && biometricType == BiometricType.faceID) {
-            appWebInterface?.biometricLoginFailure()
+        // handle cancel on biometric login
+        if (action == BiometricActions.authentication.rawValue && outcome == BiometricOutcomes.cancelled.rawValue) {
              return
         }
         

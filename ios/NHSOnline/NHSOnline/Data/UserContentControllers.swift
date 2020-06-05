@@ -6,6 +6,7 @@ struct UserContentControllers {
     var biometicLoginAttempt = "attemptBiometricLogin"
     var clearMenuBarItem = "clearMenuBarItem"
     var navigateToHomePage = "goToHomepage"
+    var getBiometricSpec = "fetchBiometricSpec"
     var getNativeVersion = "fetchNativeAppVersion"
     var hideTheSlimHeader = "hideHeaderSlim"
     var hideTheHeader = "hideHeader"

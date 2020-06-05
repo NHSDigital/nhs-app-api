@@ -12,7 +12,8 @@ describe('Settings', () => {
     showNotifications = true,
     showLinkedProfiles = true,
     webBiometrics = false,
-    source = 'ios' } = {}) => {
+    source = 'ios',
+    versionEnabled = true } = {}) => {
     $router = createRouter();
     $store = createStore({
       $env: {
@@ -22,6 +23,9 @@ describe('Settings', () => {
         device: {
           source,
         },
+      },
+      getters: {
+        'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
       },
     });
     return mount(Settings, {
@@ -128,6 +132,10 @@ describe('Settings', () => {
         beforeEach(() => {
           wrapper = mountSettings({ webBiometrics: false, source: 'android' });
           biometricsLink = wrapper.find('#btn_passwordOptions');
+        });
+
+        it('will use the expected text reference', () => {
+          expect(biometricsLink.text()).toBe('translate_myAccount.accountSettings.passwordOptions');
         });
 
         it('will not navigate to the web biometrics', () => {

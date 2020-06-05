@@ -1,4 +1,5 @@
 import NhsukLayout from '@/components/layout/NhsUkLayout';
+import NativeCallbacks from '@/services/native-app';
 import {
   APPOINTMENTS,
   APPOINTMENT_BOOKING,
@@ -19,6 +20,7 @@ import {
 import { createStore, mockCookies, shallowMount } from '../../helpers';
 
 jest.mock('@/components/widgets/HotJar', () => {});
+jest.mock('@/services/native-app');
 
 const createPage = ($store, route = INDEX) => {
   NhsukLayout.components.HotJar = {
@@ -48,11 +50,12 @@ const createPage = ($store, route = INDEX) => {
   });
 };
 
-const createLayoutStore = (isNativeApp, enabled = true) => createStore({
+const createLayoutStore = (isNativeApp, enabled = true, versionEnabled = true) => createStore({
   $cookies: mockCookies(),
   getters: {
     'errors/showApiError': false,
     'serviceJourneyRules/myRecordHubEnabled': enabled,
+    'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
   },
   state: {
     appVersion: {
@@ -63,6 +66,9 @@ const createLayoutStore = (isNativeApp, enabled = true) => createStore({
     device: {
       isNativeApp,
       source: 'ios',
+    },
+    loginSettings: {
+      biometricType: undefined,
     },
     pageTitle: {
       pageTitle: 'some title',
@@ -86,28 +92,30 @@ describe('NhsUkLayout', () => {
   beforeEach(() => {
     process.client = true;
     global.validateSession = () => {};
+    NativeCallbacks.fetchBiometricSpec.mockClear();
   });
 
   describe('is native', () => {
     const isNative = true;
+    describe('is after version for web biometrics', () => {
+      beforeEach(() => {
+        $store = createLayoutStore(isNative);
+        $store.app.$cookies.get = jest.fn();
+      });
 
-    beforeEach(() => {
-      $store = createLayoutStore(isNative);
-      $store.app.$cookies.get = jest.fn();
-    });
+      it('will load analytics when on a logged in page', () => {
+        const defaultPage = createPage($store);
+        const head = defaultPage.vm.$options.head.call(defaultPage.vm);
 
-    it('will load analytics when on a logged in page', () => {
-      const defaultPage = createPage($store);
-      const head = defaultPage.vm.$options.head.call(defaultPage.vm);
+        expect(head.script[0].src).toBe('test script');
+      });
 
-      expect(head.script[0].src).toBe('test script');
-    });
+      it('will not load analytics when on a logged off page', () => {
+        const defaultPage = createPage($store, LOGIN);
+        const head = defaultPage.vm.$options.head.call(defaultPage.vm);
 
-    it('will not load analytics when on a logged off page', () => {
-      const defaultPage = createPage($store, LOGIN);
-      const head = defaultPage.vm.$options.head.call(defaultPage.vm);
-
-      expect(head.script).toBeUndefined();
+        expect(head.script).toBeUndefined();
+      });
     });
 
     describe.each([
@@ -117,7 +125,9 @@ describe('NhsUkLayout', () => {
       [PRESCRIPTION_REPEAT_COURSES.name, PRESCRIPTION_REPEAT_COURSES],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
+        $store.app.$cookies.get = jest.fn();
       });
 
       it('will show breadcrumb', () => {
@@ -135,7 +145,9 @@ describe('NhsUkLayout', () => {
       [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
+        $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
+        $store.app.$cookies.get = jest.fn();
       });
 
       it('will not show breadcrumb', () => {
@@ -150,6 +162,7 @@ describe('NhsUkLayout', () => {
       beforeEach(() => {
         $store = createLayoutStore(isNative, true);
         wrapper = createPage($store, page);
+        $store.app.$cookies.get = jest.fn();
       });
 
       it('will show breadcrumb', () => {
@@ -164,10 +177,22 @@ describe('NhsUkLayout', () => {
       beforeEach(() => {
         $store = createLayoutStore(isNative, false);
         wrapper = createPage($store, page);
+        $store.app.$cookies.get = jest.fn();
       });
 
       it('will not show breadcrumb', () => {
         expect(wrapper.vm.shouldShowBreadCrumb).toBe(false);
+      });
+    });
+
+    describe('is before version for web biometrics', () => {
+      beforeEach(() => {
+        $store = createLayoutStore({ isNative, versionEnabled: false });
+        $store.app.$cookies.get = jest.fn();
+      });
+
+      it('will not call to fetch biometric spec', () => {
+        expect(NativeCallbacks.fetchBiometricSpec).toBeCalledTimes(0);
       });
     });
   });

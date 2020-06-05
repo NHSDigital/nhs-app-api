@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     getBiometricLinkText() {
-      if (!this.webBiometricsEnabled) {
+      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
+      if (!this.webBiometricsEnabled || !isNativeVersionAfter('1.34.0')) {
         return 'myAccount.accountSettings.passwordOptions';
       }
 
@@ -58,10 +59,15 @@ export default {
 
       return 'loginSettings.biometrics.noBiometricType.settingsLinkText';
     },
+    canVersionHandleBiometricsWeb() {
+      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
+      return !this.$store.state.device.isNativeApp || isNativeVersionAfter('1.34.0');
+    },
   },
   methods: {
     goToLoginOptions() {
-      if (this.webBiometricsEnabled || this.$store.state.device.source === 'ios') {
+      if (this.canVersionHandleBiometricsWeb &&
+        (this.webBiometricsEnabled || this.$store.state.device.source === 'ios')) {
         this.$router.push(LOGIN_SETTINGS.path);
       } else {
         this.configureWebContext(findByName('Login').helpUrl);

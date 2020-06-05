@@ -407,32 +407,24 @@ class HomeViewController : UIViewController {
     }
     
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
-        if #available(iOS 10.0, *) {
-            if(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered) {
-                sendBiometricSpec(enabled: true)
-            } else if (UserDefaultsManager.getBiometricAvailability() == BiometricState.Not_Registered
-                || UserDefaultsManager.getBiometricAvailability() == BiometricState.Invalidated){
-                sendBiometricSpec(enabled: false)
-            }
-        }
-        
-        CookieHandler().readAccessTokenFromCookie()
         let urlToLoad = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
         webViewController?.loadPage(url: urlToLoad)
         self.clearSelectedTab()
     }
     
-    private func sendBiometricSpec(enabled: Bool) {
-        if #available(iOS 11.0, *) {
-            if (laContext.biometryType == .faceID) {
-                self.appWebInterface!.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.faceId.rawValue, enabled: enabled)
+    open func handleBiometricSpecRequest(biometricAvailability: BiometricState) {
+        if #available(iOS 10.0, *) {
+            switch (biometricAvailability) {
+            case .Registered:
+                biometricService?.sendBiometricSpec(enabled: true)
+            case .Not_Registered:
+                biometricService?.sendBiometricSpec(enabled: false)
+            case .Invalidated:
+                biometricService?.sendBiometricSpec(enabled: false)
             }
-            if (laContext.biometryType == .touchID) {
-                self.appWebInterface!.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
-            }
-        } else if #available(iOS 10.0, *) {
-            self.appWebInterface!.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
         }
+        
+        CookieHandler().readAccessTokenFromCookie()
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {

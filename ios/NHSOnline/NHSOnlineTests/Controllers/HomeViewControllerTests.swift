@@ -305,4 +305,122 @@ class HomeViewControllerTests: XCTestCase {
         XCTAssert(mockBiometricService.calledDeRegister == false)
         XCTAssert(mockBiometricService.calledRegister == false)
     }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsNotRegistered_AndBiometricTypeIsFace_willReturnBiometricSpecWithFaceAndNotEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        laContextMock?.updateShouldUseFaceId(shouldUse: true)
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Not_Registered)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == false)
+        XCTAssert(appWebInterface?.biometricTypeRef == "face")
+    }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsRegistered_AndBiometricTypeIsFace_willReturnBiometricSpecWithFaceAndEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Registered)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "face")
+    }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsNotRegistered_AndBiometricTypeIsTouch_willReturnBiometricSpecWithTouchAndNotEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        laContextMock?.updateShouldUseFaceId(shouldUse: false)
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Not_Registered)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == false)
+        XCTAssert(appWebInterface?.biometricTypeRef == "touch")
+    }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsRegistered_AndBiometricTypeIsTouch_willReturnBiometricSpecWithTouchAndEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        laContextMock?.updateShouldUseFaceId(shouldUse: false)
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Registered)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "touch")
+    }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsInvalidated_AndBiometricTypeIsTouch_willReturnBiometricSpecWithTouchAndNotEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        laContextMock?.updateShouldUseFaceId(shouldUse: false)
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Invalidated)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == false)
+        XCTAssert(appWebInterface?.biometricTypeRef == "touch")
+    }
+    
+    func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsInvalidated_AndBiometricTypeIsFace_willReturnBiometricSpecWithFaceAndNotEnabled() {
+        let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        laContextMock?.biometricsCapable = true
+        
+        
+        mockBiometricService = BiometricServiceMocks(homeViewController: vcHome,
+                                                     configurationServiceProvider: configurationServiceProvider,
+        appWebInterface: appWebInterface!,
+        fidoClient: fidoClient,
+        laContext: laContextMock!)
+        vcHome?.biometricService = mockBiometricService
+        
+        vcHome?.handleBiometricSpecRequest(biometricAvailability: BiometricState.Invalidated)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricEnabled == false)
+        XCTAssert(appWebInterface?.biometricTypeRef == "face")
+    }
 }

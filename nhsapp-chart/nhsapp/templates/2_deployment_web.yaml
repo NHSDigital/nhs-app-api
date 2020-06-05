@@ -103,7 +103,7 @@ spec:
         - name: BIOMETRICS_ENABLED
           value: "{{ $.Values.biometricsEnabled }}"
         - name: WEB_BIOMETRICS_ENABLED
-          value: "false"
+          value: "{{ $.Values.webBiometricsEnabled }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
         - name: ORGAN_DONATION_THROTTLING_URL

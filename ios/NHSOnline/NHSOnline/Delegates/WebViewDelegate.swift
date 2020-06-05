@@ -90,7 +90,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
 
             if url.absoluteString.contains(config().FidoLoginErrorPath) {
-                viewController.showBiometricSessionError()
+                viewController.appWebInterface?.biometricLoginFailure()
                 viewController.hideProgressBar()
                 decisionHandler(.cancel)
                 return
@@ -266,6 +266,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case "clearMenuBarItem":
                 clearMenuBarItem()
+                break
+            case "fetchBiometricSpec":
+                let biometricState = UserDefaultsManager.getBiometricAvailability()
+                self.viewController.handleBiometricSpecRequest(biometricAvailability: biometricState)
                 break
             case "fetchNativeAppVersion":
                 self.viewController.setupAppVersion()

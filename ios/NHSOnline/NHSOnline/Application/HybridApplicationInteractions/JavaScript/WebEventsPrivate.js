@@ -12,6 +12,10 @@ window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
 };
 
+window.nativeApp.fetchBiometricSpec = function() {
+    window.webkit.messageHandlers.fetchBiometricSpec.postMessage(null);
+};
+
 window.nativeApp.fetchNativeAppVersion = function() {
     window.webkit.messageHandlers.fetchNativeAppVersion.postMessage(null);
 };

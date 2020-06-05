@@ -40,6 +40,10 @@ describe('getters', () => {
       it('will return false for 2838 MR', () => {
         expect(isVersionAfter('2838')).toEqual(false);
       });
+
+      it('will return false for 1.14.1', () => {
+        expect(isVersionAfter('1.14.1')).toEqual(false);
+      });
     });
 
     describe('RC version 1.14.0-RC4', () => {

@@ -47,6 +47,15 @@ export default {
     return '';
   },
 
+  fetchBiometricSpec() {
+    const app = window.nativeApp;
+    if (app && app.fetchBiometricSpec) {
+      const biometricSpec = app.fetchBiometricSpec();
+      return biometricSpec;
+    }
+    return '';
+  },
+
   getNotificationsStatus() {
     const app = window.nativeApp;
     if (app && app.getNotificationsStatus) {

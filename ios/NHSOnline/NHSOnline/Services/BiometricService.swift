@@ -82,6 +82,10 @@ class BiometricService: BiometricProtocol {
             let success = try fidoClient!.register(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, accessToken: accessToken, registrationUrl: registrationUrl, privateKeyLabel: privateKeyLabel, registrationResponseEndpoint: registrationResponseEndpoint, keyIDPrefix: keyIDPrefix)
             
             if !success {
+                appWebInterface.biometricCompletion(
+                    action: BiometricActions.register.rawValue,
+                    outcome: BiometricOutcomes.failed.rawValue,
+                    errorCode: BiometricErrorCodes.cannotChangeBiometrics.rawValue)
                 return
             }
             
@@ -178,5 +182,18 @@ class BiometricService: BiometricProtocol {
         }
         
         return BiometricType.touchID
+    }
+    
+    open func sendBiometricSpec(enabled: Bool) {
+        if #available(iOS 11.0, *) {
+            if (laContext.biometryType == .faceID) {
+                self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.faceId.rawValue, enabled: enabled)
+            }
+            if (laContext.biometryType == .touchID) {
+                self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
+            }
+        } else if #available(iOS 10.0, *) {
+            self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
+        }
     }
 }

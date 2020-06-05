@@ -189,7 +189,7 @@ class BiometricServiceTests: XCTestCase {
         
     }
     
-    func test_whenAuthenticateIsCalled_andUserHasFaceID_andActionIsCancelled_thenAuthenticateEndsAndTriggersErrorInWeb(){
+    func test_whenAuthenticateIsCalled_andUserHasFaceID_andActionIsCancelled_thenAuthenticateEndsAndNoErrorInWeb(){
         fidoClient?.userCancelled = true
         
         laContextMock?.updateBiometricsCapability(capable: true)
@@ -198,7 +198,7 @@ class BiometricServiceTests: XCTestCase {
         
         testBiometricServices?.authenticate()
         
-        XCTAssert(appWebInterface?.biometricLoginFailureCalled == true)
+        XCTAssert(appWebInterface?.biometricLoginFailureCalled == false)
         
     }
     
@@ -267,6 +267,64 @@ class BiometricServiceTests: XCTestCase {
         XCTAssert(appWebInterface?.biometricOutcome == "Failed")
         XCTAssert(appWebInterface?.biometricErrorCode == "10004")
         XCTAssert(biometricsAvailable == false)
+        
+    }
+    
+    func test_whenSendBiometricSpecIsCalled_AndBiometricTypeIsFace_AndBiometricsIsRegistered_willSendSpecOfFaceAndEnabled(){
+        
+        laContextMock?.updateBiometricsCapability(capable: true)
+        
+        testBiometricServices = createBiometricService()
+        
+        testBiometricServices?.sendBiometricSpec(enabled: true)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "face")
+        XCTAssert(appWebInterface?.biometricEnabled == true)
+        
+    }
+    
+    func test_whenSendBiometricSpecIsCalled_AndBiometricTypeIsFace_AndBiometricsIsNotRegistered_willSendSpecOfFaceAndNotEnabled(){
+        
+        laContextMock?.updateBiometricsCapability(capable: true)
+        
+        testBiometricServices = createBiometricService()
+        
+        testBiometricServices?.sendBiometricSpec(enabled: false)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "face")
+        XCTAssert(appWebInterface?.biometricEnabled == false)
+        
+    }
+    
+    func test_whenSendBiometricSpecIsCalled_AndBiometricTypeIsTouch_AndBiometricsIsRegistered_willSendSpecOfTouchAndEnabled(){
+        
+        laContextMock?.updateBiometricsCapability(capable: true)
+        laContextMock?.updateShouldUseFaceId(shouldUse: false)
+        
+        testBiometricServices = createBiometricService()
+        
+        testBiometricServices?.sendBiometricSpec(enabled: true)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "touch")
+        XCTAssert(appWebInterface?.biometricEnabled == true)
+        
+    }
+    
+    func test_whenSendBiometricSpecIsCalled_AndBiometricTypeIsTouch_AndBiometricsIsNotRegistered_willSendSpecOfTouchAndNotEnabled(){
+        
+        laContextMock?.updateBiometricsCapability(capable: true)
+        laContextMock?.updateShouldUseFaceId(shouldUse: false)
+        
+        testBiometricServices = createBiometricService()
+        
+        testBiometricServices?.sendBiometricSpec(enabled: false)
+        
+        XCTAssert(appWebInterface?.biometricSpecRequestCalled == true)
+        XCTAssert(appWebInterface?.biometricTypeRef == "touch")
+        XCTAssert(appWebInterface?.biometricEnabled == false)
         
     }
     

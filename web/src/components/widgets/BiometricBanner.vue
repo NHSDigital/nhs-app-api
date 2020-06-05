@@ -11,6 +11,7 @@
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
         <analytics-tracked-tag :text="$t('biometricBanner.message.settingsButton')">
           <generic-button
+            id="btn_goToSettings"
             :button-classes="['nhsuk-button',
                               'nhsuk-button--secondary',
                               $style['nhsuk-button-full-width']]"
@@ -38,7 +39,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NativeCallbacks from '@/services/native-app';
-import { findByName } from '@/lib/routes';
+import { findByName, LOGIN_SETTINGS } from '@/lib/routes';
 
 export default {
   name: 'BiometricBanner',
@@ -51,6 +52,7 @@ export default {
   data() {
     return {
       nativeLoginOptionsMethodExists: true,
+      webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
     };
   },
   computed: {
@@ -64,6 +66,10 @@ export default {
     showBiometricBanner() {
       return this.$store.state.device.isNativeApp && !this.$store.state.biometricBanner.dismissed;
     },
+    canVersionHandleBiometricsWeb() {
+      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
+      return !this.$store.state.device.isNativeApp || isNativeVersionAfter('1.34.0');
+    },
   },
   created() {
     this.$store.dispatch('biometricBanner/sync');
@@ -76,8 +82,13 @@ export default {
       this.$store.dispatch('biometricBanner/dismiss');
     },
     goToLoginOptions() {
-      this.configureWebContext(findByName('Login').helpUrl);
-      NativeCallbacks.goToLoginOptions();
+      if (this.canVersionHandleBiometricsWeb &&
+        (this.webBiometricsEnabled || this.$store.state.device.source === 'ios')) {
+        this.$router.push(LOGIN_SETTINGS.path);
+      } else {
+        this.configureWebContext(findByName('Login').helpUrl);
+        NativeCallbacks.goToLoginOptions();
+      }
     },
   },
 };

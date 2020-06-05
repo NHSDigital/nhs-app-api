@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     private func finishLoginToApp(_ url: String) {
         let viewController = getViewController()
         if url.contains(config().FidoLoginErrorPath) {
-            viewController.showBiometricSessionError()
+            viewController.appWebInterface?.biometricLoginFailure()
         } else {
             loadPageAndShowView(url, viewController)
         }
