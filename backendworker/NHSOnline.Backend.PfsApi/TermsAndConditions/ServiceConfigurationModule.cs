@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
@@ -8,8 +11,19 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<ITermsAndConditionsService, TermsAndConditionsService>();
-            services.AddSingleton<ITermsAndConditionsRepository, TermsAndConditionsRepository>();
+            services.AddTransient<IMapper<TermsAndConditionsRecord, ConsentResponse>, TermsAndConditionsToConsentResponseMapper>();
+            services.AddTransient<IConsentRequestToTermsAndConditionsMapper, ConsentRequestToTermsAndConditionsMapper>();
+            services.AddTransient<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> ,ConsentRequestToUpdateMapper>();
+            services
+                .AddTransient<
+                    IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>,
+                    AnalyticsCookieAcceptanceToUpdateMapper>();
+
+
+            services.AddTransient<IRepository<TermsAndConditionsRecord>, MongoRepositoryBase<IMongoConfiguration, TermsAndConditionsRecord>>();
+            services.AddTransient<IMapper<TermsAndConditionsRecord, ConsentResponse>, TermsAndConditionsToConsentResponseMapper>();
+            services.AddTransient<ITermsAndConditionsService, TermsAndConditionsService>();
+            services.AddTransient<ITermsAndConditionsRepository, TermsAndConditionsRepository>();
             services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
 
             base.ConfigureServices(services, configuration);

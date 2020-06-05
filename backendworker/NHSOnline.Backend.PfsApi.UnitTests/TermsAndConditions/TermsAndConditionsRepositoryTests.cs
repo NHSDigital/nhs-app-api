@@ -1,42 +1,28 @@
 using System;
-using System.Threading;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Repository;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 {
     [TestClass]
     public class TermsAndConditionsRepositoryTests
     {
-        private IFixture _fixture;
         private ITermsAndConditionsRepository _systemUnderTest;
-        private Mock<IMongoCollection<TermsAndConditionsRecord>> _mongoCollectionMock;
+        private Mock<IRepository<TermsAndConditionsRecord>> _mockRepository;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
+            _mockRepository = new Mock<IRepository<TermsAndConditionsRecord>>();
 
-            _mongoCollectionMock = _fixture.Create<Mock<IMongoCollection<TermsAndConditionsRecord>>>();
-
-            var mongoDatabaseMock = _fixture.Create<Mock<IMongoDatabase>>();
-            mongoDatabaseMock.Setup(x => x.GetCollection<TermsAndConditionsRecord>(It.IsAny<string>(), null))
-                .Returns(_mongoCollectionMock.Object);
-
-            var mockMongoClient = _fixture.Freeze<Mock<IApiMongoClient<IMongoConfiguration>>>();
-            mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
-                .Returns(mongoDatabaseMock.Object);
-
-            _systemUnderTest = _fixture.Create<TermsAndConditionsRepository>();
+            _systemUnderTest = new TermsAndConditionsRepository(new Mock<ILogger<TermsAndConditionsRepository>>().Object,
+                _mockRepository.Object);
         }
 
         [TestMethod]
@@ -56,36 +42,35 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         public async Task Create_WithRecord_AddsToCollection()
         {
             // Arrange
-            var record = _fixture.Create<TermsAndConditionsRecord>();
-            _mongoCollectionMock.Setup(x => x.InsertOneAsync(record, null, default))
-                .Returns(Task.CompletedTask);
+            var record = new TermsAndConditionsRecord();
+            _mockRepository.Setup(x =>
+                    x.Create(It.IsAny<TermsAndConditionsRecord>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.Created(record));
 
             // Act
-            await _systemUnderTest.Create(record);
+            var result = await _systemUnderTest.Create(record);
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            result.Should().BeOfType<RepositoryCreateResult<TermsAndConditionsRecord>.Created>()
+                .Subject.Record.Should().BeEquivalentTo( record );
         }
 
         [TestMethod]
         public async Task Find_WhenNhsLoginIdRecordExists_ReturnsRecord()
         {
             // Arrange
-            var record = _fixture.Create<TermsAndConditionsRecord>();
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { record });
+            var record = new TermsAndConditionsRecord();
 
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<TermsAndConditionsRecord>>(),
-                    It.IsAny<FindOptions<TermsAndConditionsRecord, TermsAndConditionsRecord>>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.Found(new []{record}));
 
             // Act
-            var result = await _systemUnderTest.Find(record.NhsLoginId);
+            var result = await _systemUnderTest.Find("nhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
-            result.Should().Be(record);
+            result.Should().BeAssignableTo<RepositoryFindResult<TermsAndConditionsRecord>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(new []{record});
         }
 
 
@@ -93,20 +78,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         public async Task Find_WhenNhsLoginIdRecordDoesNotExist_ShouldNotReturnRecord()
         {
             // Arrange
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<TermsAndConditionsRecord>(_fixture);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<TermsAndConditionsRecord>>(),
-                    It.IsAny<FindOptions<TermsAndConditionsRecord, TermsAndConditionsRecord>>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Find(_fixture.Create<string>());
+            var result = await _systemUnderTest.Find("nhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
-            result.Should().BeNull();
+            result.Should().BeAssignableTo<RepositoryFindResult<TermsAndConditionsRecord>.NotFound>();
         }
 
         [TestMethod]
@@ -120,35 +100,32 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         }
 
         [TestMethod]
-        public void Update_WhenRecordIsNull_ThrowsException()
+        public void Update_WhenNhsLoginIdIsNull_ThrowsException()
         {
             // Act
-            Func<Task> act = async () => await _systemUnderTest.Update(null);
+            Func<Task> act = async () => await _systemUnderTest.Update(null, new UpdateRecordBuilder<TermsAndConditionsRecord>());
 
             // Assert
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(1)
                 .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("record", StringComparison.Ordinal));
+                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("nhsLoginId", StringComparison.Ordinal));
         }
 
         [TestMethod]
         public async Task Update_WithRecord_UpdatesRecord()
         {
             // Arrange
-            var updatedRecord = _fixture.Create<TermsAndConditionsRecord>();
+            _mockRepository.Setup(x =>
+                    x.Update(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
+            var updatedRecord = new TermsAndConditionsRecord();
 
             // Act
-            await _systemUnderTest.Update(updatedRecord);
+            var result = await _systemUnderTest.Update("nhsLoginId", new UpdateRecordBuilder<TermsAndConditionsRecord>());
 
             // Assert
-            _mongoCollectionMock.Verify(x => x.ReplaceOneAsync(
-                It.IsAny<FilterDefinition<TermsAndConditionsRecord>>(),
-                updatedRecord,
-                It.IsAny<ReplaceOptions>(),
-                It.IsAny<CancellationToken>()
-            ));
-            _mongoCollectionMock.VerifyNoOtherCalls();
+            result.Should().BeOfType<RepositoryUpdateResult<TermsAndConditionsRecord>.Updated>();
         }
     }
 }

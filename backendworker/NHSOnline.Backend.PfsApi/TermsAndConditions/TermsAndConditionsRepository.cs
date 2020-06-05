@@ -8,22 +8,22 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
-    public class TermsAndConditionsRepository : MongoRepository<IMongoConfiguration, TermsAndConditionsRecord>,
-        ITermsAndConditionsRepository
+    public class TermsAndConditionsRepository : ITermsAndConditionsRepository
     {
         private readonly ILogger<TermsAndConditionsRepository> _logger;
+        private readonly IRepository<TermsAndConditionsRecord> _repository;
+        private const string RecordName = nameof(TermsAndConditionsRecord);
 
         public TermsAndConditionsRepository
         (
             ILogger<TermsAndConditionsRepository> logger,
-            IApiMongoClient<IMongoConfiguration> mongoClient,
-            IMongoConfiguration mongoConfiguration
-        ) : base(mongoClient, mongoConfiguration)
+            IRepository<TermsAndConditionsRecord> repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
-        public async Task Create(TermsAndConditionsRecord record)
+        public async Task<RepositoryCreateResult<TermsAndConditionsRecord>> Create(TermsAndConditionsRecord record)
         {
             try
             {
@@ -33,10 +33,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     .IsNotNull(record, nameof(record), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Add terms and conditions consent to Mongo"))
-                {
-                    await InsertOne(record);
-                }
+                return await _repository.Create(record, RecordName);
+
             }
             finally
             {
@@ -45,21 +43,23 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
-            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
-        public async Task Update(TermsAndConditionsRecord record)
+            "Method ‘CompareOrdinal’ is not supported in repository")]
+        public async Task<RepositoryUpdateResult<TermsAndConditionsRecord>> Update(string nhsLoginId,
+            UpdateRecordBuilder<TermsAndConditionsRecord> updates)
         {
             try
             {
                 _logger.LogEnter();
 
                 new ValidateAndLog(_logger)
-                    .IsNotNull(record, nameof(record), ThrowError)
+                    .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
+                    .IsNotNull(updates, nameof(updates), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Update terms and conditions consent on Mongo"))
-                {
-                    await UpdateOne(d => d.NhsLoginId == record.NhsLoginId, record);
-                }
+                return await _repository.Update(
+                    d => d.NhsLoginId == nhsLoginId,
+                    updates,
+                    RecordName);
             }
             finally
             {
@@ -68,8 +68,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
-            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
-        public async Task<TermsAndConditionsRecord> Find(string nhsLoginId)
+            "Method ‘CompareOrdinal’ is not supported in repository")]
+        public async Task<RepositoryFindResult<TermsAndConditionsRecord>> Find(string nhsLoginId)
         {
             try
             {
@@ -79,10 +79,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Find terms and conditions consent on Mongo"))
-                {
-                    return await FindOne(d => d.NhsLoginId == nhsLoginId);
-                }
+                return await _repository.Find(d => d.NhsLoginId == nhsLoginId,
+                    RecordName);
             }
             finally
             {

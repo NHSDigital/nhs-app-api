@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
     public interface ITermsAndConditionsRepository
     {
-        Task Create(TermsAndConditionsRecord record);
-        Task Update(TermsAndConditionsRecord record);
-        Task<TermsAndConditionsRecord> Find(string nhsLoginId);
+        Task<RepositoryCreateResult<TermsAndConditionsRecord>> Create(TermsAndConditionsRecord record);
+        Task<RepositoryUpdateResult<TermsAndConditionsRecord>> Update(string nhsLoginId, UpdateRecordBuilder<TermsAndConditionsRecord> updates);
+        Task<RepositoryFindResult<TermsAndConditionsRecord>> Find(string nhsLoginId);
     }
 }

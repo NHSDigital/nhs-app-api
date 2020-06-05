@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using MongoDB.Driver;
 
@@ -6,28 +7,22 @@ namespace NHSOnline.Backend.Repository
 {
     public class UpdateRecordBuilder<TRecord>
     {
-        private UpdateDefinition<TRecord> _update = null;
+        private readonly IList<UpdateDefinition<TRecord>> _updateValues = new List<UpdateDefinition<TRecord>>();
 
         public UpdateRecordBuilder<TRecord> Set<TField>(
             Expression<Func<TRecord, TField>> field,
             TField value)
         {
-            if (_update == null)
-            {
-                var updateBuilder = Builders<TRecord>.Update;
-                _update = updateBuilder.Set(field, value);
-            }
-            else
-            {
-                _update.Set(field, value);
-            }
+            var updateBuilder = Builders<TRecord>.Update;
+            var update = updateBuilder.Set(field, value);
+            _updateValues.Add(update);
 
             return this;
         }
 
-        internal UpdateDefinition<TRecord> Build()
+        public UpdateDefinition<TRecord> Build()
         {
-            return _update;
+            return Builders<TRecord>.Update.Combine(_updateValues);
         }
     }
 }

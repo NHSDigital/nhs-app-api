@@ -1,13 +1,13 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
+using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 {
@@ -16,25 +16,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
     {
         private string _nhsLoginId;
 
-        private ITermsAndConditionsService _systemUnderTest;
+        private TermsAndConditionsService _systemUnderTest;
         private Mock<ITermsAndConditionsRepository> _mockTermsAndConditionsRepository;
-        private Mock<ITermsAndConditionsConfiguration> _mockTermsAndConditionsConfiguration;
+        private Mock<IMapper<TermsAndConditionsRecord, ConsentResponse>> _mockTermsAndConditionsToConsentMapper;
+        private Mock<IConsentRequestToTermsAndConditionsMapper> _mockConsentRequestToTermsAndConditionsMapper;
+        private Mock<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockConsentRequestToUpdateMapper;
+        private Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockAnalyticsCookieAcceptanceToUpdateMapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _nhsLoginId = "NhsLoginId";
 
-            _nhsLoginId = fixture.Create<string>();
+            _mockTermsAndConditionsRepository = new Mock<ITermsAndConditionsRepository>();
+            var logger = new Mock<ILogger<TermsAndConditionsService>>().Object;
 
-            _mockTermsAndConditionsRepository = fixture.Freeze<Mock<ITermsAndConditionsRepository>>();
-            _mockTermsAndConditionsConfiguration = fixture.Freeze<Mock<ITermsAndConditionsConfiguration>>();
+            _mockTermsAndConditionsToConsentMapper = new Mock<IMapper<TermsAndConditionsRecord, ConsentResponse>>();
+            _mockConsentRequestToTermsAndConditionsMapper = new Mock<IConsentRequestToTermsAndConditionsMapper>();
+            _mockConsentRequestToUpdateMapper =
+                new Mock<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>>();
+            _mockAnalyticsCookieAcceptanceToUpdateMapper =
+                new Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset,
+                    UpdateRecordBuilder<TermsAndConditionsRecord>>>();
 
-            _systemUnderTest = fixture.Create<TermsAndConditionsService>();
+            _systemUnderTest = new TermsAndConditionsService(
+                logger,
+                _mockTermsAndConditionsRepository.Object,
+                _mockTermsAndConditionsToConsentMapper.Object,
+                _mockConsentRequestToTermsAndConditionsMapper.Object,
+                _mockConsentRequestToUpdateMapper.Object,
+                _mockAnalyticsCookieAcceptanceToUpdateMapper.Object);
         }
 
         [TestMethod]
-        public async Task RecordConsent_WhenNotUpdatingAndNotConsentedAnalytics_ReturnsInitialConsentRecorded()
+        public async Task RecordConsent_WhenNotUpdating_ReturnsInitialConsentRecorded()
         {
             // Arrange
             var request = new ConsentRequest
@@ -46,61 +61,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             var consentTime = DateTimeOffset.Now;
 
-            TermsAndConditionsRecord record = null;
+            var record = new TermsAndConditionsRecord();
             _mockTermsAndConditionsRepository
                 .Setup(x => x.Create(It.IsAny<TermsAndConditionsRecord>()))
-                .Callback<TermsAndConditionsRecord>(x => record = x);
+                .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.Created(record));
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, consentTime);
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
-
-            result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
-
-            record.Should().NotBeNull();
-            record.NhsLoginId.Should().Be(_nhsLoginId);
-            record.ConsentGiven.Should().BeTrue();
-            record.DateOfConsent.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
-            record.AnalyticsCookieAccepted.Should().BeFalse();
-            record.DateOfAnalyticsCookieToggle.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
-        }
-
-        [TestMethod]
-        public async Task RecordConsent_WhenNotUpdatingAndConsentedAnalytics_ReturnsInitialConsentRecorded()
-        {
-            // Arrange
-            var request = new ConsentRequest
-            {
-                UpdatingConsent = false,
-                ConsentGiven = true,
-                AnalyticsCookieAccepted = true,
-            };
-
-            var consentTime = DateTimeOffset.Now;
-
-            TermsAndConditionsRecord record = null;
-            _mockTermsAndConditionsRepository
-                .Setup(x => x.Create(It.IsAny<TermsAndConditionsRecord>()))
-                .Callback<TermsAndConditionsRecord>(x => record = x);
-
-            // Act
-            var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, consentTime);
-
-            // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
-
-            result.Should().NotBeNull();
-            result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
-
-            record.Should().NotBeNull();
-            record.NhsLoginId.Should().Be(_nhsLoginId);
-            record.ConsentGiven.Should().BeTrue();
-            record.DateOfConsent.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
-            record.AnalyticsCookieAccepted.Should().BeTrue();
-            record.DateOfAnalyticsCookieToggle.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
         }
 
         [TestMethod]
@@ -127,7 +98,30 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         }
 
         [TestMethod]
-        public async Task RecordConsent_WhenUpdatingAndFoundExisting_ReturnsInitialConsentRecorded()
+        public async Task RecordConsent_WhenNotUpdatingRepositoryError_ReturnsInternalServerError()
+        {
+            // Arrange
+            var request = new ConsentRequest
+            {
+                UpdatingConsent = false,
+            };
+
+            _mockTermsAndConditionsRepository
+                .Setup(x => x.Create(It.IsAny<TermsAndConditionsRecord>()))
+                .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+
+            // Act
+            var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
+
+            // Assert
+            _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task RecordConsent_WhenUpdating_ReturnsInitialConsentRecorded()
         {
             // Arrange
             var request = new ConsentRequest
@@ -137,29 +131,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             };
 
             var consentTime = DateTimeOffset.Now;
-            var existingRecord = new TermsAndConditionsRecord
-            {
-                NhsLoginId = _nhsLoginId,
-                ConsentGiven = true,
-                DateOfConsent = DateTimeOffset.Now.AddHours(-5).ToString("s", CultureInfo.InvariantCulture)
-            };
 
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(existingRecord);
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, consentTime);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
-            _mockTermsAndConditionsRepository.Verify(x => x.Update(It.IsAny<TermsAndConditionsRecord>()));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
 
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
-
-            existingRecord.NhsLoginId.Should().Be(_nhsLoginId);
-            existingRecord.ConsentGiven.Should().BeTrue();
-            existingRecord.DateOfConsent.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
         }
 
         [TestMethod]
@@ -171,14 +156,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 UpdatingConsent = true,
             };
 
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync((TermsAndConditionsRecord)null);
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.NotFound());
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
             _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
 
             result.Should().NotBeNull();
@@ -186,7 +173,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         }
 
         [TestMethod]
-        public async Task RecordConsent_WhenUpdatingAndFindThrowsException_ReturnsInternalServerError()
+        public async Task RecordConsent_WhenUpdatingReturnsError_ReturnsInternalServerError()
         {
             // Arrange
             var request = new ConsentRequest
@@ -194,22 +181,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 UpdatingConsent = true,
             };
 
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .Throws<Exception>();
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("test")));
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
             _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
 
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
-
         [TestMethod]
-        public async Task RecordConsent_WhenUpdatingAndThrowsException_ReturnsInternalServerError()
+        public async Task RecordConsent_WhenUpdatingNotChange_ReturnsSuccess()
         {
             // Arrange
             var request = new ConsentRequest
@@ -217,37 +205,34 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 UpdatingConsent = true,
             };
 
-            _mockTermsAndConditionsRepository.Setup(x => x.Update(It.IsAny<TermsAndConditionsRecord>()))
-                .Throws<Exception>();
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.NoChange());
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
-            _mockTermsAndConditionsRepository.Verify(x => x.Update(It.IsAny<TermsAndConditionsRecord>()));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
+            _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
 
             result.Should().NotBeNull();
-            result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
+            result.Should().BeOfType<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
 
         [TestMethod]
-        public async Task FetchConsent_WhenFoundAndNoUpdatedConsentRequired_ReturnsSuccess()
+        public async Task FetchConsent_WhenFound_ReturnsSuccess()
         {
             // Arrange
-            var existingRecord = new TermsAndConditionsRecord
-            {
-                NhsLoginId = _nhsLoginId,
-                ConsentGiven = true,
-                DateOfConsent = DateTimeOffset.Now.ToString("s", CultureInfo.InvariantCulture),
-                AnalyticsCookieAccepted = true
-            };
-
-            _mockTermsAndConditionsConfiguration.SetupGet(x => x.EffectiveDate)
-                .Returns(DateTimeOffset.Now.AddHours(-5));
+            var existingRecord = new TermsAndConditionsRecord();
+            var newConsentResponse = new ConsentResponse();
 
             _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(existingRecord);
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.Found(new[] { existingRecord }));
+
+            _mockTermsAndConditionsToConsentMapper.Setup(x => x.Map(existingRecord))
+                .Returns(newConsentResponse);
 
             // Act
             var result = await _systemUnderTest.FetchConsent(_nhsLoginId);
@@ -257,44 +242,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             result.Should().NotBeNull();
             var response = result.Should().BeOfType<TermsAndConditionsFetchConsentResult.Success>().Subject.Response;
-
-            response.Should().NotBeNull();
-            response.ConsentGiven.Should().Be(existingRecord.ConsentGiven);
-            response.UpdatedConsentRequired.Should().BeFalse();
-            response.AnalyticsCookieAccepted.Should().Be(existingRecord.AnalyticsCookieAccepted);
-        }
-
-        [TestMethod]
-        public async Task FetchConsent_WhenFoundAndUpdatedConsentRequired_ReturnsSuccess()
-        {
-            // Arrange
-            var existingRecord = new TermsAndConditionsRecord
-            {
-                NhsLoginId = _nhsLoginId,
-                ConsentGiven = true,
-                DateOfConsent = DateTimeOffset.Now.AddHours(-5).ToString("s", CultureInfo.InvariantCulture),
-                AnalyticsCookieAccepted = true
-            };
-
-            _mockTermsAndConditionsConfiguration.SetupGet(x => x.EffectiveDate)
-                .Returns(DateTimeOffset.Now);
-
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(existingRecord);
-
-            // Act
-            var result = await _systemUnderTest.FetchConsent(_nhsLoginId);
-
-            // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
-
-            result.Should().NotBeNull();
-            var response = result.Should().BeOfType<TermsAndConditionsFetchConsentResult.Success>().Subject.Response;
-
-            response.Should().NotBeNull();
-            response.ConsentGiven.Should().Be(existingRecord.ConsentGiven);
-            response.UpdatedConsentRequired.Should().BeTrue();
-            response.AnalyticsCookieAccepted.Should().Be(existingRecord.AnalyticsCookieAccepted);
+            response.Should().Be(newConsentResponse);
         }
 
         [TestMethod]
@@ -302,7 +250,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         {
             // Arrange
             _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync((TermsAndConditionsRecord)null);
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.NotFound());
 
             // Act
             var result = await _systemUnderTest.FetchConsent(_nhsLoginId);
@@ -332,6 +280,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         }
 
         [TestMethod]
+        public async Task FetchConsent_WhenFindReturnsRepositoryError_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+
+            // Act
+            var result = await _systemUnderTest.FetchConsent(_nhsLoginId);
+
+            // Assert
+            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<TermsAndConditionsFetchConsentResult.InternalServerError>();
+        }
+
+        [TestMethod]
         public async Task ToggleAnalyticsCookieAcceptance_WhenAccepted_ReturnsSuccess()
         {
             // Arrange
@@ -342,26 +307,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 AnalyticsCookieAccepted = true
             };
 
-            var existingRecord = new TermsAndConditionsRecord
-            {
-                AnalyticsCookieAccepted = false,
-                DateOfAnalyticsCookieToggle = null
-            };
-
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(existingRecord);
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, analyticsCookieAcceptance, consentTime);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Success>();
-
-            existingRecord.AnalyticsCookieAccepted.Should().BeTrue();
-            existingRecord.DateOfAnalyticsCookieToggle.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
         }
 
         [TestMethod]
@@ -375,57 +333,93 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 AnalyticsCookieAccepted = false
             };
 
-            var existingRecord = new TermsAndConditionsRecord
-            {
-                AnalyticsCookieAccepted = false,
-                DateOfAnalyticsCookieToggle = null
-            };
-
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(existingRecord);
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.Updated());
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, analyticsCookieAcceptance, consentTime);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Success>();
-
-            existingRecord.AnalyticsCookieAccepted.Should().BeFalse();
-            existingRecord.DateOfAnalyticsCookieToggle.Should().Be(consentTime.ToString("s", CultureInfo.InvariantCulture));
         }
 
         [TestMethod]
         public async Task ToggleAnalyticsCookieAcceptance_WhenNotFound_ReturnsFailure()
         {
             // Arrange
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync((TermsAndConditionsRecord)null);
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.NotFound());
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, new AnalyticsCookieAcceptance(), DateTimeOffset.Now);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Failure>();
         }
 
         [TestMethod]
-        public async Task ToggleAnalyticsCookieAcceptance_WhenFindThrowsException_ReturnsFailure()
+        public async Task ToggleAnalyticsCookieAcceptance_WhenNoChange_ReturnsSuccess()
         {
             // Arrange
-            _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .Throws<Exception>();
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.NoChange());
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, new AnalyticsCookieAcceptance(), DateTimeOffset.Now);
 
             // Assert
-            _mockTermsAndConditionsRepository.Verify(x => x.Find(_nhsLoginId));
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Success>();
+        }
+
+        [TestMethod]
+        public async Task ToggleAnalyticsCookieAcceptance_WhenRepositoryError_ReturnsFailure()
+        {
+            // Arrange
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+
+            // Act
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, new AnalyticsCookieAcceptance(), DateTimeOffset.Now);
+
+            // Assert
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Failure>();
+        }
+
+
+        [TestMethod]
+        public async Task ToggleAnalyticsCookieAcceptance_WhenThrowsException_ReturnsFailure()
+        {
+            // Arrange
+            _mockTermsAndConditionsRepository.Setup(x =>
+                    x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
+                .ThrowsAsync(new ArgumentException(""));
+
+            // Act
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, new AnalyticsCookieAcceptance(), DateTimeOffset.Now);
+
+            // Assert
+            _mockTermsAndConditionsRepository.Verify(x =>
+                x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Failure>();

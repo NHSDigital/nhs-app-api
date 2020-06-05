@@ -1,8 +1,9 @@
-﻿using System;
-using System.Globalization;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
+using NHSOnline.Backend.Repository;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
@@ -11,18 +12,27 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
     {
         private readonly ILogger<TermsAndConditionsService> _logger;
         private readonly ITermsAndConditionsRepository _repository;
-        private readonly ITermsAndConditionsConfiguration _configuration;
+        private readonly IMapper<TermsAndConditionsRecord, ConsentResponse> _termsAndConditionsToConsentMapper;
+        private readonly IConsentRequestToTermsAndConditionsMapper _consentRequestToTermsAndConditionsMapper;
+        private readonly IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _consentRequestToUpdateMapper;
+        private readonly IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _analyticsCookieAcceptanceToUpdateMapper;
 
         public TermsAndConditionsService
         (
             ILogger<TermsAndConditionsService> logger,
             ITermsAndConditionsRepository repository,
-            ITermsAndConditionsConfiguration configuration
+            IMapper<TermsAndConditionsRecord, ConsentResponse> termsAndConditionsToConsentMapper,
+            IConsentRequestToTermsAndConditionsMapper consentRequestToTermsAndConditionsMapper,
+            IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> consentRequestToUpdateMapper,
+            IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper
         )
         {
             _logger = logger;
             _repository = repository;
-            _configuration = configuration;
+            _termsAndConditionsToConsentMapper = termsAndConditionsToConsentMapper;
+            _consentRequestToTermsAndConditionsMapper = consentRequestToTermsAndConditionsMapper;
+            _consentRequestToUpdateMapper = consentRequestToUpdateMapper;
+            _analyticsCookieAcceptanceToUpdateMapper = analyticsCookieAcceptanceToUpdateMapper;
         }
 
         public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsLoginId)
@@ -31,33 +41,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 
             try
             {
-                var termsAndConditions = await _repository.Find(nhsLoginId);
-
-                if (termsAndConditions == null)
-                {
-                    _logger.LogInformation("No patient consent exists for terms and conditions");
-                    return new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
-                }
-
-                _logger.LogInformation("Patient consent found for terms and conditions");
-
-                //Updated consent required if date of last consent is prior to date of updated terms
-                var updatedConsentRequired = _configuration.EffectiveDate <= DateTimeOffset.Now
-                                             && _configuration.EffectiveDate > DateTimeOffset.Parse(
-                                                 termsAndConditions.DateOfConsent, CultureInfo.InvariantCulture);
-
-                var response = new ConsentResponse
-                {
-                    ConsentGiven = termsAndConditions.ConsentGiven,
-                    UpdatedConsentRequired = updatedConsentRequired,
-                    AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
-                };
-
-                _logger.LogDebug($"{nameof(termsAndConditions.ConsentGiven)}: {termsAndConditions.ConsentGiven}, " +
-                                 $"{nameof(response.UpdatedConsentRequired)}: {updatedConsentRequired}, " +
-                                 $"{nameof(termsAndConditions.AnalyticsCookieAccepted)}: {termsAndConditions.AnalyticsCookieAccepted}");
-
-                return new TermsAndConditionsFetchConsentResult.Success(response);
+                var result = await _repository.Find(nhsLoginId);
+                return result.Accept(new RepositoryGetConsentResponseVisitor(_logger, _termsAndConditionsToConsentMapper));
             }
             catch (Exception e)
             {
@@ -92,20 +77,9 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             _logger.LogEnter();
             try
             {
-                var consentTimeString = consentTime.ToString("s", CultureInfo.InvariantCulture);
-
-                var termsAndConditions = new TermsAndConditionsRecord
-                {
-                    NhsLoginId = nhsLoginId,
-                    ConsentGiven = request.ConsentGiven,
-                    AnalyticsCookieAccepted = request.AnalyticsCookieAccepted,
-                    DateOfConsent = consentTimeString,
-                    DateOfAnalyticsCookieToggle = consentTimeString
-                };
-
-                await _repository.Create(termsAndConditions);
-
-                return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
+                var termsAndConditions = _consentRequestToTermsAndConditionsMapper.Map(request, consentTime, nhsLoginId);
+                var result = await _repository.Create(termsAndConditions);
+                return result.Accept(new RepositoryCreateConsentResponseVisitor());
             }
             catch (Exception e)
             {
@@ -129,19 +103,9 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 
             try
             {
-                var termsAndConditions = await _repository.Find(nhsLoginId);
-
-                if (termsAndConditions == null)
-                {
-                    return new TermsAndConditionsRecordConsentResult.InternalServerError();
-                }
-
-                termsAndConditions.ConsentGiven = request.ConsentGiven;
-                termsAndConditions.DateOfConsent = consentTime.ToString("s", CultureInfo.InvariantCulture);
-
-                await _repository.Update(termsAndConditions);
-
-                return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+                var updates = _consentRequestToUpdateMapper.Map(request, consentTime);
+                var updateResult = await _repository.Update(nhsLoginId, updates);
+                return updateResult.Accept(new RepositoryUpdateTermsAndConditionsResultVisitor());
             }
             catch (Exception e)
             {
@@ -165,21 +129,9 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 
             try
             {
-                var termsAndConditions = await _repository.Find(nhsLoginId);
-
-                if (termsAndConditions == null)
-                {
-                    _logger.LogError("Cannot find terms and conditions consent");
-                    return new ToggleAnalyticsCookieAcceptanceResult.Failure();
-                }
-
-                termsAndConditions.AnalyticsCookieAccepted = analyticsCookieConsent.AnalyticsCookieAccepted;
-                termsAndConditions.DateOfAnalyticsCookieToggle =
-                    consentTime.ToString("s", CultureInfo.InvariantCulture);
-
-                await _repository.Update(termsAndConditions);
-
-                return new ToggleAnalyticsCookieAcceptanceResult.Success();
+                var update = _analyticsCookieAcceptanceToUpdateMapper.Map(analyticsCookieConsent, consentTime);
+                var updateResult = await _repository.Update(nhsLoginId, update);
+                return updateResult.Accept( new RepositoryUpdateAnalyticsCookieResultVisitor());
             }
             catch (Exception e)
             {
