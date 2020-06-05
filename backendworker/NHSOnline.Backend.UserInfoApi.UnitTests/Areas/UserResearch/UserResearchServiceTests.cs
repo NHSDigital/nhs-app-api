@@ -23,22 +23,23 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserResearch
         private Mock<IUserResearchClient> _mockUserResearchClient;
         private InfoUserProfile _userInfoProfile;
         private AccessToken _accessToken;
+        private Mock<ILogger<InfoController>> _mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockUserResearchClient = new Mock<IUserResearchClient>();
             _userInfoProfile = new InfoUserProfile() { Email = "Email" };
-            var mockLogger = new Mock<ILogger<InfoController>>();
+            _mockLogger = new Mock<ILogger<InfoController>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, "Nhslogin"),
                 new Claim("nhs_number", "NhsNumber"),
             });
 
-            _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
+            _accessToken = AccessToken.Parse(_mockLogger.Object, accessTokenString);
 
-            _systemUnderTest = new UserResearchService(mockLogger.Object, _mockUserResearchClient.Object);
+            _systemUnderTest = new UserResearchService(_mockLogger.Object, _mockUserResearchClient.Object);
         }
 
         [TestMethod]
@@ -54,6 +55,26 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserResearch
 
             // Assert
             _mockUserResearchClient.VerifyAll();
+            result.Should().BeAssignableTo<PostUserResearchResult.Success>();
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        public async Task Post_Success_NoOdsCode(string odsCode)
+        {
+            // Arrange
+            var userProfile = new InfoUserProfile { Email = "Email", OdsCode = odsCode };
+            var response = new UserResearchClientResponse(HttpStatusCode.Created);
+            _mockUserResearchClient.Setup(x => x.Post(It.IsAny<string>(), It.IsAny<string>(), odsCode))
+                .ReturnsAsync(response);
+
+            // Act
+            var result = await _systemUnderTest.Post(userProfile, _accessToken);
+
+            // Assert
+            _mockUserResearchClient.VerifyAll();
+            _mockLogger.VerifyLogger(LogLevel.Information, "No ODSCode was found when posting to User Research", Times.Once());
             result.Should().BeAssignableTo<PostUserResearchResult.Success>();
         }
 

@@ -38,9 +38,9 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
                     _logger.LogError("No Email was found when posting to User Research");
                     return new PostUserResearchResult.EmailMissing();
                 }
-                if (odsCode == null)
+                if (string.IsNullOrWhiteSpace(odsCode))
                 {
-                    _logger.LogError("No ODSCode was found when posting to User Research");
+                    _logger.LogInformation("No ODSCode was found when posting to User Research");
                 }
                 return await Post(nhsLoginId, email, odsCode);
             }
