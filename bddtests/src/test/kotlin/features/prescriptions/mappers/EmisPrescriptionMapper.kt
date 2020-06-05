@@ -8,9 +8,9 @@ import models.prescriptions.HistoricPrescription
 import models.prescriptions.MedicationCourse
 import org.joda.time.DateTime
 
-private const val REQUESTED_PRIORITY = 1
+private const val REQUESTED_PRIORITY = 3
 private const val APPROVED_PRIORITY = 2
-private const val REJECTED_PRIORITY = 3
+private const val REJECTED_PRIORITY = 1
 private const val UPPER_LIMIT_FOR_TOTAL_COURSES = 100
 
 object EmisPrescriptionMapper {
@@ -41,14 +41,14 @@ object EmisPrescriptionMapper {
         val repeatCourseguids = getGuids(repeatCourses)
 
         val historicPrescriptions = ArrayList<HistoricPrescription>()
-
-        for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
+        for (prescription in data.prescriptionRequests.toList().sortedWith
+        (compareByDescending{historicPrescriptionOrderPriority[it.status]; it.dateRequested })) {
 
             if (totalCoursesRunningTotal >= UPPER_LIMIT_FOR_TOTAL_COURSES) {
                 break
             }
 
-            val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendBasicDateFormat)
+            val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendDateFormat)
 
             val filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
                 it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
@@ -76,10 +76,7 @@ object EmisPrescriptionMapper {
             totalCoursesRunningTotal += filteredCoursesInPrescription.size
         }
 
-        val historicPrescriptionsOrderedByStatusOnScreen =
-                historicPrescriptions.sortedWith(compareBy({ historicPrescriptionOrderPriority[it.status] }))
-
-        return historicPrescriptionsOrderedByStatusOnScreen
+        return historicPrescriptions
     }
 
     private fun getGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {

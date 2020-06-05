@@ -1,0 +1,83 @@
+@import "./colours";
+
+$color_nhsuk-aqua-green: #00A499;
+$color_nhsuk-pink: #AE2573;
+$color_nhsuk-orange: #ED8B00;
+
+.nhsuk-tag {
+  background-color: shade($color_nhsuk-blue, 10%);
+  border: 1px solid shade($color_nhsuk-blue, 10%);
+  color: $color_nhsuk-white;
+  display: inline-block;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-decoration: none;
+}
+
+.nhsuk-tag--no-border {
+  border: 0;
+}
+
+// WHITE
+.nhsuk-tag--white	{
+  background-color: $color_nhsuk-white;
+  border-color: $color_nhsuk-black;
+  color: $color_nhsuk-black;
+}
+
+// GREY
+.nhsuk-tag--grey	{
+  background-color: tint($color_nhsuk-grey-1, 80%);
+  border-color: shade($color_nhsuk-grey-1, 30%);
+  color: shade($color_nhsuk-grey-1, 30%);
+}
+// GREEN
+.nhsuk-tag--green	{
+  background-color: tint($color_nhsuk-green, 80%);
+  border-color: shade($color_nhsuk-green, 40%);
+  color: shade($color_nhsuk-green, 40%);
+}
+// AQUA GREEN
+.nhsuk-tag--aqua-green	{
+  background-color: tint($color_nhsuk-aqua-green, 80%);
+  border-color: shade($color_nhsuk-aqua-green, 50%);
+  color: shade($color_nhsuk-aqua-green, 50%);
+}
+// BLUE
+.nhsuk-tag--blue	{
+  background-color: tint($color_nhsuk-blue, 80%);
+  border-color: shade($color_nhsuk-blue, 30%);
+  color: shade($color_nhsuk-blue, 30%);
+}
+// PURPLE
+.nhsuk-tag--purple	{
+  background-color: tint($color_nhsuk-purple, 80%);
+  border-color: shade($color_nhsuk-purple, 30%);
+  color: shade($color_nhsuk-purple, 30%);
+}
+// PINK
+.nhsuk-tag--pink	{
+  background-color: tint($color_nhsuk-pink, 80%);
+  border-color: shade($color_nhsuk-pink, 50%);
+  color: shade($color_nhsuk-pink, 50%);
+}
+// RED
+.nhsuk-tag--red	{
+  background-color: tint($color_nhsuk-red, 80%);
+  border-color: shade($color_nhsuk-red, 50%);
+  color: shade($color_nhsuk-red, 50%);
+}
+// ORANGE
+.nhsuk-tag--orange	{
+  background-color: tint($color_nhsuk-warm-yellow, 50%);
+  border-color: shade($color_nhsuk-warm-yellow, 70%);
+  color: shade($color_nhsuk-warm-yellow, 70%);
+}
+// YELLOW
+.nhsuk-tag--yellow {
+  background-color: tint($color_nhsuk-yellow, 50%);
+  border-color: shade($color_nhsuk-yellow, 70%);
+  color: shade($color_nhsuk-yellow, 70%);
+}

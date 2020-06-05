@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     new PrescriptionItem
                     {
-                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested.Date,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     new PrescriptionItem
                     {
-                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested.Date,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested.Date,
                         Status = Status.Requested,
                         Courses = new List<CourseEntry>
                         {
@@ -234,7 +234,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested.Date,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -250,7 +250,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested.Date,
                         Status = Status.Requested,
                         Courses = new List<CourseEntry>
                         {
@@ -346,7 +346,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     new PrescriptionItem
                     {
                         OrderedBy = null,
-                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested.Date,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -363,7 +363,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     new PrescriptionItem
                     {
                         OrderedBy = null,
-                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested.Date,
                         Status = Status.Requested,
                         Courses = new List<CourseEntry>
                         {
@@ -376,7 +376,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     new PrescriptionItem
                     {
                         OrderedBy = "ProxyUserForename ProxyUserSurname",
-                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested.Date,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -393,7 +393,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     new PrescriptionItem
                     {
                         OrderedBy = "ProxyUserForename ProxyUserSurname",
-                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested.Date,
                         Status = Status.Requested,
                         Courses = new List<CourseEntry>
                         {

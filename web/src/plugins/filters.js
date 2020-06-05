@@ -7,10 +7,13 @@ moment.locale('en_GB');
 
 export const formatDate = (value, format) => (value ? moment.tz(value, 'Europe/London').format(format) : '');
 export const longDate = value => formatDate(value, 'D MMMM YYYY');
+export const fullDate = value => formatDate(value, 'dddd D MMMM YYYY');
 
 Vue.filter('datePart', datePart);
 
 Vue.filter('formatDate', formatDate);
+
+Vue.filter('fullDate', fullDate);
 
 Vue.filter('longDate', longDate);
 

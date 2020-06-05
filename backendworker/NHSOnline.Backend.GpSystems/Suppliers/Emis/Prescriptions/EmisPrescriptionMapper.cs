@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             {
                 foreach (var course in prescription.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
                 {
-                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.DateRequested && x.Status == MapStatus(course.RequestedMedicationCourseStatus));
+                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.DateRequested.Date && x.Status == MapStatus(course.RequestedMedicationCourseStatus));
 
                     var newCourseEntry = new CourseEntry
                     {
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                         allPrescriptionsGrouped.Add(new PrescriptionItem
                         {
                             OrderedBy = requestedBy,
-                            OrderDate = prescription.DateRequested,
+                            OrderDate = prescription.DateRequested.Date,
                             Status = MapStatus(course.RequestedMedicationCourseStatus),
                             Courses = new List<CourseEntry>
                             {

@@ -89,14 +89,18 @@ describe('prescriptions/view-orders.vue -', () => {
       const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
     it('will clear and load prescriptions, '
-    + 'but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
+      + 'but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
       const $store = createStore(true);
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = true;
@@ -105,24 +109,36 @@ describe('prescriptions/view-orders.vue -', () => {
       const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
     it('will clear and load prescriptions, '
-    + 'but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
+      + 'but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
       const $store = createStore(true);
       jest.spyOn($store, 'dispatch');
 
       const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/load');
     });
   });
 
@@ -140,10 +156,14 @@ describe('prescriptions/view-orders.vue -', () => {
       const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
     it('will clear and load the prescriptions but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
@@ -155,10 +175,16 @@ describe('prescriptions/view-orders.vue -', () => {
       const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/clear');
+      expect($store.dispatch)
+        .toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/clear');
+      expect($store.dispatch)
+        .not
+        .toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
     it('will clear and load prescriptions, but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
@@ -180,21 +206,24 @@ describe('prescriptions/view-orders.vue -', () => {
       const $store = createStore(true);
 
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(true);
+      expect(page.vm.showNoPrescriptions)
+        .toBe(true);
     });
 
     it('will not show the no prescriptions and yield true as data not loaded yet.', () => {
       const $store = createStore(false);
 
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(false);
+      expect(page.vm.showNoPrescriptions)
+        .toBe(false);
     });
 
     it('will show prescriptions after loading as there is data to show.', () => {
       const $store = createStore(true);
       $store.state.prescriptions.prescriptionCourses.Approved = {};
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(false);
+      expect(page.vm.showNoPrescriptions)
+        .toBe(false);
     });
   });
 
@@ -205,7 +234,8 @@ describe('prescriptions/view-orders.vue -', () => {
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(true);
+      expect(page.vm.showPrescriptions)
+        .toBe(true);
     });
 
     it('will not show prescriptions as the prescriptions have not been loaded yet.', () => {
@@ -213,34 +243,36 @@ describe('prescriptions/view-orders.vue -', () => {
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(false);
+      expect(page.vm.showPrescriptions)
+        .toBe(false);
     });
 
     it('will not show prescriptions as there is no data to show.', () => {
       const $store = createStore(true);
       const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(false);
+      expect(page.vm.showPrescriptions)
+        .toBe(false);
     });
   });
 
   describe('showPrescriptionsInOrder', () => {
-    it('will show prescriptions ordered by priority.', async () => {
+    it('will show prescriptions as returned by backend without status or date information', async () => {
       const myStore = hasLoaded => ({
         dispatch: jest.fn(() => Promise.resolve()),
         state: {
           prescriptions: {
             hasLoaded,
-            prescriptionCourses: {
-              Approved: [{
+            prescriptionCourses: [
+              {
                 courseId: 'abc',
-              }],
-              Requested: [{
-                courseId: 'pqr',
-              }],
-              Rejected: [{
+              },
+              {
                 courseId: 'xyz',
-              }],
-            },
+              },
+              {
+                courseId: 'pqr',
+              },
+            ],
           },
           nominatedPharmacy: {
             pharmacy: {},
@@ -257,12 +289,65 @@ describe('prescriptions/view-orders.vue -', () => {
       jest.spyOn($store, 'dispatch');
       const page = createViewOrdersPrescriptionsPage($store);
 
-      expect(page.vm.prescriptionCoursesToDisplay).toEqual({
-        Requested: [{ courseId: 'pqr' }],
-        Approved: [{ courseId: 'abc' }],
-        Rejected: [{ courseId: 'xyz' }],
+      expect(page.vm.prescriptionCoursesToDisplay)
+        .toEqual([
+          { courseId: 'abc', statusDisplayPriority: undefined },
+          { courseId: 'xyz', statusDisplayPriority: undefined },
+          { courseId: 'pqr', statusDisplayPriority: undefined },
+        ]);
+    });
+
+    it('will show prescriptions as ordered by date desc and then status in terms of priority', async () => {
+      const myStore = hasLoaded => ({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: {
+          prescriptions: {
+            hasLoaded,
+            prescriptionCourses: [
+              {
+                courseId: 'def',
+                status: 'Approved',
+                orderDate: '2020-10-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'abc',
+                status: 'Approved',
+                orderDate: '2019-10-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'xyz',
+                status: 'Rejected',
+                orderDate: '2019-10-01T00:00:00+00:00',
+              },
+              {
+                courseId: 'pqr',
+                status: 'Requested',
+                orderDate: '2019-10-01T00:00:00+00:00',
+              },
+            ],
+          },
+          nominatedPharmacy: {
+            pharmacy: {},
+            nominatedPharmacyEnabled: true,
+          },
+        },
+        getters: {
+          'serviceJourneyRules/nominatedPharmacyEnabled': false,
+        },
       });
+
+      const $store = myStore(true);
+
+      jest.spyOn($store, 'dispatch');
+      const page = createViewOrdersPrescriptionsPage($store);
+
+      expect(page.vm.prescriptionCoursesToDisplay)
+        .toEqual([
+          { courseId: 'def', orderDate: '2020-10-01T00:00:00+00:00', statusDisplayPriority: 2, status: 'Approved' },
+          { courseId: 'xyz', orderDate: '2019-10-01T00:00:00+00:00', statusDisplayPriority: 1, status: 'Rejected' },
+          { courseId: 'abc', orderDate: '2019-10-01T00:00:00+00:00', statusDisplayPriority: 2, status: 'Approved' },
+          { courseId: 'pqr', orderDate: '2019-10-01T00:00:00+00:00', statusDisplayPriority: 3, status: 'Requested' },
+        ]);
     });
   });
 });
-

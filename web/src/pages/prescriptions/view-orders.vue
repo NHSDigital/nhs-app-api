@@ -32,43 +32,29 @@
         {{ $t('rp01.empty.line2') }}
       </p>
     </div>
+
     <div v-if="showPrescriptions" data-purpose="prescriptions">
-      <div v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
-           :key="key">
-        <div v-if="getMedicationCourseStatus(key) != null">
-          <h2 class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-2">
-            {{ getMedicationCourseStatus(key) }}
-          </h2>
-        </div>
-
-        <CardGroup v-for="(prescriptionCourse, index) in statusGroup"
-                   :key="index" role="list" class="nhsuk-grid-row">
-          <CardGroupItem class="nhsuk-grid-column-full">
-            <Card data-label="historic-prescription">
-              <historic-prescription :prescription-course="prescriptionCourse" />
-            </Card>
-          </CardGroupItem>
-        </CardGroup>
-
+      <div class="nhsuk-u-margin-bottom-0" :class="$style['nhs-app-panel-heading']">
+        <h2 class="nhsuk-heading-l">{{ $t('rp02.ordersTitle') }}</h2>
+      </div>
+      <div v-for="(prescriptionCourse, index) in prescriptionCoursesToDisplay"
+           :key="index" :class="$style['list-menu']" data-label="historic-prescription">
+        <historic-prescription :prescription-course="prescriptionCourse"
+                               :class="$style['nhs-app-message']"
+                               class="nhsuk-u-margin-bottom-0"/>
       </div>
     </div>
-  </div>
-</template>
+  </div></template>
 
 <script>
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import SjrIf from '@/components/SjrIf';
-import each from 'lodash/fp/each';
 import isEmpty from 'lodash/fp/isEmpty';
-import keys from 'lodash/fp/keys';
-import sortBy from 'lodash/fp/sortBy';
+import orderBy from 'lodash/fp/orderBy';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import Card from '@/components/widgets/card/Card';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 
 const loadData = async (store) => {
@@ -91,16 +77,13 @@ export default {
   components: {
     HistoricPrescription,
     SjrIf,
-    Card,
-    CardGroupItem,
-    CardGroup,
   },
   data() {
     return {
       statusDisplayPriority: {
-        [MedicationCourseStatus.Requested]: 1,
+        [MedicationCourseStatus.Requested]: 3,
         [MedicationCourseStatus.Approved]: 2,
-        [MedicationCourseStatus.Rejected]: 3,
+        [MedicationCourseStatus.Rejected]: 1,
       },
     };
   },
@@ -120,15 +103,11 @@ export default {
       return hasLoaded && !isEmpty(prescriptionCourses);
     },
     prescriptionCoursesToDisplay() {
-      const prescriptionKeys =
-        sortBy(i =>
-          this.statusDisplayPriority[i])(keys(this.$store.state.prescriptions.prescriptionCourses));
-      const orderedMap = {};
-      each((k) => {
-        orderedMap[k] =
-          this.$store.state.prescriptions.prescriptionCourses[k];
-      })(prescriptionKeys);
-      return orderedMap;
+      const courses = this.$store.state.prescriptions.prescriptionCourses;
+      courses.forEach((e) => {
+        e.statusDisplayPriority = this.statusDisplayPriority[e.status];
+      });
+      return orderBy(['orderDate', 'statusDisplayPriority'], ['desc', 'asc'])(courses);
     },
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
@@ -184,8 +163,62 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style module lang="scss" scoped>
+  @import '../../style/arrow';
+  @import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
+  @import '~nhsuk-frontend/packages/core/settings/globals';
+  @import '~nhsuk-frontend/packages/core/settings/typography';
+  @import '~nhsuk-frontend/packages/core/tools/typography';
+  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+
   a {
     display: inline-block;
+  }
+
+  .list-menu {
+    border-top: 1px #D8DDE0 solid;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: .2em;
+  }
+
+  .list menu p {
+    margin-bottom: 0;
+    padding-right: 3em;
+    color: #212b32;
+  }
+
+  .nhs-app-message {
+    list-style: none;
+    margin-bottom: nhsuk-spacing(3);
+    border-top: 1px $nhsuk-border-color solid;
+    @include govuk-media-query($until: desktop) {
+      margin-left: (-$nhsuk-gutter-half);
+      margin-right: (-$nhsuk-gutter-half);
+    }
+  }
+
+  .nhs-app-message p {
+    padding-top: 2px;
+    padding-bottom: 0;
+    color: $dark_grey;
+  }
+
+  .nhs-app-panel-heading {
+    margin-bottom: 0;
+    margin-top: 1em;
+
+    @include mq($until: desktop) {
+      margin: 1em -1em 0;
+    }
+
+    h1, h2, h3, h4, h5 {
+      background-color: $color_nhsuk-white;
+      padding: 0.5em 16px 0.5em 16px;
+      border-top: 1px solid #d8dde0;
+      margin-bottom: 0;
+    }
   }
 </style>

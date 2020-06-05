@@ -6,19 +6,10 @@ import mocking.vision.models.PrescriptionHistory
 import models.prescriptions.HistoricPrescription
 import org.joda.time.DateTime
 
-private const val REQUESTED_PRIORITY = 1
-private const val APPROVED_PRIORITY = 2
-private const val REJECTED_PRIORITY = 3
 private const val UPPER_LIMIT_FOR_TOTAL_COURSES = 100
 
 object VisionPrescriptionMapper {
     fun map(data: PrescriptionHistory) : List<HistoricPrescription> {
-
-        val historicPrescriptionOrderPriority = hashMapOf(
-                "Requested" to REQUESTED_PRIORITY,
-                "Approved" to APPROVED_PRIORITY,
-                "Rejected" to REJECTED_PRIORITY
-                )
 
         val visionPrescriptionStatusToDisplayedStatus = mapOf(
                 VisionPrescriptionStatus.InProgress.value to "Requested",
@@ -28,14 +19,15 @@ object VisionPrescriptionMapper {
         var totalCoursesRunningTotal = 0
 
         val historicPrescriptions = ArrayList<HistoricPrescription>()
+        val sortedList = data.request.toList().sortedWith(compareBy{ it })
 
-        for (repeatPrescription in data.request) {
+        for (repeatPrescription in sortedList) {
             if (totalCoursesRunningTotal >= UPPER_LIMIT_FOR_TOTAL_COURSES) {
                 break
             }
 
             val prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString(
-                    DateTimeFormats.frontendBasicDateFormat)
+                    DateTimeFormats.frontendDateFormat)
 
             for (course in repeatPrescription.repeat) {
                 val historicPrescription = HistoricPrescription(
@@ -52,10 +44,6 @@ object VisionPrescriptionMapper {
             }
         }
 
-        val historicPrescriptionsOrderedByStatusOnScreen =
-                historicPrescriptions.sortedWith(compareBy({ historicPrescriptionOrderPriority[it.status] }))
-
-
-        return historicPrescriptionsOrderedByStatusOnScreen
+        return historicPrescriptions
     }
 }
