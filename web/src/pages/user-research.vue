@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showTemplate">
     <message-dialog v-if="showError" message-type="error" role="alert" tabindex="-1">
       <message-text data-purpose="error-heading">
         {{ $t('user_research.errorMessage.header') }}
