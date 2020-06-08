@@ -6,9 +6,9 @@
                  tabindex="0">
         {{ anchorLink.name }}
       </nuxt-link>
-      <b v-if="index<anchorLinks.length-1" aria-hidden="true">
+      <strong v-if="index<anchorLinks.length-1" aria-hidden="true">
         &nbsp;|&nbsp;
-      </b>
+      </strong>
     </span>
   </div>
 </template>

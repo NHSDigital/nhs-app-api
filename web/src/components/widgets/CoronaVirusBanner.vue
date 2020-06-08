@@ -9,7 +9,7 @@
       target="_blank">
       <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
                 nhsuk-u-margin-bottom-0 nhsuk-body-s">
-        <b>{{ $t('coronaVirusBanner.header') }}</b>
+        <strong>{{ $t('coronaVirusBanner.header') }}</strong>
         {{ $t('coronaVirusBanner.text') }}
       </p>
     </analytics-tracked-tag>

@@ -23,7 +23,7 @@
         </ul>
       </collapsible-dialog>
       <p>{{ $t('organDonation.faith.body.paragraph2') }}</p>
-      <p><b>{{ $t('organDonation.faith.choices.header') }}</b></p>
+      <p><strong>{{ $t('organDonation.faith.choices.header') }}</strong></p>
       <radio-group v-model="selectedValue"
                    :radios="choices"
                    :current-value="currentChoice"

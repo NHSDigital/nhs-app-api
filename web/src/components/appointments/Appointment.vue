@@ -13,7 +13,7 @@
 
     <div>
       <p class="nhsuk-u-margin-0">
-        <b>{{ this.$t('appointments.index.appointmentTypeLabel') }}</b>
+        <strong>{{ this.$t('appointments.index.appointmentTypeLabel') }}</strong>
       </p>
       <p class="nhsuk-body-s nhsuk-u-margin-0" data-label="slot type">
         {{ appointment.type }}
@@ -34,7 +34,9 @@
     </div>
 
     <div class="nhsuk-u-margin-top-3">
-      <p class="nhsuk-u-margin-0"><b>{{ this.$t('appointments.index.locationLabel') }}</b></p>
+      <p class="nhsuk-u-margin-0"><strong>
+        {{ this.$t('appointments.index.locationLabel') }}
+      </strong></p>
       <p class="nhsuk-body-s nhsuk-u-margin-0" :class="$style.location">
         <span data-label="location">{{ appointment.location }}</span>
       </p>

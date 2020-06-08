@@ -14,9 +14,9 @@
         <div v-if="showExternalServiceWarning" id="external-service-warning">
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
-            <b>
+            <strong>
               {{ $t('externalServiceWarning.warningText') }}
-            </b>
+            </strong>
           </p>
         </div>
         <a v-if="isProxying" id="acting-as-other-user-warning"
@@ -28,7 +28,7 @@
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
             {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
-            <b>{{ actingAsPersonName }}</b>
+            <strong>{{ actingAsPersonName }}</strong>
           </p>
         </a>
       </yellow-banner>

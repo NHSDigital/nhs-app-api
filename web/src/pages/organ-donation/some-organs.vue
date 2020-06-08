@@ -24,7 +24,7 @@
       </div>
       <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
       <div>
-        <p><b>{{ $t('organDonation.someOrgans.choices.subheader') }}</b></p>
+        <p><strong>{{ $t('organDonation.someOrgans.choices.subheader') }}</strong></p>
       </div>
       <organ-choice v-for="choice in choices" :key="choice"
                     :title="`organDonation.someOrgans.choices.${choice}Title`"

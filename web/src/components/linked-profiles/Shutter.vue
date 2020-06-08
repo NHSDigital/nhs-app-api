@@ -2,7 +2,7 @@
   <div>
     <p v-if="subHeader" id="shutter-subheader-text"
        class="nhsuk-u-margin-bottom-3">
-      <b>{{ subHeader }}</b>
+      <strong>{{ subHeader }}</strong>
     </p>
     <p v-if="summaryText"
        id="shutter-summary-text"

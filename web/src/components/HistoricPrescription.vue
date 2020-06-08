@@ -36,7 +36,7 @@
         class="nhsuk-u-margin-bottom-3 nhsuk-u-margin-top-2"
         aria-hidden="true">
     <p class="nhsuk-u-margin-bottom-0">
-      <b data-label="course-name">{{ prescriptionCourse.name }}</b>
+      <strong data-label="course-name">{{ prescriptionCourse.name }}</strong>
     </p>
     <p data-label="detail" class="nhsuk-u-margin-bottom-0">
       {{ prescriptionCourse.details }}

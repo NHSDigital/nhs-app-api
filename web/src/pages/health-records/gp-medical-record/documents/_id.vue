@@ -11,7 +11,7 @@
         </div>
 
         <div v-if="hasComments" class="nhsuk-u-padding-bottom-3">
-          <b>{{ $t('my_record.documents.commentsHeader') }}</b>
+          <strong>{{ $t('my_record.documents.commentsHeader') }}</strong>
           <span v-for="(comment, index) in retrieveComments"
                 :id="'documentComment' + index"
                 :key="'Comment'+index"

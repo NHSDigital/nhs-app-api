@@ -20,7 +20,7 @@ class MedicalRecordShutterComponent :  HybridPageObject() {
                 .paragraph("Switch to your profile to view your GP medical record.")
                 .button("Switch to my profile")
         val parsedPage = ParsedPage.parse(this,
-                "//div[div/div/div/div/p/b[normalize-space(text())=\"$firstLine\"]]")
+                "//div[div/div/div/div/p/strong[normalize-space(text())=\"$firstLine\"]]")
         ExpectedPageStructureAssertor().assert(parsedPage, expected.build())
     }
 }
