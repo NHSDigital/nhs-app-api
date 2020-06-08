@@ -9,7 +9,7 @@ class LifecycleHandlersTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        knownServicesProvider = SuccessKnownServiceProtocolMock()
+        knownServicesProvider = KnownServicesProtocolMocks.success()
         homeController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
         webViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
     }

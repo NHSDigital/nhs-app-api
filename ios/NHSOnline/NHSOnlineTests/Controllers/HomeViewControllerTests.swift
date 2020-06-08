@@ -20,7 +20,7 @@ class HomeViewControllerTests: XCTestCase {
         super.setUp()
 
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
-            viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
+            viewController.knownServicesProvider = KnownServicesProtocolMocks.success()
             viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
 
             vcHome = viewController
@@ -178,7 +178,7 @@ class HomeViewControllerTests: XCTestCase {
     }
 
     func test_biometricsShownIfAppVersionIsValidAndBiometricsIsAvailable() {
-        vcHome.knownServicesProvider = SuccessKnownServiceProtocolMock()
+        vcHome.knownServicesProvider = KnownServicesProtocolMocks.success()
         vcHome.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
 
         vcHome.attemptBiometricLoginIfAppVersionValid()
@@ -187,7 +187,7 @@ class HomeViewControllerTests: XCTestCase {
     }
 
     func test_biometricsNotShownIfAppVersionIsInvalid() {
-        vcHome.knownServicesProvider = SuccessKnownServiceProtocolMock()
+        vcHome.knownServicesProvider = KnownServicesProtocolMocks.success()
         vcHome.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessfulInvalidAppVersionConfigurationResponseMock().instance)
 
         vcHome.attemptBiometricLoginIfAppVersionValid()

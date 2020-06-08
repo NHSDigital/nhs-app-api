@@ -33,10 +33,11 @@ class SuccessfulInvalidAppVersionConfigurationResponseMock {
 }
 
 class CompleteKnownServicesMock: KnownServices {
-    convenience override init() {
+    convenience init(url: String = "http://example.com",
+                     javaScriptInteractionMode: JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp) {
         self.init([RootService(
-                url: "http://example.com",
-                javaScriptInteractionMode: JavaScriptInteractionMode.NhsApp,
+                url: url,
+                javaScriptInteractionMode: javaScriptInteractionMode,
                 menuTab: MenuTab.None,
                 viewMode: ViewMode.WebView,
                 validateSession: false,

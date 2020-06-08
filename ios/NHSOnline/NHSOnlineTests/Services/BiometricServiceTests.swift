@@ -26,7 +26,7 @@ class BiometricServiceTests: XCTestCase {
         UserDefaultsManager.setAccessToken("token")
         
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
-            viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
+            viewController.knownServicesProvider = KnownServicesProtocolMocks.success()
             viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
 
             vcHome = viewController

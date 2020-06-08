@@ -18,15 +18,20 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var startDate: Date!
     var javascript: String!
     var webAppInterface: WebAppInterface
+    var appWebInterface: AppWebInterface
     var schemeHandlers: SchemeHandlers
     var badResponse: Bool = false
 
-    init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol,
-         configurationServiceProvider: ConfigurationServiceProtocol, webAppInterface: WebAppInterface) {
+    init(controller: HomeViewController,
+         knownServiceProvider: KnownServicesProtocol,
+         configurationServiceProvider: ConfigurationServiceProtocol,
+         webAppInterface: WebAppInterface,
+         appWebInterface: AppWebInterface) {
         self.viewController = controller
         self.knownServicesProvider = knownServiceProvider
         self.configurationServiceProvider = configurationServiceProvider
         self.webAppInterface = webAppInterface
+        self.appWebInterface = appWebInterface
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
         self.schemeHandlers.registerHandler(handler: TelSchemeHandler())
@@ -251,6 +256,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 viewController.webViewController?.loadPage(url: config().HomeUrl)
                 clearMenuBarItem()
                 break
+            case "goToPage":
+                appWebInterface.goToPage(page: message.body as! String)
+                break;
             default:
                 break;
             }

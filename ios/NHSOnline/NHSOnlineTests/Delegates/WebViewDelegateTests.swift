@@ -11,16 +11,21 @@ class WebViewDelegateTests: XCTestCase {
     var error: NSError?
     var nSURLErrorCancelled: NSError?
     var homeViewController: HomeViewControllerMocks?
+    var appWebInterface: AppWebInterfaceMocks?
+    var knownServicesProvider: KnownServicesProtocolMocks?
     
     override func setUp() {
         super.setUp()
-        let knownServicesProvider: KnownServicesProtocol = SuccessKnownServiceProtocolMock()
+        self.knownServicesProvider = KnownServicesProtocolMocks.success()
         let configurationServiceProvider: ConfigurationServiceProtocol = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
         let viewController = HomeViewControllerMocks()
-        viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
+        viewController.knownServicesProvider = knownServicesProvider
         viewController.configurationServiceProvider = configurationServiceProvider
+        
+        mockWKWebView = WebViewMocks()
+        appWebInterface = AppWebInterfaceMocks(webView: mockWKWebView)
         let webAppInterface = WebAppInterface(controller: viewController)
-        webViewDelegate = WebViewDelegateMocks(controller: viewController, knownServiceProvider: knownServicesProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
+        webViewDelegate = WebViewDelegateMocks(controller: viewController, knownServiceProvider: knownServicesProvider!, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface, appWebInterface: appWebInterface!)
         homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = WebViewMocks()
@@ -83,5 +88,40 @@ class WebViewDelegateTests: XCTestCase {
                "Expected the stopActivityIndicator() Method to not have been invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
+    }
+    
+    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeSilverThirdParty_CallsAppWebInterfaceGoToPage() {
+        // Arrange
+        let url = "http://www.example.com"
+        let page = "foo"
+        let message = WKScriptMessageMock(name: "goToPage", body: page, url: url)
+        let knownServices = CompleteKnownServicesMock(url: url,
+                                                      javaScriptInteractionMode: JavaScriptInteractionMode.SilverThirdParty)
+        
+        knownServicesProvider?.knownServicesMock = knownServices
+        
+        // Act
+        webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
+        
+        // Assert
+        assert(appWebInterface?.goToPageCalled == true)
+        assert(appWebInterface?.goToPageValue == page)
+    }
+    
+    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeNotSilverThirdParty_DoesNotCallAppWebInterfaceGoToPage() {
+        // Arrange
+        let url = "http://www.example.com"
+        let page = "foo"
+        let message = WKScriptMessageMock(name: "goToPage", body: page, url: url)
+        let knownServices = CompleteKnownServicesMock(url: url,
+                                                      javaScriptInteractionMode: JavaScriptInteractionMode.NhsApp)
+        
+        knownServicesProvider?.knownServicesMock = knownServices
+        
+        // Act
+        webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
+        
+        // Assert
+        assert(appWebInterface?.goToPageCalled == false)
     }
 }

@@ -140,4 +140,16 @@ class AppWebInterfacesTests: XCTestCase {
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
         assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/authorised\',     {\n        devicePns:\'pns\',\n        deviceType:\'ios\',\n        trigger:\'Test\'\n    \n    });"    )
     }
+    
+    func test_whenGoToPageIsTriggered_andPageIsPassed_thenNavigationGoToPageIsDispatchedWithPage(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        appWebInterface!.goToPage(page: "foo")
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'navigation/goToPage\', \'foo\');")
+    }
 }

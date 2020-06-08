@@ -81,9 +81,15 @@ class HomeViewController : UIViewController {
         setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
-
+        
+        appWebInterface = AppWebInterface(webView: webViewController?.webView)
         webAppInterface = WebAppInterface(controller: self)
-        webViewDelegate = WebViewDelegate(controller: self, knownServiceProvider: self.knownServicesProvider!, configurationServiceProvider: self.configurationServiceProvider!, webAppInterface: webAppInterface!)
+        webViewDelegate = WebViewDelegate(controller: self,
+                                          knownServiceProvider: self.knownServicesProvider!,
+                                          configurationServiceProvider: self.configurationServiceProvider!,
+                                          webAppInterface: webAppInterface!,
+                                          appWebInterface: appWebInterface!)
+        
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         tabBar.setDefaultTabBarItemsAppearance()
@@ -93,7 +99,6 @@ class HomeViewController : UIViewController {
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
 
-        appWebInterface = AppWebInterface(webView: webViewController?.webView)
         notificationsService = NotificationsService(appWebInterface: appWebInterface!)
         lifecycleHandlers = LifecycleHandlers(knownServiceProvider: self.knownServicesProvider!,
                 webViewController: webViewController!,

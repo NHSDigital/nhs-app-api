@@ -31,11 +31,13 @@
 		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
 		2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1F147F2417B57600788F25 /* KnownServicesProtocol.swift */; };
-		2EA7BDA52418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */; };
+		2EA7BDA52418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */; };
 		2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */; };
 		2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF7D81B23C76377005C03ED /* HeaderEnum.swift */; };
 		30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
+		3E27D222248FC32F000C57E8 /* WKScriptMessageMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E27D221248FC32F000C57E8 /* WKScriptMessageMock.swift */; };
+		3E27D224248FC7D2000C57E8 /* WKFrameInfoMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E27D223248FC7D2000C57E8 /* WKFrameInfoMock.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
 		3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */; };
 		3E60CCB82316D70D000AFA17 /* NotificationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60CCB72316D70D000AFA17 /* NotificationsService.swift */; };
@@ -197,7 +199,7 @@
 		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
 		2E1F147F2417B57600788F25 /* KnownServicesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServicesProtocol.swift; sourceTree = "<group>"; };
 		2E66859A238EDC3000DD79ED /* UrlHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlHelper.swift; sourceTree = "<group>"; };
-		2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServiceProtocolMocks.swift; sourceTree = "<group>"; };
+		2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServicesProtocolMocks.swift; sourceTree = "<group>"; };
 		2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceProtocolMocks.swift; sourceTree = "<group>"; };
 		2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
 		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -209,6 +211,8 @@
 		336DF80898B643D063C57C9B /* Pods-NHSOnlineTests.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch12.xcconfig"; sourceTree = "<group>"; };
 		36690ABDA97313F98262A31B /* Pods-NHSOnlineTests.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstack.xcconfig"; sourceTree = "<group>"; };
 		36E6CDBB16253891937CC7AF /* Pods-NHSOnline.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch12.xcconfig"; sourceTree = "<group>"; };
+		3E27D221248FC32F000C57E8 /* WKScriptMessageMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKScriptMessageMock.swift; sourceTree = "<group>"; };
+		3E27D223248FC7D2000C57E8 /* WKFrameInfoMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoMock.swift; sourceTree = "<group>"; };
 		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
 		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
 		3E60CCB72316D70D000AFA17 /* NotificationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsService.swift; sourceTree = "<group>"; };
@@ -482,6 +486,8 @@
 				F9BAFC4A247FC32900BF1CAE /* Delegates */,
 				F9BAFC49247FC30900BF1CAE /* Services */,
 				F9BAFC3F247FBA8100BF1CAE /* ApplicationStateMocks.swift */,
+				3E27D221248FC32F000C57E8 /* WKScriptMessageMock.swift */,
+				3E27D223248FC7D2000C57E8 /* WKFrameInfoMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -984,7 +990,7 @@
 			children = (
 				F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */,
 				2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */,
-				2EA7BDA42418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift */,
+				2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */,
 				F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */,
 			);
 			path = Services;
@@ -1403,11 +1409,13 @@
 				2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */,
 				F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */,
 				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,
+				3E27D222248FC32F000C57E8 /* WKScriptMessageMock.swift in Sources */,
 				F9BAFC37247FB7A600BF1CAE /* WebViewMocks.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
-				2EA7BDA52418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift in Sources */,
+				2EA7BDA52418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift in Sources */,
 				F9BAFC45247FBB5900BF1CAE /* ConfigurationServiceMocks.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
+				3E27D224248FC7D2000C57E8 /* WKFrameInfoMock.swift in Sources */,
 				F9BAFC33247FB6B000BF1CAE /* TabBarDelegateMocks.swift in Sources */,
 				30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */,
 				14A4188022BBE1D6004C07C4 /* TabBarDelegateTests.swift in Sources */,
