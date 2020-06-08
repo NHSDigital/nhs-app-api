@@ -58,15 +58,16 @@ If an entirely new third-party provider is being introduced, add a new entry to 
 Changes to the web project to add a new silver integration jump-off point should be limited to editing the following four files:
 
 * **web / src / lib / third-party-providers / jump-off-configuration.js** - edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump-off for a particular provider. Note that in the redirectPath field, any querystring parameters should be url encoded.
-* **web / src / locale / en / third-party-providers.js** - again, edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump off for a particular provider:
+If adding a new child brand for the same primary provider (e.g Care Information Exchange as a child brand of Patients Know Best), add these as new jump-offs within the same parent thirdPartyProvider, disambiguated with suffixes - e.g. appointmentsCie for the CIE-branded version of PKB appointments.
+* **web / src / locale / en / third-party-providers.js** - again, edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump off for a particular provider. Child brands for the same primary provider should be added as new jump-offs within the same provider. 
     * **serviceId** - this should correspond to the ID of the associated Known Service.
     * **provider Name** - this text will appear on the third-party warning screen (if showThirdPartyWarning set to true in Known Services), and also within splunk logging and audit records.
     * **jumpOffs / id** - should correspond to the entry added in jump-off-configuration.js
-    * **jumpOffs / path** - the path on the third party site to be linked to. Note that here, any querystring parameters should not be url encoded, unlike in jump-off-configuration.js.
+    * **jumpOffs / path** - the path on the third party site to be linked to. Note that here, any querystring parameters should not be url encoded, unlike in jump-off-configuration.js. For child brands, this path should be suffixed with a dummy `brand` querysting parameter, to allow disambiguation of content between multiple brands.
     * **jumpOffs / jumpOffContent** - headerText and descriptionText containing the content to be shown on the jump-off button.
-    * **jumpOffs / thirdPartyWarning** - additional content to be shown on the third-party warning screen. This can be omitted if showThirdPartyWarning set to false in Known Services (e.e. ers manageYourReferral).
+    * **jumpOffs / thirdPartyWarning** - additional content to be shown on the third-party warning screen. This can be omitted if showThirdPartyWarning is set to false in Known Services (e.e. ers manageYourReferral). Note that the `brandName` property is optional - if provided this will be used instead of the `providerName` in the warning page content.
 * **The vue page to which the jump-off button should be added.**
-    * Add an instance of the vue component ThirdPartyJumpOffButton, specifying the jump-off-type and redirect-path properties by referencing the relevant constants from jump-off-configuration.js.
+    * Add an instance of the vue component ThirdPartyJumpOffButton, specifying the `provider-configuration` by referencing the relevant object from jump-off-configuration.js.
     * Use the sjrIf library to add a computed property to determine whether the jump-off component should be shown. It may be necessary to combine this with additional checks, e.g. that the user is not proxying, or has a p9 proof level.
 * **The unit test fixture for the above page.**
 

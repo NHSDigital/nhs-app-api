@@ -1,16 +1,17 @@
+import each from 'jest-each';
 import HealthRecords from '@/pages/health-records';
 import { createStore, mount, createRouter } from '../../helpers';
 
 describe('healthRecords', () => {
+  let linkElement;
   let wrapper;
   let $store;
   let $router;
 
   const mountAs = ({
+    context = true,
     isProxying = false,
     isNativeApp = false,
-    context = { serviceProvider: 'pkb',
-      serviceType: 'carePlans' },
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -42,116 +43,81 @@ describe('healthRecords', () => {
   });
 
   describe('gp medical records link is always visible', () => {
-    const getGpMedicalRecordLink = wrapperObj =>
-      wrapperObj.find('#btn_gp_medical_record');
+    const linkElementGP = wrapperObj => wrapperObj.find('#btn_gp_medical_record');
 
-    describe('pkb care plans enabled', () => {
+    describe('silver integration rules enabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true });
+        wrapper = mountAs();
       });
 
       it('will show link', () => {
-        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+        expect(linkElementGP(wrapper).exists()).toBe(true);
       });
     });
 
-    describe('pkb care plans is disabled', () => {
+    describe('silver integration rules disabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: false });
+        wrapper = mountAs({ silverIntegrationSjrRules: [] });
       });
 
       it('will show link', () => {
-        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+        expect(linkElementGP(wrapper).exists()).toBe(true);
       });
     });
 
-    describe('pkb care plans enabled, but proxying', () => {
+    describe('silver integration rules enabled, but proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isProxying: true });
+        wrapper = mountAs({ isProxying: true });
       });
 
       it('will show link', () => {
-        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+        expect(linkElementGP(wrapper).exists()).toBe(true);
       });
     });
   });
 
-  describe('pkb care plans link', () => {
-    const getPkbCarePlansLink = wrapperObj =>
-      wrapperObj.find('#btn_care_plans');
+  describe('view third-party care plans link', () => {
+    each([
+      ['pkb', 'Care Plans', true, false, true, true],
+      ['pkb', 'Care Plans', true, true, true, false],
+      ['pkb', 'Care Plans', false, false, true, false],
+      ['cie', 'Care Plans', true, false, true, true],
+      ['cie', 'Care Plans', true, true, true, false],
+      ['cie', 'Care Plans', false, false, true, false],
+      ['pkb', 'Health Trackers', true, false, true, true],
+      ['pkb', 'Health Trackers', true, false, false, false],
+      ['pkb', 'Health Trackers', true, true, true, false],
+      ['pkb', 'Health Trackers', false, false, true, false],
+      ['cie', 'Health Trackers', true, false, true, true],
+      ['cie', 'Health Trackers', true, false, false, false],
+      ['cie', 'Health Trackers', true, true, true, false],
+      ['cie', 'Health Trackers', false, false, true, false],
+    ]).describe('%s %s enabled is %s, proxy is %s, native is %s', (
+      provider, linkType, context, isProxying, isNativeApp, expectedResult,
+    ) => {
+      switch (provider + linkType.replace(' ', '')) {
+        case 'pkbCarePlans':
+          linkElement = '#btn_pkb_care_plans';
+          break;
+        case 'cieCarePlans':
+          linkElement = '#btn_pkb_cie_care_plans';
+          break;
+        case 'pkbHealthTrackers':
+          linkElement = '#btn_pkb_health_trackers';
+          break;
+        case 'cieHealthTrackers':
+          linkElement = '#btn_pkb_health_trackers';
+          break;
+        default:
+          break;
+      }
 
-    describe('pkb care plans enabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true });
+        wrapper = mountAs({ context, isProxying, isNativeApp });
       });
 
-      it('will show link', () => {
-        expect(getPkbCarePlansLink(wrapper).exists()).toBe(true);
-      });
-    });
-
-    describe('pkb care plans is disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: false });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb care plans enabled but proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isProxying: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
-      });
-    });
-  });
-
-  describe('pkb Health Trackers link', () => {
-    const getPkbHealthTrackersLink = wrapperObj =>
-      wrapperObj.find('#btn_health_trackers');
-
-    describe('pkb health trackers enabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true });
-      });
-
-      it('will show link', () => {
-        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(true);
-      });
-    });
-
-    describe('pkb health trackers is enabled, but is desktop', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: false });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb health trackers is disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb health trackers enabled, but proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
+      it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {
+        expect(wrapper.find(linkElement).exists()).toBe(expectedResult);
       });
     });
   });

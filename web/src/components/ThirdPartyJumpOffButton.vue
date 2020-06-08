@@ -11,7 +11,6 @@
              :description="descriptionText()"
              :aria-label="headerText() |
                join(descriptionText() ,'. ')" />
-
 </template>
 
 <script>
@@ -32,25 +31,23 @@ export default {
       type: String,
       required: true,
     },
-    jumpOffType: {
-      type: String,
+    providerConfiguration: {
+      type: Object,
       required: true,
     },
     providerId: {
       type: String,
       required: true,
     },
-    redirectPath: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
-      redirectorPath: INTERSTITIAL_REDIRECTOR.path,
-      headerTextData: '',
       descriptionTextData: '',
+      headerTextData: '',
       isNativeApp: this.$store.state.device.isNativeApp,
+      jumpOffType: this.providerConfiguration.jumpOffType,
+      redirectorPath: INTERSTITIAL_REDIRECTOR.path,
+      redirectPath: this.providerConfiguration.redirectPath,
     };
   },
   computed: {

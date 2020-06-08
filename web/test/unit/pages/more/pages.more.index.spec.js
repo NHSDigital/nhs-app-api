@@ -1,16 +1,18 @@
+import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { createEvent, createStore, mount, createRouter } from '../../helpers';
 import { MESSAGES } from '@/lib/routes';
 
 describe('more', () => {
+  let linkElement;
   let wrapper;
   let $store;
   let $router;
 
   const mountAs = ({
     cdssAdminEnabled = false,
-    isProxying = false,
+    isProxy = false,
     isNativeApp = false,
     context = true,
     hasUnreadGpMessages = false,
@@ -32,7 +34,7 @@ describe('more', () => {
       getters: {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (context),
-        'session/isProxying': isProxying,
+        'session/isProxying': isProxy,
       },
       $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
@@ -91,37 +93,34 @@ describe('more', () => {
     });
   });
 
-  describe('pkb shared links link', () => {
-    const getPkbSharedLinksLink = wrapperObj =>
-      wrapperObj.find('#btn_pkb_shared_links');
+  describe('view third-party shared links link', () => {
+    each([
+      ['pkb', true, false, true],
+      ['pkb', true, true, false],
+      ['pkb', false, false, false],
+      ['cie', true, false, true],
+      ['cie', true, true, false],
+      ['cie', false, false, false],
+    ]).describe('%s secondary shared links enabled is %s, proxy is %s', (
+      provider, context, isProxy, expectedResult,
+    ) => {
+      switch (provider) {
+        case 'cie':
+          linkElement = '#btn_pkb_cie_shared_links';
+          break;
+        case 'pkb':
+          linkElement = '#btn_pkb_shared_links';
+          break;
+        default:
+          break;
+      }
 
-    describe('pkb shared links enabled, not proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ isProxying: false });
+        wrapper = mountAs({ context, isProxy });
       });
 
-      it('will show link', () => {
-        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(true);
-      });
-    });
-
-    describe('pkb shared links disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: false, isProxying: false });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb shared links enabled, proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ isProxying: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
+      it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {
+        expect(wrapper.find(linkElement).exists()).toBe(expectedResult);
       });
     });
   });

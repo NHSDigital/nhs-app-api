@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import Appointments from '@/pages/appointments';
 import { createStore, createRouter, mount } from '../../helpers';
 
@@ -8,24 +9,15 @@ describe('appointments hub', () => {
 
   const mountAs = ({
     isProxy = false,
-    apptsProviders = [],
-    context = false,
+    silverIntegrationAppointmentsEnabled = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
         device: { isNativeApp: false },
-        serviceJourneyRules: {
-          isLoaded: false,
-          rules: {
-            silverIntegrations: {
-              secondaryAppointments: apptsProviders,
-            },
-          },
-        },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'serviceJourneyRules/silverIntegrationAppointmentsEnabled': silverIntegrationAppointmentsEnabled,
         'session/isProxying': isProxy,
       } });
     return mount(Appointments, { $store, $router });
@@ -47,37 +39,19 @@ describe('appointments hub', () => {
   describe('hospital link', () => {
     const getHospitalLink = wrapperObj => wrapperObj.find('#btn_hospital');
 
-    describe('sjr secondary appointments disabled but proxy false', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ apptsProviders: [], isProxy: false });
-      });
-
-      it('will not show link', () => {
-        expect(getHospitalLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('sjr secondary appointments enabled but proxy true', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ apptsProviders: [], isProxy: true });
-      });
-
-      it('will not show link', () => {
-        expect(getHospitalLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('sjr secondary appointments enabled and proxy false', () => {
+    each([
+      [true, false, true],
+      [true, true, false],
+      [false, false, false],
+    ]).describe('secondary appointments enabled is %s, proxy is %s', (
+      silverIntegrationAppointmentsEnabled, isProxy, expectedResult,
+    ) => {
       let hospitalAppointmentsLink;
-      it('will show link for pkb', () => {
-        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false });
+
+      it(`${expectedResult ? 'will' : 'will not'} show link`, () => {
+        wrapper = mountAs({ silverIntegrationAppointmentsEnabled, isProxy });
         hospitalAppointmentsLink = getHospitalLink(wrapper);
-        expect(hospitalAppointmentsLink.exists()).toBe(true);
-      });
-      it('will show link for ers', () => {
-        wrapper = mountAs({ apptsProviders: ['ers'], context: true, isProxy: false });
-        hospitalAppointmentsLink = getHospitalLink(wrapper);
-        expect(hospitalAppointmentsLink.exists()).toBe(true);
+        expect(hospitalAppointmentsLink.exists()).toBe(expectedResult);
       });
     });
   });

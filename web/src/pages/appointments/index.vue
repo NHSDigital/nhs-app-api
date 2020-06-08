@@ -39,7 +39,6 @@
 import { GP_APPOINTMENTS, HOSPITAL_APPOINTMENTS } from '@/lib/routes';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'Appointments',
@@ -60,31 +59,9 @@ export default {
     hospitalAppointmentsPath() {
       return HOSPITAL_APPOINTMENTS.path;
     },
-    hasPkbAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    hasErsAppointments() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'ers',
-          serviceType: 'secondaryAppointments',
-        },
-      });
-    },
-    isNativeApp() {
-      return this.$store.state.device.isNativeApp;
-    },
     showHospitalAppointments() {
-      return !this.isProxying && (this.hasErsAppointments || this.hasPkbAppointments);
+      return !this.isProxying &&
+        this.$store.getters['serviceJourneyRules/silverIntegrationAppointmentsEnabled'];
     },
   },
   mounted() {

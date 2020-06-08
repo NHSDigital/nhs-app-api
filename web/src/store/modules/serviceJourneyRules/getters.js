@@ -99,11 +99,11 @@ export default {
     return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
   },
   [SILVER_INTEGRATION_APPOINTMENTS_ENABLED](state) {
-    return get('rules.silverIntegrations.secondaryAppointments')(state).includes('pkb') || get('rules.silverIntegrations.secondaryAppointments')(state).includes('ers');
+    return get('rules.silverIntegrations.secondaryAppointments')(state).length > 0;
   },
   [MY_RECORD_HUB_ENABLED](state) {
-    return get('rules.silverIntegrations.carePlans')(state).includes('pkb') ||
-      get('rules.silverIntegrations.healthTrackers')(state).includes('pkb');
+    return get('rules.silverIntegrations.carePlans')(state).length > 0 ||
+      get('rules.silverIntegrations.healthTrackers')(state).length > 0;
   },
   [DOCUMENTS_ENABLED](state) {
     return get('rules.documents')(state);

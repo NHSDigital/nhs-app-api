@@ -193,6 +193,9 @@ export default {
     },
     providerName() {
       if (this.showWarning && this.services[0]) {
+        if (this.getWarningMessage('brandName') !== undefined) {
+          return this.getWarningMessage('brandName');
+        }
         return this.getText(`thirdPartyProviders.${this.services[0].id}.providerName`);
       }
       return '';

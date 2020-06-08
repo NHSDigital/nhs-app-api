@@ -36,8 +36,12 @@
             v-if="showPkbMedicines"
             id="btn_pkb_medicines"
             provider-id="pkb"
-            :jump-off-type="thirdPartyProvider.pkb.medicines.type"
-            :redirect-path="thirdPartyProvider.pkb.medicines.redirectPath" />
+            :provider-configuration="thirdPartyProvider.pkb.medicines" />
+          <third-party-jump-off-button
+            v-if="showPkbCieMedicines"
+            id="btn_pkb_cie_medicines"
+            provider-id="pkb"
+            :provider-configuration="thirdPartyProvider.pkb.medicinesCie" />
         </menu-item-list>
       </div>
     </div>
@@ -114,8 +118,21 @@ export default {
         },
       });
     },
+    hasPkbCieMedicines() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'medicines',
+        },
+      });
+    },
     showPkbMedicines() {
       return !this.isProxying && this.hasPkbMedicines;
+    },
+    showPkbCieMedicines() {
+      return !this.isProxying && this.hasPkbCieMedicines;
     },
   },
   watch: {

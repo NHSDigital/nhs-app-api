@@ -15,8 +15,10 @@ describe('ThirdParty Jumpoff Button', () => {
     native = true,
     providerId = 'pkb',
     providerUrl = 'http://foo.com/',
-    redirectPath = 'nhsRedirectPath',
-    jumpOffType = 'messages',
+    providerConfiguration = {
+      redirectPath: 'nhsRedirectPath',
+      jumpOffType: 'messages',
+    },
   }) => {
     $store = createStore({
       state: {
@@ -33,9 +35,8 @@ describe('ThirdParty Jumpoff Button', () => {
     });
     propsData = {
       id,
-      jumpOffType,
+      providerConfiguration,
       providerId,
-      redirectPath,
     };
 
     return mount(ThirdPartyJumpOffButton, {

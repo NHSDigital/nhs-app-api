@@ -1,7 +1,8 @@
+import each from 'jest-each';
 import Messages from '@/pages/messages/';
 import { mount, createRouter, createStore } from '../../helpers';
-import each from 'jest-each';
 
+let linkElement;
 let wrapper;
 let $store;
 let $router;
@@ -100,61 +101,6 @@ describe('messages page', () => {
     });
   });
 
-  describe('pkb messages link', () => {
-    describe('pkb messaging enabled', () => {
-      beforeEach(() => {
-        mountPage();
-      });
-      it('will show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(true);
-      });
-    });
-
-    describe('pkb messaging enabled, but is proxying', () => {
-      beforeEach(() => {
-        mountPage({
-          isProxying: true,
-        });
-      });
-      it('will not show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
-      });
-    });
-
-    describe('pkb enabled but is proxying', () => {
-      beforeEach(() => {
-        mountPage({
-          isProxying: true,
-        });
-      });
-      it('will not show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
-      });
-    });
-
-    describe('pkb enabled but proof level is p5', () => {
-      beforeEach(() => {
-        mountPage({
-          isProofLevel9: false,
-        });
-      });
-      it('will not show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
-      });
-    });
-
-    describe('pkb messaging disabled', () => {
-      beforeEach(() => {
-        mountPage({
-          context: false,
-        });
-      });
-      it('will not show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
-      });
-    });
-  });
-
   describe('unread message indicators', () => {
     each([
       ['show the indicator when there is unread GP messages', true, true],
@@ -172,6 +118,40 @@ describe('messages page', () => {
       mountPage({ hasUnreadAppMessages: hasUnread });
       await wrapper.vm.$nextTick();
       expect(wrapper.find('#btn_appMessaging_unreadIndicator').exists()).toBe(indicatorShown);
+    });
+  });
+
+  describe('view third-party messaging', () => {
+    each([
+      ['pkb', true, false, true, true],
+      ['pkb', true, false, false, false],
+      ['pkb', true, true, true, false],
+      ['pkb', false, false, true, false],
+      ['cie', true, false, true, true],
+      ['cie', true, false, false, false],
+      ['cie', true, true, true, false],
+      ['cie', false, false, true, false],
+    ]).describe('%s messaging enabled is %s, proxy is %s', (
+      provider, context, isProxying, isProofLevel9, expectedResult,
+    ) => {
+      switch (provider) {
+        case 'cie':
+          linkElement = '#btn_pkb_cie_messages_and_consultations';
+          break;
+        case 'pkb':
+          linkElement = '#btn_pkb_messages_and_consultations';
+          break;
+        default:
+          break;
+      }
+
+      beforeEach(() => {
+        mountPage({ context, isProxying, isProofLevel9 });
+      });
+
+      it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {
+        expect(wrapper.find(linkElement).exists()).toBe(expectedResult);
+      });
     });
   });
 });

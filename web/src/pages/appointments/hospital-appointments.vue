@@ -6,17 +6,18 @@
           <third-party-jump-off-button v-if="showManageYourReferral"
                                        id="btn_manage_your_referral"
                                        provider-id="ers"
-                                       :jump-off-type="thirdPartyProvider.ers.
-                                         manageYourReferral.type"
-                                       :redirect-path="thirdPartyProvider.ers.
-                                         manageYourReferral.redirectPath" />
+                                       :provider-configuration="thirdPartyProvider.ers.
+                                         manageYourReferral" />
           <third-party-jump-off-button v-if="showPkbAppointments"
                                        id="btn_pkb_appointments"
                                        provider-id="pkb"
-                                       :jump-off-type="thirdPartyProvider.pkb.
-                                         appointments.type"
-                                       :redirect-path="thirdPartyProvider.pkb.
-                                         appointments.redirectPath" />
+                                       :provider-configuration="thirdPartyProvider.pkb.
+                                         appointments" />
+          <third-party-jump-off-button v-if="showPkbCieAppointments"
+                                       id="btn_pkb_cie_appointments"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider.pkb.
+                                         appointmentsCie" />
         </menu-item-list>
       </div>
     </div>
@@ -64,11 +65,24 @@ export default {
         },
       });
     },
+    hasPkbCieAppointments() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'secondaryAppointments',
+        },
+      });
+    },
     showManageYourReferral() {
       return this.hasErsAppointments && !this.isProxying;
     },
     showPkbAppointments() {
       return this.hasPkbAppointments && !this.isProxying;
+    },
+    showPkbCieAppointments() {
+      return this.hasPkbCieAppointments && !this.isProxying;
     },
   },
   mounted() {

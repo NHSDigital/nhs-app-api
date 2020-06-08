@@ -16,17 +16,25 @@
                        'healthRecordHubPage.gpMedicalRecord.body')"
                      :prevent-default="preventDefault()"/>
           <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying"
-                                       id="btn_care_plans"
+                                       id="btn_pkb_care_plans"
                                        provider-id="pkb"
-                                       :jump-off-type="thirdPartyProvider.pkb.carePlans.type"
-                                       :redirect-path="thirdPartyProvider
-                                         .pkb.carePlans.redirectPath" />
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.carePlans" />
+          <third-party-jump-off-button v-if="showPkbCieCarePlans && !isProxying"
+                                       id="btn_pkb_cie_care_plans"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.carePlansCie" />
           <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying && isNativeApp"
-                                       id="btn_health_trackers"
+                                       id="btn_pkb_health_trackers"
                                        provider-id="pkb"
-                                       :jump-off-type="thirdPartyProvider.pkb.healthTrackers.type"
-                                       :redirect-path="thirdPartyProvider.pkb
-                                         .healthTrackers.redirectPath" />
+                                       :provider-configuration="thirdPartyProvider.pkb
+                                         .healthTrackers" />
+          <third-party-jump-off-button v-if="showPkbCieHealthTracker && !isProxying && isNativeApp"
+                                       id="btn_pkb_cie_health_trackers"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider.pkb
+                                         .healthTrackersCie" />
         </menu-item-list>
       </div>
     </div>
@@ -59,11 +67,27 @@ export default {
           serviceType: 'carePlans',
         },
       }),
+      showPkbCieCarePlans: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'carePlans',
+        },
+      }),
       showPkbHealthTracker: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
+          serviceType: 'healthTrackers',
+        },
+      }),
+      showPkbCieHealthTracker: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
           serviceType: 'healthTrackers',
         },
       }),

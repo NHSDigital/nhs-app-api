@@ -114,6 +114,102 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'appointmentsCie',
+        path: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=cie',
+        jumpOffContent: {
+          headerText: 'View appointments',
+          descriptionText: 'See your upcoming and past hospital or other appointments',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'View appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'carePlansCie',
+        path: '/nhs-login/login?phrPath=/auth/listPlans.action&brand=cie',
+        jumpOffContent: {
+          headerText: 'Care plans',
+          descriptionText: 'View your personalised care plans',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'Care plans',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'healthTrackersCie',
+        path: '/nhs-login/login?phrPath=/pkbNhsMenu.action&brand=cie',
+        jumpOffContent: {
+          headerText: 'Track your health',
+          descriptionText: 'Record symptoms and add to your health journal',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'Track your health',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'messagesCie',
+        path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=cie',
+        jumpOffContent: {
+          headerText: 'Messages and consultations with a doctor or health professional',
+          descriptionText: 'Send or view messages and online consultations with a doctor or health professional',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'Messages and online consultations',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'sharedLinksCie',
+        path: '/nhs-login/login?phrPath=/library/manageLibrary.action&brand=cie',
+        jumpOffContent: {
+          headerText: 'Shared links',
+          descriptionText: 'View links your doctor or health professional has shared with you',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'Shared links',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'medicinesCie',
+        path: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=cie',
+        jumpOffContent: {
+          headerText: 'Hospital and other prescriptions',
+          descriptionText: 'See your current and past prescriptions',
+        },
+        thirdPartyWarning: {
+          brandName: 'Care Information Exchange (Patients Know Best)',
+          featureName: 'Hospital and other prescriptions',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
   'silver-third-party-api-test': {

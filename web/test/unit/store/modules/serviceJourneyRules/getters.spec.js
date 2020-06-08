@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import getters from '@/store/modules/serviceJourneyRules/getters';
 import { initialState } from '@/store/modules/serviceJourneyRules/mutation-types';
@@ -300,6 +301,43 @@ describe('getters', () => {
       currentState.rules.im1Messaging.canDeleteMessages = false;
       expect(deleteGpMessagesEnabled(currentState))
         .toBe(false);
+    });
+  });
+
+  describe('Silver Integration Appointments', () => {
+    const { silverIntegrationAppointmentsEnabled } = getters;
+
+    it('will be true if silverIntegrations.secondaryAppointments is populated', () => {
+      currentState.rules.silverIntegrations.secondaryAppointments = ['pkb', 'pkbCie'];
+      expect(silverIntegrationAppointmentsEnabled(currentState))
+        .toBe(true);
+    });
+
+    it('will be false if silverIntegrations.secondaryAppointments is empty', () => {
+      currentState.rules.silverIntegrations.secondaryAppointments = [];
+      expect(silverIntegrationAppointmentsEnabled(currentState))
+        .toBe(false);
+    });
+  });
+
+  each([
+    [['pkb', 'pkbCie'], ['pkb', 'pkbCie'], true],
+    [[], ['pkb', 'pkbCie'], true],
+    [['pkb', 'pkbCie'], [], true],
+    [['pkbCie'], ['pkbCie'], true],
+    [['pkb', 'pkbCie'], [], true],
+    [[], [], false],
+  ]).describe('Silver Integration My Record Hub', (
+    providerCarePlans, providerHealthTrackers, expectedResult,
+  ) => {
+    const { myRecordHubEnabled } = getters;
+
+    it(`will be ${expectedResult} if carePlans is ${providerCarePlans} or 
+    HealthTrackers is ${providerHealthTrackers}`, () => {
+      currentState.rules.silverIntegrations.carePlans = providerCarePlans;
+      currentState.rules.silverIntegrations.healthTrackers = providerHealthTrackers;
+      expect(myRecordHubEnabled(currentState))
+        .toBe(expectedResult);
     });
   });
 });

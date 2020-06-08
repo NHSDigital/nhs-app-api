@@ -31,8 +31,13 @@
         v-if="showPkbSharedLinks"
         id="btn_pkb_shared_links"
         provider-id="pkb"
-        :jump-off-type="thirdPartyProvider.pkb.sharedLinks.type"
-        :redirect-path="thirdPartyProvider.pkb.sharedLinks.redirectPath" />
+        :provider-configuration="thirdPartyProvider.pkb.sharedLinks" />
+
+      <third-party-jump-off-button
+        v-if="showPkbCieSharedLinks"
+        id="btn_pkb_cie_shared_links"
+        provider-id="pkb"
+        :provider-configuration="thirdPartyProvider.pkb.sharedLinksCie" />
 
       <menu-item id="btn_data_sharing"
                  header-tag="h2"
@@ -100,8 +105,21 @@ export default {
         },
       });
     },
+    hasPkbCieSharedLinks() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'libraries',
+        },
+      });
+    },
     showPkbSharedLinks() {
       return this.hasPkbSharedLinks && !this.isProxying;
+    },
+    showPkbCieSharedLinks() {
+      return this.hasPkbCieSharedLinks && !this.isProxying;
     },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;

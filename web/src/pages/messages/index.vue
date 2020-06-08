@@ -15,15 +15,16 @@
         <third-party-jump-off-button v-if="pkbEnabled"
                                      id="btn_pkb_messages_and_consultations"
                                      provider-id="pkb"
-                                     :jump-off-type="thirdPartyProvider.pkb.messages.type"
-                                     :redirect-path="thirdPartyProvider
-                                       .pkb.messages.redirectPath" />
+                                     :provider-configuration="thirdPartyProvider.pkb.messages" />
+        <third-party-jump-off-button v-if="pkbCieEnabled"
+                                     id="btn_pkb_cie_messages_and_consultations"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider.pkb.messagesCie" />
         <third-party-jump-off-button v-if="testProviderEnabled"
                                      id="btn_test_silver_messages"
                                      provider-id="silver-third-party-api-test"
-                                     :jump-off-type="thirdPartyProvider.testProvider.messages.type"
-                                     :redirect-path="thirdPartyProvider
-                                       .testProvider.messages.redirectPath" />
+                                     :provider-configuration="thirdPartyProvider.testProvider
+                                       .messages" />
         <menu-item v-if="appMessagingSjrEnabled"
                    id="btn_appMessaging"
                    header-tag="h2"
@@ -78,6 +79,14 @@ export default {
           serviceType: 'messages',
         },
       }),
+      hasPkbCieMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'messages',
+        },
+      }),
       hasTestProviderMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -93,6 +102,7 @@ export default {
       return this.gpMessagesEnabled ||
         this.appMessagingSjrEnabled ||
         this.pkbEnabled ||
+        this.pkbCieEnabled ||
         this.testProviderEnabled;
     },
     gpMessagesEnabled() {
@@ -100,6 +110,9 @@ export default {
     },
     pkbEnabled() {
       return this.hasPkbMessages && !this.isProxying && this.isProofLevel9;
+    },
+    pkbCieEnabled() {
+      return this.hasPkbCieMessages && !this.isProxying && this.isProofLevel9;
     },
     testProviderEnabled() {
       return this.hasTestProviderMessages && this.isProofLevel9;
