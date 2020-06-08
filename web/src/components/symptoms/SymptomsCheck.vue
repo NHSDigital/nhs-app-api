@@ -4,7 +4,6 @@
 
       <menu-item id="btn_corona"
                  header-tag="h2"
-                 role="link"
                  :href="coronaCheckerUrl"
                  :description="$t('sy01.corona.body')"
                  target="_blank"
@@ -15,7 +14,6 @@
 
       <menu-item id="btn_choices"
                  header-tag="h2"
-                 role="link"
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
@@ -27,7 +25,6 @@
 
       <menu-item id="btn_111"
                  header-tag="h2"
-                 role="link"
                  :href="symptomsCheckerUrl"
                  :description="$t('sy01.111.body')"
                  target="_blank"
@@ -40,7 +37,6 @@
                  id="btn_gpAdvice"
                  header-tag="h2"
                  data-purpose="text_link"
-                 role="link"
                  :description="$t('appointments.guidance.menuItem3.text')"
                  :click-func="navigate"
                  :href="gpAdviceConditionsPath"

@@ -5,7 +5,6 @@
         <menu-item-list>
           <menu-item id="btn_choices"
                      header-tag="h2"
-                     role="link"
                      data-purpose="text_link"
                      :href="gpAppointmentsPath"
                      :click-func="redirectToGpAppointments"
@@ -18,7 +17,6 @@
           <menu-item v-if="showHospitalAppointments"
                      id="btn_hospital"
                      header-tag="h2"
-                     role="link"
                      data-purpose="text_link"
                      :href="hospitalAppointmentsPath"
                      :click-func="redirectToHospitalAppointments"

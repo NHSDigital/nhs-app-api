@@ -5,7 +5,6 @@
       <menu-item v-if="canWithdraw"
                  id="btn_withdraw"
                  header-tag="h3"
-                 role="link"
                  href="#"
                  :description="$t('organDonation.otherThings.withdraw.body')"
                  :text="$t('organDonation.otherThings.withdraw.subheader')"
@@ -14,7 +13,6 @@
                                ${$t('organDonation.otherThings.withdraw.body')}`"/>
       <menu-item id="btn_blood"
                  header-tag="h3"
-                 role="link"
                  :href="bloodDonationUrl"
                  target="_blank"
                  :description="$t('organDonation.otherThings.bloodDonation.body')"

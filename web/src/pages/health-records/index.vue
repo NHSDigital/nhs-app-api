@@ -5,7 +5,6 @@
         <menu-item-list>
           <menu-item id="btn_gp_medical_record"
                      header-tag="h2"
-                     role="link"
                      data-purpose="text_link"
                      :href="gpMedicalRecordPath"
                      :click-func="redirectToMedicalRecord"

@@ -4,7 +4,6 @@
     <menu-item-list>
       <menu-item id="btn_tellFamily"
                  header-tag="h3"
-                 role="link"
                  target="_blank"
                  :href="tellFamilyUrl"
                  :description="$t('organDonation.viewDecision.nextSteps.tellFamily.body')"
@@ -15,7 +14,6 @@
       <menu-item v-if="isOptInDecision"
                  id="btn_shareDecision"
                  header-tag="h3"
-                 role="link"
                  target="_blank"
                  :href="shareDecisionUrl"
                  :description="$t('organDonation.viewDecision.nextSteps.shareDecision.body')"

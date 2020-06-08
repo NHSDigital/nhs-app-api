@@ -1,7 +1,6 @@
 <template>
   <menu-item id="btn_alreadyRegistered"
              header-tag="h3"
-             role="link"
              :href="alreadyRegisteredUrl"
              target="_blank"
              :text="$t('organDonation.links.alreadyRegisteredText')"
