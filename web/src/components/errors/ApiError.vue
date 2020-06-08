@@ -29,26 +29,27 @@
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :class="$style.additionalInformation" />
       </message-dialog>
-      <form ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
-        <generic-button v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
-                        :class="[
-                          ...dynamicStyle('nhs-button'),
-                          $style.retryButton,
-                          buttonClasses
-                        ]"
-                        data-purpose="retry-or-back-button"
-                        click-delay="medium"
-                        @click.stop.prevent="onRetryButtonClicked">
+      <form v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
+            ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
+        <generic-button
+          :class="[
+            ...dynamicStyle('nhs-button'),
+            $style.retryButton,
+            buttonClasses
+          ]"
+          data-purpose="retry-or-back-button"
+          click-delay="medium"
+          @click.stop.prevent="onRetryButtonClicked">
           {{ retryButtonText }}
         </generic-button>
-        <desktopGenericBackLink
-          v-if="retryButtonText && !$store.state.device.isNativeApp && retryUrl"
-          :path="retryUrl"
-          :button-text="retryButtonText"
-          data-purpose="retry-or-back-button"
-          @clickAndPrevent="onRetryButtonClicked"
-        />
       </form>
+      <desktopGenericBackLink
+        v-if="retryButtonText && !$store.state.device.isNativeApp && retryUrl"
+        :path="retryUrl"
+        :button-text="retryButtonText"
+        data-purpose="retry-or-back-button"
+        @clickAndPrevent="onRetryButtonClicked"
+      />
     </div>
     <div v-else>
       <header-slim :show-in-native="true" :show-in-desktop="false">{{ header }}</header-slim>
