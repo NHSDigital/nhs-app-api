@@ -96,6 +96,7 @@ services:
     command: dotnet NHSOnline.Backend.PfsApi.dll
     env_file:
       - ./docker/emis_connectivity.env
+      - ./docker/fakegp_connectivity.env
       - ./docker/gplookup_connectivity.env
       - ./docker/im1cache_database.env
       - ./docker/microtest_connectivity.env
@@ -146,6 +147,7 @@ services:
     command: dotnet NHSOnline.Backend.CidApi.dll
     env_file:
       - ./docker/emis_connectivity.env
+      - ./docker/fakegp_connectivity.env
       - ./docker/im1cache_database.env
       - ./docker/microtest_connectivity.env
       - ./docker/session_database.env
