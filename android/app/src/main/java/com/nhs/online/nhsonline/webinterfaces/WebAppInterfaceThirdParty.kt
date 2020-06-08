@@ -11,8 +11,10 @@ import com.nhs.online.nhsonline.web.NhsWeb
 class WebAppInterfaceThirdParty(
         private val activity: Activity,
         private val nhsWeb: NhsWeb,
-        private val uiInteractor: IInteractor)
-  {
+        private val uiInteractor: IInteractor,
+        private val appWebInterface: AppWebInterface)
+{
+    @Deprecated("since 1.35.0 (NHSO-9622), here for backwards compatibility")
     @JavascriptInterface
     fun goToHomepage() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering goToHomepage")
@@ -20,7 +22,14 @@ class WebAppInterfaceThirdParty(
             nhsWeb.loadWelcomePage()
             uiInteractor.clearMenuBarItem()
         }
-
+    }
+    
+    @JavascriptInterface
+    fun goToPage(page: String) {
+      Log.d(Application.TAG, "${this::class.java.simpleName}: Entering goToPage")
+      runAction {
+          appWebInterface.goToPage(page)
+      }
     }
 
     private fun runAction(action: () -> Unit){

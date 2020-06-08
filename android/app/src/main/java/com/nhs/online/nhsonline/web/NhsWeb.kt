@@ -81,7 +81,7 @@ class NhsWeb(
             WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
 
         val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
-        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor)
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor, appWebInterface)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
 
@@ -92,7 +92,6 @@ class NhsWeb(
     }
 
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
-
 
     fun loadUrl(path: String) {
         Log.d(TAG, "Entering loadUrl")

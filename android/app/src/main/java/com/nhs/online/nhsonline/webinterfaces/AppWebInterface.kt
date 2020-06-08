@@ -71,6 +71,10 @@ class AppWebInterface(private val webView: WebView) {
         loadDispatchEvent("navigation/goTo", "'$path'")
     }
 
+    fun goToPage(page: String) {
+        loadDispatchEvent("navigation/goToPage", "'$page'")
+    }
+
     private fun loadDispatchEvent(event: String, args: String = "") {
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event'" +
                 "${ if (args != "") ", $args" else "" })")
