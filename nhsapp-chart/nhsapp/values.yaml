@@ -54,7 +54,6 @@ visionSenderUserIdentity: "65489761321654"
 visionSenderUserRole: "ROSU"
 visionLinkagePath: "serverApi/v1/"
 
-emisEnabled: false
 emisHostname: nhs70apptest.emishealth.com
 emisCertEnabled: false
 emisPort: 443

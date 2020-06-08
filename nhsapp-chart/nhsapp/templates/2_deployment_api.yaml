@@ -35,7 +35,7 @@ spec:
                   - {{ $.Values.api.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
-      {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
+      {{- if (and ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
       - name: emiscert
         secret:
           secretName: emiscert-{{ .Chart.AppVersion }}
@@ -140,8 +140,6 @@ spec:
           value: "{{ $.Values.brotherMailerUserID }}"
         - name: BROTHER_MAILER_SIG
           value: "{{ $.Values.brotherMailerSIG }}"
-        - name: GP_PROVIDER_ENABLED_EMIS
-          value: "{{ $.Values.emisEnabled }}"
         - name: GP_PROVIDER_ENABLED_FAKE
           value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: GP_PROVIDER_ENABLED_MICROTEST
@@ -154,16 +152,15 @@ spec:
           value: "{{ $.Values.odsRemapEnabled }}"
         - name: ODS_REMAP_MAP
           value: "{{ $.Values.odsRemapMap }}"
-        {{- if $.Values.emisEnabled }}
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"
-          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
         - name: EMIS_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/emis/"
-          {{- else }}
+        {{- else }}
         - name: EMIS_BASE_URL
           value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
-            {{- if $.Values.emisCertEnabled }}
+          {{- if $.Values.emisCertEnabled }}
         - name: EMIS_CERTIFICATE_PATH
           value: "/secrets/emiscert/emis.pfx"
         - name: EMIS_CERTIFICATE_PASSWORD
@@ -171,7 +168,6 @@ spec:
             secretKeyRef:
               name: emiscert-password-{{ .Chart.AppVersion }}
               key: password
-            {{- end }}
           {{- end }}
         {{- end }}
         - name: KNOWNSERVICES_PATH
@@ -436,7 +432,7 @@ spec:
           value: "{{ $.Values.spineLdapConnectionRetryWaitTimeSeconds }}"
       {{- end }}
         volumeMounts:
-    {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
+    {{- if (and ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
         - name: emiscert
           mountPath: "/secrets/emiscert"
           readOnly: true

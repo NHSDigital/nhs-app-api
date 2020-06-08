@@ -35,48 +35,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.DependencyInjection
         }
 
         [TestMethod]
-        public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenEmisIsEnabled()
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_EMIS"]).Returns("True");
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterPfsServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableEmis)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [DataTestMethod]
-        [DataRow("False")]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("xyz")]
-        public void ConfigureServices_DoesntSetupEmisServicesForDependencyInjection_WhenEmisIsDisabled(string value)
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_EMIS"]).Returns(value);
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterPfsServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableEmis == false)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [TestMethod]
         public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenVisionIsEnabled()
         {
             // Arrange

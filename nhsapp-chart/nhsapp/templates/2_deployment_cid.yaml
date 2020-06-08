@@ -35,7 +35,7 @@ spec:
                   - {{ $.Values.cid.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
-      {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled)) }}
+      {{- if ($.Values.emisCertEnabled) }}
       - name: emiscert
         secret:
           secretName: emiscert-{{ .Chart.AppVersion }}
@@ -105,8 +105,6 @@ spec:
           value: "{{ $.Values.cid.containerPort }}"
         - name: ASPNETCORE_URLS
           value: "http://*:{{ $.Values.cid.containerPort }}"
-        - name: GP_PROVIDER_ENABLED_EMIS
-          value: "{{ $.Values.emisEnabled }}"
         - name: GP_PROVIDER_ENABLED_FAKE
           value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: GP_PROVIDER_ENABLED_TPP
@@ -115,10 +113,8 @@ spec:
           value: "{{ $.Values.visionEnabled }}"
         - name: GP_PROVIDER_ENABLED_MICROTEST
           value: "{{ $.Values.visionEnabled }}"
-        {{- if $.Values.emisEnabled }}
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"
-        {{- end }}
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
         - name: EMIS_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/emis/"
@@ -270,7 +266,7 @@ spec:
               key: password
       {{- end }}
         volumeMounts:
-    {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled)) }}
+    {{- if ($.Values.emisCertEnabled) }}
         - name: emiscert
           mountPath: "/secrets/emiscert"
           readOnly: true

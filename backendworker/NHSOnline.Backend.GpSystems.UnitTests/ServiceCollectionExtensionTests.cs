@@ -19,7 +19,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration
             {
                 EnableTpp = true,
-                EnableEmis = true,
                 EnableMicrotest = true,
                 EnableVision = true
             };
@@ -31,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             CheckBaseRegisteredServices(services);
             CheckAllPfsRegisteredServices(services);
         }
-        
+
         [TestMethod]
         public void CheckRegisteredCidServicesForAllSuppliers()
         {
@@ -40,7 +39,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration
             {
                 EnableTpp = true,
-                EnableEmis = true,
                 EnableMicrotest = true,
                 EnableVision = true
             };
@@ -61,7 +59,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
 
             var config = new EnableGpSupplierConfiguration {
                 EnableTpp = false,
-                EnableEmis = false,
                 EnableMicrotest = false,
                 EnableVision = false
             };
@@ -100,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppPfsRegisteredServices(serviceCollection);
             Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionPfsRegisteredServices(serviceCollection);
         }
-        
+
         private static void CheckAllCidRegisteredServices(ServiceCollection serviceCollection)
         {
             serviceCollection.Should().NotBeNull();
