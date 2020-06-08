@@ -56,6 +56,12 @@ make run
 make run LOGINENV=dev
 ```
 
+### Run everything built locally using the NHS login sandpit environment (without this defaults to ext)
+
+```bash
+make run LOGINENV=sandpit
+```
+
 ### Run everything built locally using the dev stubs
 
 ```bash

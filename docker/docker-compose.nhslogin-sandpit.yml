@@ -1,0 +1,23 @@
+version: "3.4"
+
+services:
+
+  web.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_sandpit.env
+
+  pfs.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_sandpit.env
+
+  users.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_sandpit.env
+
+  userinfo.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_sandpit.env
+
+  messages.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_sandpit.env

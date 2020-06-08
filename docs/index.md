@@ -2,7 +2,7 @@
 
 ## Welcome
 
-* [Getting Started - read first!](Getting-Started.md)
+* [Getting Started - read first!](getting-started.md)
 * [Cheat Sheet](Cheat-Sheet.md)
 
 ## Solution Areas
