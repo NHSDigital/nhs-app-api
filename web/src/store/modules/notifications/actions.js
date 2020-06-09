@@ -24,7 +24,13 @@ let resolveLoading;
 
 export default {
   authorised({ state, commit }, deviceResponse) {
-    const { trigger, devicePns, deviceType } = deviceResponse;
+    let deviceResponseParam = deviceResponse;
+
+    if (typeof deviceResponseParam !== 'object') {
+      deviceResponseParam = JSON.parse(deviceResponse);
+    }
+
+    const { trigger, devicePns, deviceType } = deviceResponseParam;
 
     if (trigger === toggle) {
       const registering = !state.registered;

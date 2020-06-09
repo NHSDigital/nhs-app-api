@@ -29,7 +29,14 @@ export default {
 
   biometricCompletion({ commit }, deviceResponse) {
     commit(SET_WAITING, false);
-    const { action, outcome, errorCode } = deviceResponse;
+
+    let deviceResponseParam = deviceResponse;
+
+    if (typeof deviceResponseParam !== 'object') {
+      deviceResponseParam = JSON.parse(deviceResponse);
+    }
+
+    const { action, outcome, errorCode } = deviceResponseParam;
 
     if (outcome === biometricRegistrationOutcomes.Failure) {
       if (errorCode === biometricErrorCodes.CannotFindBiometrics
@@ -56,7 +63,13 @@ export default {
   },
 
   biometricSpec({ commit }, deviceResponse) {
-    const { biometricTypeReference, enabled } = deviceResponse;
+    let deviceResponseParam = deviceResponse;
+
+    if (typeof deviceResponseParam !== 'object') {
+      deviceResponseParam = JSON.parse(deviceResponse);
+    }
+
+    const { biometricTypeReference, enabled } = deviceResponseParam;
     commit(UPDATE_REGISTRATION_STATUS, enabled);
     commit(UPDATE_BIOMETRIC_TYPE, biometricTypeReference);
   },
