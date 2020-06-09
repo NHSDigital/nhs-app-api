@@ -1,6 +1,4 @@
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,18 +12,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
     [TestClass]
     public class VisionDiagnosisMapperTests
     {
-        private IFixture _fixture;
         private VisionDiagnosisMapper _mapper;
-        private ILogger<VisionDiagnosisMapper> _logger;
+        private Mock<ILogger<VisionDiagnosisMapper>> _logger;
         private Mock<IHtmlSanitizer> _htmlSanitizer;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<VisionDiagnosisMapper>>();
+            _logger = new Mock<ILogger<VisionDiagnosisMapper>>();
             _htmlSanitizer = new Mock<IHtmlSanitizer>(MockBehavior.Strict);
-            _mapper = new VisionDiagnosisMapper(_logger, _htmlSanitizer.Object);
+            _mapper = new VisionDiagnosisMapper(_logger.Object, _htmlSanitizer.Object);
         }
 
         [TestMethod]

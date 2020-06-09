@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var item = new VisionDemographics();
-            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
+            var testNhsNumber = "1231231234";
             
             // Act
             var result = _mapper.Map(item, testNhsNumber);
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
+            var testNhsNumber = "1231231234";
             
             var item = new VisionDemographics
             {
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
+            var testNhsNumber = "1231231234";
             
             var item = new VisionDemographics
             {
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
         {
             // Arrange
             var dateOfBirth = DateTime.Now.Date;
-            var testNhsNumber = _fixture.CreateNhsNumberUnformatted();
+            var testNhsNumber = "1231231234";
             
             var item = new VisionDemographics
             {

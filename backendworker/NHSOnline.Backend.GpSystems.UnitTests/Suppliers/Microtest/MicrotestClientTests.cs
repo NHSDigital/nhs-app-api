@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             _fixture.Inject(_httpClient);
 
             _odsCode = _fixture.Create<string>();
-            _nhsNumber = _fixture.CreateNhsNumberFormatted();
+            _nhsNumber = "123 123 1234";
 
             _systemUnderTest = _fixture.Create<MicrotestClient>();
         }

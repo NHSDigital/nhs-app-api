@@ -77,15 +77,6 @@
         "resolved": "5.0.0",
         "contentHash": "RSM2A54eBAOL7xt2fAPddGkiizgTl+6SBmnISvK+iNIj90PSuD/tZ3bRyIzzLrTP3zVStoO/d9U2aIqUC7uBRQ=="
       },
-      "AutoFixture": {
-        "type": "Transitive",
-        "resolved": "4.11.0",
-        "contentHash": "2C8JcuQU70dJQ8v5YVwkLPyd0pzpcXT5SF6z+K+FwoRb0HWpmLEaNHw1nYx+wpjgf35AyivF+p/7hPhWsBj0YQ==",
-        "dependencies": {
-          "Fare": "[2.1.1, 3.0.0)",
-          "System.ComponentModel.Annotations": "4.3.0"
-        }
-      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "4.4.0",
@@ -120,6 +111,11 @@
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         }
+      },
+      "DnsClient": {
+        "type": "Transitive",
+        "resolved": "1.3.1",
+        "contentHash": "b9XczgqSjs3dd+OlV799jn+LXxdfirln1q36GKjs3QwWBhjhgIvgHLEG5s2VrBLcP4ogQjtA0PZ5+AmRJ35Vhg=="
       },
       "HtmlAgilityPack": {
         "type": "Transitive",
@@ -657,24 +653,6 @@
         "contentHash": "VyGn1jGRZVfxnh8EdvDCi71v3bMXrsu8aYJOwoV7SNDLVhiEqwP86pPMyRGsDsxhXAm2b3o9OIqeETfN5qfezw==",
         "dependencies": {
           "System.Runtime": "4.3.0"
-        }
-      },
-      "System.ComponentModel.Annotations": {
-        "type": "Transitive",
-        "resolved": "4.3.0",
-        "contentHash": "SY2RLItHt43rd8J9D8M8e8NM4m+9WLN2uUd9G0n1I4hj/7w+v3pzK6ZBjexlG1/2xvLKQsqir3UGVSyBTXMLWA==",
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.ComponentModel": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Extensions": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Text.RegularExpressions": "4.3.0",
-          "System.Threading": "4.3.0"
         }
       },
       "System.ComponentModel.EventBasedAsync": {
@@ -1736,7 +1714,6 @@
       "unittesthelper": {
         "type": "Project",
         "dependencies": {
-          "AutoFixture": "4.11.0",
           "FluentAssertions": "5.7.0",
           "MSTest.TestFramework": "1.4.0",
           "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",

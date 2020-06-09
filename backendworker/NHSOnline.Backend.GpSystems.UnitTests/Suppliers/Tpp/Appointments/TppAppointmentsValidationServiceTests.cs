@@ -1,12 +1,10 @@
-﻿using System;
-using AutoFixture;
+using System;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 {
@@ -14,12 +12,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     public class TppAppointmentsValidationServiceTests
     {
         private TppAppointmentsValidationService _systemUnderTest;
-        private Fixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture();
             var logger = new Mock<ILogger<TppAppointmentsValidationService>>();
             _systemUnderTest = new TppAppointmentsValidationService(logger.Object);
         }
@@ -101,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public void IsPostValid_LongBookingReason_ReturnsFalse()
         {
             // Arrange
-            var bookingReason = _fixture.CreateStringOfLength(151);
+            var bookingReason = new string('a', 151);
 
             var request = new AppointmentBookRequest
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -7,7 +7,6 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 {
@@ -25,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
 
-            _fixture.Customize<DemographicsData>(c => c.With(x => x.Nhs, _fixture.CreateNhsNumberUnformatted()));
+            _fixture.Customize<DemographicsData>(c => c.With(x => x.Nhs, "1231231234"));
         }
 
         [TestMethod]

@@ -2519,7 +2519,6 @@
       "unittesthelper": {
         "type": "Project",
         "dependencies": {
-          "AutoFixture": "4.11.0",
           "FluentAssertions": "5.7.0",
           "MSTest.TestFramework": "1.4.0",
           "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",

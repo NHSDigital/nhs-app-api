@@ -178,8 +178,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
             
-            _nhsNumber1 = _fixture.CreateNhsNumberFormatted();
-            _nhsNumber2 = _fixture.CreateNhsNumberFormatted();
+            _nhsNumber1 = "123 123 1234";
+            _nhsNumber2 = "123 123 1235";
             
             // Set the stream for audits
             _stream = new MemoryStream();

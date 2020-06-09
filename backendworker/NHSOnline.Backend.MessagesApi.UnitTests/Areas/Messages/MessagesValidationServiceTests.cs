@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 {
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _fixture = new Fixture();
             var logger = new Mock<ILogger<MessagesValidationService>>();
             _systemUnderTest = new MessagesValidationService(logger.Object);
-            _userMessageId = _fixture.CreateStringFromRegex("^[0-9a-f]{24}$"); //24 digit hex regex
+            _userMessageId = "823c13304df9cbc0e744241c"; //24 digit hex regex
             _jsonPatchDoc = new JsonPatchDocument<Message>();
             _validPatchOperation = _fixture.Create<Operation<Message>>();
 
