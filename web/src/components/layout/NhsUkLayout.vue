@@ -4,7 +4,7 @@
     <div id="app"
          ref="nhsAppRoot"
          :tabindex="!$store.state.device.isNativeApp ? -1 : false"
-         :class="{ [$style['no-footer']]: !hasFooter }">
+         :class="{ [$style['no-footer']]: noFooter }">
 
       <slot name="header">
         <div v-if="shouldShowFullDesktopHeader">
@@ -88,6 +88,12 @@ export default {
     WebHeader,
   },
   mixins: [ResetSpinnerMixin],
+  props: {
+    hasFooter: {
+      type: Boolean,
+      default: true,
+    },
+  },
   head() {
     let { platform } = this.$store.state.device.source;
     const { nativeVersion } = this.$store.state.appVersion;
@@ -148,8 +154,8 @@ export default {
     currentCrumb() {
       return (this.currentRoute || INDEX).crumb;
     },
-    hasFooter() {
-      return !!this.$slots.footer;
+    noFooter() {
+      return !this.hasFooter || this.$store.state.device.isNativeApp;
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;

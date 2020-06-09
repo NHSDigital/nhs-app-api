@@ -1,5 +1,5 @@
 <template>
-  <nhs-uk-layout>
+  <nhs-uk-layout :has-footer="false">
     <div slot="header"/>
     <nuxt/>
     <div slot="footer"/>
