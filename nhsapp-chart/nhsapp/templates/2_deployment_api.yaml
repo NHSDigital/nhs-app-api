@@ -144,8 +144,6 @@ spec:
           value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: GP_PROVIDER_ENABLED_MICROTEST
           value: "{{ $.Values.microtestEnabled }}"
-        - name: GP_PROVIDER_ENABLED_TPP
-          value: "{{ $.Values.tppEnabled }}"
         - name: ODS_REMAP_ENABLED
           value: "{{ $.Values.odsRemapEnabled }}"
         - name: ODS_REMAP_MAP
@@ -435,7 +433,7 @@ spec:
           mountPath: "/secrets/emiscert"
           readOnly: true
     {{- end }}
-    {{- if (and ($.Values.tppEnabled) (not $.Values.environmentStubbed.tppStubbed)) }}
+    {{- if (not $.Values.environmentStubbed.tppStubbed) }}
         - name: tpp-cert
           mountPath: "/secrets/tpp-cert"
           readOnly: true

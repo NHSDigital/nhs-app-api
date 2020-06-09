@@ -17,11 +17,7 @@ namespace NHSOnline.Backend.GpSystems
         {
             services.RegisterBaseGpSystemsServices();
             services.RegisterEmisPfsServices();
-
-                if (enableGpSupplierConfiguration.EnableTpp)
-            {
-                services.RegisterTppPfsServices();
-            }
+            services.RegisterTppPfsServices();
 
             services.RegisterVisionPfsServices();
 
@@ -42,11 +38,7 @@ namespace NHSOnline.Backend.GpSystems
         {
             services.RegisterBaseGpSystemsServices();
             services.RegisterEmisCidServices();
-
-            if (enableGpSupplierConfiguration.EnableTpp)
-            {
-                services.RegisterTppCidServices();
-            }
+            services.RegisterTppCidServices();
 
             services.RegisterVisionCidServices();
 

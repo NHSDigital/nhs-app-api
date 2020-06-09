@@ -30,7 +30,6 @@ biometricsEnabled: true
 userResearchEnabled: true
 
 # PFS Providers
-tppEnabled: false
 tppHostname: systmonline2.tpp-uk.com
 tppPort: 60015
 tppProtocol: https

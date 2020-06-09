@@ -18,7 +18,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var services = new ServiceCollection();
             var config = new EnableGpSupplierConfiguration
             {
-                EnableTpp = true,
                 EnableMicrotest = true
             };
 
@@ -37,7 +36,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var services = new ServiceCollection();
             var config = new EnableGpSupplierConfiguration
             {
-                EnableTpp = true,
                 EnableMicrotest = true
             };
 
@@ -56,7 +54,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var services = new ServiceCollection();
 
             var config = new EnableGpSupplierConfiguration {
-                EnableTpp = false,
                 EnableMicrotest = false
             };
 

@@ -35,48 +35,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
         }
 
         [TestMethod]
-        public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenTppIsEnabled()
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_TPP"]).Returns("True");
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableTpp)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [DataTestMethod]
-        [DataRow("False")]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("xyz")]
-        public void ConfigureServices_DoesntSetupEmisServicesForDependencyInjection_WhenTppIsDisabled(string value)
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_TPP"]).Returns(value);
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableTpp == false)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [TestMethod]
         public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenMicrotestIsEnabled()
         {
             // Arrange
