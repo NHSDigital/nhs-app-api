@@ -39,10 +39,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
 
-            var repository = new MongoRepositoryBase<IMongoConfiguration, UserAndInfo>(
+            var repository = new MongoRepository<IMongoConfiguration, UserAndInfo>(
                 _mockMongoClient.Object,
                 new Mock<IMongoConfiguration>().Object,
-                new Mock<ILogger<MongoRepositoryBase<IMongoConfiguration, UserAndInfo>>>().Object);
+                new Mock<ILogger<MongoRepository<IMongoConfiguration, UserAndInfo>>>().Object);
 
             _systemUnderTest = new UserInfoRepository(new Mock<ILogger<UserInfoRepository>>().Object, repository);
         }

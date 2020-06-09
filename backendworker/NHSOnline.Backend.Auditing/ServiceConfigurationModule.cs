@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Auditing
                     services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
                     services.AddSingleton<MongoDbAuditSinkConfiguration>();
                     services.AddSingleton<IAuditSink, DbAuditorSink>();
-                    services.AddSingleton<IRepository<AuditRecord>, MongoRepositoryBase<MongoDbAuditSinkConfiguration, AuditRecord>>();
+                    services.AddSingleton<IRepository<AuditRecord>, MongoRepository<MongoDbAuditSinkConfiguration, AuditRecord>>();
                     break;
                 default:
                     services.AddSingleton<IAzureCosmosDbAuditorSinkConfig, AzureCosmosDbAuditorSinkConfig>();

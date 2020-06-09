@@ -9,7 +9,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Repository
 {
-    public class MongoRepositoryBase<TConfig, TRecord> : IRepository<TRecord>
+    public class MongoRepository<TConfig, TRecord> : IRepository<TRecord>
         where TRecord : RepositoryRecord
         where TConfig : IMongoConfiguration
     {
@@ -18,8 +18,8 @@ namespace NHSOnline.Backend.Repository
         private readonly string _databaseName;
         private readonly string _collectionName;
 
-        public MongoRepositoryBase(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration,
-            ILogger<MongoRepositoryBase<TConfig, TRecord>> logger)
+        public MongoRepository(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration,
+            ILogger<MongoRepository<TConfig, TRecord>> logger)
         {
             _mongoClient = mongoClient;
             _logger = logger;

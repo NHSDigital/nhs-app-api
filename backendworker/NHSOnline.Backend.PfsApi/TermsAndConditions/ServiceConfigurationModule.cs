@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     AnalyticsCookieAcceptanceToUpdateMapper>();
 
 
-            services.AddTransient<IRepository<TermsAndConditionsRecord>, MongoRepositoryBase<IMongoConfiguration, TermsAndConditionsRecord>>();
+            services.AddTransient<IRepository<TermsAndConditionsRecord>, MongoRepository<IMongoConfiguration, TermsAndConditionsRecord>>();
             services.AddTransient<IMapper<TermsAndConditionsRecord, ConsentResponse>, TermsAndConditionsToConsentResponseMapper>();
             services.AddTransient<ITermsAndConditionsService, TermsAndConditionsService>();
             services.AddTransient<ITermsAndConditionsRepository, TermsAndConditionsRepository>();
