@@ -152,20 +152,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             {
                 _logger.LogWarning(
                     $"TPP user details not found in {nameof(AuthenticateReply.Registration.PatientAccess)}");
-                return new List<Person>();
             }
 
             var userPractice = new
             {
-                selfPatient.SiteDetails?.UnitName,
-                selfPatient.SiteDetails?.Address?.Address,
+                selfPatient?.SiteDetails?.UnitName,
+                selfPatient?.SiteDetails?.Address?.Address,
             };
 
             if (userPractice.UnitName == null || userPractice.Address == null)
             {
                 _logger.LogWarning(
                     $"TPP user practice details not specified. unitName:{userPractice.UnitName} address:{userPractice.Address}");
-                return new List<Person>();
             }
 
             var linkedPatientAccessItems = patientAccessItems
@@ -185,26 +183,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 }
                 else
                 {
-                    var siteDetailsForProxyPatient =
-                        linkedPatientAccessItems
-                            .FirstOrDefault(x => x.PatientId == patient.PatientId)?.SiteDetails;
-
-                    var hasSamePracticeDetailsAsMainUser =
-                        HasSamePracticeAsMainUser(selfPatient.SiteDetails, siteDetailsForProxyPatient);
-
-                    if (!hasSamePracticeDetailsAsMainUser)
+                    if (selfPatient?.SiteDetails == null)
                     {
-                        mismatchingOdsCodes.Add(patient);
+                        // no site details to compare against
+                        validPatients.Add(patient);
                     }
                     else
                     {
-                        validPatients.Add(patient);
+                        var siteDetailsForProxyPatient =
+                            linkedPatientAccessItems
+                                .FirstOrDefault(x => x.PatientId == patient.PatientId)?.SiteDetails;
+
+                        var hasSamePracticeDetailsAsMainUser =
+                            HasSamePracticeAsMainUser(selfPatient.SiteDetails, siteDetailsForProxyPatient);
+
+                        if (!hasSamePracticeDetailsAsMainUser)
+                        {
+                            mismatchingOdsCodes.Add(patient);
+                        }
+                        else
+                        {
+                            validPatients.Add(patient);
+                        }
                     }
                 }
             }
 
             var differentPracticeAddressCount = linkedPatientAccessItems.Count(x =>
-                !HasSamePracticeAsMainUser(selfPatient.SiteDetails, x.SiteDetails));
+                !HasSamePracticeAsMainUser(selfPatient?.SiteDetails, x.SiteDetails));
 
             _logger.LogInformation(
                 $"User has linked_accounts={allLinkedPatients.Count()}, with different_ods_codes_to_user={differentPracticeAddressCount}");
@@ -224,6 +230,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
         public void LogMismatchingPractices(AuthenticateReply authenticateReply, ICollection<TppProxyUserSession> proxyPatients)
         {
             var mainUserSiteDetails = authenticateReply.GetSiteDetails(authenticateReply.User.Person.PatientId);
+
+            if (mainUserSiteDetails == null)
+            {
+                _logger.LogWarning("No site details found for main user");
+                return;
+            }
 
             foreach (var proxyPatient in proxyPatients)
             {
@@ -259,8 +271,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 
         private static bool HasSamePracticeAsMainUser(SiteDetails mainUserSiteDetails, SiteDetails proxyUserSiteDetails)
         {
-            var unitNameMatch = string.Equals(mainUserSiteDetails.UnitName, proxyUserSiteDetails.UnitName, StringComparison.Ordinal);
-            var addressMatch = string.Equals(mainUserSiteDetails.Address?.Address, proxyUserSiteDetails.Address?.Address, StringComparison.Ordinal);
+            if (mainUserSiteDetails?.UnitName == null && mainUserSiteDetails?.Address == null)
+            {
+                return true;
+            }
+
+            var unitNameMatch = string.Equals(mainUserSiteDetails?.UnitName, proxyUserSiteDetails.UnitName, StringComparison.Ordinal);
+            var addressMatch = string.Equals(mainUserSiteDetails?.Address?.Address, proxyUserSiteDetails.Address?.Address, StringComparison.Ordinal);
             return unitNameMatch && addressMatch;
         }
 

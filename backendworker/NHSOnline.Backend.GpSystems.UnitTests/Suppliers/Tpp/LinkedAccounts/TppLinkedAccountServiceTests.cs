@@ -522,5 +522,87 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             result.Count.Should().Be(expectedNumberOfValidPatients + ofWhichHaveDifferentAddress);
             result.Should().BeEquivalentTo(expectedValidPeople);
         }
+
+        [TestMethod]
+        public void ExtractValidProxyPatients_LogsWarningButContinues_WhenSelfPatientIsNull()
+        {
+            // Arrange
+            const string patientId = "abc";
+            var proxyPatientId = Guid.NewGuid().ToString();
+            const string gpPracticeName = "gp practice 1";
+            const string gpAddress = "1 street name, town name";
+
+            var proxyPatient = new Person
+            {
+                PatientId = proxyPatientId,
+                NationalId = new NationalId
+                {
+                    Type = "NHS",
+                    Value = Guid.NewGuid().ToString(),
+                }
+            };
+
+            // In a response from TPP, for proxy patient only, add <Person> element and an associated <PatientAccess> element.
+            var authenticateReply = new AuthenticateReply
+            {
+                OnlineUserId = patientId,
+                User = new User
+                {
+                    Person = new Person
+                    {
+                        PatientId = patientId,
+                        NationalId = new NationalId
+                        {
+                            Type = "NHS",
+                            Value = Guid.NewGuid().ToString(),
+                        }
+                    },
+                },
+                Registration = new Registration
+                {
+                    PatientAccess = new List<PatientAccess>
+                    {
+                        new PatientAccess
+                        {
+                            SiteDetails = new SiteDetails
+                            {
+                                Address = new TppAddress
+                                {
+                                    Address = gpAddress,
+                                },
+                                UnitName = gpPracticeName,
+                            },
+                            PatientId = proxyPatientId,
+                        },
+                    },
+                },
+                People = new List<Person>
+                {
+                    proxyPatient,
+                }
+            };
+
+            // Act
+            var result = _systemUnderTest.ExtractValidProxyPatients(authenticateReply);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Warning,
+                $"TPP user details not found in {nameof(AuthenticateReply.Registration.PatientAccess)}", Times.Once());
+
+            _mockLogger.VerifyLogger(LogLevel.Information,
+                "User has linked_accounts=1, with different_ods_codes_to_user=0", Times.Once());
+
+            _mockLogger.VerifyLogger(
+                LogLevel.Information,
+                "Linked_profiles_count=1, " +
+                "excluded_for_not_having_NHS_number=0, " +
+                "has_different_ODS_code=0, " +
+                "valid_and_being_returned: 1",
+                Times.Once());
+
+            var expectedValidPeople = new List<Person> { proxyPatient };
+            result.Count.Should().Be(1);
+            result.Should().BeEquivalentTo(expectedValidPeople);
+        }
     }
 }
