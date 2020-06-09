@@ -15,8 +15,7 @@
           name="nojs.repeatPrescriptionCourses.selectedCoursesNoJs"
           @input="selectedValueChanged(repeatPrescription)">
           <span data-label="prescription-name"
-                :aria-label="`${repeatPrescription.name}`"
-                role="text">
+                :aria-label="`${repeatPrescription.name}`">
             {{ repeatPrescription.name }}
           </span>
           <span :class="$style.prescriptionDescription"

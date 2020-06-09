@@ -22,7 +22,7 @@
                                :show-reaffirm="!hasAppointedRep"/>
           <div v-if="hasAppointedRep">
             <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
-            <span role="text" aria-label="zero three zero zero one two three two three two three">
+            <span aria-label="zero three zero zero one two three two three two three">
               0300 123 2323
             </span>
           </div>

@@ -2,7 +2,7 @@
   <div class="nhsuk-care-card" :class="urgencyStyle">
     <div class="nhsuk-care-card__heading-container">
       <p class="nhsuk-care-card__heading nhsuk-heading-m">
-        <span role="text">
+        <span>
           <span class="nhsuk-u-visually-hidden">{{ headingPrefix }}</span>
           {{ heading }}
         </span>

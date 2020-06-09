@@ -3,8 +3,7 @@
               indentStyle,
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"
-     :aria-label="ariaLabel"
-     :role="role">
+     :aria-label="ariaLabel">
     <slot/>
   </p>
 </template>
@@ -17,10 +16,6 @@ export default {
     ariaLabel: {
       type: String,
       default: undefined,
-    },
-    role: {
-      type: String,
-      default: 'text',
     },
     isHeader: {
       type: Boolean,

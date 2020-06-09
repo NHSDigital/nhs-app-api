@@ -5,7 +5,6 @@
       :text="$t('coronaVirusBanner.header')"
       href="https://www.nhs.uk/conditions/coronavirus-covid-19/"
       tag="a"
-      role="link"
       target="_blank">
       <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
                 nhsuk-u-margin-bottom-0 nhsuk-body-s">
