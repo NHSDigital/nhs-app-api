@@ -1,48 +1,27 @@
 using System;
-using System.Threading;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UsersApi.Repository;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 {
     [TestClass]
     public class UserDeviceRepositoryTests
     {
-        private IFixture _fixture;
         private UserDeviceRepository _systemUnderTest;
-        private Mock<IMongoCollection<UserDevice>> _mongoCollectionMock;
+        private Mock<IRepository<UserDevice>> _mockRepository;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
+            _mockRepository = new Mock<IRepository<UserDevice>>();
 
-            _mongoCollectionMock = _fixture.Create<Mock<IMongoCollection<UserDevice>>>();
-
-            var mongoDatabaseMock = _fixture.Create<Mock<IMongoDatabase>>();
-            mongoDatabaseMock.Setup(x => x.GetCollection<UserDevice>(It.IsAny<string>(), null))
-                .Returns(_mongoCollectionMock.Object);
-
-            var mockMongoClient = _fixture.Freeze<Mock<IApiMongoClient<IMongoConfiguration>>>();
-            mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
-                .Returns(mongoDatabaseMock.Object);
-
-            var repository = new MongoRepository<IMongoConfiguration, UserDevice>(
-                mockMongoClient.Object,
-                new Mock<IMongoConfiguration>().Object,
-                new Mock<ILogger<MongoRepository<IMongoConfiguration, UserDevice>>>().Object);
-
-            _systemUnderTest = new UserDeviceRepository(new Mock<ILogger<UserDeviceRepository>>().Object, repository);
+            _systemUnderTest = new UserDeviceRepository(new Mock<ILogger<UserDeviceRepository>>().Object, _mockRepository.Object);
         }
 
         [TestMethod]
@@ -62,34 +41,31 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Create_WithUserDevice_AddsToCollection()
         {
             // Arrange
-            var userDevice = _fixture.Create<UserDevice>();
-            _mongoCollectionMock.Setup(x => x.InsertOneAsync(userDevice, null, default))
-                .Returns(Task.CompletedTask);
+            var userDevice = new UserDevice();
+
+            _mockRepository.Setup(x => x.Create(userDevice, It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryCreateResult<UserDevice>.Created(userDevice));
 
             // Act
-            await _systemUnderTest.Create(userDevice);
+            var result = await _systemUnderTest.Create(userDevice);
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            result.Should().BeOfType<RepositoryCreateResult<UserDevice>.Created>();
         }
 
         [TestMethod]
         public async Task Find_WhenDeviceIdRecordExists_ShouldReturnRecord()
         {
             // Arrange
-            var userDevice = _fixture.Create<UserDevice>();
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[]{userDevice});
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserDevice>>(),
-                    It.IsAny<FindOptions<UserDevice, UserDevice>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            var userDevice = new UserDevice();
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice }));
 
             // Act
-            var result = await _systemUnderTest.Find(_fixture.Create<string>(), userDevice.DeviceId);
+            var result = await _systemUnderTest.Find("nhsLoginId", "DeviceId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<UserDevice>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(userDevice);
         }
@@ -98,18 +74,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Find_WhenDeviceIdRecordDoesNotExist_ShouldNotReturnRecord()
         {
             // Arrange
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserDevice>(_fixture);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserDevice>>(),
-                    It.IsAny<FindOptions<UserDevice, UserDevice>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Find(_fixture.Create<string>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Find("nhsLoginId", "deviceId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserDevice>.NotFound>();
         }
 
@@ -130,15 +102,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Delete_Success()
         {
             // Arrange
-            _mongoCollectionMock
-                .Setup(x => x.DeleteOneAsync(It.IsAny<FilterDefinition<UserDevice>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new DeleteResult.Acknowledged(1));
+            _mockRepository.Setup(x =>
+                    x.Delete(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryDeleteResult<UserDevice>.Deleted());
 
             // Act
-            await _systemUnderTest.Delete(_fixture.Create<string>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Delete("NhsLoginId", "DeviceId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
+            result.Should().BeAssignableTo<RepositoryDeleteResult<UserDevice>.Deleted>();
         }
 
         [TestMethod]

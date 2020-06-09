@@ -1,50 +1,27 @@
 using System;
-using System.Threading;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.UserInfoApi.Repository;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 {
     [TestClass]
     public class UserInfoRepositoryTests
     {
-        private IFixture _fixture;
         private UserInfoRepository _systemUnderTest;
-        private Mock<IApiMongoClient<IMongoConfiguration>> _mockMongoClient;
-        private Mock<IMongoCollection<UserAndInfo>> _mongoCollectionMock;
+        private Mock<IRepository<UserAndInfo>> _mockRepository;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
+            _mockRepository = new Mock<IRepository<UserAndInfo>>();
 
-            _mongoCollectionMock = _fixture.Create<Mock<IMongoCollection<UserAndInfo>>>();
-
-            var mongoDatabaseMock = _fixture.Create<Mock<IMongoDatabase>>();
-            mongoDatabaseMock.Setup(x => x.GetCollection<UserAndInfo>(It.IsAny<string>(), null))
-                .Returns(_mongoCollectionMock.Object);
-
-            _mockMongoClient = _fixture.Freeze<Mock<IApiMongoClient<IMongoConfiguration>>>();
-            _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
-                .Returns(mongoDatabaseMock.Object);
-
-            var repository = new MongoRepository<IMongoConfiguration, UserAndInfo>(
-                _mockMongoClient.Object,
-                new Mock<IMongoConfiguration>().Object,
-                new Mock<ILogger<MongoRepository<IMongoConfiguration, UserAndInfo>>>().Object);
-
-            _systemUnderTest = new UserInfoRepository(new Mock<ILogger<UserInfoRepository>>().Object, repository);
+            _systemUnderTest = new UserInfoRepository(new Mock<ILogger<UserInfoRepository>>().Object, _mockRepository.Object);
         }
 
         [TestMethod]
@@ -65,32 +42,13 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task Create_WithUserInfo_ReturnsCreated()
         {
             // Arrange
-            var userInfo = _fixture.Create<UserAndInfo>();
+            var userInfo = new UserAndInfo();
 
-            var mongoCollectionMock = _fixture.Create<Mock<IMongoCollection<UserAndInfo>>>();
-
-            var mongoDatabaseMock = _fixture.Create<Mock<IMongoDatabase>>();
-            mongoDatabaseMock.Setup(x => x.GetCollection<UserAndInfo>(It.IsAny<string>(), null))
-                .Returns(mongoCollectionMock.Object);
-
-            _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
-                .Returns(mongoDatabaseMock.Object);
-            mongoCollectionMock.Setup(
-                    x => x.ReplaceOneAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                        It.IsAny<UserAndInfo>(),
-                        new ReplaceOptions { IsUpsert = true },
-                        default))
-                .ReturnsAsync(_fixture.Create<Mock<ReplaceOneResult>>().Object);
-
-            var mongoReplaceResult = new ReplaceOneResult.Acknowledged(1, 1, new BsonString("MockUpsertedId"));
-
-          mongoCollectionMock.Setup(
-                  x => x.ReplaceOneAsync(
-                      It.IsAny<FilterDefinition<UserAndInfo>>(),
-                      It.IsAny<UserAndInfo>(),
-                      It.IsAny<ReplaceOptions>(),
-                      It.IsAny<CancellationToken>()))
-              .ReturnsAsync(mongoReplaceResult);
+            _mockRepository.Setup(x => x.CreateOrUpdate(
+                    It.IsAny<Expression<Func<UserAndInfo, bool>>>(),
+                    userInfo,
+                    It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryCreateResult<UserAndInfo>.Created(userInfo));
 
             // Act
             var result = await _systemUnderTest.Create(userInfo);
@@ -103,19 +61,15 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByNhsLoginId_ReturnsInfo()
         {
             // Arrange
-            var userInfo = _fixture.Create<UserAndInfo>();
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userInfo });
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            var userInfo = new UserAndInfo();
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new[] { userInfo }));
 
             // Act
-            var result = await _systemUnderTest.FindByNhsLoginId(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByNhsLoginId("nhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(userInfo);
         }
@@ -124,18 +78,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByNhsLoginId_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.FindByNhsLoginId(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByNhsLoginId("nhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
 
@@ -143,21 +93,17 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByNhsNumber_ReturnsInfo()
         {
             // Arrange
-            var userInfo1 = _fixture.Create<UserAndInfo>();
-            var userInfo2 = _fixture.Create<UserAndInfo>();
+            var userInfo1 = new UserAndInfo();
+            var userInfo2 = new UserAndInfo();
             var expectedResults = new[] { userInfo1, userInfo2 };
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, expectedResults);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
-
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
+            
             // Act
-            var result = await _systemUnderTest.FindByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByNhsNumber("NhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(expectedResults);
         }
@@ -166,18 +112,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByNhsNumber_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.FindByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByNhsNumber("NhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
 
@@ -185,22 +127,17 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByOdsCode_ReturnsInfo()
         {
             // Arrange
-            var userInfo1 = _fixture.Create<UserAndInfo>();
-            var userInfo2 = _fixture.Create<UserAndInfo>();
+            var userInfo1 = new UserAndInfo();
+            var userInfo2 = new UserAndInfo();
             var expectedResults = new[] { userInfo1, userInfo2 };
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, expectedResults);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
 
             // Act
-            var result = await _systemUnderTest.FindByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByOdsCode("NhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
-
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>().Subject.Records
                 .Should().BeEquivalentTo(expectedResults);
         }
@@ -209,18 +146,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         public async Task FindByOdsCode_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
-                    It.IsAny<FindOptions<UserAndInfo, UserAndInfo>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
+            _mockRepository.Setup(x =>
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.FindByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.FindByOdsCode("NhsLoginId");
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
             result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
     }

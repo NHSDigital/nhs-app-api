@@ -196,9 +196,9 @@ namespace NHSOnline.Backend.Repository
 
         private async Task<UpdateResult> UpdateRecords(Expression<Func<TRecord, bool>> filter,
             UpdateDefinition<TRecord> updates,
-            string logMessage)
+            string recordName)
         {
-            using (_logger.WithTimer(logMessage))
+            using (_logger.WithTimer($"Mongo Update {recordName}."))
             {
                 return await GetCollection().UpdateManyAsync(filter, updates);
             }

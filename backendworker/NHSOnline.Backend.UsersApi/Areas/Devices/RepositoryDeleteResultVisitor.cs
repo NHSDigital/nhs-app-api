@@ -17,11 +17,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             return new DeleteDeviceResult.Success(_deviceId);
         }
 
-        public DeleteDeviceResult Visit(RepositoryDeleteResult<UserDevice>.InternalServerError result)
-        {
-            return new DeleteDeviceResult.InternalServerError();
-        }
-
         public DeleteDeviceResult Visit(RepositoryDeleteResult<UserDevice>.RepositoryError result)
         {
             return new DeleteDeviceResult.BadGateway();

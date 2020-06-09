@@ -4,7 +4,6 @@ namespace NHSOnline.Backend.Repository
     {
         T Visit(RepositoryUpdateResult<TRecord>.Updated result);
         T Visit(RepositoryUpdateResult<TRecord>.NotFound result);
-        T Visit(RepositoryUpdateResult<TRecord>.InternalServerError result);
         T Visit(RepositoryUpdateResult<TRecord>.RepositoryError result);
         T Visit(RepositoryUpdateResult<TRecord>.NoChange result);
     }

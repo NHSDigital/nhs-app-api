@@ -87,14 +87,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             try
             {
                 var result = await find.Invoke(_infoRepository);
-
-                if (result != null)
-                {
-                    return result.Accept(new RepositoryGetAllInfoRecordsResultVisitor());
-                }
-
-                _logger.LogError("Unexpected response from repository, null object returned");
-                return new GetInfoResult.InternalServerError();
+                return result.Accept(new RepositoryGetAllInfoRecordsResultVisitor());
             }
             catch (Exception e)
             {

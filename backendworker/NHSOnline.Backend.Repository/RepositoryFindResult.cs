@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Repository
@@ -8,14 +7,6 @@ namespace NHSOnline.Backend.Repository
         public abstract TOut Accept<TOut>(IRepositoryFindResultVisitor<TRecord, TOut> visitor);
 
         public class NotFound : RepositoryFindResult<TRecord>
-        {
-            public override TOut Accept<TOut>(IRepositoryFindResultVisitor<TRecord, TOut> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InternalServerError : RepositoryFindResult<TRecord>
         {
             public override TOut Accept<TOut>(IRepositoryFindResultVisitor<TRecord, TOut> visitor)
             {

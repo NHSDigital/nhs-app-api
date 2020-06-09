@@ -24,11 +24,6 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             return new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
         }
 
-        public TermsAndConditionsFetchConsentResult Visit(RepositoryFindResult<TermsAndConditionsRecord>.InternalServerError result)
-        {
-            return new TermsAndConditionsFetchConsentResult.InternalServerError();
-        }
-
         public TermsAndConditionsFetchConsentResult Visit(RepositoryFindResult<TermsAndConditionsRecord>.RepositoryError result)
         {
             return new TermsAndConditionsFetchConsentResult.InternalServerError();

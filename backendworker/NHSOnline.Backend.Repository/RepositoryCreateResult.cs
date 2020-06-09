@@ -1,5 +1,3 @@
-using System;
-
 namespace NHSOnline.Backend.Repository
 {
     public abstract class RepositoryCreateResult<TRecord>
@@ -8,7 +6,6 @@ namespace NHSOnline.Backend.Repository
 
         public class Created : RepositoryCreateResult<TRecord>
         {
-
             public Created(TRecord record)
             {
                 Record = record; 
@@ -16,14 +13,6 @@ namespace NHSOnline.Backend.Repository
 
             public TRecord Record { get; set; }
 
-            public override TOut Accept<TOut>(IRepositoryCreateResultVisitor<TRecord, TOut> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InternalServerError : RepositoryCreateResult<TRecord>
-        {
             public override TOut Accept<TOut>(IRepositoryCreateResultVisitor<TRecord, TOut> visitor)
             {
                 return visitor.Visit(this);

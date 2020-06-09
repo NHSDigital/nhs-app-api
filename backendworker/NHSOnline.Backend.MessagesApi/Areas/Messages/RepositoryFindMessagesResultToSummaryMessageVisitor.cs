@@ -20,11 +20,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             return new MessagesResult.None();
         }
 
-        public MessagesResult Visit(RepositoryFindResult<UserMessage>.InternalServerError result)
-        {
-            return new MessagesResult.InternalServerError();
-        }
-
         public MessagesResult Visit(RepositoryFindResult<UserMessage>.RepositoryError result)
         {
             return new MessagesResult.BadGateway();

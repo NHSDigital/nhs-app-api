@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Repository;
@@ -184,21 +183,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         }
 
         [TestMethod]
-        public async Task GetInfoByNhsNumber_RepositoryNullResponse_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockInfoRepository.Setup(x => x.FindByNhsNumber(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.InternalServerError());
-
-            // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber("NHS number");
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<GetInfoResult.InternalServerError>();
-        }
-
-        [TestMethod]
         public async Task GetInfoByNhsNumber_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
@@ -252,21 +236,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<GetInfoResult.NotFound>();
-        }
-
-        [TestMethod]
-        public async Task GetInfoByOdsCode_RepositoryNullResponse_ReturnsInternalServerError()
-        {
-            // Arrange
-            _mockInfoRepository.Setup(x => x.FindByOdsCode(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.InternalServerError());
-
-            // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
-
-            // Assert
-            _mockInfoRepository.VerifyAll();
-            result.Should().BeAssignableTo<GetInfoResult.InternalServerError>();
         }
 
         [TestMethod]

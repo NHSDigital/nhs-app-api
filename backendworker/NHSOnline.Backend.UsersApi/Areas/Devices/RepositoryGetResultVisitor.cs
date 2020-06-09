@@ -11,11 +11,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             return new SearchDeviceResult.NotFound();
         }
 
-        public SearchDeviceResult Visit(RepositoryFindResult<UserDevice>.InternalServerError result)
-        {
-            return new SearchDeviceResult.InternalServerError();
-        }
-
         public SearchDeviceResult Visit(RepositoryFindResult<UserDevice>.RepositoryError result)
         {
             return new SearchDeviceResult.BadGateway();

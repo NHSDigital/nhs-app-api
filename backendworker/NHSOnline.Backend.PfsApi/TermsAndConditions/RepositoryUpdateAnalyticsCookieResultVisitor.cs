@@ -9,11 +9,6 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             return new ToggleAnalyticsCookieAcceptanceResult.Failure();
         }
 
-        public ToggleAnalyticsCookieAcceptanceResult Visit(RepositoryUpdateResult<TermsAndConditionsRecord>.InternalServerError result)
-        {
-            return new ToggleAnalyticsCookieAcceptanceResult.Failure();
-        }
-
         public ToggleAnalyticsCookieAcceptanceResult Visit(RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError result)
         {
             return new ToggleAnalyticsCookieAcceptanceResult.Failure();

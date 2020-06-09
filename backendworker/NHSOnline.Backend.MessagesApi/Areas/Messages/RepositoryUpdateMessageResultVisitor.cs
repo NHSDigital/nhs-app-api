@@ -10,11 +10,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             return new MessagePatchResult.NotFound();
         }
 
-        public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.InternalServerError result)
-        {
-            return new MessagePatchResult.InternalServerError();
-        }
-
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.RepositoryError result)
         {
             return new MessagePatchResult.InternalServerError();

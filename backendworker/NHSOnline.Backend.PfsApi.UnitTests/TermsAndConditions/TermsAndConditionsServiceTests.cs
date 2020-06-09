@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
         [TestMethod]
-        public async Task RecordConsent_WhenUpdatingNotChange_ReturnsSuccess()
+        public async Task RecordConsent_WhenUpdatingNoChange_ReturnsSuccess()
         {
             // Arrange
             var request = new ConsentRequest

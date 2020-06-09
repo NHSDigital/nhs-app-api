@@ -10,11 +10,6 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             return new GetInfoResult.NotFound();
         }
 
-        public GetInfoResult Visit(RepositoryFindResult<UserAndInfo>.InternalServerError result)
-        {
-            return new GetInfoResult.InternalServerError();
-        }
-
         public GetInfoResult Visit(RepositoryFindResult<UserAndInfo>.RepositoryError result)
         {
             return new GetInfoResult.BadGateway();

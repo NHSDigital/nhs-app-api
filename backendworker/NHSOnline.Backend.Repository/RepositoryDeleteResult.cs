@@ -1,5 +1,3 @@
-using System;
-
 namespace NHSOnline.Backend.Repository
 {
     public abstract class RepositoryDeleteResult<TRecord>
@@ -15,14 +13,6 @@ namespace NHSOnline.Backend.Repository
         }
 
         public class NotFound : RepositoryDeleteResult<TRecord>
-        {
-            public override TOut Accept<TOut>(IRepositoryDeleteResultVisitor<TRecord, TOut> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InternalServerError : RepositoryDeleteResult<TRecord>
         {
             public override TOut Accept<TOut>(IRepositoryDeleteResultVisitor<TRecord, TOut> visitor)
             {
