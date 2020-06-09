@@ -32,13 +32,6 @@ namespace NHSOnline.Backend.Repository
 
         public class RepositoryError : RepositoryCreateResult<TRecord>
         {
-            public Exception Exception { get; }
-
-            public RepositoryError(Exception exception)
-            {
-                Exception = exception;
-            }
-
             public override TOut Accept<TOut>(IRepositoryCreateResultVisitor<TRecord, TOut> visitor)
             {
                 return visitor.Visit(this);

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Repository;
@@ -106,7 +105,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(deviceId);
             _mockDeviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>()))
-                .ReturnsAsync(new RepositoryCreateResult<UserDevice>.RepositoryError(new MongoException("Test")));
+                .ReturnsAsync(new RepositoryCreateResult<UserDevice>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.Create(new NotificationRegistrationResult(), request, _accessToken);
@@ -220,7 +219,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             // Arrange
             var deviceId = "DeviceId";
             _mockDeviceRepository.Setup(x => x.Delete(_accessToken.Subject, deviceId))
-                .ReturnsAsync(new RepositoryDeleteResult<UserDevice>.RepositoryError(new MongoException("Test")));
+                .ReturnsAsync(new RepositoryDeleteResult<UserDevice>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.Delete(deviceId, _accessToken);

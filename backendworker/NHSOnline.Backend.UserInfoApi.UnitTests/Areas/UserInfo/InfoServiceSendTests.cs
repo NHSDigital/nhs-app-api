@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Repository;
@@ -95,7 +94,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
-                .ReturnsAsync(new RepositoryCreateResult<UserAndInfo>.RepositoryError(new MongoException("Test")));
+                .ReturnsAsync(new RepositoryCreateResult<UserAndInfo>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.Send(_accessToken, _userProfile);

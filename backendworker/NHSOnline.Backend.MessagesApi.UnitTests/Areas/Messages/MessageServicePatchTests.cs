@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages;
@@ -136,7 +135,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             var jsonPatchDoc = new JsonPatchDocument<Message>();
             _mockMessageRepository.Setup(x =>
                     x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
-                .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.RepositoryError(new MongoException("Test")));
+                .ReturnsAsync(new RepositoryUpdateResult<UserMessage>.RepositoryError());
 
             _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))

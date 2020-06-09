@@ -32,13 +32,6 @@ namespace NHSOnline.Backend.Repository
 
         public class RepositoryError : RepositoryDeleteResult<TRecord>
         {
-            public Exception Exception { get; }
-
-            public RepositoryError(Exception exception)
-            {
-                Exception = exception;
-            }
-
             public override TOut Accept<TOut>(IRepositoryDeleteResultVisitor<TRecord, TOut> visitor)
             {
                 return visitor.Visit(this);

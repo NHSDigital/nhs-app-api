@@ -2475,6 +2475,19 @@
           "NHSOnline.Backend.Support": "1.0.0"
         }
       },
+      "nhsonline.backend.repository.unittests": {
+        "type": "Project",
+        "dependencies": {
+          "FluentAssertions": "5.7.0",
+          "MSTest.TestAdapter": "1.4.0",
+          "MSTest.TestFramework": "1.4.0",
+          "Microsoft.CodeAnalysis.FxCopAnalyzers": "2.9.8",
+          "Microsoft.NET.Test.Sdk": "16.2.0",
+          "Moq": "4.13.1",
+          "NHSOnline.Backend.Repository": "1.0.0",
+          "ReportGenerator": "4.0.2"
+        }
+      },
       "nhsonline.backend.servicejourneyrules.common": {
         "type": "Project",
         "dependencies": {

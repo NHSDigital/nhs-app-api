@@ -5,9 +5,9 @@ using FluentAssertions;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
+namespace NHSOnline.Backend.Repository.UnitTests
 {
-    internal class UpdateDefinitionAssertor<TRecord>
+    public class UpdateDefinitionAssertor<TRecord>
     {
         private readonly IList<Tuple<string, string>> _expectedUpdates = new List<Tuple<string, string>>();
 

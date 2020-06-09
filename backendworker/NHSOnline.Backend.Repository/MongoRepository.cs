@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Repository
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Create {recordName}.");
-                return new RepositoryCreateResult<TRecord>.RepositoryError(exception);
+                return new RepositoryCreateResult<TRecord>.RepositoryError();
             }
         }
 
@@ -57,12 +57,12 @@ namespace NHSOnline.Backend.Repository
                     $"Mongo Failure. Create or Update {recordName}. " +
                     $"ReplaceOneAsync with Upsert. " +
                     $"IsAcknowledged: {result.IsAcknowledged}");
-                return new RepositoryCreateResult<TRecord>.InternalServerError();
+                return new RepositoryCreateResult<TRecord>.RepositoryError();
             }
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Create or update {recordName}.");
-                return new RepositoryCreateResult<TRecord>.RepositoryError(exception);
+                return new RepositoryCreateResult<TRecord>.RepositoryError();
             }
         }
 
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.Repository
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Update {recordName}");
-                return new RepositoryUpdateResult<TRecord>.RepositoryError(exception);
+                return new RepositoryUpdateResult<TRecord>.RepositoryError();
             }
         }
 
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.Repository
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Find {recordName}.");
-                return new RepositoryFindResult<TRecord>.RepositoryError(exception);
+                return new RepositoryFindResult<TRecord>.RepositoryError();
             }
         }
 
@@ -144,16 +144,17 @@ namespace NHSOnline.Backend.Repository
                     return new RepositoryDeleteResult<TRecord>.NotFound();
                 }
 
+
                 _logger.LogError(
                     $"Mongo Failure. Delete {recordName}. " +
-                    $"IsAcknowledged: {result.IsAcknowledged}, " +
-                    $"DeletedCount: {result.DeletedCount}");
-                return new RepositoryDeleteResult<TRecord>.InternalServerError();
+                    $"IsAcknowledged: {result.IsAcknowledged}");
+
+                return new RepositoryDeleteResult<TRecord>.RepositoryError();
             }
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Delete {recordName}.");
-                return new RepositoryDeleteResult<TRecord>.RepositoryError(exception);
+                return new RepositoryDeleteResult<TRecord>.RepositoryError();
             }
         }
 

@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             _mockTermsAndConditionsRepository
                 .Setup(x => x.Create(It.IsAny<TermsAndConditionsRecord>()))
-                .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+                .ReturnsAsync(new RepositoryCreateResult<TermsAndConditionsRecord>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             _mockTermsAndConditionsRepository.Setup(x =>
                     x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
-                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("test")));
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.RecordConsent(_nhsLoginId, request, DateTimeOffset.Now);
@@ -284,7 +284,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         {
             // Arrange
             _mockTermsAndConditionsRepository.Setup(x => x.Find(_nhsLoginId))
-                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+                .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.FetchConsent(_nhsLoginId);
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             // Arrange
             _mockTermsAndConditionsRepository.Setup(x =>
                     x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()))
-                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError(new ArgumentException("")));
+                .ReturnsAsync(new RepositoryUpdateResult<TermsAndConditionsRecord>.RepositoryError());
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(_nhsLoginId, new AnalyticsCookieAcceptance(), DateTimeOffset.Now);
