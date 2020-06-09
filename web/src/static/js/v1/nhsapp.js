@@ -1,17 +1,18 @@
+// eslint-disable-next-line import/prefer-default-export
 const AppPage = {
   HOME_PAGE: 'homePage',
   APPOINTMENTS: 'appointments',
   PRESCRIPTIONS: 'prescriptions',
   HEALTH_RECORDS: 'healthRecords',
   SYMPTOMS: 'symptoms',
-  MESSAGING: 'messaging',
+  MESSAGES: 'messages',
 };
 
 window.nhsapp = {
   navigation: {
     goToHomePage() {
       // TODO: refactor to use goToPage(AppPage.HOME_PAGE)
-      window.nhsappNative.goToHomePage();
+      window.nhsappNative.goToHomepage();
     },
     goToPage(appPage) {
       window.nhsappNative.goToPage(appPage);
