@@ -12,17 +12,17 @@ open class MorePage : HybridPageObject() {
 
     private val organDonationTitle = "Manage your organ donation decision"
     private val organDonationDescription = "Help save thousands of lives in the UK every year by signing up" +
-            " to become a donor on the NHS Organ Donor Register."
+            " to become a donor on the NHS Organ Donor Register"
     private val dataSharingTitle = "Find out why your data matters"
     private val dataSharingDescription =
             "Find out how the NHS uses your confidential patient " +
-                    "information and choose whether or not it can be used for research and planning."
+                    "information and choose whether or not it can be used for research and planning"
     private val messagesTitle = "Messages"
     private val messagesDescription = "Get messages from your GP surgery and other NHS services."
 
     // online consultations menu item
     private val requestGpHelpTitle = "Additional GP services"
-    private val requestGpHelpDescription = "Get sick notes and GP letters or ask about recent tests."
+    private val requestGpHelpDescription = "Get sick notes and GP letters or ask about recent tests"
 
     private val sharedLinksTitle = "Shared links"
     private val sharedLinksDescription = "View links your doctor or health professional has shared with you"

@@ -19,7 +19,7 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     private val gpAdviceTitle = "Ask your GP for advice"
     private val gpAdviceDescription = "Consult your GP through an online form. " +
-            "Your GP surgery will reply by phone or email."
+            "Your GP surgery will reply by phone or email"
 
     private var menuContent = LinksWithDescriptionsContent(
             linkBlockTitle = "More",

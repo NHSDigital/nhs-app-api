@@ -517,7 +517,7 @@ export default {
       },
       menuItem3: {
         header: 'Ask your GP for advice',
-        text: 'Consult your GP through an online form. Your GP surgery will reply by phone or email.',
+        text: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
       },
       symptomButtonText: 'Check symptoms',
       bookButtonText: 'Book an appointment',
@@ -1939,15 +1939,15 @@ export default {
   sc04: {
     organDonation: {
       subheader: 'Manage your organ donation decision',
-      body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.',
+      body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register',
     },
     dataSharing: {
       subheader: 'Find out why your data matters',
-      body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning.',
+      body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning',
     },
     requestGpHelp: {
       subheader: 'Additional GP services',
-      body: 'Get sick notes and GP letters or ask about recent tests.',
+      body: 'Get sick notes and GP letters or ask about recent tests',
     },
     messages: {
       subheader: 'Messages',
