@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Support;
