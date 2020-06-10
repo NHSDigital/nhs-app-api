@@ -72,9 +72,6 @@ namespace NHSOnline.Backend.UserInfoApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var mongoConfiguration = CreateMongoConfiguration();
-            services.AddSingleton(mongoConfiguration);
-
             var configurationSettings = CreateAndValidateEnvironmentVariables();
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
@@ -85,16 +82,6 @@ namespace NHSOnline.Backend.UserInfoApi
             var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
             return config;
-        }
-
-        private IMongoConfiguration CreateMongoConfiguration()
-        {
-            var connectionString = Configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", _logger);
-            var databaseName = Configuration.GetOrThrow("USERINFO_MONGO_DATABASE_NAME", _logger);
-            var userInfoCollectionName =
-                Configuration.GetOrThrow("USERINFO_MONGO_DATABASE_COLLECTION", _logger);
-
-            return new MongoConfiguration(connectionString, databaseName, userInfoCollectionName);
         }
 
         private void SetupApiKeys(IServiceCollection services)

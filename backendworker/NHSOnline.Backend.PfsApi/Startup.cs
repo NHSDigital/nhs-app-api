@@ -41,7 +41,6 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
-using NHSOnline.Backend.Repository;
 using Wkhtmltopdf.NetCore;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
@@ -222,10 +221,7 @@ namespace NHSOnline.Backend.PfsApi
 
             var nominatedPharmacyConfig = new NominatedPharmacyConfigurationSettings(false, null, null, 0, null, null);
             services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
-
-            var mongoConfiguration = CreateMongoConfiguration();
-            services.AddSingleton(mongoConfiguration);
-
+            
             var termsAndConditionsConfiguration = CreateTermsAndConditionsConfiguration();
             services.AddSingleton(termsAndConditionsConfiguration);
         }
@@ -235,16 +231,6 @@ namespace NHSOnline.Backend.PfsApi
             var effectiveDate =
                 Configuration.GetOrThrow("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger);
             return new TermsAndConditionsConfiguration(effectiveDate);
-        }
-
-        private IMongoConfiguration CreateMongoConfiguration()
-        {
-            var connectionString = Configuration.GetOrThrow("MONGO_CONNECTION_STRING", _logger);
-            var databaseName = Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_NAME", _logger);
-            var collectionName =
-                Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_COLLECTION", _logger);
-
-            return new MongoConfiguration(connectionString, databaseName, collectionName);
         }
 
         private SessionConfigurationSettings CreateAndValidateProxyEnvironmentVariables()

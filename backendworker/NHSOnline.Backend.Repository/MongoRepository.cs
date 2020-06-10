@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Repository
 {
     public class MongoRepository<TConfig, TRecord> : IRepository<TRecord>
         where TRecord : RepositoryRecord
-        where TConfig : IMongoConfiguration
+        where TConfig : IRepositoryConfiguration
     {
         private readonly IMongoClient _mongoClient;
         private readonly ILogger _logger;

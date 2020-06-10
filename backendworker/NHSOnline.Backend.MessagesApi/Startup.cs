@@ -18,7 +18,6 @@ using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi
 {
@@ -42,8 +41,6 @@ namespace NHSOnline.Backend.MessagesApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            SetupConfigurationSettings(services);
-
             services
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
@@ -60,22 +57,6 @@ namespace NHSOnline.Backend.MessagesApi
             _modularStartup.ConfigureServices(services);
 
             ConfigureAuth(services);
-        }
-
-        private void SetupConfigurationSettings(IServiceCollection services)
-        {
-            var mongoConfiguration = CreateMongoConfiguration();
-            services.AddSingleton(mongoConfiguration);
-        }
-
-        private IMongoConfiguration CreateMongoConfiguration()
-        {
-            var connectionString = Configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", _logger);
-            var databaseName = Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_NAME", _logger);
-            var messagesCollectionName =
-                Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION", _logger);
-
-            return new MongoConfiguration(connectionString, databaseName,  messagesCollectionName);
         }
 
         private void SetupApiKeys(IServiceCollection services)

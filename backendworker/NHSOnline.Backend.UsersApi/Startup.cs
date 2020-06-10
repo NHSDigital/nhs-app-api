@@ -18,7 +18,6 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.UsersApi
 {
@@ -65,21 +64,8 @@ namespace NHSOnline.Backend.UsersApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var mongoConfiguration = CreateMongoConfiguration();
-            services.AddSingleton(mongoConfiguration);
-
             var config = CreateAzureNotificationConfiguration();
             services.AddSingleton(config);
-        }
-
-        private IMongoConfiguration CreateMongoConfiguration()
-        {
-            var connectionString = Configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", _logger);
-            var databaseName = Configuration.GetOrThrow("USERS_MONGO_DATABASE_NAME", _logger);
-            var userDeviceCollectionName =
-                Configuration.GetOrThrow("USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION", _logger);
-
-            return new MongoConfiguration(connectionString, databaseName, userDeviceCollectionName);
         }
 
         private AzureNotificationConfiguration CreateAzureNotificationConfiguration()

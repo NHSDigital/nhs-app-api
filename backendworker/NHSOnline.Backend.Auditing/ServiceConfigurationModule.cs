@@ -27,10 +27,8 @@ namespace NHSOnline.Backend.Auditing
                     services.AddSingleton<IAuditSink>(_ => new StreamAuditSink(new FileStream(filePath, FileMode.Append)));
                     break;
                 case "MONGO":
-                    services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
-                    services.AddSingleton<MongoDbAuditSinkConfiguration>();
+                    services.RegisterRepository<AuditRecord, RepositoryDbAuditSinkConfiguration>();
                     services.AddSingleton<IAuditSink, DbAuditorSink>();
-                    services.AddSingleton<IRepository<AuditRecord>, MongoRepository<MongoDbAuditSinkConfiguration, AuditRecord>>();
                     break;
                 default:
                     services.AddSingleton<IAzureCosmosDbAuditorSinkConfig, AzureCosmosDbAuditorSinkConfig>();

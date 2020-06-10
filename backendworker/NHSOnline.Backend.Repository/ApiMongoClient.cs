@@ -2,7 +2,7 @@ using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Repository
 {
-    public class ApiMongoClient<TConfiguration> : MongoClient, IApiMongoClient<TConfiguration> where TConfiguration : IMongoConfiguration
+    public class ApiMongoClient<TConfiguration> : MongoClient, IApiMongoClient<TConfiguration> where TConfiguration : IRepositoryConfiguration
     {
         public ApiMongoClient(TConfiguration mongoConfiguration)
             : base(BuildSettings(mongoConfiguration))

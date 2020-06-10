@@ -14,11 +14,9 @@ namespace NHSOnline.Backend.MessagesApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
-            
+            services.RegisterRepository<UserMessage, MessagesRepositoryConfiguration>();
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
-            services.AddSingleton<IRepository<UserMessage>, MongoRepository<IMongoConfiguration, UserMessage>>();
             services.AddSingleton<IMessageRepository, MessageRepository>();
             services.AddSingleton<IMapper<List<UserMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();

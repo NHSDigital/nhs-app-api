@@ -13,7 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Settings;
 using UnitTestHelper;
 
@@ -42,140 +41,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void ConfigureServices_MongoConfiguration_WhenConnectionStringIsInvalid_ThrowsException(string connectionString)
-        {
-            // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(connectionString);
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            // Act
-            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("DEVICES_MONGO_CONNECTION_STRING");
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public void ConfigureServices_MongoConfiguration_WhenDatabaseNameIsInvalid_ThrowsException(string databaseName)
-        {
-            // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(databaseName);
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            // Act
-            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("USERS_MONGO_DATABASE_NAME");
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public void ConfigureServices_MongoConfiguration_WhenUserDeviceCollectionIsInvalid_ThrowsException
-        (
-            string userDevicesCollection
-        )
-        {
-            // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(userDevicesCollection);
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            // Act
-            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION");
-        }
-
-        [TestMethod]
-        public void ConfigureServices_MongoConfiguration_WhenAllValuesAreProvided_MapsToProperties()
-        {
-            // Arrange
-            var connectionString = _fixture.Create<string>();
-            var databaseName = _fixture.Create<string>();
-            var userDeviceCollection = _fixture.Create<string>();
-
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(connectionString);
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(databaseName);
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(userDeviceCollection);
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
-            var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
-
-            // Act
-            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
-
-            // Assert
-            serviceDescriptors.Should().NotBeEmpty();
-
-            var mongoConfiguration =
-                serviceDescriptors.FirstOrDefault(x => x.ImplementationInstance is IMongoConfiguration)
-                    ?.ImplementationInstance as IMongoConfiguration;
-
-            using (new AssertionScope())
-            {
-                mongoConfiguration.Should().NotBeNull();
-                mongoConfiguration.ConnectionString.Should().Be(connectionString);
-                mongoConfiguration.DatabaseName.Should().Be(databaseName);
-                mongoConfiguration.CollectionName.Should().Be(userDeviceCollection);
-            }
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
         public void ConfigureServices_AzureConfiguration_WhenHubPathIsInvalid_ThrowsException(string hubPath)
         {
             // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(hubPath);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
                 .Returns(_fixture.Create<string>());
@@ -200,10 +68,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             (string hubConnectionString)
         {
             // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(hubConnectionString);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"])
@@ -226,10 +90,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
         public void ConfigureServices_AzureConfiguration_WhenHubSharedKeyIsInvalid_ThrowsException(string sharedKey)
         {
             // Arrange
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
                 .Returns(_fixture.Create<string>());
@@ -254,10 +114,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             var hubConnectionString = _fixture.Create<string>();
             var sharedAccessKey = _fixture.Create<string>();
 
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(hubPath);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"]).Returns(hubConnectionString);
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY"]).Returns(sharedAccessKey);
@@ -351,10 +207,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
 
         private void SetupAllConfiguration()
         {
-            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_PATH"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AZURE_NOTIFICATION_HUB_CONNECTION_STRING"])
                 .Returns(_fixture.Create<string>());

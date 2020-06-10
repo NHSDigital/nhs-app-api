@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
     [TestClass]
     public class MongoRepositoryCreateTests
     {
-        private MongoRepository<IMongoConfiguration, TestRepositoryRecord> _systemUnderTest;
+        private MongoRepository<IRepositoryConfiguration, TestRepositoryRecord> _systemUnderTest;
         private Mock<IMongoCollection<TestRepositoryRecord>> _mongoCollectionMock;
 
         [TestInitialize]

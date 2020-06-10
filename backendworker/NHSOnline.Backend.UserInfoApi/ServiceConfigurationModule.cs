@@ -36,8 +36,7 @@ namespace NHSOnline.Backend.UserInfoApi
 
         private static void ConfigureRepositoryServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
-            services.AddSingleton<IRepository<UserAndInfo>, MongoRepository<IMongoConfiguration, UserAndInfo>>();
+            services.RegisterRepository<UserAndInfo, UserAndInfoRepositoryConfiguration>();
             services.AddSingleton<IInfoService, InfoService>();
             services.AddSingleton<IInfoRepository, UserInfoRepository>();
         }
