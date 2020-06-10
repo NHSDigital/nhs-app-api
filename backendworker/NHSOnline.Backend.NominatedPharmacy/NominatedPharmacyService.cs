@@ -56,14 +56,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
                 LogIssueEvents(result);
 
-                var nhsNumberReturned = GetNhsNumberReturned(result);
+                var nhsNumberReturned = result.GetNhsNumberReturned();
 
                 if (!nhsNumber.RemoveWhiteSpace().Equals(nhsNumberReturned, StringComparison.Ordinal))
                 {
                     return new GetNominatedPharmacyResult.NhsNumberSuperseded(result.StatusCode, nhsNumber, nhsNumberReturned);
                 }
 
-                var confidentialityCode = GetPatientRoleConfidentialityCode(result);
+                var confidentialityCode = result.GetPatientRoleConfidentialityCode();
 
                 if (confidentialityCode != null)
                 {
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
                 var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
 
-                var patientCareProvisionEvents = GetPatientCareProvisionEvents(result, knownPharmacyTypes);
+                var patientCareProvisionEvents = result.GetPatientCareProvisionEvents(knownPharmacyTypes);
 
                 var pharmacyCheck = CheckPharmacy(patientCareProvisionEvents);
 
@@ -94,13 +94,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new GetNominatedPharmacyResult.PharmacyChecksFailed(result.StatusCode);
                 }
 
-                var familyNameReturned = GetFamilyName(result);
+                var personalDetailsCheck = CheckPersonalDetails(result, cidUserSession);
 
-                var dateOfBirthReturned = GetDateOfBirth(result);
-
-                var personalDetailsCheck = CheckPersonalDetails(nhsNumber.RemoveWhiteSpace(), nhsNumberReturned, familyNameReturned, dateOfBirthReturned, cidUserSession);
-
-                var pertinentSerialChangeNumber = GetPertinentSerialChangeNumber(result);
+                var pertinentSerialChangeNumber = result.GetPertinentSerialChangeNumber();
 
                 var objectId = GetObjectId(pharmacyCheck);
 
@@ -130,24 +126,6 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
         }
 
-        private static string GetPertinentSerialChangeNumber(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
-        {
-            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
-                ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
-        }
-
-        private static string GetDateOfBirth(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
-        {
-            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
-                ?.PatientRole?.PatientPerson?.BirthTime?.Value;
-        }
-
-        private static string GetFamilyName(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
-        {
-            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
-                ?.PatientRole?.PatientPerson?.COCTMT000203UK02PartOfWhole?.PartPerson?.Name?.Family;
-        }
-
         private static string GetOdsCode(PharmacyCheck pharmacyCheck)
         {
             return pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
@@ -156,26 +134,6 @@ namespace NHSOnline.Backend.NominatedPharmacy
         private static string GetObjectId(PharmacyCheck pharmacyCheck)
         {
             return pharmacyCheck.PatientCareProvisionEvent?.Id?.Extension;
-        }
-
-        private static IEnumerable<PatientCareProvisionEvent> GetPatientCareProvisionEvents(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result, string[] knownPharmacyTypes)
-        {
-            return result?.Body?.QUPAIN000009UK03?.ControlActEvent
-                ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
-                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
-                .Where(y => knownPharmacyTypes.Contains(y?.Code?.Code));
-        }
-
-        private static ConfidentialityCode GetPatientRoleConfidentialityCode(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
-        {
-            return result?.Body?.QUPAIN000009UK03?.ControlActEvent
-                ?.Subject?.PDSResponse?.Subject?.PatientRole?.ConfidentialityCode;
-        }
-
-        private static string GetNhsNumberReturned(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
-        {
-            return result.Body?.QUPAIN000009UK03?.ControlActEvent
-                ?.Subject?.PDSResponse?.Subject?.PatientRole?.Id?.Extension;
         }
 
         private void LogIssueEvents(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
@@ -335,25 +293,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
         }
 
-        private PersonalDetailsCheck CheckPersonalDetails(string nhsNumber, string nhsNumberReturned,
-            string familyNameReturned, string dateOfBirthReturned, CitizenIdUserSession cidUserSession)
+        private PersonalDetailsCheck CheckPersonalDetails(
+            NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result,
+            CitizenIdUserSession cidUserSession)
         {
             var personalDetailsCheck = new PersonalDetailsCheck { IsValid = false };
 
-            if (!string.IsNullOrEmpty(nhsNumberReturned))
-            {
-                if (!nhsNumberReturned.Equals(nhsNumber, StringComparison.Ordinal))
-                {
-                    _logger.LogInformation($"Returned NhsNumber {nhsNumberReturned} did not match expected NhsNumber {nhsNumber}");
-                    return personalDetailsCheck;
-                }
-            }
-            else
-            {
-                _logger.LogInformation("Could not extract nhsNumber from result of PDS Trace request");
-                return personalDetailsCheck;
-            }
-
+            var familyNameReturned = result.GetFamilyName();
             if (!string.IsNullOrEmpty(familyNameReturned))
             {
                 if (!familyNameReturned.Equals(cidUserSession.FamilyName, StringComparison.OrdinalIgnoreCase))
@@ -369,6 +315,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 return personalDetailsCheck;
             }
 
+            var dateOfBirthReturned = result.GetDateOfBirth();
             if (DateTime.TryParseExact(dateOfBirthReturned, DateOfBirthFormat,
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out var returnedDobParsed))
             {
