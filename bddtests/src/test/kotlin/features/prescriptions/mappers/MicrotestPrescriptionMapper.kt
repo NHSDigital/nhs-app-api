@@ -41,7 +41,7 @@ object MicrotestPrescriptionMapper {
             }
 
             val datetime = DateTime.parse(prescriptionCourse.orderDate)
-                    .toString(DateTimeFormats.frontendDateFormat)
+                    .toString(DateTimeFormats.frontendBasicDateFormat)
 
             val historicPrescription = HistoricPrescription(
                     name = prescriptionCourse.name,

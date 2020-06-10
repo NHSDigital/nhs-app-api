@@ -225,21 +225,19 @@ export default {
   rp02: {
     pageTitle: 'TBC',
     orderDate: 'Ordered',
-    proxyOrderedByDisplayPrefix: 'Ordered by ',
-    statusHelpText: 'The status of this prescription is ',
-    ordersTitle: 'Orders',
+    proxyOrderedByDisplayPrefix: 'by ',
     status: 'Status',
     statusRejected: {
       subHeader: 'Rejected',
-      description: 'Rejected, contact your GP',
+      description: 'Contact your GP',
     },
     statusRequested: {
       subHeader: 'Requested',
-      description: 'Requested, waiting for GP approval',
+      description: 'Waiting for GP approval',
     },
     statusApproved: {
       subHeader: 'Approved',
-      description: 'Approved by your GP',
+      description: 'Order approved by GP',
     },
   },
   rp06: {

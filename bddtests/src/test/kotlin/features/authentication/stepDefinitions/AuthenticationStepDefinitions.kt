@@ -228,7 +228,7 @@ class AuthenticationStepDefinitions {
     private fun followPrescriptionsNativeNavBarLink() {
         nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
         webHeader.isPageTitleCorrect("Prescriptions")
-        breadcrumbs.assertVisible()
+        breadcrumbs.assertNotPresent()
     }
 
     private fun followMyRecordNativeNavBarLink() {
