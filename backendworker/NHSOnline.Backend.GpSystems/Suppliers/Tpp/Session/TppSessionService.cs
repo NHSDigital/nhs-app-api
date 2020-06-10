@@ -16,6 +16,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal class TppSessionService : ISessionService
     {
+        private const string Im1MessagingService = "Messaging";
+        private const string ServiceAvailableCode = "A";
+
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
         private readonly TppTokenValidationService _tokenValidationService;
@@ -57,47 +60,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }
 
                 var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
-
                 if (!authenticateReply.HasSuccessResponse)
                 {
                     return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
                 }
 
-                var validProxyPatients = _tppLinkedAccountsService.ExtractValidProxyPatients(authenticateReply.Body);
-
-                var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, validProxyPatients.Select(x => x.PatientId));
-                if (!userSession.HasValue)
+                var createSession = CreateSession(authenticateReply, odsCode, nhsNumber);
+                if (createSession.ProcessFinishedEarly(out var createSessionFinalResult))
                 {
-                    const string message = "Cannot create a valid session from Tpp response";
-                    _logger.LogError(message);
-                    return new GpSessionCreateResult.BadGateway(message);
+                    return createSessionFinalResult;
                 }
 
-                var tppUserSession = userSession.ValueOrFailure();
+                var tppUserSession = createSession.Result;
                 _tppLinkedAccountsService.LogMismatchingPractices(authenticateReply.Body, tppUserSession.ProxyPatients);
 
-                // The PatientSelected call is only required if
-                // more than 1 person is found in the response.
-                if (authenticateReply.Body.ExtractLinkedPatients().Any())
+                await SelectPatientIfMoreThanOne(authenticateReply, tppUserSession);
+
+                if (await IsIm1MessagingEnabled(tppUserSession))
                 {
-                    var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
-                        .BuildTppRequestParameters(_logger);
-
-                    await _patientSelected.Post(tppRequestParameters);
+                    tppUserSession.Im1MessagingEnabled = true;
+                    _logger.LogInformation("PFS messaging is enabled");
                 }
-
-                var serviceAccess = await _listServiceAccesses.Post(tppUserSession);
-
-                serviceAccess.Body?.ServiceAccess?.ForEach(s => {
-                    if (string.Equals(s.Description,
-                            Constants.TppLinkServicesAccessConstants.Im1MessagingService,
-                            StringComparison.Ordinal)
-                        && s.Status == Constants.TppLinkServicesAccessConstants.AvailableCode )
-                    {
-                        tppUserSession.Im1MessagingEnabled = true;
-                        _logger.LogInformation("PFS messaging is enabled");
-                    }
-                });
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(tppUserSession);
@@ -112,6 +95,49 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<bool> IsIm1MessagingEnabled(TppUserSession tppUserSession)
+        {
+            var serviceAccesses = await _listServiceAccesses.Post(tppUserSession);
+
+            return serviceAccesses.Body?.ServiceAccess?.Where(IsIm1MessageService).Any(IsEnabled) ?? false;
+
+            static bool IsIm1MessageService(ServiceAccess serviceAccess)
+                => string.Equals(serviceAccess.Description, Im1MessagingService, StringComparison.Ordinal);
+
+            static bool IsEnabled(ServiceAccess serviceAccess)
+                => string.Equals(serviceAccess.Status, ServiceAvailableCode, StringComparison.Ordinal);
+        }
+
+        private async Task SelectPatientIfMoreThanOne(TppApiObjectResponse<AuthenticateReply> authenticateReply, TppUserSession tppUserSession)
+        {
+            // The PatientSelected call is only required if
+            // more than 1 person is found in the response.
+            if (authenticateReply.Body.ExtractLinkedPatients().Any())
+            {
+                var tppRequestParameters = new GpLinkedAccountModel(tppUserSession).BuildTppRequestParameters(_logger);
+
+                await _patientSelected.Post(tppRequestParameters);
+            }
+        }
+
+        private ProcessResult<TppUserSession, GpSessionCreateResult> CreateSession(
+            TppApiObjectResponse<AuthenticateReply> authenticateReply,
+            string odsCode,
+            string nhsNumber)
+        {
+            var validProxyPatients = _tppLinkedAccountsService.ExtractValidProxyPatients(authenticateReply.Body);
+
+            var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, validProxyPatients.Select(x => x.PatientId));
+            if (!userSession.HasValue)
+            {
+                const string message = "Cannot create a valid session from Tpp response";
+                _logger.LogError(message);
+                return ProcessResult.FinalResult<TppUserSession, GpSessionCreateResult>(new GpSessionCreateResult.BadGateway(message));
+            }
+
+            return ProcessResult.StepResult<TppUserSession, GpSessionCreateResult>(userSession.ValueOrFailure());
         }
 
         public async Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
