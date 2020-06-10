@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
@@ -42,11 +43,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         private static IServiceCollection RegisterEmisBaseServices(this IServiceCollection services)
         {
-            services.AddSingleton<EmisHttpClientHandler>();
+            services.AddTransient<EmisHttpClientHandler>();
             services.AddTransient<EmisHttpRequestIdentifier>();
 
-            services.AddSingleton<IGpSystem, EmisGpSystem>();
-            services.AddSingleton<IEmisClient, EmisClient>();
+            services.AddTransient<IGpSystem, EmisGpSystem>();
+            services.AddTransient<IEmisClient, EmisClient>();
+            services.AddTransient<EmisClientRequestSender>();
 
             services.AddHttpClient<EmisHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<EmisHttpClientHandler>()

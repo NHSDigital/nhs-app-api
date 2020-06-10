@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 .When(_httpRequestMessage.Method, _httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
 
-            _httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout, 6);
+            _httpRequestMessage.Properties.Add("customTimeout", 6);
 
             _mockHttpHandler.Fallback.Respond(async () =>
             {
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 .When(_httpRequestMessage.Method, _httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
 
-            _httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout, 6);
+            _httpRequestMessage.Properties.Add("customTimeout", 6);
 
             _mockHttpHandler.Fallback.Respond(async () =>
             {

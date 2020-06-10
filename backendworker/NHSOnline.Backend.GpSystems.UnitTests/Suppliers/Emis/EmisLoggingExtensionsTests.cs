@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
-            var demoResponse = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
+            var demoResponse = new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
             {
                 Body = demographicsResponse
             };
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             const string userIdentityGuid = "User Identity 'efa22060-9221-43a6-a0f0-6c0350b8f44d'";
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = userIdentityGuid;
-            var sampleResponse = new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+            var sampleResponse = new EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
                 .InternalServerError, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes) {ExceptionErrorResponse = errorResponse};
             
             // Act

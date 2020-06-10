@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         }
 
         private GetPrescriptionsResult InterpretGetPrescriptionsError(
-            EmisClient.EmisApiResponse response)
+            EmisApiResponse response)
         {
             if (response.HasForbiddenResponse())
             {
@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         }
 
         private OrderPrescriptionResult InterpretOrderPrescriptionError(
-            EmisClient.EmisApiResponse response)
+            EmisApiResponse response)
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
@@ -265,12 +265,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             return new OrderPrescriptionResult.BadGateway();
         }
 
-        private static bool IsBadRequest(EmisClient.EmisApiResponse response)
+        private static bool IsBadRequest(EmisApiResponse response)
         {
             return response.StatusCode == HttpStatusCode.BadRequest;
         }
 
-        private static bool HasAlreadyBeenOrderedLast30Days(EmisClient.EmisApiResponse response)
+        private static bool HasAlreadyBeenOrderedLast30Days(EmisApiResponse response)
         {
             return (response.StatusCode == HttpStatusCode.Conflict) || response.HasExceptionWithMessageContaining(
                 EmisApiErrorMessages.Prescriptions_AlreadyOrderedLast30Days);

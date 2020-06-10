@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Medication))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = medicationsResponse,
                         ExceptionErrorResponse = null,
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal))
                     , RecordType.Allergies))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = allergiesResponse,
                         ExceptionErrorResponse = null,
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Immunisations))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = immunisationsResponse,
                         ExceptionErrorResponse = null,
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.TestResults))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = testResultsResponse,
                         ExceptionErrorResponse = null,
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Problems))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = problemsResponse,
                         ExceptionErrorResponse = null,
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Consultations))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = consultationsResponse,
                         ExceptionErrorResponse = null,
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Documents))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
                     {
                         Body = documentsResponse,
                         ExceptionErrorResponse = null,
@@ -249,7 +249,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         private void SetupGetDocumentForViewing(PatientDocument mappedPatientDocument)
         {
             var individualDocumentResponse =
-                new EmisClient.EmisApiObjectResponse<IndividualDocument>(
+                new EmisApiObjectResponse<IndividualDocument>(
                     HttpStatusCode.OK,
                     RequestsForSuccessOutcome.MedicalDocumentGet,
                     _sampleSuccessStatusCodes)
@@ -270,7 +270,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         private void SetupGetDocumentForDownload(FileContentResult mappedFileContentResult)
         {
             var individualDocumentResponse =
-                new EmisClient.EmisApiObjectResponse<IndividualDocument>(
+                new EmisApiObjectResponse<IndividualDocument>(
                     HttpStatusCode.OK,
                     RequestsForSuccessOutcome.MedicalDocumentGet,
                     _sampleSuccessStatusCodes)
@@ -288,7 +288,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 .Verifiable();
         }
 
-        private void SetupEmisClientMedicalDocumentGetWithResponse(EmisClient.EmisApiObjectResponse<IndividualDocument> response)
+        private void SetupEmisClientMedicalDocumentGetWithResponse(EmisApiObjectResponse<IndividualDocument> response)
         {
             _emisClient
                 .Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, DocumentId, _emisUserSession.EndUserSessionId))

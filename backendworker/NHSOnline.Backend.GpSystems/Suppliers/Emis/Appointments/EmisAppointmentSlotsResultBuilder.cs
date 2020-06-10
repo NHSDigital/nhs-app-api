@@ -12,26 +12,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly ILogger<EmisAppointmentSlotsService> _logger;
         private readonly IAppointmentSlotsResponseMapper _appointmentSlotsResponseMapper;
-        private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> _metaTask;
-        private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> _slotTask;
-        private readonly Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> _practiceSettingsTask;
-        private readonly Task<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>> _demographicsTask;
+        private readonly Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> _metaTask;
+        private readonly Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> _slotTask;
+        private readonly Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> _practiceSettingsTask;
+        private readonly Task<EmisApiObjectResponse<DemographicsGetResponse>> _demographicsTask;
         private readonly EmisUserSession _userSession;
 
-        private EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> MetaResponse => _metaTask.Result;
-        private EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> SlotResponse => _slotTask.Result;
-        private EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> PracticeSettingsResponse
+        private EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> MetaResponse => _metaTask.Result;
+        private EmisApiObjectResponse<AppointmentSlotsGetResponse> SlotResponse => _slotTask.Result;
+        private EmisApiObjectResponse<PracticeSettingsGetResponse> PracticeSettingsResponse
             => _practiceSettingsTask.Status == TaskStatus.RanToCompletion ? _practiceSettingsTask.Result : null;
-        private EmisClient.EmisApiObjectResponse<DemographicsGetResponse> DemographicsResponse
+        private EmisApiObjectResponse<DemographicsGetResponse> DemographicsResponse
             => _demographicsTask.Status == TaskStatus.RanToCompletion ? _demographicsTask.Result : null;
 
         public EmisAppointmentSlotsResultBuilder(
             ILogger<EmisAppointmentSlotsService> logger,
             IAppointmentSlotsResponseMapper appointmentSlotsResponseMapper,
-            Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> metaTask,
-            Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask,
-            Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask,
-            Task<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>> demographicsTask,
+            Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> metaTask,
+            Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask,
+            Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask,
+            Task<EmisApiObjectResponse<DemographicsGetResponse>> demographicsTask,
             EmisUserSession userSession
             )
         {
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         private Option<AppointmentSlotsResult> GetResponseHasNoSuccessStatusCodeCase<T>(T response)
-            where T : EmisClient.EmisApiResponse
+            where T : EmisApiResponse
         {
             if (response.HasSuccessResponse)
             {

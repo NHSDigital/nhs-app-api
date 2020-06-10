@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
            // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode.Created, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode.Created, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
             {
                 Body = new CancelAppointmentDeleteResponse { IsCancelled = true },
                 ExceptionErrorResponse = null,
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Cancel_EmisReturnsForbidden_ReturnsForbidden()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                 .Forbidden, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes);
 
             MockEmisClientAppointmentCancelMethod(response);
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             errorResponse.InternalResponseCode = ProvidedAppointmentSlotInPast;
 
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .BadRequest, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsDelete_InThePast;
 
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .InternalServerError, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
                 { ExceptionErrorResponse = errorResponse };
 
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Unknown Error";
 
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .InternalServerError, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
                 { ExceptionErrorResponse = errorResponse };
 
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task Cancel_EmisClientReturnsConflict_ReturnsNotCancellable()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                 .Conflict, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes);
 
             MockEmisClientAppointmentCancelMethod(response);
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
 
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .NotFound, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsDelete_NotFound;
 
-            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+            var response = new EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .InternalServerError, RequestsForSuccessOutcome.AppointmentsDelete, _sampleSuccessStatusCodes)
                 { ExceptionErrorResponse = errorResponse };
 
@@ -297,7 +297,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         private void MockEmisClientAppointmentCancelMethod(
-            EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse> response)
+            EmisApiObjectResponse<CancelAppointmentDeleteResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsDelete(
                 It.Is<EmisRequestParameters>(p =>

@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = _endUserSessionResponse,
                         ExceptionErrorResponse = null,
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
                         y.AccessIdentityGuid.Equals(_connectionToken, StringComparison.Ordinal)
                         && y.NationalPracticeCode.Equals(_odsCode, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                     {
                         Body = _sessionsResponse,
                         ExceptionErrorResponse = null,
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.Setup(x => x.PracticeSettingsGet(
                     It.IsAny<EmisRequestParameters>(),
                     It.IsAny<string>()))
-                .ReturnsAsync(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes)
+                .ReturnsAsync(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes)
                 {
                     Body = new PracticeSettingsGetResponse()
                     {
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         {
             // Arrange
             var unsuccessfulEndUserSession = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>>()
+                .Build<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         {
             // Arrange
             var forbiddenSession = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
+                .Build<EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.Forbidden)
                 .With(x => x.Body, () => null)
                 .With(x => x.ErrorResponseBadRequest, () => null)
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         {
             // Arrange
             var badRequestSession = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
+                .Build<EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.BadRequest)
                 .With(x => x.Body, () => null)
                 .With(x => x.ExceptionErrorResponse, () => null)
@@ -213,7 +213,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         {
             // Arrange
             var forbiddenSession = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
+                .Build<EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
@@ -498,10 +498,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
                 new EmisTokenValidationService(new Mock<ILogger<EmisTokenValidationService>>().Object));
         }
 
-        private Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> CreateSessionsPostResponse(string userPatientLinkToken)
+        private Task<EmisApiObjectResponse<SessionsPostResponse>> CreateSessionsPostResponse(string userPatientLinkToken)
         {
             return Task.FromResult(
-                new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                 {
                     Body = new SessionsPostResponse
                     {

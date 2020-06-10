@@ -44,10 +44,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 .Should().NotBeNull();
         }
         
-        private Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationRootObjectResponse()
+        private Task<EmisApiObjectResponse<MedicationRootObject>> MedicationRootObjectResponse()
         {
             return Task.FromResult(
-                new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalDocumentGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalDocumentGet, _sampleSuccessStatusCodes)
                 {
                     Body = null,
                     StatusCode = HttpStatusCode.OK

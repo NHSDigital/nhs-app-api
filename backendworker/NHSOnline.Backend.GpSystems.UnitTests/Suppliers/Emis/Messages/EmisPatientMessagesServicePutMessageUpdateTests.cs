@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(PutMessageUpdateExpression())
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
                 {
                     Body = messageUpdateResponse
                 }))
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(PutMessageUpdateExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
                     {
                         ErrorResponseBadRequest = badRequestErrorResponse
                     }))
@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(PutMessageUpdateExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<MessageUpdateResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PatientMessageUpdatePut, _sampleSuccessStatusCodes)
                     {
                         ExceptionErrorResponse = exceptionErrorResponse
                     }))
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                 .ThrowAsync<ArgumentException>();
         }
 
-        private Expression<Func<IEmisClient, Task<EmisClient.EmisApiObjectResponse<MessagesGetResponse>>>>
+        private Expression<Func<IEmisClient, Task<EmisApiObjectResponse<MessagesGetResponse>>>>
             GetMatchingExpression()
         {
             return c => c.PatientMessagesGet(It.Is<EmisRequestParameters>(e =>
@@ -188,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                 _userSession.UserPatientLinkToken.Equals(e.UserPatientLinkToken, StringComparison.Ordinal)));
         }
 
-        private Expression<Func<IEmisClient, Task<EmisClient.EmisApiObjectResponse<MessageUpdateResponse>>>>
+        private Expression<Func<IEmisClient, Task<EmisApiObjectResponse<MessageUpdateResponse>>>>
             PutMessageUpdateExpression()
         {
             var requestBody = new UpdateMessageReadStatusRequest

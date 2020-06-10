@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 .AddKeyToEnum("4001552", InternalCode.PatientArchived)
                 .AddKeyToEnum("4001108", InternalCode.UserAlreadyLinked);
 
-        public static Im1ConnectionRegisterResult Map(EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse> response,
+        public static Im1ConnectionRegisterResult Map(EmisApiObjectResponse<MeApplicationsPostResponse> response,
             ILogger<EmisIm1ConnectionService> logger)
         {
             var mappedValue = EmisErrorMapper.Map(logger, response, KeyAndMessageToError);

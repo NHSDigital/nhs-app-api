@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             _mapper = mapper;
         }
         
-        public Medications Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
+        public Medications Check(Task<EmisApiObjectResponse<MedicationRootObject>> task)
         {
             _logger.LogEnter();
             

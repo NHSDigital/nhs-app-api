@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         }
 
         private GetCoursesResult GetCorrectErrorResult(
-            EmisClient.EmisApiResponse response)
+            EmisApiResponse response)
         {
             if (response.HasForbiddenResponse())
             {

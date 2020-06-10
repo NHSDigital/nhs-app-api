@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                     Im1ConnectionErrorCodes.InternalCode.PatientNotRegisteredAtThisPractice);
 
 
-        public static LinkageResult Map(EmisClient.EmisApiObjectResponse<AddVerificationResponse> response,
+        public static LinkageResult Map(EmisApiObjectResponse<AddVerificationResponse> response,
             ILogger<EmisLinkageService> logger)
         {
             var mappedValue = EmisErrorMapper.Map(logger, response, KeyAndMessageToError);

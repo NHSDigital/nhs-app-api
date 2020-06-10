@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                     "4090",
                     Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
 
-        public static LinkageResult Map(EmisClient.EmisApiObjectResponse<AddNhsUserResponse> response,
+        public static LinkageResult Map(EmisApiObjectResponse<AddNhsUserResponse> response,
             ILogger<EmisLinkageService> logger)
         {
             var mappedValue = EmisErrorMapper.Map(logger, response, KeyAndMessageToError);

@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         private AppointmentsResult InterpretAppointmentsGetResponse(
-            EmisClient.EmisApiObjectResponse<AppointmentsGetResponse> response)
+            EmisApiObjectResponse<AppointmentsGetResponse> response)
         {
             if (response.HasSuccessResponse)
             {

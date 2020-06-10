@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -193,8 +193,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -221,8 +221,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -253,7 +253,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -281,7 +281,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -310,7 +310,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId)
             };
 
             _mockHttpHandler
@@ -340,8 +340,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -379,8 +379,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -419,8 +419,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -454,9 +454,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                    "X-API-EndUserSessionId", endUserSessionId),
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderSessionId, sessionId),
+                    "X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -497,9 +497,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                    "X-API-EndUserSessionId", endUserSessionId),
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderSessionId, sessionId),
+                    "X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -546,9 +546,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                    "X-API-EndUserSessionId", endUserSessionId),
                 new KeyValuePair<string, string>(
-                    EmisClient.HeaderSessionId, sessionId),
+                    "X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -593,7 +593,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
             };
 
             _mockHttpHandler
@@ -623,7 +623,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, emisUserSession.EndUserSessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", emisUserSession.EndUserSessionId),
             };
 
             _mockHttpHandler
@@ -653,8 +653,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -688,8 +688,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -723,8 +723,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -762,8 +762,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler
@@ -797,8 +797,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId)
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId)
             };
 
             _mockHttpHandler
@@ -834,8 +834,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
             };
 
             _mockHttpHandler

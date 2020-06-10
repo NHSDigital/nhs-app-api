@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
+            var response = new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
 
             _mockEmisClient
                 .Setup(x => x.DemographicsGet(
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public async Task Extend_WhenClientReturnsError_ReturnsBadGateway()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
+            var response = new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
 
             _mockEmisClient
                 .Setup(x => x.DemographicsGet(

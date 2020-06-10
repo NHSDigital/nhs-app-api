@@ -253,14 +253,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
         }
 
         private void LogExceptionError<T>(string methodCall,
-            EmisClient.EmisApiObjectResponse<T> response) =>
+            EmisApiObjectResponse<T> response) =>
             _logger.LogError(response.GetExceptionLogMessage(methodCall));
 
         private async Task CacheConnectionToken(EmisConnectionToken connectionToken) =>
             await _im1CacheService.SaveIm1ConnectionToken(connectionToken.Im1CacheKey,
                 connectionToken);
 
-        private static bool UserIsNotRegisteredAtPractice(EmisClient.EmisApiResponse sessionsResponse)
+        private static bool UserIsNotRegisteredAtPractice(EmisApiResponse sessionsResponse)
         {
             return sessionsResponse.HasForbiddenResponse() &&
                    sessionsResponse

@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         private AppointmentBookResult InterpretAppointmentsPostResponse(
-            EmisClient.EmisApiResponse response, AppointmentBookRequest request)
+            EmisApiResponse response, AppointmentBookRequest request)
         {
             if (response.HasSuccessResponse)
             {
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _logger.LogEmisErrorResponse(response);
             return new AppointmentBookResult.BadGateway();
         }
-        private bool TelephoneNumberIsBlank(EmisClient.EmisApiResponse response)
+        private bool TelephoneNumberIsBlank(EmisApiResponse response)
         {
             var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
                             EmisApiErrorCode.RequiredFieldValueMissing)
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool SlotIsNotAvailableForBooking(EmisClient.EmisApiResponse response)
+        private bool SlotIsNotAvailableForBooking(EmisApiResponse response)
         {
             var check = response.StatusCode == HttpStatusCode.Conflict;
             if (check)
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool SlotIsOutsidePracticeDefinedDays(EmisClient.EmisApiResponse response)
+        private bool SlotIsOutsidePracticeDefinedDays(EmisApiResponse response)
         {
             var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
                             EmisApiErrorCode.AppointmentSlotIsAfterPracticeDefinedDays) ||
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool SlotNotFound(EmisClient.EmisApiResponse response)
+        private bool SlotNotFound(EmisApiResponse response)
         {
             var check = (response.StatusCode == HttpStatusCode.NotFound)
                         || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_NotFound);
@@ -141,7 +141,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool SlotIsInThePast(EmisClient.EmisApiResponse response)
+        private bool SlotIsInThePast(EmisApiResponse response)
         {
             var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
                             EmisApiErrorCode.ProvidedAppointmentSlotInPast)
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool BookingLimitReached(EmisClient.EmisApiResponse response)
+        private bool BookingLimitReached(EmisApiResponse response)
         {
             var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
                             EmisApiErrorCode.OnlineUserMaxAppointmentBookCount)

@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             return responseBody;
         }
 
-        public async Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
+        public async Task<EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
         {
             var sessionPostRequestModel = new SessionsPostRequest
             {
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 try
                 {
-                    var sessionResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>(_logger,
+                    var sessionResponse = new EmisRequestTaskChecker<EmisApiObjectResponse<SessionsPostResponse>>(_logger,
                         "SendSessionsRequest").Check(sessionRequestTask);
 
                     session.SessionId = sessionResponse.Body.SessionId;
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 try
                 {
-                    var practiceResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
+                    var practiceResponse = new EmisRequestTaskChecker<EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
 
                     session.AppointmentBookingReasonNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);

@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         private AppointmentCancelResult InterpretAppointmentsDeleteResponse(
-            EmisClient.EmisApiResponse response)
+            EmisApiResponse response)
         {
             if (response.HasSuccessResponse)
             {
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
 
-        private bool AppointmentIsNotAvailableForCancelling(EmisClient.EmisApiResponse response)
+        private bool AppointmentIsNotAvailableForCancelling(EmisApiResponse response)
         {
             var check = response.StatusCode == HttpStatusCode.Conflict;
             if (check)
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool AppointmentIsInThePast(EmisClient.EmisApiResponse response)
+        private bool AppointmentIsInThePast(EmisApiResponse response)
         {
             var check = response.StatusCode == HttpStatusCode.BadRequest
                         || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_InThePast);
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             return check;
         }
 
-        private bool AppointmentNotFound(EmisClient.EmisApiResponse response)
+        private bool AppointmentNotFound(EmisApiResponse response)
         {
             var check = response.StatusCode == HttpStatusCode.NotFound
                         || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_NotFound);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public static class EmisErrorMapper
     {
-        public static TEnum? Map<TResponse, TEnum>(ILogger logger, EmisClient.EmisApiObjectResponse<TResponse> response,
+        public static TEnum? Map<TResponse, TEnum>(ILogger logger, EmisApiObjectResponse<TResponse> response,
             KeyAndMessageToEnumMapper<TEnum> keyAndMessageTo) where TEnum : struct
         {
             if (response == null)
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public static IEnumerable<string> ErrorMessages<TResponse>(
-            EmisClient.EmisApiObjectResponse<TResponse> response)
+            EmisApiObjectResponse<TResponse> response)
         {
             var messages = new[]
             {

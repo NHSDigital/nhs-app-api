@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
-            var response = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
+            var response = new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
             {
                 Body = _emisClientGetResponse
             };
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
-            var emisResponse = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes);
+            var emisResponse = new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     StandardErrorResponse = errorResponse
                 };
@@ -155,7 +155,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message =
                 "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = errorResponse
                 };
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message ="Extra info: UnknownError";
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = errorResponse
                 };
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         private void MockEmisClientAppointmentsGetMethod(
-            EmisClient.EmisApiObjectResponse<AppointmentsGetResponse> response)
+            EmisApiObjectResponse<AppointmentsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisRequestParameters>(p =>

@@ -10,12 +10,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
     public interface IGetPatientDocumentTaskChecker
     {
         PatientDocument CheckForViewing(
-            EmisClient.EmisApiObjectResponse<IndividualDocument> response,
+            EmisApiObjectResponse<IndividualDocument> response,
             string documentType,
             string documentName);
 
         FileContentResult CheckForDownload(
-            EmisClient.EmisApiObjectResponse<IndividualDocument> response,
+            EmisApiObjectResponse<IndividualDocument> response,
             string documentType,
             string documentName);
     }
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         }
         
         public PatientDocument CheckForViewing(
-            EmisClient.EmisApiObjectResponse<IndividualDocument> response,
+            EmisApiObjectResponse<IndividualDocument> response,
             string documentType,
             string documentName)
         {
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         }
         
         public FileContentResult CheckForDownload(
-            EmisClient.EmisApiObjectResponse<IndividualDocument> response,
+            EmisApiObjectResponse<IndividualDocument> response,
             string documentType,
             string documentName)
         {
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         }
 
         private T Check<T>(
-            EmisClient.EmisApiObjectResponse<IndividualDocument> response,
+            EmisApiObjectResponse<IndividualDocument> response,
             string documentType,
             string documentName,
             Func<IndividualDocument, string, string, T> mappingFunction)

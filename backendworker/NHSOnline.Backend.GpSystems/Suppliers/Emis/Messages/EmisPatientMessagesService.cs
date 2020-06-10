@@ -200,7 +200,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private GetPatientMessagesResult InterpretPatientMessagesGetResponse(
-        EmisClient.EmisApiObjectResponse<MessagesGetResponse> response)
+        EmisApiObjectResponse<MessagesGetResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private GetPatientMessageResult InterpretPatientMessageGetResponse(
-            EmisClient.EmisApiObjectResponse<MessageGetResponse> response)
+            EmisApiObjectResponse<MessageGetResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -276,7 +276,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private PutPatientMessageReadStatusResult InterpretPatientMessagePutResponse(
-            EmisClient.EmisApiObjectResponse<MessageUpdateResponse> response)
+            EmisApiObjectResponse<MessageUpdateResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -303,7 +303,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private GetPatientMessageRecipientsResult InterpretPatientMessageRecipientsGetResponse(
-            EmisClient.EmisApiObjectResponse<MessageRecipientsResponse> response)
+            EmisApiObjectResponse<MessageRecipientsResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -332,7 +332,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private PostPatientMessageResult InterpretSendMessageResponse(
-            EmisClient.EmisApiObjectResponse<MessagePostResponse> response)
+            EmisApiObjectResponse<MessagePostResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -364,7 +364,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private DeletePatientMessageResult InterpretDeleteMessageResponse(
-            EmisClient.EmisApiObjectResponse<MessageDeleteResponse> response)
+            EmisApiObjectResponse<MessageDeleteResponse> response)
         {
             if (response.HasSuccessResponse)
             {

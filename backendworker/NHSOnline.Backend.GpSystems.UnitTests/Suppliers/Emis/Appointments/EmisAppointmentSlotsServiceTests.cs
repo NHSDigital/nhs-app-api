@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 HttpStatusCode.OK
             };
-            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, successStatusCodes));
+            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, successStatusCodes));
 
             _mockEmisClient
                 .Setup(x => x.AppointmentSlotsGet(It.IsAny<EmisRequestParameters>(), It.IsAny<SlotsGetQueryParameters>()))
@@ -112,13 +112,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var metadataResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
+                new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
 
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
             var unsuccessfulSlotResponse = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>>()
+                .Build<EmisApiObjectResponse<AppointmentSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentSlotGetMethod(unsuccessfulSlotResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotGetMethod(new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
 
             _mockEmisClient
                 .Setup(x => x.AppointmentSlotsMetadataGet(It.IsAny<EmisRequestParameters>(), It.IsAny<SlotsMetadataGetQueryParameters>()))
@@ -160,20 +160,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var unsuccessfulMetadataResponse = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>>()
+                .Build<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(unsuccessfulMetadataResponse);
 
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
-            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
+            var slotsResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -192,10 +192,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
 
-            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
-            MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotGetMethod(new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -210,16 +210,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var unsuccessfulPracticeSettingsResponse = _fixture
-                .Build<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>()
+                .Build<EmisApiObjectResponse<PracticeSettingsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
 
-            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
-            MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotGetMethod(new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
             MockEmisClientPracticeSettingsGetMethod(unsuccessfulPracticeSettingsResponse);
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -235,17 +235,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
-            var unsuccessfulPracticeSettingsResponse = new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode
+            var unsuccessfulPracticeSettingsResponse = new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode
                 .InternalServerError, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = errorResponse
                 };
 
-            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
-            MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes));
+            MockEmisClientAppointmentSlotGetMethod(new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes));
             MockEmisClientPracticeSettingsGetMethod(unsuccessfulPracticeSettingsResponse);
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -260,21 +260,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var metadataResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
+                new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
 
             var errorResponse = _fixture.Create<StandardErrorResponse>();
 
-            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
+            var slotsResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
                 .Forbidden, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes) { StandardErrorResponse = errorResponse };
 
             MockEmisClientPracticeSettingsGetMethod(
-                new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -289,21 +289,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var metadataResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
+                new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
 
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
-            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
+            var slotsResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
                 .InternalServerError, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
 
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -319,20 +319,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
 
-            var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
+            var errorMetadataResponse = new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
                 HttpStatusCode
                     .Forbidden, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes) { StandardErrorResponse = errorResponse };
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(errorMetadataResponse);
 
-            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
+            var slotsResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
 
             MockEmisClientPracticeSettingsGetMethod(
-                new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -349,19 +349,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
-            var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
+            var errorMetadataResponse = new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
                 HttpStatusCode
                     .InternalServerError, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(errorMetadataResponse);
 
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
-            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
+            var slotsResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -376,7 +376,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var metadataResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes)
                 {
                     Body = new AppointmentSlotsMetadataGetResponse(),
                     ExceptionErrorResponse = null,
@@ -385,9 +385,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
 
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
-            var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes)
+            var slotResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes)
             {
                 Body = new AppointmentSlotsGetResponse(),
                 ExceptionErrorResponse = null,
@@ -397,7 +397,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentSlotGetMethod(slotResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, metadataResponse.Body, It.IsAny<PracticeSettingsGetResponse>(), It.IsAny<DemographicsGetResponse>(), _emisUserSession))
                 .Throws<Exception>();
@@ -415,7 +415,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var metadataResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes)
+                new EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsMetadataGet, _sampleSuccessStatusCodes)
                 {
                     Body = new AppointmentSlotsMetadataGetResponse(),
                     ExceptionErrorResponse = null,
@@ -423,9 +423,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 };
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
-            MockEmisClientPracticeSettingsGetMethod(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
+            MockEmisClientPracticeSettingsGetMethod(new EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PracticeSettingsGet, _sampleSuccessStatusCodes));
 
-            var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes)
+            var slotResponse = new EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentSlotsGet, _sampleSuccessStatusCodes)
             {
                 Body = new AppointmentSlotsGetResponse(),
                 ExceptionErrorResponse = null,
@@ -435,7 +435,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             MockEmisClientAppointmentSlotGetMethod(slotResponse);
 
             MockEmisDemographicsGetMethod(
-                new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
+                new EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes));
 
             var expectedResponse = _fixture.Create<AppointmentSlotsResponse>();
 
@@ -451,7 +451,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         private void MockEmisClientPracticeSettingsGetMethod(
-            EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> response)
+            EmisApiObjectResponse<PracticeSettingsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.Is<EmisRequestParameters>(p =>
                     p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
@@ -461,7 +461,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         private void MockEmisClientAppointmentSlotGetMethod(
-            EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> response)
+            EmisApiObjectResponse<AppointmentSlotsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentSlotsGet(
                     It.Is<EmisRequestParameters>(p =>
@@ -479,7 +479,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         private void MockEmisClientAppointmentSlotsMetadataGetMethod(
-            EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> response)
+            EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentSlotsMetadataGet(
                         It.Is<EmisRequestParameters>(p =>
@@ -496,7 +496,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .Verifiable();
         }
 
-        private void MockEmisDemographicsGetMethod(EmisClient.EmisApiObjectResponse<DemographicsGetResponse> response)
+        private void MockEmisDemographicsGetMethod(EmisApiObjectResponse<DemographicsGetResponse> response)
         {
             _mockEmisClient.Setup(x => x.DemographicsGet(
                     It.Is<EmisRequestParameters>(

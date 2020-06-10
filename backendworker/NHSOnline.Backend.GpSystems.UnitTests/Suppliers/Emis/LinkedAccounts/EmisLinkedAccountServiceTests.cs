@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyAccountToUse = _emisUserSession.ProxyPatients.First();
 
             var settingsResponse = _fixture.Create<MeSettingsGetResponse>();
-            var settingsResult = new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.Accepted, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes)
+            var settingsResult = new EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.Accepted, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes)
             {
                 Body = settingsResponse,
             };
@@ -268,7 +268,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyAccountToUse = _emisUserSession.ProxyPatients.First();
 
             var settingsResult =
-                new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes);
+                new EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes);
 
             _emisClient.Setup(x => x.MeSettingsGet(
                 It.Is<EmisRequestParameters>(e =>

@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageRecipientsResponse>(
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessageRecipientsResponse>(
                     HttpStatusCode.OK,
                     RequestsForSuccessOutcome.PatientMessageDetailsGet, _sampleSuccessStatusCodes)
                 {
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessageRecipientsResponse>(HttpStatusCode.BadRequest,
+                    new EmisApiObjectResponse<MessageRecipientsResponse>(HttpStatusCode.BadRequest,
                         RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
                     {
                         ErrorResponseBadRequest = badRequestErrorResponse
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient.Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessageRecipientsResponse>(HttpStatusCode.Forbidden,
+                    new EmisApiObjectResponse<MessageRecipientsResponse>(HttpStatusCode.Forbidden,
                         RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
                     {
                         ExceptionErrorResponse = exceptionErrorResponse
@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessageRecipientsResponse>(
+                    new EmisApiObjectResponse<MessageRecipientsResponse>(
                         HttpStatusCode.InternalServerError,
                         RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
                     {

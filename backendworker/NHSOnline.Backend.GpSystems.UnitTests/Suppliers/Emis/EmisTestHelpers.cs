@@ -13,12 +13,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _fixture = fixture;
         }
 
-        public EmisClient.EmisApiObjectResponse<T> CreateResponse<T>(
+        public EmisApiObjectResponse<T> CreateResponse<T>(
             HttpStatusCode statusCode,
             int? errorCode,
             string message = "")
         {
-            var response = _fixture.Create<EmisClient.EmisApiObjectResponse<T>>();
+            var response = _fixture.Create<EmisApiObjectResponse<T>>();
 
             response.StatusCode = statusCode;
             response.StandardErrorResponse = CreateStandardErrorResponse(errorCode, message);

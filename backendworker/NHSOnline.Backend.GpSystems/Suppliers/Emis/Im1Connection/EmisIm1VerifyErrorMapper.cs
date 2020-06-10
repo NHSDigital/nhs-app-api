@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 .Add("4031030", "Patient facing services API v2 is not enabled at this practice",
                     Im1ConnectionErrorCodes.InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice);
 
-        public static Im1ConnectionVerifyResult Map<T>(EmisClient.EmisApiObjectResponse<T> response,
+        public static Im1ConnectionVerifyResult Map<T>(EmisApiObjectResponse<T> response,
             ILogger<EmisIm1ConnectionService> logger)
         {
             var mappedValue = EmisErrorMapper.Map(logger, response, KeyAndMessageToError);

@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public static class EmisLoggingExtensions
     {
-        public static void LogEmisUnknownError(this ILogger logger, EmisClient.EmisApiResponse response)
+        public static void LogEmisUnknownError(this ILogger logger, EmisApiResponse response)
         {
             if (IsResponseNull(logger, response))
             {
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             logger.LogError("Call to EMIS returned a forbidden response");
         }
         
-        public static void LogEmisErrorResponse(this ILogger logger, EmisClient.EmisApiResponse response)
+        public static void LogEmisErrorResponse(this ILogger logger, EmisApiResponse response)
         {
             if (IsResponseNull(logger, response))
             {
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 logger.LogError(e.StackTrace);
             }
         }
-        public static void LogEmisWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
+        public static void LogEmisWarningResponse(this ILogger logger, EmisApiResponse response)
         {
             if (IsResponseNull(logger, response))
             {
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             }
         }    
         
-        public static void LogEmisLogWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
+        public static void LogEmisLogWarningResponse(this ILogger logger, EmisApiResponse response)
         {
             if (IsResponseNull(logger, response))
             {
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             }
         }
         
-        private static bool IsResponseNull(ILogger logger, EmisClient.EmisApiResponse response)
+        private static bool IsResponseNull(ILogger logger, EmisApiResponse response)
         {
             if (null != response)
             {
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return true;
         }
 
-        public static JObject CensorResponse(ILogger logger, EmisClient.EmisApiResponse response)
+        public static JObject CensorResponse(ILogger logger, EmisApiResponse response)
         {
             var initialResponse = JObject.Parse(CleanRawResponse(logger, response).SerializeJson());
 
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return initialResponse;
         }
 
-        private static EmisClient.EmisApiResponse CleanRawResponse(ILogger logger, EmisClient.EmisApiResponse response)
+        private static EmisApiResponse CleanRawResponse(ILogger logger, EmisApiResponse response)
         {
             if (string.IsNullOrEmpty(response.RawResponse))
             {

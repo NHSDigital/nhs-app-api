@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = coursesResponse,
                         ExceptionErrorResponse = null,
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = coursesResponse,
                         ExceptionErrorResponse = null,
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = coursesResponse,
                         ExceptionErrorResponse = null,
@@ -279,7 +279,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = coursesResponse,
                         ExceptionErrorResponse = null,
@@ -370,7 +370,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = coursesResponse,
                         ExceptionErrorResponse = null,
@@ -415,7 +415,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))
                     ))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
@@ -459,7 +459,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                     {
                         Body = null,
                         ExceptionErrorResponse = null,
@@ -487,7 +487,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    new EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act

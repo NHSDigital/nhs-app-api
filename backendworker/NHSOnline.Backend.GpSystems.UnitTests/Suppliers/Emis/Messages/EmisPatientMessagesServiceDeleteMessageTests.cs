@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientPracticeMessageDelete(GetMatchingEmisRequestParameters(), messageId))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.OK,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.OK,
                     RequestsForSuccessOutcome.PatientPracticeMessageDelete, _sampleSuccessStatusCodes)
                 {
                     Body = messageDeleteResponse
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientPracticeMessageDelete(GetMatchingEmisRequestParameters(), "1"))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.BadRequest,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.BadRequest,
                     RequestsForSuccessOutcome.PatientPracticeMessageDelete, _sampleSuccessStatusCodes)
                 {
                     ErrorResponseBadRequest = badRequestErrorResponse
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientPracticeMessageDelete(GetMatchingEmisRequestParameters(), "1"))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.Forbidden,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessageDeleteResponse>(HttpStatusCode.Forbidden,
                     RequestsForSuccessOutcome.PatientPracticeMessageDelete, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = exceptionErrorResponse

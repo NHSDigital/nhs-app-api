@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.OK,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.OK,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
                     Body = messagePostResponse
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.BadRequest,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.BadRequest,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
                     ErrorResponseBadRequest = badRequestErrorResponse
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.Forbidden,
+                .Returns(Task.FromResult(new EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.Forbidden,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = exceptionErrorResponse
