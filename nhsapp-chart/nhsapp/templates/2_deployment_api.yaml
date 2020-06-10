@@ -146,8 +146,6 @@ spec:
           value: "{{ $.Values.microtestEnabled }}"
         - name: GP_PROVIDER_ENABLED_TPP
           value: "{{ $.Values.tppEnabled }}"
-        - name: GP_PROVIDER_ENABLED_VISION
-          value: "{{ $.Values.visionEnabled }}"
         - name: ODS_REMAP_ENABLED
           value: "{{ $.Values.odsRemapEnabled }}"
         - name: ODS_REMAP_MAP
@@ -442,11 +440,9 @@ spec:
           mountPath: "/secrets/tpp-cert"
           readOnly: true
     {{- end }}
-    {{- if $.Values.visionEnabled }}
         - name: vision-client-cert-pfx
           mountPath: "/secrets/vision-client-cert-pfx"
           readOnly: true
-    {{- end }}
         - name: ndop-cert
           mountPath: "/secrets/ndop-cert"
           readOnly: true

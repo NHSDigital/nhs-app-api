@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.PfsApi.DependencyInjection
         {
             var gpSupplierConfig = new Dictionary<string, Action<EnableGpSupplierConfiguration, bool>>
             {
-                { "GP_PROVIDER_ENABLED_VISION", (config, enabled) => config.EnableVision = enabled },
                 { "GP_PROVIDER_ENABLED_TPP", (config, enabled) => config.EnableTpp = enabled },
                 { "GP_PROVIDER_ENABLED_MICROTEST", (config, enabled) => config.EnableMicrotest = enabled },
                 { "GP_PROVIDER_ENABLED_FAKE", (config, enabled) => config.EnableFake = enabled },

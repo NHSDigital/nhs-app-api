@@ -41,7 +41,6 @@ tppApplicationName: NhsApp
 tppApplicationVersion: 1.0
 tppApplicationDeviceType: NhsApp
 
-visionEnabled: false
 visionHostname: vs002-test.inps.co.uk
 visionPort: 443
 visionProtocol: https

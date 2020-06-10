@@ -23,10 +23,7 @@ namespace NHSOnline.Backend.GpSystems
                 services.RegisterTppPfsServices();
             }
 
-            if (enableGpSupplierConfiguration.EnableVision)
-            {
-                services.RegisterVisionPfsServices();
-            }
+            services.RegisterVisionPfsServices();
 
             if (enableGpSupplierConfiguration.EnableMicrotest)
             {
@@ -51,10 +48,7 @@ namespace NHSOnline.Backend.GpSystems
                 services.RegisterTppCidServices();
             }
 
-            if (enableGpSupplierConfiguration.EnableVision)
-            {
-                services.RegisterVisionCidServices();
-            }
+            services.RegisterVisionCidServices();
 
             if (enableGpSupplierConfiguration.EnableMicrotest)
             {

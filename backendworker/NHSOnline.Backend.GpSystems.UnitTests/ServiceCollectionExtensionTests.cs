@@ -19,8 +19,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration
             {
                 EnableTpp = true,
-                EnableMicrotest = true,
-                EnableVision = true
+                EnableMicrotest = true
             };
 
             // Act
@@ -39,8 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var config = new EnableGpSupplierConfiguration
             {
                 EnableTpp = true,
-                EnableMicrotest = true,
-                EnableVision = true
+                EnableMicrotest = true
             };
 
             // Act
@@ -59,8 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
 
             var config = new EnableGpSupplierConfiguration {
                 EnableTpp = false,
-                EnableMicrotest = false,
-                EnableVision = false
+                EnableMicrotest = false
             };
 
             // Act

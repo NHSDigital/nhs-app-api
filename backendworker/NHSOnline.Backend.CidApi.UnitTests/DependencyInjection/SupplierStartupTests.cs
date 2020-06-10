@@ -35,48 +35,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
         }
 
         [TestMethod]
-        public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenVisionIsEnabled()
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_VISION"]).Returns("True");
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableVision)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [DataTestMethod]
-        [DataRow("False")]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("xyz")]
-        public void ConfigureServices_DoesntSetupVisionServicesForDependencyInjection_WhenVisionIsDisabled(string value)
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_VISION"]).Returns(value);
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableVision == false)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [TestMethod]
         public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenTppIsEnabled()
         {
             // Arrange
