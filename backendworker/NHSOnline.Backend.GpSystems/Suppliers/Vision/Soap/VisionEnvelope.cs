@@ -224,7 +224,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Soap
                 // Check to see if it's a standard ID reference
                 var idElem = base.GetIdElement(doc, id);
 
-                if (idElem != null) return idElem;
+                if (idElem != null)
+                {
+                    return idElem;
+                }
 
                 var nsManager = new XmlNamespaceManager(doc.NameTable);
                 nsManager.AddNamespace("wsu", VisionNamespaces.Wsu);

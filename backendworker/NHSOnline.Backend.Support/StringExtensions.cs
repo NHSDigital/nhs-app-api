@@ -7,13 +7,19 @@ namespace NHSOnline.Backend.Support
     {
         public static string FormatToNhsNumber(this string sourceNhsNumber)
         {
-            if (string.IsNullOrEmpty(sourceNhsNumber)) return "";
+            if (string.IsNullOrEmpty(sourceNhsNumber))
+            {
+                return "";
+            }
 
             var filteredNhsNumber = sourceNhsNumber.RemoveWhiteSpace();
 
             // Belt and braces here, apparently the NHS number will always be 10 long,
             // if not, jut return whatever it is
-            if (filteredNhsNumber.Length != 10) return filteredNhsNumber;
+            if (filteredNhsNumber.Length != 10)
+            {
+                return filteredNhsNumber;
+            }
 
             return string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}",
                 filteredNhsNumber.Substring(0, 3),

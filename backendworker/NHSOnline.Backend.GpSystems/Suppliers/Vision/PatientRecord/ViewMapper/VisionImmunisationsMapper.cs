@@ -27,9 +27,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
             var immunisationItems = new List<ImmunisationItem>();
             var rawContent = response.Record;
 
-            if (string.IsNullOrEmpty(rawContent)) 
+            if (string.IsNullOrEmpty(rawContent))
+            {
                 return immunisations;
-            
+            }
+
             try
             {
                 var parsedContent = rawContent.DeserializeXml<Root>();

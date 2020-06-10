@@ -9,7 +9,10 @@ namespace NHSOnline.Backend.Support.Middleware
             this IApplicationBuilder app, string headerName)
         {
             if (app == null)
+            {
                 throw new ArgumentNullException(nameof (app));
+            }
+
             return app.UseLogRequestHeader(new LogRequestHeaderOptions{HeaderName = headerName});
         }
         
@@ -17,9 +20,14 @@ namespace NHSOnline.Backend.Support.Middleware
             LogRequestHeaderOptions options)
         {
             if (app == null)
+            {
                 throw new ArgumentNullException(nameof (app));
+            }
+
             if (options == null)
+            {
                 throw new ArgumentNullException(nameof (options));
+            }
 
             return app.UseMiddleware<LogRequestHeaderMiddleware>((object) Microsoft.Extensions.Options.Options.Create(options));
         }

@@ -11,7 +11,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions
         {
             var operationOutcomes = new List<OperationOutcome>();
 
-            if (guidanceResponse.Contained == null) return operationOutcomes;
+            if (guidanceResponse.Contained == null)
+            {
+                return operationOutcomes;
+            }
 
             foreach (var container in guidanceResponse.Contained
                 .Where(a => a.ResourceType == ResourceType.OperationOutcome))

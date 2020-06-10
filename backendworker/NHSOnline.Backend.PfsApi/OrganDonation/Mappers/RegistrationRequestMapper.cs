@@ -65,7 +65,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             };
 
             if (source.Registration.Decision != Decision.OptIn)
+            {
                 return registrationRequest;
+            }
 
             registrationRequest.DonationWishes = _donationWishesMapper.Map(source.Registration.DecisionDetails);
             registrationRequest.FaithDeclaration = _faithDeclarationMapper.From(source.Registration.FaithDeclaration);

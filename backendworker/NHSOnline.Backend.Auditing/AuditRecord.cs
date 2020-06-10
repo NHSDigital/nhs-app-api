@@ -26,7 +26,10 @@ namespace NHSOnline.Backend.Auditing
             Operation = operation;
             Details = details;
 
-            if (version == null) return;
+            if (version == null)
+            {
+                return;
+            }
 
             ApiVersion = version.Api;
             WebVersion = version.Web;

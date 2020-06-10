@@ -24,7 +24,9 @@ namespace NHSOnline.Backend.Support.ValidationAttributes
                 .ToArray();
 
             if (expectedValues.Any(x => Equals(x, value)))
+            {
                 return ValidationResult.Success;
+            }
 
             var expectedValuesText = string.Join(", ", expectedValues.Select(x => x ?? "null"));
 

@@ -11,7 +11,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
     {
         public void SanitizeGuidanceResponse(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
-            if (guidanceResponse == null) return;
+            if (guidanceResponse == null)
+            {
+                return;
+            }
 
             SanitizeGuidanceResponseResults(guidanceResponse, htmlSanitizer);
             SanitizeQuestionnaires(guidanceResponse, guidanceResponse.DataRequirement, htmlSanitizer);
@@ -19,7 +22,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         
         public void SanitizeServiceDefinition(Hl7.Fhir.Model.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer)
         {
-            if (serviceDefinition == null) return;
+            if (serviceDefinition == null)
+            {
+                return;
+            }
 
             SanitizeQuestionnaires(serviceDefinition, serviceDefinition.DataRequirement, htmlSanitizer);
         }
@@ -40,15 +46,24 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             var resultId = guidanceResponse.Result?.Reference?.Substring(1);
 
-            if (string.IsNullOrWhiteSpace(resultId)) return;
+            if (string.IsNullOrWhiteSpace(resultId))
+            {
+                return;
+            }
 
             var referralRequestAndCarePlanIds = GetReferralRequestAndCarePlanIds(guidanceResponse, resultId).ToList();
             
-            if (referralRequestAndCarePlanIds.Count == 0) return;
+            if (referralRequestAndCarePlanIds.Count == 0)
+            {
+                return;
+            }
 
             foreach (var contained in guidanceResponse.Contained)
             {
-                if (!referralRequestAndCarePlanIds.Contains(contained.Id)) continue;
+                if (!referralRequestAndCarePlanIds.Contains(contained.Id))
+                {
+                    continue;
+                }
 
                 var carePlan = contained as CarePlan;
                 var referralRequest = contained as ReferralRequest;
@@ -62,11 +77,17 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             var result = new List<string>();
 
-            if (domainResource == null || string.IsNullOrWhiteSpace(resultId) || domainResource.Contained == null) return result;
+            if (domainResource == null || string.IsNullOrWhiteSpace(resultId) || domainResource.Contained == null)
+            {
+                return result;
+            }
 
             if (!(domainResource.Contained
                     .FirstOrDefault(contained => resultId.Equals(contained.Id, StringComparison.Ordinal)) is
-                RequestGroup requestGroup)) return result;
+                RequestGroup requestGroup))
+            {
+                return result;
+            }
 
             foreach (var actionComponent in requestGroup.Action)
             {
@@ -78,21 +99,31 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
         private static void SanitizeReferralRequest(ReferralRequest referralRequest, IHtmlSanitizer htmlSanitizer)
         {
-            if (referralRequest == null) return;
+            if (referralRequest == null)
+            {
+                return;
+            }
 
             referralRequest.Description = SanitizeAndDecodeHtml(referralRequest.Description, htmlSanitizer);
         }
 
         private static void SanitizeCarePlan(CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
         {
-            if (carePlan == null) return;
+            if (carePlan == null)
+            {
+                return;
+            }
+
             carePlan.Title = SanitizeAndDecodeHtml(carePlan.Title, htmlSanitizer);
             SanitizeCarePlanActivities(carePlan.Activity, htmlSanitizer);
         }
 
         private static void SanitizeCarePlanActivities(IReadOnlyCollection<CarePlan.ActivityComponent> activityComponents, IHtmlSanitizer htmlSanitizer)
         {
-            if (activityComponents == null) return;
+            if (activityComponents == null)
+            {
+                return;
+            }
 
             foreach (var activityComponent in activityComponents)
             {
@@ -111,12 +142,18 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             var result = new List<string>();
 
-            if (dataRequirements == null) return result;
+            if (dataRequirements == null)
+            {
+                return result;
+            }
 
             foreach (var dataRequirement in dataRequirements)
             {
-                if (dataRequirement.Type != FHIRAllTypes.QuestionnaireResponse) continue;
-                
+                if (dataRequirement.Type != FHIRAllTypes.QuestionnaireResponse)
+                {
+                    continue;
+                }
+
                 foreach (var extension in dataRequirement.Extension)
                 {
                     result.Add((extension.Value as ResourceReference)?.Reference?.Substring(1));
@@ -131,7 +168,10 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             foreach (var contained in domainResource.Contained)
             {
-                if (!questionnaireIds.Contains(contained.Id)) continue;
+                if (!questionnaireIds.Contains(contained.Id))
+                {
+                    continue;
+                }
 
                 var questionnaire = contained as Questionnaire;
                 SanitizeItems(questionnaire?.Item, htmlSanitizer);

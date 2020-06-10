@@ -18,15 +18,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         {
             var cancellationReasons = new List<CancellationReason>();
             if (appointmentsResponses?.Appointments?.Settings?.CancellationReasons == null)
+            {
                 return cancellationReasons;
-            
+            }
+
             foreach (var reason in appointmentsResponses.Appointments.Settings.CancellationReasons)
             {
 
                 var displayName = "";
                 foreach (var description in reason.Descriptions)
                 {
-                    if (!description.Language.Equals(Language, StringComparison.Ordinal)) continue;
+                    if (!description.Language.Equals(Language, StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
                     displayName = description.Text;
                     break;
                 }

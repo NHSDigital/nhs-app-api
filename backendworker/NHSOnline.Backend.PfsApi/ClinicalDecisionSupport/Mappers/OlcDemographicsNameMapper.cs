@@ -48,7 +48,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers
                 .FirstOrDefault();
 
             if (title != null)
+            {
                 fullName = fullName.Substring(title.Length + 1);
+            }
 
             var nameParts = fullName.Split(SpaceChar, StringSplitOptions.RemoveEmptyEntries);
 

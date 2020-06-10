@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     {
         public static void LogEmisUnknownError(this ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
 
             var emisMessages = response.ExceptionErrorResponse?.Exceptions?.Select(x => x.Message) ?? new[] { string.Empty };
 
@@ -29,7 +32,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         
         public static void LogEmisErrorResponse(this ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
+
             try
             {
                 var initialResponse = CensorResponse(logger, response);
@@ -46,7 +53,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
         public static void LogEmisWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
+
             try
             {
                 var initialResponse = CensorResponse(logger, response);
@@ -64,7 +75,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         
         public static void LogEmisLogWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
+
             try
             {
                 var initialResponse = CensorResponse(logger, response);
@@ -82,7 +97,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         
         private static bool IsResponseNull(ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (null != response) return false;
+            if (null != response)
+            {
+                return false;
+            }
+
             logger.LogError("Call to EMIS returned a null response");
             return true;
         }
@@ -98,7 +117,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         private static EmisClient.EmisApiResponse CleanRawResponse(ILogger logger, EmisClient.EmisApiResponse response)
         {
-            if (string.IsNullOrEmpty(response.RawResponse)) return response;
+            if (string.IsNullOrEmpty(response.RawResponse))
+            {
+                return response;
+            }
 
             try
             {

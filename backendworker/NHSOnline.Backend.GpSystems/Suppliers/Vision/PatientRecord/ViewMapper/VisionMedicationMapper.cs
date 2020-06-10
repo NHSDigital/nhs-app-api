@@ -33,9 +33,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
 
             try
             {
-                if (string.IsNullOrEmpty(rawContent)) 
+                if (string.IsNullOrEmpty(rawContent))
+                {
                     return medications;
-                
+                }
+
                 var parsedContent = rawContent.DeserializeXml<Root>();
 
                 var acuteMedications = parsedContent.Patient.Clinicals

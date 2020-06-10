@@ -24,9 +24,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
             var problemItems = new List<ProblemItem>();
             var rawContent = response.Record;
 
-            if (string.IsNullOrEmpty(rawContent)) 
+            if (string.IsNullOrEmpty(rawContent))
+            {
                 return problems;
-            
+            }
+
             try
             {
                 var parsedContent = rawContent.DeserializeXml<Root>();

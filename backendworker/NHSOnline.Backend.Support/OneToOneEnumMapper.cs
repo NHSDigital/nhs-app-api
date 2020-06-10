@@ -22,8 +22,11 @@ namespace NHSOnline.Backend.Support
         {
             get
             {
-                if (_isInitialised) return _fromMappingTable;
-                
+                if (_isInitialised)
+                {
+                    return _fromMappingTable;
+                }
+
                 _fromMappingTable = ToMappingTable.ToDictionary(c => c.Value, c => c.Key);
                 _isInitialised = true;
 

@@ -62,7 +62,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
         private static FormattedAddress FormatAddress(PrimaryAddress primaryAddress)
         {
             if (primaryAddress == null)
+            {
                 return null;
+            }
 
             var houseNumberStreet = FormatHouseNumberAndStreet(primaryAddress.HouseNumber, primaryAddress.Street);
 

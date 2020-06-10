@@ -29,7 +29,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                     out var startTime);
 
                 if (!startTimeSuccess)
+                {
                     continue;
+                }
 
                 _dateTimeOffsetProvider.TryCreateDateTimeOffset(sourceAppointment.EndDate?.TrimEnd('Z'), out var endTime);
 

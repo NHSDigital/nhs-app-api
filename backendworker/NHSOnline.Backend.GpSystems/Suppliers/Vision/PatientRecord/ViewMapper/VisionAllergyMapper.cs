@@ -27,8 +27,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
             var allergies = new List<AllergyItem>();
             var rawContent = response.Record;
 
-            if (string.IsNullOrEmpty(rawContent)) return result;
-            
+            if (string.IsNullOrEmpty(rawContent))
+            {
+                return result;
+            }
+
             try
             {
                 var parsedContent = rawContent.DeserializeXml<Root>();

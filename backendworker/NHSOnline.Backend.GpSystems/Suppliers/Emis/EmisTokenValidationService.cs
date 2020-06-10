@@ -21,7 +21,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 return false;
             }
 
-            if (IsGuid(connectionToken)) return true;
+            if (IsGuid(connectionToken))
+            {
+                return true;
+            }
 
             try
             {

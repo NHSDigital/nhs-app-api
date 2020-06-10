@@ -57,7 +57,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 {
                     var homeScreen = journeys.HomeScreen;
 
-                    if (homeScreen == null) return true;
+                    if (homeScreen == null)
+                    {
+                        return true;
+                    }
 
                     return homeScreen.PublicHealthNotifications?.Any() ?? false;
                 }, "journeys.HomeScreen.PublicHealthNotifications");

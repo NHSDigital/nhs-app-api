@@ -257,7 +257,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             d.Root.Descendants().Attributes().Where(x => x.IsNamespaceDeclaration).Remove();
 
             foreach (var elem in d.Descendants())
+            {
                 elem.Name = elem.Name.LocalName;
+            }
 
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(d.CreateReader());

@@ -25,7 +25,9 @@ namespace NHSOnline.Backend.Support.UnitTests
             public override void GetNonZeroBytes(byte[] data)
             {
                 for (var i = 0; i < data.Length; i++)
+                {
                     data[i] = (byte)_random.Next(1, 256);
+                }
             }
         }
         

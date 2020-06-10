@@ -29,8 +29,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             var mappedAppointments = new List<Slot>();
             
             if (availableAppointments?.Slots == null)
+            {
                 return mappedAppointments;
-            
+            }
+
             var locations = SetUpLocations(availableAppointments.References?.Locations);
             var slotTypes = SetUpSlotType(availableAppointments.References?.SlotTypes);
             var sessions = SetUpSessions(availableAppointments.References?.Sessions);

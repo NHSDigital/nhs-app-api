@@ -33,7 +33,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 
         private Address Map(Models.Address address)
         {
-            if (address == null) return null;
+            if (address == null)
+            {
+                return null;
+            }
 
             var parts = new List<string>
                 {

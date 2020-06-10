@@ -24,7 +24,9 @@ namespace NHSOnline.Backend.Support.Middleware
             PrepareTemplate(_options.HeaderName);
             
             if(_templateParts.Length > 2)
+            {
                 throw new ArgumentException("LogTemplate contains more than one instance of {value}");
+            }
         }
         
         public async Task Invoke(HttpContext httpContext)

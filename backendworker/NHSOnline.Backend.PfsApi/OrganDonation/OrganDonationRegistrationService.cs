@@ -47,8 +47,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                 var clientResponse = await _organDonationClient.PostRegistration(registrationRequest, userSession);
 
                 if (!clientResponse.HasSuccessResponse)
+                {
                     return _organDonationRegistrationResultErrorMapper.Map(clientResponse.StatusCode);
-                
+                }
+
                 _logger.LogDebug("Registration successful");
                 var response = _registrationResponseMapper.Map(clientResponse);
                 return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);

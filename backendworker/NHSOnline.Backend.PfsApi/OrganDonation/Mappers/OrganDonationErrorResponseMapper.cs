@@ -31,8 +31,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
         public T Map(HttpStatusCode source)
         {   
             if (!MappingTable.TryGetValue(source, out var codeResult))
+            {
                 codeResult = DefaultResult;
-            
+            }
+
             _logger.LogDebug(codeResult.Item2);
             
             return codeResult.Item1;

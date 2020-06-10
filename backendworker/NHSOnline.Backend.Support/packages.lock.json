@@ -20,6 +20,12 @@
         "resolved": "4.1.1",
         "contentHash": "ioFhRz5gm2Ny+t758Jab638eTG8Uui++klcH00EgBuU/BQbjkbFY+9xw/CkoAChIcrJsoQP2NKDYJ09zN5jR0g=="
       },
+      "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
+        "type": "Direct",
+        "requested": "[3.7.0-*, )",
+        "resolved": "3.7.0-4.20310.4",
+        "contentHash": "VkIEbrqchN8CKntwAwpjEePGr1yb/VZtoTmq7OBc+qGfDLJHxriNBLIC5++maHqCq4NgSOccR0w+kS8VsEbIBw=="
+      },
       "Microsoft.CodeAnalysis.FxCopAnalyzers": {
         "type": "Direct",
         "requested": "[2.9.8, )",

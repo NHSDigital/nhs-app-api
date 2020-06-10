@@ -7,7 +7,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     {
         public static void LogTppErrorResponse<T>(this ILogger logger, TppApiObjectResponse<T> response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
+
             try
             {
                 var message = response.ErrorResponse?.TechnicalMessage ?? response.ErrorResponse?.UserFriendlyMessage ?? string.Empty;
@@ -25,7 +29,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public static void LogTppUnknownError<T>(this ILogger logger, TppApiObjectResponse<T> response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (IsResponseNull(logger, response))
+            {
+                return;
+            }
 
             var message = response.ErrorResponse?.TechnicalMessage ?? response.ErrorResponse?.UserFriendlyMessage ?? string.Empty;
 
@@ -40,7 +47,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         private static bool IsResponseNull<T>(ILogger logger, TppApiObjectResponse<T> response)
         {
-            if (null != response) return false;
+            if (null != response)
+            {
+                return false;
+            }
+
             logger.LogError("Call to TPP returned a null response");
             return true;
         }
