@@ -13,4 +13,4 @@ services:
       - "53:53/udp"
     cap_add:
       - NET_ADMIN
-    command: --log-facility=- -h -A /web.local.bitraft.io/10.0.2.2 -A /api.local.bitraft.io/10.0.2.2 -A /stubs.local.bitraft.io/10.0.2.2
+    command: --log-facility=- -h -A /web.local.bitraft.io/10.0.2.2 -A /api.local.bitraft.io/10.0.2.2 -A /stubs.local.bitraft.io/10.0.2.2 -A /silver.local.bitraft.io/10.0.2.2

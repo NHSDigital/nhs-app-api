@@ -6,6 +6,10 @@ services:
     ports:
       - "27017:27017"
 
+  silver.integrations.bitraft.io:
+    ports:
+      - "5000:80"
+
   api.local.bitraft.io:
     ports:
       - "8089:8089"

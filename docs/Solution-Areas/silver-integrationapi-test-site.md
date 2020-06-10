@@ -13,3 +13,9 @@ One method to update the site is to download and install [Azure Storage Explorer
 
 Once connected, navigate to `Local & Attached > Storage Accounts > silverintegrationtestsa > Blob Containers > $web` and you can drag-and-drop to replace the files
 
+## Running locally
+In order to run the silver integration site locally and use it in the app you will need to add a host file entry for `silver.local.bitraft.io`.
+
+When running locally a nginx docker image is used with a bind mount to expose the local static website and allow you to live edit the site.
+
+This also allows the local site to use the static `nhsapp.js` file from your locally running web application.

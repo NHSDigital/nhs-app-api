@@ -14,6 +14,20 @@ git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 
 Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy).
 
+## Host file entries
+
+Before running the app locally, some entries need to be added to your machine's `hosts` file (`/etc/hosts` on Mac or `C:\windows\system32\drivers\etc\hosts` on Windows) to add the following entries:
+
+```bash
+127.0.0.1       web.local.bitraft.io
+127.0.0.1       api.local.bitraft.io
+127.0.0.1       stubs.local.bitraft.io
+127.0.0.1       cid.local.bitraft.io
+127.0.0.1       users.local.bitraft.io
+127.0.0.1       servicejourneyrulesapi.local.bitraft.io
+127.0.0.1       silver.local.bitraft.io
+```
+
 ## Azure DevOps Feeds
 
 NPM, NuGet and some Gradle packages (Android/BDD Tests) are pulled from DevOps feeds. These proxy internet sources, prevent tampering of packages and avoid build failures during downtime of services such as NPM.

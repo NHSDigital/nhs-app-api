@@ -18,7 +18,7 @@ Each silver integration rule describes a feature (appointments, medicines, healt
 
 If an entirely new silver integration rule is required, for a new feature that does not yet exist in the Silver integrations, the following areas of the code will need to be extended:
 
-* `backendworker/configurations/journeys/all_defaults.yam`l - to set default value for the new rule (likely an empty array).
+* `backendworker/configurations/journeys/all_defaults.yaml` - to set default value for the new rule (likely an empty array).
 * `backendworker/configurations/journeys/silver_integrations/(files)` - to set appropriate values for the new rule for test practices.
 * `backendworker/ServiceJourneyRulesApi.Models/SilverIntegrations`
 * `backendworker/ServiceJourneyRulesApi.Models/(add new Provider class)`

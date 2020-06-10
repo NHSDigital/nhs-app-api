@@ -2,16 +2,7 @@
 
 ## Setup
 
-Before running the web locally, some entries need to be added to your machine's `hosts` file (`/etc/hosts` on Mac or `C:\windows\system32\drivers\etc\hosts` on Windows) to add the following entries:
-
-```bash
-127.0.0.1       web.local.bitraft.io
-127.0.0.1       api.local.bitraft.io
-127.0.0.1       stubs.local.bitraft.io
-127.0.0.1       cid.local.bitraft.io
-127.0.0.1       users.local.bitraft.io
-127.0.0.1       servicejourneyrulesapi.local.bitraft.io
-```
+[Host file entries](../getting-started.md?anchor=host-file-entries)
 
 ## Other build options
 

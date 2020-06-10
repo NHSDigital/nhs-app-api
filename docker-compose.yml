@@ -54,6 +54,13 @@ services:
       - userinfo.local.bitraft.io
       - users.local.bitraft.io
 
+  silver.integrations.bitraft.io:
+    image: nginx:alpine
+    volumes:
+      - type: bind
+        source: ./silver-integration-api-test-site
+        target: /usr/share/nginx/html
+
   web.local.bitraft.io:
     image: ${WEB_DOCKER_REGISTRY:-local}/nhsonline-web:${WEB_DOCKER_TAG:-latest}
     env_file:

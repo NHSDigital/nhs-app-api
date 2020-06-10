@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NHS App - Silver Integration JS API test site</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/main.css">
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/design-example-overrides.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+  </head>
+  <body>
+    <h1>Go to page</h1>
+
+    <div class="nhsuk-back-link">
+      <a class="nhsuk-back-link__link" href="../index.html">
+        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+        </svg>
+        Back</a>
+    </div>
+
+    <input class="nhsuk-button" id="testHome" type="button" value="Go To NHS Home" onclick="nhsapp.navigation.goToHomePage();" />
+    <div>
+      <select class="nhsuk-select" id="goToPageSelection">
+      </select>
+      <br />
+      <input class="nhsuk-button" id="goToPage" type="button" value="Go To Page" onclick="goToPageCall()" />
+    </div>
+    <script>
+      var script = document.createElement("script");
+
+      var urlParams = new URLSearchParams(window.location.search);
+      var env = urlParams.get('env');
+
+      script.src = env + "/js/v1/nhsapp.js";
+
+      script.onload = function() {
+         if(nhsapp.navigation.AppPage) {
+          var select = document.getElementById("goToPageSelection");
+          Object.keys(nhsapp.navigation.AppPage).forEach(key => {
+            var el = document.createElement("option");
+            el.text = key;
+            select.add(el);
+          });
+        }
+      };
+
+      this.goToPageCall = function() {
+        var selection = document.getElementById("goToPageSelection");
+        var selectedPage = selection.options[selection.selectedIndex].text;
+        nhsapp.navigation.goToPage(nhsapp.navigation.AppPage[selectedPage]);
+      }
+
+      document.head.appendChild(script);
+    </script>
+  </body>
+</html>

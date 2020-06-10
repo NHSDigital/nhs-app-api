@@ -320,7 +320,7 @@
       "validateSession": false
     },
     {
-      "id": "nhs-web-app",     
+      "id": "nhs-web-app",
       "url": "https://WebAppBaseUrl",
       "javaScriptInteractionMode": "NhsApp",
       "menuTab": "None",
@@ -458,7 +458,7 @@
     },
     {
       "id": "silver-third-party-api-test",
-      "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
+      "url": "http://silver.local.bitraft.io:5000",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",

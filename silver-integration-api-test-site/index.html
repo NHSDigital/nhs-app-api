@@ -10,41 +10,135 @@
   </head>
   <body>
     <h1>NHS App - Silver Integration JS API test site</h1>
-
-    <nav class="nhsuk-contents-list" role="navigation" aria-label="Pages in this guide">
+    <nav class="nhsuk-contents-list" role="navigation" aria-label="Pages in this guide">     
       <h2 class="nhsuk-u-visually-hidden">Contents</h2>
       <ol class="nhsuk-contents-list__list">
-        <li class="nhsuk-contents-list__item" aria-current="page">
-          <span class="nhsuk-contents-list__current">Home</span>
+        <li class="nhsuk-contents-list__item">
+          <a class="nhsuk-contents-list__link" href="#goToPage">Go to page</a>
         </li>
         <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="allowed/local.html">JS interaction allowed - Local</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="allowed/scratch1.html">JS interaction allowed - Scratch 1</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="allowed/scratch2.html">JS interaction allowed - Scratch 2</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="allowed/scratch16.html">JS interaction allowed - Scratch 16</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="not-allowed/local.html">JS interaction not allowed - local</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="not-allowed/scratch1.html">JS interaction not allowed - Scratch 1</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="not-allowed/scratch2.html">JS interaction not allowed - Scratch 2</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="not-allowed/scratch16.html">JS interaction not allowed - Scratch 16</a>
-        </li>
-        <li class="nhsuk-contents-list__item">
-          <a class="nhsuk-contents-list__link" href="app-tab.html">JS interaction not allowed (appTab)</a>
+          <a class="nhsuk-contents-list__link" href="#addToCalendar">Add to calendar</a>
         </li>
       </ol>
     </nav>
+
+    <hr />
+
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h3 id="addToCalendar">Add to calendar</h3>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction allowed</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/tools.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/tools.html?env=https%3A%2F%2Fwww.production.nhsapp.service.nhs.uk">Prod</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction blocked</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/tools.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/tools.html?env=https%3A%2F%2Fwww.production.nhsapp.service.nhs.uk">Prod</a>
+                </li>
+              </ol>
+            </nav>  
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h3 id="goToPage">Go to page</h3>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction allowed</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/goToPage.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch1.dev.nonlive.nhsapp.service.nhs.uk">Scratch 1</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch2.dev.nonlive.nhsapp.service.nhs.uk">Scratch 2</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch16.dev.nonlive.nhsapp.service.nhs.uk">Scratch 16</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction blocked</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/goToPage.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch1.dev.nonlive.nhsapp.service.nhs.uk">Scratch 1</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch2.dev.nonlive.nhsapp.service.nhs.uk">Scratch 2</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/goToPage.html?env=https%3A%2F%2Fwww-scratch16.dev.nonlive.nhsapp.service.nhs.uk">Scratch 16</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h3 id="addToCalendar">Add to calendar</h3>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction allowed</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/addToCalendar.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="allowed/addToCalendar.html?env=https%3A%2F%2Fwww-scratch19.dev.nonlive.nhsapp.service.nhs.uk">Scratch 19</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="nhsuk-grid-column-one-half">
+            <nav class="nhsuk-contents-list" role="navigation">
+              <p>JS interaction blocked</p>
+              <ol class="nhsuk-contents-list__list">
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/addToCalendar.html?env=http%3A%2F%2Fweb.local.bitraft.io%3A3000">Local</a>
+                </li>
+                <li class="nhsuk-contents-list__item">
+                  <a class="nhsuk-contents-list__link" href="not-allowed/addToCalendar.html?env=https%3A%2F%2Fwww-scratch1.dev.nonlive.nhsapp.service.nhs.uk">Scratch 19</a>
+                </li>
+              </ol>
+            </nav>  
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
