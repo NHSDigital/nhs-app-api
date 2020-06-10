@@ -14,7 +14,8 @@ namespace NHSOnline.Backend.Support.UnitTests
         private RandomStringGenerator _randomStringGenerator;
         private IErrorReferenceGenerator _errorReferenceGenerator;
         private bool _disposed;
-        
+        private DeterministicRandomGenerator _deterministicRandomGenerator;
+
         private class DeterministicRandomGenerator : System.Security.Cryptography.RandomNumberGenerator
         {
             private readonly Random _random = new Random(0);
@@ -36,7 +37,8 @@ namespace NHSOnline.Backend.Support.UnitTests
         {
             _loggerFactory = new LoggerFactory();
             _logger = _loggerFactory.CreateLogger<ErrorReferenceGenerator>();
-            _randomStringGenerator = new RandomStringGenerator(new DeterministicRandomGenerator());
+            _deterministicRandomGenerator = new DeterministicRandomGenerator();
+            _randomStringGenerator = new RandomStringGenerator(_deterministicRandomGenerator);
             _errorReferenceGenerator = new ErrorReferenceGenerator(_logger, _randomStringGenerator);
         }
 
@@ -238,6 +240,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             _loggerFactory.Dispose();
             _randomStringGenerator.Dispose();
+            _deterministicRandomGenerator.Dispose();
 
             _disposed = true;
         }

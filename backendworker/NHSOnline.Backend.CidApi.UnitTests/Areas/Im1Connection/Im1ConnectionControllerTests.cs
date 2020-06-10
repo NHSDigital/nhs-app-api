@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void Constructor_NullOdsCodeLookup_Throws()
         {
             // Act
-            Action act = () => new Im1ConnectionController(
+            Action act = () => _ = new Im1ConnectionController(
                 _logger.Object,
                 _auditor.Object,
                 _odsCodeMassager.Object,

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,25 +10,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
     {
         private readonly XmlSerializer _serializer = new XmlSerializer(typeof(T));
         private T _model;
-        private XElement _element;
 
-        protected XElement Element
-        {
-            get { return _element; }
-        }
-        
+        protected XElement Element { get; private set; }
+
         [TestInitialize]
         public void TestInitialize()
         {
             _model = CreateModel();
-            _element = ToXElement(_model);
+            Element = ToXElement(_model);
         }
 
         protected abstract T CreateModel();
         
         private string Serialize(T model)
         {
-            var writer = new StringWriter();
+            using var writer = new StringWriter();
             _serializer.Serialize(writer, model);
             return writer.ToString();
         }

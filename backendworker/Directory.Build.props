@@ -19,7 +19,6 @@
     <When Condition="$(MSBuildProjectName.EndsWith('UnitTests'))">
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/TestCode.ruleset</CodeAnalysisRuleSet>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Optimize>false</Optimize>
       </PropertyGroup>
@@ -27,19 +26,16 @@
     <When Condition="$(MSBuildProjectName.Contains('UnitTest'))">
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/TestCode.ruleset</CodeAnalysisRuleSet>
         <Optimize>false</Optimize>
       </PropertyGroup>
     </When>
     <When Condition="$(MSBuildProjectName.EndsWith('Api'))">
       <PropertyGroup>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/ProductionCode.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </When>
     <Otherwise>
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/ProductionCode.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </Otherwise>
   </Choose>

@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                             {
                                 Outcome = new Outcome
                                 {
-                                    Successful = bool.FalseString.ToLowerInvariant(),
+                                    Successful = "false",
                                     Error = new OutcomeError
                                     {
                                         Code = errorCode

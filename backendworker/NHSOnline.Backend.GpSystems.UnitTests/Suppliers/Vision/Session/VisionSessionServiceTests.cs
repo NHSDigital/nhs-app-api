@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
+                                            Successful = "false",
                                             Error = new OutcomeError
                                             {
                                                 Code = "-30",
@@ -245,7 +245,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
+                                            Successful = "false",
                                             Error = new OutcomeError
                                             {
                                                 Code = "-100",

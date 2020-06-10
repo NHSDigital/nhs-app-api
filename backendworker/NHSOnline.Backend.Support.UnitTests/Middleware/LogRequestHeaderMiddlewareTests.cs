@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
                 });
             
             // ReSharper disable once ObjectCreationAsStatement
-            Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
+            Action act = () => _ = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             // Act
             act.Should().Throw<ArgumentException>()
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
             OptionsWrapper<LogRequestHeaderOptions> options = null;
             
             // ReSharper disable once ObjectCreationAsStatement
-            Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
+            Action act = () => _ = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             // Act
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("options");
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
                 null);
             
             // ReSharper disable once ObjectCreationAsStatement
-            Action act = () => new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
+            Action act = () => _ = new LogRequestHeaderMiddleware(_next, _loggerFactory.Object, options);
             
             // Act
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("options");

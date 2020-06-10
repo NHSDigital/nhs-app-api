@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.Support
             where TEnum : struct, IConvertible
         {
             var type = GetType<TEnum>();
-
             try
             {
                 value = (TEnum)ParseFromDescriptionInternal(type, description);

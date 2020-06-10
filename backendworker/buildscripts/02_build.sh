@@ -19,7 +19,6 @@ done
 COMMIT_ID=$(git rev-parse --short HEAD)
 
 docker build \
-  --memory="1.8g" \
   --target=built \
   --build-arg=COMMIT_ID="$COMMIT_ID" \
   --tag "local/backend-build:$COMMIT_ID" \

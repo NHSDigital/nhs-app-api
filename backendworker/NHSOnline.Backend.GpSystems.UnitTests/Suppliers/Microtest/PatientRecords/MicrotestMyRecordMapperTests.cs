@@ -12,7 +12,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecords
 {
-    [TestClass] public class MicrotestMyRecordMapperTest
+    [TestClass]
+    public class MicrotestMyRecordMapperTests
     {
         private IMicrotestMyRecordMapper _mapper;
         private IFixture _fixture;

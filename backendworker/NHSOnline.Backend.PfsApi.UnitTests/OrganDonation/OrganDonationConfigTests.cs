@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", null);
 
             // Act
-            Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);
+            Action create = () => _ = new OrganDonationConfig(_mockConfiguration.Object, _logger);
 
             // Assert
             create
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", "boo");
 
             // Act
-            Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);
+            Action create = () => _ = new OrganDonationConfig(_mockConfiguration.Object, _logger);
 
             // Assert
             create

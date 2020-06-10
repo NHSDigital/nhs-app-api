@@ -11,7 +11,7 @@ using NHSOnline.Backend.UsersApi.Notifications.Azure;
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
 {
     [TestClass]
-    public class RegistrationDescriptionFactoryTest
+    public class RegistrationDescriptionFactoryTests
     {
         private Fixture _fixture;
         private RegistrationDescriptionFactory _systemUnderTest;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -707,7 +707,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                         {
                             Outcome = new Outcome
                             {
-                                Successful = bool.FalseString.ToLowerInvariant(),
+                                Successful = "false",
                                 Error = new OutcomeError
                                 {
                                     Code = errorCode,

@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         [TestMethod]
         public void Constructor_KnownServicesOptionsNull_ThrowsException()
         {
-            Action act = () => new ConfigurationService(_logger.Object, null, _settings);
+            Action act = () => _ = new ConfigurationService(_logger.Object, null, _settings);
 
             act.Should().Throw<ArgumentNullException>();
         }
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         public void Constructor_KnownServicesOptionValuesNull_ThrowsException()
         {
             IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(null);
-            Action act = () => new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
 
             act.Should().Throw<ArgumentNullException>();
         }
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         [TestMethod]
         public void Constructor_DeviceConfigurationNull_ThrowsException()
         {
-            Action act = () => new ConfigurationService(_logger.Object, _mockKnownServices.Object, null);
+            Action act = () => _ = new ConfigurationService(_logger.Object, _mockKnownServices.Object, null);
 
             act.Should().Throw<ArgumentNullException>();
         }
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 WebAppBaseUrl = string.IsNullOrWhiteSpace(webAppBaseUrl) ? null : new Uri(webAppBaseUrl),
             };
 
-            Action act = () => new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
+            Action act = () => _ = new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
 
             act.Should().Throw<ArgumentNullException>();
         }
