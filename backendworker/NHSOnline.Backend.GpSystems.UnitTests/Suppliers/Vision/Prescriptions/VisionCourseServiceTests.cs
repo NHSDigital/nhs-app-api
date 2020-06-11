@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         {
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = _eligibleRepeatsResponse,
                     }));
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = _eligibleRepeatsResponse,
                     }));
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession)).Returns(
                 Task.FromResult(
-                    new VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = _eligibleRepeatsResponse,
                     }));
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
                 .Returns(
                     Task.FromResult(
-                        new VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>
+                        new VisionPfsApiObjectResponse<EligibleRepeatsResponse>
                             (HttpStatusCode.InternalServerError)
                             {
                                 RawResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>()
@@ -248,7 +248,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         {
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
                 .Returns(Task.FromResult(
-                    new VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
+                    new VisionPfsApiObjectResponse<EligibleRepeatsResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = _eligibleRepeatsResponse,
                     }));

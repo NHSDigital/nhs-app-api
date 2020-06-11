@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
                 .AddKeyToEnum("404VY806",
                     Im1ConnectionErrorCodes.InternalCode.PatientRecordNotFound);
 
-        public static LinkageResult Map(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse> response,
+        public static LinkageResult Map(VisionLinkageApiObjectResponse<LinkageKeyPostResponse> response,
             ILogger<VisionLinkageService> logger)
         {
             var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);

@@ -12,12 +12,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             _fixture = fixture;
         }
 
-        public VisionLinkageClient.VisionApiObjectResponse<T> CreateResponse<T>(
+        public VisionLinkageApiObjectResponse<T> CreateResponse<T>(
             HttpStatusCode statusCode,
             string errorCode,
             string message = "")
         {
-            var response = _fixture.Create<VisionLinkageClient.VisionApiObjectResponse<T>>();
+            var response = _fixture.Create<VisionLinkageApiObjectResponse<T>>();
 
             response.StatusCode = statusCode;
             response.ErrorResponse.Code = errorCode;

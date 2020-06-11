@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
     [TestClass]
     public sealed class VisionPFSClientTests : IDisposable
     {
-        private IVisionPFSClient _systemUnderTest;
+        private IVisionPfsClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private VisionConfigurationSettings _visionConfig;
         private IFixture _fixture;
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(VisionConstants.GetVisionRequestXml);
 
-            _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.IsAny<X509Certificate2>(), It.IsAny<VisionRequest<Object>>(), It.IsAny<string>())).Returns("AnyString");
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.IsAny<VisionRequest<Object>>(), It.IsAny<string>())).Returns("AnyString");
 
             _mockCertificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>())).Returns(
                 new X509Certificate2(Path, Passphrase));
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             _fixture.Inject(_httpClient);
             _fixture.Inject(_visionConfig);
 
-            _systemUnderTest = _fixture.Create<VisionPFSClient>();
+            _systemUnderTest = _fixture.Create<VisionPfsClient>();
         }
 
         [TestMethod]
@@ -228,9 +228,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             // Arrange
             var bodyResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>();
 
-            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
-                It.IsAny<X509Certificate2>(),
-                It.IsAny<VisionRequest<CoursesRequest>>(),
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.IsAny<VisionRequest<CoursesRequest>>(),
                 It.IsAny<string>())).Returns("AnyString");
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
@@ -255,9 +253,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             var bodyResponse = _fixture.Create<VisionResponseEnvelope<PrescriptionHistoryResponse>>();
 
-            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
-                It.IsAny<X509Certificate2>(),
-                It.Is<VisionRequest<PrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.Is<VisionRequest<PrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
                 It.IsAny<string>())).Returns("requestXml");
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
@@ -283,9 +279,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             var bodyResponse = _fixture.Create<VisionResponseEnvelope<OrderNewPrescriptionResponse>>();
 
-            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
-                It.IsAny<X509Certificate2>(),
-                It.Is<VisionRequest<OrderNewPrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.Is<VisionRequest<OrderNewPrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
                 It.IsAny<string>())).Returns("requestXml");
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
@@ -319,13 +313,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             _mockEnvelopeService.Reset();
 
-            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
-                It.IsAny<X509Certificate2>(),
-                It.IsAny<VisionRequest<AvailableAppointmentsRequest>>(),
-                It.IsAny<string>()))
+            _mockEnvelopeService
+                .Setup(x => x.BuildEnvelope(It.IsAny<VisionRequest<AvailableAppointmentsRequest>>(), It.IsAny<string>()))
                 .Returns("AnyString")
-                .Callback<X509Certificate, VisionRequest<AvailableAppointmentsRequest>, string>((c, r, s) =>
-                    received = r);
+                .Callback<VisionRequest<AvailableAppointmentsRequest>, string>((r, s) => received = r);
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
             _mockHttpHandler

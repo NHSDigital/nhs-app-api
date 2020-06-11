@@ -29,8 +29,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             _visionClient = visionClient;
             _settings = settings;
             _visionPrescriptionMapper = visionPrescriptionMapper;
-
-            _settings.Validate();
         }
 
         public async Task<GetPrescriptionsResult> GetPrescriptions(

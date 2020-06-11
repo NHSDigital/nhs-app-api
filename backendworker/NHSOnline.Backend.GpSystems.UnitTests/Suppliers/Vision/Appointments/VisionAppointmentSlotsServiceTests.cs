@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
                 CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
             
-            var slotsResponse = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
+            var slotsResponse = new VisionPfsApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<AvailableAppointmentsResponse>
                 {
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             MockVisionClientAppointmentSlotsGetMethod(slotsResponse);
       
-            var configResponse = new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+            var configResponse = new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                 {
@@ -224,7 +224,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         private void MockVisionClientAppointmentSlotsGetMethod(
-            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
+            VisionPfsApiObjectResponse<AvailableAppointmentsResponse> response)
         {   
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
                     _visionUserSession,
@@ -234,7 +234,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         private void MockVisionClientConfigurationGetMethod(
-            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response)
+            VisionPfsApiObjectResponse<PatientConfigurationResponse> response)
         {
             _mockVisionClient.Setup(x => x.GetConfiguration(
                     _visionUserSession

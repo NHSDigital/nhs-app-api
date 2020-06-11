@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                     req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                            req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse>(httpStatusCode)
+                    new VisionLinkageApiObjectResponse<LinkageKeyGetResponse>(httpStatusCode)
                     {
                         Body = getLinkageKeyResponse,
                     }));
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                     req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
                            req.OdsCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse>(httpStatusCodeResponse)
+                    new VisionLinkageApiObjectResponse<LinkageKeyGetResponse>(httpStatusCodeResponse)
                     {
                         ErrorResponse = new ErrorResponse
                         {
@@ -229,7 +229,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                                    && request.LinkageKeyPostRequest.LastName.Equals(surname,
                                        StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse>(HttpStatusCode.OK)
+                    new VisionLinkageApiObjectResponse<LinkageKeyPostResponse>(HttpStatusCode.OK)
                     {
                         Body = linkageKeyPostResponse,
                     }))
@@ -285,7 +285,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                 });
 
             var mockResponse =
-                new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse>(httpStatusCodeResponse);
+                new VisionLinkageApiObjectResponse<LinkageKeyPostResponse>(httpStatusCodeResponse);
 
             // Add vision specific error code if unit test requires it.
             if (!visionApiErrorCode.IsNullOrEmpty())
@@ -347,7 +347,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
                                    && request.LinkageKeyPostRequest.LastName.Equals(createLinkageRequest.Surname,
                                        StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse>(HttpStatusCode.Conflict)))
+                    new VisionLinkageApiObjectResponse<LinkageKeyPostResponse>(HttpStatusCode.Conflict)))
                 .Verifiable();
 
             // Act

@@ -102,23 +102,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             // Arrange
             var createLinkageKey = _fixture.Create<CreateLinkageKey>();
 
-            var errorResponseWrapper = _fixture.Create<VisionLinkageClient.ErrorResponseWrapper>();
-
             var linkagePostUri = new Uri(ApiUri,
                 string.Format(CultureInfo.CurrentCulture, LinkageBasePath, createLinkageKey.OdsCode));
 
             _mockHttpHandler.WhenVision(HttpMethod.Post, linkagePostUri)
                 .WithContent(JsonConvert.SerializeObject(createLinkageKey.LinkageKeyPostRequest,
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }))
-                .Respond(HttpStatusCode.Conflict, "application/json",
-                    JsonConvert.SerializeObject(errorResponseWrapper));
+                .Respond(HttpStatusCode.Conflict, "application/json", @"{ ""Error"": { ""Code"": ""12345"" } }");
 
             // Act
             var response = await _systemUnderTest.CreateLinkageKey(createLinkageKey);
 
             // Assert
             response.StatusCode.Should().Be(409);
-            response.ErrorResponse.Should().BeEquivalentTo(errorResponseWrapper.Error);
+            response.ErrorResponse.Code.Should().Be("12345");
         }
 
         [TestCleanup]

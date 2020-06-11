@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             _mapperType = mapperType;
         }
 
-        public T Check(VisionPFSClient.VisionApiObjectResponse<VisionPatientDataResponse> result)
+        public T Check(VisionPfsApiObjectResponse<VisionPatientDataResponse> result)
         {
             _logger.LogInformation($"Checking Vision {(_mapperType)}");
 

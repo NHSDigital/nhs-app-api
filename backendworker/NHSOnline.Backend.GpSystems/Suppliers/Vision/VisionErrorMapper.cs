@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
     public static class VisionErrorMapper
     {
         public static TEnum? Map<TResponse, TEnum>(ILogger logger,
-            VisionLinkageClient.VisionApiObjectResponse<TResponse> response,
+            VisionLinkageApiObjectResponse<TResponse> response,
             KeyAndMessageToEnumMapper<TEnum> keyAndMessageTo) where TEnum : struct
         {
             logger.LogVisionErrorResponse(response);
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         }
 
         public static TEnum? Map<TResponse, TEnum>(ILogger logger,
-            VisionPFSClient.VisionApiObjectResponse<TResponse> response,
+            VisionPfsApiObjectResponse<TResponse> response,
             KeyAndMessageToEnumMapper<TEnum> keyAndMessageTo) where TEnum : struct
         {
             logger.LogVisionErrorResponse(response);

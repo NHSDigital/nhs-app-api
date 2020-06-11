@@ -112,12 +112,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
 
-        private static VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> CreateResponse(
+        private static VisionPfsApiObjectResponse<ServiceContentRegisterResponse> CreateResponse(
             HttpStatusCode statusCode,
             string errorCode,
             string errormessage = null)
         {
-            return new VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(statusCode)
+            return new VisionPfsApiObjectResponse<ServiceContentRegisterResponse>(statusCode)
             {
                 RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
                 {

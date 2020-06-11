@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.UseConfigurationValidation();
             services.ConfigureValidatableSetting<OnlineConsultationsProvidersSettings>(configuration.GetSection("OnlineConsultationsProvidersSettings"));
 
             services.AddHttpContextAccessor();

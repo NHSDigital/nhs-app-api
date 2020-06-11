@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 {
                     var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-                    VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> linkAccountResponse;
+                    VisionPfsApiObjectResponse<ServiceContentRegisterResponse> linkAccountResponse;
 
                     try
                     {
@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 
         private CreateIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
             PatientIm1ConnectionRequest request,
-            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
+            VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionConnectionToken connectionToken)
         {
             var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();

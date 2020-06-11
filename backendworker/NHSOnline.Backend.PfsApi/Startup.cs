@@ -193,7 +193,7 @@ namespace NHSOnline.Backend.PfsApi
         {
             _configurationSettings = CreateAndValidateEnvironmentVariables();
 
-            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+            services.UseConfigurationValidation();
 
             services.AddSingleton(_configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(_configurationSettings);

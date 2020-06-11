@@ -27,8 +27,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _logger = logger;
             _mapper = mapper;
             _settings = settings;
-
-            _settings.Validate();
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
@@ -53,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
                 var configTask = _visionClient.GetConfiguration(visionUserSession);
 
-                VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse = null;
+                VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse = null;
 
                 try
                 {
@@ -80,8 +78,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         }
 
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
-            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> slotsResponse,
-            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
+            VisionPfsApiObjectResponse<AvailableAppointmentsResponse> slotsResponse,
+            VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionUserSession userSession)
         {
             if (slotsResponse.IsAccessDeniedError)

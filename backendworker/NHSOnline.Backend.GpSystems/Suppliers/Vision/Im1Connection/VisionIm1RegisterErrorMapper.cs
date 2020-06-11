@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 .AddKeyToEnum("200-15", InternalCode.UserAccountDisabled);
 
         public static Im1ConnectionRegisterResult Map(
-            VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> response, ILogger<VisionIm1ConnectionService> logger)
+            VisionPfsApiObjectResponse<ServiceContentRegisterResponse> response, ILogger<VisionIm1ConnectionService> logger)
         {
             var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);
 

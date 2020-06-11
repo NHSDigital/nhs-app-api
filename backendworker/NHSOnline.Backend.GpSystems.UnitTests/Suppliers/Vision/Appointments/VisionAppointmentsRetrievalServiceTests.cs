@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         public async Task GetAppointments_VisionClientReturnsUnparsableMessage_ReturnsInternalServerError()
         {
             // Arrange
-            var visionResponse = new VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            var visionResponse = new VisionPfsApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
                 {
@@ -173,10 +173,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _visionUserSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
         }
 
-        private static VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
+        private static VisionPfsApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
             VisionResponse<BookedAppointmentsResponse> bookedAppointments)
         {
-            return new VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            return new VisionPfsApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
                 {
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         private void MockVisionClientAppointmentsGetMethod(
-            VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
+            VisionPfsApiObjectResponse<BookedAppointmentsResponse> response)
         {   
             _mockVisionClient.Reset();
             _mockVisionClient.Setup(x => x.GetExistingAppointments(

@@ -1,37 +1,27 @@
-﻿using System;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Serialization;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope.ServiceEvaluators;
+using NHSOnline.Backend.Support.Certificate;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
 {
     [TestClass]
-    public sealed class EnvelopeServiceTests : IDisposable
+    public sealed class EnvelopeServiceTests
     {
-        private IFixture _fixture;
-
-        private EnvelopeService _systemUnderTest;
-        private X509Certificate2 _certificate;
-        private const string CertificatePath = "Suppliers/Vision/Resources/mycert.pfx";
-        private const string Password = "password1";
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _certificate = new X509Certificate2(CertificatePath, Password);
-            _systemUnderTest = _fixture.Create<EnvelopeService>();
-        }
-
         [TestMethod]
         public void BuildEnvelope_GetConfiguration_CorrectFormat()
         {
+            using var context = new EnvelopeServiceTestContext();
+
             const string expectedServiceDefinition = "VOS.GetConfiguration";
             const string expectedVersionDefinition = "2.3.0";
 
@@ -41,12 +31,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
             const string expectedProviderId = "nhson001";
             const string requestUsername = "vps-nhson001";
 
-            var visionRequest = new VisionRequest<Object>(expectedServiceDefinition, expectedVersionDefinition,
+            var visionRequest = new VisionRequest<object>(expectedServiceDefinition, expectedVersionDefinition,
                 expectedRosuAccountId, expectedApiKey, expectedOdsCode, expectedProviderId, null);
 
-            var result = _systemUnderTest.BuildEnvelope(_certificate,
-                visionRequest,
-                requestUsername);
+            var result = context.SystemUnderTest.BuildEnvelope(visionRequest, requestUsername);
 
             result.Should().BeAssignableTo<string>()
                 .Subject.Should().Contain("<vision:serviceContent />");
@@ -66,6 +54,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
         [TestMethod]
         public void BuildEnvelope_GenericContentBody_CorrectFormat()
         {
+            using var context = new EnvelopeServiceTestContext();
+
             const string expectedServiceDefinition = "VOS.GenericService";
             const string expectedVersionDefinition = "9.9.9";
 
@@ -85,22 +75,53 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
                 expectedRosuAccountId, expectedApiKey, expectedOdsCode, expectedProviderId,
                 new TestClass { TestProp = "myTest" });
 
-            var result = _systemUnderTest.BuildEnvelope(_certificate,
-                visionRequest,
-                requestUsername);
+            var result = context.SystemUnderTest.BuildEnvelope(visionRequest, requestUsername);
 
             result.Should().Contain(expectedServiceContent);
         }
 
-        public void Dispose()
+        private sealed class EnvelopeServiceTestContext : IDisposable
         {
-            _certificate.Dispose();
+            private const string CertificatePath = "Suppliers/Vision/Resources/mycert.pfx";
+            private const string Password = "password1";
+
+            private readonly X509Certificate2 _certificate;
+            private readonly ServiceProvider _serviceProvider;
+
+            internal EnvelopeServiceTestContext()
+            {
+                _certificate = new X509Certificate2(CertificatePath, Password);
+
+                var mockCertificateService = new Mock<ICertificateService>();
+                mockCertificateService
+                    .Setup(x => x.GetCertificate(CertificatePath, Password))
+                    .Returns(_certificate);
+
+                var visionConfiguration = new VisionConfigurationSettings("", null, CertificatePath, Password, "", "", "", "", "", 0, null, null, "");
+
+                var services = new ServiceCollection()
+                    .RegisterVisionEnvelopeServices()
+                    .AddMockLoggers()
+                    .AddSingleton(mockCertificateService.Object)
+                    .AddSingleton(visionConfiguration);
+
+                _serviceProvider = services.BuildServiceProvider();
+                SystemUnderTest = _serviceProvider.GetRequiredService<IEnvelopeService>();
+            }
+
+            public IEnvelopeService SystemUnderTest { get; }
+
+            public void Dispose()
+            {
+                _certificate.Dispose();
+                _serviceProvider.Dispose();
+            }
         }
-    }
-    
-    public class TestClass
-    {
-        [XmlElement(ElementName = "hello", Namespace = "urn:vision")]
-        public string TestProp { get; set; }        
+
+        public class TestClass
+        {
+            [XmlElement(ElementName = "hello", Namespace = "urn:vision")]
+            public string TestProp { get; set; }
+        }
     }
 }

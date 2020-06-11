@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         [TestMethod]
         public void Vision_LoggingExtension_Validate_SuccessfulErrorLog()
         {
-            var expectedResponse = _fixture.Create<VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>>();
+            var expectedResponse = _fixture.Create<VisionPfsApiObjectResponse<PatientConfigurationResponse>>();
 
             _logger.Object.LogVisionErrorResponse(expectedResponse);
 
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .BuildUnsuccessfulResponseWithErrorCode<BookedAppointmentsResponse>("-35");
 
             errorResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description = userIdentityGuid;
-            var sampleResponse = new VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode
+            var sampleResponse = new VisionPfsApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode
                 .InternalServerError) {RawResponse = errorResponse.RawResponse};
 
             var response = VisionLoggingExtensions.CensorResponse(sampleResponse);

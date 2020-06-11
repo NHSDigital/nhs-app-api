@@ -38,15 +38,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             var dependencies = new List<ServiceDescriptor>
             {
-                new ServiceDescriptor(typeof(IGpSystem), typeof(VisionGpSystem), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IVisionLinkageConfig), typeof(VisionLinkageConfig), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IVisionPFSClient), typeof(VisionPFSClient), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IVisionLinkageClient), typeof(VisionLinkageClient), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IVisionClient), typeof(VisionClient), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(IGpSystem), typeof(VisionGpSystem), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IVisionLinkageConfig), typeof(VisionLinkageConfig), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IVisionPfsClient), typeof(VisionPfsClient), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IVisionLinkageClient), typeof(VisionLinkageClient), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IVisionClient), typeof(VisionClient), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(VisionTokenValidationService), typeof(VisionTokenValidationService), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(VisionPFSHttpRequestIdentifier), typeof(VisionPFSHttpRequestIdentifier), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(VisionLinkageHttpRequestIdentifier), typeof(VisionLinkageHttpRequestIdentifier), ServiceLifetime.Transient),
-                new ServiceDescriptor(typeof(VisionHttpClientHandler), typeof(VisionHttpClientHandler), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(VisionHttpClientHandler), typeof(VisionHttpClientHandler), ServiceLifetime.Transient),
             };
 
             foreach (var dependency in dependencies)

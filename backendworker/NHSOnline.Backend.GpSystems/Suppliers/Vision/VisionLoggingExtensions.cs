@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
     public static class VisionLoggingExtensions
     {
-        public static void LogVisionErrorResponse<T>(this ILogger logger, VisionLinkageClient.VisionApiObjectResponse<T> response)
+        public static void LogVisionErrorResponse<T>(this ILogger logger, VisionLinkageApiObjectResponse<T> response)
         {
             if (response == null)
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             }
         }
 
-        public static void LogVisionErrorResponse<T>(this ILogger logger, VisionPFSClient.VisionApiObjectResponse<T> response)
+        public static void LogVisionErrorResponse<T>(this ILogger logger, VisionPfsApiObjectResponse<T> response)
         {
             if (response == null)
             {
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             }
         }
 
-        public static JObject CensorResponse<T>(VisionLinkageClient.VisionApiObjectResponse<T> response)
+        public static JObject CensorResponse<T>(VisionLinkageApiObjectResponse<T> response)
         {
             var initialResponse = JObject.Parse(response.SerializeJson());
             var properties = initialResponse.Descendants()
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return initialResponse;
         }
 
-        public static JObject CensorResponse<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
+        public static JObject CensorResponse<T>(VisionPfsApiObjectResponse<T> response)
         {
             var initialResponse = JObject.Parse(response.RawResponse.SerializeJson());
             var properties = initialResponse.Descendants()

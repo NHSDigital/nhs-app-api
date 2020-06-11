@@ -40,17 +40,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         private static IServiceCollection RegisterVisionBaseServices(this IServiceCollection services)
         {
-            services.AddSingleton<IGpSystem, VisionGpSystem>();
-            services.AddSingleton<IVisionLinkageConfig, VisionLinkageConfig>();
-            services.AddSingleton<IVisionPFSClient, VisionPFSClient>();
-            services.AddSingleton<IVisionLinkageClient, VisionLinkageClient>();
-            services.AddSingleton<IVisionClient, VisionClient>();
+            services.AddTransient<IGpSystem, VisionGpSystem>();
+            services.AddTransient<IVisionLinkageConfig, VisionLinkageConfig>();
+            services.AddTransient<IVisionPfsClient, VisionPfsClient>();
+            services.AddTransient<VisionPfsClientRequestSender>();
+            services.AddTransient<IVisionLinkageClient, VisionLinkageClient>();
+            services.AddTransient<IVisionClient, VisionClient>();
 
             services.AddTransient<VisionTokenValidationService>();
 
             services.AddTransient<VisionPFSHttpRequestIdentifier>();
             services.AddTransient<VisionLinkageHttpRequestIdentifier>();
-            services.AddSingleton<VisionHttpClientHandler>();
+            services.AddTransient<VisionHttpClientHandler>();
 
             services.AddHttpClient<VisionPFSHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<VisionHttpClientHandler>()

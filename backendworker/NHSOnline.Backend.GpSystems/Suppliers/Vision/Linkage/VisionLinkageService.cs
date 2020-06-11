@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
         }
 
         private LinkageResult HandleSuccessfulGetLinkageKey(
-            VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response)
+            VisionLinkageApiObjectResponse<LinkageKeyGetResponse> response)
         {
             try
             {

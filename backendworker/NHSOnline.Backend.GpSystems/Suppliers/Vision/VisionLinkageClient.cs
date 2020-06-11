@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,10 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Linkage;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -36,21 +32,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             _responseParser = responseParser;
         }
 
-        public async Task<VisionApiObjectResponse<LinkageKeyGetResponse>> GetLinkageKey(GetLinkageKey getLinkageKey)
+        public async Task<VisionLinkageApiObjectResponse<LinkageKeyGetResponse>> GetLinkageKey(GetLinkageKey getLinkageKey)
         {
             var path = string.Format(CultureInfo.InvariantCulture, GetLinkagePath, getLinkageKey.OdsCode, getLinkageKey.NhsNumber);
 
             return await Get<LinkageKeyGetResponse>(path);
         }
 
-        public async Task<VisionApiObjectResponse<LinkageKeyPostResponse>> CreateLinkageKey(CreateLinkageKey createLinkageKey)
+        public async Task<VisionLinkageApiObjectResponse<LinkageKeyPostResponse>> CreateLinkageKey(CreateLinkageKey createLinkageKey)
         {
             var path = string.Format(CultureInfo.InvariantCulture, LinkageBasePath, createLinkageKey.OdsCode);
 
             return await Post<LinkageKeyPostResponse>(createLinkageKey.LinkageKeyPostRequest, path);
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> Get<TResponse>(string path)
+        private async Task<VisionLinkageApiObjectResponse<TResponse>> Get<TResponse>(string path)
         {
             using (var request = BuildVisionRequest(HttpMethod.Get, path))
             {
@@ -58,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             }
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> Post<TResponse>(LinkageKeyPostRequest model, string path)
+        private async Task<VisionLinkageApiObjectResponse<TResponse>> Post<TResponse>(LinkageKeyPostRequest model, string path)
         {
             using (var request = BuildVisionRequest(HttpMethod.Post, path))
             {
@@ -77,65 +73,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return request;
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+        private async Task<VisionLinkageApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
             _logger.LogEnter();
 
             var responseMessage = await _httpClient.Client.SendAsync(request);
-            var response = new VisionApiObjectResponse<TResponse>(responseMessage.StatusCode);
+            var response = new VisionLinkageApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             await response.Parse(responseMessage, _responseParser, _logger);
 
             _logger.LogExit();
 
             return response;
-        }
-
-        public class VisionApiObjectResponse<TBody> : ApiResponse
-        {
-            public VisionApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
-            {
-            }
-
-            public TBody Body { get; set; }
-
-            public ErrorResponse ErrorResponse { get; set; }
-
-            public async Task Parse(
-                HttpResponseMessage responseMessage,
-                IJsonResponseParser responseParser,
-                ILogger logger)
-            {
-                var stringResponse = await GetStringResponse(responseMessage, logger);
-
-                if (!string.IsNullOrEmpty(stringResponse))
-                {
-                    ParseResponse(responseParser, stringResponse);
-                }
-            }
-
-            private void ParseResponse(
-                IResponseParser responseParser,
-                string stringResponse)
-            {
-                Body = responseParser.ParseBody<TBody>(stringResponse);
-
-                if (!HasSuccessResponse)
-                {
-                    var errorWrapper = responseParser.ParseBody<ErrorResponseWrapper>(stringResponse);
-                    ErrorResponse = errorWrapper?.Error;
-                }
-            }
-
-            public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
-
-            protected override bool FormatResponseIfUnsuccessful => true;
-        }
-
-        public class ErrorResponseWrapper
-        {
-            public ErrorResponse Error { get; set; }
         }
     }
 }

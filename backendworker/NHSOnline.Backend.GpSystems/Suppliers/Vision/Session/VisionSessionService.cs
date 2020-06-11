@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             }
         }
 
-        private static List<string> GetLocationIds(VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response) =>
+        private static List<string> GetLocationIds(VisionPfsApiObjectResponse<PatientConfigurationResponse> response) =>
             response.Body.Configuration.References?.Locations != null
                 ? response.Body.Configuration.References.Locations.Select(l => l.Id).ToList()
                 : new List<string>();
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             throw new System.NotImplementedException();
         }
 
-        private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
+        private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPfsApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

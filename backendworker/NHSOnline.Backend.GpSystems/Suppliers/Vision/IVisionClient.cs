@@ -1,6 +1,6 @@
 ﻿namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
-    public interface IVisionClient : IVisionLinkageClient, IVisionPFSClient
+    public interface IVisionClient : IVisionLinkageClient, IVisionPfsClient
     {
     }
 }

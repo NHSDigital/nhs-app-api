@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 .AddKeyToEnum("200InvalidSecurity", InternalCode.InvalidSecurity);
 
         public static Im1ConnectionVerifyResult Map(
-            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response, ILogger<VisionIm1ConnectionService> logger)
+            VisionPfsApiObjectResponse<PatientConfigurationResponse> response, ILogger<VisionIm1ConnectionService> logger)
         {
             var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);
 

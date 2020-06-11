@@ -1,8 +1,10 @@
 using System;
 using NHSOnline.Backend.Support.Settings;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Vision {
-    public class VisionConfigurationSettings {
+namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
+{
+    public sealed class VisionConfigurationSettings
+    {
         public int VisionAppointmentSlotsRequestCount { get; set; }
         public int? CoursesMaxCoursesLimit { get; set; }
         public int? PrescriptionsMaxCoursesSoftLimit { get; set; }
@@ -15,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision {
         public string VisionSenderUserFullName { get; }
         public string VisionSenderUserIdentity { get; }
         public string VisionSenderUserRole { get; }
-        
         public string Environment { get; set; }
 
         public VisionConfigurationSettings(
@@ -47,6 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision {
             PrescriptionsMaxCoursesSoftLimit = prescriptionsMaxCoursesSoftLimit;
             Environment = environment;
         }
+
         public void Validate()
         { 
             if (VisionAppointmentSlotsRequestCount == default)

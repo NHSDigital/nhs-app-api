@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
@@ -9,47 +9,47 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
-    public interface IVisionPFSClient
+    public interface IVisionPfsClient
     {
-        Task<VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
+        Task<VisionPfsApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
             VisionConnectionToken token,
             string odsCode);
 
-        Task<VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
+        Task<VisionPfsApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
             VisionUserSession userSession);
 
-        Task<VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(
+        Task<VisionPfsApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(
             VisionUserSession userSession,
             PrescriptionRequest prescriptionRequest);
     
-        Task<VisionPFSClient.VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
+        Task<VisionPfsApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
             VisionUserSession visionUserSession,
             DemographicsRequest requestContent);
         
-        Task<VisionPFSClient.VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
+        Task<VisionPfsApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
             VisionUserSession session);
 
-        Task<VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(
+        Task<VisionPfsApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(
             VisionUserSession userSession,
             OrderNewPrescriptionRequest newPrescriptionRequest);
 
-        Task<VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
+        Task<VisionPfsApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionUserSession userSession);
         
-        Task<VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
+        Task<VisionPfsApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
             VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange);
         
-        Task<VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse>> BookAppointment(
+        Task<VisionPfsApiObjectResponse<BookAppointmentResponse>> BookAppointment(
             VisionUserSession userSession, BookAppointmentRequest bookAppointmentRequest);
         
-        Task<VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
+        Task<VisionPfsApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
             VisionUserSession userSession, CancelAppointmentRequest request);
             
-        Task<VisionPFSClient.VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
+        Task<VisionPfsApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
             VisionUserSession visionUserSession,
             PatientDataRequest requestContent);
         
-        Task<VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
+        Task<VisionPfsApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
             PatientIm1ConnectionRequest request, string dob);
     }
 }

@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
                     "404VY806",
                     InternalCode.PatientRecordNotFound);
 
-        public static LinkageResult Map(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response,
+        public static LinkageResult Map(VisionLinkageApiObjectResponse<LinkageKeyGetResponse> response,
             ILogger<VisionLinkageService> logger)
         {
             var mappedValue = VisionErrorMapper.Map(logger, response, KeyAndMessageToError);
