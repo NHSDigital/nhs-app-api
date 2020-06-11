@@ -81,7 +81,7 @@ class NhsWeb(
             WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
 
         val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
-        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor)
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
 

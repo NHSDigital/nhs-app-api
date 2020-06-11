@@ -2,7 +2,6 @@ enum UserContent: String, CaseIterable {
     case getNotificationsStatus = "getNotificationsStatus"
     case attemptBiometricLogin = "attemptBiometricLogin"
     case clearMenuBarItem = "clearMenuBarItem"
-    case goToHomepage = "goToHomepage"
     case goToPage = "goToPage"
     case fetchBiometricSpec = "fetchBiometricSpec"
     case fetchNativeAppVersion = "fetchNativeAppVersion"

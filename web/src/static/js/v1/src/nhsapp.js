@@ -3,8 +3,12 @@ import { AppPage } from './constants';
 window.nhsapp = {
   navigation: {
     goToHomePage() {
-      // TODO: refactor to use goToPage(AppPage.HOME_PAGE)
-      window.nhsappNative.goToHomepage();
+      // TODO: remove when min app version is 1.36
+      if (window.nhsappNative.goToHomepage) {
+        window.nhsappNative.goToHomepage();
+      } else {
+        this.goToPage(AppPage.HOME_PAGE);
+      }
     },
     goToPage(appPage) {
       window.nhsappNative.goToPage(appPage);

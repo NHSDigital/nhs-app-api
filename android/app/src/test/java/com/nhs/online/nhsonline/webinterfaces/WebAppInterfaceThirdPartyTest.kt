@@ -13,36 +13,14 @@ class WebAppInterfaceThirdPartyTest {
     private lateinit var contextMock: MainActivity
     private lateinit var nhsWebMock: NhsWeb
     private lateinit var webAppInterfaceThirdParty: WebAppInterfaceThirdParty
-    private lateinit var appWebInterface: AppWebInterface
-
 
     private fun setUp(mode: JavaScriptInteractionMode) {
         contextMock = mock()
         nhsWebMock = mock {
             on { javaScriptInteractionMode }.thenReturn(mode)
         }
-        appWebInterface = mock()
         doNothing().whenever(nhsWebMock).loadWelcomePage()
-        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock, contextMock)
-    }
-
-    @Test
-    fun onGoToHomepage_javaScriptInteractionMode_IsSilverThirdParty() {
-        setUp(mode = JavaScriptInteractionMode.SilverThirdParty)
-
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfaceThirdParty.goToHomepage()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(nhsWebMock).loadWelcomePage()
-    }
-
-    @Test
-    fun onGoToHomepage_javaScriptInteractionMode_IsNone() {
-        setUp(mode = JavaScriptInteractionMode.None)
-
-        webAppInterfaceThirdParty.goToHomepage()
-        verifyNoMoreInteractions(contextMock)
+        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock)
     }
 
     @Test

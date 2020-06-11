@@ -243,10 +243,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if (knownService.javaScriptInteractionMode == .SilverThirdParty){
             switch message.name {
-            case UserContent.goToHomepage.rawValue:
-                viewController.webViewController?.loadPage(url: config().HomeUrl)
-                clearMenuBarItem()
-                break
             case UserContent.goToPage.rawValue:
                 viewController.handleGoToPage(page: message.body as! String)
                 break;
@@ -338,6 +334,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.updateBiometricRegistration.rawValue:
                 let biometricState = UserDefaultsManager.getBiometricAvailability()
                 viewController.handleBiometricStatusChangeRequest(biometricState: biometricState)
+                break
             default:
                 break
             }
