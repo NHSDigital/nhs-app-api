@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -125,92 +126,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 _logger.LogEnter();
 
-                var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
-                if (!endUserSessionResponse.HasSuccessResponse)
+                var endUserSessionStep = await CreateEndUserSession();
+                if (endUserSessionStep.ProcessFinishedEarly(out var endUserSessionStepFinalResult))
                 {
-                    LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
-                    _logger.LogEmisErrorResponse(endUserSessionResponse);
-                    return new Im1ConnectionRegisterResult.BadGateway();
+                    return endUserSessionStepFinalResult;
                 }
+                var endUserSessionId = endUserSessionStep.Result;
 
-                var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
-
-                _logger.LogInformation("Checking cache for IM1 connection token");
-                var key = _im1CacheKeyGenerator.GenerateCacheKey(
-                    request.AccountId, request.OdsCode, request.LinkageKey);
-                var cachedConnectionToken =
-                    await _im1CacheService.GetIm1ConnectionToken<EmisConnectionToken>(key);
-
-                EmisConnectionToken connectionToken;
-
-                if (cachedConnectionToken.HasValue)
+                var connectionTokenStep = await GetOrCreateIm1ConnectionToken(request, endUserSessionId);
+                if (connectionTokenStep.ProcessFinishedEarly(out var connectionTokenStepFinalResult))
                 {
-                    connectionToken = cachedConnectionToken.ValueOrFailure();
-                    _logger.LogInformation("IM1 connection token found in cache.");
+                    return connectionTokenStepFinalResult;
                 }
-                else
+                var connectionToken = connectionTokenStep.Result;
+
+                var nhsNumbersStep = await FetchNhsNumbers(connectionToken, request.OdsCode, endUserSessionId);
+                if (nhsNumbersStep.ProcessFinishedEarly(out var nhsNumbersStepFinalResult))
                 {
-                    _logger.LogInformation("IM1 connection token not found in cache.");
-                    var meApplicationsPostRequest = CreateMeApplicationsPostRequest(request);
-
-                    var meApplicationsResponse =
-                        await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
-
-                    if (!meApplicationsResponse.HasSuccessResponse)
-                    {
-                        return EmisIm1RegisterErrorMapper.Map(meApplicationsResponse, _logger);
-                    }
-
-                    connectionToken = new EmisConnectionToken
-                    {
-                        AccessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid,
-                        Im1CacheKey = key
-                    };
-
-
-                    await CacheConnectionToken(connectionToken);
+                    return nhsNumbersStepFinalResult;
                 }
-
-                var sessionPostRequestModel = new SessionsPostRequest
-                {
-                    AccessIdentityGuid = connectionToken.AccessIdentityGuid,
-                    NationalPracticeCode = request.OdsCode
-                };
-
-                var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
-                if (!sessionsResponse.HasSuccessResponse)
-                {
-                    LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
-                    _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionRegisterResult.BadGateway();
-                }
-
-                var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
-                if (string.IsNullOrEmpty(userPatientLinkToken))
-                {
-                    _logger.LogError(
-                        $"Emis could not extract {nameof(userPatientLinkToken)}. registration_linked_accounts={sessionsResponse.Body?.ExtractLinkedPatients().Count()}");
-                    _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
-                }
-
-                var demographicsResponse =
-                    await _emisClient.DemographicsGet(
-                        new EmisRequestParameters
-                        {
-                            UserPatientLinkToken = userPatientLinkToken,
-                            SessionId = sessionsResponse.Body.SessionId,
-                            EndUserSessionId = endUserSessionId
-                        });
-
-                if (!demographicsResponse.HasSuccessResponse)
-                {
-                    LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
-                    _logger.LogEmisErrorResponse(demographicsResponse);
-                    return new Im1ConnectionRegisterResult.BadGateway();
-                }
-
-                var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+                var nhsNumbers = nhsNumbersStep.Result;
 
                 var response = new CreateIm1ConnectionResponse
                 {
@@ -235,6 +170,132 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<ProcessResult<string, Im1ConnectionRegisterResult>> CreateEndUserSession()
+        {
+            var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
+            if (!endUserSessionResponse.HasSuccessResponse)
+            {
+                LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
+                _logger.LogEmisErrorResponse(endUserSessionResponse);
+
+                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
+                return ProcessResult.FinalResult<string, Im1ConnectionRegisterResult>(finalResult);
+            }
+
+            var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
+            return ProcessResult.StepResult<string, Im1ConnectionRegisterResult>(endUserSessionId);
+        }
+
+        private async Task<ProcessResult<EmisConnectionToken, Im1ConnectionRegisterResult>> GetOrCreateIm1ConnectionToken(
+            PatientIm1ConnectionRequest request,
+            string endUserSessionId)
+        {
+            _logger.LogInformation("Checking cache for IM1 connection token");
+            var key = _im1CacheKeyGenerator.GenerateCacheKey(
+                request.AccountId, request.OdsCode, request.LinkageKey);
+            var cachedConnectionToken =
+                await _im1CacheService.GetIm1ConnectionToken<EmisConnectionToken>(key);
+
+            EmisConnectionToken connectionToken;
+
+            if (cachedConnectionToken.HasValue)
+            {
+                connectionToken = cachedConnectionToken.ValueOrFailure();
+                _logger.LogInformation("IM1 connection token found in cache.");
+            }
+            else
+            {
+                _logger.LogInformation("IM1 connection token not found in cache.");
+                var meApplicationsPostRequest = CreateMeApplicationsPostRequest(request);
+
+                var meApplicationsResponse =
+                    await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
+
+                if (!meApplicationsResponse.HasSuccessResponse)
+                {
+                    var finalResult = EmisIm1RegisterErrorMapper.Map(meApplicationsResponse, _logger);
+                    return ProcessResult.FinalResult<EmisConnectionToken, Im1ConnectionRegisterResult>(finalResult);
+                }
+
+                connectionToken = new EmisConnectionToken
+                {
+                    AccessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid,
+                    Im1CacheKey = key
+                };
+
+                await CacheConnectionToken(connectionToken);
+            }
+
+            return ProcessResult.StepResult<EmisConnectionToken, Im1ConnectionRegisterResult>(connectionToken);
+        }
+
+        private async Task<ProcessResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>> FetchNhsNumbers(
+            EmisConnectionToken connectionToken,
+            string odsCode,
+            string endUserSessionId)
+        {
+            var sessionsPostStep = await FetchSessions(connectionToken, odsCode, endUserSessionId);
+            if (sessionsPostStep.ProcessFinishedEarly(out var sessionsPostStepFinalResult))
+            {
+                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(sessionsPostStepFinalResult);
+            }
+            var sessionsResponse = sessionsPostStep.Result;
+
+            var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
+            if (string.IsNullOrEmpty(userPatientLinkToken))
+            {
+                _logger.LogError(
+                    $"Emis could not extract {nameof(userPatientLinkToken)}. registration_linked_accounts={sessionsResponse.Body?.ExtractLinkedPatients().Count()}");
+                _logger.LogEmisErrorResponse(sessionsResponse);
+
+                var finalResult = new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
+                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(finalResult);
+            }
+
+            var demographicsResponse =
+                await _emisClient.DemographicsGet(
+                    new EmisRequestParameters
+                    {
+                        UserPatientLinkToken = userPatientLinkToken,
+                        SessionId = sessionsResponse.Body.SessionId,
+                        EndUserSessionId = endUserSessionId
+                    });
+
+            if (!demographicsResponse.HasSuccessResponse)
+            {
+                LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
+                _logger.LogEmisErrorResponse(demographicsResponse);
+                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
+                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(finalResult);
+            }
+
+            var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+            return ProcessResult.StepResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(nhsNumbers.ToList());
+        }
+
+        private async Task<ProcessResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>> FetchSessions(
+            EmisConnectionToken connectionToken,
+            string odsCode,
+            string endUserSessionId)
+        {
+            var sessionPostRequestModel = new SessionsPostRequest
+            {
+                AccessIdentityGuid = connectionToken.AccessIdentityGuid,
+                NationalPracticeCode = odsCode
+            };
+
+            var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
+            if (!sessionsResponse.HasSuccessResponse)
+            {
+                LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
+                _logger.LogEmisErrorResponse(sessionsResponse);
+                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
+                return ProcessResult.FinalResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>(finalResult);
+            }
+
+            return ProcessResult.StepResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>(sessionsResponse);
         }
 
         private MeApplicationsPostRequest CreateMeApplicationsPostRequest(PatientIm1ConnectionRequest request)
