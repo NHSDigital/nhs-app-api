@@ -1,5 +1,7 @@
 import Redirector from '@/pages/redirector/index';
-import { APPOINTMENTS, INDEX, INTERSTITIAL_REDIRECTOR, REDIRECT_PARAMETER } from '@/lib/routes';
+import consola from 'consola';
+import { APPOINTMENTS, INDEX, INTERSTITIAL_REDIRECTOR, REDIRECT_PARAMETER, REDIRECT_PAGE_PARAMETER } from '@/lib/routes';
+import { AppPage } from '@/static/js/v1/src/constants';
 import { createRouter, createStore, mount } from '../../helpers';
 import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
 
@@ -338,6 +340,48 @@ describe('redirector page', () => {
       expect(wrapper.vm.paragraphText()).toEqual('');
       expect(wrapper.vm.linkText()).toEqual('');
       expect(wrapper.vm.providerName()).toEqual('');
+    });
+  });
+
+  describe('has redirect to page param', () => {
+    beforeEach(() => {
+      const $http = createHttp();
+      const $store = createStore({ state: createState() });
+
+      $route = {
+        ...INTERSTITIAL_REDIRECTOR,
+        query: { [REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
+      };
+      mountRedirector($http, $store);
+    });
+
+    it('will call router push with APPOINTMENTS path', () => {
+      expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+    });
+  });
+
+  describe('has redirect to page param with invalid value', () => {
+    let errorFn;
+
+    beforeEach(() => {
+      const $http = createHttp();
+      const $store = createStore({ state: createState() });
+      errorFn = consola.error;
+      consola.error = jest.fn();
+
+      $route = {
+        ...INTERSTITIAL_REDIRECTOR,
+        query: { [REDIRECT_PAGE_PARAMETER]: 'foo' },
+      };
+      mountRedirector($http, $store);
+    });
+
+    it('will call router push with INDEX path', () => {
+      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+    });
+
+    afterEach(() => {
+      consola.error = errorFn;
     });
   });
 });

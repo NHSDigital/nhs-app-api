@@ -183,7 +183,7 @@
 	<key>PrivateKeyLabel</key>
 	<string>nhs-biometrics-key</string>
 	<key>RedirectorUrl</key>
-	<string>$(HOME_URL)redirector?redirect_to=</string>
+	<string>$(BASE_SCHEME)://$(HOME_URL)redirector</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
 	<key>SessionCookieName</key>

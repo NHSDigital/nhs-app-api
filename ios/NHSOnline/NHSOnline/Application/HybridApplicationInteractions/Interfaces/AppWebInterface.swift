@@ -48,10 +48,6 @@ class AppWebInterface {
         dispatchEvent(event: "notifications/unauthorised")
     }
     
-    func goToPage(page: String) {
-        dispatchEvent(event: "navigation/goToPage", args: "'\(page)'")
-    }
-    
     func notificationsAuthorised(devicePns: String, trigger: String) {
         let response = """
             {

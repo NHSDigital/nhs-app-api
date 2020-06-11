@@ -1,6 +1,8 @@
 import { find, get } from 'lodash/fp';
+import consola from 'consola';
 import proofLevel from './proofLevel';
 import sjrIf from './sjrIf';
+import { AppPage } from '../static/js/v1/src/constants';
 
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
@@ -1949,8 +1951,29 @@ export const findByName = name => find(({ name: routeName }) => routeName === na
 
 export const findByPath = path => find(({ path: pathValue }) => pathValue === path)(routes);
 
+export const findByPage = (page) => {
+  switch (page) {
+    case AppPage.HOME_PAGE:
+      return routes.INDEX;
+    case AppPage.APPOINTMENTS:
+      return routes.APPOINTMENTS;
+    case AppPage.PRESCRIPTIONS:
+      return routes.PRESCRIPTIONS;
+    case AppPage.HEALTH_RECORDS:
+      return routes.HEALTH_RECORDS;
+    case AppPage.SYMPTOMS:
+      return routes.SYMPTOMS;
+    case AppPage.MESSAGES:
+      return routes.MESSAGES;
+    default:
+      consola.error(new Error(`Navigation for page enum value not implemented: ${page}`));
+      return undefined;
+  }
+};
+
 export const getRouteNames = () => Object.keys(routes).map(key => routes[key].name);
 
+export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
 export const REDIRECT_PARAMETER = 'redirect_to';
 export const getRedirectRoute = (route) => {
   const redirectPath = get(REDIRECT_PARAMETER)(route.query);

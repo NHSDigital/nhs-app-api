@@ -1,12 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-const AppPage = {
-  HOME_PAGE: 'homePage',
-  APPOINTMENTS: 'appointments',
-  PRESCRIPTIONS: 'prescriptions',
-  HEALTH_RECORDS: 'healthRecords',
-  SYMPTOMS: 'symptoms',
-  MESSAGES: 'messages',
-};
+import { AppPage } from './constants';
 
 window.nhsapp = {
   navigation: {

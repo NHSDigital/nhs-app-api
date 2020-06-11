@@ -21,7 +21,7 @@ class ViewIntentHandler(private val context: Context) : IIntentHandler
         appPersistData = PersistData(context)
 
         intent.dataString.let { url ->
-            val urlString = urlHelper.ensureSchemeAndBuildRedirectorUrl(url)
+            val urlString = urlHelper.createRedirectToUrl(url)
             if (urlHelper.isSameHostAndSchemeAsHomeUrl(urlString.toString())) {
                 if (isAppClosed) {
                     urlString?.let { appPersistData.storePersistedLink(urlString.toString()) }

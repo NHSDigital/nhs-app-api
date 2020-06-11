@@ -7,6 +7,6 @@ window.nhsappNative.goToHomepage = function() {
     window.webkit.messageHandlers.goToHomepage.postMessage(null);
 };
 
-window.nhsappNative.goToPage = function() {
-    window.webkit.messageHandlers.goToPage.postMessage(null);
+window.nhsappNative.goToPage = function(page) {
+    window.webkit.messageHandlers.goToPage.postMessage(page);
 };

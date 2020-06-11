@@ -50,6 +50,7 @@
 		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
 		4BF31A1F435C7F730D9BC6A3 /* UrlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF312899B19527799A781CD /* UrlHelper.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
+		640585EA249237EA009784D5 /* UserContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640585E9249237EA009784D5 /* UserContent.swift */; };
 		647D0C5524694EAC00336949 /* WebEventsThirdParty.js in Resources */ = {isa = PBXBuildFile; fileRef = 647D0C5424694EAC00336949 /* WebEventsThirdParty.js */; };
 		64909CF83EEBD7876CEC4A9E /* Pods_NHSOnlineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */; };
 		64C1C76423DB4E2400FCBA57 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76323DB4E2400FCBA57 /* KnownServices.swift */; };
@@ -100,7 +101,6 @@
 		F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */; };
 		F91E2176248663C90067A1C5 /* BiometricErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */; };
 		F91E21782486666D0067A1C5 /* BiometricTypeWebReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */; };
-		F91E217A248667690067A1C5 /* UserContentControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E2179248667690067A1C5 /* UserContentControllers.swift */; };
 		F94E3475248518F8009CAAC0 /* BiometricErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94E3474248518F8009CAAC0 /* BiometricErrors.swift */; };
 		F94E3477248547D9009CAAC0 /* BiometricServiceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */; };
 		F975F4962481082E00D3957F /* BiometricServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975F4952481082E00D3957F /* BiometricServiceTests.swift */; };
@@ -238,6 +238,7 @@
 		5E01AB4AED48C58A6C63F7B1 /* Pods-NHSOnline.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.production.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.production.xcconfig"; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		62E61855971D414EE70893D6 /* Pods-NHSOnline.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.preview.xcconfig"; sourceTree = "<group>"; };
+		640585E9249237EA009784D5 /* UserContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContent.swift; sourceTree = "<group>"; };
 		647D0C5424694EAC00336949 /* WebEventsThirdParty.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebEventsThirdParty.js; sourceTree = "<group>"; };
 		64C1C76323DB4E2400FCBA57 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
 		64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelSchemeHandler.swift; sourceTree = "<group>"; };
@@ -360,7 +361,6 @@
 		F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricOutcomes.swift; sourceTree = "<group>"; };
 		F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrorCodes.swift; sourceTree = "<group>"; };
 		F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricTypeWebReferences.swift; sourceTree = "<group>"; };
-		F91E2179248667690067A1C5 /* UserContentControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserContentControllers.swift; sourceTree = "<group>"; };
 		F94E3474248518F8009CAAC0 /* BiometricErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrors.swift; sourceTree = "<group>"; };
 		F94E3476248547D9009CAAC0 /* BiometricServiceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricServiceMocks.swift; sourceTree = "<group>"; };
 		F975F4952481082E00D3957F /* BiometricServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricServiceTests.swift; sourceTree = "<group>"; };
@@ -759,7 +759,6 @@
 				F381C9539D60A22E031DD16B /* SubService.swift */,
 				F381C196F8E47FBE97B3025B /* Enum */,
 				F94E3474248518F8009CAAC0 /* BiometricErrors.swift */,
-				F91E2179248667690067A1C5 /* UserContentControllers.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -842,6 +841,7 @@
 				F91E2173248662FD0067A1C5 /* BiometricOutcomes.swift */,
 				F91E2175248663C90067A1C5 /* BiometricErrorCodes.swift */,
 				F91E21772486666D0067A1C5 /* BiometricTypeWebReferences.swift */,
+				640585E9249237EA009784D5 /* UserContent.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1364,9 +1364,9 @@
 				2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */,
+				640585EA249237EA009784D5 /* UserContent.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
-				F91E217A248667690067A1C5 /* UserContentControllers.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
 				8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */,

@@ -31,6 +31,7 @@ class UrlHelper(val context: Context) {
 
         return URL(finalUrl)
     }
+
     fun getPostRequestReloadUrl(url: String): String? {
         return when {
             url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
@@ -51,11 +52,15 @@ class UrlHelper(val context: Context) {
         return context.resources.getString(resourceId)
     }
 
-    fun ensureSchemeAndBuildRedirectorUrl(url: String?) : URL? {
-        if (ensureUrlWithScheme(url).toString() == context.getString(R.string.baseURL)) {
-           return ensureUrlWithScheme(url)
+    fun createRedirectToUrl(url: String?): URL? {
+        val urlWithScheme = ensureUrlWithScheme(url)
+        if (urlWithScheme.toString() == context.getString(R.string.baseURL)) {
+            return urlWithScheme
         }
-        return URL(
-                redirector.plus(ensureUrlWithScheme(url).toString()))
+        return URL(redirector.plus("?redirect_to=").plus(urlWithScheme.toString()))
+    }
+
+    fun createRedirectToPageUrl(page: String?): URL? {
+        return URL("$redirector?redirect_to_page=$page")
     }
 }

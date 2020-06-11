@@ -70,8 +70,12 @@ class UrlHelper {
     }
     
     static func createRedirectToUrl(url : String) -> URL? {
-        let resolvedUrl = UrlHelper.ensureUrlWithScheme(url: "\(config().RedirectorUrl)\(url)")
+        let resolvedUrl = UrlHelper.ensureUrlWithScheme(url: "\(config().RedirectorUrl)?redirect_to=\(url)")
         return resolvedUrl
+    }
+    
+    static func createRedirectToPageUrl(page : String) -> URL? {
+        return UrlHelper.ensureUrlWithScheme(url: "\(config().RedirectorUrl)?redirect_to_page=\(page)")
     }
     
     static func checkForUrlOverride(url : String) -> String {

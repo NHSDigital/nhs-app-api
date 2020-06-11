@@ -249,12 +249,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if (knownService.javaScriptInteractionMode == .SilverThirdParty){
             switch message.name {
-            case "goToHomepage":
+            case UserContent.goToHomepage.rawValue:
                 viewController.webViewController?.loadPage(url: config().HomeUrl)
                 clearMenuBarItem()
                 break
-            case "goToPage":
-                viewController.handleGoToPage(message: message.body as! String)
+            case UserContent.goToPage.rawValue:
+                viewController.handleGoToPage(page: message.body as! String)
                 break;
             default:
                 break;
@@ -263,85 +263,85 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
         if (knownService.javaScriptInteractionMode == .NhsApp) {
             switch message.name {
-            case "getNotificationsStatus":
+            case UserContent.getNotificationsStatus.rawValue:
                 viewController.getNotificationsStatus()
                 break;
-            case "attemptBiometricLogin":
+            case UserContent.attemptBiometricLogin.rawValue:
                 viewController.delayedBiometricsStart(0.3)
                 break
-            case "clearMenuBarItem":
+            case UserContent.clearMenuBarItem.rawValue:
                 clearMenuBarItem()
                 break
-            case "fetchBiometricSpec":
+            case UserContent.fetchBiometricSpec.rawValue:
                 let biometricState = UserDefaultsManager.getBiometricAvailability()
                 self.viewController.handleBiometricSpecRequest(biometricAvailability: biometricState)
                 break
-            case "fetchNativeAppVersion":
+            case UserContent.fetchNativeAppVersion.rawValue:
                 self.viewController.setupAppVersion()
                 break
-            case "hideHeader":
+            case UserContent.hideHeader.rawValue:
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
-            case "hideWhiteScreen":
+            case UserContent.hideWhiteScreen.rawValue:
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 break
-            case "hideHeaderSlim":
+            case UserContent.hideHeaderSlim.rawValue:
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
-            case "hideMenuBar":
+            case UserContent.hideMenuBar.rawValue:
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
-            case "onLogin":
+            case UserContent.onLogin.rawValue:
                 WebViewController.Properties.usingAbsoluteUri = false
                 break
-            case "onLogout":
+            case UserContent.onLogout.rawValue:
                 WebViewController.Properties.usingAbsoluteUri = true
                 webAppInterface.onLogout()
                 break
-            case "onSessionExpiring":
+            case UserContent.onSessionExpiring.rawValue:
                 viewController.displayExtendSessionDialogue()
                 break
-            case "openAppSettings":
+            case UserContent.openAppSettings.rawValue:
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
                 }
                 break
-            case "pageLoadComplete":
+            case UserContent.pageLoadComplete.rawValue:
                 viewController.applicationState.unBlock()
                 break
-            case "requestPnsToken":
+            case UserContent.requestPnsToken.rawValue:
                 let trigger: String = message.body as! String
                 viewController.registerForPushNotifications(trigger: trigger)
                 break
-            case "resetPageFocus":
+            case UserContent.resetPageFocus.rawValue:
                 viewController.headerBar.setFocusToNhsLogoForA11y()
                 break
-            case "setHelpUrl":
+            case UserContent.setHelpUrl.rawValue:
                 setHelpUrl(url: message.body as? String ?? config().HelpURL)
                 break
-            case "setRetryPath":
+            case UserContent.setRetryPath.rawValue:
                 setRetryUrl(path: message.body as! String)
                 break;
-            case "setMenuBarItem":
+            case UserContent.setMenuBarItem.rawValue:
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
-            case "showHeader":
+            case UserContent.showHeader.rawValue:
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Full)
                 break
-            case "showHeaderSlim":
+            case UserContent.showHeaderSlim.rawValue:
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Slim)
                 break
-            case "startDownload":
+            case UserContent.startDownload.rawValue:
                 viewController.downloadFile(messageBody: String(describing: message.body))
                 break
-            case "updateHeaderText":
+            case UserContent.updateHeaderText.rawValue:
                 if (!Reachability.isConnectedToNetwork()) {
                     self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
-            case "updateBiometricRegistration":
+            case UserContent.updateBiometricRegistration.rawValue:
                 let biometricState = UserDefaultsManager.getBiometricAvailability()
                 viewController.handleBiometricStatusChangeRequest(biometricState: biometricState)
             default:

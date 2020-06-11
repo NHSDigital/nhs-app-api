@@ -36,3 +36,6 @@ web-unit-test-results.xml
 web-unit-test-coverage.xml
 hawkeye-results.json
 reports/
+
+# Bundled static API files
+src/static/js/*/*.js

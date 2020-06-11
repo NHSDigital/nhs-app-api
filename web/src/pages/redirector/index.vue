@@ -32,7 +32,7 @@
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import WarningContentPanel from '@/components/widgets/WarningContentPanel';
-import { REDIRECT_PARAMETER, INDEX, findByName, findByPath } from '@/lib/routes';
+import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER, INDEX, findByName, findByPage, findByPath } from '@/lib/routes';
 import { getPathAndQuery, getThirdPartyJumpOff, getThirdPartyLocaleText } from '@/lib/utils';
 
 export default {
@@ -41,11 +41,14 @@ export default {
   },
   layout(context) {
     const redirectPath = get(REDIRECT_PARAMETER)(context.route.query);
-    const services = context.store.state.knownServices.knownServices
-      .filter(service => redirectPath.includes(service.url));
 
-    if (services.length > 0 && services[0].showThirdPartyWarning === true) {
-      return 'nhsuk-layout';
+    if (redirectPath) {
+      const services = context.store.state.knownServices.knownServices
+        .filter(service => redirectPath.includes(service.url));
+
+      if (services.length > 0 && services[0].showThirdPartyWarning === true) {
+        return 'nhsuk-layout';
+      }
     }
     return 'nhsuk-layout-chromeless';
   },
@@ -68,24 +71,26 @@ export default {
   },
   async mounted() {
     this.redirectPath = get(REDIRECT_PARAMETER)(this.$route.query);
+    const redirectPage = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
 
-    if (this.redirectPath === undefined || this.redirectPath === '') {
-      this.$router.push(INDEX.path);
-      return;
+    let route;
+
+    if (this.redirectPath) {
+      route = findByName(this.redirectPath) || findByPath(this.redirectPath);
+    } else if (redirectPage) {
+      route = findByPage(redirectPage) || INDEX;
+    } else {
+      route = INDEX;
     }
 
-    if (findByName(this.redirectPath)) {
-      this.$router.push(findByName(this.redirectPath).path);
-      return;
-    }
-
-    if (findByPath(this.redirectPath)) {
-      this.$router.push(findByPath(this.redirectPath).path);
+    if (route) {
+      this.$router.push(route.path);
       return;
     }
 
     this.services = await this.$store.state.knownServices.knownServices
       .filter(service => this.redirectPath.includes(service.url));
+
     if (this.services.length > 0) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.services[0].id}`;
       this.redirectPathAndQuery = getPathAndQuery(this.redirectPath);

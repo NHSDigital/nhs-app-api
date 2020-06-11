@@ -12,12 +12,21 @@ class UrlHelperTests: XCTestCase {
     }
     
     func test_EnsureUrlWithScheme_WhenSchemeMissing_ReturnsUrlWithDefaultScheme() {
-        let url = "www.bbc.co.uk"
+        let url = "//www.bbc.co.uk"
         
         let result = UrlHelper.ensureUrlWithScheme(url: url)
         
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.scheme, "https")        
+    }
+    
+    func test_EnsureUrlWithScheme_WhenSchemeMissingAndHasPort_ReturnsUrlWithDefaultScheme() {
+        let url = "//www.bbc.co.uk:3000"
+        
+        let result = UrlHelper.ensureUrlWithScheme(url: url)
+        
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.scheme, "https")
     }
     
     func test_EnsureUrlWithScheme_WhenSchemePresent_ReturnsUrlWithMatchingSchemeHttps() {

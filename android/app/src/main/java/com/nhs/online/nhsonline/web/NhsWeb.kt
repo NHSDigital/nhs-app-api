@@ -81,7 +81,7 @@ class NhsWeb(
             WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
 
         val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
-        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor, appWebInterface)
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
 
@@ -335,5 +335,10 @@ class NhsWeb(
 
     fun getNotificationsStatus() {
         notificationsService.getNotificationsStatus()
+    }
+
+    fun goToPage(page: String) {
+        val pageUrl = urlHelper.createRedirectToPageUrl(page)
+        urlLoader.loadUrl(url = pageUrl.toString(), requiresFullPageLoad = true )
     }
 }

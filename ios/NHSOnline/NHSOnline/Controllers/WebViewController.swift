@@ -57,10 +57,8 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
-        let userContentControllers = UserContentControllers()
-        let userContentMirror = Mirror(reflecting: userContentControllers)
-        for child in userContentMirror.children {
-            webView.configuration.userContentController.add(delegate, name: "\(child.value)")
+        UserContent.allCases.forEach { value in
+            webView.configuration.userContentController.add(delegate, name: "\(value.rawValue)")
         }
     }
 

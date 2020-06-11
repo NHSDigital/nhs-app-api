@@ -1,17 +1,25 @@
-import {
-  TERMSANDCONDITIONS,
-  APPOINTMENTS,
-  APPOINTMENT_BOOKING_GUIDANCE,
-  LOGIN,
-  BEGINLOGIN,
-  backLinkOverrides,
-  isAnonymous,
-  executeHomeNavigationRule,
-  getRouteNames,
-  findByName,
-  findByPath,
-} from '@/lib/routes';
+import consola from 'consola';
 import each from 'jest-each';
+import {
+  APPOINTMENT_BOOKING_GUIDANCE,
+  APPOINTMENTS,
+  BEGINLOGIN,
+  HEALTH_RECORDS,
+  INDEX,
+  LOGIN,
+  MESSAGES,
+  PRESCRIPTIONS,
+  SYMPTOMS,
+  TERMSANDCONDITIONS,
+  backLinkOverrides,
+  executeHomeNavigationRule,
+  findByName,
+  findByPage,
+  findByPath,
+  getRouteNames,
+  isAnonymous,
+} from '@/lib/routes';
+import { AppPage } from '@/static/js/v1/src/constants';
 
 describe('routes', () => {
   describe('isAnonymous', () => {
@@ -39,7 +47,6 @@ describe('routes', () => {
       expect(isAnonymous(APPOINTMENTS.name)).toBe(false);
     });
   });
-
 
   describe('backLinkOverrides', () => {
     each([
@@ -92,6 +99,55 @@ describe('routes', () => {
 
     it('should return the corresponding route object for a given path.', () => {
       expect(findByPath('/appointments')).toEqual(APPOINTMENTS);
+    });
+  });
+
+  describe('findByPage', () => {
+    let result;
+    let errorFn;
+
+    beforeEach(() => {
+      errorFn = consola.error;
+      consola.error = jest.fn();
+    });
+
+    describe('with unknown page', () => {
+      beforeEach(() => {
+        result = findByPage('foo');
+      });
+
+      it('will return `undefined`', () => {
+        expect(result).toBeUndefined();
+      });
+
+      it('will log an error', () => {
+        expect(consola.error).toBeCalled();
+      });
+    });
+
+    describe.each([
+      [AppPage.HOME_PAGE, INDEX],
+      [AppPage.APPOINTMENTS, APPOINTMENTS],
+      [AppPage.PRESCRIPTIONS, PRESCRIPTIONS],
+      [AppPage.HEALTH_RECORDS, HEALTH_RECORDS],
+      [AppPage.SYMPTOMS, SYMPTOMS],
+      [AppPage.MESSAGES, MESSAGES],
+    ])('with `%s` page', (page, route) => {
+      beforeEach(() => {
+        result = findByPage(page);
+      });
+
+      it(`will return the ${route.name} route`, () => {
+        expect(result).toBe(route);
+      });
+
+      it('will not log an error', () => {
+        expect(consola.error).not.toBeCalled();
+      });
+    });
+
+    afterEach(() => {
+      consola.error = errorFn;
     });
   });
 

@@ -9,10 +9,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito
@@ -22,7 +19,9 @@ open class ResourceMockingClass {
 
     fun mockContext(): Context {
         val resourceMock: Resources = mock {
-            on { getString(R.string.baseURL) } doReturn "http://10.0.2.2:3000"
+            on { getString(R.string.baseURL) } doReturn "https://www.baseurl.com/"
+            on { getString(R.string.baseScheme) } doReturn "https"
+            on { getString(R.string.appScheme) } doReturn "nhsapp"
             on { getString(R.string.dataSharingURL) } doReturn "https://www.nhs.uk/your-nhs-data-matters/"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
@@ -68,9 +67,11 @@ open class ResourceMockingClass {
             on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
             on { getString(R.string.fido_auth_response) } doReturn "fidoAuthResponse"
             on { getString(R.string.login_auth_code_path) } doReturn "/authcode"
+            on { getString(R.string.redirectorPath) } doReturn "redirector"
         }
 
         return mock {
+            on { getString(anyInt()) } doAnswer { i -> resourceMock.getString(i.arguments.first() as Int) }
             on { resources } doReturn resourceMock
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
         }

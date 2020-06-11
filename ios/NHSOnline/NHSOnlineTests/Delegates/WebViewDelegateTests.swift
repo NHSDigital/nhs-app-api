@@ -90,7 +90,7 @@ class WebViewDelegateTests: XCTestCase {
         assert(homeViewController!.applicationState.isReady() == true)
     }
     
-    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeSilverThirdParty_CallsAppWebInterfaceGoToPage() {
+    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeSilverThirdParty_CallsControllerGoToPage() {
         // Arrange
         let url = "http://www.example.com"
         let page = "foo"
@@ -108,7 +108,7 @@ class WebViewDelegateTests: XCTestCase {
         assert(homeViewController?.goToPageValue == page)
     }
     
-    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeNotSilverThirdParty_DoesNotCallAppWebInterfaceGoToPage() {
+    func test_userContentControllerGoToPage_WithJavaScriptInteractionModeNotSilverThirdParty_DoesNotCallControllerGoToPage() {
         // Arrange
         let url = "http://www.example.com"
         let page = "foo"

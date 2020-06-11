@@ -10,8 +10,6 @@ class AppWebInterfaceMocks: AppWebInterface {
     var biometricErrorCode = ""
     var biometricTypeRef = ""
     var biometricEnabled = false
-    var goToPageCalled = false
-    var goToPageValue = ""
 
     override func biometricCompletion(action: String, outcome: String, errorCode: String) {
         biometricCompletionCalled = true
@@ -28,10 +26,5 @@ class AppWebInterfaceMocks: AppWebInterface {
         biometricSpecRequestCalled = true
         biometricTypeRef = biometricTypeReference
         biometricEnabled = enabled
-    }
-    
-    override func goToPage(page: String) {
-        goToPageCalled = true
-        goToPageValue = page
     }
 }

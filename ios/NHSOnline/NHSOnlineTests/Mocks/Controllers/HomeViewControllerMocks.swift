@@ -37,8 +37,8 @@ class HomeViewControllerMocks: HomeViewController {
         alertDismissed = true;
      }
     
-    override func handleGoToPage(message: String) {
+    override func handleGoToPage(page: String) {
         goToPageCalled = true
-        goToPageValue = message
+        goToPageValue = page
     }
 }

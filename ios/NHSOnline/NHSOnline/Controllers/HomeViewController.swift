@@ -682,7 +682,8 @@ class HomeViewController : UIViewController {
         })
     }
     
-    func handleGoToPage(message: String) {
-        self.appWebInterface?.goToPage(page: message)
+    func handleGoToPage(page: String) {
+        let redirectUrl = UrlHelper.createRedirectToPageUrl(page: page)
+        webViewController?.loadPage(url: redirectUrl!)
     }
 }

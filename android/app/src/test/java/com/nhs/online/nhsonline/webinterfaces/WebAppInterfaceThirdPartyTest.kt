@@ -18,12 +18,12 @@ class WebAppInterfaceThirdPartyTest {
 
     private fun setUp(mode: JavaScriptInteractionMode) {
         contextMock = mock()
-        nhsWebMock = mock{
-            on { javaScriptInteractionMode }.thenReturn( mode )
+        nhsWebMock = mock {
+            on { javaScriptInteractionMode }.thenReturn(mode)
         }
         appWebInterface = mock()
         doNothing().whenever(nhsWebMock).loadWelcomePage()
-        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock, contextMock, appWebInterface)
+        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock, contextMock)
     }
 
     @Test
@@ -54,7 +54,7 @@ class WebAppInterfaceThirdPartyTest {
         webAppInterfaceThirdParty.goToPage(page)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(appWebInterface).goToPage(page)
+        verify(nhsWebMock).goToPage(page)
     }
 
     @Test
