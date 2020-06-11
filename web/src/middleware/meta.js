@@ -393,8 +393,8 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.login';
       break;
     case LOGOUT.name:
-      route.meta.headerKey = '';
-      route.meta.pageTitleKey = '';
+      route.meta.headerKey = 'pageHeaders.logout';
+      route.meta.pageTitleKey = 'pageTitles.logout';
       break;
     case MEDICAL_HISTORY.name:
       route.meta.headerKey = 'pageHeaders.medicalHistory';
