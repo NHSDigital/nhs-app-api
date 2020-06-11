@@ -46,7 +46,7 @@ services:
     restart: always
     image: nginx:alpine
     volumes:
-      - ./docker/nginx:/etc/nginx/conf.d
+      - ./docker/nginx/api:/etc/nginx/conf.d
     depends_on:
       - log.local.bitraft.io
       - messages.local.bitraft.io
@@ -59,7 +59,8 @@ services:
     volumes:
       - type: bind
         source: ./silver-integration-api-test-site
-        target: /usr/share/nginx/html
+        target: /etc/nginx/html
+      - ./docker/nginx/silver:/etc/nginx/conf.d
 
   web.local.bitraft.io:
     image: ${WEB_DOCKER_REGISTRY:-local}/nhsonline-web:${WEB_DOCKER_TAG:-latest}
