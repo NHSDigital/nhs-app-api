@@ -15,6 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
     public interface IFakeUser
     {
         Guid Id { get; }
+        string EmailAddress { get; }
         string NhsNumber { get; }
         string OdsCode { get; }
         string GivenName { get; }

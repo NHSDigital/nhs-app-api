@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
+namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users.Communal
 {
     public class FakeUser9658218865GarthWright : FakeUser
     {
@@ -13,7 +13,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
 
         public override Guid Id => Guid.Parse("b9fd14bd-0a86-4349-909a-dfd904859e1d");
 
+        public override string EmailAddress => "testuserlive+2@demo.signin.nhs.uk";
+
         public override string NhsNumber => NhsNumberInternal;
+
+        public override string OdsCode => "A20047";
 
         public override string GivenName => "Garth";
 

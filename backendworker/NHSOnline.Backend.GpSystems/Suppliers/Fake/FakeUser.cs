@@ -24,8 +24,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         }
 
         public abstract Guid Id { get; }
+        public abstract string EmailAddress { get; }
         public abstract string NhsNumber { get ; }
-        public virtual string OdsCode => "A20047";
+        public abstract string OdsCode { get; }
         public abstract string GivenName { get; }
         public abstract string FamilyName { get; }
         public abstract DateTime DateOfBirth { get; }

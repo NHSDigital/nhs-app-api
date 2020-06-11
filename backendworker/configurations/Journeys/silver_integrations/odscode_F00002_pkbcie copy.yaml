@@ -1,0 +1,25 @@
+#
+#
+#   Sandpit users in ODS code F00002 are used by Patients Know Best (Care Information Exchange branded)
+#   DO NOT enable any third-party silver integrations other than PKBCIE for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00002"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkbCie
+    consultations:
+      - pkbCie
+    healthTrackers:
+      - pkbCie
+    libraries:
+      - pkbCie
+    medicines:
+      - pkbCie
+    messages:
+      - pkbCie
+    secondaryAppointments:
+      - pkbCie

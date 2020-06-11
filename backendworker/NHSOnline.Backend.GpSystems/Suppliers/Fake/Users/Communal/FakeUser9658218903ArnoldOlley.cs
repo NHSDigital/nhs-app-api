@@ -4,7 +4,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
+namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users.Communal
 {
     public class FakeUser9658218903ArnoldOlley : FakeUser
     {
@@ -16,7 +16,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
 
         public override Guid Id => Guid.Parse("11719623-7a50-4ec0-8a58-67ad08de8834");
 
+        public override string EmailAddress => "testuserlive+5@demo.signin.nhs.uk";
+
         public override string NhsNumber => NhsNumberInternal;
+
+        public override string OdsCode => "A20047";
 
         public override string GivenName => "Arnold";
 
