@@ -81,14 +81,12 @@ class HomeViewController : UIViewController {
         setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
-        
-        appWebInterface = AppWebInterface(webView: webViewController?.webView)
+    
         webAppInterface = WebAppInterface(controller: self)
         webViewDelegate = WebViewDelegate(controller: self,
                                           knownServiceProvider: self.knownServicesProvider!,
                                           configurationServiceProvider: self.configurationServiceProvider!,
-                                          webAppInterface: webAppInterface!,
-                                          appWebInterface: appWebInterface!)
+                                          webAppInterface: webAppInterface!)
         
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
@@ -99,6 +97,8 @@ class HomeViewController : UIViewController {
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
 
+        appWebInterface = AppWebInterface(webView: webViewController?.webView)
+        
         notificationsService = NotificationsService(appWebInterface: appWebInterface!)
         lifecycleHandlers = LifecycleHandlers(knownServiceProvider: self.knownServicesProvider!,
                 webViewController: webViewController!,
@@ -680,5 +680,9 @@ class HomeViewController : UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
             self.splashScreen?.hide()
         })
+    }
+    
+    func handleGoToPage(message: String) {
+        self.appWebInterface?.goToPage(page: message)
     }
 }

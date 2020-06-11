@@ -25,7 +25,7 @@ class WebViewDelegateTests: XCTestCase {
         mockWKWebView = WebViewMocks()
         appWebInterface = AppWebInterfaceMocks(webView: mockWKWebView)
         let webAppInterface = WebAppInterface(controller: viewController)
-        webViewDelegate = WebViewDelegateMocks(controller: viewController, knownServiceProvider: knownServicesProvider!, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface, appWebInterface: appWebInterface!)
+        webViewDelegate = WebViewDelegateMocks(controller: viewController, knownServiceProvider: knownServicesProvider!, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
         homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = WebViewMocks()
@@ -104,8 +104,8 @@ class WebViewDelegateTests: XCTestCase {
         webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
         
         // Assert
-        assert(appWebInterface?.goToPageCalled == true)
-        assert(appWebInterface?.goToPageValue == page)
+        assert(homeViewController?.goToPageCalled == true)
+        assert(homeViewController?.goToPageValue == page)
     }
     
     func test_userContentControllerGoToPage_WithJavaScriptInteractionModeNotSilverThirdParty_DoesNotCallAppWebInterfaceGoToPage() {
@@ -122,6 +122,6 @@ class WebViewDelegateTests: XCTestCase {
         webViewDelegate?.userContentController(WKUserContentController(), didReceive: message)
         
         // Assert
-        assert(appWebInterface?.goToPageCalled == false)
+        assert(homeViewController?.goToPageCalled == false)
     }
 }

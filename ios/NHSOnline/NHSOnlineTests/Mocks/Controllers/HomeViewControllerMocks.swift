@@ -6,6 +6,8 @@ class HomeViewControllerMocks: HomeViewController {
      var updateHeaderTextCalled = false
      var startActivityIndicatorWasCalled = false
      var stopActivityIndicatorWasCalled = false
+     var goToPageCalled = false
+     var goToPageValue = ""
      
      override func showWebViewContainer() {
          showWebViewContainerCalled = true
@@ -34,4 +36,9 @@ class HomeViewControllerMocks: HomeViewController {
      override func dimissAlert() {
         alertDismissed = true;
      }
+    
+    override func handleGoToPage(message: String) {
+        goToPageCalled = true
+        goToPageValue = message
+    }
 }

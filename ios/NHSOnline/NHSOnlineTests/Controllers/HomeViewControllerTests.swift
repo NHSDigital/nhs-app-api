@@ -47,6 +47,15 @@ class HomeViewControllerTests: XCTestCase {
         mockDocumentInteractionController = DocumentInteractionsControllerMocks()
         vcHome?.documentInteractionController = mockDocumentInteractionController
         
+        vcHome?.appWebInterface = appWebInterface
+    }
+    
+    func test_callsGoToPage_withCorrectValue() {
+        let page = "testPage";
+        vcHome.handleGoToPage(message: page)
+
+        assert(appWebInterface!.goToPageCalled == true)
+        assert(appWebInterface!.goToPageValue == page)
     }
 
     func test_hasCidUrlSuffix_nilUrl_Returns_False() {
