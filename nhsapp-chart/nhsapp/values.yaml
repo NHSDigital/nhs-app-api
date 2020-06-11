@@ -525,6 +525,44 @@ info:
     - name: AUDIT_SINK_TYPE
       value: MONGO
 
+sjr:
+  createService: true
+  containerPort: 8080
+  publicURL: null
+  role: sjr
+  image: nhsonline-backendservicejourneyrulesapi
+  image_tag: latest
+  imagePullPolicy: Always
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  inputPath: /configurations  # From mounted image
+  environmentVariables:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
+
+sjrconfig:
+  loadFiles: true
+  imagePullPolicy: Always
+  image: nhsonline-service-journey-dev-config
+  image_tag: latest
+  mountPath: /configurations
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
 global:
   environment: default
 

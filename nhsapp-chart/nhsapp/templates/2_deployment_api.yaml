@@ -312,7 +312,7 @@ spec:
           value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
         {{- end }}
         - name: SERVICE_JOURNEY_RULES_BASE_URL
-          value: "https://nhsapp-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+          value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: NHSLOGIN_KEY_PATH
           value: "/secrets/nhslogin-key/nhslogin.pem"
         - name: NHSLOGIN_KEY_PASSWORD

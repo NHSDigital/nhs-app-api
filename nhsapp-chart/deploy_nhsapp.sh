@@ -7,67 +7,6 @@ source script_helpers/formatting
 source script_helpers/aks_access
 source script_helpers/unlock_repo
 
-function trigger_sjr() {
-	SJR_IMAGE_TAG="$1"
-	SJRCONFIG_IMAGE_TAG="$2"
-
-    info "Triggering SJR deployment job for $TARGET_ENVIRONMENT"
-
-	case $TARGET_ENVIRONMENT in
-	"ops"*)
-		if [ $TARGET_ZONE = "sandbox" ]; then
-			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_2DeploySjrAppRepoTest"
-		elif [ $TARGET_ZONE = "dev" ]; then
-			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
-		else
-		  die "Unknown target zone $TARGET_ZONE."
-		fi
-	;;
-	"scratch"*)
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
-	;;
-	"preview")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_1Preview_2_2DeploySjrAppRepo"
-	;;
-	"demo")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_3Demo_2DeploySjrAppRepo"
-	;;
-	"onboardingsandpit")
-                BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_System_5OnboardingSandpit_2DeploySjrAppRepo"
-        ;;
-        "stubbed"*)
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_3Stubbed_2DeploySjrAppRepo"
-	;;
-	"staging")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_6Staging_2DeploySjrAppRepo"
-	;;
-	"production")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_3Production_Namespaces_Production_2DeploySjrAppRepo"
-	;;
-	*)
-		die "Unable to find Build Config ID for $TARGET_ENVIRONMENT"
-	;;
-	esac
-
-	if [[ $TARGET_ZONE == "dev" || $TARGET_ENVIRONMENT == "stubbed"* ]]; then
-		# Prepare JSON data containing required parameters - including passing through the app version
-		DATA=$(cat <<-EOF
-		{"buildType":{"id":"${BUILD_CONFIG_ID}","projectId":"NHSOnline"},"triggeringOptions":{"queueAtTop":true},"properties":{"property":[{"name":"env.TARGET_ENVIRONMENT","value":"${TARGET_ENVIRONMENT}"},{"name":"env.SJR_IMAGE_TAG","value":"${SJR_IMAGE_TAG}"},{"name":"env.SJRCONFIG_IMAGE_TAG","value":"${SJRCONFIG_IMAGE_TAG}"},{"name":"env.REGION","value":"${REGION}"},{"name":"env.AKSCLUSTERNAME","value":"${AKSCLUSTERNAME}"}]}}
-		EOF
-		)
-	else
-		# Prepare JSON data containing required parameters
-		DATA=$(cat <<-EOF
-		{"buildType":{"id":"${BUILD_CONFIG_ID}","projectId":"NHSOnline"},"triggeringOptions":{"queueAtTop":true},"properties":{"property":[{"name":"env.TARGET_ENVIRONMENT","value":"${TARGET_ENVIRONMENT}"},{"name":"env.REGION","value":"${REGION}"},{"name":"env.AKSCLUSTERNAME","value":"${AKSCLUSTERNAME}"}]}}
-		EOF
-		)
-	fi
-
-	# Curl TeamCity buildQueue endpoint to trigger job with data
-	curl -s -u system:$TC_SYSTEM_PW --request POST "http://teamcity.teamcity.svc.cluster.local:8111/httpAuth/app/rest/buildQueue" --header "Content-Type: application/json" -H "Accept: application/json" -d $DATA
-}
-
-
 [ -z "$AKSCLUSTERNAME" ]     && die "You need to set the AKSCLUSTERNAME environment variable"
 [ -z "$TARGET_ENVIRONMENT" ] && die "You need to set the TARGET_ENVIRONMENT environment variable"
 [ -z "$TARGET_ZONE" ]        && die "You need to set the TARGET_ZONE environment variable"
@@ -271,6 +210,8 @@ helm upgrade "$TARGET_ENVIRONMENT-$appImageTag" \
 	--set web.image_tag="$WEB_IMAGE_TAG" \
 	--set cdsswiremock.image_tag="$CDSSWIREMOCK_IMAGE_TAG" \
 	--set logger.image_tag="$LOGGER_IMAGE_TAG" \
+	--set sjr.image_tag="$SJR_IMAGE_TAG" \
+	--set sjrconfig.image_tag="$SJRCONFIG_IMAGE_TAG" \
 	--set stub_loader.image_tag="$STUB_LOADER_IMAGE_TAG" \
 	--set wiremock.image_tag="$PERF_WIREMOCK_IMAGE_TAG" \
 	--set users.image_tag=$USERS_IMAGE_TAG \
@@ -295,12 +236,3 @@ DEPLOYMENT_SUCCESS=$?
 }
 
 info "Deployment Completed"
-
-if [[ "$TARGET_ZONE" == production ]]; then
-	info "Target zone is production, not triggering SJR deployment."
-elif [[ "$TARGET_ENVIRONMENT" == "staging" ]]; then
-	info "Target environment is staging, not triggering SJR deployment."
-else
-	info "Deploying SJR into namespace $TARGET_ENVIRONMENT"
-  trigger_sjr "$SJR_IMAGE_TAG" "$SJRCONFIG_IMAGE_TAG"
-fi

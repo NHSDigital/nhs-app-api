@@ -41,7 +41,7 @@ spec:
         {{- end }}
       - name: wildcard-namespace-cert
         secret:
-          secretName: wildcard-{{ $.Values.global.environment }}-tls-sjr-{{ .Chart.AppVersion }}
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
       - name: sidecar-proxy-config
         configMap:
           name: sjr-sidecar-proxy-config-{{ .Chart.AppVersion }}
@@ -116,7 +116,7 @@ spec:
         - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
         - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
       imagePullSecrets:
-      - name: azure-registry-sjr-{{ .Chart.AppVersion }}
+      - name: azure-registry-{{ .Chart.AppVersion }}
       dnsConfig:
         options:
         - name: single-request-reopen
