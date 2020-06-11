@@ -64,7 +64,68 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             return responseBody;
         }
 
-        public async Task<EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
+        public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError("Invalid Im1 connection token");
+                    return new GpSessionCreateResult.InvalidConnectionToken();
+                }
+
+                var endUserSessionResponse = await SendSessionsEndUserSessionPost();
+
+                var session = new EmisUserSession
+                {
+                    Id = Guid.NewGuid(),
+                    EndUserSessionId = endUserSessionResponse.EndUserSessionId,
+                    NhsNumber = nhsNumber,
+                    OdsCode = odsCode,
+                    AppointmentBookingReasonNecessity =  Necessity.Mandatory,
+                    PrescriptionSpecialRequestNecessity = Necessity.Optional
+                };
+
+                var emisRequestParameters = new EmisRequestParameters(session);
+
+                var either = EmisConnectionTokenParser.Parse(connectionToken);
+                var accessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid);
+
+                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
+                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
+                await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
+
+                var processSessionsStep = await UpdateSessionWithUserSessionsResponse(session, sessionRequestTask);
+                if (processSessionsStep.ProcessFinishedEarly(out var processSessionsStepFinalResult))
+                {
+                    return processSessionsStepFinalResult;
+                }
+                var patientName = processSessionsStep.Result;
+
+                await UpdateSessionWithPracticeSettings(session, practiceSettingsTask, patientName);
+
+                return new GpSessionCreateResult.Success(session);
+            }
+            catch (EmisSessionResponseErrorException responseError)
+            {
+                _logger.LogError(responseError, $"{StandardErrorMessage}, {nameof(EmisSessionResponseErrorException)} has been thrown");
+                return responseError.ErrorResult;
+            }
+            catch (HttpRequestException e)
+            {
+                var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
+                _logger.LogError(e, message);
+                return new GpSessionCreateResult.BadGateway(message);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
         {
             var sessionPostRequestModel = new SessionsPostRequest
             {
@@ -96,130 +157,96 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             return sessionsResponse;
         }
 
-        public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
+        private async Task<ProcessResult<string, GpSessionCreateResult>> UpdateSessionWithUserSessionsResponse(
+            EmisUserSession session,
+            Task<EmisApiObjectResponse<SessionsPostResponse>> sessionRequestTask)
         {
+            string patientName;
+
             try
             {
-                _logger.LogEnter();
+                var sessionResponse = await sessionRequestTask;
 
-                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
-                {
-                    _logger.LogError("Invalid Im1 connection token");
-                    return new GpSessionCreateResult.InvalidConnectionToken();
-                }
-
-                var endUserSessionResponse = await SendSessionsEndUserSessionPost();
-
-                string patientName;
-
-                var session = new EmisUserSession
-                {
-                    Id = Guid.NewGuid(),
-                    EndUserSessionId = endUserSessionResponse.EndUserSessionId,
-                    NhsNumber = nhsNumber,
-                    OdsCode = odsCode,
-                    AppointmentBookingReasonNecessity =  Necessity.Mandatory,
-                    PrescriptionSpecialRequestNecessity = Necessity.Optional
-                };
-
-                var emisRequestParameters = new EmisRequestParameters(session);
-
-                var either = EmisConnectionTokenParser.Parse(connectionToken);
-                var accessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid);
-
-                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
-                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
-                await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
-
-                try
-                {
-                    var sessionResponse = new EmisRequestTaskChecker<EmisApiObjectResponse<SessionsPostResponse>>(_logger,
-                        "SendSessionsRequest").Check(sessionRequestTask);
-
-                    session.SessionId = sessionResponse.Body.SessionId;
-                    session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
-                    session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
-                        .Select(x => new EmisProxyUserSession
-                        {
-                            Id = Guid.NewGuid(),
-                            OdsCode = x.NationalPracticeCode,
-                            UserPatientLinkToken = x.UserPatientLinkToken,
-                        })
-                        .ToList();
-
-                    patientName = FormatName(sessionResponse.Body);
-
-                    LogProxyInformation(session, sessionResponse.Body);
-
-                    if (string.IsNullOrWhiteSpace(patientName))
+                session.SessionId = sessionResponse.Body.SessionId;
+                session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
+                session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
+                    .Select(x => new EmisProxyUserSession
                     {
-                        const string message = "No patient name found";
-                        _logger.LogError(message);
-                        return new GpSessionCreateResult.BadGateway(message);
-                    }
+                        Id = Guid.NewGuid(),
+                        OdsCode = x.NationalPracticeCode,
+                        UserPatientLinkToken = x.UserPatientLinkToken,
+                    })
+                    .ToList();
 
-                    if (string.IsNullOrWhiteSpace(session.UserPatientLinkToken))
-                    {
-                        const string message = "No EMIS userPatientLinkToken found";
-                        _logger.LogError(message);
-                        _logger.LogEmisErrorResponse(sessionResponse);
-                        return new GpSessionCreateResult.Forbidden(message);
-                    }
-                }
-                catch (EmisSessionResponseErrorException responseError)
+                patientName = FormatName(sessionResponse.Body);
+
+                LogProxyInformation(session, sessionResponse.Body);
+
+                if (string.IsNullOrWhiteSpace(patientName))
                 {
-                    _logger.LogError(responseError,
-                        $"{StandardErrorMessage},{nameof(EmisSessionResponseErrorException)} has been thrown");
-                    return responseError.ErrorResult;
+                    const string message = "No patient name found";
+                    _logger.LogError(message);
+                    var finalResult = new GpSessionCreateResult.BadGateway(message);
+                    return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
                 }
-                catch (HttpRequestException e)
+
+                if (string.IsNullOrWhiteSpace(session.UserPatientLinkToken))
                 {
-                    var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
-                    _logger.LogError(e, message);
-                    return new GpSessionCreateResult.BadGateway(message);
+                    const string message = "No EMIS userPatientLinkToken found";
+                    _logger.LogError(message);
+                    _logger.LogEmisErrorResponse(sessionResponse);
+                    var finalResult = new GpSessionCreateResult.Forbidden(message);
+                    return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
                 }
-
-                try
-                {
-                    var practiceResponse = new EmisRequestTaskChecker<EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
-
-                    session.AppointmentBookingReasonNecessity =
-                        _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);
-
-                    session.PrescriptionSpecialRequestNecessity =
-                        _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.PrescribingComment, Necessity.Optional);
-
-                    session.Im1MessagingEnabled =
-                        practiceResponse?.Body?.Services?.PracticePatientCommunicationSupported ?? false;
-
-                    session.Name = patientName;
-
-                    LogAppointmentsAndPrescriptionsNecessityValues(session);
-
-                    _logger.LogInformation($"Enabled services for practice {session.OdsCode}: {practiceResponse?.Body?.Services}");
-                }
-                catch (HttpRequestException e)
-                {
-                    _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
-                }
-
-                return new GpSessionCreateResult.Success(session);
             }
             catch (EmisSessionResponseErrorException responseError)
             {
                 _logger.LogError(responseError,
-                    $"{StandardErrorMessage}, {nameof(EmisSessionResponseErrorException)} has been thrown");
-                return responseError.ErrorResult;
+                    $"{StandardErrorMessage},{nameof(EmisSessionResponseErrorException)} has been thrown");
+                return ProcessResult.FinalResult<string, GpSessionCreateResult>(responseError.ErrorResult);
             }
             catch (HttpRequestException e)
             {
                 var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
                 _logger.LogError(e, message);
-                return new GpSessionCreateResult.BadGateway(message);
+                var finalResult = new GpSessionCreateResult.BadGateway(message);
+                return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
             }
-            finally
+
+            return ProcessResult.StepResult<string, GpSessionCreateResult>(patientName);
+        }
+
+        private async Task UpdateSessionWithPracticeSettings(
+            EmisUserSession session,
+            Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask,
+            string patientName)
+        {
+            try
             {
-                _logger.LogExit();
+                var practiceResponse = await practiceSettingsTask;
+
+                session.AppointmentBookingReasonNecessity =
+                    _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason,
+                        Necessity.Mandatory);
+
+                session.PrescriptionSpecialRequestNecessity =
+                    _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.PrescribingComment,
+                        Necessity.Optional);
+
+                session.Im1MessagingEnabled =
+                    practiceResponse?.Body?.Services?.PracticePatientCommunicationSupported ?? false;
+
+                session.Name = patientName;
+
+                LogAppointmentsAndPrescriptionsNecessityValues(session);
+
+                _logger.LogInformation(
+                    $"Enabled services for practice {session.OdsCode}: {practiceResponse?.Body?.Services}");
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e,
+                    "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
             }
         }
 
