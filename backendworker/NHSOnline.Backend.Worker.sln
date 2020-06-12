@@ -39,7 +39,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.users.yaml = contracts\nhsonline.users.yaml
 		contracts\nhsonline.usersession.yaml = contracts\nhsonline.usersession.yaml
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
-		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
 	EndProjectSection
 EndProject

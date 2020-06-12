@@ -36,6 +36,7 @@ class WorkerClient(config:Config = Config.instance) {
     val messages = WorkerClientMessages(config, workerClientSender, gson)
     val userInfo = WorkerClientUserInfo(config, workerClientSender, gson)
     val configuration = WorkerClientConfiguration(config, workerClientSender, gson)
+    val clientLogger = WorkerClientLogger(config, workerClientSender, gson)
 
     companion object {
 

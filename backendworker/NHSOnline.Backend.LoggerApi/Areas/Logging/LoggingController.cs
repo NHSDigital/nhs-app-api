@@ -8,7 +8,7 @@ using NHSOnline.Backend.LoggerApi.Logging;
 
 namespace NHSOnline.Backend.LoggerApi.Areas.Logging
 {
-    [Route("log")]
+    [Route("api/log")]
     public class LoggingController : Controller
     {
         private readonly ILogger<LoggingController> _logger;
