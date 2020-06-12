@@ -171,7 +171,6 @@ cosmosDBIPTrust:
 
 microtestHostname: nhsapp-test.microtest.co.uk
 microtestProtocol: https
-microtestEnabled: false
 
 odsRemapEnabled: false
 odsRemapMap: ""

@@ -25,8 +25,7 @@ namespace NHSOnline.Backend.PfsApi.DependencyInjection
         {
             var gpSupplierConfig = new Dictionary<string, Action<EnableGpSupplierConfiguration, bool>>
             {
-                { "GP_PROVIDER_ENABLED_MICROTEST", (config, enabled) => config.EnableMicrotest = enabled },
-                { "GP_PROVIDER_ENABLED_FAKE", (config, enabled) => config.EnableFake = enabled },
+                { "GP_PROVIDER_ENABLED_FAKE", (config, enabled) => config.EnableFake = enabled }
             };
 
             _logger.LogInformation("Registering GP services");

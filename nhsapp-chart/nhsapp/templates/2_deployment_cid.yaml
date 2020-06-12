@@ -107,8 +107,6 @@ spec:
           value: "http://*:{{ $.Values.cid.containerPort }}"
         - name: GP_PROVIDER_ENABLED_FAKE
           value: "{{ $.Values.fakeGpSystemEnabled }}"
-        - name: GP_PROVIDER_ENABLED_MICROTEST
-          value: "{{ $.Values.microtestEnabled }}"
         - name: EMIS_APPLICATION_ID
           value: "{{ $.Values.emisApplicationID }}"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}

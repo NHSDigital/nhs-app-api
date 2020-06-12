@@ -16,10 +16,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         {
             // Arrange
             var services = new ServiceCollection();
-            var config = new EnableGpSupplierConfiguration
-            {
-                EnableMicrotest = true
-            };
+            var config = new EnableGpSupplierConfiguration();
 
             // Act
             services.RegisterPfsGpSystemsServices(config);
@@ -34,10 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         {
             // Arrange
             var services = new ServiceCollection();
-            var config = new EnableGpSupplierConfiguration
-            {
-                EnableMicrotest = true
-            };
+            var config = new EnableGpSupplierConfiguration();
 
             // Act
             services.RegisterCidGpSystemsServices(config);
@@ -53,9 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             // Arrange
             var services = new ServiceCollection();
 
-            var config = new EnableGpSupplierConfiguration {
-                EnableMicrotest = false
-            };
+            var config = new EnableGpSupplierConfiguration();
 
             // Act
             services.RegisterPfsGpSystemsServices(config);

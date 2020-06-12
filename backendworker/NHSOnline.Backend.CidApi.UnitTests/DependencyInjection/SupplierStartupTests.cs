@@ -35,48 +35,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
         }
 
         [TestMethod]
-        public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenMicrotestIsEnabled()
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_MICROTEST"]).Returns("True");
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableMicrotest)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [DataTestMethod]
-        [DataRow("False")]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("xyz")]
-        public void ConfigureServices_DoesntSetupMicrotestServicesForDependencyInjection_WhenMicrotestIsDisabled(string value)
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection();
-
-            _configuration.Setup(x => x["GP_PROVIDER_ENABLED_MICROTEST"]).Returns(value);
-
-            _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableMicrotest == false)))
-                .Verifiable();
-
-            // Act
-            _systemUnderTest.ConfigureServices(serviceCollection);
-
-            // Assert
-            _gpSystemRegistrationService.Verify();
-        }
-
-        [TestMethod]
         public void ConfigureServices_SetsUpCorrectServicesForDependencyInjection_WhenFakeIsEnabled()
         {
             // Arrange

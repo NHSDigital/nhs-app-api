@@ -142,8 +142,6 @@ spec:
           value: "{{ $.Values.brotherMailerSIG }}"
         - name: GP_PROVIDER_ENABLED_FAKE
           value: "{{ $.Values.fakeGpSystemEnabled }}"
-        - name: GP_PROVIDER_ENABLED_MICROTEST
-          value: "{{ $.Values.microtestEnabled }}"
         - name: ODS_REMAP_ENABLED
           value: "{{ $.Values.odsRemapEnabled }}"
         - name: ODS_REMAP_MAP
