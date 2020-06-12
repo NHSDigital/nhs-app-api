@@ -49,14 +49,15 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun getNotificationsStatus() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
-        runAction { nhsWeb.getNotificationsStatus() }
+    fun fetchBiometricSpec() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchBiometricSpec")
+        runAction { uiInteractor.fetchBiometricSpec() }
     }
 
     @JavascriptInterface
-    fun goToLoginOptions() {
-        runAction { uiInteractor.showNativeBiometricOptions() }
+    fun getNotificationsStatus() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
+        runAction { nhsWeb.getNotificationsStatus() }
     }
 
     @JavascriptInterface

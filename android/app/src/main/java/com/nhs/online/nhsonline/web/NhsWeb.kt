@@ -171,7 +171,7 @@ class NhsWeb(
         return true
     }
 
-    fun onbackButtonPressedOnCheckSymptomsUnsecurePage() {
+    fun onbackButtonPressedOnLoggedOutUnsecurePage() {
         when {
             webView.canGoBack() -> webView.goBack()
             else -> reloadHomepageOnBackReturn()

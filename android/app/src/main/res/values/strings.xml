@@ -111,9 +111,9 @@
     <string name="new_fingerprint_enrolled_description">
         A new fingerprint was added to this device, so your password is required.
     </string>
-    <string name="invalid_fingerprint_dialog_header">You need to turn on Fingerprint ID again</string>
+    <string name="invalid_fingerprint_dialog_header">You need to turn on fingerprint again</string>
     <string name="invalid_fingerprint_dialog_message">
-        We have turned it off as something has changed.\nYou can log in using your password and security code, then turn Fingerprint ID on in the NHS App.
+        We have turned it off as something has changed.\nLog in using your email, password and security code, then turn fingerprint on in the NHS App settings.
     </string>
     <string name="fingerprint_registration_success_heading">Success</string>
     <string name="fingerprint_registration_success_dialog_message">
@@ -145,8 +145,8 @@
     <string name="login_auth_code_path">/authcode</string>
 
     <!--Fingerprint Login generic error contents-->
-    <string name="fingerprint_login_error_title">Something went wrong</string>
-    <string name="fingerprint_login_error_description">It wasn\'t your fault. Try logging in again.</string>
+    <string name="fingerprint_login_error_title">There\'s a problem</string>
+    <string name="fingerprint_login_error_description">Try logging in again.</string>
     <string name="redirectErrorQueryParam">error</string>
     <!--End Content texts for the biometric authentication-->
 

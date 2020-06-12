@@ -1,9 +1,7 @@
-package com.nhs.online.nhsonline.biometrics
+package com.nhs.online.nhsonline.biometrics.utils
 
 import android.util.Log
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystore
-import com.nhs.online.nhsonline.biometrics.utils.FingerprintSharedPreferences
-import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
 
 private val TAG = BiometricState::class.java.simpleName
 

@@ -3,7 +3,6 @@ package com.nhs.online.nhsonline.biometrics.utils
 import android.app.Activity
 import android.util.Log
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.biometrics.BiometricConstants
 import com.nhs.online.nhsonline.support.AppSharedPref
 
 private val TAG = FingerprintSharedPreferences::class.java.simpleName

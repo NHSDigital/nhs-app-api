@@ -10,14 +10,13 @@ import com.nhs.online.fidoclient.constants.UAF_AUTH_RESPONSE_FIELD
 import com.nhs.online.fidoclient.utils.fidoHelpers
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.fidoclient.exceptions.GenericFidoException
-import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.fidoclient.uaf.client.AuthAssertionBuilder
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.fidoclient.uaf.crypto.FidoSignerAndroidM
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.support.toBase64
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import org.json.JSONObject
 import java.lang.RuntimeException
 
@@ -25,15 +24,16 @@ private val TAG = AuthenticationService::class.java.simpleName
 
 @TargetApi(Build.VERSION_CODES.M)
 class AuthenticationService(
-        private val activity: FragmentActivity,
-        private val biometricAsyncHandler: BiometricAsyncHandler,
-        private val biometricsInteractor: BiometricsInteractor,
-        private val biometricState: BiometricState,
-        private val biometricCleanupHelper: BiometricCleanupHelper,
-        private val fingerprintDialog: FingerprintDialog,
-        private val fingerprintSystemChecker: FingerprintSystemChecker,
-        private val preferencesService: FingerprintSharedPreferences,
-        private val uafAuthenticator: Authentication
+    private val activity: FragmentActivity,
+    private val biometricAsyncHandler: BiometricAsyncHandler,
+    private val biometricsInteractor: BiometricsInteractor,
+    private val biometricState: BiometricState,
+    private val biometricCleanupHelper: BiometricCleanupHelper,
+    private val fingerprintDialog: FingerprintDialog,
+    private val fingerprintSystemChecker: FingerprintSystemChecker,
+    private val preferencesService: FingerprintSharedPreferences,
+    private val uafAuthenticator: Authentication,
+    private val appWebInterface: AppWebInterface
 ) {
     var isFingerprintLoginStarted = false
 
@@ -46,12 +46,17 @@ class AuthenticationService(
 
         Log.d(TAG, "isRegistered")
         with(biometricsInteractor) {
-            toggleBiometricSwitch(true)
-            dismissNotifications()
+            dismissBiometricNotification()
         }
 
-        startFidoSignIn()
-        return true
+        try {
+            startFidoSignIn()
+            return true
+        } catch (fidoException: FidoInvalidSignatureException) {
+            Log.d(TAG, "Invalid signature")
+            throw fidoException
+        }
+
     }
 
     private fun startFidoSignIn() {
@@ -65,7 +70,14 @@ class AuthenticationService(
             if (response.statusCode != BiometricAsyncHandler.OK) {
                 return@requestUafAuthenticationMessage
             }
-            completeSignInStart(response)
+
+            try {
+                completeSignInStart(response)
+            } catch (fidoException: FidoInvalidSignatureException) {
+                Log.d(TAG, "Invalid signature")
+                throw fidoException
+            }
+
         }
     }
 
@@ -87,14 +99,16 @@ class AuthenticationService(
             }
             val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
             fingerprintDialog.showFingerprintAuthDialog(signInCallback, fingerprintContent)
-        } catch (e: FidoInvalidSignatureException) {
+        } catch (fidoException: FidoInvalidSignatureException) {
             biometricsInteractor.dismissProgressDialog()
             isFingerprintLoginStarted = false
             handleInvalidKeys()
+            throw fidoException
         } catch (e: IllegalStateException) {
             Log.d(TAG, "Unable to show the fingerprint dialog: ", e)
             biometricsInteractor.dismissProgressDialog()
             isFingerprintLoginStarted = false
+            appWebInterface.biometricLoginFailure()
         }
     }
 

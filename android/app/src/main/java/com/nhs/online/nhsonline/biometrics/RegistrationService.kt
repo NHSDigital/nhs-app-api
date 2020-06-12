@@ -17,12 +17,15 @@ import com.nhs.online.fidoclient.uaf.client.operation.Registration
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.fidoclient.uaf.message.RegistrationRequest
 import com.nhs.online.fidoclient.utils.fidoHelpers
+import com.nhs.online.nhsonline.biometrics.utils.BiometricState
 import com.nhs.online.nhsonline.biometrics.utils.*
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.json.JSONArray
 import org.json.JSONException
 import java.security.KeyStoreException
+import java.security.PublicKey
 import java.security.Signature
 
 private val TAG = RegistrationService::class.java.simpleName
@@ -30,33 +33,48 @@ private const val KEY_ID_PREFIX = "nhs-app-key"
 
 @TargetApi(Build.VERSION_CODES.M)
 class RegistrationService(
-        private val activity: FragmentActivity,
-        private val biometricAsyncHandler: BiometricAsyncHandler,
-        private val biometricsInteractor: IBiometricsInteractor,
-        private val cookieService: FingerprintCookieService,
-        private val biometricCleanupHelper: BiometricCleanupHelper,
-        private val fidoKeystore: FidoKeystoreAndroidM,
-        private val fingerprintDialog: FingerprintDialog,
-        private val fingerprintSystemChecker: FingerprintSystemChecker,
-        private val preferencesService: FingerprintSharedPreferences,
-        private val biometricState: BiometricState
-) {
+    private val activity: FragmentActivity,
+    private val biometricAsyncHandler: BiometricAsyncHandler,
+    private val biometricsInteractor: IBiometricsInteractor,
+    private val cookieService: FingerprintCookieService,
+    private val biometricCleanupHelper: BiometricCleanupHelper,
+    private val fidoKeystore: FidoKeystoreAndroidM,
+    private val fingerprintDialog: FingerprintDialog,
+    private val fingerprintSystemChecker: FingerprintSystemChecker,
+    private val preferencesService: FingerprintSharedPreferences,
+    private val biometricState: BiometricState,
+    private val appWebInterface: AppWebInterface,
+    val assertionFactory: (publicKey: PublicKey, signature: Signature, keyId: String) ->
+        RegAssertionBuilder = {p,s,k -> RegAssertionBuilder(p, s, k) }
+    ) {
     fun startFidoRegistration() {
-        if (!isRegistrationReady()) return
-
-        val facetId = fidoHelpers.getFacetId(activity)
-        val accessToken = cookieService.getAccessTokenFromCookie()
-        if (facetId == null || accessToken == null || accessToken.isEmpty()) {
-            biometricsInteractor.toggleBiometricSwitch(false)
-            biometricsInteractor.showBiometricRegistrationError()
+        if (!isRegistrationReady()) {
+            appWebInterface.biometricCompletion(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_FIND_CODE)
             return
         }
 
-        biometricsInteractor.showProgressDialog()
+        val facetId = fidoHelpers.getFacetId(activity)
+        val accessToken = cookieService.getAccessTokenFromCookie()
+        if (facetId.isNullOrBlank() || accessToken.isNullOrBlank()) {
+            appWebInterface.biometricCompletion(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_CHANGE_CODE)
+            return
+        }
+
         biometricAsyncHandler.fetchUafRegistrationMessage(facetId,
             accessToken) { response: BiometricCallResult ->
             handleRegistrationResponse(response)
         }
+
+    }
+
+    fun doFingerprintsExist(): Boolean {
+        return fingerprintSystemChecker.checkIfFingerprintsExist()
     }
 
     private fun isRegistrationReady(): Boolean {
@@ -66,20 +84,17 @@ class RegistrationService(
             biometricCleanupHelper.removeFidoData()
         }
 
-        val preRegCheckResult = fingerprintSystemChecker.preRegistrationCheck()
+        return fingerprintSystemChecker.preRegistrationCheck()
 
-        if (!preRegCheckResult) {
-            biometricsInteractor.toggleBiometricSwitch(false)
-        }
-        return preRegCheckResult
     }
 
     private fun handleRegistrationResponse(response: BiometricCallResult) {
         try {
-            biometricsInteractor.dismissProgressDialog()
             if (response.statusCode != BiometricAsyncHandler.OK) {
-                biometricsInteractor.showBiometricRegistrationError()
-                biometricsInteractor.toggleBiometricSwitch(false)
+                appWebInterface.biometricCompletion(
+                    BiometricConstants.REGISTER,
+                    BiometricConstants.FAILURE,
+                    BiometricConstants.CANNOT_CHANGE_CODE)
                 return
             }
             val result = response.result
@@ -92,12 +107,19 @@ class RegistrationService(
                         completeFidoRegistration(cryptObj, this.uafMessage)
 
                 override fun cancel() {
+                    appWebInterface.biometricCompletion(
+                        BiometricConstants.REGISTER,
+                        BiometricConstants.CANCELLED,
+                        "")
                     biometricState.registrationStateChangeInProgress = false
-                    biometricsInteractor.toggleBiometricSwitch(false)
+                    return
                 }
 
                 override fun error() {
-                    biometricsInteractor.toggleBiometricSwitch(false)
+                    appWebInterface.biometricCompletion(
+                        BiometricConstants.REGISTER,
+                        BiometricConstants.FAILURE,
+                        BiometricConstants.CANNOT_CHANGE_CODE)
                     return
                 }
             }
@@ -106,59 +128,71 @@ class RegistrationService(
             val fingerprintContent = fingerprintDialog.generateFingerprintContent(true)
             fingerprintDialog.showFingerprintAuthDialog(registerCallback, fingerprintContent)
         }
+        catch(fidoException: Exception) {
+            Log.d(TAG, "Registration call failed due to fido exception", fidoException)
+            showErrorAndRemoveData(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_CHANGE_CODE)
+        }
         catch(e: Exception) {
-            removeAndShowDeviceError()
+            Log.d(TAG, "Registration call failed", e)
+            showErrorAndRemoveData(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_CHANGE_CODE)
         }
         biometricState.registrationStateChangeInProgress = false
     }
 
-    private fun completeFidoRegistration(
+    fun completeFidoRegistration(
         cryptObj: FingerprintManagerCompat.CryptoObject,
         uafMessage: String
     ): Int {
         val signature = cryptObj.signature
         if (signature == null) {
-            removeAndShowRegistrationError()
+            showErrorAndRemoveData(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_CHANGE_CODE)
             return Activity.RESULT_CANCELED
         }
         try {
             val processedRegMessage = processUafRegistrationMsg(uafMessage, signature)
             Log.d(TAG, "UAF processed message $processedRegMessage")
 
-            biometricsInteractor.showProgressDialog()
             biometricAsyncHandler.sendClientRegistrationMsg(processedRegMessage) { response: BiometricCallResult ->
-                biometricsInteractor.dismissProgressDialog()
                 if (response.statusCode != BiometricAsyncHandler.OK) {
-                    removeAndShowRegistrationError()
+                    showErrorAndRemoveData(
+                        BiometricConstants.REGISTER,
+                        BiometricConstants.FAILURE,
+                        BiometricConstants.CANNOT_CHANGE_CODE)
                     return@sendClientRegistrationMsg
                 }
 
                 if (verifyIfRegistrationSuccess(response.result)) {
                     preferencesService.storeFingerprintState(true)
                     biometricState.registered = true
-                    biometricsInteractor.showBiometricsOnRegistrationSuccessMessage()
+                    appWebInterface.biometricCompletion(
+                        BiometricConstants.REGISTER,
+                        BiometricConstants.SUCCESS,
+                        "")
                 } else {
-                    biometricCleanupHelper.removeFidoData()
+                    showErrorAndRemoveData(
+                        BiometricConstants.REGISTER,
+                        BiometricConstants.FAILURE,
+                        BiometricConstants.CANNOT_CHANGE_CODE)
                 }
             }
         }
-        catch (e: KeyStoreException){
-            removeAndShowDeviceError()
-            return Activity.RESULT_CANCELED
+        catch (keyStoreException: KeyStoreException){
+            showErrorAndRemoveData(
+                BiometricConstants.REGISTER,
+                BiometricConstants.FAILURE,
+                BiometricConstants.CANNOT_CHANGE_CODE)
         }
+
         return Activity.RESULT_OK
-    }
-
-    private fun removeAndShowRegistrationError() {
-        biometricsInteractor.showBiometricRegistrationError()
-        biometricCleanupHelper.removeFidoData()
-        biometricsInteractor.toggleBiometricSwitch(false)
-    }
-
-    private fun removeAndShowDeviceError() {
-        biometricsInteractor.showBiometricDeviceError()
-        biometricCleanupHelper.removeFidoData()
-        biometricsInteractor.toggleBiometricSwitch(false)
     }
 
     private fun processUafRegistrationMsg(inMsg: String, signature: Signature): String {
@@ -173,7 +207,7 @@ class RegistrationService(
         preferencesService.storeString(BiometricConstants.KEY_ID, keyId)
 
         val publicKey = fidoKeystore.getPublicKey(preferencesService.getFidoUsername())
-        val assertionBuilder = RegAssertionBuilder(publicKey, signature, keyId)
+        val assertionBuilder = assertionFactory(publicKey, signature, keyId)
         
         return registerResponseHandler.processRegisterMessage(inMsg, assertionBuilder)
     }
@@ -209,5 +243,10 @@ class RegistrationService(
                 .fromJson(uafRegMsg)!![0]
 
         return regRequest.username
+    }
+
+    private fun showErrorAndRemoveData(action: String, outcome: String, errorCode: String){
+        appWebInterface.biometricCompletion(action, outcome, errorCode)
+        biometricCleanupHelper.removeFidoData()
     }
 }

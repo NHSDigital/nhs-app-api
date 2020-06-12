@@ -30,14 +30,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.utils.FingerprintContent
 import com.nhs.online.nhsonline.biometrics.utils.SigningHelper
 import kotlinx.android.synthetic.main.fingerprint_dialog_container.*
 
 @RequiresApi(Build.VERSION_CODES.M)
 fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
                                                   fingerprintContent: FingerprintContent,
-                                                  fingerprintAuthProcessor: FingerprintAuthProcessor) : FingerprintAuthenticationDialogFragment {
-    val fragment = FingerprintAuthenticationDialogFragment()
+                                                  fingerprintAuthProcessor: FingerprintAuthProcessor
+) : FingerprintAuthenticationDialogFragment {
+    val fragment =
+        FingerprintAuthenticationDialogFragment()
     val args = Bundle()
     fragment.arguments = args
     fragment.cryptoObject = FingerprintManagerCompat.CryptoObject(signingHelper.initSignature())
@@ -53,7 +56,7 @@ fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
 @RequiresApi(Build.VERSION_CODES.M)
 class FingerprintAuthenticationDialogFragment : DialogFragment(),
     TextView.OnEditorActionListener,
-        FingerprintUiHelper.Callback {
+    FingerprintUiHelper.Callback {
     private var fingerprintUiHelper: FingerprintUiHelper? = null
     var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     var fingerprintContent: FingerprintContent? = null
@@ -115,8 +118,11 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         context?.let {
             val fingerprintManager = FingerprintManagerCompat.from(it)
             if (fingerprintManager.isHardwareDetected && fingerprintManager.hasEnrolledFingerprints()) {
-                fingerprintUiHelper = FingerprintUiHelper(fingerprintManager, fingerprintIcon,
-                        fingerprintStatus, this)
+                fingerprintUiHelper = FingerprintUiHelper(
+                    fingerprintManager,
+                    fingerprintIcon,
+                    fingerprintStatus,
+                    this)
                 return
             }
         }

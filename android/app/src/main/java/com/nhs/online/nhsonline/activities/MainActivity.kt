@@ -19,10 +19,12 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
+import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
+import com.nhs.online.nhsonline.biometrics.utils.BiometricConstants
 import com.nhs.online.nhsonline.clients.FirebaseClient
 import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -49,8 +51,6 @@ import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.biometric_layout_content.*
-import kotlinx.android.synthetic.main.breadcrumb_layout.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import kotlinx.android.synthetic.main.success_layout.*
@@ -157,7 +157,6 @@ class MainActivity :
         homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
-        breadcrumb.setOnClickListener { onBreadcrumbSelected() }
     }
 
     private fun initialiseActivityElements() {
@@ -173,8 +172,8 @@ class MainActivity :
     }
 
     private fun initialiseBiometrics() {
-        biometricsInteractor = BiometricsInteractor(this.resources, this, nhsWeb, this)
-        biometricsInterface = BiometricsInterface(biometricsInteractor, this)
+        biometricsInteractor = BiometricsInteractor(this, nhsWeb, this)
+        biometricsInterface = BiometricsInterface(biometricsInteractor, this, appWebInterface)
         configBiometricSetup(configurationResponse.fidoServerUrl)
     }
 
@@ -310,20 +309,8 @@ class MainActivity :
     }
 
     fun configBiometricSetup(fidoServerUrl: String) {
-        if (biometricsInterface.isFingerprintServiceInitialised()) {
-            return
-        }
-        biometricsInterface.initializeFingerprintService(fidoServerUrl)
-
-        biometricToggleSwitch.setOnCheckedChangeListener{ _, _ ->
-            if (biometricToggleSwitch.isChecked || biometricsInterface.isFingerprintRegistered) {
-                biometricsInteractor.let {
-                    it.dismissNotifications()
-                    if (!biometricsInterface.requestBiometricsRegistrationStateChange()) {
-                        it.toggleBiometricSwitch(false)
-                    }
-                }
-            }
+        if (!biometricsInterface.isFingerprintServiceInitialised()) {
+            biometricsInterface.initializeFingerprintService(fidoServerUrl)
         }
     }
 
@@ -397,15 +384,6 @@ class MainActivity :
         nhsWeb.loadUrlInChromeTab(nhsWeb.getHelpLocation())
     }
 
-    private fun onBreadcrumbSelected() {
-        if (!nhsWeb.reloadUrl.isNullOrBlank()) {
-            nhsWeb.loadUrl(nhsWeb.reloadUrl!!)
-        } else {
-            nhsWeb.loadWelcomePage()
-        }
-        menuBar.deselectActiveItem()
-    }
-
     override fun setHelpUrl(url: String) {
         logger.info("Entering setHelpUrl")
         nhsWeb.setHelpLocation(url)
@@ -426,8 +404,11 @@ class MainActivity :
         when {
             nhsWeb.isUserLoggedIn -> showExitDialog()
             path == "/" + resources.getString(R.string.checkYourSymptoms) ->
-                nhsWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
-            nhsWeb.shouldReloadHomepageOnBackReturn(nhsWeb.reloadUrl) -> nhsWeb.reloadHomepageOnBackReturn()
+                nhsWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
+            path == "/" + resources.getString(R.string.loginBiometricsError) ->
+                nhsWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
+            nhsWeb.shouldReloadHomepageOnBackReturn(nhsWeb.reloadUrl) ->
+                nhsWeb.reloadHomepageOnBackReturn()
             else -> this.finishAndRemoveTask()
         }
     }
@@ -579,11 +560,6 @@ class MainActivity :
         nhsWeb.applicationState.unBlock()
     }
 
-    override fun showNativeBiometricOptions() {
-        nhsWeb.requiresFullPageLoad = true
-        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT)
-    }
-
     override fun announcePageTitle(title: String?) {
         title?.let { nhsWeb.announceForAccessibility(it) }
     }
@@ -657,6 +633,13 @@ class MainActivity :
         appDialogs.dismissExtendSessionDialog()
     }
 
+    override fun fetchBiometricSpec() {
+        if (biometricsInterface.isFingerprintServiceInitialised()){
+            appWebInterface.biometricSpec(BiometricConstants.BIOMETRIC_TYPE,
+                biometricsInterface.isFingerprintRegistered)
+        }
+    }
+
     override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
         if (!configurationResponse.callSuccessful){
             return false
@@ -666,7 +649,11 @@ class MainActivity :
             val url = URL(currentUrl)
 
             if (url.query == null || !url.query.contains(resources.getString(R.string.fidoAuthQueryKey))) {
-                return biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+                try {
+                    return biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+                } catch (fidoException: FidoInvalidSignatureException) {
+                    appWebInterface.biometricLoginFailure()
+                }
             }
         }
 
@@ -729,23 +716,8 @@ class MainActivity :
 
     override fun getActivity(): FragmentActivity = this
 
-    override fun toggleBiometricSwitchOn() {
-        biometricToggleSwitch.isChecked = true
-    }
-
-    override fun toggleBiometricSwitchOff() {
-        biometricToggleSwitch.isChecked = false
-    }
-
-    override fun setSuccessViewMessage(id: Int) {
-        successTextView.text = resources.getString(id)
-    }
-
-    override fun switchToFingerprintSuccessView() {
-        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
-    }
-
     override fun updateBiometricRegistration() {
-        TODO("Not yet implemented")
+        biometricsInteractor.dismissBiometricNotification()
+        biometricsInterface.requestBiometricsRegistrationStateChange()
     }
 }

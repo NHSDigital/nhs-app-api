@@ -337,7 +337,7 @@ class NhsWebTest {
     @Test
     fun onbackButtonPressedOnCheckSymptomsUnsecurePage_CallsReloadHomepageOnBackReturn_IfCanGoBackIsFalse() {
         whenever(webViewMock.canGoBack()).thenReturn(false)
-        spyWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
+        spyWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
 
         verify(spyWeb).reloadHomepageOnBackReturn()
     }
@@ -345,7 +345,7 @@ class NhsWebTest {
     @Test
     fun onbackButtonPressedOnCheckSymptomsUnsecurePage_CallsGoBack_IfCanGoBackIsTrue() {
         whenever(webViewMock.canGoBack()).thenReturn(true)
-        spyWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
+        spyWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
 
         verify(webViewMock).goBack()
     }

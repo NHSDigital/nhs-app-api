@@ -27,16 +27,10 @@ class MainActivityViewSwitcher(
                 activity.errorViewLayout.visibility = visibility
                 activity.enableMenuBar()
             }
-
-            ActivityView.FINGERPRINT ->
-                activity.biometricContent.visibility = visibility
-
-            ActivityView.FINGERPRINT_SUCCESS ->
-                activity.successViewLayout.visibility = visibility
         }
     }
 }
 
 enum class ActivityView {
-    WEBVIEW, ERROR, FINGERPRINT, FINGERPRINT_SUCCESS
+    WEBVIEW, ERROR
 }

@@ -9,26 +9,28 @@ import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 private const val keyIdPrefix = "com.nhs.online.nhsonline.fidouafclient.keystore.key"
 
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintService(
-        biometricsInteractor: BiometricsInteractor,
-        private val interactor: IInteractor,
-        fidoKeystore: FidoKeystoreAndroidM,
-        fingerprintSystemChecker: FingerprintSystemChecker,
-        preferencesService: FingerprintSharedPreferences,
-        fidoEndpointConfig: FidoEndpointConfig,
-        uafAuthenticator: Authentication
+    biometricsInteractor: BiometricsInteractor,
+    fidoKeystore: FidoKeystoreAndroidM,
+    fingerprintSystemChecker: FingerprintSystemChecker,
+    preferencesService: FingerprintSharedPreferences,
+    fidoEndpointConfig: FidoEndpointConfig,
+    uafAuthenticator: Authentication,
+    appWebInterface: AppWebInterface
 ) {
 
     private val authenticationService: AuthenticationService
     private val deRegistrationService: DeRegistrationService
     private val registrationService: RegistrationService
-    val biometricState: BiometricState = BiometricState(preferencesService,
-        fidoKeystore,
-        fingerprintSystemChecker)
+    val biometricState: BiometricState =
+        BiometricState(preferencesService,
+            fidoKeystore,
+            fingerprintSystemChecker)
     private val biometricAsyncHandler: BiometricAsyncHandler
 
     init {
@@ -38,7 +40,8 @@ class FingerprintService(
             fidoKeystore,
             preferencesService)
 
-        biometricAsyncHandler = BiometricAsyncHandler(fidoEndpointConfig)
+        biometricAsyncHandler =
+            BiometricAsyncHandler(fidoEndpointConfig)
 
         val signingHelper = SigningHelper(fidoKeystore, preferencesService)
 
@@ -48,34 +51,39 @@ class FingerprintService(
 
         val cookieService = FingerprintCookieService(activity)
 
-        deRegistrationService = DeRegistrationService(biometricsInteractor,
-            fidoDataHelper,
-            preferencesService,
-            biometricState,
-            biometricAsyncHandler,
-            cookieService
-        )
+        deRegistrationService =
+            DeRegistrationService(fidoDataHelper,
+                preferencesService,
+                biometricState,
+                biometricAsyncHandler,
+                cookieService,
+                appWebInterface
+            )
 
-        registrationService = RegistrationService(activity,
-            biometricAsyncHandler,
-            biometricsInteractor,
-            cookieService,
-            fidoDataHelper,
-            fidoKeystore,
-            fingerprintDialog,
-            fingerprintSystemChecker,
-            preferencesService,
-            biometricState)
+        registrationService =
+            RegistrationService(activity,
+                biometricAsyncHandler,
+                biometricsInteractor,
+                cookieService,
+                fidoDataHelper,
+                fidoKeystore,
+                fingerprintDialog,
+                fingerprintSystemChecker,
+                preferencesService,
+                biometricState,
+                appWebInterface)
 
-        authenticationService = AuthenticationService(activity,
-            biometricAsyncHandler,
-            biometricsInteractor,
-            biometricState,
-            fidoDataHelper,
-            fingerprintDialog,
-            fingerprintSystemChecker,
-            preferencesService,
-            uafAuthenticator)
+        authenticationService =
+            AuthenticationService(activity,
+                biometricAsyncHandler,
+                biometricsInteractor,
+                biometricState,
+                fidoDataHelper,
+                fingerprintDialog,
+                fingerprintSystemChecker,
+                preferencesService,
+                uafAuthenticator,
+                appWebInterface)
 
     }
 
@@ -84,6 +92,8 @@ class FingerprintService(
     fun deRegisterBiometrics() = deRegistrationService.deRegisterBiometrics()
 
     fun startFidoRegistration() = registrationService.startFidoRegistration()
+
+    fun doFingerprintsExist() = registrationService.doFingerprintsExist()
 
     fun showBiometricLoginIfEnabled(forceStart: Boolean = false) = authenticationService.showBiometricLoginIfEnabled(forceStart)
 
@@ -98,7 +108,8 @@ class FingerprintService(
         fun createIfDeviceSupported(
             biometricsInteractor: BiometricsInteractor,
             fidoServerUrl: String,
-            interactor: IInteractor
+            interactor: IInteractor,
+            appWebInterface: AppWebInterface
         ): FingerprintService? {
             if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null
@@ -120,13 +131,14 @@ class FingerprintService(
             val uafAuthenticator = Authentication()
 
 
-            return FingerprintService(biometricsInteractor,
-                    interactor,
+            return FingerprintService(
+                biometricsInteractor,
                 fidoKeystore,
                 fingerprintSystemChecker,
                 preferencesService,
                 fidoEndpointConfig,
-                uafAuthenticator)
+                uafAuthenticator,
+                appWebInterface)
         }
     }
 }

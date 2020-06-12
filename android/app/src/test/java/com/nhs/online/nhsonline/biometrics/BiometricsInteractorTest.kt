@@ -29,33 +29,13 @@ class BiometricsInteractorTest {
         mockNhsWeb = mock()
         mockInteractor = mock()
 
-        biometricInteractor = BiometricsInteractor(mockResources, mockInteractor, mockNhsWeb, mockLifeCycleObserverContext)
+        biometricInteractor = BiometricsInteractor(mockInteractor, mockNhsWeb, mockLifeCycleObserverContext)
     }
 
     @Test
-    fun test_showBiometricsOnDeRegistrationSuccessMessage() {
+    fun test_dismissBiometricNotification() {
         //Act
-        biometricInteractor.showBiometricsOnDeRegistrationSuccessMessage()
-
-        //Assert
-        verify(mockInteractor).setSuccessViewMessage(any())
-        verify(mockInteractor).switchToFingerprintSuccessView()
-    }
-
-    @Test
-    fun test_showBiometricsOnRegistrationSuccessMessage() {
-        //Act
-        biometricInteractor.showBiometricsOnRegistrationSuccessMessage()
-
-        //Assert
-        verify(mockInteractor).setSuccessViewMessage(any())
-        verify(mockInteractor).switchToFingerprintSuccessView()
-    }
-
-    @Test
-    fun test_dismissNotifications() {
-        //Act
-        biometricInteractor.dismissNotifications()
+        biometricInteractor.dismissBiometricNotification()
 
         //Assert
         verify(mockNhsWeb).onBiometricOptionChanged()
@@ -88,40 +68,4 @@ class BiometricsInteractorTest {
         verify(mockInteractor).getActivity()
     }
 
-    @Test
-    fun test_toggleBiometricSwitchTurnBiometricsOn() {
-        //Act
-        biometricInteractor.toggleBiometricSwitch(true)
-
-        //Assert
-        verify(mockInteractor).toggleBiometricSwitchOn()
-
-    }
-
-    @Test
-    fun test_toggleBiometricSwitchTurnBiometricsOff() {
-        //Act
-        biometricInteractor.toggleBiometricSwitch(false)
-
-        //Assert
-        verify(mockInteractor).toggleBiometricSwitchOff()
-    }
-
-    @Test
-    fun test_showBiometricDeviceError() {
-
-        biometricInteractor.showBiometricDeviceError()
-
-        //Assert
-        verify(mockInteractor).showUnavailabilityError(any<ErrorMessage>())
-    }
-
-    @Test
-    fun test_showBiometricRegistrationError() {
-        //Act
-        biometricInteractor.showBiometricRegistrationError()
-
-        //Assert
-        verify(mockInteractor).showUnavailabilityError(any<ErrorMessage>())
-    }
 }

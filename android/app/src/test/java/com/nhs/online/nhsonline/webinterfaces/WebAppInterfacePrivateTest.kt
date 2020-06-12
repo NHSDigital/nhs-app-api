@@ -180,15 +180,6 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
-    fun biometrics() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.goToLoginOptions()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).showNativeBiometricOptions()
-    }
-
-    @Test
     fun onSessionExpiringTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterfacePrivate.onSessionExpiring()
@@ -235,6 +226,15 @@ class WebAppInterfacePrivateTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun fetchBiometricSpecTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfacePrivate.fetchBiometricSpec()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).fetchBiometricSpec()
     }
 
     @Test

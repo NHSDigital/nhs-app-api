@@ -80,10 +80,6 @@
             layout="@layout/success_layout"
             android:visibility="gone" />
 
-        <include
-            android:id="@+id/biometricContent"
-            layout="@layout/biometric_layout_content"
-            android:visibility="gone" />
     </FrameLayout>
 
     <LinearLayout

@@ -12,7 +12,6 @@ class ConfigurationServiceManager(private val activity: MainActivity, private va
 
     fun getConfigurationResponse(): ConfigurationResponse {
         activity.showProgressDialog()
-
         val configuration = callConfiguration()
         val configurationResponse = ConfigurationResponse()
 

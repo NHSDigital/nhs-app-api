@@ -57,7 +57,7 @@ interface IInteractor {
 
     fun dismissBiometricDialog()
 
-    fun showNativeBiometricOptions()
+    fun fetchBiometricSpec()
 
     fun resetFocusToNhsLogoForAccessibility()
 
@@ -70,14 +70,6 @@ interface IInteractor {
     fun dismissSplashScreen()
 
     fun getActivity(): FragmentActivity
-
-    fun toggleBiometricSwitchOn()
-
-    fun toggleBiometricSwitchOff()
-
-    fun setSuccessViewMessage(id:Int)
-
-    fun switchToFingerprintSuccessView()
 
     fun updateBiometricRegistration()
 

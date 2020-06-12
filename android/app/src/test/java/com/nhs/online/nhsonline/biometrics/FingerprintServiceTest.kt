@@ -72,11 +72,14 @@ class FingerprintServiceTest {
         val fidoKeystore: FidoKeystoreAndroidM = mock()
         val interactor: IInteractor = mock()
 
-        fingerprintService = FingerprintService(biometricsInteractor, interactor,
+        fingerprintService = FingerprintService(
+            biometricsInteractor,
             fidoKeystore,
             mock(),
             preferencesServiceMock,
-            fidoEndpointConfig, authenticationMock)
+            fidoEndpointConfig,
+            authenticationMock,
+            mock())
     }
 
     @Test
@@ -96,7 +99,8 @@ class FingerprintServiceTest {
         marshmallowOrHigherApis.forEach { version ->
             setAndroidApiVersion(version)
             val fingerprintService =
-                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
+                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl,
+                    interactor, mock())
             Assert.assertNotNull(fingerprintService)
         }
     }
@@ -113,7 +117,8 @@ class FingerprintServiceTest {
         lollipopOrLowerApis.forEach { version ->
             setAndroidApiVersion(version)
             val fingerprintService =
-                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl, interactor)
+                FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl,
+                    interactor, mock())
             Assert.assertNull(fingerprintService)
         }
     }
@@ -125,11 +130,12 @@ class FingerprintServiceTest {
         Assert.assertEquals("uafProtocolMessage", extractedMessage)
     }
 
-    @Test()
+    @Test
     fun returnEmptyStringWhenInvalidFingerprintCaught() {
-        val authenticationService = AuthenticationService(mock(), mock(),
-            biometricsInteractor, mock(), mock(), mock(), mock(),
-            preferencesServiceMock, authenticationMock)
+        val authenticationService =
+            AuthenticationService(mock(), mock(),
+                biometricsInteractor, mock(), mock(), mock(), mock(),
+                preferencesServiceMock, authenticationMock, mock())
 
         val result = authenticationService.processUafLoginMsg(FingerprintManagerCompat.CryptoObject(
             signatureMock), "{Error}")

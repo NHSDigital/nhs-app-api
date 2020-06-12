@@ -5,22 +5,28 @@ import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.biometrics.*
+import com.nhs.online.nhsonline.biometrics.FingerprintAuthProcessor
+import com.nhs.online.nhsonline.biometrics.FingerprintAuthenticationDialogFragment
+import com.nhs.online.nhsonline.biometrics.createFingerprintAuthenticationDialogFragment
 
 private val TAG = FingerprintDialog::class.java.simpleName
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintDialog(
-        private val activity: FragmentActivity,
-        private val biometricState: BiometricState,
-        private val signingHelper: SigningHelper
+    private val activity: FragmentActivity,
+    private val biometricState: BiometricState,
+    private val signingHelper: SigningHelper
 ) {
     private var fingerprintAuthFragment: FingerprintAuthenticationDialogFragment? = null
 
     fun showFingerprintAuthDialog(
-            fingerprintAuthProcessor: FingerprintAuthProcessor,
-            fingerprintContent: FingerprintContent
+        fingerprintAuthProcessor: FingerprintAuthProcessor,
+        fingerprintContent: FingerprintContent
     ) {
-        fingerprintAuthFragment = createFingerprintAuthenticationDialogFragment(signingHelper, fingerprintContent, fingerprintAuthProcessor)
+        fingerprintAuthFragment =
+            createFingerprintAuthenticationDialogFragment(
+                signingHelper,
+                fingerprintContent,
+                fingerprintAuthProcessor)
 
         Log.d(TAG, "Showing fingerprint fragment: $fingerprintAuthFragment")
         fingerprintAuthFragment?.show(activity.supportFragmentManager, BiometricConstants.DIALOG_FRAGMENT_TAG)
@@ -45,6 +51,9 @@ class FingerprintDialog(
         }
 
         val cancelText = activity.getString(R.string.cancel)
-        return FingerprintContent(title, description, cancelText)
+
+        return FingerprintContent(title,
+            description,
+            cancelText)
     }
 }
