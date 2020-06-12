@@ -1,5 +1,6 @@
 <template>
-  <nav class="nhsuk-header__navigation" :class="[miniMenuExpanded && 'js-show',
+  <nav id="header-navigation"
+       class="nhsuk-header__navigation" :class="[miniMenuExpanded && 'js-show',
                                                  'nojs-mini-menu-expanded']">
     <p class="nhsuk-header__navigation-title">
       <span id="label-navigation" style="color:#212b32;">Menu</span>
