@@ -63,6 +63,7 @@ import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import isFunction from 'lodash/fp/isFunction';
+import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import showShutterPage from '@/lib/proxy/shutter';
 import {
   DOCUMENT_DETAIL,
@@ -233,10 +234,6 @@ export default {
     isLoading() {
       return this.$store.getters['http/isLoading'];
     },
-    canVersionHandleBiometricsWeb() {
-      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
-      return !this.$store.state.device.isNativeApp || isNativeVersionAfter('1.34.0');
-    },
   },
   watch: {
     $route(to, from) {
@@ -255,8 +252,9 @@ export default {
       this.$store.dispatch('session/updateLastCalledAt');
 
       NativeVersionSetup(this.$store);
+
       if (process.client
-        && this.canVersionHandleBiometricsWeb
+        && canVersionHandleBiometricsWeb(this)
         && this.$store.state.loginSettings.biometricType === undefined) {
         NativeCallbacks.fetchBiometricSpec();
       }

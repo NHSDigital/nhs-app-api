@@ -22,6 +22,7 @@ describe('Account.index', () => {
       getters: {
         'serviceJourneyRules/notificationsEnabled': false,
         'linkedAccounts/hasLinkedAccounts': false,
+        'appVersion/isNativeVersionAfter': () => true,
       },
     };
 
@@ -37,7 +38,7 @@ describe('Account.index', () => {
   });
 
   describe('Logout button', () => {
-    it('should be visible as in native view', () => {
+    it('should be visible in native view', () => {
       store.state.device.isNativeApp = true;
       const env = {
         BIOMETRICS_ENABLED: true,
@@ -53,7 +54,7 @@ describe('Account.index', () => {
         .toBe('translate_signOutButton.signOut');
     });
 
-    it('should not be visible as in desktop view', () => {
+    it('should not be visible in desktop view', () => {
       store.state.device.isNativeApp = false;
       const env = {
         BIOMETRICS_ENABLED: true,

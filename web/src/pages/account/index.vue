@@ -58,6 +58,7 @@ import MenuItemList from '@/components/MenuItemList';
 import NativeCallbacks from '@/services/native-app';
 import Settings from '@/components/account/Settings';
 import sjrIf from '@/lib/sjrIf';
+import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
@@ -76,13 +77,16 @@ export default {
       nativeLoginOptionsMethodExists: true,
       cookiesPath: ACCOUNT_COOKIES.path,
       linkedProfilesPath: LINKED_PROFILES.path,
-      webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
     };
   },
   computed: {
     showBiometrics() {
-      return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
-        this.$store.state.device.isNativeApp;
+      if (!canVersionHandleBiometricsWeb(this)) {
+        return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
+          this.$store.state.device.isNativeApp;
+      }
+
+      return this.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
     },
     showNotifications() {
       return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
@@ -93,7 +97,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.webBiometricsEnabled) {
+    if (!canVersionHandleBiometricsWeb(this)) {
       this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
     }
     if (this.$store.state.device.isNativeApp) {

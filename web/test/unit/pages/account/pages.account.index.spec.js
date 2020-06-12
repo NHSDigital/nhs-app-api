@@ -4,6 +4,7 @@ import WebFooter from '@/components/widgets/WebFooter';
 import { create$T, createStore, initFilters, mount, toClass } from '../../helpers';
 
 describe('Account Page', () => {
+  jest.mock('@/services/native-app');
   let wrapper;
 
   initFilters();
@@ -32,6 +33,15 @@ describe('Account Page', () => {
     },
   };
 
+  const buildStoreGetters = ({
+    notificationsEnabled = false,
+    showLinkedProfiles = false,
+  } = {}) => ({
+    'serviceJourneyRules/notificationsEnabled': notificationsEnabled,
+    'linkedAccounts/hasLinkedAccounts': showLinkedProfiles,
+    'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
+  });
+
   const createStyle = () => ({
     'list-menu': 'list-menu',
   });
@@ -45,11 +55,18 @@ describe('Account Page', () => {
     return urls;
   };
 
-  const mountPage = ({ notificationsEnabled = false, isNativeApp = false,
-    showLinkedProfiles = false }) => {
+  const mountPage = ({
+    notificationsEnabled = false,
+    isNativeApp = false,
+    showLinkedProfiles = false,
+  }) => {
     const $store = createStore({ state: $state });
-    $store.getters['serviceJourneyRules/notificationsEnabled'] = notificationsEnabled;
-    $store.getters['linkedAccounts/hasLinkedAccounts'] = showLinkedProfiles;
+
+    $store.getters = buildStoreGetters({
+      notificationsEnabled,
+      showLinkedProfiles,
+    });
+
     $state.device.isNativeApp = isNativeApp;
     return mount(AccountPage, { $env,
       $store,
@@ -59,9 +76,11 @@ describe('Account Page', () => {
 
   describe('on a native app', () => {
     beforeEach(() => {
-      wrapper = mountPage({ notificationsEnabled: true,
+      wrapper = mountPage({
+        notificationsEnabled: true,
         isNativeApp: true,
-        showLinkedProfiles: true });
+        showLinkedProfiles: true,
+      });
     });
 
     it('will verify that footer links are subset of links in account page', () => {
@@ -95,7 +114,8 @@ describe('Account Page', () => {
     beforeEach(() => {
       wrapper = mountPage({ notificationsEnabled: true,
         isNativeApp: false,
-        showLinkedProfiles: false });
+        showLinkedProfiles: false,
+      });
     });
 
     it('will not have a linked profiles link', () => {
@@ -105,9 +125,11 @@ describe('Account Page', () => {
 
   describe('on desktop with showLinkedProfiles true', () => {
     beforeEach(() => {
-      wrapper = mountPage({ notificationsEnabled: true,
+      wrapper = mountPage({
+        notificationsEnabled: true,
         isNativeApp: false,
-        showLinkedProfiles: true });
+        showLinkedProfiles: true,
+      });
     });
 
     it('will have a linked profiles link', () => {
@@ -123,6 +145,7 @@ describe('Account Page', () => {
       $t = create$T();
 
       $store = createStore({ state: $state });
+      $store.getters = buildStoreGetters();
     });
 
     it('will be set to "Settings" for native', () => {

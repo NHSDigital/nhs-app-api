@@ -11,16 +11,12 @@ describe('BiometricBanner', () => {
   let $store;
 
   const mountBiometricBanner = ({
-    webBiometrics = false,
     isNativeApp = true,
     source = 'ios',
     dismissed = false,
     versionEnabled = true } = {}) => {
     $router = createRouter();
     $store = createStore({
-      $env: {
-        WEB_BIOMETRICS_ENABLED: webBiometrics,
-      },
       state: {
         device: {
           isNativeApp,
@@ -99,7 +95,7 @@ describe('BiometricBanner', () => {
           let biometricsLink;
 
           beforeEach(() => {
-            wrapper = mountBiometricBanner({ webBiometrics: true, versionEnabled: true });
+            wrapper = mountBiometricBanner({ versionEnabled: true });
             biometricsLink = wrapper.find('#btn_goToSettings');
           });
 
@@ -112,7 +108,7 @@ describe('BiometricBanner', () => {
         describe('min app version not met', () => {
           let biometricsLink;
           beforeEach(() => {
-            wrapper = mountBiometricBanner({ webBiometrics: true, versionEnabled: false });
+            wrapper = mountBiometricBanner({ versionEnabled: false });
             biometricsLink = wrapper.find('#btn_goToSettings');
           });
 
@@ -128,13 +124,13 @@ describe('BiometricBanner', () => {
           let biometricsLink;
 
           beforeEach(() => {
-            wrapper = mountBiometricBanner({ webBiometrics: false, source: 'android' });
+            wrapper = mountBiometricBanner({ source: 'android' });
             biometricsLink = wrapper.find('#btn_goToSettings');
           });
 
-          it('will not navigate to the web biometrics', () => {
+          it('will navigate to the web biometrics', () => {
             biometricsLink.trigger('click');
-            expect($router.push).not.toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+            expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
           });
         });
 
@@ -142,7 +138,7 @@ describe('BiometricBanner', () => {
           let biometricsLink;
 
           beforeEach(() => {
-            wrapper = mountBiometricBanner({ webBiometrics: false });
+            wrapper = mountBiometricBanner();
             biometricsLink = wrapper.find('#btn_goToSettings');
           });
 

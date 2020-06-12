@@ -17,6 +17,7 @@
 
 <script>
 import { ACCOUNT_NOTIFICATIONS, findByName, LOGIN_SETTINGS } from '@/lib/routes';
+import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
 
@@ -43,13 +44,11 @@ export default {
     const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
     return {
       biometricType,
-      webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
     };
   },
   computed: {
     getBiometricLinkText() {
-      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
-      if (!this.webBiometricsEnabled || !isNativeVersionAfter('1.34.0')) {
+      if (!canVersionHandleBiometricsWeb(this)) {
         return 'myAccount.accountSettings.passwordOptions';
       }
 
@@ -59,15 +58,10 @@ export default {
 
       return 'loginSettings.biometrics.noBiometricType.settingsLinkText';
     },
-    canVersionHandleBiometricsWeb() {
-      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
-      return !this.$store.state.device.isNativeApp || isNativeVersionAfter('1.34.0');
-    },
   },
   methods: {
     goToLoginOptions() {
-      if (this.canVersionHandleBiometricsWeb &&
-        (this.webBiometricsEnabled || this.$store.state.device.source === 'ios')) {
+      if (canVersionHandleBiometricsWeb(this)) {
         this.$router.push(LOGIN_SETTINGS.path);
       } else {
         this.configureWebContext(findByName('Login').helpUrl);
