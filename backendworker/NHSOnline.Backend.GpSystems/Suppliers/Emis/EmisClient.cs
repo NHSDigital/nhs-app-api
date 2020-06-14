@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
-            string responseSessionId,
+            string sessionId,
             string endUserSessionId,
             PrescriptionRequestsPost model)
         {
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                     .RequestType(RequestsForSuccessOutcome.PrescriptionsPost)
                     .Post(PrescriptionsPostPath)
                     .Request(model)
-                    .SessionId(responseSessionId)
+                    .SessionId(sessionId)
                     .EndUserSessionId(endUserSessionId));
         }
 

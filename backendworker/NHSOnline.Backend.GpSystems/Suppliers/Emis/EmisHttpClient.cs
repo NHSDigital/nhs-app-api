@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public class EmisHttpClient
     {
-        public const string HeaderApplicationId = "X-API-ApplicationId";
-        public const string HeaderVersion = "X-API-Version";
+        private const string HeaderApplicationId = "X-API-ApplicationId";
+        private const string HeaderVersion = "X-API-Version";
 
         public EmisHttpClient(HttpClient client, EmisConfigurationSettings config)
         {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers
 {
     internal static class ServiceCollectionExtensions
     {
