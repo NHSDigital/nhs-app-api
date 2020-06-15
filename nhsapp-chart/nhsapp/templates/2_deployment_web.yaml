@@ -100,8 +100,6 @@ spec:
         {{- end }}
         - name: VERSION_TAG
           value: "{{ $.Values.web.image_tag }}"
-        - name: BIOMETRICS_ENABLED
-          value: "{{ $.Values.biometricsEnabled }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
         - name: ORGAN_DONATION_THROTTLING_URL

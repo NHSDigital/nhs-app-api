@@ -41,7 +41,6 @@ describe('Account.index', () => {
     it('should be visible in native view', () => {
       store.state.device.isNativeApp = true;
       const env = {
-        BIOMETRICS_ENABLED: true,
         nativeLoginOptionsMethodExists: true,
       };
 
@@ -57,7 +56,6 @@ describe('Account.index', () => {
     it('should not be visible in desktop view', () => {
       store.state.device.isNativeApp = false;
       const env = {
-        BIOMETRICS_ENABLED: true,
         nativeLoginOptionsMethodExists: true,
       };
 

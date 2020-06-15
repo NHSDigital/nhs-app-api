@@ -16,7 +16,6 @@ describe('Account Page', () => {
     PRIVACY_POLICY_URL: 'https://privacy',
     HELP_AND_SUPPORT_URL: 'https://help',
     ACCESSIBILITY_STATEMENT: 'https://accessibility',
-    BIOMETRICS_ENABLED: false,
   };
 
   const $state = {

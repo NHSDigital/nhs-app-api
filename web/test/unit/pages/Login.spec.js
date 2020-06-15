@@ -34,7 +34,6 @@ describe('login page', () => {
     instructionsViewed = true,
   }) => {
     const $env = {
-      BIOMETRICS_ENABLED: true,
     };
 
     const $cookies = {

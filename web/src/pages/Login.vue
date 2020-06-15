@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     shouldShowBiometrics() {
-      return this.$store.app.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
+      return this.$store.state.device.isNativeApp;
     },
     getButtonClasses() {
       return ['nhsuk-login', 'nhsuk-body', 'nhsuk-button',

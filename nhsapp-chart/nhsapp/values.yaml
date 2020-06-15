@@ -26,7 +26,6 @@ clusterDNSNameservers:
   - 10.254.0.10
   - 172.28.160.10
 
-biometricsEnabled: true
 userResearchEnabled: true
 
 # PFS Providers

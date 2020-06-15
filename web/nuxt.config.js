@@ -87,8 +87,6 @@ const config = {
     URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
     // Cookie settings
     SECURE_COOKIES: false,
-    // Biometrics
-    BIOMETRICS_ENABLED: true,
     // Core
     COOKIE_DOMAIN: '.bitraft.io',
     // Citizen ID

@@ -22,7 +22,6 @@ describe('login page', () => {
 
   const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
     const $env = {
-      BIOMETRICS_ENABLED: true,
     };
 
     const $cookies = {

@@ -82,11 +82,11 @@ export default {
   computed: {
     showBiometrics() {
       if (!canVersionHandleBiometricsWeb(this)) {
-        return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
+        return this.nativeLoginOptionsMethodExists &&
           this.$store.state.device.isNativeApp;
       }
 
-      return this.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
+      return this.$store.state.device.isNativeApp;
     },
     showNotifications() {
       return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
