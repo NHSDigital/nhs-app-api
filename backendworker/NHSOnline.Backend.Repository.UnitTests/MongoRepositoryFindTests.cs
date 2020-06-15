@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +28,9 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            var cursorMock = CreateCursorMockFind(new[] { record });
-            SetupFind().ReturnsAsync(cursorMock.Object);
+            IEnumerable<TestRepositoryRecord>[] values = new[] { new[] { record } };
+            using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
+            SetupFind().ReturnsAsync(cursorMock);
 
             // Act
             var result = await _systemUnderTest.Find(_ => true, "recordName");
@@ -37,6 +39,25 @@ namespace NHSOnline.Backend.Repository.UnitTests
             _mongoCollectionMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
                 .Subject.Records.Should().BeEquivalentTo(new[] { record });
+        }
+
+        [TestMethod]
+        public async Task Find_WhenManyBatchesOfRecordsExist_Found()
+        {
+            // Arrange
+            var record1 = new TestRepositoryRecord();
+            var record2 = new TestRepositoryRecord();
+            IEnumerable<TestRepositoryRecord>[] values = new[] { new[] { record1 }, new[] { record2 } };
+            using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
+            SetupFind().ReturnsAsync(cursorMock);
+
+            // Act
+            var result = await _systemUnderTest.Find(_ => true, "recordName");
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(new[] { record1, record2 });
         }
 
         [TestMethod]
@@ -81,16 +102,38 @@ namespace NHSOnline.Backend.Repository.UnitTests
             return cursorMock;
         }
 
-        private static Mock<IAsyncCursor<TestRepositoryRecord>> CreateCursorMockFind(IEnumerable<TestRepositoryRecord> values)
+        private class MockAsyncCursor<T> : IAsyncCursor<T>
         {
-            var cursorMock = new Mock<IAsyncCursor<TestRepositoryRecord>>();
-            var mockReturn = true;
+            private readonly Queue<IEnumerable<T>> _batches;
+            private IEnumerable<T> _current = null;
 
-            cursorMock.Setup(x => x.MoveNext(It.IsAny<CancellationToken>())).Returns(() => mockReturn)
-                .Callback<CancellationToken>(t => mockReturn = false);
+            public MockAsyncCursor(IEnumerable<IEnumerable<T>> batches)
+            {
+                _batches = new Queue<IEnumerable<T>>(batches);
+            }
 
-            cursorMock.SetupGet(x => x.Current).Returns(values);
-            return cursorMock;
+            public bool MoveNext(CancellationToken cancellationToken = new CancellationToken())
+            {
+                if (_batches.TryDequeue(out var next))
+                {
+                    _current = next;
+                    return true;
+                }
+
+                _current = null;
+                return false;
+            }
+
+            public Task<bool> MoveNextAsync(CancellationToken cancellationToken = new CancellationToken())
+            {
+                return Task.FromResult(MoveNext(cancellationToken));
+            }
+
+            public IEnumerable<T> Current => _current ?? throw new InvalidOperationException(
+                "Invalid test setup: Current cannot be accessed before the first call to MoveNext or the last call to it");
+
+            public void Dispose()
+            {}
         }
     }
 }

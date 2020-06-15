@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -106,16 +108,33 @@ namespace NHSOnline.Backend.Repository
             {
                 var records = await FindRecords(filter, recordName);
 
-                if (records.Any())
+                if (!await records.MoveNextAsync() || !records.Current.Any())
                 {
                     _logger.LogInformation($"Mongo Find {recordName} Successful. " +
-                                           $"Count: {records.Count}");
-                    return new RepositoryFindResult<TRecord>.Found(records);
+                                           "No records found");
+
+                    records.Dispose();
+                    return new RepositoryFindResult<TRecord>.NotFound();
                 }
 
                 _logger.LogInformation($"Mongo Find {recordName} Successful. " +
-                                       "No records found");
-                return new RepositoryFindResult<TRecord>.NotFound();
+                                       $"One or more records found");
+
+                IEnumerable<TRecord> EnumerateResults()
+                {
+                    using (records)
+                    {
+                        do
+                        {
+                            foreach (var record in records.Current)
+                            {
+                                yield return record;
+                            }
+                        } while (records.MoveNext());
+                    }
+                }
+
+                return new RepositoryFindResult<TRecord>.Found(EnumerateResults());
             }
             catch (MongoException exception)
             {
@@ -185,12 +204,11 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
-        private async Task<List<TRecord>> FindRecords(Expression<Func<TRecord, bool>> filter, string recordName)
+        private async Task<IAsyncCursor<TRecord>> FindRecords(Expression<Func<TRecord, bool>> filter, string recordName)
         {
             using (_logger.WithTimer($"Mongo Find {recordName}."))
             {
-                var records = await GetCollection().FindAsync(filter);
-                return records.ToList();
+                return await GetCollection().FindAsync(filter);
             }
         }
 
