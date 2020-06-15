@@ -1,4 +1,3 @@
-{{- if ($.Values.usersEnabled) }}
 ---
 apiVersion: v1
 kind: Service
@@ -16,4 +15,3 @@ spec:
   ports:
   - port: {{ $.Values.sidecar_proxy.containerPort }}
     targetPort: {{ $.Values.sidecar_proxy.containerPort }}
-{{- end }}

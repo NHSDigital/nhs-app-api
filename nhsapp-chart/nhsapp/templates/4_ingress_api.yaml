@@ -46,12 +46,10 @@ spec:
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v1/api/log
           {{- end }}
-          {{- if $.Values.usersEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v[1,2]/api/users
-          {{- end }}
+            path: /v[1,2]/api/users}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -75,12 +73,10 @@ spec:
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users/.{36}/messages
           {{- end }}
-          {{- if $.Values.usersEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users
-          {{- end }}
 
   tls:
     - hosts:
