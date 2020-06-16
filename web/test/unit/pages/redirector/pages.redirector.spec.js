@@ -168,12 +168,6 @@ describe('redirector page', () => {
     it('warning section should not be shown', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(false);
     });
-
-    it('text computed properties should be empty strings', () => {
-      expect(wrapper.vm.paragraphText()).toEqual('');
-      expect(wrapper.vm.linkText()).toEqual('');
-      expect(wrapper.vm.providerName()).toEqual('');
-    });
   });
 
   describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale', () => {
@@ -207,30 +201,19 @@ describe('redirector page', () => {
     });
 
     it('will call `postV1PatientAssertedLoginIdentity` on button click', () => {
-      const expectedRequest = { assertedLoginIdentityRequest: {
-        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
-        JumpOffId: 'messages',
-        ProviderId: 'pkb',
-        ProviderName: 'Patients Know Best',
-      } };
+      const expectedRequest = {
+        assertedLoginIdentityRequest: {
+          IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+          JumpOffId: 'messages',
+          ProviderId: 'pkb',
+          ProviderName: 'Patients Know Best',
+        },
+        ignoreError: true,
+      };
       const continueButton = wrapper.find('a.nhsuk-button');
       continueButton.trigger('click');
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
-    });
-
-    it('will disable button on button click', () => {
-      const continueButton = wrapper.find('a.nhsuk-button');
-      continueButton.trigger('click');
-
-      expect(wrapper.vm.buttonDisabled).toEqual(true);
-      expect(wrapper.find('a.nhsuk-button.nhsuk-button--disabled').exists()).toBe(true);
-    });
-
-    it('text computed properties should not be empty strings', () => {
-      expect(wrapper.vm.paragraphText()).toEqual('translate_thirdPartyProviders.warningConjunctions.paragraph');
-      expect(wrapper.vm.linkText()).toEqual('translate_thirdPartyProviders.warningConjunctions.linkText');
-      expect(wrapper.vm.providerName()).toEqual('translate_thirdPartyProviders.pkb.providerName');
     });
   });
 
@@ -321,12 +304,15 @@ describe('redirector page', () => {
     });
 
     it('will call router push', () => {
-      const expectedRequest = { assertedLoginIdentityRequest: {
-        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
-        JumpOffId: 'messages',
-        ProviderId: 'pkb',
-        ProviderName: 'Patients Know Best',
-      } };
+      const expectedRequest = {
+        assertedLoginIdentityRequest: {
+          IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+          JumpOffId: 'messages',
+          ProviderId: 'pkb',
+          ProviderName: 'Patients Know Best',
+        },
+        ignoreError: true,
+      };
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
     });
@@ -334,12 +320,6 @@ describe('redirector page', () => {
     it('does not display the continue button', () => {
       const continueButton = wrapper.contains('a.nhsuk-button');
       expect(continueButton).toEqual(false);
-    });
-
-    it('text computed properties should not be empty strings', () => {
-      expect(wrapper.vm.paragraphText()).toEqual('');
-      expect(wrapper.vm.linkText()).toEqual('');
-      expect(wrapper.vm.providerName()).toEqual('');
     });
   });
 

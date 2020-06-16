@@ -1,43 +1,27 @@
 <template>
   <div v-if="showTemplate">
-    <warning-content-panel v-if="shouldShowWarning" data-purpose="silver-integration-warning">
-      <template slot="header">
-        {{ $t('thirdPartyProviders.warningConjunctions.heading2') }}
-      </template>
-      <template>
-        <p>{{ paragraphText() }}
-          <strong>{{ providerName() }}</strong>.
-        </p>
-
-        <a :href="buttonHref"
-           :class="['nhsuk-button', 'nhsuk-button--reverse',
-                    buttonDisabled ? 'nhsuk-button--disabled': '']"
-           @click="buttonClick">
-          {{ $t('thirdPartyProviders.warningConjunctions.button') }}
-        </a>
-
-        <p>
-          <a class="inline-link" :href="linkHref()"
-             target="_blank" rel="noopener noreferrer">
-            {{ linkText() }}
-          </a>
-        </p>
-      </template>
-    </warning-content-panel>
+    <silver-integration-panel
+      v-if="shouldShowWarning"
+      :known-service="services[0]"
+      :redirect-path="redirectPath"
+      :session-storage-name="sessionStorageName"
+      @click.stop.prevent="getAssertedLoginIdentityAndNavigate"
+    />
     <div v-else :class="$style['spacer']" />
   </div>
 </template>
 
 <script>
+import consola from 'consola';
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
-import WarningContentPanel from '@/components/widgets/WarningContentPanel';
+import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
 import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER, INDEX, findByName, findByPage, findByPath } from '@/lib/routes';
-import { getPathAndQuery, getThirdPartyJumpOff, getThirdPartyLocaleText } from '@/lib/utils';
+import { getPathAndQuery, getThirdPartyJumpOff } from '@/lib/utils';
 
 export default {
   components: {
-    WarningContentPanel,
+    SilverIntegrationPanel,
   },
   layout(context) {
     const redirectPath = get(REDIRECT_PARAMETER)(context.route.query);
@@ -92,9 +76,10 @@ export default {
       .filter(service => this.redirectPath.includes(service.url));
 
     if (this.services.length > 0) {
-      this.sessionStorageName = `agreedThirdPartyWarning_${this.services[0].id}`;
+      const matchedService = this.services[0];
+      this.sessionStorageName = `agreedThirdPartyWarning_${matchedService.id}`;
       this.redirectPathAndQuery = getPathAndQuery(this.redirectPath);
-      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.services[0].id}`);
+      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${matchedService.id}`);
       this.JumpOffId =
         getThirdPartyJumpOff(this.thirdPartyServiceContent, this.redirectPathAndQuery).id;
 
@@ -113,17 +98,13 @@ export default {
         return;
       }
 
-      const featureName = this.getWarningMessage('featureName');
-      this.setButtonHref();
       this.showWarning = true;
-      this.$store.dispatch('pageTitle/updatePageTitle', featureName);
-      this.$store.dispatch('header/updateHeaderText', featureName);
       return;
     }
     this.$router.push(INDEX.path);
   },
   methods: {
-    async postPatientAssertedLoginIdentity() {
+    async getAssertedLoginIdentityAndNavigate() {
       return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
@@ -132,90 +113,21 @@ export default {
             ProviderName: this.thirdPartyServiceContent.providerName,
             JumpOffId: this.JumpOffId,
           },
+          ignoreError: true,
         })
-        .then(response => this.appendAssertedLoginIdentity(this.redirectPath, response));
-    },
-    async setButtonHref() {
-      if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
-        await this.postPatientAssertedLoginIdentity()
-          .then((response) => {
-            this.buttonHref = response;
-          });
-      } else {
-        this.buttonHref = this.redirectPath;
-      }
-    },
-    async getAssertedLoginIdentityAndNavigate() {
-      await this.postPatientAssertedLoginIdentity()
         .then((response) => {
-          window.location = response;
+          window.location = this.appendAssertedLoginIdentity(this.redirectPath, response);
         })
-        .catch(() => {
+        .catch((error) => {
+          consola.error(new Error(`Failed to get AssertedLoginIdentity: ${error.response.status}`));
           this.$router.push(INDEX.path);
         });
-    },
-    buttonClick(event) {
-      if (this.buttonDisabled) {
-        event.preventDefault();
-      } else {
-        this.buttonDisabled = true;
-        sessionStorage.setItem(this.sessionStorageName, true);
-      }
     },
     appendAssertedLoginIdentity(uri, response) {
       if (uri.indexOf('?') !== -1) {
         return `${uri}&assertedLoginIdentity=${response.token}`;
       }
       return `${uri}?assertedLoginIdentity=${response.token}`;
-    },
-    paragraphText() {
-      if (this.showWarning) {
-        const paragraph = this.getWarningConjunction('paragraph');
-        return paragraph
-          .replace('{{ servicePurchaser }}', this.servicePurchaser())
-          .replace('{{ serviceType }}', this.serviceType());
-      }
-      return '';
-    },
-    linkText() {
-      if (this.showWarning) {
-        const paragraph = this.getWarningConjunction('linkText');
-        return paragraph.replace('{{ serviceTypePlural }}', this.serviceTypePlural());
-      }
-      return '';
-    },
-    servicePurchaser() {
-      return this.showWarning ? this.getWarningMessage('servicePurchaser') : '';
-    },
-    serviceType() {
-      return this.showWarning ? this.getWarningMessage('serviceType') : '';
-    },
-    serviceTypePlural() {
-      return this.showWarning ? this.getWarningMessage('serviceTypePlural') : '';
-    },
-    linkHref() {
-      return this.showWarning ? this.getWarningMessage('linkHref') : '';
-    },
-    providerName() {
-      if (this.showWarning && this.services[0]) {
-        if (this.getWarningMessage('brandName') !== undefined) {
-          return this.getWarningMessage('brandName');
-        }
-        return this.getText(`thirdPartyProviders.${this.services[0].id}.providerName`);
-      }
-      return '';
-    },
-    getWarningConjunction(type) {
-      if (this.services[0]) {
-        return this.getText(`thirdPartyProviders.warningConjunctions.${type}`);
-      }
-      return '';
-    },
-    getWarningMessage(property) {
-      if (this.services[0]) {
-        return getThirdPartyLocaleText(this.thirdPartyServiceContent, this.redirectPathAndQuery, 'thirdPartyWarning', property);
-      }
-      return '';
     },
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';

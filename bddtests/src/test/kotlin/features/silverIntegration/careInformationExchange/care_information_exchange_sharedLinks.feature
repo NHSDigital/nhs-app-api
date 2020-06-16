@@ -33,5 +33,5 @@ Feature: Care Information Exchange Shared Links
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Flibrary%252FmanageLibrary.action%26brand=cie'
     Then I am redirected to the redirector page with the header 'Shared links'
-    When I click the 'Continue' button on the redirector page with a url starting with 'https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action&brand=cie&assertedLoginIdentity='
+    When I click the 'Continue' button on the redirector page with a url starting with 'https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action&brand=cie'
     Then I am navigated to a third party site

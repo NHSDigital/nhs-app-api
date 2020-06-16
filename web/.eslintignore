@@ -5,3 +5,4 @@
 /src/.transpiled
 /lint/node_modules/
 /build/
+/src/static/js/v*/nhsapp.js
