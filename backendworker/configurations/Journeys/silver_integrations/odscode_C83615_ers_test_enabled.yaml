@@ -1,0 +1,15 @@
+#
+#
+#   Sandpit users in ODS code C83615 are used by multiple third-party providers.
+#   DO NOT enable any external third-party silver integrations for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "C83615"
+journeys:
+  silverIntegrations:
+    messages:
+      - testSilverThirdPartyProvider
+    secondaryAppointments:
+      - ers

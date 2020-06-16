@@ -1,21 +1,15 @@
+#
+#
+#   Sandpit users in ODS code A20047 are used by multiple third-party providers.
+#   DO NOT enable any external third-party silver integrations for this ODS code.
+#
+#
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCode: "A20047"
 journeys:
   silverIntegrations:
-    carePlans:
-      - pkb
-    consultations:
-      - pkb
-    healthTrackers:
-      - pkb
-    libraries:
-      - pkb
-    medicines:
-      - pkb
     messages:
-      - pkb
       - testSilverThirdPartyProvider
     secondaryAppointments:
       - ers
-      - pkb
