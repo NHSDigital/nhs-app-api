@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum CarePlansProvider
     {
         pkb,
-        pkbCie
+        pkbCie,
+        substraktPatientPack
     }
 }

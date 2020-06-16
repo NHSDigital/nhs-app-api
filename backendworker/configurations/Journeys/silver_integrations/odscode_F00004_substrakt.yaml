@@ -9,7 +9,8 @@ target:
   odsCode: "F00004"
 journeys:
   silverIntegrations:
-    carePlans: []
+    carePlans: 
+      - substraktPatientPack
     consultations: []
     healthTrackers: []
     libraries: []

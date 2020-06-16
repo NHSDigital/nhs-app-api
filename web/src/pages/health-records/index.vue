@@ -35,6 +35,11 @@
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider.pkb
                                          .healthTrackersCie" />
+          <third-party-jump-off-button v-if="showPatientPackLifestyleGuides && !isProxying"
+                                       id="btn_substrakt_lifestyle_guides"
+                                       provider-id="substraktPatientPack"
+                                       :provider-configuration="thirdPartyProvider
+                                         .substraktPatientPack.lifestyleGuides" />
         </menu-item-list>
       </div>
     </div>
@@ -89,6 +94,14 @@ export default {
         context: {
           provider: 'pkbCie',
           serviceType: 'healthTrackers',
+        },
+      }),
+      showPatientPackLifestyleGuides: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'substraktPatientPack',
+          serviceType: 'carePlans',
         },
       }),
       isNativeApp: this.$store.state.device.isNativeApp,

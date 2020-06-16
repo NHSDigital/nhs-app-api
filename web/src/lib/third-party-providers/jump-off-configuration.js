@@ -56,6 +56,12 @@ export default {
         redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments&brand=cie',
       },
     },
+    substraktPatientPack: {
+      lifestyleGuides: {
+        type: 'lifestyleGuides',
+        redirectPath: '/lifestyle_guides',
+      },
+    },
     testProvider: {
       messages: {
         type: 'messages',

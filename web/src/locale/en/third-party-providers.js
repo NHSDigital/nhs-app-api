@@ -212,6 +212,27 @@ export default {
       },
     ],
   },
+  substraktPatientPack: {
+    serviceId: 'substraktPatientPack',
+    providerName: 'Patient Pack (Substrakt Health)',
+    jumpOffs: [
+      {
+        id: 'lifestyleGuides',
+        path: '/lifestyle_guides',
+        jumpOffContent: {
+          headerText: 'Lifestyle Guides',
+          descriptionText: 'Patient Pack Lifestyle Guides',
+        },
+        thirdPartyWarning: {
+          featureName: 'Feature name',
+          servicePurchaser: 'service purchaser',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+    ],
+  },
   'silver-third-party-api-test': {
     serviceId: 'silver-third-party-api-test',
     providerName: 'Test Silver Third Party Provider',

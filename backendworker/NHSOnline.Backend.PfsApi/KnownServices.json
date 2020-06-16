@@ -457,6 +457,18 @@
       "validateSession": true
     },
     {
+      "id": "substraktPatientPack",
+      "url": "https://patientpack-development.ngrok.io",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    {
       "id": "silver-third-party-api-test",
       "url": "http://silver.local.bitraft.io:5000",
       "javaScriptInteractionMode": "None",
