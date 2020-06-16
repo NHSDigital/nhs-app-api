@@ -1993,6 +1993,7 @@ export default {
     organDonation: 'Manage your organ donation decision',
     linkedProfiles: 'Linked profiles',
     messages: 'View your messages',
+    appMessages: 'View health information and updates',
     unreadMessages: 'You have unread messages',
   },
   gpPrescriptionsHub: {
@@ -2476,7 +2477,7 @@ export default {
       body: 'Send or view messages from your GP surgery',
     },
     appMessaging: {
-      subHeader: 'Health information and updates',
+      subheader: 'Health information and updates',
       body: 'View messages from health services and the NHS App',
     },
   },

@@ -4,13 +4,18 @@ import { mount, createStore, createRouter, createEvent } from '../helpers';
 let wrapper;
 let $store;
 let $router;
+let propsData;
 
 const mountAs = ({
   isNativeApp = false,
   isLinkedEnabledEnabled = false,
   isProofLevel9 = true,
+  linkToAppMessages = false,
 } = {}) => {
   $router = createRouter();
+  propsData = {
+    linkToAppMessages,
+  };
   $store = createStore({
     state: {
       device:
@@ -26,7 +31,7 @@ const mountAs = ({
       YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com',
     },
   });
-  return mount(NavigationListMenu, { $store, $router });
+  return mount(NavigationListMenu, { $store, $router, propsData });
 };
 
 beforeEach(() => {
@@ -56,15 +61,6 @@ describe('Navigation Links ', () => {
     it('will display a link to the messages hub', () => {
       wrapper = mountAs();
       expect(wrapper.find('#btn_messages').exists()).toBe(true);
-    });
-  });
-
-  describe('methods', () => {
-    describe('navigate', () => {
-      it('will navigate to event current target path name', () => {
-        wrapper.vm.navigate(createEvent({ currentTarget: { pathname: '/event/path' } }));
-        expect($router.push).toHaveBeenCalledWith('/event/path');
-      });
     });
   });
 
@@ -101,6 +97,19 @@ describe('Navigation Links ', () => {
 
     it('will show symptoms link', () => {
       expect(wrapper.find('#menu-item-symptoms').exists()).toBe(true);
+    });
+  });
+
+  describe('Messages Link', () => {
+    it('will dispatch the correct breadcrumb on message link click if only links to app messaging', () => {
+      wrapper = mountAs({ linkToAppMessages: true });
+      wrapper.vm.navigateToMessages(createEvent({ currentTarget: { pathname: '/event/path' } }));
+      expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+    });
+
+    it('will not dispatch the breadrcrumb call on message link click if links to messages hub', () => {
+      wrapper.vm.navigateToMessages(createEvent({ currentTarget: { pathname: '/event/path' } }));
+      expect($store.dispatch).not.toBeCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
     });
   });
 });

@@ -44,10 +44,9 @@
                data-purpose="messages-menu-item"
                :href="messagesPath"
                :has-unread-messages="hasMessageIndicator"
-               :text="$t('navigationMenuList.messages')"
+               :text="messagesItemText"
                :aria-label="ariaLabel"
-               :click-func="goToUrl"
-               :click-param="messagesPath"/>
+               :click-func="navigateToMessages"/>
 
     <organ-donation-link v-if="isProofLevel9"
                          id="organ-donation-link"
@@ -72,7 +71,7 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { APPOINTMENTS, GP_MEDICAL_RECORD, PRESCRIPTIONS, SYMPTOMS,
-  LINKED_PROFILES, INDEX, MESSAGES } from '@/lib/routes';
+  LINKED_PROFILES, INDEX, MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -91,11 +90,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    linkToAppMessages: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
-      messagesPath: MESSAGES.path,
       symptomsPath: SYMPTOMS.path,
       appointmentsPath: APPOINTMENTS.path,
       prescriptionsPath: PRESCRIPTIONS.path,
@@ -111,15 +113,25 @@ export default {
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
+    messagesItemText() {
+      return (this.linkToAppMessages) ? this.$t('navigationMenuList.appMessages') :
+        this.$t('navigationMenuList.messages');
+    },
+    messagesPath() {
+      return (this.linkToAppMessages) ? HEALTH_INFORMATION_UPDATES.path : MESSAGES.path;
+    },
     ariaLabel() {
       return (this.hasMessageIndicator) ?
-        `${this.$t('navigationMenuList.messages')}
+        `${this.messagesItemText}
           ${this.$t('navigationMenuList.unreadMessages')}` :
-        this.$t('navigationMenuList.messages');
+        this.messagesItemText;
     },
   },
   methods: {
-    navigate(event) {
+    navigateToMessages(event) {
+      if (this.linkToAppMessages) {
+        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      }
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
     },

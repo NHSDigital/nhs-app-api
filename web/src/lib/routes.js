@@ -626,6 +626,12 @@ const routes = {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MESSAGES];
       },
+      get appMessagesOnlyCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+      get appMessagesOnlyMoreCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
@@ -637,6 +643,13 @@ const routes = {
     upliftPath: '/uplift/more',
     crumb: {
       get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MESSAGES,
+          this.allRoutes.HEALTH_INFORMATION_UPDATES];
+      },
+      get appMessagesOnlyCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.HEALTH_INFORMATION_UPDATES];
+      },
+      get appMessagesOnlyMoreCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MORE,
           this.allRoutes.HEALTH_INFORMATION_UPDATES];
       },

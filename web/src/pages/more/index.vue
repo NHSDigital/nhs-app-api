@@ -1,14 +1,26 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
-      <menu-item id="btn_messages"
+      <menu-item v-if="!onlyAppMessagesEnabled"
+                 id="btn_messages"
                  header-tag="h2"
                  data-purpose="text_link"
                  :href="messagesPath"
                  :text="$t('sc04.messages.subheader')"
                  :description="$t('sc04.messages.body')"
                  :has-unread-messages="hasUnreadMessages"
-                 :click-func="navigate"
+                 :click-func="navigateToMessages"
+                 :aria-label="ariaLabel"/>
+
+      <menu-item v-else
+                 id="btn_appMessaging"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="appMessagingPath"
+                 :has-unread-messages="hasUnreadMessages"
+                 :text="$t('messagesHub.appMessaging.subheader')"
+                 :description="$t('messagesHub.appMessaging.body')"
+                 :click-func="navigateToMessages"
                  :aria-label="ariaLabel"/>
 
       <menu-item v-if="adminHelpEnabled"
@@ -60,7 +72,7 @@ import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import sjrIf from '@/lib/sjrIf';
-import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_OVERVIEW, MORE, MESSAGES } from '@/lib/routes';
+import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_OVERVIEW, MORE, MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
@@ -80,6 +92,7 @@ export default {
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
       }),
+      appMessagingPath: HEALTH_INFORMATION_UPDATES.path,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       isNativeApp: this.$store.state.device.isNativeApp,
@@ -87,6 +100,22 @@ export default {
       morePath: MORE.path,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       messagesPath: MESSAGES.path,
+      hasPkbMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'messages',
+        },
+      }),
+      hasTestProviderMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'testSilverThirdPartyProvider',
+          serviceType: 'messages',
+        },
+      }),
     };
   },
   computed: {
@@ -124,13 +153,21 @@ export default {
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
+    onlyAppMessagesEnabled() {
+      return !this.gpMessagesEnabled && !this.hasPkbMessages && this.appMessagingEnabled &&
+        !this.hasTestProviderMessages;
+    },
     ariaLabel() {
+      let i18nLabel = 'sc04.messages';
+      if (this.onlyAppMessagesEnabled) {
+        i18nLabel = 'messagesHub.appMessaging';
+      }
       return (this.hasUnreadMessages) ?
-        `${this.$t('sc04.messages.subheader')}
-          ${this.$t('sc04.messages.body')}.
+        `${this.$t(`${i18nLabel}.subheader`)}
+          ${this.$t(`${i18nLabel}.body`)}.
           ${this.$t('sc04.messages.unreadMessages')}`
-        : `${this.$t('sc04.messages.subheader')}
-          ${this.$t('sc04.messages.body')}.`;
+        : `${this.$t(`${i18nLabel}.subheader`)}
+          ${this.$t(`${i18nLabel}.body`)}.`;
     },
   },
   async mounted() {
@@ -154,6 +191,12 @@ export default {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
+    },
+    navigateToMessages(event) {
+      if (this.onlyAppMessagesEnabled) {
+        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+      }
+      this.navigate(event);
     },
     navigateToAdminHelp(event) {
       this.navigate(event);

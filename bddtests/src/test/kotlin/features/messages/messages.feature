@@ -8,12 +8,10 @@ Feature: Messages
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     And my messages from the sender are displayed
     # We need to check the functionality to mark the messages as read with the back button,
@@ -27,7 +25,7 @@ Feature: Messages
 
   Scenario: A user can see they have unread messages on the More page
     Given I am using the native app user agent
-    And I am a user wishing to view my messages
+    And I am a user wishing to view my messages and GP surgery messages
     And I am logged in
     And I can see I have unread messages on the home page
     When I navigate to the More page
@@ -35,7 +33,7 @@ Feature: Messages
 
   Scenario: A user can see they have unread messages on the Messages Hub
     Given I am using the native app user agent
-    And I am a user wishing to view my messages
+    And I am a user wishing to view my messages and GP surgery messages
     And I am logged in
     And I can see I have unread messages on the home page
     When I follow the Messages link from the home page
@@ -48,22 +46,18 @@ Feature: Messages
       | /appointments/gp-appointments/booking-guidance  |
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click on the '/account' link in the message
     Then the Account page for mobile devices is displayed
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click on the '/appointments/gp-appointments/booking-guidance' link in the message
     Then I am on the Appointments Guidance page
@@ -76,13 +70,10 @@ Feature: Messages
       | https://111.nhs.uk/  |
       | 111.nhs.uk/  |
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    When I follow the Health information and updates link from the home page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click the link called 'https://111.nhs.uk/' with a url of 'https://111.nhs.uk/'
     Then a new tab has been opened by the link
@@ -95,12 +86,10 @@ Feature: Messages
       | email@address.com  |
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     And the email address 'email@address.com' is identified as a link in the message
 
@@ -110,12 +99,10 @@ Feature: Messages
       | /appointments/sausages  |
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
-    When I click on a sender in the Messages Inbox
+    And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click on the '/appointments/sausages' link in the message
     Then the Page not found error is displayed
@@ -125,9 +112,7 @@ Feature: Messages
     And I am a user wishing to view my messages, but I have no messages
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
 
@@ -138,7 +123,6 @@ Feature: Messages
       | messages      | disabled |
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
     Then the link to NHS App Messages link is not displayed
     When I browse to the pages at the following urls I see the home page
       | /messages/app-messaging  |
@@ -153,11 +137,9 @@ Feature: Messages
     And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And an error with a retry button is displayed indicating that there was a problem getting messages
-    When the messages in the repository can be retrieved successfully
+    And the messages in the repository can be retrieved successfully
     And I click the 'Try again' button
     Then the Messages Inbox page is displayed
 
@@ -166,11 +148,9 @@ Feature: Messages
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the senders and latest messages are displayed on the Messages Inbox page
-    When retrieving the messages from the repository will cause an internal server error
+    And retrieving the messages from the repository will cause an internal server error
     And I click on a sender in the Messages Inbox
     Then an error with a retry button is displayed indicating that there was a problem getting messages from the sender
     When the messages in the repository can be retrieved successfully
@@ -178,11 +158,10 @@ Feature: Messages
     Then the Messages page is displayed
     And my messages from the sender are displayed
 
+
   Scenario: A desktop user can see their messages if enabled
     Given I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
-    And I click on the NHS App Messages link on the Messages Hub page
+    And I click the App Messages link on the More page
     And the Messages Inbox page is displayed

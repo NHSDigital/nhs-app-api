@@ -20,6 +20,9 @@ open class MorePage : HybridPageObject() {
     private val messagesTitle = "Messages"
     private val messagesDescription = "Get messages from your GP surgery and other NHS services."
 
+    private val appMessagesTitle = "Health information and updates"
+    private val appMessagesDescription = "View messages from health services and the NHS App"
+
     // online consultations menu item
     private val requestGpHelpTitle = "Additional GP services"
     private val requestGpHelpDescription = "Get sick notes and GP letters or ask about recent tests"
@@ -39,6 +42,7 @@ open class MorePage : HybridPageObject() {
 
     val btnOrganDonation by lazy { links.link(organDonationTitle, organDonationDescription) }
     val btnMessages by lazy { links.link(messagesTitle, messagesDescription) }
+    val btnAppMessages by lazy { links.link(appMessagesTitle, appMessagesDescription) }
     val btnDataSharing by lazy { links.link(dataSharingTitle, dataSharingDescription) }
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle, requestGpHelpDescription) }
     val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}

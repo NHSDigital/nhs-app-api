@@ -1,10 +1,12 @@
 package features.messages.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
@@ -30,6 +32,22 @@ class MessagesStepDefinitions {
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesInCache()
+    }
+
+    @Given("^I am a user wishing to view my messages and GP surgery messages$")
+    fun iAmAUserWishingToViewTheirMessagesAndGPMessages() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                arrayListOf(
+                        SJRJourneyType.MESSAGES_ENABLED,
+                        SJRJourneyType.IM1_MESSAGING_ENABLED))
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpMultipleMessagesInCache()
+
+        PracticePatientMessagingFactory
+                .getForSupplier(Supplier.TPP)
+                .enabled(patient)
     }
 
     @Given("^I am a user wishing to view my appointments and my messages with content$")

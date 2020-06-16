@@ -31,9 +31,9 @@
                    data-purpose="text_link"
                    :href="appMessagingPath"
                    :has-unread-messages="hasUnreadAppMessages"
-                   :text="$t('messagesHub.appMessaging.subHeader')"
+                   :text="$t('messagesHub.appMessaging.subheader')"
                    :description="$t('messagesHub.appMessaging.body')"
-                   :click-func="navigate"
+                   :click-func="navigateToAppMessages"
                    :aria-label="ariaLabel('appMessaging')"/>
       </menu-item-list>
       <p v-else data-purpose="no-messages-available">
@@ -105,6 +105,10 @@ export default {
         this.pkbCieEnabled ||
         this.testProviderEnabled;
     },
+    onlyAppMessagingEnabled() {
+      return !this.gpMessagesEnabled && this.appMessagingSjrEnabled &&
+      !this.pkbEnabled && !this.testProviderEnabled;
+    },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
@@ -136,6 +140,12 @@ export default {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
+    },
+    navigateToAppMessages(event) {
+      if (this.onlyAppMessagingEnabled) {
+        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      }
+      this.navigate(event);
     },
     ariaLabel(type) {
       const { hasUnreadGPMessages, hasUnreadAppMessages } = this;

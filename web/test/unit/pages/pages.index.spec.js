@@ -1,5 +1,5 @@
 import Index from '@/pages/index';
-import { createStore, mount, createRouter } from '../helpers';
+import { createStore, mount, createRouter, create$T } from '../helpers';
 import each from 'jest-each';
 
 describe('index', () => {
@@ -20,6 +20,8 @@ describe('index', () => {
     homeScreen = {},
     isNativeApp = false,
     isProofLevel9 = true,
+    context = true,
+    appMessagingEnabled = false,
     hasUnreadAppMessages = false,
     hasUnreadGpMessages = false,
   } = {}) => {
@@ -31,6 +33,12 @@ describe('index', () => {
         },
         gpMessages: { hasUnread: hasUnreadGpMessages },
         messaging: { hasUnread: hasUnreadAppMessages },
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            url: 'www.url.com',
+          }],
+        },
         linkedAccounts: {
           actingAsUser: {
             id: 'user-id-0',
@@ -48,13 +56,15 @@ describe('index', () => {
           isNativeApp,
         },
       },
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'session/isProofLevel9': isProofLevel9,
+        'session/isProxying': isProxying,
+        'session/currentProfile': { name: '' },
+        'serviceJourneyRules/messagingEnabled': appMessagingEnabled,
+      },
     });
-    $store.getters['session/isProofLevel9'] = isProofLevel9;
-    $store.getters['session/isProxying'] = isProxying;
-    $store.getters['session/currentProfile'] = {
-      name: '',
-    };
-    return mount(Index, { $store, $router, stubs: ['BiometricBanner'] });
+    return mount(Index, { $store, $router, $t: create$T(), stubs: ['BiometricBanner'] });
   };
 
   it('will display the navigation items when not proxying', () => {
@@ -127,4 +137,14 @@ describe('index', () => {
       await wrapper.vm.$nextTick();
       expect(wrapper.find('#btn_messages_unreadIndicator').exists()).toBe(showIndicator);
     });
+
+  it('will show the correct app messaging text on the message home link if only app messaging enabled', () => {
+    wrapper = mountAs({ im1MessagingEnabled: false, context: false, appMessagingEnabled: true });
+    expect(wrapper.find('#btn_messages').text()).toBe('translate_navigationMenuList.appMessages');
+  });
+
+  it('will show the correct messaging text on the message home link when more than one message service enabled', () => {
+    wrapper = mountAs({ im1MessagingEnabled: true, context: true, appMessagingEnabled: true });
+    expect(wrapper.find('#btn_messages').text()).toBe('translate_navigationMenuList.messages');
+  });
 });

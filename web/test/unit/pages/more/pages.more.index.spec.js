@@ -1,8 +1,8 @@
 import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { createEvent, createStore, mount, createRouter } from '../../helpers';
-import { MESSAGES } from '@/lib/routes';
+import { createEvent, createStore, mount, createRouter, create$T } from '../../helpers';
+import { MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 
 describe('more', () => {
   let linkElement;
@@ -15,13 +15,17 @@ describe('more', () => {
     isProxy = false,
     isNativeApp = false,
     context = true,
+    sjrIm1MessagingEnabled = true,
     hasUnreadGpMessages = false,
     hasUnreadAppMessages = false,
+    sjrMessagingEnabled = true,
+    im1MessagingPracticeEnabled = true,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
         device: { isNativeApp },
+        practiceSettings: { im1MessagingEnabled: im1MessagingPracticeEnabled },
         gpMessages: { hasUnread: hasUnreadGpMessages },
         messaging: { hasUnread: hasUnreadAppMessages },
         knownServices: {
@@ -33,12 +37,14 @@ describe('more', () => {
       },
       getters: {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
+        'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
+        'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (context),
         'session/isProxying': isProxy,
       },
       $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
-    return mount(More, { $store, $router });
+    return mount(More, { $store, $router, $t: create$T() });
   };
 
   beforeEach(() => {
@@ -90,6 +96,47 @@ describe('more', () => {
       const event = createEvent({ currentTarget: { pathname: MESSAGES.path } });
       wrapper.vm.navigate(event);
       expect($router.push).toBeCalledWith(MESSAGES.path);
+    });
+
+    it('will only show the app messaging link if only app messaging is enabled', () => {
+      wrapper = mountAs({
+        sjrIm1MessagingEnabled: false,
+        sjrMessagingEnabled: true,
+        context: false });
+      expect(wrapper.find('#btn_messages').exists()).toBe(false);
+      expect(wrapper.find('#btn_appMessaging').exists()).toBe(true);
+    });
+
+    it('will dispatch the new breadcrumb when only the app messaging service is available', () => {
+      wrapper = mountAs({
+        sjrIm1MessagingEnabled: false,
+        sjrMessagingEnabled: true,
+        context: false });
+
+      const event = createEvent({ currentTarget: { pathname: HEALTH_INFORMATION_UPDATES.path } });
+      wrapper.vm.navigateToMessages(event);
+      expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+    });
+
+    it('will not dispatch the new breadcrumb when more than one messages service is available', () => {
+      const event = createEvent({ currentTarget: { pathname: HEALTH_INFORMATION_UPDATES.path } });
+      wrapper.vm.navigateToMessages(event);
+      expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+    });
+
+    it('will show the correct menu item text if only app messaging enabled', () => {
+      const expectedText = 'translate_messagesHub.appMessaging.subheader';
+      wrapper = mountAs({
+        sjrIm1MessagingEnabled: false,
+        sjrMessagingEnabled: true,
+        context: false });
+
+      expect(wrapper.find('#btn_appMessaging').text()).toContain(expectedText);
+    });
+
+    it('will show the correct menu item text if more than app messaging enabled', () => {
+      const expectedText = 'translate_sc04.messages.subheader';
+      expect(wrapper.find('#btn_messages').text()).toContain(expectedText);
     });
   });
 
