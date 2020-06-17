@@ -112,16 +112,15 @@ describe('more', () => {
         sjrIm1MessagingEnabled: false,
         sjrMessagingEnabled: true,
         context: false });
-
       const event = createEvent({ currentTarget: { pathname: HEALTH_INFORMATION_UPDATES.path } });
       wrapper.vm.navigateToMessages(event);
-      expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+      expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
     });
 
     it('will not dispatch the new breadcrumb when more than one messages service is available', () => {
       const event = createEvent({ currentTarget: { pathname: HEALTH_INFORMATION_UPDATES.path } });
       wrapper.vm.navigateToMessages(event);
-      expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+      expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
     });
 
     it('will show the correct menu item text if only app messaging enabled', () => {

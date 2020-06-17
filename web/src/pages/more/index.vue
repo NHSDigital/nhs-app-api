@@ -194,7 +194,7 @@ export default {
     },
     navigateToMessages(event) {
       if (this.onlyAppMessagesEnabled) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyMoreCrumb');
+        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
       }
       this.navigate(event);
     },
