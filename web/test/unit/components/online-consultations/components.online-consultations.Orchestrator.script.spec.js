@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import Orchestrator from '@/components/online-consultations/Orchestrator';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
 import QuestionAttachment from '@/components/online-consultations/QuestionAttachment';
@@ -12,14 +13,15 @@ import QuestionQuantity from '@/components/online-consultations/QuestionQuantity
 import QuestionString from '@/components/online-consultations/QuestionString';
 import QuestionText from '@/components/online-consultations/QuestionText';
 import QuestionTime from '@/components/online-consultations/QuestionTime';
-import { mount, shallowMount, createScrollTo } from '../../helpers';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
-import * as LibUtils from '@/lib/utils';
-import each from 'jest-each';
+import { redirectTo } from '@/lib/utils';
+import { INDEX_PATH } from '@/router/paths';
+import { mount, shallowMount, createScrollTo } from '../../helpers';
 
 jest.mock('@/services/event-bus');
 jest.mock('@/services/native-app');
+jest.mock('@/lib/utils');
 
 let orchestrator;
 
@@ -32,12 +34,9 @@ const testReferralRequest = {
 
 const scrollTo = createScrollTo();
 const dispatch = jest.fn();
-LibUtils.redirectTo = jest.fn();
 
 const store = {
-  app: {
-    $env: {},
-  },
+  $env: {},
   state: {
     device: {
       isNativeApp: true,
@@ -79,7 +78,7 @@ describe('orchestrator', () => {
     dispatch.mockClear();
     scrollTo.mockClear();
     NativeApp.resetPageFocus.mockClear();
-    LibUtils.redirectTo.mockClear();
+    redirectTo.mockClear();
   });
 
   describe('computed', () => {
@@ -351,28 +350,13 @@ describe('orchestrator', () => {
       });
     });
 
-    describe('noJsState', () => {
-      it('will return entire onlineConsultations state object', () => {
-        // Arrange
-        const onlineConsultations = { something: { else: true }, aValue: 'goes here' };
-        const expectedNoJsState = { onlineConsultations };
-        store.state.onlineConsultations = onlineConsultations;
-
-        // Act
-        mountOrchestrator();
-
-        // Assert
-        expect(orchestrator.vm.noJsState).toEqual(expectedNoJsState);
-      });
-    });
-
     describe('indexPath', () => {
       it('will return path of logged in home page', () => {
         // Act
         mountOrchestrator();
 
         // Assert
-        expect(orchestrator.vm.indexPath).toEqual('/');
+        expect(orchestrator.vm.indexPath).toEqual(INDEX_PATH);
       });
     });
 
@@ -654,8 +638,8 @@ describe('orchestrator', () => {
         orchestrator.vm.backToHomeClicked();
 
         // Assert
-        expect(LibUtils.redirectTo).toHaveBeenCalledWith(orchestrator.vm, '/');
-        expect(LibUtils.redirectTo).toHaveBeenCalledTimes(1);
+        expect(redirectTo).toHaveBeenCalledWith(orchestrator.vm, INDEX_PATH);
+        expect(redirectTo).toHaveBeenCalledTimes(1);
       });
     });
   });

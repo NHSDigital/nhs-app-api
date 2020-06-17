@@ -15,10 +15,7 @@
         </message-list>
       </message-dialog>
 
-      <no-js-form :value="noJsState"
-                  :action="noJSPath"
-                  :enctype="enctype"
-                  method="post">
+      <form @submit.prevent="continueClicked">
         <question :id="question.id"
                   :is-legend="question.isLegend"
                   :label-for="question.name"
@@ -55,7 +52,7 @@
                         @click.prevent="continueClicked">
           {{ $t('onlineConsultations.orchestrator.continueButton') }}
         </generic-button>
-      </no-js-form>
+      </form>
     </div>
 
     <div v-else-if="isSuccess && (carePlans || referralRequests)" id="result-container">
@@ -98,7 +95,6 @@ import get from 'lodash/fp/get';
 import BackButton from '@/components/BackButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import Question from '@/components/online-consultations/Question';
 import QuestionAttachment from '@/components/online-consultations/QuestionAttachment';
 import QuestionBoolean from '@/components/online-consultations/QuestionBoolean';
@@ -117,7 +113,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
-import { INDEX, APPOINTMENT_ADMIN_HELP, APPOINTMENT_GP_ADVICE } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -131,7 +127,6 @@ export default {
     MessageDialog,
     MessageList,
     MessageText,
-    NoJsForm,
     Question,
     QuestionBoolean,
     QuestionChoice,
@@ -231,13 +226,8 @@ export default {
         this.$store.dispatch('onlineConsultations/setAnswer', value);
       },
     },
-    noJsState() {
-      return {
-        onlineConsultations: this.$store.state.onlineConsultations,
-      };
-    },
     indexPath() {
-      return INDEX.path;
+      return INDEX_PATH;
     },
     showBackToHomeButton() {
       if (!this.isSuccess) {
@@ -245,13 +235,6 @@ export default {
       }
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       return true;
-    },
-    noJSPath() {
-      if (this.serviceDefinitionId ===
-        this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition) {
-        return APPOINTMENT_ADMIN_HELP.path;
-      }
-      return APPOINTMENT_GP_ADVICE.path;
     },
     backButtonText() {
       return this.isSuccess
@@ -327,7 +310,7 @@ export default {
     },
     backToHomeClicked() {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
-      redirectTo(this, INDEX.path);
+      redirectTo(this, INDEX_PATH);
     },
     validationErrorMessages(localError, responseErrors) {
       const errorMessages = [];
@@ -368,7 +351,7 @@ export default {
     }
   }
 
-  /deep/strong {
+  ::v-deep strong {
     display: inline;
   }
 </style>

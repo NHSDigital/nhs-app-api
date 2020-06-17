@@ -1,6 +1,12 @@
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
-import { ORGAN_DONATION_WITHDRAW_REASON } from '@/lib/routes';
+import { ORGAN_DONATION_WITHDRAW_REASON_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createRouter, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('OtherThingsToDo', () => {
   const externalLink = 'www.foo.com';
@@ -16,6 +22,7 @@ describe('OtherThingsToDo', () => {
     });
 
   beforeEach(() => {
+    redirectTo.mockClear();
     wrapper = mountOtherThingsToDo();
   });
 
@@ -71,7 +78,7 @@ describe('OtherThingsToDo', () => {
         });
 
         it('will push ORGAN_DONATION_WITHDRAW_REASON to the router', () => {
-          expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_WITHDRAW_REASON.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_WITHDRAW_REASON_PATH);
         });
       });
     });

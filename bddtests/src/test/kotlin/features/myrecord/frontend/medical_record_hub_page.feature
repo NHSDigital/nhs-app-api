@@ -50,12 +50,3 @@ Feature: Medical record hub page
     Then I see the health records hub page
     And I click the menu item 'GP medical record'
     And I see the 'GP medical record' page
-
-  Scenario: Proxy users are redirected to the sensitive information acceptance screen
-    Given I am an EMIS user with linked profiles
-    And I am logged in
-    When I select the linked profiles link from the home page
-    And I select a linked profile
-    And I click the Switch to this profile button for the proxy user
-    And I navigate to MY_RECORD
-    Then I see 'Your GP medical record' page

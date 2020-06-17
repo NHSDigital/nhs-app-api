@@ -18,16 +18,10 @@
         <li>{{ $t('my_record.personalRecordText.bulletPoints.bp2') }}</li>
       </ul>
     </div>
-    <form :action="myRecordPath" method="get">
-      <input :value="JSON.stringify({ myRecord: { hasAcceptedTerms: true }})"
-             type="hidden"
-             name="nojs">
-
-      <generic-button class="nhsuk-button"
-                      @click="onContinueButtonClicked">
-        {{ $t('my_record.personalRecordText.agreeButtonText') }}
-      </generic-button>
-    </form>
+    <generic-button class="nhsuk-button"
+                    @click.prevent="onContinueButtonClicked">
+      {{ $t('my_record.personalRecordText.agreeButtonText') }}
+    </generic-button>
 
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
@@ -41,11 +35,11 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import { INDEX, MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
+import { INDEX_PATH } from '@/router/paths';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'Warning',
@@ -63,13 +57,11 @@ export default {
   },
   data() {
     return {
-      indexPath: INDEX.path,
-      myRecordPath: MYRECORD.path,
+      indexPath: INDEX_PATH,
     };
   },
   methods: {
-    onContinueButtonClicked(event) {
-      event.preventDefault();
+    onContinueButtonClicked() {
       sessionStorage.setItem('agreedToMedicalWarning', true);
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
@@ -78,8 +70,7 @@ export default {
         NativeApp.resetPageFocus();
       }
     },
-    onBackButtonClicked(event) {
-      event.preventDefault();
+    onBackButtonClicked() {
       redirectTo(this, this.indexPath);
     },
   },

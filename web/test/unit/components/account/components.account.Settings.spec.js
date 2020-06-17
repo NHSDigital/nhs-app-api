@@ -1,9 +1,11 @@
 import Settings from '@/components/account/Settings';
-import { ACCOUNT_NOTIFICATIONS, LOGIN_SETTINGS } from '@/lib/routes';
-import { createRouter, mount, createStore } from '../../helpers';
+import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
+import { mount, createStore } from '../../helpers';
+
+jest.mock('@/lib/utils');
 
 describe('Settings', () => {
-  let $router;
   let wrapper;
   let $store;
 
@@ -13,12 +15,14 @@ describe('Settings', () => {
     showLinkedProfiles = true,
     source = 'ios',
     versionEnabled = true } = {}) => {
-    $router = createRouter();
     $store = createStore({
       state: {
         device: {
           isNativeApp: true,
           source,
+        },
+        session: {
+          isLoggedIn: jest.fn(),
         },
       },
       getters: {
@@ -26,7 +30,6 @@ describe('Settings', () => {
       },
     });
     return mount(Settings, {
-      $router,
       methods: {
         configureWebContext(url) {
           return url;
@@ -39,6 +42,10 @@ describe('Settings', () => {
         showLinkedProfiles },
     });
   };
+
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
   describe('biometrics, notifications and linked profiles enabled', () => {
     let notificationsLink;
@@ -65,7 +72,7 @@ describe('Settings', () => {
     it('the notifications link will direct to notifications page', () => {
       global.digitalData = {};
       notificationsLink.trigger('click');
-      expect($router.push).toHaveBeenCalledWith(ACCOUNT_NOTIFICATIONS.path);
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ACCOUNT_NOTIFICATIONS_PATH);
     });
   });
 
@@ -118,7 +125,7 @@ describe('Settings', () => {
 
       it('will navigate to the web biometrics', () => {
         biometricsLink.trigger('click');
-        expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
       });
     });
 
@@ -133,7 +140,7 @@ describe('Settings', () => {
 
         it('will navigate to the web biometrics', () => {
           biometricsLink.trigger('click');
-          expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
         });
       });
 
@@ -147,7 +154,7 @@ describe('Settings', () => {
 
         it('will navigate to the web biometrics', () => {
           biometricsLink.trigger('click');
-          expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
         });
       });
     });

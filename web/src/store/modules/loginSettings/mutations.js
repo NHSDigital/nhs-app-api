@@ -1,9 +1,9 @@
+import biometricTypes from '@/lib/biometrics/biometricTypes';
 import { SET_WAITING,
   UPDATE_REGISTRATION_STATUS,
   UPDATE_BIOMETRIC_TYPE,
   ADD_ERROR_CODE,
   CLEAR_ERROR_CODE } from './mutation-types';
-import biometricTypes from '@/lib/biometrics/biometricTypes';
 
 export default {
   [UPDATE_REGISTRATION_STATUS](state, biometricRegistered) {

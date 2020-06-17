@@ -51,12 +51,10 @@ export const createRouter = (name = undefined) => ({
   go: jest.fn(),
   goBack: jest.fn(),
   push: jest.fn(),
+  currentRoute: { name },
   history: {
     router: {
       previousPaths: [],
-    },
-    current: {
-      name,
     },
   },
 });
@@ -79,16 +77,16 @@ export const createStore = ({
     $analytics: {
       logicError: jest.fn(),
     },
-    $cookies,
-    $env,
     $http,
     context,
     i18n,
     router,
   },
+  $cookies,
   dispatch: jest.fn(),
   getters,
   state,
+  $env,
 });
 
 export const createScrollTo = () => {
@@ -126,6 +124,7 @@ export const mount = (component, {
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const mountFn = shallow ? vueShallowMount : vueMount;
+
   return mountFn(component, {
     localVue,
     data,

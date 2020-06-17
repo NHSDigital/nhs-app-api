@@ -1,6 +1,5 @@
 package features.authentication.stepDefinitions
 
-import config.Config
 import constants.Supplier
 import cucumber.api.DataTable
 import cucumber.api.java.en.Given
@@ -119,7 +118,7 @@ class AuthenticationStepDefinitions {
     fun iLogInAgain() {
         val patient = SerenityHelpers.getPatient()
         login.using(patient)
-        home.waitForLoginToCompleteSuccessfully()
+        home.waitForLoginToCompleteSuccessfully(true)
     }
 
     @When("^I browse to the page at (.*)$")
@@ -145,9 +144,8 @@ class AuthenticationStepDefinitions {
 
     private fun iBrowseToPageXAndSeePageX(page: String, path: String, destination: String = "") {
         val lowerPage = page.toLowerCase()
-        val fullUrl = Config.instance.url + path
-        browser.browseTo(fullUrl)
-        this.currentUrl = fullUrl
+        browser.browseTo(path)
+        this.currentUrl = path
 
         when (lowerPage) {
             "login" -> {
@@ -157,14 +155,14 @@ class AuthenticationStepDefinitions {
                 home.assertHeaderVisible()
             }
             "relevant" -> {
-                browser.shouldHaveUrl(Config.instance.url + destination, path)
+                browser.shouldHaveUrl(destination, path)
             }
         }
     }
 
     @Then("^I am on the relevant (.*) page$")
     fun iAmOnTheXPage(page: String) {
-        browser.shouldHaveUrl(Config.instance.url + page)
+        browser.shouldHaveUrl(page)
     }
 
     @When("^I select to create an account$")

@@ -9,7 +9,7 @@
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 
 export default {
   name: 'SwitchProfileButton',
@@ -21,7 +21,7 @@ export default {
       await this.$store.dispatch('linkedAccounts/switchToMainUserProfile');
       await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('serviceJourneyRules/init');
-      redirectTo(this, INDEX.path);
+      redirectTo(this, INDEX_PATH);
     },
   },
 };

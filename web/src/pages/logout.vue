@@ -4,12 +4,11 @@
 
 <script>
 export default {
-  head() {
+  metaInfo() {
     return {
       noscript: [
         { innerHTML: '<meta http-equiv="refresh" content="0;URL=\'/\'">', body: false },
       ],
-      title: `${this.$store.state.header.headerText} screen`,
       __dangerouslyDisableSanitizers: ['noscript'],
     };
   },
@@ -22,6 +21,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-</style>

@@ -1,8 +1,8 @@
 import QuestionMultipleChoice from '@/components/online-consultations/QuestionMultipleChoice';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import CheckboxGroup from '@/components/CheckboxGroup';
-import { mount } from '../../helpers';
 import each from 'jest-each';
+import { mount } from '../../helpers';
 
 const multiChoiceValidationMessage = 'onlineConsultations.validationErrors.message.multiple_choiceAtLeastOneRequired';
 let wrapper;

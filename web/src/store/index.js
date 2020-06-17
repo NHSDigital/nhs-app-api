@@ -1,3 +1,6 @@
+import Vue from 'vue';
+import Vuex from 'vuex';
+import get from 'lodash/fp/get';
 import analytics from './modules/analytics';
 import appVersion from './modules/appVersion';
 import auth from './modules/auth';
@@ -24,7 +27,6 @@ import notifications from './modules/notifications';
 import onlineConsultations from './modules/onlineConsultations';
 import organDonation from './modules/organDonation';
 import pageLeaveWarning from './modules/pageLeaveWarning';
-import pageTitle from './modules/pageTitle';
 import gpMessages from './modules/gpMessages';
 import practiceSettings from './modules/practiceSettings';
 import preRegistrationInformation from './modules/preRegistrationInformation';
@@ -35,61 +37,53 @@ import session from './modules/session';
 import spinner from './modules/spinner';
 import termsAndConditions from './modules/termsAndConditions';
 
+Vue.use(Vuex);
 
-export const modules = {
-  analytics,
-  appVersion,
-  auth,
-  availableAppointments,
-  biometricBanner,
-  cookieBanner,
-  device,
-  documents,
-  errors,
-  flashMessage,
-  header,
-  http,
-  knownServices,
-  linkedAccounts,
-  login,
-  loginSettings,
-  messaging,
-  modal,
-  myAppointments,
-  myRecord,
-  navigation,
-  nominatedPharmacy,
-  notifications,
-  onlineConsultations,
-  organDonation,
-  pageLeaveWarning,
-  pageTitle,
-  gpMessages,
-  practiceSettings,
-  preRegistrationInformation,
-  prescriptions,
-  repeatPrescriptionCourses,
-  serviceJourneyRules,
-  session,
-  spinner,
-  termsAndConditions,
-};
-
-export const actions = {
-  async nuxtServerInit({ dispatch }, { req, res }) {
-    const authCookie = this.$cookies.get('nhso.auth');
-    if (process.server) {
-      /*
-      disabled the eslint global-require as consola should only be imported when running on server
-      babel doesn't transpile the library code to es5 (for ie 11) when imports on client
-      */
-      const consola = require('consola'); // eslint-disable-line global-require
-      const { redirectUri, codeVerifier } = authCookie || {};
-      const { nhsoRequestId } = res.locals;
-
-      consola.info(`Auth Cookie values for request: ${req.url}, redirectUri=${redirectUri}, codeVerifier=${codeVerifier}, CorrelationId=${nhsoRequestId}`);
-    }
-    await dispatch('auth/updateConfig', authCookie);
-    await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
+export default new Vuex.Store({
+  state: {
   },
-};
+  getters: {
+    getEnvVariable: state => variable => get(variable)(state.$env),
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+    analytics,
+    appVersion,
+    auth,
+    availableAppointments,
+    biometricBanner,
+    cookieBanner,
+    device,
+    documents,
+    errors,
+    flashMessage,
+    header,
+    http,
+    knownServices,
+    linkedAccounts,
+    login,
+    loginSettings,
+    messaging,
+    modal,
+    myAppointments,
+    myRecord,
+    navigation,
+    nominatedPharmacy,
+    notifications,
+    onlineConsultations,
+    organDonation,
+    pageLeaveWarning,
+    gpMessages,
+    practiceSettings,
+    preRegistrationInformation,
+    prescriptions,
+    repeatPrescriptionCourses,
+    serviceJourneyRules,
+    session,
+    spinner,
+    termsAndConditions,
+  },
+});

@@ -1,3 +1,4 @@
+
 <template>
   <div v-if="showTemplate && summariesLoaded" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
@@ -52,19 +53,19 @@ import MenuItemListHeader from '@/components/MenuItemListHeader';
 import MenuItemList from '@/components/MenuItemList';
 import MenuItem from '@/components/MenuItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import {
-  MESSAGES,
-  GP_MESSAGES_URGENCY,
-  GP_MESSAGES_VIEW_MESSAGE,
-  INDEX,
-} from '@/lib/routes';
 import { redirectTo, isNumber, isEmptyArray } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 import srjIf from '@/lib/sjrIf';
 import last from 'lodash/fp/last';
+import {
+  MESSAGES_PATH,
+  INDEX_PATH,
+  GP_MESSAGES_URGENCY_PATH,
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesPage',
   components: {
     SummaryMessage,
     MenuItemListHeader,
@@ -74,11 +75,13 @@ export default {
   },
   data() {
     return {
-      messagesPath: MESSAGES.path,
-      summaries: this.$store.state.gpMessages.messageSummaries,
+      messagesPath: MESSAGES_PATH,
     };
   },
   computed: {
+    summaries() {
+      return this.$store.state.gpMessages.messageSummaries;
+    },
     summariesLoaded() {
       return this.$store.state.gpMessages.loadedMessages;
     },
@@ -92,19 +95,16 @@ export default {
       return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
     },
   },
-  async asyncData({ store, redirect }) {
-    if (!store.state.practiceSettings.im1MessagingEnabled) {
-      redirect(INDEX.path);
+  created() {
+    if (!this.$store.state.practiceSettings.im1MessagingEnabled) {
+      redirectTo(this, INDEX_PATH);
       return;
     }
 
-    store.dispatch('gpMessages/clearSelectedRetainingId');
-    store.dispatch('gpMessages/clearSelectedRecipient');
-
-    await store.dispatch('gpMessages/loadMessages');
-  },
-  mounted() {
     this.$store.dispatch('gpMessages/setUrgencyChoice', undefined);
+    this.$store.dispatch('gpMessages/clearSelectedRetainingId');
+    this.$store.dispatch('gpMessages/clearSelectedRecipient');
+    this.$store.dispatch('gpMessages/loadMessages');
   },
   methods: {
     getUnreadCount(unreadCount) {
@@ -115,7 +115,7 @@ export default {
       return unreadCount;
     },
     sendMessage() {
-      redirectTo(this, GP_MESSAGES_URGENCY.path);
+      redirectTo(this, GP_MESSAGES_URGENCY_PATH);
     },
     getSubtitle(summary) {
       const { subject, content } = summary;
@@ -153,7 +153,7 @@ export default {
         this.$store.dispatch('gpMessages/setMessageDetails', { messageDetails: message });
       }
 
-      redirectTo(this, `${GP_MESSAGES_VIEW_MESSAGE.path}${
+      redirectTo(this, `${GP_MESSAGES_VIEW_MESSAGE_PATH}${
         message.unreadReplyInfo.present ? '#unreadMessages' : ''
       }`);
     },

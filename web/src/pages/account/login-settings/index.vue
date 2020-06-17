@@ -35,7 +35,7 @@ import MessageText from '@/components/widgets/MessageText';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'LoginSettingsPage',
   components: {
     MessageDialog,
     MessageText,

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import QuestionImage from '@/components/online-consultations/QuestionImage';
 import GenericImageInput from '@/components/widgets/GenericImageInput';
 import { mount } from '../../helpers';

@@ -1,22 +1,13 @@
 import AccountPage from '@/pages/account/index';
 import AboutUs from '@/components/account/AboutUs';
 import WebFooter from '@/components/widgets/WebFooter';
-import { create$T, createStore, initFilters, mount, toClass } from '../../helpers';
+import { createStore, initFilters, mount } from '../../helpers';
 
 describe('Account Page', () => {
   jest.mock('@/services/native-app');
   let wrapper;
 
   initFilters();
-
-  const $env = {
-    TERMS_AND_CONDITIONS_URL: 'https://terms',
-    COOKIES_POLICY_URL: 'https://cookies',
-    OPEN_SOURCE_LICENCES_URL: 'https://open-source',
-    PRIVACY_POLICY_URL: 'https://privacy',
-    HELP_AND_SUPPORT_URL: 'https://help',
-    ACCESSIBILITY_STATEMENT_URL: 'https://accessibility',
-  };
 
   const $state = {
     device: {
@@ -67,7 +58,7 @@ describe('Account Page', () => {
     });
 
     $state.device.isNativeApp = isNativeApp;
-    return mount(AccountPage, { $env,
+    return mount(AccountPage, {
       $store,
       $state,
       $style: createStyle() });
@@ -83,16 +74,16 @@ describe('Account Page', () => {
     });
 
     it('will verify that footer links are subset of links in account page', () => {
-      const webHeaderWrapper = mount(WebFooter, { $env });
-      const accountCssLinkPath = `ul${toClass('list-menu')} li a`;
+      const webFooterWrapper = mount(WebFooter);
+      const aboutUsWrapper = mount(AboutUs);
 
-      const footerLinkElements = webHeaderWrapper.findAll('ul li a');
-      const accountLinkElements = wrapper.findAll(accountCssLinkPath);
+      const footerLinkElements = webFooterWrapper.findAll('ul li a');
+      const accountLinkElements = aboutUsWrapper.findAll('ul li a');
 
       const footerLinks = findLinks(footerLinkElements.wrappers);
       const accountLinks = findLinks(accountLinkElements.wrappers);
+      expect(wrapper.find(AboutUs).exists()).toBe(true);
       expect(accountLinks.length).toBeGreaterThan(0);
-
       expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
     });
 
@@ -133,45 +124,6 @@ describe('Account Page', () => {
 
     it('will have a linked profiles link', () => {
       expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
-    });
-  });
-
-  describe('page title', () => {
-    let $store;
-    let $t;
-
-    beforeEach(() => {
-      $t = create$T();
-
-      $store = createStore({ state: $state });
-      $store.getters = buildStoreGetters();
-    });
-
-    it('will be set to "Settings" for native', () => {
-      $state.device.isNativeApp = true;
-      mount(AccountPage, {
-        $env,
-        $t,
-        $store,
-        $state,
-        $style: createStyle(),
-      });
-
-      expect($store.dispatch).toBeCalledWith('header/updateHeaderText', 'translate_pageHeaders.settings');
-    });
-
-    it('will be set to "Settings" for desktop', () => {
-      $state.device.isNativeApp = false;
-
-      mount(AccountPage, {
-        $env,
-        $t,
-        $store,
-        $state,
-        $style: createStyle(),
-      });
-
-      expect($store.dispatch).not.toBeCalledWith('header/updateHeaderText', 'pageHeaders.settings');
     });
   });
 });

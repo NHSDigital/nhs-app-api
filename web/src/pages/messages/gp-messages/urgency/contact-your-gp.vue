@@ -32,18 +32,18 @@
 <script>
 import CareCard from '@/components/widgets/CareCard';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { GP_MESSAGES_URGENCY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import { GP_MESSAGES_URGENCY_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesUrgencyContactYourGpPage',
   components: {
     CareCard,
     DesktopGenericBackLink,
   },
   data() {
     return {
-      urgencyPath: GP_MESSAGES_URGENCY.path,
+      urgencyPath: GP_MESSAGES_URGENCY_PATH,
     };
   },
   methods: {

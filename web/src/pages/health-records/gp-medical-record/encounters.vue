@@ -55,11 +55,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DcrErrorNoAccessGpRecord,
@@ -70,33 +69,33 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      encounters: null,
     };
   },
   computed: {
     orderedEncounters() {
       return orderBy([encounter => this.getRecordedOnDate(encounter.recordedOn, '')],
-        ['desc'])(this.encounters.data);
+        ['desc'])((this.encounters || {}).data);
     },
     showError() {
-      return (
-        (this.encounters || {}).hasErrored ||
-        (this.encounters || {}).data.length === 0 ||
-        !this.encounters.hasAccess
-      );
+      return this.encounters &&
+        (this.encounters.hasErrored ||
+        this.encounters.data.length === 0 ||
+        !this.encounters.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (store.state.myRecord.record.supplier !== 'MICROTEST') {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (this.$store.state.myRecord.record.supplier !== 'MICROTEST') {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.encounters) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.encounters) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      encounters: store.state.myRecord.record.encounters,
-    };
+
+    this.encounters = this.$store.state.myRecord.record.encounters;
   },
   methods: {
     backButtonClicked() {

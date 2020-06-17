@@ -5,6 +5,7 @@ import {
   isFalsy,
   isTruthy,
   redirectTo,
+  redirectByName,
   readableBytes,
   stripHtml,
   formatInboxMessageTime,
@@ -12,8 +13,18 @@ import {
   getPathAndQuery,
   getThirdPartyLocaleText,
   mimeType,
+  resetPageFocus,
 } from '@/lib/utils';
+import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
+import NativeCallbacks from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import { create$T } from '../helpers';
+
+jest.mock('@/services/native-app');
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 let self;
 
@@ -36,7 +47,12 @@ const trueValues = [
 ];
 
 describe('util library', () => {
+  let loggedIn = false;
+  const PATIENT_ID = 1234;
+
   beforeEach(() => {
+    NativeCallbacks.resetPageFocus.mockClear();
+
     self = {
       $store: {
         app: {
@@ -50,10 +66,17 @@ describe('util library', () => {
             source: 'web',
           },
         },
+        getters: {
+          'session/isLoggedIn': () => loggedIn,
+          'linkedAccounts/getPatientId': PATIENT_ID,
+          'linkedAccounts/isPatientIdNotEmpty': true,
+        },
       },
       $router: {
         currentRoute: {
-          path: '/foo',
+          path: 'foo',
+          params: {},
+          name: 'bar',
         },
         go: jest.fn(),
         push: jest.fn(),
@@ -78,26 +101,9 @@ describe('util library', () => {
   });
 
   describe('redirectTo', () => {
-    describe('on server', () => {
+    describe('logged out', () => {
       beforeEach(() => {
-        process.server = true;
-      });
-
-      it('will call redirect with query when query is not null', () => {
-        redirectTo(self, 'a-path', { query: 'aQuery' });
-        expect(self.$store.app.context.redirect).toHaveBeenCalledWith(302, 'a-path', { query: 'aQuery' });
-      });
-
-      it('will call redirect without query when query is null', () => {
-        process.server = true;
-        redirectTo(self, 'a-path');
-        expect(self.$store.app.context.redirect).toHaveBeenCalledWith('a-path');
-      });
-    });
-
-    describe('on client', () => {
-      beforeEach(() => {
-        process.server = false;
+        loggedIn = false;
       });
 
       it('will call push with query if passed', () => {
@@ -111,7 +117,7 @@ describe('util library', () => {
         undefined,
       ]).it('will call push with path only if query value is `%s`', (query) => {
         redirectTo(self, 'a-path', query);
-        expect(self.$router.push).toBeCalledWith('a-path');
+        expect(self.$router.push).toBeCalledWith({ path: 'a-path' });
       });
 
       describe('same page', () => {
@@ -152,6 +158,237 @@ describe('util library', () => {
           const query = { source: 'ios' };
           redirectTo(self, path, query);
           expect(self.$router.push).toBeCalledWith({ path, query });
+        });
+      });
+    });
+
+    describe('logged in', () => {
+      const completePath = INDEX_PATH.replace(INDEX_PATH_PARAM, PATIENT_ID);
+
+      beforeEach(() => {
+        loggedIn = true;
+      });
+      it('will call push with query if passed', () => {
+        const query = { source: 'ios' };
+        redirectTo(self, 'a-path', query);
+        expect(self.$router.push).toBeCalledWith({ path: `${completePath}a-path`, query });
+      });
+
+      each([
+        null,
+        undefined,
+      ]).it('will call push with path only if query value is `%s`', (query) => {
+        redirectTo(self, 'a-path', query);
+        expect(self.$router.push).toBeCalledWith({ path: `${completePath}a-path` });
+      });
+
+      describe('same page', () => {
+        let path;
+        let ts;
+
+        beforeEach(() => {
+          const nowDate = moment();
+          mockdate.set(nowDate);
+          ts = nowDate.unix();
+
+          ({ path } = self.$router.currentRoute);
+        });
+
+        afterEach(() => {
+          mockdate.reset();
+        });
+
+        it('will call push with timespan if query is not passed', () => {
+          redirectTo(self, path);
+          expect(self.$router.push).toBeCalledWith({ path: completePath + path, query: { ts } });
+        });
+
+        it('will call push with passed query and timespan if it is the same as current', () => {
+          const query = { source: 'ios', ts: 12345678 };
+          self.$router.currentRoute.query = query;
+          redirectTo(self, path, query);
+          expect(self.$router.push).toBeCalledWith({
+            path: completePath + path,
+            query: {
+              ...query,
+              ts,
+            },
+          });
+        });
+
+        it('will call push with passed query if not the same as current', () => {
+          const query = { source: 'ios' };
+          redirectTo(self, path, query);
+          expect(self.$router.push).toBeCalledWith({ path: completePath + path, query });
+        });
+      });
+    });
+  });
+
+  describe('redirectByName', () => {
+    describe('logged out', () => {
+      const params = {};
+
+      beforeEach(() => {
+        loggedIn = false;
+      });
+
+      it('will call push with query if passed', () => {
+        const query = { source: 'ios' };
+        redirectByName(self, 'a-name', query);
+        expect(self.$router.push).toBeCalledWith({ name: 'a-name', query, params });
+      });
+
+      each([
+        null,
+        undefined,
+      ]).it('will call push with name only if query value is `%s`', (query) => {
+        redirectByName(self, 'a-name', query);
+        expect(self.$router.push).toBeCalledWith({ name: 'a-name', params });
+      });
+
+      describe('same page', () => {
+        let name;
+        let ts;
+
+        beforeEach(() => {
+          const nowDate = moment();
+          mockdate.set(nowDate);
+          ts = nowDate.unix();
+
+          ({ name } = self.$router.currentRoute);
+        });
+
+        afterEach(() => {
+          mockdate.reset();
+        });
+
+        it('will call push with timespan if query is not passed', () => {
+          redirectByName(self, name);
+          expect(self.$router.push).toBeCalledWith({ name, query: { ts }, params });
+        });
+
+        it('will call push with passed query and timespan if it is the same as current', () => {
+          const query = { source: 'ios', ts: 12345678 };
+          self.$router.currentRoute.query = query;
+          redirectByName(self, name, query);
+          expect(self.$router.push).toBeCalledWith({
+            name,
+            query: {
+              ...query,
+              ts,
+            },
+            params,
+          });
+        });
+
+        it('will call push with passed query if not the same as current', () => {
+          const query = { source: 'ios' };
+          redirectByName(self, name, query);
+          expect(self.$router.push).toBeCalledWith({ name, query, params });
+        });
+      });
+    });
+
+    describe('logged in', () => {
+      beforeEach(() => {
+        loggedIn = true;
+      });
+      it('will call push with query if passed', () => {
+        const query = { source: 'ios' };
+        const params = { patientId: PATIENT_ID };
+        redirectByName(self, 'a-name', query);
+        expect(self.$router.push).toBeCalledWith({ name: 'a-name', query, params });
+      });
+
+      each([
+        null,
+        undefined,
+      ]).it('will call push with path only if query value is `%s`', (query) => {
+        redirectByName(self, 'a-name', query);
+        const params = { patientId: PATIENT_ID };
+        expect(self.$router.push).toBeCalledWith({ name: 'a-name', params });
+      });
+
+      describe('multiple parameters', () => {
+        beforeEach(() => {
+          loggedIn = true;
+          self.$router.currentRoute.params = { pearl: 'jam' };
+        });
+
+        it('will call push with param if passed', () => {
+          const query = { source: 'ios' };
+          redirectByName(self, 'a-name', query);
+          expect(self.$router.push).toBeCalledWith({
+            name: 'a-name',
+            query,
+            params: {
+              ...self.$router.currentRoute.params,
+              patientId: PATIENT_ID,
+            },
+          });
+        });
+      });
+
+      describe('no patient Id', () => {
+        beforeEach(() => {
+          loggedIn = true;
+          self.$store.getters['linkedAccounts/isPatientIdNotEmpty'] = false;
+        });
+        it('will call push with no patientId param', () => {
+          const query = { source: 'ios' };
+          redirectByName(self, 'a-name', query);
+          expect(self.$router.push).toBeCalledWith({ name: 'a-name', query, params: {} });
+        });
+      });
+
+      describe('same page', () => {
+        let ts;
+        let name;
+
+        beforeEach(() => {
+          const nowDate = moment();
+          mockdate.set(nowDate);
+          ts = nowDate.unix();
+
+          ({ name } = self.$router.currentRoute);
+        });
+
+        afterEach(() => {
+          mockdate.reset();
+        });
+
+        it('will call push with timespan if query is not passed', () => {
+          redirectByName(self, name);
+          expect(self.$router.push).toBeCalledWith({
+            name,
+            query: { ts },
+            params: { patientId: PATIENT_ID },
+          });
+        });
+
+        it('will call push with passed query and timespan if it is the same as current', () => {
+          const query = { source: 'ios', ts: 12345678 };
+          self.$router.currentRoute.query = query;
+          redirectByName(self, name, query);
+          expect(self.$router.push).toBeCalledWith({
+            name,
+            query: {
+              ...query,
+              ts,
+            },
+            params: { patientId: PATIENT_ID },
+          });
+        });
+
+        it('will call push with passed query if not the same as current', () => {
+          const query = { source: 'ios' };
+          redirectByName(self, name, query);
+          expect(self.$router.push).toBeCalledWith({
+            name,
+            query,
+            params: { patientId: PATIENT_ID },
+          });
         });
       });
     });
@@ -307,6 +544,32 @@ describe('util library', () => {
 
           expect(retrievedText).toEqual(expectedText);
         });
+    });
+
+    describe('resetPageFocus', () => {
+      it('will call NativeCallbacks.resetPageFocus when isNativeApp is true', () => {
+        resetPageFocus({ state: { device: { isNativeApp: true } } });
+
+        expect(NativeCallbacks.resetPageFocus).toHaveBeenCalled();
+      });
+      it('will not call NativeCallbacks.resetPageFocus when isNativeApp is false', () => {
+        resetPageFocus({ state: { device: { isNativeApp: false } } });
+
+        expect(NativeCallbacks.resetPageFocus).not.toHaveBeenCalled();
+      });
+
+      it('will emit FOCUS_NHSAPP_ROOT on event bus', () => {
+        resetPageFocus({ state: { device: {} } });
+
+        expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
+      });
+
+      it('will reset window scroll position', () => {
+        window.scrollTo = jest.fn();
+        resetPageFocus({ state: { device: {} } });
+
+        expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+      });
     });
   });
 });

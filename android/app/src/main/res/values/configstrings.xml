@@ -16,6 +16,7 @@
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="loginBiometricsError">biometric-login-error</string>
     <string name="myRecordPath">my-record</string>
+    <string name="healthRecordsPath">health-records</string>
     <string name="symptomsPath">symptoms</string>
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>

@@ -116,7 +116,6 @@ import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 const PATIENTDETAILS = 'patientdetails';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Glossary,
     DcrEmisGpRecord,

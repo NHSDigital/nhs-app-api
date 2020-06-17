@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import each from 'jest-each';
 import QuestionDatetime from '@/components/online-consultations/QuestionDateTime';
 import { mount } from '../../helpers';

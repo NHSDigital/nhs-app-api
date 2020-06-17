@@ -1,16 +1,16 @@
 <script>
 import get from 'lodash/fp/get';
 import { DECISION_APPOINTED_REP, DECISION_OPT_IN, DECISION_UNKNOWN } from '@/store/modules/organDonation/mutation-types';
-import { INDEX, ORGAN_DONATION } from '@/lib/routes';
+import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 
 const getDecision = get('state.organDonation.registration.decision');
 const canAmendDecision = decision => ![DECISION_APPOINTED_REP, DECISION_UNKNOWN].includes(decision);
 const redirectIfFalse = ({ redirect, store, value }) => {
   if (!isNativeApp({ store })) {
-    redirect(INDEX.path);
+    redirect(INDEX_PATH);
   } else if (!value) {
-    redirect(ORGAN_DONATION.path);
+    redirect(ORGAN_DONATION_PATH);
   }
 };
 

@@ -1,11 +1,15 @@
-import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyOnlineOnlySearch from '@/pages/nominated-pharmacy/online-only-search';
 import * as dependency from '@/lib/utils';
-import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
+} from '@/router/paths';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
-describe('nominated pharmacy online only search page', () => {
+// Skipping as the online-only-search page currently always redirects to prescriptions.
+describe.skip('nominated pharmacy online only search page', () => {
   let $store;
   let $router;
   let wrapper;
@@ -79,7 +83,7 @@ describe('nominated pharmacy online only search page', () => {
       it('navigates as expected when clicked', async () => {
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
       });
     });
 
@@ -179,7 +183,7 @@ describe('nominated pharmacy online only search page', () => {
         expect(wrapper.vm.showErrorMessage).toBe(false);
         expect($http.getV1PatientOnlinePharmacies).toHaveBeenCalled();
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
       });
     });
   });

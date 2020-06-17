@@ -6,7 +6,7 @@ $logged_height: 12em; //16.5em
 @import './textstyles';
 @import './screensizes';
 @import './fonts';
-@import '/desktopWeb/accessibility';
+@import './desktopWeb/accessibility';
 
 html {
   font: $apple-system-body;

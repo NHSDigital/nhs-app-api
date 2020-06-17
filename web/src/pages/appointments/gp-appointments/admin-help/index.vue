@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" class="nhsuk-grid-row">
+  <div v-if="showTemplate && available !== undefined" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <online-consultations-unavailable v-if="!available"/>
       <message-dialog v-else-if="isError" role="alert">
@@ -15,13 +15,12 @@
       <template v-else>
         <demographics-question v-if="!demographicsQuestionAnswered"
                                :provider="provider"
-                               :provider-name="getProviderName"
+                               :provider-name="providerName"
                                :service-definition-id="serviceDefinitionId">
           <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
           <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
           <p>{{ $t('appointments.admin_help.demographicsQuestion.p3') }}</p>
         </demographics-question>
-
         <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
       </template>
     </div>
@@ -29,30 +28,29 @@
 </template>
 
 <script>
-import get from 'lodash/fp/get';
 import OnlineConsultationsUnavailable from '@/components/online-consultations/OnlineConsultationsUnavailable';
 import Orchestrator from '@/components/online-consultations/Orchestrator';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
-import { noJsParameterName } from '@/lib/noJs';
-import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
-import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import { findByPath, LOGIN } from '@/lib/routes';
-import {
-  ANSWERING_DEMOGRAPHICS_NAME,
-  DEMOGRAPHICS_QUESTION_NAME,
-  DEMOGRAPHICS_QUESTION_OPTION,
-} from '@/lib/online-consultations/constants/nojsInputNames';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { LOGIN_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpAppointmentsAdminHelpPage',
   components: {
     MessageDialog,
     MessageText,
     OnlineConsultationsUnavailable,
     Orchestrator,
     DemographicsQuestion,
+  },
+  data() {
+    return {
+      provider: this.$store.state.serviceJourneyRules.rules.cdssAdmin.provider,
+      serviceDefinitionId: this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition,
+      available: undefined,
+    };
   },
   computed: {
     demographicsQuestionAnswered() {
@@ -64,90 +62,47 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
-    getProviderName() {
+    providerName() {
       return this.$store.state.onlineConsultations.adminProviderName;
     },
   },
-  async asyncData({ store, req }) {
-    const { provider } = store.state.serviceJourneyRules.rules.cdssAdmin;
+  async created() {
+    await this.$store.dispatch('onlineConsultations/serviceDefinitionIsValid', this.provider);
 
-    await store.dispatch('onlineConsultations/serviceDefinitionIsValid', provider);
-
-    if (store.state.onlineConsultations.available === undefined) {
+    if (this.$store.state.onlineConsultations.available === undefined) {
       // unable to get available status due to API error
-      return {};
+      return;
     }
 
-    if (store.state.onlineConsultations.available === false) {
-      store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+    if (this.$store.state.onlineConsultations.available === false) {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
 
-      store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
-      store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.admin_help.unavailable.headerCaption'));
+      EventBus.$emit(UPDATE_HEADER, {
+        headerKey: 'appointments.admin_help.unavailable.header',
+        captionKey: 'appointments.admin_help.unavailable.headerCaption',
+      });
+      EventBus.$emit(UPDATE_TITLE, 'appointments.admin_help.unavailable.header');
 
-      store.dispatch('pageTitle/updatePageTitle', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
-
-      return { available: false };
+      this.available = false;
+      return;
     }
 
-    const requestBody = get('body', req);
-    const handlingNoJS = get(noJsParameterName, requestBody) !== undefined;
-    const { question } = store.state.onlineConsultations;
-    const answeringConsultationQuestion = question !== undefined;
-    const previousClicked = get('direction', requestBody) === 'back';
-    const answeringDemographics = get(ANSWERING_DEMOGRAPHICS_NAME, requestBody) !== undefined;
-    const consentGiven =
-      get(DEMOGRAPHICS_QUESTION_NAME, requestBody) === DEMOGRAPHICS_QUESTION_OPTION;
+    this.$store.dispatch('onlineConsultations/setJourneyInfo', {
+      provider: this.provider,
+      serviceDefinitionId: this.serviceDefinitionId,
+    });
 
-    const journeyInfo = {
-      provider,
-      serviceDefinitionId: store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition,
-      addJavascriptDisabledHeader: false,
-    };
-
-    if (handlingNoJS) {
-      if (answeringDemographics) {
-        store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
-        store.dispatch('onlineConsultations/setDemographicsQuestionAnswered');
-        store.dispatch('onlineConsultations/setAnswer', undefined);
-      } else if (answeringConsultationQuestion) {
-        const answer = getAnswerFromRequestBody(requestBody, question);
-        journeyInfo.addJavascriptDisabledHeader = process.server;
-        store.dispatch('onlineConsultations/setAnswer', answer);
-        store.dispatch('onlineConsultations/setAnswerIsValid', isAnswerValid(answer, question));
-        store.dispatch('onlineConsultations/setValidationError');
-      }
-    }
-
-    store.dispatch('onlineConsultations/setJourneyInfo', journeyInfo);
-
-    const demographicsAnswered = store.state.onlineConsultations.demographicsQuestionAnswered;
-    const { answerIsValid } = store.state.onlineConsultations;
-
-    if (!answeringConsultationQuestion && demographicsAnswered) {
-      await store.dispatch('onlineConsultations/getServiceDefinition', journeyInfo);
-    } else if (answerIsValid || previousClicked) {
-      if (previousClicked) {
-        store.dispatch('onlineConsultations/setPrevious');
-      }
-      await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
-    }
-
-    return {
-      ...journeyInfo,
-      available: true,
-    };
+    this.available = true;
   },
   beforeRouteLeave(to, from, next) {
     let shouldContinue = true;
 
-    if (to.path === LOGIN.path) {
+    if (to.path === LOGIN_PATH) {
       next(shouldContinue);
     }
 
     if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
-      const toPath = findByPath(to.path);
-
-      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', toPath);
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', to.path);
       this.showModal();
 
       shouldContinue = false;

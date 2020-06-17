@@ -95,6 +95,8 @@
 	<string>https://$(DATA_SHARING_URL)</string>
 	<key>FidoLoginErrorPath</key>
 	<string>error=server_data_expired</string>
+	<key>HealthRecordsUrlPath</key>
+	<string>$(HEALTH_RECORDS_URL_PATH)</string>
 	<key>HelpAccountURL</key>
 	<string>https://$(HELP_ACCOUNT_URL)</string>
 	<key>HelpAppointmentsURL</key>

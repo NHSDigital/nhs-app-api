@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
@@ -67,14 +68,17 @@ import PageDivider from '@/components/widgets/PageDivider';
 import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
 import ScrollToAnchor from '@/components/widgets/ScrollToAnchor';
 import SentMessage from '@/components/gp-messages/SentMessage';
-import {
-  GP_MESSAGES, GP_MESSAGES_DELETE, GP_MESSAGES_URGENCY, GP_MESSAGES_VIEW_MESSAGE,
-} from '@/lib/routes';
 import { redirectTo, isBlankString } from '@/lib/utils';
 import srjIf from '@/lib/sjrIf';
+import {
+  GP_MESSAGES_PATH,
+  GP_MESSAGES_DELETE_PATH,
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+  GP_MESSAGES_URGENCY_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesViewDetailsPage',
   components: {
     DesktopGenericBackLink,
     MenuItem,
@@ -86,7 +90,8 @@ export default {
   },
   data() {
     return {
-      messagesPath: GP_MESSAGES.path,
+      recipient: get('$store.state.gpMessages.selectedMessageRecipient.name')(this),
+      messagesPath: GP_MESSAGES_PATH,
     };
   },
   computed: {
@@ -108,30 +113,27 @@ export default {
         : this.$t('gp_messages.view_details.unreadMessage');
     },
   },
-  async fetch({ store, redirect }) {
-    if (isBlankString(store.state.gpMessages.selectedMessageId)) {
-      return redirect(GP_MESSAGES.path);
+  async created() {
+    const { selectedMessageId, selectedMessageDetails } = this.$store.state.gpMessages;
+
+    if (isBlankString(this.$store.state.gpMessages.selectedMessageId)) {
+      redirectTo(this, GP_MESSAGES_PATH);
+      return;
     }
 
-    if (store.state.gpMessages.selectedMessageId === '0'
-      || store.state.gpMessages.selectedMessageDetails !== undefined) {
-      return undefined;
+    if (selectedMessageId !== '0') {
+      if (selectedMessageDetails === undefined) {
+        await this.$store.dispatch('gpMessages/loadMessage', {
+          id: this.$store.state.gpMessages.selectedMessageId,
+          clearApiError: true,
+        });
+      }
+
+      if (this.$store.state.gpMessages.loadedDetails && this.updateStatusEnabled) {
+        this.$store.dispatch('gpMessages/updateReadStatusAsRead');
+      }
     }
 
-    const selectedId = store.state.gpMessages.selectedMessageId;
-
-    return store.dispatch('gpMessages/loadMessage', {
-      id: selectedId,
-      clearApiError: true,
-    });
-  },
-  mounted() {
-    if (this.$store.state.gpMessages.loadedDetails
-      && this.updateStatusEnabled
-      && !isBlankString(this.$store.state.gpMessages.selectedMessageId)
-      && this.$store.state.gpMessages.selectedMessageId !== '0') {
-      this.$store.dispatch('gpMessages/updateReadStatusAsRead');
-    }
     this.$store.dispatch('navigation/clearBackLinkOverride');
   },
   methods: {
@@ -139,12 +141,12 @@ export default {
       redirectTo(this, this.messagesPath);
     },
     deleteClicked() {
-      redirectTo(this, GP_MESSAGES_DELETE.path);
+      redirectTo(this, GP_MESSAGES_DELETE_PATH);
     },
     sendNewMessageClicked() {
-      this.$store.dispatch('navigation/setBackLinkOverride', GP_MESSAGES_VIEW_MESSAGE.path);
+      this.$store.dispatch('navigation/setBackLinkOverride', GP_MESSAGES_VIEW_MESSAGE_PATH);
       this.$store.dispatch('gpMessages/setUrgencyChoice', undefined);
-      redirectTo(this, GP_MESSAGES_URGENCY.path);
+      redirectTo(this, GP_MESSAGES_URGENCY_PATH);
     },
   },
 };

@@ -1,8 +1,7 @@
 <template>
   <div v-if="showTemplate">
     <h2 class="nhsuk-u-margin-bottom-0">{{ $t('myAccount.aboutUsHeading') }}</h2>
-
-    <menu-item-list>
+    <menu-item-list id="about-us-links">
       <menu-item v-for="(link, index) in links"
                  :id="'account-menu-item' + index"
                  :key="index"
@@ -35,7 +34,7 @@ export default {
   },
   data() {
     return {
-      links: accountLinks(this.$env),
+      links: accountLinks(this.$store.$env),
     };
   },
 };

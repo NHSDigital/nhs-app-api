@@ -16,37 +16,33 @@ export default {
     commit(TRACK_ACTION, action);
   },
   trackError(_, error) {
-    if (process.client) {
-      error.messages.forEach((message) => {
-        window.digitalData.error = {
-          type: error.type,
-          description: message,
-          descriptionwithpagename: `${window.digitalData.page.pageInfo.pageName}:${message}`,
-        };
-        this.dispatch('analytics/satelliteTrack', 'track_validation_errors');
-      });
-    }
+    error.messages.forEach((message) => {
+      window.digitalData.error = {
+        type: error.type,
+        description: message,
+        descriptionwithpagename: `${window.digitalData.page.pageInfo.pageName}:${message}`,
+      };
+      this.dispatch('analytics/satelliteTrack', 'track_validation_errors');
+    });
   },
   trackLink({ commit }, navigationInfo) {
     commit(TRACK_LINK, navigationInfo);
-    if (process.client) {
-      window.digitalData.event = {
-        eventInfo: {
-          navigation: navigationInfo,
-        },
-      };
-      this.dispatch('analytics/satelliteTrack', 'click_link');
-    }
+    window.digitalData.event = {
+      eventInfo: {
+        navigation: navigationInfo,
+      },
+    };
+    this.dispatch('analytics/satelliteTrack', 'click_link');
   },
   trackUserProperty(_, { key, value }) {
-    if (process.client && window.digitalData && window.digitalData.user) {
+    if (window.digitalData && window.digitalData.user) {
       window.digitalData.user[key] = value;
     }
   },
   satelliteTrack(_, nameOfCall, objectToTrack = {}) {
     // Put track call in try-catch, as it likely called under error, so no internet connection.
     // eslint-disable-next-line no-underscore-dangle
-    if (process.client && window._satellite) {
+    if (window._satellite) {
       /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
       try {
         // eslint-disable-next-line no-underscore-dangle

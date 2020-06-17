@@ -77,6 +77,7 @@ describe('orderRepeatPrescription', () => {
           push: jest.fn().mockResolvedValue(),
         },
       },
+      dispatch: jest.fn(),
     };
 
     const commit = jest.fn();
@@ -109,6 +110,7 @@ describe('orderRepeatPrescription', () => {
           push: jest.fn().mockResolvedValue(),
         },
       },
+      dispatch: jest.fn(),
     };
 
     const commit = jest.fn();

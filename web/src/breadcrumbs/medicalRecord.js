@@ -1,0 +1,216 @@
+import { INDEX_CRUMB } from '@/breadcrumbs/general';
+import sjrIf from '@/lib/sjrIf';
+import sjrRedirectRules from '@/router/sjrRedirectRules';
+
+import {
+  HEALTH_RECORDS_NAME,
+  ALLERGIESANDREACTIONS_NAME,
+  ACUTE_MEDICINES_NAME,
+  CURRENT_MEDICINES_NAME,
+  CONSULTATIONS_AND_EVENTS_NAME,
+  ENCOUNTERS_NAME,
+  TESTRESULTS_NAME,
+  TESTRESULTSDETAIL_NAME,
+  TESTRESULTID_NAME,
+  IMMUNISATIONS_NAME,
+  DIAGNOSIS_V2_NAME,
+  EXAMINATIONS_V2_NAME,
+  PROCEDURES_V2_NAME,
+  MEDICINES_NAME,
+  MEDICAL_HISTORY_NAME,
+  DOCUMENTS_NAME,
+  DOCUMENT_NAME,
+  DOCUMENT_DETAIL_NAME,
+  RECALLS_NAME,
+  REFERRALS_NAME,
+  HEALTH_CONDITIONS_NAME,
+  DISCONTINUED_MEDICINES_NAME,
+  UPLIFT_GP_MEDICAL_RECORD_NAME,
+  GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
+} from '@/router/names';
+
+const HEALTH_RECORDS_CRUMB = {
+  i18nKey: 'healthRecords',
+  defaultCrumb: [INDEX_CRUMB],
+  name: HEALTH_RECORDS_NAME,
+  nativeDisabled: true,
+};
+
+const GP_MEDICAL_RECORD_CRUMB = {
+  i18nKey: 'myRecord',
+  defaultCrumb: [INDEX_CRUMB],
+  name: HEALTH_RECORDS_NAME,
+  nativeDisabled({ $store }) {
+    const rule = sjrRedirectRules.silverIntegrationsHealthRecordHubCarePlansEnabledRedirect;
+    return sjrIf({
+      $store,
+      journey: rule.journey,
+      disabled: true,
+    });
+  },
+};
+
+const GP_MEDICAL_RECORD_GP_AT_HAND_CRUMB = {
+  i18nKey: 'myRecordGpAtHand',
+  defaultCrumb: [INDEX_CRUMB],
+  name: GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
+};
+
+const UPLIFT_GP_MEDICAL_RECORD_CRUMB = {
+  i18nKey: 'myRecord',
+  defaultCrumb: [INDEX_CRUMB],
+  name: UPLIFT_GP_MEDICAL_RECORD_NAME,
+};
+
+const ALLERGIES_AND_REACTIONS_CRUMB = {
+  i18nKey: 'allergiesAndReactions',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: ALLERGIESANDREACTIONS_NAME,
+};
+
+const ACUTE_MEDICINES_CRUMB = {
+  i18nKey: 'medicines',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: ACUTE_MEDICINES_NAME,
+};
+
+const CURRENT_MEDICINES_CRUMB = {
+  i18nKey: 'current_medicines',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: CURRENT_MEDICINES_NAME,
+};
+
+const DISCONTINUED_MEDICINES_CRUMB = {
+  i18nKey: 'medicines',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: DISCONTINUED_MEDICINES_NAME,
+};
+
+const CONSULTATIONS_AND_EVENTS_CRUMB = {
+  i18nKey: 'consultationsAndEvents',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: CONSULTATIONS_AND_EVENTS_NAME,
+};
+
+const ENCOUNTERS_CRUMB = {
+  i18nKey: 'encounters',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: ENCOUNTERS_NAME,
+};
+
+const TEST_RESULTS_CRUMB = {
+  i18nKey: 'testResults',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: TESTRESULTS_NAME,
+};
+
+const TEST_RESULTS_DETAIL_CRUMB = {
+  i18nKey: 'gpMedicalRecordTestResultsDetail',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: TESTRESULTSDETAIL_NAME,
+};
+
+const TEST_RESULTS_ID_CRUMB = {
+  i18nKey: 'gpMedicalRecordTestResult',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: TESTRESULTID_NAME,
+};
+
+const IMMUNISATIONS_CRUMB = {
+  i18nKey: 'immunisations',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: IMMUNISATIONS_NAME,
+};
+
+const DIAGNOSIS_V2_CRUMB = {
+  i18nKey: 'diagnosis',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: DIAGNOSIS_V2_NAME,
+};
+
+const EXAMINATIONS_V2_CRUMB = {
+  i18nKey: 'examinations',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: EXAMINATIONS_V2_NAME,
+};
+
+const PROCEDURES_V2_CRUMB = {
+  i18nKey: 'procedures',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: PROCEDURES_V2_NAME,
+};
+
+const MEDICINES_CRUMB = {
+  i18nKey: 'medicines',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: MEDICINES_NAME,
+};
+
+const MEDICAL_HISTORY_CRUMB = {
+  i18nKey: 'medicalHistory',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: MEDICAL_HISTORY_NAME,
+};
+
+const DOCUMENTS_CRUMB = {
+  i18nKey: 'myRecordDocuments',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: DOCUMENTS_NAME,
+};
+
+const DOCUMENT_CRUMB = {
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: DOCUMENT_NAME,
+};
+
+const DOCUMENT_DETAIL_CRUMB = {
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: DOCUMENT_DETAIL_NAME,
+};
+
+const RECALLS_CRUMB = {
+  i18nKey: 'recalls',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: RECALLS_NAME,
+};
+
+const REFERRALS_CRUMB = {
+  i18nKey: 'referrals',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: REFERRALS_NAME,
+};
+
+const HEALTH_CONDITIONS_CRUMB = {
+  i18nKey: 'healthConditions',
+  defaultCrumb: [INDEX_CRUMB, GP_MEDICAL_RECORD_CRUMB],
+  name: HEALTH_CONDITIONS_NAME,
+};
+
+
+export default {
+  HEALTH_RECORDS_CRUMB,
+  GP_MEDICAL_RECORD_CRUMB,
+  ALLERGIES_AND_REACTIONS_CRUMB,
+  ACUTE_MEDICINES_CRUMB,
+  CURRENT_MEDICINES_CRUMB,
+  DISCONTINUED_MEDICINES_CRUMB,
+  CONSULTATIONS_AND_EVENTS_CRUMB,
+  ENCOUNTERS_CRUMB,
+  TEST_RESULTS_CRUMB,
+  TEST_RESULTS_DETAIL_CRUMB,
+  TEST_RESULTS_ID_CRUMB,
+  IMMUNISATIONS_CRUMB,
+  DIAGNOSIS_V2_CRUMB,
+  EXAMINATIONS_V2_CRUMB,
+  PROCEDURES_V2_CRUMB,
+  MEDICINES_CRUMB,
+  MEDICAL_HISTORY_CRUMB,
+  DOCUMENTS_CRUMB,
+  DOCUMENT_CRUMB,
+  DOCUMENT_DETAIL_CRUMB,
+  RECALLS_CRUMB,
+  REFERRALS_CRUMB,
+  HEALTH_CONDITIONS_CRUMB,
+  UPLIFT_GP_MEDICAL_RECORD_CRUMB,
+  GP_MEDICAL_RECORD_GP_AT_HAND_CRUMB,
+};

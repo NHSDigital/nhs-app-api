@@ -34,7 +34,7 @@ import WelcomeSection from '@/components/WelcomeSection';
 import sjrIf from '@/lib/sjrIf';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'IndexPage',
   components: {
     BiometricBanner,
     NavigationListMenu,
@@ -89,7 +89,6 @@ export default {
   },
   async mounted() {
     const params = { ignoreError: true };
-
     if (this.gpMessagesEnabled) {
       await this.$store.dispatch('gpMessages/loadMessages', params);
     }

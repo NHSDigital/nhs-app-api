@@ -90,8 +90,6 @@ spec:
           value: "{{ $.Values.cidP5VectorOfTrustEnabled }}"
         - name: HOTJAR_SITE_ID
           value: "{{ $.Values.web.hotjarSiteId }}"
-        - name: NODE_EXTRA_CA_CERTS
-          value: "/usr/local/share/ca-certificates/tls.crt"
         - name: DATA_PREFERENCES_URL
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.deployWiremock)) }}
           value: https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/ndop/createsession
@@ -100,18 +98,10 @@ spec:
         {{- end }}
         - name: VERSION_TAG
           value: "{{ $.Values.web.image_tag }}"
-        - name: GP_LOOKUP_API_RESULTS_LIMIT
-          value: "{{ $.Values.gpLookupApiResultsLimit }}"
-        - name: ORGAN_DONATION_THROTTLING_URL
-          value: "{{ $.Values.web.organDonationThrottlingUrl }}"
         - name: BLOOD_DONATION_URL
           value: "{{ $.Values.web.bloodDonationUrl }}"
         - name: CONTACT_US_URL
           value: "{{ $.Values.contactUsUrl }}"
-        - name: MY_RECORD_DOCUMENTS_ENABLED
-          value: "{{ $.Values.web.myRecordDocumentsEnabled }}"
-        - name: MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS
-          value: "[{{ join ","  $.Values.web.myRecordDocumentsEnabledSuppliers }}]"
         - name: GP_MESSAGES_ENABLED
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
         - name: USER_RESEARCH_ENABLED
@@ -120,6 +110,18 @@ spec:
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
         - name: ADD_APPOINTMENT_TO_CALENDAR_ENABLED
           value: "{{ $.Values.addAppointmentToCalendarEnabled }}"
+        - name: ORGAN_DONATION_INTEGRATION_ENABLED
+          value: "true"
+        - name: HOTJAR_SURVEY_URL
+          value: "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
+        - name: HOTJAR_SURVEY_VISIBLE
+          value: "false"
+        - name: COMMIT_ID
+          value: "dev"
+        - name: CE_MARK_ENABLED
+          value: "false"
+        - name: SESSION_EXPIRING_WARNING_SECONDS
+          value: "60"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates

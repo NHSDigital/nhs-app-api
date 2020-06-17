@@ -1,7 +1,5 @@
 package features.sharedSteps
 
-import config.Config
-
 open class PageUrl {
 
     companion object {
@@ -29,7 +27,7 @@ open class PageUrl {
                         "notifications settings" to "/account/notifications",
                         "terms and conditions" to "/terms-and-conditions",
                         "my record" to "/my-record",
-                        "gp at hand my record" to "/my-record/gp-at-hand",
+                        "gp at hand health record" to "/health-records/gp-at-hand",
                         "gp medical record" to "/health-records/gp-medical-record",
                         "health record hub" to "/health-records",
                         "gp medical record diagnosis" to "/health-records/gp-medical-record/diagnosis",
@@ -56,10 +54,12 @@ open class PageUrl {
                         "messages hub" to "/messages"
                 )
 
-        fun getPage(pageName: String): String {
-            val path = map[pageName.toLowerCase()]!!
+        /*fun getPage(pageName: String): String {
+            return "${Config.instance.url}$${getRelativePagePath(pageName)}"
+        }*/
 
-            return "${Config.instance.url}$path"
+        fun getRelativePagePath(pageName: String): String {
+            return map[pageName.toLowerCase()]!!
         }
     }
 }

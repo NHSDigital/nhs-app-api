@@ -21,7 +21,7 @@
 <script>
 
 import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 
 export default {
   name: 'HomeIcon',
@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     indexPath() {
-      return INDEX.path;
+      return INDEX_PATH;
     },
   },
 };

@@ -36,15 +36,17 @@
 </template>
 
 <script>
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import get from 'lodash/fp/get';
+import {
+  CORONA_SERVICE_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'Shutter',
-  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     GenericButton,
@@ -58,7 +60,7 @@ export default {
   },
   data() {
     return {
-      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
+      coronaServiceUrl: CORONA_SERVICE_URL,
       coronaVirusBodyText: '',
       coronaVirusHeaderText: '',
       coronaVirusLinkLabelText: undefined,
@@ -114,7 +116,7 @@ export default {
       await this.$store.dispatch('linkedAccounts/switchToMainUserProfile');
       await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('serviceJourneyRules/init');
-      redirectTo(this, INDEX.path);
+      redirectTo(this, INDEX_PATH);
     },
   },
 };

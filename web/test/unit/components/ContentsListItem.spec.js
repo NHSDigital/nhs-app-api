@@ -1,13 +1,13 @@
 import ContentsListItem from '@/components/ContentsListItem';
 import { mount } from '../helpers';
 
-const mountContentsListItem = ({ href, routeName }) => mount(ContentsListItem, {
+const mountContentsListItem = ({ route, prop }) => mount(ContentsListItem, {
   $route: {
-    path: routeName,
+    name: route,
   },
   propsData: {
     id: 'id',
-    href,
+    routeName: prop,
   },
 });
 
@@ -19,8 +19,8 @@ describe('Contents List Item', () => {
   describe('when it is the current page', () => {
     beforeEach(() => {
       wrapper = mountContentsListItem({
-        href: '/data-sharing/where-used',
-        routeName: '/data-sharing/where-used',
+        route: '/data-sharing/where-used',
+        prop: '/data-sharing/where-used',
       });
     });
 
@@ -36,8 +36,8 @@ describe('Contents List Item', () => {
   describe('when it is not the current page', () => {
     beforeEach(() => {
       wrapper = mountContentsListItem({
-        href: '/data-sharing/where-used',
-        routeName: '/data-sharing',
+        route: '/data-sharing/where-used',
+        prop: '/data-sharing',
       });
     });
 

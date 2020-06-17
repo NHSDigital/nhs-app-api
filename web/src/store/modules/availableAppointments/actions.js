@@ -28,9 +28,9 @@ export default {
     try {
       await this.app.$http.postV1PatientAppointments(param);
       commit(BOOKING_JOURNEY_START);
-      if (process.client) {
-        this.dispatch('analytics/satelliteTrack', 'appointment_booked');
-      }
+      this.dispatch('' +
+        '' +
+        'analytics/satelliteTrack', 'appointment_booked');
     } catch (error) {
       commit(ADD_ERROR, createError(error));
     }
@@ -70,9 +70,7 @@ export default {
     commit(SET_BOOKING_REASON_NECESSITY, value);
   },
   setSelectedFilters({ commit }, selectedOptions) {
-    if (process.client) {
-      this.dispatch('analytics/trackUserProperty', { key: 'appointmentDateFilterDropdownValue', value: selectedOptions.date });
-    }
+    this.dispatch('analytics/trackUserProperty', { key: 'appointmentDateFilterDropdownValue', value: selectedOptions.date });
     commit(SET_SELECTED_OPTIONS, selectedOptions);
   },
   startBookingJourney({ commit }) {

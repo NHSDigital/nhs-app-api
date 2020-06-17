@@ -1,9 +1,13 @@
-import { createStore, mount } from '../../helpers';
 import NominatedPharmacyChooseType from '@/pages/nominated-pharmacy/choose-type';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { NOMINATED_PHARMACY_DSP_INTERRUPT, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  NOMINATED_PHARMACY_INTERRUPT_PATH,
+} from '@/router/paths';
 import * as dependency from '@/lib/utils';
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy choose type page', () => {
   let $router;
@@ -13,6 +17,7 @@ describe('nominated pharmacy choose type page', () => {
   let continueButton;
   let backLink;
   let errorComponent;
+  let getters;
 
   const createState = () => ({
     device: {
@@ -24,11 +29,12 @@ describe('nominated pharmacy choose type page', () => {
   });
 
   beforeEach(() => {
+    getters = { 'nominatedPharmacy/nominatedPharmacyEnabled': true };
     state = createState();
-    $store = createStore({ state });
+    $store = createStore({ state, getters });
+    dependency.redirectTo = jest.fn();
     wrapper = mount(NominatedPharmacyChooseType, { $router, $store });
     continueButton = wrapper.find('#continue-button');
-    dependency.redirectTo = jest.fn();
   });
 
   it('will have radio buttons', () => {
@@ -52,7 +58,7 @@ describe('nominated pharmacy choose type page', () => {
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.HIGH_STREET_PHARMACY);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_PATH);
     });
 
     it('will redirect to the dsp interrupt page', () => {
@@ -63,7 +69,7 @@ describe('nominated pharmacy choose type page', () => {
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.ONLINE_PHARMACY);
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm,
-        NOMINATED_PHARMACY_DSP_INTERRUPT.path);
+        NOMINATED_PHARMACY_DSP_INTERRUPT_PATH);
     });
 
     it('will not redirect to next page in flow when no radio button is selected', () => {
@@ -94,7 +100,7 @@ describe('nominated pharmacy choose type page', () => {
     it('will go to the interrupt page when clicked', () => {
       backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT_PATH);
     });
   });
 });

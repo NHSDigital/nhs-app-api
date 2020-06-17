@@ -1,5 +1,5 @@
 import EnsureDecisionMixin, { EnsureCanSubmit, EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
-import { INDEX, ORGAN_DONATION } from '@/lib/routes';
+import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
 import {
   initialState,
   DECISION_APPOINTED_REP,
@@ -44,7 +44,7 @@ describe('ensure decision mixin', () => {
       });
 
       it('will call redirect with the INDEX path', () => {
-        expect(redirect).toHaveBeenCalledWith(INDEX.path);
+        expect(redirect).toHaveBeenCalledWith(INDEX_PATH);
       });
     });
 
@@ -55,7 +55,7 @@ describe('ensure decision mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -65,7 +65,7 @@ describe('ensure decision mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -111,7 +111,7 @@ describe('ensure opt in decision mixin', () => {
       });
 
       it('will call redirect with the INDEX path', () => {
-        expect(redirect).toHaveBeenCalledWith(INDEX.path);
+        expect(redirect).toHaveBeenCalledWith(INDEX_PATH);
       });
     });
 
@@ -122,7 +122,7 @@ describe('ensure opt in decision mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -132,7 +132,7 @@ describe('ensure opt in decision mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -142,7 +142,7 @@ describe('ensure opt in decision mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -178,7 +178,7 @@ describe('ensure can submit mixin', () => {
       });
 
       it('will call redirect with the INDEX path', () => {
-        expect(redirect).toHaveBeenCalledWith(INDEX.path);
+        expect(redirect).toHaveBeenCalledWith(INDEX_PATH);
       });
     });
 
@@ -189,7 +189,7 @@ describe('ensure can submit mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
       });
 
@@ -201,7 +201,7 @@ describe('ensure can submit mixin', () => {
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION_PATH);
         });
 
         describe('is withdrawing', () => {

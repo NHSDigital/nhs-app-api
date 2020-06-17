@@ -28,7 +28,7 @@ export default {
   name: 'WebFooter',
   data() {
     return {
-      links: footerLinks(this.$env),
+      links: footerLinks(this.$store.$env),
     };
   },
 

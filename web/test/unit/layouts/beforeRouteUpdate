@@ -1,0 +1,10 @@
+beforeRouteUpdate
+ - will emit update_header passing to.meta
+ - will call onUpdateTitle (stub method) passing to.meta
+ - will invoke next()
+
+beforeMount
+ - will register UPDATE_TITLE passing this.onUpdateTitle
+
+beforeDestroy
+ - will deregister UPDATE_TITLE passing this.onUpdateTitle

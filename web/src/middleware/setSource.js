@@ -1,8 +1,10 @@
 import Sources from '@/lib/sources';
 
 export default function (context) {
-  const userAgent = process.server ? context.req.headers['user-agent'] : navigator.userAgent;
-  let { source } = context.route.query;
+  const { to, store, next } = context;
+
+  const { userAgent } = navigator;
+  let { source } = to.query;
 
   if (/nhsapp-android/i.test(userAgent)) {
     source = Sources.Android;
@@ -11,7 +13,9 @@ export default function (context) {
   }
 
   if (Sources.isNative(source)) {
-    context.store.dispatch('device/updateIsNativeApp', true);
-    context.store.dispatch('device/setSourceDevice', source);
+    store.dispatch('device/updateIsNativeApp', true);
+    store.dispatch('device/setSourceDevice', source);
   }
+
+  return next();
 }

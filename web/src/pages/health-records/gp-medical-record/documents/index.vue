@@ -40,8 +40,12 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItemList from '@/components/MenuItemList';
-import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
+import { DOCUMENT_NAME } from '@/router/names';
 import { isBlankString, isNumber, redirectTo, readableBytes, datePart } from '@/lib/utils';
+import {
+  CLINICAL_ABBREVIATIONS_URL,
+} from '@/router/externalLinks';
 
 function mapDocumentInfo(document) {
   const {
@@ -76,7 +80,6 @@ function mapDocumentInfo(document) {
 }
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     DcrErrorNoAccessGpRecord,
@@ -86,32 +89,33 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
-      backPath: GP_MEDICAL_RECORD.path,
+      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      documents: null,
     };
   },
   computed: {
     showError() {
-      return (this.documents || {}).hasErrored ||
-        (this.documents || {}).data.length === 0 ||
-        !(this.documents || {}).hasAccess;
+      return this.documents && (
+        this.documents.hasErrored ||
+        this.documents.data.length === 0 ||
+        !this.documents.hasAccess);
     },
     orderedDocuments() {
-      return orderBy([document => this.getEffectiveDate(document.effectiveDate, '')], ['desc'])(this.documents.data);
+      return orderBy([document => this.getEffectiveDate(document.effectiveDate, '')], ['desc'])((this.documents || {}).data);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (!['EMIS', 'TPP'].includes(store.state.myRecord.record.supplier)) {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
-    }
-    if (!store.state.myRecord.record.documents) {
-      await store.dispatch('myRecord/load');
+  async mounted() {
+    if (!['EMIS', 'TPP'].includes(this.$store.state.myRecord.record.supplier)) {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
 
-    return {
-      documents: store.state.myRecord.record.documents,
-    };
+    if (!this.$store.state.myRecord.record.documents) {
+      await this.$store.dispatch('myRecord/load');
+    }
+
+    this.documents = this.$store.state.myRecord.record.documents;
   },
   methods: {
     backButtonClicked() {
@@ -150,7 +154,7 @@ export default {
     documentClicked(document) {
       this.$store.dispatch('documents/setSelectedDocumentInfo', mapDocumentInfo(document));
       this.$router.push({
-        name: DOCUMENT.name,
+        name: DOCUMENT_NAME,
         params: { id: document.documentIdentifier },
       });
     },

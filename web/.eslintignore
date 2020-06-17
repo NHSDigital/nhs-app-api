@@ -6,3 +6,4 @@
 /lint/node_modules/
 /build/
 /src/static/js/v*/nhsapp.js
+/public/js/v*/nhsapp.js

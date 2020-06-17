@@ -1,4 +1,5 @@
 import AreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
+import { ORGAN_DONATION_ALREADY_REGISTERED_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 describe('already registered link', () => {
@@ -17,11 +18,10 @@ describe('already registered link', () => {
   });
 
   describe('link', () => {
-    const URL_EXTERNAL = 'www.foo.com';
     let link;
 
     beforeEach(() => {
-      $store = createStore({ $env: { ORGAN_DONATION_ALREADY_REGISTERED_URL: URL_EXTERNAL } });
+      $store = createStore();
       wrapper = mountAlreadyRegisteredLink();
       link = wrapper.find('a');
     });
@@ -32,7 +32,7 @@ describe('already registered link', () => {
 
     it('will have the external already registered link, with target set', () => {
       expect(link.attributes().target).toEqual('_blank');
-      expect(link.attributes().href).toEqual(URL_EXTERNAL);
+      expect(link.attributes().href).toEqual(ORGAN_DONATION_ALREADY_REGISTERED_URL);
     });
   });
 });

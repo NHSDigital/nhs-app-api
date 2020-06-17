@@ -1,6 +1,6 @@
 import Index from '@/pages/index';
-import { createStore, mount, createRouter, create$T } from '../helpers';
 import each from 'jest-each';
+import { createStore, mount, createRouter, create$T } from '../helpers';
 
 describe('index', () => {
   let wrapper;

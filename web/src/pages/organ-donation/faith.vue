@@ -50,12 +50,11 @@ import MessageText from '@/components/widgets/MessageText';
 import RadioGroup from '@/components/RadioGroup';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     BackButton,
     CollapsibleDialog,
@@ -88,15 +87,15 @@ export default {
       return this.hasTriedToContinue && !this.hasMadeDecision;
     },
   },
-  asyncData({ store }) {
+  beforeMount() {
     if (
-      store.state.organDonation.isAmending &&
+      this.$store.state.organDonation.isAmending &&
       isDefault({
         path: 'registration.faithDeclaration',
-        state: store.state.organDonation,
+        state: this.$store.state.organDonation,
       })
     ) {
-      store.dispatch('organDonation/cloneFromOriginal', 'faithDeclaration');
+      this.$store.dispatch('organDonation/cloneFromOriginal', 'faithDeclaration');
     }
   },
   methods: {
@@ -108,7 +107,7 @@ export default {
       if (this.showError) {
         window.scrollTo(0, 0);
       } else {
-        redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+        redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
       }
     },
   },

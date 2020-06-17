@@ -1,9 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as dependency from '@/lib/utils';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount, create$T } from '../../helpers';
-import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
 
 const $tMock = create$T();
 const $style = {};
@@ -49,6 +49,7 @@ describe('search pharmacies', () => {
       state,
       getters: {
         'nominatedPharmacy/previousPage': '/nominated-pharmacy',
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
       },
       dispatch: jest.fn(() => Promise.resolve()),
     });
@@ -215,7 +216,7 @@ describe('search pharmacies', () => {
 
       // assert
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
     });
   });
 
@@ -244,7 +245,7 @@ describe('search pharmacies', () => {
       backLink.trigger('click');
 
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
+        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH);
     });
   });
 });

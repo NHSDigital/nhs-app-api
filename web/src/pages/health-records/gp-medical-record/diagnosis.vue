@@ -32,11 +32,10 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     DcrErrorNoAccessGpRecord,
@@ -46,24 +45,26 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      markup: null,
+      diagnosis: null,
     };
   },
   computed: {
     showError() {
-      return (!this.markup);
+      return (this.diagnosis && !this.markup);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (store.state.myRecord.record.supplier !== 'VISION') {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (this.$store.state.myRecord.record.supplier !== 'VISION') {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    await store.dispatch('myRecord/loadDiagnosis');
-    return {
-      markup: get('markup', store.state.myRecord.diagnosis),
-      diagnosis: get('diagnosis', store.state.myRecord.record) || {},
-    };
+
+    await this.$store.dispatch('myRecord/loadDiagnosis');
+
+    this.markup = get('markup', this.$store.state.myRecord.diagnosis);
+    this.diagnosis = get('diagnosis', this.$store.state.myRecord.record) || {};
   },
   methods: {
     onBackButtonClicked() {

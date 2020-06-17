@@ -1,6 +1,6 @@
-import { mount } from '../../helpers';
 import Modal from '@/components/modal/Modal';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
+import { mount } from '../../helpers';
 
 describe('Modal.vue', () => {
   const createModal = (

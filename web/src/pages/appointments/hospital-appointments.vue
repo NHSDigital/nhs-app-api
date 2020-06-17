@@ -1,44 +1,41 @@
 <template>
-  <div class="nhsuk-grid-row">
+  <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="showTemplate" data-purpose="">
-        <menu-item-list>
-          <third-party-jump-off-button v-if="showManageYourReferral"
-                                       id="btn_manage_your_referral"
-                                       provider-id="ers"
-                                       :provider-configuration="thirdPartyProvider.ers.
-                                         manageYourReferral" />
-          <third-party-jump-off-button v-if="showPkbAppointments"
-                                       id="btn_pkb_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointments" />
-          <third-party-jump-off-button v-if="showPkbCieAppointments"
-                                       id="btn_pkb_cie_appointments"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb.
-                                         appointmentsCie" />
-          <third-party-jump-off-button v-if="showGncrAppointments"
-                                       id="btn_gncr_appointments"
-                                       provider-id="gncr"
-                                       :provider-configuration="thirdPartyProvider.gncr.
-                                         appointments" />
-        </menu-item-list>
-      </div>
+      <menu-item-list>
+        <third-party-jump-off-button v-if="showManageYourReferral"
+                                     id="btn_manage_your_referral"
+                                     provider-id="ers"
+                                     :provider-configuration="thirdPartyProvider.ers.
+                                       manageYourReferral" />
+        <third-party-jump-off-button v-if="showPkbAppointments"
+                                     id="btn_pkb_appointments"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider.pkb.
+                                       appointments" />
+        <third-party-jump-off-button v-if="showPkbCieAppointments"
+                                     id="btn_pkb_cie_appointments"
+                                     provider-id="pkb"
+                                     :provider-configuration="thirdPartyProvider.pkb.
+                                       appointmentsCie" />
+        <third-party-jump-off-button v-if="showGncrAppointments"
+                                     id="btn_gncr_appointments"
+                                     provider-id="gncr"
+                                     :provider-configuration="thirdPartyProvider.gncr.
+                                       appointments" />
+      </menu-item-list>
     </div>
   </div>
 </template>
 
 <script>
-
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
-  name: 'HospitalAppointments',
-  layout: 'nhsuk-layout',
+  name: 'HospitalAppointmentsPage',
   components: {
     MenuItemList,
     ThirdPartyJumpOffButton,

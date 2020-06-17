@@ -1,6 +1,6 @@
-import { NOMINATED_PHARMACY_CONFIRM } from '@/lib/routes';
+import { NOMINATED_PHARMACY_CONFIRM_PATH } from '@/router/paths';
 
-const PATH = NOMINATED_PHARMACY_CONFIRM.path;
+const PATH = NOMINATED_PHARMACY_CONFIRM_PATH;
 
 export default {
   400: [

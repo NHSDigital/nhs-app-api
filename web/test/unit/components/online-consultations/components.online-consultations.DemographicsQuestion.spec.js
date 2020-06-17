@@ -1,16 +1,18 @@
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
 import GenericButton from '@/components/widgets/GenericButton';
-import { mount, shallowMount, createStore, createScrollTo, createRouter } from '../../helpers';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
 import each from 'jest-each';
+import {
+  ONLINE_CONSULTATIONS_PRIVACY_URL,
+} from '@/router/externalLinks';
+import { mount, shallowMount, createStore, createScrollTo, createRouter } from '../../helpers';
 
 jest.mock('@/services/event-bus');
 jest.mock('@/services/native-app');
 
 const defaultStore = () => (
   createStore({
-    $env: { ONLINE_CONSULTATIONS_PRIVACY_URL: 'www.google.co.uk' },
     state: {
       onlineConsultations: {},
       device: { isNativeApp: false },
@@ -129,7 +131,7 @@ describe('demographics question', () => {
       // Assert
       expect(warning.find('p').text()).toContain('translate_onlineConsultations.warning.warningText');
       expect(warningHelpLink.text()).toEqual('translate_onlineConsultations.warning.warningLink');
-      expect(warningHelpLink.attributes().href).toEqual('www.google.co.uk');
+      expect(warningHelpLink.attributes().href).toEqual(ONLINE_CONSULTATIONS_PRIVACY_URL);
     });
     it('have a slot for question text, and place in the Question component', () => {
       // Arrange
@@ -156,19 +158,6 @@ describe('demographics question', () => {
       // Assert
       expect(multipleChoice.name).toEqual('NHSAPP_DEMOGRAPHICS_CONSENT');
       expect(multipleChoice.required).toEqual(false);
-    });
-    it('will wrap the question multiple choice with a nojsform with a hidden input to identify consent question on postback', () => {
-      // Arrange
-      const component = mountComponent();
-
-      // Act
-      const noJsForm = component.find('no-js-form-stub');
-      const hiddenInput = noJsForm.find('input[type=hidden]').element;
-
-      // Assert
-      expect(noJsForm.find('generic-checkbox-stub')).toBeDefined();
-      expect(hiddenInput.name).toEqual('ANSWERING_CONSENT_QUESTION');
-      expect(hiddenInput.value).toEqual('true');
     });
     it('will have a continue button with demographicsContinueClicked method as click handler', () => {
       // Arrange

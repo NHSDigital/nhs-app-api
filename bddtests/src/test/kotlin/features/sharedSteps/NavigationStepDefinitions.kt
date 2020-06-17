@@ -21,7 +21,12 @@ class NavigationStepDefinitions {
 
     @When("^I navigate to the (.*) page$")
     fun iNavigateToThePage(pageName: String) {
-        val url = PageUrl.getPage(pageName)
+        val url = PageUrl.getRelativePagePath(pageName)
         browser.browseTo(url)
+    }
+
+    @When("^I browse directly to '(.*)' in the NHS App$")
+    fun iBrowseDirectlyToThePage(path: String) {
+        browser.browseViaHttpGet(path)
     }
 }

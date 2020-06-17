@@ -19,7 +19,8 @@ import {
   STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_VIEW_DECISION, ORGAN_DONATION_WITHDRAWN } from '@/lib/routes';
+import { ORGAN_DONATION_VIEW_DECISION_PATH, ORGAN_DONATION_WITHDRAWN_PATH } from '@/router/paths';
+import * as dependency from '@/lib/utils';
 import { createRouter } from '../../../helpers';
 
 const createHttp = ({
@@ -51,6 +52,7 @@ describe('organ donation actions', () => {
   let referenceData;
 
   beforeEach(() => {
+    dependency.redirectTo = jest.fn();
     result = 'result';
     referenceData = 'reference-data';
     commit = jest.fn();
@@ -137,7 +139,8 @@ describe('organ donation actions', () => {
     });
 
     it('will push organ donation withdrawn to the router', () => {
-      expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_WITHDRAWN.path);
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(actions.app, ORGAN_DONATION_WITHDRAWN_PATH);
     });
   });
 
@@ -341,7 +344,8 @@ describe('organ donation actions', () => {
       });
 
       it('will push organ donation view decision to the router', () => {
-        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(actions.app, ORGAN_DONATION_VIEW_DECISION_PATH);
       });
     });
 
@@ -376,7 +380,8 @@ describe('organ donation actions', () => {
       });
 
       it('will push organ donation view decision to the router', () => {
-        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(actions.app, ORGAN_DONATION_VIEW_DECISION_PATH);
       });
     });
 
@@ -409,7 +414,8 @@ describe('organ donation actions', () => {
       });
 
       it('will push organ donation view decision to the router', () => {
-        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(actions.app, ORGAN_DONATION_VIEW_DECISION_PATH);
       });
     });
   });

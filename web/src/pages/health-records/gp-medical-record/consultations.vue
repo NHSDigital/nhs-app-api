@@ -78,11 +78,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DesktopGenericBackLink,
@@ -93,31 +92,35 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
       resultsCollapsed: true,
+      consultations: null,
     };
   },
   computed: {
     orderedConsultations() {
-      return orderBy([consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc'])(this.consultations.data);
+      return orderBy([consultation => this.getEffectiveDate(consultation.effectiveDate, '')],
+        ['desc'])((this.consultations || {}).data);
+    // (this.consultations.data);
     },
     showError() {
-      return this.consultations.hasErrored
+      return this.consultations &&
+        this.consultations.data &&
+        (this.consultations.hasErrored
              || this.consultations.data.length === 0
-             || !this.consultations.hasAccess;
+             || !this.consultations.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (store.state.myRecord.record.supplier !== 'EMIS') {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (this.$store.state.myRecord.record.supplier !== 'EMIS') {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.consultations) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.consultations) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      consultations: store.state.myRecord.record.consultations,
-    };
+    this.consultations = this.$store.state.myRecord.record.consultations;
   },
   methods: {
     backButtonClicked() {

@@ -1,19 +1,19 @@
-import { isAnonymous,
-  APPOINTMENT_ADMIN_HELP,
-  APPOINTMENT_GP_ADVICE } from '@/lib/routes';
+import { isAnonymous } from '@/router';
+import { APPOINTMENT_ADMIN_HELP_NAME, APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
 
-export default async ({ route, store }) => {
+export default async ({ to, store, next }) => {
   const isLoggedIn = store.getters['session/isLoggedIn'];
-  if (!isAnonymous(route.name)
+
+  if (
+    !isAnonymous(to)
     && isLoggedIn()
     && store.state.serviceJourneyRules.isLoaded
-    && (route.name === APPOINTMENT_ADMIN_HELP.name
-        || route.name === APPOINTMENT_GP_ADVICE.name)) {
-    await store.dispatch('onlineConsultations/setProviderNames',
-      { adminProviderName: store.state.serviceJourneyRules.rules.cdssAdmin.provider,
-        adviceProviderName: store.state.serviceJourneyRules.rules.cdssAdvice.provider,
-      });
+    && (to.name === APPOINTMENT_ADMIN_HELP_NAME || to.name === APPOINTMENT_GP_ADVICE_NAME)) {
+    await store.dispatch('onlineConsultations/setProviderNames', {
+      adminProviderName: store.state.serviceJourneyRules.rules.cdssAdmin.provider,
+      adviceProviderName: store.state.serviceJourneyRules.rules.cdssAdvice.provider,
+    });
   }
 
-  return Promise.resolve();
+  return next();
 };

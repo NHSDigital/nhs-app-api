@@ -7,26 +7,26 @@ export default {
   [CONTINUE](state) {
     state.seen = true;
     setCookie({
-      cookies: this.app.$cookies,
+      cookies: this.$cookies,
       key: 'SkipPreRegistrationPage',
       value: true,
       options: {
         maxAge: moment.duration(5, 'y').asSeconds(),
-        secure: this.app.$env.SECURE_COOKIES,
+        secure: this.$env.SECURE_COOKIES,
       },
     });
   },
   [SYNC](state) {
-    const cookieState = !!this.app.$cookies.get('SkipPreRegistrationPage');
+    const cookieState = !!this.$cookies.get('SkipPreRegistrationPage');
     state.seen = state.seen || !!cookieState;
     if (state.seen && !cookieState) {
       setCookie({
-        cookies: this.app.$cookies,
+        cookies: this.$cookies,
         key: 'SkipPreRegistrationPage',
         value: state.seen,
         options: {
           maxAge: moment.duration(5, 'y').asSeconds(),
-          secure: this.app.$env.SECURE_COOKIES,
+          secure: this.$env.SECURE_COOKIES,
         },
       });
     }

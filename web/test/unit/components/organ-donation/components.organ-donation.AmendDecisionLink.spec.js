@@ -1,4 +1,5 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
+import * as dependency from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
 
 describe('amend decision link', () => {
@@ -9,6 +10,7 @@ describe('amend decision link', () => {
   const mountAmendDecision = () => mount(AmendDecisionLink, { $store, $style });
 
   beforeEach(() => {
+    dependency.redirectTo = jest.fn();
     $style = {
       description: 'desc',
     };

@@ -1,5 +1,5 @@
 import actions from '@/store/modules/pageLeaveWarning/actions';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import {
   SHOULD_BYPASS_ROUTE_GUARD,
   SHOW_LEAVING_PAGE_WARNING,
@@ -9,6 +9,7 @@ import {
 import NativeCallbacks from '@/services/native-app';
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
 import { redirectTo } from '@/lib/utils';
+import { createRouter } from '../../../helpers';
 
 jest.mock('@/lib/utils', () =>
 
@@ -27,15 +28,16 @@ describe('actions', () => {
       commit: jest.fn(),
       state: {
         showLeavingWarning: false,
-        attemptedRedirectRoute: INDEX,
+        attemptedRedirectRoute: INDEX_PATH,
       },
     };
   });
 
   describe('setAttemptedRedirectRoute', () => {
     it('will call commit for the HIDE_EXPIRY_MESSAGE, passing through the route', () => {
-      actions.setAttemptedRedirectRoute(mutation, INDEX);
-      expect(mutation.commit).toHaveBeenCalledWith(SET_ATTEMPTED_REDIRECT_ROUTE, INDEX);
+      const route = { path: INDEX_PATH };
+      actions.setAttemptedRedirectRoute(mutation, route);
+      expect(mutation.commit).toHaveBeenCalledWith(SET_ATTEMPTED_REDIRECT_ROUTE, route);
     });
   });
 
@@ -67,7 +69,6 @@ describe('actions', () => {
 
       beforeEach(() => {
         window.nativeApp = true;
-        process.client = true;
         spy = jest.spyOn(NativeCallbacks, 'displayPageLeaveWarning').mockImplementation(() => true);
         actions.showLeavingModal(mutation);
       });
@@ -89,7 +90,6 @@ describe('actions', () => {
 
       beforeEach(() => {
         window.nativeApp = false;
-        process.client = true;
         app = {
           dispatch: jest.fn(),
           showLeavingModal: actions.showLeavingModal,
@@ -169,17 +169,19 @@ describe('actions', () => {
   });
 
   describe('leavePage', () => {
-    let store;
+    let $store;
+    const $router = createRouter('online-consultations');
+
     beforeEach(() => {
       redirectTo.mockClear();
       window.nativeApp = true;
-      store =
-      {
+      $store = {
         app: {
+          $router,
           $env: jest.fn(),
         },
       };
-      actions.leavePage.call(store, mutation);
+      actions.leavePage.call($store, mutation);
     });
     it('will call commit for the RESET', () => {
       expect(mutation.commit).toHaveBeenCalledWith(RESET);
@@ -190,7 +192,7 @@ describe('actions', () => {
     });
 
     it('will call redirect to the INDEX page', () => {
-      expect(redirectTo).toHaveBeenCalledWith(store, INDEX.path);
+      expect(redirectTo).toHaveBeenCalledWith({ $router, $store }, INDEX_PATH);
     });
   });
 });

@@ -48,4 +48,9 @@ class MedicalRecordHubPage : HybridPageObject() {
                 helpfulName = pageTitle
         )
     }
+
+    val gpMedicalRecordPanel = HybridPageElement(
+            webDesktopLocator = "//*[@id='btn_gp_medical_record']",
+            page = this
+    )
 }

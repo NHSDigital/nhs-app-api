@@ -1,5 +1,5 @@
-import { mount } from '../../helpers';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import { mount } from '../../helpers';
 
 
 describe('AnalyticsTrackedTag.vue', () => {

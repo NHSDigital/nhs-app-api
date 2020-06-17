@@ -45,7 +45,7 @@ import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
-import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_PATH } from '@/router/paths';
 import { redirectTo, navigateBack } from '@/lib/utils';
 
 export default {
@@ -60,8 +60,8 @@ export default {
     return {
       nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
-      currentPage: NOMINATED_PHARMACY.path,
-      prescriptionsPath: PRESCRIPTIONS.path,
+      currentPage: NOMINATED_PHARMACY_PATH,
+      prescriptionsPath: PRESCRIPTIONS_PATH,
     };
   },
   computed: {

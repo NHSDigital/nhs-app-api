@@ -27,30 +27,33 @@ import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { TESTRESULTS } from '@/lib/routes';
+import { TESTRESULTS_PATH } from '@/router/paths';
+
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DcrErrorNoAccessGpRecord,
     DesktopGenericBackLink,
     Glossary,
   },
+  data() {
+    return {
+      result: null,
+    };
+  },
   computed: {
     getBackPath() {
-      return TESTRESULTS.path;
+      return TESTRESULTS_PATH;
     },
   },
-  async asyncData({ route, store }) {
-    await store.dispatch(
+  async mounted() {
+    await this.$store.dispatch(
       'myRecord/loadDetailedTestResult',
-      route.params.testResultId,
+      this.$route.params.testResultId,
     );
-    return {
-      result: store.state.myRecord.detailedTestResult.data,
-    };
+    this.result = this.$store.state.myRecord.detailedTestResult.data;
   },
   methods: {
     backButtonClicked() {

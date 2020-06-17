@@ -28,7 +28,7 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
-import { LOGOUT } from '@/lib/routes';
+import { LOGOUT_PATH } from '@/router/paths';
 
 export default {
   name: 'SessionExpiryModal',
@@ -44,7 +44,7 @@ export default {
     },
 
     logoutPath() {
-      return LOGOUT.path;
+      return LOGOUT_PATH;
     },
   },
   methods: {

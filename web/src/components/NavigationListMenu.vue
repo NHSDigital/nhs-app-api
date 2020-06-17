@@ -70,8 +70,17 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, GP_MEDICAL_RECORD, PRESCRIPTIONS, SYMPTOMS,
-  LINKED_PROFILES, INDEX, MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
+import { ORGAN_DONATION_URL } from '@/router/externalLinks';
+import {
+  APPOINTMENTS_PATH,
+  MESSAGES_PATH,
+  GP_MEDICAL_RECORD_PATH,
+  PRESCRIPTIONS_PATH,
+  SYMPTOMS_PATH,
+  LINKED_PROFILES_PATH,
+  INDEX_PATH,
+  HEALTH_INFORMATION_UPDATES_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -97,13 +106,13 @@ export default {
   },
   data() {
     return {
-      organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
-      symptomsPath: SYMPTOMS.path,
-      appointmentsPath: APPOINTMENTS.path,
-      prescriptionsPath: PRESCRIPTIONS.path,
-      gpMedicalRecordPath: GP_MEDICAL_RECORD.path,
-      linkedProfilesPath: LINKED_PROFILES.path,
-      indexPath: INDEX.path,
+      organDonationUrl: ORGAN_DONATION_URL,
+      symptomsPath: SYMPTOMS_PATH,
+      appointmentsPath: APPOINTMENTS_PATH,
+      prescriptionsPath: PRESCRIPTIONS_PATH,
+      gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
+      linkedProfilesPath: LINKED_PROFILES_PATH,
+      indexPath: INDEX_PATH,
     };
   },
   computed: {
@@ -114,11 +123,12 @@ export default {
       return this.$store.getters['session/isProofLevel9'];
     },
     messagesItemText() {
-      return (this.linkToAppMessages) ? this.$t('navigationMenuList.appMessages') :
-        this.$t('navigationMenuList.messages');
+      return (this.linkToAppMessages)
+        ? this.$t('navigationMenuList.appMessages')
+        : this.$t('navigationMenuList.messages');
     },
     messagesPath() {
-      return (this.linkToAppMessages) ? HEALTH_INFORMATION_UPDATES.path : MESSAGES.path;
+      return (this.linkToAppMessages) ? HEALTH_INFORMATION_UPDATES_PATH : MESSAGES_PATH;
     },
     ariaLabel() {
       return (this.hasMessageIndicator) ?
@@ -128,12 +138,11 @@ export default {
     },
   },
   methods: {
-    navigateToMessages(event) {
+    navigateToMessages() {
       if (this.linkToAppMessages) {
         this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
       }
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
+      redirectTo(this, this.messagesPath);
     },
   },
 };

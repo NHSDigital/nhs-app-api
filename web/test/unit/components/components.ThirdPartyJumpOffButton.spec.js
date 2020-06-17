@@ -62,6 +62,10 @@ describe('ThirdParty Jumpoff Button', () => {
           .toEqual(EXPECTED_URI);
       });
 
+      it('will begin with a / to enable proper navigation on desktop', () => {
+        expect(link.attributes().href.startsWith('/')).toBe(true);
+      });
+
       it('will have no target set', () => {
         expect(link.attributes().target)
           .toEqual(undefined);

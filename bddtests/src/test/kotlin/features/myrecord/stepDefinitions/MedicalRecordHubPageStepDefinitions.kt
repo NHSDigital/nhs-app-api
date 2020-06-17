@@ -75,6 +75,11 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getGpRecordHeader("Your GP medical record").assertSingleElementPresent()
     }
 
+    @When("^I click on the Gp medical record link$")
+    fun clickGpMedicalRecordLink() {
+        medicalRecordHubPage.gpMedicalRecordPanel.click()
+    }
+
     private fun setupPatient(configuration: SJRJourneyType, gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(

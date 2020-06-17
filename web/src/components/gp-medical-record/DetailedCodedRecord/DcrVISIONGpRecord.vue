@@ -61,13 +61,13 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import {
-  TESTRESULTSDETAIL,
-  IMMUNISATIONS,
-  HEALTH_CONDITIONS,
-  DIAGNOSIS_V2,
-  EXAMINATIONS_V2,
-  PROCEDURES_V2,
-} from '@/lib/routes';
+  HEALTH_CONDITIONS_PATH,
+  IMMUNISATIONS_PATH,
+  TESTRESULTSDETAIL_PATH,
+  DIAGNOSIS_V2_PATH,
+  EXAMINATIONS_V2_PATH,
+  PROCEDURES_V2_PATH,
+} from '@/router/paths';
 
 export default {
   name: 'DcrVISIONGpRecord',
@@ -77,12 +77,12 @@ export default {
   data() {
     return {
       record: this.$store.state.myRecord.record,
-      testResultsPath: TESTRESULTSDETAIL.path,
-      immunisationsPath: IMMUNISATIONS.path,
-      healthConditionsPath: HEALTH_CONDITIONS.path,
-      diagnosisPath: DIAGNOSIS_V2.path,
-      examinationsPath: EXAMINATIONS_V2.path,
-      proceduresPath: PROCEDURES_V2.path,
+      testResultsPath: TESTRESULTSDETAIL_PATH,
+      immunisationsPath: IMMUNISATIONS_PATH,
+      healthConditionsPath: HEALTH_CONDITIONS_PATH,
+      diagnosisPath: DIAGNOSIS_V2_PATH,
+      examinationsPath: EXAMINATIONS_V2_PATH,
+      proceduresPath: PROCEDURES_V2_PATH,
     };
   },
   methods: {

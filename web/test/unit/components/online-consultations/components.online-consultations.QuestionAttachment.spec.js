@@ -89,15 +89,12 @@ describe('QuestionAttachment.vue', () => {
         onFileError,
         onFileAbort,
       };
-      process.client = true;
 
       // Act
       wrapper = mountQuestion({ methods });
 
       // Assert
       expect(wrapper.vm.reader).toBeInstanceOf(FileReader);
-
-      process.client = false;
     });
   });
 

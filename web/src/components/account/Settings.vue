@@ -16,10 +16,12 @@
 </template>
 
 <script>
-import { ACCOUNT_NOTIFICATIONS, findByName, LOGIN_SETTINGS } from '@/lib/routes';
+import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
+import { redirectTo } from '@/lib/utils';
+import { appLoginHelpUrl } from '@/router/externalLinks';
 
 export default {
   name: 'Settings',
@@ -62,14 +64,14 @@ export default {
   methods: {
     goToLoginOptions() {
       if (canVersionHandleBiometricsWeb(this)) {
-        this.$router.push(LOGIN_SETTINGS.path);
+        redirectTo(this, LOGIN_SETTINGS_PATH);
       } else {
-        this.configureWebContext(findByName('Login').helpUrl);
+        this.configureWebContext(appLoginHelpUrl);
         NativeCallbacks.goToLoginOptions();
       }
     },
     showNotificationsClicked() {
-      this.$router.push(ACCOUNT_NOTIFICATIONS.path);
+      redirectTo(this, ACCOUNT_NOTIFICATIONS_PATH);
     },
   },
 };

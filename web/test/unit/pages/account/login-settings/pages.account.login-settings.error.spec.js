@@ -1,9 +1,12 @@
 import loginSettingsError from '@/pages/account/login-settings/error';
-import { mount, createRouter, createStore } from '../../../helpers';
-import { LOGIN_SETTINGS } from '@/lib/routes';
+import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import each from 'jest-each';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
 import biometricTypes from '@/lib/biometrics/biometricTypes';
+import { redirectTo } from '@/lib/utils';
+import { mount, createRouter, createStore } from '../../../helpers';
+
+jest.mock('@/lib/utils');
 
 describe('login settings page', () => {
   let wrapper;
@@ -77,16 +80,9 @@ describe('login settings page', () => {
     });
 
     describe('undefined errorCode', () => {
-      let redirect;
-
-      beforeEach(() => {
-        redirect = jest.fn();
-      });
-
       it('will redirect to login settings', async () => {
         mountPage();
-        await wrapper.vm.$options.fetch({ store, redirect });
-        expect(redirect).toBeCalledWith(LOGIN_SETTINGS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
       });
     });
   });

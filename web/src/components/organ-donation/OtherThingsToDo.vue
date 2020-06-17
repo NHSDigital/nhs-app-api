@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import { ORGAN_DONATION_WITHDRAW_REASON } from '@/lib/routes';
+import { ORGAN_DONATION_WITHDRAW_REASON_PATH } from '@/router/paths';
 import MenuItemList from '@/components/MenuItemList';
 import MenuItem from '@/components/MenuItem';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'OtherThingsToDo',
@@ -42,13 +43,13 @@ export default {
   },
   data() {
     return {
-      bloodDonationUrl: this.$store.app.$env.BLOOD_DONATION_URL,
+      bloodDonationUrl: this.$store.$env.BLOOD_DONATION_URL,
     };
   },
   methods: {
     withdrawDecision() {
       this.$store.dispatch('organDonation/withdrawStart');
-      this.$router.push(ORGAN_DONATION_WITHDRAW_REASON.path);
+      redirectTo(this, ORGAN_DONATION_WITHDRAW_REASON_PATH);
     },
   },
 };

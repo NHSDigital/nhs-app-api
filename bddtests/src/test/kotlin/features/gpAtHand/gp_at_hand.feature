@@ -18,7 +18,7 @@ Feature: GP at Hand Frontend
       | Journey            | Value     |
       | medical record     | gpAtHAnd  |
     And I am logged in
-    When I retrieve the 'My Record' page directly
+    When I retrieve the 'Gp Medical Record' page directly
     Then I see an appropriate message informing me that my GP surgery uses the Babylon App for my medical record
     When I click the link called 'use the Babylon app' with a url of 'https://www.gpathand.nhs.uk/download-app'
     Then a new tab has been opened by the link

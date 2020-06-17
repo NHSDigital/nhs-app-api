@@ -38,7 +38,6 @@ import { displayedURL } from '@/lib/utils';
 
 export default {
   name: 'PharmacyAddressComponent',
-  layout: 'nhsuk-layout',
   props: {
     pharmacy: {
       type: Object,

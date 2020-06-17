@@ -1,12 +1,13 @@
 import BiometricBanner from '@/components/widgets/BiometricBanner';
-import { LOGIN_SETTINGS } from '@/lib/routes';
-import { createRouter, createStore, mount } from '../../helpers';
+import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
+import { redirectTo } from '@/lib/utils';
+import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/services/native-app');
+jest.mock('@/lib/utils');
 
 describe('BiometricBanner', () => {
-  let $router;
   let wrapper;
   let $store;
 
@@ -15,7 +16,6 @@ describe('BiometricBanner', () => {
     source = 'ios',
     dismissed = false,
     versionEnabled = true } = {}) => {
-    $router = createRouter();
     $store = createStore({
       state: {
         device: {
@@ -34,18 +34,23 @@ describe('BiometricBanner', () => {
       },
     });
     return mount(BiometricBanner, {
-      $router,
       methods: {
         configureWebContext(url) {
           return url;
         },
       },
+      $router: createRouter(),
+      $route: { meta: { helpUrl: 'current-help-url' } },
       $store,
       $style: {
         info: 'info',
       },
     });
   };
+
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
   describe('is native', () => {
     beforeEach(() => {
@@ -84,7 +89,7 @@ describe('BiometricBanner', () => {
 
       it('will dispatch `biometricBanner/dismiss` when clicked', () => {
         global.digitalData = {};
-        $store.app.$cookies.set = jest.fn();
+        $store.$cookies.set = jest.fn();
         dismissButton.trigger('click');
         expect($store.dispatch).toBeCalledWith('biometricBanner/dismiss');
         expect($store.dispatch).toBeCalledWith('biometricBanner/sync');
@@ -103,7 +108,7 @@ describe('BiometricBanner', () => {
 
           it('will navigate to the web biometrics', () => {
             biometricsLink.trigger('click');
-            expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
           });
         });
 
@@ -116,7 +121,7 @@ describe('BiometricBanner', () => {
 
           it('will navigate to the web biometrics', () => {
             biometricsLink.trigger('click');
-            expect($router.push).not.toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+            expect(redirectTo).not.toHaveBeenCalled();
           });
         });
       });
@@ -132,7 +137,7 @@ describe('BiometricBanner', () => {
 
           it('will navigate to the web biometrics', () => {
             biometricsLink.trigger('click');
-            expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
           });
         });
 
@@ -146,7 +151,7 @@ describe('BiometricBanner', () => {
 
           it('will navigate to the web biometrics', () => {
             biometricsLink.trigger('click');
-            expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
           });
         });
       });

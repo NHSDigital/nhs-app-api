@@ -70,6 +70,7 @@ export default {
 // Mobile Toggle Switch
 .toggleWrapper {
   display: inline-block;
+  position: relative;
   .spinner {
     background: none;
     position: absolute;

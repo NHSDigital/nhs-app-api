@@ -66,10 +66,13 @@ import Contents from '@/components/data-sharing/Contents';
 import GenericButton from '@/components/widgets/GenericButton';
 import InsetText from '@/components/InsetText';
 import Pagination from '@/components/Pagination';
-import { DATA_SHARING_DOES_NOT_APPLY } from '@/lib/routes';
+import { DATA_SHARING_DOES_NOT_APPLY_PATH } from '@/router/paths';
+import {
+  OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'DataSharingMakeYourChoicePage',
   components: {
     AnalyticsTrackedTag,
     Contents,
@@ -79,10 +82,10 @@ export default {
   },
   data() {
     return {
-      dataPreferencesUrl: this.$store.app.$env.DATA_PREFERENCES_URL,
-      doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY.path,
+      dataPreferencesUrl: this.$store.$env.DATA_PREFERENCES_URL,
+      doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY_PATH,
       ndopToken: undefined,
-      otherWaysToMakeChoiceUrl: this.$store.app.$env.OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
+      otherWaysToMakeChoiceUrl: OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
     };
   },
   methods: {

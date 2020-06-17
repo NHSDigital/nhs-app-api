@@ -14,7 +14,6 @@
 <script>
 
 export default {
-  layout: 'nhsuk-layout',
   name: 'CollapsibleDetails',
 };
 </script>

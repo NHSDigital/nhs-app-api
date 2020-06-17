@@ -264,8 +264,6 @@ class WebClientInterceptor(
                 url!!.contains(context.resources.getString(R.string.login_auth_code_path)))) {
             uiInteractor.dismissProgressDialog()
         }
-        
-        uiInteractor.dismissSplashScreen()
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
@@ -277,6 +275,7 @@ class WebClientInterceptor(
                 uiInteractor.dismissBiometricDialog()
             }
         }
+        uiInteractor.dismissSplashScreen()
         super.onPageCommitVisible(view, url)
     }
 

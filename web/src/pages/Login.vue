@@ -1,58 +1,54 @@
 <template>
-  <div :class="dynamicStyle('loginMain')">
-    <div>
-      <h2 v-if="isUsingNativeApp" id="native-header"
-          class="nhsuk-u-margin-bottom-2">
-        {{ $t('login.desc') }}
-      </h2>
-      <form ref="loginForm"
-            :action="instructionsUrl"
-            method="get">
-        <input :value="redirectTo"
-               type="hidden"
-               :name="redirectName">
+  <login-layout>
+    <div :class="dynamicStyle('loginMain')">
+      <div>
+        <h2 v-if="isUsingNativeApp" id="native-header"
+            class="nhsuk-u-margin-bottom-2">
+          {{ $t('login.desc') }}
+        </h2>
         <generic-button id="viewInstructionsButton"
                         :button-classes="getButtonClasses"
                         @click="onContinueClicked">
           {{ $t('loginButton.login') }}
         </generic-button>
-      </form>
+      </div>
+      <div v-if="isUsingNativeApp"
+           :class="[$style['nhsuk-body-s'], $style['appVersion']]">
+        Version {{ this.$store.state.appVersion.webVersion }}
+        <span v-if="this.$store.state.appVersion.nativeVersion">
+          ({{ this.$store.state.appVersion.nativeVersion }})
+        </span>
+      </div>
     </div>
-    <div v-if="isUsingNativeApp"
-         :class="[$style['nhsuk-body-s'], $style['appVersion']]">
-      Version {{ this.$store.state.appVersion.webVersion }}
-      <span v-if="this.$store.state.appVersion.nativeVersion">
-        ({{ this.$store.state.appVersion.nativeVersion }})
-      </span>
-    </div>
-  </div>
+  </login-layout>
 </template>
 <script>
 import AuthorisationService from '@/services/authorisation-service';
+import LoginLayout from '@/layouts/login';
 import NativeCallbacks from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
-import { BEGINLOGIN, REDIRECT_PARAMETER, PRE_REGISTRATION_INFORMATION } from '@/lib/routes';
+import { BEGINLOGIN_PATH, PRE_REGISTRATION_INFORMATION_PATH } from '@/router/paths';
+import { REDIRECT_PARAMETER } from '@/router/names';
 import GenericButton from '@/components/widgets/GenericButton';
+import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'login',
+  name: 'LoginPage',
   components: {
     GenericButton,
+    LoginLayout,
   },
   data() {
     return {
-      authoriseUrl: BEGINLOGIN.path,
-      redirectTo: this.$route.query[REDIRECT_PARAMETER],
+      authoriseUrl: BEGINLOGIN_PATH,
+      redirectParameter: this.$route.query[REDIRECT_PARAMETER],
       redirectName: REDIRECT_PARAMETER,
-      instructionsUrl: PRE_REGISTRATION_INFORMATION.path,
+      instructionsUrl: PRE_REGISTRATION_INFORMATION_PATH,
       isUsingNativeApp: this.$store.state.device.isNativeApp,
       hasSeenInstructions: this.$store.getters['preRegistrationInformation/instructionsViewed'],
     };
   },
   computed: {
-    shouldShowBiometrics() {
-      return this.$store.state.device.isNativeApp;
-    },
     getButtonClasses() {
       return ['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
         this.isUsingNativeApp ? 'button' : ''];
@@ -73,25 +69,25 @@ export default {
   },
   mounted() {
     sessionStorage.clear();
-    if (this.shouldShowBiometrics && this.$route.query.fidoAuthResponse) {
+    if (this.isUsingNativeApp && this.$route.query.fidoAuthResponse) {
       const { authoriseUrl, loginUrl } = this.generateRedirectData();
       this.authoriseUrl = authoriseUrl;
-      this.$store.app.context.redirect(loginUrl);
       this.$store.dispatch('analytics/satelliteTrack', 'fidoLogin');
+      window.location = loginUrl;
       return;
     }
 
-    if (this.$store.state.device.isNativeApp) {
+    if (this.isUsingNativeApp) {
       NativeCallbacks.hideElements();
     }
   },
   methods: {
     generateRedirectData() {
-      const authorisationService = new AuthorisationService(this.$store.app.$env);
+      const authorisationService = new AuthorisationService(this.$store.$env);
       const { request, loginUrl } = authorisationService.generateLoginUrl({
         isNativeApp: this.isUsingNativeApp,
         cookies: this.$cookies,
-        redirectTo: this.redirectTo,
+        redirectTo: this.redirectParameter,
         fidoAuthResponse: this.$route.query.fidoAuthResponse,
       });
       return { authoriseUrl: request.authoriseUrl, loginUrl };
@@ -100,11 +96,10 @@ export default {
       return getDynamicStyle(this, args);
     },
     onContinueClicked() {
-      if (!this.isButtonDisabled
-        && (!this.isUsingNativeApp
-          || this.hasSeenInstructions)) {
+      if (!this.isButtonDisabled) {
         this.$store.dispatch('analytics/satelliteTrack', 'login');
         this.isButtonDisabled = true;
+        redirectTo(this, this.instructionsUrl, this.redirectParameter);
       }
     },
   },

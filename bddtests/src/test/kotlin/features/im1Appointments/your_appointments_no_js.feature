@@ -1,6 +1,7 @@
 @appointments
 @my
 @noJs
+@pending
 Feature: Your Appointments With Javascript Disabled
   Users can view their upcoming and past appointments in the Your Appointments screen.
 

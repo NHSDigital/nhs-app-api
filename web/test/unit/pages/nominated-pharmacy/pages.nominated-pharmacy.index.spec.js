@@ -1,7 +1,7 @@
-import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -33,8 +33,11 @@ describe('nominated pharmacy found', () => {
 
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+        'nominatedPharmacy/hasNoNominatedPharmacy': false,
+      };
       wrapper = mountPage();
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
       pharmacyDetails = wrapper.find(PharmacyDetail);
     });
 
@@ -53,8 +56,11 @@ describe('nominated pharmacy found', () => {
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(PharmacyType.P3),
       });
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+        'nominatedPharmacy/hasNoNominatedPharmacy': false,
+      };
       wrapper = mountPage();
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
       pharmacyDetails = wrapper.find(PharmacyDetail);
     });
 

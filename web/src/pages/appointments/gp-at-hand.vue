@@ -1,8 +1,8 @@
 <template>
   <div v-if="showTemplate">
     <gp-at-hand-content
-      :header-tag="'gp_at_hand.appointments.headerTag'"
-      :content-tag="'gp_at_hand.appointments.contentTag'" />
+      header-tag="gp_at_hand.appointments.headerTag"
+      content-tag="gp_at_hand.appointments.contentTag"/>
   </div>
 </template>
 
@@ -10,13 +10,9 @@
 import GpAtHandContent from '@/components/GpAtHandContent';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpAtHandPage',
   components: {
     GpAtHandContent,
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-
-</style>

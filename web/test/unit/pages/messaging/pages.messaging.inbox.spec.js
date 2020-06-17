@@ -42,9 +42,9 @@ describe('messaging index', () => {
   });
 
   describe('fetch', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = mountIndex();
-      wrapper.vm.$options.fetch({ store: $store });
+      await wrapper.vm.$nextTick();
     });
 
     it('will dispatch `messaging/load`', () => {
@@ -69,12 +69,13 @@ describe('messaging index', () => {
   describe('has messages', () => {
     let messageSection;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       createSummaryMessage({ body: 'summary message 1', sender: 'Test 1' });
       createSummaryMessage({ body: 'unread summary message 2', sender: 'Test 2', unreadCount: 2 });
       createSummaryMessage({ body: 'summary message 3', sender: 'Test 3' });
       createSummaryMessage({ body: 'unread summary message 4', sender: 'Test 4', unreadCount: 4 });
       wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
       messageSection = wrapper.find(`.${messageSectionClass}`);
     });
 

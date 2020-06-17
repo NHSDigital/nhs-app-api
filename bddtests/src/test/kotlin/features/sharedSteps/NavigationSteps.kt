@@ -1,6 +1,5 @@
 package features.sharedSteps
 
-import config.Config
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -57,8 +56,7 @@ open class NavigationSteps {
 
     @Step
     fun browseToPage(url: String): String {
-        val fullUrl = Config.instance.url + url
-        browser.browseTo(fullUrl)
-        return fullUrl
+        browser.browseTo(url)
+        return url
     }
 }

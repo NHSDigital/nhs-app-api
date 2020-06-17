@@ -11,7 +11,6 @@ describe('notifications', () => {
   let state;
 
   beforeEach(() => {
-    process.client = true;
     state = {
       notifications: initialState(),
       device: {

@@ -1,113 +1,106 @@
 import ViewAttachment from '@/pages/messages/gp-messages/view-attachment';
+import { redirectTo } from '@/lib/utils';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { mount, createStore } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 jest.mock('@/lib/utils');
 jest.mock('@/services/native-app');
 
-let dummyMetaTag;
-
+const messageDetails = {
+  messageDetails: {
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    replies: [],
+  },
+};
 
 describe('gp messages view attachment page', () => {
   let wrapper;
-  dummyMetaTag = document.createElement('meta');
-  document.getElementsByName = jest.fn().mockReturnValue([dummyMetaTag]);
+  let store;
+
+  document.getElementsByName = jest.fn().mockReturnValue([document.createElement('meta')]);
 
   const router = {
     go: jest.fn(),
   };
 
-  const mountPage = (store) => {
+  const mountPage = ({
+    selectedMessageDetails,
+    currentDocument,
+  } = {}) => {
+    store = createStore({
+      state: {
+        device: { isNativeApp: false },
+        gpMessages: { selectedMessageDetails },
+        documents: { currentDocument },
+      },
+    });
+
     wrapper = mount(ViewAttachment, {
       $store: store,
       $router: router,
     });
   };
 
-  const selectedMessageDetails = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: true,
-      replies: [],
-    },
-  };
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
   describe('back link clicked', () => {
     it('will redirect to gp messages inbox', () => {
-      const store = createStore({
-        $env: {
-          CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        },
-        state: {
-          device: {
-            isNativeApp: false,
-          },
-          gpMessages: {
-            selectedMessageDetails,
-          },
-          documents: {
-            currentDocument: null,
-          },
-        },
-      });
-      mountPage(store);
+      mountPage({ currentDocument: {} });
       wrapper.vm.backToMessageClicked();
       expect(router.go).toHaveBeenCalled();
     });
   });
 
-  describe('asyncData', () => {
-    it('will redirect back to the inbox if there is no document', async () => {
-      const redirect = jest.fn();
-      const store = createStore({
-        $env: {
-          CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        },
-        state: {
-          device: {
-            isNativeApp: false,
-          },
-          gpMessages: {
-            selectedMessageDetails,
-          },
-          documents: {},
-        },
-      });
-      mountPage(store);
-      await wrapper.vm.$options.asyncData({ store, redirect });
-
-      expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
+  describe('created', () => {
+    beforeEach(() => {
+      EventBus.$emit.mockClear();
     });
 
-    it('will set the invalid headers if the document is not viewable', async () => {
-      const redirect = jest.fn();
-      const store = createStore({
-        $env: {
-          CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        },
-        state: {
-          device: {
-            isNativeApp: false,
-          },
-          gpMessages: {
-            selectedMessageDetails,
-          },
-          documents: {
-            currentDocument: {
-              type: null,
-            },
-          },
-        },
-      });
-      mountPage(store);
-      await wrapper.vm.$options.asyncData({ store, redirect });
+    it('will redirect to gp-messages if there is no document', () => {
+      mountPage();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+    });
 
-      expect(store.dispatch).toHaveBeenCalledWith('header/updateHeaderText',
-        'translate_pageHeaders.gpMessagesAttachmentUnavailable');
-      expect(store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle',
-        'translate_pageTitles.gpMessagesAttachmentUnavailable');
+    describe('document is not viewable', () => {
+      beforeEach(() => {
+        mountPage({
+          currentDocument: { isViewable: false },
+          selectedMessageDetails: messageDetails,
+        });
+      });
+
+      it('will emit UPDATE_HEADER with attachment unavailable as event when not viewable', () => {
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'pageHeaders.gpMessagesAttachmentUnavailable');
+      });
+
+      it('will emit UPDATE_TITLE with attachment unavailable as event when not viewable', () => {
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'pageTitles.gpMessagesAttachmentUnavailable');
+      });
+    });
+
+    describe('document is viewable', () => {
+      beforeEach(() => {
+        mountPage({
+          currentDocument: { isViewable: true },
+          selectedMessageDetails: messageDetails,
+        });
+      });
+
+      it('will not emit an UPDATE_HEADER or UPDATE_TITLE event', () => {
+        expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_HEADER, expect.anything());
+        expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_TITLE, expect.anything());
+      });
     });
   });
 });

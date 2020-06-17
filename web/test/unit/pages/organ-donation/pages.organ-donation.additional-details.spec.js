@@ -1,9 +1,18 @@
 import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
 import BackButton from '@/components/BackButton';
-import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import {
+  ORGAN_DONATION_PATH,
+  ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
+} from '@/router/paths';
 import { DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
+import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('additional-details', () => {
   // In this case we want string numbers to be coerced into actual numbers and vice versa.
@@ -20,6 +29,7 @@ describe('additional-details', () => {
   };
 
   beforeEach(() => {
+    redirectTo.mockClear();
     $router = [];
     state = {
       organDonation: initialState(),
@@ -167,7 +177,8 @@ describe('additional-details', () => {
           });
 
           it('will push the confirmation page on the router', () => {
-            expect($router).toContain(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
+            expect(redirectTo)
+              .toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
           });
         });
       });
@@ -175,7 +186,7 @@ describe('additional-details', () => {
 
     describe('mounted', () => {
       it('will not push the organ donation index to the router', () => {
-        expect($router).not.toContain(ORGAN_DONATION.path);
+        expect(redirectTo).not.toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
       });
     });
   });

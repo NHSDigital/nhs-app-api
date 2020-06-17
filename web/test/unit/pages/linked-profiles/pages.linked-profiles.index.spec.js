@@ -1,8 +1,8 @@
 import LinkedProfileIndex from '@/pages/linked-profiles/index';
-import { create$T, createStore, mount } from '../../helpers';
-import { LINKED_PROFILES_SUMMARY } from '@/lib/routes';
+import { LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -78,10 +78,10 @@ describe('linked profile is there', () => {
 
       // assert
       expect($store.app.$analytics.trackButtonClick)
-        .toHaveBeenCalledWith(LINKED_PROFILES_SUMMARY.path, true);
+        .toHaveBeenCalledWith(LINKED_PROFILES_SUMMARY_PATH, true);
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/select', $store.state.linkedAccounts.items[1]);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY.path);
+        .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY_PATH);
     });
   });
 });

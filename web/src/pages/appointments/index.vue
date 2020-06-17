@@ -1,5 +1,5 @@
 <template>
-  <div class="nhsuk-grid-row">
+  <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="showTemplate" data-purpose="">
         <menu-item-list>
@@ -12,8 +12,7 @@
                      :text="$t('appointmentHubPage.gpSurgeryAppointments.subheader')"
                      :aria-label="ariaLabelCaption(
                        'appointmentHubPage.gpSurgeryAppointments.subheader',
-                       'appointmentHubPage.gpSurgeryAppointments.body')"
-                     :prevent-default="preventDefault()"/>
+                       'appointmentHubPage.gpSurgeryAppointments.body')"/>
           <menu-item v-if="showHospitalAppointments"
                      id="btn_hospital"
                      header-tag="h2"
@@ -24,8 +23,7 @@
                      :text="$t('appointmentHubPage.hospitalAppointments.subheader')"
                      :aria-label="ariaLabelCaption(
                        'appointmentHubPage.hospitalAppointments.subheader',
-                       'appointmentHubPage.hospitalAppointments.body')"
-                     :prevent-default="preventDefault()"/>
+                       'appointmentHubPage.hospitalAppointments.body')"/>
         </menu-item-list>
       </div>
     </div>
@@ -33,15 +31,16 @@
 </template>
 
 <script>
-
-import { GP_APPOINTMENTS, HOSPITAL_APPOINTMENTS } from '@/lib/routes';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import {
+  GP_APPOINTMENTS_PATH,
+  HOSPITAL_APPOINTMENTS_PATH,
+} from '@/router/paths';
 import sjrIf from '@/lib/sjrIf';
 
 export default {
-  name: 'Appointments',
-  layout: 'nhsuk-layout',
+  name: 'AppointmentsIndexPage',
   components: {
     MenuItem,
     MenuItemList,
@@ -53,10 +52,10 @@ export default {
   },
   computed: {
     gpAppointmentsPath() {
-      return GP_APPOINTMENTS.path;
+      return GP_APPOINTMENTS_PATH;
     },
     hospitalAppointmentsPath() {
-      return HOSPITAL_APPOINTMENTS.path;
+      return HOSPITAL_APPOINTMENTS_PATH;
     },
     showHospitalAppointments() {
       return !this.isProxying &&
@@ -75,9 +74,6 @@ export default {
     },
     redirectToHospitalAppointments() {
       this.$router.push(this.hospitalAppointmentsPath);
-    },
-    preventDefault() {
-      return true;
     },
   },
 };

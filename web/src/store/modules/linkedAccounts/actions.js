@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import moment from 'moment';
 import {
   CLEAR,
@@ -70,6 +70,8 @@ export default {
       .postV1PatientLinkedAccountsSwitchById(params)
       .then(() => {
         commit(SWITCH_TO_LINKED_ACCOUNT, profile);
+        this.dispatch('myRecord/clear');
+        this.dispatch('serviceJourneyRules/init');
       });
   },
   switchToMainUserProfile({ commit, getters }) {
@@ -85,7 +87,7 @@ export default {
   },
   redirectAfterInvalidPatientIdDetected({ commit }) {
     commit(LOSS_PROXY);
-    this.app.context.redirect(302, `${INDEX.path}?ts=${moment().unix()}`);
+    this.app.context.redirect(302, `${INDEX_PATH}?ts=${moment().unix()}`);
   },
   proxyRecoveryComplete({ commit }) {
     commit(LOSS_PROXY_RESET);

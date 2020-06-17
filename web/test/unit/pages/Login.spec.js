@@ -1,49 +1,44 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
-import { BEGINLOGIN } from '@/lib/routes';
+import { BEGINLOGIN_PATH } from '@/router/paths';
 import NativeApp from '@/services/native-app';
 import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
+
 const loginResponse = {
   loginUrl: 'boom',
   request: {
     authoriseUrl: 'bang',
   },
 };
+
 AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
   .mockReturnValue(loginResponse);
 
-const defaultQuery = {
-  source: 'android',
-};
-
-const createFidoQueries = () =>
-  Object.assign({}, defaultQuery, {
-    fidoAuthResponse: 'Boom',
-  });
+const fidoQuery = { fidoAuthResponse: 'Boom' };
 
 describe('login page', () => {
   let $store;
   let wrapper;
+  let $cookies;
 
-  const mountWithQueryData = ({
+  beforeEach(() => {
+    delete window.location;
+  });
+
+  const mountPage = ({
     isNativeApp = true,
-    query,
-    source = 'android',
+    query = {},
     data,
     instructionsViewed = true,
-  }) => {
-    const $env = {
-    };
-
-    const $cookies = {
+  } = {}) => {
+    $cookies = {
       get: jest.fn().mockImplementation('BetaCookie').mockReturnValue({}),
       set: jest.fn(),
     };
 
     $store = createStore({
-      $env,
       state: {
         appVersion: {
           webVersion: '1.2.3',
@@ -51,43 +46,43 @@ describe('login page', () => {
         },
         device: {
           isNativeApp,
-          source,
-        },
-        preRegistrationInformation: {
-          seen: true,
         },
         getters: {
-          'device/isNativeApp': isNativeApp,
           'preRegistrationInformation/instructionsViewed': instructionsViewed,
         },
       },
       $cookies,
-      context: {
-        redirect: jest.fn(),
-      },
     });
+
     return mount(Login, {
-      $env,
+      shallow: true,
       $store,
       $route: {
         query,
       },
       $cookies,
       data,
-      stubs: {
-        'no-ssr': '<div><slot/></div>',
-      },
     });
   };
+
+  beforeEach(() => {
+    AuthorisationService.mockClear();
+  });
+
+  describe('template', () => {
+    it('will display the header in native', () => {
+      wrapper = mountPage();
+      expect(wrapper.find('#native-header').exists()).toBe(true);
+    });
+  });
 
   describe('created lifecycle hook', () => {
     let dismissAllDialoguesSpy;
 
     beforeEach(() => {
       dismissAllDialoguesSpy = jest.spyOn(NativeApp, 'dismissAllDialogues').mockImplementation(() => true);
-      AuthorisationService.mockClear();
 
-      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
+      wrapper = mountPage({ instructionsViewed: false });
     });
 
     it('will call pre registration sync', () => {
@@ -102,7 +97,7 @@ describe('login page', () => {
       window.onbeforeunload = () => {};
 
       AuthorisationService.mockClear();
-      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
+      wrapper = mountPage({ instructionsViewed: false });
 
       expect(window.onbeforeunload).toBe(null);
     });
@@ -112,50 +107,62 @@ describe('login page', () => {
     });
   });
 
-  describe('viewed instructions', () => {
-    beforeEach(() => {
-      AuthorisationService.mockClear();
+  describe('mounted', () => {
+    describe('handling fido', () => {
+      describe('on native', () => {
+        let generateLoginUrl;
+
+        beforeEach(() => {
+          wrapper = mountPage({ query: fidoQuery });
+          /* eslint-disable-next-line prefer-destructuring */
+          generateLoginUrl = AuthorisationService.mock.instances[0].generateLoginUrl;
+        });
+
+        it('will generate login url using fido auth response', () => {
+          expect(generateLoginUrl).toHaveBeenCalledTimes(1);
+          expect(generateLoginUrl).toHaveBeenCalledWith({
+            isNativeApp: true,
+            cookies: $cookies,
+            redirectTo: undefined,
+            fidoAuthResponse: 'Boom',
+          });
+        });
+
+        it('will set the window location to generated login url', () => {
+          expect(window.location).toEqual('boom');
+        });
+      });
+
+      describe('on web', () => {
+        it('will not generate login url or change window location', () => {
+          wrapper = mountPage({ query: fidoQuery, isNativeApp: false });
+          expect(AuthorisationService).not.toHaveBeenCalled();
+          expect(window.location).toBeUndefined();
+        });
+      });
     });
 
-    it('will redirect automatically if FidoAuthResponse exists and is native', () => {
-      const fidoQuery = createFidoQueries();
-      wrapper = mountWithQueryData({ query: fidoQuery });
-      expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
-    });
-
-    it('will not automatically redirect if it is native but no fidoResponse', () => {
-      wrapper = mountWithQueryData({ query: defaultQuery });
-      expect(AuthorisationService).not.toHaveBeenCalled();
-    });
-
-    it('will not automatically redirect if it is web', () => {
-      const fidoQuery = createFidoQueries();
-
-      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
-      expect(AuthorisationService).not.toHaveBeenCalled();
-    });
-
-    it('will not display the header in web', () => {
-      const fidoQuery = createFidoQueries();
-      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
-      expect(wrapper.find('#native-header').exists()).toBe(false);
-    });
-
-    it('will display the header in native', () => {
-      const fidoQuery = createFidoQueries();
-      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: true, source: 'android' });
-      expect(wrapper.find('#native-header').exists()).toBe(true);
+    describe.each([
+      ['on native', true],
+      ['on web', false],
+    ])('not handling fido', (description, isNativeApp) => {
+      describe(description, () => {
+        it('will not generate login url or change window location', () => {
+          wrapper = mountPage({ isNativeApp });
+          expect(AuthorisationService).not.toHaveBeenCalled();
+          expect(window.location).toBeUndefined();
+        });
+      });
     });
   });
 
   describe('pre registration button', () => {
     beforeEach(() => {
-      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
-      AuthorisationService.mockClear();
+      wrapper = mountPage({ instructionsViewed: false });
     });
 
     it('will not have a form that performs a get request to the begin login path', () => {
-      const form = wrapper.find(`form[action="${BEGINLOGIN.path}"]`);
+      const form = wrapper.find(`form[action="${BEGINLOGIN_PATH}"]`);
 
       expect(form.exists()).toBe(false);
     });

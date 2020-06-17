@@ -23,7 +23,7 @@ class QuantityQuestionConfiguration: IQuestionConfiguration {
                       "linkId":"NHS_ADMIN_AD_REFERRALPAINORIGIN",
                       "answer":[
                          {
-                            "valueString":"Point:155,80"
+                            "valueString":"Point:155,81"
                          }
                       ]
                    }

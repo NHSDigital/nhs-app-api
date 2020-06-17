@@ -1,5 +1,16 @@
 import DownloadAttachment from '@/pages/messages/gp-messages/download-attachment';
+import { redirectTo } from '@/lib/utils';
 import { mount, createStore } from '../../helpers';
+
+jest.mock('@/lib/utils', () => {
+  const { datePart, mimeType } = jest.requireActual('@/lib/utils');
+
+  return {
+    redirectTo: jest.fn(),
+    datePart,
+    mimeType,
+  };
+});
 
 describe('gp messages urgency page', () => {
   let wrapper;
@@ -36,6 +47,10 @@ describe('gp messages urgency page', () => {
       $route: route,
     });
   };
+
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
   describe('back link clicked', () => {
     it('will redirect to gp messages inbox', () => {

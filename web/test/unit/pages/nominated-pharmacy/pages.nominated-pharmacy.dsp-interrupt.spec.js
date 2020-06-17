@@ -1,7 +1,10 @@
-import { create$T, createStore, mount } from '../../helpers';
 import DspInterrupt from '@/pages/nominated-pharmacy/dsp-interrupt';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
+import {
+  NOMINATED_PHARMACY_DSP_URL,
+} from '@/router/externalLinks';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -11,7 +14,6 @@ describe('nominated pharmacy not found', () => {
   let wrapper;
   let dspLink;
   let prescriptionHomeLink;
-  const NOMINATED_PHARMACY_DSP_URL = 'bazz';
 
   const createState = (state = {
     device: {
@@ -30,9 +32,6 @@ describe('nominated pharmacy not found', () => {
       $store = createStore({
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(),
-        $env: {
-          NOMINATED_PHARMACY_DSP_URL,
-        },
       });
       dependency.redirectTo = jest.fn();
       wrapper = mountPage();
@@ -64,7 +63,7 @@ describe('nominated pharmacy not found', () => {
       it('will navigate to prescriptions home page when clicked ', () => {
         prescriptionHomeLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
       });
     });
   });

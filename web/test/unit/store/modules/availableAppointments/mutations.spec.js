@@ -6,11 +6,11 @@ import FilterDataProvider from './mutation/FilterDataProvider';
 
 const callLoadMutation = (state, data, sixteenWeeksSlotsEnabled = true) => {
   mutations.LOAD.call({
-    app: { $env: { SIXTEEN_WEEKS_SLOTS_ENABLED: sixteenWeeksSlotsEnabled } },
+    $env: { SIXTEEN_WEEKS_SLOTS_ENABLED: sixteenWeeksSlotsEnabled },
   }, state, data);
 };
 
-describe('mustations', () => {
+describe('mutations', () => {
   describe('ADD_ERROR', () => {
     const error = {
       status: 500,

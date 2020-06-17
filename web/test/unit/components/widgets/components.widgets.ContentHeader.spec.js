@@ -1,14 +1,21 @@
 import each from 'jest-each';
-import { createStore, mount } from '../../helpers';
 import ContentHeader from '@/components/widgets/ContentHeader';
-import { LINKED_PROFILES } from '@/lib/routes';
-
+import PageTitle from '@/components/widgets/PageTitle';
+import { LINKED_PROFILES_NAME } from '@/router/names';
+import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
+import { createStore, mount } from '../../helpers';
 
 describe('ContentHeader.vue', () => {
   let getter;
 
   beforeEach(() => {
     getter = {};
+  });
+
+  describe('mixins', () => {
+    it('will include the OnUpdateHeaderMixin', () => {
+      expect(ContentHeader.mixins).toEqual([OnUpdateHeaderMixin]);
+    });
   });
 
   describe('Login', () => {
@@ -22,9 +29,6 @@ describe('ContentHeader.vue', () => {
         state: {
           device: {
             isNativeApp: true,
-          },
-          header: {
-            headerText: 'Test',
           },
           navigation: {
             crumbSetName: 'testCrumb',
@@ -49,6 +53,7 @@ describe('ContentHeader.vue', () => {
       });
       $route = {
         name: 'Login',
+        meta: { crumb: {} },
       };
       $router = {
         history: {
@@ -61,8 +66,8 @@ describe('ContentHeader.vue', () => {
     };
 
     it('currentBreadCrumbs will return nothing when in Login page', () => {
-      wrapper = mountAs();
-      expect(wrapper.vm.currentBreadCrumbs()).toEqual([]);
+      wrapper = mountAs({ native: true });
+      expect(wrapper.vm.currentBreadCrumbs()).toBeUndefined();
     });
 
     it('showYellowBanner will return undefined', () => {
@@ -105,6 +110,7 @@ describe('ContentHeader.vue', () => {
     let coronaVirusBanner;
 
     const mountAs = ({ linkedAccountsState = {} } = {}) => {
+      getter['appVersion/isNativeVersionAfter'] = jest.fn(() => true);
       $store = createStore({
         state: {
           device: {
@@ -112,9 +118,6 @@ describe('ContentHeader.vue', () => {
           },
           navigation: {
             crumbSetName: 'testCrumb',
-          },
-          header: {
-            headerText: 'Test',
           },
           linkedAccounts: linkedAccountsState,
           session: {
@@ -125,6 +128,7 @@ describe('ContentHeader.vue', () => {
       });
       $route = {
         name: 'index',
+        meta: { crumb: {} },
       };
       return mount(ContentHeader, { $store, $route });
     };
@@ -140,7 +144,7 @@ describe('ContentHeader.vue', () => {
     it('will not show Corona Virus Banner when not on the home page and proxying is false', () => {
       wrapper = mountAs();
       coronaVirusBanner = wrapper.find('#corona-virus-banner');
-      $route.name = LINKED_PROFILES.name;
+      $route.name = LINKED_PROFILES_NAME;
       getter['session/isProxying'] = false;
       expect(wrapper.vm.showCoronaVirusBanner).toEqual(false);
       expect(coronaVirusBanner.exists()).toEqual(false);
@@ -168,16 +172,13 @@ describe('ContentHeader.vue', () => {
     const mountAs = ({
       demographicsQuestionAnswered = false,
       linkedAccountsState = {},
-      route,
+      route = { meta: { crumb: {} } },
     } = {}) => {
+      getter['appVersion/isNativeVersionAfter'] = jest.fn();
       $store = createStore({
         state: {
           device: {
             isNativeApp: true,
-          },
-          header: {
-            headerText: 'Test',
-            headerCaption: 'Test Caption',
           },
           navigation: {
             crumbSetName: 'testCrumb',
@@ -203,20 +204,8 @@ describe('ContentHeader.vue', () => {
       return mount(ContentHeader, {
         $store,
         $route: route,
-        stubs: {
-          'nuxt-link': '<a></a>',
-        },
       });
     };
-
-    it('will pass store header caption to PageTitle', () => {
-      wrapper = mountAs();
-
-      const caption = wrapper.find('span[data-purpose=header-caption]');
-
-      expect(caption.exists()).toBe(true);
-      expect(caption.text()).toBe('Test Caption');
-    });
 
     it('with demographics question not answered but proxying will display appropriate warning', () => {
       getter['session/isProxying'] = true;
@@ -224,6 +213,7 @@ describe('ContentHeader.vue', () => {
         demographicsQuestionAnswered: false,
         route: {
           name: 'appointments-admin-help',
+          meta: { crumb: {} },
         },
         linkedAccountsState: {
           actingAsUser: {
@@ -249,7 +239,10 @@ describe('ContentHeader.vue', () => {
         demographicsQuestionAnswered: true,
         route: {
           name: routeName,
-          warningBanner: true,
+          meta: {
+            crumb: {},
+            warningBanner: true,
+          },
         },
       });
       expect(wrapper.vm.showYellowBanner).toEqual(true);
@@ -262,10 +255,66 @@ describe('ContentHeader.vue', () => {
           demographicsQuestionAnswered: false,
           route: {
             name: routeName,
-            warningBanner: true,
+            meta: {
+              crumb: {},
+              warningBanner: true,
+            },
           },
         });
         expect(wrapper.vm.showYellowBanner).toEqual(false);
       });
+  });
+
+  describe('PageTitle', () => {
+    let $store;
+    let wrapper;
+
+    const mountAs = () => {
+      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+      $store = createStore({
+        state: {
+          device: { isNativeApp: true },
+          navigation: { crumbSetName: {} },
+          onlineConsultations: { demographicsQuestionAnswered: false },
+          serviceJourneyRules: {
+            rules: {
+              cdssAdmin: {
+                provider: 'Test',
+                name: 'eConsult Health Ltd',
+              },
+            },
+          },
+          linkedAccounts: {},
+          session: { csrfToken: {} },
+        },
+        getters: getter,
+      });
+      return mount(ContentHeader, {
+        $store,
+        $route: { meta: { crumb: {} } },
+      });
+    };
+
+    it('will not be shown if header is empty', () => {
+      wrapper = mountAs();
+      wrapper.vm.header = '';
+      expect(wrapper.find(PageTitle).exists()).toBe(false);
+    });
+
+    it('will pass caption to PageTitle', () => {
+      wrapper = mountAs();
+      wrapper.vm.header = 'Test Header';
+      wrapper.vm.caption = 'Test Caption';
+      const pageTitle = wrapper.find(PageTitle);
+      expect(pageTitle.vm.caption).toBe('Test Caption');
+    });
+
+    it('will set title key as combination of caption and header', () => {
+      wrapper = mountAs();
+      wrapper.vm.caption = 'Test Caption';
+      wrapper.vm.header = 'Test Header';
+      const pageTitle = wrapper.find(PageTitle);
+      expect(pageTitle.vm.titleKey).toBe('Test HeaderTest Caption');
+    });
   });
 });

@@ -1,39 +1,52 @@
 import get from 'lodash/fp/get';
 import {
-  INDEX,
-  INTERSTITIAL_REDIRECTOR,
-  LOGOUT,
+  INDEX_NAME,
+  INTERSTITIAL_REDIRECTOR_NAME,
+  LOGOUT_NAME,
   REDIRECT_PARAMETER,
-  TERMSANDCONDITIONS,
-  findByName,
-  isAnonymous,
-} from '@/lib/routes';
+  TERMSANDCONDITIONS_NAME,
+  isNhsAppRouteName,
+} from '@/router/names';
+import { isAnonymous } from '@/router';
+import { createRouteByNameObject } from '@/lib/utils';
 
-export default async ({ redirect, route, store }) => {
-  if (isAnonymous(route.name)) {
-    return Promise.resolve();
+export default async (context) => {
+  const { to, store, next } = context;
+
+  if (isAnonymous(to)) {
+    return next();
   }
+
   await store.dispatch('termsAndConditions/checkAcceptance');
 
   if (store.state.termsAndConditions.areAccepted
       && !store.state.termsAndConditions.updatedConsentRequired) {
-    if (route.name === TERMSANDCONDITIONS.name) {
-      const redirectName = get(REDIRECT_PARAMETER)(route.query);
-      const internalRedirect = findByName(redirectName);
-      if (internalRedirect) {
-        return redirect(internalRedirect.path);
+    if (to.name === TERMSANDCONDITIONS_NAME) {
+      const redirectName = get(REDIRECT_PARAMETER)(to.query);
+      if (isNhsAppRouteName(redirectName)) {
+        delete to.query[REDIRECT_PARAMETER];
+        return next(createRouteByNameObject({
+          name: redirectName,
+          query: to.query,
+          params: to.params,
+          store,
+        }));
       }
-      const path = redirectName ? INTERSTITIAL_REDIRECTOR.path : INDEX.path;
-      return redirect(path, route.query);
+      const name = redirectName ? INTERSTITIAL_REDIRECTOR_NAME : INDEX_NAME;
+      return next(createRouteByNameObject({ name, query: to.query, params: to.params, store }));
     }
-    return Promise.resolve();
+    return next();
   }
 
-  switch (route.name) {
-    case TERMSANDCONDITIONS.name:
-    case LOGOUT.name:
-      return Promise.resolve();
+  switch (to.name) {
+    case TERMSANDCONDITIONS_NAME:
+    case LOGOUT_NAME:
+      return next();
     default:
-      return redirect(TERMSANDCONDITIONS.path, route.query);
+      return next({
+        name: TERMSANDCONDITIONS_NAME,
+        query: to.query,
+        params: to.params,
+      });
   }
 };

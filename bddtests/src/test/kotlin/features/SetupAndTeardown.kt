@@ -29,7 +29,8 @@ val CONSOLE_LOG_STRINGS_TO_IGNORE =
                 ,"Failed to load resource"
                 ,"Request failed with status code 50"
                 ,"Uncaught (in promise)"
-                ,"https://assets.nhs.uk/fonts")
+                ,"https://assets.nhs.uk/fonts"
+                ,"unknown action type")
 
 class SetupAndTeardown {
 

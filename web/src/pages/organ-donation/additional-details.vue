@@ -49,7 +49,7 @@ import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 const mapAdditionalDetails = self => ({
@@ -58,7 +58,6 @@ const mapAdditionalDetails = self => ({
 });
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     BackButton,
     GenericButton,
@@ -88,7 +87,7 @@ export default {
   methods: {
     continueClicked() {
       this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));
-      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
+      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
     },
   },
 };

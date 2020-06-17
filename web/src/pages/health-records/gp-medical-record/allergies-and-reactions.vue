@@ -46,11 +46,10 @@ import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import ScrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/SCRErrorNoAccessGpRecord';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DesktopGenericBackLink,
@@ -61,8 +60,9 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
       resultsCollapsed: true,
+      allergies: null,
     };
   },
   computed: {
@@ -70,16 +70,15 @@ export default {
       return orderBy([obj => this.getEffectiveDate(obj.date, '')], ['desc'])((this.allergies || {}).data);
     },
     showError() {
-      return ((this.allergies || {}).hasErrored) || (this.allergies || {}).data.length === 0;
+      return this.allergies &&
+        (this.allergies.hasErrored || this.allergies.data.length === 0);
     },
   },
-  async asyncData({ store }) {
-    if (!store.state.myRecord.record.allergies) {
-      await store.dispatch('myRecord/load');
+  async mounted() {
+    if (!this.$store.state.myRecord.record.allergies) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      allergies: store.state.myRecord.record.allergies,
-    };
+    this.allergies = this.$store.state.myRecord.record.allergies;
   },
   methods: {
     backButtonClicked() {

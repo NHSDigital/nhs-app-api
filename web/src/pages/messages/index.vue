@@ -11,7 +11,7 @@
                    :text="$t('messagesHub.im1Messaging.subheader')"
                    :description="$t('messagesHub.im1Messaging.body')"
                    :aria-label="ariaLabel('im1Messaging')"
-                   :click-func="navigate"/>
+                   :click-func="navigateToGpMessages"/>
         <third-party-jump-off-button v-if="pkbEnabled"
                                      id="btn_pkb_messages_and_consultations"
                                      provider-id="pkb"
@@ -42,7 +42,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import MenuItemList from '@/components/MenuItemList';
@@ -50,11 +49,10 @@ import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import MenuItem from '@/components/MenuItem';
 import { redirectTo } from '@/lib/utils';
-import { GP_MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
+import { GP_MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
 
 export default {
-  name: 'Messages',
-  layout: 'nhsuk-layout',
+  name: 'MessagesPage',
   components: {
     MenuItem,
     MenuItemList,
@@ -66,8 +64,8 @@ export default {
       hasUnreadGPMessages: false,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
-      im1MessagingPath: GP_MESSAGES.path,
-      appMessagingPath: HEALTH_INFORMATION_UPDATES.path,
+      im1MessagingPath: GP_MESSAGES_PATH,
+      appMessagingPath: HEALTH_INFORMATION_UPDATES_PATH,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
@@ -137,15 +135,14 @@ export default {
     this.hasUnreadAppMessages = this.$store.state.messaging.hasUnread;
   },
   methods: {
-    navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
+    navigateToGpMessages() {
+      redirectTo(this, this.im1MessagingPath);
     },
-    navigateToAppMessages(event) {
+    navigateToAppMessages() {
       if (this.onlyAppMessagingEnabled) {
         this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
       }
-      this.navigate(event);
+      redirectTo(this, this.appMessagingPath);
     },
     ariaLabel(type) {
       const { hasUnreadGPMessages, hasUnreadAppMessages } = this;

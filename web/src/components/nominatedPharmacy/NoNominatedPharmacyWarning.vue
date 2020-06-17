@@ -23,7 +23,7 @@
 /* eslint-disable global-require */
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacyInterruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
+      nominatedPharmacyInterruptPath: NOMINATED_PHARMACY_INTERRUPT_PATH,
     };
   },
   methods: {

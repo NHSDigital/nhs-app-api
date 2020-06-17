@@ -3,24 +3,18 @@ import mutations from '@/store/modules/termsAndConditions/mutations';
 import { mockCookies } from '../../../helpers';
 
 describe('termsAndConditions/mutations', () => {
-  let app;
-
   beforeEach(() => {
-    app = {
-      $cookies: mockCookies(),
-      $env: {
-        SECURE_COOKIES: true,
-      },
+    mutations.$env = {
+      SECURE_COOKIES: true,
     };
-
-    mutations.app = app;
+    mutations.$cookies = mockCookies();
   });
 
   it('will set `areAccepted` to true when SET_ACCEPTANCE is committed with true', () => {
     const state = { areAccepted: false, analyticsCookieAccepted: '' };
     mutations[SET_ACCEPTANCE](state, { areAccepted: true, analyticsCookieAccepted: true });
     expect(state.areAccepted).toEqual(true);
-    expect(app.$cookies.set).toHaveBeenCalledWith(
+    expect(mutations.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
       { analyticsCookieAccepted: true, areAccepted: true },
       { secure: true, path: '/' },
@@ -32,7 +26,7 @@ describe('termsAndConditions/mutations', () => {
     const state = { areAccepted: true, analyticsCookieAccepted: '' };
     mutations[SET_ACCEPTANCE](state, { areAccepted: false, analyticsCookieAccepted: false });
     expect(state.areAccepted).toEqual(false);
-    expect(app.$cookies.set).toHaveBeenCalledWith(
+    expect(mutations.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
       { analyticsCookieAccepted: false, areAccepted: false },
       { secure: true, path: '/' },

@@ -1,13 +1,16 @@
 import DeleteSuccess from '@/pages/messages/gp-messages/delete-success';
+import { redirectTo } from '@/lib/utils';
+import { INDEX_PATH } from '@/router/paths';
 import { create$T, createStore, mount } from '../../helpers';
-import { isFalsy, redirectTo } from '@/lib/utils';
 
-jest.mock('@/lib/utils');
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('patient messaging delete success', () => {
   let wrapper;
   let store;
-  let redirect;
   let $t;
 
   const mountPage = ({
@@ -33,28 +36,27 @@ describe('patient messaging delete success', () => {
   };
 
   beforeEach(() => {
-    redirect = jest.fn();
+    redirectTo.mockClear();
   });
 
-  describe('fetch deleted', () => {
-    let messageDeleted;
+  describe('created', () => {
     describe('gp messages message is not deleted', () => {
-      beforeEach(async () => {
-        messageDeleted = false;
-        isFalsy.mockImplementation(messageDeleted).mockReturnValue(true);
-
-        mountPage({ messageDeleted });
-        await wrapper.vm.$options.fetch({ store, redirect });
-      });
-
       it('will redirect to home', () => {
-        expect(redirect).toHaveBeenCalledWith('/');
+        mountPage({ messageDeleted: false });
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+      });
+    });
+    describe('gp messages message is deleted', () => {
+      it('will not redirect to home', () => {
+        mountPage({ messageDeleted: true });
+        expect(redirectTo).not.toHaveBeenCalled();
       });
     });
   });
+
   describe('data', () => {
     it('will return the correct messages path', () => {
-      expect(wrapper.vm.messagesPath).toBe('/messages/gp-messages');
+      expect(wrapper.vm.messagesPath).toBe('messages/gp-messages');
     });
   });
   describe('success page messages link clicked', () => {
@@ -64,7 +66,7 @@ describe('patient messaging delete success', () => {
 
     it('will redirect to message list page', () => {
       wrapper.vm.goToMessagesClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
     });
   });
 });

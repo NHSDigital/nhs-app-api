@@ -95,8 +95,13 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
-import { USER_RESEARCH } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { USER_RESEARCH_PATH } from '@/router/paths';
+import { isFalsy } from '@/lib/utils';
+import {
+  TERMS_AND_CONDITIONS_URL,
+  PRIVACY_POLICY_URL,
+  COOKIES_POLICY_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'TermsConditions',
@@ -109,9 +114,9 @@ export default {
   mixins: [TermsConditionsMixin],
   data() {
     return {
-      termsAndConditionsURL: this.$store.app.$env.TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
-      cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
+      termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: PRIVACY_POLICY_URL,
+      cookiesPolicyURL: COOKIES_POLICY_URL,
       areTermsAccepted: false,
       isAnalyticsCookieAccepted: false,
       termsAcceptedValue: 'terms',
@@ -142,10 +147,10 @@ export default {
         return;
       }
 
-      if (isFalsy(this.$store.app.$env.USER_RESEARCH_ENABLED)) {
+      if (isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)) {
         this.conditionalRedirect();
       } else {
-        redirectTo(this, USER_RESEARCH.path, this.$route.query);
+        this.$router.push({ path: USER_RESEARCH_PATH });
       }
     },
     getErrorState() {

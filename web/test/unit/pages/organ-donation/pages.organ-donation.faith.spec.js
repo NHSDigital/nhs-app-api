@@ -2,8 +2,14 @@ import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
 import { createRouter, createScrollTo, createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('organ donation faith page', () => {
   let $store;
@@ -24,6 +30,8 @@ describe('organ donation faith page', () => {
   };
 
   beforeEach(() => {
+    redirectTo.mockClear();
+
     $router = createRouter();
     $store = createStore({ state: createState() });
     wrapper = mount(Faith, {
@@ -81,7 +89,8 @@ describe('organ donation faith page', () => {
           });
 
           it('will not push the organ donation additional details page on the router', () => {
-            expect($router.push).not.toHaveBeenCalledWith(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+            expect(redirectTo)
+              .not.toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
           });
 
           it('will scroll to the top', () => {
@@ -112,7 +121,8 @@ describe('organ donation faith page', () => {
           });
 
           it('will push the organ donation additional details page on the router', () => {
-            expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+            expect(redirectTo)
+              .toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
           });
         });
       });

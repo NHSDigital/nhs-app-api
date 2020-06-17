@@ -1,6 +1,6 @@
 import GenericImageInput from '@/components/widgets/GenericImageInput';
-import { mount } from '../../helpers';
 import each from 'jest-each';
+import { mount } from '../../helpers';
 
 const state = {
   device: {

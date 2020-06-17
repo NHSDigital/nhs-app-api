@@ -18,7 +18,7 @@
     margin-right: 1em;
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
-    background: $nhs_blue url(~assets/survey-arrow-down.png) center no-repeat;
+    background: $nhs_blue url(~@/assets/survey-arrow-down.png) center no-repeat;
     background-position: center 0.4em;
   }
   .surveyTabHandleClosed {
@@ -28,7 +28,7 @@
     margin-right: 1em;
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
-    background: $nhs_blue url(~assets/survey-arrow-up.png) center no-repeat;
+    background: $nhs_blue url(~@/assets/survey-arrow-up.png) center no-repeat;
     background-position: center 0.4em;
   }
   .surveyContent {

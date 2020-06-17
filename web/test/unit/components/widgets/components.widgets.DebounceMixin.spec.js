@@ -28,9 +28,7 @@ const verifyDebounceClicks = ({ clickFuncName = 'clicked', createComponent }) =>
     func = jest.fn();
 
     $store = {
-      app: {
-        $env: {},
-      },
+      $env: {},
     };
 
     component = createComponent(func);

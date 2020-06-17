@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+
 export default {
   name: 'ErrorTitle',
   props: {
@@ -17,25 +19,9 @@ export default {
       default: '',
     },
   },
-  computed: {
-    headerText() {
-      return this.header ? this.$t(this.header) : this.titleText;
-    },
-    titleText() {
-      return this.$t(this.title);
-    },
-  },
-  created() {
-    this.updatePageTitle();
-    this.updatePageHeader();
-  },
-  methods: {
-    updatePageHeader() {
-      this.$store.dispatch('header/updateHeaderText', this.headerText);
-    },
-    updatePageTitle() {
-      this.$store.dispatch('pageTitle/updatePageTitle', this.titleText);
-    },
+  beforeMount() {
+    EventBus.$emit(UPDATE_HEADER, this.header || this.title);
+    EventBus.$emit(UPDATE_TITLE, this.title);
   },
 };
 </script>

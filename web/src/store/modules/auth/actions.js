@@ -1,9 +1,8 @@
 import NativeCallbacks from '@/services/native-app';
-import consola from 'consola';
 import jwt from 'jwt-decode';
-import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG } from './mutation-types';
-import { LOGIN } from '@/lib/routes';
+import { LOGIN_PATH } from '@/router/paths';
 import { removeCookies, setCookie } from '@/lib/cookie-manager';
+import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG } from './mutation-types';
 
 const thirtySeconds = 30000;
 
@@ -14,7 +13,6 @@ const final = ({ self, commit }) => {
   self.dispatch('myAppointments/init');
   self.dispatch('auth/init');
   self.dispatch('device/init');
-  self.dispatch('header/init');
   self.dispatch('http/init');
   self.dispatch('knownServices/init');
   self.dispatch('messaging/init');
@@ -31,11 +29,11 @@ const final = ({ self, commit }) => {
   self.dispatch('gpMessages/init');
   self.dispatch('practiceSettings/init');
 
-  self.app.context.redirect(LOGIN.path);
+  self.app.$router.push({ path: LOGIN_PATH });
 };
 
-const removeSessionCookies = ({ app }) => removeCookies({
-  cookies: app.$cookies,
+const removeSessionCookies = self => removeCookies({
+  cookies: self.$cookies,
   key: ['nhso.terms', 'nhso.session', 'NHSO-Session-Id'],
 });
 
@@ -50,7 +48,7 @@ const logoutCleanUp = ({ self }) => {
 
 export default {
   async ensureAccessToken() {
-    const cookieValue = this.app.$cookies.get('nhso.session');
+    const cookieValue = this.$cookies.get('nhso.session');
     const decodedToken = jwt(cookieValue.accessToken);
     if (decodedToken.exp * 1000 < Date.now() + thirtySeconds) {
       const { token } = await this.app.$http.postV1PatientAuthorizationAccessTokenRefresh();
@@ -58,9 +56,9 @@ export default {
       setCookie({
         key: 'nhso.session',
         value: cookieValue,
-        cookies: this.app.$cookies,
+        cookies: this.$cookies,
         options: {
-          secure: this.app.$env.SECURE_COOKIES,
+          secure: this.$env.SECURE_COOKIES,
         },
       });
     }
@@ -74,10 +72,10 @@ export default {
      */
 
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
-    if (process.server) {
-      const { nhsoRequestId } = this.app.context.res.locals;
-      consola.info(`handleAuthResponse - codeVerifier=${codeVerifier}, redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
-    }
+
+    // const { nhsoRequestId } = this.app.context.res.locals;
+    // consola.info(`handleAuthResponse - codeVerifier=${codeVerifier},
+    // redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
 
     try {
       const response = await this.app.$http
@@ -123,7 +121,7 @@ export default {
       this.dispatch('session/startValidationChecking');
 
       removeCookies({
-        cookies: this.app.$cookies,
+        cookies: this.$cookies,
         key: 'nhso.auth',
       });
     }
@@ -150,10 +148,8 @@ export default {
     commit(INIT_AUTH);
   },
   nativeLogin() {
-    if (process.client) {
-      NativeCallbacks.onLogin();
-      NativeCallbacks.showHeader();
-    }
+    NativeCallbacks.onLogin();
+    NativeCallbacks.showHeader();
   },
   updateConfig({ commit }, config) {
     commit(UPDATE_CONFIG, config);

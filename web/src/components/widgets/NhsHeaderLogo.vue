@@ -1,11 +1,13 @@
 <template>
   <div>
-    <a id="nhs_logo"
-       ref="homeLogoEl"
-       :href="indexPath"
-       :class="'nhsuk-header__link nhsuk-header__link--service'"
-       :aria-label="$t('webHeader.nhsLogoAriaLabel')"
-       @click.stop.prevent="onClick">
+    <router-link
+      id="nhs_logo"
+      ref="homeLogoEl"
+      :href="indexPath"
+      :to="indexPath"
+      :class="'nhsuk-header__link nhsuk-header__link--service'"
+      :aria-label="$t('webHeader.nhsLogoAriaLabel')"
+      @click.stop.prevent="onClick">
       <svg class="nhsuk-logo nhsuk-logo--white"
            xmlns="http://www.w3.org/2000/svg"
            focusable="false"
@@ -25,20 +27,20 @@
             id="logo-text"
             class="nhsuk-header__service-name">
         {{ $t('webHeader.logoText') }}</span>
-    </a>
+    </router-link>
   </div>
 </template>
 
 <script>
 import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'NhsHeaderLogo',
   props: {
     indexPath: {
-      default: INDEX.path,
+      default: INDEX_PATH,
       type: String,
     },
   },

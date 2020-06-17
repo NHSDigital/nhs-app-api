@@ -56,7 +56,7 @@ import MenuItem from '@/components/MenuItem';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_INTERRUPT, PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_PATH, NOMINATED_PHARMACY_INTERRUPT_PATH, PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import sjrIf from '@/lib/sjrIf';
@@ -74,8 +74,7 @@ const loadData = async (store) => {
 };
 
 export default {
-  layout: 'nhsuk-layout',
-  name: 'Prescriptions',
+  name: 'PrescriptionIndexPage',
   components: {
     MenuItemList,
     MenuItem,
@@ -145,15 +144,9 @@ export default {
       }
     },
   },
-  async fetch({ store }) {
-    if (process.server) {
-      await loadData(store);
-    }
-  },
   mounted() {
-    if (process.client) {
-      loadData(this.$store);
-    }
+    loadData(this.$store);
+
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
@@ -169,17 +162,17 @@ export default {
       return GetNavigationPathFromPrescriptions(this.$store);
     },
     onViewOrdersClicked() {
-      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS.path);
+      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS_PATH);
     },
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT.path, true);
+        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT_PATH, true);
         this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.PRESCRIPTIONS);
-        redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
+        redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
       } else {
-        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
+        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_PATH, true);
         this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_SUMMARY);
-        redirectTo(this, NOMINATED_PHARMACY.path);
+        redirectTo(this, NOMINATED_PHARMACY_PATH);
       }
     },
     ariaLabelCaption(header, body) {

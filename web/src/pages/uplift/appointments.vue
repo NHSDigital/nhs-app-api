@@ -1,14 +1,12 @@
 <template>
-  <div v-if="showTemplate">
-    <proof-level-uplift-banner description="appointments"/>
-  </div>
+  <proof-level-uplift-banner v-if="showTemplate" description="appointments"/>
 </template>
 
 <script>
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'UpliftAppointmentsPage',
   components: {
     ProofLevelUpliftBanner,
   },

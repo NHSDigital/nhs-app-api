@@ -1,6 +1,5 @@
 package features.myrecord.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -141,7 +140,7 @@ open class MedicalRecordStepDefinitions {
 
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/health-records/gp-medical-record/"
+        val fullUrl = "/health-records/gp-medical-record/"
         browser.browseTo(fullUrl)
     }
 

@@ -2,7 +2,7 @@
   <div>
     <div :class="$style[isNative ? 'fix-breadcrumb' : '']">
       <bread-crumb-trail v-if="isBreadCrumbVisible" id="bread-crumb"
-                         :routes="currentBreadCrumbs()"/>
+                         :crumbs="currentBreadCrumbs()"/>
       <yellow-banner v-if="showYellowBanner || showCoronaVirusBanner"
                      id="yellow-banner-line"
                      :class="$style['bannerLine']"/>
@@ -36,10 +36,10 @@
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
           <div id="page-title-container" class="nhsuk-grid-column-two-thirds">
-            <page-title v-if="showContentHeader"
-                        :caption="$store.state.header.headerCaption"
-                        :title-key="$store.state.header.headerText">
-              {{ $store.state.header.headerText }}
+            <page-title v-if="(showContentHeader || overrideShowContentHeader) && !isHeaderEmpty"
+                        :caption="caption"
+                        :title-key="`${header}${caption}`">
+              {{ header }}
             </page-title>
           </div>
         </div>
@@ -49,16 +49,18 @@
 </template>
 
 <script>
-import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
+import get from 'lodash/fp/get';
 import isEmpty from 'lodash/fp/isEmpty';
+import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 import PageTitle from '@/components/widgets/PageTitle';
+import { SWITCH_PROFILE_PATH } from '@/router/paths';
 import {
-  findByName,
-  APPOINTMENT_GP_ADVICE,
-  APPOINTMENT_ADMIN_HELP,
-  SWITCH_PROFILE,
-  INDEX,
-} from '@/lib/routes';
+  SWITCH_PROFILE_NAME,
+  INDEX_NAME,
+  APPOINTMENT_ADMIN_HELP_NAME,
+  APPOINTMENT_GP_ADVICE_NAME,
+} from '@/router/names';
+import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import YellowBanner from './YellowBanner';
 import CoronaVirusBanner from './CoronaVirusBanner';
 
@@ -70,6 +72,7 @@ export default {
     PageTitle,
     CoronaVirusBanner,
   },
+  mixins: [OnUpdateHeaderMixin],
   props: {
     showBreadCrumb: {
       type: Boolean,
@@ -80,6 +83,13 @@ export default {
       default: true,
     },
   },
+  data() {
+    return {
+      header: '',
+      caption: '',
+      overrideShowContentHeader: false,
+    };
+  },
   computed: {
     isProxying() {
       return this.$store.getters['session/isProxying'];
@@ -87,8 +97,11 @@ export default {
     isNative() {
       return this.$store.state.device.isNativeApp;
     },
+    isHeaderEmpty() {
+      return isEmpty(this.header);
+    },
     showCoronaVirusBanner() {
-      return !this.isProxying && this.$route.name === INDEX.name;
+      return !this.isProxying && this.$route.name === INDEX_NAME;
     },
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
@@ -99,57 +112,35 @@ export default {
     },
     showYellowBanner() {
       return this.showExternalServiceWarning ||
-        (this.isProxying && this.$route.name !== SWITCH_PROFILE.name);
+        (this.isProxying && this.$route.name !== SWITCH_PROFILE_NAME);
     },
     showExternalServiceWarning() {
-      const route = findByName(this.$route.name);
-      if (route === undefined) {
-        return false;
+      const warningBanner = get('$route.meta.warningBanner', this);
+      const routeName = this.$route.name;
+      if (routeName === APPOINTMENT_ADMIN_HELP_NAME
+        || routeName === APPOINTMENT_GP_ADVICE_NAME) {
+        return warningBanner && this.demographicsQuestionAnswered;
       }
-      if (route.path === APPOINTMENT_ADMIN_HELP.path || route.path === APPOINTMENT_GP_ADVICE.path) {
-        return route.warningBanner && this.demographicsQuestionAnswered;
-      }
-      return route.warningBanner;
+      return warningBanner;
     },
     actingAsPersonName() {
       return this.$store.state.linkedAccounts.actingAsUser.fullName;
     },
-    getProviderName() {
-      const route = findByName(this.$route.name);
-      if (route !== undefined) {
-        if (route === 'appointments-admin-help') {
-          return this.$store.state.onlineConsultations.adminProviderName;
-        }
-        return this.$store.state.onlineConsultations.adviceProviderName;
-      }
-      return '';
-    },
   },
   methods: {
     proxyBannerClicked() {
-      if (this.$route.name !== SWITCH_PROFILE.name) {
-        this.goToUrl(SWITCH_PROFILE.path);
+      if (this.$route.name !== SWITCH_PROFILE_NAME) {
+        this.goToUrl(SWITCH_PROFILE_PATH);
       }
     },
     currentBreadCrumbs() {
-      const route = findByName(
-        (this.$router.history !== undefined &&
-          this.$router.history.pending !== undefined &&
-          this.$router.history.pending !== null) ?
-          this.$router.history.pending.name :
-          this.$route.name,
-      );
       const { crumbSetName } = this.$store.state.navigation;
-
-      if (route === undefined) {
-        return [];
-      }
-
-      if (route.crumb[crumbSetName] === undefined) {
+      if (this.$route.meta.crumb[crumbSetName] === undefined) {
         this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
-        return route.crumb.defaultCrumb;
+        return this.$route.meta.crumb.defaultCrumb;
       }
-      return route.crumb[crumbSetName];
+
+      return this.$route.meta.crumb[crumbSetName];
     },
   },
 };

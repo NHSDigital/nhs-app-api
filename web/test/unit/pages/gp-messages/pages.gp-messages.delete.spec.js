@@ -1,6 +1,6 @@
 import Delete from '@/pages/messages/gp-messages/delete';
-import { createStore, mount } from '../../helpers';
 import { redirectTo } from '@/lib/utils';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => {
   const { isBlankString } = jest.requireActual('@/lib/utils');
@@ -12,11 +12,9 @@ jest.mock('@/lib/utils', () => {
   };
 });
 
-
 describe('patient messaging delete', () => {
   let wrapper;
   let store;
-  let redirect;
 
   const mountPage = ({
     deleteEnabled = true,
@@ -44,32 +42,40 @@ describe('patient messaging delete', () => {
     });
   };
 
-  describe('fetch', () => {
-    beforeEach(() => {
-      redirect = jest.fn();
-    });
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
+  describe('created', () => {
     describe('selected message id is undefined', () => {
-      it('will redirect to gp messages', async () => {
+      it('will redirect to gp messages', () => {
         mountPage();
-        await wrapper.vm.$options.fetch({ store, redirect });
-        expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
       });
     });
 
-    describe('current route is not gp messages view details', () => {
-      it('will redirect to gp messages', async () => {
-        mountPage({ currentRoutePath: '/more' });
-        await wrapper.vm.$options.fetch({ store, redirect });
-        expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
-      });
-    });
-
-    describe('current route is view details and selected message id is defined', () => {
-      it('will not redirect', async () => {
+    describe('selected message id is not undefined', () => {
+      it('will not redirect to gp messages', () => {
         mountPage({ selectedId: '1' });
-        await wrapper.vm.$options.fetch({ store, redirect });
-        expect(redirect).not.toHaveBeenCalled();
+        expect(redirectTo).not.toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+      });
+    });
+  });
+
+  describe('beforeRouteEnter', () => {
+    describe('coming from gp messages view details', () => {
+      it('will not redirect to gp messages', () => {
+        const next = jest.fn();
+        Delete.beforeRouteEnter(undefined, { path: 'messages/gp-messages/view-details' }, next);
+        expect(next).toHaveBeenCalledWith(undefined);
+      });
+    });
+
+    describe('not coming from gp messages view details', () => {
+      it('will redirect to gp messages', () => {
+        const next = jest.fn();
+        Delete.beforeRouteEnter(undefined, { path: '/somewhere-not-gp-messages' }, next);
+        expect(next).toHaveBeenCalledWith('messages/gp-messages');
       });
     });
   });
@@ -80,11 +86,11 @@ describe('patient messaging delete', () => {
     });
 
     it('will return the correct messages path', () => {
-      expect(wrapper.vm.messagesPath).toBe('/messages/gp-messages');
+      expect(wrapper.vm.messagesPath).toBe('messages/gp-messages');
     });
 
     it('will return the correct message details path', () => {
-      expect(wrapper.vm.messageDetailsPath).toBe('/messages/gp-messages/view-details');
+      expect(wrapper.vm.messageDetailsPath).toBe('messages/gp-messages/view-details');
     });
 
     it('will return the correct message id', () => {
@@ -100,7 +106,7 @@ describe('patient messaging delete', () => {
     it('will redirect to message details page', () => {
       mountPage({ isNativeApp: false, selectedId: '1' });
       wrapper.vm.backLinkClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details');
     });
   });
 
@@ -115,7 +121,7 @@ describe('patient messaging delete', () => {
     });
 
     it('will call redirect', () => {
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/delete-success');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/delete-success');
     });
   });
 });

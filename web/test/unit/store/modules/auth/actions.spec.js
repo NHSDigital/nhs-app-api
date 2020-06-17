@@ -40,7 +40,6 @@ describe('actions', () => {
       'device/init',
       'errors/clearAllApiErrors',
       'flashMessage/init',
-      'header/init',
       'http/init',
       'messaging/init',
       'myAppointments/init',
@@ -60,15 +59,15 @@ describe('actions', () => {
 
   const removeSessionCookiesAsserts = () => {
     it('will remove the `nhso.session` cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.session');
     });
 
     it('will remove the `nhso.terms` cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
     });
 
     it('will remove the `NHSO-Session-Id` cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
     });
   };
 
@@ -87,29 +86,13 @@ describe('actions', () => {
 
   beforeEach(() => {
     actions.app = {
-      $env: {
-        SECURE_COOKIES: true,
-      },
       $http: {
         postV1PatientAuthorizationAccessTokenRefresh: jest.fn(() =>
           Promise.resolve({ token: refreshedToken })),
         postV1Session: jest.fn(() => Promise.resolve(postSessionResponse)),
         deleteV1Session: jest.fn(() => Promise.resolve()),
       },
-      $cookies: {
-        ...mockCookies(),
-        get: (cookieName) => {
-          switch (cookieName) {
-            case 'nhso.session':
-              return {
-                accessToken: mockAccessToken,
-              };
-            default:
-              return undefined;
-          }
-        },
-      },
-      router: {
+      $router: {
         go: jest.fn(),
         push: jest.fn(),
       },
@@ -120,6 +103,22 @@ describe('actions', () => {
       },
       context: {
         redirect: jest.fn(),
+      },
+    };
+    actions.$env = {
+      SECURE_COOKIES: true,
+    };
+    actions.$cookies = {
+      ...mockCookies(),
+      get: (cookieName) => {
+        switch (cookieName) {
+          case 'nhso.session':
+            return {
+              accessToken: mockAccessToken,
+            };
+          default:
+            return undefined;
+        }
       },
     };
 
@@ -156,7 +155,7 @@ describe('actions', () => {
     });
 
     it('will remove the "nhso.auth" cookie', () => {
-      expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.auth');
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.auth');
     });
 
     it('will commit the AUTH_RESPONSE', () => {
@@ -185,10 +184,10 @@ describe('actions', () => {
       });
 
       it('will set `nhso.session` with refreshed token', () => {
-        expect(actions.app.$cookies.set).toBeCalledWith(
+        expect(actions.$cookies.set).toBeCalledWith(
           'nhso.session',
           { accessToken: refreshedToken },
-          { path: '/', secure: actions.app.$env.SECURE_COOKIES },
+          { path: '/', secure: actions.$env.SECURE_COOKIES },
         );
       });
 
@@ -210,7 +209,7 @@ describe('actions', () => {
       });
 
       it('will not set cookie', () => {
-        expect(actions.app.$cookies.set).not.toBeCalled();
+        expect(actions.$cookies.set).not.toBeCalled();
       });
 
       it('will return the existing token', () => {
@@ -269,18 +268,12 @@ describe('actions', () => {
 
   describe('nativeLogin', () => {
     it('will fire the native onLogin callback', () => {
-      process.client = true;
-
       actions.nativeLogin();
-
       expect(NativeCallbacks.onLogin).toHaveBeenCalled();
     });
 
     it('will fire the show headers callback', () => {
-      process.client = true;
-
       actions.nativeLogin();
-
       expect(NativeCallbacks.showHeader).toHaveBeenCalled();
     });
   });

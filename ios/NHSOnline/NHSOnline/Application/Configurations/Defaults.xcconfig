@@ -6,6 +6,7 @@ NHS_111_LOCATION_URL = 111.service.nhs.uk/
 MORE_URL = /more
 DATA_SHARING_URL_PATH = /data-sharing
 
+HEALTH_RECORDS_URL_PATH = /health-records
 MY_RECORD_URL_PATH = /my-record
 APPOINTMENTS_URL_PATH = /appointments
 ADMIN_HELP_URL_PATH = /appointments/admin-help

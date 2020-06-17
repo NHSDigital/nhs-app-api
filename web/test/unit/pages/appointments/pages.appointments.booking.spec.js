@@ -2,84 +2,86 @@ import each from 'jest-each';
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
 import { createStore, mount } from '../../helpers';
 
-const createBookingPage = ({ $route, $store, data }) => mount(BookingPage, {
-  $route,
-  $style: {
-    mainShowingSlots: 'mainShowingSlots',
-    warning: 'warning',
-    error: 'error',
-  },
-  $store,
-  data,
-  methods: {
-    reload: jest.fn(),
-  },
-  stubs: {
-    'page-title': '<div></div>',
-    'nuxt-link': '<a>Back</a>',
-  },
-});
-
 describe('booking.vue', () => {
-  let $store;
-  let state;
   let wrapper;
+  let $store;
 
-  beforeEach(() => {
-    state = {
-      availableAppointments: {
-        slots: [],
-        filteredSlots: [],
-        hasLoaded: true,
-        error: null,
-      },
-      myAppointments: {
-        disableCancellation: false,
-      },
-      device: {
-        source: 'web',
-      },
-    };
-    $store = createStore({ state });
-    wrapper = createBookingPage({ $store });
-  });
-
-  it('will show "no slot message"', () => {
-    expect(wrapper.find('.warning').exists()).toBeTruthy();
-    expect(wrapper.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
-  });
-
-  it('will show "not match search criteria message"', () => {
-    state.availableAppointments.slots.push({});
-    state.availableAppointments.selectedOptions = {
-      type: 'appointment',
-      location: 'my surgery',
-    };
-
-    const data = () => ({
-      filters: {
-        type: 'Emergency',
-        location: 'Leeds',
+  const createBookingPage = ({
+    slots = [],
+    selectedOptions,
+    queryName = 'nothing',
+    error = undefined,
+  } = {}) => {
+    $store = createStore({
+      state: {
+        availableAppointments: {
+          selectedOptions,
+          slots,
+          filteredSlots: [],
+          hasLoaded: true,
+          error,
+        },
+        myAppointments: {
+          disableCancellation: false,
+        },
+        device: {
+          source: 'web',
+        },
       },
     });
 
-    wrapper = createBookingPage({ $store, data });
-    wrapper.vm.filterSlots();
+    wrapper = mount(BookingPage, {
+      $route: {
+        path: '/foo',
+        query: {
+          [queryName]: '123456',
+        },
+      },
+      $style: {
+        mainShowingSlots: 'mainShowingSlots',
+        warning: 'warning',
+        error: 'error',
+      },
+      $store,
+      methods: {
+        reload: jest.fn(),
+      },
+      stubs: {
+        'page-title': '<div></div>',
+      },
+    });
+  };
 
-    expect(wrapper.find('.warning').exists()).toBeTruthy();
-    expect(wrapper.findAll('.warning p').at(0).text()).toContain('appointments.booking.adjustSearch.line1');
-    expect(wrapper.findAll('.warning p').at(1).text()).toContain('appointments.booking.adjustSearch.line2');
+  describe('available appointments has no slots', () => {
+    it('will show "no slot message"', () => {
+      createBookingPage();
+
+      expect(wrapper.find('.warning').exists()).toBeTruthy();
+      expect(wrapper.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
+    });
   });
 
-  describe('asyncData', () => {
+  describe('no matching slots', () => {
+    it('will show "not match search criteria message"', () => {
+      const slots = [{}];
+      const selectedOptions = {
+        type: 'appointment',
+        location: 'my surgery',
+      };
+
+      createBookingPage({ slots, selectedOptions });
+      wrapper.vm.filterSlots();
+
+      expect(wrapper.find('.warning').exists()).toBeTruthy();
+      expect(wrapper.findAll('.warning p').at(0).text()).toContain('appointments.booking.adjustSearch.line1');
+      expect(wrapper.findAll('.warning p').at(1).text()).toContain('appointments.booking.adjustSearch.line2');
+    });
+  });
+
+  describe('created', () => {
     describe('query has filter', () => {
-      beforeEach(async () => {
-        await wrapper.vm.$options.asyncData({
-          store: $store,
-          req: {
-            url: '/foo?time-period=123456',
-          },
-        });
+      beforeEach(() => {
+        createBookingPage({ queryName: 'time-period' });
       });
 
       it('will dispatch `availableAppointments/init`', () => {
@@ -103,12 +105,8 @@ describe('booking.vue', () => {
     });
 
     describe('query has no filter', () => {
-      beforeEach(async () => {
-        await wrapper.vm.$options.asyncData({ store: $store,
-          req: {
-            url: '/foo?nothing=123456',
-          },
-        });
+      beforeEach(() => {
+        createBookingPage();
       });
 
       it('will dispatch `availableAppointments/init`', () => {
@@ -136,52 +134,43 @@ describe('booking.vue', () => {
 
     describe('query has filter', () => {
       beforeEach(() => {
-        wrapper.setData({
-          $route: {
-            query: {
-              'time-period': 'time-period',
-              ts: 'testTs',
-            },
-          },
-        });
+        createBookingPage({ queryName: 'time-period' });
+        wrapper.setData({ $route: { query: { ts: 'testTs' } } });
       });
 
       it('will dispatch `availableAppointments/init`', () => {
-        expect($store.dispatch).toBeCalledWith('availableAppointments/init');
+        expect($store.dispatch).toHaveBeenNthCalledWith(3, 'availableAppointments/init');
       });
 
       it('will dispatch `availableAppointments/load`', () => {
-        expect($store.dispatch).toBeCalledWith('availableAppointments/load');
+        expect($store.dispatch).toHaveBeenNthCalledWith(4, 'availableAppointments/load');
       });
     });
 
     describe('query has no filter', () => {
       beforeEach(() => {
+        createBookingPage();
         wrapper.setData({ $route: { query: { ts: 'testTs' } } });
       });
 
       it('will dispatch `availableAppointments/init`', () => {
-        expect($store.dispatch).toBeCalledWith('availableAppointments/init');
+        expect($store.dispatch).toHaveBeenNthCalledWith(3, 'availableAppointments/init');
       });
 
       it('will dispatch `availableAppointments/load`', () => {
-        expect($store.dispatch).toBeCalledWith('availableAppointments/load');
+        expect($store.dispatch).toHaveBeenNthCalledWith(4, 'availableAppointments/load');
       });
     });
   });
 
   describe('errors', () => {
-    beforeEach(() => {
-      wrapper = createBookingPage({ $store });
-    });
-
     each([
       403,
       500,
       502,
       504,
     ]).it('will display an error dialog for status code: %s', (status) => {
-      state.availableAppointments.error = { status };
+      createBookingPage({ error: { status } });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });

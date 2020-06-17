@@ -1,10 +1,15 @@
 import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import {
-  ORGAN_DONATION_REVIEW_YOUR_DECISION,
-  ORGAN_DONATION_YOUR_CHOICE,
-} from '@/lib/routes';
-
+  ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
+  ORGAN_DONATION_YOUR_CHOICE_PATH,
+} from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const mountReaffirmDecision = ({ $router, $store, isSomeOrgans = false } = {}) =>
   mount(ReaffirmDecisionLink, {
@@ -19,6 +24,7 @@ describe('reaffirm decision', () => {
   let wrapper;
 
   beforeEach(() => {
+    redirectTo.mockClear();
     wrapper = mountReaffirmDecision();
   });
 
@@ -58,7 +64,8 @@ describe('reaffirm decision', () => {
         });
 
         it('will push ORGAN_DONATION_REVIEW_YOUR_DECISION to the router', () => {
-          expect($router).toContain(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
+          expect(redirectTo)
+            .toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
         });
       });
 
@@ -69,7 +76,7 @@ describe('reaffirm decision', () => {
         });
 
         it('will push ORGAN_DONATION_YOUR_CHOICE to the router', () => {
-          expect($router).toContain(ORGAN_DONATION_YOUR_CHOICE.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_YOUR_CHOICE_PATH);
         });
       });
     });

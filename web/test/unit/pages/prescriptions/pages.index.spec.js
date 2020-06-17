@@ -1,8 +1,8 @@
 import each from 'jest-each';
 import PrescriptionsPage from '@/pages/prescriptions/index';
-import { mount } from '../../helpers';
 import * as dependency from '@/lib/utils';
-import { PRESCRIPTIONS_VIEW_ORDERS, NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY } from '@/lib/routes';
+import { PRESCRIPTIONS_VIEW_ORDERS_PATH, NOMINATED_PHARMACY_INTERRUPT_PATH, NOMINATED_PHARMACY_PATH } from '@/router/paths';
+import { mount } from '../../helpers';
 
 let linkElement;
 
@@ -15,9 +15,7 @@ const createStore = ({
   context = true,
 }) => ({
   dispatch: jest.fn(),
-  app: {
-    $env: {},
-  },
+  $env: {},
   state: {
     device: { isNativeApp },
     knownServices: {
@@ -54,11 +52,6 @@ describe('prescriptions hub index page', () => {
   let repeatPrescriptionsButton;
   let nominatedPharmacyPanel;
   let viewOrdersLink;
-
-  beforeEach(() => {
-    process.server = false;
-    process.client = true;
-  });
 
   it('will call repeatPrescriptionsCourses init, clearInterruptBackTo, and clear/load nominatedPharmacy when nominatedPharmacy is enabled by sjr and nominated pharamcy is not already loaded', async () => {
     $store = createStore({ pharmacyName: 'boots', sjrEnabled: true });
@@ -104,12 +97,10 @@ describe('prescriptions hub index page', () => {
   describe('when nominated pharmacy is enabled and nominated pharmacy set', () => {
     beforeEach(() => {
       $store = createStore({ nominatedPharmacyEnabled: true, sjrEnabled: true, pharmacyName: 'Boots' });
+      $store.app = { $analytics: { trackButtonClick: jest.fn() } };
       wrapper = mountPage($store);
       nominatedPharmacyPanel = wrapper.find('#nominated-pharmacy');
       dependency.redirectTo = jest.fn();
-      $store.app.$analytics = {
-        trackButtonClick: jest.fn(),
-      };
     });
 
     it('will display the correct nominated pharmacy information and panel title', async () => {
@@ -121,19 +112,17 @@ describe('prescriptions hub index page', () => {
     it('will redirect to the correct page when panel is clicked', async () => {
       wrapper.vm.onNominatedPharmacyDetailClicked();
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_PATH);
     });
   });
 
   describe('when nominated pharmacy is enabled and no nominated pharmacy set', () => {
     beforeEach(() => {
       $store = createStore({ nominatedPharmacyEnabled: true, sjrEnabled: true });
+      $store.app = { $analytics: { trackButtonClick: jest.fn() } };
       wrapper = mountPage($store);
       nominatedPharmacyPanel = wrapper.find('#nominated-pharmacy');
       dependency.redirectTo = jest.fn();
-      $store.app.$analytics = {
-        trackButtonClick: jest.fn(),
-      };
     });
 
     it('will display the nominated pharmacy help text and correct panel title', async () => {
@@ -145,7 +134,7 @@ describe('prescriptions hub index page', () => {
     it('will redirect to the correct page when panel is clicked', async () => {
       wrapper.vm.onNominatedPharmacyDetailClicked();
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT_PATH);
     });
   });
 
@@ -178,7 +167,7 @@ describe('prescriptions hub index page', () => {
     it('will go the view orders page when clicked', async () => {
       wrapper.vm.onViewOrdersClicked();
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS_PATH);
     });
   });
 

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" class="nhsuk-grid-row">
+  <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="messageRecipients && messageRecipients.length > 0">
         <message-dialog v-if="isError" message-type="error" role="alert">
@@ -56,18 +56,19 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import Question from '@/components/online-consultations/Question';
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
-import {
-  GP_MESSAGES,
-  GP_MESSAGES_URGENCY_CONTACT_GP,
-  GP_MESSAGES_RECIPIENTS,
-} from '@/lib/routes';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
+import {
+  GP_MESSAGES_PATH,
+  GP_MESSAGES_URGENCY_CONTACT_GP_PATH,
+  GP_MESSAGES_RECIPIENTS_PATH,
+} from '@/router/paths';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 const YES = 'yes';
 const NO = 'no';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesUrgencyPage',
   components: {
     DesktopGenericBackLink,
     GenericButton,
@@ -80,6 +81,7 @@ export default {
   data() {
     return {
       isError: false,
+      loading: true,
       questionOptions: [{
         code: YES,
         label: this.$t('im02.isUrgentChoiceLabel'),
@@ -87,7 +89,7 @@ export default {
         code: NO,
         label: this.$t('im02.isNotUrgentChoiceLabel'),
       }],
-      messagingPath: GP_MESSAGES.path,
+      messagingPath: GP_MESSAGES_PATH,
     };
   },
   computed: {
@@ -104,14 +106,16 @@ export default {
         this.$store.state.gpMessages.messageRecipients : [];
     },
   },
-  async fetch({ store, app }) {
-    await store.dispatch('gpMessages/loadRecipients');
-    const { messageRecipients } = store.state.gpMessages;
+  async created() {
+    await this.$store.dispatch('gpMessages/loadRecipients');
+    const { messageRecipients } = this.$store.state.gpMessages;
 
     if (!messageRecipients || isEmptyArray(messageRecipients)) {
-      store.dispatch('pageTitle/updatePageTitle', app.i18n.t('im02.noRecipients'));
-      store.dispatch('header/updateHeaderText', app.i18n.t('im02.noRecipients'));
+      EventBus.$emit(UPDATE_HEADER, 'im02.noRecipients');
+      EventBus.$emit(UPDATE_TITLE, 'im02.noRecipients');
     }
+
+    this.loading = false;
   },
   methods: {
     onAnswerValidate(validation) {
@@ -123,12 +127,11 @@ export default {
         return;
       }
       redirectTo(this, this.answer === YES
-        ? GP_MESSAGES_URGENCY_CONTACT_GP.path
-        : GP_MESSAGES_RECIPIENTS.path);
+        ? GP_MESSAGES_URGENCY_CONTACT_GP_PATH
+        : GP_MESSAGES_RECIPIENTS_PATH);
     },
     backLinkClicked() {
-      redirectTo(this, this.$store.state.navigation.backLinkOverride ||
-      GP_MESSAGES.path);
+      redirectTo(this, this.$store.state.navigation.backLinkOverride || this.messagingPath);
     },
   },
 };

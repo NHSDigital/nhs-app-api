@@ -1,7 +1,8 @@
 import { getOr, isArray } from 'lodash/fp';
-import { findByName } from '@/lib/routes';
+import { isNhsAppRouteName } from '@/router/names';
+import { createRoutePathObject } from '@/lib/utils';
 
-export const conditionalRedirector = ({ redirect, path, redirectRules, store }) => {
+export const conditionalRedirector = ({ redirectRules, store, name }) => {
   if (isArray(redirectRules)) {
     for (let i = 0; i < redirectRules.length; i += 1) {
       const rule = redirectRules[i];
@@ -10,25 +11,30 @@ export const conditionalRedirector = ({ redirect, path, redirectRules, store }) 
         : store.getters[rule.condition];
 
       if (getOr(true, 'value', rule) === result) {
-        if (path === rule.url) {
+        if (name === rule.route.name) {
           break;
         }
-        redirect('302', rule.url);
-        break;
+        return createRoutePathObject({ path: rule.route.path, store });
       }
     }
   }
+  return false;
 };
 
-export default ({ redirect, route, store }) => {
-  const routeDetail = findByName(route.name);
-
-  if (routeDetail) {
-    conditionalRedirector({
-      redirect,
-      path: routeDetail.path,
-      redirectRules: routeDetail.redirectRules,
+export default ({ to, store, next }) => {
+  const internalRoute = isNhsAppRouteName(to.name);
+  let redirect;
+  if (internalRoute) {
+    redirect = conditionalRedirector({
+      next,
+      name: to.name,
+      redirectRules: to.meta.redirectRules,
       store,
     });
   }
+
+  if (redirect) {
+    return next(redirect);
+  }
+  return next();
 };

@@ -32,8 +32,16 @@ class HeaderNative : NativePageObject() {
     )
     private val accountIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("myAccountIcon"),
-            webDesktopLocator = "//a[@href='/account']",
-            webMobileLocator = "//a[@href='/account']",
+            webDesktopLocator = "//a[@href='account']",
+            webMobileLocator = "//a[@href='account']",
+            iOSAccessID = "My account",
+            page = this
+    )
+
+    private val accountLink = NativePageElement(
+            androidLocator = getAndroidIconLocator("myAccountIcon"),
+            webDesktopLocator = "//a[@id='account-link']",
+            webMobileLocator = "//a[@id='account-link']",
             iOSAccessID = "My account",
             page = this
     )
@@ -50,7 +58,8 @@ class HeaderNative : NativePageObject() {
 
     fun assertIsVisible(title: String) {
         Assert.assertTrue("Expected logo to be visible", homeIcon.isDisplayed())
-        Assert.assertTrue("Expected account icon to be visible", accountIcon.isDisplayed())
+        Assert.assertTrue("Expected account icon to be visible",
+                accountIcon.isDisplayed() || accountLink.isDisplayed())
 
         val optionManager = OptionManager.instance()
         when {
@@ -62,7 +71,12 @@ class HeaderNative : NativePageObject() {
     }
 
     fun clickMyAccount() {
-        accountIcon.click()
+        if ( accountIcon.isDisplayed() ) {
+            accountIcon.click()
+        }
+        else {
+            accountLink.click()
+        }
     }
 
     fun clickHelp() {

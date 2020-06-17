@@ -11,6 +11,16 @@ class ErrorDialogPage : HybridPageObject() {
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
 
     fun assertPageTitle(title: String): ErrorDialogPage {
+        var retryCount = (TIME_TO_WAIT_FOR_ELEMENT / ELEMENT_RETRY_TIME).toInt()
+        while (retryCount > 0) {
+            if ("$title - NHS App" != this.title) {
+                retryCount--
+                Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
+            }
+            else {
+                break;
+            }
+        }
         assertEquals("$title - NHS App", this.title)
         return this
     }

@@ -15,21 +15,32 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { GP_MESSAGES, LOGIN, LOGOUT, GP_MESSAGES_VIEW_MESSAGE } from '@/lib/routes';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { redirectTo } from '@/lib/utils';
+import { UPDATE_HEADER, UPDATE_TITLE, FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
+import {
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+  GP_MESSAGES_PATH,
+  LOGOUT_PATH,
+  LOGIN_PATH,
+} from '@/router/paths';
+import {
+  CLINICAL_ABBREVIATIONS_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesViewAttachmentPage',
   components: {
     DesktopGenericBackLink,
     Glossary,
   },
   data() {
     return {
-      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
+      isViewable: get('$store.state.documents.currentDocument.isViewable', this),
+      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {
@@ -37,29 +48,25 @@ export default {
       return this.$store.state.documents.currentDocument.data;
     },
     messagePath() {
-      return GP_MESSAGES_VIEW_MESSAGE.path;
+      return GP_MESSAGES_VIEW_MESSAGE_PATH;
     },
     isAndroid() {
       return this.$store.state.device.source === 'android';
     },
   },
-  async asyncData({ store, redirect }) {
-    if (!store.state.gpMessages.selectedMessageDetails ||
-      !store.state.documents.currentDocument) {
-      return redirect(GP_MESSAGES.path);
-    }
-    const { isViewable } = store.state.documents.currentDocument;
-    if (!isViewable) {
-      store.dispatch('header/updateHeaderText',
-        store.app.i18n.t('pageHeaders.gpMessagesAttachmentUnavailable'));
-      store.dispatch('pageTitle/updatePageTitle',
-        store.app.i18n.t('pageTitles.gpMessagesAttachmentUnavailable'));
+  created() {
+    if (!this.$store.state.gpMessages.selectedMessageDetails ||
+        !this.$store.state.documents.currentDocument) {
+      redirectTo(this, GP_MESSAGES_PATH);
+      return;
     }
 
-    return { isViewable };
-  },
-  created() {
-    if (this.document && process.client) {
+    if (!this.isViewable) {
+      EventBus.$emit(UPDATE_HEADER, 'pageHeaders.gpMessagesAttachmentUnavailable');
+      EventBus.$emit(UPDATE_TITLE, 'pageTitles.gpMessagesAttachmentUnavailable');
+    }
+
+    if (this.document) {
       this.navHidden = true;
       NativeAppCallbacks.hideHeader();
       NativeAppCallbacks.hideMenuBar();
@@ -96,7 +103,7 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    if (!(to.path === LOGIN.path || to.path === LOGOUT.path) && this.navHidden) {
+    if (!(to.path === LOGIN_PATH || to.path === LOGOUT_PATH) && this.navHidden) {
       NativeAppCallbacks.showHeader();
       NativeAppCallbacks.showMenuBar();
     }

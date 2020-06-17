@@ -1,6 +1,6 @@
 import LinkifyContent from '@/components/widgets/LinkifyContent';
-import { createRouter, mount } from '../../helpers';
 import { key } from '@/lib/utils';
+import { createRouter, mount } from '../../helpers';
 
 const createEvent = ({ keyName, href }) => ({
   key: keyName,
@@ -15,10 +15,13 @@ const createEvent = ({ keyName, href }) => ({
   },
 });
 
-const state = {
-  device: {
-    isNativeApp: false,
+const $store = {
+  state: {
+    device: {
+      isNativeApp: false,
+    },
   },
+  getters: {},
 };
 const defaultContent = 'lorem ipsum dolor sit amet';
 
@@ -26,16 +29,18 @@ describe('LinkifyContent', () => {
   let $router;
   let wrapper;
 
-  const mountLinkifyContent = ({ content = defaultContent, id, tag } = {}) =>
-    mount(LinkifyContent, {
+  const mountLinkifyContent = ({ content = defaultContent, id, tag } = {}) => {
+    $store.getters['session/isLoggedIn'] = jest.fn();
+    return mount(LinkifyContent, {
       $router,
-      state,
+      $store,
       propsData: {
         content,
         id,
         tag,
       },
     });
+  };
 
   beforeEach(() => {
     $router = createRouter();
@@ -113,7 +118,7 @@ describe('LinkifyContent', () => {
         });
 
         it('will push href to the router', () => {
-          expect($router.push).toBeCalledWith(href);
+          expect($router.push).toBeCalledWith({ path: href });
         });
 
         it('will call event preventDefault', () => {
@@ -149,7 +154,7 @@ describe('LinkifyContent', () => {
         });
 
         it('will push href to the router', () => {
-          expect($router.push).toBeCalledWith(href);
+          expect($router.push).toBeCalledWith({ path: href });
         });
       });
 

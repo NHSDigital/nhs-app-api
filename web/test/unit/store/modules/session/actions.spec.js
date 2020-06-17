@@ -18,14 +18,12 @@ describe('actions', () => {
   let mutation;
 
   beforeEach(() => {
-    actions.app = {
-      $cookies: {
-        get: jest.fn(),
-        set: jest.fn(),
-        remove: jest.fn(),
-      },
-      $env: jest.fn(),
+    actions.$cookies = {
+      get: jest.fn(),
+      set: jest.fn(),
+      remove: jest.fn(),
     };
+    actions.$env = jest.fn();
     mutation = {
       commit: jest.fn(),
       state: { },
@@ -61,7 +59,6 @@ describe('actions', () => {
 
   describe('validation checking', () => {
     beforeEach(() => {
-      process.client = true;
       mutation.state = {};
       mutation.getters = {
         isLoggedIn: () => true,
@@ -94,7 +91,6 @@ describe('actions', () => {
         'will not call commit for the START_VALIDATION_CHECKING when not running on the server',
         () => {
           mutation.state.validationInterval = 1;
-          process.client = false;
           actions.startValidationChecking(mutation);
           expect(mutation.commit.mock.calls[0]).toBeUndefined();
         },
@@ -172,10 +168,8 @@ describe('actions', () => {
       app = {
         dispatch: jest.fn(),
         validate: actions.validate,
-        app: {
-          $env: {
-            SESSION_EXPIRING_WARNING_SECONDS: 10,
-          },
+        $env: {
+          SESSION_EXPIRING_WARNING_SECONDS: 10,
         },
       };
       store = {
@@ -240,7 +234,6 @@ describe('actions', () => {
 
       it('will call dispatch moal/show  if expiring and desktop', () => {
         window.nativeApp = undefined;
-        process.client = true;
 
         app.validate(store);
         expect(app.dispatch).toHaveBeenCalledWith('modal/show', { content: SessionExpiryModal });

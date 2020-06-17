@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
+      <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="documentData"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  :path="documentPath"
@@ -15,51 +15,51 @@
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { GP_MEDICAL_RECORD, LOGIN, LOGOUT, DOCUMENT } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH, DOCUMENT_PATH, LOGOUT_PATH, LOGIN_PATH } from '@/router/paths';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { redirectTo } from '@/lib/utils';
+import {
+  CLINICAL_ABBREVIATIONS_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     Glossary,
   },
   data() {
     return {
-      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
+      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
+      documentData: null,
     };
   },
   computed: {
-    document() {
-      return this.$store.state.documents.currentDocument.data;
-    },
     isAndroid() {
       return this.$store.state.device.source === 'android';
     },
     documentPath() {
-      return DOCUMENT.path.replace(':id', this.$route.params.id);
+      return DOCUMENT_PATH.replace(':id', this.$route.params.id);
     },
   },
-  async asyncData({ store, route, redirect }) {
-    if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
-      redirect(GP_MEDICAL_RECORD.path);
+  async mounted() {
+    if (!this.$store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
       return;
     }
 
     // TPP document would already have been loaded into the store at this point.
-    if (!store.state.documents.currentDocument.data) {
-      await store.dispatch('documents/loadDocument', { documentIdentifier: route.params.id });
+    if (!this.$store.state.documents.currentDocument.data) {
+      await this.$store.dispatch('documents/loadDocument', { documentIdentifier: this.$route.params.id });
     }
-  },
-  created() {
-    if (this.document && process.client) {
+    this.documentData = this.$store.state.documents.currentDocument.data;
+
+    if (this.documentData) {
       this.navHidden = true;
       NativeAppCallbacks.hideHeader();
       NativeAppCallbacks.hideMenuBar();
     }
-  },
-  mounted() {
+
     // Need to set user-scalable=yes
     // and maximum-scale=10.0 options
     // from the content attribute so user can zoom
@@ -93,7 +93,7 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    if (!(to.path === LOGIN.path || to.path === LOGOUT.path) && this.navHidden) {
+    if (!(to.path === LOGIN_PATH || to.path === LOGOUT_PATH) && this.navHidden) {
       NativeAppCallbacks.showHeader();
       NativeAppCallbacks.showMenuBar();
     }

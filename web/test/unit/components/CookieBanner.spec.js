@@ -1,5 +1,5 @@
-import { createRouter, mount, createStore } from '../helpers';
 import CookieBanner from '@/components/CookieBanner';
+import { createRouter, mount, createStore } from '../helpers';
 
 describe('components/CookieBanner.vue -', () => {
   let $router;

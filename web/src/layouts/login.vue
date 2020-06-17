@@ -4,7 +4,7 @@
       <connection-error/>
       <api-error/>
     </div>
-    <div v-else id="app" :class="{ [$style['no-footer']]: isNativeApp }">
+    <div v-else id="app">
       <corona-virus-banner v-if="isNativeApp"
                            :should-be-floating="true"/>
       <div :class="dynamicStyle('login-app-header-flex-container')">
@@ -16,9 +16,9 @@
         <session-expired-banner v-if="showSessionExpiredBanner"/>
         <main v-if="isNativeApp" :class="$style.homeMain">
           <flash-message/>
-          <nuxt id="mainContent"/>
+          <slot id="mainContent"/>
         </main>
-        <div v-else id="mainContent" ref="mainContent" tabindex="-1"
+        <div v-else id="maincontent" ref="mainContent" tabindex="-1"
              class="nhsuk-width-container">
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
@@ -44,10 +44,10 @@
               </div>
             </div>
           </div>
-          <pre-registration-information :should-show-header="shouldShowPreRegistrationHeader"/>
+          <pre-registration-information :should-show-header="true"/>
           <main :class="[$style['homeMain-desktop'], $style['pull-content']]">
             <flash-message/>
-            <nuxt/>
+            <slot/>
             <div class="nhsuk-grid-row">
               <div class="nhsuk-grid-column-one-third"
                    :class="$style['nhs-app-desktop-hide']">
@@ -80,13 +80,13 @@ import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import DownloadAppPanel from '@/components/widgets/DownloadAppPanel';
-import { CHECKYOURSYMPTOMS, findByName } from '@/lib/routes';
+import { CHECKYOURSYMPTOMS_PATH } from '@/router/paths';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import PreRegistrationInformation from '@/components/PreRegistrationInformation';
 import OtherServices from '../components/OtherServices';
 
-
 export default {
+  name: 'LoginLayout',
   components: {
     OtherServices,
     PreRegistrationInformation,
@@ -100,13 +100,20 @@ export default {
     WebHeader,
     DownloadAppPanel,
   },
+  metaInfo() {
+    return {
+      title: `${this.$t('pageTitles.login')} screen`,
+      htmlAttrs: {
+        lang: `${this.$t('language')}`,
+      },
+    };
+  },
   data() {
     return {
-      currentHelpUrl: findByName(this.$route.name).helpUrl,
+      currentHelpUrl: this.$route.meta.helpUrl,
       isNativeApp: this.$store.state.device.isNativeApp,
       symptomButtonId: 'btn_home_symptoms',
-      symptomsUrl: CHECKYOURSYMPTOMS.path,
-      shouldShowPreRegistrationHeader: true,
+      symptomsUrl: CHECKYOURSYMPTOMS_PATH,
     };
   },
   computed: {
@@ -116,14 +123,6 @@ export default {
     isErrorVisible() {
       return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
     },
-  },
-  head() {
-    return {
-      htmlAttrs: {
-        lang: `${this.$t('language')}`,
-      },
-      title: `${this.$store.state.header.headerText} screen`,
-    };
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
@@ -137,7 +136,7 @@ export default {
     this.configureWebContext(this.currentHelpUrl);
   },
   created() {
-    const appVersion = this.$store.app.$env.VERSION_TAG;
+    const appVersion = this.$store.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
@@ -158,7 +157,6 @@ export default {
   @import "../style/home";
   @import "../style/spacings";
   @import "../style/webshared";
-  @import "../style/nofooter";
 
   .error-container {
     @include space(padding, all, 1em);

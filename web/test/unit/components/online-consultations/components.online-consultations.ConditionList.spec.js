@@ -1,8 +1,9 @@
+import each from 'jest-each';
 import ConditionList from '@/components/online-consultations/ConditionList';
 import MenuItem from '@/components/MenuItem';
-import { mount, createStore } from '../../helpers';
+import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import each from 'jest-each';
+import { mount, createStore } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
@@ -145,7 +146,7 @@ describe('condition list', () => {
         conditionList.vm.endMyConsultationClicked();
 
         // Assert
-        expect(redirectTo).toHaveBeenCalledWith(conditionList.vm, '/');
+        expect(redirectTo).toHaveBeenCalledWith(conditionList.vm, INDEX_PATH);
       });
     });
   });

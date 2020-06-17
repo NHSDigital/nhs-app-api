@@ -1,5 +1,6 @@
-import { createStore, mount } from '../../helpers';
 import NhsHeaderLogo from '@/components/widgets/NhsHeaderLogo';
+import { RouterLinkStub } from '@vue/test-utils';
+import { createStore, mount } from '../../helpers';
 
 describe('NhsHeaderLogo.vue', () => {
   let $router;
@@ -15,8 +16,9 @@ describe('NhsHeaderLogo.vue', () => {
       },
     });
 
-    return mount(NhsHeaderLogo, { $store, $router });
+    return mount(NhsHeaderLogo, { $store, $router, stubs: { 'router-link': RouterLinkStub } });
   };
+
   describe('on desktop', () => {
     let span;
 
@@ -33,6 +35,10 @@ describe('NhsHeaderLogo.vue', () => {
 
     it('will display text from webHeader.logoText', () => {
       expect(span.text()).toEqual('translate_webHeader.logoText');
+    });
+
+    it('will have the service header design for the logo', () => {
+      expect(wrapper.find('#nhs_logo').attributes('class')).toBe('nhsuk-header__link nhsuk-header__link--service');
     });
   });
 

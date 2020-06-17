@@ -1,13 +1,17 @@
 import conditionalRedirect from '@/middleware/conditionalRedirect';
-import { ACCOUNT_NOTIFICATIONS, INDEX, MORE } from '@/lib/routes';
+import { ACCOUNT_NOTIFICATIONS } from '@/router/routes/account';
+import { MORE } from '@/router/routes/more';
+import { INDEX_PATH } from '@/router/paths';
+import * as dependency from '@/lib/utils';
 
 describe('middleware/conditionalRedirect rules', () => {
   let getters;
-  let redirect;
+  let next;
   let store;
+  dependency.createRoutePathObject = jest.fn(x => ({ path: x.path }));
 
-  const callConditionalRedirect = (route) => {
-    conditionalRedirect({ redirect, route, store });
+  const callConditionalRedirect = (to) => {
+    conditionalRedirect({ next, to, store });
   };
 
   beforeEach(() => {
@@ -15,18 +19,18 @@ describe('middleware/conditionalRedirect rules', () => {
     store = {
       getters,
     };
-    redirect = jest.fn();
+    next = jest.fn();
   });
 
-  describe('notifications redirect rules', () => {
+  describe('notifications next rules', () => {
     describe('is not native app', () => {
       beforeEach(() => {
         getters['device/isNativeApp'] = false;
         callConditionalRedirect(ACCOUNT_NOTIFICATIONS);
       });
 
-      it('will redirect to accounts', () => {
-        expect(redirect).toBeCalledWith('302', INDEX.path);
+      it('will next to accounts', () => {
+        expect(next).toBeCalledWith({ path: INDEX_PATH });
       });
     });
 
@@ -36,13 +40,14 @@ describe('middleware/conditionalRedirect rules', () => {
         callConditionalRedirect(ACCOUNT_NOTIFICATIONS);
       });
 
-      it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+      it('will next with no parameter', () => {
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
   });
 
-  describe('more redirect rules', () => {
+  describe('more next rules', () => {
     describe('is not native app', () => {
       beforeEach(() => {
         getters['device/isNativeApp'] = false;
@@ -56,8 +61,9 @@ describe('middleware/conditionalRedirect rules', () => {
         callConditionalRedirect(MORE);
       });
 
-      it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+      it('will next with no parameter', () => {
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
   });

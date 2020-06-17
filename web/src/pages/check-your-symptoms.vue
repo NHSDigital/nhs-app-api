@@ -1,20 +1,24 @@
 <template>
-  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
-    <header-slim v-if="$store.state.device.isNativeApp"> {{ $t('sy01.pageHeader') }}</header-slim>
-    <div>
-      <symptoms-check/>
+  <nhsuk-layout>
+    <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+      <header-slim v-if="$store.state.device.isNativeApp"> {{ $t('sy01.pageHeader') }}</header-slim>
+      <div>
+        <symptoms-check/>
+      </div>
     </div>
-  </div>
+  </nhsuk-layout>
 </template>
+
 <script>
-/* eslint-disable import/extensions */
+import NhsukLayout from '@/layouts/nhsuk-layout';
 import NativeCallbacks from '@/services/native-app';
 import HeaderSlim from '@/components/HeaderSlim';
 import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'CheckYourSymptomsPage',
   components: {
+    NhsukLayout,
     HeaderSlim,
     symptomsCheck,
   },

@@ -60,7 +60,12 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY_DSP_INTERRUPT, PRESCRIPTIONS } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  NOMINATED_PHARMACY_INTERRUPT_PATH,
+  NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
+  PRESCRIPTIONS_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -76,9 +81,9 @@ export default {
   },
   data() {
     return {
-      interruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
-      highStreetSearchPath: NOMINATED_PHARMACY_SEARCH.path,
-      dspInterruptPath: NOMINATED_PHARMACY_DSP_INTERRUPT.path,
+      interruptPath: NOMINATED_PHARMACY_INTERRUPT_PATH,
+      highStreetSearchPath: NOMINATED_PHARMACY_SEARCH_PATH,
+      dspInterruptPath: NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
       hasTriedToContinue: false,
       radioButtons: [
         {
@@ -108,7 +113,7 @@ export default {
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {

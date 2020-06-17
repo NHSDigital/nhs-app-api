@@ -8,24 +8,25 @@
         <div class="nhsuk-grid-column-full">
           <div v-if="!$store.state.device.isNativeApp" id="navbar-breadcrumb">
             <ol class="nhsuk-breadcrumb__list">
-              <li v-for="(route, index) in routes" :key="index"
+              <li v-for="(crumb, index) in crumbs" :key="index"
                   class="nhsuk-breadcrumb__item">
-                <nuxt-link class="nhsuk-breadcrumb__link" :to="route.path" tabindex="0" >
-                  {{ $t(`crumbName.${route.crumb.i18nKey}`) }}
-                </nuxt-link>
+                <router-link class="nhsuk-breadcrumb__link"
+                             :to="createRouteLink(crumb.name)" tabindex="0" >
+                  {{ $t(`crumbName.${crumb.i18nKey}`) }}
+                </router-link>
               </li>
             </ol>
             <p class="nhsuk-breadcrumb__back">
-              <nuxt-link :class="['nhsuk-breadcrumb__backlink',
-                                  $store.state.device.isNativeApp && $style.native
-                         ]"
-                         :to="lastCrumb.path"
-                         tabindex="0"
-                         :aria-label="$t('crumbName.backTo',
-                                         { crumbName: $t(`crumbName.${lastCrumb.crumb.i18nKey}`)})">
+              <router-link :class="['nhsuk-breadcrumb__backlink',
+                                    $store.state.device.isNativeApp && $style.native]"
+                           :to="createRouteLink(lastCrumb.name)"
+                           tabindex="0"
+                           :aria-label="$t(
+                             'crumbName.backTo',
+                             { crumbName: $t(`crumbName.${lastCrumb.i18nKey}`)})">
                 {{ $t('crumbName.backTo',
-                      { crumbName: $t(`crumbName.${lastCrumb.crumb.i18nKey}`)}) }}
-              </nuxt-link>
+                      { crumbName: $t(`crumbName.${lastCrumb.i18nKey}`)}) }}
+              </router-link>
             </p>
           </div>
           <div v-else>
@@ -50,40 +51,41 @@
 <script>
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
-import { navigateBack } from '@/lib/utils';
+import { navigateBack, createRouteByNameObject } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import {
-  SWITCH_PROFILE,
-  backLinkOverrides,
-} from '@/lib/routes';
+import backLinkOverrides from '@/router/backLinkOverRides';
+import { SWITCH_PROFILE_NAME } from '@/router/names';
 
 export default {
   name: 'BreadCrumbTrail',
   props: {
-    routes: {
+    crumbs: {
       type: Array,
       default: () => [],
     },
   },
   computed: {
     isProxyPage() {
-      return this.$route.name === SWITCH_PROFILE.name;
+      return this.$route.name === SWITCH_PROFILE_NAME;
     },
     olcBack() {
       return this.$store.state.onlineConsultations.previousQuestion !== undefined;
     },
     lastCrumb() {
-      return last(this.routes);
+      return last(this.crumbs);
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
     },
     hasCrumbs() {
-      return !isEmpty(this.routes);
+      return !isEmpty(this.crumbs);
     },
   },
   methods: {
+    createRouteLink(name) {
+      return createRouteByNameObject({ name, params: {}, store: this.$store });
+    },
     backClicked() {
       if (this.olcBack) {
         this.goToPreviousQuestion();

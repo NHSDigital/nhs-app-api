@@ -47,10 +47,8 @@ export default {
           AnalyticsValues.SCRAccess;
       }
       commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
-      if (process.client) {
-        this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
-        this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
-      }
+      this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+      this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
     } catch (error) {
       this.dispatch('errors/addApiError', error);
     }

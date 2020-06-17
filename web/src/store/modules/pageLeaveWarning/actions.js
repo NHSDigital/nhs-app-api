@@ -1,12 +1,12 @@
+import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
+import NativeCallbacks from '@/services/native-app';
+import { redirectTo } from '@/lib/utils';
 import {
   SHOULD_BYPASS_ROUTE_GUARD,
   SHOW_LEAVING_PAGE_WARNING,
   SET_ATTEMPTED_REDIRECT_ROUTE,
   RESET,
 } from './mutation-types';
-import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
-import NativeCallbacks from '@/services/native-app';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   setAttemptedRedirectRoute({ commit }, route) {
@@ -18,7 +18,7 @@ export default {
   },
 
   showLeavingModal({ state, commit }) {
-    if (process.client && !state.showLeavingWarning) {
+    if (!state.showLeavingWarning) {
       commit(SHOW_LEAVING_PAGE_WARNING);
 
       if (window.nativeApp) {
@@ -50,7 +50,7 @@ export default {
       this.dispatch('modal/hide');
     }
     commit(SHOULD_BYPASS_ROUTE_GUARD, true);
-    redirectTo(this, state.attemptedRedirectRoute.path);
+    redirectTo({ $router: this.app.$router, $store: this }, state.attemptedRedirectRoute);
     commit(RESET);
   },
 

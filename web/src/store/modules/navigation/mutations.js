@@ -21,7 +21,7 @@ function storePreviousSelectedMenuItem(state) {
 
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
-    if (process.client && window.nativeApp) {
+    if (window.nativeApp) {
       NativeCallbacks.clearMenuBarItem();
     } else {
       storePreviousSelectedMenuItem(state);
@@ -29,7 +29,7 @@ export default {
     }
   },
   [SET_NEWMENUITEM](state, menuItemIndex) {
-    if (process.client && window.nativeApp !== 'undefined') {
+    if (window.nativeApp !== 'undefined') {
       NativeCallbacks.setMenuBarItem(menuItemIndex);
     }
     storePreviousSelectedMenuItem(state);

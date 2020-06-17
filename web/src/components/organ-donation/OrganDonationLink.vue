@@ -16,12 +16,14 @@ import get from 'lodash/fp/get';
 // For some reason, in this file, when the JEST tests run, it fails unless I add the '.vue'
 // extension.  Other tests seem fine but this one fails!
 // eslint-disable-next-line import/extensions
-import { ORGAN_DONATION } from '@/lib/routes';
+import { ORGAN_DONATION_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import MenuItem from '@/components/MenuItem';
+import {
+  ORGAN_DONATION_URL,
+} from '@/router/externalLinks';
 
 const getIsNativeApp = get('$store.state.device.isNativeApp');
-const getOrganDonationUrl = get('$store.app.$env.ORGAN_DONATION_URL');
 
 export default {
   name: 'OrganDonationLink',
@@ -61,7 +63,7 @@ export default {
       return this.useIntegratedOrganDonation ? '_self' : '_blank';
     },
     organDonationUrl() {
-      return this.useIntegratedOrganDonation ? ORGAN_DONATION.path : getOrganDonationUrl(this);
+      return this.useIntegratedOrganDonation ? ORGAN_DONATION_PATH : ORGAN_DONATION_URL;
     },
     useIntegratedOrganDonation() {
       // Integrated organ donation is used if the request is from the native app.
@@ -69,15 +71,11 @@ export default {
     },
   },
   methods: {
-    navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
-    },
-    onClickOrganDonation(event) {
+    onClickOrganDonation() {
       if (this.useIntegratedOrganDonation) {
         this.$store.dispatch('navigation/setBackLinkOverride', this.backLinkOverride);
 
-        this.navigate(event);
+        redirectTo(this, ORGAN_DONATION_PATH);
       }
     },
   },

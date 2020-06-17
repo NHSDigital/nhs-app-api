@@ -40,12 +40,12 @@ import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import {
-  ORGAN_DONATION_FAITH,
-  ORGAN_DONATION_SOME_ORGANS,
-} from '@/lib/routes';
+  ORGAN_DONATION_FAITH_PATH,
+  ORGAN_DONATION_SOME_ORGANS_PATH,
+} from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     BackButton,
     GenericButton,
@@ -85,15 +85,15 @@ export default {
       return this.hasTriedToContinue && !this.hasMadeDecision;
     },
   },
-  asyncData({ store }) {
+  beforeMount() {
     if (
-      store.state.organDonation.isAmending &&
+      this.$store.state.organDonation.isAmending &&
       isDefault({
         path: 'registration.decisionDetails.all',
-        state: store.state.organDonation,
+        state: this.$store.state.organDonation,
       })
     ) {
-      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.all');
+      this.$store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.all');
     }
   },
   created() {
@@ -113,9 +113,11 @@ export default {
         return;
       }
 
-      this.$router.push(this.currentChoice ?
-        ORGAN_DONATION_FAITH.path :
-        ORGAN_DONATION_SOME_ORGANS.path);
+      if (this.currentChoice) {
+        redirectTo(this, ORGAN_DONATION_FAITH_PATH);
+      } else {
+        redirectTo(this, ORGAN_DONATION_SOME_ORGANS_PATH);
+      }
     },
     selected(value) {
       this.$store.dispatch(this.setAllOrgansAction, value);

@@ -82,7 +82,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
             break
         case .MyRecord:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().HealthRecordsUrlPath)
             break
         case .More:
             selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)

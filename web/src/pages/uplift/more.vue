@@ -1,14 +1,12 @@
 <template>
-  <div v-if="showTemplate">
-    <proof-level-uplift-banner description="more"/>
-  </div>
+  <proof-level-uplift-banner v-if="showTemplate" description="more"/>
 </template>
 
 <script>
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'UpliftMorePage',
   components: {
     ProofLevelUpliftBanner,
   },

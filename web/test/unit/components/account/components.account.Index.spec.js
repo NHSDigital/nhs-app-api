@@ -4,7 +4,15 @@ import { createStore, mount } from '../../helpers';
 describe('Account.index', () => {
   let wrapper;
   let store;
-  let mountIndex;
+  const mountIndex = ($store, $env) => mount(Index, {
+    $env,
+    $store: createStore(Object.assign({}, $store, $env)),
+    stubs: {
+      'welcome-section': '<div></div>',
+      settings: '<div data-purpose="setting-section"></div>',
+      // 'analytics-tracked-tag': '<a></a>',
+    },
+  });
 
   beforeEach(() => {
     store = {
@@ -25,16 +33,6 @@ describe('Account.index', () => {
         'appVersion/isNativeVersionAfter': () => true,
       },
     };
-
-    mountIndex = ($store, $env) => mount(Index, {
-      $env,
-      $store: createStore($store),
-      stubs: {
-        'welcome-section': '<div></div>',
-        settings: '<div data-purpose="setting-section"></div>',
-        // 'analytics-tracked-tag': '<a></a>',
-      },
-    });
   });
 
   describe('Logout button', () => {

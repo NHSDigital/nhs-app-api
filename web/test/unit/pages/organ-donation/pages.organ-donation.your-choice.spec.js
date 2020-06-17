@@ -1,8 +1,14 @@
 import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
-import { ORGAN_DONATION_FAITH } from '@/lib/routes';
+import { ORGAN_DONATION_FAITH_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
+import { redirectTo } from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const createState = (choice = '') => {
   const state = {
@@ -28,6 +34,8 @@ describe('organ donation your choice page', () => {
   });
 
   beforeEach(() => {
+    redirectTo.mockClear();
+
     $router = createRouter();
     state = createState();
     $store = createStore({ state });
@@ -71,7 +79,7 @@ describe('organ donation your choice page', () => {
         });
 
         it('will push the organ donation faith page on the router', () => {
-          expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_FAITH.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_FAITH_PATH);
         });
       });
     });

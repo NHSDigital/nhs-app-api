@@ -7,8 +7,8 @@
       <menu-item :id="'cookies-policy'"
                  :key="'cookies-policy'"
                  header-tag="h2"
-                 :target="cookieLink[0].url"
-                 :href="cookieLink[0].url"
+                 :target="cookieLink"
+                 :href="cookieLink"
                  :text="$t('myAccount.cookiesPolicy')"
                  :aria-label="$t('myAccount.cookiesPolicy')"/>
     </menu-item-list>
@@ -29,13 +29,15 @@
 </template>
 
 <script>
-import { ACCOUNT } from '@/lib/routes';
-import { cookieLink } from '@/lib/common-links';
+import { ACCOUNT_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import {
+  COOKIES_POLICY_URL,
+} from '@/router/externalLinks';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   layout: 'nhsuk-layout',
@@ -48,8 +50,8 @@ export default {
 
   data() {
     return {
-      backPath: ACCOUNT.path,
-      cookieLink: cookieLink(this.$env),
+      backPath: ACCOUNT_PATH,
+      cookieLink: COOKIES_POLICY_URL,
       dataToggle: this.registered,
     };
   },

@@ -1,5 +1,9 @@
 import AuthReturnLayout from '@/layouts/authReturn';
-import { mount } from '../helpers';
+import { AUTH_RETURN_PATH } from '@/router/paths';
+import { mount, createStore } from '../helpers';
+
+
+jest.mock('@/lib/utils');
 
 describe('authReturn layout', () => {
   const CONTACT_US_URL = 'https://www.example.com';
@@ -10,24 +14,35 @@ describe('authReturn layout', () => {
   let goToUrl;
   let wrapper;
 
-  const mountAuthReturnLayout = status => mount(AuthReturnLayout, {
-    $env: {
-      CONTACT_US_URL,
-    },
+  const mountAuthReturnLayout = ({
+    status,
+    shallow = false,
+    showApiError = true,
+  }) => mount(AuthReturnLayout, {
+    shallow,
     mocks: {
       correctUrl: jest.fn(),
       goToUrl,
     },
-    state: {
-      device: {
-        isNativeApp: true,
+    $store: createStore({
+      $env: {
+        CONTACT_US_URL,
       },
-      errors: {
-        pageSettings: { errorOverrideStyles: [] },
-        routePath: '/auth-return',
-        apiErrors: [{ status, serviceDeskReference }],
+      getters: {
+        'errors/showApiError': showApiError,
       },
-    },
+      state: {
+        appVersion: {
+          nativeVersion: true,
+        },
+        device: { isNativeApp: true },
+        errors: {
+          pageSettings: { errorOverrideStyles: [] },
+          routePath: AUTH_RETURN_PATH,
+          apiErrors: [{ status, serviceDeskReference }],
+        },
+      },
+    }),
   });
 
   beforeEach(() => {
@@ -42,7 +57,7 @@ describe('authReturn layout', () => {
     999,
   ])('on error %i', (status) => {
     beforeEach(() => {
-      wrapper = mountAuthReturnLayout(status);
+      wrapper = mountAuthReturnLayout({ status });
     });
 
     describe('error container', () => {
@@ -93,7 +108,7 @@ describe('authReturn layout', () => {
 
   describe('on error 464', () => {
     beforeEach(() => {
-      wrapper = mountAuthReturnLayout(464);
+      wrapper = mountAuthReturnLayout({ status: 464 });
     });
 
     describe('error container', () => {
@@ -152,7 +167,7 @@ describe('authReturn layout', () => {
 
   describe('on error 465', () => {
     beforeEach(() => {
-      wrapper = mountAuthReturnLayout(465);
+      wrapper = mountAuthReturnLayout({ status: 465 });
     });
 
     describe('error container', () => {
@@ -168,6 +183,34 @@ describe('authReturn layout', () => {
 
       it('will not have any links', () => {
         expect(container.find('a').exists()).toBe(false);
+      });
+    });
+  });
+
+  describe('metaInfo', () => {
+    it('will set language from locale', () => {
+      wrapper = mountAuthReturnLayout({ shallow: true });
+      const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+      expect(head.htmlAttrs.lang).toBe('translate_language');
+    });
+
+    it('will have no scripts defined', () => {
+      wrapper = mountAuthReturnLayout({ shallow: true });
+      const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+      expect(head.script).toBeUndefined();
+    });
+
+    describe('title', () => {
+      it('will set title to undefined if showError is false', () => {
+        wrapper = mountAuthReturnLayout({ shallow: true, showApiError: false });
+        const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        expect(head.title).toBeUndefined();
+      });
+
+      it('will set title to loginFailed if showError is true', () => {
+        wrapper = mountAuthReturnLayout({ shallow: true });
+        const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+        expect(head.title).toBe('translate_auth_return.error.title.loginFailed');
       });
     });
   });

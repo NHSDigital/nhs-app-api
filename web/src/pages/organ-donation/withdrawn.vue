@@ -36,9 +36,11 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
+import {
+  ORGAN_DONATION_LAW_CHANGE_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     MessageDialog,
@@ -48,7 +50,7 @@ export default {
   mixins: [NativeOnlyMixin],
   data() {
     return {
-      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
+      lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
     };
   },
   created() {

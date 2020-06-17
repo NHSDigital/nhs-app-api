@@ -4,7 +4,7 @@
       {{ $t('thirdPartyProviders.warningConjunctions.heading2') }}
     </template>
     <template>
-      <p>{{ paragraphText() }}
+      <p class="nhsuk-body-m">{{ paragraphText() }}
         <strong>{{ providerName() }}</strong>.
       </p>
 
@@ -28,6 +28,7 @@
 <script>
 import WarningContentPanel from '@/components/widgets/WarningContentPanel';
 import { getPathAndQuery, getThirdPartyLocaleText } from '@/lib/utils';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'SilverIntegrationPanel',
@@ -56,8 +57,8 @@ export default {
   async mounted() {
     const featureName = this.getWarningMessage('featureName');
 
-    this.$store.dispatch('pageTitle/updatePageTitle', featureName);
-    this.$store.dispatch('header/updateHeaderText', featureName);
+    EventBus.$emit(UPDATE_HEADER, featureName, true);
+    EventBus.$emit(UPDATE_TITLE, featureName, true);
   },
   methods: {
     buttonClick(event) {

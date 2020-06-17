@@ -39,8 +39,8 @@ const store = {
       getV2CdssServiceDefinitionByProviderDetails: jest.fn(),
       getV2CdssServiceDefinitionByProviderIsValid: jest.fn(),
     },
-    i18n: {
-      t: jest.fn(p => `translate_${p}`),
+    $options: {
+      i18n: { t: jest.fn(p => `translate_${p}`) },
     },
   },
   dispatch: jest.fn(),

@@ -1,7 +1,6 @@
 import Warning from '@/components/my-record/Warning';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
-import { INDEX, MYRECORD } from '@/lib/routes';
-import { createEvent, createStore, shallowMount } from '../../helpers';
+import { createStore, shallowMount } from '../../helpers';
 
 const createState = () => ({
   myRecord: initialState(),
@@ -25,39 +24,24 @@ const createComponent = ({ $store = createStore({ state: createState() }) } = {}
 
 describe('Warning', () => {
   let $store;
-  let event;
   let component;
 
   beforeEach(() => {
     $store = createStore({ state: createState() });
-    event = createEvent();
     component = createComponent({ $store });
-  });
-
-  it('will have a form that performs a get request to the my record path', () => {
-    const form = component.find(`form[action="${MYRECORD.path}"]`);
-
-    expect(form.exists()).toBe(true);
-    expect(form.attributes().method).toEqual('get');
-  });
-
-  it('will not have a form that performs a get request to the index path', () => {
-    const form = component.find(`form[action="${INDEX.path}"]`);
-
-    expect(form.exists()).toBe(false);
   });
 
   describe('onContinueButtonClicked', () => {
     beforeEach(() => {
-      component.vm.onContinueButtonClicked(event);
-    });
-
-    it('will prevent default on the event', () => {
-      expect(event.preventDefault).toHaveBeenCalled();
+      component.vm.onContinueButtonClicked();
     });
 
     it('will accept the terms', () => {
       expect($store.dispatch).toHaveBeenCalledWith('myRecord/acceptTerms');
+    });
+
+    it('will load my record', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/load');
     });
   });
 });

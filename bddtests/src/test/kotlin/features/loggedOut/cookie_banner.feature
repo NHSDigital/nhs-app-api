@@ -3,16 +3,12 @@ Feature: Cookie Banner
 
   Cookie Banner displayed when logged-out, until the user has explicitly dismissed it
 
-  Scenario Outline: Cookie banner appears on the "non logged in" login page, on the web with Javascript <js enabled?>, if not yet acknowledged
-    Given I have <js enabled?> javascript
+  Scenario: Cookie banner appears on the "non logged in" login page, on the web with Javascript enabled, if not yet acknowledged
+    Given I have enabled javascript
     When I am on the login logged-out page
     Then I see the cookie banner
     When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage'
     Then a new tab has been opened by the link
-    Examples:
-      | js enabled? |
-      | enabled     |
-      | disabled    |
 
   @native
   @nativesmoketest
@@ -30,8 +26,8 @@ Feature: Cookie Banner
     And pages will display the cookie banner
       | /login               |
 
-  Scenario Outline: Cookie Banner doesn't appear when logged in on web, when Javascript <js enabled?>
-    Given I have <js enabled?> javascript
+  Scenario: Cookie Banner doesn't appear when logged in on web, when Javascript enabled
+    Given I have enabled javascript
     And I am a EMIS patient
     And I am about to directly access every page
     And I am logged in
@@ -53,22 +49,14 @@ Feature: Cookie Banner
       | /prescriptions/confirm-prescription-details |
       | /symptoms                                   |
       | /terms-and-conditions                       |
-    Examples:
-      | js enabled? |
-      | enabled     |
-      | disabled    |
 
-  Scenario Outline: Unacknowledged Cookie Banner reappears when logged out of the web, when Javascript <js enabled?>
-    Given I have <js enabled?> javascript
+  Scenario: Unacknowledged Cookie Banner reappears when logged out of the web, when Javascript enabled
+    Given I have enabled javascript
     And I am a EMIS patient
     And I am logged in
     And I see the home page
     When I sign out
     Then I see the cookie banner
-    Examples:
-      | js enabled? |
-      | disabled    |
-      | enabled     |
 
   Scenario: Acknowledged Cookie Banner reappears when browser closed and repoened, when Javascript enabled
     Given I have enabled javascript

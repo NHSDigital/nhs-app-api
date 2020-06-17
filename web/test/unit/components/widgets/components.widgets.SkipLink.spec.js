@@ -1,5 +1,5 @@
-import { createStore, mount } from '../../helpers';
 import SkipLink from '@/components/widgets/SkipLink';
+import { createStore, mount } from '../../helpers';
 
 describe('SkipLink.vue', () => {
   let $router;

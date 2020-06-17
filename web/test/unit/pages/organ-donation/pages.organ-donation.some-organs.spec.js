@@ -3,8 +3,17 @@ import OrganChoice from '@/components/organ-donation/OrganChoice';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
+import {
+  ORGAN_DONATION_FAITH_PATH,
+  ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH,
+} from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const allNoChoices = {
   heart: NO,
@@ -85,6 +94,8 @@ describe('organ donation some organs page', () => {
   };
 
   beforeEach(() => {
+    redirectTo.mockClear();
+
     wrapper = mountSomeOrgans();
     global.scrollTo = jest.fn();
   });
@@ -118,7 +129,7 @@ describe('organ donation some organs page', () => {
       });
 
       it('will push the organ donation more about organs page on the router', () => {
-        expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_MORE_ABOUT_ORGANS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
       });
     });
   });
@@ -187,7 +198,7 @@ describe('organ donation some organs page', () => {
           });
 
           it('will not push the organ donation additional details page on the router', () => {
-            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+            expect(redirectTo).not.toHaveBeenCalledWith(ORGAN_DONATION_FAITH_PATH);
           });
 
           it('will show inline errors', () => {
@@ -206,7 +217,7 @@ describe('organ donation some organs page', () => {
           });
 
           it('will not push the organ donation additional details page on the router', () => {
-            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+            expect(redirectTo).not.toHaveBeenCalledWith(ORGAN_DONATION_FAITH_PATH);
           });
 
           it('will not show inline errors', () => {
@@ -225,7 +236,7 @@ describe('organ donation some organs page', () => {
           });
 
           it('will not push the organ donation additional details page on the router', () => {
-            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+            expect(redirectTo).not.toHaveBeenCalledWith(ORGAN_DONATION_FAITH_PATH);
           });
 
           it('will show inline errors', () => {
@@ -244,7 +255,7 @@ describe('organ donation some organs page', () => {
           });
 
           it('will push the organ donation additional details page on the router', () => {
-            expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_FAITH.path);
+            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_FAITH_PATH);
           });
 
           it('will not show inline errors', () => {

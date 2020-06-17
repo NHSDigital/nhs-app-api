@@ -1,12 +1,18 @@
 import onlineConsultations from '@/middleware/onlineConsultations';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
-import { APPOINTMENT_ADMIN_HELP, APPOINTMENT_GP_ADVICE, APPOINTMENTS, AUTH_RETURN } from '@/lib/routes';
+import {
+  APPOINTMENTS_NAME,
+  APPOINTMENT_ADMIN_HELP_NAME,
+  APPOINTMENT_GP_ADVICE_NAME,
+  AUTH_RETURN_NAME,
+} from '@/router/names';
 import { mutationNames } from '../../../src/store/modules/serviceJourneyRules/constants';
 
 const { IM1_PROVIDER } = mutationNames;
 
 describe('middleware/onlineConsultations', () => {
   let store;
+  const next = jest.fn();
 
   const callOnlineConsultations = async ({
     routeName, isLoggedIn, isSjrLoaded, adminName, adviceName }) => {
@@ -47,13 +53,13 @@ describe('middleware/onlineConsultations', () => {
     store.state.serviceJourneyRules.isLoaded = isSjrLoaded;
     store.state.serviceJourneyRules.rules.cdssAdmin = adminName;
     store.state.serviceJourneyRules.rules.cdssAdvice = adviceName;
-    await onlineConsultations({ route: { name: routeName }, store });
+    await onlineConsultations({ to: { name: routeName }, store, next });
   };
 
   describe('appointments path', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENTS.name,
+        routeName: APPOINTMENTS_NAME,
         isLoggedIn: true,
         isSjrLoaded: true,
         adminName: 'none',
@@ -69,7 +75,7 @@ describe('middleware/onlineConsultations', () => {
   describe('admin path', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENT_ADMIN_HELP.name,
+        routeName: APPOINTMENT_ADMIN_HELP_NAME,
         isLoggedIn: true,
         isSjrLoaded: true,
         adminName: 'eConsult',
@@ -85,7 +91,7 @@ describe('middleware/onlineConsultations', () => {
   describe('advice path', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENT_GP_ADVICE.name,
+        routeName: APPOINTMENT_GP_ADVICE_NAME,
         isLoggedIn: true,
         isSjrLoaded: true,
         adminName: 'eConsult',
@@ -101,7 +107,7 @@ describe('middleware/onlineConsultations', () => {
   describe('advice path sjr not loaded', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENT_GP_ADVICE.name,
+        routeName: APPOINTMENT_GP_ADVICE_NAME,
         isLoggedIn: true,
         isSjrLoaded: false,
         adminName: 'eConsult',
@@ -117,7 +123,7 @@ describe('middleware/onlineConsultations', () => {
   describe('auth return path', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: AUTH_RETURN.name,
+        routeName: AUTH_RETURN_NAME,
         isLoggedIn: false,
         isSjrLoaded: false,
         adminName: 'none',

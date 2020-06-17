@@ -13,7 +13,7 @@ export default {
     state.user = user;
   },
   [LOGOUT]() {
-    if (process.client && window.nativeApp) {
+    if (window.nativeApp) {
       NativeCallbacks.onLogout();
     }
   },

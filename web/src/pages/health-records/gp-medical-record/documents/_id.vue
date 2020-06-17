@@ -58,39 +58,12 @@ import get from 'lodash/fp/get';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { DOCUMENT_DETAIL, DOCUMENTS, GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH, DOCUMENTS_PATH } from '@/router/paths';
+import { DOCUMENT_DETAIL_NAME } from '@/router/names';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { isBlankString, isEmptyArray, isTruthy, redirectTo, datePart, mimeType } from '@/lib/utils';
+import { isBlankString, isEmptyArray, isTruthy, redirectTo, createRouteByNameObject, datePart, mimeType } from '@/lib/utils';
 import Glossary from '@/components/Glossary';
-
-function updateHeaderText(store, term, isValidFile, datePartString, documentType, dateString) {
-  if (isValidFile) {
-    store.dispatch('header/updateHeaderText', term || dateString);
-
-    return;
-  }
-
-  if (!isBlankString(documentType)) {
-    store.dispatch('header/updateHeaderText',
-      store.app.i18n.t('my_record.documents.documentTypeUnavailableHeader', {
-        date: datePartString,
-        type: documentType.toLowerCase(),
-      }));
-
-    store.dispatch('pageTitle/updatePageTitle',
-      store.app.i18n.t('my_record.documents.documentTypeUnavailablePageTitle', {
-        date: datePartString,
-        type: documentType.toLowerCase(),
-      }));
-
-    return;
-  }
-
-  store.dispatch('header/updateHeaderText',
-    store.app.i18n.t('my_record.documents.documentUnavailableHeader', { date: datePartString }));
-  store.dispatch('pageTitle/updatePageTitle',
-    store.app.i18n.t('my_record.documents.documentUnavailablePageTitle', { date: datePartString }));
-}
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 function loadComments(store) {
   const documentComments = get('state.documents.currentDocument.comments', store);
@@ -103,14 +76,24 @@ function loadComments(store) {
 }
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     MenuItem,
     MenuItemList,
     Glossary,
     DesktopGenericBackLink,
   },
-
+  data() {
+    return {
+      dateString: null,
+      term: null,
+      type: null,
+      comments: null,
+      size: null,
+      isValidFile: null,
+      isViewable: null,
+      isDownloadable: null,
+    };
+  },
   computed: {
     hasComments() {
       return Array.isArray(this.comments) && !isEmptyArray(this.comments);
@@ -118,16 +101,17 @@ export default {
     retrieveComments() {
       return this.comments;
     },
-    documentsPath: () => DOCUMENTS.path,
+    documentsPath: () => DOCUMENTS_PATH,
   },
-
-  async asyncData({ store, redirect, route }) {
+  async mounted() {
+    const store = this.$store;
+    const route = this.$route;
     const date = get('state.documents.currentDocument.date', store);
     const needMoreInformation = get('state.documents.currentDocument.needMoreInformation', store);
 
     if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
 
     if (isTruthy(needMoreInformation)) {
@@ -147,13 +131,12 @@ export default {
     let dateString;
 
     if (!isBlankString(documentType)) {
-      dateString = `${documentType} ${store.app.i18n.t('my_record.documents.docTypePageSubtext')} ${datePartString}`;
+      dateString = `${documentType} ${this.$t('my_record.documents.docTypePageSubtext')} ${datePartString}`;
     } else {
-      dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePartString}`;
+      dateString = `${this.$t('my_record.documents.documentPageSubtext')} ${datePartString}`;
     }
 
-    updateHeaderText(
-      store,
+    this.updateHeaderText(
       term,
       isValidFile,
       datePartString,
@@ -161,23 +144,22 @@ export default {
       dateString,
     );
 
-    return {
-      dateString,
-      term,
-      type,
-      comments,
-      size,
-      isValidFile,
-      isViewable,
-      isDownloadable,
-    };
+    this.dateString = dateString;
+    this.term = term;
+    this.type = type;
+    this.comments = comments;
+    this.size = size;
+    this.isValidFile = isValidFile;
+    this.isViewable = isViewable;
+    this.isDownloadable = isDownloadable;
   },
   methods: {
     navigateToView() {
-      this.$router.push({
-        name: DOCUMENT_DETAIL.name,
+      this.$router.push(createRouteByNameObject({
+        name: DOCUMENT_DETAIL_NAME,
         params: { id: this.$route.params.id },
-      });
+        store: this.$store,
+      }));
     },
     backToDocumentsClicked() {
       redirectTo(this, this.documentsPath, null);
@@ -214,6 +196,28 @@ export default {
         default:
           return fileType;
       }
+    },
+    updateHeaderText(term, isValidFile, datePartString, documentType, dateString) {
+      if (isValidFile) {
+        EventBus.$emit(UPDATE_HEADER, term || dateString, true);
+        return;
+      }
+
+      let formatArgs;
+      let headerKey;
+      let titleKey;
+
+      if (!isBlankString(documentType)) {
+        formatArgs = { date: datePartString, type: documentType.toLowerCase() };
+        headerKey = 'my_record.documents.documentTypeUnavailableHeader';
+        titleKey = 'my_record.documents.documentTypeUnavailablePageTitle';
+      } else {
+        formatArgs = { date: datePartString };
+        headerKey = 'my_record.documents.documentUnavailableHeader';
+        titleKey = 'my_record.documents.documentUnavailablePageTitle';
+      }
+      EventBus.$emit(UPDATE_HEADER, this.$t(headerKey, formatArgs), true);
+      EventBus.$emit(UPDATE_TITLE, this.$t(titleKey, formatArgs), true);
     },
   },
 };

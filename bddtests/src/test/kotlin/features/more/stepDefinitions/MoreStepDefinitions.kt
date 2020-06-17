@@ -71,7 +71,7 @@ class MoreStepDefinitions {
 
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
-        webHeader.getPageTitle().withText("More")
+        webHeader.getPageTitle().waitForElement().withText("More")
     }
 
     @Then("the link to Messages is not available on the More page")

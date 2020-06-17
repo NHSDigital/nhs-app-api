@@ -67,10 +67,16 @@ import ErrorGroup from '@/components/ErrorGroup';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS, NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
+  PRESCRIPTIONS_PATH,
+  NOMINATED_PHARMACY_CHOOSE_TYPE_PATH,
+} from '@/router/paths';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 // If changing regex, ensure backend regex is updated.
 const postcodeRegex = /^((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( ?[0-9][A-Za-z]{2})?)$/;
@@ -92,11 +98,11 @@ export default {
     return {
       searchQueryMaxLength: 10,
       searchQuery: '',
-      allPharmaciesURL: NOMINATED_PHARMACY_SEARCH.path,
-      allDispensingContractorsURL: NOMINATED_PHARMACY_SEARCH.path,
+      allPharmaciesURL: NOMINATED_PHARMACY_SEARCH_PATH,
+      allDispensingContractorsURL: NOMINATED_PHARMACY_SEARCH_PATH,
       submissionError: false,
       showInvalidSearchError: false,
-      backButtonPath: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
+      backButtonPath: NOMINATED_PHARMACY_CHOOSE_TYPE_PATH,
       foundNoResultsMessage: '',
     };
   },
@@ -113,7 +119,7 @@ export default {
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {
@@ -144,11 +150,12 @@ export default {
 
       if (pharmacySearchResponse.noResultsFound) {
         this.foundNoResultsMessage = this.generateNoResultsMessage();
-        this.$store.dispatch('header/updateHeaderText', this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header', { searchQuery: this.searchQuery }));
-        this.$store.dispatch('pageTitle/updatePageTitle', this.$t('nominatedPharmacySearchResults.errors.noResultsFound.title', { searchQuery: this.searchQuery }));
+        const formatArgs = { searchQuery: this.searchQuery };
+        EventBus.$emit(UPDATE_HEADER, this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header', formatArgs), true);
+        EventBus.$emit(UPDATE_TITLE, this.$t('nominatedPharmacySearchResults.errors.noResultsFound.title', formatArgs), true);
         window.scrollTo(0, 0);
       } else {
-        redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+        redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
       }
     },
     searchFormSubmitted() {

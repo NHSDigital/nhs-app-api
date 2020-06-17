@@ -1,12 +1,16 @@
 /* eslint-disable object-curly-newline */
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
+import {
+  ORGAN_DONATION_ADDITIONAL_DETAILS_PATH,
+  ORGAN_DONATION_YOUR_CHOICE_PATH,
+} from '@/router/paths';
 import {
   DECISION_OPT_OUT,
   DECISION_OPT_IN,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
+import * as dependency from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
 
 describe('organ donation button', () => {
@@ -14,6 +18,7 @@ describe('organ donation button', () => {
   let wrapper;
 
   beforeEach(() => {
+    dependency.redirectTo = jest.fn();
     $store = createStore({
       state: {
         organDonation: initialState(),
@@ -47,7 +52,7 @@ describe('organ donation button', () => {
     describe('computed properties', () => {
       describe('nextRoute', () => {
         it('will be the ORGAN_DONATION path', () => {
-          expect(wrapper.vm.nextRoute).toEqual(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+          expect(wrapper.vm.nextRoute).toEqual(ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
         });
       });
     });
@@ -79,7 +84,7 @@ describe('organ donation button', () => {
     describe('computed properties', () => {
       describe('nextRoute', () => {
         it('will be the ORGAN_DONATION_YOUR_CHOICE path', () => {
-          expect(wrapper.vm.nextRoute).toEqual(ORGAN_DONATION_YOUR_CHOICE.path);
+          expect(wrapper.vm.nextRoute).toEqual(ORGAN_DONATION_YOUR_CHOICE_PATH);
         });
       });
     });
@@ -87,7 +92,7 @@ describe('organ donation button', () => {
     describe('data', () => {
       it('will set the data based on the decision', () => {
         const stateData = wrapper.vm;
-        expect(stateData.nextRoute).toEqual(ORGAN_DONATION_YOUR_CHOICE.path);
+        expect(stateData.nextRoute).toEqual(ORGAN_DONATION_YOUR_CHOICE_PATH);
         expect(stateData.style).toEqual(wrapper.vm.$style['yes-button']);
         expect(stateData.headerKey).toEqual('organDonation.register.yesButton.header');
         expect(stateData.subHeaderKey).toEqual('organDonation.register.yesButton.subheader');

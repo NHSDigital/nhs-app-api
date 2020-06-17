@@ -20,29 +20,28 @@ import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MenuItemList from '@/components/MenuItemList';
-import { INDEX, ORGAN_DONATION } from '@/lib/routes';
+import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     FindOutMoreLink,
     GenericButton,
     MakeDecision,
     MenuItemList,
   },
-  fetch({ redirect, route, store }) {
-    if (!isNativeApp({ route, store })) {
-      redirect(INDEX.path);
-    } else if (!store.state.organDonation.isAmending) {
-      redirect(ORGAN_DONATION.path);
+  mounted() {
+    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+      redirectTo(this, INDEX_PATH);
+    } else if (!this.$store.state.organDonation.isAmending) {
+      redirectTo(this, ORGAN_DONATION_PATH);
     }
   },
   methods: {
     goBack() {
       this.$store.dispatch('organDonation/amendCancel');
-      redirectTo(this, ORGAN_DONATION.path);
+      redirectTo(this, ORGAN_DONATION_PATH);
     },
   },
 };

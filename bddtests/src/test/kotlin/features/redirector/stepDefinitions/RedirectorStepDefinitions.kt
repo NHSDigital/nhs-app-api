@@ -15,9 +15,8 @@ class RedirectorStepDefinitions {
     private lateinit var redirector: RedirectorPage
 
     @When("I navigate to the redirector page with a url of '(.*)'$")
-    fun iNavigateToRedirectPageWith(queryString: String) {
-        val fullUrl = Config.instance.url + queryString
-        browser.browseTo(fullUrl)
+    fun iNavigateToRedirectPageWith(path: String) {
+        browser.browseToInternal(path)
     }
 
     @When("^I click the 'Continue' button on the redirector page with a url starting with '(.*)'$")

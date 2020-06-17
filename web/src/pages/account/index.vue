@@ -40,7 +40,7 @@
         ({{ $store.state.appVersion.nativeVersion }})
       </span>
     </p>
-    <p v-if="$store.app.$env.CE_MARK_ENABLED">
+    <p v-if="$store.$env.CE_MARK_ENABLED === 'true'">
       <ce-mark-icon/>
     </p>
 
@@ -49,7 +49,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { ACCOUNT_COOKIES, LINKED_PROFILES } from '@/lib/routes';
 import AboutUs from '@/components/account/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
@@ -60,6 +59,7 @@ import Settings from '@/components/account/Settings';
 import sjrIf from '@/lib/sjrIf';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import GenericButton from '@/components/widgets/GenericButton';
+import { ACCOUNT_COOKIES_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
 
 export default {
   layout: 'nhsuk-layout',
@@ -75,8 +75,8 @@ export default {
   data() {
     return {
       nativeLoginOptionsMethodExists: true,
-      cookiesPath: ACCOUNT_COOKIES.path,
-      linkedProfilesPath: LINKED_PROFILES.path,
+      cookiesPath: ACCOUNT_COOKIES_PATH,
+      linkedProfilesPath: LINKED_PROFILES_PATH,
     };
   },
   computed: {
@@ -85,7 +85,6 @@ export default {
         return this.nativeLoginOptionsMethodExists &&
           this.$store.state.device.isNativeApp;
       }
-
       return this.$store.state.device.isNativeApp;
     },
     showNotifications() {
@@ -99,9 +98,6 @@ export default {
   mounted() {
     if (!canVersionHandleBiometricsWeb(this)) {
       this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
-    }
-    if (this.$store.state.device.isNativeApp) {
-      this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.settings'));
     }
   },
   methods: {

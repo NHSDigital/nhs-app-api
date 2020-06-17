@@ -52,11 +52,10 @@ import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import { initialState, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
-import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
+import { ORGAN_DONATION_FAITH_PATH, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   scrollToTop: true,
   components: {
     BackButton,
@@ -96,28 +95,29 @@ export default {
       return this.showErrors && !this.areAllSelected;
     },
   },
-  asyncData({ store }) {
+  beforeMount() {
     if (
-      (store.state.organDonation.isAmending || store.state.organDonation.isReaffirming) &&
+      (this.$store.state.organDonation.isAmending ||
+        this.$store.state.organDonation.isReaffirming) &&
       isDefault({
         path: 'registration.decisionDetails.choices',
-        state: store.state.organDonation,
+        state: this.$store.state.organDonation,
       })
     ) {
-      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.choices');
+      this.$store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.choices');
     }
   },
   methods: {
     continueClicked() {
       this.hasTriedToContinue = true;
       if (this.hasMadeChoices) {
-        redirectTo(this, ORGAN_DONATION_FAITH.path);
+        redirectTo(this, ORGAN_DONATION_FAITH_PATH);
         return;
       }
       window.scrollTo(0, 0);
     },
     moreAboutOrgansClicked() {
-      this.$router.push(ORGAN_DONATION_MORE_ABOUT_ORGANS.path);
+      redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
     },
   },
 };

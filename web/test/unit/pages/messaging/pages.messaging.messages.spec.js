@@ -1,81 +1,78 @@
 import Messages from '@/pages/messages/app-messaging/app-message';
-import { initialState } from '@/store/modules/messaging/mutation-types';
-import { HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
+import { HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('messaging messages', () => {
   const pageDividerClass = 'page-divider';
   const panelItemClass = 'message-panel__item';
   const readSectionId = 'readSection';
   const unreadSectionId = 'unreadSection';
-  const sender = 'test sender';
-  let $store;
-  let storeRedirect;
+  const testSender = 'test sender';
+
   let wrapper;
+  let $store;
 
-  const mountMessages = () => mount(Messages, {
-    $store,
-    $style: {
-      [pageDividerClass]: pageDividerClass,
-      [panelItemClass]: panelItemClass,
-    },
-  });
-
-  const createSenderMessage = (messages) => {
-    $store.state.messaging.senderMessages = [{
-      sender,
-      messages,
-    }];
-  };
-
-  beforeEach(() => {
-    storeRedirect = jest.fn();
+  const mountMessages = ({
+    sender,
+    senderMessages = [],
+  } = {}) => {
     $store = createStore({
-      context: {
-        redirect: storeRedirect,
-      },
       state: {
-        messaging: initialState(),
+        messaging: {
+          senderMessages,
+          selectedSender: sender,
+          hasUnread: false,
+        },
         device: {
           isNativeApp: true,
         },
       },
     });
+    return mount(Messages, {
+      $store,
+      $style: {
+        [pageDividerClass]: pageDividerClass,
+        [panelItemClass]: panelItemClass,
+      },
+    });
+  };
+
+  beforeEach(() => {
+    redirectTo.mockClear();
   });
 
-  describe('fetch', () => {
-    let redirect;
-
-    const fetch = ({ selectedSender = '' } = {}) => {
-      redirect = jest.fn();
-      $store.state.messaging.selectedSender = selectedSender;
-      wrapper.vm.$options.fetch({ redirect, store: $store });
-    };
-
-    beforeEach(() => {
-      wrapper = mountMessages();
-    });
-
+  describe('created', () => {
     describe('has selected sender', () => {
-      const selectedSender = 'test1';
-
-      beforeEach(() => {
-        fetch({ selectedSender });
+      beforeEach(async () => {
+        wrapper = mountMessages({
+          sender: testSender,
+          senderMessages: [{
+            sender: testSender,
+            messages: [{ body: 'read message 1', read: true }],
+          }],
+        });
+        await wrapper.vm.$nextTick();
       });
 
       it('will dispatch `messaging/load` with selected sender', () => {
-        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: selectedSender });
+        expect($store.dispatch).toBeCalledWith('messaging/load', { sender: testSender });
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(redirectTo).not.toHaveBeenCalled();
       });
     });
 
     describe('has no selected sender', () => {
-      beforeEach(() => {
-        redirect = jest.fn();
-        fetch();
+      beforeEach(async () => {
+        wrapper = mountMessages();
+        await wrapper.vm.$nextTick();
       });
 
       it('will not dispatch', () => {
@@ -83,37 +80,37 @@ describe('messaging messages', () => {
       });
 
       it('will redirect to `HEALTH_INFORMATION_UPDATES`', () => {
-        expect(redirect).toBeCalledWith(HEALTH_INFORMATION_UPDATES.path);
+        expect(redirectTo).toBeCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
       });
     });
   });
 
   describe('created', () => {
-    beforeEach(() => {
-      process.server = true;
-    });
-
     describe('has no messages', () => {
-      beforeEach(() => {
-        wrapper = mountMessages();
+      beforeEach(async () => {
+        wrapper = mountMessages({ sender: testSender });
+        await wrapper.vm.$nextTick();
       });
 
       it('will redirect to `HEALTH_INFORMATION_UPDATES`', () => {
-        expect(storeRedirect).toBeCalledWith(HEALTH_INFORMATION_UPDATES.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
       });
     });
 
     describe('has messages', () => {
-      beforeEach(() => {
-        createSenderMessage([
-          { body: 'read message 1', read: true },
-        ]);
-
-        wrapper = mountMessages();
+      beforeEach(async () => {
+        wrapper = mountMessages({
+          sender: testSender,
+          senderMessages: [{
+            sender: testSender,
+            messages: [{ body: 'read message 1', read: true }],
+          }],
+        });
+        await wrapper.vm.$nextTick();
       });
 
       it('will not redirect', () => {
-        expect(storeRedirect).not.toBeCalled();
+        expect(redirectTo).not.toBeCalled();
       });
     });
   });
@@ -121,13 +118,19 @@ describe('messaging messages', () => {
   describe('has only read messages', () => {
     let readSection;
 
-    beforeEach(() => {
-      createSenderMessage([
-        { body: 'read message 1', read: true },
-        { body: 'read message 2', read: true },
-        { body: 'read message 3', read: true },
-      ]);
-      wrapper = mountMessages();
+    beforeEach(async () => {
+      wrapper = mountMessages({
+        sender: testSender,
+        senderMessages: [{
+          sender: testSender,
+          messages: [
+            { body: 'read message 1', read: true },
+            { body: 'read message 2', read: true },
+            { body: 'read message 3', read: true },
+          ],
+        }],
+      });
+      await wrapper.vm.$nextTick();
       readSection = wrapper.find(`#${readSectionId}`);
     });
 
@@ -155,14 +158,20 @@ describe('messaging messages', () => {
   describe('has a read message before unread, shows as only unread messages', () => {
     let unreadSection;
 
-    beforeEach(() => {
-      createSenderMessage([
-        { body: 'unread message 1', read: false },
-        { body: 'unread message 2', read: false },
-        { body: 'read message 4', read: true },
-        { body: 'unread message 3', read: false },
-      ]);
-      wrapper = mountMessages();
+    beforeEach(async () => {
+      wrapper = mountMessages({
+        sender: testSender,
+        senderMessages: [{
+          sender: testSender,
+          messages: [
+            { body: 'unread message 1', read: false },
+            { body: 'unread message 2', read: false },
+            { body: 'read message 4', read: true },
+            { body: 'unread message 3', read: false },
+          ],
+        }],
+      });
+      await wrapper.vm.$nextTick();
       unreadSection = wrapper.find(`#${unreadSectionId}`);
     });
 
@@ -192,17 +201,23 @@ describe('messaging messages', () => {
     let unreadSection;
     let readSection;
 
-    beforeEach(() => {
-      createSenderMessage([
-        { body: 'read message 1', read: true },
-        { body: 'read message 2', read: true },
-        { body: 'read message 3', read: true },
-        { body: 'unread message 1', read: false },
-        { body: 'unread message 2', read: false },
-        { body: 'read message 4', read: true },
-        { body: 'unread message 3', read: false },
-      ]);
-      wrapper = mountMessages();
+    beforeEach(async () => {
+      wrapper = mountMessages({
+        sender: testSender,
+        senderMessages: [{
+          sender: testSender,
+          messages: [
+            { body: 'read message 1', read: true },
+            { body: 'read message 2', read: true },
+            { body: 'read message 3', read: true },
+            { body: 'unread message 1', read: false },
+            { body: 'unread message 2', read: false },
+            { body: 'read message 4', read: true },
+            { body: 'unread message 3', read: false },
+          ],
+        }],
+      });
+      await wrapper.vm.$nextTick();
       readSection = wrapper.find(`#${readSectionId}`);
       unreadSection = wrapper.find(`#${unreadSectionId}`);
     });

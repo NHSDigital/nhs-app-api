@@ -1,8 +1,8 @@
-export default async ({ store }) => {
-  if (!store.getters['session/isLoggedIn']()) return Promise.resolve();
-  if (store.state.session.hasLoaded) return Promise.resolve();
+export default async ({ store, next }) => {
+  if (!store.getters['session/isLoggedIn']()) return next();
+  if (store.state.session.hasLoaded) return next();
 
   await store.dispatch('session/getSession');
 
-  return Promise.resolve();
+  return next();
 };

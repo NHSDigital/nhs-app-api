@@ -25,6 +25,9 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
+import {
+  COOKIES_BANNER_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'CookieBanner',
@@ -33,7 +36,7 @@ export default {
   },
   computed: {
     cookieBannerUrl() {
-      return this.$store.app.$env.COOKIES_BANNER_URL;
+      return COOKIES_BANNER_URL;
     },
     showCookieBanner() {
       return (
@@ -81,7 +84,7 @@ export default {
     top: 0px;
     right: 5px;
     cursor: pointer;
-    background: white url(~assets/icon-close.svg) center no-repeat;
+    background: white url(~@/assets/icon-close.svg) center no-repeat;
     border: none;
 
     -webkit-box-shadow: none;

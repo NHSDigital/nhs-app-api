@@ -1,29 +1,34 @@
 import conditionalRedirect from '@/middleware/conditionalRedirect';
-import { findByName } from '@/lib/routes';
+import { isNhsAppRouteName } from '@/router/names';
+import * as dependency from '@/lib/utils';
 
-jest.mock('@/lib/routes');
+jest.mock('@/router/names');
 
 describe('middleware/conditionalRedirect', () => {
-  const currentPath = '/current-path';
+  const currentName = 'current-name';
   let getters;
   let gettersSpy;
-  let redirect;
   let store;
+  let to;
+  const next = jest.fn();
+  dependency.createRoutePathObject = jest.fn(x => ({ path: x.path }));
 
-  const callConditionalRedirect = () => conditionalRedirect({ redirect, route: { name: 'foo' }, store });
+  const callConditionalRedirect = () => conditionalRedirect({ next, to, store });
 
   beforeEach(() => {
-    getters = {};
+    getters = {
+      'session/isLoggedIn': () => true,
+    };
     store = {
       get getters() { return getters; },
     };
     gettersSpy = jest.spyOn(store, 'getters', 'get');
-    redirect = jest.fn();
   });
 
   describe('route detail does not exists', () => {
     beforeEach(() => {
-      findByName.mockReturnValue(undefined);
+      to = { name: 'foo' };
+      isNhsAppRouteName.mockReturnValue(undefined);
       callConditionalRedirect();
     });
 
@@ -31,17 +36,24 @@ describe('middleware/conditionalRedirect', () => {
       expect(gettersSpy).not.toBeCalled();
     });
 
-    it('will not redirect', () => {
-      expect(redirect).not.toBeCalled();
+    it('next called with no parameters', () => {
+      expect(next).not.toBeCalledWith(expect.anything);
+      expect(next).toBeCalled();
     });
   });
 
   describe('has route details', () => {
-    let routeDetails;
+    let meta;
 
     beforeEach(() => {
-      routeDetails = { path: currentPath };
-      findByName.mockReturnValue(routeDetails);
+      meta = {
+        redirectRules: { name: currentName },
+      };
+      to = {
+        name: 'foo',
+        meta,
+      };
+      isNhsAppRouteName.mockReturnValue(true);
     });
 
     describe.each([
@@ -49,7 +61,7 @@ describe('middleware/conditionalRedirect', () => {
       { invalid: true },
     ])('redirect rules is `%o` (must be an array)', (redirectRules) => {
       beforeEach(() => {
-        routeDetails.redirectRules = redirectRules;
+        meta.redirectRules = redirectRules;
         callConditionalRedirect();
       });
 
@@ -57,8 +69,9 @@ describe('middleware/conditionalRedirect', () => {
         expect(gettersSpy).not.toBeCalled();
       });
 
-      it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+      it('next called with no parameters', () => {
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -75,7 +88,7 @@ describe('middleware/conditionalRedirect', () => {
           get [secondRule]() { return returnValue; },
         };
         conditionGetterSpy = jest.spyOn(getters, rule.condition, 'get');
-        routeDetails.redirectRules = [
+        meta.redirectRules = [
           { condition: 'invalid/getter' },
           rule,
           secondRule,
@@ -95,9 +108,9 @@ describe('middleware/conditionalRedirect', () => {
             returnValue = true;
           });
 
-          describe('redirect path is the same as current path', () => {
+          describe('redirect name is the same as current name', () => {
             beforeEach(() => {
-              rule.url = currentPath;
+              rule.route = { name: currentName };
               callConditionalRedirect();
             });
 
@@ -105,14 +118,15 @@ describe('middleware/conditionalRedirect', () => {
               expect(conditionGetterSpy).toBeCalled();
             });
 
-            it('will not redirect', () => {
-              expect(redirect).not.toBeCalled();
+            it('next called with no parameters', () => {
+              expect(next).not.toBeCalledWith(expect.anything);
+              expect(next).toBeCalled();
             });
           });
 
           describe('redirect path is different than the current path', () => {
             beforeEach(() => {
-              rule.url = '/different_path';
+              rule.route = { path: '/different_path' };
               callConditionalRedirect();
             });
 
@@ -120,8 +134,8 @@ describe('middleware/conditionalRedirect', () => {
               expect(conditionGetterSpy).toBeCalled();
             });
 
-            it('will redirect to rule url', () => {
-              expect(redirect).toBeCalledWith('302', rule.url);
+            it('will next to becalled with rule path', () => {
+              expect(next).toBeCalledWith({ path: rule.route.path });
             });
           });
         });
@@ -136,8 +150,9 @@ describe('middleware/conditionalRedirect', () => {
             expect(conditionGetterSpy).toBeCalled();
           });
 
-          it('will not redirect', () => {
-            expect(redirect).not.toBeCalled();
+          it('next called with no parameters', () => {
+            expect(next).not.toBeCalledWith(expect.anything);
+            expect(next).toBeCalled();
           });
         });
       });
@@ -152,9 +167,9 @@ describe('middleware/conditionalRedirect', () => {
             returnValue = false;
           });
 
-          describe('redirect path is the same as current path', () => {
+          describe('redirect name is the same as current name', () => {
             beforeEach(() => {
-              rule.url = currentPath;
+              rule.route = { name: currentName };
               callConditionalRedirect();
             });
 
@@ -162,14 +177,15 @@ describe('middleware/conditionalRedirect', () => {
               expect(conditionGetterSpy).toBeCalled();
             });
 
-            it('will not redirect', () => {
-              expect(redirect).not.toBeCalled();
+            it('next called with no parameters', () => {
+              expect(next).not.toBeCalledWith(expect.anything);
+              expect(next).toBeCalled();
             });
           });
 
           describe('redirect path is different than the current path', () => {
             beforeEach(() => {
-              rule.url = '/different_path';
+              rule.route = { url: '/different_path' };
               callConditionalRedirect();
             });
 
@@ -177,8 +193,8 @@ describe('middleware/conditionalRedirect', () => {
               expect(conditionGetterSpy).toBeCalled();
             });
 
-            it('will redirect to rule url', () => {
-              expect(redirect).toBeCalledWith('302', rule.url);
+            it('will next with to rule path', () => {
+              expect(next).toBeCalledWith({ path: rule.route.path });
             });
           });
         });
@@ -193,8 +209,9 @@ describe('middleware/conditionalRedirect', () => {
             expect(conditionGetterSpy).toBeCalled();
           });
 
-          it('will not redirect', () => {
-            expect(redirect).not.toBeCalled();
+          it('next called with no parameters', () => {
+            expect(next).not.toBeCalledWith(expect.anything);
+            expect(next).toBeCalled();
           });
         });
       });
@@ -202,7 +219,7 @@ describe('middleware/conditionalRedirect', () => {
       describe('rule with context', () => {
         beforeEach(() => {
           returnValue = jest.fn().mockImplementation(() => true);
-          rule.url = '/context-path';
+          rule.route = { url: '/context-path' };
           rule.context = { foo: 'test' };
           callConditionalRedirect();
         });
@@ -215,8 +232,8 @@ describe('middleware/conditionalRedirect', () => {
           expect(returnValue).toBeCalledWith(rule.context);
         });
 
-        it('will redirect to rule url', () => {
-          expect(redirect).toBeCalledWith('302', rule.url);
+        it('will next with to rule path', () => {
+          expect(next).toBeCalledWith({ path: rule.route.path });
         });
       });
     });

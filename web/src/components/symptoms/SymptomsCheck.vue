@@ -59,9 +59,15 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import NativeApp from '@/services/native-app';
 import sjrIf from '@/lib/sjrIf';
-import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
-import { createUri } from '@/lib/noJs';
+import { SYMPTOMS_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
+import { APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
+import {
+  SYMPTOM_CHECKER_URL,
+  SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS,
+  CONDITIONS_CHECKER_URL,
+  CORONA_SERVICE_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'SymptomsCheck',
@@ -70,15 +76,16 @@ export default {
     MenuItem,
   },
   data() {
-    let symptomsCheckerUrl = this.$store.app.$env.SYMPTOM_CHECKER_URL;
+    let symptomsCheckerUrl = SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += this.$store.app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+      symptomsCheckerUrl += SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       symptomsCheckerUrl,
-      conditionsCheckerUrl: this.$store.app.$env.CONDITIONS_CHECKER_URL,
-      symptomsPath: SYMPTOMS.path,
-      coronaCheckerUrl: this.$store.app.$env.CORONA_SERVICE_URL,
+      conditionsCheckerUrl: CONDITIONS_CHECKER_URL,
+      symptomsPath: SYMPTOMS_PATH,
+      coronaCheckerUrl: CORONA_SERVICE_URL,
+      gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_NAME,
     };
   },
   computed: {
@@ -88,28 +95,19 @@ export default {
     isCdssAdvice() {
       return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
     },
-    gpAdviceConditionsPath() {
-      const noJsData = {
-        onlineConsultations: {
-          previousRoute: this.symptomsPath,
-        },
-      };
-      return createUri({ path: APPOINTMENT_GP_ADVICE.path, noJs: noJsData });
-    },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
   },
   methods: {
     navigate(event) {
-      if (event.currentTarget.pathname === APPOINTMENT_GP_ADVICE.path) {
+      if (event.currentTarget.pathname === this.gpAdviceConditionsPath) {
         this.$store.dispatch('onlineConsultations/setPreviousRoute', this.symptomsPath);
         this.$store.dispatch('navigation/setBackLinkOverride', this.symptomsPath);
         this.$store.dispatch('navigation/setRouteCrumb', 'symptomsCrumb');
         this.$store.dispatch('navigation/setNewMenuItem', 0);
       }
-
-      redirectTo(this, event.currentTarget.pathname);
+      redirectTo(this, APPOINTMENT_GP_ADVICE_PATH);
       event.preventDefault();
     },
     ariaLabelCaption(header, body) {

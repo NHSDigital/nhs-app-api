@@ -4,12 +4,12 @@
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-u-margin-bottom-0">
           <strong>{{ $t('switchProfile.informationHeaders.age') }}:</strong>
-          <span id="proxy-age">{{ getDisplayedAgeText(currentProfile) }}</span>
+          <span id="proxy-age"> {{ getDisplayedAgeText(currentProfile) }}</span>
         </p>
 
         <p v-if="currentProfile.gpPracticeName" class="nhsuk-u-margin-bottom-0">
           <strong>{{ $t('switchProfile.informationHeaders.gpPractice') }}:</strong>
-          <span id="proxy-gp-practice">{{ currentProfile.gpPracticeName }}</span>
+          <span id="proxy-gp-practice"> {{ currentProfile.gpPracticeName }}</span>
         </p>
       </div>
     </div>
@@ -24,6 +24,7 @@
 
 <script>
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
@@ -38,10 +39,9 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.switchProfile', this.currentProfile));
-    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.switchProfile', this.currentProfile));
+    // TODO: move into route header/title callbacks. don't think there's a need for this here
+    EventBus.$emit(UPDATE_HEADER, this.$t('pageHeaders.switchProfile', this.currentProfile), true);
+    EventBus.$emit(UPDATE_TITLE, this.$t('pageTitles.switchProfile', this.currentProfile), true);
   },
 };
 </script>
-<style module lang="scss" scoped>
-</style>

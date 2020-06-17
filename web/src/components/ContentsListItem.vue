@@ -17,7 +17,6 @@
 
 <script>
 import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
-import { findByPath } from '@/lib/routes';
 
 export default {
   name: 'ContentsListItem',
@@ -35,6 +34,10 @@ export default {
       type: String,
       default: undefined,
     },
+    routeName: {
+      type: String,
+      default: undefined,
+    },
     id: {
       type: String,
       required: true,
@@ -46,7 +49,7 @@ export default {
   },
   computed: {
     isCurrentPage() {
-      return findByPath(this.$route.path) === findByPath(this.href);
+      return this.$route.name === this.routeName;
     },
   },
 };

@@ -2,42 +2,41 @@
 import assign from 'lodash/fp/assign';
 import has from 'lodash/fp/has';
 import {
-  ACCOUNT,
-  ACCOUNT_NOTIFICATIONS,
-  ALLERGIESANDREACTIONS,
-  APPOINTMENT_ADMIN_HELP,
-  APPOINTMENT_GP_ADVICE,
-  AUTH_RETURN,
-  BEGINLOGIN,
-  DOCUMENT,
-  DOCUMENTS,
-  GP_MEDICAL_RECORD,
-  HEALTH_RECORDS,
-  LOGIN,
-  HEALTH_INFORMATION_UPDATES,
-  HEALTH_INFORMATION_UPDATES_MESSAGES,
-  MESSAGES,
-  MYRECORD,
-  MYRECORDTESTRESULT,
-  NOMINATED_PHARMACY_CONFIRM,
-  NOMINATED_PHARMACY_SEARCH,
-  ORGAN_DONATION,
-  ORGAN_DONATION_REVIEW_YOUR_DECISION,
-  GP_MESSAGES,
-  GP_MESSAGES_VIEW_MESSAGE,
-  GP_MESSAGES_URGENCY,
-  GP_MESSAGES_URGENCY_CONTACT_GP,
-  GP_MESSAGES_RECIPIENTS,
-  GP_MESSAGES_CREATE,
-  GP_MESSAGES_DELETE,
-  PRESCRIPTIONS,
-  PRESCRIPTION_CONFIRM_COURSES,
-  PRESCRIPTIONS_VIEW_ORDERS,
-  PRESCRIPTION_REPEAT_COURSES,
-  TESTRESULTID,
-  TESTRESULTS,
-  TESTRESULTSDETAIL,
-} from '@/lib/routes';
+  ACCOUNT_PATH,
+  ACCOUNT_NOTIFICATIONS_PATH,
+  ALLERGIESANDREACTIONS_PATH,
+  AUTH_RETURN_PATH,
+  DOCUMENT_PATH,
+  DOCUMENTS_PATH,
+  GP_MEDICAL_RECORD_PATH,
+  HEALTH_RECORDS_PATH,
+  HEALTH_INFORMATION_UPDATES_PATH,
+  HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
+  NOMINATED_PHARMACY_CONFIRM_PATH,
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  ORGAN_DONATION_PATH,
+  ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
+  PRESCRIPTIONS_PATH,
+  PRESCRIPTION_CONFIRM_COURSES_PATH,
+  PRESCRIPTIONS_VIEW_ORDERS_PATH,
+  PRESCRIPTION_REPEAT_COURSES_PATH,
+  TESTRESULTID_PATH,
+  TESTRESULTS_PATH,
+  TESTRESULTSDETAIL_PATH,
+  APPOINTMENT_ADMIN_HELP_PATH,
+  APPOINTMENT_GP_ADVICE_PATH,
+  LOGIN_PATH,
+  BEGINLOGIN_PATH,
+  GP_MESSAGES_PATH,
+  SYMPTOMS_PATH,
+  MESSAGES_PATH,
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+  GP_MESSAGES_URGENCY_PATH,
+  GP_MESSAGES_URGENCY_CONTACT_GP_PATH,
+  GP_MESSAGES_RECIPIENTS_PATH,
+  GP_MESSAGES_CREATE_PATH,
+  GP_MESSAGES_DELETE_PATH,
+} from '@/router/paths';
 
 export default {
   default: {
@@ -50,217 +49,211 @@ export default {
   },
   pages: [
     {
-      route: ACCOUNT_NOTIFICATIONS.path,
+      route: ACCOUNT_NOTIFICATIONS_PATH,
       action: {
         10002: 'notifications/retryToggle',
       },
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
-        default: ACCOUNT.path,
-        10001: ACCOUNT_NOTIFICATIONS.path,
+        default: ACCOUNT_PATH,
+        10001: ACCOUNT_NOTIFICATIONS_PATH,
       },
     },
     {
-      route: ALLERGIESANDREACTIONS.path,
+      route: ALLERGIESANDREACTIONS_PATH,
       redirectUrl: {
-        default: ALLERGIESANDREACTIONS.path,
+        default: ALLERGIESANDREACTIONS_PATH,
       },
     },
     {
-      route: APPOINTMENT_ADMIN_HELP.path,
+      route: APPOINTMENT_ADMIN_HELP_PATH,
       ignoredErrors: [480, 580],
     },
     {
-      route: APPOINTMENT_GP_ADVICE.path,
+      route: APPOINTMENT_GP_ADVICE_PATH,
       ignoredErrors: [480, 580],
     },
     {
-      route: AUTH_RETURN.path,
+      route: AUTH_RETURN_PATH,
       redirectUrl: {
-        default: LOGIN.path,
+        default: LOGIN_PATH,
       },
     },
     {
-      route: BEGINLOGIN.path,
+      route: BEGINLOGIN_PATH,
       redirectUrl: {
-        default: LOGIN.path,
+        default: LOGIN_PATH,
       },
     },
     {
-      route: GP_MEDICAL_RECORD.path,
+      route: GP_MEDICAL_RECORD_PATH,
       redirectUrl: {
-        default: GP_MEDICAL_RECORD.path,
+        default: GP_MEDICAL_RECORD_PATH,
       },
     },
     {
-      route: HEALTH_RECORDS.path,
+      route: HEALTH_RECORDS_PATH,
       redirectUrl: {
-        default: HEALTH_RECORDS.path,
+        default: HEALTH_RECORDS_PATH,
       },
     },
     {
-      route: HEALTH_INFORMATION_UPDATES.path,
+      route: HEALTH_INFORMATION_UPDATES_PATH,
       redirectUrl: {
-        default: HEALTH_INFORMATION_UPDATES.path,
+        default: HEALTH_INFORMATION_UPDATES_PATH,
       },
     },
     {
-      route: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
+      route: HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
       redirectUrl: {
-        default: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
+        default: HEALTH_INFORMATION_UPDATES_MESSAGES_PATH,
       },
       additionalInfoComponent: 'MessagesSenderError',
     },
     {
-      route: MYRECORD.path,
+      route: DOCUMENT_PATH,
       redirectUrl: {
-        default: MYRECORD.path,
+        default: GP_MEDICAL_RECORD_PATH,
       },
     },
     {
-      route: MYRECORDTESTRESULT.path,
+      route: DOCUMENTS_PATH,
       redirectUrl: {
-        default: MYRECORD.path,
+        default: GP_MEDICAL_RECORD_PATH,
       },
     },
     {
-      route: DOCUMENT.path,
+      route: NOMINATED_PHARMACY_CONFIRM_PATH,
       redirectUrl: {
-        default: GP_MEDICAL_RECORD.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: DOCUMENTS.path,
+      route: NOMINATED_PHARMACY_SEARCH_PATH,
       redirectUrl: {
-        default: GP_MEDICAL_RECORD.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: NOMINATED_PHARMACY_CONFIRM.path,
-      redirectUrl: {
-        default: PRESCRIPTIONS.path,
-      },
-    },
-    {
-      route: NOMINATED_PHARMACY_SEARCH.path,
-      redirectUrl: {
-        default: PRESCRIPTIONS.path,
-      },
-    },
-    {
-      route: ORGAN_DONATION.path,
+      route: ORGAN_DONATION_PATH,
       additionalInfoComponent: 'ContactOrganDonation',
       redirectUrl: {
-        1: ORGAN_DONATION.path,
+        1: ORGAN_DONATION_PATH,
       },
     },
     {
-      route: ORGAN_DONATION_REVIEW_YOUR_DECISION.path,
+      route: ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
       action: {
         1: 'organDonation/submitDecision',
       },
       additionalInfoComponent: 'ContactOrganDonation',
     },
     {
-      route: GP_MESSAGES.path,
+      route: GP_MESSAGES_PATH,
       errorOverrideStyles: { 403: 'plain' },
       action: {
         400: 'gpMessages/clearErrorsAndLoadMessages',
       },
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_VIEW_MESSAGE.path,
+      route: GP_MESSAGES_VIEW_MESSAGE_PATH,
       action: {
         400: 'gpMessages/clearErrorsAndLoadDetails',
       },
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_URGENCY.path,
+      route: GP_MESSAGES_URGENCY_PATH,
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_URGENCY_CONTACT_GP.path,
+      route: GP_MESSAGES_URGENCY_CONTACT_GP_PATH,
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_RECIPIENTS.path,
+      route: GP_MESSAGES_RECIPIENTS_PATH,
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_CREATE.path,
+      route: GP_MESSAGES_CREATE_PATH,
       redirectUrl: {
-        default: MESSAGES.path,
+        default: MESSAGES_PATH,
       },
     },
     {
-      route: GP_MESSAGES_DELETE.path,
+      route: GP_MESSAGES_DELETE_PATH,
       action: {
         400: 'gpMessages/retryMessageDelete',
       },
     },
     {
-      route: PRESCRIPTIONS.path,
+      route: PRESCRIPTIONS_PATH,
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
-        default: PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: PRESCRIPTIONS_VIEW_ORDERS.path,
+      route: PRESCRIPTIONS_VIEW_ORDERS_PATH,
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
-        default: PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: PRESCRIPTION_CONFIRM_COURSES.path,
+      route: PRESCRIPTION_CONFIRM_COURSES_PATH,
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
-        default: PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: PRESCRIPTION_CONFIRM_COURSES.path,
+      route: PRESCRIPTION_CONFIRM_COURSES_PATH,
       errorOverrideStyles: { 466: 'plain' },
       redirectUrl: {
-        default: PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: PRESCRIPTION_REPEAT_COURSES.path,
+      route: PRESCRIPTION_REPEAT_COURSES_PATH,
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
-        default: PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS_PATH,
       },
     },
     {
-      route: TESTRESULTID.path,
+      route: SYMPTOMS_PATH,
       redirectUrl: {
-        default: TESTRESULTID.path,
+        default: SYMPTOMS_PATH,
       },
     },
     {
-      route: TESTRESULTS.path,
+      route: TESTRESULTID_PATH,
       redirectUrl: {
-        default: TESTRESULTS.path,
+        default: TESTRESULTID_PATH,
       },
     },
     {
-      route: TESTRESULTSDETAIL.path,
+      route: TESTRESULTS_PATH,
       redirectUrl: {
-        default: TESTRESULTSDETAIL.path,
+        default: TESTRESULTS_PATH,
+      },
+    },
+    {
+      route: TESTRESULTSDETAIL_PATH,
+      redirectUrl: {
+        default: TESTRESULTSDETAIL_PATH,
       },
     },
   ],

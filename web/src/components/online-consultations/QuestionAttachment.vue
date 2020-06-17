@@ -68,14 +68,13 @@ export default {
     },
   },
   created() {
-    if (process.client) {
-      const reader = new FileReader();
-      reader.onload = this.onFileLoad;
-      reader.onerror = this.onFileError;
-      reader.onabort = this.onFileAbort;
+    const reader = new FileReader();
+    reader.onload = this.onFileLoad;
+    reader.onerror = this.onFileError;
+    reader.onabort = this.onFileAbort;
 
-      this.reader = reader;
-    }
+    this.reader = reader;
+
     this.checkAndEmitIsValueValid(this.attachmentValue);
   },
   beforeDestroy() {

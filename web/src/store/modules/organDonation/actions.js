@@ -1,6 +1,10 @@
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import cloneDeep from 'lodash/fp/cloneDeep';
-import { ORGAN_DONATION_VIEW_DECISION, ORGAN_DONATION_WITHDRAWN } from '@/lib/routes';
+import {
+  ORGAN_DONATION_VIEW_DECISION_PATH,
+  ORGAN_DONATION_WITHDRAWN_PATH,
+} from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import {
   CLONE_FROM_ORIGINAL,
   INIT,
@@ -75,7 +79,7 @@ export default {
     };
     await this.app.$http.deleteV1PatientOrgandonation(request);
 
-    this.$router.push(ORGAN_DONATION_WITHDRAWN.path);
+    redirectTo(this.app, ORGAN_DONATION_WITHDRAWN_PATH);
   },
   async getReferenceData({ commit }) {
     return this.app.$http.getV1PatientOrgandonationReferencedata()
@@ -134,7 +138,7 @@ export default {
     commit(SET_REGISTRATION_ID, response.identifier);
     commit(UPDATE_ORIGINAL_REGISTRATION);
 
-    this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
+    redirectTo(this.app, ORGAN_DONATION_VIEW_DECISION_PATH);
   },
   withdrawCancel({ commit }) {
     commit(SET_WITHDRAWING, false);

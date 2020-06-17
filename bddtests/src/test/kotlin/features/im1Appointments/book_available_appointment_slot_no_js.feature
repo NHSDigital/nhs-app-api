@@ -2,6 +2,7 @@
 @appointments-book
 @book
 @noJs
+@pending
 Feature: Book Appointments With Javascript Disabled
   In order to complete a booking appointment
   As a logged in user with Javascript switched off

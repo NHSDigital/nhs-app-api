@@ -35,11 +35,11 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
-import PharmacySummary from '../../components/nominatedPharmacy/PharmacySummary';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import PharmacySummary from '../../components/nominatedPharmacy/PharmacySummary';
 
 export default {
   layout: 'nhsuk-layout',
@@ -56,7 +56,7 @@ export default {
       openingTimes: this.$store.state.nominatedPharmacy
         .selectedNominatedPharmacy.openingTimesFormatted,
       nominatedPharmacy: this.$store.state.nominatedPharmacy.selectedNominatedPharmacy,
-      nominatedPharmacySearchResultsPath: NOMINATED_PHARMACY_SEARCH_RESULTS.path,
+      nominatedPharmacySearchResultsPath: NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
       isHighStreetSelected:
         this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY,
       isOnlineOnlySelected:
@@ -65,14 +65,14 @@ export default {
   },
   created() {
     if (this.nominatedPharmacy === null) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {
     async submitNominatedPharmacy() {
       try {
         await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
-        redirectTo(this, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
+        redirectTo(this, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH);
       } catch (error) {
         /*
           empty catch block as the

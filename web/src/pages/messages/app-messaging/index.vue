@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
+  <div v-if="showTemplate && loaded" id="mainDiv">
     <h2>{{ $t('app_messaging.index.subHeader') }}</h2>
     <ul v-if="hasSenderMessages" id="inboxMessages" :class="$style['nhs-app-message']">
       <li v-for="(senderMessage, index) in senderMessages"
@@ -30,45 +30,49 @@
 
 <script>
 import { formatDate } from '@/plugins/filters';
-import { createUri } from '@/lib/noJs';
 import { redirectTo, stripHtml } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES_MESSAGES } from '@/lib/routes';
+import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH } from '@/router/paths';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'AppMessagingPage',
   components: {
     SummaryMessage,
   },
   data() {
     return {
-      senderMessages: this.$store.state.messaging.senderMessages,
+      loaded: false,
     };
   },
   computed: {
+    senderMessages() {
+      return this.$store.state.messaging.senderMessages;
+    },
     hasSenderMessages() {
       return this.senderMessages.length > 0;
     },
   },
-  async fetch({ store }) {
-    await store.dispatch('messaging/load');
+  watch: {
+    '$route.query.ts': async function watchTimestamp() {
+      await this.loadMessages();
+    },
+  },
+  async created() {
+    await this.loadMessages();
   },
   methods: {
-    setUpUnreadAnchor(unreadCount) {
-      if (unreadCount > 0) {
-        return `${HEALTH_INFORMATION_UPDATES_MESSAGES.path}#unreadMessages`;
-      }
-      return HEALTH_INFORMATION_UPDATES_MESSAGES.path;
+    async loadMessages() {
+      await this.$store.dispatch('messaging/load');
+      this.loaded = true;
     },
     generateMessageUrl(senderMessage) {
-      return createUri({
-        path: this.setUpUnreadAnchor(senderMessage.unreadCount),
-        noJs: { messaging: { selectedSender: senderMessage.sender } },
-      });
+      return senderMessage.unreadCount > 0
+        ? `${HEALTH_INFORMATION_UPDATES_MESSAGES_PATH}#unreadMessages`
+        : HEALTH_INFORMATION_UPDATES_MESSAGES_PATH;
     },
     goToMessages(senderMessage) {
       this.$store.dispatch('messaging/selectSender', senderMessage.sender);
-      redirectTo(this, this.setUpUnreadAnchor(senderMessage.unreadCount));
+      redirectTo(this, this.generateMessageUrl(senderMessage.unreadCount));
     },
     messageLabel(senderMessage, message) {
       let label = this.$t('app_messaging.index.hidden.intro')

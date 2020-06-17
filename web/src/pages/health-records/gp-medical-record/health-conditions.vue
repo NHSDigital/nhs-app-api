@@ -54,14 +54,13 @@ import orderBy from 'lodash/fp/orderBy';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DesktopGenericBackLink,
@@ -73,32 +72,34 @@ export default {
   data() {
     return {
       resultsCollapsed: true,
+      problems: null,
     };
   },
   computed: {
     orderedProblems() {
-      return orderBy([problem => this.getEffectiveDate(problem.effectiveDate, '')], ['desc'])(this.problems.data);
+      return orderBy([problem => this.getEffectiveDate(problem.effectiveDate, '')], ['desc'])((this.problems || {}).data);
     },
     getBackPath() {
-      return GP_MEDICAL_RECORD.path;
+      return GP_MEDICAL_RECORD_PATH;
     },
     showError() {
-      return this.problems.hasErrored
+      return this.problems &&
+        (this.problems.hasErrored
              || this.problems.data.length === 0
-             || !this.problems.hasAccess;
+             || !this.problems.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (!['EMIS', 'VISION', 'MICROTEST'].includes(store.state.myRecord.record.supplier)) {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (!['EMIS', 'VISION', 'MICROTEST'].includes(this.$store.state.myRecord.record.supplier)) {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.problems) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.problems) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      problems: store.state.myRecord.record.problems,
-    };
+
+    this.problems = this.$store.state.myRecord.record.problems;
   },
   methods: {
     backButtonClicked() {

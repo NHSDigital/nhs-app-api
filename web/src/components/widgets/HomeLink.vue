@@ -1,19 +1,20 @@
+
 <template>
-  <nuxt-link ref="homeLogoEl"
-             :to="indexPath">
+  <router-link ref="homeLogoEl"
+               :to="indexPath">
     <home-icon/>
-  </nuxt-link>
+  </router-link>
 </template>
 <script>
 import HomeIcon from '@/components/icons/HomeIcon';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 
 export default {
   name: 'HomeLink',
   components: { HomeIcon },
   props: {
     indexPath: {
-      default: INDEX.path,
+      default: INDEX_PATH,
       type: String,
     },
   },

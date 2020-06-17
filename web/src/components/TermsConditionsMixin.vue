@@ -1,26 +1,28 @@
 <script>
 import get from 'lodash/fp/get';
-import { findByName, INDEX, INTERSTITIAL_REDIRECTOR, REDIRECT_PARAMETER } from '@/lib/routes';
+import {
+  REDIRECT_PARAMETER,
+  isNhsAppRouteName,
+} from '@/router/names';
+import {
+  INTERSTITIAL_REDIRECTOR_PATH,
+  INDEX_PATH,
+} from '@/router/paths';
+import { redirectTo, redirectByName } from '@/lib/utils';
 
 export default {
   methods: {
     conditionalRedirect() {
       const redirectName = get(REDIRECT_PARAMETER)(this.$route.query);
       if (redirectName) {
-        const internalRedirect = findByName(redirectName);
-        if (internalRedirect) {
-          this.$router.push(internalRedirect.path);
+        if (isNhsAppRouteName(redirectName)) {
+          redirectByName(this, redirectName);
           return;
         }
-
-        this.$router.push({
-          path: INTERSTITIAL_REDIRECTOR.path,
-          query: this.$route.query,
-        });
+        redirectTo(this, INTERSTITIAL_REDIRECTOR_PATH, this.$route.query);
         return;
       }
-
-      this.$router.push(INDEX.path);
+      redirectTo(this, INDEX_PATH);
     },
   },
 };

@@ -1,10 +1,16 @@
 import * as dependency from '@/lib/utils';
-import { PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
+import { PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import NominatedPharmacyChangeSuccess from '@/pages/nominated-pharmacy/change-success';
-import { create$T, createStore, mount } from '../../helpers';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { create$T, createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 const $t = create$T();
 
@@ -173,7 +179,28 @@ describe('confirm nominated pharmacy', () => {
       dependency.redirectTo = jest.fn();
       await goToPrescriptionsLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS_PATH);
+    });
+  });
+
+  describe('mounted', () => {
+    beforeEach(() => {
+      EventBus.$emit.mockClear();
+      $t.mockClear();
+      $store = createStore({ state: createState() });
+      mountPage();
+    });
+
+    it('will emit UPDATE_HEADER with localised change success header as event', () => {
+      expect($t).toHaveBeenCalledWith('pageHeaders.nominatedPharmacyChangeSuccess', { name: 'Boots' });
+      expect(EventBus.$emit)
+        .toHaveBeenCalledWith(UPDATE_HEADER, 'translate_pageHeaders.nominatedPharmacyChangeSuccess', true);
+    });
+
+    it('will emit UPDATE_TITLE with localised change success title as event', () => {
+      expect($t).toHaveBeenCalledWith('pageTitles.nominatedPharmacyChangeSuccess', { name: 'Boots' });
+      expect(EventBus.$emit)
+        .toHaveBeenCalledWith(UPDATE_TITLE, 'translate_pageTitles.nominatedPharmacyChangeSuccess', true);
     });
   });
 });

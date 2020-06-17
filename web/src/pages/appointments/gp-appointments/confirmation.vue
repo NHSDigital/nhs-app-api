@@ -2,7 +2,7 @@
   <div v-if="showTemplate">
     <div v-if="error">
       <error-container v-if="error.status===403"
-                       :id="generateErrorId()"
+                       :id="generateErrorId"
                        override-style="plain"
                        aria-live="polite">
         <error-title title="appointments.error.title.unavailable"/>
@@ -16,7 +16,7 @@
                     data-purpose="corona-service"
                     target="_blank"/>
       </error-container>
-      <error-container v-else-if="error.status===400" :id="generateErrorId()">
+      <error-container v-else-if="error.status===400" :id="generateErrorId">
         <error-title title="appointments.error.title.problem"
                      header="appointments.error.header.problem" />
         <error-paragraph from="appointments.error.400.message" />
@@ -24,7 +24,7 @@
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
-      <error-container v-else-if="error.status===409" :id="generateErrorId()">
+      <error-container v-else-if="error.status===409" :id="generateErrorId">
         <error-title title="appointments.confirmation.error.409.title"/>
         <error-paragraph from="appointments.confirmation.error.409.message" />
         <error-link from="generic.backButton.text"
@@ -32,7 +32,7 @@
                     :desktop-only="true"/>
       </error-container>
       <error-container v-else-if="error.status===460"
-                       :id="generateErrorId()"
+                       :id="generateErrorId"
                        override-style="plain">
         <error-title title="appointments.confirmation.error.460.title"/>
         <error-paragraph from="appointments.confirmation.error.460.line1" />
@@ -44,7 +44,7 @@
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===500 || error.status===502 || error.status===504"
-                       :id="generateErrorId()">
+                       :id="generateErrorId">
         <error-title title="appointments.error.title.problem"
                      header="appointments.error.header.problem" />
         <error-paragraph from="appointments.error.message.goBackAndTryContact"
@@ -59,161 +59,145 @@
       </error-container>
     </div>
     <div v-else>
-      <no-js-form :action="confirmBookingPath" :value="{}" method="post">
-        <input :value="confirmationMessageKey" type="hidden" name="confirmationMessageKey">
-        <input :value="slotEndTime" type="hidden"
-               name="nojs.availableAppointments.selectedSlot.endTime">
-        <input :value="slotId" type="hidden" name="nojs.availableAppointments.selectedSlot.id">
-        <input :value="slotStartTime" type="hidden"
-               name="nojs.availableAppointments.selectedSlot.startTime">
-        <input :value="true" type="hidden" name="isSubmitted">
-        <div v-if="showError" class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
-            <message-dialog message-type="error" role="alert">
-              <message-text data-purpose="error-heading">
-                {{ $t('appointments.confirmation.errorDialog') }}
-              </message-text>
-              <div data-purpose="error-dialog-list">
-                <message-list>
-                  <li v-if="showTelephoneError" data-purpose="telephone-error">
-                    <p class="nhsuk-u-margin-left-2">
-                      {{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
-                  </li>
-                  <li v-if="showReasonError" data-purpose="reason-error">
-                    <p class="nhsuk-u-margin-left-2">
-                      {{ $t('appointments.confirmation.noReasonError') }}</p>
-                  </li>
-                </message-list>
-              </div>
-            </message-dialog>
-          </div>
-        </div>
-
-        <div class="nhsuk-grid-row" data-purpose="info">
-          <div class="nhsuk-grid-column-full">
-            <p class="nhsuk-u-padding-bottom-2">
-              {{ $t('appointments.confirmation.info') }}
-            </p>
-          </div>
-        </div>
-
-        <CardGroup class="nhsuk-grid-row">
-          <CardGroupItem class="nhsuk-grid-column-one-half">
-            <Card>
-              <appointment-slot v-if="slot" :appointment="slot"
-                                :show-cancellation-link="false"
-                                data-purpose="appointment-info"
-                                date-time-header="h2"/>
-            </Card>
-          </CardGroupItem>
-        </CardGroup>
-
-        <div v-if="showPhoneNumber()" class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
-            <div role="form" data-purpose="phone-number" :class="telephoneErrorStyle">
-              <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
-                <legend id="telephone-input-label" class="nhsuk-fieldset__legend">
-                  <strong>{{ $t('appointments.confirmation.telephoneNumberLabel') }}</strong>
-                </legend>
-                <error-message v-if="showTelephoneError"
-                               id="telephone-error-label">
-                  {{ $t('appointments.confirmation.noPhoneNumberError') }}
-                </error-message>
-                <div v-if="isJavascriptOn">
-                  <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
-                       :key="index" class="nhsuk-radios__item">
-                    <input :id="patientTelephoneNumber.telephoneNumber"
-                           v-model="telephoneNumber"
-                           :value="patientTelephoneNumber.telephoneNumber"
-                           type="radio"
-                           name="radio"
-                           class="nhsuk-radios__input"
-                           @change="selected">
-                    <label :for="patientTelephoneNumber.telephoneNumber"
-                           class="nhsuk-label nhsuk-radios__label"
-                           @keypress.enter.stop="selected" @click.stop="selected">
-                      {{ patientTelephoneNumber.telephoneNumber }}
-                    </label>
-                  </div>
-                  <div v-if="patientTelephoneNumbers.length > 0" class="nhsuk-radios__item">
-                    <input :id="'otherPhoneNumberRadioInput'"
-                           type="radio"
-                           name="radio"
-                           class="nhsuk-radios__input"
-                           @change.stop="selected">
-                    <label :for="'otherPhoneNumberRadioInput'"
-                           class="nhsuk-label nhsuk-radios__label"
-                           @keypress.enter.stop="selected" @click.stop="selected">
-                      {{ $t('appointments.confirmation.useOtherPhoneNumberLabel') }}
-                    </label>
-                  </div>
-                </div>
-                <div v-if="showPhoneNumberTextBox">
-                  <p id="telephone-number-desc" class="nhsuk-u-padding-bottom-2">
-                    {{ $t('appointments.confirmation.telephoneNumberDescription') }}
-                  </p>
-                  <generic-text-input id="telephoneNumberText"
-                                      ref="telephone"
-                                      v-model="otherTelephoneNumber"
-                                      :a-labelled-by="telephoneNumberTextAriaLabelledBy"
-                                      :text-area-classes="defaultClasses"
-                                      :required="true"
-                                      :error="showTelephoneError"
-                                      :class="showReasonError"
-                                      name="telephoneNumber"
-                                      pattern=".*[^ ].*"
-                                      type="tel"/>
-                </div>
-              </fieldset>
+      <div v-if="showError" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <message-dialog message-type="error" role="alert">
+            <message-text data-purpose="error-heading">
+              {{ $t('appointments.confirmation.errorDialog') }}
+            </message-text>
+            <div data-purpose="error-dialog-list">
+              <message-list>
+                <li v-if="showTelephoneError" data-purpose="telephone-error">
+                  <p class="nhsuk-u-margin-left-2">
+                    {{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
+                </li>
+                <li v-if="showReasonError" data-purpose="reason-error">
+                  <p class="nhsuk-u-margin-left-2">
+                    {{ $t('appointments.confirmation.noReasonError') }}</p>
+                </li>
+              </message-list>
             </div>
-          </div>
+          </message-dialog>
         </div>
-
-        <div v-if="showBookingReason()" class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-            <div role="form" data-purpose="booking-reason" :class="reasonTextErrorStyle">
-              <label id="booking-reason-label" class="nhsuk-fieldset__legend"
-                     for="reasonText">
-                <strong>
-                  {{ $t('appointments.confirmation.headerLabel') }}
-                  {{ bookingReasonOptional() ?
-                    $t('appointments.confirmation.headerLabelSuffix') : '' }}
-                </strong>
-              </label>
-              <p id="max-reason-desc">
-                {{ $t('appointments.confirmation.reasonDesc.line1') }}
-              </p>
-              <p>
-                {{ $t('appointments.confirmation.reasonDesc.line2') }}
-                {{ $t('appointments.confirmation.reasonDesc.line3') }}
-              </p>
-              <error-message v-if="showReasonError" id="reason-error-label">
-                {{ $t('appointments.confirmation.noReasonError') }}
+      </div>
+      <div class="nhsuk-grid-row" data-purpose="info">
+        <div class="nhsuk-grid-column-full">
+          <p class="nhsuk-u-padding-bottom-2">
+            {{ $t('appointments.confirmation.info') }}
+          </p>
+        </div>
+      </div>
+      <CardGroup class="nhsuk-grid-row">
+        <CardGroupItem class="nhsuk-grid-column-one-half">
+          <Card>
+            <appointment-slot v-if="slot" :appointment="slot"
+                              :show-cancellation-link="false"
+                              data-purpose="appointment-info"
+                              date-time-header="h2"/>
+          </Card>
+        </CardGroupItem>
+      </CardGroup>
+      <div v-if="showPhoneNumber" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <div role="form" data-purpose="phone-number" :class="telephoneErrorStyle">
+            <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
+              <legend id="telephone-input-label" class="nhsuk-fieldset__legend">
+                <strong>{{ $t('appointments.confirmation.telephoneNumberLabel') }}</strong>
+              </legend>
+              <error-message v-if="showTelephoneError"
+                             id="telephone-error-label">
+                {{ $t('appointments.confirmation.noPhoneNumberError') }}
               </error-message>
-              <generic-text-area id="reasonText"
-                                 ref="reason"
-                                 v-model="symptoms"
-                                 :a-labelled-by="reasonBoxAriaLabelledBy"
-                                 :text-area-classes="defaultClasses"
-                                 :required="reasonRequired"
-                                 :error.sync="showReasonError"
-                                 name="bookingReason"
-                                 maxlength="150"/>
-            </div>
+              <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
+                   :key="index" class="nhsuk-radios__item">
+                <input :id="patientTelephoneNumber.telephoneNumber"
+                       v-model="telephoneNumber"
+                       :value="patientTelephoneNumber.telephoneNumber"
+                       type="radio"
+                       name="radio"
+                       class="nhsuk-radios__input"
+                       @change="selected">
+                <label :for="patientTelephoneNumber.telephoneNumber"
+                       class="nhsuk-label nhsuk-radios__label"
+                       @keypress.enter.stop="selected" @click.stop="selected">
+                  {{ patientTelephoneNumber.telephoneNumber }}
+                </label>
+              </div>
+              <div v-if="patientTelephoneNumbers.length > 0" class="nhsuk-radios__item">
+                <input :id="'otherPhoneNumberRadioInput'"
+                       type="radio"
+                       name="radio"
+                       class="nhsuk-radios__input"
+                       @change.stop="selected">
+                <label :for="'otherPhoneNumberRadioInput'"
+                       class="nhsuk-label nhsuk-radios__label"
+                       @keypress.enter.stop="selected" @click.stop="selected">
+                  {{ $t('appointments.confirmation.useOtherPhoneNumberLabel') }}
+                </label>
+              </div>
+              <div v-if="showPhoneNumberTextBox">
+                <p id="telephone-number-desc" class="nhsuk-u-padding-bottom-2">
+                  {{ $t('appointments.confirmation.telephoneNumberDescription') }}
+                </p>
+                <generic-text-input id="telephoneNumberText"
+                                    ref="telephone"
+                                    v-model="otherTelephoneNumber"
+                                    :a-labelled-by="telephoneNumberTextAriaLabelledBy"
+                                    :text-area-classes="defaultClasses"
+                                    :required="true"
+                                    :error="showTelephoneError"
+                                    :class="showReasonError"
+                                    name="telephoneNumber"
+                                    pattern=".*[^ ].*"
+                                    type="tel"/>
+              </div>
+            </fieldset>
           </div>
         </div>
-
-        <div class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
-            <generic-button id="btn_book_appointment"
-                            :button-classes="['nhsuk-button']"
-                            click-delay="medium"
-                            @click.prevent="onConfirmButtonClicked">
-              {{ $t('appointments.confirmation.confirmButtonText') }}
-            </generic-button>
+      </div>
+      <div v-if="showBookingReason" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
+          <div role="form" data-purpose="booking-reason" :class="reasonTextErrorStyle">
+            <label id="booking-reason-label" class="nhsuk-fieldset__legend"
+                   for="reasonText">
+              <strong>
+                {{ $t('appointments.confirmation.headerLabel') }}
+                {{ bookingReasonOptional ?
+                  $t('appointments.confirmation.headerLabelSuffix') : '' }}
+              </strong>
+            </label>
+            <p id="max-reason-desc">
+              {{ $t('appointments.confirmation.reasonDesc.line1') }}
+            </p>
+            <p>
+              {{ $t('appointments.confirmation.reasonDesc.line2') }}
+              {{ $t('appointments.confirmation.reasonDesc.line3') }}
+            </p>
+            <error-message v-if="showReasonError" id="reason-error-label">
+              {{ $t('appointments.confirmation.noReasonError') }}
+            </error-message>
+            <generic-text-area id="reasonText"
+                               ref="reason"
+                               v-model="symptoms"
+                               :a-labelled-by="reasonBoxAriaLabelledBy"
+                               :text-area-classes="defaultClasses"
+                               :required="!bookingReasonOptional"
+                               :error.sync="showReasonError"
+                               name="bookingReason"
+                               maxlength="150"/>
           </div>
         </div>
-      </no-js-form>
+      </div>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <generic-button id="btn_book_appointment"
+                          :button-classes="['nhsuk-button']"
+                          click-delay="medium"
+                          @click.prevent="onConfirmButtonClicked">
+            {{ $t('appointments.confirmation.confirmButtonText') }}
+          </generic-button>
+        </div>
+      </div>
 
       <div v-if="!$store.state.device.isNativeApp" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
@@ -229,6 +213,7 @@
 <script>
 import get from 'lodash/fp/get';
 import moment from 'moment';
+
 import AppointmentSlot from '@/components/appointments/Appointment';
 import Card from '@/components/widgets/card/Card';
 import CardGroup from '@/components/widgets/card/CardGroup';
@@ -247,20 +232,22 @@ import GenericTextInput from '@/components/widgets/GenericTextInput';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
-import NoJsForm from '@/components/no-js/NoJsForm';
+
 import channel from '@/lib/channel';
 import necessity from '@/lib/necessity';
-import {
-  GP_APPOINTMENTS,
-  APPOINTMENT_BOOKING,
-  APPOINTMENT_CONFIRMATIONS,
-  APPOINTMENT_BOOKING_SUCCESS,
-} from '@/lib/routes';
-import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
+import {
+  GP_APPOINTMENTS_PATH,
+  APPOINTMENT_BOOKING_PATH,
+  APPOINTMENT_CONFIRMATIONS_PATH,
+  APPOINTMENT_BOOKING_SUCCESS_PATH,
+} from '@/router/paths';
+import {
+  CORONA_SERVICE_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpAppointmentsConfirmationPage',
   components: {
     AppointmentSlot,
     Card,
@@ -279,25 +266,25 @@ export default {
     MessageDialog,
     MessageText,
     MessageList,
-    NoJsForm,
   },
   mixins: [ErrorPageMixin],
   data() {
     return {
-      appointmentBookingPath: APPOINTMENT_BOOKING.path,
-      appointmentsPath: GP_APPOINTMENTS.path,
-      confirmBookingPath: APPOINTMENT_CONFIRMATIONS.path,
-      contactUsUrl: this.$env.CONTACT_US_URL,
-      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
+      appointmentBookingPath: APPOINTMENT_BOOKING_PATH,
+      appointmentsPath: GP_APPOINTMENTS_PATH,
+      confirmBookingPath: APPOINTMENT_CONFIRMATIONS_PATH,
+      contactUsUrl: this.$store.$env.CONTACT_US_URL,
+      coronaServiceUrl: CORONA_SERVICE_URL,
       isJavascriptOn: false,
       otherTelephoneNumber: '',
       patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
       reasonError: false,
-      showPhoneNumberTextBox: true,
       slot: this.$store.state.availableAppointments.selectedSlot,
       symptoms: '',
       telephoneNumber: '',
       telephoneNumberError: false,
+      showPhoneNumberTextBox:
+        this.$store.state.availableAppointments.patientTelephoneNumbers.length <= 0,
     };
   },
   computed: {
@@ -315,22 +302,11 @@ export default {
     error() {
       return this.$store.state.availableAppointments.error;
     },
-    formData() {
-      return {
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
-    },
-    noJsTelephoneNumber() {
-      if (!this.telephoneNumber) return undefined;
-      return this.telephoneNumber;
-    },
     reasonBoxAriaLabelledBy() {
       return this.showError ? 'booking-reason-label error-label max-reason-desc' : 'booking-reason-label max-reason-desc';
     },
     reasonRequired() {
-      return !this.bookingReasonOptional();
+      return !this.bookingReasonOptional;
     },
     reasonTextErrorStyle() {
       return this.showReasonError ? 'nhsuk-form-group--error' : '';
@@ -362,6 +338,20 @@ export default {
     telephoneErrorStyle() {
       return this.showTelephoneError ? 'nhsuk-form-group--error' : '';
     },
+    showBookingReason() {
+      return this.$store.state.availableAppointments
+        .bookingReasonNecessity !== necessity.NotAllowed;
+    },
+    showPhoneNumber() {
+      return (this.slot || {}).channel === channel.Telephone;
+    },
+    generateErrorId() {
+      return `error-dialog-${this.error.status}`;
+    },
+    bookingReasonOptional() {
+      return this.$store.state.availableAppointments
+        .bookingReasonNecessity === necessity.Optional;
+    },
   },
   watch: {
     symptoms(value, oldValue) {
@@ -370,53 +360,12 @@ export default {
       }
     },
   },
-  async fetch({ store, req, redirect }) {
-    const requestBody = get('body', req);
-    const isSubmitted = get('isSubmitted', requestBody);
-    let uri;
-
-
-    if (isSubmitted) {
-      const appointmentBookRequest = {
-        BookingReason: requestBody.bookingReason,
-        EndTime: store.state.availableAppointments.selectedSlot.endTime,
-        SlotId: store.state.availableAppointments.selectedSlot.id,
-        StartTime: store.state.availableAppointments.selectedSlot.startTime,
-        TelephoneNumber: requestBody.telephoneNumber,
-      };
-      await store.dispatch('availableAppointments/book', appointmentBookRequest);
-
-      if (!store.state.availableAppointments.error) {
-        uri = createUri({
-          path: this.appointmentsPath,
-          noJs: {
-            flashMessage: {
-              show: true,
-              key: requestBody.confirmationMessageKey,
-            },
-          },
-        });
-        redirect(uri);
-      }
-    }
-  },
   mounted() {
     if (!this.slot) {
       redirectTo(this, this.appointmentsPath);
     }
   },
-  created() {
-    if (process.client) {
-      this.isJavascriptOn = true;
-      this.showPhoneNumberTextBox =
-        (this.$store.state.availableAppointments.patientTelephoneNumbers.length <= 0);
-    }
-  },
   methods: {
-    bookingReasonOptional() {
-      return this.$store.state.availableAppointments
-        .bookingReasonNecessity === necessity.Optional;
-    },
     async confirmTheAppointmentSlot(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
       if (!slot) {
         throw new ErrorMessage('Slot should not be null');
@@ -430,9 +379,6 @@ export default {
         TelephoneNumber: (telephoneNumberField !== null && telephoneNumberField !== '')
           ? telephoneNumberField : otherTelephoneNumberField,
       });
-    },
-    generateErrorId() {
-      return `error-dialog-${this.error.status}`;
     },
     hidePhoneNumberTextBox() {
       this.showPhoneNumberTextBox = false;
@@ -474,7 +420,7 @@ export default {
         key: 'gpBookingSlot',
         value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
       });
-      redirectTo(this, APPOINTMENT_BOOKING_SUCCESS.path);
+      redirectTo(this, APPOINTMENT_BOOKING_SUCCESS_PATH);
     },
     otherPhoneNumberSelected() {
       this.telephoneNumber = '';
@@ -487,13 +433,6 @@ export default {
         this.telephoneNumber = event.currentTarget.id;
         this.hidePhoneNumberTextBox();
       }
-    },
-    showBookingReason() {
-      return this.$store.state.availableAppointments
-        .bookingReasonNecessity !== necessity.NotAllowed;
-    },
-    showPhoneNumber() {
-      return (this.slot || {}).channel === channel.Telephone;
     },
   },
 };

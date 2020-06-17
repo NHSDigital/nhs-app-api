@@ -42,7 +42,12 @@ export default {
     }
   },
   [SET_ROUTE_PATH](state, route) {
-    const routePath = route.replace(/\/$/, '');
+    let routePath = route.replace(/\/$/, '');
+    const prefix = '/patient/';
+    const hasPrefix = routePath.indexOf(prefix) === 0;
+    if (hasPrefix) {
+      routePath = routePath.substr(prefix.length);
+    }
     state.pageSettings = ErrorSettings.forPage(routePath);
     state.routePath = routePath;
   },

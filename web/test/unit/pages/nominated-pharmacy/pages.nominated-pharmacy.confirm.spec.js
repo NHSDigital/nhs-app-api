@@ -1,9 +1,9 @@
 import * as dependency from '@/lib/utils';
-import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
-import { create$T, createStore, mount } from '../../helpers';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -154,7 +154,7 @@ describe('confirm nominated pharmacy', () => {
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH);
     });
 
     it('will submit nominated pharmacy on click and call to redirect when changing an existing nominated pharmacy', async () => {
@@ -166,7 +166,7 @@ describe('confirm nominated pharmacy', () => {
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH);
     });
   });
 
@@ -236,7 +236,7 @@ describe('confirm nominated pharmacy', () => {
       dependency.redirectTo = jest.fn();
       await backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
     });
   });
 });

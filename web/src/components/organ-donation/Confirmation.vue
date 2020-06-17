@@ -37,6 +37,9 @@
 import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
+import {
+  ORGAN_DONATION_PRIVACY_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'Confirmation',
@@ -55,7 +58,7 @@ export default {
     return {
       accuracyCheckboxId: 'accuracy-checkbox',
       privacyCheckboxId: 'privacy-checkbox',
-      privacyUrl: this.$store.app.$env.ORGAN_DONATION_PRIVACY_URL,
+      privacyUrl: ORGAN_DONATION_PRIVACY_URL,
       checkboxes: [
         { code: 'accuracy-checkbox', id: 'accuracy-checkbox', selected: false },
         { code: 'privacy-checkbox', id: 'privacy-checkbox', selected: false },

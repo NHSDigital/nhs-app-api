@@ -38,9 +38,12 @@
 
 <script>
 import { redirectTo } from '@/lib/utils';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import {
+  NOMINATED_PHARMACY_DSP_URL,
+} from '@/router/externalLinks';
 
 export default {
   layout: 'nhsuk-layout',
@@ -50,8 +53,8 @@ export default {
   },
   data() {
     return {
-      visitOnlinePharmacyListPath: this.$store.app.$env.NOMINATED_PHARMACY_DSP_URL,
-      returnToPrescriptionsPath: PRESCRIPTIONS.path,
+      visitOnlinePharmacyListPath: NOMINATED_PHARMACY_DSP_URL,
+      returnToPrescriptionsPath: PRESCRIPTIONS_PATH,
     };
   },
   methods: {

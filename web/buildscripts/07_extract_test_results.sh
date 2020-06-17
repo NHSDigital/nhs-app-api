@@ -10,15 +10,15 @@ source "../buildscripts/lib/functions_logging.sh"
 mkdir -p reports
 
 docker cp \
-  nhsonline-web-test-run:/data/test/unit/coverage \
+  nhsonline-web-test-run:/app/test/unit/coverage \
   reports/. || die "Failed to copy web coverage reports from container"
 
 docker cp \
-  nhsonline-web-test-run:/data/junit.xml \
+  nhsonline-web-test-run:/app/junit.xml \
   web-unit-test-results.xml || die "Failed to copy web unit test results from container"
 
 docker cp \
-  nhsonline-web-test-run:/data/test/unit/coverage/cobertura-coverage.xml \
+  nhsonline-web-test-run:/app/test/unit/coverage/cobertura-coverage.xml \
   web-unit-test-coverage.xml || die "Failed to copy web coverage data from container"
 
 # Fixup coverage source path

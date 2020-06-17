@@ -88,12 +88,15 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { IMMUNISATIONS,
-  HEALTH_CONDITIONS,
-  RECALLS, REFERRALS,
-  ENCOUNTERS,
-  MEDICAL_HISTORY,
-  TESTRESULTS } from '@/lib/routes';
+import {
+  HEALTH_CONDITIONS_PATH,
+  IMMUNISATIONS_PATH,
+  TESTRESULTS_PATH,
+  RECALLS_PATH,
+  REFERRALS_PATH,
+  ENCOUNTERS_PATH,
+  MEDICAL_HISTORY_PATH,
+} from '@/router/paths';
 
 export default {
   name: 'DcrMICROTESTGpRecord',
@@ -103,13 +106,13 @@ export default {
   data() {
     return {
       record: this.$store.state.myRecord.record,
-      immunisationsPath: IMMUNISATIONS.path,
-      healthConditionsPath: HEALTH_CONDITIONS.path,
-      recallsPath: RECALLS.path,
-      referralsPath: REFERRALS.path,
-      encountersPath: ENCOUNTERS.path,
-      medicalHistoryPath: MEDICAL_HISTORY.path,
-      testResultsPath: TESTRESULTS.path,
+      immunisationsPath: IMMUNISATIONS_PATH,
+      healthConditionsPath: HEALTH_CONDITIONS_PATH,
+      recallsPath: RECALLS_PATH,
+      referralsPath: REFERRALS_PATH,
+      encountersPath: ENCOUNTERS_PATH,
+      medicalHistoryPath: MEDICAL_HISTORY_PATH,
+      testResultsPath: TESTRESULTS_PATH,
     };
   },
   methods: {

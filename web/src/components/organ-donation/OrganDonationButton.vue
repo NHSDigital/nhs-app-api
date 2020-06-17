@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH, ORGAN_DONATION_YOUR_CHOICE_PATH } from '@/router/paths';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
@@ -34,8 +34,8 @@ export default {
 
     return {
       nextRoute: isOptOut
-        ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
-        : ORGAN_DONATION_YOUR_CHOICE.path,
+        ? ORGAN_DONATION_ADDITIONAL_DETAILS_PATH
+        : ORGAN_DONATION_YOUR_CHOICE_PATH,
       style: isOptOut ? this.$style['no-button'] : this.$style['yes-button'],
       headerKey: isOptOut ? 'organDonation.register.noButton.header' : 'organDonation.register.yesButton.header',
       subHeaderKey: isOptOut ? 'organDonation.register.noButton.subheader' : 'organDonation.register.yesButton.subheader',

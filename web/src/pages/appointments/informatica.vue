@@ -1,23 +1,20 @@
 <template>
-  <div v-if="showTemplate" >
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 id="guidance_sub_header">
-          {{ $t('appointments.informatica.header') }}
-        </h2>
-        <div :class="$style.info" data-purpose="info">
-          <p>{{ $t('appointments.informatica.description') }}</p>
-
-          <p>
-            {{ $t('appointments.informatica.link.prefix') }}
-            <analytics-tracked-tag
-              :href="informaticaUrl"
-              :text="$t('appointments.informatica.link.text')"
-              tag="a" target="_blank">
-              {{ $t('appointments.informatica.link.text') }}
-            </analytics-tracked-tag>.
-          </p>
-        </div>
+  <div v-if="showTemplate" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h2 id="guidance_sub_header">
+        {{ $t('appointments.informatica.header') }}
+      </h2>
+      <div :class="$style.info" data-purpose="info">
+        <p>{{ $t('appointments.informatica.description') }}</p>
+        <p>
+          {{ $t('appointments.informatica.link.prefix') }}
+          <analytics-tracked-tag
+            :href="informaticaUrl"
+            :text="$t('appointments.informatica.link.text')"
+            tag="a" target="_blank">
+            {{ $t('appointments.informatica.link.text') }}
+          </analytics-tracked-tag>.
+        </p>
       </div>
     </div>
   </div>
@@ -27,8 +24,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
-  layout: 'nhsuk-layout',
-
+  name: 'InformaticaPage',
   components: {
     AnalyticsTrackedTag,
   },

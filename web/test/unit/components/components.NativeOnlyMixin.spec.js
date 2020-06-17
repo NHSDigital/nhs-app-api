@@ -1,5 +1,5 @@
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 
 describe('NativeOnlyMixin', () => {
   let redirect;
@@ -25,7 +25,7 @@ describe('NativeOnlyMixin', () => {
     });
 
     it('will redirect to the index page', () => {
-      expect(redirect).toBeCalledWith(INDEX.path);
+      expect(redirect).toBeCalledWith(INDEX_PATH);
     });
   });
 

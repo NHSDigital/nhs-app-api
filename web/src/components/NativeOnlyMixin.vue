@@ -1,6 +1,6 @@
 <script>
 import get from 'lodash/fp/get';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 
 export const isNativeApp = ({ store = {} }) =>
   get('state.device.isNativeApp')(store);
@@ -8,7 +8,7 @@ export const isNativeApp = ({ store = {} }) =>
 export default {
   fetch({ redirect, store }) {
     if (!isNativeApp({ store })) {
-      redirect(INDEX.path);
+      redirect(INDEX_PATH);
     }
   },
 };

@@ -2,8 +2,11 @@ import * as utils from '@/lib/utils';
 import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { createEvent, createStore, mount } from '../../helpers';
-import { MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
+import { MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH, DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
+import {
+  YOUR_NHS_DATA_MATTERS_URL,
+} from '@/router/externalLinks';
+import { createStore, mount } from '../../helpers';
 
 describe('more', () => {
   let linkElement;
@@ -45,7 +48,6 @@ describe('more', () => {
         'session/isProxying': isProxying,
         'session/isProofLevel9': isProofLevel9,
       },
-      $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
     return mount(More, { $store });
   };
@@ -130,7 +132,7 @@ describe('more', () => {
             messagingLink.trigger('click');
           });
           it('will redirect to MESSAGES', () => {
-            expect(utils.redirectTo).toBeCalledWith(wrapper.vm, MESSAGES.path);
+            expect(utils.redirectTo).toBeCalledWith(wrapper.vm, MESSAGES_PATH);
           });
 
           it('will not set breadcrumb', () => {
@@ -179,7 +181,7 @@ describe('more', () => {
           });
 
           it('will redirect to HEALTH_INFORMATION_UPDATES', () => {
-            expect(utils.redirectTo).toBeCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES.path);
+            expect(utils.redirectTo).toBeCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
           });
 
           it('will set breadcrumb to `appMessagesOnlyCrumb`', () => {
@@ -243,30 +245,21 @@ describe('more', () => {
   });
 
   describe('methods', () => {
-    describe('navigate', () => {
-      it('will navigate to event current target path name', () => {
-        wrapper.vm.navigate(createEvent({ currentTarget: { pathname: '/event/path' } }));
-        expect(utils.redirectTo).toBeCalledWith(wrapper.vm, '/event/path');
-      });
-    });
-
     describe('navigateToDataSharing', () => {
-      it('will navigate to event current target path name if native', () => {
+      it('will redirect to DATA_SHARING_OVERVIEW_PATH if native', () => {
         wrapper = mountAs({ isNativeApp: true });
-        const event = createEvent({ currentTarget: { pathname: '/event/path' } });
-        wrapper.vm.navigateToDataSharing(event);
 
-        expect(utils.redirectTo).toBeCalledWith(wrapper.vm, '/event/path');
-        expect(event.preventDefault).toHaveBeenCalled();
+        wrapper.vm.navigateToDataSharing();
+
+        expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, DATA_SHARING_OVERVIEW_PATH);
       });
+
       it('will navigate to ndop home page if not native', () => {
         wrapper = mountAs();
-        const event = createEvent({ currentTarget: { pathname: 'testYourDataMattersUrl.com' } });
-        wrapper.vm.navigateToDataSharing(event);
 
-        expect(utils.redirectTo).not.toHaveBeenCalled();
-        expect(event.preventDefault).not.toHaveBeenCalled();
-        expect(global.open).toHaveBeenCalledWith('testYourDataMattersUrl.com', '_blank');
+        wrapper.vm.navigateToDataSharing();
+
+        expect(window.open).toHaveBeenCalledWith(YOUR_NHS_DATA_MATTERS_URL, '_blank');
       });
     });
   });

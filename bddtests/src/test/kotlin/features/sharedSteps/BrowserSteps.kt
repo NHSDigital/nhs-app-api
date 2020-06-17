@@ -4,6 +4,7 @@ import config.Config
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageObject
 import pages.loggedOut.LoginPage
@@ -67,12 +68,20 @@ open class BrowserSteps {
 
     @Step
     open fun browseTo(url: String) {
-        loginPage.driver.get(url)
+        val executor = (loginPage.driver) as JavascriptExecutor
+        executor.executeScript("window.appRoute(\"${url}\");")
         executeScripts()
     }
 
     @Step
     open fun browseToInternal(relativeUrl: String) {
+        val executor = (loginPage.driver) as JavascriptExecutor
+        executor.executeScript("window.appRoute(\"${relativeUrl}\");")
+        executeScripts()
+    }
+
+    @Step
+    open fun browseViaHttpGet(relativeUrl: String) {
         loginPage.driver.get("${Config.instance.url}$relativeUrl")
         executeScripts()
     }
@@ -90,10 +99,22 @@ open class BrowserSteps {
         val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
-                .withMessage("Expected url to be '$url', but was '${loginPage.driver.currentUrl}'"
+                .withMessage("Expected url to end with '$url', but was '${loginPage.driver.currentUrl}'"
                         + originalPathMessage)
                 .until {
-                    it.currentUrl == url
+                    it.currentUrl.endsWith(url)
+                }
+    }
+
+    @Step
+    open fun shouldEndWithUrl(url: String, originalPath: String? = null) {
+        val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
+        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
+                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
+                .withMessage("Expected url to end with '$url', but was '${loginPage.driver.currentUrl}'"
+                        + originalPathMessage)
+                .until {
+                    it.currentUrl.trimEnd('/').endsWith(url.trimEnd('/'))
                 }
     }
 

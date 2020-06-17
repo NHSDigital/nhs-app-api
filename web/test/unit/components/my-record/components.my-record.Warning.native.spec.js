@@ -1,6 +1,6 @@
 import Warning from '@/components/my-record/Warning';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { createStore, shallowMount } from '../../helpers';
 
 const createState = () => ({
@@ -33,7 +33,7 @@ describe('Warning', () => {
   });
 
   it('will not have any form on native as removing all grey back buttons', () => {
-    const form = component.find(`form[action="${INDEX.path}"]`);
+    const form = component.find(`form[action="${INDEX_PATH}"]`);
 
     expect(form.exists()).toBe(false);
   });

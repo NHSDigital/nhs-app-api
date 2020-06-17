@@ -21,7 +21,7 @@
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
 import { hrefForURL, displayedURL } from '@/lib/utils';
 
 export default {
@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacyInterrupt: NOMINATED_PHARMACY_INTERRUPT.path,
+      nominatedPharmacyInterrupt: NOMINATED_PHARMACY_INTERRUPT_PATH,
     };
   },
   computed: {

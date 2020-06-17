@@ -1,4 +1,5 @@
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
+import { ORGAN_DONATION_FIND_OUT_MORE_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 describe('find out more link', () => {
@@ -17,11 +18,10 @@ describe('find out more link', () => {
   });
 
   describe('link', () => {
-    const URL_EXTERNAL = 'www.foo.com';
     let link;
 
     beforeEach(() => {
-      $store = createStore({ $env: { ORGAN_DONATION_FIND_OUT_MORE_URL: URL_EXTERNAL } });
+      $store = createStore();
       wrapper = mountFindOutMoreLink();
       link = wrapper.find('a');
     });
@@ -32,7 +32,7 @@ describe('find out more link', () => {
 
     it('will have the external find out more link, with target set', () => {
       expect(link.attributes().target).toEqual('_blank');
-      expect(link.attributes().href).toEqual(URL_EXTERNAL);
+      expect(link.attributes().href).toEqual(ORGAN_DONATION_FIND_OUT_MORE_URL);
     });
   });
 });

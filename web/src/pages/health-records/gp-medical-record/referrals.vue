@@ -53,11 +53,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DesktopGenericBackLink,
@@ -68,31 +67,33 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      referrals: null,
     };
   },
   computed: {
     orderedReferrals() {
       return orderBy([referral => this.getRecordDate(referral.recordDate, '')],
-        ['desc'])(this.referrals.data);
+        ['desc'])((this.referrals || {}).data);
     },
     showError() {
-      return this.referrals.hasErrored
+      return this.referrals &&
+             (this.referrals.hasErrored
              || this.referrals.data.length === 0
-             || !this.referrals.hasAccess;
+             || !this.referrals.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (store.state.myRecord.record.supplier !== 'MICROTEST') {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (this.$store.state.myRecord.record.supplier !== 'MICROTEST') {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.referrals) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.referrals) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      referrals: store.state.myRecord.record.referrals,
-    };
+
+    this.referrals = this.$store.state.myRecord.record.referrals;
   },
   methods: {
     backButtonClicked() {

@@ -64,7 +64,7 @@ export default {
   [LOAD](state, d) {
     const data = d || {};
     const mutation = new LoadMutation(DateProvider);
-    const result = mutation.execute(data, this.app.$env.SIXTEEN_WEEKS_SLOTS_ENABLED) || {};
+    const result = mutation.execute(data, this.$env.SIXTEEN_WEEKS_SLOTS_ENABLED) || {};
 
     state.bookingGuidance = data.bookingGuidance;
     state.bookingReasonNecessity = data.bookingReasonNecessity;

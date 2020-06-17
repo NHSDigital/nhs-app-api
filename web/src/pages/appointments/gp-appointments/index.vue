@@ -39,7 +39,7 @@
       <error-title title="appointments.error.title.problemLoading"/>
       <error-paragraph from="errors.tryAgainNow"/>
       <error-paragraph from="appointments.error.message.ifItContinues"/>
-      <error-button from="generic.tryAgainButton.text" @click="reload" />
+      <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
       <report-a-problem :reference="error.serviceDeskReference"/>
       <error-link from="generic.backButton.text"
                   :action="backUrl"
@@ -50,7 +50,7 @@
       <error-paragraph from="appointments.error.message.tryAgainNow"
                        :variable="error.serviceDeskReference"/>
       <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
-      <error-button from="generic.tryAgainButton.text" @click="reload" />
+      <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
       <error-link from="generic.contactUsButton.text"
                   :action="contactUsUrl"
                   target="_blank"/>
@@ -60,19 +60,14 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <corona-virus-message />
-        <no-js-form :action="guidanceUrl" :value="formData">
-          <generic-button id="book-appointments-button"
-                          :button-classes="['nhsuk-button',
-                                            'nhsuk-u-margin-bottom-3',
-                                            'nhsuk-u-margin-top-3']"
-                          @click.stop.prevent="onBookButtonClicked">
-            {{ $t('appointments.guidance.bookButtonText') }}
-          </generic-button>
-        </no-js-form>
-      </div>
-    </div>
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+        <generic-button id="book-appointments-button"
+                        :button-classes="['nhsuk-button',
+                                          'nhsuk-u-margin-bottom-3',
+                                          'nhsuk-u-margin-top-3']"
+                        @click="onBookButtonClicked">
+          {{ $t('appointments.guidance.bookButtonText') }}
+        </generic-button>
+
         <div v-if="showNoUpcomingAppointments"
              class="nhsuk-u-margin-bottom-3"
              data-purpose="upcoming-info">
@@ -82,10 +77,7 @@
         <upcoming-appointments v-if="showUpcomingAppointments"
                                :appointments="upcomingAppointments"
                                :cancellation-disabled="cancellationDisabled"/>
-      </div>
-    </div>
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+
         <div v-if="showNoPastAppointments" data-purpose="past-info">
           <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.emptyPast.header') }}</h2>
           <div>
@@ -103,6 +95,7 @@
 
 <script>
 import isEmpty from 'lodash/fp/isEmpty';
+
 import CoronaVirusMessage from '@/components/widgets/CoronaVirusMessage';
 import AppointmentsGpSessionError from '@/components/errors/gp-session-errors/AppointmentsGpSessionError';
 import ErrorButton from '@/components/errors/ErrorButton';
@@ -114,12 +107,15 @@ import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import ReportAProblem from '@/components/errors/ReportAProblem';
 import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
+
 import showShutterPage from '@/lib/proxy/shutter';
-import { APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENTS, findByName } from '@/lib/routes';
+import { APPOINTMENTS_PATH, APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import {
+  CORONA_SERVICE_URL,
+} from '@/router/externalLinks';
 
 const loadData = async (store) => {
   store.dispatch('myAppointments/clear');
@@ -127,8 +123,7 @@ const loadData = async (store) => {
 };
 
 export default {
-  name: 'GPAppointments',
-  layout: 'nhsuk-layout',
+  name: 'GpAppointmentsIndexPage',
   components: {
     CoronaVirusMessage,
     ErrorButton,
@@ -138,7 +133,6 @@ export default {
     ErrorParagraph,
     ErrorTitle,
     GenericButton,
-    NoJsForm,
     PastAppointments,
     UpcomingAppointments,
     ReportAProblem,
@@ -147,28 +141,18 @@ export default {
   mixins: [ErrorPageMixin],
   data() {
     return {
-      backUrl: APPOINTMENTS.path,
-      contactUsUrl: this.$env.CONTACT_US_URL,
-      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
-      guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE.path,
+      backUrl: APPOINTMENTS_PATH,
+      contactUsUrl: this.$store.$env.CONTACT_US_URL,
+      coronaServiceUrl: CORONA_SERVICE_URL,
+      guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE_PATH,
     };
   },
   computed: {
     cancellationDisabled() {
       return this.$store.state.myAppointments.disableCancellation;
     },
-    currentRoute() {
-      return findByName(this.$route.name);
-    },
     error() {
       return this.$store.state.myAppointments.error;
-    },
-    formData() {
-      return {
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
     },
     hasLoaded() {
       return this.$store.state.myAppointments.hasLoaded;
@@ -208,7 +192,7 @@ export default {
     },
     error(value) {
       if (value) {
-        showShutterPage(this.currentRoute, this);
+        showShutterPage(this.$router.currentRoute, this);
       }
     },
     hasLoaded() {
@@ -216,11 +200,6 @@ export default {
         this.$store.dispatch('flashMessage/show');
       }
     },
-  },
-  async asyncData({ store }) {
-    if (process.server) {
-      await loadData(store);
-    }
   },
   mounted() {
     loadData(this.$store);

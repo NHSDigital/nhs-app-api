@@ -1,5 +1,5 @@
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
-import { NOMINATED_PHARMACY_CHECK, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import { NOMINATED_PHARMACY_CHECK_PATH, PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 
 describe('navigation', () => {
   let getters;
@@ -24,7 +24,7 @@ describe('navigation', () => {
         });
 
         it('will be nominated pharmacy check path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(NOMINATED_PHARMACY_CHECK.path);
+          expect(GetNavigationPathFromPrescriptions(store)).toBe(NOMINATED_PHARMACY_CHECK_PATH);
         });
       });
 
@@ -34,7 +34,7 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES.path);
+          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
     });
@@ -51,7 +51,7 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES.path);
+          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
 
@@ -61,7 +61,7 @@ describe('navigation', () => {
         });
 
         it('will be prescriptions repeat courses path', () => {
-          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES.path);
+          expect(GetNavigationPathFromPrescriptions(store)).toBe(PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
     });

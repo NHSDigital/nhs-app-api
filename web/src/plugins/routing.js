@@ -1,34 +1,38 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import Vue from 'vue';
 /* eslint-disable no-param-reassign */
 import get from 'lodash/fp/get';
-import configureAnalytics from '../services/analytics-service';
 
-export default ({ app, store }) => {
-  let navigatingBack = false;
+const RoutingPlugin = {
+  install(Vue, { router }) {
+    let navigatingBack = false;
 
-  app.router.previousPaths = [];
-  app.router.goBack = () => {
-    navigatingBack = true;
-    if (app.router.previousPaths) {
-      app.router.push(app.router.previousPaths.pop());
-    } else {
-      app.router.go(-1);
-    }
-  };
-
-  app.router.afterEach((_, from) => {
-    if (navigatingBack) {
-      navigatingBack = false;
-    } else {
-      if (app.router.previousPaths.length >= 15) {
-        app.router.previousPaths = app.router.previousPaths.splice(1);
+    router.previousPaths = [];
+    router.goBack = () => {
+      navigatingBack = true;
+      if (router.previousPaths) {
+        router.push(router.previousPaths.pop());
+      } else {
+        router.go(-1);
       }
-      app.router.previousPaths.push(get('path')(from));
-    }
+    };
 
-    Vue.nextTick(() => {
-      configureAnalytics(app, store, _);
+    router.afterEach((_, from) => {
+      if (navigatingBack) {
+        navigatingBack = false;
+      } else {
+        if (router.previousPaths.length >= 15) {
+          router.previousPaths = router.previousPaths.splice(1);
+        }
+        router.previousPaths.push(get('path')(from));
+      }
+
+      /*
+      Vue.nextTick(() => {
+        configureAnalytics(app, store, _);
+      });
+      */
     });
-  });
+  },
 };
+
+export default RoutingPlugin;

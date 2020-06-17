@@ -87,11 +87,6 @@
 </template>
 
 <script>
-import { redirectTo } from '@/lib/utils';
-import { GP_MESSAGES,
-  GP_MESSAGES_RECIPIENTS,
-  GP_MESSAGES_VIEW_MESSAGE,
-} from '@/lib/routes';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -99,11 +94,17 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import srjIf from '@/lib/sjrIf';
 import SjrIf from '@/components/SjrIf';
+import { redirectTo } from '@/lib/utils';
+import srjIf from '@/lib/sjrIf';
+import {
+  GP_MESSAGES_PATH,
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+  GP_MESSAGES_RECIPIENTS_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesSendMessagePage',
   components: {
     GenericTextArea,
     GenericTextInput,
@@ -127,7 +128,7 @@ export default {
       return (this.subjectError && this.subjectEnabled) || this.messageTextError;
     },
     backPath() {
-      return GP_MESSAGES_RECIPIENTS.path;
+      return GP_MESSAGES_RECIPIENTS_PATH;
     },
     getErrorClass() {
       return this.showError ? 'nhsuk-form-group--error' : '';
@@ -142,14 +143,9 @@ export default {
       return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
     },
   },
-  fetch({ store, redirect }) {
-    if (store.state.gpMessages.selectedMessageRecipient === undefined) {
-      redirect(GP_MESSAGES.path);
-    }
-  },
   created() {
     if (this.selectedMessageRecipient === undefined || this.hasSent) {
-      redirectTo(this, GP_MESSAGES.path);
+      redirectTo(this, GP_MESSAGES_PATH);
     }
   },
   methods: {
@@ -184,14 +180,12 @@ export default {
             outboundMessage: true,
             replies: [],
           } });
-        redirectTo(this, GP_MESSAGES_VIEW_MESSAGE.path);
+        redirectTo(this, GP_MESSAGES_VIEW_MESSAGE_PATH);
       }
     },
     onBackButtonClicked() {
-      redirectTo(this, GP_MESSAGES_RECIPIENTS.path);
+      redirectTo(this, GP_MESSAGES_RECIPIENTS_PATH);
     },
   },
 };
 </script>
-
-<style></style>

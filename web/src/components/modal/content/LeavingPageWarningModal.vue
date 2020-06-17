@@ -34,14 +34,13 @@ export default {
   },
   data() {
     return {
-      redirectPath: this.$store.state.pageLeaveWarning.attemptedRedirectRoute.path,
+      redirectPath: this.$store.state.pageLeaveWarning.attemptedRedirectRoute,
     };
   },
   methods: {
     stayOnPage() {
       this.$store.dispatch('pageLeaveWarning/stayOnPage');
     },
-
     leavePage() {
       this.$store.dispatch('pageLeaveWarning/leavePage');
     },

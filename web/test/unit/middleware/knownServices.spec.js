@@ -3,6 +3,7 @@ import { initialState } from '@/store/modules/knownServices/mutation-types';
 
 describe('middleware/knownServices', () => {
   let store;
+  const next = jest.fn();
 
   const callKnownServices
    = async ({ isLoggedIn, isLoaded }) => {
@@ -17,7 +18,7 @@ describe('middleware/knownServices', () => {
      };
 
      store.state.knownServices.isLoaded = isLoaded;
-     await knownServices({ store });
+     await knownServices({ next, store });
    };
 
   describe('not logged in', () => {

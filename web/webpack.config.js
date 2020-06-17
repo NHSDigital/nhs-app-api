@@ -24,7 +24,7 @@ const configurations = [];
       nhsapp: `./src/static/js/${version}/src/nhsapp.js`,
     },
     output: {
-      path: path.join(__dirname, `src/static/js/${version}`),
+      path: path.join(__dirname, `public/js/${version}`),
       filename: '[name].js',
     },
   }));

@@ -1,17 +1,15 @@
 import AppointmentsGpSessionError from '@/components/errors/gp-session-errors/AppointmentsGpSessionError';
 import MenuItem from '@/components/MenuItem';
-import { mount } from '../../../helpers';
+import { createStore, mount } from '../../../helpers';
 
 describe('Appointment GP session error', () => {
   const mountWrapper = ({
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
   } = {}) => mount(AppointmentsGpSessionError, {
-    $store: {
-      app: {
-        $env: {
-          CONTACT_US_URL: 'https://contact.us',
-        },
+    $store: createStore({
+      $env: {
+        CONTACT_US_URL: 'https://contact.us',
       },
       state: {
         device: {
@@ -22,8 +20,7 @@ describe('Appointment GP session error', () => {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
       },
-      dispatch: jest.fn(),
-    },
+    }),
   });
 
   it('will have the correct error content', () => {

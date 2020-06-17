@@ -92,38 +92,12 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/events                                  |
       |/health-records/gp-medical-record/documents                               |
       |/health-records/gp-medical-record/documents/detail                        |
-    When I click the 'Continue' button
-    Then retrieving the Medical Record pages directly displays the Medical Record main page
-      |/health-records/gp-medical-record/allergies-and-reactions                 |
-      |/health-records/gp-medical-record/medicines                               |
-      |/health-records/gp-medical-record/medicines/acute-medicines               |
-      |/health-records/gp-medical-record/medicines/current-medicines             |
-      |/health-records/gp-medical-record/medicines/discontinued-medicines        |
-      |/health-records/gp-medical-record/immunisations                           |
-      |/health-records/gp-medical-record/health-conditions                       |
-      |/health-records/gp-medical-record/test-results                            |
-      |/health-records/gp-medical-record/events                                  |
-      |/health-records/gp-medical-record/documents                               |
-      |/health-records/gp-medical-record/documents/detail                        |
 
   Scenario: A EMIS user cannot view their record before accepting the warning - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     Then retrieving the Medical Record pages directly displays the Medical Record Warning page
-      |/health-records/gp-medical-record/allergies-and-reactions                 |
-      |/health-records/gp-medical-record/medicines                               |
-      |/health-records/gp-medical-record/medicines/acute-medicines               |
-      |/health-records/gp-medical-record/medicines/current-medicines             |
-      |/health-records/gp-medical-record/medicines/discontinued-medicines        |
-      |/health-records/gp-medical-record/immunisations                           |
-      |/health-records/gp-medical-record/health-conditions                       |
-      |/health-records/gp-medical-record/test-results                            |
-      |/health-records/gp-medical-record/consultations                           |
-      |/health-records/gp-medical-record/documents                               |
-      |/health-records/gp-medical-record/documents/detail                        |
-    When I click the 'Continue' button
-    Then retrieving the Medical Record pages directly displays the Medical Record main page
       |/health-records/gp-medical-record/allergies-and-reactions                 |
       |/health-records/gp-medical-record/medicines                               |
       |/health-records/gp-medical-record/medicines/acute-medicines               |
@@ -152,39 +126,12 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/diagnosis                               |
       |/health-records/gp-medical-record/examinations                            |
       |/health-records/gp-medical-record/procedures                              |
-    When I click the 'Continue' button
-    Then retrieving the Medical Record pages directly displays the Medical Record main page
-      |/health-records/gp-medical-record/allergies-and-reactions                 |
-      |/health-records/gp-medical-record/medicines                               |
-      |/health-records/gp-medical-record/medicines/acute-medicines               |
-      |/health-records/gp-medical-record/medicines/current-medicines             |
-      |/health-records/gp-medical-record/medicines/discontinued-medicines        |
-      |/health-records/gp-medical-record/immunisations                           |
-      |/health-records/gp-medical-record/health-conditions                       |
-      |/health-records/gp-medical-record/test-results                            |
-      |/health-records/gp-medical-record/diagnosis                               |
-      |/health-records/gp-medical-record/examinations                            |
-      |/health-records/gp-medical-record/procedures                              |
 
   Scenario: A MICROTEST user cannot view their record before accepting the warning - Medical Record v2
     Given I am a MICROTEST user setup to use medical record version 2
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     Then retrieving the Medical Record pages directly displays the Medical Record Warning page
-      |/health-records/gp-medical-record/allergies-and-reactions                 |
-      |/health-records/gp-medical-record/medicines                               |
-      |/health-records/gp-medical-record/medicines/acute-medicines               |
-      |/health-records/gp-medical-record/medicines/current-medicines             |
-      |/health-records/gp-medical-record/medicines/discontinued-medicines        |
-      |/health-records/gp-medical-record/immunisations                           |
-      |/health-records/gp-medical-record/health-conditions                       |
-      |/health-records/gp-medical-record/test-results                            |
-      |/health-records/gp-medical-record/medical-history                         |
-      |/health-records/gp-medical-record/recalls                                 |
-      |/health-records/gp-medical-record/encounters                              |
-      |/health-records/gp-medical-record/referrals                               |
-    When I click the 'Continue' button
-    Then retrieving the Medical Record pages directly displays the Medical Record main page
       |/health-records/gp-medical-record/allergies-and-reactions                 |
       |/health-records/gp-medical-record/medicines                               |
       |/health-records/gp-medical-record/medicines/acute-medicines               |
@@ -233,7 +180,6 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/diagnosis                               |
       |/health-records/gp-medical-record/examinations                            |
       |/health-records/gp-medical-record/procedures                              |
-      |/health-records/gp-medical-record/events                                  |
 
   Scenario: A VISION user attempting to view pages not provided by their supplier will be directed to the Medical Record main page - Medical Record v2
     Given I am a VISION user setup to use medical record version 2

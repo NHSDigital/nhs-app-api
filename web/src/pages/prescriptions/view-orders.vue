@@ -61,7 +61,10 @@ import SjrIf from '@/components/SjrIf';
 import isEmpty from 'lodash/fp/isEmpty';
 import orderBy from 'lodash/fp/orderBy';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_INTERRUPT, PRESCRIPTIONS } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_INTERRUPT_PATH,
+  PRESCRIPTIONS_PATH,
+} from '@/router/paths';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import sjrIf from '@/lib/sjrIf';
 
@@ -89,7 +92,7 @@ export default {
   },
   data() {
     return {
-      backPath: PRESCRIPTIONS.path,
+      backPath: PRESCRIPTIONS_PATH,
       statusDisplayPriority: {
         [MedicationCourseStatus.Requested]: 3,
         [MedicationCourseStatus.Approved]: 2,
@@ -139,24 +142,17 @@ export default {
       }
     },
   },
-  async fetch({ store }) {
-    if (process.server) {
-      await loadData(store);
-    }
-  },
-  mounted() {
-    if (process.client) {
-      loadData(this.$store);
-    }
+  async mounted() {
+    await loadData(this.$store);
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
   },
   methods: {
     onNominatedPharmacyDetailClicked() {
-      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT.path, true);
+      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT_PATH, true);
       this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.PRESCRIPTIONS);
-      redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
+      redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
     },
     onOrderRepeatPrescriptionClicked() {
       const path = this.getContinueButtonPath();

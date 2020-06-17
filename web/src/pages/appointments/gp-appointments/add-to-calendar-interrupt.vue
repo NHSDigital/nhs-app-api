@@ -21,14 +21,13 @@
 
 <script>
 import moment from 'moment-timezone';
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import PrimaryButton from '@/components/PrimaryButton';
 import NativeApp from '@/services/native-app';
 
 export default {
-  name: 'AddToCalendar',
-  layout: 'nhsuk-layout',
+  name: 'AddToCalendarInterruptPage',
   components: {
     PrimaryButton,
   },
@@ -40,7 +39,7 @@ export default {
   created() {
     this.appointment = this.$store.state.myAppointments.selectedAppointment;
     if (!this.appointment) {
-      redirectTo(this, APPOINTMENTS.path);
+      redirectTo(this, APPOINTMENTS_PATH);
     }
   },
   mounted() {
@@ -77,7 +76,7 @@ export default {
       });
 
       NativeApp.addEventToCalendar(calendarEvent);
-      redirectTo(this, APPOINTMENTS.path);
+      redirectTo(this, APPOINTMENTS_PATH);
     },
   },
 };

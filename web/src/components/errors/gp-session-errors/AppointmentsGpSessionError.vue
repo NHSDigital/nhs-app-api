@@ -27,6 +27,7 @@
                  :text="$t('appointments.guidance.menuItem3.header')"
                  :description="$t('appointments.guidance.menuItem3.text')"
                  :click-func="navigate"
+                 :click-param="gpAdviceConditionsPath"
                  :aria-label="ariaLabelCaption(
                    'appointments.guidance.menuItem3.header',
                    'appointments.guidance.menuItem3.text')"/>
@@ -38,6 +39,7 @@
                  :text="$t('appointments.guidance.menuItem2.header')"
                  :description="$t('appointments.guidance.menuItem2.text')"
                  :click-func="navigate"
+                 :click-param="adminHelpPath"
                  :aria-label="ariaLabelCaption(
                    'appointments.guidance.menuItem2.header',
                    'appointments.guidance.menuItem2.text')"/>
@@ -53,18 +55,23 @@
     </template>
   </gp-session-error>
 </template>
+
 <script>
 import MenuItem from '@/components/MenuItem';
 import GpSessionError from '@/components/errors/GPSessionError';
 import sjrIf from '@/lib/sjrIf';
-import { createUri } from '@/lib/noJs';
 import {
-  APPOINTMENTS,
-  APPOINTMENT_ADMIN_HELP,
-  APPOINTMENT_BOOKING_GUIDANCE,
-  APPOINTMENT_GP_ADVICE,
-} from '@/lib/routes';
+  APPOINTMENTS_PATH,
+  APPOINTMENT_BOOKING_GUIDANCE_PATH,
+  APPOINTMENT_ADMIN_HELP_PATH,
+  APPOINTMENT_GP_ADVICE_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import {
+  SYMPTOM_CHECKER_URL,
+  SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS,
+  CORONA_SERVICE_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'AppointmentsGpSessionError',
@@ -79,14 +86,16 @@ export default {
     },
   },
   data() {
-    let symptomsCheckerUrl = this.$store.app.$env.SYMPTOM_CHECKER_URL;
+    let symptomsCheckerUrl = SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += this.$store.app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+      symptomsCheckerUrl += SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
-      backUrl: APPOINTMENTS.path,
+      backUrl: APPOINTMENTS_PATH,
       symptomsCheckerUrl,
-      coronaCheckerUrl: this.$store.app.$env.CORONA_SERVICE_URL,
+      coronaCheckerUrl: CORONA_SERVICE_URL,
+      adminHelpPath: APPOINTMENT_ADMIN_HELP_PATH,
+      gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_PATH,
     };
   },
   computed: {
@@ -95,18 +104,6 @@ export default {
     },
     isCdssAdvice() {
       return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
-    },
-    adminHelpPath() {
-      return createUri({
-        path: APPOINTMENT_ADMIN_HELP.path,
-        noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
-      });
-    },
-    gpAdviceConditionsPath() {
-      return createUri({
-        path: APPOINTMENT_GP_ADVICE.path,
-        noJs: { onlineConsultations: { previousRoute: APPOINTMENT_BOOKING_GUIDANCE.path } },
-      });
     },
   },
   created() {
@@ -117,9 +114,9 @@ export default {
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
-    navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
+    navigate(path) {
+      this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE_PATH);
+      redirectTo(this, path);
     },
   },
 };

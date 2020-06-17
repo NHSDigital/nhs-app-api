@@ -3,8 +3,14 @@ import { createStore } from '../helpers';
 
 describe('middleware/setSource', () => {
   let store;
+  let next;
 
-  const callSetSource = source => setSource({ route: { query: { source } }, store });
+  beforeEach(() => {
+    store = createStore();
+    next = jest.fn();
+  });
+
+  const callSetSource = source => setSource({ to: { query: { source } }, store, next });
 
   const callWithNativeSource = (source) => {
     describe(`${source} device`, () => {
@@ -21,10 +27,6 @@ describe('middleware/setSource', () => {
       });
     });
   };
-
-  beforeEach(() => {
-    store = createStore();
-  });
 
   callWithNativeSource('android');
   callWithNativeSource('ios');

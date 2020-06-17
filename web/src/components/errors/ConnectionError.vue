@@ -1,24 +1,25 @@
 <template>
-  <div v-if="isVisible"
-       :class="[!$store.state.device.isNativeApp && $style.desktopWeb, 'pull-content']">
+  <div v-if="showError"
+       :class="[!isNativeApp && $style.desktopWeb, 'pull-content']">
     <message-dialog message-type="error">
-      <message-text>{{ subheader }}</message-text>
+      <message-text>{{ this.$t('noConnection.subheader') }}</message-text>
       <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>
     <generic-button :class="['nhsuk-button']"
                     @click.stop.prevent="onRetryButtonClicked">
-      {{ retryButtonText }}
+      {{ $t('noConnection.retryButtonText') }}
     </generic-button>
   </div>
 </template>
+
 <script>
-/* eslint-disable import/extensions */
 import isObject from 'lodash/fp/isObject';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-import { INDEX } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
+import { INDEX_PATH } from '@/router/paths';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'ConnectionError',
@@ -27,7 +28,6 @@ export default {
     MessageDialog,
     MessageText,
   },
-  mixins: [ErrorMessageMixin],
   props: {
     withTitle: {
       type: Boolean,
@@ -35,18 +35,14 @@ export default {
       default: () => false,
     },
   },
+  data() {
+    return {
+      isNativeApp: this.$store.state.device.isNativeApp,
+    };
+  },
   computed: {
-    isVisible() {
-      return this.showError() && !this.$store.state.device.isNativeApp;
-    },
-    header() {
-      return this.getMessage('header');
-    },
-    subheader() {
-      return this.getMessage('subheader');
-    },
     message() {
-      return this.getMessage('message');
+      return this.$t('noConnection.message');
     },
     messageLabel() {
       return isObject(this.message) ? this.message.label : undefined;
@@ -54,29 +50,26 @@ export default {
     messageText() {
       return isObject(this.message) ? this.message.text : this.message;
     },
-    retryButtonText() {
-      return this.getMessage('retryButtonText');
+    showError() {
+      return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
     },
   },
   updated() {
-    if (this.showError()) {
-      this.$store.dispatch('errors/setConnectionProblem', process.client && !navigator.onLine);
-      this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
-      this.$store.dispatch('pageTitle/updatePageTitle', this.getMessage('header'));
+    if (this.showError) {
+      this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
+      EventBus.$emit(UPDATE_HEADER, 'noConnection.header');
+      EventBus.$emit(UPDATE_TITLE, 'noConnection.header');
     }
   },
   methods: {
     onRetryButtonClicked() {
-      if (process.client && navigator.onLine) {
-        if (this.$store.getters['session/isProxying']) {
-          this.$router.push(INDEX.path);
-        } else {
-          this.$router.go();
-        }
+      if (!navigator.onLine) { return; }
+
+      if (this.$store.getters['session/isProxying']) {
+        redirectTo(this, INDEX_PATH);
+      } else {
+        this.$router.go();
       }
-    },
-    showError() {
-      return this.hasConnectionError;
     },
   },
 };

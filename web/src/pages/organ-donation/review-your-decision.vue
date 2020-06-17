@@ -65,7 +65,6 @@ import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AdditionalInformation,
     BackButton,

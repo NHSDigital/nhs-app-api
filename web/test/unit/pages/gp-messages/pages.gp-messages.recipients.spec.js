@@ -1,13 +1,12 @@
 import RecipientsPage from '@/pages/messages/gp-messages/recipients';
-import { mount, createStore } from '../../helpers';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
+import { mount, createStore } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
 describe('gp messages recipients page', () => {
   let wrapper;
   let store;
-  let redirect;
 
   const mountPage = ({
     isNativeApp = true,
@@ -27,33 +26,36 @@ describe('gp messages recipients page', () => {
     });
   };
 
-  describe('fetch', () => {
-    beforeEach(() => {
-      redirect = jest.fn();
-    });
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
 
+  describe('created', () => {
     describe('no message recipients', () => {
-      it('will redirect to the inbox', async () => {
+      const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
+
+      beforeEach(() => {
         isEmptyArray.mockReturnValueOnce(true);
-        mountPage();
+        mountPage({ messageRecipients });
+      });
 
-        await wrapper.vm.$options.fetch({ store, redirect });
-
-        expect(isEmptyArray).toHaveBeenCalledWith([]);
-        expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
+      it('will redirect to the inbox', async () => {
+        expect(isEmptyArray).toHaveBeenCalledWith(messageRecipients);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
       });
     });
 
     describe('has message recipients', () => {
-      it('will not redirect to home', async () => {
-        const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
+      const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
+
+      beforeEach(() => {
         isEmptyArray.mockReturnValueOnce(false);
         mountPage({ messageRecipients });
+      });
 
-        await wrapper.vm.$options.fetch({ store, redirect });
-
+      it('will not redirect', async () => {
         expect(isEmptyArray).toHaveBeenCalledWith(messageRecipients);
-        expect(redirect).not.toHaveBeenCalledWith('/messages/gp-messages');
+        expect(redirectTo).not.toHaveBeenCalled();
       });
     });
   });
@@ -65,7 +67,7 @@ describe('gp messages recipients page', () => {
 
         wrapper.vm.backLinkClicked();
 
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/urgency');
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/urgency');
       });
     });
 
@@ -76,7 +78,6 @@ describe('gp messages recipients page', () => {
         mountPage({ messageRecipients });
 
         expect(wrapper.find('#recipientsMenuList').exists()).toBe(true);
-        expect(store.dispatch).not.toHaveBeenCalledWith('header/updateHeaderText');
       });
     });
   });

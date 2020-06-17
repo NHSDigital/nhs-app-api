@@ -1,8 +1,11 @@
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import BookingGuidancePage from '@/pages/appointments/gp-appointments/booking-guidance';
+import { GP_APPOINTMENTS_PATH, APPOINTMENT_BOOKING_PATH, SYMPTOMS_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createStore, mount, createRouter } from '../../helpers';
-import { APPOINTMENT_BOOKING, GP_APPOINTMENTS, SYMPTOMS } from '@/lib/routes';
+
+jest.mock('@/lib/utils');
 
 describe('booking guidance', () => {
   let wrapper;
@@ -41,6 +44,10 @@ describe('booking guidance', () => {
     });
   };
 
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
+
   it('will include the Appointment guidance menu if cdss admin or cdss advice is enabled', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(true);
@@ -58,14 +65,14 @@ describe('booking guidance', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
     wrapper.find(DesktopGenericBackLink).find('a').trigger('click');
 
-    expect($router.push).toHaveBeenCalledWith(GP_APPOINTMENTS.path);
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, GP_APPOINTMENTS_PATH);
   });
 
   it('will go to the appointments booking page when book appointment button clicked', () => {
     wrapper = mountAs();
     wrapper.find('#btn_appointment').trigger('click');
 
-    expect($router.push).toHaveBeenCalledWith(APPOINTMENT_BOOKING.path);
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_PATH);
   });
 
   it('will include the guidance text if online consultations env var is false', () => {
@@ -96,7 +103,7 @@ describe('booking guidance', () => {
     wrapper = mountAs();
     wrapper.find('#btn_check_symptoms').trigger('click');
 
-    expect($router.push).toHaveBeenCalledWith(SYMPTOMS.path);
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, SYMPTOMS_PATH);
   });
 });
 

@@ -28,9 +28,7 @@ export default {
     try {
       await this.app.$http.deleteV1PatientAppointments(param);
       commit(CANCELLING_JOURNEY_START);
-      if (process.client) {
-        this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
-      }
+      this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
     } catch (error) {
       commit(ADD_ERROR, createError(error));
     }

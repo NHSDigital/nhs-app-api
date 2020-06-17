@@ -1,6 +1,6 @@
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_PATH } from '@/router/paths';
 
-const PATH = NOMINATED_PHARMACY_SEARCH.path;
+const PATH = NOMINATED_PHARMACY_SEARCH_PATH;
 
 export default {
   400: [

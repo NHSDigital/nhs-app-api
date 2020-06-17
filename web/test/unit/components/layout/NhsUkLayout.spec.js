@@ -1,22 +1,26 @@
 import NhsukLayout from '@/components/layout/NhsUkLayout';
 import NativeCallbacks from '@/services/native-app';
+import { SYMPTOMS } from '@/router/routes/symptoms';
+import { INDEX } from '@/router/routes/general';
+import { LOGIN } from '@/router/routes/login';
+import { MORE } from '@/router/routes/more';
 import {
   APPOINTMENTS,
-  APPOINTMENT_BOOKING,
-  APPOINTMENT_BOOKING_GUIDANCE,
-  APPOINTMENT_CONFIRMATIONS,
+  BOOKING,
+  BOOKING_GUIDANCE,
+  CONFIRMATION,
+} from '@/router/routes/appointments';
+import {
+  PRESCRIPTIONS,
+  REPEAT_COURSES,
+} from '@/router/routes/prescriptions';
+import {
   DOCUMENT_DETAIL,
   GP_MEDICAL_RECORD,
   HEALTH_RECORDS,
-  INDEX,
-  LOGIN,
-  MORE,
-  MYRECORD,
-  MYRECORD_GP_AT_HAND,
-  PRESCRIPTIONS,
-  PRESCRIPTION_REPEAT_COURSES,
-  SYMPTOMS,
-} from '@/lib/routes';
+  GP_MEDICAL_RECORD_GP_AT_HAND,
+} from '@/router/routes/medical-record';
+
 import { createStore, mockCookies, shallowMount } from '../../helpers';
 
 jest.mock('@/components/widgets/HotJar', () => {});
@@ -35,17 +39,17 @@ const createPage = ($store, route = INDEX) => {
     },
     $store,
     $route: {
-      name: route.name,
+      ...route,
+      /* name: route.name,
       query: '',
-      crumb: route.crumb,
+      meta: {
+        crumb: route.crumb,
+      },
       shouldShowContentHeader: route.shouldShowContentHeader ?
-        route.shouldShowContentHeader : undefined,
+        route.shouldShowContentHeader : undefined, */
     },
     methods: {
       configureWebContext: helpUrl => helpUrl,
-    },
-    stubs: {
-      nuxt: '<div></div>',
     },
   });
 };
@@ -70,9 +74,6 @@ const createLayoutStore = (isNativeApp, enabled = true, versionEnabled = true) =
     loginSettings: {
       biometricType: undefined,
     },
-    pageTitle: {
-      pageTitle: 'some title',
-    },
     session: {
       csrfToken: 'someToken',
     },
@@ -90,44 +91,22 @@ describe('NhsUkLayout', () => {
   let wrapper;
 
   beforeEach(() => {
-    process.client = true;
     global.validateSession = () => {};
     NativeCallbacks.fetchBiometricSpec.mockClear();
   });
 
   describe('is native', () => {
     const isNative = true;
-    describe('is after version for web biometrics', () => {
-      beforeEach(() => {
-        $store = createLayoutStore(isNative);
-        $store.app.$cookies.get = jest.fn();
-      });
-
-      it('will load analytics when on a logged in page', () => {
-        const defaultPage = createPage($store);
-        const head = defaultPage.vm.$options.head.call(defaultPage.vm);
-
-        expect(head.script[0].src).toBe('test script');
-      });
-
-      it('will not load analytics when on a logged off page', () => {
-        const defaultPage = createPage($store, LOGIN);
-        const head = defaultPage.vm.$options.head.call(defaultPage.vm);
-
-        expect(head.script).toBeUndefined();
-      });
-    });
-
     describe.each([
-      [APPOINTMENT_BOOKING_GUIDANCE.name, APPOINTMENT_BOOKING_GUIDANCE],
-      [APPOINTMENT_BOOKING.name, APPOINTMENT_BOOKING],
-      [APPOINTMENT_CONFIRMATIONS.name, APPOINTMENT_CONFIRMATIONS],
-      [PRESCRIPTION_REPEAT_COURSES.name, PRESCRIPTION_REPEAT_COURSES],
+      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
+      [BOOKING.name, BOOKING],
+      [CONFIRMATION.name, CONFIRMATION],
+      [REPEAT_COURSES.name, REPEAT_COURSES],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
-        $store.app.$cookies.get = jest.fn();
+        $store.$cookies.get = jest.fn();
       });
 
       it('will show breadcrumb', () => {
@@ -140,14 +119,13 @@ describe('NhsUkLayout', () => {
       [SYMPTOMS.name, SYMPTOMS],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
-      [MYRECORD.name, MYRECORD],
       [HEALTH_RECORDS.name, HEALTH_RECORDS],
       [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         $store = createLayoutStore(isNative);
         wrapper = createPage($store, page);
-        $store.app.$cookies.get = jest.fn();
+        $store.$cookies.get = jest.fn();
       });
 
       it('will not show breadcrumb', () => {
@@ -157,12 +135,12 @@ describe('NhsUkLayout', () => {
 
     describe.each([
       [GP_MEDICAL_RECORD.name, GP_MEDICAL_RECORD],
-      [MYRECORD_GP_AT_HAND.name, MYRECORD_GP_AT_HAND],
+      [GP_MEDICAL_RECORD_GP_AT_HAND.name, GP_MEDICAL_RECORD_GP_AT_HAND],
     ])('silver integration enabled for `%s`', (_, page) => {
       beforeEach(() => {
         $store = createLayoutStore(isNative, true);
         wrapper = createPage($store, page);
-        $store.app.$cookies.get = jest.fn();
+        $store.$cookies.get = jest.fn();
       });
 
       it('will show breadcrumb', () => {
@@ -172,12 +150,11 @@ describe('NhsUkLayout', () => {
 
     describe.each([
       [GP_MEDICAL_RECORD.name, GP_MEDICAL_RECORD],
-      [MYRECORD_GP_AT_HAND.name, MYRECORD_GP_AT_HAND],
     ])('silver integration is not enabled for `%s`', (_, page) => {
       beforeEach(() => {
         $store = createLayoutStore(isNative, false);
         wrapper = createPage($store, page);
-        $store.app.$cookies.get = jest.fn();
+        $store.$cookies.get = jest.fn();
       });
 
       it('will not show breadcrumb', () => {
@@ -188,7 +165,7 @@ describe('NhsUkLayout', () => {
     describe('is before version for web biometrics', () => {
       beforeEach(() => {
         $store = createLayoutStore({ isNative, versionEnabled: false });
-        $store.app.$cookies.get = jest.fn();
+        $store.$cookies.get = jest.fn();
       });
 
       it('will not call to fetch biometric spec', () => {
@@ -203,14 +180,13 @@ describe('NhsUkLayout', () => {
     });
 
     describe.each([
-      [APPOINTMENT_BOOKING_GUIDANCE.name, APPOINTMENT_BOOKING_GUIDANCE],
-      [APPOINTMENT_BOOKING.name, APPOINTMENT_BOOKING],
-      [APPOINTMENT_CONFIRMATIONS.name, APPOINTMENT_CONFIRMATIONS],
-      [PRESCRIPTION_REPEAT_COURSES.name, PRESCRIPTION_REPEAT_COURSES],
+      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
+      [BOOKING.name, BOOKING],
+      [CONFIRMATION.name, CONFIRMATION],
+      [REPEAT_COURSES.name, REPEAT_COURSES],
       [SYMPTOMS.name, SYMPTOMS],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
-      [MYRECORD.name, MYRECORD],
       [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
@@ -236,14 +212,13 @@ describe('NhsUkLayout', () => {
     });
 
     describe.each([
-      [APPOINTMENT_BOOKING_GUIDANCE.name, APPOINTMENT_BOOKING_GUIDANCE],
-      [APPOINTMENT_BOOKING.name, APPOINTMENT_BOOKING],
-      [APPOINTMENT_CONFIRMATIONS.name, APPOINTMENT_CONFIRMATIONS],
-      [PRESCRIPTION_REPEAT_COURSES.name, PRESCRIPTION_REPEAT_COURSES],
+      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
+      [BOOKING.name, BOOKING],
+      [CONFIRMATION.name, CONFIRMATION],
+      [REPEAT_COURSES.name, REPEAT_COURSES],
       [SYMPTOMS.name, SYMPTOMS],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
-      [MYRECORD.name, MYRECORD],
       [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {

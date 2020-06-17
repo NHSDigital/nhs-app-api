@@ -63,11 +63,4 @@ describe('GenericTextArea.vue', () => {
     expect(wrapper.emitted('input').length).toBe(2);
     expect(wrapper.emitted('input')[1][0]).toEqual('Update and emit this');
   });
-
-  it('will ensure the focus function works', () => {
-    expect(document.activeElement).not.toBe(genericTextArea.element);
-    expect(typeof wrapper.vm.focus).toBe('function');
-    wrapper.vm.focus();
-    expect(document.activeElement).toBe(genericTextArea.element);
-  });
 });

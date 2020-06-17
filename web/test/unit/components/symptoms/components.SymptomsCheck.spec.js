@@ -1,11 +1,13 @@
 import SymptomsCheck from '@/components/symptoms/SymptomsCheck';
-import { createStore, mount, createRouter, createEvent } from '../../helpers';
-import { APPOINTMENT_GP_ADVICE } from '@/lib/routes';
 import MenuItem from '@/components/MenuItem';
+import * as dependency from '@/lib/utils';
+import { APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
+import { createStore, mount, createRouter, createEvent } from '../../helpers';
 
 const createHttp = (rules = undefined) => ({
   getV1PatientJourneyConfiguration: jest.fn().mockImplementation(() => Promise.resolve(rules)),
 });
+dependency.redirectTo = jest.fn();
 
 describe('GP Guidence button tests', () => {
   let $store;
@@ -148,9 +150,10 @@ describe('GP Guidence button tests', () => {
 
       it('will navigate to the Preexisting condititons page when clicked', () => {
         const event = createEvent({ currentTarget:
-          { pathname: APPOINTMENT_GP_ADVICE.path } });
+          { pathname: APPOINTMENT_GP_ADVICE_PATH } });
         wrapper.vm.navigate(event);
-        expect($router.push).toHaveBeenCalledWith(APPOINTMENT_GP_ADVICE.path);
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_GP_ADVICE_PATH);
       });
     });
   });

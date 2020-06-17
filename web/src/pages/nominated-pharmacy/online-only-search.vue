@@ -75,10 +75,10 @@
 
 <script>
 import {
-  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
-  NOMINATED_PHARMACY_SEARCH_RESULTS,
-  PRESCRIPTIONS,
-} from '@/lib/routes';
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
+  PRESCRIPTIONS_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
@@ -106,7 +106,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacyChooseType: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path,
+      nominatedPharmacyChooseType: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
       showErrorMessage: false,
       searchQuery: '',
       showMainPageHeader: true,
@@ -120,7 +120,7 @@ export default {
     },
   },
   created() {
-    redirectTo(this, PRESCRIPTIONS.path);
+    redirectTo(this, PRESCRIPTIONS_PATH);
   },
   methods: {
     generateNoResultsMessage() {
@@ -176,7 +176,7 @@ export default {
           this.showMainPageHeader = false;
           window.scrollTo(0, 0);
         } else {
-          redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+          redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
         }
       }
     },

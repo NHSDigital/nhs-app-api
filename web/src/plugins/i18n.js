@@ -6,11 +6,10 @@ import messages from '../locale';
 
 Vue.use(VueI18n);
 
-export default ({ app }) => {
-  app.i18n = new VueI18n({
-    locale: 'en',
-    fallbackLocale: 'en',
-    messages,
-    silentTranslationWarn: false,
-  });
-};
+export default new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+  silentTranslationWarn: false,
+});
+

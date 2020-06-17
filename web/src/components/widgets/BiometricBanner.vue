@@ -39,8 +39,9 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
-import { findByName, LOGIN_SETTINGS } from '@/lib/routes';
+import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'BiometricBanner',
@@ -81,9 +82,9 @@ export default {
     },
     goToLoginOptions() {
       if (canVersionHandleBiometricsWeb(this)) {
-        this.$router.push(LOGIN_SETTINGS.path);
+        redirectTo(this, LOGIN_SETTINGS_PATH);
       } else {
-        this.configureWebContext(findByName('Login').helpUrl);
+        this.configureWebContext(this.$route.meta.helpUrl);
         NativeCallbacks.goToLoginOptions();
       }
     },

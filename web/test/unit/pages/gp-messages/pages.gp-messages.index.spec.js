@@ -1,10 +1,10 @@
 import Page from '@/pages/messages/gp-messages/index';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
-import { createStore, create$T, mount } from '../../helpers';
 import { formatDate } from '@/plugins/filters';
-import { INDEX } from '@/lib/routes';
 import { isEmptyArray, redirectTo } from '@/lib/utils';
 import last from 'lodash/fp/last';
+import { INDEX_PATH } from '@/router/paths';
+import { createStore, create$T, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 jest.mock('@/plugins/filters');
@@ -17,8 +17,6 @@ describe('practice patient messaging inbox', () => {
   let wrapper;
   let store;
   let $t;
-
-  const redirect = jest.fn();
 
   const summaries = [{
     messageId: 'message-1',
@@ -87,36 +85,42 @@ describe('practice patient messaging inbox', () => {
     });
   };
 
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
+
   beforeAll(() => {
     formatDate.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('mock formatted date');
   });
 
-  describe('asyncData', () => {
-    it('will clear selected message and recipient if im1MessagingEnabled is enabled for the practice', async () => {
-      mountPage({ im1MessagingEnabled: true });
-      await wrapper.vm.$options.asyncData({ store, redirect });
+  describe('created', () => {
+    describe('practice settings im1 messaging enabled', () => {
+      beforeAll(() => {
+        mountPage({ im1MessagingEnabled: true });
+      });
 
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/clearSelectedRetainingId');
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/clearSelectedRecipient');
+      it('will clear selected message and recipient if im1MessagingEnabled is enabled for the practice', async () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/clearSelectedRetainingId');
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/clearSelectedRecipient');
+      });
+
+      it('will dispatch load if im1MessagingEnabled is enabled for the practice', async () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/loadMessages');
+      });
+
+      it('will dispatch action to clear urgency choice', () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setUrgencyChoice', undefined);
+      });
     });
 
-    it('will dispatch load if im1MessagingEnabled is enabled for the practice', async () => {
-      mountPage({ im1MessagingEnabled: true });
-      await wrapper.vm.$options.asyncData({ store, redirect });
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/loadMessages');
-    });
+    describe('practice settings im1 messaging disabled', () => {
+      beforeEach(() => {
+        mountPage();
+      });
 
-    it('will redirect if im1MessagingEnabled is not enabled for the practice', async () => {
-      mountPage();
-      await wrapper.vm.$options.asyncData({ store, redirect });
-      expect(redirect).toHaveBeenCalledWith(INDEX.path);
-    });
-  });
-
-  describe('mounted', () => {
-    it('will dispatch action to clear urgency choice', () => {
-      mountPage();
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setUrgencyChoice', undefined);
+      it('will redirect if im1MessagingEnabled is not enabled for the practice', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+      });
     });
   });
 
@@ -152,7 +156,7 @@ describe('practice patient messaging inbox', () => {
     it('will go back to the messages hub', () => {
       mountPage();
       wrapper.vm.backLinkClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages');
     });
   });
 
@@ -196,7 +200,7 @@ describe('practice patient messaging inbox', () => {
         });
 
         it('will redirect to view gp message path without unread messages url hash', () => {
-          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details');
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details');
         });
       });
 
@@ -207,7 +211,7 @@ describe('practice patient messaging inbox', () => {
         });
 
         it('will redirect to view gp message path with unread messages url hash', () => {
-          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details#unreadMessages');
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details#unreadMessages');
         });
 
         it('will set message details if required', () => {

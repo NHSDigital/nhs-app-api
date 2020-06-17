@@ -2,6 +2,7 @@
 @authentication-session-expiry
 @noJs
 @long-running
+@pending
 Feature: NoJS Session Expiry
 
   Scenario: On session expiry, a user on a secure screen is automatically signed out

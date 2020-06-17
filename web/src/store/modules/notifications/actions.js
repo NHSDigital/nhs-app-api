@@ -1,5 +1,6 @@
 import get from 'lodash/fp/get';
 import NativeApp from '@/services/native-app';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { SET_REGISTRATION, SET_WAITING } from './mutation-types';
 
 const load = 'load';
@@ -80,8 +81,8 @@ export default {
   retryToggle({ dispatch }) {
     // NHSO-7584
     this.dispatch('errors/clearAllApiErrors');
-    this.dispatch('header/updateHeaderText', this.app.i18n.tc('pageHeaders.notifications'));
-    this.dispatch('pageTitle/updatePageTitle', this.app.i18n.tc('pageHeaders.notifications'));
+    EventBus.$emit(UPDATE_HEADER, 'pageHeaders.notifications');
+    EventBus.$emit(UPDATE_TITLE, 'pageHeaders.notifications');
     dispatch('toggle');
   },
   toggle({ commit }) {

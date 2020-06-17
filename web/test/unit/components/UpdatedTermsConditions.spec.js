@@ -1,10 +1,16 @@
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
-import { APPOINTMENTS, INDEX, REDIRECT_PARAMETER, TERMSANDCONDITIONS } from '@/lib/routes';
+import { APPOINTMENTS } from '@/router/routes/appointments';
+import { REDIRECT_PARAMETER, APPOINTMENTS_NAME } from '@/router/names';
+import { INDEX_PATH } from '@/router/paths';
+import { TERMSANDCONDITIONS } from '@/router/routes/login';
+import * as dependency from '@/lib/utils';
 import { createRouter, createStore, mount } from '../helpers';
 
 let $router;
 let wrapper;
 let $store;
+dependency.redirectTo = jest.fn();
+dependency.redirectByName = jest.fn();
 
 const createUpdatedTermsConditionsComponent = ({ state, route = TERMSANDCONDITIONS }) => {
   $router = createRouter();
@@ -114,7 +120,7 @@ describe('terms and conditions are accepted', () => {
       });
 
       it('will redirect to INDEX route when the button is pushed', async () => {
-        expect($router.push).toHaveBeenCalledWith(INDEX.path);
+        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
       });
     });
   });
@@ -137,7 +143,7 @@ describe('terms and conditions are accepted', () => {
       });
 
       it('will redirect to redirect parameter route when the button is pushed', async () => {
-        expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+        expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
       });
     });
   });

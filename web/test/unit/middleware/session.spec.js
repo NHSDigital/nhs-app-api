@@ -3,6 +3,7 @@ import session from '@/middleware/session';
 describe('session middleware', () => {
   let store;
   let dispatch;
+  const next = jest.fn();
 
   const createStore = ({ isLoggedIn = true, hasLoaded = false } = {}) => {
     store = {
@@ -28,8 +29,9 @@ describe('session middleware', () => {
     });
 
     it('will not dispatch get session', async () => {
-      await session({ store });
-      expect(dispatch).not.toHaveBeenCalled();
+      await session({ next, store });
+      expect(next).not.toBeCalledWith(expect.anything);
+      expect(next).toBeCalled();
     });
   });
 
@@ -39,8 +41,9 @@ describe('session middleware', () => {
     });
 
     it('will not dispatch get session', async () => {
-      await session({ store });
-      expect(dispatch).not.toHaveBeenCalled();
+      await session({ next, store });
+      expect(next).not.toBeCalledWith(expect.anything);
+      expect(next).toBeCalled();
     });
   });
 
@@ -50,8 +53,10 @@ describe('session middleware', () => {
     });
 
     it('will dispatch get session', async () => {
-      await session({ store });
+      await session({ next, store });
       expect(dispatch).toHaveBeenCalledWith('session/getSession');
+      expect(next).not.toBeCalledWith(expect.anything);
+      expect(next).toBeCalled();
     });
   });
 });

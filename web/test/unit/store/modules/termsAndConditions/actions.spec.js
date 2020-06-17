@@ -12,25 +12,25 @@ describe('termsAndConditions/actions', () => {
     commit = jest.fn();
     cookieValue = {};
     app = {
-      $cookies: {
-        get: jest.fn()
-          .mockImplementation('nhso.session').mockReturnValue(cookieValue),
-        set: jest.fn(),
+      state: {
+        device: {
+          source: '',
+        },
       },
       $http: {
         getV1PatientTermsAndConditionsConsent: jest.fn(),
         postV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve()),
       },
-      router: [],
-      store: {
-        state: {
-          device: {
-            source: '',
-          },
-        },
+      app: {
+        router: [],
       },
     };
     actions.app = app;
+    actions.$cookies = {
+      get: jest.fn()
+        .mockImplementation('nhso.session').mockReturnValue(cookieValue),
+      set: jest.fn(),
+    };
   });
 
   describe('acceptTerms', () => {
@@ -45,8 +45,8 @@ describe('termsAndConditions/actions', () => {
       };
     });
 
-    it('will call postV1PatientTermsAndConditionsConsent with the received consent terms ', () => {
-      actions.acceptTerms({ commit }, consentTerms);
+    it('will call postV1PatientTermsAndConditionsConsent with the received consent terms ', async () => {
+      await actions.acceptTerms({ commit }, consentTerms);
       expect(app.$http.postV1PatientTermsAndConditionsConsent).toBeCalledWith(consentTerms);
     });
 
@@ -126,7 +126,7 @@ describe('termsAndConditions/actions', () => {
 
     describe('already accepted via cookies', () => {
       beforeEach(async () => {
-        actions.app.$cookies.get = jest.fn()
+        actions.$cookies.get = jest.fn()
           .mockImplementation('nhso.session')
           .mockReturnValue(cookieValue)
 

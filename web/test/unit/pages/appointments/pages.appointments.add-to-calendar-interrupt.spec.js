@@ -1,8 +1,8 @@
 import * as dependency from '@/lib/utils';
 import AddToCalendarInterrupt from '@/pages/appointments/gp-appointments/add-to-calendar-interrupt';
-import { createStore, mount } from '../../helpers';
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS_PATH } from '@/router/paths';
 import NativeApp from '@/services/native-app';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 jest.mock('@/services/native-app');
@@ -16,12 +16,7 @@ describe('add-to-calendar-interrupt.vue', () => {
   let para;
   let addToCalendarButton;
 
-  const createAddToCalendarInterruptPage = () => mount(AddToCalendarInterrupt, {
-    $store,
-    stubs: {
-      'page-title': '<div></div>',
-    },
-  });
+  const createAddToCalendarInterruptPage = () => mount(AddToCalendarInterrupt, { $store });
 
   beforeEach(() => {
     $store = createStore({
@@ -90,7 +85,7 @@ describe('add-to-calendar-interrupt.vue', () => {
       expect($store.dispatch).toHaveBeenCalledWith('availableAppointments/completeBookingJourney');
       expect($store.dispatch).toHaveBeenCalledWith('availableAppointments/deselect');
       expect(NativeApp.addEventToCalendar).toHaveBeenCalled();
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_PATH);
     });
   });
 });

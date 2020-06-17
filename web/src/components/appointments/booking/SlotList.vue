@@ -1,5 +1,5 @@
 <template>
-  <form :class="[$style.appointmentTime]">
+  <div :class="[$style.appointmentTime]">
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <div v-if="hasAppointments(daySlots)" data-purpose="appointment-day">
         <h3 data-purpose="appointment-day-heading"
@@ -17,14 +17,14 @@
         </ul>
       </div>
     </span>
-  </form>
+  </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
 import DateProvider from '@/services/DateProvider';
-import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
+import { APPOINTMENT_CONFIRMATIONS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -42,7 +42,7 @@ export default {
     formatDate: dateTime => DateProvider.create(dateTime).format('dddd D MMMM YYYY'),
     select(ref) {
       this.$refs[ref][0].select();
-      redirectTo(this, APPOINTMENT_CONFIRMATIONS.path);
+      redirectTo(this, APPOINTMENT_CONFIRMATIONS_PATH);
     },
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;

@@ -1,20 +1,17 @@
 import NextSteps from '@/components/organ-donation/NextSteps';
+import {
+  ORGAN_DONATION_SHARE_DECISION_URL,
+  ORGAN_DONATION_TELL_FAMILY_URL,
+} from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 describe('next steps component', () => {
   let wrapper;
   let $store;
-  const TELL_FAMILY_URL = 'www.foo.com';
 
   describe('opt in', () => {
-    const SHARE_DECISION_URL = 'www.boo.com';
     beforeEach(() => {
-      $store = createStore({
-        $env: {
-          ORGAN_DONATION_SHARE_DECISION_URL: SHARE_DECISION_URL,
-          ORGAN_DONATION_TELL_FAMILY_URL: TELL_FAMILY_URL,
-        },
-      });
+      $store = createStore();
       wrapper = mount(NextSteps, {
         $store,
         propsData: { isOptInDecision: true },
@@ -37,7 +34,7 @@ describe('next steps component', () => {
       });
 
       it('will go to share decision external url', () => {
-        expect(shareDecisionLink.attributes().href).toEqual(SHARE_DECISION_URL);
+        expect(shareDecisionLink.attributes().href).toEqual(ORGAN_DONATION_SHARE_DECISION_URL);
       });
     });
 
@@ -57,18 +54,14 @@ describe('next steps component', () => {
       });
 
       it('will go to share decision external url', () => {
-        expect(tellFamilyLink.attributes().href).toEqual(TELL_FAMILY_URL);
+        expect(tellFamilyLink.attributes().href).toEqual(ORGAN_DONATION_TELL_FAMILY_URL);
       });
     });
   });
 
   describe('opt out', () => {
     beforeEach(() => {
-      $store = createStore({
-        $env: {
-          ORGAN_DONATION_TELL_FAMILY_URL: TELL_FAMILY_URL,
-        },
-      });
+      $store = createStore();
       wrapper = mount(NextSteps, {
         $store,
         propsData: { isOptInDecision: false },
@@ -95,7 +88,7 @@ describe('next steps component', () => {
       });
 
       it('will go to share decision external url', () => {
-        expect(tellFamilyLink.attributes().href).toEqual(TELL_FAMILY_URL);
+        expect(tellFamilyLink.attributes().href).toEqual(ORGAN_DONATION_TELL_FAMILY_URL);
       });
     });
   });

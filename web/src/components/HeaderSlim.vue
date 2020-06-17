@@ -13,7 +13,7 @@
 <script>
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
-import { ACCOUNT_SIGNOUT } from '@/lib/routes';
+import { LOGOUT_PATH } from '@/router/paths';
 
 export default {
   name: 'HeaderSlim',
@@ -31,7 +31,7 @@ export default {
     },
     clickUrl: {
       type: String,
-      default: ACCOUNT_SIGNOUT.path,
+      default: LOGOUT_PATH,
     },
   },
   computed: {

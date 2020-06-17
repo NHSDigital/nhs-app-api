@@ -12,8 +12,7 @@
                      :text="$t('healthRecordHubPage.gpMedicalRecord.subheader')"
                      :aria-label="ariaLabelCaption(
                        'healthRecordHubPage.gpMedicalRecord.subheader',
-                       'healthRecordHubPage.gpMedicalRecord.body')"
-                     :prevent-default="preventDefault()"/>
+                       'healthRecordHubPage.gpMedicalRecord.body')" />
           <third-party-jump-off-button v-if="showPkbTestResults && !isProxying"
                                        id="btn_pkb_test_results"
                                        provider-id="pkb"
@@ -52,15 +51,15 @@
 
 <script>
 
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     MenuItem,
     MenuItemList,
@@ -68,6 +67,7 @@ export default {
   },
   data() {
     return {
+      gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
       showPkbTestResults: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -120,11 +120,6 @@ export default {
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
-  computed: {
-    gpMedicalRecordPath() {
-      return GP_MEDICAL_RECORD.path;
-    },
-  },
   updated() {
     window.scrollTo(0, 0);
   },
@@ -136,10 +131,7 @@ export default {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
     redirectToMedicalRecord() {
-      this.$router.push(this.gpMedicalRecordPath);
-    },
-    preventDefault() {
-      return true;
+      redirectTo(this, this.gpMedicalRecordPath);
     },
   },
 };

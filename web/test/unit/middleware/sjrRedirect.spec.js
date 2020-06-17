@@ -1,38 +1,54 @@
 import sjrRedirect from '@/middleware/sjrRedirect';
 import {
-  APPOINTMENTS,
-  ACCOUNT_NOTIFICATIONS,
-  APPOINTMENT_GP_AT_HAND,
-  APPOINTMENT_INFORMATICA,
+  GP_AT_HAND,
   GP_APPOINTMENTS,
+  INFORMATICA,
+  HOSPITAL_APPOINTMENTS,
+} from '@/router/routes/appointments';
+import {
   GP_MEDICAL_RECORD,
   GP_MEDICAL_RECORD_GP_AT_HAND,
-  HOSPITAL_APPOINTMENTS,
-  INDEX,
-  MYRECORD,
-  MYRECORD_GP_AT_HAND,
-  PRESCRIPTIONS,
-  PRESCRIPTIONS_GP_AT_HAND,
   DOCUMENTS,
   DOCUMENT,
   DOCUMENT_DETAIL,
+} from '@/router/routes/medical-record';
+import { PRESCRIPTIONS_GP_AT_HAND, PRESCRIPTIONS } from '@/router/routes/prescriptions';
+import { ACCOUNT_NOTIFICATIONS } from '@/router/routes/account';
+import {
   GP_MESSAGES,
   GP_MESSAGES_URGENCY,
-  GP_MESSAGES_URGENCY_CONTACT_GP,
+  GP_MESSAGES_URGENCY_CONTACT_YOUR_GP,
   GP_MESSAGES_RECIPIENTS,
-  GP_MESSAGES_VIEW_MESSAGE,
-  GP_MESSAGES_CREATE,
+  GP_MESSAGES_VIEW_DETAILS,
+  GP_MESSAGES_SEND_MESSAGE,
   GP_MESSAGES_DELETE,
   GP_MESSAGES_DELETE_SUCCESS,
-} from '@/lib/routes';
+} from '@/router/routes/messages';
+import {
+  APPOINTMENTS_PATH,
+  APPOINTMENT_GP_AT_HAND_PATH,
+  APPOINTMENT_INFORMATICA_PATH,
+  GP_APPOINTMENTS_PATH,
+  GP_MEDICAL_RECORD_PATH,
+  INDEX_PATH,
+  GP_MEDICAL_RECORD_GP_AT_HAND_PATH,
+  PRESCRIPTIONS_PATH,
+  PRESCRIPTIONS_GP_AT_HAND_PATH,
+  HEALTH_RECORDS_PATH,
+} from '@/router/paths';
+import * as dependency from '@/lib/utils';
 
 describe('middleware/sjrRedirect', () => {
   let getters;
-  let redirect;
+  let next;
   let store;
+  dependency.createRoutePathObject = jest.fn(x => ({ path: x.path }));
 
   const callSjrRedirect = (route) => {
-    sjrRedirect({ redirect, route, store });
+    const to = {
+      ...route,
+    };
+    sjrRedirect({ next, to, store });
   };
 
   beforeEach(() => {
@@ -40,40 +56,41 @@ describe('middleware/sjrRedirect', () => {
     store = {
       getters,
     };
-    redirect = jest.fn();
+    next = jest.fn();
   });
 
   describe('appointment gp at hand redirect rules', () => {
     describe('sjr im1 enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1AppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENT_GP_AT_HAND);
+        callSjrRedirect(GP_AT_HAND);
       });
 
       it('will redirect to appointments', () => {
-        expect(redirect).toBeCalledWith('302', GP_APPOINTMENTS.path);
+        expect(next).toBeCalledWith({ path: GP_APPOINTMENTS_PATH });
       });
     });
 
     describe('sjr informatica enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/informaticaAppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENT_GP_AT_HAND);
+        callSjrRedirect(GP_AT_HAND);
       });
 
       it('will redirect to appointments informatica', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENT_INFORMATICA.path);
+        expect(next).toBeCalledWith({ path: APPOINTMENT_INFORMATICA_PATH });
       });
     });
 
     describe('sjr gp at hand enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/gpAtHandAppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENT_GP_AT_HAND);
+        callSjrRedirect(GP_AT_HAND);
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
   });
@@ -86,7 +103,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -97,7 +115,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to appointments informatica', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENT_INFORMATICA.path);
+        expect(next).toBeCalledWith({ path: APPOINTMENT_INFORMATICA_PATH });
       });
     });
 
@@ -108,7 +126,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to appointments gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENT_GP_AT_HAND.path);
+        expect(next).toBeCalledWith({ path: APPOINTMENT_GP_AT_HAND_PATH });
       });
     });
   });
@@ -117,33 +135,34 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr im1 enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1AppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENT_INFORMATICA);
+        callSjrRedirect(INFORMATICA);
       });
 
       it('will redirect to appointments', () => {
-        expect(redirect).toBeCalledWith('302', GP_APPOINTMENTS.path);
+        expect(next).toBeCalledWith({ path: GP_APPOINTMENTS_PATH });
       });
     });
 
     describe('sjr informatica enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1AppointmentsEnabled'] = false;
-        callSjrRedirect(APPOINTMENT_INFORMATICA);
+        callSjrRedirect(INFORMATICA);
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
     describe('sjr gp at hand enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/gpAtHandAppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENT_INFORMATICA);
+        callSjrRedirect(INFORMATICA);
       });
 
       it('will redirect to appointments gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENT_GP_AT_HAND.path);
+        expect(next).toBeCalledWith({ path: APPOINTMENT_GP_AT_HAND_PATH });
       });
     });
   });
@@ -156,22 +175,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect to my record', () => {
-        expect(redirect).not.toBeCalled();
-      });
-    });
-
-    describe('sjr gp at hand enabled', () => {
-      beforeEach(() => {
-        store = {
-          getters: {
-            'serviceJourneyRules/silverIntegrationEnabled': () => (false),
-            'serviceJourneyRules/gpAtHandGpMedicalRecordV2Enabled': true,
-          },
-        };
-        callSjrRedirect(MYRECORD);
-      });
-      it('will redirect to my record gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD_GP_AT_HAND.path);
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -183,31 +188,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to my record gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
-      });
-    });
-  });
-
-  describe('my record gp at hand redirect rules', () => {
-    describe('sjr im1 enabled', () => {
-      beforeEach(() => {
-        getters['serviceJourneyRules/im1MyRecordEnabled'] = true;
-        callSjrRedirect(MYRECORD_GP_AT_HAND);
-      });
-
-      it('will redirect to my record', () => {
-        expect(redirect).toBeCalledWith('302', MYRECORD.path);
-      });
-    });
-
-    describe('sjr gp at hand enabled', () => {
-      beforeEach(() => {
-        getters['serviceJourneyRules/gpAtHandMyRecordEnabled'] = true;
-        callSjrRedirect(MYRECORD_GP_AT_HAND);
-      });
-
-      it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).toBeCalledWith({ path: HEALTH_RECORDS_PATH });
       });
     });
   });
@@ -220,7 +201,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -232,10 +214,10 @@ describe('middleware/sjrRedirect', () => {
             'serviceJourneyRules/gpAtHandMyRecordEnabled': true,
           },
         };
-        callSjrRedirect(MYRECORD);
+        callSjrRedirect(GP_MEDICAL_RECORD);
       });
       it('will redirect to my record gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', MYRECORD_GP_AT_HAND.path);
+        expect(next).toBeCalledWith({ path: GP_MEDICAL_RECORD_GP_AT_HAND_PATH });
       });
     });
   });
@@ -248,7 +230,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to prescriptions', () => {
-        expect(redirect).toBeCalledWith('302', PRESCRIPTIONS.path);
+        expect(next).toBeCalledWith({ path: PRESCRIPTIONS_PATH });
       });
     });
 
@@ -259,7 +241,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
   });
@@ -272,7 +255,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -283,7 +267,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to prescriptions gp at hand', () => {
-        expect(redirect).toBeCalledWith('302', PRESCRIPTIONS_GP_AT_HAND.path);
+        expect(next).toBeCalledWith({ path: PRESCRIPTIONS_GP_AT_HAND_PATH });
       });
     });
   });
@@ -296,7 +280,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -307,7 +292,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to account', () => {
-        expect(redirect).toBeCalledWith('302', INDEX.path);
+        expect(next).toBeCalledWith({ path: INDEX_PATH });
       });
     });
   });
@@ -322,7 +307,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -332,21 +318,57 @@ describe('middleware/sjrRedirect', () => {
         documentsRoutes.forEach(route => callSjrRedirect(route));
       });
 
-      it('will redirect to medical record home', () => {
-        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
-        expect(redirect).toHaveBeenCalledTimes(documentsRoutes.length);
+      it('will redirect to home', () => {
+        expect(next).toBeCalledWith({ path: GP_MEDICAL_RECORD_PATH });
+        expect(next).toHaveBeenCalledTimes(documentsRoutes.length);
       });
     });
   });
+
+  /*  describe('im1Messaging rules', () => {
+    const gpDeleteMessagesRoutes = [
+      GP_MESSAGES_DELETE,
+      GP_MESSAGES_DELETE_SUCCESS,
+    ];
+
+    describe('deleteMessageRedirect enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/deleteGpMessagesEnabled'] = true;
+        gpDeleteMessagesRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will not redirect', () => {
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
+      });
+    });
+
+    describe('deleteMessageRedirect disabled', () => {
+      beforeEach(() => {
+       // getters['serviceJourneyRules/im1MessagingEnabled'] = true;
+        getters['serviceJourneyRules/deleteGpMessagesEnabled'] = false;
+        gpMessagesRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will redirect to GP_MESSAGES_PATH', () => {
+        expect(next).toBeCalledWith({ path: GP_MESSAGES_PATH });
+        expect(next).toHaveBeenCalledTimes(gpMessagesRoutes.length);
+      });
+    });
+  });
+  */
+
+
+  // ADMIN_HELP
 
   describe('im1Messaging rules', () => {
     const gpMessagesRoutes = [
       GP_MESSAGES,
       GP_MESSAGES_URGENCY,
-      GP_MESSAGES_URGENCY_CONTACT_GP,
+      GP_MESSAGES_URGENCY_CONTACT_YOUR_GP,
       GP_MESSAGES_RECIPIENTS,
-      GP_MESSAGES_VIEW_MESSAGE,
-      GP_MESSAGES_CREATE,
+      GP_MESSAGES_VIEW_DETAILS,
+      GP_MESSAGES_SEND_MESSAGE,
       GP_MESSAGES_DELETE,
       GP_MESSAGES_DELETE_SUCCESS,
     ];
@@ -358,7 +380,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
 
@@ -369,8 +392,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to home', () => {
-        expect(redirect).toBeCalledWith('302', INDEX.path);
-        expect(redirect).toHaveBeenCalledTimes(gpMessagesRoutes.length);
+        expect(next).toBeCalledWith({ path: INDEX_PATH });
+        expect(next).toHaveBeenCalledTimes(gpMessagesRoutes.length);
       });
     });
   });
@@ -391,7 +414,8 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will not redirect', () => {
-        expect(redirect).not.toBeCalled();
+        expect(next).not.toBeCalledWith(expect.anything);
+        expect(next).toBeCalled();
       });
     });
     describe('secondary appointments disabled', () => {
@@ -401,7 +425,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to appointments', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENTS.path);
+        expect(next).toBeCalledWith({ path: APPOINTMENTS_PATH });
       });
     });
   });

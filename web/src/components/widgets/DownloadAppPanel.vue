@@ -11,7 +11,7 @@
            class="nhsuk-u-margin-bottom-2 nhsuk-u-margin-right-3"
            target="_blank" rel="noopener noreferrer">
           <img :alt="$t('web.home.appStorePanel.appStoreLabel')"
-               src="~assets/download-on-the-app-store.png">
+               src="../../assets/download-on-the-app-store.png">
         </a>
       </li>
       <li>
@@ -20,7 +20,7 @@
            href="https://play.google.com/store/apps/details?id=com.nhs.online.nhsonline" target="_blank"
            rel="noopener noreferrer">
           <img :alt="$t('web.home.appStorePanel.googlePlayLabel')"
-               src="~assets/google-play-store.png">
+               src="../../assets/google-play-store.png">
         </a>
       </li>
     </ul>

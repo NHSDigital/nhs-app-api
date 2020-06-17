@@ -1,5 +1,5 @@
-import { shallowMount } from '../../helpers';
 import Symptoms from '@/pages/symptoms';
+import { shallowMount } from '../../helpers';
 
 describe('symptoms page', () => {
   it('will dispatch device/unlockNavBar when page mounted', () => {

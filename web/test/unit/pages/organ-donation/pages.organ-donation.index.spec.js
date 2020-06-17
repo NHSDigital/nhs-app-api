@@ -17,6 +17,9 @@ import {
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
+import {
+  ORGAN_DONATION_LAW_CHANGE_URL,
+} from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 const createState =
@@ -38,14 +41,11 @@ const createState =
     return state;
   };
 
-const LAW_CHANGE_URL = 'www.boo.com';
-
 const createPageStore = ({ state, isSomeOrgans = false } = {}) => createStore({
   state,
   getters: {
     'organDonation/isSomeOrgans': isSomeOrgans,
   },
-  $env: { ORGAN_DONATION_LAW_CHANGE_URL: LAW_CHANGE_URL },
 });
 
 const createStyle = () => ({
@@ -149,11 +149,10 @@ describe('organ donation index page', () => {
     });
   });
 
-  describe('asyncData', () => {
+  describe('mount', () => {
     beforeEach(() => {
       $store = createPageStore({ state: createState() });
       wrapper = mountOrganDonation();
-      wrapper.vm.$options.asyncData({ store: $store });
     });
 
     it('will request reference data from the api', async () => {
@@ -220,8 +219,8 @@ describe('organ donation index page', () => {
         expect(lawChangeLink.attributes('target')).toEqual('_blank');
       });
 
-      it('will have href set to LAW_CHANGE_URL', () => {
-        expect(lawChangeLink.attributes('href')).toEqual(LAW_CHANGE_URL);
+      it('will have href set to ORGAN_DONATION_LAW_CHANGE_URL', () => {
+        expect(lawChangeLink.attributes('href')).toEqual(ORGAN_DONATION_LAW_CHANGE_URL);
       });
     });
 

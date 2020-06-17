@@ -1,7 +1,7 @@
 import * as dependency from '@/lib/utils';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
+import { NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
 import { create$T, createStore, createRouter, mount } from '../../helpers';
-import { NOMINATED_PHARMACY_INTERRUPT } from '../../../../src/lib/routes';
 
 const $t = create$T();
 
@@ -93,7 +93,7 @@ describe('nominated pharmacy not found', () => {
       };
       await link.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT_PATH);
     });
   });
 });

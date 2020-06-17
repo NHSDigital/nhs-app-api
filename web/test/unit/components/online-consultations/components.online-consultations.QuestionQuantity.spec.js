@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import QuestionQuantity from '@/components/online-consultations/QuestionQuantity';
-import { mount } from '../../helpers';
 import each from 'jest-each';
+import { mount } from '../../helpers';
 
 let wrapper;
 

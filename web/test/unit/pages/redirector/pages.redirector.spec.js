@@ -1,15 +1,24 @@
 import Redirector from '@/pages/redirector/index';
-import consola from 'consola';
-import { APPOINTMENTS, INDEX, INTERSTITIAL_REDIRECTOR, REDIRECT_PARAMETER, REDIRECT_PAGE_PARAMETER } from '@/lib/routes';
+import {
+  INTERSTITIAL_REDIRECTOR_NAME,
+  REDIRECT_PARAMETER,
+  REDIRECT_PAGE_PARAMETER,
+  APPOINTMENTS_NAME,
+} from '@/router/names';
 import { AppPage } from '@/static/js/v1/src/constants';
-import { createRouter, createStore, mount } from '../../helpers';
+import { APPOINTMENTS_PATH, INDEX_PATH, APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
 import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
+import * as dependency from '@/lib/utils';
+import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 
 describe('redirector page', () => {
   let $route;
   let $router;
+  let wrapper;
+  dependency.redirectTo = jest.fn();
+  dependency.redirectByName = jest.fn();
 
   const createState = () => ({
     knownServices: {
@@ -29,6 +38,7 @@ describe('redirector page', () => {
 
   beforeEach(() => {
     $router = createRouter();
+    wrapper = undefined;
   });
 
   describe('has no redirect param', () => {
@@ -37,15 +47,15 @@ describe('redirector page', () => {
       const $store = createStore({ state: createState() });
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: {},
       };
 
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
@@ -55,15 +65,15 @@ describe('redirector page', () => {
       const $store = createStore({ state: createState() });
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: '' },
       };
 
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
@@ -73,14 +83,14 @@ describe('redirector page', () => {
       const $store = createStore({ state: createState() });
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS.name },
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
       };
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with APPOINTMENTS path', () => {
-      expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+    it('will call router push with APPOINTMENTS name', () => {
+      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
     });
   });
 
@@ -88,16 +98,18 @@ describe('redirector page', () => {
     beforeEach(() => {
       const $http = createHttp();
       const $store = createStore({ state: createState() });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(true);
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS.path },
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: APPOINTMENT_BOOKING_GUIDANCE_PATH },
       };
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with APPOINTMENTS path', () => {
-      expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_GUIDANCE_PATH);
     });
   });
 
@@ -105,17 +117,18 @@ describe('redirector page', () => {
     beforeEach(() => {
       const $http = createHttp();
       const $store = createStore({ state: createState() });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
-        query: { [REDIRECT_PARAMETER]: `${APPOINTMENTS.path}xyz` },
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: `${APPOINTMENTS_PATH}xyz` },
       };
 
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
@@ -123,23 +136,24 @@ describe('redirector page', () => {
     beforeEach(() => {
       const $http = createHttp();
       const $store = createStore({ state: createState() });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.google.com' },
       };
 
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
   describe('has redirect param external site on knownServices list for non third party', () => {
     let $http;
-    let wrapper;
+
     beforeEach(() => {
       $http = createHttp();
       const $state = {
@@ -153,8 +167,9 @@ describe('redirector page', () => {
         },
       };
       const $store = createStore({ $http, state: $state });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
       };
 
@@ -162,7 +177,7 @@ describe('redirector page', () => {
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
 
     it('warning section should not be shown', () => {
@@ -172,7 +187,7 @@ describe('redirector page', () => {
 
   describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale', () => {
     let $http;
-    let wrapper;
+
     beforeEach(() => {
       $http = createHttp();
       const $state = {
@@ -188,8 +203,9 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       const $store = createStore({ $http, state: $state });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
 
@@ -219,7 +235,7 @@ describe('redirector page', () => {
 
   describe('has redirect param external site on knownServices for pkb and path not included in third-party-provider locale', () => {
     let $http;
-    let wrapper;
+
     beforeEach(() => {
       $http = createHttp();
       const $state = {
@@ -235,8 +251,9 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
       const $store = createStore({ $http, state: $state });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/abc?def=ghi' },
       };
 
@@ -248,7 +265,7 @@ describe('redirector page', () => {
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
@@ -256,22 +273,23 @@ describe('redirector page', () => {
     beforeEach(() => {
       const $http = createHttp();
       const $store = createStore({ state: createState() });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'something else' },
       };
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 
   describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale and thirdparty warning has been accepted', () => {
     let $http;
-    let wrapper;
+
     beforeEach(() => {
       $http = createHttp();
       const $state = {
@@ -287,8 +305,9 @@ describe('redirector page', () => {
       hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(true);
       const $store = createStore({ $http, state: $state });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
 
@@ -329,39 +348,31 @@ describe('redirector page', () => {
       const $store = createStore({ state: createState() });
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
       };
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with APPOINTMENTS path', () => {
-      expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+    it('will call router push with APPOINTMENTS name', () => {
+      expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
     });
   });
 
   describe('has redirect to page param with invalid value', () => {
-    let errorFn;
-
     beforeEach(() => {
       const $http = createHttp();
       const $store = createStore({ state: createState() });
-      errorFn = consola.error;
-      consola.error = jest.fn();
 
       $route = {
-        ...INTERSTITIAL_REDIRECTOR,
+        name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: 'foo' },
       };
-      mountRedirector($http, $store);
+      wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      expect($router.push).toHaveBeenCalledWith(INDEX.path);
-    });
-
-    afterEach(() => {
-      consola.error = errorFn;
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 });

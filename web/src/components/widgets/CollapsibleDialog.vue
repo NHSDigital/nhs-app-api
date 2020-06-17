@@ -11,7 +11,6 @@
 import CollapsibleDetails from '@/components/CollapsibleDetails';
 
 export default {
-  layout: 'nhsuk-layout',
   name: 'CollapsibleDialog',
   components: {
     CollapsibleDetails,

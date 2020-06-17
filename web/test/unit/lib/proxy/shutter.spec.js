@@ -1,5 +1,5 @@
 import showShutterPage from '@/lib/proxy/shutter';
-import { GP_APPOINTMENTS } from '@/lib/routes';
+import { GP_APPOINTMENTS_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
 import { createStore } from '../../helpers';
 
@@ -34,13 +34,15 @@ describe('shutter', () => {
 
       beforeEach(() => {
         route = {
-          proxyShutterPath: '/shutter/example',
+          meta: {
+            proxyShutterPath: '/shutter/example',
+          },
         };
       });
 
       describe('appointments route', () => {
         beforeEach(() => {
-          route.name = GP_APPOINTMENTS.name;
+          route.name = GP_APPOINTMENTS_NAME;
         });
 
         describe('has 403 error', () => {
@@ -128,7 +130,7 @@ describe('shutter', () => {
         };
         $store.getters['errors/showApiError'] = true;
         $store.state.errors.apiErrors.push({ status: 403 });
-        route.name = GP_APPOINTMENTS.name;
+        route.name = GP_APPOINTMENTS_NAME;
         $store.state.myAppointments.error = { status: 403 };
         showShutterPage(route, self);
       });
@@ -146,7 +148,7 @@ describe('shutter', () => {
       $store.getters['session/isProxying'] = false;
 
       route = {
-        name: GP_APPOINTMENTS.name,
+        name: GP_APPOINTMENTS_NAME,
         proxyShutterPath: '/shutter/example',
       };
       $store.getters['errors/showApiError'] = true;

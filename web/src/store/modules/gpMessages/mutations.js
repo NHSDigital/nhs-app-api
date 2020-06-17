@@ -1,4 +1,5 @@
 import mapKeys from 'lodash/fp/mapKeys';
+import buildMessageMetadata from '@/lib/gp-messages/build-message-metadata';
 import {
   INIT,
   CLEAR,
@@ -19,7 +20,6 @@ import {
   SET_HAS_UNREAD,
   initialState,
 } from './mutation-types';
-import buildMessageMetadata from '@/lib/gp-messages/build-message-metadata';
 
 const clearMessage = (state) => {
   state.selectedMessageDetails = undefined;

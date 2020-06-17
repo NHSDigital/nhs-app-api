@@ -16,10 +16,8 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import { getThirdPartyLocaleText } from '@/lib/utils';
-import {
-  INTERSTITIAL_REDIRECTOR,
-  REDIRECT_PARAMETER,
-} from '@/lib/routes';
+import { REDIRECT_PARAMETER } from '@/router/names';
+import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 
 export default {
   name: 'ThirdPartyJumpOffButton',
@@ -42,11 +40,11 @@ export default {
   },
   data() {
     return {
-      descriptionTextData: '',
+      redirectorPath: INTERSTITIAL_REDIRECTOR_PATH,
       headerTextData: '',
+      descriptionTextData: '',
       isNativeApp: this.$store.state.device.isNativeApp,
       jumpOffType: this.providerConfiguration.jumpOffType,
-      redirectorPath: INTERSTITIAL_REDIRECTOR.path,
       redirectPath: this.providerConfiguration.redirectPath,
     };
   },
@@ -58,7 +56,7 @@ export default {
         return '';
       }
       const encodedUri = encodeURIComponent(services[0].url + this.redirectPath);
-      return `${this.redirectorPath}?${REDIRECT_PARAMETER}=${encodedUri}`;
+      return `/${this.redirectorPath}?${REDIRECT_PARAMETER}=${encodedUri}`;
     },
   },
   methods: {

@@ -1,11 +1,12 @@
 import SendMessage from '@/pages/messages/gp-messages/send-message';
+import { redirectTo } from '@/lib/utils';
 import { create$T, createStore, mount } from '../../helpers';
-import * as dependency from '@/lib/utils';
+
+jest.mock('@/lib/utils');
 
 describe('patient messaging messages', () => {
   let wrapper;
   let store;
-  let redirect;
   let $t;
 
   const mountPage = ({
@@ -37,7 +38,7 @@ describe('patient messaging messages', () => {
   };
 
   beforeEach(() => {
-    redirect = jest.fn();
+    redirectTo.mockClear();
   });
 
   describe('template', () => {
@@ -94,17 +95,39 @@ describe('patient messaging messages', () => {
     });
   });
 
+  describe('created', () => {
+    describe('selected recipient is undefined', () => {
+      beforeEach(() => {
+        mountPage();
+      });
+
+      it('will redirect to gp-messages inbox', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+      });
+    });
+    describe('messageSent is true', () => {
+      beforeEach(() => {
+        mountPage({ messageSent: true });
+      });
+
+      it('will redirect to gp-messages inbox', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+      });
+    });
+  });
+
   describe('computed', () => {
     beforeEach(() => {
       mountPage({ selectedMessageRecipient: 'Recipient' });
     });
+
     it('will return true for showError if there is a message error or a subject error', () => {
       wrapper.vm.subjectError = true;
       expect(wrapper.vm.showError).toBe(true);
     });
 
     it('will return the correct back path', () => {
-      expect(wrapper.vm.backPath).toBe('/messages/gp-messages/recipients');
+      expect(wrapper.vm.backPath).toBe('messages/gp-messages/recipients');
     });
 
     it('will set the error class if there is an error', () => {
@@ -113,18 +136,9 @@ describe('patient messaging messages', () => {
     });
   });
 
-  describe('fetch', () => {
-    it('will redirect to the messaging inbox page if the toggle is false', async () => {
-      mountPage({ toggle: false });
-      await wrapper.vm.$options.fetch({ store, redirect });
-      expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
-    });
-  });
-
   describe('methods', () => {
     it('will send the message if the inputs are valid', async () => {
       mountPage({ selectedMessageRecipient: 'Recipient', messageSent: true });
-      dependency.redirectTo = jest.fn();
 
       wrapper.vm.messageText = 'Test message';
       wrapper.vm.subjectText = 'Test subject';
@@ -139,12 +153,11 @@ describe('patient messaging messages', () => {
         messageText: 'Test message',
         subjectText: 'Test subject',
       });
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details');
     });
 
     it('will not send the message if the inputs are invalid', async () => {
       mountPage({ selectedMessageRecipient: 'Recipient' });
-      dependency.redirectTo = jest.fn();
 
       wrapper.vm.messageText = '';
       wrapper.vm.subjectText = '';
@@ -159,7 +172,7 @@ describe('patient messaging messages', () => {
         messageText: 'Test message',
         subjectText: 'Test subject',
       });
-      expect(dependency.redirectTo).not.toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details');
+      expect(redirectTo).not.toHaveBeenCalled();
     });
   });
 });

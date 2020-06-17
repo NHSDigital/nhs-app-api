@@ -9,7 +9,7 @@ import pages.sharedElements.LinksWithDescriptionsContent
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {
 
-    private val mainXPath = "//*[@id='app']/div/main/div/div/div/div/div/div/div/div"
+    private val mainXPath = "//*[@id='appointment-guidance-menu']"
 
     private val checkSymptomsTitle = "Get help with symptoms"
     private val checkSymptomsDescription = "Find information about specific conditions"

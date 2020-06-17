@@ -1,11 +1,11 @@
 <template>
   <div v-if="anchorLinks.length>0" :class="$style['header-links']">
     <span v-for="(anchorLink, index) in anchorLinks" :key="index">
-      <nuxt-link :id="anchorLink.id"
-                 :to="anchorLink.value"
-                 tabindex="0">
+      <router-link :id="anchorLink.id"
+                   :to="anchorLink.value"
+                   tabindex="0">
         {{ anchorLink.name }}
-      </nuxt-link>
+      </router-link>
       <strong v-if="index<anchorLinks.length-1" aria-hidden="true">
         &nbsp;|&nbsp;
       </strong>
@@ -14,7 +14,6 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
 export default {
   name: 'HeaderLinks',
   props: {

@@ -9,7 +9,6 @@ import pages.HybridPageObject
 import pages.clickOnActionContainingText
 
 class GenericPageStepDefinitions {
-
     private lateinit var notFoundErrorPage: NotFoundErrorPage
     private lateinit var genericPage: HybridPageObject
 
@@ -39,7 +38,7 @@ class GenericPageStepDefinitions {
 
     @When("^I retrieve the '(.*)' page directly$")
     fun iretrieveThePageDirectly(pageName:String) {
-        val urlForPage = PageUrl.getPage(pageName)
+        val urlForPage = PageUrl.getRelativePagePath(pageName)
         browser.browseTo(urlForPage)
     }
 
@@ -68,8 +67,8 @@ class GenericPageStepDefinitions {
 
     @Then("^I am redirected to the '(.*)' page$")
     fun thenIAmRedirectedToThePage(pageName: String) {
-        val redirectUrl = PageUrl.getPage(pageName)
-        browser.shouldHaveUrl(redirectUrl)
+        val redirectUrl = PageUrl.getRelativePagePath(pageName)
+        browser.shouldEndWithUrl(redirectUrl)
     }
 
     @Then("^I press the tab key$")

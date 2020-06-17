@@ -49,11 +49,16 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { ACUTE_MEDICINES, CURRENT_MEDICINES, DISCONTINUED_MEDICINES, GP_MEDICAL_RECORD } from '@/lib/routes';
+import {
+  GP_MEDICAL_RECORD_PATH,
+  ACUTE_MEDICINES_PATH,
+  CURRENT_MEDICINES_PATH,
+  DISCONTINUED_MEDICINES_PATH,
+} from '@/router/paths';
+
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     MenuItem,
     DesktopGenericBackLink,
@@ -62,22 +67,22 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
-      acuteMedicinesPath: ACUTE_MEDICINES.path,
-      currentMedicinesPath: CURRENT_MEDICINES.path,
-      discontinuedMedicinesPath: DISCONTINUED_MEDICINES.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      acuteMedicinesPath: ACUTE_MEDICINES_PATH,
+      currentMedicinesPath: CURRENT_MEDICINES_PATH,
+      discontinuedMedicinesPath: DISCONTINUED_MEDICINES_PATH,
+      acuteMedicinesCount: null,
+      currentMedicinesCount: null,
     };
   },
-  async asyncData({ store }) {
-    if (!(store.state.myRecord.record || {}).medications) {
-      await store.dispatch('myRecord/load');
+  async mounted() {
+    if (!(this.$store.state.myRecord.record || {}).medications) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      acuteMedicinesCount:
-        store.state.myRecord.record.medications.data.acuteMedications.length,
-      currentMedicinesCount:
-        store.state.myRecord.record.medications.data.currentRepeatMedications.length,
-    };
+    this.acuteMedicinesCount =
+      this.$store.state.myRecord.record.medications.data.acuteMedications.length;
+    this.currentMedicinesCount =
+      this.$store.state.myRecord.record.medications.data.currentRepeatMedications.length;
   },
   methods: {
     backButtonClicked() {

@@ -1,115 +1,35 @@
-import each from 'jest-each';
 import gpMedicalRecordAcceptance from '@/middleware/gpMedicalRecordAcceptance';
-import { initialState } from '@/store/modules/myRecord/mutation-types';
-import { createStore } from '../helpers';
-import {
-  ACUTE_MEDICINES,
-  ALLERGIESANDREACTIONS,
-  CONSULTATIONS,
-  CURRENT_MEDICINES,
-  DIAGNOSIS_V2,
-  DISCONTINUED_MEDICINES,
-  DOCUMENT,
-  DOCUMENTS,
-  DOCUMENT_DETAIL,
-  ENCOUNTERS,
-  EVENTS,
-  EXAMINATIONS_V2,
-  GP_MEDICAL_RECORD,
-  HEALTH_CONDITIONS,
-  IMMUNISATIONS,
-  MEDICAL_HISTORY,
-  MEDICINES,
-  PROCEDURES_V2,
-  RECALLS,
-  REFERRALS,
-  TESTRESULTID,
-  TESTRESULTS,
-  TESTRESULTSDETAIL,
-} from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
+import { createRoutePathObject } from '@/lib/utils';
 
-jest.mock('@/lib/sessionStorage');
-const createState = () => ({
-  GP_MEDICAL_RECORD: initialState(),
-});
+jest.mock('@/lib/utils');
 
-const createApp = ({ redirect, route, store }) => ({
-  redirect,
-  route,
-  store,
-});
+const routePathObject = `redirect/${GP_MEDICAL_RECORD_PATH}`;
+createRoutePathObject.mockReturnValue(routePathObject);
 
-describe('my-record acceptance middleware', () => {
-  let app;
-  let redirect;
+const store = { state: { myRecord: {} } };
+const next = jest.fn();
 
-  function checkForRedirect(name, path, hasAgreedToTerms, redirectExpected) {
-    redirect = jest.fn();
-    const store = createStore({ state: createState() });
-    store.state.myRecord = { hasAcceptedTerms: hasAgreedToTerms };
-    app = createApp({
-      redirect,
-      route: {
-        name,
-        path,
-      },
-      store,
+describe('gp medical record acceptance middleware', () => {
+  describe('accepted warning and agreed to terms', () => {
+    it('will not redirect to main record page', () => {
+      store.state.myRecord.hasAcceptedTerms = true;
+
+      gpMedicalRecordAcceptance({ store, next });
+
+      expect(createRoutePathObject).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalledWith(expect.anything());
     });
-    gpMedicalRecordAcceptance(app);
-    if (redirectExpected) {
-      expect(redirect).toHaveBeenCalledWith(GP_MEDICAL_RECORD.path);
-    } else {
-      expect(redirect).not.toHaveBeenCalledWith(GP_MEDICAL_RECORD.path);
-    }
-  }
+  });
 
-  describe('details pages', () => {
-    const detailsPages = [
-      ACUTE_MEDICINES,
-      ALLERGIESANDREACTIONS,
-      CONSULTATIONS,
-      CURRENT_MEDICINES,
-      DIAGNOSIS_V2,
-      DISCONTINUED_MEDICINES,
-      DOCUMENT,
-      DOCUMENTS,
-      DOCUMENT_DETAIL,
-      ENCOUNTERS,
-      EVENTS,
-      EXAMINATIONS_V2,
-      HEALTH_CONDITIONS,
-      IMMUNISATIONS,
-      MEDICAL_HISTORY,
-      MEDICINES,
-      PROCEDURES_V2,
-      RECALLS,
-      REFERRALS,
-      TESTRESULTID,
-      TESTRESULTS,
-      TESTRESULTSDETAIL];
+  describe('not agreed to terms', () => {
+    it('will redirect to main record page', () => {
+      store.state.myRecord.hasAcceptedTerms = false;
 
-    describe('accepted warning and agreed to terms', () => {
-      each(detailsPages)
-        .it('will not redirect to main record page', (path) => {
-          checkForRedirect(
-            path.name,
-            path.path,
-            true,
-            false,
-          );
-        });
-    });
+      gpMedicalRecordAcceptance({ store, next });
 
-    describe('not agreed to terms', () => {
-      each(detailsPages)
-        .it('will redirect to main record page', (path) => {
-          checkForRedirect(
-            path.name,
-            path.path,
-            false,
-            true,
-          );
-        });
+      expect(createRoutePathObject).toHaveBeenCalledWith({ path: GP_MEDICAL_RECORD_PATH, store });
+      expect(next).toHaveBeenCalledWith(routePathObject);
     });
   });
 });

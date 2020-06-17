@@ -17,7 +17,6 @@ import BackButton from '@/components/BackButton';
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     BackButton,
   },

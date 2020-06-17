@@ -1,5 +1,6 @@
 @prescription
 @noJs
+@pending
 Feature: Prescriptions Service With Javascript Disabled
 
   @tech-debt

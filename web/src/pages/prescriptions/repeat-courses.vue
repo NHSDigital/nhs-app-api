@@ -1,5 +1,4 @@
 <template>
-
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
@@ -34,10 +33,6 @@
                 </CardGroup>
               </div>
             </div>
-            <input value="true" type="hidden" name="nojs.repeatPrescriptionCourses.submitted">
-            <input :value="specialRequestNecessity"
-                   type="hidden"
-                   name="nojs.repeatPrescriptionCourses.specialRequestNecessity">
             <div v-if="specialRequestNecessity !== 'NotAllowed'"
                  role="form"
                  :class="mandatoryReasonErrorStyle">
@@ -104,20 +99,18 @@ import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import {
-  NOMINATED_PHARMACY_CHECK,
-  PRESCRIPTIONS,
-  PRESCRIPTION_CONFIRM_COURSES,
-  PRESCRIPTION_REPEAT_COURSES,
-} from '@/lib/routes';
-import isEmpty from 'lodash/fp/isEmpty';
+  NOMINATED_PHARMACY_CHECK_PATH,
+  PRESCRIPTIONS_PATH,
+  PRESCRIPTION_CONFIRM_COURSES_PATH,
+  PRESCRIPTION_REPEAT_COURSES_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import { ensureNoJsPostedValueIsArray } from '@/lib/noJs';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'RepeatCoursesPage',
   components: {
     RepeatPrescription,
     MessageDialog,
@@ -153,9 +146,7 @@ export default {
       }
 
       if (validated && errors.length > 0) {
-        if (process.client) {
-          this.$store.app.$analytics.validationError(errors);
-        }
+        this.$store.app.$analytics.validationError(errors);
         return true;
       }
 
@@ -196,13 +187,13 @@ export default {
     },
     getBackPath() {
       return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled ?
-        NOMINATED_PHARMACY_CHECK.path : PRESCRIPTIONS.path;
+        NOMINATED_PHARMACY_CHECK_PATH : PRESCRIPTIONS_PATH;
     },
     confirmCoursesPath() {
-      return PRESCRIPTION_CONFIRM_COURSES.path;
+      return PRESCRIPTION_CONFIRM_COURSES_PATH;
     },
     repeatCoursesPath() {
-      return PRESCRIPTION_REPEAT_COURSES.path;
+      return PRESCRIPTION_REPEAT_COURSES_PATH;
     },
     mandatoryReasonErrorStyle() {
       if (this.specialRequestNecessity === 'Mandatory' &&
@@ -215,45 +206,9 @@ export default {
       return (this.error && !this.courseSelectionValid) ? 'nhsuk-form-group--error' : '';
     },
   },
-  async fetch({ store }) {
-    const storeData = store;
-    if (!store.state.repeatPrescriptionCourses.hasLoaded) {
-      await store.dispatch('repeatPrescriptionCourses/load');
-    }
-
-    if (store.state.repeatPrescriptionCourses.submitted) {
-      if (isEmpty(store.state.repeatPrescriptionCourses.specialRequest)) {
-        storeData.state.repeatPrescriptionCourses.specialRequest = null;
-      }
-
-      storeData.state.repeatPrescriptionCourses.submitted = false;
-      const { selectedCoursesNoJs } = store.state.repeatPrescriptionCourses;
-
-      if (selectedCoursesNoJs) {
-        const courseSelection = ensureNoJsPostedValueIsArray(selectedCoursesNoJs).map(String);
-
-        storeData.state.repeatPrescriptionCourses.repeatPrescriptionCourses.forEach((course) => {
-          const courseToCheckIsSelected = course;
-          courseSelection.forEach((selection) => {
-            if (courseToCheckIsSelected.id === selection) {
-              courseToCheckIsSelected.selected = true;
-            }
-          });
-        });
-      }
-
-      const courseSelectionValid = store.getters['repeatPrescriptionCourses/isValid'];
-      const specialRequestValid = store.getters['repeatPrescriptionCourses/specialRequestValid'];
-
-      if (courseSelectionValid && specialRequestValid) {
-        store.app.router.push(PRESCRIPTION_CONFIRM_COURSES.path);
-      } else {
-        const validationObj = {
-          isValid: courseSelectionValid && specialRequestValid,
-          submitted: true,
-        };
-        store.dispatch('repeatPrescriptionCourses/validate', validationObj);
-      }
+  async mounted() {
+    if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
+      await this.$store.dispatch('repeatPrescriptionCourses/load');
     }
   },
   methods: {

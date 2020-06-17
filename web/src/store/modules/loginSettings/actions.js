@@ -1,3 +1,9 @@
+import { LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
+import NativeApp from '@/services/native-app';
+import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
+import biometricActions from '@/lib/biometrics/biometricActions';
+import biometricRegistrationOutcomes from '@/lib/biometrics/biometricRegistrationOutcomes';
+import { redirectTo } from '@/lib/utils';
 import {
   SET_WAITING,
   UPDATE_BIOMETRIC_TYPE,
@@ -5,11 +11,6 @@ import {
   ADD_ERROR_CODE,
   CLEAR_ERROR_CODE,
 } from './mutation-types';
-import { LOGIN_SETTINGS_ERROR } from '@/lib/routes';
-import NativeApp from '@/services/native-app';
-import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
-import biometricActions from '@/lib/biometrics/biometricActions';
-import biometricRegistrationOutcomes from '@/lib/biometrics/biometricRegistrationOutcomes';
 
 const addApiError = ({ dispatch }, statusCode, errorCode, message) => dispatch('errors/addApiError', {
   message,
@@ -43,7 +44,7 @@ export default {
     if (outcome === biometricRegistrationOutcomes.Failure) {
       if (errorCode === biometricErrorCodes.CannotFindBiometrics
         || errorCode === biometricErrorCodes.CannotChangeBiometrics) {
-        this.$router.push(LOGIN_SETTINGS_ERROR.path);
+        redirectTo({ $router: this.app.$router, $store: this }, LOGIN_SETTINGS_ERROR_PATH);
         commit(ADD_ERROR_CODE, errorCode);
       } else {
         addApiError(this,

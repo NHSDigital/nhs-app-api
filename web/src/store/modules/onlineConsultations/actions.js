@@ -1,5 +1,21 @@
 import get from 'lodash/fp/get';
 import {
+  getDataRequirements,
+  getSessionId,
+  getQuestionnaire,
+  getQuestionnaireItem,
+  getCarePlansAndReferralRequests,
+  getPreviousQuestion,
+  getQuestionnaireResponseAnswers,
+  getAllIssues,
+  getQuestionnaireId,
+} from '@/lib/online-consultations/mappers/response';
+import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
+import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
+import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
+import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
+import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
+import {
   CLEAR,
   SET_SESSION_ID,
   SET_STATUS,
@@ -28,22 +44,6 @@ import {
   SET_JOURNEY_INFO,
   SET_IS_AVAILABLE,
 } from './mutation-types';
-import {
-  getDataRequirements,
-  getSessionId,
-  getQuestionnaire,
-  getQuestionnaireItem,
-  getCarePlansAndReferralRequests,
-  getPreviousQuestion,
-  getQuestionnaireResponseAnswers,
-  getAllIssues,
-  getQuestionnaireId,
-} from '@/lib/online-consultations/mappers/response';
-import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
-import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
-import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
-import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
-import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 
 const initialiseLeaveWarnings = (store) => {
   // Enable navigation prompt
@@ -53,7 +53,7 @@ const initialiseLeaveWarnings = (store) => {
     return;
   }
 
-  const browserString = store.app.i18n.t('web.pageLeavingWarning.warning');
+  const browserString = store.app.$options.i18n.t('web.pageLeavingWarning.warning');
 
   window.onbeforeunload = function handleBeforeUnload(event) {
     event.preventDefault();

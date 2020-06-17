@@ -1,10 +1,15 @@
 import PrescriptionsPage from '@/pages/prescriptions/index';
+import * as dependency from '@/lib/utils';
+import {
+  NOMINATED_PHARMACY_PATH,
+  NOMINATED_PHARMACY_CHECK_PATH,
+  NOMINATED_PHARMACY_INTERRUPT_PATH,
+  PRESCRIPTION_REPEAT_COURSES_PATH,
+} from '@/router/paths';
+import {
+  PRESCRIPTIONS_NAME,
+} from '@/router/names';
 import { createRouter, createStore, mount } from '../../helpers';
-import { NOMINATED_PHARMACY,
-  NOMINATED_PHARMACY_CHECK,
-  NOMINATED_PHARMACY_INTERRUPT,
-  PRESCRIPTIONS,
-  PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
 describe('prescriptions/index.vue', () => {
   let wrapper;
@@ -38,11 +43,9 @@ describe('prescriptions/index.vue', () => {
     $store.app.$analytics = {
       trackButtonClick: jest.fn(),
     };
+    dependency.redirectTo = jest.fn();
 
     return mount(PrescriptionsPage, {
-      $route: {
-        name: PRESCRIPTIONS.name,
-      },
       $router,
       $store,
       stubs: {
@@ -79,9 +82,11 @@ describe('prescriptions/index.vue', () => {
     $store.app.$analytics = {
       trackButtonClick: jest.fn(),
     };
+    dependency.redirectTo = jest.fn();
+
     return mount(PrescriptionsPage, {
       $route: {
-        name: PRESCRIPTIONS.name,
+        name: PRESCRIPTIONS_NAME,
       },
       $router,
       $store,
@@ -115,11 +120,12 @@ describe('prescriptions/index.vue', () => {
 
         it('will track nominated pharmacy interrupt path when no nominated pharmacy is assigned', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY_INTERRUPT.path, true);
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_INTERRUPT_PATH, true);
         });
 
         it('will redirect to nominated pharmacy interrupt page when no nominated pharmacy is assigned', () => {
-          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_INTERRUPT.path);
+          expect(dependency.redirectTo)
+            .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT_PATH);
         });
       });
     });
@@ -138,11 +144,12 @@ describe('prescriptions/index.vue', () => {
 
         it('will track nominated pharmacy check path', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK.path, true);
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK_PATH, true);
         });
 
         it('will redirect to nominated pharmacy check page', () => {
-          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_CHECK.path);
+          expect(dependency.redirectTo)
+            .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK_PATH);
         });
       });
     });
@@ -172,11 +179,11 @@ describe('prescriptions/index.vue', () => {
 
         it('will track nominated pharmacy search path when no nominated pharmacy is assigned', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY.path, true);
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_PATH, true);
         });
 
         it('will redirect to nominated pharmacy search page when no nominated pharmacy is assigned', () => {
-          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY.path);
+          expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_PATH);
         });
       });
     });
@@ -205,11 +212,12 @@ describe('prescriptions/index.vue', () => {
 
         it('will track prescriptions repeat courses path', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES.path, true);
+            .toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES_PATH, true);
         });
 
         it('will redirect to prescriptions repeat courses', () => {
-          expect($router.push).toHaveBeenCalledWith(PRESCRIPTION_REPEAT_COURSES.path);
+          expect(dependency.redirectTo)
+            .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES_PATH);
         });
       });
     });

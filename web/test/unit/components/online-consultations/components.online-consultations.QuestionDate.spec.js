@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import QuestionDate from '@/components/online-consultations/QuestionDate';
 import { mount } from '../../helpers';
 

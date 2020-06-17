@@ -4,18 +4,12 @@ import { createStore, mount } from '../../helpers';
 describe('AboutUs', () => {
   let wrapper;
   let $store;
-  const URL_EXTERNAL = 'www.foo.com';
 
   const mountAboutUs = () => mount(AboutUs, { $store });
 
   beforeEach(() => {
     wrapper = mountAboutUs();
-    $store = createStore({ $env: {
-      TERMS_AND_CONDITIONS_URL: URL_EXTERNAL,
-      PRIVACY_POLICY_URL: URL_EXTERNAL,
-      OPEN_SOURCE_LICENCES_URL: URL_EXTERNAL,
-      HELP_AND_SUPPORT_URL: URL_EXTERNAL,
-      ACCESSIBILITY_STATEMENT_URL: URL_EXTERNAL } });
+    $store = createStore();
   });
 
   it('will have a header', () => {
@@ -34,4 +28,3 @@ describe('AboutUs', () => {
     expect(links.at(4).text()).toContain('translate_myAccount.termsAndConditions');
   });
 });
-

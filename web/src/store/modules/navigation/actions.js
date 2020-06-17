@@ -1,3 +1,4 @@
+import { redirectTo } from '@/lib/utils';
 import {
   CLEAR_SELECTED_MENUITEM,
   INIT_NAVIGATION,
@@ -5,7 +6,6 @@ import {
   SET_NEWMENUITEM,
   SET_ROUTE_CRUMB,
 } from './mutation-types';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   clearPreviousSelectedMenuItem({ commit }) {
@@ -15,7 +15,7 @@ export default {
     commit(INIT_NAVIGATION);
   },
   goTo(_, path) {
-    redirectTo({ $router: this.$router, $store: this.app.store }, path);
+    redirectTo({ $router: this.app.$router, $store: this }, path);
   },
   setBackLinkOverride({ commit }, backLinkOverride) {
     commit(SET_BACK_LINK_OVERRIDE, backLinkOverride);

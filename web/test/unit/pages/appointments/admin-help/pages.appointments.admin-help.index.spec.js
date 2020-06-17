@@ -1,44 +1,22 @@
-import { mount, createRouter } from '../../../helpers';
 import each from 'jest-each';
 import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help/index';
-import { noJsParameterName } from '@/lib/noJs';
-import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
-import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
-import { INDEX, APPOINTMENTS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
+import { INDEX_PATH, APPOINTMENTS_PATH } from '@/router/paths';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { mount, createRouter, createStore } from '../../../helpers';
 
-jest.mock('@/lib/online-consultations/noJs');
-jest.mock('@/lib/online-consultations/answer-validators');
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 describe('Admin Help page', () => {
   let page;
-  const dispatch = jest.fn(() => Promise.resolve());
-  const redirect = jest.fn();
-  const tc = jest.fn();
-
-  const $store = {
-    app: {
-      $env: { PRIVACY_POLICY_URL: 'www.google.co.uk' },
-      i18n: { tc },
-    },
-    state: {
-      device: { isNativeApp: true },
-      onlineConsultations: {
-        available: true,
-        adminProviderName: 'eConsult Health Ltd',
-      },
-      pageLeaveWarning: {
-        shouldSkipDisplayingLeavingWarning: false,
-      },
-      serviceJourneyRules: {
-        rules: {
-          cdssAdmin: { serviceDefinition: 'NHS_ADMIN', provider: 'stubs' },
-          cdssAdvice: { serviceDefinition: 'NHS_ADVICE', provider: 'stubs' },
-        },
-      },
-    },
-    getters: { getProviderName: 'eConsult Health Ltd' },
-    dispatch,
-  };
+  let $store;
 
   const $style = {
     desktopWeb: 'desktopWeb',
@@ -46,8 +24,11 @@ describe('Admin Help page', () => {
 
   const mountPage = ({
     stubDemographicsQuestion = true,
-    available = true,
-    shouldShowLeavingModal = true } = {}) => {
+    available,
+    shouldShowLeavingModal = true,
+    error = false,
+    demographicsQuestionAnswered,
+  } = {}) => {
     const stubs = {
       orchestrator: '<div class="orchestrator"></div>',
       'online-consultations-unavailable': '<div class="online-consultations-unavailable"></div>',
@@ -58,15 +39,30 @@ describe('Admin Help page', () => {
       stubs['demographics-question'] = '<div class="demographicsQuestion"></div>';
     }
 
+    $store = createStore({
+      state: {
+        device: { isNativeApp: true },
+        onlineConsultations: {
+          available,
+          adminProviderName: 'eConsult Health Ltd',
+          error,
+          demographicsQuestionAnswered,
+        },
+        pageLeaveWarning: {
+          shouldSkipDisplayingLeavingWarning: false,
+        },
+        serviceJourneyRules: {
+          rules: {
+            cdssAdmin: { serviceDefinition: 'NHS_ADMIN', provider: 'stubs' },
+            cdssAdvice: { serviceDefinition: 'NHS_ADVICE', provider: 'stubs' },
+          },
+        },
+      },
+    });
+
     page = mount(AdminHelpPage, {
-      data: () => ({
-        provider: 'stubs',
-        serviceDefinitionId: 'NHS_ADMIN',
-        available,
-      }),
       $store,
       $style,
-      showTemplate: () => true,
       stubs,
       getters: {
         'pageLeaveWarning/shouldShowLeavingModal': shouldShowLeavingModal,
@@ -76,36 +72,88 @@ describe('Admin Help page', () => {
   };
 
   beforeEach(() => {
-    dispatch.mockClear();
-    redirect.mockClear();
-    tc.mockClear();
-
+    redirectTo.mockClear();
     window.onbeforeunload = () => {};
   });
 
-  describe('computed properties', () => {
-    describe('isError', () => {
-      each([true, false]).it('should get error state from store', (error) => {
-        // Arrange
-        $store.state.onlineConsultations.error = error;
+  describe('created', () => {
+    beforeEach(() => {
+      EventBus.$emit.mockClear();
+    });
 
-        // Act
-        mountPage();
+    describe('online consultations available', () => {
+      beforeEach(() => {
+        mountPage({ available: true });
+      });
 
-        // Assert
-        expect(page.vm.isError).toBe(error);
+      it('will dispatch onlineConsultations/serviceDefinitionIsValid with provider as argument', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+      });
+
+      it('will not emit any update header events', () => {
+        expect(EventBus.$emit).not.toHaveBeenCalled();
+      });
+
+      it('will dispatch onlineConsultations/setJourneyInfo passing provider and service definition id as an argument', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setJourneyInfo', {
+          provider: 'stubs',
+          serviceDefinitionId: 'NHS_ADMIN',
+        });
+      });
+
+      it('will set available to true on the component', () => {
+        expect(page.vm.available).toBe(true);
       });
     });
-    describe('isNativeApp', () => {
-      each([true, false]).it('should get is native app from store', (isNativeApp) => {
-        // Arrange
-        $store.state.device.isNativeApp = isNativeApp;
 
-        // Act
+    describe('online consultations unavailable', () => {
+      beforeEach(() => {
+        mountPage({ available: false });
+      });
+
+      it('will check if the service definition is valid for the given provider', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+      });
+
+      it('will emit UPDATE_HEADER passing unavailable header and caption', () => {
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, {
+          headerKey: 'appointments.admin_help.unavailable.header',
+          captionKey: 'appointments.admin_help.unavailable.headerCaption',
+        });
+      });
+
+      it('will emit UPDATE_TITLE passing unavailable header', () => {
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'appointments.admin_help.unavailable.header');
+      });
+
+      it('will not set the journey info in the store', () => {
+        expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/setJourneyInfo', expect.anything());
+      });
+
+      it('will set available to false on the component', () => {
+        expect(page.vm.available).toBe(false);
+      });
+    });
+
+    describe('online consultations isValid call failed', () => {
+      beforeEach(() => {
         mountPage();
+      });
 
-        // Assert
-        expect(page.vm.isNativeApp).toBe(isNativeApp);
+      it('will check if the service definition is valid for the given provider', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+      });
+
+      it('will not update the page header, caption, and title to unavailable', () => {
+        expect(EventBus.$emit).not.toHaveBeenCalled();
+      });
+
+      it('will not set the journey info in the store', () => {
+        expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/setJourneyInfo', expect.anything());
+      });
+
+      it('will leave available as undefined on the component', () => {
+        expect(page.vm.available).toBeUndefined();
       });
     });
   });
@@ -115,16 +163,18 @@ describe('Admin Help page', () => {
       const next = jest.fn();
       beforeEach(() => {
         next.mockClear();
+        $store.dispatch.mockClear();
         $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = false;
         $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = true;
       });
-      each([INDEX, APPOINTMENTS])
-        .it('will show page leaving warning', (to) => {
+      each([INDEX_PATH, APPOINTMENTS_PATH])
+        .it('will show page leaving warning', (path) => {
           const showModal = jest.fn();
-          mountPage();
-          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, to, undefined, next);
+
+          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, { path }, undefined, next);
+
           expect(next).toHaveBeenCalledWith(false);
-          expect(dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', to);
+          expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', path);
           expect(showModal).toHaveBeenCalled();
 
           expect(window.onbeforeunload).not.toBe(null);
@@ -135,16 +185,15 @@ describe('Admin Help page', () => {
       const next = jest.fn();
       beforeEach(() => {
         next.mockClear();
+        $store.dispatch.mockClear();
         $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = true;
         $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = false;
       });
-      each([INDEX, APPOINTMENTS])
-        .it('will not show page leaving warning', (to) => {
+      each([INDEX_PATH, APPOINTMENTS_PATH])
+        .it('will not show page leaving warning', (path) => {
           const showModal = jest.fn();
 
-          mountPage();
-
-          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, to, undefined, next);
+          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, { path }, undefined, next);
 
           expect(next).toHaveBeenCalledWith(true);
           expect(showModal).toHaveBeenCalledTimes(0);
@@ -159,10 +208,8 @@ describe('Admin Help page', () => {
         // Arrange
         mountPage();
 
-        // Act
         page.destroy();
 
-        // Assert
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/clear', true);
       });
 
@@ -176,273 +223,47 @@ describe('Admin Help page', () => {
     });
   });
 
-  describe('asyncData', () => {
-    let req = {};
-    mountPage();
-
-    describe('state onlineConsultations.available is false', () => {
-      it('will update header text/caption and return available false', async () => {
-        // Arrange
-        const expectedResult = { available: false };
-        $store.state.onlineConsultations.available = false;
-
-        tc.mockImplementation((key) => {
-          switch (key) {
-            case 'appointments.admin_help.unavailable.header':
-              return 'admin help unavailable header';
-            case 'appointments.admin_help.unavailable.headerCaption':
-              return 'admin help unavailable header caption';
-            default:
-              return undefined;
-          }
-        });
-
-        // Act
-        const result = await page.vm.$options.asyncData({ store: $store, req });
-
-        // Assert
-        expect(result).toEqual(expectedResult);
-        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
-        expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'admin help unavailable header');
-        expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderCaption', 'admin help unavailable header caption');
-      });
-    });
-
-    describe('state onlineConsultations.available is true', () => {
-      it('will not update header text/caption and return available true', async () => {
-        // Arrange
-        const expectedResult = {
-          provider: 'stubs',
-          serviceDefinitionId: 'NHS_ADMIN',
-          addJavascriptDisabledHeader: false,
-          available: true,
-        };
-        $store.state.onlineConsultations.available = true;
-
-        // Act
-        const result = await page.vm.$options.asyncData({ store: $store, req });
-
-        // Assert
-        expect(result).toEqual(expectedResult);
-        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
-        expect($store.app.i18n.tc).not.toHaveBeenCalled();
-      });
-    });
-
-    it('should return provider and serviceDefinitionId from SJR rules store', async () => {
-      // Arrange
-      const expectedResult = {
-        provider: 'stubs',
-        serviceDefinitionId: 'NHS_ADMIN',
-        addJavascriptDisabledHeader: false,
-        available: true,
-      };
-
-      // Act
-      const result = await page.vm.$options.asyncData({ store: $store, req });
-
-      // Assert
-      expect(result).toEqual(expectedResult);
-    });
-
-    describe('nojs', () => {
-      describe('with nojs body not present in request or question not present in store', () => {
-        each([{
-          request: {},
-          question: {},
-        }, {
-          request: { body: {} },
-          question: {},
-        }, {
-          request: {
-            body: {
-              [noJsParameterName]: {},
-            },
-          },
-        }]).it('should not update store with answer or validation state', async ({ request, question }) => {
-          // Arrange
-          $store.state.onlineConsultations.question = question;
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req: request });
-
-          // Assert
-          expect($store.dispatch).not.toBeCalledWith('onlineConsultations/setAnswer');
-          expect($store.dispatch).not.toBeCalledWith('onlineConsultations/setAnswerIsValid');
-          expect($store.dispatch).not.toBeCalledWith('onlineConsultations/setValidationError');
-        });
-      });
-      describe('with nojs body present in request and question in store', () => {
-        const expectedAnswer = 'test answer';
-        const expectedValidation = {
-          isValid: true,
-          isEmpty: false,
-          message: 'test-error-message',
-        };
-
-        beforeEach(() => {
-          getAnswerFromRequestBody.mockClear();
-          getAnswerFromRequestBody.mockReturnValue(expectedAnswer);
-
-          isAnswerValid.mockClear();
-          isAnswerValid.mockReturnValue(expectedValidation);
-        });
-
-        it('should update store with answer and validation info', async () => {
-          // Arrange
-          const expectedBody = { [noJsParameterName]: '' };
-          req = { body: expectedBody };
-
-          const expectedQuestion = {
-            text: 'What is this question?',
-            type: 'string',
-          };
-          $store.state.onlineConsultations.question = expectedQuestion;
-
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req });
-
-          // Assert
-          expect(getAnswerFromRequestBody).toHaveBeenCalledWith(expectedBody, expectedQuestion);
-          expect(isAnswerValid).toHaveBeenCalledWith(expectedAnswer, expectedQuestion);
-
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setAnswer', expectedAnswer);
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setAnswerIsValid', expectedValidation);
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
-        });
-      });
-    });
-    describe('service definition evaluation', () => {
-      describe('with question missing from the store and demographics answered', () => {
-        beforeEach(() => {
-          $store.state.onlineConsultations.question = undefined;
-          $store.state.onlineConsultations.demographicsQuestionAnswered = true;
-        });
-        afterAll(() => {
-          $store.state.onlineConsultations.demographicsQuestionAnswered = false;
-        });
-
-        it('should not dispatch evaluate action', async () => {
-          // Arrange
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req });
-
-          // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
-            provider: 'stubs',
-            serviceDefinitionId: 'NHS_ADMIN',
-            addJavascriptDisabledHeader: false,
-          });
-        });
-        it('should dispatch get action', async () => {
-          // Arrange
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req });
-
-          // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', {
-            provider: 'stubs',
-            serviceDefinitionId: 'NHS_ADMIN',
-            addJavascriptDisabledHeader: false,
-          });
-        });
-      });
-      describe('with valid answer in store', () => {
-        it('should dispatch evaluate action', async () => {
-          // Arrange
-          $store.state.onlineConsultations.question = {};
-          $store.state.onlineConsultations.answerIsValid = true;
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req });
-
-          // Assert
-          expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
-            provider: 'stubs',
-            serviceDefinitionId: 'NHS_ADMIN',
-          });
-        });
-      });
-      describe('with a question and invalid answer', () => {
-        it('should not dispatch evaluate action', async () => {
-          // Arrange
-          $store.state.onlineConsultations.question = {};
-          $store.state.onlineConsultations.answerIsValid = false;
-          mountPage();
-
-          // Act
-          await page.vm.$options.asyncData({ store: $store, req });
-
-          // Assert
-          expect($store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', {
-            provider: 'stubs',
-            serviceDefinitionId: 'NHS_ADMIN',
-          });
-        });
-      });
-    });
-  });
   describe('template', () => {
     describe('online consultations unavailable message', () => {
-      each([true, false]).it('should appear only if available is false', (available) => {
-        // Act
+      each([
+        ['will not be visible when available is true', true],
+        ['will be visible when available is false', false],
+      ]).it('%s', async (_, available) => {
         mountPage({ available });
+        await page.vm.$nextTick();
 
-        // Assert
         expect(page.find('div.online-consultations-unavailable').exists()).toBe(!available);
       });
     });
+
     describe('error dialog', () => {
-      afterAll(() => {
-        $store.state.onlineConsultations.error = false;
-      });
-      it('should not appear is available is false', () => {
-        // Act
+      it('should not appear is available is false', async () => {
         mountPage({ available: false });
+        await page.vm.$nextTick();
 
-        // Assert
         expect(page.find('[data-purpose=error-heading]').exists()).toBe(false);
         expect(page.find('[data-purpose=reason-error]').exists()).toBe(false);
       });
-      it('should not appear if onlineConsultations error state is false', () => {
-        // Arrange
-        $store.state.onlineConsultations.error = false;
+      it('should not appear if onlineConsultations error state is false', async () => {
+        mountPage({ error: false, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        mountPage();
-
-        // Assert
         expect(page.find('[data-purpose=error-heading]').exists()).toBe(false);
         expect(page.find('[data-purpose=reason-error]').exists()).toBe(false);
       });
-      it('should appear if onlineConsultations error state is true', () => {
-        // Arrange
-        $store.state.onlineConsultations.error = true;
+      it('should appear if onlineConsultations error state is true', async () => {
+        mountPage({ error: true, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        mountPage();
-
-        // Assert
         expect(page.find('[data-purpose=error-container]').exists()).toBe(true);
       });
-      it('should display the default error content for admin help', () => {
-        // Arrange
-        $store.state.onlineConsultations.error = true;
+      it('should display the default error content for admin help', async () => {
+        mountPage({ error: true, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        mountPage();
         const errorHeading = page.find('[data-purpose=error-heading]');
         const errorReason = page.find('[data-purpose=reason-error]');
 
-        // Assert
         expect(errorHeading.exists()).toBe(true);
         expect(errorReason.exists()).toBe(true);
         expect(errorHeading.text()).toBe('translate_appointments.admin_help.errors.header');
@@ -450,79 +271,58 @@ describe('Admin Help page', () => {
       });
     });
     describe('demographicsQuestion', () => {
-      it('should not appear is available is false', () => {
-        // Act
+      it('should not appear is available is false', async () => {
         mountPage({ available: false });
+        await page.vm.$nextTick();
 
-        // Assert
         expect(page.find('div.demographicsQuestion').exists()).toBe(false);
       });
       each([
         true,
         false,
-      ]).it('will be shown if demographics question is answered', (demographicsQuestionAnswered) => {
-        // Arrange
-        $store.state.onlineConsultations.demographicsQuestionAnswered =
-          demographicsQuestionAnswered;
-        mountPage();
+      ]).it('will be shown if demographics question is answered', async (demographicsQuestionAnswered) => {
+        mountPage({ demographicsQuestionAnswered, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        const demographicsQuestion = page.find('div.demographicsQuestion');
-
-        // Assert
-        expect(demographicsQuestion).toBeDefined();
+        expect(page.find('div.demographicsQuestion')).toBeDefined();
       });
-      it('will have appropriate attributes set for provider and serviceDefinitionId', () => {
-        // Arrange
-        mountPage();
+      it('will have appropriate attributes set for provider and serviceDefinitionId', async () => {
+        mountPage({ available: true });
+        await page.vm.$nextTick();
 
-        // Act
         const { provider, serviceDefinitionId } = page.find('div.demographicsQuestion').vm;
 
-        // Assert
         expect(provider).toEqual('stubs');
         expect(serviceDefinitionId).toEqual('NHS_ADMIN');
       });
-      it('will display three demographics question paragraphs passed via slot', () => {
-        // Arrange
-        mountPage({ stubDemographicsQuestion: false });
+      it('will display three demographics question paragraphs passed via slot', async () => {
+        mountPage({ stubDemographicsQuestion: false, available: true });
+        await page.vm.$nextTick();
 
-        // Act
         const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
 
-        // Assert
         expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
         expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
         expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
       });
     });
     describe('orchestrator', () => {
-      it('should not appear is available is false', () => {
-        // Act
+      it('should not appear is available is false', async () => {
         mountPage({ available: false });
+        await page.vm.$nextTick();
 
-        // Assert
         expect(page.find('div.orchestrator').exists()).toBe(false);
       });
-      it('should appear if onlineConsultations error state is false and demographics question answered', () => {
-        // Arrange
-        $store.state.onlineConsultations.error = false;
-        $store.state.onlineConsultations.demographicsQuestionAnswered = true;
+      it('should appear if onlineConsultations error state is false and demographics question answered', async () => {
+        mountPage({ error: false, demographicsQuestionAnswered: true, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        mountPage();
-
-        // Assert
         expect(page.find('div.orchestrator').exists()).toBe(true);
       });
-      it('should not appear if onlineConsultations error state is true', () => {
-        // Arrange
-        $store.state.onlineConsultations.error = true;
+      it('should not appear if onlineConsultations error state is true', async () => {
+        mountPage({ error: true, available: true });
+        await page.vm.$nextTick();
 
-        // Act
-        mountPage();
-
-        // Assert
         expect(page.find('div.orchestrator').exists()).toBe(false);
       });
     });

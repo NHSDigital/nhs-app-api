@@ -1,12 +1,11 @@
 import sanitize from 'sanitize-filename';
-
+import NativeCallbacks from '@/services/native-app';
 import {
   INIT,
   CLEAR,
   LOADED_DOCUMENT,
   SET_SELECTED_DOCUMENT_INFO,
 } from './mutation-types';
-import NativeCallbacks from '@/services/native-app';
 
 const sanitizeFilename = sanitize;
 

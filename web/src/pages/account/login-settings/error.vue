@@ -19,11 +19,12 @@
 </template>
 
 <script>
-import { LOGIN_SETTINGS } from '@/lib/routes';
+import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'LoginSettingsErrorPage',
   data() {
     return {
       error: this.$store.getters['loginSettings/retrieveError'],
@@ -33,9 +34,9 @@ export default {
       cannotChangeBiometricsErrorCode: biometricErrorCodes.CannotChangeBiometrics,
     };
   },
-  async fetch({ store, redirect }) {
-    if (store.state.loginSettings.errorCode === undefined) {
-      redirect(LOGIN_SETTINGS.path);
+  created() {
+    if (this.$store.state.loginSettings.errorCode === undefined) {
+      redirectTo(this, LOGIN_SETTINGS_PATH);
     }
   },
 };

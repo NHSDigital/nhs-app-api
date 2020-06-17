@@ -57,6 +57,7 @@
 </template>
 <script>
 import get from 'lodash/fp/get';
+import { redirectTo } from '@/lib/utils';
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DecisionInfo from '@/components/organ-donation/DecisionInfo';
@@ -76,8 +77,11 @@ import {
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
+import {
+  ORGAN_DONATION_LAW_CHANGE_URL,
+} from '@/router/externalLinks';
 
 const load = async (store) => {
   await store.dispatch('organDonation/getReferenceData');
@@ -85,7 +89,6 @@ const load = async (store) => {
 };
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AlreadyRegisteredLink,
     AnalyticsTrackedTag,
@@ -102,7 +105,7 @@ export default {
   },
   data() {
     return {
-      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
+      lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
     };
   },
   computed: {
@@ -145,11 +148,11 @@ export default {
       load(this.$store);
     },
   },
-  async asyncData({ redirect, route, store }) {
-    if (!isNativeApp({ route, store })) {
-      redirect(INDEX.path);
+  async mounted() {
+    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+      redirectTo(this, INDEX_PATH);
     } else {
-      await load(store);
+      await load(this.$store);
     }
   },
   created() {

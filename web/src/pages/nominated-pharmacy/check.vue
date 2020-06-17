@@ -35,11 +35,11 @@ import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH, PRESCRIPTION_REPEAT_COURSES_PATH, NOMINATED_PHARMACY_CHECK_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'NominatedPharmacyCheck',
   components: {
     GenericButton,
     PharmacyDetail,
@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      currentPage: NOMINATED_PHARMACY_CHECK.path,
+      currentPage: NOMINATED_PHARMACY_CHECK_PATH,
       pharmacy: this.$store.state.nominatedPharmacy.pharmacy,
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
     };
@@ -63,7 +63,7 @@ export default {
       return (this.pharmacy.pharmacyType !== PharmacyType.P3);
     },
     prescriptionsPath() {
-      return PRESCRIPTIONS.path;
+      return PRESCRIPTIONS_PATH;
     },
   },
   created() {
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onContinueButtonClicked() {
-      redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path);
+      redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH);
     },
     onBackButtonClicked() {
       redirectTo(this, this.prescriptionsPath);

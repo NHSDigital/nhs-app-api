@@ -2,7 +2,7 @@ import { get, has } from 'lodash/fp';
 import * as dependency from '@/lib/utils';
 import Shutter from '@/components/linked-profiles/Shutter';
 import locale from '@/locale';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 const engLocale = locale.en;
@@ -60,7 +60,7 @@ describe('shutter component', () => {
       expect($store.dispatch).toHaveBeenCalledWith('myRecord/clear');
       expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, INDEX.path);
+        .toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 });

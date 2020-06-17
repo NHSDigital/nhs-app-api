@@ -1,19 +1,21 @@
 import { conditionalRedirector } from '@/middleware/conditionalRedirect';
-import { findByName } from '@/lib/routes';
 
-export default ({ redirect, route, store }) => {
-  const routeDetail = findByName(route.name);
-
-  if (routeDetail && routeDetail.proofLevel && routeDetail.upliftPath) {
-    conditionalRedirector({
-      redirect,
-      path: routeDetail.path,
+export default ({ to, store, next }) => {
+  const { upliftRoute, proofLevel } = to.meta;
+  if (proofLevel && upliftRoute) {
+    const redirect = conditionalRedirector({
+      path: to.path,
+      store,
       redirectRules: [{
         condition: 'session/shouldUplift',
-        url: routeDetail.upliftPath,
-        context: routeDetail.proofLevel,
+        route: upliftRoute,
+        context: proofLevel,
       }],
-      store,
     });
+    if (redirect) {
+      return next(redirect);
+    }
   }
+  return next();
 };
+

@@ -1,5 +1,6 @@
 @appointments
 @noJs
+@pending
 Feature: Appointments Service With Javascript Disabled
 
   #This test covers navigation via buttons/links

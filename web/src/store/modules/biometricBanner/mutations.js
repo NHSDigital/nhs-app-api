@@ -8,16 +8,16 @@ export default {
     state.dismissed = true;
   },
   [SYNC](state) {
-    const cookieState = !!this.app.$cookies.get('HideBiometricBanner');
+    const cookieState = !!this.$cookies.get('HideBiometricBanner');
     state.dismissed = state.dismissed || !!cookieState;
     if (state.dismissed && !cookieState) {
       setCookie({
-        cookies: this.app.$cookies,
+        cookies: this.$cookies,
         key: 'HideBiometricBanner',
         value: state.dismissed,
         options: {
           maxAge: moment.duration(5, 'y').asSeconds(),
-          secure: this.app.$env.SECURE_COOKIES,
+          secure: this.$env.SECURE_COOKIES,
         },
       });
     }

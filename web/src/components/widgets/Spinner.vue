@@ -30,6 +30,7 @@ export default {
     height: 60px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 40px;
+    padding: 0 !important;
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
   }

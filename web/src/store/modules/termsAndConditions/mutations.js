@@ -10,22 +10,22 @@ export default {
     state.areAccepted = result.areAccepted;
     state.analyticsCookieAccepted = result.analyticsCookieAccepted;
     mergeCookie({
-      cookies: this.app.$cookies,
+      cookies: this.$cookies,
       key: 'nhso.terms',
       value: {
         areAccepted: state.areAccepted,
         analyticsCookieAccepted: state.analyticsCookieAccepted,
       },
-      options: { secure: this.app.$env.SECURE_COOKIES },
+      options: { secure: this.$env.SECURE_COOKIES },
     });
   },
   [SET_UPDATED_CONSENT_REQUIRED](state, result) {
     state.updatedConsentRequired = result;
     mergeCookie({
-      cookies: this.app.$cookies,
+      cookies: this.$cookies,
       key: 'nhso.terms',
       value: { updatedConsentRequired: state.updatedConsentRequired },
-      options: { secure: this.app.$env.SECURE_COOKIES },
+      options: { secure: this.$env.SECURE_COOKIES },
     });
   },
   [INIT_ACCEPTANCE](state) {

@@ -2,7 +2,7 @@ Feature: User Research
 
   Scenario: A newly registered patient after failing to make a choice can accept to be part of user research
     Given I am a EMIS patient who has not already accepted terms and conditions
-    And I am logged in
+    And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button
@@ -17,7 +17,7 @@ Feature: User Research
 
   Scenario: A newly registered patient can reject to be part of user research
     Given I am a EMIS patient who has not already accepted terms and conditions
-    And I am logged in
+    And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button
@@ -28,7 +28,7 @@ Feature: User Research
 
   Scenario: A newly registered patient can accept to be part of user research
     Given I am a EMIS patient who has not already accepted terms and conditions
-    And I am logged in
+    And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button
@@ -39,7 +39,7 @@ Feature: User Research
 
   Scenario: A newly registered patient can navigate to the User Research Privacy policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
-    And I am logged in
+    And I am logged in expecting to see T&Cs
     Then the Terms and Conditions page is displayed
     When I check the agree to terms and conditions checkbox
     And I click the 'Continue' button

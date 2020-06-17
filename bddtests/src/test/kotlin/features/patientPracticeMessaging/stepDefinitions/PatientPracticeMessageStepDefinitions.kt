@@ -1,6 +1,5 @@
 package features.patientPracticeMessaging.stepDefinitions
 
-import config.Config
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -151,7 +150,7 @@ class PatientPracticeMessageStepDefinitions {
 
     @When("^I enter url address for the send message page$")
     fun whenIEnterTheUrlAddressForSendMessagePage() {
-        val fullUrl = Config.instance.url + "/messages/gp-messages/send-message"
+        val fullUrl = "/messages/gp-messages/send-message"
         browser.browseTo(fullUrl)
     }
 

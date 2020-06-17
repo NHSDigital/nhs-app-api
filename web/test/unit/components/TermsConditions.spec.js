@@ -1,12 +1,17 @@
 import TermsConditions from '@/components/TermsConditions';
-import { APPOINTMENTS, INDEX, REDIRECT_PARAMETER, TERMSANDCONDITIONS } from '@/lib/routes';
+import * as LibUtils from '@/lib/utils';
+import { TERMSANDCONDITIONS_NAME, APPOINTMENTS_NAME, REDIRECT_PARAMETER } from '@/router/names';
+import { TERMSANDCONDITIONS_PATH, INDEX_PATH } from '@/router/paths';
 import { createRouter, createStore, mount } from '../helpers';
+
+LibUtils.redirectTo = jest.fn();
+LibUtils.redirectByName = jest.fn();
 
 let $router;
 let wrapper;
 let $store;
 
-const createTermsConditionsComponent = ({ state, route = TERMSANDCONDITIONS }) => {
+const createTermsConditionsComponent = ({ state, query }) => {
   $router = createRouter();
   $store = createStore({ state });
   return mount(TermsConditions, {
@@ -20,10 +25,19 @@ const createTermsConditionsComponent = ({ state, route = TERMSANDCONDITIONS }) =
       green: '#00ff00',
       validationBorderLeft: 'mock validation border',
     },
-    $route: route,
+    $route: {
+      path: TERMSANDCONDITIONS_PATH,
+      name: TERMSANDCONDITIONS_NAME,
+      query,
+    },
     $router,
   });
 };
+
+beforeEach(() => {
+  LibUtils.redirectTo.mockClear();
+  LibUtils.redirectByName.mockClear();
+});
 
 describe('TermsConditions checkbox rendering', () => {
   beforeEach(() => {
@@ -127,18 +141,17 @@ describe('terms and conditions are accepted', () => {
       });
 
       it('will redirect to INDEX route', () => {
-        expect($router.push).toBeCalledWith(INDEX.path);
+        expect(LibUtils.redirectTo).toBeCalledWith(wrapper.vm, INDEX_PATH);
       });
     });
   });
 
   describe('current route has a redirect query parameter', () => {
     beforeEach(() => {
-      const redirectRoute = {
-        ...TERMSANDCONDITIONS,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS.name },
-      };
-      wrapper = createTermsConditionsComponent({ state, route: redirectRoute });
+      wrapper = createTermsConditionsComponent({
+        state,
+        query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
+      });
       wrapper.vm.areTermsAccepted = true;
       wrapper.vm.isAnalyticsCookieAccepted = true;
     });
@@ -149,7 +162,7 @@ describe('terms and conditions are accepted', () => {
       });
 
       it('will redirect to redirect parameter route', () => {
-        expect($router.push).toBeCalledWith(APPOINTMENTS.path);
+        expect(LibUtils.redirectByName).toBeCalledWith(wrapper.vm, APPOINTMENTS_NAME);
       });
     });
   });

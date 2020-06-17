@@ -1,7 +1,6 @@
 <template>
   <div id="app"
        ref="nhsAppRoot"
-       :class="{ [$style['no-footer']]: !shouldShowFooter }"
        tabindex="-1">
     <div>
       <web-header :show-menu="false"
@@ -22,7 +21,7 @@
             <connection-error />
             <api-error />
             <flash-message />
-            <nuxt />
+            <slot />
           </div>
         </div>
       </div>
@@ -34,6 +33,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -44,9 +44,7 @@ import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
 import Spinner from '@/components/widgets/Spinner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
-import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
-import { findByName } from '@/lib/routes';
-
+import { FOCUS_NHSAPP_ROOT, UPDATE_HEADER, EventBus } from '@/services/event-bus';
 
 export default {
   components: {
@@ -59,54 +57,46 @@ export default {
     WebHeader,
   },
   mixins: [ResetSpinnerMixin],
-  head() {
-    let head = {};
-    if (this.$store.state.termsAndConditions.analyticsCookieAccepted) {
-      head = {
-        htmlAttrs: {
-          lang: `${this.$t('language')}`,
-        },
-        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-        __dangerouslyDisableSanitizers: ['noscript'],
-        script: [],
-      };
-      if (this.$store.app.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET') {
-        head.script = [
-          {
-            src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
-          },
-        ];
-      }
-    } else {
-      head = {
-        htmlAttrs: {
-          lang: `${this.$t('language')}`,
-        },
-        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-        __dangerouslyDisableSanitizers: ['noscript'],
-      };
+  metaInfo() {
+    const head = {
+      htmlAttrs: { lang: this.$t('language') },
+      title: `${this.title} - ${this.$t('appTitle')}`,
+      // TODO: needed if 'nojs' is not a thing?
+      __dangerouslyDisableSanitizers: ['noscript'],
+    };
+
+    // TODO: needed if 'nojs' is not a thing?
+    const durationSeconds = get('durationSeconds', this.$store.$cookies.get('nhso.session'));
+
+    if (durationSeconds) {
+      head.noscript = [{
+        innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`,
+        body: false,
+      }];
     }
 
-    const sessionCookie = this.$store.app.$cookies.get('nhso.session');
+    const { analyticsCookieAccepted } = this.$store.state.termsAndConditions;
+    const analyticsScriptUrl = this.$store.$env.ANALYTICS_SCRIPT_URL;
 
-    if (sessionCookie) {
-      const { durationSeconds } = sessionCookie;
-
-      if (durationSeconds) {
-        head.noscript = [
-          { innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`, body: false },
-        ];
-      }
+    if (analyticsScriptUrl !== 'NOT_SET' && analyticsCookieAccepted) {
+      head.script = [{
+        src: analyticsScriptUrl,
+      }];
     }
 
     return head;
   },
   computed: {
     currentHelpUrl() {
-      return findByName(this.$route.name).helpUrl;
+      return this.$route.meta.helpUrl;
     },
     shouldShowFooter() {
       return !this.$store.state.device.isNativeApp;
+    },
+    title() {
+      return this.$t(this.$store.state.termsAndConditions.updatedConsentRequired
+        ? 'updatedTermsAndConditions.title'
+        : 'pageTitles.termsAndConditions');
     },
   },
   created() {
@@ -114,7 +104,7 @@ export default {
       this.$store.dispatch('session/updateLastCalledAt');
     }
 
-    const appVersion = this.$store.app.$env.VERSION_TAG;
+    const appVersion = this.$store.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
@@ -123,6 +113,7 @@ export default {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   mounted() {
+    EventBus.$emit(UPDATE_HEADER, this.$route.meta);
     NativeVersionSetup(this.$store);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
@@ -144,8 +135,4 @@ export default {
 
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
-</style>
-
-<style module lang="scss" scoped>
-  @import "../style/nofooter";
 </style>

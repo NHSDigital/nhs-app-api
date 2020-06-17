@@ -1,8 +1,8 @@
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import RadioGroup from '@/components/RadioGroup';
-import { shallowMount, mount } from '../helpers';
 import each from 'jest-each';
+import { shallowMount, mount } from '../helpers';
 
 const mountGroup = propsData => mount(RadioGroup, {
   propsData,

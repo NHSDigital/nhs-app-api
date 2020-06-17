@@ -77,8 +77,7 @@
 <script>
 import moment from 'moment-timezone';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { APPOINTMENT_CANCELLING, APPOINTMENT_ADD_TO_CALENDAR } from '@/lib/routes';
-import { createUri } from '@/lib/noJs';
+import { APPOINTMENT_CANCELLING_PATH, APPOINTMENT_ADD_TO_CALENDAR_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import channel from '@/lib/channel';
 
@@ -117,20 +116,10 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
-      isAddToCalendarEnabled: this.$store.app.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED,
-      appointmentAddToCalendarPath: APPOINTMENT_ADD_TO_CALENDAR.path,
+      isAddToCalendarEnabled: this.$store.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED,
+      appointmentAddToCalendarPath: APPOINTMENT_ADD_TO_CALENDAR_PATH,
+      appointmentCancellingPath: APPOINTMENT_CANCELLING_PATH,
     };
-  },
-  computed: {
-    appointmentCancellingPath() {
-      const noJsData = {
-        myAppointments: {
-          selectedAppointment: this.appointment,
-          cancellationReasons: this.$store.state.myAppointments.cancellationReasons,
-        },
-      };
-      return createUri({ path: APPOINTMENT_CANCELLING.path, noJs: noJsData });
-    },
   },
   methods: {
     formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mma'),
@@ -139,13 +128,13 @@ export default {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
-      redirectTo(this, APPOINTMENT_CANCELLING.path);
+      redirectTo(this, this.appointmentCancellingPath);
     },
     onAddToCalendar() {
       if (this.showAddToCalendar()) {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
-      redirectTo(this, APPOINTMENT_ADD_TO_CALENDAR.path);
+      redirectTo(this, this.appointmentAddToCalendarPath);
     },
     showAddToCalendar() {
       return this.showAddToCalendarLink && this.isAddToCalendarEnabled && this.isNativeApp;

@@ -1,55 +1,56 @@
+import {
+  HELP_AND_SUPPORT_URL,
+  ACCESSIBILITY_STATEMENT_URL,
+  OPEN_SOURCE_LICENCES_URL,
+  PRIVACY_POLICY_URL,
+  TERMS_AND_CONDITIONS_URL,
+} from '@/router/externalLinks';
 
-export const accountLinks = env =>
+export const accountLinks = () =>
   [
     {
-      url: env.HELP_AND_SUPPORT_URL,
+      url: HELP_AND_SUPPORT_URL,
       localeLabel: 'myAccount.helpAndSupport',
     },
     {
-      url: env.ACCESSIBILITY_STATEMENT_URL,
+      url: ACCESSIBILITY_STATEMENT_URL,
       localeLabel: 'myAccount.accessibilityStatement',
     },
     {
-      url: env.OPEN_SOURCE_LICENCES_URL,
+      url: OPEN_SOURCE_LICENCES_URL,
       localeLabel: 'myAccount.openSourceLicences',
     },
     {
-      url: env.PRIVACY_POLICY_URL,
+      url: PRIVACY_POLICY_URL,
       localeLabel: 'myAccount.privacyPolicy',
     },
     {
-      url: env.TERMS_AND_CONDITIONS_URL,
+      url: TERMS_AND_CONDITIONS_URL,
       localeLabel: 'myAccount.termsAndConditions',
     },
   ];
 
-export const footerLinks = env =>
+export const footerLinks = () =>
   [
     {
-      url: env.TERMS_AND_CONDITIONS_URL,
+      url: TERMS_AND_CONDITIONS_URL,
       localeLabel: 'myAccount.termsAndConditions',
     },
     {
-      url: env.PRIVACY_POLICY_URL,
+      url: PRIVACY_POLICY_URL,
       localeLabel: 'myAccount.privacyPolicy',
     },
     {
-      url: env.HELP_AND_SUPPORT_URL,
+      url: HELP_AND_SUPPORT_URL,
       localeLabel: 'myAccount.helpAndSupport',
     },
     {
-      url: env.ACCESSIBILITY_STATEMENT_URL,
+      url: ACCESSIBILITY_STATEMENT_URL,
       localeLabel: 'myAccount.accessibilityStatement',
     },
   ];
-
-export const cookieLink = env => [{
-  url: env.COOKIES_POLICY_URL,
-  localeLabel: 'myAccount.cookiesPolicy',
-}];
 
 export default {
   accountLinks,
   footerLinks,
-  cookieLink,
 };

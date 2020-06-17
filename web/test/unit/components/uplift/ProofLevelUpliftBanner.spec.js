@@ -12,15 +12,13 @@ describe('Proof level uplift banner', () => {
 
   const mountProofLevelUpliftBanner = () => mount(ProofLevelUpliftBanner, {
     $store: {
-      app: {
-        $env: {
-          NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
-          CID_REDIRECT_URI: 'mock cid redirect uri',
-          CID_CLIENT_ID: 'mock cid client ID',
-          CID_AUTH_ENDPOINT_URL: 'mock cid auth endpoint',
-        },
-        $http,
+      $env: {
+        NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
+        CID_REDIRECT_URI: 'mock cid redirect uri',
+        CID_CLIENT_ID: 'mock cid client ID',
+        CID_AUTH_ENDPOINT: 'mock cid auth endpoint',
       },
+      $http,
       state: {
         device: {
           isNativeApp: false,

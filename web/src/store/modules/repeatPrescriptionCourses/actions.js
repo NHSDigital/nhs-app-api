@@ -39,9 +39,7 @@ export default {
       .postV1PatientPrescriptions(param).then((data) => {
         commit(PRESCRIPTIONS_JOURNEY_START);
         commit(PARTIAL_ORDER_RESULT, data);
-        if (process.client) {
-          this.dispatch('analytics/satelliteTrack', 'prescription_ordered');
-        }
+        this.dispatch('analytics/satelliteTrack', 'prescription_ordered');
       });
   },
   updateAdditionalInfo({ commit }, repeatPrescriptionAdditionalInfo) {

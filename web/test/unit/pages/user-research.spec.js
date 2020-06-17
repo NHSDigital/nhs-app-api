@@ -14,6 +14,9 @@ const mountUserResearch = ({ methods, $http }) => mount(UserResearch, {
     error: 'error',
   },
   methods,
+  stubs: {
+    'terms-and-conditions-layout': '<div><slot/></div>',
+  },
 });
 
 describe('user research', () => {

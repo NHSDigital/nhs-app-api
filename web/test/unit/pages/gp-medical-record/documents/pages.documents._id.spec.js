@@ -1,27 +1,26 @@
 import each from 'jest-each';
-import { mount, createRouter, createStore } from '../../../helpers';
 import DocumentInformation from '@/pages/health-records/gp-medical-record/documents/_id';
-import { DOCUMENT_DETAIL } from '@/lib/routes';
+import { DOCUMENT_DETAIL_NAME } from '@/router/names';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
+import * as dependancy from '@/services/event-bus';
+import * as utilsDependancy from '@/lib/utils';
+import { mount, createRouter, createStore, create$T } from '../../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 
-let redirect;
 const $router = createRouter();
 const $route = {
   params: {
     id: 1,
   },
 };
+const $t = create$T();
 
 const newStore = ({
   document,
   documentConsultationsWithComments = [],
 } = {}) => (
   createStore({
-    $env: {
-      CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-    },
     state: {
       myRecord: {
         hasAcceptedTerms: true,
@@ -36,12 +35,13 @@ const newStore = ({
     },
   }));
 
-const mountPage = ({ $store = newStore(), data = () => ({ comments: [] }) } = {}) =>
-  mount(DocumentInformation, { $store, $router, $route, data });
+const mountPage = ({ $store = newStore() }) =>
+  mount(DocumentInformation, { $store, $router, $route, $t });
 
 describe('document view', () => {
   beforeEach(() => {
-    redirect = jest.fn();
+    dependancy.EventBus = { $emit: jest.fn() };
+    utilsDependancy.createRouteByNameObject = jest.fn(r => r);
     hasAgreedToMedicalWarning.mockClear();
     hasAgreedToMedicalWarning.mockReturnValue(true);
   });
@@ -49,15 +49,16 @@ describe('document view', () => {
   describe('template', () => {
     it('will display Unknown Date if there is no document date', async () => {
       // Arrange
-      const data = () => ({
+      const document = {
         term: 'Document1',
         comments: [],
         size: 1000000,
         type: 'jpg',
-        dateString: 'translate_my_record.documents.documentPageSubtext Unknown Date',
+        date: {},
         isValidFile: true,
-      });
-      const page = mountPage({ data });
+      };
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -68,19 +69,21 @@ describe('document view', () => {
       expect(documentInfo.text()).toEqual(dateString);
     });
 
-    it('will display the date subtext if there is a term', () => {
+    it('will display the date subtext if there is a term', async () => {
       // Arrange
-      const data = () => ({
+      const document = {
         term: 'Document1',
         comments: [],
         size: 1000000,
         type: 'jpg',
-        dateString: 'translate_my_record.documents.documentPageSubtext 8 August 2019',
+        date: { value: '2019-08-08T12:03:44+00:00' },
         isValidFile: true,
-      });
-      const page = mountPage({ data });
+      };
 
       // Act
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
+
       const documentInfo = page.find('#documentInfo p');
       const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
 
@@ -89,7 +92,7 @@ describe('document view', () => {
       expect(documentInfo.text()).toEqual(dateString);
     });
 
-    it('will display a comment when there is a single comment', () => {
+    it('will display a comment when there is a single comment', async () => {
       // Arrange
       const document = {
         name: 'Doc1',
@@ -98,6 +101,7 @@ describe('document view', () => {
         eventGuid: 'test',
         codeId: 1234,
         type: 'jpg',
+        comments: ['this is a test'],
       };
       const documentComments = [{
         consultationHeaders: [{
@@ -114,19 +118,10 @@ describe('document view', () => {
         },
         ],
       }];
-      const data = () => ({
-        name: 'Doc1',
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        term: 'test',
-        eventGuid: 'test',
-        codeId: 1234,
-        type: 'jpg',
-        comments: ['this is a test'],
-        isValidFile: true,
-      });
-      const page = mountPage({ $store: newStore({ document, documentComments }), data });
 
       // Act
+      const page = mountPage({ $store: newStore({ document, documentComments }) });
+
       const documentComment = page.find('#documentComment0 pre');
 
       // Assert
@@ -143,6 +138,7 @@ describe('document view', () => {
         eventGuid: 'test',
         codeId: 1234,
         type: 'jpg',
+        comments: ['this is a test', 'this is a second test', 'this is a third test'],
       };
       const documentComments = [{
         documentKey: {
@@ -152,17 +148,8 @@ describe('document view', () => {
         },
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
       }];
-      const data = () => ({
-        name: 'Doc1',
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        term: 'test',
-        eventGuid: 'test',
-        codeId: 1234,
-        type: 'jpg',
-        comments: ['this is a test', 'this is a second test', 'this is a third test'],
-        isValidFile: true,
-      });
-      const page = mountPage({ $store: newStore({ document, documentComments }), data });
+
+      const page = mountPage({ $store: newStore({ document, documentComments }) });
 
       // Act
       const firstDocumentComment = page.find('#documentComment0 pre');
@@ -188,18 +175,10 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
-      };
-      const data = () => ({
-        name: 'Doc1',
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        term: 'test',
-        eventGuid: 'test',
-        codeId: 1234,
-        type: 'jpg',
         comments: [],
-        isValidFile: true,
-      });
-      const page = mountPage({ $store: newStore({ document }), data });
+      };
+
+      const page = mountPage({ $store: newStore({ document }) });
 
       // Act
       const documentComment = page.find('#documentComment0 p');
@@ -208,16 +187,17 @@ describe('document view', () => {
       expect(documentComment.exists()).toBe(false);
     });
 
-    it('will not display the date subtext if there is no name', () => {
+    it('will not display the date subtext if there is no name', async () => {
       // Arrange
-      const data = () => ({
+      const document = {
         name: undefined,
         comments: [],
         size: 1000000,
         type: 'jpg',
         isValidFile: true,
-      });
-      const page = mountPage({ data });
+      };
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -232,8 +212,8 @@ describe('document view', () => {
       ['valid, viewable but not downloadable', true, true, false],
       ['invalid, not viewable and not downloadable', false, false, false],
       ['invalid, viewable and downloadable', false, true, true],
-    ]).it('will display the correct actions for the document when file is %s', (_, isValidFile, isViewable, isDownloadable) => {
-      const data = () => ({
+    ]).it('will display the correct actions for the document when file is %s', async (_, isValidFile, isViewable, isDownloadable) => {
+      const document = {
         name: undefined,
         comments: [],
         size: 1000000,
@@ -241,9 +221,10 @@ describe('document view', () => {
         isValidFile,
         isViewable,
         isDownloadable,
-      });
+      };
       // Arrange
-      const page = mountPage({ data });
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
 
       // Act
       const viewItem = page.find('#btn_viewDocument');
@@ -271,11 +252,12 @@ describe('document view', () => {
       size: 1000000,
       comments: [],
       isValidFile: true,
-    }]).it('will display a different subtext if the document file type is TGA or TPIC', (testData) => {
+    }]).it('will display a different subtext if the document file type is TGA or TPIC', async (testData) => {
       // Arrange
       const { size, comments, type } = testData;
-      const data = () => ({ type, size, comments });
-      const page = mountPage({ data });
+      const document = { type, size, comments };
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -295,11 +277,12 @@ describe('document view', () => {
       size: 1000000,
       comments: [],
       isValidFile: true,
-    }]).it('will not display the glossary or the warning if the document file type is TGA or TPIC', (testData) => {
+    }]).it('will not display the glossary or the warning if the document file type is TGA or TPIC', async (testData) => {
       // Arrange
       const { size, comments, type } = testData;
-      const data = () => ({ size, comments, type });
-      const page = mountPage({ data });
+      const document = { size, comments, type };
+      const page = mountPage({ $store: newStore({ document }) });
+      await page.vm.$nextTick();
 
       // Act
       const downloadWarning = page.find('#downloadWarning');
@@ -314,14 +297,15 @@ describe('document view', () => {
   describe('methods', () => {
     it('will navigate to the view document page with the correct id in the path', () => {
       // Arrange
-      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
-      const page = mountPage();
+      const store = newStore();
+      const route = { name: DOCUMENT_DETAIL_NAME, params: { id: 1 }, store };
+      const page = mountPage({ $store: store });
 
       // Act
       page.vm.navigateToView();
 
       // Assert
-      expect($router.push).toHaveBeenCalledWith(route);
+      expect(utilsDependancy.createRouteByNameObject).toHaveBeenCalledWith(route);
     });
 
     it.each([
@@ -330,7 +314,7 @@ describe('document view', () => {
       ['jfif', 'jpg'],
     ])('will map the download type correctly', (type, expectedType) => {
       // Arrange
-      const page = mountPage();
+      const page = mountPage({});
 
       // Act & Assert
       expect(page.vm.mapFileTypeToDownloadType(type)).toEqual(expectedType);
@@ -354,14 +338,13 @@ describe('document view', () => {
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
       }];
       const $store = newStore({ document, documentComments });
-      const page = mountPage({ $store });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+      mountPage({ $store });
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentTypeUnavailableHeader');
-      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_my_record.documents.documentTypeUnavailablePageTitle');
+      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_HEADER, 'translate_my_record.documents.documentTypeUnavailableHeader', true);
+      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_TITLE, 'translate_my_record.documents.documentTypeUnavailablePageTitle', true);
     });
 
     it('will set the header and page title to the document term', async () => {
@@ -376,13 +359,12 @@ describe('document view', () => {
         isDownloadable: true,
       };
       const $store = newStore({ document });
-      const page = mountPage({ $store });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+      mountPage({ $store });
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'Document1');
+      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_HEADER, 'Document1', true);
     });
 
     it('will dispatch the load document function if needMoreInformation is true', async () => {
@@ -395,10 +377,9 @@ describe('document view', () => {
         isValidFile: true,
       };
       const $store = newStore({ document });
-      const page = mountPage({ $store });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+      mountPage({ $store });
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', { documentIdentifier: 1, updateMetaData: true });
@@ -417,15 +398,15 @@ describe('document view', () => {
         documentType: null,
       };
       const $store = newStore({ document });
-      const page = mountPage({ $store });
+
+      // Act
+      mountPage({ $store });
 
       const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
 
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
+      expect(dependancy.EventBus.$emit)
+        .toHaveBeenCalledWith(dependancy.UPDATE_HEADER, dateString, true);
     });
 
     it('will set the header to the letter date if documentType exists and is letter', async () => {
@@ -441,15 +422,15 @@ describe('document view', () => {
         documentType: 'Letter',
       };
       const $store = newStore({ document });
-      const page = mountPage({ $store });
+
+      // Act
+      mountPage({ $store });
 
       const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
 
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
+      expect(dependancy.EventBus.$emit)
+        .toHaveBeenCalledWith(dependancy.UPDATE_HEADER, dateString, true);
     });
   });
 });

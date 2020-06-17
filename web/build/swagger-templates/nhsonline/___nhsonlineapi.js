@@ -50,16 +50,11 @@ class NHSOnlineApi {
 
   get domain() {
       const {
-          app: {
-              $env
-          }
+        $env
       } = this.store;
-      const domain = this.req ?
-          $env.API_BASE_URL :
-          resolveApiClient({
-              host: this.req,
-              env: $env
-          });
+      const domain = resolveApiClient({
+        env: $env,
+      });
 
       return domain;
   }
@@ -145,13 +140,7 @@ class NHSOnlineApi {
           }
         }
 
-        let nhsoRequestId;
-
-        if (process.server) {
-          nhsoRequestId = this.res.locals.nhsoRequestId;
-        } else {
-          nhsoRequestId = uuid();
-        }
+        let nhsoRequestId = uuid();
         headers['NHSO-Request-ID'] = nhsoRequestId;
 
         const webVersion = getWebVersion(this);
@@ -159,7 +148,7 @@ class NHSOnlineApi {
         const platform = getPlatform(this);
 
         if (webVersion) {
-          headers['NHSO-Web-Version-Tag'] = webVersion + ' (commit:' + this.store.app.$env.COMMIT_ID + ')';
+          headers['NHSO-Web-Version-Tag'] = webVersion + ' (commit:' + this.store.$env.COMMIT_ID + ')';
         }
         if (nativeVersion) {
           if (platform !== 'web') {
@@ -208,13 +197,6 @@ class NHSOnlineApi {
 
         const requestStartTime = new Date();
 
-        let consola = {};
-
-        if (process.server) {
-          consola = require('consola');
-          consola.info(`Begin request: ${method} ${urlWithParams}, CorrelationId=${nhsoRequestId}`);
-        }
-
         axios({
           cancelToken: new CancelToken(function executor(c) {
             // An executor function receives a cancel function as a parameter
@@ -228,21 +210,6 @@ class NHSOnlineApi {
           crossDomain: true,
           data: JSON.stringify(body)
         }).then((response) => {
-          if (process.server) {
-            if (response) {
-              const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
-              consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`);
-
-              if (response.headers) {
-                this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
-                this.res.setHeader('Pragma', `${response.headers['pragma']}`);
-
-                if (response.headers['set-cookie']) {
-                  this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
-                }
-              }
-            }
-          }
 
           if (returnResponse) {
             return response;
@@ -259,17 +226,6 @@ class NHSOnlineApi {
               store: this.store
           });
         }).catch((error) => {
-          if (process.server) {
-            const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
-
-            if (error.response) {
-              consola.error(new Error(`Error response for request: ${method} ${urlWithParams}, response: ${error.response.status}, duration: ${requestDurationMilliseconds}ms}, CorrelationId=${nhsoRequestId}`));
-            } else if (error.request) {
-              consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`));
-            } else {
-              consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms, CorrelationId=${nhsoRequestId}`));
-            }
-          }
           if (!ignoreLoading){
             this.store.dispatch('http/loadingCompleted', url);
           }
@@ -295,18 +251,11 @@ class NHSOnlineApi {
               this.store.dispatch('errors/addApiError', error);
             }
 
-            if (process.server && !isEmpty(this.store.state.errors.apiErrors)) {
-                resolve({
-                    deferred,
-                    store: this.store
-                });
-            } else {
-                reject({
-                    deferred,
-                    error,
-                    store: this.store
-                });
-            }
+            reject({
+                deferred,
+                error,
+                store: this.store
+            });
           }
 
           reject({

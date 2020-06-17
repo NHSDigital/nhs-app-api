@@ -8,7 +8,7 @@
 import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'UpliftMessagingPage',
   components: {
     ProofLevelUpliftBanner,
   },

@@ -1,7 +1,7 @@
 import each from 'jest-each';
-import * as dependency from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import ConfirmationPage from '@/pages/appointments/gp-appointments/confirmation';
-import { APPOINTMENT_BOOKING_SUCCESS } from '@/lib/routes';
+import { APPOINTMENT_BOOKING_SUCCESS_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
@@ -10,14 +10,11 @@ describe('confirmation.vue', () => {
   let $store;
   let wrapper;
 
-  const createConfirmationPage = () => mount(ConfirmationPage, {
-    $store,
-    stubs: {
-      'page-title': '<div></div>',
-    },
-  });
+  const createConfirmationPage = () => mount(ConfirmationPage, { $store });
 
   beforeEach(() => {
+    redirectTo.mockClear();
+
     $store = createStore({
       state: {
         device: {
@@ -45,7 +42,6 @@ describe('confirmation.vue', () => {
       },
     });
 
-    dependency.redirectTo = jest.fn();
     wrapper = createConfirmationPage();
   });
 
@@ -82,12 +78,11 @@ describe('confirmation.vue', () => {
 
       it('will dispatch `availableAppointments/book` action', () => {
         expect($store.dispatch)
-          .toHaveBeenNthCalledWith(1, 'availableAppointments/book', jasmine.anything());
+          .toHaveBeenNthCalledWith(1, 'availableAppointments/book', expect.anything());
       });
 
       it('will redirect to booking success page', async () => {
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS_PATH);
       });
     });
   });

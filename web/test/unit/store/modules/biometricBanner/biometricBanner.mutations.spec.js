@@ -8,15 +8,12 @@ describe('biometric banner mutations', () => {
   let expirySeconds;
 
   beforeEach(() => {
-    mutations.app = {
-      $cookies: mockCookies(),
-      $env: {
-        SECURE_COOKIES: true,
-        COOKIES_BANNER_EXPIRY_DAYS: 2,
-      },
+    mutations.$env = {
+      SECURE_COOKIES: true,
     };
+    mutations.$cookies = mockCookies();
 
-    jest.spyOn(mutations.app.$cookies, 'set');
+    jest.spyOn(mutations.$cookies, 'set');
 
     const nowDate = moment.duration(5, 'y');
     expirySeconds = nowDate.asSeconds();
@@ -46,7 +43,7 @@ describe('biometric banner mutations', () => {
 
     beforeEach(() => {
       state = {};
-      mutations.app.$cookies.get = jest.fn().mockImplementation((name) => {
+      mutations.$cookies.get = jest.fn().mockImplementation((name) => {
         switch (name) {
           case 'HideBiometricBanner':
             return hideBiometricBannerValue;
@@ -67,7 +64,7 @@ describe('biometric banner mutations', () => {
       });
 
       it('will not set cookie', () => {
-        expect(mutations.app.$cookies.set).not.toBeCalled();
+        expect(mutations.$cookies.set).not.toBeCalled();
       });
     });
 
@@ -87,7 +84,7 @@ describe('biometric banner mutations', () => {
         });
 
         it('will not set cookie', () => {
-          expect(mutations.app.$cookies.set).not.toBeCalled();
+          expect(mutations.$cookies.set).not.toBeCalled();
         });
       });
 
@@ -102,7 +99,7 @@ describe('biometric banner mutations', () => {
         });
 
         it('will set cookie to true', () => {
-          expect(mutations.app.$cookies.set).toBeCalledWith(
+          expect(mutations.$cookies.set).toBeCalledWith(
             'HideBiometricBanner',
             true,
             { secure: true, maxAge: expirySeconds, path: '/' },

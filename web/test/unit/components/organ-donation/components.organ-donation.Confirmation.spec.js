@@ -1,4 +1,7 @@
 import Confirmation from '@/components/organ-donation/Confirmation';
+import {
+  ORGAN_DONATION_PRIVACY_URL,
+} from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 describe('confirmation', () => {
@@ -60,7 +63,6 @@ describe('confirmation', () => {
   });
 
   describe('privacy link', () => {
-    const URL_EXTERNAL = 'www.foo.com';
     let link;
 
     beforeEach(() => {
@@ -74,9 +76,6 @@ describe('confirmation', () => {
             isNativeApp: false,
           },
         },
-        $env: {
-          ORGAN_DONATION_PRIVACY_URL: URL_EXTERNAL,
-        },
       });
       wrapper = mountConfirmation();
       link = wrapper.find('a');
@@ -88,7 +87,7 @@ describe('confirmation', () => {
 
     it('will have the external privacy link, with target set', () => {
       expect(link.attributes().target).toEqual('_blank');
-      expect(link.attributes().href).toEqual(URL_EXTERNAL);
+      expect(link.attributes().href).toEqual(ORGAN_DONATION_PRIVACY_URL);
     });
   });
 

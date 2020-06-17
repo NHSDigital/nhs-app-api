@@ -1,8 +1,8 @@
-import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
-import { createStore, mount } from '../../helpers';
-import { INDEX } from '@/lib/routes';
-import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
+import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
+import { INDEX_PATH } from '@/router/paths';
+import * as dependency from '@/lib/utils';
+import { createStore, mount } from '../../helpers';
 
 describe('switch profile button component', () => {
   let $store;
@@ -37,7 +37,7 @@ describe('switch profile button component', () => {
       expect($store.dispatch).toHaveBeenCalledWith('myRecord/clear');
       expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, INDEX.path);
+        .toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
 });

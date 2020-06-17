@@ -9,6 +9,12 @@ const loginResponse = {
     authoriseUrl: 'bang',
   },
 };
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
+
 AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
   .mockReturnValue(loginResponse);
 
@@ -45,9 +51,6 @@ describe('login page', () => {
         },
       },
       $cookies,
-      context: {
-        redirect: jest.fn(),
-      },
     });
     return mount(LoginButton, {
       $env,

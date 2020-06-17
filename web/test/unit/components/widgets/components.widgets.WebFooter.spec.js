@@ -1,21 +1,21 @@
 import WebFooter from '@/components/widgets/WebFooter';
 import en from '@/locale/en/index';
+import {
+  TERMS_AND_CONDITIONS_URL,
+  PRIVACY_POLICY_URL,
+  HELP_AND_SUPPORT_URL,
+  ACCESSIBILITY_STATEMENT_URL,
+} from '@/router/externalLinks';
 import { mount } from '../../helpers';
 
 describe('WebFooter.vue', () => {
   let wrapper;
 
-  const $env = {
-    TERMS_AND_CONDITIONS_URL: 'https://terms',
-    PRIVACY_POLICY_URL: 'https://privacy',
-    HELP_AND_SUPPORT_URL: 'https://help',
-    ACCESSIBILITY_STATEMENT_URL: 'https://accessibility',
-  };
   const urlAndTexts = {
-    'myAccount.termsAndConditions': { url: $env.TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
-    'myAccount.privacyPolicy': { url: $env.PRIVACY_POLICY_URL, text: 'Privacy policy' },
-    'myAccount.helpAndSupport': { url: $env.HELP_AND_SUPPORT_URL, text: 'Help and support' },
-    'myAccount.accessibilityStatement': { url: $env.ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
+    'myAccount.termsAndConditions': { url: TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
+    'myAccount.privacyPolicy': { url: PRIVACY_POLICY_URL, text: 'Privacy policy' },
+    'myAccount.helpAndSupport': { url: HELP_AND_SUPPORT_URL, text: 'Help and support' },
+    'myAccount.accessibilityStatement': { url: ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
   };
 
   const $tKey = translated => translated.replace('translate_', '');
@@ -39,14 +39,13 @@ describe('WebFooter.vue', () => {
   };
 
   beforeEach(() => {
-    wrapper = mount(WebFooter, { $env });
+    wrapper = mount(WebFooter);
   });
 
 
   it('will verify that links in footer are correctly generated', () => {
     const linkElements = wrapper.findAll('ul li a');
     expect(linkElements.length).toBeGreaterThan(0);
-    expect(linkElements.length).toEqual(Object.keys($env).length);
     linkElements.wrappers.forEach((w) => {
       const urlAndText = retrieveUrlAndText(w);
 

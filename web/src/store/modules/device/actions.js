@@ -1,6 +1,6 @@
 import Sources from '@/lib/sources';
-import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE } from './mutation-types';
 import NativeCallbacks from '@/services/native-app';
+import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE } from './mutation-types';
 
 export default {
   init({ commit }) {
@@ -13,15 +13,11 @@ export default {
     commit(SET_SOURCE_DEVICE, source);
   },
   unlockNavBar() {
-    if (process.client) {
-      NativeCallbacks.pageLoadComplete();
-      window.nhsAppPageLoadComplete = true;
-    }
+    NativeCallbacks.pageLoadComplete();
+    window.nhsAppPageLoadComplete = true;
   },
   pageLoadComplete() {
-    if (process.client) {
-      NativeCallbacks.pageLoadComplete();
-      window.nhsAppPageLoadComplete = true;
-    }
+    NativeCallbacks.pageLoadComplete();
+    window.nhsAppPageLoadComplete = true;
   },
 };

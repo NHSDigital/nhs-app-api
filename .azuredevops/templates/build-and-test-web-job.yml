@@ -34,7 +34,7 @@ jobs:
       - task: ShellScript@2
         displayName: Run web unit tests
         inputs:
-          scriptPath: web/buildscripts/06_run_unit_tests.sh
+         scriptPath: web/buildscripts/06_run_unit_tests.sh
 
       - task: Bash@3
         displayName: Check for test container
@@ -90,7 +90,7 @@ jobs:
           script: |
             echo "unit.tests.coverage.exists=$UNIT_TESTS_COVERAGE_EXISTS"
             echo "##vso[task.setvariable variable=unit.tests.coverage.exists;isOutput=true]$UNIT_TESTS_COVERAGE_EXISTS"
-
+  
       - task: ShellScript@2
         displayName: Build web docker image
         inputs:

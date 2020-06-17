@@ -78,18 +78,19 @@ Feature: Authorisation occurs during each URL visit
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
-      | /account                                    | /account                       |
-      | /appointments                               | /appointments                  |
-      | /appointments/booking-guidance              | /appointments/booking-guidance |
-      | /appointments/booking                       | /appointments/booking          |
-      | /                                           | /                              |
-      | /health-records/gp-record                   | /health-records/gp-record      |
-      | /prescriptions                              | /prescriptions                 |
-      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
-      | /prescriptions/confirm-prescription-details | /prescriptions                 |
-      | /symptoms                                   | /symptoms                      |
-      | /terms-and-conditions                       | /                              |
-      | /logout                                     | /login                         |
+      | /account                                       | /account                                       |
+      | /appointments                                  | /appointments                                  |
+      | /appointments/gp-appointments/booking-guidance | /appointments/gp-appointments/booking-guidance |
+      | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
+      | /                                              |                                                |
+      | /my-record                                     | /health-records                                |
+      | /health-records/gp-medical-record              | /health-records/gp-medical-record              |
+      | /prescriptions                                 | /prescriptions                                 |
+      | /prescriptions/repeat-courses                  | /prescriptions/repeat-courses                  |
+      | /prescriptions/confirm-prescription-details    | /prescriptions                                 |
+      | /symptoms                                      | /symptoms                                      |
+      | /terms-and-conditions                          |                                                |
+      | /logout                                        | /login                                         |
 
   @bug @NHSO-8672
   #To be merged into the above test once the bug is fixed
@@ -99,8 +100,8 @@ Feature: Authorisation occurs during each URL visit
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
-      | /appointments/cancelling   | /appointments/gp-appointments |
-      | /appointments/confirmation | /appointments/gp-appointments |
+      | /appointments/gp-appointments/cancelling   | /appointments/gp-appointments |
+      | /appointments/gp-appointments/confirmation | /appointments/gp-appointments |
 
   Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
     Given I am a EMIS patient
@@ -111,14 +112,14 @@ Feature: Authorisation occurs during each URL visit
     Examples:
       | Url                                         | Page                              |
       | /appointments                               | /appointments                     |
-      | /                                           | /                                 |
+      | /                                           |                                   |
       | /health-records/gp-medical-record           | /health-records/gp-medical-record |
       | /prescriptions                              | /prescriptions                    |
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
       | /symptoms                                   | /symptoms                         |
-      | /terms-and-conditions                       | /                                 |
+      | /terms-and-conditions                       |                                   |
       | /logout                                     | /login                            |
-      | /redirector                                 | /                                 |
+      | /redirector                                 |                                   |
       | /redirector?redirect_to=appointments        | /appointments                     |
-      | /nonexistent                                | /                                 |
+      | /nonexistent                                |                                   |
 

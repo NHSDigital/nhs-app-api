@@ -20,12 +20,9 @@ describe('actions', () => {
         deleteV1Session: jest.fn(() => Promise.resolve()),
         getV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve({ response })),
       },
-      router: {
+      $router: {
         go: jest.fn(),
         push: jest.fn(),
-      },
-      $cookies: {
-        remove: jest.fn(),
       },
       store: {
         state: {
@@ -35,6 +32,9 @@ describe('actions', () => {
       context: {
         redirect: jest.fn(),
       },
+    };
+    actions.$cookies = {
+      remove: jest.fn(),
     };
 
     commit = jest.fn();

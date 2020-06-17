@@ -1,20 +1,23 @@
 <template>
-  <div>
+  <terms-and-conditions-layout>
     <div :class="$store.state.device.isNativeApp && 'pull-content'">
       <updated-terms-conditions v-if="isUpdatedConsentRequired"/>
       <terms-conditions v-else/>
     </div>
-  </div>
+  </terms-and-conditions-layout>
 </template>
 <script>
 import TermsConditions from '@/components/TermsConditions';
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
+import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
+import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
 
 export default {
-  layout: 'termsAndConditions',
+  name: 'TermsAndConditionsPage',
   components: {
     TermsConditions,
     UpdatedTermsConditions,
+    TermsAndConditionsLayout,
   },
   data() {
     return {
@@ -24,28 +27,20 @@ export default {
   },
   computed: {
     pageHeader() {
-      if ((this.areAccepted)
-        && (this.updatedConsentRequired)) {
-        return this.$t('updatedTermsAndConditions.title');
-      }
-      return this.$t('termsAndConditions.title');
+      return this.isUpdatedConsentRequired
+        ? 'updatedTermsAndConditions.title'
+        : 'termsAndConditions.title';
     },
     isUpdatedConsentRequired() {
-      return ((this.areAccepted)
-        && (this.updatedConsentRequired));
+      return this.areAccepted && this.updatedConsentRequired;
     },
   },
+  beforeMount() {
+    EventBus.$emit(UPDATE_HEADER, this.pageHeader);
+  },
   mounted() {
-    if (this.$store.state.termsAndConditions.updatedConsentRequired) {
-      this.$store.dispatch('header/updateHeaderText', this.pageHeader);
-      if (process.client) {
-        window.document.title = `${this.$t('updatedTermsAndConditions.title')} - ${this.$t('appTitle')}`;
-      }
-    }
-
     this.$store.dispatch('device/pageLoadComplete');
   },
-
 };
 </script>
 

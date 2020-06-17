@@ -2,10 +2,10 @@
 import ApiError from '@/components/errors/ApiError';
 import { initialState as initialDevice } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrors } from '@/store/modules/errors/mutation-types';
-import { createStore, mount } from '../../helpers';
 import has from 'lodash/fp/has';
 import get from 'lodash/fp/get';
 import locale from '@/locale';
+import { createStore, mount } from '../../helpers';
 
 const engLocale = locale.en;
 const $te = key => has(key, engLocale);
@@ -24,22 +24,11 @@ describe('error message mixin', () => {
   const mountErrorMessageMixin = ({
     apiError,
     hasApiError = false,
-    hasConnectionError = false,
     routePath,
-    showError = true,
   } = {}) => {
     state = createState();
-    if (hasConnectionError) {
-      state.errors.hasConnectionProblem = hasConnectionError;
-    }
-
-    if (routePath) {
-      state.errors.routePath = routePath;
-    }
-
-    if (apiError) {
-      state.errors.apiErrors[0] = apiError;
-    }
+    state.errors.routePath = routePath;
+    state.errors.apiErrors[0] = apiError;
 
     $store = createStore({
       getters: {
@@ -48,14 +37,8 @@ describe('error message mixin', () => {
       state,
     });
 
-    const mounted = mount(ApiError, { $store, $te, $t });
-    mounted.vm.showError = jest.fn().mockReturnValue(showError);
-    return mounted;
+    return mount(ApiError, { $store, $te, $t });
   };
-
-  beforeEach(() => {
-    wrapper = mountErrorMessageMixin();
-  });
 
   describe('computed', () => {
     describe('component', () => {
@@ -72,22 +55,6 @@ describe('error message mixin', () => {
       it('will substitude "-" for "_"', () => {
         wrapper = mountErrorMessageMixin({ routePath: '/my-page' });
         expect(wrapper.vm.component).toEqual('my_page');
-      });
-    });
-
-    describe('domain', () => {
-      it('will be "errors" when there are API errors', () => {
-        const apiError = {
-          status: 401,
-          error: 'forbidden',
-        };
-        wrapper = mountErrorMessageMixin({ apiError, hasApiError: true });
-        expect(wrapper.vm.domain).toEqual('errors');
-      });
-
-      it('will be "noConnection" when there are no API errors', () => {
-        wrapper = mountErrorMessageMixin({ hasApiError: false });
-        expect(wrapper.vm.domain).toEqual('noConnection');
       });
     });
   });
@@ -113,35 +80,9 @@ describe('error message mixin', () => {
     });
 
     describe('get message', () => {
-      describe('has connection error', () => {
-        it('will return the component error code key when one is returned', () => {
-          const expected = 'an error';
-
-          wrapper = mountErrorMessageMixin({ hasConnectionError: true });
-          wrapper.vm.getText = jest.fn().mockReturnValue(expected);
-
-          expect(wrapper.vm.getMessage('appointments')).toEqual(expected);
-          expect(wrapper.vm.getText).toHaveBeenCalledWith('noConnection.appointments');
-        });
-      });
-      describe('showing errors', () => {
-        it('will return the component error code key when one is returned', () => {
-          const expected = 'an error';
-
-          wrapper = mountErrorMessageMixin({ hasConnectionError: true });
-          wrapper.vm.getText = jest.fn().mockReturnValue(expected);
-
-          expect(wrapper.vm.getMessage('appointments')).toEqual(expected);
-          expect(wrapper.vm.getText).toHaveBeenCalledWith('noConnection.appointments');
-        });
-      });
-
       describe('not showing errors', () => {
-        beforeEach(() => {
-          wrapper.vm.showError = jest.fn().mockReturnValue(false);
-        });
-
         it('will be an empty string when not showing errors', () => {
+          wrapper = mountErrorMessageMixin();
           expect(wrapper.vm.getMessage('appointments')).toEqual('');
         });
       });
@@ -149,10 +90,12 @@ describe('error message mixin', () => {
 
     describe('get text', () => {
       it('will return an empty string if the key does not exist in the locale file', () => {
+        wrapper = mountErrorMessageMixin();
         expect(wrapper.vm.getText('mickey.mouse')).toEqual('');
       });
 
       it('will return the value if the key exists in the locale file', () => {
+        wrapper = mountErrorMessageMixin();
         expect(wrapper.vm.getText('errors.pageHeader')).toEqual('Server error');
       });
     });

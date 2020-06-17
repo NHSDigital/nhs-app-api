@@ -77,6 +77,11 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import {
+  TERMS_AND_CONDITIONS_URL,
+  PRIVACY_POLICY_URL,
+  COOKIES_POLICY_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'UpdatedTermsConditions',
@@ -89,9 +94,9 @@ export default {
   mixins: [TermsConditionsMixin],
   data() {
     return {
-      termsAndConditionsURL: this.$store.app.$env.TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
-      cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
+      termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: PRIVACY_POLICY_URL,
+      cookiesPolicyURL: COOKIES_POLICY_URL,
       areTermsAccepted: false,
       termsAcceptedValue: 'terms',
       hasTriedToContinue: false,

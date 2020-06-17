@@ -40,7 +40,7 @@ export default {
       if (content.linkUrl) {
         url = content.linkUrl;
       } else {
-        url = this.$env.CONTACT_US_URL;
+        url = this.$store.$env.CONTACT_US_URL;
       }
       if (this.queryParam.param) {
         url += `?${this.queryParam.param}=${this.queryParam.value}`;

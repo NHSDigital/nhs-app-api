@@ -1,26 +1,27 @@
 /* eslint-disable object-curly-newline */
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { ORGAN_DONATION } from '@/lib/routes';
-import { createEvent, createStore, mount } from '../../helpers';
+import { ORGAN_DONATION_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
+import { createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const ID_TEST_LINK = 'test-link';
-const URL_EXTERNAL = 'http://foo.bar/';
-const URL_INTERNAL = ORGAN_DONATION.path;
+const URL_INTERNAL = ORGAN_DONATION_PATH;
 const BACK_LINK_OVERRIDE = '/correct-url';
 
 describe('organ donation link', () => {
-  let $env;
   let $router;
   let $store;
-  let event;
   let link;
   let propsData;
   let wrapper;
 
   const mountAs = (params = { native: true }) => {
-    $env = $env || {};
     $store = createStore({
-      $env,
       state: {
         device: {
           isNativeApp: params.native,
@@ -35,12 +36,12 @@ describe('organ donation link', () => {
       backLinkOverride: BACK_LINK_OVERRIDE,
     };
 
-    return mount(OrganDonationLink, { $env, $store, $router, propsData });
+    return mount(OrganDonationLink, { $store, $router, propsData });
   };
 
   beforeEach(() => {
+    redirectTo.mockClear();
     $router = [];
-    $env = { ORGAN_DONATION_URL: URL_EXTERNAL };
   });
 
   describe('`useIntegratedOrganDonation` computed property', () => {
@@ -74,29 +75,21 @@ describe('organ donation link', () => {
 
   describe('onClickOrganDonation handler', () => {
     beforeEach(() => {
-      event = createEvent({ currentTarget: { pathname: URL_INTERNAL } });
       wrapper = mountAs();
       link = wrapper.find(`#${ID_TEST_LINK}`);
     });
 
-    it('will push to the router when the link is clicked', () => {
-      wrapper.vm.onClickOrganDonation(event);
-      expect($router).toContain(URL_INTERNAL);
-    });
-
-    it('will prevent the default action on the event', () => {
-      wrapper.vm.onClickOrganDonation(event);
-      expect(event.preventDefault).toHaveBeenCalled();
+    it('will redirect to the organ donation path ', () => {
+      wrapper = mountAs();
+      wrapper.vm.onClickOrganDonation();
+      expect(redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
     });
 
     describe('back link override', () => {
-      beforeEach(() => {
-        event = createEvent({ currentTarget: { pathname: URL_INTERNAL } });
-      });
-
       it('the correct value is added to the store', () => {
         wrapper = mountAs();
-        wrapper.vm.onClickOrganDonation(event);
+        wrapper.vm.onClickOrganDonation();
         expect($store.dispatch).toHaveBeenCalledWith('navigation/setBackLinkOverride', BACK_LINK_OVERRIDE);
       });
     });

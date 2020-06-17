@@ -3,8 +3,7 @@
     <modal/>
     <div id="app"
          ref="nhsAppRoot"
-         :tabindex="!$store.state.device.isNativeApp ? -1 : false"
-         :class="{ [$style['no-footer']]: noFooter }">
+         :tabindex="!$store.state.device.isNativeApp ? -1 : false">
 
       <slot name="header">
         <div v-if="shouldShowFullDesktopHeader">
@@ -49,6 +48,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -65,14 +65,14 @@ import WebHeader from '@/components/widgets/WebHeader';
 import isFunction from 'lodash/fp/isFunction';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import showShutterPage from '@/lib/proxy/shutter';
-import {
-  DOCUMENT_DETAIL,
-  INDEX,
-  LOGIN,
-  findByName,
-  isAnonymous,
-} from '@/lib/routes';
+import { INDEX } from '@/router/routes/general';
+import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
+import {
+  DOCUMENT_DETAIL_NAME,
+  LOGIN_NAME,
+  INDEX_NAME,
+} from '@/router/names';
 
 export default {
   name: 'NhsUkLayout',
@@ -95,50 +95,6 @@ export default {
       default: true,
     },
   },
-  head() {
-    let { platform } = this.$store.state.device.source;
-    const { nativeVersion } = this.$store.state.appVersion;
-
-    if (nativeVersion !== undefined) {
-      platform = `${platform} (${nativeVersion})`;
-    }
-
-    const head = {
-      htmlAttrs: {
-        lang: `${this.$t('language')}`,
-      },
-      title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-      meta: [
-        { name: 'web version', content: this.$store.state.appVersion.webVersion },
-        { name: 'platform', content: platform },
-      ],
-      __dangerouslyDisableSanitizers: ['noscript'],
-    };
-
-    const sessionCookie = this.$store.app.$cookies.get('nhso.session');
-
-    if (sessionCookie) {
-      const { durationSeconds } = sessionCookie;
-
-      if (durationSeconds) {
-        head.noscript = [
-          {
-            innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`,
-            body: false,
-          },
-        ];
-      }
-    }
-
-    if (this.$env.ANALYTICS_SCRIPT_URL !== 'NOT_SET' && this.isAnalyticsCookieAccepted() && !isAnonymous(this.$route.name)) {
-      head.script = [
-        {
-          src: this.$env.ANALYTICS_SCRIPT_URL,
-        },
-      ];
-    }
-    return head;
-  },
   data() {
     return {
       resetTimeoutId: undefined,
@@ -146,14 +102,11 @@ export default {
     };
   },
   computed: {
-    currentRoute() {
-      return findByName(this.$route.name);
-    },
     currentHelpUrl() {
-      return (this.currentRoute || INDEX).helpUrl;
+      return get('$route.meta.helpUrl', this) || INDEX.helpUrl;
     },
     currentCrumb() {
-      return (this.currentRoute || INDEX).crumb;
+      return get('$route.meta.crumb', this) || INDEX_CRUMB;
     },
     noFooter() {
       return !this.hasFooter || this.$store.state.device.isNativeApp;
@@ -164,26 +117,26 @@ export default {
     // document needs to stretch to make use of
     // more of the screen
     getColumnClass() {
-      return this.$route.name === DOCUMENT_DETAIL.name &&
+      return this.$route.name === DOCUMENT_DETAIL_NAME &&
         !this.$store.state.device.isNativeApp ?
         'nhsuk-grid-column-full-width' : 'nhsuk-grid-column-two-thirds';
     },
     getRowClass() {
-      return this.$route.name === DOCUMENT_DETAIL.name &&
+      return this.$route.name === DOCUMENT_DETAIL_NAME &&
         !this.$store.state.device.isNativeApp ?
         '' : 'nhsuk-grid-row';
     },
     showMenu() {
       return !this.$store.state.device.isNativeApp &&
           this.loggedIn &&
-          this.$route.name !== LOGIN.name;
+          this.$route.name !== LOGIN_NAME;
     },
     shouldShowButton() {
       return !this.$store.getters['errors/showApiError'] && !this.$store.state.device.isNativeApp;
     },
     shouldShowBreadCrumb() {
       return this.loggedIn &&
-        this.$route.name !== LOGIN.name &&
+        this.$route.name !== LOGIN_NAME &&
         !this.breadcrumbDisabledNative;
     },
     breadcrumbDisabledNative() {
@@ -199,20 +152,18 @@ export default {
         : this.currentCrumb.nativeDisabled;
     },
     shouldShowContentHeader() {
-      const route = this.currentRoute;
-      return route !== undefined &&
-        (route.shouldShowContentHeader === undefined || route.shouldShowContentHeader === true);
+      return get('meta.shouldShowContentHeader', this.$route) !== false;
     },
     shouldShowFullDesktopHeader() {
       return !this.$store.state.device.isNativeApp &&
         this.loggedIn &&
-        this.$route.name !== LOGIN.name;
+        this.$route.name !== LOGIN_NAME;
     },
     shouldShowSlimDesktopHeader() {
       return !this.$store.state.device.isNativeApp && !this.loggedIn;
     },
     showSurvey() {
-      return this.isHotJarSurveyVisible() && this.$route.name === INDEX.name;
+      return this.isHotJarSurveyVisible() && this.$route.name === INDEX_NAME;
     },
     mainClass() {
       const clazzes = [];
@@ -222,7 +173,7 @@ export default {
       } else {
         clazzes.push('desktopWeb');
       }
-      if (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name) {
+      if (this.isHotJarSurveyVisible() && this.$route.name === INDEX_NAME) {
         if (this.surveyBarOpen) {
           clazzes.push('survey-open');
         } else {
@@ -243,38 +194,35 @@ export default {
     },
     isLoading(to, from) {
       if (from && !to) {
-        showShutterPage(this.currentRoute, this);
+        showShutterPage(this.$route, this);
       }
     },
   },
   created() {
-    if (process.client) {
-      this.$store.dispatch('session/updateLastCalledAt');
+    this.$store.dispatch('session/updateLastCalledAt');
 
-      NativeVersionSetup(this.$store);
+    NativeVersionSetup(this.$store);
 
-      if (process.client
-        && canVersionHandleBiometricsWeb(this)
-        && this.$store.state.loginSettings.biometricType === undefined) {
-        NativeCallbacks.fetchBiometricSpec();
-      }
-
-      if (this.loggedIn) {
-        this.$store.dispatch('session/startValidationChecking');
-        window.validateSession =
-          window.validateSession || (() => {
-            this.$store.dispatch('session/validate');
-          });
-
-        if (this.$store.state.device.isNativeApp) {
-          this.$store.dispatch('auth/nativeLogin');
-          NativeCallbacks.resetPageFocus();
-        }
-      }
-      this.configureWebContext(this.currentHelpUrl);
+    if (canVersionHandleBiometricsWeb(this)
+      && this.$store.state.loginSettings.biometricType === undefined) {
+      NativeCallbacks.fetchBiometricSpec();
     }
 
-    const appVersion = this.$store.app.$env.VERSION_TAG;
+    if (this.loggedIn) {
+      this.$store.dispatch('session/startValidationChecking');
+      window.validateSession =
+        window.validateSession || (() => {
+          this.$store.dispatch('session/validate');
+        });
+
+      if (this.$store.state.device.isNativeApp) {
+        this.$store.dispatch('auth/nativeLogin');
+        NativeCallbacks.resetPageFocus();
+      }
+    }
+    this.configureWebContext(this.currentHelpUrl);
+
+    const appVersion = this.$store.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
@@ -295,7 +243,7 @@ export default {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
     },
     isHotJarSurveyVisible() {
-      return this.isAnalyticsCookieAccepted() && `${this.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
+      return this.isAnalyticsCookieAccepted() && `${this.$store.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
     },
     focusNhsAppRoot() {
       this.$refs.nhsAppRoot.focus();
@@ -306,7 +254,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/nofooter";
-</style>

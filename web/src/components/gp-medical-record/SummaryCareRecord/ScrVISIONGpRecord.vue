@@ -28,7 +28,10 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { ALLERGIESANDREACTIONS, MEDICINES } from '@/lib/routes';
+import {
+  ALLERGIESANDREACTIONS_PATH,
+  MEDICINES_PATH,
+} from '@/router/paths';
 
 export default {
   name: 'ScrVISIONGpRecord',
@@ -38,8 +41,8 @@ export default {
   data() {
     return {
       record: this.$store.state.myRecord.record,
-      allergiesAndReactionsPath: ALLERGIESANDREACTIONS.path,
-      medicinesPath: MEDICINES.path,
+      allergiesAndReactionsPath: ALLERGIESANDREACTIONS_PATH,
+      medicinesPath: MEDICINES_PATH,
     };
   },
   computed: {

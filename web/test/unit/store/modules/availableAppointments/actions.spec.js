@@ -46,25 +46,12 @@ describe('actions', () => {
       });
 
       it('will not commit ADD_ERROR', () => {
-        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
-      });
-
-      describe('on server', () => {
-        beforeEach(async () => {
-          that.dispatch = jest.fn();
-          process.client = false;
-          await actions.book.call(that, { commit });
-        });
-
-        it('will not dispatch `analytics/satelliteTrack`', () => {
-          expect(that.dispatch).not.toBeCalled();
-        });
+        expect(commit).not.toBeCalledWith(ADD_ERROR, expect.anything());
       });
 
       describe('on client', () => {
         beforeEach(async () => {
           that.dispatch = jest.fn();
-          process.client = true;
           await actions.book.call(that, { commit });
         });
 
@@ -85,7 +72,6 @@ describe('actions', () => {
       };
 
       beforeEach(async () => {
-        process.client = true;
         response = Promise.reject(error);
         await actions.book.call(that, { commit }, slot);
       });
@@ -152,7 +138,7 @@ describe('actions', () => {
       });
 
       it('will not commit ADD_ERROR', () => {
-        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
+        expect(commit).not.toBeCalledWith(ADD_ERROR, expect.anything());
       });
     });
 
@@ -178,7 +164,7 @@ describe('actions', () => {
       });
 
       it('will not commit LOAD', () => {
-        expect(commit).not.toBeCalledWith(LOAD, jasmine.anything());
+        expect(commit).not.toBeCalledWith(LOAD, expect.anything());
       });
 
       it('will commit ADD_ERROR', () => {

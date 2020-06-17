@@ -1,5 +1,6 @@
 @111Online
 @noJs
+@pending
 Feature: Access 111 Online with no javascript
 
   A user can navigate to the 111 service after logging in while Javascript is disabled

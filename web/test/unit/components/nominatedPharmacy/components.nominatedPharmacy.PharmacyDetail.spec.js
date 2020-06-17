@@ -1,6 +1,6 @@
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import { createStore, mount } from '../../helpers';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import { createStore, mount } from '../../helpers';
 
 const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => mount(PharmacyDetail, {
   propsData: {

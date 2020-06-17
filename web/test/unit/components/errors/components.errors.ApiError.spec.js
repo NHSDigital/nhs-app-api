@@ -1,12 +1,19 @@
-/* eslint-disable import/no-extraneous-dependencies */
+
 import Vue from 'vue';
+import each from 'jest-each';
 import ApiError from '@/components/errors/ApiError';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import ReportAProblem from '@/components/errors/ReportAProblem';
 import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, locale, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 Vue.mixin({
   methods: {
@@ -76,6 +83,38 @@ describe('api errors', () => {
   const mountApiError = () => mount(ApiError, {
     $store,
     $style,
+  });
+
+  describe('updated', () => {
+    beforeEach(() => {
+      state = createState({
+        action: { 504: '/test' },
+        isNativeApp: false,
+        path: '/prescriptions/view-orders',
+        status: 504,
+      });
+      EventBus.$emit.mockClear();
+    });
+
+    it('will not emit to EventBus when updated and no api error shown', () => {
+      getters = { 'errors/showApiError': true };
+      $store = createStore({ getters, state });
+      wrapper = mountApiError();
+      getters['errors/showApiError'] = false;
+
+      expect(EventBus.$emit).not.toHaveBeenCalled();
+    });
+
+    it('will update header and title when updated and api error shown', () => {
+      getters = { 'errors/showApiError': false };
+      $store = createStore({ getters, state });
+      wrapper = mountApiError();
+      getters['errors/showApiError'] = true;
+
+      expect(EventBus.$emit).toHaveBeenCalledTimes(2);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'translate_prescriptions.view_orders.errors.504.pageHeader', true, true);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'translate_prescriptions.view_orders.errors.504.pageTitle', true);
+    });
   });
 
   describe('standard error', () => {
@@ -301,6 +340,7 @@ describe('api errors', () => {
               });
               $store = createStore({ getters, state });
               wrapper = mountApiError();
+              EventBus.$emit.mockClear();
             });
 
             it('will exist', () => {
@@ -330,10 +370,6 @@ describe('api errors', () => {
             });
           });
         });
-      });
-
-      it('will not display if there is no retry text', () => {
-
       });
     });
   });
@@ -371,6 +407,63 @@ describe('api errors', () => {
 
       it('will have an h2 set to the subheader', () => {
         expect(wrapper.find('h2').text()).toEqual('translate_errors.404.subheader');
+      });
+    });
+  });
+  describe('computed', () => {
+    describe('component', () => {
+      each([
+        ['will remove the leading slash', '/mypage', 'mypage'],
+        ['will substitude "/" for "."', '/my/page', 'my.page'],
+        ['will substitude "-" for "_"', '/my-page', 'my_page'],
+      ]).it('%s', (_, routePath, expectedComponent) => {
+        state = createState({ path: routePath });
+        $store = createStore({ getters, state });
+        wrapper = mountApiError();
+        expect(wrapper.vm.component).toEqual(expectedComponent);
+      });
+    });
+  });
+
+  describe('methods', () => {
+    beforeEach(() => {
+      getters = { 'errors/showApiError': true };
+    });
+
+    describe('get component error code key', () => {
+      it('will be empty string when there is no API error', () => {
+        wrapper = mountApiError();
+        expect(wrapper.vm.getComponentErrorCodeKey('any')).toEqual('');
+      });
+
+      it('will be value of `[component].errors.[statusCode].[errorCode].[type] if it exists', () => {
+        state = createState({ path: '/account/notifications', error: 10001, status: 500 });
+        $store = createStore({ getters, state });
+        wrapper = mountApiError();
+
+        const x = wrapper.vm.getComponentErrorCodeKey('retryButtonText');
+        expect(x).toEqual('translate_account.notifications.errors.500.10001.retryButtonText');
+      });
+    });
+
+    describe('get message', () => {
+      describe('not showing errors', () => {
+        it('will be an empty string when not showing errors', () => {
+          wrapper = mountApiError();
+          expect(wrapper.vm.getMessage('appointments')).toEqual('');
+        });
+      });
+    });
+
+    describe('get text', () => {
+      it('will return an empty string if the key does not exist in the locale file', () => {
+        wrapper = mountApiError();
+        expect(wrapper.vm.getText('mickey.mouse')).toEqual('');
+      });
+
+      it('will return the value if the key exists in the locale file', () => {
+        wrapper = mountApiError();
+        expect(wrapper.vm.getText('errors.pageHeader')).toEqual('translate_errors.pageHeader');
       });
     });
   });

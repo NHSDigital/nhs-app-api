@@ -27,7 +27,6 @@ describe('healthRecords', () => {
         'serviceJourneyRules/silverIntegrationEnabled': () => (integrationEnabled),
         'session/isProxying': isProxying,
       },
-      $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
     return mount(HealthRecords, { $store, $router });
   };

@@ -9,7 +9,7 @@
                  :has-unread-messages="hasUnreadMessages"
                  :text="$t('messagesHub.appMessaging.subheader')"
                  :description="$t('messagesHub.appMessaging.body')"
-                 :click-func="navigateToMessages"
+                 :click-func="navigateToAppMessages"
                  :aria-label="ariaLabel"/>
 
       <menu-item v-else
@@ -60,7 +60,6 @@
                  :click-func="navigateToDataSharing"
                  :aria-label="$t('sc04.dataSharing.subheader') |
                    join($t('sc04.dataSharing.body') ,'. ')"/>
-
     </menu-item-list>
   </div>
 </template>
@@ -72,12 +71,20 @@ import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import sjrIf from '@/lib/sjrIf';
-import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_OVERVIEW, MORE, MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
-import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
+import {
+  APPOINTMENT_ADMIN_HELP_PATH,
+  MORE_PATH,
+  MESSAGES_PATH,
+  DATA_SHARING_OVERVIEW_PATH,
+  HEALTH_INFORMATION_UPDATES_PATH,
+} from '@/router/paths';
+import {
+  YOUR_NHS_DATA_MATTERS_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'MorePage',
   components: {
     MenuItemList,
     MenuItem,
@@ -88,26 +95,23 @@ export default {
     return {
       hasUnreadMessages: false,
       adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
-      adminHelpPath: createUri({
-        path: APPOINTMENT_ADMIN_HELP.path,
-        noJs: { onlineConsultations: { previousRoute: MORE.path } },
-      }),
-      appMessagingPath: HEALTH_INFORMATION_UPDATES.path,
+      appMessagingPath: HEALTH_INFORMATION_UPDATES_PATH,
+      adminHelpPath: APPOINTMENT_ADMIN_HELP_PATH,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
-      morePath: MORE.path,
+      morePath: MORE_PATH,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
-      messagesPath: MESSAGES.path,
+      messagesPath: MESSAGES_PATH,
     };
   },
   computed: {
     dataSharingPath() {
       return this.$store.state.device.isNativeApp
-        ? DATA_SHARING_OVERVIEW.path
-        : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
+        ? DATA_SHARING_OVERVIEW_PATH
+        : YOUR_NHS_DATA_MATTERS_URL;
     },
     hasPkbSharedLinks() {
       return sjrIf({
@@ -175,26 +179,23 @@ export default {
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
-    navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
+    navigateToAppMessages() {
+      this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      redirectTo(this, this.appMessagingPath);
     },
-    navigateToMessages(event) {
-      if (this.onlyAppMessagesEnabled) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-      }
-      this.navigate(event);
+    navigateToMessages() {
+      redirectTo(this, this.messagesPath);
     },
-    navigateToAdminHelp(event) {
-      this.navigate(event);
+    navigateToAdminHelp() {
       this.$store.dispatch('navigation/setNewMenuItem', 4);
       this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
       this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
       this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
+      redirectTo(this, this.adminHelpPath);
     },
-    navigateToDataSharing(event) {
+    navigateToDataSharing() {
       if (this.$store.state.device.isNativeApp) {
-        this.navigate(event);
+        redirectTo(this, this.dataSharingPath);
       } else {
         window.open(this.dataSharingPath, '_blank');
       }

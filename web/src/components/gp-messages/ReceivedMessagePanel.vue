@@ -20,7 +20,7 @@
         </strong>
         <div>
           <desktopGenericBackLink id="viewLink"
-                                  :class="$style['attachmentLink']"
+                                  :class="[$style['attachmentLink'], 'nhsuk-u-margin-right-2']"
                                   :path="viewAttachmentPath"
                                   button-text="gp_messages.view_details.view"
                                   @clickAndPrevent="viewClicked"/>
@@ -38,14 +38,16 @@
     </p>
   </div>
 </template>
+
 <script>
 import LinkifyContent from '@/components/widgets/LinkifyContent';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { formatIndividualMessageTime, redirectTo, isBlankString } from '@/lib/utils';
 import {
-  GP_MESSAGES_DOWNLOAD_ATTACHMENT,
-  GP_MESSAGES_VIEW_ATTACHMENT,
-} from '@/lib/routes';
+  GP_MESSAGES_VIEW_ATTACHMENT_PATH,
+  GP_MESSAGES_DOWNLOAD_ATTACHMENT_PATH,
+} from '@/router/paths';
+import { GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME } from '@/router/names';
 
 export default {
   name: 'ReceivedMessagePanel',
@@ -75,6 +77,12 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      viewAttachmentPath: GP_MESSAGES_VIEW_ATTACHMENT_PATH,
+      downloadAttachmentPath: GP_MESSAGES_DOWNLOAD_ATTACHMENT_PATH,
+    };
+  },
   computed: {
     formattedTime() {
       return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
@@ -85,12 +93,6 @@ export default {
     fileAttached() {
       return !isBlankString(this.attachmentId);
     },
-    downloadAttachmentPath() {
-      return GP_MESSAGES_DOWNLOAD_ATTACHMENT.path;
-    },
-    viewAttachmentPath() {
-      return GP_MESSAGES_VIEW_ATTACHMENT.path;
-    },
   },
   methods: {
     async loadDocument() {
@@ -98,13 +100,13 @@ export default {
     },
     async viewClicked() {
       await this.loadDocument();
-      redirectTo(this, GP_MESSAGES_VIEW_ATTACHMENT.path);
+      redirectTo(this, this.viewAttachmentPath);
     },
     async downloadClicked() {
       await this.loadDocument();
       this.$store.dispatch('gpMessages/setAttachmentId', this.attachmentId);
       this.$router.push({
-        name: GP_MESSAGES_DOWNLOAD_ATTACHMENT.name,
+        name: GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME,
         params: { date: this.message.sentDateTime },
       });
     },

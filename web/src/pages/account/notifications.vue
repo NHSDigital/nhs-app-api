@@ -31,16 +31,19 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import NativeApp from '@/services/native-app';
+import {
+  PRIVACY_POLICY_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'AccountNotificationsPage',
   components: {
     AnalyticsTrackedTag,
     LabelledToggle,
   },
   data() {
     return {
-      privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
+      privacyPolicyURL: PRIVACY_POLICY_URL,
     };
   },
   computed: {
@@ -63,9 +66,7 @@ export default {
     },
   },
   created() {
-    if (process.client) {
-      this.$store.dispatch('notifications/load');
-    }
+    this.$store.dispatch('notifications/load');
   },
   methods: {
     openAppSettings() {

@@ -30,7 +30,6 @@ describe('actions', () => {
         },
         dispatch: jest.fn(),
       };
-      process.client = true;
     });
 
     describe('on success', () => {
@@ -56,7 +55,7 @@ describe('actions', () => {
       });
 
       it('will not commit ADD_ERROR', () => {
-        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
+        expect(commit).not.toBeCalledWith(ADD_ERROR, expect.anything());
       });
     });
 
@@ -93,7 +92,7 @@ describe('actions', () => {
       });
 
       it('will not commit LOADED', () => {
-        expect(commit).not.toBeCalledWith(LOADED, jasmine.anything());
+        expect(commit).not.toBeCalledWith(LOADED, expect.anything());
       });
     });
   });
@@ -112,7 +111,6 @@ describe('actions', () => {
         },
         dispatch: jest.fn(),
       };
-      process.client = true;
     });
 
     describe('on success', () => {
@@ -131,31 +129,12 @@ describe('actions', () => {
       });
 
       it('will not commit ADD_ERROR', () => {
-        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
+        expect(commit).not.toBeCalledWith(ADD_ERROR, expect.anything());
       });
 
-      describe('on client', () => {
-        beforeEach(async () => {
-          that.dispatch = jest.fn();
-          process.client = true;
-          await actions.cancel.call(that, { commit }, data);
-        });
 
-        it('will dispatch `analytics/satelliteTrack``', () => {
-          expect(that.dispatch).toBeCalledWith('analytics/satelliteTrack', 'appointment_cancelled');
-        });
-      });
-
-      describe('on server', () => {
-        beforeEach(async () => {
-          that.dispatch = jest.fn();
-          process.client = false;
-          await actions.cancel.call(that, { commit }, data);
-        });
-
-        it('will not dispatch `analytics/satelliteTrack`', () => {
-          expect(that.dispatch).not.toBeCalled();
-        });
+      it('will dispatch `analytics/satelliteTrack``', () => {
+        expect(that.dispatch).toBeCalledWith('analytics/satelliteTrack', 'appointment_cancelled');
       });
     });
 

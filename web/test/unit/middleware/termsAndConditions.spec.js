@@ -1,13 +1,24 @@
 import getters from '@/store/modules/session/getters';
 import termsAndConditions from '@/middleware/termsAndConditions';
-import { APPOINTMENTS, INTERSTITIAL_REDIRECTOR, LOGOUT, REDIRECT_PARAMETER, TERMSANDCONDITIONS } from '@/lib/routes';
+import { TERMS_AND_CONDITIONS } from '@/router/routes/login';
+import { LOGOUT } from '@/router/routes/logout';
+import { APPOINTMENTS } from '@/router/routes/appointments';
+import {
+  TERMSANDCONDITIONS_NAME,
+  INDEX_NAME,
+  APPOINTMENTS_NAME,
+  REDIRECT_PARAMETER,
+  INTERSTITIAL_REDIRECTOR_NAME,
+} from '@/router/names';
 import { initialState as sessionState } from '@/store/modules/session/mutation-types';
 import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
+import * as dependency from '@/lib/utils';
 
 const { isLoggedIn } = getters;
 
 describe('middleware/termsAndConditions', () => {
-  let app;
+  let context;
+  dependency.createRouteByNameObject = jest.fn(x => ({ name: x.name, query: x.query }));
 
   beforeEach(() => {
     const state = {
@@ -15,12 +26,8 @@ describe('middleware/termsAndConditions', () => {
       termsAndConditions: termsAndConditionsState(),
     };
 
-    app = {
-      $cookies: {
-        get: jest.fn(),
-        set: jest.fn(),
-      },
-      redirect: jest.fn(),
+    context = {
+      next: jest.fn(),
       store: {
         state,
         commit: jest.fn(),
@@ -28,80 +35,97 @@ describe('middleware/termsAndConditions', () => {
         getters: {
           'session/isLoggedIn': isLoggedIn(state),
         },
+        $cookies: {
+          get: jest.fn(),
+          set: jest.fn(),
+        },
       },
-      route: {
-        ...TERMSANDCONDITIONS,
+      to: {
+        ...TERMS_AND_CONDITIONS,
         query: {},
       },
     };
-    app.store.app = app;
   });
 
   describe('is logged in', () => {
     beforeEach(() => {
-      app.store.state.session.csrfToken = 'token';
+      context.store.state.session.csrfToken = 'token';
     });
 
     describe('terms not accepted', () => {
       beforeEach(() => {
-        app.store.state.termsAndConditions.areAccepted = false;
+        context.store.state.termsAndConditions.areAccepted = false;
       });
 
       it('will check the server if the terms and conditions are not accepted on the state', async () => {
-        app.route = TERMSANDCONDITIONS;
-        await termsAndConditions(app);
-        expect(app.store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
+        context.to = TERMS_AND_CONDITIONS;
+        await termsAndConditions(context);
+        expect(context.store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
       });
 
       it('will allow logout regardless of acceptance of the terms', async () => {
-        app.route = LOGOUT;
-        await termsAndConditions(app);
-        expect(app.redirect).not.toBeCalled();
+        context.to = LOGOUT;
+        await termsAndConditions(context);
+        expect(context.next).not.toBeCalledWith(expect.anything);
+        expect(context.next).toBeCalled();
       });
 
       describe('will redirect to', () => {
         beforeEach(() => {
-          app.route = { APPOINTMENTS,
-            query: {},
-          };
+          context.to = APPOINTMENTS;
+          context.to.query = {};
         });
 
         it('terms and conditions when not accepted', async () => {
-          await termsAndConditions(app);
-          expect(app.redirect).toBeCalledWith(TERMSANDCONDITIONS.path, {});
+          await termsAndConditions(context);
+          expect(context.next).toBeCalledWith({
+            name: TERMSANDCONDITIONS_NAME,
+            query: {},
+          });
         });
 
         it('terms and conditions with redirect query param when not accepted', async () => {
-          app.route.query = { [REDIRECT_PARAMETER]: LOGOUT.name };
-          await termsAndConditions(app);
-          expect(app.redirect).toBeCalledWith(TERMSANDCONDITIONS.path,
-            { [REDIRECT_PARAMETER]: LOGOUT.name });
+          context.to.query = { [REDIRECT_PARAMETER]: LOGOUT.name };
+          await termsAndConditions(context);
+          expect(context.next).toBeCalledWith({
+            name: TERMSANDCONDITIONS_NAME,
+            query: { [REDIRECT_PARAMETER]: LOGOUT.name },
+          });
         });
       });
 
       describe('dispatch says terms have been accepted', () => {
         beforeEach(async () => {
-          app.store.dispatch = jest.fn(() => new Promise((resolve) => {
-            app.store.state.termsAndConditions.areAccepted = true;
+          context.store.dispatch = jest.fn(() => new Promise((resolve) => {
+            context.store.state.termsAndConditions.areAccepted = true;
             resolve();
           }));
         });
 
-        it('will redirect to "/"', async () => {
-          await termsAndConditions(app);
-          expect(app.redirect).toHaveBeenCalledWith('/', {});
+        it('will redirect to INDEX', async () => {
+          await termsAndConditions(context);
+          expect(context.next).toHaveBeenCalledWith({
+            name: INDEX_NAME,
+            query: {},
+          });
         });
 
         it('will redirect to query param target', async () => {
-          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name };
-          await termsAndConditions(app);
-          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME };
+          await termsAndConditions(context);
+          expect(context.next).toBeCalledWith({
+            name: APPOINTMENTS_NAME,
+            query: {},
+          });
         });
 
         it('will redirect to query parameter target and pass source parameter', async () => {
-          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name, source: 'web' };
-          await termsAndConditions(app);
-          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME, source: 'web' };
+          await termsAndConditions(context);
+          expect(context.next).toBeCalledWith({
+            name: APPOINTMENTS_NAME,
+            query: { source: 'web' },
+          });
         });
       });
     });
@@ -109,36 +133,45 @@ describe('middleware/termsAndConditions', () => {
     describe('terms accepted in state', () => {
       describe('no redirect in query string', () => {
         beforeEach(async () => {
-          app.store.state.termsAndConditions.areAccepted = true;
-          await termsAndConditions(app);
+          context.store.state.termsAndConditions.areAccepted = true;
+          await termsAndConditions(context);
         });
 
-        it('will redirect to "/"', async () => {
-          expect(app.redirect).toBeCalledWith('/', {});
+        it('will redirect to INDEX', async () => {
+          expect(context.next).toBeCalledWith({
+            name: INDEX_NAME,
+            query: {},
+          });
         });
       });
 
       describe('internal route redirect in query string', () => {
         beforeEach(async () => {
-          app.store.state.termsAndConditions.areAccepted = true;
-          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name };
-          await termsAndConditions(app);
+          context.store.state.termsAndConditions.areAccepted = true;
+          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME };
+          await termsAndConditions(context);
         });
 
         it('will redirect to target of redirect_to parameter', async () => {
-          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+          expect(context.next).toBeCalledWith({
+            name: APPOINTMENTS_NAME,
+            query: {},
+          });
         });
       });
 
       describe('external route redirect in query string', () => {
         beforeEach(async () => {
-          app.store.state.termsAndConditions.areAccepted = true;
-          app.route.query = { [REDIRECT_PARAMETER]: 'somethingelse', source: 'web' };
-          await termsAndConditions(app);
+          context.store.state.termsAndConditions.areAccepted = true;
+          context.to.query = { [REDIRECT_PARAMETER]: 'somethingelse', source: 'web' };
+          await termsAndConditions(context);
         });
 
         it('will redirect to redirector page with redirect_to parameter', async () => {
-          expect(app.redirect).toBeCalledWith(INTERSTITIAL_REDIRECTOR.path, app.route.query);
+          expect(context.next).toBeCalledWith({
+            name: INTERSTITIAL_REDIRECTOR_NAME,
+            query: context.to.query,
+          });
         });
       });
     });

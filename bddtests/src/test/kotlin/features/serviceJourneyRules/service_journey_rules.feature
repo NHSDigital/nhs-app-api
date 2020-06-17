@@ -50,15 +50,15 @@ Feature: Service Journey Rules Frontend
     When I retrieve the 'Informatica Appointments' page directly
     Then I am redirected to the 'GP at Hand Appointments' page
 
-  Scenario: A user with medical record configured to Im1 navigates directly to GP at Hand Medical Record page and is redirected to the Health Record Hub page
+  Scenario: A user with medical record configured to Im1 navigates directly to GP at Hand Health Record page and is redirected to the Health Record Hub page
     Given I am a EMIS user where the journey configurations are:
       | Journey        | Value |
       | medical record | im1   |
     And I am logged in
-    When I retrieve the 'GP at Hand My Record' page directly
+    When I retrieve the 'GP at Hand Health Record' page directly
     Then I am redirected to the 'health record hub' page
 
-  Scenario: A user with medical record configured to medical records v2 navigates from the navigation panel
+  Scenario: A user with medical record configured to medical records v2 navigates directly to my record v1 and is redirected to the Health Record Hub page
     Given I am a EMIS user setup to use medical record version 2
     And I am logged in
     When I retrieve the 'my record' page directly
@@ -69,8 +69,8 @@ Feature: Service Journey Rules Frontend
       | Journey        | Value    |
       | medical record | gpAtHand |
     And I am logged in
-    When I retrieve the 'My Record' page directly
-    Then I am redirected to the 'GP at Hand My Record' page
+    When I retrieve the 'Gp Medical Record' page directly
+    Then I am redirected to the 'GP at Hand Health Record' page
 
   Scenario: A user with prescriptions configured to Im1 navigates directly to GP at Hand Prescriptions page and is redirected to the Im1 Prescriptions page
     Given I am a EMIS user where the journey configurations are:

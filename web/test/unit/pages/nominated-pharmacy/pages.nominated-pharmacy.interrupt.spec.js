@@ -1,8 +1,8 @@
-import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyInterrupt from '@/pages/nominated-pharmacy/interrupt';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_PATH, NOMINATED_PHARMACY_CHECK_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -30,6 +30,9 @@ describe('nominated pharmacy not found', () => {
   describe('interrupt page', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+      };
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button');
     });
@@ -49,7 +52,10 @@ describe('nominated pharmacy not found', () => {
   describe('nominated pharmacy not found', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+        'nominatedPharmacy/hasNoNominatedPharmacy': true,
+      };
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button');
       nominatedPharmacyFoundWarning = wrapper.find('#nominated-pharmacy-prescriptions-warning');
@@ -66,7 +72,10 @@ describe('nominated pharmacy not found', () => {
   describe('nominated pharmacy found', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
+      $store.getters = {
+        'nominatedPharmacy/nominatedPharmacyEnabled': true,
+        'nominatedPharmacy/hasNoNominatedPharmacy': false,
+      };
       dependency.redirectTo = jest.fn();
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button');
@@ -112,7 +121,7 @@ describe('nominated pharmacy not found', () => {
 
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_PATH);
       });
 
       it('will navigate to prescriptions page when clicked if prescriptions has been set in the store', () => {
@@ -122,7 +131,7 @@ describe('nominated pharmacy not found', () => {
 
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
       });
 
       it('will navigate to prescriptions page when clicked if InterruptBackTo has not been set', () => {
@@ -132,7 +141,7 @@ describe('nominated pharmacy not found', () => {
 
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
       });
 
       it('will navigate to check page when clicked if check is set in the store', () => {
@@ -142,7 +151,7 @@ describe('nominated pharmacy not found', () => {
 
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK_PATH);
       });
     });
   });

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { ORGAN_DONATION_AMEND } from '@/lib/routes';
+import { ORGAN_DONATION_AMEND_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -17,7 +17,7 @@ export default {
   methods: {
     amendDecision() {
       this.$store.dispatch('organDonation/amendStart');
-      redirectTo(this, ORGAN_DONATION_AMEND.path);
+      redirectTo(this, ORGAN_DONATION_AMEND_PATH);
     },
   },
 };

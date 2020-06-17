@@ -84,12 +84,19 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION, ORGAN_DONATION_AMEND } from '@/lib/routes';
+import {
+  INDEX_PATH,
+  ORGAN_DONATION_PATH,
+  ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
+  ORGAN_DONATION_AMEND_PATH,
+} from '@/router/paths';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 import { redirectTo } from '@/lib/utils';
+import {
+  ORGAN_DONATION_LAW_CHANGE_URL,
+} from '@/router/externalLinks';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     ErrorGroup,
@@ -103,7 +110,7 @@ export default {
   data() {
     return {
       hasTriedToContinue: false,
-      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
+      lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
       reasonId: get('organDonation.withdrawReasonId')(this.$store.state),
     };
   },
@@ -118,17 +125,17 @@ export default {
       return (this.hasTriedToContinue && !this.reasonId);
     },
   },
-  fetch({ redirect, route, store }) {
-    if (!isNativeApp({ route, store })) {
-      redirect(INDEX.path);
-    } else if (!store.state.organDonation.isWithdrawing) {
-      redirect(ORGAN_DONATION.path);
+  mounted() {
+    if (!isNativeApp({ route: this.$route, store: this.$store })) {
+      redirectTo(this, INDEX_PATH);
+    } else if (!this.$store.state.organDonation.isWithdrawing) {
+      redirectTo(this, ORGAN_DONATION_PATH);
     }
   },
   methods: {
     amendDecision() {
       this.$store.dispatch('organDonation/amendStart');
-      redirectTo(this, ORGAN_DONATION_AMEND.path);
+      redirectTo(this, ORGAN_DONATION_AMEND_PATH);
     },
     continueClicked() {
       this.hasTriedToContinue = true;
@@ -139,11 +146,11 @@ export default {
       }
 
       this.$store.dispatch('organDonation/setWithdrawReasonId', this.reasonId);
-      this.$router.push(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
+      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
     },
     goBack() {
       this.$store.dispatch('organDonation/withdrawCancel');
-      this.$router.push(ORGAN_DONATION.path);
+      redirectTo(this, ORGAN_DONATION_PATH);
     },
   },
 };

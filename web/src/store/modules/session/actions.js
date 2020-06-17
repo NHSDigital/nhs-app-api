@@ -1,5 +1,6 @@
 import NativeCallbacks from '@/services/native-app';
 import { setCookie } from '@/lib/cookie-manager';
+import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import {
   CLEAR,
   INIT,
@@ -14,7 +15,6 @@ import {
   HIDE_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
 } from './mutation-types';
-import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
 export default {
   init:
@@ -63,24 +63,18 @@ export default {
     return Promise.resolve();
   },
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
-    if (process.client || !this.app.context.res.locals.LastCalledAtUpdated) {
-      if (process.server) {
-        this.app.context.res.locals.LastCalledAtUpdated = true;
-      }
+    const session = this.$cookies.get('nhso.session');
 
-      const session = this.app.$cookies.get('nhso.session');
-
-      if (session) {
-        session.lastCalledAt = lastCalledAt;
-        setCookie({
-          key: 'nhso.session',
-          value: session,
-          cookies: this.app.$cookies,
-          options: {
-            secure: this.app.$env.SECURE_COOKIES,
-          },
-        });
-      }
+    if (session) {
+      session.lastCalledAt = lastCalledAt;
+      setCookie({
+        key: 'nhso.session',
+        value: session,
+        cookies: this.$cookies,
+        options: {
+          secure: this.$env.SECURE_COOKIES,
+        },
+      });
     }
 
     commit(SET_LAST_CALLED_AT, lastCalledAt);
@@ -104,16 +98,16 @@ export default {
     setCookie({
       key: 'nhso.session',
       value,
-      cookies: this.app.$cookies,
+      cookies: this.$cookies,
       options: {
-        secure: this.app.$env.SECURE_COOKIES,
+        secure: this.$env.SECURE_COOKIES,
       },
     });
 
     commit(SET_INFO, info);
   },
   startValidationChecking({ getters, commit, dispatch, state }) {
-    if (process.server || !getters.isLoggedIn() || state.validationInterval) return;
+    if (!getters.isLoggedIn() || state.validationInterval) return;
 
     const interval = setInterval(() => {
       dispatch('validate');
@@ -129,8 +123,8 @@ export default {
   validate({ getters, state, commit }) {
     if (getters.isLoggedIn()) {
       if (getters.isValid()) {
-        if (process.client && !state.showSessionExpiring
-            && getters.isExpiring(this.app.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
+        if (!state.showSessionExpiring
+            && getters.isExpiring(this.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
           commit(SHOW_SESSION_EXPIRING);
 
           if (window.nativeApp) {

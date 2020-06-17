@@ -45,12 +45,12 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import {
-  NOMINATED_PHARMACY_SEARCH,
-  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
-  NOMINATED_PHARMACY_CONFIRM,
-  PRESCRIPTIONS,
-  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
-} from '@/lib/routes';
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH,
+  NOMINATED_PHARMACY_CONFIRM_PATH,
+  PRESCRIPTIONS_PATH,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import MenuItem from '@/components/MenuItem';
@@ -93,26 +93,26 @@ export default {
   computed: {
     previousPagePath() {
       if (this.isHighStreetSearch) {
-        return NOMINATED_PHARMACY_SEARCH.path;
+        return NOMINATED_PHARMACY_SEARCH_PATH;
       }
       if (this.isOnlineWithSearch) {
-        return NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path;
+        return NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH;
       }
-      return NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path;
+      return NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH;
     },
     searchNominatedPharmacyPath() {
-      return NOMINATED_PHARMACY_SEARCH.path;
+      return NOMINATED_PHARMACY_SEARCH_PATH;
     },
   },
   mounted() {
     if (this.isHighStreetSearch && !this.searchQuery) {
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH_PATH);
     }
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']
         || !this.$store.state.nominatedPharmacy.chosenType) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {
@@ -128,7 +128,7 @@ export default {
     },
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);
-      redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path);
+      redirectTo(this, NOMINATED_PHARMACY_CONFIRM_PATH);
     },
     backButtonClicked() {
       redirectTo(this, this.previousPagePath);

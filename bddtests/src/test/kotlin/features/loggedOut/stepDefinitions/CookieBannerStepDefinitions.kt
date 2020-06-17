@@ -1,6 +1,5 @@
 package features.loggedOut.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -99,8 +98,7 @@ class CookieBannerStepDefinitions {
     @Then("^pages ($WILL|$WILL_NOT) display the cookie banner$")
     fun pagesWillNotDisplayTheCookieBanner(visibility: String, urls: List<String>) {
         for (url in urls) {
-            val fullUrl = Config.instance.url + url
-            browserSteps.browseTo(fullUrl)
+            browserSteps.browseViaHttpGet(url)
             when (visibility) {
                 WILL -> cookieBanner.cookieBannerText1.assertIsVisible()
                 WILL_NOT -> cookieBanner.cookieBannerText1.assertElementNotPresent()

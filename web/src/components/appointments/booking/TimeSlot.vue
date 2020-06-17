@@ -3,7 +3,7 @@
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
     @keypress.enter="select">
-    <a :href="createLink()" @click.prevent="select">
+    <a :href="appointmentConfirmationPath" @click.prevent="select">
       <span >
         <span :class="$style.strong"
               data-label="start time"
@@ -21,11 +21,9 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import DateProvider from '@/services/DateProvider';
 import TabFocusMixin from '@/components/widgets/TabFocusMixin';
-import { createUri } from '@/lib/noJs';
-import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
+import { APPOINTMENT_CONFIRMATIONS_PATH } from '@/router/paths';
 
 export default {
   name: 'TimeSlot',
@@ -40,6 +38,7 @@ export default {
   data() {
     return {
       isSelected: false,
+      appointmentConfirmationPath: APPOINTMENT_CONFIRMATIONS_PATH,
     };
   },
   computed: {
@@ -48,19 +47,6 @@ export default {
     },
   },
   methods: {
-    createLink() {
-      const noJs = {
-        availableAppointments: {
-          bookingReasonNecessity: this.$store.state.availableAppointments.bookingReasonNecessity,
-          selectedSlot: this.timeSlot,
-        },
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
-
-      return createUri({ path: APPOINTMENT_CONFIRMATIONS.path, noJs });
-    },
     formatTime: dateTime => DateProvider.create(dateTime).format('h:mma'),
     select() {
       this.isSelected = true;

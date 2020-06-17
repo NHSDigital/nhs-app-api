@@ -13,7 +13,8 @@
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
-import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, PRESCRIPTIONS } from '@/lib/routes';
+import { APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
+import { APPOINTMENTS_NAME, PRESCRIPTIONS_NAME } from '@/router/names';
 
 export default {
   name: 'HeaderCompanionButton',
@@ -22,11 +23,11 @@ export default {
   },
   data() {
     const buttonData = {};
-    buttonData[APPOINTMENTS.name] = {
+    buttonData[APPOINTMENTS_NAME] = {
       text: `${this.$t('appointments.index.bookButtonText')}`,
       formData: {},
     };
-    buttonData[PRESCRIPTIONS.name] = {
+    buttonData[PRESCRIPTIONS_NAME] = {
       text: `${this.$t('rp01.orderPrescriptionButton')}`,
       formData: {},
     };
@@ -37,7 +38,7 @@ export default {
   computed: {
     activeButton() {
       const activeButtonData = this.buttonData[this.$route.name];
-      if (activeButtonData && this.$route.name === APPOINTMENTS.name) {
+      if (activeButtonData && this.$route.name === APPOINTMENTS_NAME) {
         activeButtonData.formData.myAppointments = {
           disableCancellation: this.$store.state.myAppointments.disableCancellation,
         };
@@ -51,10 +52,10 @@ export default {
       return this.$store.getters['errors/showApiError'];
     },
     path() {
-      if (this.$route.name === APPOINTMENTS.name) {
-        return APPOINTMENT_BOOKING_GUIDANCE.path;
+      if (this.$route.name === APPOINTMENTS_NAME) {
+        return APPOINTMENT_BOOKING_GUIDANCE_PATH;
       }
-      if (this.$route.name === PRESCRIPTIONS.name) {
+      if (this.$route.name === PRESCRIPTIONS_NAME) {
         return GetNavigationPathFromPrescriptions(this.$store);
       }
       return '';

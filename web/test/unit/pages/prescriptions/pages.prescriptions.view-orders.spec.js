@@ -68,93 +68,18 @@ const createViewOrdersPrescriptionsPage = ($store) => {
       },
       showTemplate: () => true,
     },
-    stubs: {
-      'nuxt-link': '<a>Back</a>',
-    },
   });
 };
 
 describe('prescriptions/view-orders.vue -', () => {
-  describe('fetch (server)', () => {
-    beforeEach(() => {
-      process.server = false;
-      process.client = true;
-    });
-    it('will clear and load the prescriptions and will clear and load nominated pharmacy when enabled via sjr and nominated pharamcy is not already loaded', async () => {
-      const $store = createStore(true);
-      $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
-      $store.state.nominatedPharmacy.hasLoaded = false;
-      jest.spyOn($store, 'dispatch');
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
-
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('nominatedPharmacy/load');
-    });
-
-    it('will clear and load prescriptions, '
-      + 'but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
-      const $store = createStore(true);
-      $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
-      $store.state.nominatedPharmacy.hasLoaded = true;
-      jest.spyOn($store, 'dispatch');
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
-
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch)
-        .not
-        .toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch)
-        .not
-        .toHaveBeenCalledWith('nominatedPharmacy/load');
-    });
-
-    it('will clear and load prescriptions, '
-      + 'but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
-      const $store = createStore(true);
-      jest.spyOn($store, 'dispatch');
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
-
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('prescriptions/load');
-      expect($store.dispatch)
-        .not
-        .toHaveBeenCalledWith('nominatedPharmacy/clear');
-      expect($store.dispatch)
-        .not
-        .toHaveBeenCalledWith('nominatedPharmacy/load');
-    });
-  });
-
-  describe('fetch (client)', () => {
-    beforeEach(() => {
-      process.server = false;
-      process.client = true;
-    });
+  describe('page load', () => {
     it('will clear and load the prescriptions and will clear and load nominated pharmacy when enabled via sjr and is not already loaded', async () => {
       const $store = createStore(true);
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = false;
       jest.spyOn($store, 'dispatch');
 
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
+      await createViewOrdersPrescriptionsPage($store);
 
       expect($store.dispatch)
         .toHaveBeenCalledWith('prescriptions/clear');
@@ -172,8 +97,7 @@ describe('prescriptions/view-orders.vue -', () => {
       $store.state.nominatedPharmacy.hasLoaded = true;
       jest.spyOn($store, 'dispatch');
 
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
+      createViewOrdersPrescriptionsPage($store);
 
       expect($store.dispatch)
         .toHaveBeenCalledWith('prescriptions/clear');
@@ -191,8 +115,7 @@ describe('prescriptions/view-orders.vue -', () => {
       const $store = createStore(true);
       jest.spyOn($store, 'dispatch');
 
-      const page = createViewOrdersPrescriptionsPage($store);
-      await page.vm.$options.fetch({ store: $store });
+      createViewOrdersPrescriptionsPage($store);
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');

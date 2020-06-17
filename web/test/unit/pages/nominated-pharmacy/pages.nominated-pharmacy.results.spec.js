@@ -2,14 +2,14 @@
 import NominatedPharmacySearchResults from '@/pages/nominated-pharmacy/results';
 import * as dependency from '@/lib/utils';
 import { createLocalVue } from '@vue/test-utils';
-import { create$T, createStore, mount } from '../../helpers';
 import {
-  PRESCRIPTIONS,
-  NOMINATED_PHARMACY_SEARCH,
-  NOMINATED_PHARMACY_CONFIRM,
-  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
-} from '@/lib/routes';
+  PRESCRIPTIONS_PATH,
+  NOMINATED_PHARMACY_SEARCH_PATH,
+  NOMINATED_PHARMACY_CONFIRM_PATH,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
+} from '@/router/paths';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $tMock = create$T();
 
@@ -110,7 +110,7 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_PATH);
   });
 
   it('will not redirect to search if a search query is present', () => {
@@ -182,7 +182,7 @@ describe('nominated pharmacy search results', () => {
 
     // assert
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
   });
 
   it('will go back to the search page when the back button is clicked and the user came from high street pharmacy search', () => {
@@ -203,7 +203,7 @@ describe('nominated pharmacy search results', () => {
 
     // assert
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_PATH);
   });
 
   it('will go back to the online choices page when the back button is clicked and the user chose to see a selection of randomised online pharmacies', () => {
@@ -224,7 +224,7 @@ describe('nominated pharmacy search results', () => {
 
     // assert
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH);
   });
 
   describe('pharmacyPracticeClicked', () => {
@@ -248,7 +248,7 @@ describe('nominated pharmacy search results', () => {
       // assert
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/select', pharmacy);
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM_PATH);
     });
   });
 

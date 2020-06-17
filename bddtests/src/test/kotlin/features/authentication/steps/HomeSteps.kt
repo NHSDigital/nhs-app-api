@@ -66,7 +66,10 @@ open class HomeSteps {
     }
 
     @Step
-    fun waitForLoginToCompleteSuccessfully() {
+    fun waitForLoginToCompleteSuccessfully(waitForLoginPage: Boolean) {
+        if (waitForLoginPage) {
+            assertHeaderVisible()
+        }
         homePage.locatorMethods.assertNativeElementsLoaded(homePage.greeting)
         if (homePage.onMobile()) {
             Assert.assertEquals("Dismiss button text", "Dismiss", homePage.dismissButton.textValue.trim())

@@ -23,15 +23,15 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import {
-  GP_MESSAGES,
-  GP_MESSAGES_URGENCY,
-  GP_MESSAGES_CREATE,
-} from '@/lib/routes';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
+import {
+  GP_MESSAGES_URGENCY_PATH,
+  GP_MESSAGES_PATH,
+  GP_MESSAGES_CREATE_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesRecipientsPage',
   components: {
     DesktopGenericBackLink,
     MenuItem,
@@ -39,14 +39,14 @@ export default {
   },
   data() {
     return {
-      urgencyPath: GP_MESSAGES_URGENCY.path,
+      urgencyPath: GP_MESSAGES_URGENCY_PATH,
       messageRecipients: this.$store.state.gpMessages.messageRecipients,
     };
   },
-  fetch({ store, redirect }) {
-    const { messageRecipients } = store.state.gpMessages;
+  created() {
+    const { messageRecipients } = this.$store.state.gpMessages;
     if (!messageRecipients || isEmptyArray(messageRecipients)) {
-      redirect(GP_MESSAGES.path);
+      redirectTo(this, GP_MESSAGES_PATH);
     }
   },
   methods: {
@@ -57,7 +57,7 @@ export default {
       this.$store.dispatch('gpMessages/setSelectedRecipient',
         { id: recipient.recipientIdentifier, name: recipient.name });
       this.$store.dispatch('gpMessages/setMessageSent', false);
-      redirectTo(this, GP_MESSAGES_CREATE.path);
+      redirectTo(this, GP_MESSAGES_CREATE_PATH);
     },
   },
 };

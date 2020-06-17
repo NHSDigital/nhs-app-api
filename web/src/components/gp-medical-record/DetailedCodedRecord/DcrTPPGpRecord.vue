@@ -44,10 +44,10 @@
 import MenuItem from '@/components/MenuItem';
 import SjrIf from '@/components/SjrIf';
 import {
-  TESTRESULTS,
-  EVENTS,
-  DOCUMENTS,
-} from '@/lib/routes';
+  TESTRESULTS_PATH,
+  EVENTS_PATH,
+  DOCUMENTS_PATH,
+} from '@/router/paths';
 
 export default {
   name: 'DcrTPPGpRecord',
@@ -58,9 +58,9 @@ export default {
   data() {
     return {
       record: this.$store.state.myRecord.record,
-      testResultsPath: TESTRESULTS.path,
-      eventsPath: EVENTS.path,
-      documentsPath: DOCUMENTS.path,
+      testResultsPath: TESTRESULTS_PATH,
+      eventsPath: EVENTS_PATH,
+      documentsPath: DOCUMENTS_PATH,
     };
   },
   methods: {

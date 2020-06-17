@@ -32,12 +32,11 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
-import { LINKED_PROFILES_SUMMARY } from '@/lib/routes';
+import { LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import find from 'lodash/fp/find';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     MenuItemList,
     MenuItem,
@@ -50,7 +49,7 @@ export default {
   },
   computed: {
     linkedProfileSummaryPath() {
-      return LINKED_PROFILES_SUMMARY.path;
+      return LINKED_PROFILES_SUMMARY_PATH;
     },
   },
   methods: {

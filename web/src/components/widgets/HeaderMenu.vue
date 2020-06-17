@@ -21,7 +21,7 @@
         <a class="nhsuk-header__navigation-link" :href="symptomsPath"
            data-sid="symptoms-menu-item"
            data-purpose="symptomsPageLink"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(symptomsPath)">
           {{ $t('navigationMenu.symptomsLabel') }}
         </a>
       </li>
@@ -29,7 +29,7 @@
         <a class="nhsuk-header__navigation-link" :href="appointmentsPath"
            data-sid="appointments-menu-item"
            data-purpose="appointmentsPageLink"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(appointmentsPath)">
           {{ $t('navigationMenu.appointmentsLabel') }}
         </a>
       </li>
@@ -37,7 +37,7 @@
         <a class="nhsuk-header__navigation-link" :href="prescriptionsPath"
            data-sid="prescriptions-menu-item"
            data-purpose="prescriptionsPageLink"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(prescriptionsPath)">
           {{ $t('navigationMenu.prescriptionsLabel') }}
         </a>
       </li>
@@ -45,7 +45,7 @@
         <a class="nhsuk-header__navigation-link" :href="recordPath"
            data-sid="myrecord-menu-item"
            data-purpose="myRecordPageLink"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(recordPath)">
           {{ $t('navigationMenu.myRecordLabel') }}
         </a>
       </li>
@@ -54,21 +54,21 @@
         <a class="nhsuk-header__navigation-link" :href="morePath"
            data-sid="more-menu-item"
            data-purpose="morePageLink"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(morePath)">
           {{ $t('navigationMenu.moreLabel') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
         <a class="nhsuk-header__navigation-link" :href="accountPath"
            data-sid="account-menu-item"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(accountPath)">
           {{ $t('navigationMenu.accountLabel') }}
         </a>
       </li>
       <li :class="[$style.additionalMenuItem, 'nhsuk-header__navigation-item']">
         <a class="nhsuk-header__navigation-link" :href="logoutPath"
            data-sid="logout-menu-item"
-           @click.prevent="setMenuitemState($event)">
+           @click.prevent="setMenuitemState(logoutPath)">
           {{ $t('navigationMenu.logoutLabel') }}
         </a>
       </li>
@@ -77,7 +77,15 @@
 </template>
 
 <script>
-import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE, ACCOUNT, LOGOUT } from '@/lib/routes';
+import {
+  APPOINTMENTS_PATH,
+  MORE_PATH,
+  SYMPTOMS_PATH,
+  PRESCRIPTIONS_PATH,
+  HEALTH_RECORDS_PATH,
+  ACCOUNT_PATH,
+  LOGOUT_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -86,6 +94,36 @@ export default {
     showMiniMenuOnSmallMedia: {
       type: Boolean,
       default: false,
+    },
+  },
+  data() {
+    return {
+      symptomsPath: SYMPTOMS_PATH,
+      appointmentsPath: APPOINTMENTS_PATH,
+      prescriptionsPath: PRESCRIPTIONS_PATH,
+      recordPath: HEALTH_RECORDS_PATH,
+      morePath: MORE_PATH,
+      shouldShowMiniMenu: true,
+      accountPath: ACCOUNT_PATH,
+      logoutPath: LOGOUT_PATH,
+    };
+  },
+  computed: {
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded;
+    },
+  },
+  methods: {
+    isMenuItemSelected(menuItemIndex) {
+      return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
+    },
+    setMenuitemState(path) {
+      // this.$store.app.$analytics.trackButtonClick(a.pathname);
+      redirectTo(this, path);
+      this.closeMiniMenu();
+    },
+    closeMiniMenu() {
+      this.$store.dispatch('header/closeMiniMenu');
     },
   },
   head() {
@@ -105,41 +143,6 @@ export default {
       ],
       __dangerouslyDisableSanitizers: ['noscript'],
     };
-  },
-  data() {
-    return {
-      symptomsPath: SYMPTOMS.path,
-      appointmentsPath: APPOINTMENTS.path,
-      prescriptionsPath: PRESCRIPTIONS.path,
-      recordPath: MYRECORD.path,
-      morePath: MORE.path,
-      shouldShowMiniMenu: true,
-      accountPath: ACCOUNT.path,
-      logoutPath: LOGOUT.path,
-    };
-  },
-  computed: {
-    miniMenuExpanded() {
-      return this.$store.state.header.miniMenuExpanded;
-    },
-  },
-  methods: {
-    isMenuItemSelected(menuItemIndex) {
-      return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
-    },
-    setMenuitemState(event) {
-      const a = event.currentTarget;
-      this.$store.app.$analytics.trackButtonClick(a.pathname);
-      if (a.target === '_blank') {
-        window.open(a.href, '_blank');
-      } else {
-        redirectTo(this, a.pathname);
-      }
-      this.closeMiniMenu();
-    },
-    closeMiniMenu() {
-      this.$store.dispatch('header/closeMiniMenu');
-    },
   },
 };
 </script>

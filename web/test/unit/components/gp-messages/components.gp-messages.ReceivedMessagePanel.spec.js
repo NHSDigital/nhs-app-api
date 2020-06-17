@@ -1,6 +1,6 @@
 import ReceivedMessagePanel from '@/components/gp-messages/ReceivedMessagePanel';
-import { createStore, createRouter, create$T, shallowMount } from '../../helpers';
 import { formatInboxMessageTime, redirectTo } from '@/lib/utils';
+import { createStore, createRouter, create$T, shallowMount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
@@ -54,7 +54,7 @@ describe('Received Message Panel', () => {
   it('will navigate to the view attachment when clicked', async () => {
     await wrapper.vm.viewClicked();
     expect(store.dispatch).toBeCalledWith('documents/loadDocument', { documentIdentifier: '1', updateMetaData: true });
-    expect(redirectTo).toBeCalledWith(wrapper.vm, '/messages/gp-messages/view-attachment');
+    expect(redirectTo).toBeCalledWith(wrapper.vm, 'messages/gp-messages/view-attachment');
   });
 
   it('will navigate to the download attachment when clicked', async () => {

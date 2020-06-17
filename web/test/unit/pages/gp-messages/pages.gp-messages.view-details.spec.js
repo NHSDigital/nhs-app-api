@@ -1,11 +1,15 @@
 import Message from '@/pages/messages/gp-messages/view-details';
+import { redirectTo } from '@/lib/utils';
 import { create$T, createStore, mount } from '../../helpers';
-import * as dependency from '@/lib/utils';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('gp message details', () => {
   let wrapper;
   let store;
-  let redirect;
   let $t;
 
   const messageDetailsNoReplies = [{
@@ -229,42 +233,88 @@ describe('gp message details', () => {
   };
 
   beforeEach(() => {
-    redirect = jest.fn();
-    dependency.redirectTo = jest.fn();
+    redirectTo.mockClear();
   });
 
-  describe('fetch', () => {
-    describe('selected message id is defined', () => {
+  describe('created', () => {
+    describe('selectedId is blank string', () => {
       beforeEach(async () => {
-        mountPage({ messages: undefined, selectedId: '1' });
-        await wrapper.vm.$options.fetch({ store, redirect });
+        mountPage({ selectedId: '' });
+        await wrapper.vm.$nextTick();
       });
 
+      it('will not dispatch gpMessages/loadMessage', () => {
+        expect(store.dispatch).not.toHaveBeenCalled();
+      });
+
+      it('will redirect to /gp-messages', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages');
+      });
+    });
+
+    describe.each([
+      ['a default id for newly sent messages', '0'],
+      ['a non-default id from the GPSS', '12345678-1234-abcd-ef12-345678901234'],
+    ])('selectedId is %s (%s)', (_, id) => {
+      beforeEach(async () => {
+        mountPage({ selectedId: id });
+        await wrapper.vm.$nextTick();
+      });
+
+      it('will clear back link override', () => {
+        expect(store.dispatch).toHaveBeenCalledWith('navigation/clearBackLinkOverride');
+      });
+    });
+
+    describe('selected message id is not 0 and messags details are undefined', () => {
       it('will dispatch `gpMessages/loadMessage` with id', () => {
+        mountPage({ messages: undefined, selectedId: '1' });
         expect(store.dispatch).toBeCalledWith('gpMessages/loadMessage', { id: '1', clearApiError: true });
       });
     });
 
-    describe('selected message id is undefined', () => {
+    describe('selected message id is not 0 and message details are undefined', () => {
       beforeEach(async () => {
-        mountPage({ loaded: false });
-        await wrapper.vm.$options.fetch({ store, redirect });
+        mountPage({ messages: undefined, selectedId: '1' });
+        await wrapper.vm.$nextTick();
       });
 
-      it('will not dispatch load', () => {
-        expect(store.dispatch).not.toHaveBeenCalledWith('gpMessages/loadMessage');
+      it('will load the message details', () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/loadMessage', { id: '1', clearApiError: true });
       });
 
-      it('will redirect to /gp-messages', () => {
-        expect(redirect).toHaveBeenCalledWith('/messages/gp-messages');
+      it('will update the read status', () => {
+        expect(store.dispatch).toHaveBeenCalledWith('gpMessages/updateReadStatusAsRead');
       });
     });
-  });
 
-  describe('mounted', () => {
-    it('will dispatch update read status', () => {
-      mountPage({ messages: messageDetailsNoReplies, selectedId: '1' });
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/updateReadStatusAsRead');
+    describe.each([
+      ['selected message id is 0 and messages are undefined', '0', undefined],
+      ['selected message id is not 0 and messages are defined', 1, messageDetailsNoReplies],
+    ])('%s', (_, selectedMessageId, messages) => {
+      beforeEach(async () => {
+        mountPage({ selectedId: selectedMessageId, messages });
+        await wrapper.vm.$nextTick();
+      });
+
+      it('will not load the message', () => {
+        expect(store.dispatch).not.toHaveBeenCalledWith('gpMessages/loadMessage', expect.anything());
+      });
+
+      it('will not mark the message as read', () => {
+        expect(store.dispatch).not.toHaveBeenCalledWith('gpMessages/updateReadStatusAsRead');
+      });
+    });
+
+    describe('selected message id is not 0 and message details are undefined and update read status is not enabled', () => {
+      beforeEach(async () => {
+        mountPage({ updateEnabled: false, messages: messageDetailsNoReplies, selectedId: '1' });
+        await wrapper.vm.$nextTick();
+      });
+
+      it('will not update read status', () => {
+        expect(store.dispatch).not.toHaveBeenCalledWith('gpMessages/updateReadStatusAsRead');
+      });
     });
   });
 
@@ -331,7 +381,7 @@ describe('gp message details', () => {
     it('will go to the urgency page when the new message menu item is clicked', () => {
       mountPage({ messages: messageDetailsReadReplies, selectedId: '1', loaded: true });
       wrapper.vm.sendNewMessageClicked();
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/urgency');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/urgency');
     });
   });
 });

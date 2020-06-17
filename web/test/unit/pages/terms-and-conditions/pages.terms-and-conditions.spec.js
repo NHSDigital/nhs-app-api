@@ -1,88 +1,48 @@
 import TermsAndConditions from '@/pages/terms-and-conditions';
-import { create$T, createStore, initFilters, mount } from '../../helpers';
+import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
+
+const mountTermsAndConditions = (updatedConsentRequired = false) => (mount(TermsAndConditions, {
+  state: {
+    device: { isNativeApp: true },
+    termsAndConditions: {
+      areAccepted: updatedConsentRequired,
+      updatedConsentRequired,
+    },
+  },
+  shallow: true,
+}));
 
 describe('Terms and Conditions', () => {
-  describe('Initial Page', () => {
-    initFilters();
-
-    const $env = {};
-
-    const $state = {
-      device: {
-        isNativeApp: false,
-      },
-      termsAndConditions: {
-        areAccepted: false,
-        updatedConsentRequired: false,
-      },
-    };
-
-    describe('page title', () => {
-      let $store;
-      let $t;
-
-      beforeEach(() => {
-        $t = create$T();
-
-        $store = createStore({ state: $state });
-      });
-
-      it('will not use updated title', () => {
-        $state.device.isNativeApp = true;
-        mount(TermsAndConditions, {
-          $env,
-          $t,
-          $store,
-          $state,
-          $style: {},
-        });
-
-        expect($store.dispatch)
-          .not.toBeCalledWith('header/updateHeaderText', 'translate_termsAndConditions.title');
-      });
-    });
+  beforeEach(() => {
+    EventBus.$emit.mockClear();
   });
 
-  describe('Updated Page', () => {
-    initFilters();
-
-    const $env = {};
-
-    const $state = {
-      device: {
-        isNativeApp: false,
-      },
-      appVersion: {
-        webVersion: 'web',
-      },
-      termsAndConditions: {
-        areAccepted: true,
-        updatedConsentRequired: true,
-      },
-    };
-
-    describe('page title', () => {
-      let $store;
-      let $t;
-
+  describe('header', () => {
+    describe('updated consent not required', () => {
       beforeEach(() => {
-        $t = create$T();
-
-        $store = createStore({ state: $state });
+        mountTermsAndConditions();
       });
 
-      it('will use the updated title', () => {
-        $state.device.isNativeApp = true;
-        mount(TermsAndConditions, {
-          $env,
-          $t,
-          $store,
-          $state,
-          $style: {},
-        });
+      it('will only emit UPDATE_HEADER with the default title', () => {
+        expect(EventBus.$emit).toHaveBeenCalledTimes(1);
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'termsAndConditions.title');
+      });
+    });
 
-        expect($store.dispatch)
-          .toBeCalledWith('header/updateHeaderText', 'translate_updatedTermsAndConditions.title');
+    describe('updated consent required', () => {
+      beforeEach(() => {
+        mountTermsAndConditions(true);
+      });
+
+      it('will only emit UPDATE_HEADER with the default title', () => {
+        expect(EventBus.$emit).toHaveBeenCalledTimes(1);
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'updatedTermsAndConditions.title');
       });
     });
   });

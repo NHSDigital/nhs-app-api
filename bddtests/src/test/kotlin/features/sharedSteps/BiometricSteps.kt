@@ -27,17 +27,14 @@ open class BiometricSteps {
     @Step
     fun triggerBiometricLoginError() {
         triggerWindowDispatch(
-                "login/handleBiometricLoginFailure", ""
+                "login/handleBiometricLoginFailure", "''"
         )
     }
 
     private fun triggerWindowDispatch(event: String, arg: String) {
         val jsExecutor = genericPage.driver as JavascriptExecutor
         jsExecutor.executeScript("""
-            this.window.${'$'}nuxt.${'$'}store.dispatch(
-                "$event", 
-                $arg
-            )"""
-        )
+            window.appEvent({ event: "${event}", payload: ${arg} });
+        """.trimIndent())
     }
 }

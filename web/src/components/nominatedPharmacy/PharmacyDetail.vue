@@ -39,7 +39,7 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { PRESCRIPTIONS, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
@@ -68,7 +68,7 @@ export default {
     previousPath: {
       type: String,
       required: false,
-      default: PRESCRIPTIONS.path,
+      default: PRESCRIPTIONS_PATH,
     },
     canChangePharmacy: {
       type: Boolean,
@@ -87,7 +87,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacyInterrupt: NOMINATED_PHARMACY_INTERRUPT.path,
+      nominatedPharmacyInterrupt: NOMINATED_PHARMACY_INTERRUPT_PATH,
     };
   },
   computed: {
@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     goToNominatedPharmacyInterruptPage() {
-      redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
+      redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
     },
   },
 };

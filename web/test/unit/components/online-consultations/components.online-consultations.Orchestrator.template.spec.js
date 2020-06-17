@@ -1,7 +1,7 @@
 import Orchestrator from '@/components/online-consultations/Orchestrator';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
-import { mount, shallowMount } from '../../helpers';
 import each from 'jest-each';
+import { mount, shallowMount } from '../../helpers';
 
 jest.mock('@/services/event-bus');
 jest.mock('@/services/native-app');
@@ -21,9 +21,7 @@ const baseQuestion = type => ({
 });
 
 const store = {
-  app: {
-    $env: {},
-  },
+  $env: {},
   state: {
     device: {
       isNativeApp: true,
@@ -424,48 +422,6 @@ describe('orchestrator', () => {
           const backButton = orchestrator.find('#endMyConsultationButton');
           expect(backButton.exists()).toBe(true);
           expect(backButton.text()).toEqual('translate_onlineConsultations.orchestrator.endMyConsultationButton');
-        });
-      });
-
-      describe('nojs', () => {
-        it('will wrap question/input in a post no-js-form with a value bound to noJsState', () => {
-          // Arrange
-          store.state.onlineConsultations.question = {
-            type: 'integer',
-            text: 'no js question text',
-          };
-          const expectedNoJsState = {
-            onlineConsultations: store.state.onlineConsultations,
-          };
-
-          // Act
-          mountOrchestrator();
-
-          // Assert
-          const noJsForm = orchestrator.find('no-js-form-stub');
-          const questionComponent = noJsForm.find('question-stub');
-
-          expect(noJsForm.exists()).toBe(true);
-          expect(noJsForm.vm.value).toEqual(expectedNoJsState);
-          expect(noJsForm.vm.method).toEqual('post');
-          expect(questionComponent.exists()).toBe(true);
-          expect(questionComponent.vm.text).toEqual(store.state.onlineConsultations.question.text);
-        });
-
-        it('will wrap back button in a form with an action bound to /', () => {
-          // Arrange
-          store.state.onlineConsultations.question = {
-            type: 'integer',
-            text: 'no js question text',
-          };
-
-          // Act
-          mountOrchestrator();
-
-          // Assert
-          const backButton = orchestrator.find('generic-button-stub');
-
-          expect(backButton.exists()).toBe(true);
         });
       });
     });

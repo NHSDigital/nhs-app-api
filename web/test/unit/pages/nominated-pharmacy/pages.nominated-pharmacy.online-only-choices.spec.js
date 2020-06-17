@@ -1,12 +1,12 @@
-import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyOnlineOnlyChoices from '@/pages/nominated-pharmacy/online-only-choices';
 import RadioGroup from '@/components/RadioGroup';
 import {
-  NOMINATED_PHARMACY_DSP_INTERRUPT,
-  NOMINATED_PHARMACY_SEARCH_RESULTS,
-  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
-} from '@/lib/routes';
+  NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH,
+} from '@/router/paths';
 import * as dependency from '@/lib/utils';
+import { create$T, createStore, mount } from '../../helpers';
 
 const $t = create$T();
 
@@ -85,7 +85,7 @@ describe('nominated pharmacy online only choices page', () => {
         continueButton.trigger('click');
         expect(errorMessage.exists()).toBe(false);
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH);
       });
 
       it('will use redirect to search results when no is selected and the continue button is clicked', async () => {
@@ -98,7 +98,7 @@ describe('nominated pharmacy online only choices page', () => {
         errorMessage = wrapper.find('#error-message');
         expect(errorMessage.exists()).toBe(false);
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
       });
 
       it('will not redirect to next page in flow when a radio button has not been selected', () => {
@@ -123,7 +123,7 @@ describe('nominated pharmacy online only choices page', () => {
       it('it will go back to the dsp interrupt page', () => {
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_DSP_INTERRUPT.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_DSP_INTERRUPT_PATH);
       });
     });
 

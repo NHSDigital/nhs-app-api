@@ -17,8 +17,7 @@ Scenario: A user can go through the online consultations gp advice journey and i
   And I am in an emergency and I agree to end my consultation
   Then I see advice on what to do next
 
-Scenario: A user going through the online consultations journey accidently navigates away can use the
-modal to stay on the page and then complete their journey
+Scenario: A user going through the online consultations journey accidently navigates away can use the modal to stay on the page and then complete their journey
   Given I am logged in as a EMIS user with no linked profiles
   And I have access to online consultations gp advice journey and it is an emergency
   And I have no booked appointments for EMIS
@@ -37,8 +36,7 @@ modal to stay on the page and then complete their journey
   And I am in an emergency and I agree to end my consultation
   And I see advice on what to do next
 
-Scenario: A user going through the online consultations journey navigates away and can use the
-modal to leave the page
+Scenario: A user going through the online consultations journey navigates away and can use the modal to leave the page
   Given I am logged in as a EMIS user with no linked profiles
   And I have access to online consultations gp advice journey and it is an emergency
   And I have no booked appointments for EMIS

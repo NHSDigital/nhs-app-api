@@ -1,7 +1,7 @@
 import each from 'jest-each';
-import * as dependency from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import AppointmentsCancellingPage from '@/pages/appointments/gp-appointments/cancelling';
-import { APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
+import { APPOINTMENT_CANCELLING_SUCCESS_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
@@ -11,14 +11,11 @@ describe('cancelling.vue', () => {
   let wrapper;
   const selectedAppointmentId = 'appt-5';
 
-  const createAppointmentCancellingPage = () => mount(AppointmentsCancellingPage, {
-    $store,
-    stubs: {
-      'page-title': '<div></div>',
-    },
-  });
+  const createAppointmentCancellingPage = () => mount(AppointmentsCancellingPage, { $store });
 
   beforeEach(() => {
+    redirectTo.mockClear();
+
     $store = createStore({
       state: {
         device: {
@@ -40,7 +37,6 @@ describe('cancelling.vue', () => {
       },
     });
 
-    dependency.redirectTo = jest.fn();
     wrapper = createAppointmentCancellingPage();
   });
 
@@ -69,8 +65,7 @@ describe('cancelling.vue', () => {
       });
 
       it('will redirect to appointments cancelling success page', async () => {
-        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm,
-          APPOINTMENT_CANCELLING_SUCCESS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_CANCELLING_SUCCESS_PATH);
       });
     });
   });

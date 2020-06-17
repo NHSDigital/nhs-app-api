@@ -20,7 +20,7 @@ export default {
   computed: {
     defaultClasses() {
       return [...this.buttonClasses]
-        .map(style => (((typeof (style) !== 'string') || style.match(/^nhsuk-/g))
+        .map(style => (((typeof (style) !== 'string') || style.match(/nhsuk-/g))
           ? style : this.$style[style]));
     },
   },

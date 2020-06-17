@@ -67,12 +67,12 @@
 import MenuItem from '@/components/MenuItem';
 import SjrIf from '@/components/SjrIf';
 import {
-  TESTRESULTS,
-  IMMUNISATIONS,
-  CONSULTATIONS,
-  HEALTH_CONDITIONS,
-  DOCUMENTS,
-} from '@/lib/routes';
+  HEALTH_CONDITIONS_PATH,
+  TESTRESULTS_PATH,
+  CONSULTATIONS_PATH,
+  IMMUNISATIONS_PATH,
+  DOCUMENTS_PATH,
+} from '@/router/paths';
 
 export default {
   name: 'DcrEMISGpRecord',
@@ -83,11 +83,11 @@ export default {
   data() {
     return {
       record: this.$store.state.myRecord.record,
-      testResultsPath: TESTRESULTS.path,
-      immunisationsPath: IMMUNISATIONS.path,
-      consultationsPath: CONSULTATIONS.path,
-      healthConditionsPath: HEALTH_CONDITIONS.path,
-      documentsPath: DOCUMENTS.path,
+      testResultsPath: TESTRESULTS_PATH,
+      immunisationsPath: IMMUNISATIONS_PATH,
+      consultationsPath: CONSULTATIONS_PATH,
+      healthConditionsPath: HEALTH_CONDITIONS_PATH,
+      documentsPath: DOCUMENTS_PATH,
     };
   },
   methods: {

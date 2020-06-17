@@ -1,4 +1,4 @@
-node_modules
+**/node_modules
 Dockerfile
 src/services/nhsonlineapi.js
 src/services/v1nhsonlineapi.js
@@ -13,3 +13,6 @@ reports/
 buildscripts/
 **/.transpiled
 Makefile
+
+# vue build folder
+**/dist

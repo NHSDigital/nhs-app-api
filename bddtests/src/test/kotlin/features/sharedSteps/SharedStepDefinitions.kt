@@ -134,8 +134,17 @@ open class SharedStepDefinitions {
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
+    @Given("^I am logged in expecting to see T&Cs$")
+    fun iAmLoggedInFirstTime() {
+        doLogin(false)
+    }
+
     @Given("^I am logged in$")
     fun iAmLoggedIn() {
+        doLogin(true)
+    }
+
+    private fun doLogin(waitForLoginPage: Boolean) {
         val patient = SerenityHelpers.getPatient()
         browser.goToApp()
 
@@ -148,7 +157,7 @@ open class SharedStepDefinitions {
         cookieSteps.setInstructionsCookie("true")
 
         login.using(patient)
-        home.waitForLoginToCompleteSuccessfully()
+        home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
     }
 
     @When("^I login$")

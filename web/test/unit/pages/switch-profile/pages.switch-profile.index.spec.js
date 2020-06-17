@@ -1,7 +1,13 @@
 import SwitchProfile from '@/pages/switch-profile/index';
-import { create$T, createStore, mount } from '../../helpers';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { create$T, createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 const $t = create$T();
 
@@ -50,8 +56,8 @@ describe('switch profile page is there', () => {
     });
 
     it('updated header and title is correct', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_pageHeaders.switchProfile');
-      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.switchProfile');
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'translate_pageHeaders.switchProfile', true);
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'translate_pageTitles.switchProfile', true);
     });
 
     it('proxy users age is visible', () => {

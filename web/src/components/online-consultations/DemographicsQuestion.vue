@@ -17,8 +17,7 @@
       <div slot="question-slot" class="demographicsQuestion">
         <slot/>
       </div>
-      <no-js-form :value="noJsState" method="post">
-        <input :name="answeringDemographicsName" value="true" type="hidden">
+      <form @submit.prevent="demographicsContinueClicked">
         <generic-checkbox :key="code"
                           checkbox-id="demographics-checkbox"
                           :name="name"
@@ -40,7 +39,7 @@
                         @click.prevent="demographicsContinueClicked">
           {{ $t('onlineConsultations.orchestrator.continueButton') }}
         </generic-button>
-      </no-js-form>
+      </form>
       <desktopGenericBackLink v-if="!isNativeApp"
                               data-purpose="back-link"
                               :path="backLink"
@@ -53,26 +52,30 @@
 <script>
 import MessageDialog from '@/components/widgets/MessageDialog';
 import Question from '@/components/online-consultations/Question';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import {
-  ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
 } from '@/lib/online-consultations/constants/nojsInputNames';
-import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
+import {
+  APPOINTMENT_BOOKING_GUIDANCE_PATH,
+  APPOINTMENTS_PATH,
+} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import {
+  PRIVACY_POLICY_URL,
+  ONLINE_CONSULTATIONS_PRIVACY_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'DemographicsQuestion',
   components: {
     MessageDialog,
     Question,
-    NoJsForm,
     GenericCheckbox,
     GenericButton,
     DesktopGenericBackLink,
@@ -94,28 +97,24 @@ export default {
   data() {
     return {
       code: DEMOGRAPHICS_QUESTION_OPTION,
-      answeringDemographicsName: ANSWERING_DEMOGRAPHICS_NAME,
       name: DEMOGRAPHICS_QUESTION_NAME,
       isDemographicsAccepted: false,
-      privacyPolicyUrl: this.$store.app.$env.PRIVACY_POLICY_URL,
-      onlineConsultationsUrl: this.$store.app.$env.ONLINE_CONSULTATIONS_PRIVACY_URL,
+      privacyPolicyUrl: PRIVACY_POLICY_URL,
+      onlineConsultationsUrl: ONLINE_CONSULTATIONS_PRIVACY_URL,
     };
   },
   computed: {
-    noJsState() {
-      return {
-        onlineConsultations: this.$store.state.onlineConsultations,
-      };
-    },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
     bookingGuidancePath() {
-      return APPOINTMENT_BOOKING_GUIDANCE.path;
+      return APPOINTMENT_BOOKING_GUIDANCE_PATH;
     },
     backLink() {
-      const { previousPaths } = this.$router.history.router;
-      return previousPaths[previousPaths.length - 1];
+      // TODO: revert to using previouspaths when routing plugin moved
+      // const { previousPaths } = this.$router.history.router;
+      // return previousPaths[previousPaths.length - 1];
+      return APPOINTMENTS_PATH;
     },
   },
   methods: {

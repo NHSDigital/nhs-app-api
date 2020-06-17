@@ -68,7 +68,7 @@
 import GreenTick from '@/components/icons/GreenTick';
 import RedCross from '@/components/icons/RedCross';
 import { redirectTo } from '@/lib/utils';
-import { PRESCRIPTIONS, PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
+import { PRESCRIPTIONS_PATH, PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 
 export default {
   layout: 'nhsuk-layout',
@@ -89,12 +89,12 @@ export default {
   },
   created() {
     if (!this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {
     backToPrescriptionsClicked() {
-      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS.path);
+      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS_PATH);
     },
   },
 };

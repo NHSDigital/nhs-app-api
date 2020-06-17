@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
+import { PRESCRIPTIONS_NAME } from '@/router/names';
+import { NOMINATED_PHARMACY_CHECK_PATH, PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
-import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHECK, PRESCRIPTION_REPEAT_COURSES } from '../../../../src/lib/routes';
 
 const createHeaderCompanionButton = isValid => mount(HeaderCompanionButton, {
   $store: createStore({
@@ -19,7 +20,7 @@ const createHeaderCompanionButton = isValid => mount(HeaderCompanionButton, {
     },
   }),
   $route: {
-    name: PRESCRIPTIONS.name,
+    name: PRESCRIPTIONS_NAME,
   },
   $style: {
     headerCompanion: 'headerCompanion',
@@ -28,10 +29,10 @@ const createHeaderCompanionButton = isValid => mount(HeaderCompanionButton, {
 
 describe('HeaderCompanionButton.vue', () => {
   it('will go to nominated pharmacy check when nominated pharmacy is enabled', () => {
-    expect(createHeaderCompanionButton(true).vm.path).toEqual(NOMINATED_PHARMACY_CHECK.path);
+    expect(createHeaderCompanionButton(true).vm.path).toEqual(NOMINATED_PHARMACY_CHECK_PATH);
   });
 
   it('will go to prescriptions repeat courses when nominated pharmacy is not enabled', () => {
-    expect(createHeaderCompanionButton(false).vm.path).toEqual(PRESCRIPTION_REPEAT_COURSES.path);
+    expect(createHeaderCompanionButton(false).vm.path).toEqual(PRESCRIPTION_REPEAT_COURSES_PATH);
   });
 });

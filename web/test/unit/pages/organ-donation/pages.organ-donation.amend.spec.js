@@ -2,8 +2,14 @@ import Amend from '@/pages/organ-donation/amend';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
+import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
-import { INDEX, ORGAN_DONATION } from '@/lib/routes';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 const createState = ({ isAmending = false, isNativeApp = false } = {}) => ({
   device: {
@@ -23,68 +29,56 @@ describe('organ donation amend page', () => {
   let state;
   let wrapper;
 
-  const mountWrapper = () => mount(Amend, {
-    $router,
-    $store,
-  });
+  const mountWrapper = (options) => {
+    $router = createRouter();
+    state = createState(options);
+    $store = createStore({ state });
+
+    return mount(Amend, {
+      $router,
+      $store,
+    });
+  };
 
   beforeEach(() => {
-    $router = createRouter();
-    state = createState({ isAmending: true });
-    $store = createStore({ state });
-    wrapper = mountWrapper();
+    redirectTo.mockClear();
   });
 
-  describe('fetch', () => {
-    let redirect;
+  describe('not native', () => {
+    beforeEach(() => {
+      wrapper = mountWrapper({ isAmending: false, isNativeApp: false });
+    });
 
-    const fetch = ({ isAmending, isNativeApp } = {}) => {
-      redirect = jest.fn();
+    it('will redirect back to the home page', () => {
+      expect(redirectTo).toBeCalledWith(wrapper.vm, INDEX_PATH);
+    });
+  });
 
-      wrapper.vm.$options.fetch({
-        redirect,
-        store: createStore({
-          state: createState({ isAmending, isNativeApp }),
-        }),
-      });
-    };
-
-    describe('not native', () => {
+  describe('native', () => {
+    describe('is not amending', () => {
       beforeEach(() => {
-        fetch({ isAmending: false, isNativeApp: false });
+        wrapper = mountWrapper({ isAmending: false, isNativeApp: true });
       });
 
-      it('will redirect back to the home page', () => {
-        expect(redirect).toBeCalledWith(INDEX.path);
+      it('will redirect back to the organ donation page', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
       });
     });
 
-    describe('native', () => {
-      describe('is not amending', () => {
-        beforeEach(() => {
-          fetch({ isAmending: false, isNativeApp: true });
-        });
-
-        it('will redirect back to the organ donation page', () => {
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
-        });
+    describe('is amending', () => {
+      beforeEach(() => {
+        mountWrapper({ isAmending: true, isNativeApp: true });
       });
 
-      describe('is amending', () => {
-        beforeEach(() => {
-          fetch({ isAmending: true, isNativeApp: true });
-        });
-
-        it('will not redirect', () => {
-          expect(redirect).not.toHaveBeenCalled();
-        });
+      it('will not redirect', () => {
+        expect(redirectTo).not.toHaveBeenCalled();
       });
     });
   });
 
   describe('is amending', () => {
     beforeEach(() => {
-      state = createState({ isAmending: true });
+      wrapper = mountWrapper({ isAmending: true });
     });
 
     it('will show the "MakeDecision" component', () => {
@@ -126,7 +120,7 @@ describe('organ donation amend page', () => {
         });
 
         it('will push the organ donation page on the router', () => {
-          expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION.path);
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_PATH);
         });
       });
     });

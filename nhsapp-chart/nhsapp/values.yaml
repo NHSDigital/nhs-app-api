@@ -299,11 +299,7 @@ web:
   analyticsURL: "//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js"
   hotjarSiteId: "859152"
   dataPreferencesUrl: https://ndopapp-int1.thunderbird.service.nhs.uk/createsession
-  organDonationThrottlingUrl: https://www.organdonation.nhs.uk/
   bloodDonationUrl: https://www.blood.co.uk/
-  myRecordDocumentsEnabled: true
-  myRecordDocumentsEnabledSuppliers:
-    - "'EMIS'"
   environmentVariables:
 
 api:

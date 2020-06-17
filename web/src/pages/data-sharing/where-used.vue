@@ -53,18 +53,21 @@
 <script>
 import Contents from '@/components/data-sharing/Contents';
 import Pagination from '@/components/Pagination';
-import { DATA_SHARING_DOES_NOT_APPLY, DATA_SHARING_OVERVIEW } from '@/lib/routes';
+import {
+  DATA_SHARING_DOES_NOT_APPLY_PATH,
+  DATA_SHARING_OVERVIEW_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'DataSharingWhereUsedPage',
   components: {
     Contents,
     Pagination,
   },
   data() {
     return {
-      doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY.path,
-      overviewPath: DATA_SHARING_OVERVIEW.path,
+      doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY_PATH,
+      overviewPath: DATA_SHARING_OVERVIEW_PATH,
     };
   },
 };

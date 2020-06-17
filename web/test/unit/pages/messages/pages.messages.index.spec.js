@@ -1,6 +1,10 @@
 import each from 'jest-each';
 import Messages from '@/pages/messages/';
+import { redirectTo } from '@/lib/utils';
+import { GP_MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
 import { mount, createRouter, createStore } from '../../helpers';
+
+jest.mock('@/lib/utils');
 
 let linkElement;
 let wrapper;
@@ -43,6 +47,10 @@ const mountPage = ({
 };
 
 describe('messages page', () => {
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
+
   describe('no messaging services available', () => {
     mountPage({
       practiceIm1MessagingEnabled: false,
@@ -152,6 +160,37 @@ describe('messages page', () => {
       it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {
         expect(wrapper.find(linkElement).exists()).toBe(expectedResult);
       });
+    });
+  });
+
+  describe('navigateToGpMessages', () => {
+    it('will redirect to gp messages', () => {
+      mountPage();
+      wrapper.vm.navigateToGpMessages();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, GP_MESSAGES_PATH);
+    });
+  });
+
+  describe('navigateToAppMessages', () => {
+    it('will redirect to app messages', () => {
+      mountPage();
+      wrapper.vm.navigateToAppMessages();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+    });
+
+    it('will not set route crumb to appMessagesOnlyCrumb when not the only messages service enabled', () => {
+      mountPage();
+      wrapper.vm.navigateToAppMessages();
+      expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+    });
+
+    it('will set route crumb to appMessagesOnlyCrumb when the only messages service enabled', () => {
+      mountPage({
+        sjrIm1MessagingEnabled: false,
+        context: false,
+      });
+      wrapper.vm.navigateToAppMessages();
+      expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
     });
   });
 });

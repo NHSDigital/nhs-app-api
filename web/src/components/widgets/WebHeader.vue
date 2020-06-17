@@ -34,10 +34,14 @@ import HeaderMenu from '@/components/widgets/HeaderMenu';
 import NhsHeaderLogo from '@/components/widgets/NhsHeaderLogo';
 import SkipLink from '@/components/widgets/SkipLink';
 import {
-  ACCOUNT,
+  ACCOUNT_PATH,
+  LOGOUT_PATH,
   executeHomeNavigationRule,
-  LOGOUT,
-} from '@/lib/routes';
+} from '@/router/paths';
+import { createRoutePathObject } from '@/lib/utils';
+import {
+  HELP_AND_SUPPORT_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'WebHeader',
@@ -47,14 +51,6 @@ export default {
     HeaderMenu,
     NhsHeaderLogo,
     SkipLink,
-  },
-  head() {
-    return {
-      htmlAttrs: {
-        lang: `${this.$t('language')}`,
-      },
-      title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
-    };
   },
   props: {
     showAccountIcon: {
@@ -75,11 +71,21 @@ export default {
     },
   },
   data() {
+    const accountPath = createRoutePathObject({
+      path: ACCOUNT_PATH,
+      store: this.$store,
+    });
+
+    const logoutPath = createRoutePathObject({
+      path: LOGOUT_PATH,
+      store: this.$store,
+    });
+
     return {
-      helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
+      helpAndSupportURL: HELP_AND_SUPPORT_URL,
       links: [
-        { name: this.$t('webHeader.links.account'), value: ACCOUNT.path, id: 'account-link' },
-        { name: this.$t('webHeader.links.logout'), value: LOGOUT.path, id: 'account-logout' },
+        { name: this.$t('webHeader.links.account'), value: accountPath, id: 'account-link' },
+        { name: this.$t('webHeader.links.logout'), value: logoutPath, id: 'account-logout' },
       ],
       showMenuButton: false,
     };

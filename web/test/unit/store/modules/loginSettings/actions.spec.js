@@ -1,14 +1,17 @@
 import actions from '@/store/modules/loginSettings/actions';
-import { createRouter } from '../../../helpers';
-import { LOGIN_SETTINGS_ERROR, LOGIN_SETTINGS } from '@/lib/routes';
+import { LOGIN_SETTINGS_ERROR_PATH } from '@/router/paths';
+import { LOGIN_SETTINGS_NAME } from '@/router/names';
 import NativeCallbacks from '@/services/native-app';
 import { SET_WAITING,
   CLEAR_ERROR_CODE,
   UPDATE_REGISTRATION_STATUS,
   UPDATE_BIOMETRIC_TYPE,
   ADD_ERROR_CODE } from '@/store/modules/loginSettings/mutation-types';
+import { redirectTo } from '@/lib/utils';
+import { createRouter } from '../../../helpers';
 
 jest.mock('@/services/native-app');
+jest.mock('@/lib/utils');
 
 const mockAccessToken = 'MockAccessToken';
 
@@ -133,14 +136,20 @@ describe('loginSettings actions', () => {
     });
 
     describe('error', () => {
+      let $router;
+
+      beforeEach(() => {
+        redirectTo.mockClear();
+      });
+
       describe('10004', () => {
         let commit;
-        const deviceResponse =
-          { action: 'Deregister', outcome: 'Failed', errorCode: '10004' };
+        const deviceResponse = { action: 'Deregister', outcome: 'Failed', errorCode: '10004' };
+
         beforeEach(() => {
-          actions.$router = createRouter(LOGIN_SETTINGS.name);
-          actions.$router.push(LOGIN_SETTINGS.path);
           commit = jest.fn();
+          $router = createRouter(LOGIN_SETTINGS_NAME);
+          actions.app = { $router };
           actions.biometricCompletion({ commit }, deviceResponse);
         });
 
@@ -149,7 +158,9 @@ describe('loginSettings actions', () => {
         });
 
         it('will redirect user to the login setting error page', () => {
-          expect(actions.$router.push).toHaveBeenLastCalledWith(LOGIN_SETTINGS_ERROR.path);
+          expect(redirectTo).toHaveBeenCalledWith({
+            $router, $store: actions,
+          }, LOGIN_SETTINGS_ERROR_PATH);
         });
 
         it('will add the error code that was received', () => {
@@ -162,9 +173,9 @@ describe('loginSettings actions', () => {
         const deviceResponse =
           { action: 'Deregister', outcome: 'Failed', errorCode: '10005' };
         beforeEach(() => {
-          actions.$router = createRouter(LOGIN_SETTINGS.name);
-          actions.$router.push(LOGIN_SETTINGS.path);
           commit = jest.fn();
+          $router = createRouter(LOGIN_SETTINGS_NAME);
+          actions.app = { $router };
           actions.biometricCompletion({ commit }, deviceResponse);
         });
 
@@ -173,7 +184,9 @@ describe('loginSettings actions', () => {
         });
 
         it('will redirect user to the login setting error page', () => {
-          expect(actions.$router.push).toHaveBeenLastCalledWith(LOGIN_SETTINGS_ERROR.path);
+          expect(redirectTo).toHaveBeenCalledWith({
+            $router, $store: actions,
+          }, LOGIN_SETTINGS_ERROR_PATH);
         });
 
         it('will add the error code that was received', () => {
@@ -186,8 +199,6 @@ describe('loginSettings actions', () => {
         const deviceResponse =
           { action: 'Deregister', outcome: 'Failed', errorCode: '10006' };
         beforeEach(() => {
-          actions.$router = createRouter(LOGIN_SETTINGS.name);
-          actions.$router.push(LOGIN_SETTINGS.path);
           commit = jest.fn();
           actions.dispatch = jest.fn();
           actions.biometricCompletion({ commit }, deviceResponse);

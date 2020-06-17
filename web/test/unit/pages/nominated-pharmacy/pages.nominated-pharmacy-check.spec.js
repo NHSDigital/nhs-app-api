@@ -1,8 +1,8 @@
 import * as dependency from '@/lib/utils';
 import NominatedPharmacyCheck from '@/pages/nominated-pharmacy/check';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
+import { PRESCRIPTION_REPEAT_COURSES_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
 import { create$T, createStore, mount } from '../../helpers';
-import { PRESCRIPTION_REPEAT_COURSES, PRESCRIPTIONS } from '../../../../src/lib/routes';
 
 const $t = create$T();
 
@@ -17,6 +17,7 @@ describe('nominated pharmacy not found', () => {
       source: 'web',
     },
     nominatedPharmacy: {
+      hasLoaded: true,
       pharmacy: {
         pharmacyName: undefined,
         openingTimesFormatted: [{
@@ -36,6 +37,7 @@ describe('nominated pharmacy not found', () => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       $style = {};
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+      $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
       wrapper = mountPage();
       noNominatedPharmacyWarning = wrapper.find(NoNominatedPharmacyWarning);
     });
@@ -55,6 +57,7 @@ describe('nominated pharmacy not found', () => {
         green: 'green',
       };
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+      $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button-found');
     });
@@ -72,7 +75,7 @@ describe('nominated pharmacy not found', () => {
       dependency.redirectTo = jest.fn();
       await continueButton.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES_PATH);
     });
   });
 
@@ -82,6 +85,7 @@ describe('nominated pharmacy not found', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+      $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
       wrapper = mountPage();
       backLink = wrapper.find('#back-link').find('a');
     });
@@ -99,7 +103,7 @@ describe('nominated pharmacy not found', () => {
       dependency.redirectTo = jest.fn();
       await backLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
     });
   });
 });
@@ -133,6 +137,7 @@ describe('back button present on mobile app', () => {
       grey: 'grey',
     };
     $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
+    $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
     wrapper = mountPage();
     backButton = wrapper.find('#back-link').find('a');
   });
@@ -150,7 +155,7 @@ describe('back button present on mobile app', () => {
     dependency.redirectTo = jest.fn();
     await backButton.trigger('click');
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_PATH);
   });
 });
 
@@ -187,6 +192,7 @@ describe('community pharmacy is nominated', () => {
         green: 'green',
       };
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
+      $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button-found');
     });
@@ -204,7 +210,7 @@ describe('community pharmacy is nominated', () => {
       dependency.redirectTo = jest.fn();
       await continueButton.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES_PATH);
     });
   });
 
@@ -213,8 +219,9 @@ describe('community pharmacy is nominated', () => {
 
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      wrapper = mountPage();
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
+      $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
+      wrapper = mountPage();
       pharmacyDetails = wrapper.find('#pharmacy-details');
     });
 

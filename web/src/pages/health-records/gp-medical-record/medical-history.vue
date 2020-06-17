@@ -44,11 +44,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DesktopGenericBackLink,
@@ -59,31 +58,33 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      medicalHistory: null,
     };
   },
   computed: {
     orderedMedicalHistory() {
       return orderBy([medicalHistory => this.getStartDate(medicalHistory.startDate, '')],
-        ['desc'])(this.medicalHistory.data);
+        ['desc'])((this.medicalHistory || {}).data);
     },
     showError() {
-      return this.medicalHistory.hasErrored
+      return this.medicalHistory &&
+             (this.medicalHistory.hasErrored
              || this.medicalHistory.data.length === 0
-             || !this.medicalHistory.hasAccess;
+             || !this.medicalHistory.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (store.state.myRecord.record.supplier !== 'MICROTEST') {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (this.$store.state.myRecord.record.supplier !== 'MICROTEST') {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.medicalHistories) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.medicalHistories) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      medicalHistory: store.state.myRecord.record.medicalHistories,
-    };
+
+    this.medicalHistory = this.$store.state.myRecord.record.medicalHistories;
   },
   methods: {
     backButtonClicked() {

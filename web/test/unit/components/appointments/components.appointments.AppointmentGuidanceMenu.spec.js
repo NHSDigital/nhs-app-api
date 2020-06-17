@@ -1,11 +1,16 @@
+import each from 'jest-each';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
-import { createStore, mount, createRouter, createEvent } from '../../helpers';
-import { SYMPTOMS, APPOINTMENT_ADMIN_HELP } from '@/lib/routes';
+import {
+  SYMPTOMS_PATH,
+  APPOINTMENT_ADMIN_HELP_PATH,
+  APPOINTMENT_GP_ADVICE_PATH,
+  APPOINTMENT_BOOKING_GUIDANCE_PATH,
+} from '@/router/paths';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import { redirectTo } from '@/lib/utils';
+import { createStore, mount, createRouter } from '../../helpers';
 
-const createHttp = (rules = undefined) => ({
-  getV1PatientJourneyConfiguration: jest.fn().mockImplementation(() => Promise.resolve(rules)),
-});
+jest.mock('@/lib/utils');
 
 describe('Appointment guidance menu', () => {
   let $store;
@@ -40,6 +45,10 @@ describe('Appointment guidance menu', () => {
     return mount(AppointmentGuidanceMenu, { $store, $router });
   };
 
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
+
   describe('Main Content', () => {
     let wrapper;
     beforeEach(async () => {
@@ -54,9 +63,7 @@ describe('Appointment guidance menu', () => {
           provider: 'stubs',
         },
       };
-      const http = createHttp(mockRules);
-      const rules = await http.getV1PatientJourneyConfiguration();
-      wrapper = createWrapper(rules);
+      wrapper = createWrapper(mockRules);
     });
 
     it('will contain the correct content ', async () => {
@@ -81,113 +88,70 @@ describe('Appointment guidance menu', () => {
       const requestGPHelpButtonText = tagArray.at(2).find('a span p');
       expect(requestGPHelpButtonText.text()).toContain('translate_appointments.guidance.menuItem3.text');
     });
-
-    it('will link to the check symptoms page when check symptoms menu item clicked', () => {
-      const event = createEvent({ currentTarget: { pathname: SYMPTOMS.path } });
-      wrapper.vm.navigate(event);
-      expect($router.push).toHaveBeenCalledWith(SYMPTOMS.path);
-    });
   });
 
-  it('will hides the request admin help menu item when cdssAdmin is not enabled', async () => {
-    const mockRules = {
-      appointments: {
-        provider: '',
-      },
-      cdssAdvice: {
-        provider: 'none',
-      },
-      cdssAdmin: {
-        provider: 'none',
-      },
-    };
-    const http = createHttp(mockRules);
-    const rules = await http.getV1PatientJourneyConfiguration();
-    const wrapper = createWrapper(rules);
-    const adminMenuItem = wrapper.find('#btn_gpHelpNoAppointment');
-    expect(adminMenuItem.exists()).toBe(false);
-  });
-
-  it('will only shows the symptoms admin menu item when an undefined response is returned', async () => {
-    const http = createHttp();
-    const rules = await http.getV1PatientJourneyConfiguration();
-    const wrapper = createWrapper(rules);
-    const tagArray = wrapper.findAll(AnalyticsTrackedTag);
-    const adminMenuItem = wrapper.find('#btn_gpHelpNoAppointment');
-    const adviceMenuItem = wrapper.find('#btn_gpAdvice');
-
-    expect(tagArray.length).toBe(1);
-    expect(adminMenuItem.exists()).toBe(false);
-    expect(adviceMenuItem.exists()).toBe(false);
-  });
-
-  describe('cdssAdmin is enabled', () => {
+  describe('menu items', () => {
     let wrapper;
-    beforeEach(async () => {
-      const mockRulesResponse = {
-        appointments: {
-          provider: '',
-        },
-        cdssAdvice: {
-          provider: 'none',
-        },
-        cdssAdmin: {
-          provider: 'stubs',
-        },
-      };
-      const http = createHttp(mockRulesResponse);
-      const rules = await http.getV1PatientJourneyConfiguration();
-      wrapper = createWrapper(rules);
+
+    beforeEach(() => {
+      wrapper = createWrapper({
+        appointments: { provider: '' },
+        cdssAdvice: { provider: 'stubs' },
+        cdssAdmin: { provider: 'stubs' },
+      });
     });
 
-    it('will shows the request admin help menu item when cdssAdmin is enabled', () => {
-      const adminMenuItem = wrapper.find('#btn_gpHelpNoAppointment');
-      expect(adminMenuItem.exists()).toBe(true);
+    each([
+      ['symptoms', 'goToSymptoms', '#btn_symptoms'],
+      ['admin help', 'goToAdminHelp', '#btn_gpHelpNoAppointment'],
+      ['gp advice', 'goToGpAdvice', '#btn_gpAdvice'],
+    ]).it('will set %s clickFunc to %s', (_, clickFunc, id) => {
+      expect(wrapper.find(id).vm.clickFunc).toEqual(wrapper.vm[clickFunc]);
     });
 
-    it('will navigate to the admin help orchestrator when admin help menu item clickec', () => {
-      const event = createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } });
-      wrapper.vm.navigate(event);
+    each([
+      [SYMPTOMS_PATH, 'goToSymptoms'],
+      [APPOINTMENT_ADMIN_HELP_PATH, 'goToAdminHelp'],
+      [APPOINTMENT_GP_ADVICE_PATH, 'goToGpAdvice'],
+    ]).it('will redirect to %s when %s called', (path, method) => {
+      wrapper.vm[method]();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, path);
+    });
+
+    each([
+      [APPOINTMENT_ADMIN_HELP_PATH, 'goToAdminHelp'],
+      [APPOINTMENT_GP_ADVICE_PATH, 'goToGpAdvice'],
+    ]).it('will setup olc navigation context', (path, method) => {
+      wrapper.vm[method]();
+      expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE_PATH);
       expect($store.dispatch).toHaveBeenCalledWith('navigation/setNewMenuItem', 1);
-      expect($router.push).toHaveBeenCalledWith(APPOINTMENT_ADMIN_HELP.path);
+      expect($store.dispatch).toHaveBeenCalledWith('navigation/setBackLinkOverride', APPOINTMENT_BOOKING_GUIDANCE_PATH);
     });
   });
 
-  it('will hides the gp advice menu item when cdssAdvice is not enabled', async () => {
-    const mockRules = {
-      appointments: {
-        provider: '',
-      },
-      cdssAdvice: {
-        provider: 'none',
-      },
-      cdssAdmin: {
-        provider: 'none',
-      },
+  each([
+    ['not enabled', false],
+    ['enabled', true],
+  ]).it('will hide the admin help menu item when cdssAdmin is %s', (_, enabled) => {
+    const mockRulesResponse = {
+      appointments: { provider: '' },
+      cdssAdvice: { provider: 'none' },
+      cdssAdmin: { provider: enabled ? 'stubs' : 'none' },
     };
-    const http = createHttp(mockRules);
-    const rules = await http.getV1PatientJourneyConfiguration();
-    const wrapper = createWrapper(rules);
-    const adviceMenuItem = wrapper.find('#btn_gpAdvice');
-    expect(adviceMenuItem.exists()).toBe(false);
+    const adminMenuItem = createWrapper(mockRulesResponse).find('#btn_gpHelpNoAppointment');
+    expect(adminMenuItem.exists()).toBe(enabled);
   });
 
-  it('will shows the gp advice menu item when cdssAdvice is enabled', async () => {
+  each([
+    ['not enabled', false],
+    ['enabled', true],
+  ]).it('will hide the gp advice menu item when cdssAdvice is %s', (_, enabled) => {
     const mockRules = {
-      appointments: {
-        provider: '',
-      },
-      cdssAdvice: {
-        provider: 'stubs',
-      },
-      cdssAdmin: {
-        provider: 'none',
-      },
+      appointments: { provider: '' },
+      cdssAdvice: { provider: enabled ? 'stubs' : 'none' },
+      cdssAdmin: { provider: 'none' },
     };
-    const http = createHttp(mockRules);
-    const rules = await http.getV1PatientJourneyConfiguration();
-    const wrapper = createWrapper(rules);
-    const adviceMenuItem = wrapper.find('#btn_gpAdvice');
-    expect(adviceMenuItem.exists()).toBe(true);
+    const adviceMenuItem = createWrapper(mockRules).find('#btn_gpAdvice');
+    expect(adviceMenuItem.exists()).toBe(enabled);
   });
 });

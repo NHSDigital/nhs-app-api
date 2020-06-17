@@ -23,10 +23,11 @@ Feature: Care Information Exchange Appointments
     Then the Hospital Appointments page is displayed
     And the link to CIE View Appointments is not available on the Appointments page
 
+
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a EMIS patient
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action%26brand=cie'
+    When I navigate to the redirector page with a url of 'redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action%26brand=cie'
     Then I am redirected to the redirector page with the header 'View appointments'
     When I click the link called 'Find out more about personal health record services.' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
@@ -34,7 +35,7 @@ Feature: Care Information Exchange Appointments
   Scenario: A user navigates to an external partner site and will see a warning page
     Given I am a EMIS patient
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action%26brand=cie'
+    When I navigate to the redirector page with a url of 'redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action%26brand=cie'
     Then I am redirected to the redirector page with the header 'View appointments'
     When I click the 'Continue' button on the redirector page with a url starting with 'https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Fdiary%2FlistAppointments.action&brand=cie'
     Then I am navigated to a third party site

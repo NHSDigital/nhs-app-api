@@ -3,6 +3,9 @@ import { getType as lookupMimeType } from 'mime';
 import Mime from 'mime/Mime';
 import moment from 'moment-timezone';
 import 'url-polyfill';
+import { INDEX_PATH, EMPTY_PATH, INDEX_PATH_PARAM } from '@/router/paths';
+import NativeCallbacks from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
@@ -130,14 +133,93 @@ export const readableBytes = (bytes) => {
   return `${Number(parseFloat(bytes / 1000000).toFixed(2))}MB`;
 };
 
+export const createRouteByNameObject = ({ name, query, params, store }) => {
+  const newParams = { ...params };
+  const isLoggedIn = store.getters['session/isLoggedIn']();
+  if (isLoggedIn && store.getters['linkedAccounts/isPatientIdNotEmpty']) {
+    newParams.patientId = store.getters['linkedAccounts/getPatientId'];
+  } else {
+    delete newParams.patientId;
+  }
+  return { name, query, params: newParams };
+};
+
+export const redirectByName = ({ $router, $store }, name, query) => {
+  const { currentRoute } = $router;
+  const { params } = currentRoute;
+  if (get('currentRoute.name')($router) === name) {
+    const localQuery = !query || isEqual($router.currentRoute.query, query)
+      ? {
+        ...currentRoute.query,
+        ts: moment().unix(),
+      }
+      : query;
+
+    $router.push(createRouteByNameObject({ name, query: localQuery, params, store: $store }));
+  } else if (!query) {
+    $router.push(createRouteByNameObject({ name, params, store: $store }));
+  } else {
+    $router.push(createRouteByNameObject({ name, query, params, store: $store }));
+  }
+};
+
+const getTrimmedPath = (path) => {
+  if ((path !== INDEX_PATH) && path.length > 1 && path[0] === EMPTY_PATH) {
+    return path.substr(1);
+  }
+  return path;
+};
+
+const definePatientIdPathParams = (store) => {
+  const retObj = {
+    patientId: '',
+    paramString: `${INDEX_PATH_PARAM}${EMPTY_PATH}`,
+  };
+
+  if (store.getters['linkedAccounts/isPatientIdNotEmpty']) {
+    retObj.patientId = store.getters['linkedAccounts/getPatientId'];
+    retObj.paramString = INDEX_PATH_PARAM;
+  }
+  return retObj;
+};
+
+const getPathWithPatientIdPrefix = ({ trimmedPath, store }) => {
+  const { patientId, paramString } = definePatientIdPathParams(store);
+  let replacedPatientIdPath = INDEX_PATH.replace(paramString, patientId);
+
+  if (trimmedPath !== INDEX_PATH && trimmedPath !== EMPTY_PATH) {
+    replacedPatientIdPath = `${replacedPatientIdPath}${trimmedPath}`;
+  }
+  return replacedPatientIdPath;
+};
+
+// TODO add more unit tests here
+export const checkIfPathShouldHavePatientPrefix = ({ path, store }) => {
+  if (store.app.isNhsAppPath(path)) {
+    return path;
+  }
+  const trimmedPath = getTrimmedPath(path);
+  const completePath = getPathWithPatientIdPrefix({ trimmedPath, store });
+  return store.app.isNhsAppPath(completePath) ? trimmedPath : undefined;
+};
+
+export const createRoutePathObject = ({ path, query, store }) => {
+  let routeObject = {};
+  if (query) {
+    routeObject = { query };
+  }
+  const isLoggedIn = store.getters['session/isLoggedIn']();
+  if (!isLoggedIn) {
+    routeObject.path = path;
+  } else {
+    routeObject.path = getPathWithPatientIdPrefix({ trimmedPath: getTrimmedPath(path), store });
+  }
+  return routeObject;
+};
+
 export const redirectTo = ({ $router, $store }, path, query) => {
-  if (process.server) {
-    if (!query) {
-      $store.app.context.redirect(path);
-    } else {
-      $store.app.context.redirect(302, path, query);
-    }
-  } else if (get('currentRoute.path')($router) === path) {
+  const currentRoute = get('currentRoute.path')($router);
+  if (currentRoute !== undefined && currentRoute.endsWith(path)) {
     const localQuery = !query || isEqual($router.currentRoute.query, query)
       ? {
         ...$router.currentRoute.query,
@@ -145,11 +227,11 @@ export const redirectTo = ({ $router, $store }, path, query) => {
       }
       : query;
 
-    $router.push({ path, query: localQuery });
+    $router.push(createRoutePathObject({ path, query: localQuery, store: $store }));
   } else if (!query) {
-    $router.push(path);
+    $router.push(createRoutePathObject({ path, store: $store }));
   } else {
-    $router.push({ path, query });
+    $router.push(createRoutePathObject({ path, query, store: $store }));
   }
 };
 
@@ -205,4 +287,13 @@ export const getThirdPartyLocaleText = (thirdPartyLocales, redirectPath, feature
     return '';
   }
   return jumpOff[feature][property];
+};
+
+export const resetPageFocus = (store) => {
+  if (store.state.device.isNativeApp) {
+    NativeCallbacks.resetPageFocus();
+  }
+
+  EventBus.$emit(FOCUS_NHSAPP_ROOT);
+  window.scrollTo(0, 0);
 };

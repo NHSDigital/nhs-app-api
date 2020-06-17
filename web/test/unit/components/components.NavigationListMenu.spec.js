@@ -1,5 +1,9 @@
 import NavigationListMenu from '@/components/NavigationListMenu';
-import { mount, createStore, createRouter, createEvent } from '../helpers';
+import { redirectTo } from '@/lib/utils';
+import { HEALTH_INFORMATION_UPDATES_PATH, MESSAGES_PATH } from '@/router/paths';
+import { mount, createStore, createRouter } from '../helpers';
+
+jest.mock('@/lib/utils');
 
 let wrapper;
 let $store;
@@ -26,9 +30,6 @@ const mountAs = ({
     getters: {
       'linkedAccounts/hasLinkedAccounts': isLinkedEnabledEnabled,
       'session/isProofLevel9': isProofLevel9,
-    },
-    $env: {
-      YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com',
     },
   });
   return mount(NavigationListMenu, { $store, $router, propsData });
@@ -101,15 +102,34 @@ describe('Navigation Links ', () => {
   });
 
   describe('Messages Link', () => {
-    it('will dispatch the correct breadcrumb on message link click if only links to app messaging', () => {
-      wrapper = mountAs({ linkToAppMessages: true });
-      wrapper.vm.navigateToMessages(createEvent({ currentTarget: { pathname: '/event/path' } }));
-      expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+    describe('linkToAppMessages is true', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ linkToAppMessages: true });
+        wrapper.vm.navigateToMessages();
+      });
+
+      it('will redirect to app messages', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+      });
+
+      it('will set route crumb to appMessagesOnlyCrumb', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      });
     });
 
-    it('will not dispatch the breadrcrumb call on message link click if links to messages hub', () => {
-      wrapper.vm.navigateToMessages(createEvent({ currentTarget: { pathname: '/event/path' } }));
-      expect($store.dispatch).not.toBeCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+    describe('linkToAppMessages is false', () => {
+      beforeEach(() => {
+        wrapper = mountAs();
+        wrapper.vm.navigateToMessages();
+      });
+
+      it('will redirect to app messages', () => {
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MESSAGES_PATH);
+      });
+
+      it('will set route crumb to appMessagesOnlyCrumb', () => {
+        expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      });
     });
   });
 });

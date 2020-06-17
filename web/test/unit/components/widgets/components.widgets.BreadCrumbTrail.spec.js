@@ -1,38 +1,58 @@
 import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
-import { APPOINTMENT_BOOKING_GUIDANCE, INDEX } from '@/lib/routes';
+import { APPOINTMENT_BOOKING_GUIDANCE_NAME, INDEX_NAME } from '@/router/names';
+import { INDEX_CRUMB } from '@/breadcrumbs/general';
+import { APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB } from '@/breadcrumbs/appointments';
+import { RouterLinkStub } from '@vue/test-utils';
+import * as dependancy from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
+
+const INDEX = {
+  path: '/',
+  meta: { crumb: {} },
+  name: INDEX_NAME,
+};
+
+const BOOKING_GUIDANCE = {
+  name: APPOINTMENT_BOOKING_GUIDANCE_NAME,
+  meta: { crumb: { defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB] } },
+};
 
 describe('BreadCrumbTrail.vue', () => {
   let $router;
   let goToUrl;
+  let $store;
 
   const createBreadCrumbTrail = ({
     isNativeApp = false,
     routeName = 'some-route',
-    routesProp = [INDEX],
+    routesProp = [INDEX_CRUMB],
     csrfToken = 'some token',
     backLinkOverride = undefined,
-  } = {}) =>
-    mount(BreadCrumbTrail, {
-      $store: createStore({
-        state: {
-          navigation: { backLinkOverride },
-          device: { isNativeApp },
-          session: { csrfToken },
-          onlineConsultations: {},
-        },
-      }),
+  } = {}) => {
+    $store = createStore({
+      state: {
+        navigation: { backLinkOverride },
+        device: { isNativeApp },
+        session: { csrfToken },
+        onlineConsultations: {},
+      },
+    });
+
+    return mount(BreadCrumbTrail, {
+      $store,
       methods: { goToUrl },
-      propsData: { routes: routesProp },
+      propsData: { crumbs: routesProp },
       $style: { native: 'native' },
       $route: { name: routeName },
       $router,
-      stubs: { 'nuxt-link': '<a></a>' },
+      stubs: { 'router-link': RouterLinkStub },
     });
+  };
 
   beforeEach(() => {
     goToUrl = jest.fn();
     $router = createRouter();
+    dependancy.createRouteByNameObject = jest.fn(x => `{ name: ${x.name} }`);
   });
 
   it('will not render a breadcrumb as the user is not logged in.', () => {
@@ -55,27 +75,21 @@ describe('BreadCrumbTrail.vue', () => {
     expect(wrapper.find("nav[aria-label='Breadcrumb']")
       .exists()).toEqual(true);
 
-    expect(wrapper.find(`ol>li>a[to='${INDEX.path}']`)
-      .exists()).toEqual(true);
-
-    expect(wrapper.find(`p>a[to='${INDEX.path}']`)
-      .exists()).toEqual(true);
+    expect(dependancy.createRouteByNameObject)
+      .toHaveBeenCalledWith({ name: INDEX_NAME, params: {}, store: $store });
+    expect(wrapper.find(RouterLinkStub).props().to).toBe(`{ name: ${INDEX_NAME} }`);
   });
 
   it('will return a multiple breadcrumbs item to display.', () => {
-    const wrapper = createBreadCrumbTrail({ routesProp: [INDEX, APPOINTMENT_BOOKING_GUIDANCE] });
+    const wrapper = createBreadCrumbTrail({ routesProp: [INDEX, BOOKING_GUIDANCE] });
 
     expect(wrapper.find("nav[aria-label='Breadcrumb']")
       .exists()).toEqual(true);
 
-    expect(wrapper.find(`ol>li>a[to='${INDEX.path}']`)
-      .exists()).toEqual(true);
+    const links = wrapper.findAll(RouterLinkStub);
 
-    expect(wrapper.find(`ol>li>a[to='${APPOINTMENT_BOOKING_GUIDANCE.path}']`)
-      .exists()).toEqual(true);
-
-    expect(wrapper.find(`p>a[to='${APPOINTMENT_BOOKING_GUIDANCE.path}']`)
-      .exists()).toEqual(true);
+    expect(links.at(0).props().to).toBe(`{ name: ${INDEX_NAME} }`);
+    expect(links.at(1).props().to).toBe(`{ name: ${APPOINTMENT_BOOKING_GUIDANCE_NAME} }`);
   });
 
   describe('native', () => {
@@ -90,14 +104,14 @@ describe('BreadCrumbTrail.vue', () => {
       expect($router.goBack).toHaveBeenCalled();
     });
 
-    it('will go to route override path if configured in routes.js', () => {
+    it('will go to route override path if configured in route setup', () => {
       const wrapper = createBreadCrumbTrail({ isNativeApp: true, routeName: 'organ-donation' });
 
       const backLink = wrapper.find('#native-back-breadcrumb').find('a');
       backLink.trigger('click');
 
       expect(wrapper.vm.$route.name).toBe('organ-donation');
-      expect(goToUrl).toHaveBeenCalledWith('/more');
+      expect(goToUrl).toHaveBeenCalledWith('more');
     });
 
     it('will go to the store override path if set ' +
@@ -127,7 +141,7 @@ describe('BreadCrumbTrail.vue', () => {
       backLink.trigger('click');
 
       expect(wrapper.vm.$route.name).toBe('switch-profile');
-      expect(goToUrl).toHaveBeenCalledWith('/');
+      expect(goToUrl).toHaveBeenCalledWith('/patient/:patientId?/');
     });
 
     it('back link will exist and have the correct attributes', () => {

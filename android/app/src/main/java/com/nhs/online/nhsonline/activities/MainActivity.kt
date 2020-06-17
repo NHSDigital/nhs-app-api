@@ -324,7 +324,7 @@ class MainActivity :
                 path = resources.getString(R.string.symptomsPath)
             }
             R.id.myRecord -> {
-                path = resources.getString(R.string.myRecordPath)
+                path = resources.getString(R.string.healthRecordsPath)
             }
             R.id.more -> {
                 path = resources.getString(R.string.morePath)

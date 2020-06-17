@@ -28,6 +28,10 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import {
+  ORGAN_DONATION_SHARE_DECISION_URL,
+  ORGAN_DONATION_TELL_FAMILY_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'NextSteps',
@@ -43,8 +47,8 @@ export default {
   },
   data() {
     return {
-      shareDecisionUrl: this.$store.app.$env.ORGAN_DONATION_SHARE_DECISION_URL,
-      tellFamilyUrl: this.$store.app.$env.ORGAN_DONATION_TELL_FAMILY_URL,
+      shareDecisionUrl: ORGAN_DONATION_SHARE_DECISION_URL,
+      tellFamilyUrl: ORGAN_DONATION_TELL_FAMILY_URL,
     };
   },
 };

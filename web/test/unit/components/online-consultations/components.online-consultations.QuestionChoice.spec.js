@@ -1,8 +1,8 @@
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
 import RadioGroup from '@/components/RadioGroup';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
-import { mount } from '../../helpers';
 import each from 'jest-each';
+import { mount } from '../../helpers';
 
 describe('questionChoice compoonent', () => {
   let wrapper;

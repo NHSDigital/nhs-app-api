@@ -1,111 +1,87 @@
 <template>
-  <div v-if="showTemplate">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <sjr-if journey="onlineConsultations">
-          <appointment-guidance-menu/>
-        </sjr-if>
-        <sjr-if journey="onlineConsultations" :disabled="true">
-          <div id="info" data-purpose="info">
-            <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
-            <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li1.text') }}</p>
-            <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
-            <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li2.text') }}</p>
-            <strong>3. {{ $t('appointments.guidance.li3.header') }}</strong>
-            <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li3.text') }}</p>
-          </div>
-          <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
-                                 :destination="symptomsPath"
-                                 data-purpose="generic-button">
-            <no-js-form :action="symptomsPath" :value="formData">
-              <generic-button id="btn_check_symptoms"
-                              :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                              tabindex="0"
-                              @click="onCheckSymptomClicked">
-                {{ $t('appointments.guidance.symptomButtonText') }}
-              </generic-button>
-            </no-js-form>
-          </analytics-tracked-tag>
-        </sjr-if>
-      </div>
-    </div>
+  <div v-if="showTemplate" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <sjr-if journey="onlineConsultations">
+        <appointment-guidance-menu id="appointment-guidance-menu" />
+      </sjr-if>
 
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <no-js-form :action="appointmentBookingPath" :value="formData">
-          <generic-button
-            id="btn_appointment"
-            :button-classes="['nhsuk-button']"
-            tabindex="0"
-            @click.stop.prevent="onBookButtonClicked">
-            {{ $t('appointments.guidance.bookButtonText') }}
+      <sjr-if journey="onlineConsultations" :disabled="true">
+        <div id="info" data-purpose="info">
+          <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li1.text') }}</p>
+          <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li2.text') }}</p>
+          <strong>3. {{ $t('appointments.guidance.li3.header') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li3.text') }}</p>
+        </div>
+        <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
+                               :destination="symptomsPath"
+                               data-purpose="generic-button">
+          <generic-button id="btn_check_symptoms"
+                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                          tabindex="0"
+                          @click="onCheckSymptomClicked">
+            {{ $t('appointments.guidance.symptomButtonText') }}
           </generic-button>
-        </no-js-form>
-      </div>
-    </div>
+        </analytics-tracked-tag>
+      </sjr-if>
 
-    <div v-if="!$store.state.device.isNativeApp"
-         class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <sjr-if journey="onlineConsultations">
-          <desktopGenericBackLink :path="indexPath"
-                                  button-text="appointments.guidance.backDesktopLinkText"
-                                  @clickAndPrevent="onBackButtonClicked"/>
-        </sjr-if>
-      </div>
+      <generic-button
+        id="btn_appointment"
+        :button-classes="['nhsuk-button']"
+        tabindex="0"
+        @click="onBookButtonClicked">
+        {{ $t('appointments.guidance.bookButtonText') }}
+      </generic-button>
+
+      <sjr-if v-if="!$store.state.device.isNativeApp" journey="onlineConsultations">
+        <desktopGenericBackLink :path="indexPath"
+                                button-text="appointments.guidance.backDesktopLinkText"
+                                @clickAndPrevent="onBackButtonClicked"/>
+      </sjr-if>
     </div>
   </div>
 </template>
 
 <script>
-import { APPOINTMENT_BOOKING, GP_APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import SjrIf from '@/components/SjrIf';
+import {
+  INDEX_PATH,
+  SYMPTOMS_PATH,
+  APPOINTMENT_BOOKING_PATH,
+  GP_APPOINTMENTS_PATH,
+} from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpAppointmentsBookingGuidancePage',
   components: {
     AnalyticsTrackedTag,
     GenericButton,
-    NoJsForm,
     AppointmentGuidanceMenu,
     DesktopGenericBackLink,
     SjrIf,
   },
   data() {
     return {
-      indexPath: INDEX.path,
-      symptomsPath: SYMPTOMS.path,
+      indexPath: INDEX_PATH,
+      symptomsPath: SYMPTOMS_PATH,
     };
-  },
-  computed: {
-    appointmentBookingPath() {
-      return APPOINTMENT_BOOKING.path;
-    },
-    formData() {
-      return {
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
-    },
   },
   methods: {
     onBookButtonClicked() {
-      redirectTo(this, APPOINTMENT_BOOKING.path);
+      redirectTo(this, APPOINTMENT_BOOKING_PATH);
     },
     onCheckSymptomClicked() {
-      redirectTo(this, SYMPTOMS.path);
+      redirectTo(this, this.symptomsPath);
     },
     onBackButtonClicked() {
-      redirectTo(this, GP_APPOINTMENTS.path);
+      redirectTo(this, GP_APPOINTMENTS_PATH);
     },
   },
 };
-
 </script>

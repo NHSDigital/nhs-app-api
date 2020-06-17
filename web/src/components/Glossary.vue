@@ -9,6 +9,9 @@
 
 <script>
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
+import {
+  CLINICAL_ABBREVIATIONS_URL,
+} from '@/router/externalLinks';
 
 export default {
   name: 'Glossary',
@@ -17,7 +20,7 @@ export default {
   },
   data() {
     return {
-      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
+      glossaryLinkURL: CLINICAL_ABBREVIATIONS_URL,
     };
   },
 };

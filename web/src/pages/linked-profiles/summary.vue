@@ -36,10 +36,9 @@ import GreenTick from '@/components/icons/GreenTick';
 import RedCross from '@/components/icons/RedCross';
 import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
-import { INDEX, LINKED_PROFILES } from '@/lib/routes';
+import { INDEX_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     GreenTick,
     RedCross,
@@ -47,7 +46,7 @@ export default {
   },
   data() {
     return {
-      linkedAccount: this.$store.getters['linkedAccounts/getSelectedLinkedAccount'],
+      linkedAccount: {},
     };
   },
   computed: {
@@ -78,19 +77,16 @@ export default {
       return this.linkedAccount.showSummary;
     },
   },
-  asyncData({ store, redirect }) {
-    if (store.state.linkedAccounts.selectedLinkedAccount === null) {
-      return redirect(302, LINKED_PROFILES.path, null);
+  async mounted() {
+    if (this.$store.state.linkedAccounts.selectedLinkedAccount === null) {
+      redirectTo(this, LINKED_PROFILES_PATH);
+    } else {
+      await this.$store.dispatch(
+        'linkedAccounts/loadAccountAccessSummary',
+        this.$store.state.linkedAccounts.selectedLinkedAccount.id,
+      );
+      this.linkedAccount = this.$store.getters['linkedAccounts/getSelectedLinkedAccount'];
     }
-
-    return store.dispatch(
-      'linkedAccounts/loadAccountAccessSummary',
-      store.state.linkedAccounts.selectedLinkedAccount.id,
-    );
-  },
-  mounted() {
-    this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.linkedProfilesSummary').replace('{fullName}', this.linkedAccount.fullName));
-    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.linkedProfilesSummary').replace('{fullName}', this.linkedAccount.fullName));
   },
   beforeDestroy() {
     this.$store.dispatch('linkedAccounts/clearSelectedLinkedAccount');
@@ -98,9 +94,7 @@ export default {
   methods: {
     async switchProfileButtonClicked() {
       await this.$store.dispatch('linkedAccounts/switchProfile', this.linkedAccount);
-      await this.$store.dispatch('myRecord/clear');
-      await this.$store.dispatch('serviceJourneyRules/init');
-      redirectTo(this, INDEX.path);
+      redirectTo(this, INDEX_PATH);
     },
   },
 };

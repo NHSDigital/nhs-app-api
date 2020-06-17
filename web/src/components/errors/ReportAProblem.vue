@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      contactUsUrl: this.$store.app.$env.CONTACT_US_URL,
+      contactUsUrl: this.$store.$env.CONTACT_US_URL,
     };
   },
   computed: {

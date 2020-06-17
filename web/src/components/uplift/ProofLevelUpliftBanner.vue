@@ -24,10 +24,10 @@ export default {
   },
   computed: {
     upliftUrl() {
-      const authorisationService = new AuthorisationService(this.$store.app.$env);
+      const authorisationService = new AuthorisationService(this.$store.$env);
       const { upliftUrl } = authorisationService.generateUpliftUrl({
         isNativeApp: this.$store.state.device.isNativeApp,
-        cookies: this.$cookies,
+        cookies: this.$store.$cookies,
       });
 
       return upliftUrl;
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     async onUpliftClick() {
-      await this.$store.app.$http
+      await this.$store.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
             IntendedRelyingPartyUrl: window.location.hostname,

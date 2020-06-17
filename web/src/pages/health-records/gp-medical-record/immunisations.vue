@@ -55,11 +55,10 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DcrErrorNoAccessGpRecord,
@@ -70,33 +69,34 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      immunisations: null,
+
     };
   },
   computed: {
     orderedImmunisations() {
       return orderBy([item =>
-        this.getEffectiveDate(item.effectiveDate, '')], ['desc'])(this.immunisations.data);
+        this.getEffectiveDate(item.effectiveDate, '')], ['desc'])((this.immunisations || {}).data);
     },
     showError() {
-      return (
-        (this.immunisations || {}).hasErrored ||
-        (this.immunisations || {}).data.length === 0 ||
-        !this.immunisations.hasAccess
-      );
+      return this.immunisations &&
+        (this.immunisations.hasErrored ||
+        this.immunisations.data.length === 0 ||
+        !this.immunisations.hasAccess);
     },
   },
-  async asyncData({ store, redirect }) {
-    if (!['EMIS', 'VISION', 'MICROTEST'].includes(store.state.myRecord.record.supplier)) {
-      redirect(GP_MEDICAL_RECORD.path);
-      return {};
+  async mounted() {
+    if (!['EMIS', 'VISION', 'MICROTEST'].includes(this.$store.state.myRecord.record.supplier)) {
+      redirectTo(this, GP_MEDICAL_RECORD_PATH);
+      return;
     }
-    if (!store.state.myRecord.record.immunisations) {
-      await store.dispatch('myRecord/load');
+
+    if (!this.$store.state.myRecord.record.immunisations) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      immunisations: store.state.myRecord.record.immunisations,
-    };
+
+    this.immunisations = this.$store.state.myRecord.record.immunisations;
   },
   methods: {
     backButtonClicked() {

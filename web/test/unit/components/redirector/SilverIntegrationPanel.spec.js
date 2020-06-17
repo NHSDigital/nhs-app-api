@@ -1,5 +1,11 @@
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 describe('Silver Integration warning panel', () => {
   let wrapper;
@@ -13,13 +19,23 @@ describe('Silver Integration warning panel', () => {
         showThirdPartyWarning: true,
         url: 'http://www.url.com',
       },
-      redirectPath: 'path',
+      redirectPath: 'https://test.url.com/nhs-login/login?phrPath=/diary/listAppointments.action',
       sessionStorageName: 'sessionName',
     },
   });
 
   beforeEach(() => {
+    EventBus.$emit.mockClear();
     wrapper = mountComponent();
+  });
+
+  describe('mounted', () => {
+    it('will emit UPDATE_HEADER and UPDATE_TITLE on EventBus with third party feature name', async () => {
+      await wrapper.vm.$nextTick();
+
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'View appointments', true);
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'View appointments', true);
+    });
   });
 
   describe('button', () => {

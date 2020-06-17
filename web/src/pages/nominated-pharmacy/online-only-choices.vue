@@ -51,11 +51,11 @@ import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import { redirectTo } from '@/lib/utils';
 import {
-  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
-  NOMINATED_PHARMACY_SEARCH_RESULTS,
-  NOMINATED_PHARMACY_DSP_INTERRUPT,
-  PRESCRIPTIONS,
-} from '@/lib/routes';
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
+  NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
+  PRESCRIPTIONS_PATH,
+} from '@/router/paths';
 
 export default {
   layout: 'nhsuk-layout',
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      dspInterrupt: NOMINATED_PHARMACY_DSP_INTERRUPT.path,
+      dspInterrupt: NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
       hasTriedToContinue: false,
       onlineOnlyChoice: this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'],
       radioButtons: [
@@ -98,7 +98,7 @@ export default {
     },
   },
   created() {
-    redirectTo(this, PRESCRIPTIONS.path);
+    redirectTo(this, PRESCRIPTIONS_PATH);
   },
   methods: {
     async continueClicked() {
@@ -112,7 +112,7 @@ export default {
       this.$store.dispatch('nominatedPharmacy/setOnlineOnlyKnownOption', this.onlineOnlyChoice);
 
       if (this.onlineOnlyChoice === true) {
-        redirectTo(this, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path);
+        redirectTo(this, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH);
       } else {
         const pharmacySearchResponse = await this.getRandomOnlinePharmacies();
 
@@ -124,7 +124,7 @@ export default {
         this.$store.dispatch('nominatedPharmacy/setSearchQuery', '');
         this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
 
-        redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+        redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
       }
     },
     async getRandomOnlinePharmacies() {

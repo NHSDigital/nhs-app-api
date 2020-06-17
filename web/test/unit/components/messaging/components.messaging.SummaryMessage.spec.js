@@ -1,7 +1,7 @@
 import SummaryMessage from '@/components/messaging/SummaryMessage';
-import { createRouter, createStore, mount } from '../../helpers';
 import { formatInboxMessageTime } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
+import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 jest.mock('@/plugins/filters');

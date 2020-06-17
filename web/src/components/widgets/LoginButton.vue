@@ -1,27 +1,25 @@
 <template>
-  <form ref="loginForm"
-        :action="authoriseUrl"
-        method="get">
-    <input :value="redirectTo" type="hidden" :name="redirectName">
-    <generic-button
-      id="login-button"
-      class="nhsuk-u-margin-bottom-3"
-      :button-classes="[isLoginPage ? ['nhsuk-login', 'nhsuk-body'] : '', 'nhsuk-button',
-                        isLoginPage && $store.state.device.isNativeApp
-                          ?'button':'']"
-      type="submit"
-      data-id="login-button"
-      @click="trackLogin">
-      {{ $t(buttonText) }}
-    </generic-button>
-  </form>
+  <generic-button
+    id="login-button"
+    class="nhsuk-u-margin-bottom-3"
+    :button-classes="[isLoginPage ? ['nhsuk-login', 'nhsuk-body'] : '', 'nhsuk-button',
+                      isLoginPage && $store.state.device.isNativeApp
+                        ?'button':'']"
+    type="submit"
+    data-id="login-button"
+    @click="trackLogin">
+    {{ $t(buttonText) }}
+  </generic-button>
 </template>
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
-import { BEGINLOGIN,
+import { BEGINLOGIN_PATH } from '@/router/paths';
+import {
+  LOGIN_NAME,
+  PRE_REGISTRATION_INFORMATION_NAME,
   REDIRECT_PARAMETER,
-  LOGIN,
-  PRE_REGISTRATION_INFORMATION } from '@/lib/routes';
+} from '@/router/names';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'LoginButton',
@@ -35,24 +33,24 @@ export default {
   data() {
     return {
       isButtonDisabled: false,
-      authoriseUrl: BEGINLOGIN.path,
+      authoriseUrl: BEGINLOGIN_PATH,
       redirectTo: this.$route.query[REDIRECT_PARAMETER],
-      redirectName: REDIRECT_PARAMETER,
     };
   },
   computed: {
     isLoginPage() {
-      return this.$route.name === LOGIN.name;
+      return this.$route.name === LOGIN_NAME;
     },
   },
   methods: {
-    trackLogin() {
+    async trackLogin() {
       if (!this.isButtonDisabled) {
         this.$store.dispatch('analytics/satelliteTrack', 'login');
         this.isButtonDisabled = true;
-        if (this.$route.name === PRE_REGISTRATION_INFORMATION.name) {
-          this.$store.dispatch('preRegistrationInformation/continue');
+        if (this.$route.name === PRE_REGISTRATION_INFORMATION_NAME) {
+          await this.$store.dispatch('preRegistrationInformation/continue');
         }
+        redirectTo(this, this.authoriseUrl, this.redirectTo);
       }
     },
   },

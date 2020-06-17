@@ -13,33 +13,36 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Medicines from '@/components/gp-medical-record/SharedComponents/Medicines';
-import { MEDICINES } from '@/lib/routes';
+import { MEDICINES_PATH } from '@/router/paths';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
     Glossary,
     Medicines,
   },
+  data() {
+    return {
+      currentMedicines: null,
+    };
+  },
   computed: {
     getBackPath() {
-      return MEDICINES.path;
+      return MEDICINES_PATH;
     },
     showError() {
-      return this.currentMedicines.hasErrored
-             || (this.currentMedicines && this.currentMedicines.length === 0);
+      return this.currentMedicines &&
+        (this.currentMedicines.hasErrored || this.currentMedicines.length === 0);
     },
   },
-  async asyncData({ store }) {
-    if (!store.state.myRecord.record.medications) {
-      await store.dispatch('myRecord/load');
+  async mounted() {
+    if (!this.$store.state.myRecord.record.medications) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      currentMedicines: store.state.myRecord.record.medications.data.currentRepeatMedications,
-    };
+    this.currentMedicines =
+      this.$store.state.myRecord.record.medications.data.currentRepeatMedications;
   },
   methods: {
     backButtonClicked() {

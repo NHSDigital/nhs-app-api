@@ -1,6 +1,6 @@
-import { mount } from '../../../helpers';
-import { INDEX } from '@/lib/routes';
+import { INDEX_PATH } from '@/router/paths';
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
+import { mount } from '../../../helpers';
 
 jest.mock('@/lib/utils', () =>
 
@@ -27,9 +27,7 @@ describe('LeavingPageWarningModal.vue', () => {
           app: { $env: {} },
           $env: {},
           state: {
-            pageLeaveWarning: {
-              attemptedRedirectRoute: INDEX,
-            },
+            pageLeaveWarning: { attemptedRedirectRoute: INDEX_PATH },
           },
         },
       });
@@ -56,9 +54,7 @@ describe('LeavingPageWarningModal.vue', () => {
           app: { $env: {} },
           $env: {},
           state: {
-            pageLeaveWarning: {
-              attemptedRedirectRoute: INDEX,
-            },
+            pageLeaveWarning: { attemptedRedirectRoute: INDEX_PATH },
           },
           dispatch: jest.fn(),
         };
@@ -81,9 +77,7 @@ describe('LeavingPageWarningModal.vue', () => {
           app: { $env: {} },
           $env: {},
           state: {
-            pageLeaveWarning: {
-              attemptedRedirectRoute: INDEX,
-            },
+            pageLeaveWarning: { attemptedRedirectRoute: INDEX_PATH },
           },
           dispatch: jest.fn(),
         };

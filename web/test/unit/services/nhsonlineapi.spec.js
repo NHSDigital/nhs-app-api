@@ -90,33 +90,7 @@ describe('services/nhsonlineapi', () => {
         headers = {};
       });
 
-      describe('when process is server', () => {
-        beforeEach(() => {
-          process.server = true;
-        });
-
-        it('will read value from current request variable', () => {
-          // act
-          res.locals = {
-            nhsoRequestId: mockNhsoRequestID,
-          };
-          const api = createRequestApi();
-          request({ api, headers });
-
-          // assert
-          const headersSentInRequest = axios.mock.calls[0][0].headers;
-          expect(headersSentInRequest).not.toBeNull();
-          const nhsoRequestIdHeader = headersSentInRequest['NHSO-Request-ID'];
-          expect(nhsoRequestIdHeader).toBe(mockNhsoRequestID);
-          expect(uuid.v4).not.toHaveBeenCalled();
-        });
-      });
-
       describe('when process is client', () => {
-        beforeEach(() => {
-          process.server = false;
-        });
-
         it('will generate a unique id for the http request', () => {
           // act
           request({ headers });

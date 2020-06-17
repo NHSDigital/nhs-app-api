@@ -1,3 +1,4 @@
+import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 import {
   NOMINATED_PHARMACY_CLEAR,
   NOMINATED_PHARMACY_LOADED,
@@ -12,7 +13,6 @@ import {
   SET_INTERRUPT_BACK_TO,
   CLEAR_INTERRUPT_BACK_TO,
 } from './mutation-types';
-import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 const formatWithOpeningTimes = (pharmacyResponse) => {
   const response = Object.assign({}, pharmacyResponse);

@@ -1,10 +1,11 @@
+import * as dependency from '@/lib/utils';
 import each from 'jest-each';
 import DocumentPage from '@/pages/health-records/gp-medical-record/documents/detail/_id';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
-import { createStore, shallowMount } from '../../../helpers';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import NativeCallbacks from '@/services/native-app';
 import Glossary from '@/components/Glossary';
+import { createStore, shallowMount } from '../../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/services/native-app');
@@ -17,7 +18,7 @@ const route = {
   query: { type: 'img', name: 'query file' },
 };
 
-const mountPage = () => {
+const mountPage = async () => {
   page = shallowMount(DocumentPage, {
     $store,
     $route: route,
@@ -29,9 +30,6 @@ describe('health-records documents', () => {
   document.getElementsByName = jest.fn().mockReturnValue([dummyMetaTag]);
   beforeEach(() => {
     $store = createStore({
-      $env: {
-        CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-      },
       state: {
         documents: {
           currentDocument: {},
@@ -44,70 +42,61 @@ describe('health-records documents', () => {
     hasAgreedToMedicalWarning.mockReturnValue(true);
   });
 
-  describe('asyncData', () => {
-    const redirect = jest.fn();
+  describe('mounted', () => {
+    dependency.redirectTo = jest.fn();
 
-    beforeEach(() => redirect.mockClear());
+    beforeEach(() => {
+      dependency.redirectTo.mockClear();
+      NativeCallbacks.hideHeader.mockClear();
+      NativeCallbacks.hideMenuBar.mockClear();
+    });
 
     describe('redirect', () => {
       it('will redirect to health-records > gp-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
         hasAgreedToMedicalWarning.mockReturnValue(false);
-        await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/health-records/gp-medical-record');
+        await mountPage();
+        expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, 'health-records/gp-medical-record');
       });
       it('will load document and not redirect if toggle on and accepted terms even if type and name not set', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
-        await DocumentPage.asyncData({ redirect, route, store: $store });
-        expect(redirect).not.toHaveBeenCalled();
+        await mountPage();
+        expect(dependency.redirectTo).not.toHaveBeenCalled();
         expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', { documentIdentifier: route.params.id });
       });
-
       it('will not load document if it is already loaded', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
         $store.state.documents.currentDocument.data = 'testData';
-        await DocumentPage.asyncData({ redirect, route, store: $store });
-        expect(redirect).not.toHaveBeenCalled();
+        await mountPage();
+        expect(dependency.redirectTo).not.toHaveBeenCalled();
         expect($store.dispatch).not.toHaveBeenCalled();
+      });
+      it('will hide header and menubar if document exists', async () => {
+        $store.state.myRecord.hasAcceptedTerms = true;
+        $store.state.documents.currentDocument.data = {};
+        await mountPage();
+        expect(NativeCallbacks.hideHeader).toHaveBeenCalled();
+        expect(NativeCallbacks.hideMenuBar).toHaveBeenCalled();
+      });
+      it('will set the meta tag content so the user can zoom in', async () => {
+        $store.state.myRecord.hasAcceptedTerms = true;
+        $store.state.documents.currentDocument.data = {};
+        await mountPage();
+        expect(document.getElementsByName('viewport')[0].getAttribute('content'))
+          .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes');
+      });
+      it('will not hide header and menubar if document absent', async () => {
+        $store.state.myRecord.hasAcceptedTerms = true;
+        $store.state.documents.currentDocument.data = undefined;
+        await mountPage();
+        expect(NativeCallbacks.hideHeader).not.toHaveBeenCalled();
+        expect(NativeCallbacks.hideMenuBar).not.toHaveBeenCalled();
       });
     });
   });
   describe('computed', () => {
     it('will return the document path', () => {
       mountPage();
-      expect(page.vm.documentPath).toEqual('/health-records/gp-medical-record/documents/document-id');
-    });
-  });
-  describe('created', () => {
-    beforeEach(() => {
-      NativeCallbacks.hideHeader.mockClear();
-      NativeCallbacks.hideMenuBar.mockClear();
-    });
-    it('will hide header and menubar if document exists and on client', () => {
-      process.client = true;
-      $store.state.documents.currentDocument.data = {};
-      mountPage();
-      expect(NativeCallbacks.hideHeader).toHaveBeenCalled();
-      expect(NativeCallbacks.hideMenuBar).toHaveBeenCalled();
-    });
-    it('will set the meta tag content so the user can zoom in', () => {
-      process.client = true;
-      $store.state.documents.currentDocument.data = {};
-      mountPage();
-      expect(document.getElementsByName('viewport')[0].getAttribute('content'))
-        .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes');
-    });
-    each([{
-      client: false,
-      document: {},
-    }, {
-      client: true,
-      document: undefined,
-    }]).it('will not hide header and menubar if document absent or not on client', ({ client, document }) => {
-      process.client = client;
-      $store.state.documents.currentDocument.data = document;
-      mountPage();
-      expect(NativeCallbacks.hideHeader).not.toHaveBeenCalled();
-      expect(NativeCallbacks.hideMenuBar).not.toHaveBeenCalled();
+      expect(page.vm.documentPath).toEqual('health-records/gp-medical-record/documents/document-id');
     });
   });
   describe('methods', () => {

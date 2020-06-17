@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       open: true,
-      hotJarLinkUrl: this.$store.app.$env.HOTJAR_SURVEY_URL,
+      hotJarLinkUrl: this.$store.$env.HOTJAR_SURVEY_URL,
     };
   },
   created() {

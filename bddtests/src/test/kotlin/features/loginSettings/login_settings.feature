@@ -16,8 +16,7 @@ Feature: Biometric status update
       | Touch ID      |
       | fingerprint   |
 
-  Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device and deregister their
-  <Biometric Type>
+  Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device and deregister their <Biometric Type>
     Given I am a EMIS patient using the native app
     And I am logged in
     And I have already registered for biometrics
@@ -33,8 +32,7 @@ Feature: Biometric status update
       | Touch ID      |
       | fingerprint   |
 
-  Scenario Outline: A patient that gets an error due to an inability to find their <Biometric Type> state when changing their
-  <Biometric Type> state
+  Scenario Outline: A patient that gets an error due to an inability to find their <Biometric Type> state when changing their <Biometric Type> state
     Given I am a EMIS patient using the native app
     And I am logged in
     And I have already registered for biometrics

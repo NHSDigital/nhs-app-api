@@ -3,7 +3,7 @@
     <silver-integration-panel
       v-if="shouldShowWarning"
       :known-service="services[0]"
-      :redirect-path="redirectPath"
+      :redirect-path="redirectParameter"
       :session-storage-name="sessionStorageName"
       @click.stop.prevent="getAssertedLoginIdentityAndNavigate"
     />
@@ -12,37 +12,37 @@
 </template>
 
 <script>
-import consola from 'consola';
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
+import {
+  REDIRECT_PARAMETER,
+  REDIRECT_PAGE_PARAMETER,
+  isNhsAppRouteName,
+  findByRedirectEnum,
+} from '@/router/names';
+import {
+  INDEX_PATH,
+} from '@/router/paths';
+import {
+  getPathAndQuery,
+  getThirdPartyJumpOff,
+  redirectTo,
+  redirectByName,
+} from '@/lib/utils';
 import NativeApp from '@/services/native-app';
-import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER, INDEX, findByName, findByPage, findByPath } from '@/lib/routes';
-import { getPathAndQuery, getThirdPartyJumpOff } from '@/lib/utils';
 
 export default {
+  name: 'InterstitialRedirectorPage',
   components: {
     SilverIntegrationPanel,
-  },
-  layout(context) {
-    const redirectPath = get(REDIRECT_PARAMETER)(context.route.query);
-
-    if (redirectPath) {
-      const services = context.store.state.knownServices.knownServices
-        .filter(service => redirectPath.includes(service.url));
-
-      if (services.length > 0 && services[0].showThirdPartyWarning === true) {
-        return 'nhsuk-layout';
-      }
-    }
-    return 'nhsuk-layout-chromeless';
   },
   data() {
     return {
       showWarning: false,
       services: [],
-      redirectPath: '',
-      redirectPathAndQuery: '',
+      redirectParameter: '',
+      redirectParameterAndQuery: '',
       buttonHref: '',
       buttonDisabled: false,
       sessionStorageName: '',
@@ -54,38 +54,46 @@ export default {
       return this.showWarning && !agreedToThirdPartyWarning(this.sessionStorageName);
     },
   },
-  async mounted() {
-    this.redirectPath = get(REDIRECT_PARAMETER)(this.$route.query);
-    const redirectPage = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
+  mounted() {
+    this.redirectParameter = get(REDIRECT_PARAMETER)(this.$route.query);
+    const redirectEnum = get(REDIRECT_PAGE_PARAMETER)(this.$route.query);
 
-    let route;
+    let path;
 
-    if (this.redirectPath) {
-      route = findByName(this.redirectPath) || findByPath(this.redirectPath);
-    } else if (redirectPage) {
-      route = findByPage(redirectPage) || INDEX;
+    if (redirectEnum && findByRedirectEnum(redirectEnum)) {
+      redirectByName(this, redirectEnum);
+      return;
+    }
+    if (this.redirectParameter) {
+      if (isNhsAppRouteName(this.redirectParameter)) {
+        redirectByName(this, this.redirectParameter);
+        return;
+      }
+      if (this.$store.app.isNhsAppPath(this.redirectParameter)) {
+        path = this.redirectParameter;
+      }
     } else {
-      route = INDEX;
+      path = INDEX_PATH;
     }
 
-    if (route) {
-      this.$router.push(route.path);
+    if (path) {
+      redirectTo(this, path);
       return;
     }
 
-    this.services = await this.$store.state.knownServices.knownServices
-      .filter(service => this.redirectPath.includes(service.url));
+    this.services = this.$store.state.knownServices.knownServices
+      .filter(service => this.redirectParameter.includes(service.url));
 
     if (this.services.length > 0) {
       const matchedService = this.services[0];
       this.sessionStorageName = `agreedThirdPartyWarning_${matchedService.id}`;
-      this.redirectPathAndQuery = getPathAndQuery(this.redirectPath);
+      this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
       this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${matchedService.id}`);
       this.JumpOffId =
-        getThirdPartyJumpOff(this.thirdPartyServiceContent, this.redirectPathAndQuery).id;
+        getThirdPartyJumpOff(this.thirdPartyServiceContent, this.redirectParameterAndQuery).id;
 
       if (this.JumpOffId === undefined) {
-        this.$router.push(INDEX.path);
+        redirectTo(this, INDEX_PATH);
         return;
       }
 
@@ -94,7 +102,7 @@ export default {
         if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
           this.getAssertedLoginIdentityAndNavigate();
         } else {
-          this.navigateToExternalPath(this.redirectPath);
+          this.navigateToExternalPath(this.redirectParameter);
         }
         return;
       }
@@ -102,14 +110,14 @@ export default {
       this.showWarning = true;
       return;
     }
-    this.$router.push(INDEX.path);
+    redirectTo(this, INDEX_PATH);
   },
   methods: {
     async getAssertedLoginIdentityAndNavigate() {
       return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
-            IntendedRelyingPartyUrl: this.redirectPath,
+            IntendedRelyingPartyUrl: this.redirectParameter,
             ProviderId: this.thirdPartyServiceContent.serviceId,
             ProviderName: this.thirdPartyServiceContent.providerName,
             JumpOffId: this.JumpOffId,
@@ -118,12 +126,12 @@ export default {
         })
         .then((response) => {
           this.navigateToExternalPath(
-            this.appendAssertedLoginIdentity(this.redirectPath, response),
+            this.appendAssertedLoginIdentity(this.redirectParameter, response),
           );
         })
         .catch((error) => {
-          consola.error(new Error(`Failed to get AssertedLoginIdentity: ${error.response.status}`));
-          this.$router.push(INDEX.path);
+          this.$store.dispatch('log/onError', `Failed to get AssertedLoginIdentity: ${error.response.status}`);
+          redirectTo(this, INDEX_PATH);
         });
     },
     appendAssertedLoginIdentity(uri, response) {

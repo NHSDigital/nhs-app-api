@@ -1,6 +1,8 @@
 import BackButton from '@/components/BackButton';
+import { redirectTo } from '@/lib/utils';
 import { createRouter, mount } from '../helpers';
 
+jest.mock('@/lib/utils');
 
 const mountBackButton = ({ $router, propsData = {} }) => mount(BackButton, { $router, propsData });
 
@@ -10,6 +12,7 @@ describe('Back Button', () => {
 
   beforeEach(() => {
     $router = createRouter();
+    redirectTo.mockClear();
   });
 
   describe('no explicit path or text', () => {
@@ -40,7 +43,7 @@ describe('Back Button', () => {
 
     it('will push the explict path to the router', () => {
       wrapper.trigger('click');
-      expect($router.push).toHaveBeenCalledWith(gotoPath);
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, gotoPath);
     });
   });
 });

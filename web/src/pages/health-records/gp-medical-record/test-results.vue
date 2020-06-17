@@ -92,10 +92,9 @@ import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { redirectTo } from '@/lib/utils';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
     Card,
     DcrErrorNoAccessGpRecord,
@@ -106,7 +105,9 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: GP_MEDICAL_RECORD.path,
+      backPath: GP_MEDICAL_RECORD_PATH,
+      results: null,
+      supplier: null,
     };
   },
   computed: {
@@ -118,24 +119,21 @@ export default {
       );
     },
     showError() {
-      return (
-        (this.results || {}).hasErrored ||
-        (this.results || {}).data.length === 0 ||
-        !this.results.hasAccess
-      );
+      return this.results && (
+        this.results.hasErrored ||
+        this.results.data.length === 0 ||
+        !this.results.hasAccess);
     },
     getTotalResults() {
       return (this.results || {}).data.length > 10;
     },
   },
-  async asyncData({ store }) {
-    if (!store.state.myRecord.record.testResults) {
-      await store.dispatch('myRecord/load');
+  async mounted() {
+    if (!this.$store.state.myRecord.record.testResults) {
+      await this.$store.dispatch('myRecord/load');
     }
-    return {
-      results: store.state.myRecord.record.testResults,
-      supplier: store.state.myRecord.record.supplier,
-    };
+    this.results = this.$store.state.myRecord.record.testResults;
+    this.supplier = this.$store.state.myRecord.record.supplier;
   },
   methods: {
     activateTestResult(testResultId) {

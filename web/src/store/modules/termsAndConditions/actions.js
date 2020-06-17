@@ -20,8 +20,7 @@ export default {
   async acceptTerms({ commit }, consentTerms) {
     let analyticsCookie = false;
     if (consentTerms.consentRequest.UpdatingConsent) {
-      await this
-        .app
+      await this.app
         .$http
         .getV1PatientTermsAndConditionsConsent({})
         .then((data) => {
@@ -31,8 +30,7 @@ export default {
         })
         .catch(err => Promise.reject(err));
     } else { analyticsCookie = consentTerms.consentRequest.AnalyticsCookieAccepted; }
-    return this
-      .app
+    return this.app
       .$http
       .postV1PatientTermsAndConditionsConsent(consentTerms)
       .then(() => {
@@ -52,7 +50,7 @@ export default {
   },
   async checkAcceptance({ commit, state }) {
     const getTermsAndConditions = (termsAndConditions, property) =>
-      termsAndConditions[property] || (this.app.$cookies.get('nhso.terms') || {})[property];
+      termsAndConditions[property] || (this.$cookies.get('nhso.terms') || {})[property];
     const areAccepted = getTermsAndConditions(state, 'areAccepted');
     const updatedConsentRequired = getTermsAndConditions(state, 'updatedConsentRequired');
     const analyticsCookieAccepted = getTermsAndConditions(state, 'analyticsCookieAccepted') || false;
@@ -67,8 +65,7 @@ export default {
         consentRequired: updatedConsentRequired,
       });
     } else {
-      promise = this
-        .app
+      promise = this.app
         .$http
         .getV1PatientTermsAndConditionsConsent({})
         .then((data) => {

@@ -15,9 +15,6 @@ const exclusions = [
   '../src/components/errors/ErrorPageMixin.vue',
 ];
 
-jest.mock('@/components/widgets/HotJar', () => {
-});
-
 const importComponent = (path) => {
   try {
     // eslint-disable-next-line

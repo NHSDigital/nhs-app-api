@@ -33,10 +33,11 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
 import {
-  NOMINATED_PHARMACY_CHOOSE_TYPE,
-  NOMINATED_PHARMACY, PRESCRIPTIONS,
-  NOMINATED_PHARMACY_CHECK,
-} from '@/lib/routes';
+  NOMINATED_PHARMACY_CHOOSE_TYPE_PATH,
+  NOMINATED_PHARMACY_PATH,
+  PRESCRIPTIONS_PATH,
+  NOMINATED_PHARMACY_CHECK_PATH,
+} from '@/router/paths';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
@@ -59,13 +60,13 @@ export default {
 
       switch (backTo) {
         case InterruptBackTo.PRESCRIPTIONS:
-          return PRESCRIPTIONS.path;
+          return PRESCRIPTIONS_PATH;
         case InterruptBackTo.NOMINATED_PHARMACY_SUMMARY:
-          return NOMINATED_PHARMACY.path;
+          return NOMINATED_PHARMACY_PATH;
         case InterruptBackTo.NOMINATED_PHARMACY_CHECK:
-          return NOMINATED_PHARMACY_CHECK.path;
+          return NOMINATED_PHARMACY_CHECK_PATH;
         default:
-          return PRESCRIPTIONS.path;
+          return PRESCRIPTIONS_PATH;
       }
     },
   },
@@ -73,12 +74,12 @@ export default {
     this.$store.dispatch('nominatedPharmacy/clearSearchJourney');
 
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_PATH);
     }
   },
   methods: {
     continueButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
+      redirectTo(this, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH);
     },
     backButtonClicked() {
       redirectTo(this, this.previousPagePath);

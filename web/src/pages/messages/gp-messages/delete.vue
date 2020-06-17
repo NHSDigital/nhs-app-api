@@ -10,7 +10,9 @@
         {{ $t('gp_messages.delete.secondParagraph') }}
       </p>
       <generic-button id="deleteButton"
-                      :class="[$style['nhsuk-button'], 'nhsuk-u-margin-top-2', 'nhsuk-u-padding-2']"
+                      :class="[$style['nhsuk-button'],
+                               'nhsuk-u-margin-top-2',
+                               'nhsuk-u-padding-2']"
                       @click="deleteButtonClicked">
         {{ $t('gp_messages.delete.deleteButtonText') }}
       </generic-button>
@@ -22,25 +24,27 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import {
-  GP_MESSAGES,
-  GP_MESSAGES_VIEW_MESSAGE,
-  GP_MESSAGES_DELETE_SUCCESS,
-} from '@/lib/routes';
 import { redirectTo, isBlankString } from '@/lib/utils';
+import {
+  GP_MESSAGES_PATH,
+  GP_MESSAGES_VIEW_MESSAGE_PATH,
+  GP_MESSAGES_DELETE_SUCCESS_PATH,
+} from '@/router/paths';
 
 export default {
-  layout: 'nhsuk-layout',
+  name: 'GpMessagesDeletePage',
   components: {
     DesktopGenericBackLink,
     GenericButton,
   },
   data() {
     return {
-      messagesPath: GP_MESSAGES.path,
-      messageDetailsPath: GP_MESSAGES_VIEW_MESSAGE.path,
+      recipient: get('$store.state.gpMessages.selectedMessageRecipient.name')(this),
+      messagesPath: GP_MESSAGES_PATH,
+      messageDetailsPath: GP_MESSAGES_VIEW_MESSAGE_PATH,
     };
   },
   computed: {
@@ -51,10 +55,12 @@ export default {
       return 'gp_messages.delete.backButtonText.text';
     },
   },
-  fetch({ store, redirect }) {
-    if (isBlankString(store.state.gpMessages.selectedMessageId) ||
-        store.app.router.currentRoute.path !== GP_MESSAGES_VIEW_MESSAGE.path) {
-      redirect(GP_MESSAGES.path);
+  beforeRouteEnter(_, from, next) {
+    next(from.path !== GP_MESSAGES_VIEW_MESSAGE_PATH ? GP_MESSAGES_PATH : undefined);
+  },
+  created() {
+    if (isBlankString(this.$store.state.gpMessages.selectedMessageId)) {
+      redirectTo(this, this.messagesPath);
     }
   },
   methods: {
@@ -63,7 +69,7 @@ export default {
         this.$store.state.gpMessages.selectedMessageId);
 
       if (this.$store.state.gpMessages.messageDeleted) {
-        redirectTo(this, GP_MESSAGES_DELETE_SUCCESS.path);
+        redirectTo(this, GP_MESSAGES_DELETE_SUCCESS_PATH);
       }
     },
     backLinkClicked() {

@@ -34,19 +34,18 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import AppointmentSlot from '@/components/appointments/Appointment';
 import Card from '@/components/widgets/card/Card';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
-import get from 'lodash/fp/get';
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  name: 'BookingSuccess',
-  layout: 'nhsuk-layout',
+  name: 'GpAppointmentsBookingSuccessPage',
   components: {
     AppointmentSlot,
     Card,
@@ -59,7 +58,7 @@ export default {
     return {
       isProxying: this.$store.getters['session/isProxying'],
       name: get('$store.state.linkedAccounts.actingAsUser.fullName', this),
-      backPath: APPOINTMENTS.path,
+      backPath: APPOINTMENTS_PATH,
       slot: this.$store.state.availableAppointments.selectedSlot,
     };
   },

@@ -8,6 +8,7 @@
     </p>
     <p v-if="dateOfBirth" class="nhsuk-u-margin-bottom-0">
       <strong>Date of birth:</strong>
+      &nbsp;
       <span data-sid="user-date-of-birth">{{ dateOfBirth | longDate }}</span>
       <br>
     </p>

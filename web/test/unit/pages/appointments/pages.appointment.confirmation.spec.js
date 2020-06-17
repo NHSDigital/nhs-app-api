@@ -1,9 +1,14 @@
-import * as dependency from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import Channel from '@/lib/channel';
 import Confirmation from '@/pages/appointments/gp-appointments/confirmation';
 import Necessity from '@/lib/necessity';
-import { GP_APPOINTMENTS } from '@/lib/routes';
+import { GP_APPOINTMENTS_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/lib/utils', () => ({
+  ...jest.requireActual('@/lib/utils'),
+  redirectTo: jest.fn(),
+}));
 
 describe('appointments confirmation page', () => {
   let $style;
@@ -14,6 +19,7 @@ describe('appointments confirmation page', () => {
     availableAppointments: {
       bookingReasonNecessity: Necessity.Mandatory,
       selectedSlot: slot,
+      patientTelephoneNumbers: [],
     },
     device: {
       isNativeApp: false,
@@ -34,10 +40,11 @@ describe('appointments confirmation page', () => {
     },
   });
 
+  beforeEach(() => {
+    redirectTo.mockClear();
+  });
+
   describe('mounted', () => {
-    beforeEach(() => {
-      dependency.redirectTo = jest.fn();
-    });
     describe('when no slot is selected', () => {
       beforeEach(() => {
         state = createState(undefined);
@@ -45,7 +52,7 @@ describe('appointments confirmation page', () => {
       });
 
       it('will redirect to appointments hub page', () => {
-        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, GP_APPOINTMENTS.path);
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, GP_APPOINTMENTS_PATH);
       });
     });
 
@@ -56,7 +63,7 @@ describe('appointments confirmation page', () => {
       });
 
       it('will not call redirect', () => {
-        expect(dependency.redirectTo).not.toHaveBeenCalled();
+        expect(redirectTo).not.toHaveBeenCalled();
       });
     });
   });

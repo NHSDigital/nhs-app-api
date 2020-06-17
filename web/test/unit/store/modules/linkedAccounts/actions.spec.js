@@ -94,6 +94,7 @@ describe('switchProfile', () => {
           ),
         },
       },
+      dispatch: jest.fn(),
     };
 
     const commit = jest.fn();
@@ -104,6 +105,8 @@ describe('switchProfile', () => {
         expect(that.app.$http.postV1PatientLinkedAccountsSwitchById)
           .toHaveBeenCalledWith(expectedRequest);
         expect(commit).toHaveBeenCalledWith(SWITCH_TO_LINKED_ACCOUNT, profile);
+        expect(that.dispatch).toHaveBeenCalledWith('myRecord/clear');
+        expect(that.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       });
   });
 });
