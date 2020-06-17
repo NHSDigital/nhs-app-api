@@ -208,7 +208,6 @@ loggerEnabled: true
 
 # Messages, Devices and Users Services
 usersEnabled: true
-infoEnabled: true
 messagesEnabled: true
 
 # N3 Endpoint

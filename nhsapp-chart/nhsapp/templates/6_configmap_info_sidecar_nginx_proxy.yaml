@@ -1,4 +1,3 @@
-{{- if $.Values.infoEnabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -93,4 +92,3 @@ data:
             }
         }
     }
-{{- end }}

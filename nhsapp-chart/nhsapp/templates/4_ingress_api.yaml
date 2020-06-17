@@ -22,7 +22,6 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
-          {{- if $.Values.infoEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
@@ -31,7 +30,6 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users/me/info
-          {{- end }}
           {{- if $.Values.messagesEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}

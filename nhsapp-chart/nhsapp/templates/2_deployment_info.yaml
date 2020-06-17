@@ -1,4 +1,3 @@
-{{- if $.Values.infoEnabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -193,4 +192,3 @@ spec:
       dnsConfig:
         options:
           - name: single-request-reopen
-{{- end }}
