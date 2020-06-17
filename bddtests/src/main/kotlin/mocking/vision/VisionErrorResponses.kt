@@ -92,6 +92,14 @@ object VisionErrorResponses {
         )
     }
 
+    fun getRegistrationIncomplete(serviceDefinition: ServiceDefinition): String {
+        return getMockedError(
+                serviceDefinition,
+                VisionErrorTypes.REGISTRATIONINCOMPLETE.Code,
+                VisionErrorTypes.REGISTRATIONINCOMPLETE.Description
+        )
+    }
+
     fun getPatientAlreadyRegisteredError(serviceDefinition: ServiceDefinition): String {
         return getMockedError(
                 serviceDefinition,

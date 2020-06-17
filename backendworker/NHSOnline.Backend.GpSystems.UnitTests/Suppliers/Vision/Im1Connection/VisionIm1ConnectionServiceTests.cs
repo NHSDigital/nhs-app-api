@@ -229,6 +229,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
+        public async Task Verify_VisionArchivedOrDisabledError_ReturnsRegistrationIncompleteError()
+        {
+            // Arrange
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPfsApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = VisionResponseWithError<PatientConfigurationResponse>("-8"),
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorCase>()
+                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.RegistrationIncomplete);
+        }
+
+        [TestMethod]
         public async Task Verify_InvalidSecurityHeader_ReturnsInvalidSecurityError()
         {
             // Arrange

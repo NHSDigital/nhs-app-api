@@ -102,6 +102,18 @@ class PatientVerificationStepDefinitions {
                 }
     }
 
+    @Given("Vision responds with a registration incomplete error")
+    fun visionRespondsWithARegistrationIncompleteError() {
+        val patient =  Patient.getDefault(Supplier.VISION)
+        PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
+        PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
+        mockingClient.forVision.mock {
+            authentication.getConfigurationRequest(
+                    VisionMockDefaults.getVisionUserSession(patient))
+                    .respondWithRegistrationIncomplete()
+        }
+    }
+
     @Given("I have an (.*) ODS Code not in expected format")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)

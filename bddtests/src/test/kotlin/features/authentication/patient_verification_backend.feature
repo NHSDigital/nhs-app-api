@@ -134,12 +134,10 @@ Feature: Patient Verification Backend
     When I verify patient data using the v1 endpoint
     Then I receive an "Internal server error" error
 
-
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
     When I verify patient data using the v1 endpoint
     Then I receive a "Bad Request" error
-
 
   Scenario: Vision responds with an unknown error from the Gateway
     Given Vision responds with an unknown error
@@ -150,6 +148,11 @@ Feature: Patient Verification Backend
     Given Vision responds with a record currently unavailable error
     When I verify patient data using the v1 endpoint
     Then I receive a "Bad Gateway" error
+
+  Scenario: Vision responds with a registration incomplete error
+    Given Vision responds with a registration incomplete error
+    When I verify patient data using the v1 endpoint
+    Then I receive a "Forbidden" error
 
   Scenario Outline: Verifying the old credentials of a <GP System> patient after they've moved practice returns a forbidden response
     Given I have an old ODS Code and IM1 Connection Token for a <GP System> patient that has since moved to a different practice

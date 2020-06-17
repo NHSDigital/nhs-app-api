@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 .AddKeyToEnum("200-100", InternalCode.ConnectionToServiceFailed)
                 .AddKeyToEnum("200-15", InternalCode.UserRecordUnavailable)
                 .AddKeyToEnum("200-30", InternalCode.InvalidLinkageDetails)
+                .AddKeyToEnum("200-8", InternalCode.RegistrationIncomplete)
                 // THESE RESPONSES DO NOT HAVE ERROR CODES JUST A FAULT CODE 
                 .AddKeyToEnum("200INVALID_REQUEST", InternalCode.InvalidRequest)
                 .AddKeyToEnum("200InvalidSecurity", InternalCode.InvalidSecurity);

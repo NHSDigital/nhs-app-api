@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
@@ -56,6 +56,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     InternalCode.UserAccountAlreadyExistsWithPatientDemographicDetailsAndIsArchived,
                     StatusCodes.Status403Forbidden
                 },
+                { InternalCode.RegistrationIncomplete, StatusCodes.Status403Forbidden },
                 { InternalCode.LinkageKeyAlreadyExists, StatusCodes.Status409Conflict },
                 { InternalCode.LinkageKeysNotSupportedBySupplier, Status550LinkageNotSupported }
             };

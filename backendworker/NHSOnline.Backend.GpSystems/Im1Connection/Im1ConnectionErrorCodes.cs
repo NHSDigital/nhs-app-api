@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
@@ -110,6 +110,8 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             InvalidRequest = 131,
             [Description("Invalid user patient link token, please try again")]
             InvalidUserPatientLinkToken = 132,
+            [Description("Registration incomplete")]
+            RegistrationIncomplete = 133,
             [Description("Patient not registered at this practice")]
             PatientNotRegisteredAtThisPractice = 195,
             [Description("No API key associated with the nhs number")]
@@ -185,6 +187,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
                     ExternalCode.PatientArchivedOrDisabled
                 },
                 { InternalCode.NotValidForOnlineUser, ExternalCode.PatientArchivedOrDisabled },
+                { InternalCode.RegistrationIncomplete, ExternalCode.PatientArchivedOrDisabled },
 
                 { InternalCode.PracticeNotLive, ExternalCode.PracticeNotEnabled },
                 { InternalCode.PatientFacingServicesApiv2IsNotEnabledAtThisPractice,ExternalCode.PracticeNotEnabled  },

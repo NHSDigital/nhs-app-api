@@ -9,5 +9,6 @@ enum class VisionErrorTypes (val Code: String, val Description: String){
     NOMATCH("-33", "No Match: couldn't link account with detail provided"),
     RECORDCURRENTLYUNAVAILABLE("-15", "Record currently unavailable - please try again later or contact " +
             "your Practice: VOSUsers record is locked, is patient selected in registration?"),
+    REGISTRATIONINCOMPLETE("-8", "Registration incomplete"),
     USERHASALREADYBEENREGISTERED("-2", "User has already been registered")
 }
