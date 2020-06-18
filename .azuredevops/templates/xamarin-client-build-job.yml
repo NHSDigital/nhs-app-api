@@ -23,12 +23,27 @@ jobs:
         outputDirectory: '$(output.directory)'
         configuration: '$(build.configuration)'
 
+    - task: InstallAppleCertificate@2
+      displayName: 'Install Apple certificate'
+      inputs:
+        certSecureFile: iOSDevelopmentCertificate.p12
+        certPwd: $(ios.development.certificate.password)
+
+    - task: InstallAppleProvisioningProfile@1
+      displayName: 'Install provisioning profile'
+      inputs:
+        provProfileSecureFile: iOSDevelopmentBrowserStack.mobileprovision
+        removeProfile: true
+
     - task: XamariniOS@2
       displayName: Build iOS
       inputs:
         solutionFile: 'xamarin/NhsOnline.App.sln'
         configuration: '$(build.configuration)'
-        buildForSimulator: true
+        buildForSimulator: false
+        packageApp: true
+        signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+        signingProvisioningProfileID: '$(APPLE_PROV_PROFILE_UUID)'
         args: /p:IpaPackageDir="$(output.directory)"
 
     - template: check-for-output-steps.yml
