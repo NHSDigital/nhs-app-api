@@ -202,10 +202,6 @@ eConsult:
   protocol: https
   hostname: nhsapp.econsulttest.health
 
-# Logger API
-loggerEnabled: true
-
-# Messages
 messagesEnabled: true
 
 # N3 Endpoint

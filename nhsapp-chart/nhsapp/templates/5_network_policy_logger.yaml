@@ -1,4 +1,4 @@
-{{- if and ($.Values.networkPolicyEnabled) ($.Values.loggerEnabled) -}}
+{{- if ($.Values.networkPolicyEnabled) -}}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1

@@ -40,12 +40,10 @@ spec:
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users/.{36}/messages
           {{- end }}
-          {{- if $.Values.loggerEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v1/api/log
-          {{- end }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
@@ -57,12 +55,10 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
-          {{- if $.Values.loggerEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v1/api/log
-          {{- end }}
           {{- if $.Values.messagesEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
