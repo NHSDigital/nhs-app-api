@@ -13,7 +13,7 @@ using Name = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models.Name;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 {
-    public class ServiceConfigurationModule : NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
@@ -37,10 +37,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             services.AddSingleton<IServiceDefinitionIsValidQuery, ServiceDefinitionIsValidQuery>();
 
             services.AddTransient<IServiceDefinitionService, ServiceDefinitionService>();
-            services.AddSingleton<IMapper<DemographicsResponse, OlcDemographics>,
-                OlcDemographicsMapper>();
-            services.AddSingleton<IMapper<string, DemographicsName, Name>,
-                OlcDemographicsNameMapper>();
+            services.AddTransient<ServiceDefinitionQuerySender>();
+            services.AddSingleton<IMapper<DemographicsResponse, OlcDemographics>, OlcDemographicsMapper>();
+            services.AddSingleton<IMapper<string, DemographicsName, Name>, OlcDemographicsNameMapper>();
             services.AddSingleton<IOlcDataMaps, OlcDataMaps>();
             services.AddTransient<IFhirParameterHelpers, FhirParameterHelpers>();
 

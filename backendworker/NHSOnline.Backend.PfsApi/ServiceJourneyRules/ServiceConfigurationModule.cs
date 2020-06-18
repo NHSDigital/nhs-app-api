@@ -5,7 +5,7 @@ using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
 {
-    public class ServiceConfigurationModule: NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule: Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

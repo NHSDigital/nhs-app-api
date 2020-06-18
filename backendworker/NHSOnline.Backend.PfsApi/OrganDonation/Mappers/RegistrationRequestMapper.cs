@@ -24,8 +24,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
         public RegistrationRequestMapper(
             IEnumMapper<string, FaithDeclaration> faithDeclarationMapper,
             IEnumMapper<string, Decision> decisionMapper,
-            IMapper<OrganDonation.Models.Name, Name> nameMapper,
-            IMapper<string, OrganDonation.Models.Address, Address> addressMapper,
+            IMapper<Models.Name, Name> nameMapper,
+            IMapper<string, Models.Address, Address> addressMapper,
             IOrganDonationIdentifierMapper identifierMapper,
             IOrganDonationDonationWishesMapper donationWishesMapper,
             IOrganDonationGenderMapper genderMapper,

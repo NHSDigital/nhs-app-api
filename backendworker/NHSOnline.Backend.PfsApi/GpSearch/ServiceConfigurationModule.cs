@@ -4,7 +4,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
-    public class ServiceConfigurationModule: NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule: Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

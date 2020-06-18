@@ -5,7 +5,7 @@ using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationNameMapper : IMapper<PfsApi.OrganDonation.Models.Name, Name>
+    internal class OrganDonationNameMapper : IMapper<Models.Name, Name>
     {
         private readonly ILogger<OrganDonationNameMapper> _logger;
         private readonly IDictionary<string,string> _titlesMap;
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             _titlesMap = dataMaps.TitleDataMap;
         }
 
-        public Name Map(OrganDonation.Models.Name source)
+        public Name Map(Models.Name source)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(source, nameof(source), ValidateAndLog.ValidationOptions.ThrowError)
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 };
         }
 
-        private static List<string> MapGiven(List<string> prefix, OrganDonation.Models.Name source)
+        private static List<string> MapGiven(List<string> prefix, Models.Name source)
         {
             var givenName = source.GivenName;
             if (prefix == null && !string.IsNullOrWhiteSpace(source.Title))

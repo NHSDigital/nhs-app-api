@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class ServiceConfigurationModule: Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule: Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

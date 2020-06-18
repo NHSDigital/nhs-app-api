@@ -3,7 +3,13 @@ using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
 {
-    public interface IEvaluateServiceDefinitionQuery {
-        Task<HttpResponseMessage> EvaluateServiceDefinition(string providerKey, string serviceDefinitionId, string requestBody, bool addJavascriptDisabledHeader, string sessionId = null);
+    public interface IEvaluateServiceDefinitionQuery
+    {
+        Task<HttpResponseMessage> EvaluateServiceDefinition(
+            string providerKey,
+            string serviceDefinitionId,
+            string requestBody,
+            bool addJavascriptDisabledHeader,
+            string sessionId = null);
     }
 }

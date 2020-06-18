@@ -5,8 +5,6 @@
  using System.Net.Http;
  using System.Text;
  using System.Threading.Tasks;
- using AutoFixture;
- using AutoFixture.AutoMoq;
  using FluentAssertions;
  using Hl7.Fhir.Model;
  using Hl7.Fhir.Serialization;
@@ -37,10 +35,10 @@
      [TestClass]
      public sealed class ServiceDefinitionServiceTests: IDisposable
      {
-         private IFixture _fixture;
          private Mock<IHtmlSanitizer> _mockHtmlSanitizer;
          private Mock<IFhirSanitizationHelper> _mockFhirSanitizationHelper;
          private Mock<ILogger<ServiceDefinitionService>> _mockLogger;
+         private Mock<ILogger<ServiceDefinitionQuerySender>> _mockSenderLogger;
          private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
          private Mock<IAuditor> _mockAuditor;
          private P9UserSession _userSession;
@@ -76,11 +74,10 @@
          [TestInitialize]
          public void TestInitialize()
          {
-             _fixture = new Fixture()
-                 .Customize(new AutoMoqCustomization());
              _mockHtmlSanitizer = new Mock<IHtmlSanitizer>();
              _mockFhirSanitizationHelper = new Mock<IFhirSanitizationHelper>();
              _mockLogger = new Mock<ILogger<ServiceDefinitionService>>();
+             _mockSenderLogger = new Mock<ILogger<ServiceDefinitionQuerySender>>();
              _mockDemographicsOlcMapper = new Mock<IMapper<DemographicsResponse, OlcDemographics>>();
              _mockAuditor = new Mock<IAuditor>();
              _mockFhirParameterHelpers = new Mock<IFhirParameterHelpers>();
@@ -89,16 +86,12 @@
              _mockGuidCreator = new Mock<IGuidCreator>();
              _serializer = new FhirJsonSerializer();
 
-             _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
+             _demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-             _fixture.Customize<P9UserSession>(c => c
-                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
-             _userSession = _fixture.Create<P9UserSession>();
+             _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1ConnectionToken");
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
-             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
-
+             _mockDemographicsService = new Mock<IDemographicsService>();
              _mockDemographicsService
                  .Setup(x => x.GetDemographics(
                      It.Is<GpLinkedAccountModel>(
@@ -106,12 +99,12 @@
                               && d.PatientId == _userSession.GpUserSession.Id)))
                  .Returns(Task.FromResult(_demographicsResult));
 
-             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+             _mockGpSystem = new Mock<IGpSystem>();
              _mockGpSystem
                  .Setup(x => x.GetDemographicsService())
                  .Returns(_mockDemographicsService.Object);
 
-             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
              _mockGpSystemFactory
                  .Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                  .Returns(_mockGpSystem.Object);
@@ -127,17 +120,18 @@
 
              _service = new ServiceDefinitionService(
                  _mockLogger.Object,
-                 _mockHtmlSanitizer.Object,
-                 _mockFhirSanitizationHelper.Object,
                  _mockDemographicsOlcMapper.Object,
                  _mockAuditor.Object,
                  _mockGpSystemFactory.Object,
                  _mockFhirParameterHelpers.Object,
                  providersSettings,
-                 _mockEvaluateServiceDefinitionQuery.Object,
-                 _mockServiceDefinitionIsValidQuery.Object,
-                 _mockGuidCreator.Object
-             );
+                 _mockGuidCreator.Object,
+                 new ServiceDefinitionQuerySender(
+                     _mockSenderLogger.Object,
+                     _mockHtmlSanitizer.Object,
+                     _mockFhirSanitizationHelper.Object,
+                     _mockEvaluateServiceDefinitionQuery.Object,
+                     _mockServiceDefinitionIsValidQuery.Object));
          }
 
          [TestMethod]
@@ -268,8 +262,7 @@
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
-             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>()
-                 .Subject.Response.Equals(ProviderName, StringComparison.Ordinal);
+             response.Should().BeAssignableTo<ServiceDefinitionResult.Success>().Subject.Response.Should().Be(ProviderName);
          }
 
          [TestMethod]
@@ -532,7 +525,7 @@
              await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
 
              // Assert
-             _mockLogger.VerifyLogger(LogLevel.Information, $"Ending consultation for {ServiceDefinitionDescription}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
+             _mockSenderLogger.VerifyLogger(LogLevel.Information, $"Ending consultation for {ServiceDefinitionDescription}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
          }
 
          [TestMethod]
@@ -637,7 +630,7 @@
          public async Task GetServiceDefinitionIsValid_WhenResponseContentIsNull_ReturnsBadGateway()
          {
              MockCreateServiceDefinitionIsValidParameters();
-             MockHttpResponseMessage(HttpStatusCode.OK, null);
+             MockHttpResponseMessage(HttpStatusCode.OK);
 
              Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
                  q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
