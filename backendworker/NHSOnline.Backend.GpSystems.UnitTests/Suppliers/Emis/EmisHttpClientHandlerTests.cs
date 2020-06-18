@@ -34,7 +34,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const string Path = "Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
-        private const string Environment = "testEnv";
 
         [TestInitialize]
         public void TestInitialize()
@@ -43,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _mockLogger = _fixture.Create<ILogger<EmisHttpClientHandler>>();
 
             _config = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
             
             _certificateService = _fixture.Freeze<Mock<ICertificateService>>();
         }

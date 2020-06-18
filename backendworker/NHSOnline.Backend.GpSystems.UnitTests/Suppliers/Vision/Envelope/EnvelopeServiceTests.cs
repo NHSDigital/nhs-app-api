@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope
                     .Setup(x => x.GetCertificate(CertificatePath, Password))
                     .Returns(_certificate);
 
-                var visionConfiguration = new VisionConfigurationSettings("", null, CertificatePath, Password, "", "", "", "", "", 0, null, null, "");
+                var visionConfiguration = new VisionConfigurationSettings("", null, CertificatePath, Password, "", "", "", "", "", 0, null, null);
 
                 var services = new ServiceCollection()
                     .RegisterVisionEnvelopeServices()

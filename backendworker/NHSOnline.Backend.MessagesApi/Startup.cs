@@ -50,10 +50,6 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddOptions();
             services.AddCorrelationId();
 
-            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
-            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
-            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
-
             _modularStartup.ConfigureServices(services);
 
             ConfigureAuth(services);

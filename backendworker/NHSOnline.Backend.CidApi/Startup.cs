@@ -1,6 +1,4 @@
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Globalization;
 using CorrelationId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -36,7 +34,6 @@ namespace NHSOnline.Backend.CidApi
     public class Startup
     {
         private readonly ILogger<Startup> _logger;
-        private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
         private readonly SupplierStartup _supplierStartup;
         private readonly string _apiAppVersion;
@@ -53,12 +50,13 @@ namespace NHSOnline.Backend.CidApi
             _logger = loggerFactory.CreateLogger<Startup>();
         }
 
+        private IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
-            var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
-            SetupConfigurationSettings(services, environment);
+            SetupConfigurationSettings(services);
 
             services.AddCorrelationId();
 
@@ -87,7 +85,6 @@ namespace NHSOnline.Backend.CidApi
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddTransient<IGuidCreator, GuidCreator>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
@@ -157,23 +154,16 @@ namespace NHSOnline.Backend.CidApi
             _modularStartup.Configure(app, env);
         }
 
-        private void SetupConfigurationSettings(IServiceCollection services, string environment)
+        private void SetupConfigurationSettings(IServiceCollection services)
         {
             var configurationSettings = CreateAndValidateEnvironmentVariables();
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
 
-            var microtestConfig = CreateAndValidateMicrotestEnvironmentVariables(environment);
-            services.AddSingleton(microtestConfig);
-
-            var emisConfig = CreateAndValidateEmisEnvironmentVariables(environment);
-            services.AddSingleton(emisConfig);
-
-            var tppConfig = CreateAndValidateTppEnvironmentVariables(environment);
-            services.AddSingleton(tppConfig);
-
-            var visionConfig = CreateAndValidateVisionEnvironmentVariables(environment);
-            services.AddSingleton(visionConfig);
+            services.AddSingleton(EmisConfigurationSettings.CreateAndValidate(Configuration, _logger));
+            services.AddSingleton(TppConfigurationSettings.CreateAndValidate(Configuration, _logger));
+            services.AddSingleton(MicrotestConfigurationSettings.CreateAndValidate(Configuration, _logger));
+            services.AddSingleton(VisionConfigurationSettings.CreateAndValidate(Configuration, _logger));
         }
 
         private ConfigurationSettings CreateAndValidateEnvironmentVariables()
@@ -189,110 +179,6 @@ namespace NHSOnline.Backend.CidApi
 
             var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
                 defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge);
-
-            config.Validate();
-            return config;
-        }
-
-        private EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment)
-        {
-            var emisBaseUrl = Configuration.GetOrWarn("EMIS_BASE_URL", _logger);
-            var applicationId = Configuration.GetOrWarn("EMIS_APPLICATION_ID", _logger);
-            var version = Configuration.GetOrWarn("EMIS_VERSION", _logger);
-            var certificatePath = Configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", _logger);
-            var certificatePassphrase = Configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", _logger);
-
-            var emisExtendedHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:EmisExtendedHttpTimeoutSeconds", _logger);
-            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-
-            var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version, certificatePath, certificatePassphrase,
-             emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit, prescriptionsMaxCoursesSoftLimit, environment);
-            config.Validate();
-
-            return config;
-        }
-
-        private MicrotestConfigurationSettings CreateAndValidateMicrotestEnvironmentVariables(string environment)
-        {
-            var baseUrlstring = Configuration.GetOrWarn("MICROTEST_BASE_URL", _logger);
-            var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
-            var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-
-            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath, certificatePassphrase, environment, prescriptionsMaxCoursesSoftLimit, coursesMaxCoursesLimit);
-            config.Validate();
-
-            return config;
-        }
-
-        private TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment)
-        {
-            var tppBaseUrl = Configuration.GetOrWarn("TPP_BASE_URL", _logger);
-            var apiVersion = Configuration.GetOrWarn("TPP_API_VERSION", _logger);
-            var applicationName = Configuration.GetOrWarn("TPP_APPLICATION_NAME", _logger);
-            var applicationVersion = Configuration.GetOrWarn("TPP_APPLICATION_VERSION", _logger);
-            var applicationProviderId = Configuration.GetOrWarn("TPP_APPLICATION_PROVIDER_ID", _logger);
-            var applicationDeviceType = Configuration.GetOrWarn("TPP_APPLICATION_DEVICE_TYPE", _logger);
-            var certificatePath = Configuration.GetOrWarn("TPP_CERTIFICATE_PATH", _logger);
-            var certificatePassphrase = Configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", _logger);
-            var supportsLinkedAccounts = Configuration.GetOrWarn("TPP_SUPPORTS_LINKED_ACCOUNTS", _logger);
-
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-
-            var config = new TppConfigurationSettings(
-                new Uri(tppBaseUrl, UriKind.Absolute),
-                apiVersion,
-                applicationName,
-                applicationVersion,
-                applicationProviderId,
-                applicationDeviceType,
-                certificatePath,
-                certificatePassphrase,
-                prescriptionsMaxCoursesSoftLimit,
-                coursesMaxCoursesLimit,
-                environment,
-                supportsLinkedAccounts);
-
-            config.Validate();
-            return config;
-        }
-
-        private VisionConfigurationSettings CreateAndValidateVisionEnvironmentVariables(string environment)
-        {
-            var applicationProviderId = Configuration.GetOrWarn("VISION_APPLICATION_PROVIDER_ID", _logger);
-            var apiBaseUriString = Configuration.GetOrWarn("VISION_BASE_URI", _logger);
-            var visionPfsPath = Configuration.GetOrWarn("VISION_PFS_PATH", _logger);
-            var certificatePath = Configuration.GetOrWarn("VISION_CERT_PATH", _logger);
-            var certificatePassphrase = Configuration.GetOrWarn("VISION_CERT_PASSPHRASE", _logger);
-            var requestUsername = Configuration.GetOrWarn("VISION_USERNAME", _logger);
-            var visionSenderUserName = Configuration.GetOrWarn("VISION_SENDER_USERNAME", _logger);
-            var visionSenderUserFullName = Configuration.GetOrWarn("VISION_SENDER_USERFULLNAME", _logger);
-            var visionSenderUserIdentity = Configuration.GetOrWarn("VISION_SENDER_USERIDENTITY", _logger);
-            var visionSenderUserRole = Configuration.GetOrWarn("VISION_SENDER_USERROLE", _logger);
-
-            var prescriptionsMaxCoursesSoftLimit = int.Parse(Configuration["ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit"], CultureInfo.InvariantCulture);
-            var coursesMaxCoursesLimit = int.Parse(Configuration["ConfigurationSettings:CoursesMaxCoursesLimit"], CultureInfo.InvariantCulture);
-            var visionAppointmentSlotsRequestCount = int.Parse(Configuration["ConfigurationSettings:VisionAppointmentSlotsRequestCount"], CultureInfo.InvariantCulture);
-
-            var config = new VisionConfigurationSettings(
-                applicationProviderId,
-                new Uri(apiBaseUriString + visionPfsPath, UriKind.Absolute),
-                certificatePath,
-                certificatePassphrase,
-                requestUsername,
-                visionSenderUserName,
-                visionSenderUserFullName,
-                visionSenderUserIdentity,
-                visionSenderUserRole,
-                visionAppointmentSlotsRequestCount,
-                coursesMaxCoursesLimit,
-                prescriptionsMaxCoursesSoftLimit,
-                environment
-                );
 
             config.Validate();
             return config;

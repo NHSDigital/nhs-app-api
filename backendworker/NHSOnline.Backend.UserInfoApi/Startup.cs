@@ -55,13 +55,8 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddOptions();
             services.AddCorrelationId();
 
-            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
-            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
-            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
-
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-
 
             SetupApiKeys(services);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -41,7 +41,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private const int EmisExtendedHttpTimeoutSeconds = 6;
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
-        private const string Environment = "environment";
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
@@ -60,8 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
             _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
-                Environment);
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisCourseService>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()

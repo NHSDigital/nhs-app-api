@@ -40,7 +40,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         private const int EmisExtendedHttpTimeoutSeconds = 6;
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
-        private const string Environment = "environment";
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
@@ -56,8 +55,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _emisClient = new Mock<IEmisClient>();
 
             _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
-                Environment);
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
             _fixture.Inject(_settings);
             _fixture.Inject(_demographicsService);
             _fixture.Inject(_emisClient);

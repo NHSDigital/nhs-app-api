@@ -48,7 +48,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private const int CoursesMaxCoursesLimit = 100;
 
         private VisionConfigurationSettings _settings;
-        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -72,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
                 CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
                 VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
-                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
             
             var slotsResponse = new VisionPfsApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {

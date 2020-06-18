@@ -45,7 +45,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
-        private const string Environment = "testEnv";
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
@@ -88,8 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion,
                 CertificatePath,
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds,
-                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
-                Environment);
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
             _repeatPrescriptionRequest = new RepeatPrescriptionRequest

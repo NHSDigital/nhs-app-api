@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             _microtestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _microtestPrescriptionMapper = _fixture.Freeze<Mock<IMicrotestPrescriptionMapper>>();
-            _settings = new MicrotestConfigurationSettings(null, string.Empty, string.Empty, string.Empty, 0, CoursesMaxCoursesLimit);
+            _settings = new MicrotestConfigurationSettings(null, string.Empty, string.Empty, 0, CoursesMaxCoursesLimit);
 
             _fixture.Inject(_settings);
             _fixture.Inject(_logger);

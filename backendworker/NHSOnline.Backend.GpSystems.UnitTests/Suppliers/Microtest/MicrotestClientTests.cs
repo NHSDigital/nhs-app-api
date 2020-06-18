@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,7 +35,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         private IFixture _fixture;
         private string _nhsNumber;
         private string _odsCode;
-        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -45,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             _mockHttpHandler = new MockHttpMessageHandler();
             
-            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, Environment, PrescriptionsLimit, CoursesLimit);
+            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, PrescriptionsLimit, CoursesLimit);
 
             _httpClient = new MicrotestHttpClient(new HttpClient(_mockHttpHandler), _configurationSettings);
 

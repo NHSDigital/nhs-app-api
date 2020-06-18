@@ -54,8 +54,6 @@ namespace NHSOnline.Backend.LoggerApi
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddTransient<IGuidCreator, GuidCreator>();
-
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Support
         private const string LogMessageParseError =
             "Attempted to parse value {0} for name {1} from the environment but encountered an error.";
 
-        public static string GetOrWarn<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        public static string GetOrWarn(this IConfiguration configuration, string key, ILogger logger)
         {
             var value = configuration[key];
             if (string.IsNullOrEmpty(value))
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Support
             return value;
         }
 
-        public static string GetOrThrow<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        public static string GetOrThrow(this IConfiguration configuration, string key, ILogger logger)
         {
             var value = configuration[key];
 
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Support
             return configuration[key];
         }
 
-        public static int GetIntOrThrow<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        public static int GetIntOrThrow(this IConfiguration configuration, string key, ILogger logger)
         {
             var strValue = GetOrThrow(configuration, key, logger);
 
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Support
             throw new ConfigurationNotValidException(key);
         }
 
-        public static int GetIntOrDefault<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        public static int GetIntOrDefault(this IConfiguration configuration, string key, ILogger logger)
         {
             var value = 0;
             var strValue = GetOrWarn(configuration, key, logger);
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Support
             return value;
         }
 
-        public static int GetIntOrWarn<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        public static int GetIntOrWarn(this IConfiguration configuration, string key, ILogger logger)
         {
             var strValue = GetOrWarn(configuration, key, logger);
 
@@ -80,11 +80,6 @@ namespace NHSOnline.Backend.Support
 
             logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
             throw new ConfigurationNotFoundException(key);
-        }
-
-        public static IConfigurationSection ConfigurationSettings(this IConfiguration configuration)
-        {
-            return configuration.GetSection("ConfigurationSettings");
         }
 
         public static string GetApiAppVersion(this IConfiguration configuration)

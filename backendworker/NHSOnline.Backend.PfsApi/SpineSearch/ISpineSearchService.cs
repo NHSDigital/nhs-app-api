@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.PfsApi.SpineSearch
+namespace NHSOnline.Backend.PfsApi.SpineSearch
 {
     public interface ISpineSearchService
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -44,8 +44,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
 
-        private const string Environment = "testEnv";
-
         private IEmisClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private EmisConfigurationSettings _emisConfig;
@@ -62,8 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _mockHttpHandler = new MockHttpMessageHandler();
 
             _emisConfig = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
-                Environment);
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
 
             _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _emisConfig);
 

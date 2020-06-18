@@ -55,7 +55,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string OrderNewPrescriptionServiceDefinitionName = "VONREP.NewPrescription";
         private const string GetAvailableAppointmentsServiceDefinitionName = "VOAPP.GetAvailableAppointments";
         private const int VisionAppointmentSlotsRequestCount = 50;
-        private const string Environment = "environment";
 
         private Mock<ICertificateService> _mockCertificateService;
         private Mock<IEnvelopeService> _mockEnvelopeService;
@@ -69,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             _visionConfig = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl,
                 CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName,
-                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, 50, 100, 100, Environment);
+                VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, 50, 100, 100);
 
             _mockCertificateService = _fixture.Freeze<Mock<ICertificateService>>();
             _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();

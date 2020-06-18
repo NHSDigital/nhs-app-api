@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -43,7 +43,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
         private const int VisionAppointmentSlotsRequestCount = 100;
-        private const string Environment = "environment";
 
         [TestInitialize]
         public void TestInitialize()
@@ -62,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
                 CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
                 VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, VisionAppointmentSlotsRequestCount, 
-                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit);
                 
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<VisionPrescriptionService>();
