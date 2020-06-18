@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
-            return StepResult(citizenIdSessionResult);
+            return citizenIdSessionResult;
         }
 
         private async Task Audit(CitizenIdSessionResult citizenIdSessionResult)
@@ -64,18 +64,11 @@ namespace NHSOnline.Backend.PfsApi.Session
             var errorTypes = citizenIdSessionResult.StatusCode switch
             {
                 // 502 Bad gateway error references differ by source API. The other error types do not.
-                StatusCodes.Status502BadGateway => ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login,
-                    StatusCodes.Status502BadGateway, SourceApi.NhsLogin),
+                StatusCodes.Status502BadGateway => ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, StatusCodes.Status502BadGateway, SourceApi.NhsLogin),
                 _ => ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, citizenIdSessionResult.StatusCode)
             };
 
-            return FinalResult<CitizenIdSessionResult>(errorTypes);
+            return new CreateSessionResult.ErrorResult(errorTypes);
         }
-
-        private static ProcessResult<TStepResult, CreateSessionResult> StepResult<TStepResult>(TStepResult result)
-            => ProcessResult.StepResult<TStepResult, CreateSessionResult>(result);
-
-        private static ProcessResult<TFinalResult, CreateSessionResult> FinalResult<TFinalResult>(ErrorTypes errorTypes)
-            => ProcessResult.FinalResult<TFinalResult, CreateSessionResult>(new CreateSessionResult.ErrorResult(errorTypes));
     }
 }

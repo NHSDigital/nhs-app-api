@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             public ServiceJourneyRulesConfigResultVisitor(ILogger logger) => _logger = logger;
 
             public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.Success result)
-                => StepResult(result.Response);
+                => result.Response;
 
             public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.NotFound result)
                 => ErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
@@ -53,14 +53,8 @@ namespace NHSOnline.Backend.PfsApi.Session
                 var errorMessage = $"Retrieving Service Journey Rules failed with status code: '{errorTypes.StatusCode}'";
                 _logger.LogError(errorMessage);
 
-                return FinalResult<ServiceJourneyRulesResponse>(errorTypes);
+                return new CreateSessionResult.ErrorResult(errorTypes);
             }
-
-            private static ProcessResult<TStepResult, CreateSessionResult> StepResult<TStepResult>(TStepResult result)
-                => ProcessResult.StepResult<TStepResult, CreateSessionResult>(result);
-
-            private static ProcessResult<TFinalResult, CreateSessionResult> FinalResult<TFinalResult>(ErrorTypes errorTypes)
-                => ProcessResult.FinalResult<TFinalResult, CreateSessionResult>(new CreateSessionResult.ErrorResult(errorTypes));
         }
     }
 }

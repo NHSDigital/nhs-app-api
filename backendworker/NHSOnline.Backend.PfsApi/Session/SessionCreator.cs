@@ -24,27 +24,26 @@ namespace NHSOnline.Backend.PfsApi.Session
         public async Task<CreateSessionResult> CreateSession(ICreateSessionRequest request)
         {
             var citizenIdSession = await _citizenIdService.FetchUserProfile(request);
-
-            if (citizenIdSession.ProcessFinishedEarly(out var citizenIdSessionResult))
+            if (citizenIdSession.Failed(out var citizenIdSessionFailure))
             {
-                return citizenIdSessionResult;
+                return citizenIdSessionFailure;
             }
 
-            var serviceJourneyRules = await _serviceJourneyRulesService.Fetch(citizenIdSession.Result);
-            if (serviceJourneyRules.ProcessFinishedEarly(out var serviceJourneyRulesResult))
+            var serviceJourneyRules = await _serviceJourneyRulesService.Fetch(citizenIdSession);
+            if (serviceJourneyRules.Failed(out var serviceJourneyRulesFailure))
             {
-                return serviceJourneyRulesResult;
+                return serviceJourneyRulesFailure;
             }
 
-            var userSession = await _userSessionManager.Create(citizenIdSession.Result, serviceJourneyRules.Result, request.CsrfToken);
-            if (userSession.ProcessFinishedEarly(out var userSessionResult))
+            var userSession = await _userSessionManager.Create(citizenIdSession, serviceJourneyRules, request.CsrfToken);
+            if (userSession.Failed(out var userSessionFailure))
             {
-                return userSessionResult;
+                return userSessionFailure;
             }
 
-            await _userInfoService.Update(request, serviceJourneyRules.Result, citizenIdSession.Result);
+            await _userInfoService.Update(request, serviceJourneyRules, citizenIdSession);
 
-            return new CreateSessionResult.Success(serviceJourneyRules.Result, userSession.Result);
+            return new CreateSessionResult.Success(serviceJourneyRules, userSession);
         }
     }
 }

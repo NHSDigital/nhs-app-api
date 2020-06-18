@@ -101,21 +101,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 
             try
             {
-                var getOrCreateIm1ConnectionTokenStep = await GetOrCreateIm1ConnectionToken(request);
-                if (getOrCreateIm1ConnectionTokenStep.ProcessFinishedEarly(out var getOrCreateFinalResult))
+                var connectionToken = await GetOrCreateIm1ConnectionToken(request);
+                if (connectionToken.Failed(out var connectionTokenFailure))
                 {
-                    return getOrCreateFinalResult;
+                    return connectionTokenFailure;
                 }
 
-                var connectionToken = getOrCreateIm1ConnectionTokenStep.Result;
-
-                var getConfigurationStep = await GetConfiguration(connectionToken, request.OdsCode);
-                if (getConfigurationStep.ProcessFinishedEarly(out var getConfigurationStepFinalResult))
+                var configResponse = await GetConfiguration(connectionToken, request.OdsCode);
+                if (configResponse.Failed(out var configResponseFailure))
                 {
-                    return getConfigurationStepFinalResult;
+                    return configResponseFailure;
                 }
-
-                var configResponse = getConfigurationStep.Result;
 
                 var response = CreatePatientIm1ConnectionResponse(request, configResponse, connectionToken);
 
@@ -139,38 +135,29 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             PatientIm1ConnectionRequest request)
         {
             var getCachedStep = await GetCachedIm1ConnectionToken(request);
-            if (getCachedStep.ProcessFinishedEarly(out var cachedConnectionToken))
+            if (getCachedStep.Failed(out var cachedConnectionToken))
             {
-                return ProcessResult.StepResult<VisionConnectionToken, Im1ConnectionRegisterResult>(
-                    cachedConnectionToken);
+                return cachedConnectionToken;
             }
-
-            var cacheKey = getCachedStep.Result;
-
-            return await CreateIm1ConnectionToken(request, cacheKey);
+            
+            return await CreateIm1ConnectionToken(request, getCachedStep);
         }
 
         private async Task<ProcessResult<string, VisionConnectionToken>> GetCachedIm1ConnectionToken(
             PatientIm1ConnectionRequest request)
         {
-            var cacheKey =
-                _im1CacheKeyGenerator.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey);
+            var cacheKey = _im1CacheKeyGenerator.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey);
 
             _logger.LogDebug("Checking cache for IM1 connection token");
             var cachedConnectionToken = await _im1CacheService.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey);
 
-            return await cachedConnectionToken
-                .IfSome(connectionToken =>
+            return cachedConnectionToken
+                .IfSome<ProcessResult<string, VisionConnectionToken>>(connectionToken =>
                 {
                     _logger.LogDebug("IM1 connection token found in cache.");
-                    var finalResult = ProcessResult.FinalResult<string, VisionConnectionToken>(connectionToken);
-                    return Task.FromResult(finalResult);
+                    return connectionToken;
                 })
-                .IfNone(() =>
-                {
-                    var stepResult = ProcessResult.StepResult<string, VisionConnectionToken>(cacheKey);
-                    return Task.FromResult(stepResult);
-                });
+                .IfNone(() => cacheKey);
         }
 
         private async Task<ProcessResult<VisionConnectionToken, Im1ConnectionRegisterResult>> CreateIm1ConnectionToken(
@@ -189,16 +176,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 _logger.LogError(ex,
                     $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked.");
-                var finalResult =
-                    new Im1ConnectionRegisterResult.ErrorCase(
-                        Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
-                return ProcessResult.FinalResult<VisionConnectionToken, Im1ConnectionRegisterResult>(finalResult);
+                return new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UserAlreadyLinked);
             }
 
             if (linkAccountResponse.HasErrorResponse)
             {
-                var finalResult = VisionIm1RegisterErrorMapper.Map(linkAccountResponse, _logger);
-                return ProcessResult.FinalResult<VisionConnectionToken, Im1ConnectionRegisterResult>(finalResult);
+                return VisionIm1RegisterErrorMapper.Map(linkAccountResponse, _logger);
             }
 
             var apiToken = linkAccountResponse.Body.AuthenticationRef.ApiToken;
@@ -212,7 +195,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
 
             await _im1CacheService.SaveIm1ConnectionToken(cacheKey, connectionToken);
 
-            return ProcessResult.StepResult<VisionConnectionToken, Im1ConnectionRegisterResult>(connectionToken);
+            return connectionToken;
         }
 
         private async Task<ProcessResult<VisionPfsApiObjectResponse<PatientConfigurationResponse>, Im1ConnectionRegisterResult>> GetConfiguration(
@@ -236,11 +219,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     _logger.LogVisionErrorResponse(configResponse);
                 }
 
-                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
-                return ProcessResult.FinalResult<VisionPfsApiObjectResponse<PatientConfigurationResponse>, Im1ConnectionRegisterResult>(finalResult);
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
 
-            return ProcessResult.StepResult<VisionPfsApiObjectResponse<PatientConfigurationResponse>, Im1ConnectionRegisterResult>(configResponse);
+            return configResponse;
         }
 
         private CreateIm1ConnectionResponse CreatePatientIm1ConnectionResponse(

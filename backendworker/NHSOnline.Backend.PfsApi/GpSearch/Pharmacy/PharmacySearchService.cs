@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -60,19 +60,17 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         .InRandomOrder()
                         .Take(_gpLookupConfig.OnlinePharmacyRandomisedSearchResultLimit);
 
-                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
-
                     try
                     {
-                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmaciesInRandomOrder);
+                        var pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmaciesInRandomOrder);
+
+                        return new PharmacySearchResult.Success(pharmacies);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
                         return new PharmacySearchResult.InternalServerError();
                     }
-
-                    return new PharmacySearchResult.Success(pharmacies);
                 }
 
                 return new PharmacySearchResult.InternalServerError();
@@ -104,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 return new PharmacySearchResult.BadRequest();
             }
 
-            searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm, false);
+            searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm);
 
             var query = CreateOnlinePharmacyOnlySearchQuery(searchTerm);
             try
@@ -115,24 +113,23 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
                 if (pharmacySearchResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    var contactablePharmacies = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies);
+                    var contactablePharmacies = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies).ToList();
 
-                    var nonContactablePharmaciesCount = pharmacySearchResponse.Pharmacies.Count - contactablePharmacies.Count();
-                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
+                    var nonContactablePharmaciesCount = pharmacySearchResponse.Pharmacies.Count - contactablePharmacies.Count;
 
                     try
                     {
-                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(contactablePharmacies);
+                        var pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(contactablePharmacies);
+
+                        return new PharmacySearchResult.Success(
+                            pharmacies,
+                            pharmacySearchResponse.PharmacyCount - nonContactablePharmaciesCount);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
                         return new PharmacySearchResult.InternalServerError();
                     }
-
-                    return new PharmacySearchResult.Success(
-                        pharmacies,
-                        pharmacySearchResponse.PharmacyCount - nonContactablePharmaciesCount);
                 }
 
                 return new PharmacySearchResult.InternalServerError();
@@ -151,8 +148,49 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
         public async Task<PharmacySearchResult> Search(string searchTerm)
         {
-            _logger.LogEnter();
+            try
+            {
+                _logger.LogEnter();
 
+                var sanitizedSearchTerm = SanitizeAndValidateSearchTerm(searchTerm);
+                if (sanitizedSearchTerm.Failed(out var sanitizedSearchTermFailure))
+                {
+                    return sanitizedSearchTermFailure;
+                }
+
+                var parsedPostcode = ParsePostcodeData(sanitizedSearchTerm);
+                if (parsedPostcode.Failed(out var parsedPostcodeFailure))
+                {
+                    return parsedPostcodeFailure;
+                }
+
+                var postcodeData = await LookupPostcodeCoordinates(sanitizedSearchTerm, parsedPostcode);
+                if (postcodeData.Failed(out var postcodeDataFailure))
+                {
+                    return postcodeDataFailure;
+                }
+
+                var pharmacies = await FindPharmaciesByPostcode(sanitizedSearchTerm, parsedPostcode, postcodeData);
+                if (pharmacies.Failed(out var pharmaciesFailure))
+                {
+                    return pharmaciesFailure;
+                }
+
+                return new PharmacySearchResult.Success(pharmacies.Result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error processing Postcode search input: {searchTerm}");
+                return new PharmacySearchResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private ProcessResult<string, PharmacySearchResult> SanitizeAndValidateSearchTerm(string searchTerm)
+        {
             searchTerm = OrganisationSearchUtility.SanitizeSearch(searchTerm);
 
             var isValid = new ValidateAndLog(_logger)
@@ -164,6 +202,11 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 return new PharmacySearchResult.BadRequest();
             }
 
+            return searchTerm;
+        }
+
+        private ProcessResult<ParsedPostcode, PharmacySearchResult> ParsePostcodeData(string searchTerm)
+        {
             var postcodeDetail = _postcodeParser.ParseSearchTermForPostcodeMatch(searchTerm);
 
             if (!postcodeDetail.IsPostcode)
@@ -172,71 +215,84 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 return new PharmacySearchResult.InvalidPostcode();
             }
 
+            return postcodeDetail;
+        }
+
+        private async Task<ProcessResult<PostcodeData, PharmacySearchResult>> LookupPostcodeCoordinates(
+            string searchTerm,
+            ParsedPostcode parsedPostcode)
+        {
             try
             {
-                var search = OrganisationSearchUtility.PrepareSearch(postcodeDetail.Postcode, true);
-                var postcodeSearchData = OrganisationSearchUtility.CreatePostcodeSearchQuery(search, string.IsNullOrEmpty(postcodeDetail.Inward));
+                var search = OrganisationSearchUtility.PrepareSearch(parsedPostcode.Postcode, true);
+                var postcodeSearchData =
+                    OrganisationSearchUtility.CreatePostcodeSearchQuery(search,
+                        string.IsNullOrEmpty(parsedPostcode.Inward));
+
+                var postcodeSearchResult = await _gpLookupClient.PostcodeSearch(postcodeSearchData);
+
+                if (!postcodeSearchResult.HasSuccessResponse)
+                {
+                    _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude " +
+                                     $"on Nhs Search Service, Status code: " +
+                                     $"{(int) postcodeSearchResult.StatusCode}");
+
+                    return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
+                }
+
+                var postcodeCoordinates = postcodeSearchResult.Body?.PostcodeData?.FirstOrDefault();
+
+                if (postcodeCoordinates == null)
+                {
+                    _logger.LogInformation($"NHS Search service returned no postcode data for: {searchTerm}");
+                    return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
+                }
+
+                return postcodeCoordinates;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, $"Search for Nhs pharmacies Failed for: {searchTerm} ");
+                return new PharmacySearchResult.InternalServerError();
+            }
+        }
+
+        private async Task<ProcessResult<IEnumerable<PharmacyDetails>, PharmacySearchResult>> FindPharmaciesByPostcode(
+            string searchTerm,
+            ParsedPostcode postcodeDetail,
+            PostcodeData postcodeCoordinates)
+        {
+            try
+            {
+                var organisationSearchQuery = CreateOrganisationPostcodeSearchQuery(postcodeCoordinates);
+
+                var pharmacySearchResponse =
+                    await ExecuteOrganisationPostcodeSearch(organisationSearchQuery, postcodeDetail.Postcode);
+
+                pharmacySearchResponse.PostcodeCoordinate = new GeoCoordinate(
+                    double.Parse(postcodeCoordinates.Latitude, CultureInfo.InvariantCulture),
+                    double.Parse(postcodeCoordinates.Longitude, CultureInfo.InvariantCulture));
 
                 try
                 {
-                    var postcodeSearchResult = await _gpLookupClient.PostcodeSearch(postcodeSearchData);
+                    var pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
+                        pharmacySearchResponse.Pharmacies,
+                        pharmacySearchResponse.PostcodeCoordinate);
 
-                    if (!postcodeSearchResult.HasSuccessResponse)
-                    {
-                        _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude " +
-                                         $"on Nhs Search Service, Status code: " +
-                                         $"{(int) postcodeSearchResult.StatusCode}");
-
-                        return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
-                    }
-
-                    var postcodeCoordinates = postcodeSearchResult?.Body?.PostcodeData?.FirstOrDefault();
-
-                    if (postcodeCoordinates == null)
-                    {
-                        _logger.LogInformation($"NHS Search service returned no postcode data for: {searchTerm}");
-                        return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
-                    }
-
-                    var organisationSearchQuery = CreateOrganisationPostcodeSearchQuery(postcodeCoordinates);
-
-                    var pharmacySearchResponse =
-                        await ExecuteOrganisationPostcodeSearch(organisationSearchQuery, postcodeDetail.Postcode);
-
-
-                    pharmacySearchResponse.PostcodeCoordinate = new GeoCoordinate(
-                        double.Parse(postcodeCoordinates.Latitude, CultureInfo.InvariantCulture),
-                        double.Parse(postcodeCoordinates.Longitude, CultureInfo.InvariantCulture));
-
-                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
-                    try
-                    {
-                         pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
-                            pharmacySearchResponse.Pharmacies,
-                            pharmacySearchResponse.PostcodeCoordinate);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
-                        return new PharmacySearchResult.InternalServerError();
-                    }
-
-                    return new PharmacySearchResult.Success(pharmacies);
+                    return ProcessResult<IEnumerable<PharmacyDetails>, PharmacySearchResult>.FromTResult(pharmacies);
                 }
-                catch (HttpRequestException ex)
+                catch (Exception e)
                 {
-                    _logger.LogError(ex, $"Search for Nhs pharmacies Failed for: {searchTerm} ");
-                    return new PharmacySearchResult.InternalServerError();
+                    _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
+                    var finalResult = new PharmacySearchResult.InternalServerError();
+                    return finalResult;
                 }
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, $"Error processing Postcode search input: {searchTerm} ");
-                return new PharmacySearchResult.InternalServerError();
-            }
-            finally
-            {
-                _logger.LogExit();
+                _logger.LogError(ex, $"Search for Nhs pharmacies Failed for: {searchTerm} ");
+                var finalResult = new PharmacySearchResult.InternalServerError();
+                return finalResult;
             }
         }
 

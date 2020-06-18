@@ -125,14 +125,13 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return new MessagePatchResult.BadRequest();
                 }
 
-                var mapperStep = new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
-                if (mapperStep.ProcessFinishedEarly(out var messageUpdateResult))
+                var repositoryUpdates = new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
+                if (repositoryUpdates.Failed(out var repositoryUpdatesFailure))
                 {
-                    return messageUpdateResult;
+                    return repositoryUpdatesFailure;
                 }
 
-                var updateResult =
-                    await _messageRepository.UpdateOne(accessToken.Subject, messageId, mapperStep.Result);
+                var updateResult = await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
                 return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
             }
             catch (Exception e)

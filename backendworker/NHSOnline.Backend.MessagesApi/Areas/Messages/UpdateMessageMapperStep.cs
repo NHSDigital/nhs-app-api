@@ -41,10 +41,10 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             if (invalidOperations.Any())
             {
                 _logger.LogError($"Invalid operations in Message Update: {string.Join(", ", invalidOperations)}");
-                return ProcessResult.FinalResult<UpdateRecordBuilder<UserMessage>,MessagePatchResult>(new MessagePatchResult.BadRequest());
+                return new MessagePatchResult.BadRequest();
             }
 
-            return ProcessResult.StepResult<UpdateRecordBuilder<UserMessage>, MessagePatchResult>(updates);
+            return updates;
         }
     }
 }

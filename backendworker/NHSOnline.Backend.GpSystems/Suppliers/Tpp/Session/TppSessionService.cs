@@ -54,34 +54,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             try
             {
-                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+                var authenticateReply = await Authenticate(connectionToken, odsCode);
+                if (authenticateReply.Failed(out var authenticateReplyFailure))
                 {
-                    _logger.LogError("Invalid Im1 connection token");
-                    return new GpSessionCreateResult.InvalidConnectionToken();
+                    return authenticateReplyFailure;
                 }
 
-                var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
-                if (!authenticateReply.HasSuccessResponse)
+                var tppUserSession = CreateSession(authenticateReply, odsCode, nhsNumber);
+                if (tppUserSession.Failed(out var tppUserSessionFailure))
                 {
-                    return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
+                    return tppUserSessionFailure;
                 }
 
-                var createSession = CreateSession(authenticateReply, odsCode, nhsNumber);
-                if (createSession.ProcessFinishedEarly(out var createSessionFinalResult))
-                {
-                    return createSessionFinalResult;
-                }
-
-                var tppUserSession = createSession.Result;
-                _tppLinkedAccountsService.LogMismatchingPractices(authenticateReply.Body, tppUserSession.ProxyPatients);
+                LogMismatchingPractices(authenticateReply, tppUserSession);
 
                 await SelectPatientIfMoreThanOne(authenticateReply, tppUserSession);
 
-                if (await IsIm1MessagingEnabled(tppUserSession))
-                {
-                    tppUserSession.Im1MessagingEnabled = true;
-                    _logger.LogInformation("PFS messaging is enabled");
-                }
+                await UpdateSessionIfIm1MessagingIsEnabled(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(tppUserSession);
@@ -109,17 +98,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             }
         }
 
-        private async Task<bool> IsIm1MessagingEnabled(TppUserSession tppUserSession)
+        private async Task<ProcessResult<TppApiObjectResponse<AuthenticateReply>, GpSessionCreateResult>> Authenticate(
+            string connectionToken,
+            string odsCode)
         {
-            var serviceAccesses = await _listServiceAccesses.Post(tppUserSession);
+            if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+            {
+                _logger.LogError("Invalid Im1 connection token");
+                return new GpSessionCreateResult.InvalidConnectionToken();
+            }
 
-            return serviceAccesses.Body?.ServiceAccess?.Where(IsIm1MessageService).Any(IsEnabled) ?? false;
+            var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
+            if (!authenticateReply.HasSuccessResponse)
+            {
+                return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
+            }
 
-            static bool IsIm1MessageService(ServiceAccess serviceAccess)
-                => string.Equals(serviceAccess.Description, Im1MessagingService, StringComparison.Ordinal);
-
-            static bool IsEnabled(ServiceAccess serviceAccess)
-                => string.Equals(serviceAccess.Status, ServiceAvailableCode, StringComparison.Ordinal);
+            return authenticateReply;
         }
 
         private async Task SelectPatientIfMoreThanOne(TppApiObjectResponse<AuthenticateReply> authenticateReply, TppUserSession tppUserSession)
@@ -146,10 +141,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 const string message = "Cannot create a valid session from Tpp response";
                 _logger.LogError(message);
-                return ProcessResult.FinalResult<TppUserSession, GpSessionCreateResult>(new GpSessionCreateResult.BadGateway(message));
+                return new GpSessionCreateResult.BadGateway(message);
             }
 
-            return ProcessResult.StepResult<TppUserSession, GpSessionCreateResult>(userSession.ValueOrFailure());
+            return userSession.ValueOrFailure();
+        }
+
+        private async Task UpdateSessionIfIm1MessagingIsEnabled(TppUserSession tppUserSession)
+        {
+            if (await IsIm1MessagingEnabled(tppUserSession))
+            {
+                tppUserSession.Im1MessagingEnabled = true;
+                _logger.LogInformation("PFS messaging is enabled");
+            }
+        }
+
+        private async Task<bool> IsIm1MessagingEnabled(TppUserSession tppUserSession)
+        {
+            var serviceAccesses = await _listServiceAccesses.Post(tppUserSession);
+
+            return serviceAccesses.Body?.ServiceAccess?.Where(IsIm1MessageService).Any(IsEnabled) ?? false;
+
+            static bool IsIm1MessageService(ServiceAccess serviceAccess)
+                => string.Equals(serviceAccess.Description, Im1MessagingService, StringComparison.Ordinal);
+
+            static bool IsEnabled(ServiceAccess serviceAccess)
+                => string.Equals(serviceAccess.Status, ServiceAvailableCode, StringComparison.Ordinal);
+        }
+
+        private void LogMismatchingPractices(TppApiObjectResponse<AuthenticateReply> authenticateReply, TppUserSession tppUserSession)
+        {
+            _tppLinkedAccountsService.LogMismatchingPractices(authenticateReply.Body, tppUserSession.ProxyPatients);
         }
 
         public async Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)

@@ -100,13 +100,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 var practiceSettingsTask = _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
                 await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
 
-                var processSessionsStep = await UpdateSessionWithUserSessionsResponse(session, sessionRequestTask);
-                if (processSessionsStep.ProcessFinishedEarly(out var processSessionsStepFinalResult))
+                var patientName = await UpdateSessionWithUserSessionsResponse(session, sessionRequestTask);
+                if (patientName.Failed(out var patientNameFailure))
                 {
-                    return processSessionsStepFinalResult;
+                    return patientNameFailure;
                 }
-
-                var patientName = processSessionsStep.Result;
 
                 await UpdateSessionWithPracticeSettings(session, practiceSettingsTask, patientName);
 
@@ -201,8 +199,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 {
                     const string message = "No patient name found";
                     _logger.LogError(message);
-                    var finalResult = new GpSessionCreateResult.BadGateway(message);
-                    return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
+                    return new GpSessionCreateResult.BadGateway(message);
                 }
 
                 if (string.IsNullOrWhiteSpace(session.UserPatientLinkToken))
@@ -210,25 +207,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                     const string message = "No EMIS userPatientLinkToken found";
                     _logger.LogError(message);
                     _logger.LogEmisErrorResponse(sessionResponse);
-                    var finalResult = new GpSessionCreateResult.Forbidden(message);
-                    return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
+                    return new GpSessionCreateResult.Forbidden(message);
                 }
             }
             catch (EmisSessionResponseErrorException responseError)
             {
                 _logger.LogError(responseError,
                     $"{StandardErrorMessage},{nameof(EmisSessionResponseErrorException)} has been thrown");
-                return ProcessResult.FinalResult<string, GpSessionCreateResult>(responseError.ErrorResult);
+                return responseError.ErrorResult;
             }
             catch (HttpRequestException e)
             {
                 var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
                 _logger.LogError(e, message);
                 var finalResult = new GpSessionCreateResult.BadGateway(message);
-                return ProcessResult.FinalResult<string, GpSessionCreateResult>(finalResult);
+                return finalResult;
             }
 
-            return ProcessResult.StepResult<string, GpSessionCreateResult>(patientName);
+            return patientName;
         }
 
         private async Task UpdateSessionWithPracticeSettings(

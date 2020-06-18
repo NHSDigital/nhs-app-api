@@ -27,10 +27,9 @@ namespace NHSOnline.Backend.PfsApi.Session
         {
             var createUserSessionResult = await _userSessionCreator.Create(citizenIdSessionResult, serviceJourneyRules, csrfToken);
 
-            return createUserSessionResult.Accept(
-                failure => ProcessResult.FinalResult<UserSession, CreateSessionResult>(
-                    new CreateSessionResult.ErrorResult(failure.ErrorType)),
-                success => ProcessResult.StepResult<UserSession, CreateSessionResult>(success.UserSession));
+            return createUserSessionResult.Accept<ProcessResult<UserSession, CreateSessionResult>>(
+                failure => new CreateSessionResult.ErrorResult(failure.ErrorType),
+                success => success.UserSession);
         }
 
         public async Task<DeleteUserSessionResult> Delete(HttpContext httpContext, UserSession userSession)

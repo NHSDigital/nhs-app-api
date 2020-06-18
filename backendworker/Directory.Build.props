@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.7.0-*" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All" />
+    <PackageReference Include="NHSOnline.CodeAnalysers" Version="0.3.0" PrivateAssets="All" />
   </ItemGroup>
 
   <Choose>

@@ -126,37 +126,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 _logger.LogEnter();
 
-                var endUserSessionStep = await CreateEndUserSession();
-                if (endUserSessionStep.ProcessFinishedEarly(out var endUserSessionStepFinalResult))
+                var endUserSessionId = await CreateEndUserSession();
+                if (endUserSessionId.Failed(out var endUserSessionFailure))
                 {
-                    return endUserSessionStepFinalResult;
+                    return endUserSessionFailure;
                 }
-                var endUserSessionId = endUserSessionStep.Result;
 
-                var connectionTokenStep = await GetOrCreateIm1ConnectionToken(request, endUserSessionId);
-                if (connectionTokenStep.ProcessFinishedEarly(out var connectionTokenStepFinalResult))
+                var connectionToken = await GetOrCreateIm1ConnectionToken(request, endUserSessionId);
+                if (connectionToken.Failed(out var connectionTokenFailure))
                 {
-                    return connectionTokenStepFinalResult;
+                    return connectionTokenFailure;
                 }
-                var connectionToken = connectionTokenStep.Result;
 
-                var nhsNumbersStep = await FetchNhsNumbers(connectionToken, request.OdsCode, endUserSessionId);
-                if (nhsNumbersStep.ProcessFinishedEarly(out var nhsNumbersStepFinalResult))
+                var nhsNumbers = await FetchNhsNumbers(connectionToken, request.OdsCode, endUserSessionId);
+                if (nhsNumbers.Failed(out var nhsNumbersFailure))
                 {
-                    return nhsNumbersStepFinalResult;
+                    return nhsNumbersFailure;
                 }
-                var nhsNumbers = nhsNumbersStep.Result;
 
-                var response = new CreateIm1ConnectionResponse
-                {
-                    ConnectionToken = connectionToken.SerializeJson(),
-                    NhsNumbers = nhsNumbers,
-                    OdsCode = request.OdsCode,
-                    LinkageKey = request.LinkageKey,
-                    AccountId = request.AccountId
-                };
-
-                _logger.LogInformation($"Emis returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
+                var response = CreateIm1ConnectionResponse(request, connectionToken, nhsNumbers.Result);
 
                 return new Im1ConnectionRegisterResult.Success(response);
             }
@@ -172,6 +160,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             }
         }
 
+        private CreateIm1ConnectionResponse CreateIm1ConnectionResponse(
+            PatientIm1ConnectionRequest request,
+            EmisConnectionToken connectionToken,
+            IEnumerable<PatientNhsNumber> nhsNumbers)
+        {
+            var response = new CreateIm1ConnectionResponse
+            {
+                ConnectionToken = connectionToken.SerializeJson(),
+                NhsNumbers = nhsNumbers,
+                OdsCode = request.OdsCode,
+                LinkageKey = request.LinkageKey,
+                AccountId = request.AccountId
+            };
+
+            _logger.LogInformation($"Emis returned {response.NhsNumbers?.Count()} NHS Numbers for the user");
+            return response;
+        }
+
         private async Task<ProcessResult<string, Im1ConnectionRegisterResult>> CreateEndUserSession()
         {
             var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
@@ -180,12 +186,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                 _logger.LogEmisErrorResponse(endUserSessionResponse);
 
-                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
-                return ProcessResult.FinalResult<string, Im1ConnectionRegisterResult>(finalResult);
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
 
-            var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
-            return ProcessResult.StepResult<string, Im1ConnectionRegisterResult>(endUserSessionId);
+            return endUserSessionResponse.Body.EndUserSessionId;
         }
 
         private async Task<ProcessResult<EmisConnectionToken, Im1ConnectionRegisterResult>> GetOrCreateIm1ConnectionToken(
@@ -215,8 +219,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                 if (!meApplicationsResponse.HasSuccessResponse)
                 {
-                    var finalResult = EmisIm1RegisterErrorMapper.Map(meApplicationsResponse, _logger);
-                    return ProcessResult.FinalResult<EmisConnectionToken, Im1ConnectionRegisterResult>(finalResult);
+                    return EmisIm1RegisterErrorMapper.Map(meApplicationsResponse, _logger);
                 }
 
                 connectionToken = new EmisConnectionToken
@@ -228,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 await CacheConnectionToken(connectionToken);
             }
 
-            return ProcessResult.StepResult<EmisConnectionToken, Im1ConnectionRegisterResult>(connectionToken);
+            return connectionToken;
         }
 
         private async Task<ProcessResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>> FetchNhsNumbers(
@@ -236,24 +239,38 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             string odsCode,
             string endUserSessionId)
         {
-            var sessionsPostStep = await FetchSessions(connectionToken, odsCode, endUserSessionId);
-            if (sessionsPostStep.ProcessFinishedEarly(out var sessionsPostStepFinalResult))
+            var sessionsResponse = await FetchSessions(connectionToken, odsCode, endUserSessionId);
+            if (sessionsResponse.Failed(out var sessionsResponseFailure))
             {
-                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(sessionsPostStepFinalResult);
-            }
-            var sessionsResponse = sessionsPostStep.Result;
-
-            var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
-            if (string.IsNullOrEmpty(userPatientLinkToken))
-            {
-                _logger.LogError(
-                    $"Emis could not extract {nameof(userPatientLinkToken)}. registration_linked_accounts={sessionsResponse.Body?.ExtractLinkedPatients().Count()}");
-                _logger.LogEmisErrorResponse(sessionsResponse);
-
-                var finalResult = new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
-                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(finalResult);
+                return sessionsResponseFailure;
             }
 
+            var userPatientLinkToken = ExtractUserPatientLinkToken(sessionsResponse);
+            if (userPatientLinkToken.Failed(out var userPatientLinkTokenFailure))
+            {
+                return userPatientLinkTokenFailure;
+            }
+
+            var demographicsResponse = await GetDemographicsResponse(sessionsResponse, userPatientLinkToken, endUserSessionId);
+            if (demographicsResponse.Failed(out var demographicsResponseFailure))
+            {
+                return demographicsResponseFailure;
+            }
+
+            var nhsNumbers = ExtractNhsNumbers(demographicsResponse);
+            return ProcessResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>.FromTResult(nhsNumbers);
+        }
+
+        private static IEnumerable<PatientNhsNumber> ExtractNhsNumbers(EmisApiObjectResponse<DemographicsGetResponse> demographicsResponse)
+        {
+            return demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
+        }
+
+        private async Task<ProcessResult<EmisApiObjectResponse<DemographicsGetResponse>, Im1ConnectionRegisterResult>> GetDemographicsResponse(
+            EmisApiObjectResponse<SessionsPostResponse> sessionsResponse,
+            string userPatientLinkToken,
+            string endUserSessionId)
+        {
             var demographicsResponse =
                 await _emisClient.DemographicsGet(
                     new EmisRequestParameters
@@ -267,12 +284,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                 _logger.LogEmisErrorResponse(demographicsResponse);
-                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
-                return ProcessResult.FinalResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(finalResult);
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
 
-            var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
-            return ProcessResult.StepResult<IEnumerable<PatientNhsNumber>, Im1ConnectionRegisterResult>(nhsNumbers.ToList());
+            return demographicsResponse;
+        }
+
+        private ProcessResult<string, Im1ConnectionRegisterResult> ExtractUserPatientLinkToken(
+            EmisApiObjectResponse<SessionsPostResponse> sessionsResponse)
+        {
+            var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
+            if (string.IsNullOrEmpty(userPatientLinkToken))
+            {
+                _logger.LogError(
+                    $"Emis could not extract {nameof(userPatientLinkToken)}. registration_linked_accounts={sessionsResponse.Body?.ExtractLinkedPatients().Count()}");
+                _logger.LogEmisErrorResponse(sessionsResponse);
+
+                return new Im1ConnectionRegisterResult.UnmappedErrorWithStatusCode();
+            }
+
+            return userPatientLinkToken;
         }
 
         private async Task<ProcessResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>> FetchSessions(
@@ -291,11 +322,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
             {
                 LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                 _logger.LogEmisErrorResponse(sessionsResponse);
-                var finalResult = new Im1ConnectionRegisterResult.BadGateway();
-                return ProcessResult.FinalResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>(finalResult);
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
 
-            return ProcessResult.StepResult<EmisApiObjectResponse<SessionsPostResponse>, Im1ConnectionRegisterResult>(sessionsResponse);
+            return sessionsResponse;
         }
 
         private MeApplicationsPostRequest CreateMeApplicationsPostRequest(PatientIm1ConnectionRequest request)
