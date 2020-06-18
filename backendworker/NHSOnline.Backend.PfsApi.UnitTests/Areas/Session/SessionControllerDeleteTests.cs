@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             await CreateSystemUnderTest().Delete(userSession);
 
             // Assert
-            Context.MockGpSessionManager.VerifyNoOtherCalls();
+            Context.Mocks.GpSessionManager.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             await CreateSystemUnderTest().Delete(userSession);
 
             // Assert
-            Context.MockAuditor.VerifyNoOtherCalls();
+            Context.Mocks.Auditor.VerifyNoOtherCalls();
         }
 
         private P9UserSession CreateP9UserSession(
@@ -188,14 +188,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
         private void ArrangeDeleteCachedUserSession(string key, bool? result = null)
         {
-            Context.MockSessionCacheService
+            Context.Mocks.SessionCacheService
                 .Setup(x => x.DeleteUserSession(key))
                 .ReturnsAsync(result ?? true);
         }
 
         private void ArrangeCloseAndDeleteGpUserSession(GpUserSession gpUserSession, CloseSessionResult result = null)
         {
-            Context.MockGpSessionManager
+            Context.Mocks.GpSessionManager
                 .Setup(x => x.CloseSession(gpUserSession))
                 .ReturnsAsync(result ?? new CloseSessionResult.Success());
         }

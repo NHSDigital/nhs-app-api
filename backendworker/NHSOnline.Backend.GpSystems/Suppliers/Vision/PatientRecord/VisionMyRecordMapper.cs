@@ -2,28 +2,22 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 {
-    public class VisionMyRecordMapper : IVisionMyRecordMapper
+    internal sealed class VisionMyRecordMapper : IVisionMyRecordMapper
     {
-        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, Problems problems, TestResults testResults, Diagnosis diagnosis, Examinations examinations, Procedures procedures)
+        public MyRecordResponse Map(VisionPatientRecordData data)
         {
             return new MyRecordResponse
             {
-                Allergies = allergies,
-                Medications = medications,
-                Immunisations = immunisations,
-                Problems = problems,
-                TestResults = testResults,
-                Diagnosis = diagnosis,
-                Examinations = examinations,
-                Procedures = procedures,
-                HasSummaryRecordAccess = allergies?.HasAccess ?? false,
-                HasDetailedRecordAccess = (
-                    (immunisations != null && immunisations.HasAccess) ||
-                    (problems != null && problems.HasAccess) ||
-                    (testResults != null && testResults.HasAccess) ||
-                    (diagnosis != null && diagnosis.HasAccess) ||
-                    (examinations != null && examinations.HasAccess) ||
-                    (procedures != null && procedures.HasAccess))
+                Allergies = data.Allergies,
+                Medications = data.Medications,
+                Immunisations = data.Immunisations,
+                Problems = data.Problems,
+                TestResults = data.TestResults,
+                Diagnosis = data.Diagnosis,
+                Examinations = data.Examinations,
+                Procedures = data.Procedures,
+                HasSummaryRecordAccess = data.HasSummaryRecordAccess,
+                HasDetailedRecordAccess = data.HasDetailedRecordAccess
             };
         }
     }

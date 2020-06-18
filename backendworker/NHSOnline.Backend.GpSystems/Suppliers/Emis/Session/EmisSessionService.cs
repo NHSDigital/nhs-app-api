@@ -80,15 +80,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
-                var session = new EmisUserSession
-                {
-                    Id = Guid.NewGuid(),
-                    EndUserSessionId = endUserSessionResponse.EndUserSessionId,
-                    NhsNumber = nhsNumber,
-                    OdsCode = odsCode,
-                    AppointmentBookingReasonNecessity = Necessity.Mandatory,
-                    PrescriptionSpecialRequestNecessity = Necessity.Optional
-                };
+                var session = CreateEmisUserSession(odsCode, nhsNumber, endUserSessionResponse);
 
                 var emisRequestParameters = new EmisRequestParameters(session);
 
@@ -136,6 +128,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogExit();
             }
+        }
+
+        private static EmisUserSession CreateEmisUserSession(string odsCode, string nhsNumber,
+            SessionsEndUserSessionPostResponse endUserSessionResponse)
+        {
+            var session = new EmisUserSession
+            {
+                Id = Guid.NewGuid(),
+                EndUserSessionId = endUserSessionResponse.EndUserSessionId,
+                NhsNumber = nhsNumber,
+                OdsCode = odsCode,
+                AppointmentBookingReasonNecessity = Necessity.Mandatory,
+                PrescriptionSpecialRequestNecessity = Necessity.Optional
+            };
+            return session;
         }
 
         private async Task<EmisApiObjectResponse<SessionsPostResponse>> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)

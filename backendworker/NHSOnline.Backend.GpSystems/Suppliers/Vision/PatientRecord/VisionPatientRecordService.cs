@@ -13,12 +13,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
     internal class VisionPatientRecordService : IVisionPatientRecordService
     {
         private readonly ILogger<VisionPatientRecordService> _logger;
+        private readonly VisionPatientRecordSectionsService _patientRecordSectionsService;
         private readonly IVisionMyRecordMapper _visionMyRecordMapper;
         private readonly PatientRecordSectionResolver _patientRecordSectionResolver;
-        private readonly AllergiesSection _allergiesSection;
-        private readonly MedicationsSection _medicationsSection;
-        private readonly ImmunisationsSection _immunisationsSection;
-        private readonly ProblemsSection _problemsSection;
         private readonly TestResultSection _testResultsSection;
         private readonly DiagnosisSection _diagnosisSection;
         private readonly ExaminationsSection _examinationsSection;
@@ -26,24 +23,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 
         public VisionPatientRecordService(
             ILogger<VisionPatientRecordService> logger,
+            VisionPatientRecordSectionsService patientRecordSectionsService,
             IVisionMyRecordMapper visionMyRecordMapper,
             PatientRecordSectionResolver patientRecordSectionResolver,
-            AllergiesSection allergiesSection,
-            MedicationsSection medicationSection,
-            ImmunisationsSection immunisationsSection,
-            ProblemsSection problemsSection,
             TestResultSection testResultsSection,
             DiagnosisSection diagnosisSection,
             ExaminationsSection examinationsSection,
             ProceduresSection proceduresSection)
         {
             _logger = logger;
+            _patientRecordSectionsService = patientRecordSectionsService;
             _visionMyRecordMapper = visionMyRecordMapper;
             _patientRecordSectionResolver = patientRecordSectionResolver;
-            _allergiesSection = allergiesSection;
-            _medicationsSection = medicationSection;
-            _immunisationsSection = immunisationsSection;
-            _problemsSection = problemsSection;
             _testResultsSection = testResultsSection;
             _diagnosisSection = diagnosisSection;
             _examinationsSection = examinationsSection;
@@ -63,22 +54,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                     return new GetMyRecordResult.InternalServerError();
                 }
 
-                var allergiesTask = _patientRecordSectionResolver.GetPatientData(userSession, _allergiesSection);
-                var medicationsTask = _patientRecordSectionResolver.GetPatientData(userSession, _medicationsSection);
-                var immunisationsTask = _patientRecordSectionResolver.GetPatientData(userSession, _immunisationsSection);
-                var problemsTask = _patientRecordSectionResolver.GetPatientData(userSession, _problemsSection);
-                var testResultsTask = _patientRecordSectionResolver.GetPatientData(userSession, _testResultsSection);
-                var diagnosisTask = _patientRecordSectionResolver.GetPatientData(userSession, _diagnosisSection);
-                var examinationsTask = _patientRecordSectionResolver.GetPatientData(userSession, _examinationsSection);
-                var proceduresTask = _patientRecordSectionResolver.GetPatientData(userSession, _proceduresSection);
+                var data = await _patientRecordSectionsService.GetPatientRecordData(userSession);
 
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask,
-                    diagnosisTask, testResultsTask, examinationsTask, proceduresTask);
-
-                var response = _visionMyRecordMapper.Map(allergiesTask.Result, medicationsTask.Result,
-                    immunisationsTask.Result, problemsTask.Result, testResultsTask.Result, diagnosisTask.Result,
-                    examinationsTask.Result, proceduresTask.Result);
-                response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                var response = _visionMyRecordMapper.Map(data);
+                response.Supplier = Supplier.Vision.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 _logger.LogInformation("Patient record tasks completed");
 

@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             services.AddTransient<ProceduresSection>();
 
             services.AddTransient<VisionPatientRecordService>();
+            services.AddTransient<VisionPatientRecordSectionsService>();
             services.AddTransient<IVisionMyRecordMapper, VisionMyRecordMapper>();
             services.AddTransient<IVisionMyRecordSectionMapper, VisionMyRecordSectionMapper>();
 

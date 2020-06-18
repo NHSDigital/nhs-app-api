@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
+    [SuppressMessage("Microsoft.Maintainability", "CA1506", Justification = "NHSO-10119 Reduce EmisClient class coupling - In Progress")]
     internal sealed class EmisClient : IEmisClient
     {
         private const string MeApplicationsPath = "me/applications";

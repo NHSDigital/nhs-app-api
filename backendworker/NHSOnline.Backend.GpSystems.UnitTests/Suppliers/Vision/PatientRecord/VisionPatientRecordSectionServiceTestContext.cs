@@ -1,15 +1,16 @@
 using System;
 using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.Sections;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Sanitization;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 {
@@ -17,69 +18,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
     {
         private static readonly Uri MockUri = new Uri("http://mockVision/", UriKind.Absolute);
 
-        public VisionUserSession VisionUserSession { get; }
-        internal VisionPatientRecordService SystemUnderTest { get;}
-        public Mock<IHtmlSanitizer> MockSanitizer { get; }
-        public Mock<IVisionClient> VisionClient { get;}
-
-
+        public VisionUserSession VisionUserSession { get; } = new VisionUserSession();
+        internal IVisionPatientRecordService SystemUnderTest { get;}
+        internal Mock<IHtmlSanitizer> MockSanitizer { get; }
+        internal Mock<IVisionClient> VisionClient { get;}
+        
         public VisionPatientRecordSectionServiceTestContext()
         {
-            VisionUserSession = new VisionUserSession();
             var logger = new Mock<ILogger<VisionPatientRecordService>>();
             VisionClient = new Mock<IVisionClient>();
             MockSanitizer = new Mock<IHtmlSanitizer>(MockBehavior.Strict);
 
-            var recordSectionResolver = CreateRecordSectionResolver();
+            var services = new ServiceCollection()
+                .RegisterVisionPatientRecordServices()
+                .AddSingleton(logger.Object)
+                .AddSingleton(VisionClient.Object)
+                .AddSingleton(MockSanitizer.Object)
+                .AddSingleton(CreateConfig())
+                .AddMockLoggers();
 
-            var allergyMapper = new VisionAllergyMapper(new Mock<ILogger<VisionAllergyMapper>>().Object);
-            var medicationMapper = new VisionMedicationMapper(new Mock<ILogger<VisionMedicationMapper>>().Object);
-            var immunisationsMapper =
-                new VisionImmunisationsMapper(new Mock<ILogger<VisionImmunisationsMapper>>().Object);
-            var problemsMapper = new VisionProblemsMapper(new Mock<ILogger<VisionProblemsMapper>>().Object);
-
-            var testResultsMapper = new VisionTestResultsMapper(new Mock<ILogger<VisionTestResultsMapper>>().Object,
-                MockSanitizer.Object);
-            var diagnosisMapper = new VisionDiagnosisMapper(new Mock<ILogger<VisionDiagnosisMapper>>().Object,
-                MockSanitizer.Object);
-            var examinationsMapper = new VisionExaminationsMapper(new Mock<ILogger<VisionExaminationsMapper>>().Object,
-                MockSanitizer.Object);
-            var proceduresMapper = new VisionProceduresMapper(new Mock<ILogger<VisionProceduresMapper>>().Object,
-                MockSanitizer.Object);
-            
-            var allergySection = new AllergiesSection(allergyMapper);
-            var medicationSection = new MedicationsSection(medicationMapper);
-            var immunisationsSection = new ImmunisationsSection(immunisationsMapper);
-            var problemsSection = new ProblemsSection(problemsMapper);
-            var testResultsSection = new TestResultSection(testResultsMapper);
-            var diagnosisSection = new DiagnosisSection(diagnosisMapper);
-            var examinationsSection = new ExaminationsSection(examinationsMapper);
-            var proceduresSection = new ProceduresSection(proceduresMapper);
-
-            SystemUnderTest = new VisionPatientRecordService(
-                logger.Object,
-                new VisionMyRecordMapper(),
-                recordSectionResolver,
-                allergySection,
-                medicationSection,
-                immunisationsSection,
-                problemsSection,
-                testResultsSection,
-                diagnosisSection,
-                examinationsSection,
-                proceduresSection
-            );
-        }
-
-        private PatientRecordSectionResolver CreateRecordSectionResolver()
-        {
-            var visionConfig = CreateConfig();
-
-            return new PatientRecordSectionResolver(
-                new Mock<ILogger<PatientRecordSectionResolver>>().Object,
-                VisionClient.Object,
-                visionConfig,
-                new VisionMyRecordSectionMapper());
+            SystemUnderTest = services.BuildServiceProvider(true).GetRequiredService<VisionPatientRecordService>();
         }
 
         private VisionConfigurationSettings CreateConfig()
