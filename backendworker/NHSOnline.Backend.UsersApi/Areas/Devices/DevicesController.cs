@@ -4,32 +4,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
-using NHSOnline.Backend.UsersApi.Notifications;
-using NHSOnline.Backend.UsersApi.Repository;
+using NHSOnline.Backend.UsersApi.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
     [Route("api/users/devices")]
     public class DevicesController : Controller
     {
-        private readonly INotificationService _notificationService;
-        private readonly IDeviceRepositoryService _deviceRepositoryService;
+        private readonly IRegistrationService _registrationService;
         private readonly ILogger<DevicesController> _logger;
 
-        public DevicesController
-        (
-            INotificationService notificationService,
-            IDeviceRepositoryService deviceRepositoryService,
-            ILogger<DevicesController> logger
-        )
+        public DevicesController(IRegistrationService registrationService, ILogger<DevicesController> logger)
         {
-            _notificationService = notificationService;
-            _deviceRepositoryService = deviceRepositoryService;
             _logger = logger;
+            _registrationService = registrationService;
         }
 
         [HttpGet]
@@ -48,16 +39,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 try
                 {
-                    var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
-
-                    if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
-                    {
-                        return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
-                    }
-
-                    return await VerifyRegistration(
-                        foundDeviceResult,
-                        accessToken);
+                    var result = await _registrationService.GetRegistration(devicePns, accessToken);
+                    return result.Accept(new RegistrationExistsResultVisitor());
                 }
                 catch (Exception e)
                 {
@@ -84,10 +67,11 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
-                
+
                 try
                 {
-                    return await Delete(devicePns, accessToken);
+                    var result = await _registrationService.DeleteRegistration(devicePns, accessToken);
+                    return result.Accept(new DeleteRegistrationResultVisitor());
                 }
                 catch (Exception e)
                 {
@@ -99,28 +83,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             {
                 _logger.LogExit();
             }
-        }
-
-        private async Task<IActionResult> Delete(string devicePns, AccessToken accessToken)
-        {
-            var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
-            if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
-            {
-                {
-                    return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
-                }
-            }
-
-            var userDevice = foundDeviceResult.UserDevice;
-
-            var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
-            if (!(deleteRegistrationResult is DeleteRegistrationResult.Success))
-            {
-                return deleteRegistrationResult.Accept(new DeleteRegistrationResultVisitor());
-            }
-
-            var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
-            return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
         }
 
         [HttpPost]
@@ -139,16 +101,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 try
                 {
-                    var registrationResponse = await _notificationService.Register(model, accessToken);
-
-                    if (!(registrationResponse is RegistrationResult.Success successRegistrationResult))
-                    {
-                        return registrationResponse.Accept(new NotificationRegistrationResultVisitor());
-                    }
-
-                    var deviceRepositoryResult =
-                        await _deviceRepositoryService.Create(successRegistrationResult.Response, model, accessToken);
-                    return deviceRepositoryResult.Accept(new DeviceRegistrationResultVisitor(model));
+                    var registrationResult = await _registrationService.CreateRegistration(model, accessToken);
+                    return registrationResult.Accept(new RegisterDeviceResultVisitor(model));
                 }
                 catch (Exception e)
                 {
@@ -176,41 +130,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 .IsNotNullOrWhitespace(request?.DevicePns, nameof(request.DevicePns))
                 .IsNotNull(request?.DeviceType, nameof(request.DeviceType))
                 .IsValid();
-        }
-
-        private async Task<IActionResult> VerifyRegistration
-        (
-            SearchDeviceResult.Found foundDeviceResult,
-            AccessToken accessToken
-        )
-        {
-            var registrationResult = await _notificationService.Exists(foundDeviceResult.UserDevice);
-
-            switch (registrationResult)
-            {
-                case RegistrationExistsResult.Found _:
-                    return foundDeviceResult.Accept(new SearchDeviceResultVisitor());
-
-                case RegistrationExistsResult.NotFound _:
-                    return await DeleteOrphanDeviceRecord(foundDeviceResult.UserDevice, accessToken);
-
-                default:
-                    return registrationResult.Accept(new RegistrationExistsResultVisitor());
-            }
-        }
-
-        private async Task<IActionResult> DeleteOrphanDeviceRecord(
-            UserDevice userDevice,
-            AccessToken accessToken)
-        {
-            var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
-
-            if (deleteDeviceResult is DeleteDeviceResult.Success)
-            {
-                var result = new SearchDeviceResult.NotFound();
-                return result.Accept(new SearchDeviceResultVisitor());
-            }
-            return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
         }
     }
 }

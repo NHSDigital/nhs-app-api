@@ -1,5 +1,3 @@
-using NHSOnline.Backend.UsersApi.Areas.Devices;
-
 namespace NHSOnline.Backend.UsersApi.Repository
 {
     public abstract class SearchDeviceResult

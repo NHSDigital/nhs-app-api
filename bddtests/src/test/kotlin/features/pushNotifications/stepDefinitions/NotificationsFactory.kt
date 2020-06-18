@@ -16,6 +16,7 @@ import utils.getOrFail
 import worker.models.userDevices.InvalidUserDevice
 import java.util.*
 
+private const val WAIT_FOR_HUB_REGISTRATION = 200L
 class NotificationsFactory {
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
@@ -76,6 +77,7 @@ class NotificationsFactory {
         val patientToUse = patient ?: SerenityHelpers.getPatient()
         val authToken = patientToUse.accessToken
         NotificationsApi.setupRegistration(authToken)
+        Thread.sleep(WAIT_FOR_HUB_REGISTRATION)
     }
 
     fun setUpInvalidMongoDeviceRegistration() {

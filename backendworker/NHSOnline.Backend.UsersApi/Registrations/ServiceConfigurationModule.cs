@@ -1,17 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Repository;
-using NHSOnline.Backend.UsersApi.Repository;
 
-namespace NHSOnline.Backend.UsersApi
+namespace NHSOnline.Backend.UsersApi.Registrations
 {
     public class ServiceConfigurationModule: Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterRepository<UserDevice, UsersRepositoryConfiguration>();
-            services.AddSingleton<IUserDeviceRepository, UserDeviceRepository>();
-            services.AddSingleton<IDeviceRepositoryService, DeviceRepositoryService>();
+            services.AddTransient<IRegistrationService,RegistrationService>();
 
             base.ConfigureServices(services, configuration);
         }

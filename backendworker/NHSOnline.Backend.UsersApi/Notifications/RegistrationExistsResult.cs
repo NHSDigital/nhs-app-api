@@ -1,5 +1,3 @@
-using NHSOnline.Backend.UsersApi.Areas.Devices;
-
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
     public abstract class RegistrationExistsResult
@@ -13,7 +11,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return visitor.Visit(this);
             }
         }
-        
+
         public class NotFound : RegistrationExistsResult
         {
             public override T Accept<T>(IRegistrationExistsResultVisitor<T> visitor)
@@ -21,7 +19,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return visitor.Visit(this);
             }
         }
-        
+
         public class BadGateway : RegistrationExistsResult
         {
             public override T Accept<T>(IRegistrationExistsResultVisitor<T> visitor)
@@ -29,7 +27,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InternalServerError : RegistrationExistsResult
         {
             public override T Accept<T>(IRegistrationExistsResultVisitor<T> visitor)

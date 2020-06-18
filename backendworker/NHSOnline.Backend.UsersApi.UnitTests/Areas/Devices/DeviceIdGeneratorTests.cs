@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
+using NHSOnline.Backend.UsersApi.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices

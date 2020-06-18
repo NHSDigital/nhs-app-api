@@ -1,5 +1,3 @@
-using NHSOnline.Backend.UsersApi.Areas.Devices;
-
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
     public abstract class DeleteRegistrationResult
@@ -13,7 +11,15 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return visitor.Visit(this);
             }
         }
-        
+
+        public class NotFound : DeleteRegistrationResult
+        {
+            public override T Accept<T>(IDeleteRegistrationResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
         public class BadGateway : DeleteRegistrationResult
         {
             public override T Accept<T>(IDeleteRegistrationResultVisitor<T> visitor)
@@ -21,7 +27,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InternalServerError : DeleteRegistrationResult
         {
             public override T Accept<T>(IDeleteRegistrationResultVisitor<T> visitor)

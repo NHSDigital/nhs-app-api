@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -8,11 +7,10 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     public class RegistrationExistsResultVisitor : IRegistrationExistsResultVisitor<IActionResult>
     {
         public IActionResult Visit(RegistrationExistsResult.Found result)
-            => throw new NotImplementedException();
-
-
+            => new StatusCodeResult(StatusCodes.Status204NoContent);
+        
         public IActionResult Visit(RegistrationExistsResult.NotFound result)
-            => throw new NotImplementedException();
+            => new StatusCodeResult(StatusCodes.Status404NotFound);
 
         public IActionResult Visit(RegistrationExistsResult.BadGateway result)
         {
