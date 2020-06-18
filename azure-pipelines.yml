@@ -140,6 +140,12 @@ stages:
     jobs:
       - template: .azuredevops/templates/build-and-test-web-job.yml
 
+  - stage: xamarin
+    displayName: Xamarin Client
+    dependsOn:
+    jobs:
+      - template: .azuredevops/templates/xamarin-client-build-job.yml
+
   - stage: android
     displayName: Android Client
     dependsOn:

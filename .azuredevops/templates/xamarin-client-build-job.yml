@@ -1,0 +1,45 @@
+jobs:
+- job:
+  displayName: Build
+  pool:
+    vmImage: 'macos-latest'
+
+  variables:
+    build.configuration: 'Release'
+    output.directory: '$(build.binariesDirectory)/$(build.configuration)'
+
+  steps:
+    - task: MSBuild@1
+      displayName: Restore packages
+      inputs:
+        solution: 'xamarin/NhsOnline.App.sln'
+        msbuildArguments: '-m /t:Restore'
+        configuration: '$(build.configuration)'
+
+    - task: XamarinAndroid@1
+      displayName: Build Android
+      inputs:
+        projectFile: 'xamarin/NhsOnline.App.Android/NhsOnline.App.Android.csproj'
+        outputDirectory: '$(output.directory)'
+        configuration: '$(build.configuration)'
+
+    - task: XamariniOS@2
+      displayName: Build iOS
+      inputs:
+        solutionFile: 'xamarin/NhsOnline.App.sln'
+        configuration: '$(build.configuration)'
+        buildForSimulator: true
+        args: /p:IpaPackageDir="$(output.directory)"
+
+    - template: check-for-output-steps.yml
+      parameters:
+        description: build outputs
+        test.path: '$(output.directory)'
+        test.path.exists.variable.name: output.directory.exists
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish build outputs
+      condition: and(succeededOrFailed(), eq(variables['output.directory.exists'], 'True'))
+      inputs:
+        pathtoPublish: '$(output.directory)'
+        artifactName: Xamarin Clients
