@@ -36,9 +36,10 @@ class MessagesFactory {
     private val senderTwo = "Sender Two"
 
     fun setUpUser(patient: Patient? = null) {
-        val patientToUse = patient ?:
-        ServiceJourneyRulesMapper.findPatientForConfiguration(null,
-                SJRJourneyType.MESSAGES_ENABLED)
+        val patientToUse = patient
+                ?: ServiceJourneyRulesMapper.findPatientForConfiguration(
+                        null,
+                        SJRJourneyType.MESSAGES_ENABLED)
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney().createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())

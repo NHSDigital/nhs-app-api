@@ -9,7 +9,9 @@ import cucumber.api.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import mocking.AccessTokenBuilder
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
+import models.IdentityProofingLevel
 import pages.messages.MessagesErrorPage
 import pages.messages.MessagesInboxPage
 import pages.messages.MessagesPage
@@ -17,6 +19,10 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.messages.MessagesSummaryFacade
 import worker.models.messages.SingleMessageFacade
+import java.util.*
+import kotlin.collections.ArrayList
+
+private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 30000
 
 class MessagesStepDefinitions {
 
@@ -29,6 +35,31 @@ class MessagesStepDefinitions {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
                 SJRJourneyType.MESSAGES_ENABLED)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpMultipleMessagesInCache()
+    }
+
+    @Given("^I am a user with proof level 5 wishing to view my messages$")
+    fun iAmAUserWithProofLevel5WishingToViewTheirMessages() {
+        val patient = ServiceJourneyRulesMapper
+                .findPatientForConfiguration(null, SJRJourneyType.MESSAGES_ENABLED, IdentityProofingLevel.P5)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+        factory.setUpMultipleMessagesInCache()
+    }
+
+    @Given("^I am a user with proof level 5 whose access token is about to expire wishing to view my messages$")
+    fun iAmAUserWithProofLevel5WhoseAccessTokenIsAboutToExpireWishingToViewTheirMessages() {
+        val patient = ServiceJourneyRulesMapper
+                .findPatientForConfiguration(null, SJRJourneyType.MESSAGES_ENABLED, IdentityProofingLevel.P5)
+        patient.accessToken = AccessTokenBuilder()
+                .getSignedToken(
+                        patient,
+                        expirationTimeOverride = Date(Date().time + ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS))
+                .serialize()
+        patient.refreshToken = AccessTokenBuilder().getSignedToken(patient).serialize()
+
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesInCache()

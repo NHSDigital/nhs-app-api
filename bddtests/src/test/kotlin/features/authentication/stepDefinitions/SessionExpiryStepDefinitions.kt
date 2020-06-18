@@ -39,9 +39,8 @@ class SessionExpiryStepDefinitions  {
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy()
+        val patient = Patient.getDefault(supplier).copy(linkedAccounts = setOf())
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
-        patient.linkedAccounts = setOf()
 
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)

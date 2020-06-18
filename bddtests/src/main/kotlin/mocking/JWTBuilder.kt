@@ -17,10 +17,10 @@ abstract class JWTBuilder {
     protected var audience = Config.instance.cidClientId
     protected var jwtId = "2581a97f-13ba-4bd5-89d4-099c70531db2"
 
-    fun getSignedToken(patient: Patient): SignedJWT {
+    fun getSignedToken(patient: Patient, expirationTimeOverride: Date? = null): SignedJWT {
         val signedJWT = SignedJWT(
                 getHeader(patient),
-                getClaims(patient))
+                getClaims(patient, expirationTimeOverride = expirationTimeOverride))
 
         signedJWT.sign(Config.keyStore.signer)
 

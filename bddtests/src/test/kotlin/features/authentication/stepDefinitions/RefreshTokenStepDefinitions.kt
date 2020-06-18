@@ -9,6 +9,7 @@ import mocking.AccessTokenBuilder
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import models.IdentityProofingLevel
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -26,6 +27,18 @@ class RefreshTokenStepDefinitions {
     @Given("^I am an API user who wishes to refresh their access token$")
     fun givenIAmAnApiUserWhoWishesToRefreshTheirAccessToken() {
         val patient = setupPatient()
+        val refreshedAccessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
+        AuthorizationSerenityHelpers.REFRESHED_ACCESS_TOKEN.set(refreshedAccessToken)
+
+        mockingClient.forCitizenId.mock {
+            refreshTokenRequest(SessionConstants.RefreshToken)
+                    .respondWithSuccess(accessToken = refreshedAccessToken)
+        }
+    }
+
+    @Given("^I am an API user with proof level 5 who wishes to refresh their access token$")
+    fun givenIAmAnApiUserWithProofLevel5WhoWishesToRefreshTheirAccessToken() {
+        val patient = setupPatient(IdentityProofingLevel.P5)
         val refreshedAccessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
         AuthorizationSerenityHelpers.REFRESHED_ACCESS_TOKEN.set(refreshedAccessToken)
 
@@ -61,11 +74,11 @@ class RefreshTokenStepDefinitions {
         Assert.assertEquals("Expected access token", expectedAccessToken, refreshedResponse?.token)
     }
 
-    private fun setupPatient(): Patient {
+    private fun setupPatient(proofingLevel: IdentityProofingLevel = IdentityProofingLevel.P9): Patient {
         val gpSystem = Supplier.EMIS
         SerenityHelpers.setGpSupplier(gpSystem)
 
-        val patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(gpSystem).copy(identityProofingLevel = proofingLevel)
         SerenityHelpers.setPatient(patient)
 
         CitizenIdSessionCreateJourney().createFor(patient)

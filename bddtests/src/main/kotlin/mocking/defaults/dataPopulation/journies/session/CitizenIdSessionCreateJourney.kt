@@ -1,6 +1,7 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
+import constants.SessionConstants
 import mocking.IdTokenBuilder
 import mocking.MockingClient
 import mocking.citizenId.login.UpliftLoginRequestBuilder
@@ -121,6 +122,14 @@ class CitizenIdSessionCreateJourney {
             tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }
+
+        patient.refreshToken?.let {
+            mockingClient.forCitizenId.mock {
+                refreshTokenRequest(SessionConstants.RefreshToken)
+                        .respondWithSuccess(accessToken = it)
+            }
+        }
+
         return accessToken
     }
 }

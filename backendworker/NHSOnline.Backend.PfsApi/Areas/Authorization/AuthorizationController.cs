@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Session;
@@ -15,19 +14,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Authorization
     public class AuthorizationController : Controller
     {
         private readonly ICitizenIdService _citizenIdService;
-        private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly ILogger<AuthorizationController> _logger;
 
         public AuthorizationController(
             ICitizenIdService citizenIdService,
-            IAuditor auditor,
             ISessionCacheService sessionCacheService,
-            ILogger<AuthorizationController> logger
-            )
+            ILogger<AuthorizationController> logger)
         {
             _citizenIdService = citizenIdService;
-            _auditor = auditor;
             _sessionCacheService = sessionCacheService;
             _logger = logger;
         }
@@ -39,12 +34,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Authorization
             try
             {
                 _logger.LogEnter();
-                await _auditor.Audit(AuditingOperations.PostRefreshPatientAccessTokenRequest,
-                    "Attempting to refresh access token");
 
                 var result = await _citizenIdService.RefreshAccessToken(userSession.CitizenIdUserSession.RefreshToken);
 
-                await result.Accept(new RefreshTokenResultAuditVisitor(_auditor, _logger));
                 return await result.Accept(new RefreshTokenResultVisitor(_sessionCacheService, userSession, _logger));
             }
             finally
