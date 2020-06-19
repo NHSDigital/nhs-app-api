@@ -1,5 +1,0 @@
-[ -x "$(which kubectl)" ] || die "Error: Kubectl is not installed, please resolve this before continuing"
-[ -x "$(which helm)" ]    || die "Error: Helm is not installed, please resolve this before continuing"
-[ -x "$(which terraform)" ] || die "Error: Terraform is not installed, please resolve this before continuing"
-[ -x "$(which git-crypt)" ] || die "Error: Git-Crypt is not installed, please resolve this before continuing"
-[ -x "$(which az)" ] || die "Error: Azure CLI is not installed, please resolve this before continuing"

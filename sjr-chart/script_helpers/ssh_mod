@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-function ssh_mod () {
-    info "Setting 600 permissions on ssh private key..."
-    chmod 600 ~/.ssh/id_rsa | true
-# Ignoring failures, it's not critical for running terraform - key could be in different path
-# We are making sure that key has correct perms on TC agents to not fail during terraform init process (downloading tf modules via SSH)
-}
