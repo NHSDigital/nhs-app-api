@@ -5,21 +5,16 @@ import android.content.Intent
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.support.PersistData
-import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 
-private lateinit var urlHelper: UrlHelper
-private lateinit var appPersistData: PersistData
 private lateinit var biometricsInterface: BiometricsInterface
 
-class FidoIntentHandler(private val context: Context) : IIntentHandler
-{
-    override val intentAction = "fido"
+class DefaultIntentHandler(private val context: Context) : IIntentHandler {
+    override val intentAction = "default"
 
     override fun handle(intent: Intent, isAppClosed: Boolean, nhsWeb: NhsWeb) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering Fido Intent Handle")
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering Default Intent Handle")
 
         intent?.data?.let { uri ->
             val uriPath = uri.path ?: ""

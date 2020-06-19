@@ -79,11 +79,11 @@ class NhsWeb(
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
         val webInterceptor =
-            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
+                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
 
         val addToCalendarHandler = AddToCalendarHandler(activity)
 
-        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
+        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this, uiInteractor, settingsService)
         val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, addToCalendarHandler)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
@@ -100,8 +100,8 @@ class NhsWeb(
         Log.d(TAG, "Entering loadUrl")
 
         val hasFidoLoginError = path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
-            uiInteractor.canDisplayBiometricLogin() &&
-            path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
+                uiInteractor.canDisplayBiometricLogin() &&
+                path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
         if (hasFidoLoginError) {
             Log.d(TAG, "Fido login error response url: $path")
             uiInteractor.displayBiometricLoginErrorOccurrence()
@@ -113,11 +113,11 @@ class NhsWeb(
             showNoConnectionError()
             return
         }
-        val url:String
-        if (!appPersistData.getPersistedLink().isNullOrBlank()) {
-            url = loadPersistedLink()!!
-        }else{
-            url = urlLoader.produceValidUrl(path)
+
+        val url = if (!appPersistData.getPersistedLink().isNullOrBlank()) {
+            loadPersistedLink()!!
+        } else {
+            urlLoader.produceValidUrl(path)
         }
 
         reloadUrl = url
@@ -130,18 +130,17 @@ class NhsWeb(
         urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
-    fun loadPersistedLink(): String? {
+    private fun loadPersistedLink(): String? {
         val url = appPersistData.getPersistedLink().toString()
         if (!url.isNullOrBlank() && URLUtil.isValidUrl(url)) {
             appPersistData.storePersistedLink("")
-            // loadUrl(url)
             return url
         }
         return null
     }
 
     fun setReloadPath(path: String) {
-        if(path.isBlank()){
+        if (path.isBlank()) {
             return
         }
 
@@ -206,11 +205,11 @@ class NhsWeb(
     }
 
     private fun trimCachedFiles() {
-        val contentsToDelete=
-                when(appWebViewDir.listFiles()) {
+        val contentsToDelete =
+                when (appWebViewDir.listFiles()) {
                     null -> arrayOf(cacheDir)
                     else -> appWebViewDir.listFiles().plus(cacheDir)
-        }
+                }
 
         contentsToDelete.forEach { file ->
             try {
@@ -279,7 +278,7 @@ class NhsWeb(
     private fun clearSessionCookies() {
         val host = readResourceString(R.string.baseHost)
         val allHosts = host.split('.')
-            .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
+                .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
         for (String in allHosts) {
             clearCookie("nhso.session", "https://$String")
             clearCookie("NHSO-Session-Id", "https://.$String")
@@ -342,6 +341,6 @@ class NhsWeb(
 
     fun goToPage(page: String) {
         val pageUrl = urlHelper.createRedirectToPageUrl(page)
-        urlLoader.loadUrl(url = pageUrl.toString(), requiresFullPageLoad = true )
+        urlLoader.loadUrl(url = pageUrl.toString(), requiresFullPageLoad = true)
     }
 }

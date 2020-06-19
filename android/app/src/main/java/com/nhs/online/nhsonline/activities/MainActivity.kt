@@ -39,13 +39,13 @@ import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.support.*
-import com.nhs.online.nhsonline.utils.NotificationManagerCompat
-import com.nhs.online.nhsonline.web.NhsWeb
-import com.nhs.online.nhsonline.utils.UrlHelper
+import com.nhs.online.nhsonline.support.intentHandlers.DefaultIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
 import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
-import com.nhs.online.nhsonline.support.intentHandlers.FidoIntentHandler
+import com.nhs.online.nhsonline.utils.NotificationManagerCompat
+import com.nhs.online.nhsonline.web.NhsWeb
+import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
@@ -96,13 +96,12 @@ class MainActivity :
         intentHandlers = IntentHandlers()
         intentHandlers.registerHandler(FirebaseMessagingIntentHandler(this))
         intentHandlers.registerHandler(ViewIntentHandler(this))
-        intentHandlers.registerHandler(FidoIntentHandler(this))
-
+        intentHandlers.registerHandler(DefaultIntentHandler(this))
 
         if (resources.getString(R.string.secureFlag) != "disabled" &&
-              Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE)
+                    WindowManager.LayoutParams.FLAG_SECURE)
         }
         urlHelper = UrlHelper(this)
         appPersistData = PersistData(this)
@@ -143,6 +142,8 @@ class MainActivity :
 
         initialiseNhsWeb()
         initialiseBiometrics()
+
+        intentHandlers.handleIntent(intent, true, nhsWeb)
 
         if (configurationResponse.callSuccessful) {
             loadWelcomePage()
@@ -201,7 +202,7 @@ class MainActivity :
 
         if (!isConnectedToNetwork) {
             logger.info(
-                "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
+                    "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
             return
         }
 
@@ -237,8 +238,6 @@ class MainActivity :
             lifeCycleObserver?.onMoveToForeground()
         }
 
-        intentHandlers.handleIntent(intent,true, nhsWeb)
-
         lifeCycleObserver?.onMoveToForeground()
     }
 
@@ -262,7 +261,7 @@ class MainActivity :
         val fileUploadCallback = nhsWeb.getFileUploadCallback()
 
         logger.log(Level.WARNING,
-            "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
+                "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
 
         try {
             if (resultCode == Activity.RESULT_OK) {
@@ -456,7 +455,7 @@ class MainActivity :
         if (progressBarLayout.visibility == GONE) {
             progressBarLayout.visibility = VISIBLE
             window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
     }
 
@@ -478,7 +477,7 @@ class MainActivity :
 
     private fun showDownloadDocumentFailureError() {
         Log.d(Application.TAG, "Download document failed")
-        showErrorScreen( ErrorMessage(this.resources, ErrorType.DownloadDocumentError))
+        showErrorScreen(ErrorMessage(this.resources, ErrorType.DownloadDocumentError))
     }
 
     override fun showUnavailabilityError(errorMessage: ErrorMessage) {
@@ -526,8 +525,8 @@ class MainActivity :
     override fun setWebViewVisible() = activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>, grantResults: IntArray
     ) {
         when (requestCode) {
             LOCATION_REQUEST_CODE -> nhsWeb.handleWebClientLocationResult(grantResults)
@@ -634,14 +633,14 @@ class MainActivity :
     }
 
     override fun fetchBiometricSpec() {
-        if (biometricsInterface.isFingerprintServiceInitialised()){
+        if (biometricsInterface.isFingerprintServiceInitialised()) {
             appWebInterface.biometricSpec(BiometricConstants.BIOMETRIC_TYPE,
-                biometricsInterface.isFingerprintRegistered)
+                    biometricsInterface.isFingerprintRegistered)
         }
     }
 
     override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
-        if (!configurationResponse.callSuccessful){
+        if (!configurationResponse.callSuccessful) {
             return false
         }
 
@@ -689,7 +688,7 @@ class MainActivity :
             path = URL(currentUrl).path
         } catch (e: MalformedURLException) {
             logger.log(Level.WARNING,
-                "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
+                    "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
         }
 
         return path

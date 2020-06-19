@@ -1,6 +1,5 @@
 package com.nhs.online.nhsonline.support.intentHandlers
 
-
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -8,11 +7,11 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.web.NhsWeb
+
 private lateinit var urlHelper: UrlHelper
 private lateinit var appPersistData: PersistData
 
-class FirebaseMessagingIntentHandler(private val context: Context) : IIntentHandler
-{
+class FirebaseMessagingIntentHandler(private val context: Context) : IIntentHandler {
     override val intentAction = "firebaseMessaging"
 
     override fun handle(intent: Intent, isAppClosed: Boolean, nhsWeb: NhsWeb) {
