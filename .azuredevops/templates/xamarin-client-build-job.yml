@@ -23,6 +23,16 @@ jobs:
         outputDirectory: '$(output.directory)'
         configuration: '$(build.configuration)'
 
+    - task: AndroidSigning@3
+      displayName: Sign Android
+      inputs:
+        apkFiles: '$(output.directory)/com.nhs.online.nhsonline.apk'
+        apksign: true
+        apksignerKeystoreFile: AndroidDebugSigningKeyStore
+        apksignerKeystorePassword: $(android.debug.key.store.password)
+        apksignerKeyPassword: $(android.debug.key.store.password)
+        keystoreAlias: debug
+
     - task: InstallAppleCertificate@2
       displayName: 'Install Apple certificate'
       inputs:

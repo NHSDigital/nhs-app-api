@@ -61,6 +61,11 @@ parameters:
       - Scratch20
       - Scratch21
 
+  - name: intTestsRunXamarinNative
+    displayName: Run Xamarin Native Integration Tests
+    type: boolean
+    default: false
+
   - name: intTestsRunAndroidNative
     displayName: Run Android Native Integration Tests
     type: boolean
@@ -110,13 +115,16 @@ variables:
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
+    int.tests.run.native.xamarin: ${{ parameters.intTestsRunXamarinNative }}
     int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
     int.tests.run.native.ios: ${{ parameters.intTestsRuniOSNative }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+      int.tests.run.native.xamarin: true
       int.tests.run.native.android: true
       int.tests.run.native.ios: true
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+      int.tests.run.native.xamarin: false
       int.tests.run.native.android: false
       int.tests.run.native.ios: false
 
@@ -230,6 +238,16 @@ stages:
           - template: .azuredevops/templates/integration-tests-variables.yml
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
+
+  - ${{ if eq(variables['int.tests.run.native.xamarin'], 'true') }}:
+    - stage: xamarin_integration_tests
+      displayName: Xamarin Integration Tests
+      dependsOn:
+        - web
+        - backend
+        - xamarin
+      jobs:
+        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
   - ${{ if or(eq(variables['int.tests.run.native.android'], 'true'), eq(variables['int.tests.run.native.android.long-running'], 'true')) }}:
     - stage: android_integration_tests

@@ -4,20 +4,7 @@ jobs:
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
-
-      - task: Bash@3
-        displayName: Create User NuGet Config
-        env:
-          SYSTEM_ACCESS_TOKEN: $(System.AccessToken)
-        inputs:
-          targetType: 'inline'
-          script: |
-            dotnet nuget add source \
-              --name nhsapp-nuget-feed \
-              https://pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-nuget-feed/nuget/v3/index.json \
-              --username nhsapp \
-              --password ${SYSTEM_ACCESS_TOKEN} \
-              --store-password-in-clear-text
+      - template: nuget-authenticate.yml
 
       - task: ShellScript@2
         displayName: Restore backend packages
