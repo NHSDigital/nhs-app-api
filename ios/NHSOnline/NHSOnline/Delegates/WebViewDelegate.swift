@@ -19,29 +19,38 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var javascript: String!
     var webAppInterface: WebAppInterface
     var schemeHandlers: SchemeHandlers
+    private var loggingService: LoggingServiceProtocol
     var badResponse: Bool = false
 
     init(controller: HomeViewController,
          knownServiceProvider: KnownServicesProtocol,
          configurationServiceProvider: ConfigurationServiceProtocol,
-         webAppInterface: WebAppInterface) {
+         webAppInterface: WebAppInterface,
+         loggingService: LoggingServiceProtocol) {
         self.viewController = controller
         self.knownServicesProvider = knownServiceProvider
         self.configurationServiceProvider = configurationServiceProvider
         self.webAppInterface = webAppInterface
         self.schemeHandlers = SchemeHandlers()
+        self.loggingService = loggingService
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
         self.schemeHandlers.registerHandler(handler: TelSchemeHandler())
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if let response = navigationResponse.response as? HTTPURLResponse {
-
-            let url = self.viewController.webViewController?.webView.url
+            let url = webView.url
             let baseUrl = URL(string: config().HomeUrl)
-            let statusCode = response.statusCode
+            let errorStatusCode = response.statusCode >= 400
+            
+            if (errorStatusCode){
+                let formattedMessage = String(format: "Failed HTTP Call from webview. url:%@ httpResponseCode:%d", url!.absoluteString, response.statusCode)
+                loggingService.logError(message: formattedMessage)
+            }
 
-            if ((url?.host == baseUrl?.host) && statusCode >= 400) {
+            if ((url?.host == baseUrl?.host) && errorStatusCode) {
                 badResponse = true
                 return decisionHandler(.cancel)
             } else {
@@ -64,7 +73,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
         navigate(webView: webView, navigationAction: navigationAction, decisionHandler: decisionHandler);
     }
-
+    
     func checkIfIproov(navigationAction: WKNavigationAction) -> Bool {
         if (navigationAction.navigationType == .linkActivated && navigationAction.request.url?.host == "iproov.app") {
             return true;

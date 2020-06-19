@@ -125,6 +125,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LoggerApiPath</key>
+	<string>$(LOGGER_API_PATH)</string>
 	<key>MedicalRecordAbbreviationsURL</key>
 	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL)</string>
 	<key>MedicalRecordAbbreviationsURLOld</key>

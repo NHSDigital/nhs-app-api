@@ -3,7 +3,7 @@ import WebKit
 @testable import NHSOnline
 
 class WebViewDelegateTests: XCTestCase {
-    var webViewDelegate: WebViewDelegateMocks?
+    var webViewDelegate: WebViewDelegate?
     
     var wKWebView: WKWebView?
     var mockWKWebView: WebViewMocks?
@@ -13,6 +13,7 @@ class WebViewDelegateTests: XCTestCase {
     var homeViewController: HomeViewControllerMocks?
     var appWebInterface: AppWebInterfaceMocks?
     var knownServicesProvider: KnownServicesProtocolMocks?
+    var loggingService: LoggingServiceMocks?
     
     override func setUp() {
         super.setUp()
@@ -22,10 +23,11 @@ class WebViewDelegateTests: XCTestCase {
         viewController.knownServicesProvider = knownServicesProvider
         viewController.configurationServiceProvider = configurationServiceProvider
         
+        loggingService = LoggingServiceMocks()
         mockWKWebView = WebViewMocks()
         appWebInterface = AppWebInterfaceMocks(webView: mockWKWebView)
         let webAppInterface = WebAppInterface(controller: viewController)
-        webViewDelegate = WebViewDelegateMocks(controller: viewController, knownServiceProvider: knownServicesProvider!, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
+        webViewDelegate = WebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider!, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface, loggingService: loggingService!)
         homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = WebViewMocks()
@@ -48,6 +50,30 @@ class WebViewDelegateTests: XCTestCase {
         
         assert(homeViewController!.startActivityIndicatorWasCalled == false,
                "startActivityIndicator() Method should not be invoked")
+    }
+    
+    func test_webViewNavigationFailWithStatusCodeGreaterOrEqualTo400_LogsAnApiError() {
+        wKWebView?.loadPage(url: config().HomeUrl)
+        let decisionHandler: (WKNavigationResponsePolicy) -> Void = {
+            (policy) in return;
+        }
+        
+        let navigationResponse = WKNavigationResponseMock(statusCode: 404)
+        webViewDelegate?.webView(wKWebView!, decidePolicyFor: navigationResponse, decisionHandler: decisionHandler)
+        
+        assert(loggingService?.calledLogError == true)
+    }
+    
+    func test_webViewNavigationSuccess_DoesNotLogAnApiError() {
+        wKWebView?.loadPage(url: config().HomeUrl)
+        let decisionHandler: (WKNavigationResponsePolicy) -> Void = {
+            (policy) in return;
+        }
+        
+        let navigationResponse = WKNavigationResponseMock(statusCode: 204)
+        webViewDelegate?.webView(wKWebView!, decidePolicyFor: navigationResponse, decisionHandler: decisionHandler)
+        
+        assert(loggingService?.calledLogError == false)
     }
     
     func test_webViewDidFailProvisionalNavigationWithNSURLErrorCancelled_VerifyStopActivityIndicatorIsCalled() {

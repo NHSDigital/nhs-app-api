@@ -20,7 +20,8 @@ class WebViewUrlTests: XCTestCase {
         webViewDelegate = WebViewDelegateMocks(controller: viewController,
                                           knownServiceProvider: knownServicesProvider!,
                                           configurationServiceProvider: configurationServiceProvider!,
-                                          webAppInterface: webAppInterface)
+                                          webAppInterface: webAppInterface,
+                                          loggingService: LoggingServiceMocks())
     }
     
     override func tearDown() {

@@ -88,7 +88,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
         webViewDelegate = WebViewDelegate(controller: self,
                                           knownServiceProvider: self.knownServicesProvider!,
                                           configurationServiceProvider: self.configurationServiceProvider!,
-                                          webAppInterface: webAppInterface!)
+                                          webAppInterface: webAppInterface!,
+                                          loggingService: LoggingService())
         
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate

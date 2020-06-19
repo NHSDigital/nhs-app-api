@@ -24,6 +24,7 @@ CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms
 PRE_REGISTRATION_INFORMATION_PATH = /pre-registration-information
 BIOMETRIC_LOGIN_ERROR_PATH = /biometric-login-error
 APP_SCHEME = nhsapp
+LOGGER_API_PATH = v1/api/log
 MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/
 HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/
 HELP_ACCOUNT_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/account/
