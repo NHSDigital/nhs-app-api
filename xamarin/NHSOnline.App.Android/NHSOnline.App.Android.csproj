@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{30B3186B-8809-4016-817A-894E629D1EDF}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -13,7 +13,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
-    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidManifest>Properties\AndroidManifest.generated.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
@@ -23,27 +23,27 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+
+    <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
+    <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
+
+  <PropertyGroup>
+    <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AndroidManagedSymbols>true</AndroidManagedSymbols>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|AnyCPU' " />
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|AnyCPU' " />
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|AnyCPU' " />
+
+  <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
+  <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
+
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -65,7 +65,10 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.template.xml"/>
+    <None Include="Properties\AndroidManifest.generated.xml">
+      <DependentUpon>AndroidManifest.template.xml</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
@@ -88,11 +91,26 @@
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
+
+  <Target Name="Generate Android Manifest" BeforeTargets="_ValidateAndroidPackageProperties">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml" DestinationFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" />
+    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppPackackeName)" Query="/manifest/@package" Namespaces="$(ManifestNamespace)" />
+    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppLabel)" Query="/manifest/application/@android:label" Namespaces="$(ManifestNamespace)" />
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
       <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
       <Name>NHSOnline.App</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ItemGroup>
+    <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />
+    <None Include="Properties\BuildConfiguration.debugmode.Release.props" />
+    <None Include="Properties\BuildConfiguration.env.BrowserStack.props" />
+    <None Include="Properties\BuildConfiguration.env.Dev.props" />
+    <None Include="Properties\BuildConfiguration.env.Local.props" />
+    <None Include="Properties\BuildConfiguration.env.Staging.props" />
+  </ItemGroup>
+ <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

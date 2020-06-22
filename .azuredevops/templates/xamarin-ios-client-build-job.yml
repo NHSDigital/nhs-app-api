@@ -1,0 +1,69 @@
+parameters:
+  - name: configuration
+    type: string
+    default: 'Browserstack - Debug'
+  - name: certSecureFile
+    type: string
+    default: 'iOSDevelopmentCertificate.p12'
+  - name: certPwd
+    type: string
+    default: '$(ios.development.certificate.password)'
+  - name: provProfileSecureFile
+    type: string
+    default: 'iOSDevelopmentBrowserStack.mobileprovision'
+
+jobs:
+  - job:
+    displayName: Build Xamarin iOS - ${{ parameters.configuration }}
+    pool:
+      vmImage: 'macos-latest'
+
+    variables:
+      output.directory: '$(build.binariesDirectory)/$(build.configuration)'
+
+    steps:
+      - task: NuGetAuthenticate@0
+        displayName: NuGet Authenticate
+
+      - task: MSBuild@1
+        displayName: Restore packages
+        inputs:
+          solution: 'xamarin/NhsOnline.App.sln'
+          msbuildArguments: '-m /t:Restore'
+          configuration: '${{ parameters.configuration }}'
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install Apple certificate'
+        inputs:
+          certSecureFile: '${{ parameters.certSecureFile }}'
+          certPwd: '${{ parameters.certPwd }}'
+
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install provisioning profile'
+        inputs:
+          provProfileSecureFile: ${{ parameters.provProfileSecureFile }}
+          removeProfile: true
+
+      - task: XamariniOS@2
+        displayName: Build iOS ${{ parameters.configuration }}
+        inputs:
+          solutionFile: 'xamarin/NhsOnline.App.sln'
+          configuration: '${{ parameters.configuration }}'
+          buildForSimulator: false
+          packageApp: true
+          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+          signingProvisioningProfileID: '$(APPLE_PROV_PROFILE_UUID)'
+          args: /p:IpaPackageDir="$(output.directory)"
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: build outputs
+          test.path: '$(output.directory)'
+          test.path.exists.variable.name: output.directory.exists
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish build outputs
+        condition: and(succeededOrFailed(), eq(variables['output.directory.exists'], 'True'))
+        inputs:
+          pathtoPublish: '$(output.directory)'
+          artifactName: Xamarin iOS Clients

@@ -7,13 +7,20 @@ jobs:
       - template: nuget-authenticate.yml
 
       - task: DownloadBuildArtifacts@0
-        displayName: Download Apps
+        displayName: Download Android App
         inputs:
           downloadType: single
-          artifactName: Xamarin Clients
+          artifactName: Xamarin Android Clients
           itemPattern: |
-            Xamarin Clients/com.nhs.online.nhsonline.apk
-            Xamarin Clients/NHSOnline.App.BrowserStack.ipa
+            Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk
+
+      - task: DownloadBuildArtifacts@0
+        displayName: Download iOS
+        inputs:
+          downloadType: single
+          artifactName: Xamarin iOS Clients
+          itemPattern: |
+            Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa
 
       - task: Bash@3
         displayName: Initialise Secrets
@@ -45,8 +52,8 @@ jobs:
         env:
           BrowserStack__Key: $(browserstack.access.key)
           BrowserStack__Build: $(Build.BuildNumber)
-          NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Clients/com.nhs.online.nhsonline.apk"
-          NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin Clients/NHSOnline.App.BrowserStack.ipa"
+          NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk"
+          NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
         inputs:
           scriptPath: xamarinintegrationtests/buildscripts/04_run_integration_tests.sh
 

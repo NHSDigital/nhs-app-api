@@ -61,6 +61,11 @@ parameters:
       - Scratch20
       - Scratch21
 
+  - name: xamarinDistributeApps
+    displayName: Distribute Xamarin Apps
+    type: boolean
+    default: false
+
   - name: intTestsRunXamarinNative
     displayName: Run Xamarin Native Integration Tests
     type: boolean
@@ -118,15 +123,18 @@ variables:
     int.tests.run.native.xamarin: ${{ parameters.intTestsRunXamarinNative }}
     int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
     int.tests.run.native.ios: ${{ parameters.intTestsRuniOSNative }}
+    native.xamarin.distribute: ${{ parameters.xamarinDistributeApps }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: true
       int.tests.run.native.android: true
       int.tests.run.native.ios: true
+      native.xamarin.distribute: true
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
       int.tests.run.native.android: false
       int.tests.run.native.ios: false
+      native.xamarin.distribute: false
 
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: true
@@ -148,11 +156,32 @@ stages:
     jobs:
       - template: .azuredevops/templates/build-and-test-web-job.yml
 
-  - stage: xamarin
-    displayName: Xamarin Client
+  - stage: xamarin_android
+    displayName: Xamarin Android Client
     dependsOn:
     jobs:
-      - template: .azuredevops/templates/xamarin-client-build-job.yml
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        parameters:
+          configuration: 'Staging - Release'
+          apkFilename: 'com.nhs.online.nhsonline.staging.apk'
+          keyStoreFile: AndroidSigningKeyStore
+          apksignerKeystorePassword: '$(android.key.store.password)'
+          keystoreAlias: 'playconsoleuploadkey'
+
+  - stage: xamarin_ios
+    displayName: Xamarin iOS Client
+    dependsOn:
+    jobs:
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+        parameters:
+          configuration: 'Staging - Release'
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
+          provProfileSecureFile: iOSDemo.mobileprovision
 
   - stage: android
     displayName: Android Client
@@ -245,7 +274,8 @@ stages:
       dependsOn:
         - web
         - backend
-        - xamarin
+        - xamarin_android
+        - xamarin_ios
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
@@ -284,3 +314,11 @@ stages:
             parameters:
               job.name: Long Running
               tranche.tag: long-running
+
+  - ${{ if eq(variables['native.xamarin.distribute'], 'true') }}:
+    - stage: xamarin_distribute_apps
+      displayName: Xamarin Distribute Apps
+      dependsOn:
+        - xamarin_integration_tests
+      jobs:
+        - template: .azuredevops/templates/xamarin-distribute-apps-job.yml

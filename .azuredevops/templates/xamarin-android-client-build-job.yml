@@ -1,0 +1,66 @@
+parameters:
+  - name: configuration
+    type: string
+    default: 'Browserstack - Release'
+  - name: apkFilename
+    type: string
+    default: 'com.nhs.online.nhsonline.browserstack.apk'
+  - name: keyStoreFile
+    type: string
+    default: 'AndroidDebugSigningKeyStore'
+  - name: apksignerKeystorePassword
+    type: string
+    default: '$(android.debug.key.store.password)'
+  - name: keystoreAlias
+    type: string
+    default: 'debug'
+
+jobs:
+  - job:
+    displayName: Build Xamarin Android - ${{ parameters.configuration }}
+    pool:
+      vmImage: 'macos-latest'
+
+    variables:
+      output.directory: '$(build.binariesDirectory)/xamarin-android'
+
+    steps:
+      - task: NuGetAuthenticate@0
+        displayName: NuGet Authenticate
+
+      - task: MSBuild@1
+        displayName: Restore packages
+        inputs:
+          solution: 'xamarin/NhsOnline.App.sln'
+          msbuildArguments: '-m /t:Restore'
+          configuration: '${{ parameters.configuration }}'
+
+      - task: XamarinAndroid@1
+        displayName: Build Android '${{ parameters.configuration }}'
+        inputs:
+          projectFile: 'xamarin/NhsOnline.App.Android/NhsOnline.App.Android.csproj'
+          outputDirectory: '$(output.directory)'
+          configuration: '${{ parameters.configuration }}'
+
+      - task: AndroidSigning@3
+        displayName: Sign Android '${{ parameters.configuration }}'
+        inputs:
+          apkFiles: '$(output.directory)/${{ parameters.apkFilename }}'
+          apksign: true
+          apksignerKeystoreFile: '${{ parameters.keyStoreFile }}'
+          apksignerKeystorePassword: '${{ parameters.apksignerKeystorePassword }}'
+          apksignerKeyPassword: '${{ parameters.apksignerKeystorePassword }}'
+          keystoreAlias: '${{ parameters.keystoreAlias }}'
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: build outputs
+          test.path: '$(output.directory)'
+          test.path.exists.variable.name: output.directory.exists
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish build outputs
+        condition: and(succeededOrFailed(), eq(variables['output.directory.exists'], 'True'))
+        inputs:
+          pathtoPublish: '$(output.directory)'
+          artifactName: Xamarin Android Clients
