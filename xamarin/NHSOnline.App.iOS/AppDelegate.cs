@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+using System.Diagnostics.CodeAnalysis;
 using Foundation;
 using UIKit;
 
@@ -11,7 +8,8 @@ namespace NHSOnline.App.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "iOS naming convention")]
+    public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -20,12 +18,12 @@ namespace NHSOnline.App.iOS
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-            global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            Xamarin.Forms.Forms.Init();
+            LoadApplication(new NhsApp());
 
-            return base.FinishedLaunching(app, options);
+            return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }
 }

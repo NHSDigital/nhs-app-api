@@ -1,12 +1,10 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using NHSOnline.App.Views;
 
 namespace NHSOnline.App
 {
-    public partial class App : Application
+    public partial class NhsApp
     {
-        public App()
+        public NhsApp()
         {
             InitializeComponent();
 

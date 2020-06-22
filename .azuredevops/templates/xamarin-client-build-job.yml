@@ -9,6 +9,9 @@ jobs:
     output.directory: '$(build.binariesDirectory)/$(build.configuration)'
 
   steps:
+    - task: NuGetAuthenticate@0
+      displayName: NuGet Authenticate
+
     - task: MSBuild@1
       displayName: Restore packages
       inputs:

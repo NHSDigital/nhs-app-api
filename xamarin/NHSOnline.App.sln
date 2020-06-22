@@ -7,7 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.App.Android", "NH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.App.iOS", "NHSOnline.App.iOS\NHSOnline.App.iOS.csproj", "{F135886A-E596-49E8-A3D9-BF4AD1C587B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.App", "NHSOnline.App\NHSOnline.App.csproj", "{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App", "NHSOnline.App\NHSOnline.App.csproj", "{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA6E3701-F642-4DAB-B137-CC1021472F7B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
