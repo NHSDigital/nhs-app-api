@@ -43,7 +43,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
 
             // Act
             Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
@@ -52,7 +51,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("NHSAPP_API_KEY");
         }
-        
+
         [TestMethod]
         public void ConfigureServices_ConfigureAuth_WhenInProduction_ShouldRequireHttpsMetadata()
         {
@@ -118,7 +117,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
         }
     }

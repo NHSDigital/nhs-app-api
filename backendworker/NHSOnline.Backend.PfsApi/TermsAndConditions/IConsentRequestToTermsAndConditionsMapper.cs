@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
     public interface IConsentRequestToTermsAndConditionsMapper
     {
-        public TermsAndConditionsRecord Map(ConsentRequest request, DateTimeOffset consentTime, string nhsLoginId);
+        TermsAndConditionsRecord Map(ConsentRequest request, DateTimeOffset consentTime, string nhsLoginId);
     }
 }

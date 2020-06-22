@@ -6,23 +6,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing
 {
     internal sealed class Auditor : IAuditor
     {
-        private readonly IAuditSink _auditSink;
         private readonly AsyncLocal<HttpContextAuditorScope> _scopeProvider;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
+        private readonly IAuditSink _auditSink;
 
-        public Auditor(IAuditSink auditSink, AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger logger, IConfiguration configuration)
+        public Auditor(AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger logger, IConfiguration configuration,
+            IAuditSink auditSink)
         {
-            _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
             _scopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
         }
 
         public async Task Audit(string operation, string details, params object[] parameters)
@@ -41,15 +43,15 @@ namespace NHSOnline.Backend.Auditing
             {
                 nhsNumber = auditUserContext.LinkedAccountNhsNumber;
             }
-            
+
             await AuditInternal(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
         }
 
         public async Task AuditRegistrationEvent(
-            string nhsNumber, 
-            Supplier supplier, 
+            string nhsNumber,
+            Supplier supplier,
             string operation,
-            string details, 
+            string details,
             params object[] parameters)
         {
             const string nhsLoginSubject = "";
@@ -80,14 +82,14 @@ namespace NHSOnline.Backend.Auditing
                         throw new InvalidOperationException("Cannot audit outside of HttpContextAuditorScope");
             var state = new AuditBuilderState(
                 _logger,
-                _auditSink,
                 () => scope.UserContext(),
-                scope.VersionTag());
+                scope.VersionTag(),
+                _auditSink);
             return new AuditBuilder(state);
         }
 
         private async Task AuditInternal(
-            string nhsLoginSubject, 
+            string nhsLoginSubject,
             string nhsNumber,
             bool isProxying,
             Supplier supplier,
@@ -99,7 +101,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
-            
+
             var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
 
             await AuditInternal(auditRecord);
@@ -165,7 +167,7 @@ namespace NHSOnline.Backend.Auditing
             private readonly Func<AuditUserContext> _auditUserContext;
             private readonly VersionTag _versionTag;
 
-            public AuditBuilderState(ILogger logger, IAuditSink auditSink, Func<AuditUserContext> auditUserContext, VersionTag versionTag)
+            public AuditBuilderState(ILogger logger, Func<AuditUserContext> auditUserContext, VersionTag versionTag, IAuditSink auditSink)
             {
                 Logger = logger;
                 AuditSink = auditSink;
@@ -175,7 +177,6 @@ namespace NHSOnline.Backend.Auditing
 
             public ILogger Logger { get; }
             public IAuditSink AuditSink { get; }
-
             public string NhsLoginSubject { get; set; } = string.Empty;
             public string NhsNumber { get; set; } = string.Empty;
             public bool IsProxying { get; set; }

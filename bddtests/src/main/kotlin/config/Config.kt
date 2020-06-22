@@ -55,6 +55,8 @@ class Config private constructor() {
     val messagesMongoDbPort: Long
     val consentMongoDbHost: String
     val consentMongoDbPort: Long
+    val auditMongoDbHost: String
+    val auditMongoDbPort: Long
 
     val accessibilityOutputFolder: String
 
@@ -126,6 +128,9 @@ class Config private constructor() {
 
         consentMongoDbHost = envOrDefault("CONSENT_MONGO_DATABASE_HOST", "127.0.0.1")
         consentMongoDbPort = envOrDefault("CONSENT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
+
+        auditMongoDbHost = envOrDefault("AUDIT_MONGO_DATABASE_HOST", "127.0.0.1")
+        auditMongoDbPort = envOrDefault("AUDIT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
         nhsAppApiKey = envOrDefault("NHSAPP_API_KEY", "testnhssearchservicekey")

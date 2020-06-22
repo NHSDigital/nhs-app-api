@@ -53,6 +53,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             _mockTermsAndConditionsService = new Mock<ITermsAndConditionsService>();
             _mockAuditor = new Mock<IAuditor>();
 
+            var consentRecord = new ConsentResponse();
+            var fetchResponse = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
+            _mockTermsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
+                .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) fetchResponse));
+
             _systemUnderTest = new TermsAndConditionsController(
                 _mockTermsAndConditionsService.Object,
                 new Mock<ILogger<TermsAndConditionsController>>().Object,
@@ -105,7 +110,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             using (new AssertionScope())
             {
                 auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
-                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1}, previousDateOfConsent={2}, DateOfConsent={3}");
                 auditStub.Parameters[0].Should().Be(consent);
                 auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
                 auditStub.ResponseDetails.Should().Be("Initial Consent Successfully recorded");
@@ -159,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             using (new AssertionScope())
             {
                 auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
-                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1}, previousDateOfConsent={2}, DateOfConsent={3}");
                 auditStub.Parameters[0].Should().Be(consent);
                 auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
                 auditStub.ResponseDetails.Should().Be("Updated Consent Successfully recorded");
@@ -176,6 +181,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
                 .Returns(Task.FromResult(response))
                 .Verifiable();
+
             ArrangeAudit();
 
             // Act
@@ -199,6 +205,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var request = new ConsentRequest { AnalyticsCookieAccepted = analyticsCookieAccepted, ConsentGiven = consent, UpdatingConsent = true };
             TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.InternalServerError();
 
+
+
             _mockTermsAndConditionsService
                 .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
                 .Returns(Task.FromResult(response));
@@ -211,7 +219,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             using (new AssertionScope())
             {
                 auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
-                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1}, previousDateOfConsent={2}, DateOfConsent={3}");
                 auditStub.Parameters[0].Should().Be(consent);
                 auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
                 auditStub.ResponseDetails.Should().Be("Failed to record");
@@ -304,8 +312,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
-            _mockTermsAndConditionsService.VerifyAll();
-
             var noContentResult = result.Should().BeAssignableTo<NoContentResult>().Subject;
             noContentResult.Should().BeAssignableTo<NoContentResult>();
         }
@@ -354,8 +360,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
-            _mockTermsAndConditionsService.VerifyAll();
-
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }

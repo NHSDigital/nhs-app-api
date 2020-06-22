@@ -318,15 +318,12 @@ api:
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
   emisExtendedTimeout: 10
+  mongoDatabaseAuditCollection: audit_info
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
     - name: EMIS_VERSION
       value: "2.1.0.0"
-    - name: AUDIT_COSMOS_COLLECTION_ID
-      value: audit
-    - name: AUDIT_SINK_TYPE
-      value: COSMOS
     - name: SESSION_MONGO_DATABASE_COLLECTION
       value: session
     - name: CONSENT_MONGO_DATABASE_COLLECTION
@@ -335,6 +332,7 @@ api:
       value: im1cache
     - name: USERINFO_API_BASE_URL
       value: http://api.local.bitraft.io:8091/v1/api/me/info
+    
 
 cid:
   containerPort: 8080
@@ -352,15 +350,12 @@ cid:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
+  mongoDatabaseAuditCollection: audit_info
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
     - name: EMIS_VERSION
       value: "2.1.0.0"
-    - name: AUDIT_COSMOS_COLLECTION_ID
-      value: audit
-    - name: AUDIT_SINK_TYPE
-      value: COSMOS
     - name: SESSION_MONGO_DATABASE_COLLECTION
       value: session
     - name: IM1CACHE_MONGO_DATABASE_COLLECTION
@@ -518,8 +513,6 @@ info:
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
-    - name: AUDIT_SINK_TYPE
-      value: MONGO
 
 sjr:
   createService: true

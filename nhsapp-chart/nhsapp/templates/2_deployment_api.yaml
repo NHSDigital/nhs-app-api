@@ -327,8 +327,6 @@ spec:
         - name: MICROTEST_BASE_URL
           value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
           {{- end }}
-        - name: AUDIT_COSMOS_URI
-          value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
         - name: ConfigurationSettings__CookieDomain
           {{- if $.Values.akamaiEnv }}
           value: .{{ $.Values.akamaiEnv }}
@@ -337,13 +335,6 @@ spec:
           {{- end }}
         - name: ConfigurationSettings__EmisExtendedHttpTimeoutSeconds
           value: "{{ $.Values.api.emisExtendedTimeout }}"
-        - name: AUDIT_COSMOS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdbkey-{{ .Chart.AppVersion }}
-              key: key
-        - name: AUDIT_COSMOS_DATABASE_ID
-          value: {{ $.Values.cosmosDBName }}
         - name: CONSENT_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: MONGO_CONNECTION_STRING
@@ -362,6 +353,19 @@ spec:
         - name: ASPNETCORE_HOSTINGSTARTUPASSEMBLIES
           value: "Microsoft.ApplicationInsights.Profiler.AspNetCore"
         {{- end }}
+        - name: AUDIT_MONGO_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
+        - name: AUDIT_MONGO_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
+          {{- else }}
+          value: {{ $.Values.global.environment }}-mongo
+          {{- end }}
+        - name: AUDIT_MONGO_DATABASE_COLLECTION
+          value: {{ $.Values.api.mongoDatabaseAuditCollection }}
         - name: VERSION_TAG
           value: "{{ $.Values.api.image_tag }}"
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.organDonationStubbed)) }}

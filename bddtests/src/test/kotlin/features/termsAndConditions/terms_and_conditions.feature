@@ -25,6 +25,7 @@ Feature: Use Terms and conditions page
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
     Then the User Research page is displayed
+    And the operation TermsAndConditions_RecordConsent_Response has been audited
 
   Scenario: A patient can proceed to the app after accepting updated terms and conditions
     Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
@@ -34,6 +35,7 @@ Feature: Use Terms and conditions page
     Then I see error messages indicating I have not yet accepted the updated terms and conditions
     When I agree to the updated terms and conditions
     Then I see the home page
+    And the expected field Details is audited containing the value Attempting to record patient consent - ConsentGiven=True, AnalyticsCookieAccepted=False, previousDateOfConsent=11/11/2018 00:00:00 +00:00
 
   Scenario: A patient can navigate to the Privacy policy page
     Given I am a EMIS patient who has not already accepted terms and conditions
@@ -64,6 +66,7 @@ Feature: Use Terms and conditions page
     And I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
     Then the User Research page is displayed
+    And the expected field Details is audited containing the value Attempting to record patient consent - ConsentGiven=True, AnalyticsCookieAccepted=True, previousDateOfConsent=null
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
@@ -77,6 +80,7 @@ Feature: Use Terms and conditions page
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
     Then the User Research page is displayed
+    And the expected field Details is audited containing the value Attempting to record patient consent - ConsentGiven=True, AnalyticsCookieAccepted=False, previousDateOfConsent=null
 
   Scenario: A user with proof level 5 that does not accept cookies is able to do so from the Manage cookies page
     Given I am a patient with proof level 5 who has not already accepted terms and conditions
@@ -103,6 +107,7 @@ Feature: Use Terms and conditions page
     When I check the agree to terms and conditions checkbox
     And I click the continue button on Terms and Conditions
     Then the User Research page is displayed
+    And the expected field Details is audited containing the value Attempting to record patient consent - ConsentGiven=True, AnalyticsCookieAccepted=True, previousDateOfConsent=null
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
@@ -119,6 +124,7 @@ Feature: Use Terms and conditions page
     Then I see error messages indicating I have not yet accepted the updated terms and conditions
     When I agree to the updated terms and conditions
     Then I see the home page
+    And the expected field Details is audited containing the value Attempting to record patient consent - ConsentGiven=True, AnalyticsCookieAccepted=False, previousDateOfConsent=11/11/2018 00:00:00 +00:00
 
   Scenario: A user with proof level 5 that has accepted terms and conditions is able to view their previous cookie consent decision
     Given I am a patient with proof level 5 who has updated terms and conditions

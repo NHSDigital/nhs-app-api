@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -59,14 +60,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 return new BadRequestObjectResult(ModelState);
             }
 
+            var nhsLoginId = GetNhsLoginId(userSession);
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
+
+            _logger.LogDebug("Fetching previous user consent date");
+
+            var previousConsentResult = await _termsAndConditionsService.FetchConsent(nhsLoginId);
 
             var auditingVisitor = new TermsAndConditionsRecordConsentAuditingVisitor(
                 _auditor,
                 model,
                 termsAndConditionsAcceptanceDate,
                async () => await RecordConsent(model, userSession, termsAndConditionsAcceptanceDate));
-            var recordConsentResult = await userSession.Accept(auditingVisitor);
+
+            var recordConsentResult = await userSession.Accept(auditingVisitor.Accept(previousConsentResult));
 
             _logger.LogExit();
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());

@@ -1,8 +1,6 @@
-using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Repository;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Auditing
 {
@@ -11,30 +9,9 @@ namespace NHSOnline.Backend.Auditing
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient(AuditorFactory.BuildAuditor);
+            services.AddSingleton<IAuditSink, DbAuditorSink>();
             services.AddSingleton<AuditorFactory>();
-
-            var sinkType = configuration["AUDIT_SINK_TYPE"];
-
-            if (sinkType == null)
-            {
-                throw new ConfigurationNotFoundException("AUDIT_SINK_TYPE");
-            }
-
-            switch (sinkType.ToUpperInvariant())
-            {
-                case "FILE":
-                    var filePath = configuration["AUDIT_FILE"] ?? "audit.txt";
-                    services.AddSingleton<IAuditSink>(_ => new StreamAuditSink(new FileStream(filePath, FileMode.Append)));
-                    break;
-                case "MONGO":
-                    services.RegisterRepository<AuditRecord, RepositoryDbAuditSinkConfiguration>();
-                    services.AddSingleton<IAuditSink, DbAuditorSink>();
-                    break;
-                default:
-                    services.AddSingleton<IAzureCosmosDbAuditorSinkConfig, AzureCosmosDbAuditorSinkConfig>();
-                    services.AddSingleton<IAuditSink, AzureCosmosDbAuditorSink>();
-                    break;
-            }
+            services.RegisterRepository<AuditRecord, RepositoryDbAuditSinkConfiguration>();
         }
     }
 }

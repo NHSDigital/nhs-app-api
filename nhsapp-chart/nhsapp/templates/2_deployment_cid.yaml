@@ -224,24 +224,25 @@ spec:
         {{- else }}
           value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
         {{- end }}
-        - name: AUDIT_COSMOS_URI
-          value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
         - name: ConfigurationSettings__CookieDomain
           value: .{{ $.Values.domain }}
-        - name: AUDIT_COSMOS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdbkey-{{ .Chart.AppVersion }}
-              key: key
-        - name: SERVICE_JOURNEY_RULES_BASE_URL
-          value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
-        - name: AUDIT_COSMOS_DATABASE_ID
-          value: {{ $.Values.cosmosDBName }}
-        - name: MONGO_CONNECTION_STRING
+        - name: AUDIT_MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
+        - name: SERVICE_JOURNEY_RULES_BASE_URL
+          value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+        - name: AUDIT_MONGO_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
+          {{- else }}
+          value: {{ $.Values.global.environment }}-mongo
+          {{- end }}
+        - name: AUDIT_MONGO_DATABASE_COLLECTION
+          value: {{ $.Values.cid.mongoDatabaseAuditCollection }}
+        - name: SERVICE_JOURNEY_RULES_BASE_URL
+          value: "https://nhsapp-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: SESSION_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}

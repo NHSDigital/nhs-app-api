@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList
 import com.google.gson.GsonBuilder
 import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.model.Filters.regex
 import config.Config
 import org.bson.Document
 import org.junit.Assert
@@ -12,6 +13,7 @@ import pages.MILLISECONDS_IN_A_SECOND
 import pages.TIME_TO_WAIT_FOR_ELEMENT
 import java.lang.reflect.Type
 import java.time.format.DateTimeFormatter
+import java.util.regex.Pattern
 
 class MongoDBConnection(private val collectionName: String, private val host: String, private val port: Int) {
 
@@ -30,6 +32,18 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         val gsonBuilder = GsonBuilder().create()
         return onCollection { collection ->
             val documents = collection.find()
+            documents.map {
+                document ->
+                val jsonDocument = document.toJson()
+                gsonBuilder.fromJson<T>(jsonDocument, type)
+            }.toList()
+        }
+    }
+
+    fun <T> getValuesWhere(type: Type, field: String, value: String): List<T> {
+        val gsonBuilder = GsonBuilder().create()
+        return onCollection { collection ->
+            val documents = collection.find(regex(field, ".*" + Pattern.quote(value) + ".*"))
             documents.map {
                 document ->
                 val jsonDocument = document.toJson()
@@ -103,6 +117,7 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         private const val messagesCollectionName = "messages"
         private const val developmentDatabaseName = "development"
         private const val termsAndConditionsCollectionName = "consent"
+        private const val auditInfoCollectionName = "audit_info"
         val mongoDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssz")
 
         val Im1CacheCollection = MongoDBConnection(
@@ -125,6 +140,10 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 termsAndConditionsCollectionName,
                 Config.instance.consentMongoDbHost,
                 Config.instance.consentMongoDbPort.toInt())
+        val AuditInfoCollection = MongoDBConnection(
+                auditInfoCollectionName,
+                Config.instance.consentMongoDbHost,
+                Config.instance.consentMongoDbPort.toInt())
 
         fun collections(): ImmutableList<MongoDBConnection> =
                 ImmutableList.of(
@@ -132,7 +151,8 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                         UserDevicesCollection,
                         MessagesCollection,
                         UserInfoCollection,
-                        TermsAndConditionsCollection
+                        TermsAndConditionsCollection,
+                        AuditInfoCollection
                 )
     }
 }

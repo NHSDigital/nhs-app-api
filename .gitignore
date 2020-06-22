@@ -4,7 +4,6 @@
 .gradle/
 .vscode/
 .DS_Store
-audit.txt
 web.DotSettings.user
 /docker-compose.override.yml
 

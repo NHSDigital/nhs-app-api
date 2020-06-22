@@ -23,16 +23,18 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         {
             _logger.LogInformation("Patient consent found for terms and conditions");
 
+            var dateOfConsent = DateTimeOffset.Parse(source.DateOfConsent, CultureInfo.InvariantCulture);
+
             //Updated consent required if date of last consent is prior to date of updated terms
             var updatedConsentRequired = _configuration.EffectiveDate <= DateTimeOffset.Now
-                                         && _configuration.EffectiveDate > DateTimeOffset.Parse(
-                                             source.DateOfConsent, CultureInfo.InvariantCulture);
+                                         && _configuration.EffectiveDate > dateOfConsent;
 
             var response = new ConsentResponse
             {
                 ConsentGiven = source.ConsentGiven,
                 UpdatedConsentRequired = updatedConsentRequired,
                 AnalyticsCookieAccepted = source.AnalyticsCookieAccepted,
+                DateOfConsent = dateOfConsent
             };
 
             _logger.LogDebug($"{nameof(source.ConsentGiven)}: {source.ConsentGiven}, " +

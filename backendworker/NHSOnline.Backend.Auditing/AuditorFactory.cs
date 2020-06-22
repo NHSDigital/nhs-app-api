@@ -3,25 +3,26 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {
     public class AuditorFactory
     {
-        private readonly IAuditSink _auditSink;
         private readonly IConfiguration _configuration;
         private readonly AsyncLocal<HttpContextAuditorScope> _scopeProvider;
+        private readonly IAuditSink _auditSink;
 
-        public AuditorFactory(IAuditSink auditSink, IConfiguration configuration)
+        public AuditorFactory(IConfiguration configuration, IAuditSink auditSink)
         {
-            _auditSink = auditSink;
             _configuration = configuration;
             _scopeProvider = new AsyncLocal<HttpContextAuditorScope>();
+            _auditSink = auditSink;
         }
 
         public IAuditor CreateAuditor(ILogger logger)
         {
-            return new Auditor(_auditSink, _scopeProvider, logger, _configuration);
+            return new Auditor(_scopeProvider, logger, _configuration, _auditSink);
         }
 
         public static IAuditor BuildAuditor(IServiceProvider serviceProvider)
