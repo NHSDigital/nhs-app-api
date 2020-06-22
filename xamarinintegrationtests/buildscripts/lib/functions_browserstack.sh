@@ -57,8 +57,34 @@ function upload_android_app_to_browserstack () {
   info "Android__App: $Android__App"
 }
 
+function upload_ios_app_to_browserstack () {
+  local BROWSERSTACK_UPLOAD_RESPONSE
+
+  [ -f "$NATIVE_APP_PATH_IOS" ] || die "Native app (NATIVE_APP_PATH_IOS=$NATIVE_APP_PATH_IOS) does not exist, this is required to run integration tests"
+
+  info "Uploading native app to BrowserStack: $NATIVE_APP_PATH_IOS"
+
+  local BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-ios}
+  BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
+    -u "$BrowserStack__User:$BrowserStack__Key" \
+    -X POST \
+    -F "file=@$NATIVE_APP_PATH_IOS" \ \
+    -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
+    "https://api-cloud.browserstack.com/app-automate/upload")
+  info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
+
+  # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
+  iOS__App=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
+
+  export iOS__App
+  DOCKER_ARGS+=(--env "iOS__App=${iOS__App}")
+
+  info "iOS__App: $iOS__App"
+}
+
 function setup_browserstack_environment () {
   validate_browserstack_environment
   generate_browserstack_local_identifier
   upload_android_app_to_browserstack
+  upload_ios_app_to_browserstack
 }

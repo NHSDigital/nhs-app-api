@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -22,10 +23,16 @@ namespace NHSOnline.IntegrationTests.UI
             var logs = new TestLogs();
             logs.Info(_displayName);
 
+            // Include driver setup/teardown in test duration
+            var timer = Stopwatch.StartNew();
+
             var testResult = ExecuteInternal(logs);
 
             logs.Info("{0} => {1}", _displayName, testResult.Outcome);
             logs.UpdateResult(testResult);
+
+            timer.Stop();
+            testResult.Duration = timer.Elapsed;
 
             return testResult;
         }

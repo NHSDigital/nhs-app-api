@@ -12,6 +12,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     {
         private readonly ChromeDriverService _chromeDriverService;
         private readonly IWebDriver _webDriver;
+        private readonly Interactor<IWebElement> _interactor;
 
         internal ChromeWebDriverWrapper(TestLogs logs)
         {
@@ -34,29 +35,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
             _webDriver = new ChromeDriver(_chromeDriverService, options);
             _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+            _interactor = new Interactor<IWebElement>(Logs, _webDriver.FindElement);
         }
 
         private TestLogs Logs { get; }
 
         public void GoToUrl(Uri uri) => _webDriver.Navigate().GoToUrl(uri);
 
-        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action)
-        {
-            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(2));
-            while (true)
-            {
-                try
-                {
-                    var element = _webDriver.FindElement(by);
-                    action(element);
-                    return;
-                }
-                catch (StaleElementReferenceException e) when (DateTime.UtcNow < retryUntil)
-                {
-                    Logs.Info("{0}: Retrying", e.Message);
-                }
-            }
-        }
+        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action) => _interactor.ActOnElement(by, action);
 
         public void AttachDebugInfo(IDriverCleanupContext context)
         {
