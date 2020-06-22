@@ -1,4 +1,7 @@
-using NHSOnline.App.Views;
+using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Presenters;
+using Xamarin.Forms;
 
 namespace NHSOnline.App
 {
@@ -8,7 +11,12 @@ namespace NHSOnline.App
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices);
+
+            var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
+            var mainPage = pageFactory.CreatePageFor(new MainModel());
+
+            MainPage = new NavigationPage(mainPage);
         }
 
         protected override void OnStart()
