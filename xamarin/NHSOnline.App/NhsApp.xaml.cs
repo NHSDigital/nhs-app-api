@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
-using NHSOnline.App.Presenters;
 using Xamarin.Forms;
 
 namespace NHSOnline.App
@@ -17,7 +17,7 @@ namespace NHSOnline.App
             var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
 
             var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
-            var mainPage = pageFactory.CreatePageFor(new MainModel());
+            var mainPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
             MainPage = new NavigationPage(mainPage);
         }

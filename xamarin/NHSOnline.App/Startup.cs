@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.App.Views;
+using NHSOnline.App.Areas;
 
 namespace NHSOnline.App
 {
@@ -8,7 +8,7 @@ namespace NHSOnline.App
         internal static void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddViews();
+                .AddAreas();
         }
     }
 }

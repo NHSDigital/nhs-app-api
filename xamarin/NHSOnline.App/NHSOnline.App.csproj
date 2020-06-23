@@ -21,8 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Areas\LoggedOut\Views\LoggedOutHomeScreenPage.xaml.cs">
+      <DependentUpon>LoggedOutHomeScreenPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="NhsApp.xaml.cs">
       <DependentUpon>NhsApp.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
 </Project>

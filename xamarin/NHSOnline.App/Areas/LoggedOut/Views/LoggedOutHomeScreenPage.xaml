@@ -4,13 +4,15 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Views.MainPage">
+             x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage">
 
     <StackLayout>
         <!-- Place new controls here -->
         <Label Text="Welcome to the NHS App"
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
+        <Button Text="Continue with NHS Login"
+                Clicked="LoginButton_OnClicked"/>
     </StackLayout>
 
 </ContentPage>
