@@ -332,7 +332,7 @@ api:
       value: im1cache
     - name: USERINFO_API_BASE_URL
       value: http://api.local.bitraft.io:8091/v1/api/me/info
-    
+
 
 cid:
   containerPort: 8080
@@ -403,7 +403,7 @@ iproxy:
   containerPort: 8443
   role: iproxy
   image: nhsonline-nginx
-  image_tag: "v1.18.0"
+  image_tag: "v1.16.1"
   imagePullPolicy: IfNotPresent
   minAvailable: 0
   minReplicas: 1
@@ -421,7 +421,7 @@ iproxy_microtest:
   containerPort: 8443
   role: iproxy-microtest
   image: nhsonline-nginx-microtest
-  image_tag: "v1.18.0"
+  image_tag: "v1.16.1"
   imagePullPolicy: IfNotPresent
   minAvailable: 0
   minReplicas: 1
