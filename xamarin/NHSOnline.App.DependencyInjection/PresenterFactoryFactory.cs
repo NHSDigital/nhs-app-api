@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.App.DependencyInjection
 {
@@ -12,6 +13,8 @@ namespace NHSOnline.App.DependencyInjection
             BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
 
         private static readonly MethodInfo GetRequiredServiceMethod = FindGetRequiredServiceMethod();
+
+        internal static ILogger Logger { get; set; } = null!;
 
         internal static Func<IServiceProvider, TModel, TView, TPresenter> CreatePresenterFactoryMethod<TModel, TView, TPresenter>()
         {
@@ -63,7 +66,9 @@ namespace NHSOnline.App.DependencyInjection
                 return constructors[0];
             }
 
-            throw new InvalidOperationException($"Presenter {typeof(TPresenter).Name} must have a single constructor");
+            var message = $"Presenter {typeof(TPresenter).Name} must have a single constructor";
+            Logger.LogError(message);
+            throw new InvalidOperationException(message);
         }
 
         private static MethodInfo FindGetRequiredServiceMethod()
@@ -73,10 +78,16 @@ namespace NHSOnline.App.DependencyInjection
                     nameof(ServiceProviderServiceExtensions.GetRequiredService),
                     new[] { typeof(IServiceProvider), typeof(Type) });
 
-            return requiredServiceMethod
-                   ?? throw new InvalidOperationException(
-                       $"Missing {nameof(ServiceProviderServiceExtensions)}.{nameof(ServiceProviderServiceExtensions.GetRequiredService)}" +
-                       $"({nameof(IServiceProvider)}, {nameof(Type)})");
+            if (requiredServiceMethod != null)
+            {
+                return requiredServiceMethod;
+            }
+
+            var message = "Missing " +
+                          $"{nameof(ServiceProviderServiceExtensions)}.{nameof(ServiceProviderServiceExtensions.GetRequiredService)}" +
+                          $"({nameof(IServiceProvider)}, {nameof(Type)})";
+            Logger.LogError(message);
+            throw new InvalidOperationException(message);
         }
     }
 }

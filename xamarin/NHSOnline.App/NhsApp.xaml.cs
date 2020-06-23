@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Logging;
 using NHSOnline.App.Presenters;
 using Xamarin.Forms;
 
@@ -11,7 +12,9 @@ namespace NHSOnline.App
         {
             InitializeComponent();
 
-            var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices);
+            var loggerFactory = NhsAppLogging.Init();
+
+            var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
 
             var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
             var mainPage = pageFactory.CreatePageFor(new MainModel());

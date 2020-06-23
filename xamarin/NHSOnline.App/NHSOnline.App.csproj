@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App.DependencyInjection\NHSOnline.App.DependencyInjection.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

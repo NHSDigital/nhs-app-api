@@ -1,11 +1,14 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
+        internal static ILogger Logger { get; set; } = null!;
+
         public static IServiceCollection AddPageFactory(this IServiceCollection services)
         {
             return services.AddTransient<IPageFactory, PageFactory>();
@@ -15,6 +18,8 @@ namespace NHSOnline.App.DependencyInjection
             this IServiceCollection services)
             where TView : Page
         {
+            Logger.LogDebug($"{nameof(AddModelViewPresenter)}<{{Model}}, {{View}}, {{Presenter}}>", typeof(TModel).Name, typeof(TView).Name, typeof(TPresenter).Name);
+
             services.AddTransient<IPageFactory<TModel>, PageFactory<TModel, TView>>();
             services.AddTransient<TView>();
 
