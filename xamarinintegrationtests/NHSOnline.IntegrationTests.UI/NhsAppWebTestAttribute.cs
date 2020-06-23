@@ -12,8 +12,10 @@ namespace NHSOnline.IntegrationTests.UI
 
         public override TestResult[] Execute(ITestMethod testMethod)
         {
+            var testName = DisplayName ?? testMethod.TestMethodName;
+
             var testExecutor = new TestExecutor<IWebDriverWrapper>(
-                DisplayName,
+                testName,
                 testMethod,
                 logs => new ChromeWebDriverWrapper(logs));
 

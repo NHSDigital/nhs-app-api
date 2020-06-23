@@ -8,10 +8,20 @@ namespace NHSOnline.IntegrationTests
     [TestClass]
     public class IOSLoginTests
     {
-        [NhsAppIOSTest("A patient can start the app on iOS")]
+        [NhsAppIOSTest()]
         public void APatientCanStartTheApp(IIOSDriverWrapper driver)
         {
             _ = IOSLoggedOutHomePage.AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest()]
+        public void APatientIsShownTheBeforeYouStartPage(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            _ = IOSBeforeYouStartPage.AssertOnPage(driver);
         }
     }
 }

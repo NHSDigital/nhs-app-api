@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.7.0.968" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,15 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Areas\LoggedOut\Views\BeforeYouStartPage .xaml.cs">
+      <DependentUpon>BeforeYouStartPage .xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\LoggedOutHomeScreenPage.xaml.cs">
       <DependentUpon>LoggedOutHomeScreenPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="NhsApp.xaml.cs">
       <DependentUpon>NhsApp.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\" />
   </ItemGroup>
 </Project>

@@ -17,9 +17,9 @@ namespace NHSOnline.App
             var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
 
             var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
-            var mainPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
+            var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
-            MainPage = new NavigationPage(mainPage);
+            MainPage = new NavigationPage(loggedOutHomeScreenPage);
         }
 
         protected override void OnStart()

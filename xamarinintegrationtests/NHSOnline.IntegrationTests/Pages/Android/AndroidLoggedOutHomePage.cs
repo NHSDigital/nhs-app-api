@@ -5,17 +5,24 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 {
     internal sealed class AndroidLoggedOutHomePage
     {
-        private readonly IAndroidDriverWrapper _androidDriver;
+        private readonly IAndroidDriverWrapper _driver;
 
-        private AndroidLoggedOutHomePage(IAndroidDriverWrapper androidDriver) => _androidDriver = androidDriver;
+        private AndroidLoggedOutHomePage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel WelcomeMessage => new AndroidLabel(_androidDriver, "Welcome to the NHS App");
+        private AndroidLabel WelcomeMessage => new AndroidLabel(_driver, "Welcome to the NHS App");
 
-        internal static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper androidDriver)
+        private AndroidButton ContinueButton => new AndroidButton(_driver, "CONTINUE WITH NHS LOGIN");
+
+        internal static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidLoggedOutHomePage(androidDriver);
+            var page = new AndroidLoggedOutHomePage(driver);
             page.WelcomeMessage.AssertVisible();
             return page;
+        }
+
+        public void ContinueWithNhsLogin()
+        {
+            ContinueButton.Click();
         }
     }
 }

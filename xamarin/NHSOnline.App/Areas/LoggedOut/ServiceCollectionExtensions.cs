@@ -11,6 +11,7 @@ namespace NHSOnline.App.Areas.LoggedOut
         internal static IServiceCollection AddLoggedOutArea(this IServiceCollection services)
         {
             return services
+                .AddModelViewPresenter<BeforeYouStartModel, BeforeYouStartPage, BeforeYouStartPresenter>()
                 .AddModelViewPresenter<LoggedOutHomeScreenModel, LoggedOutHomeScreenPage, LoggedOutHomeScreenPresenter>();
         }
     }

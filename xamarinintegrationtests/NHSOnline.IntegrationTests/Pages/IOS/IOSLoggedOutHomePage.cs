@@ -5,17 +5,24 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 {
     internal sealed class IOSLoggedOutHomePage
     {
-        private readonly IIOSDriverWrapper _iosDriver;
+        private readonly IIOSDriverWrapper _driver;
 
-        private IOSLoggedOutHomePage(IIOSDriverWrapper iosDriver) => _iosDriver = iosDriver;
+        private IOSLoggedOutHomePage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel WelcomeMessage => new IOSLabel(_iosDriver, "Welcome to the NHS App");
+        private IOSLabel WelcomeMessage => new IOSLabel(_driver, "Welcome to the NHS App");
 
-        internal static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper iosDriver)
+        private IOSButton ContinueButton => new IOSButton(_driver, "Continue with NHS Login");
+
+        internal static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
         {
-            var page = new IOSLoggedOutHomePage(iosDriver);
+            var page = new IOSLoggedOutHomePage(driver);
             page.WelcomeMessage.AssertVisible();
             return page;
+        }
+
+        public void ContinueWithNhsLogin()
+        {
+            ContinueButton.Click();
         }
     }
 }

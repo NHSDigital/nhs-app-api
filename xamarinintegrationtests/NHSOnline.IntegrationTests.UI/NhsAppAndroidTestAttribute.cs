@@ -7,15 +7,15 @@ namespace NHSOnline.IntegrationTests.UI
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class NhsAppAndroidTestAttribute : TestMethodAttribute
     {
-        public NhsAppAndroidTestAttribute(string displayName) : base(displayName)
-        { }
 
         public override TestResult[] Execute(ITestMethod testMethod)
         {
+            var testName = DisplayName ?? testMethod.TestMethodName;
+
             var testExecutor = new TestExecutor<IAndroidDriverWrapper>(
-                DisplayName,
+                testName,
                 testMethod,
-                logs => new AndroidDriverWrapper(DisplayName, logs));
+                logs => new AndroidDriverWrapper(testName, logs));
 
             return new[] {testExecutor.Execute()};
         }

@@ -7,15 +7,15 @@ namespace NHSOnline.IntegrationTests.UI
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class NhsAppIOSTestAttribute : TestMethodAttribute
     {
-        public NhsAppIOSTestAttribute(string displayName) : base(displayName)
-        { }
 
         public override TestResult[] Execute(ITestMethod testMethod)
         {
+            var testName = DisplayName ?? testMethod.TestMethodName;
+
             var testExecutor = new TestExecutor<IIOSDriverWrapper>(
-                DisplayName,
+                testName,
                 testMethod,
-                logs => new IOSDriverWrapper(DisplayName, logs));
+                logs => new IOSDriverWrapper(testName, logs));
 
             return new[] { testExecutor.Execute() };
         }

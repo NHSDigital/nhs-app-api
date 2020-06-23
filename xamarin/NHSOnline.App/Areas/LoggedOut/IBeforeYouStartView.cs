@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut
 {
-    internal interface ILoggedOutHomeScreenView
+    internal interface IBeforeYouStartView
     {
         event EventHandler<EventArgs> LoginRequested;
 

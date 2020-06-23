@@ -1,21 +1,20 @@
 using System;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Services;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class LoggedOutHomeScreenPresenter
+    internal sealed class BeforeYouStartPresenter
     {
-        private readonly ILoggedOutHomeScreenView _view;
-        private readonly ILogger _logger;
+        private readonly IBeforeYouStartView _view;
+        private readonly ILogger<BeforeYouStartPresenter> _logger;
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
 
-        public LoggedOutHomeScreenPresenter(
-            ILoggedOutHomeScreenView view,
-            ILogger<LoggedOutHomeScreenPresenter> logger,
+        public BeforeYouStartPresenter(
+            IBeforeYouStartView view,
+            ILogger<BeforeYouStartPresenter> logger,
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService)
         {
@@ -31,12 +30,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Login Requested");
 
-            if (_userPreferencesService.ShowBeforeYouStart)
-            {
-                var beforeYouStart = new BeforeYouStartModel();
-                var beforeYouStartPage = _pageFactory.CreatePageFor(beforeYouStart);
-                await _view.Navigation.PushAsync(beforeYouStartPage).PreserveThreadContext();
-            }
+            _userPreferencesService.ShowBeforeYouStart = false;
+
+            await _view.Navigation.PopToRootAsync(true).PreserveThreadContext();
         }
     }
 }

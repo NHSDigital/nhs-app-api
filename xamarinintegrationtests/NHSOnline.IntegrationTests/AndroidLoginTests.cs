@@ -8,10 +8,20 @@ namespace NHSOnline.IntegrationTests
     [TestClass]
     public class AndroidLoginTests
     {
-        [NhsAppAndroidTest("A patient can start the app on android")]
+        [NhsAppAndroidTest()]
         public void APatientCanStartTheApp(IAndroidDriverWrapper driver)
         {
             _ = AndroidLoggedOutHomePage.AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest()]
+        public void APatientIsShownTheBeforeYouStartPage(IAndroidDriverWrapper driver)
+        {
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            _ = AndroidBeforeYouStartPage.AssertOnPage(driver);
         }
     }
 }

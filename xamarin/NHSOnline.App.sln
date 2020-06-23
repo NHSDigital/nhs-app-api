@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.DependencyInjection", "NHSOnline.App.DependencyInjection\NHSOnline.App.DependencyInjection.csproj", "{380AB30A-6EEA-4A81-B0A3-0B818036E74F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.App.Logging", "NHSOnline.App.Logging\NHSOnline.App.Logging.csproj", "{7783BCD8-95F8-4645-95A9-28FEF39731BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.Logging", "NHSOnline.App.Logging\NHSOnline.App.Logging.csproj", "{7783BCD8-95F8-4645-95A9-28FEF39731BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

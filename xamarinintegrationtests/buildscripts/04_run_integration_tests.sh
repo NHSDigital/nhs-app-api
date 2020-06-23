@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
 set -e
 
 # Change current working directory to be the root of integration tests, regardless of how this script is invoked
