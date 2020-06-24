@@ -1,13 +1,14 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Logging;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        internal static ILogger Logger { get; set; } = null!;
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(ServiceCollectionExtensions));
 
         public static IServiceCollection AddPageFactory(this IServiceCollection services)
         {

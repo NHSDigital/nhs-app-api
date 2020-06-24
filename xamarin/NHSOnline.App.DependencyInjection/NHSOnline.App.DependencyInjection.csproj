@@ -10,4 +10,8 @@
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.495" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
+  </ItemGroup>
+
 </Project>

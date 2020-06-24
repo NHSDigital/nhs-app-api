@@ -5,21 +5,23 @@ namespace NHSOnline.App.Logging
 {
     public static class NhsAppLogging
     {
-        private static ILoggerFactory _loggerFactory = null!;
+        private static Func<Type, ILogger> _createLogger = CreateLoggerNotInitialised;
 
         public static ILoggerFactory Init()
         {
             try
             {
                 // TODO: Set Minimum Level from configuration once available
-                _loggerFactory = LoggerFactory.Create(
+                var loggerFactory = LoggerFactory.Create(
                     builder => builder
                         .SetMinimumLevel(LogLevel.Trace)
                         .AddDebug());
 
-                _loggerFactory.CreateLogger(typeof(NhsAppLogging)).LogInformation("Logging initialised");
+                _createLogger = type => loggerFactory.CreateLogger(type);
 
-                return _loggerFactory;
+                CreateLogger(typeof(NhsAppLogging)).LogInformation("Logging initialised");
+
+                return loggerFactory;
             }
             catch (Exception e)
             {
@@ -28,6 +30,9 @@ namespace NHSOnline.App.Logging
             }
         }
 
-        public static ILogger<T> CreateLogger<T>() => _loggerFactory.CreateLogger<T>();
+        public static ILogger CreateLogger(Type type) => _createLogger(type);
+
+        private static ILogger CreateLoggerNotInitialised(Type type)
+            => throw new InvalidOperationException($"Cannot create logger of type {type.FullName} as logging has not been initialised");
     }
 }

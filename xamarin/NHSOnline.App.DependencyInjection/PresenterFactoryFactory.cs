@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Logging;
 
 namespace NHSOnline.App.DependencyInjection
 {
@@ -14,7 +15,7 @@ namespace NHSOnline.App.DependencyInjection
 
         private static readonly MethodInfo GetRequiredServiceMethod = FindGetRequiredServiceMethod();
 
-        internal static ILogger Logger { get; set; } = null!;
+        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(PresenterFactoryFactory));
 
         internal static Func<IServiceProvider, TModel, TView, TPresenter> CreatePresenterFactoryMethod<TModel, TView, TPresenter>()
         {

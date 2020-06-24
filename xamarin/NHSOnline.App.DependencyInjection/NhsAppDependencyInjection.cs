@@ -13,8 +13,6 @@ namespace NHSOnline.App.DependencyInjection
 
             try
             {
-                InitLoggers(loggerFactory);
-
                 var services = ConfigureServices(configureServices, loggerFactory);
 
                 return BuildServiceProvider(services);
@@ -24,13 +22,6 @@ namespace NHSOnline.App.DependencyInjection
                 logger.LogError(e, "Failed to initialise dependency injection");
                 throw;
             }
-        }
-
-        // Enable logging during configuration of the dependency injection container
-        private static void InitLoggers(ILoggerFactory loggerFactory)
-        {
-            ServiceCollectionExtensions.Logger = loggerFactory.CreateLogger(typeof(ServiceCollectionExtensions));
-            PresenterFactoryFactory.Logger = loggerFactory.CreateLogger(typeof(PresenterFactoryFactory));
         }
 
         private static IServiceCollection ConfigureServices(Action<IServiceCollection> configureServices, ILoggerFactory loggerFactory)
