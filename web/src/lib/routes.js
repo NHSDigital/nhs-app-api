@@ -899,7 +899,7 @@ const routes = {
   },
   MEDICINES: {
     name: 'health-records-gp-medical-record-medicines',
-    path: '/health-records/gp-medical-record/medicines-index',
+    path: '/health-records/gp-medical-record/medicines',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
