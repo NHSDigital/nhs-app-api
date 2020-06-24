@@ -218,7 +218,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             public TUserSessionResponse Visit(P5UserSession userSession)
             {
                 SetCommonProperties(userSession);
-                _userSessionResponse.Name = $"{userSession.CitizenIdUserSession.GivenName} {userSession.CitizenIdUserSession.FamilyName}";
+                _userSessionResponse.Name = userSession.CitizenIdUserSession.Name;
                 _userSessionResponse.Im1MessagingEnabled = false;
                 return _userSessionResponse;
             }

@@ -21,7 +21,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         val bodyText = "Contact your GP surgery to amend your personal details."
         val expected = ExpectedPageStructure()
                 .h3("Personal details")
-                .h4("Name").paragraph(patient.formattedFullName())
+                .h4("Name").paragraph(patient.formattedFullName(false))
                 .h4("Date of birth").paragraph(patient.age.formattedDateOfBirth())
                 .h4("Gender").paragraph(patient.sex.toString())
                 .h4("NHS number").paragraph(patient.formattedNHSNumber())

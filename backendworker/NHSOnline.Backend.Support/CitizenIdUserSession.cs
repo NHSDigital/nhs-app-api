@@ -13,5 +13,7 @@ namespace NHSOnline.Backend.Support
         public ProofLevel ProofLevel { get; set; }
         public string OdsCode { get; set; }
         public string RefreshToken { get; set; }
+
+        public string Name => $"{GivenName} {FamilyName}";
     }
 }

@@ -25,7 +25,7 @@ data class OrganDonationRegistration(
             return OrganDonationRegistration(
                     identifier = patient.organDonationRegistrationId,
                     nhsNumber = patient.formattedNHSNumber(),
-                    nameFull = patient.formattedFullName(),
+                    nameFull = patient.formattedFullName(false),
                     name = Name.fromPatient(patient),
                     dateOfBirth = patient.age.dateOfBirth,
                     addressFull = patient.contactDetails.address.full(),

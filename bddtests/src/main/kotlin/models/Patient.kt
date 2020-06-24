@@ -56,8 +56,8 @@ data class Patient(
         return NhsNumberFormatter.format(nhsNumbers.first())
     }
 
-    fun formattedFullName(): String {
-        return name.formattedFullName(identityProofingLevel)
+    fun formattedFullName(includeTitle: Boolean = true): String {
+        return name.formattedFullName(identityProofingLevel, includeTitle)
     }
 
     fun updateOdsCodes(targetOdsCode: String) {

@@ -7,7 +7,7 @@ Feature: Organ Donation Lookup Backend
     And I have logged in and have a valid session cookie
     When I request my organ donation details
     Then I receive organ donation details with an 'OptOut' decision
-    And I receive the users demographics details
+    And I receive the users personal details
     Examples:
       | GP System |
       | EMIS      |
@@ -20,7 +20,7 @@ Feature: Organ Donation Lookup Backend
     And I have logged in and have a valid session cookie
     When I request my organ donation details
     Then I receive organ donation details with an 'OptIn' decision
-    And I receive the users demographics details
+    And I receive the users personal details
     Examples:
       | GP System |
       | EMIS      |
@@ -34,7 +34,7 @@ Feature: Organ Donation Lookup Backend
     When I request my organ donation details
     Then I receive a "OK" success code
     And I receive organ donation details with an 'OptIn' decision
-    And I receive the users demographics details
+    And I receive the users personal details
     Examples:
       | GP System |
       | EMIS      |
@@ -47,7 +47,7 @@ Feature: Organ Donation Lookup Backend
     And I have logged in and have a valid session cookie
     When I request my organ donation details
     Then I receive organ donation details with an 'AppRep' decision
-    And I receive the users demographics details
+    And I receive the users personal details
     Examples:
       | GP System |
       | EMIS      |
@@ -61,7 +61,7 @@ Feature: Organ Donation Lookup Backend
     And I have logged in and have a valid session cookie
     When I request my organ donation details
     Then I receive a "OK" success code
-    And I receive the users demographics details
+    And I receive the users personal details
     And I receive no organ donation details
     Examples:
       | GP System |

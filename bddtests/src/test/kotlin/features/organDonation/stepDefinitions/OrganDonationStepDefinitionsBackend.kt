@@ -109,8 +109,8 @@ class OrganDonationStepDefinitionsBackend {
                 organDonationResponse.state)
     }
 
-    @Then("^I receive the users demographics details$")
-    fun iReceiveTheGpUsersDemographicsDetails() {
+    @Then("^I receive the users personal details$")
+    fun iReceiveTheUsersPersonalDetails() {
         val patient = SerenityHelpers.getPatient()
 
         val organDonationResponse = Serenity
@@ -120,7 +120,7 @@ class OrganDonationStepDefinitionsBackend {
                 patient.formattedNHSNumber(),
                 organDonationResponse.nhsNumber)
         Assert.assertEquals("Patient name in the response does not match patient",
-                patient.formattedFullName(),
+                patient.formattedFullName(false),
                 organDonationResponse.nameFull)
     }
 }

@@ -6,12 +6,13 @@ data class PatientName(
         val surname: String = "",
         val callingName: String = ""){
 
-    fun formattedFullName(identityProofingLevel: IdentityProofingLevel): String {
-        val fullName = if (identityProofingLevel == IdentityProofingLevel.P9) {
+    fun formattedFullName(identityProofingLevel: IdentityProofingLevel, includeTitle: Boolean): String {
+        val fullName = if (includeTitle && identityProofingLevel == IdentityProofingLevel.P9) {
             "$title $firstName $surname"
         } else {
             "$firstName $surname"
         }
 
         return fullName.trim()
-    }}
+    }
+}

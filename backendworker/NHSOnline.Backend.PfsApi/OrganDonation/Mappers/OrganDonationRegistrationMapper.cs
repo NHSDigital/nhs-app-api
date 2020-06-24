@@ -12,43 +12,42 @@ using Name = NHSOnline.Backend.PfsApi.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationRegistrationMapper : IMapper<DemographicsResponse, OrganDonationRegistration>,
+    internal class OrganDonationRegistrationMapper :
+        IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>,
         IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
     {
         private readonly IEnumMapper<string, Decision> _organDonationDecisionMapper;
         private readonly IEnumMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
         private readonly IEnumMapper<string, ChoiceState> _organDonationChoiceStateMapper;
-        private readonly IMapper<string, DemographicsName, Name> _demographicsNameMapper;
         private readonly ILogger<OrganDonationRegistrationMapper> _logger;
 
         public OrganDonationRegistrationMapper(IEnumMapper<string, Decision> organDonationDecisionMapper,
             IEnumMapper<string, FaithDeclaration> organDonationFaithDeclarationMapper,
             IEnumMapper<string, ChoiceState> organDonationChoiceStateMapper,
-            IMapper<string, DemographicsName, Name> demographicsNameMapper,
             ILogger<OrganDonationRegistrationMapper> logger)
         {
             _organDonationDecisionMapper = organDonationDecisionMapper;
             _organDonationChoiceStateMapper = organDonationChoiceStateMapper;
-            _demographicsNameMapper = demographicsNameMapper;
             _organDonationFaithDeclarationMapper = organDonationFaithDeclarationMapper;
             _logger = logger;
         }
 
-        public OrganDonationRegistration Map(DemographicsResponse source)
+        public OrganDonationRegistration Map(DemographicsResponse firstSource, CitizenIdUserSession secondSource)
         {
             new ValidateAndLog(_logger)
-                .IsNotNull(source, nameof(source), ThrowError)
+                .IsNotNull(firstSource, nameof(firstSource), ThrowError)
+                .IsNotNull(secondSource, nameof(secondSource), ThrowError)
                 .IsValid();
 
             return new OrganDonationRegistration
             {
-                Gender = source.Sex,
-                AddressFull = source.Address,
-                Address = MapAddress(source),
-                NameFull = source.PatientName,
-                Name = MapName(source),
-                NhsNumber = source.NhsNumber,
-                DateOfBirth = source.DateOfBirth
+                Gender = firstSource.Sex,
+                AddressFull = firstSource.Address,
+                Address = MapAddress(firstSource),
+                NameFull = secondSource.Name,
+                Name = MapName(secondSource),
+                NhsNumber = firstSource.NhsNumber,
+                DateOfBirth = firstSource.DateOfBirth
             };
         }
 
@@ -139,9 +138,13 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             return name;
         }
 
-        private Name MapName(DemographicsResponse demographicsResponse)
+        private static Name MapName(CitizenIdUserSession citizenIdUserSession)
         {
-            return _demographicsNameMapper.Map(demographicsResponse.PatientName, demographicsResponse.NameParts);
+            return new Name
+            {
+                Surname = citizenIdUserSession.FamilyName,
+                GivenName = citizenIdUserSession.GivenName
+            };
         }
 
         private DecisionDetails MapDecisionDetails(Registration existingRegistration)

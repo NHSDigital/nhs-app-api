@@ -37,11 +37,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
             services.AddSingleton<IOrganDonationDataMaps, OrganDonationDataMaps>();
 
-            services.AddSingleton<IMapper<DemographicsResponse, OrganDonationRegistration>,
+            services.AddSingleton<IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>,
                 OrganDonationRegistrationMapper>();
-
-            services.AddSingleton<IMapper<string, DemographicsName, Models.Name>,
-                OrganDonationDemographicsNameMapper>();
 
             services
                 .AddSingleton<IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>,
@@ -58,10 +55,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                 .AddSingleton<IMapper<string, Models.Address, Address>, OrganDonationAddressMapper>();
 
             services.AddSingleton<IMapper<Models.Name, Name>, OrganDonationNameMapper>();
-            services.AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, 
+            services.AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>,
                 RegistrationRequestMapper>();
 
-            services.AddSingleton<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>, 
+            services.AddSingleton<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>,
                     WithdrawRequestMapper>();
 
             services

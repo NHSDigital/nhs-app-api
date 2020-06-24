@@ -11,7 +11,6 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
-using Name = NHSOnline.Backend.PfsApi.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {
@@ -19,7 +18,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
     public class OrganDonationRegistrationMapperTests
     {
         private IFixture _fixture;
-        private IMapper<DemographicsResponse, OrganDonationRegistration> _demographicsToRegistrationMapper;
+        private IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>
+            _demographicsToRegistrationMapper;
 
         private IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
             _lookupToRegistrationMapper;
@@ -27,30 +27,43 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         private Mock<IEnumMapper<string, Decision>> _decisionMapper;
         private Mock<IEnumMapper<string, FaithDeclaration>> _faithDeclarationMapper;
         private Mock<IEnumMapper<string, ChoiceState>> _choiceStateMapper;
-        private Mock<IMapper<string, DemographicsName, Name>> _demographicsNameMapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
+
             _decisionMapper = _fixture.Freeze<Mock<IEnumMapper<string, Decision>>>();
             _faithDeclarationMapper = _fixture.Freeze<Mock<IEnumMapper<string, FaithDeclaration>>>();
             _choiceStateMapper = _fixture.Freeze<Mock<IEnumMapper<string, ChoiceState>>>();
-            _demographicsNameMapper = _fixture.Freeze<Mock<IMapper<string, DemographicsName, Name>>>();
 
             _demographicsToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
             _lookupToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
         }
 
         [TestMethod]
-        public void MapDemographicsResponseToOrganDonationRegistration_WhenPassingNull_ThrowsArgumentNullException()
+        public void MapDemographicsResponseToOrganDonationRegistration_WhenPassingNullResponse_ThrowsArgumentNullException()
         {
+            // Arrange
+            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
+
             // Act and Assert
-            Action act = () => _demographicsToRegistrationMapper.Map(null);
-            
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("source");
+            Action act = () => _demographicsToRegistrationMapper.Map(null, citizenIdUserSession);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("firstSource");
+        }
+
+        [TestMethod]
+        public void MapDemographicsResponseToOrganDonationRegistration_WhenPassingNullSession_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var response = _fixture.Create<DemographicsResponse>();
+
+            // Act and Assert
+            Action act = () => _demographicsToRegistrationMapper.Map(response, null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("secondSource");
         }
 
         [TestMethod]
@@ -58,27 +71,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Arrange
             var response = _fixture.Create<DemographicsResponse>();
-            _demographicsNameMapper
-                .Setup(x => x.Map(response.PatientName, response.NameParts))
-                .Returns(new Name
-                {
-                    GivenName = response.NameParts.Given,
-                    Surname = response.NameParts.Surname,
-                    Title = response.NameParts.Title
-                })
-                .Verifiable();
+            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
 
             // Act
-            var result = _demographicsToRegistrationMapper.Map(response);
+            var result = _demographicsToRegistrationMapper.Map(response, citizenIdUserSession);
 
             // Assert
-            _demographicsNameMapper.Verify();
             result.Should().NotBeNull();
-            result.NameFull.Should().Be(response.PatientName);
+            result.NameFull.Should().Be(citizenIdUserSession.Name);
             result.Name.Should().NotBeNull();
-            result.Name.GivenName.Should().Be(response.NameParts.Given);
-            result.Name.Surname.Should().Be(response.NameParts.Surname);
-            result.Name.Title.Should().Be(response.NameParts.Title);
+            result.Name.GivenName.Should().Be(citizenIdUserSession.GivenName);
+            result.Name.Surname.Should().Be(citizenIdUserSession.FamilyName);
+            result.Name.Title.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().NotBeNull();
             result.Address.HouseName.Should().Be(response.AddressParts.HouseName);
@@ -96,29 +100,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapDemographicsResponseToOrganDonationRegistration_WithNoAddressParts_MapsCorrectly()
         {
             // Arrange
+            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
             var response = _fixture.Create<DemographicsResponse>();
             response.AddressParts = null;
-            _demographicsNameMapper
-                .Setup(x => x.Map(response.PatientName, response.NameParts))
-                .Returns(new Name
-                {
-                    GivenName = response.NameParts.Given,
-                    Surname = response.NameParts.Surname,
-                    Title = response.NameParts.Title
-                })
-                .Verifiable();
 
             // Act
-            var result = _demographicsToRegistrationMapper.Map(response);
+            var result = _demographicsToRegistrationMapper.Map(response, citizenIdUserSession);
 
             // Assert
-            _demographicsNameMapper.Verify();
             result.Should().NotBeNull();
-            result.NameFull.Should().Be(response.PatientName);
+            result.NameFull.Should().Be(citizenIdUserSession.Name);
             result.Name.Should().NotBeNull();
-            result.Name.GivenName.Should().Be(response.NameParts.Given);
-            result.Name.Surname.Should().Be(response.NameParts.Surname);
-            result.Name.Title.Should().Be(response.NameParts.Title);
+            result.Name.GivenName.Should().Be(citizenIdUserSession.GivenName);
+            result.Name.Surname.Should().Be(citizenIdUserSession.FamilyName);
+            result.Name.Title.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().BeNull();
             result.DateOfBirth.Should().Be(response.DateOfBirth);
@@ -156,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
                 .And.Contain(x => ((ArgumentNullException)x).ParamName.Equals("secondSource", StringComparison.Ordinal))
                 .And.Contain(x => ((ArgumentNullException)x).ParamName.Equals("Entry", StringComparison.Ordinal));
         }
-        
+
         [TestMethod]
         public void
             MapRegistrationLookupResponseToOrganDonationRegistration_WhenPassingNullResponseEntry_ThrowsArgumentNullException()
@@ -173,7 +168,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("Entry");
         }
-        
+
         [TestMethod]
         public void
             MapRegistrationLookupResponseToOrganDonationRegistration_WhenPassingNullResponseResource_ThrowsArgumentNullException()
@@ -252,7 +247,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.FaithDeclaration.Should().Be(FaithDeclaration.No);
             result.State.Should().Be(State.Ok);
         }
-        
+
         [TestMethod]
         public void MapRegistrationLookupResponseToOrganDonationRegistration_WithAppRepDecision_ShouldNotMapDetails()
         {
@@ -267,7 +262,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
                 { "heart", "not-stated" },
                 { "tissue", "yes" }
             };
-            
+
             var registration = _fixture.Create<OrganDonationRegistration>();
             _choiceStateMapper.Setup(x => x.To(It.IsAny<string>())).Returns(ChoiceState.No);
 
@@ -279,7 +274,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.DecisionDetails.Should().BeNull();
             _choiceStateMapper.VerifyNoOtherCalls();
         }
-        
+
         [TestMethod]
         public void MapRegistrationLookupResponseToOrganDonationRegistration_WithOptOutDecision_ShouldNotMapDetails()
         {
@@ -293,7 +288,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
                 { "heart", "not-stated" },
                 { "tissue", "yes" }
             };
-            
+
             var registration = _fixture.Create<OrganDonationRegistration>();
             _decisionMapper.Setup(x => x.To(resource.OrganDonationDecision)).Returns(Decision.OptOut);
             _choiceStateMapper.Setup(x => x.To(It.IsAny<string>())).Returns(ChoiceState.No);
