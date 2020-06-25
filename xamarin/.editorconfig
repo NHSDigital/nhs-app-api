@@ -118,7 +118,7 @@ dotnet_diagnostic.CA1032.severity = error
 dotnet_diagnostic.CA1033.severity = error
 
 # CA1034: Nested types should not be visible
-dotnet_diagnostic.CA1034.severity = error
+dotnet_diagnostic.CA1034.severity = silent
 
 # CA1036: Override methods on comparable types
 dotnet_diagnostic.CA1036.severity = error

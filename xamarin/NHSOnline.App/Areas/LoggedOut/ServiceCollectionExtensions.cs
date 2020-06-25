@@ -12,7 +12,10 @@ namespace NHSOnline.App.Areas.LoggedOut
         {
             return services
                 .AddModelViewPresenter<BeforeYouStartModel, BeforeYouStartPage, BeforeYouStartPresenter>()
-                .AddModelViewPresenter<LoggedOutHomeScreenModel, LoggedOutHomeScreenPage, LoggedOutHomeScreenPresenter>();
+                .AddModelViewPresenter<CreateSessionModel, CreateSessionPage, CreateSessionPresenter>()
+                .AddModelViewPresenter<LoggedOutHomeScreenModel, LoggedOutHomeScreenPage, LoggedOutHomeScreenPresenter>()
+                .AddModelViewPresenter<NhsLoginErrorModel, NhsLoginErrorPage, NhsLoginErrorPresenter>()
+                .AddModelViewPresenter<NhsLoginModel, NhsLoginPage, NhsLoginPresenter>();
         }
     }
 }

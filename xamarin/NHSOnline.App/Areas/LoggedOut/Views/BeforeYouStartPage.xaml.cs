@@ -13,9 +13,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             InitializeComponent();
         }
 
-        private async void LoginButton_OnClicked(object sender, EventArgs e)
+        private void LoginButton_OnClicked(object sender, EventArgs e)
         {
-            await Navigation.PopToRootAsync(true).PreserveThreadContext();
             LoginRequested?.Invoke(this, EventArgs.Empty);
         }
     }

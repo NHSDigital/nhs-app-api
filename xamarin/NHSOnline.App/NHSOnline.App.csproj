@@ -16,11 +16,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj" />
     <ProjectReference Include="..\NHSOnline.App.DependencyInjection\NHSOnline.App.DependencyInjection.csproj" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.NhsLogin\NHSOnline.App.NhsLogin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Areas\LoggedOut\Views\NhsLoginErrorPage.xaml.cs">
+      <DependentUpon>NhsLoginErrorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionPage.xaml.cs">
+      <DependentUpon>CreateSessionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\NhsLoginPage.xaml.cs">
+      <DependentUpon>NhsLoginPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\BeforeYouStartPage .xaml.cs">
       <DependentUpon>BeforeYouStartPage .xaml</DependentUpon>
     </Compile>
