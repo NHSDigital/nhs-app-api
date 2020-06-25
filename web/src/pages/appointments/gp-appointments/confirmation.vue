@@ -412,9 +412,6 @@ export default {
         (this.$store.state.availableAppointments.patientTelephoneNumbers.length <= 0);
     }
   },
-  beforeDestroy() {
-    this.$store.dispatch('availableAppointments/deselect');
-  },
   methods: {
     bookingReasonOptional() {
       return this.$store.state.availableAppointments

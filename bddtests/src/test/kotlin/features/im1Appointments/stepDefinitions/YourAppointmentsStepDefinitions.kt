@@ -123,12 +123,14 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.yourAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
         bookingSuccessPage.checkBookingSuccessMessage()
+        bookingSuccessPage.checkAppointmentDetails()
     }
 
     @Then("^the Appointment Booking success page is displayed$")
     fun appointmentBookingSuccessPage() {
         bookingSuccessPage.checkBookingSuccessMessage()
         yourAppointmentsUISteps.checkBackToAppointmentsLink()
+        bookingSuccessPage.checkAppointmentDetails()
     }
 
     @Then("^the Appointment Cancel success page is displayed$")
@@ -158,6 +160,7 @@ class YourAppointmentsStepDefinitions {
     @Then("^the Appointment Booking success page is displayed without reference to being able to cancel$")
     fun appointmentBookingConfirmationPageIsDisplayedWithoutReferenceToCancel() {
         bookingSuccessPage.checkBookingSuccessMessage()
+        bookingSuccessPage.checkAppointmentDetails()
     }
 
     @Then("^the booked appointment is correctly displayed without ability to cancel$")

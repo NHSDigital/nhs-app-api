@@ -13,5 +13,7 @@ open class AppointmentBookingSuccessStepDefinitions {
     fun theBookingSuccessPageIsShown() {
         appointmentBookingSuccessPage
                 .isLoaded(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
+
+        appointmentBookingSuccessPage.appointmentDetailsNotShown()
     }
 }
