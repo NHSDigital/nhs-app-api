@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NHS App - Silver Integration JS API test site</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/main.css">
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/design-example-overrides.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </head>
+  <body>
+    <h1>Go to error page</h1>
+
+    <div class="nhsuk-back-link">
+      <a class="nhsuk-back-link__link" href="../index.html">
+        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+        </svg>
+        Back</a>
+    </div>
+    <div>
+        <label class="nhsuk-label" for="example">
+        Enter http status code:
+      </label>
+      <input class="nhsuk-input nhsuk-input--width-3 nhsuk-u-margin-bottom-3" id="webErrorInput" type="number" max="599" min="400" />
+      <br/>
+      <input class="nhsuk-button" id="goToPage" type="button" value="Go To Page" onclick="navigateToErrorPage()" />
+    </div>
+    <script>
+      this.navigateToErrorPage = function() {
+        var errorCodeText = document.getElementById("webErrorInput").value;
+        window.location.href=`https://httpstat.us/${errorCodeText}`;
+      }
+    </script>
+  </body>
+</html>

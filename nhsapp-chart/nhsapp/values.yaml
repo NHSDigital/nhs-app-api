@@ -1049,6 +1049,18 @@ knownservices_config: {
           "validateSession": false
         }
       ]
+    },
+    {
+      "id": "http-status",
+      "url": "https://httpstat.us",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
     }
   ]
 }

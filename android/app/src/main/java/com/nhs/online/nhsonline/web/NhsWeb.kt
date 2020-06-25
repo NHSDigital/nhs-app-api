@@ -11,6 +11,7 @@ import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.UrlLoader
@@ -46,7 +47,8 @@ class NhsWeb(
         private val notificationsService: NotificationsService,
         appWebInterface: AppWebInterface,
         private val knownServices: KnownServices,
-        private val nhsLoginLoggedInPaths: List<String>
+        private val nhsLoginLoggedInPaths: List<String>,
+        private val loggingService: ILoggingService
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
     private val urlLoader = UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
@@ -79,7 +81,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
         val webInterceptor =
-                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
+                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths, loggingService)
 
         val addToCalendarHandler = AddToCalendarHandler(activity)
 

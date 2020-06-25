@@ -1,8 +1,5 @@
-package com.nhs.online.nhsonline.services
+package com.nhs.online.nhsonline.services.knownservices
 
-import com.nhs.online.nhsonline.services.knownservices.KnownServices
-import com.nhs.online.nhsonline.services.knownservices.RootService
-import com.nhs.online.nhsonline.services.knownservices.SubService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode

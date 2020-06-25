@@ -14,7 +14,6 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowDialog
 
-
 @RunWith(RobolectricTestRunner::class)
 class AppDialogsTest {
     private val activity: Activity = Robolectric.buildActivity(Activity::class.java).get()

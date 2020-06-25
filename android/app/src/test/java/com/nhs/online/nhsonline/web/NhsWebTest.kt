@@ -65,7 +65,7 @@ class NhsWebTest {
         tempCacheDir = mock()
         tempAppWebViewDir = mock()
 
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, nhsLoginLoggedInPaths)
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, nhsLoginLoggedInPaths, mock())
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         ReflectionHelpers.setField(nhsWeb, "cacheDir", tempCacheDir)
@@ -73,7 +73,6 @@ class NhsWebTest {
 
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
-
 
     @Test
     fun stopLoading_callsNativeAndroidWebViewStopLoadingFunction() {

@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
@@ -31,7 +32,8 @@ class WebClientInterceptor(
         private val context: Context,
         private val knownServices: KnownServices,
         private val schemeHandlers: SchemeHandlers,
-        private val nhsLoginLoggedInPaths: List<String>
+        private val nhsLoginLoggedInPaths: List<String>,
+        private val loggingService: ILoggingService
 ) : WebViewClient() {
 
     companion object {
@@ -154,6 +156,8 @@ class WebClientInterceptor(
     override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedHttpError")
+        loggingService.logError("Failed HTTP Call from webview. url:${request?.url} httpResponseCode:${errorResponse?.statusCode}")
+
         if (canHandleUnavailability(view) && !isNHSApi(request)) {
             cancelTrackingWebRequestResponse()
             handleUnavailability(view?.url, ERROR_CONNECT)
@@ -163,6 +167,11 @@ class WebClientInterceptor(
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
         Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onReceivedError")
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            loggingService.logError("Failed HTTP Call from webview. url:${request?.url} AndroidError:${error?.errorCode}")
+        }
+
         if (isNHSAppDomain(request?.url?.host) &&
                 canHandleUnavailability(view) &&
                 shouldHandleUnavailability(view?.url)) {
@@ -186,6 +195,7 @@ class WebClientInterceptor(
             description: String?,
             failingUrl: String?
     ) {
+        loggingService.logError("Failed HTTP Call from webview. url:${failingUrl} AndroidError:${errorCode}")
 
         if (shouldHandleUnavailability(failingUrl)) {
             Log.d(Application.TAG,

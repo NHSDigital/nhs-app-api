@@ -24,7 +24,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-class ConfigurationServiceTest : ResourceMockingClass() {
+class ConfigurationServiceTest {
 
     private lateinit var activity: Activity
     private lateinit var uiIInteractor: IInteractor
@@ -32,10 +32,12 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     private lateinit var httpClientMock: HttpClient
     private lateinit var configurationService: ConfigurationService
     private lateinit var errorMessageHandler: ErrorMessageHandler
+    private lateinit var resourceMockingClass: ResourceMockingClass
 
     @Before
     fun setUp() {
-        context = mockConnectedContext()
+        resourceMockingClass = ResourceMockingClass()
+        context = resourceMockingClass.mockConnectedContext()
         errorMessageHandler = ErrorMessageHandler(context.resources)
         httpClientMock = mock()
         uiIInteractor = mock()
@@ -47,7 +49,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     @Test
     fun getConfigurationResponse_WhenThereIsNoConnection_ItShowsNoConnectionErrorAndReturnsNull() {
         whenever(httpClientMock.readText(any())).thenAnswer { throw IOException() }
-        MockConnectionStateMonitor().mockNetworkCallback(mockDisconnectedContext())
+        MockConnectionStateMonitor().mockNetworkCallback(resourceMockingClass.mockDisconnectedContext())
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()

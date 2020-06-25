@@ -16,11 +16,11 @@ import org.mockito.Mockito
 
 open class ResourceMockingClass {
 
-
     fun mockContext(): Context {
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn "https://www.baseurl.com/"
             on { getString(R.string.baseScheme) } doReturn "https"
+            on { getString(R.string.baseApiURL) } doReturn "https://www.baseapiurl.com/"
             on { getString(R.string.appScheme) } doReturn "nhsapp"
             on { getString(R.string.dataSharingURL) } doReturn "https://www.nhs.uk/your-nhs-data-matters/"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
@@ -68,6 +68,7 @@ open class ResourceMockingClass {
             on { getString(R.string.fido_auth_response) } doReturn "fidoAuthResponse"
             on { getString(R.string.login_auth_code_path) } doReturn "/authcode"
             on { getString(R.string.redirectorPath) } doReturn "redirector"
+            on { getString(R.string.loggerApiPath) } doReturn "logging"
         }
 
         return mock {

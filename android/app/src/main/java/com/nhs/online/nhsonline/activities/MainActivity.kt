@@ -35,6 +35,8 @@ import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.ConfigurationService
+import com.nhs.online.nhsonline.services.logging.LoggingService
+import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
@@ -166,7 +168,8 @@ class MainActivity :
     }
 
     private fun initialiseNhsWeb() {
-        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, nhsLoginLoggedInPaths)
+        val loggingService = LoggingService(this, VolleyQueueProvider())
+        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, nhsLoginLoggedInPaths, loggingService)
         menuBar.nhsWeb = nhsWeb
 
         setHelpUrl(resources.getString(R.string.helpURL))

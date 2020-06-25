@@ -1,6 +1,5 @@
 package com.nhs.online.nhsonline.services.knownservices
 
-import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import java.net.URL
 
 data class KnownServices(
