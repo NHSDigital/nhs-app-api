@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,6 +22,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly ILogger<MyRecordSectionController> _logger;
         private readonly IAuditor _auditor;
 
+        private readonly IEnumerable<VisionMapperType> _validSections = new[]
+        {
+            VisionMapperType.TestResults,
+            VisionMapperType.Diagnosis,
+            VisionMapperType.Examinations,
+            VisionMapperType.Procedures
+        };
+
+
         public MyRecordSectionController(
             ILogger<MyRecordSectionController> logger,
             IGpSystemFactory gpSystemFactory,
@@ -31,18 +43,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
         [HttpGet]
         public async Task<IActionResult> GetSection(
-            [FromQuery] VisionMapperType section,
+            [FromQuery] string section,
             [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
-            
-            if (!ModelState.IsValid)
+            var validVisionSection = GetVisionSection(section);
+            if (validVisionSection is null)
             {
                 return new BadRequestObjectResult(ModelState);
             }
 
             var gpSystem = userSession.GpUserSession.Supplier;
-
             if (gpSystem != Supplier.Vision)
             {
                 return BadRequest("The Test Results endpoint only works with Vision");
@@ -59,13 +70,30 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
             _logger.LogInformation($"Fetching patient record {section} section");
 
-            var result = await patientRecordService.GetSection(userSession.GpUserSession, section);
+            var result = await patientRecordService.GetSection(userSession.GpUserSession, validVisionSection.Value);
 
             // Audit result of attempt to view patient record    
             await result.Accept(new MyRecordSectionAuditingVisitor(_auditor, _logger));
 
             _logger.LogExit();
             return result.Accept(new MyRecordSectionResultVisitor());
+        }
+
+        private VisionMapperType? GetVisionSection(string section)
+        {
+            var sectionParseSuccess = Enum.TryParse<VisionMapperType>(section, out var visionSection);
+            if (!sectionParseSuccess)
+            {
+                _logger.LogError($"Requested Vision My Record Section Invalid: '{section}'");
+                return null;
+            }
+            if (!_validSections.Contains(visionSection))
+            {
+                _logger.LogError($"Requested Vision My Record Section Invalid: '{section}'");
+                return null;
+            }
+            _logger.LogError($"Requested Vision My Record Section Valid: '{section}'");
+            return visionSection;
         }
     }
 }

@@ -99,7 +99,7 @@
                             enum: 
                               - "AppTab"
                               - "WebView"
-                          showSpinner:
+                          showSpinner: 
                             type: "boolean"
                           showThirdPartyWarning: 
                             type: "boolean"
@@ -136,7 +136,7 @@
                                   enum: 
                                     - "AppTab"
                                     - "WebView"
-                                showSpinner:
+                                showSpinner: 
                                   type: "boolean"
                                 showThirdPartyWarning: 
                                   type: "boolean"
@@ -1717,6 +1717,8 @@
               enum: 
                 - "TestResults"
                 - "Diagnosis"
+                - "Examinations,"
+                - "Procedures"
         responses: 
           200: 
             description: "Returns specified myrecord section for the logged in user."
