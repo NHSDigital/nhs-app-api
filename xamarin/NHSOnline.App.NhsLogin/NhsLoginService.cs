@@ -3,16 +3,23 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NHSOnline.App.Config;
 
 namespace NHSOnline.App.NhsLogin
 {
     internal sealed class NhsLoginService: INhsLoginService
     {
         private readonly ILogger _logger;
+        private readonly INhsLoginConfiguration _loginConfig;
+        private readonly INhsAppWebConfiguration _webConfig;
 
-        public NhsLoginService(ILogger<NhsLoginService> logger)
+        public NhsLoginService(
+            ILogger<NhsLoginService> logger,
+            INhsLoginConfiguration loginConfig, INhsAppWebConfiguration webConfig)
         {
             _logger = logger;
+            _loginConfig = loginConfig;
+            _webConfig = webConfig;
         }
 
         public ProofKeyCodeExchangeCodes GeneratePkceCodes()
@@ -37,11 +44,11 @@ namespace NHSOnline.App.NhsLogin
             var authReturnUri = new UriBuilder
             {
                 Scheme = "nhsapp",
-                Host = "www-staging.nhsapp.service.nhs.uk",
+                Host = _webConfig.Host,
                 Path = "/auth-return"
             }.Uri;
 
-            var authoriseUri = NhsLoginUriBuilder.Create()
+            var authoriseUri = NhsLoginUriBuilder.Create(_loginConfig)
                 .Challenge(codes.Challenge, codes.Method)
                 .ClientId("nhs-online")
                 .Scopes("openid", "profile", "nhs_app_credentials", "gp_integration_credentials", "profile_extended")

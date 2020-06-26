@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHSOnline.App.Config;
 
 namespace NHSOnline.App.NhsLogin
 {
@@ -53,15 +54,9 @@ namespace NHSOnline.App.NhsLogin
         private readonly UriBuilder _uriBuilder;
         private readonly Dictionary<string, string> _queryString;
 
-        private NhsLoginUriBuilder()
+        private NhsLoginUriBuilder(INhsLoginConfiguration config)
         {
-            _uriBuilder = new UriBuilder
-            {
-                Scheme = "https",
-                Host = "auth.ext.signin.nhs.uk",
-                Port = 443,
-                Path = "authorize"
-            };
+            _uriBuilder = new UriBuilder(config.AuthBaseAddress);
 
             _queryString = new Dictionary<string, string>
             {
@@ -70,9 +65,9 @@ namespace NHSOnline.App.NhsLogin
             };
         }
 
-        public static INhsLoginUriBuilderChallengeSetter Create()
+        public static INhsLoginUriBuilderChallengeSetter Create(INhsLoginConfiguration config)
         {
-            return new NhsLoginUriBuilder();
+            return new NhsLoginUriBuilder(config);
         }
 
         public INhsLoginUriBuilderClientIdSetter Challenge(string challenge, string method)

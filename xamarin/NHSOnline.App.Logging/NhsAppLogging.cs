@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Config;
 
 namespace NHSOnline.App.Logging
 {
@@ -7,14 +8,15 @@ namespace NHSOnline.App.Logging
     {
         private static Func<Type, ILogger> _createLogger = CreateLoggerNotInitialised;
 
+        private static ILoggingConfiguration Config => IConfiguration.Configuration.Logging;
+
         public static ILoggerFactory Init()
         {
             try
             {
-                // TODO: Set Minimum Level from configuration once available
                 var loggerFactory = LoggerFactory.Create(
                     builder => builder
-                        .SetMinimumLevel(LogLevel.Trace)
+                        .SetMinimumLevel(Config.MinimumLogLevel)
                         .AddDebug());
 
                 _createLogger = type => loggerFactory.CreateLogger(type);
