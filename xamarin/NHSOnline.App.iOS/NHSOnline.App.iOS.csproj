@@ -52,11 +52,9 @@
     <Compile Include="AppDelegate.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.template.plist">
-      <LogicalName>Info.plist.in</LogicalName>
     </None>
-    <None Include="Info.generated.plist">
+    <None Include="Info.plist">
       <DependentUpon>Info.template.plist</DependentUpon>
-      <LogicalName>Info.plist</LogicalName>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -126,8 +124,8 @@
   </ItemGroup>
 
   <Target Name="Generate Info Plist" BeforeTargets="PrepareForBuild">
-    <Exec Command="plutil -replace CFBundleIdentifier -string $(NhsAppBundleIdentifier) -o $(MSBuildProjectDirectory)/Info.generated.plist $(MSBuildProjectDirectory)/Info.template.plist" Condition=" '$(OS)' != 'Windows_NT' " />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)/Info.template.plist" DestinationFiles="$(MSBuildProjectDirectory)/Info.generated.plist" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)/Info.template.plist" DestinationFiles="$(MSBuildProjectDirectory)/Info.plist" />
+    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Info.plist" Value="$(NhsAppBundleIdentifier)" Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleIdentifier']" />
   </Target>
 
   <ItemGroup>
