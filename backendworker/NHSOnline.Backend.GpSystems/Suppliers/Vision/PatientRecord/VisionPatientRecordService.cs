@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -218,124 +218,74 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 View = visionView,
             };
         }
+
         private async Task<Allergies> RetrieveAllergies(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var allergiesTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES));
-            return new VisionTaskChecker<Allergies>(_logger, _allergyMapper, VisionMapperType.Allergies).Check(allergiesTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving allergies failed. Returning hasErrored as true");
-            return new Allergies { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES, _allergyMapper,
+                VisionMapperType.Allergies);
         }
+
         private async Task<Medications> RetrieveMedications(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var medicationsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS));
-            return new VisionTaskChecker<Medications>(_logger, _medicationMapper, VisionMapperType.Medications).Check(medicationsTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving medications failed. Returning hasErrored as true");
-            return new Medications {
-                HasErrored = true,
-            };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS, _medicationMapper,
+                VisionMapperType.Medications);
         }
 
         private async Task<Immunisations> RetrieveImmunisations(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var immunisationTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.PROCEDURES));
-            return new VisionTaskChecker<Immunisations>(_logger, _immunisationsMapper, VisionMapperType.Immunisations).Check(immunisationTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving immunisations failed. Returning hasErrored as true");
-            return new Immunisations { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.XML, Views.PROCEDURES, _immunisationsMapper,
+                VisionMapperType.Immunisations);
         }
         private async Task<Problems> RetrieveProblems(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var problemTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.PROBLEMS));
-            return new VisionTaskChecker<Problems>(_logger, _problemsMapper, VisionMapperType.Problems).Check(problemTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving problems failed. Returning hasErrored as true");
-            return new Problems { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.XML, Views.PROBLEMS, _problemsMapper,
+                VisionMapperType.Problems);
         }
 
         private async Task<TestResults> RetrieveTestResults(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var testResultsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS));
-            return new VisionTaskChecker<TestResults>(_logger, _testResultsMapper, VisionMapperType.TestResults).Check(testResultsTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving test results failed. Returning hasErrored as true");
-            return new TestResults { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS, _testResultsMapper,
+                VisionMapperType.TestResults);
         }
 
         private async Task<Diagnosis> RetrieveDiagnosis(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var diagnosisTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.DIAGNOSIS));
-            return new VisionTaskChecker<Diagnosis>(_logger, _diagnosisMapper, VisionMapperType.Diagnosis).Check(diagnosisTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving diagnosis failed. Returning hasErrored as true");
-            return new Diagnosis { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.HTML, Views.DIAGNOSIS, _diagnosisMapper,
+                VisionMapperType.Diagnosis);
         }
 
         private async Task<Examinations> RetrieveExaminations(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var examinationsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.EXAM_FINDINGS));
-            return new VisionTaskChecker<Examinations>(_logger, _examinationsMapper, VisionMapperType.Examinations).Check(examinationsTask);
-
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving examinations failed. Returning hasErrored as true");
-            return new Examinations { HasErrored = true };
-          }
+            return await RetrieveSection(visionUserSession, ResponseFormats.HTML, Views.EXAM_FINDINGS, _examinationsMapper,
+                VisionMapperType.Examinations);
         }
 
         private async Task<Procedures> RetrieveProcedures(VisionUserSession visionUserSession)
         {
-          try
-          {
-            var proceduresTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.PROCEDURES));
-            return new VisionTaskChecker<Procedures>(_logger, _proceduresMapper, VisionMapperType.Examinations).Check(proceduresTask);
+            return await RetrieveSection(visionUserSession, ResponseFormats.HTML, Views.PROCEDURES, _proceduresMapper,
+                VisionMapperType.Examinations);
+        }
 
-          }
-          catch(Exception e)
-          {
-            _logger.LogError(e, "Retrieving procedures failed. Returning hasErrored as true");
-            return new Procedures { HasErrored = true };
-          }
+        private async Task<T> RetrieveSection<T>(
+            VisionUserSession visionUserSession,
+            string responseFormat,
+            string view,
+            IVisionMapper<T> mapper,
+            VisionMapperType type) where T : IPatientDataModel, new()
+        {
+            try
+            {
+                var data = await _visionClient.GetPatientData(
+                    visionUserSession,
+                    CreatePatientDataRequest(visionUserSession, responseFormat, view));
+                return new VisionTaskChecker<T>(_logger, mapper, type).Check(data);
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Retrieving '{view}' section failed. Returning hasErrored as true");
+                return new T() { HasErrored = true };
+            }
         }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
@@ -367,11 +317,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             public const string PROBLEMS = "PROBLEMS";
             public const string DIAGNOSIS = "DIAGNOSIS";
             public const string MEDICATIONS = "MEDICATIONS";
-            public const string RISKS_AND_WARNINGS = "RISKS AND WARNINGS";
             public const string PROCEDURES = "PROCEDURES";
             public const string TEST_RESULTS = "TEST RESULTS";
             public const string EXAM_FINDINGS = "EXAM FINDINGS";
-            public const string VPS_EVENT_HISTORY = "VPS_EVENT_HISTORY";
         }
     }
 }
