@@ -1,3 +1,4 @@
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
@@ -17,8 +18,17 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         public void Click()
         {
             _interactor.ActOnElement(
-                By.XPath($"//android.widget.Button[normalize-space(@text)={_text.QuoteXPathLiteral()}]"),
+                XPath,
                 e => e.Click());
         }
+
+        public void AssertVisible()
+        {
+            _interactor.ActOnElement(
+                XPath,
+                e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
+        }
+
+        private By XPath => By.XPath($"//android.widget.Button[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
     }
 }

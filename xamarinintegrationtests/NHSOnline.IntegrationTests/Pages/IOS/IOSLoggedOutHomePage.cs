@@ -9,14 +9,19 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSLoggedOutHomePage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel WelcomeMessage => new IOSLabel(_driver, "Welcome to the NHS App");
+        private IOSLabel HowAreYouFeelingText => new IOSLabel(_driver, "How are you feeling today?");
+        private IOSLabel AccessServicesText => new IOSLabel(_driver, "To access your NHS services");
 
-        private IOSButton ContinueButton => new IOSButton(_driver, "Continue with NHS Login");
+        private IOSButton ContinueButton => new IOSButton(_driver, "Continue with NHS login");
+        private IOSButton CheckYourSymptoms => new IOSButton(_driver, "Check symptoms");
 
         internal static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSLoggedOutHomePage(driver);
-            page.WelcomeMessage.AssertVisible();
+            page.HowAreYouFeelingText.AssertVisible();
+            page.AccessServicesText.AssertVisible();
+            page.ContinueButton.AssertVisible();
+            page.CheckYourSymptoms.AssertVisible();
             return page;
         }
 

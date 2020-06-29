@@ -9,14 +9,19 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLoggedOutHomePage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel WelcomeMessage => new AndroidLabel(_driver, "Welcome to the NHS App");
+        private AndroidLabel HowAreYouFeelingText => new AndroidLabel(_driver, "How are you feeling today?");
+        private AndroidLabel AccessServicesText => new AndroidLabel(_driver, "To access your NHS services");
 
-        private AndroidButton ContinueButton => new AndroidButton(_driver, "CONTINUE WITH NHS LOGIN");
+        private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue with NHS login");
+        private AndroidButton CheckYourSymptoms => new AndroidButton(_driver, "Check symptoms");
 
         internal static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidLoggedOutHomePage(driver);
-            page.WelcomeMessage.AssertVisible();
+            page.HowAreYouFeelingText.AssertVisible();
+            page.AccessServicesText.AssertVisible();
+            page.CheckYourSymptoms.AssertVisible();
+            page.ContinueButton.AssertVisible();
             return page;
         }
 
