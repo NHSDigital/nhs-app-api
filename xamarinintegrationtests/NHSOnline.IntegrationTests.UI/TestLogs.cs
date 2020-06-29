@@ -12,11 +12,18 @@ namespace NHSOnline.IntegrationTests.UI
 
         internal void Info(string format, params object[] args)
             => Info(string.Format(CultureInfo.InvariantCulture, format, args));
-        internal void Info(string message) => _info.Add($"{DateTime.UtcNow:s} {message}");
+        internal void Info(string message) => Log(_info, message);
 
         internal void Error(string format, params object[] args)
             => Error(string.Format(CultureInfo.InvariantCulture, format, args));
-        internal void Error(string message) => _error.Add($"{DateTime.UtcNow:s} {message}");
+        internal void Error(string message) => Log(_error, message);
+
+        private static void Log(List<string> logs, string message)
+        {
+            var logLine = $"{DateTime.UtcNow:s} {message}";
+            System.Diagnostics.Debug.WriteLine(logLine);
+            logs.Add(logLine);
+        }
 
         internal void UpdateResult(TestResult testResult)
         {

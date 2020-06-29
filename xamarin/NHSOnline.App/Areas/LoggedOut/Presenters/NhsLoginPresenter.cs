@@ -29,6 +29,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger = logger;
             _pageFactory = pageFactory;
 
+            _view.NavigationFailed += ViewOnNavigationFailed;
+
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
 
@@ -36,10 +38,21 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
 
+        private async void ViewOnNavigationFailed(object sender, EventArgs e)
+        {
+            _logger.LogWarning("NHS login navigation failed");
+
+            _view.NavigationFailed -= ViewOnNavigationFailed;
+
+            await NavigateToLoginErrorPage().PreserveThreadContext();
+        }
+
         private bool IsRedirect(Uri uri) => _loginState.IsAuthReturn(uri);
 
         private async void OnRedirect(Uri redirectUri)
         {
+            _view.NavigationFailed -= ViewOnNavigationFailed;
+
             var result = _loginState.CheckAuthReturn(redirectUri);
             await result.Accept(this).PreserveThreadContext();
         }
@@ -58,6 +71,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogWarning("Auth Return Failed");
 
+            await NavigateToLoginErrorPage().PreserveThreadContext();
+        }
+
+        private async Task NavigateToLoginErrorPage()
+        {
             var nhsLoginErrorModel = _model.Failed();
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 

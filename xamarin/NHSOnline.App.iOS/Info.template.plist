@@ -32,5 +32,7 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Assets.xcassets/AppIcon.appiconset</string>
+  <key>NSAppTransportSecurity</key>
+  <dict />
 </dict>
 </plist>

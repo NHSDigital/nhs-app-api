@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         public override TestResult[] Execute(ITestMethod testMethod)
         {
-            var testName = DisplayName ?? testMethod.TestMethodName;
+            var testName = "[Android] " + (DisplayName ?? testMethod.TestMethodName);
 
             var testExecutor = new TestExecutor<IAndroidDriverWrapper>(
                 testName,

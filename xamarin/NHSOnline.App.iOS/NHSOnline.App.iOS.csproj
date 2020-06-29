@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -15,41 +15,35 @@
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <ProvisioningType>automatic</ProvisioningType>
-
     <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
     <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
-
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Platform)\$(DebugMode)</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhoneSimulator' " />
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' " />
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhoneSimulator' " />
-
-
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.platform.$(Platform).props" />
-
   <ItemGroup>
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\WebViews\DelegatingWebViewNavigationDelegate.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.template.plist">
     </None>
@@ -75,17 +69,20 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.App.Controls\NHSOnline.App.Controls.csproj">
+      <Project>{85425714-f320-4935-81d4-b8727cfc9cdf}</Project>
+      <Name>NHSOnline.App.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj">
+      <Project>{7783bcd8-95f8-4645-95a9-28fef39731ba}</Project>
+      <Name>NHSOnline.App.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
       <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
       <Name>NHSOnline.App</Name>
     </ProjectReference>
   </ItemGroup>
-
-  <Target Name="Generate Info Plist" BeforeTargets="PrepareForBuild">
-    <Copy SourceFiles="$(MSBuildProjectDirectory)/Info.template.plist" DestinationFiles="$(MSBuildProjectDirectory)/Info.plist" />
-    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Info.plist" Value="$(NhsAppBundleIdentifier)" Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleIdentifier']" />
-  </Target>
-
+  <Import Project="GenerateInfoPlist.targets" />
   <ItemGroup>
     <None Include="Properties\BuildConfiguration.debugmode.Debug.props" />
     <None Include="Properties\BuildConfiguration.debugmode.Release.props" />
@@ -96,24 +93,54 @@
     <None Include="Properties\BuildConfiguration.platform.iPhone.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhoneSimulator.props" />
   </ItemGroup>
-
   <ItemGroup>
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App Store Copy@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-83.5@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-40@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x-1.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@3x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@3x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@1x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@2x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App Store Copy@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-83.5@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-40@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
-
 </Project>

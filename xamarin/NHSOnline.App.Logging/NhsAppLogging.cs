@@ -32,6 +32,8 @@ namespace NHSOnline.App.Logging
             }
         }
 
+        public static ILogger CreateLogger<T>() => _createLogger(typeof(T));
+
         public static ILogger CreateLogger(Type type) => _createLogger(type);
 
         private static ILogger CreateLoggerNotInitialised(Type type)

@@ -10,6 +10,10 @@ namespace NHSOnline.App.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+#if DEBUG_WEBVIEW
+            Android.Webkit.WebView.SetWebContentsDebuggingEnabled(true);
+#endif
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

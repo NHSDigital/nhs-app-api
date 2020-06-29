@@ -45,51 +45,21 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action) => _interactor.ActOnElement(by, action);
 
-        public void AttachDebugInfo(IDriverCleanupContext context)
+        void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
-            TryAttachScreenshot(context);
-            TryAttachPageSource(context);
+            context.TryAttachScreenshot(_webDriver);
+            context.TryAttachWebPageSource(_webDriver);
             TryAttachChromeDriverLog(context);
         }
 
-        public void Cleanup(IDriverCleanupContext context)
-        {
-            DestroyChromeWebDriver(context);
-        }
-
-        private void TryAttachScreenshot(IDriverCleanupContext context)
-        {
-            if (_webDriver is ITakesScreenshot takesScreenShot)
-            {
-                context.TryAttach("screen shot", () =>
-                {
-                    var screenShot = takesScreenShot.GetScreenshot();
-                    var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.png");
-                    screenShot.SaveAsFile(fileName);
-                    return fileName;
-                });
-            }
-        }
-
-        private void TryAttachPageSource(IDriverCleanupContext context)
-        {
-            context.TryAttach("page source", () =>
-            {
-                var pageSource = _webDriver.PageSource;
-                var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.html");
-                File.WriteAllText(fileName, pageSource);
-                return fileName;
-            });
-        }
-
-        private static void TryAttachChromeDriverLog(IDriverCleanupContext context)
-            => context.TryAttach("chrome driver log", () => Path.Join(Path.GetTempPath(), "ChromeDriver.log"));
-
-        private void DestroyChromeWebDriver(IDriverCleanupContext context)
+        void IDriverWrapper.Cleanup(IDriverCleanupContext context)
         {
             context.TryCleanUp("close web driver", () => _webDriver?.Close());
             context.TryCleanUp("quit web driver", () => _webDriver?.Quit());
         }
+
+        private static void TryAttachChromeDriverLog(IDriverCleanupContext context)
+            => context.TryAttach("chrome driver log", () => Path.Join(Path.GetTempPath(), "ChromeDriver.log"));
 
         public void Dispose()
         {

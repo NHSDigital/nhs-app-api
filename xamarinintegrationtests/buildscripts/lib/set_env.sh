@@ -11,7 +11,8 @@ export DOCKER_TAG=${DOCKER_TAG:-latest}
 export DOCKER_IMAGE_DOTNET_BUILD=${DOCKER_IMAGE_DOTNET_BUILD:-nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1}
 export DOCKER_IMAGE_BROWSERSTACK_LOCAL=${DOCKER_IMAGE_BROWSERSTACK_LOCAL:-nhsapp.azurecr.io/nhsonline-browserstack-local:latest}
 
-export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-com.nhs.online.nhsonline.apk}
+export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-com.nhs.online.nhsonline.browserstack.apk}
+export NATIVE_APP_PATH_IOS=${NATIVE_APP_PATH_IOS:-NHSOnline.App.BrowserStack.ipa}
 
 export WEB_DOCKER_TAG=${WEB_DOCKER_TAG:-$DOCKER_TAG}
 export WEB_DOCKER_REGISTRY=${WEB_DOCKER_REGISTRY:-$DOCKER_REGISTRY}

@@ -32,6 +32,7 @@ namespace NHSOnline.IntegrationTests.UI
             logs.UpdateResult(testResult);
 
             timer.Stop();
+            testResult.DisplayName = _displayName;
             testResult.Duration = timer.Elapsed;
 
             return testResult;

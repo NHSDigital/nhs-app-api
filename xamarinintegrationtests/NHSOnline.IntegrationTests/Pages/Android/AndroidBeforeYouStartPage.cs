@@ -11,11 +11,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLabel Title => new AndroidLabel(_driver, "Before You Start");
 
+        private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue");
+
         internal static AndroidBeforeYouStartPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidBeforeYouStartPage(driver);
             page.Title.AssertVisible();
             return page;
+        }
+
+        internal void Continue()
+        {
+            ContinueButton.Click();
         }
     }
 }

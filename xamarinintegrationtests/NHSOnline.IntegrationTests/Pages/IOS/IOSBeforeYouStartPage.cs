@@ -11,11 +11,18 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSLabel Title => new IOSLabel(_driver, "Before You Start");
 
+        private IOSButton ContinueButton => new IOSButton(_driver, "Continue");
+
         internal static IOSBeforeYouStartPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSBeforeYouStartPage(driver);
             page.Title.AssertVisible();
             return page;
+        }
+
+        internal void Continue()
+        {
+            ContinueButton.Click();
         }
     }
 }

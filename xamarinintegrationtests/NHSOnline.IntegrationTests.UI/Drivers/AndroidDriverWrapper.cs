@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
@@ -47,54 +46,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action)
             => _interactor.ActOnElement(by, action);
 
-        public void AttachDebugInfo(IDriverCleanupContext context)
+        void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
-            TryAttachScreenshot(context);
-            TryAttachPageSource(context);
+            context.TryAttachScreenshot(_driver);
+            context.TryAttachNativePageSource(_driver, _nativeDriverContext);
         }
 
-        public void Cleanup(IDriverCleanupContext context)
+        void IDriverWrapper.Cleanup(IDriverCleanupContext context)
         {
-            DestroyAndroidDriver(context);
-        }
-
-        private void TryAttachScreenshot(IDriverCleanupContext context)
-        {
-            if (_driver is ITakesScreenshot takesScreenShot)
-            {
-                context.TryAttach("screen shot", () =>
-                {
-                    var screenShot = takesScreenShot.GetScreenshot();
-                    var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.png");
-                    screenShot.SaveAsFile(fileName);
-                    return fileName;
-                });
-            }
-        }
-
-        private void TryAttachPageSource(IDriverCleanupContext context)
-        {
-            context.TryAttach("app source", () =>
-            {
-                var pageSource = _driver.PageSource;
-                var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.xml");
-                File.WriteAllText(fileName, pageSource);
-                return fileName;
-            });
-
-            context.TryAttach("page source", () =>
-            {
-                using var _ = _nativeDriverContext.Web();
-                var pageSource = _driver.PageSource;
-                var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.html");
-                File.WriteAllText(fileName, pageSource);
-                return fileName;
-            });
-        }
-
-        private void DestroyAndroidDriver(IDriverCleanupContext context)
-        {
-            context.TryCleanUp("quit android driver", () => _driver?.Quit());
+            context.TryCleanUp("quit Android driver", () => _driver?.Quit());
         }
 
         public void Dispose() => _driver.Dispose();

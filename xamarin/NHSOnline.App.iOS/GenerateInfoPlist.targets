@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <InfoPlistTemplate>$(MSBuildProjectDirectory)/Info.template.plist</InfoPlistTemplate>
+    <InfoPlistGenerated>$(MSBuildProjectDirectory)/Info.plist</InfoPlistGenerated>
+    <NSAppTransportSecurityXPath>/plist/dict/dict[preceding-sibling::key[1] = 'NSAppTransportSecurity']</NSAppTransportSecurityXPath>
+  </PropertyGroup>
+
+  <Target Name="Generate Info Plist" BeforeTargets="PrepareForBuild">
+    <Copy SourceFiles="$(InfoPlistTemplate)" DestinationFiles="$(InfoPlistGenerated)" />
+
+    <XmlPoke
+      XmlInputPath="$(InfoPlistGenerated)"
+      Value="$(NhsAppBundleIdentifier)"
+      Query="/plist/dict/string[preceding-sibling::key[1] = 'CFBundleIdentifier']" />
+
+    <CallTarget Targets="Update Info Plist Allow Insecure Websites" Condition=" '$(NhsAppAllowInsecureBitraftDomain)' == 'true' " />
+
+    <ReadLinesFromFile File="$(InfoPlistGenerated)">
+      <Output TaskParameter="Lines" ItemName="InfoPlistLines" />
+    </ReadLinesFromFile>
+    <Message Text="@(InfoPlistLines, '&#xA;')" Importance="High" />
+  </Target>
+
+  <Target Name="Update Info Plist Allow Insecure Websites">
+    <!-- Read current NSAppTransportSecurity so we can append to it -->
+    <XmlPeek XmlInputPath="$(InfoPlistGenerated)" Query="$(NSAppTransportSecurityXPath)/*">
+      <Output TaskParameter="Result" ItemName="TemplateNSAppTransportSecurityContents" />
+    </XmlPeek>
+
+    <PropertyGroup>
+      <TemplateNSAppTransportSecurityContents>@(TemplateNSAppTransportSecurityContents, '')</TemplateNSAppTransportSecurityContents>
+      <AdditionalNSAppTransportSecurityContents>
+        <key xmlns="">NSExceptionDomains</key>
+        <dict xmlns="">
+          <key>local.bitraft.io</key>
+          <dict>
+            <key>NSIncludesSubdomains</key>
+            <true />
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true />
+          </dict>
+        </dict>
+      </AdditionalNSAppTransportSecurityContents>
+    </PropertyGroup>
+
+    <XmlPoke
+      XmlInputPath="$(InfoPlistGenerated)"
+      Query="$(NSAppTransportSecurityXPath)"
+      Value="$(TemplateNSAppTransportSecurityContents)$(AdditionalNSAppTransportSecurityContents)" />
+  </Target>
+
+</Project>
