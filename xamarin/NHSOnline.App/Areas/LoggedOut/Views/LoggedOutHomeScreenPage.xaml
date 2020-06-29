@@ -3,16 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage">
 
-    <StackLayout>
-        <Label Text="Welcome to the NHS App"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
+    <StackLayout BackgroundColor="White">
+        <AbsoluteLayout VerticalOptions="FillAndExpand">
+            <controls:GradientBackground AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                                      AbsoluteLayout.LayoutFlags="All"
+                                      InnerColour="#0072df"
+                                      OuterColour="#0053a3"
+                                      Radius="Max" />
 
-        <Button Text="Continue with NHS Login"
-                Clicked="LoginButton_OnClicked"/>
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                         AbsoluteLayout.LayoutFlags="All">
+                <StackLayout StyleClass="LogoPanel"
+                             VerticalOptions="FillAndExpand">
+
+                    <BoxView VerticalOptions="FillAndExpand"
+                             BackgroundColor="Transparent" />
+
+                    <controls:NhsLogo HorizontalOptions="Center"
+                                   HeightRequest="48" />
+
+                    <BoxView VerticalOptions="FillAndExpand"
+                             BackgroundColor="Transparent" />
+
+                    <BoxView HeightRequest="1" Color="White" />
+                </StackLayout>
+                <StackLayout StyleClass="SymptomsPanel">
+                    <Label Text="How are you feeling today?"
+                           StyleClass="Heading2"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           TextColor="White" />
+                    <controls:Button Text="Check symptoms"
+                                  HorizontalOptions="FillAndExpand" />
+                </StackLayout>
+
+
+            </StackLayout>
+        </AbsoluteLayout>
+
+        <StackLayout StyleClass="LoginPanel" BackgroundColor="White">
+            <Label Text="To access your NHS services"
+                   StyleClass="Heading2"
+                   HorizontalOptions="Center" />
+            <controls:Button Text="Continue with NHS login"
+                          Clicked="LoginButton_OnClicked"
+                          HorizontalOptions="FillAndExpand" />
+            <Label Text="Version 2.Xamarin"
+                   HorizontalOptions="Center" />
+        </StackLayout>
     </StackLayout>
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="StackLayout" Class="SymptomsPanel">
+                <Setter Property="Padding" Value="20, 0, 20, 20" />
+            </Style>
+
+            <Style TargetType="StackLayout" Class="LoginPanel">
+                <Setter Property="Margin" Value="0, 0, 0, 48" />
+                <Setter Property="Padding" Value="16" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
 </ContentPage>

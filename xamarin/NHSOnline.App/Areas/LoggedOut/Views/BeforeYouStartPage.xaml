@@ -6,13 +6,54 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage">
 
-    <StackLayout>
-        <Label Text="Before You Start"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
+    <StackLayout BackgroundColor="#f0f4f5" Margin="2,20,0,0">
+        <Label FontSize="24" FontAttributes="Bold" Text="Before You Start"
+               Margin="30,0,0,0" FontFamily="Fruitiger W01" />
+        <Label FontSize="15" Text="To use this service you must be:" Margin="20" FontFamily="Fruitiger W01" />
+        <Label FontSize="15" Text="&#x2022; registered with a GP surgery in England" Margin="30,0,0,0" FontFamily="Fruitiger W01" />
+        <Label FontSize="15" Text="&#x2022; aged 13 and over" Margin="30,0,0,0" FontFamily="Fruitiger W01" />
+        <Label FontSize="15" Text="Other services you can use without logging in:" Margin="20" FontFamily="Fruitiger W01" />
 
-        <Button Text="Continue"
-                Clicked="LoginButton_OnClicked"/>
+        <Label FontSize="15" Margin="30,0,0,0"> 
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="&#x2022; " />
+                    <Span Text="Check if you have coronavirus symptoms"
+                          TextColor="Blue"
+                          TextDecorations="Underline">
+                    </Span>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label FontSize="15" Margin="30,0,0,0" > 
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="&#x2022; " />
+                    <Span Text="Search conditions and treatments"
+                          TextColor="Blue"
+                          TextDecorations="Underline">
+                    </Span>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label FontSize="15" Margin="30,0,0,0"> 
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="&#x2022; " />
+                    <Span Text="Use NHS 111 online to check if you need urgent help"
+                          TextColor="Blue"
+                          TextDecorations="Underline">
+                    </Span>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Button BackgroundColor="#007f3b"
+                Text="Continue"
+                TextColor="White"
+                Font="Fruitiger"
+                HorizontalOptions="Start"
+                Margin="30,20,0,0"
+                Clicked="LoginButton_OnClicked" Padding="10,0"/>
     </StackLayout>
 
 </ContentPage>
