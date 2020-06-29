@@ -34,12 +34,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhone' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' "/>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' " />
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhone' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhoneSimulator' "/>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhoneSimulator' " />
 
 
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
@@ -60,48 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -138,4 +96,24 @@
     <None Include="Properties\BuildConfiguration.platform.iPhone.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhoneSimulator.props" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\App Store Copy@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-76@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-83.5@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-40@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x-1.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small-60@3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@3x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@1x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@2x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@3x.png" />
+  </ItemGroup>
+
 </Project>
