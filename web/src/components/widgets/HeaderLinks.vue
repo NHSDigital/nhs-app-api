@@ -57,7 +57,7 @@ export default {
         }
 
         &:hover {
-          background: #003d78;
+          background: $hover_blue;
           box-shadow: none;
           color: $white;
           text-decoration: underline;

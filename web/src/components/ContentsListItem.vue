@@ -17,7 +17,7 @@
 
 <script>
 import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
-import { findByPath } from '../lib/routes';
+import { findByPath } from '@/lib/routes';
 
 export default {
   name: 'ContentsListItem',

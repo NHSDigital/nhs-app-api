@@ -1,6 +1,7 @@
 package features.loggedOut.stepDefinitions
 
 import cucumber.api.java.en.Then
+import pages.assertElementNotPresent
 import pages.isDisplayed
 import pages.loggedOut.LoginPage
 
@@ -21,6 +22,17 @@ class LoggedOutHomePageStepDefinitions {
     @Then("^I see the Download app panel$")
     fun iSeeTheDownloadAppPanel() {
         loginPage.downloadAppPanel.isDisplayed
+    }
+
+
+    @Then("^I see the desktop specific information displayed$")
+    fun iSeeDesktopSpecificInformationDisplayed() {
+        loginPage.desktopSpecificInformation.isDisplayed
+    }
+
+    @Then("^I do not see desktop specific information displayed$")
+    fun iDoNotSeeDesktopSpecificInformationDisplayed() {
+        loginPage.desktopSpecificInformation.assertElementNotPresent()
     }
 
 }

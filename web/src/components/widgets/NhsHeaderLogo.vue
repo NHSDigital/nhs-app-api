@@ -1,9 +1,9 @@
 <template>
-  <div class="nhsuk-header__logo">
+  <div>
     <a id="nhs_logo"
        ref="homeLogoEl"
        :href="indexPath"
-       :class="'nhsuk-header__link'"
+       :class="'nhsuk-header__link nhsuk-header__link--service'"
        :aria-label="$t('webHeader.nhsLogoAriaLabel')"
        @click.stop.prevent="onClick">
       <svg class="nhsuk-logo nhsuk-logo--white"
@@ -21,6 +21,8 @@
           4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7
           3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"/>
       </svg>
+      <span id="logo-text" class="nhsuk-header__service-name">
+        {{ $t('webHeader.logoText') }}</span>
     </a>
   </div>
 </template>
@@ -56,5 +58,26 @@ export default {
   },
 };
 </script>
+<style module lang="scss" scoped>
+  @import "../../style/colours";
+  @import '../../style/screensizes';
+  a {
+    &:visited, &:active {
+      color: $white;
+    }
+
+    &:hover {
+      background: $hover_blue;
+      box-shadow: 0 0 0 3px $hover_blue;
+      color: $white;
+      text-decoration: underline;
+    }
+  }
+  @include tabletAndBelow() {
+   span {
+     padding-top: 0;
+   }
+  }
+</style>
 
 

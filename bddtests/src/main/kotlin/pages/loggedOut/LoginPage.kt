@@ -27,6 +27,13 @@ class LoginPage : HybridPageObject() {
             page = this
     )
 
+    val desktopSpecificInformation = HybridPageElement(
+            webDesktopLocator = "//*[@id='desktopSpecificInformation']",
+            webMobileLocator = "//*[@id='desktopSpecificInformation']",
+            androidLocator = null,
+            page = this
+    )
+
     val beforeYouStartDiv = HybridPageElement(
             webDesktopLocator = "//div[@id='before-you-start']",
             webMobileLocator = "//div@id='before-you-start']",

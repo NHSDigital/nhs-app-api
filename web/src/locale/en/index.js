@@ -1959,7 +1959,8 @@ export default {
   },
   webHeader: {
     title: '{pageTitle} - NHS App',
-    nhsLogoAriaLabel: 'Access your NHS services homepage',
+    nhsLogoAriaLabel: 'NHS App online homepage',
+    logoText: 'NHS App online',
     links: {
       account: 'Settings',
       logout: 'Log out',
@@ -2629,6 +2630,7 @@ export default {
   web: {
     home: {
       title: 'Access your NHS services',
+      desktopInformation: 'Use NHS App online to access services on your desktop or laptop computer, through your web browser.  You do not need to install anything to get started.',
       bulletListDescription: 'Use this service to:',
       bullets: {
         one: 'book and manage appointments at your GP surgery',

@@ -27,6 +27,8 @@
           </div>
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-two-thirds nhsuk-u-margin-bottom-0">
+              <p v-if="!isNativeApp" id="desktopSpecificInformation">
+                {{ $t('web.home.desktopInformation') }}</p>
               <p class="nhsuk-u-margin-bottom-4">{{ $t('web.home.bulletListDescription') }}</p>
               <ul>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.one') }}</li>

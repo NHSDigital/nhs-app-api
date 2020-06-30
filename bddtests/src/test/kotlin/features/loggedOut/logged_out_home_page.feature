@@ -17,5 +17,11 @@ Feature: Logged out home page content
     Then I see a list of other services I can use without logging in
     And I see Before you start information
     And I see the Download app panel
+    And I see the desktop specific information displayed
+
+  Scenario: The desktop specific information does not appear when on logged-out home page in native
+    Given I am a EMIS patient using the native app
+    And I am on the login logged-out page
+    Then I do not see desktop specific information displayed
 
 

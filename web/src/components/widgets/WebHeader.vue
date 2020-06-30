@@ -1,10 +1,12 @@
 <template>
   <div>
-    <cookie-banner v-if="!loggedIn"/>
+    <cookie-banner v-if="!loggedIn" id="cookie-banner"/>
     <skip-link v-if="!$store.state.device.isNativeApp" />
     <header class="nhsuk-header" role="banner">
       <div class="nhsuk-width-container nhsuk-header__container">
-        <NhsHeaderLogo :index-path="indexPath"/>
+        <div class="nhsuk-header__logo nhsuk-header__logo--only">
+          <NhsHeaderLogo id="nhs-header-logo" :index-path="indexPath"/>
+        </div>
         <div id="web-content-header" class="nhsuk-header__content">
           <div v-if="showMenu" class="nhsuk-header__menu">
             <button id="toggle-menu"
@@ -141,7 +143,6 @@ export default {
       }
      }
     }
-
     .menuButton {
       margin-right: 0;
     }
@@ -174,7 +175,7 @@ export default {
           }
 
           &:hover {
-            background: #003d78;
+            background: $hover_blue;
             box-shadow: 0 0 0 4px $focus_highlight;
             text-decoration: none;
           }
