@@ -75,7 +75,7 @@ run-bdd:	## Run the BDD tests as they are run in the CI build
 
 run-deps: validate_local_secrets validate_local_images
 
-configure-package-feed:
+configure-package-feed:	## Create or Update configuration files for accessing ADO package feeds ()
 	./buildscripts/configure_package_feed.sh
 
 validate_local_secrets:
