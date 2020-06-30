@@ -1909,12 +1909,14 @@ export default {
   },
   account: {
     notifications: {
-      paragraphs: [
-        'You can choose whether to allow notifications on your device.',
-        'If you share this device with other people, they may be able to see your notifications.',
-      ],
+      youCanChoose: 'You can choose whether to allow notifications on your device.',
+      ifYouShare: {
+        prefix: 'If you share this device with other people, they may be able to see your notifications. Read more about notifications in the ',
+        linkText: 'NHS App privacy policy',
+      },
       toggleLabel: 'Allow notifications',
-      settingsLinkText: 'Manage how notifications appear on your device',
+      toggleHint: 'I accept the NHS App sending me notifications on this device',
+      settingsLinkText: 'Manage how notifications are shown on this device (opens your device settings)',
       errors: {
         pageTitle: 'Notifications error',
         pageHeader: 'Notifications error',

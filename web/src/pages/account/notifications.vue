@@ -2,31 +2,46 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <p v-for="(paragraph, index) of $t('account.notifications.paragraphs')" :key="index">
-          {{ paragraph }}
+        <p>{{ $t('account.notifications.youCanChoose') }}</p>
+        <p>{{ $t('account.notifications.ifYouShare.prefix') }}<analytics-tracked-tag
+          :href="privacyPolicyURL"
+          :text="$t('account.notifications.ifYouShare.linkText')"
+          class="inline"
+          tag="a"
+          target="_blank">{{
+            $t('account.notifications.ifYouShare.linkText')
+          }}</analytics-tracked-tag>.
         </p>
         <labelled-toggle v-model="registered"
                          checkbox-id="allow_notifications"
                          :is-waiting="isWaiting"
-                         :label="$t('account.notifications.toggleLabel')"/>
-        <nhs-arrow-banner :banner-text="$t('account.notifications.settingsLinkText')"
-                          :open-new-window="false"
-                          :click-action="openAppSettings"/>
+                         :label="$t('account.notifications.toggleLabel')"
+                         :hint-text="$t('account.notifications.toggleHint')"/>
+        <p>
+          <a id="app-settings" href="#" @click.prevent.stop="openAppSettings">
+            {{ $t('account.notifications.settingsLinkText') }}
+          </a>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import NativeApp from '@/services/native-app';
-import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
+    AnalyticsTrackedTag,
     LabelledToggle,
-    NhsArrowBanner,
+  },
+  data() {
+    return {
+      privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
+    };
   },
   computed: {
     isWaiting() {

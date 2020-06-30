@@ -44,7 +44,7 @@ describe('notifications', () => {
 
   describe('native settings link', () => {
     it('will call the native app function to open settings', () => {
-      wrapper.find('a').trigger('click');
+      wrapper.find('#app-settings').trigger('click');
       expect(NativeApp.openAppSettings).toHaveBeenCalled();
     });
   });

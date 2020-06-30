@@ -28,6 +28,17 @@ Feature: Push Notifications
     Then the notifications toggle is displayed as on
     And the push registration has been added to the repository
 
+  Scenario: A user can navigate to the push notifications Privacy policy page
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time
+    And I am logged in
+    When I navigate to the Account page
+    Then the Account Settings are available
+    And I click the Notifications link on the Account page
+    And the Notifications Settings page is displayed
+    When I click the link called 'NHS App privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
+    Then a new tab has been opened by the link
+
   @smoketest
   Scenario: A user can disable push notifications for their device
     Given I am using the native app user agent

@@ -29,8 +29,9 @@ class ExpectedPageStructure : ExpectedPageStructureBase<ExpectedPageStructure>()
         return this
     }
 
-    fun toggle(content: String): ExpectedPageStructure {
-        expectedElements.add(content, "label")
+    fun toggle(title: String, content: String): ExpectedPageStructure {
+        expectedElements.add("${title}\n${content}", "label")
+        expectedElements.add(content, "span")
         return this
     }
 

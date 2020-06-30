@@ -15,10 +15,10 @@ class NotificationsSettingsPage : HybridPageObject() {
         title.waitForElement()
         val expected = ExpectedPageStructure()
                 .paragraph("You can choose whether to allow notifications on your device.")
-                .paragraph(
-                        "If you share this device with other people, they may be able to see your notifications.")
-                .toggle("Allow notifications")
-                .span("Manage how notifications appear on your device")
+                .paragraph("If you share this device with other people, they may be able to see your " +
+                        "notifications. Read more about notifications in the NHS App privacy policy.")
+                .toggle("Allow notifications", "I accept the NHS App sending me notifications on this device")
+                .paragraph("Manage how notifications are shown on this device (opens your device settings)")
         expected.assert(this)
     }
 

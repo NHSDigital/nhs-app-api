@@ -6,7 +6,10 @@
            :for="checkboxId"
            @click.stop.prevent="onClick">
       <strong>{{ label }}</strong>
-      <span v-if="hintText !== ''" class="nhsuk-body"><br>{{ hintText }}</span>
+      <template v-if="hintText">
+        <br>
+        <span class="nhsuk-body">{{ hintText }}</span>
+      </template>
     </label>
     <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting" @input="onClick"/>
   </div>
