@@ -12,7 +12,7 @@ using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 {
-    public class VisionPatientRecordSectionServiceTestContext
+    internal class VisionPatientRecordSectionServiceTestContext
     {
         private static readonly Uri MockUri = new Uri("http://mockVision/", UriKind.Absolute);
 
@@ -30,9 +30,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             MockSanitizer = new Mock<IHtmlSanitizer>(MockBehavior.Strict);
             var visionConfig = CreateConfig();
             var visionMyRecordMapper = new VisionMyRecordMapper();
+            var sectionResolver = new PatientRecordSectionResolver(
+                new Mock<ILogger<PatientRecordSectionResolver>>().Object,
+                VisionClient.Object, visionConfig, visionMyRecordMapper);
             var allergyMapper = new VisionAllergyMapper(new Mock<ILogger<VisionAllergyMapper>>().Object);
             var medicationMapper = new VisionMedicationMapper(new Mock<ILogger<VisionMedicationMapper>>().Object);
-            var immunisationsMapper = new VisionImmunisationsMapper(new Mock<ILogger<VisionImmunisationsMapper>>().Object);
+            var immunisationsMapper =
+                new VisionImmunisationsMapper(new Mock<ILogger<VisionImmunisationsMapper>>().Object);
             var problemsMapper = new VisionProblemsMapper(new Mock<ILogger<VisionProblemsMapper>>().Object);
 
             var testResultsMapper = new VisionTestResultsMapper(new Mock<ILogger<VisionTestResultsMapper>>().Object,
@@ -46,8 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 
             SystemUnderTest = new VisionPatientRecordService(
                 logger.Object,
-                VisionClient.Object,
-                visionConfig,
+                sectionResolver,
                 visionMyRecordMapper,
                 allergyMapper,
                 medicationMapper,

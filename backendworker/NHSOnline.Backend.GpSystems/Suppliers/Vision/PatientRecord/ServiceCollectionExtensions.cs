@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
@@ -15,6 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             services.AddTransient<VisionDiagnosisMapper>();
             services.AddTransient<VisionExaminationsMapper>();
             services.AddTransient<VisionProceduresMapper>();
+            services.AddTransient<PatientRecordSectionResolver>();
 
             services.AddTransient<VisionPatientRecordService>();
             services.AddTransient<IVisionMyRecordMapper, VisionMyRecordMapper>();
