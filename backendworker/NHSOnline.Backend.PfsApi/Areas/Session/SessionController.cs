@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 _logger.LogEnter();
 
-                var responseBody = userSession.Accept(new UserSessionResponseVisitor<UserSessionResponse>(_settings, new UserSessionResponse()));
+                var responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<UserSessionResponse>(_settings, new UserSessionResponse()));
 
                 return new OkObjectResult(responseBody);
             }
@@ -127,24 +127,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             };
         }
 
-        private sealed class CreateSessionRequest: ICreateSessionRequest
-        {
-            private readonly UserSessionRequest _model;
-
-            internal CreateSessionRequest(UserSessionRequest model, string csrfToken, HttpContext httpContext)
-            {
-                _model = model;
-                CsrfToken = csrfToken;
-                HttpContext = httpContext;
-            }
-
-            public string AuthCode => _model.AuthCode;
-            public string CodeVerifier => _model.CodeVerifier;
-            public Uri RedirectUrl => new Uri(_model.RedirectUrl);
-            public string CsrfToken { get; }
-            public HttpContext HttpContext { get; }
-        }
-
         private sealed class SessionCreateResultVisitor : ICreateSessionResultVisitor<Task<IActionResult>>
         {
             private readonly SessionController _controller;
@@ -167,7 +149,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 Logger.LogInformation($"Created {userSession.GetType().Name}");
 
                 var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
-                responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(Settings, responseBody));
+                responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(Settings, responseBody));
 
                 await _controller._metricLogger.Login();
 
@@ -189,57 +171,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
-            }
-        }
-
-        private sealed class DeleteUserSessionResponseVisitor : IDeleteUserSessionResultVisitor<IActionResult>
-        {
-            public IActionResult Visit(DeleteUserSessionResult.Success success)
-                => new NoContentResult();
-
-            public IActionResult Visit(DeleteUserSessionResult.Failure failure)
-                => new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-
-        private sealed class UserSessionResponseVisitor<TUserSessionResponse> : IUserSessionVisitor<TUserSessionResponse>
-            where TUserSessionResponse : UserSessionResponse
-        {
-            private readonly ConfigurationSettings _settings;
-            private readonly TUserSessionResponse _userSessionResponse;
-
-            public UserSessionResponseVisitor(
-                ConfigurationSettings settings,
-                TUserSessionResponse userSessionResponse)
-            {
-                _settings = settings;
-                _userSessionResponse = userSessionResponse;
-            }
-
-            public TUserSessionResponse Visit(P5UserSession userSession)
-            {
-                SetCommonProperties(userSession);
-                _userSessionResponse.Name = userSession.CitizenIdUserSession.Name;
-                _userSessionResponse.Im1MessagingEnabled = false;
-                return _userSessionResponse;
-            }
-
-            public TUserSessionResponse Visit(P9UserSession userSession)
-            {
-                SetCommonProperties(userSession);
-                _userSessionResponse.Name = userSession.GpUserSession.Name;
-                _userSessionResponse.NhsNumber = userSession.GpUserSession.NhsNumber;
-                _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled;
-                return _userSessionResponse;
-            }
-
-            private void SetCommonProperties(P5UserSession userSession)
-            {
-                _userSessionResponse.SessionTimeout = (int)TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds;
-                _userSessionResponse.OdsCode = userSession.OdsCode;
-                _userSessionResponse.Token = userSession.CsrfToken;
-                _userSessionResponse.DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth;
-                _userSessionResponse.AccessToken = userSession.CitizenIdUserSession.AccessToken;
-                _userSessionResponse.ProofLevel = userSession.CitizenIdUserSession.ProofLevel;
             }
         }
     }

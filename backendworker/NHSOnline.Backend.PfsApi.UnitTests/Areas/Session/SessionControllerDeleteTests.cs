@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Delete_P9UserSessionDeleteGpUserSessionFails_Returns500InternalServiceError()
+        public async Task Delete_P9UserSessionDeleteGpUserSessionFails_ReturnsStatus204NoContent()
         {
             // Arrange
             var userSession = CreateP9UserSession(supplier: Supplier.Emis, nhsNumber: "123 456 7890", accessToken: "AccToken", key: "SessionKey");
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
             using (new AssertionScope())
             {
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Delete_P9UserSessionDeleteSessionCacheFails_Returns500InternalServiceError()
+        public async Task Delete_P9UserSessionDeleteSessionCacheFails_ReturnsStatus204NoContent()
         {
             // Arrange
             var userSession = CreateP9UserSession(supplier: Supplier.Emis, nhsNumber: "123 456 7890", accessToken: "AccToken", key: "SessionKey");
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
             using (new AssertionScope())
             {
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Delete_P5UserSessionDeleteSessionCacheFails_Returns500InternalServiceError()
+        public async Task Delete_P5UserSessionDeleteSessionCacheFails_ReturnsStatus204NoContent()
         {
             // Arrange
             var userSession = CreateP5UserSession(key: "SessionKey");
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
         }
 
