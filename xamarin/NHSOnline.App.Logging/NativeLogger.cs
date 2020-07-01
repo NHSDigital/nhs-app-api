@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.App.Logging
@@ -23,7 +24,31 @@ namespace NHSOnline.App.Logging
                 return;
             }
 
-            _nativeLog.Log(logLevel, _name, formatter(state, exception));
+            if (TryCreateMessage(state, exception, formatter, out var message))
+            {
+                _nativeLog.Log(logLevel, _name, message);
+            }
+        }
+
+        private static bool TryCreateMessage<TState>(
+            TState state,
+            Exception exception,
+            Func<TState, Exception, string> formatter,
+            [NotNullWhen(true)] out string? message)
+        {
+            message = formatter(state, exception);
+
+            // The default formatter ignores the exception: https://github.com/aspnet/Logging/issues/442
+            if (message == null)
+            {
+                message = exception?.ToString();
+            }
+            else if (exception != null)
+            {
+                message = $"{message}{Environment.NewLine}{exception}";
+            }
+
+            return message != null;
         }
 
         public bool IsEnabled(LogLevel logLevel) => logLevel >= _minimumLevel;

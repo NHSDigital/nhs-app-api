@@ -2,7 +2,7 @@ using System;
 
 namespace NHSOnline.App.Areas.LoggedOut.Models
 {
-    internal sealed class CreateSessionModel: NhsLoginModel
+    internal class CreateSessionModel: NhsLoginModel
     {
         public CreateSessionModel(NhsLoginModel nhsLoginModel, Uri redirectUri, string authCode)
             : base(nhsLoginModel)
@@ -11,7 +11,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
             AuthCode = authCode;
         }
 
+        protected CreateSessionModel(CreateSessionModel createSessionModel)
+            : this(createSessionModel, createSessionModel.RedirectUri, createSessionModel.AuthCode)
+        {
+        }
+
         public Uri RedirectUri { get; }
         public string AuthCode { get; }
+
+        internal CreateSessionErrorModel CreateSessionFailed() => new CreateSessionErrorModel(this);
     }
 }

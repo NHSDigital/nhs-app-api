@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NHSOnline.HttpMocks.Domain;
-using NHSOnline.HttpMocks.Emis;
-using NHSOnline.HttpMocks.Microtest;
-using NHSOnline.HttpMocks.Tpp;
-using NHSOnline.HttpMocks.Vision;
 
 namespace NHSOnline.HttpMocks.Dev
 {

@@ -1,9 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Api;
 using NHSOnline.App.Areas;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
+using NHSOnline.App.Threading;
 
 namespace NHSOnline.App
 {
@@ -16,6 +18,8 @@ namespace NHSOnline.App
                 .AddServices()
                 .AddDependencyServices()
                 .AddNhsLoginServices()
+                .AddApiServices()
+                .AddThreadingServices()
                 .AddAreas();
         }
     }

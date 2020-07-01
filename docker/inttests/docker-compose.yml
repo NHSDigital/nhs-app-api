@@ -14,6 +14,8 @@ services:
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}
     restart: always
+    depends_on:
+      - api.local.bitraft.io
     entrypoint:
       - /bin/bash
       - -c

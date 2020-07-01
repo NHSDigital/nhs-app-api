@@ -76,7 +76,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async Task NavigateToLoginErrorPage()
         {
-            var nhsLoginErrorModel = _model.Failed();
+            var nhsLoginErrorModel = _model.NhsLoginFailed();
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
             await _view.Navigation.ReplaceCurrentPageAsync(nhsLoginErrorPage).PreserveThreadContext();

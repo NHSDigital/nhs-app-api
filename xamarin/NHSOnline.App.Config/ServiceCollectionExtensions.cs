@@ -9,6 +9,7 @@ namespace NHSOnline.App.Config
             return services
                 .AddSingleton(IConfiguration.Configuration)
                 .AddSingleton(IConfiguration.Configuration.NhsLogin)
+                .AddSingleton(IConfiguration.Configuration.NhsAppApi)
                 .AddSingleton(IConfiguration.Configuration.NhsAppWeb);
         }
     }

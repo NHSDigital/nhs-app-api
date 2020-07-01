@@ -18,6 +18,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         internal CreateSessionModel AuthReturn(Uri redirectUri, string authCode) => new CreateSessionModel(this, redirectUri, authCode);
 
-        internal NhsLoginErrorModel Failed() => new NhsLoginErrorModel(this);
+        internal NhsLoginErrorModel NhsLoginFailed() => new NhsLoginErrorModel(this);
     }
 }
