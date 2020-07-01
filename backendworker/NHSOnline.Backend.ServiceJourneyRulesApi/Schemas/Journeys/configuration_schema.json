@@ -185,7 +185,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb", "pkbCie" ]
+            "enum": [ "ers", "pkb", "pkbCie", "gncr"]
           }
         },
         "testResults": {

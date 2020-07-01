@@ -1068,6 +1068,17 @@ knownservices_config: {
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
+    "gncr": {
+      "url": "https://nhs-pep-glenr.enigmadev2.net",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
     "silver-third-party-api-test": {
       "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
       "javaScriptInteractionMode": "None",

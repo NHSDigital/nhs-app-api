@@ -20,6 +20,27 @@ export default {
       },
     ],
   },
+  gncr: {
+    serviceId: 'gncr',
+    providerName: 'Great Northern Care Record',
+    jumpOffs: [
+      {
+        id: 'appointments',
+        path: '/appointment',
+        jumpOffContent: {
+          headerText: 'Appointments',
+          descriptionText: 'GNCR Appointments',
+        },
+        thirdPartyWarning: {
+          featureName: 'Feature name',
+          servicePurchaser: 'service purchaser',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+    ],
+  },
   pkb: {
     serviceId: 'pkb',
     providerName: 'Patients Know Best',

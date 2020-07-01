@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         ers,
         pkb,
-        pkbCie
+        pkbCie,
+        gncr
     }
 }

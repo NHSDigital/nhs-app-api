@@ -18,6 +18,11 @@
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider.pkb.
                                          appointmentsCie" />
+          <third-party-jump-off-button v-if="showGncrAppointments"
+                                       id="btn_gncr_appointments"
+                                       provider-id="gncr"
+                                       :provider-configuration="thirdPartyProvider.gncr.
+                                         appointments" />
         </menu-item-list>
       </div>
     </div>
@@ -55,6 +60,16 @@ export default {
         },
       });
     },
+    hasGncrAppointments() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'gncr',
+          serviceType: 'secondaryAppointments',
+        },
+      });
+    },
     hasPkbAppointments() {
       return sjrIf({
         $store: this.$store,
@@ -74,6 +89,9 @@ export default {
           serviceType: 'secondaryAppointments',
         },
       });
+    },
+    showGncrAppointments() {
+      return this.hasGncrAppointments && !this.isProxying;
     },
     showManageYourReferral() {
       return this.hasErsAppointments && !this.isProxying;

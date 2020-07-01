@@ -66,6 +66,12 @@ export default {
         redirectPath: '/lifestyle_guides',
       },
     },
+    gncr: {
+      appointments: {
+        type: 'appointments',
+        redirectPath: '/appointment',
+      },
+    },
     testProvider: {
       messages: {
         type: 'messages',

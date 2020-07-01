@@ -429,3 +429,32 @@ defaultUsers:
       familyName: March
       dateOfBirth: "1974-04-19T00:00:00"
       sex: Female
+
+  gncr:
+    9996450422:
+      userId: cc8ed018-7e96-4d39-afe3-512a20f7d19d
+      emailAddress: onboarding.nhsapp+gncr.user1@gmail.com
+      odsCode: F00005
+      givenName: Letty
+      familyName: Harrison
+      dateOfBirth: "1999-05-03T00:00:00"
+      sex: Female
+
+    9993147974:
+      userId: fc2f457a-043d-4a40-8016-927614d1161d
+      emailAddress: onboarding.nhsapp+gncr.user2@gmail.com
+      odsCode: F00005
+      givenName: Robert
+      familyName: James
+      dateOfBirth: "1964-02-11T00:00:00"
+      sex: Male
+
+    9999560032:
+      userId: 86888710-eeb2-4588-bb4c-948e53259db8
+      emailAddress: onboarding.nhsapp+gncr.user3@gmail.com
+      odsCode: F00005
+      givenName: Ashley
+      familyName: Davidson
+      dateOfBirth: "1964-02-15T00:00:00"
+      sex: Male
+

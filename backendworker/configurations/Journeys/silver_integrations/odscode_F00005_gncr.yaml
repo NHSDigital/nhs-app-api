@@ -1,0 +1,19 @@
+#
+#
+#   Sandpit users in ODS code F00005 are used by GNCR.
+#   DO NOT enable any third-party silver integrations other than GNCR (Patient Pack) for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00005"
+journeys:
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    secondaryAppointments:
+      - gncr
