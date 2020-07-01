@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.Sections;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 
@@ -14,13 +15,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         private readonly ILogger<PatientRecordSectionResolver> _logger;
         private readonly IVisionClient _visionClient;
         private readonly VisionConfigurationSettings _config;
-        private readonly IVisionMyRecordMapper _visionMyRecordSectionMapper;
+        private readonly IVisionMyRecordSectionMapper _visionMyRecordSectionMapper;
 
         public PatientRecordSectionResolver(
             ILogger<PatientRecordSectionResolver> logger,
             IVisionClient visionClient,
             VisionConfigurationSettings visionConfig,
-            IVisionMyRecordMapper visionMyRecordSectionMapper)
+            IVisionMyRecordSectionMapper visionMyRecordSectionMapper)
         {
             _logger = logger;
             _visionClient = visionClient;
@@ -30,36 +31,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 
         public async Task<T> GetPatientData<T>(
             VisionUserSession visionUserSession,
-            string responseFormat,
-            string view,
-            IVisionMapper<T> mapper) where T : IPatientDataModel, new()
+            IRecordSection<T> section) where T : IPatientDataModel, new()
         {
             try
             {
-                return await GetVisionPatientData(visionUserSession, responseFormat, view, mapper);
+                return await GetVisionPatientData(visionUserSession, section.FormatResponse, section.ViewName, section.Mapper);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Vision Record Section '{view}': Failure");
+                _logger.LogError(e, $"Vision Record Section '{section.ViewName}': Failure");
                 return new T { HasErrored = true };
             }
         }
 
         public async Task<GetMyRecordSectionResult> GetSectionResponse<T>(
             VisionUserSession visionUserSession,
-            string responseFormat,
-            string view,
-            IVisionMapper<T> mapper) where T : IVisionPatientDataModel, new()
+            IRecordSection<T> section) where T : IVisionPatientDataModel, new()
         {
             try
             {
-                var response = await GetVisionPatientData(visionUserSession, responseFormat, view, mapper);
-                var mappedResponse = _visionMyRecordSectionMapper.MapSection(response, view);
+                var response = await GetVisionPatientData(visionUserSession, section.FormatResponse, section.ViewName, section.Mapper);
+                var mappedResponse = _visionMyRecordSectionMapper.MapSection(response, section.ViewName);
                 return new GetMyRecordSectionResult.Success(mappedResponse);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Unsuccessful request retrieving {view} for Vision");
+                _logger.LogError(e, $"Unsuccessful request retrieving {section.ViewName} for Vision");
                 return new GetMyRecordSectionResult.BadGateway();
             }
         }

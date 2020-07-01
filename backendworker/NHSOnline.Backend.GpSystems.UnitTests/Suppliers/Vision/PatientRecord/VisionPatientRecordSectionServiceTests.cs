@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.Sections;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
@@ -34,11 +34,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
         }
 
         [DataTestMethod]
-        [DataRow(VisionMapperType.TestResults, "TEST RESULTS")]
-        [DataRow(VisionMapperType.Examinations, "EXAM FINDINGS")]
-        [DataRow(VisionMapperType.Diagnosis, "DIAGNOSIS")]
-        [DataRow(VisionMapperType.Procedures, "PROCEDURES")]
-        public async Task GetSection_Successful(VisionMapperType section, string expectedSectionName)
+        [DataRow(VisionRecordSectionType.TestResults, "TEST RESULTS")]
+        [DataRow(VisionRecordSectionType.Examinations, "EXAM FINDINGS")]
+        [DataRow(VisionRecordSectionType.Diagnosis, "DIAGNOSIS")]
+        [DataRow(VisionRecordSectionType.Procedures, "PROCEDURES")]
+        public async Task GetSection_Successful(VisionRecordSectionType section, string expectedSectionName)
         {
             var context = new VisionPatientRecordSectionServiceTestContext();
             var sanitizedHtml = context.CreateHtml(expectedSectionName);
@@ -59,37 +59,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
         }
 
         [DataTestMethod]
-        [DataRow(VisionMapperType.Medications, "VPS_MEDICATIONS")]
-        [DataRow(VisionMapperType.Allergies, "VPS_ALLERGIES")]
-        [DataRow(VisionMapperType.Immunisations, "IMMUNISATIONS")]
-        [DataRow(VisionMapperType.Problems, "PROBLEMS")]
-        public async Task GetSection_SectionNotAllowed_ReturnsBadRequest(VisionMapperType section,
-            string expectedSectionName)
+        [DataRow(VisionRecordSectionType.TestResults, "TEST RESULTS")]
+        [DataRow(VisionRecordSectionType.Examinations, "EXAM FINDINGS")]
+        [DataRow(VisionRecordSectionType.Diagnosis, "DIAGNOSIS")]
+        [DataRow(VisionRecordSectionType.Procedures, "PROCEDURES")]
+        public async Task GetSection_VisionClientThrowsException_BadGateway(VisionRecordSectionType section, string expectedSectionName)
         {
             var context = new VisionPatientRecordSectionServiceTestContext();
             var sanitizedHtml = context.CreateHtml(expectedSectionName);
-            var mockVisionResponse = context.CreateVisionResponse(sanitizedHtml, context);
+
             context.VisionClient.Setup(x => x.GetPatientData(context.VisionUserSession,
                     It.Is<PatientDataRequest>(x => x.View == expectedSectionName)))
-                .ReturnsAsync(mockVisionResponse);
-
-            // Act
-            var result = await context.SystemUnderTest.GetSection(context.VisionUserSession, section);
-
-            // Assert
-            result.Should().BeAssignableTo<GetMyRecordSectionResult.BadRequest>();
-        }
-
-        [TestMethod]
-        public async Task GetSection_Exception_ReturnsBadGateway()
-        {
-            var context = new VisionPatientRecordSectionServiceTestContext();
-            context.VisionClient.Setup(x => x.GetPatientData(context.VisionUserSession,
-                    It.Is<PatientDataRequest>(x => x.View == "TEST RESULTS")))
                 .Throws<HttpRequestException>();
 
             // Act
-            var result = await context.SystemUnderTest.GetSection(context.VisionUserSession, VisionMapperType.TestResults);
+            var result = await context.SystemUnderTest.GetSection(context.VisionUserSession, section);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordSectionResult.BadGateway>();

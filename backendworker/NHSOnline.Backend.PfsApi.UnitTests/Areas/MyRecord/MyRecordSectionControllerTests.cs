@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.Sections;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
@@ -41,11 +42,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         }
 
         [DataTestMethod]
-        [DataRow("TestResults", VisionMapperType.TestResults)]
-        [DataRow("Diagnosis", VisionMapperType.Diagnosis)]
-        [DataRow("Examinations", VisionMapperType.Examinations)]
-        [DataRow("Procedures", VisionMapperType.Procedures)]
-        public async Task GetSection_Successful(string section, VisionMapperType visionSection)
+        [DataRow("TestResults", VisionRecordSectionType.TestResults)]
+        [DataRow("Diagnosis", VisionRecordSectionType.Diagnosis)]
+        [DataRow("Examinations", VisionRecordSectionType.Examinations)]
+        [DataRow("Procedures", VisionRecordSectionType.Procedures)]
+        public async Task GetSection_Successful(string section, VisionRecordSectionType visionSection)
         {
             // Arrange
             var mockGpSystem = new Mock<IGpSystem>();
@@ -71,7 +72,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         }
 
         [DataTestMethod]
-        [DataRow("testResults")]
         [DataRow("Medications")]
         [DataRow("Allergies")]
         [DataRow("Immunisations")]
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(
-                    x => x.GetSection(_userSession.GpUserSession, VisionMapperType.TestResults))
+                    x => x.GetSection(_userSession.GpUserSession, VisionRecordSectionType.TestResults))
                 .ReturnsAsync(new GetMyRecordSectionResult.BadGateway());
 
             // Act
@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(
-                    x => x.GetSection(_userSession.GpUserSession, VisionMapperType.TestResults))
+                    x => x.GetSection(_userSession.GpUserSession, VisionRecordSectionType.TestResults))
                 .ReturnsAsync(new GetMyRecordSectionResult.InternalServerError());
 
             // Act
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(
-                    x => x.GetSection(_userSession.GpUserSession, VisionMapperType.TestResults))
+                    x => x.GetSection(_userSession.GpUserSession, VisionRecordSectionType.TestResults))
                 .ReturnsAsync(new GetMyRecordSectionResult.BadRequest());
 
             // Act

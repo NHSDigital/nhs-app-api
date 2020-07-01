@@ -1,4 +1,4 @@
-﻿using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 {
@@ -18,21 +18,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 Procedures = procedures,
                 HasSummaryRecordAccess = allergies?.HasAccess ?? false,
                 HasDetailedRecordAccess = (
-                    (immunisations != null && immunisations.HasAccess) || 
-                    (problems != null && problems.HasAccess) || 
-                    (testResults != null && testResults.HasAccess) || 
+                    (immunisations != null && immunisations.HasAccess) ||
+                    (problems != null && problems.HasAccess) ||
+                    (testResults != null && testResults.HasAccess) ||
                     (diagnosis != null && diagnosis.HasAccess) ||
                     (examinations != null && examinations.HasAccess) ||
                     (procedures != null && procedures.HasAccess))
-            };
-        }
-
-        public MyRecordSectionResponse MapSection(IVisionPatientDataModel detailedSection, string sectionName)
-        {
-            return new MyRecordSectionResponse()
-            {
-                Markup = detailedSection.RawHtml,
-                SectionName = sectionName
             };
         }
     }

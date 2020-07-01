@@ -49,7 +49,7 @@ paths:
             enum:
               - TestResults
               - Diagnosis
-              - Examinations,
+              - Examinations
               - Procedures
       responses:
         "200":
@@ -58,6 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MyRecordSectionResponse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "401":
           description: User session has expired.
         "500":
