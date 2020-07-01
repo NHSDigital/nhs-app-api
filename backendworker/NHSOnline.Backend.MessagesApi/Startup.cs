@@ -12,12 +12,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.MessagesApi
 {
@@ -41,6 +44,8 @@ namespace NHSOnline.Backend.MessagesApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SetupConfigurationSettings(services);
+
             services
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
@@ -50,9 +55,26 @@ namespace NHSOnline.Backend.MessagesApi
             services.AddOptions();
             services.AddCorrelationId();
 
+            services.AddSingleton(typeof(HttpTimeoutHandler<>));
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+
             _modularStartup.ConfigureServices(services);
 
             ConfigureAuth(services);
+        }
+
+        private void SetupConfigurationSettings(IServiceCollection services)
+        {
+            var configurationSettings = CreateAndValidateEnvironmentVariables();
+            services.AddSingleton(configurationSettings);
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
+        }
+
+        private HttpTimeoutConfigurationSettings CreateAndValidateEnvironmentVariables()
+        {
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
+            return config;
         }
 
         private void SetupApiKeys(IServiceCollection services)
@@ -67,6 +89,7 @@ namespace NHSOnline.Backend.MessagesApi
         {
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.Filters.Add<UserProfileFilter>();
             options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
         }
 
@@ -129,5 +152,15 @@ namespace NHSOnline.Backend.MessagesApi
                 {
                 });
         }
+    }
+
+    internal class HttpTimeoutConfigurationSettings : IHttpTimeoutConfigurationSettings
+    {
+        public HttpTimeoutConfigurationSettings(int defaultHttpTimeoutSeconds)
+        {
+            DefaultHttpTimeoutSeconds = defaultHttpTimeoutSeconds;
         }
+
+        public int DefaultHttpTimeoutSeconds { get; set; }
+    }
 }

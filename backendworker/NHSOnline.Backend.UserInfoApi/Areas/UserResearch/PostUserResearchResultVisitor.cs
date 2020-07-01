@@ -1,10 +1,11 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Metrics;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
 {
-    public class PostUserResearchResultVisitor : IUserResearchResultVisitor<IActionResult>
+    public class PostUserResearchResultVisitor : IUserResearchResultVisitor<Task<IActionResult>>
     {
         private readonly IMetricLogger _metricLogger;
 
@@ -12,25 +13,25 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
         {
             _metricLogger = metricLogger;
         }
-        public IActionResult Visit(PostUserResearchResult.Success result)
+        public async Task<IActionResult> Visit(PostUserResearchResult.Success result)
         {
-            _metricLogger.UserResearchOptIn();
+            await _metricLogger.UserResearchOptIn();
             return new NoContentResult();
         }
 
-        public IActionResult Visit(PostUserResearchResult.Failure result)
+        public async Task<IActionResult> Visit(PostUserResearchResult.Failure result)
         {
-           return new StatusCodeResult(StatusCodes.Status502BadGateway);
+           return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
 
-        public IActionResult Visit(PostUserResearchResult.EmailMissing result)
+        public async Task<IActionResult> Visit(PostUserResearchResult.EmailMissing result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
 
-        public IActionResult Visit(PostUserResearchResult.InternalServerError result)
+        public async Task<IActionResult> Visit(PostUserResearchResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
     }
 }

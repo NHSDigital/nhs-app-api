@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                     .Execute(async () => await _userResearchService.Post(userInfo,
                         _accessTokenProvider.AccessToken));
 
-                return result.Accept(new PostUserResearchResultVisitor(_metricLogger));
+                return await result.Accept(new PostUserResearchResultVisitor(_metricLogger));
             }
             catch (Exception e)
             {

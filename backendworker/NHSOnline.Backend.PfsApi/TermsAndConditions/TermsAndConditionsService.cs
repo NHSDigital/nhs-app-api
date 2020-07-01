@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             {
                 var termsAndConditions = _consentRequestToTermsAndConditionsMapper.Map(request, consentTime, nhsLoginId);
                 var result = await _repository.Create(termsAndConditions);
-                return result.Accept(new RepositoryCreateConsentResponseVisitor(_metricLogger));
+                return await result.Accept(new RepositoryCreateConsentResponseVisitor(_metricLogger));
             }
             catch (Exception e)
             {

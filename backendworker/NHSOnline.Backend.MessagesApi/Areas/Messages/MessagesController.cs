@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -10,22 +11,29 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 {
     public class MessagesController : Controller
     {
+        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IMessageService _messageService;
         private readonly ILogger<MessagesController> _logger;
+        private readonly IMetricLogger _metricLogger;
 
         public MessagesController
         (
             IMessageService messageService,
-            ILogger<MessagesController> logger)
+            ILogger<MessagesController> logger,
+            IMetricLogger metricLogger,
+            IAccessTokenProvider accessTokenProvider)
         {
             _messageService = messageService;
             _logger = logger;
+            _metricLogger = metricLogger;
+            _accessTokenProvider = accessTokenProvider;
         }
 
         [HttpPost]
@@ -66,9 +74,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 _logger.LogEnter();
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
-
-                var messagesResult = await GetUserMessages(sender, summary, accessToken);
+                var messagesResult = await GetUserMessages(sender, summary, _accessTokenProvider.AccessToken);
 
                 return messagesResult.Accept(new MessagesResultVisitor());
             }
@@ -86,17 +92,18 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         [HttpPatch]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/messages/{messageId}")]
-        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument, string messageId)
+        [SuppressMessage("Microsoft.Design", "CA1801", Justification = "Metric logger requires the user profile")]
+        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument,
+            string messageId,
+            [UserProfile] UserProfile userProfile)
         {
             try
             {
                 _logger.LogEnter();
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
+                var messageResult = await _messageService.UpdateMessage(patchDocument,  _accessTokenProvider.AccessToken, messageId);
 
-                var messageResult = await _messageService.UpdateMessage(patchDocument, accessToken, messageId);
-
-                return messageResult.Accept(new MessagePatchResultVisitor());
+                return await messageResult.Accept(new MessagePatchResultVisitor(_metricLogger));
             }
             catch (Exception e)
             {

@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +20,6 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UserInfoApi
@@ -157,7 +155,7 @@ namespace NHSOnline.Backend.UserInfoApi
                 {
                 });
         }
-        }
+    }
 
     internal class HttpTimeoutConfigurationSettings : IHttpTimeoutConfigurationSettings
     {

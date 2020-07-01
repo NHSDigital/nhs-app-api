@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
-    internal class RepositoryCreateConsentResponseVisitor : IRepositoryCreateResultVisitor<TermsAndConditionsRecord, TermsAndConditionsRecordConsentResult>
+    internal class RepositoryCreateConsentResponseVisitor : IRepositoryCreateResultVisitor<TermsAndConditionsRecord, Task<TermsAndConditionsRecordConsentResult>>
     {
         private readonly IMetricLogger _metricLogger;
 
@@ -11,15 +12,15 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         {
             _metricLogger = metricLogger;
         }
-        public TermsAndConditionsRecordConsentResult Visit(RepositoryCreateResult<TermsAndConditionsRecord>.Created result)
+        public async Task<TermsAndConditionsRecordConsentResult> Visit(RepositoryCreateResult<TermsAndConditionsRecord>.Created result)
         {
-            _metricLogger.TermsAndConditionsInitialConsent();
+            await _metricLogger.TermsAndConditionsInitialConsent();
             return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
         }
 
-        public TermsAndConditionsRecordConsentResult Visit(RepositoryCreateResult<TermsAndConditionsRecord>.RepositoryError result)
+        public async Task<TermsAndConditionsRecordConsentResult> Visit(RepositoryCreateResult<TermsAndConditionsRecord>.RepositoryError result)
         {
-            return new TermsAndConditionsRecordConsentResult.InternalServerError();
+            return await Task.FromResult(new TermsAndConditionsRecordConsentResult.InternalServerError());
         }
     }
 }
