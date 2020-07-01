@@ -3,6 +3,9 @@ import { mount } from '../helpers';
 
 describe('authReturn layout', () => {
   const CONTACT_US_URL = 'https://www.example.com';
+  const MY_HEALTH_ONLINE_URL = 'https://www.myhealthonline-inps2.wales.nhs.uk';
+  const NHS_WALES_111_URL = 'https://111.wales.nhs.uk';
+  const NHS_111_URL = 'https://111.nhs.uk';
   const serviceDeskReference = 'fooReference';
   let goToUrl;
   let wrapper;
@@ -104,23 +107,44 @@ describe('authReturn layout', () => {
         expect(container.exists()).toBe(true);
       });
 
-      it('will have one link only', () => {
-        expect(container.findAll('a').length).toBe(1);
+      it('will have four sub headings', () => {
+        expect(container.findAll('h2').length).toBe(4);
       });
 
-      describe('contact us link', () => {
+      it('will have eight paragraphs', () => {
+        expect(container.findAll('p').length).toBe(8);
+      });
+
+      it('will have four links', () => {
+        expect(container.findAll('a').length).toBe(4);
+      });
+
+      describe('hyperlinks', () => {
+        let myHealthOnlineLink;
+        let nhsWales111Link;
+        let nhs111Link;
         let contactUsLink;
 
         beforeEach(() => {
-          contactUsLink = wrapper.find('a');
+          myHealthOnlineLink = wrapper.findAll('a').at(0);
+          nhsWales111Link = wrapper.findAll('a').at(1);
+          nhs111Link = wrapper.findAll('a').at(2);
+          contactUsLink = wrapper.findAll('a').at(3);
         });
 
         it('will exist', () => {
+          expect(myHealthOnlineLink.exists()).toBe(true);
+          expect(nhsWales111Link.exists()).toBe(true);
+          expect(nhs111Link.exists()).toBe(true);
           expect(contactUsLink.exists()).toBe(true);
         });
 
-        it('url will have error code', () => {
-          expect(contactUsLink.attributes('href')).toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
+        it('url href is correct', () => {
+          expect(myHealthOnlineLink.attributes('href')).toBe(MY_HEALTH_ONLINE_URL);
+          expect(nhsWales111Link.attributes('href')).toBe(NHS_WALES_111_URL);
+          expect(nhs111Link.attributes('href')).toBe(NHS_111_URL);
+          expect(contactUsLink.attributes('href'))
+            .toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
         });
       });
     });

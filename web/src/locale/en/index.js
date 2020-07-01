@@ -122,24 +122,60 @@ export default {
         },
       },
       464: {
-        line1: 'This can be one of two problems:',
-        uList: {
-          item1: {
-            id: '1',
-            text: 'we cannot find your GP surgery',
-            label: 'we cannot find your GP surgery',
-          },
-          item2: {
-            id: '2',
-            text: 'we cannot find your NHS number',
-            label: 'we cannot find your NHS number',
+        wales: {
+          header: 'If your GP surgery is in Wales',
+          line1: 'The NHS App is not available in Wales because health services are managed separately from England.',
+          line2: {
+            content: [
+              {
+                text: 'If you need an appointment or prescription, go to ',
+                linkUrl: 'https://www.myhealthonline-inps2.wales.nhs.uk',
+                linkText: 'My Health Online',
+              },
+              {
+                text: ' or contact your GP surgery directly. For urgent medical advice, go to ',
+                linkUrl: 'https://111.wales.nhs.uk',
+                linkText: '111.wales.nhs.uk',
+              },
+              {
+                text: ' or call 111.',
+              },
+            ],
           },
         },
-        contactUs: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
-        message: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one',
+        england: {
+          header: 'If your GP surgery is in England ',
+          line1: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
+          line2: {
+            content: [
+              {
+                text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',
+                linkUrl: 'https://111.nhs.uk',
+                linkText: '111.nhs.uk',
+              },
+              {
+                text: ' or call 111.',
+              },
+            ],
+          },
+          line3: {
+            content: [
+              {
+                text: 'If you still need to access the app, ',
+                linkText: 'contact us',
+              },
+            ],
+          },
         },
+        ni_scotland: {
+          header: 'If your GP surgery is in Northern Ireland or Scotland ',
+          line1: 'The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.',
+          line2: {
+            text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
+        },
+        reference: 'Reference: ',
       },
       465: {
         title: 'Login failed',

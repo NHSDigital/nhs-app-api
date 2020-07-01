@@ -23,15 +23,21 @@
                     {{ $t('auth_return.error.title.loginFailed') }} </h1>
                   <error-container v-if="errorStatusCode===464">
                     <error-title title="auth_return.error.title.loginFailed"/>
-                    <error-paragraph from="auth_return.error.464.line1" />
-                    <error-unordered-list from="auth_return.error.464.uList" />
-                    <error-paragraph from="auth_return.error.464.contactUs"
-                                     :variable="serviceDeskReference"/>
-                    <error-paragraph from="auth_return.error.464.message" />
-                    <error-link from="generic.contactUsButton.text"
-                                :action="contactUsUrl"
-                                :target="target"
-                                :query-param="contactUsParam"/>
+                    <error-header from="auth_return.error.464.wales.header" />
+                    <error-paragraph from="auth_return.error.464.wales.line1" />
+                    <error-paragraph-with-links from="auth_return.error.464.wales.line2.content" />
+                    <error-header from="auth_return.error.464.england.header" />
+                    <error-paragraph from="auth_return.error.464.england.line1" />
+                    <error-paragraph-with-links from="auth_return.error.464.england.line2.content"/>
+                    <error-paragraph-with-links from="auth_return.error.464.england.line3.content"
+                                                :query-param="contactUsParam"/>
+                    <error-header from="auth_return.error.464.ni_scotland.header" />
+                    <error-paragraph from="auth_return.error.464.ni_scotland.line1" />
+                    <error-paragraph from="auth_return.error.464.ni_scotland.line2" />
+                    <p id="errorCode" class="nhsuk-u-font-size-16">
+                      {{ $t('auth_return.error.464.reference') }}
+                      {{ serviceDeskReference }}
+                    </p>
                   </error-container>
                   <error-container v-else-if="errorStatusCode===465">
                     <error-title title="auth_return.error.465.title"/>
@@ -144,9 +150,11 @@ import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorParagraphWithLinks from '@/components/errors/ErrorParagraphWithLinks';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import ErrorUnorderedList from '@/components/errors/ErrorUnorderedList';
 import FlashMessage from '@/components/widgets/FlashMessage';
@@ -162,8 +170,10 @@ export default {
     ApiError,
     ConnectionError,
     ErrorContainer,
+    ErrorHeader,
     ErrorLink,
     ErrorParagraph,
+    ErrorParagraphWithLinks,
     ErrorTitle,
     ErrorUnorderedList,
     FlashMessage,

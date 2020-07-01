@@ -7,7 +7,7 @@ import pages.HybridPageObject
 
 class FrontendErrorVerificationStepDefinitions : HybridPageObject() {
     private val errorCode = HybridPageElement(
-            webDesktopLocator = "//span[@id=\"errorCode\"]",
+            webDesktopLocator = "//*[@id=\"errorCode\"]",
             androidLocator = null,
             page = this,
             helpfulName = "error message"
@@ -17,5 +17,13 @@ class FrontendErrorVerificationStepDefinitions : HybridPageObject() {
     fun iSeeTheServiceReferenceNumberPrefix(prefix: String) {
         Assert.assertEquals("the error code prefix does not match the expected prefix",
                 prefix.toLowerCase(), errorCode.textValue.substring(0,2).toLowerCase())
+    }
+
+    @Then("^The reference error and label and prefix is shown as \"([^\"]*)\"$")
+    fun iSeeTheServiceReferenceNumberPrefixAndLabel(prefix: String) {
+        Assert.assertTrue(
+                "the error code label and prefix do not match the expected label and prefix",
+                errorCode.textValue.toLowerCase().startsWith(prefix.toLowerCase()))
+
     }
 }

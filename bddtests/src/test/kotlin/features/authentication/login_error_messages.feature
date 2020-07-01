@@ -58,25 +58,37 @@ Feature: Login error messages
     #464
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
     Given I attempt to log in as a <GP System> user without an NHS Number
-    Then In the error message I see the service reference number prefix with "3f"
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f'
+    Then The reference error and label and prefix is shown as "Reference: 3f"
+    When I click the error <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
     Examples:
-      | GP System |
-      | TPP       |
+      | GP System | Link text           | Link url                                                        |
+      | TPP       | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
+      | TPP       | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | TPP       | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
+      | TPP       | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
   @nativesmoketest
     Examples:
-      | GP System |
-      | EMIS      |
+      | GP System  | Link text           | Link url                                                        |
+      | EMIS       | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
+      | EMIS       | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | EMIS       | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
+      | EMIS       | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
   #464
   @nativesmoketest
-  Scenario: Cannot log in as a EMIS user with invalid ODS Code
+  Scenario Outline: Cannot log in as a EMIS user with invalid ODS Code
     Given I attempt to log in as a EMIS user with invalid ODS Code
-    Then In the error message I see the service reference number prefix with "3f"
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f'
+    Then The reference error and label and prefix is shown as "Reference: 3f"
+    When I click the error <Link text> link with a url of <Link url>
     Then a new tab has been opened by the link
+    Examples:
+      | Link text           | Link url                                                        |
+      | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
+      | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
+      | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
 #504 timeout
   Scenario: Cannot log in as a EMIS when the request timeout I see error code with "zn" prefix
