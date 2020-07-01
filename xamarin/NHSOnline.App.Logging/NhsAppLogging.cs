@@ -10,13 +10,14 @@ namespace NHSOnline.App.Logging
 
         private static ILoggingConfiguration Config => IConfiguration.Configuration.Logging;
 
-        public static ILoggerFactory Init()
+        public static ILoggerFactory Init(INativeLog nativeLog)
         {
             try
             {
                 var loggerFactory = LoggerFactory.Create(
                     builder => builder
                         .SetMinimumLevel(Config.MinimumLogLevel)
+                        .AddProvider(new NativeLoggerProvider(Config.MinimumNativeLogLevel, nativeLog))
                         .AddDebug());
 
                 _createLogger = type => loggerFactory.CreateLogger(type);

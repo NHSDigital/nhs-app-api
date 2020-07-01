@@ -23,27 +23,20 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-
     <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
     <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
   </PropertyGroup>
-
   <PropertyGroup>
     <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|AnyCPU' " />
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|AnyCPU' " />
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|AnyCPU' " />
-
   <Import Project="Properties/BuildConfiguration.debugmode.$(DebugMode).props" />
   <Import Project="Properties/BuildConfiguration.env.$(Environment).props" />
-
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -62,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyServices\AndroidCookies.cs" />
+    <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,17 +91,16 @@
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-  </ItemGroup>
-
   <Target Name="Generate Android Manifest" BeforeTargets="_ValidateAndroidPackageProperties">
     <Copy SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml" DestinationFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" />
     <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppPackackeName)" Query="/manifest/@package" Namespaces="$(ManifestNamespace)" />
     <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppLabel)" Query="/manifest/application/@android:label" Namespaces="$(ManifestNamespace)" />
   </Target>
-
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj">
+      <Project>{7783BCD8-95F8-4645-95A9-28FEF39731BA}</Project>
+      <Name>NHSOnline.App.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
       <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
       <Name>NHSOnline.App</Name>
@@ -121,5 +114,5 @@
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
   </ItemGroup>
- <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

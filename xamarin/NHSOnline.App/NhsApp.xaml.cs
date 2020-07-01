@@ -1,4 +1,6 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
@@ -12,14 +14,33 @@ namespace NHSOnline.App
         {
             InitializeComponent();
 
-            var loggerFactory = NhsAppLogging.Init();
+            try
+            {
+                var loggerFactory = NhsAppLogging.Init(DependencyService.Get<INativeLog>());
 
-            var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
+                var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
 
-            var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
-            var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
+                var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
+                var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
-            MainPage = new NavigationPage(loggedOutHomeScreenPage);
+                MainPage = new NavigationPage(loggedOutHomeScreenPage);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("App Startup Failed: {0}", e);
+                TryLogFailure(e);
+            }
+        }
+
+        private static void TryLogFailure(Exception e)
+        {
+            try
+            {
+                DependencyService.Get<INativeLog>().Log(LogLevel.Critical, nameof(NhsApp), $"App Startup Failed: {e}");
+            }
+            catch
+            {
+            }
         }
 
         protected override void OnStart()

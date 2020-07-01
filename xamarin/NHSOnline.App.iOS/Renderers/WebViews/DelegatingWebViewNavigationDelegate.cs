@@ -1,7 +1,5 @@
 using System;
-using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Foundation;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Logging;
@@ -61,17 +59,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private static void Log(LogLevel level, WKNavigation navigation, [CallerMemberName] string method = "")
         {
-            var message = string.Format(
-                CultureInfo.InvariantCulture,
-                "Navigation {0:X} {1}",
-                navigation.ClassHandle.ToInt64(),
-                method);
-
-            using (var nss = new NSString(message))
-            {
-                NativeMethods.NSLog(nss.Handle);
-            }
-
             Logger.Log(
                 level,
                 "Navigation {Id:X} {Method}",
@@ -81,18 +68,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private static void LogError(WKNavigation navigation, NSError error, [CallerMemberName] string method = "")
         {
-            var message = string.Format(
-                CultureInfo.InvariantCulture,
-                "Navigation {0:X} {1}: {2}",
-                navigation.ClassHandle.ToInt64(),
-                method,
-                error.LocalizedDescription);
-
-            using (var nss = new NSString(message))
-            {
-                NativeMethods.NSLog(nss.Handle);
-            }
-
             Logger.LogError(
                 "Navigation {Id:X} {Method}: {Description}",
                 navigation.ClassHandle.ToInt64(),
@@ -108,12 +83,6 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             {
                 _wrappedNavigationDelegate.Dispose();
             }
-        }
-
-        private static class NativeMethods
-        {
-            [DllImport(ObjCRuntime.Constants.FoundationLibrary)]
-            internal static extern void NSLog(IntPtr message);
         }
     }
 }

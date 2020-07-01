@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.DependencyServices
