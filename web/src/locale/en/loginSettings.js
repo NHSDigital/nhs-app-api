@@ -6,7 +6,10 @@ export default {
       touch: 'Touch ID lets you log in with your fingerprint instead of a password and security code.',
     },
     biometricType: {
-      fingerPrint: 'Fingerprint',
+      header: {
+        fingerPrint: 'Fingerprint',
+      },
+      fingerPrint: 'fingerprint',
       face: 'Face ID',
       touch: 'Touch ID',
     },

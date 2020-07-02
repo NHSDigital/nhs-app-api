@@ -12,7 +12,7 @@ export default {
     return `loginSettings.biometrics.biometricType.${state.biometricType}`;
   },
   getBiometricInformation(state) {
-    return `loginSettings.biometrics.warningText.${state.biometricType}`;
+    return `loginSettings.biometrics.biometricInformation.${state.biometricType}`;
   },
   getBiometricWarningText(state) {
     return `loginSettings.biometrics.warningText.${state.biometricType}`;

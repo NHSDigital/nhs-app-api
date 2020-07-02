@@ -28,7 +28,7 @@ export default {
         break;
       case biometricTypes.Fingerprint:
         state.biometricLocaleReference =
-          `loginSettings.biometrics.biometricType.${biometricTypes.Fingerprint}`;
+          `loginSettings.biometrics.biometricType.header.${biometricTypes.Fingerprint}`;
         state.biometricType = biometricTypes.Fingerprint;
         break;
       default:
