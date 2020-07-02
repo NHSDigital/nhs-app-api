@@ -2,6 +2,8 @@
 @careInformationExchange
 Feature: Care Information Exchange Medicines
 
+  # P5 notes - the prescriptions hub page is not available to P5 users, preventing them from accessing any silver integration medicines jump offs.
+
   Scenario: A user navigates to CIE Medicines and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Medicines from Care Information Exchange

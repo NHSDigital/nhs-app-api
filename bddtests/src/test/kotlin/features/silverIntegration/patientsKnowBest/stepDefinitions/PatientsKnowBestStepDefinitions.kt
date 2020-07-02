@@ -7,6 +7,7 @@ import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
 import pages.assertIsVisible
@@ -65,6 +66,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Given("^I am a user who can view Messages and Online Consultations from Patients Know Best$")
     fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
+    }
+
+    @Given("^I am a user with proof level 5 who can view Messages and Online Consultations from Patients Know Best$")
+    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB, IdentityProofingLevel.P5)
     }
 
     @Given("^I am a user who cannot view Messages and Online Consultations from Patients Know Best$")
@@ -131,9 +137,9 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         prescriptionsHubPage.pkbMedicinesJumpOffButton.click()
     }
 
-    private fun setupPatient(configuration: SJRJourneyType) {
+    private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null, configuration)
+                null, configuration, proofLevel)
         val supplier = SerenityHelpers.getGpSupplier()
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         CitizenIdSessionCreateJourney().createFor(patient)

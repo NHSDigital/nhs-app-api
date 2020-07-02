@@ -5,7 +5,7 @@ journeys:
   appointments:
     provider: im1
   notifications: false
-  messaging: false
+  messaging: true
   userInfo: false
   documents: true
   im1Messaging:

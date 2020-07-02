@@ -23,6 +23,13 @@ Feature: Messages
     Then the Messages page is displayed
     And my messages from the sender are displayed as read
 
+  Scenario: A user with proof level 5 can access their messages
+    Given I am using the native app user agent
+    And I am a user with proof level 5 wishing to view my messages
+    And I am logged in
+    When I follow the Health information and updates link from the home page
+    Then the Messages Inbox page is displayed
+
   Scenario: A user with proof level 5 can see they have unread messages on the home page
     Given I am using the native app user agent
     And I am a user with proof level 5 wishing to view my messages
@@ -169,7 +176,6 @@ Feature: Messages
     And I click the 'Try again' button
     Then the Messages page is displayed
     And my messages from the sender are displayed
-
 
   Scenario: A desktop user can see their messages if enabled
     Given I am a user wishing to view my messages

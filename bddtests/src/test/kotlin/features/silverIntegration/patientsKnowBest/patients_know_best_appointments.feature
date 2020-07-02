@@ -2,6 +2,8 @@
 @patientsKnowBest
 Feature: Patients Know Best Appointments
 
+  # P5 notes - the hospital and other appointments page is not available to P5 users, preventing them from accessing any silver integration secondary appointments jump offs.
+
   Scenario: A user navigates to PKB appointments and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Appointments from Patients Know Best

@@ -2,6 +2,8 @@
 @careInformationExchange
 Feature: Care Information Exchange Health Tracker
 
+  # P5 notes - the health record hub page is not available to P5 users, preventing them from accessing any silver integration health trackers jump offs.
+
   Scenario: A user navigates to CIE health tracker and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view health tracker from Care Information Exchange

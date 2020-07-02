@@ -37,6 +37,7 @@
 import { GP_APPOINTMENTS, HOSPITAL_APPOINTMENTS } from '@/lib/routes';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'Appointments',
@@ -59,7 +60,7 @@ export default {
     },
     showHospitalAppointments() {
       return !this.isProxying &&
-        this.$store.getters['serviceJourneyRules/silverIntegrationAppointmentsEnabled'];
+        sjrIf({ $store: this.$store, journey: 'silverIntegrationAppointments' });
     },
   },
   mounted() {

@@ -1,18 +1,7 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
-      <menu-item v-if="!onlyAppMessagesEnabled"
-                 id="btn_messages"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="messagesPath"
-                 :text="$t('sc04.messages.subheader')"
-                 :description="$t('sc04.messages.body')"
-                 :has-unread-messages="hasUnreadMessages"
-                 :click-func="navigateToMessages"
-                 :aria-label="ariaLabel"/>
-
-      <menu-item v-else
+      <menu-item v-if="onlyAppMessagesEnabled"
                  id="btn_appMessaging"
                  header-tag="h2"
                  data-purpose="text_link"
@@ -20,6 +9,17 @@
                  :has-unread-messages="hasUnreadMessages"
                  :text="$t('messagesHub.appMessaging.subheader')"
                  :description="$t('messagesHub.appMessaging.body')"
+                 :click-func="navigateToMessages"
+                 :aria-label="ariaLabel"/>
+
+      <menu-item v-else
+                 id="btn_messages"
+                 header-tag="h2"
+                 data-purpose="text_link"
+                 :href="messagesPath"
+                 :text="$t('sc04.messages.subheader')"
+                 :description="$t('sc04.messages.body')"
+                 :has-unread-messages="hasUnreadMessages"
                  :click-func="navigateToMessages"
                  :aria-label="ariaLabel"/>
 
@@ -97,25 +97,10 @@ export default {
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
+      isProofLevel9: this.$store.getters['session/isProofLevel9'],
       morePath: MORE.path,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       messagesPath: MESSAGES.path,
-      hasPkbMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'messages',
-        },
-      }),
-      hasTestProviderMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'testSilverThirdPartyProvider',
-          serviceType: 'messages',
-        },
-      }),
     };
   },
   computed: {
@@ -154,8 +139,10 @@ export default {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     onlyAppMessagesEnabled() {
-      return !this.gpMessagesEnabled && !this.hasPkbMessages && this.appMessagingEnabled &&
-        !this.hasTestProviderMessages;
+      return this.appMessagingEnabled
+        && !this.gpMessagesEnabled
+        && (sjrIf({ $store: this.$store, journey: 'silverIntegrationMessages', disabled: true })
+          || this.isProxying || !this.isProofLevel9);
     },
     ariaLabel() {
       let i18nLabel = 'sc04.messages';

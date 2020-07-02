@@ -619,8 +619,7 @@ const routes = {
   HEALTH_INFORMATION_UPDATES: {
     name: 'messages-app-messaging',
     path: '/messages/app-messaging',
-    proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/more',
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'healthAndInformationUpdates',
       get defaultCrumb() {
@@ -629,9 +628,6 @@ const routes = {
       get appMessagesOnlyCrumb() {
         return [this.allRoutes.INDEX];
       },
-      get appMessagesOnlyMoreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
-      },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
@@ -639,8 +635,7 @@ const routes = {
   HEALTH_INFORMATION_UPDATES_MESSAGES: {
     name: 'messages-app-messaging-app-message',
     path: '/messages/app-messaging/app-message',
-    proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/more',
+    proofLevel: proofLevel.P5,
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MESSAGES,
@@ -648,10 +643,6 @@ const routes = {
       },
       get appMessagesOnlyCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.HEALTH_INFORMATION_UPDATES];
-      },
-      get appMessagesOnlyMoreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE,
-          this.allRoutes.HEALTH_INFORMATION_UPDATES];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,

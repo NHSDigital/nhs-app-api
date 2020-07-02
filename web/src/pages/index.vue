@@ -50,22 +50,6 @@ export default {
       hasUnreadMessages: false,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
-      hasPkbMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'messages',
-        },
-      }),
-      hasTestProviderMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'testSilverThirdPartyProvider',
-          serviceType: 'messages',
-        },
-      }),
     };
   },
   computed: {
@@ -91,8 +75,10 @@ export default {
       return this.$store.getters['session/isProxying'];
     },
     linkToAppMessages() {
-      return !this.gpMessagesEnabled && this.appMessagingEnabled && !this.hasPkbMessages &&
-      !this.hasTestProviderMessages;
+      return this.appMessagingEnabled
+        && !this.gpMessagesEnabled
+        && (sjrIf({ $store: this.$store, journey: 'silverIntegrationMessages', disabled: true })
+          || !this.isProofLevel9);
     },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];

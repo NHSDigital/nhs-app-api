@@ -2,6 +2,8 @@
 @patientsKnowBest
 Feature: Patients Know Best Care Plans
 
+  # P5 notes - the health record hub page is not available to P5 users, preventing them from accessing any silver integration care plans jump offs.
+
   Scenario: A user navigates to PKB care plans and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view care plans from Patients Know Best

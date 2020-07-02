@@ -2,6 +2,8 @@
 @patientsKnowBest
 Feature: Patients Know Best Medicines
 
+  # P5 notes - the prescriptions hub page is not available to P5 users, preventing them from accessing any silver integration medicines jump offs.
+
   Scenario: A user navigates to PKB Medicines and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Medicines from Patients Know Best

@@ -20,7 +20,8 @@ describe('index', () => {
     homeScreen = {},
     isNativeApp = false,
     isProofLevel9 = true,
-    context = true,
+    sjrIm1MessagingEnabled = true,
+    silverIntegrationMessagesEnabled = true,
     appMessagingEnabled = false,
     hasUnreadAppMessages = false,
     hasUnreadGpMessages = false,
@@ -29,7 +30,7 @@ describe('index', () => {
     $store = createStore({
       state: {
         practiceSettings: {
-          im1MessagingEnabled: false,
+          im1MessagingEnabled: true,
         },
         gpMessages: { hasUnread: hasUnreadGpMessages },
         messaging: { hasUnread: hasUnreadAppMessages },
@@ -57,11 +58,12 @@ describe('index', () => {
         },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'serviceJourneyRules/silverIntegrationMessagesEnabled': silverIntegrationMessagesEnabled,
         'session/isProofLevel9': isProofLevel9,
         'session/isProxying': isProxying,
         'session/currentProfile': { name: '' },
         'serviceJourneyRules/messagingEnabled': appMessagingEnabled,
+        'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
       },
     });
     return mount(Index, { $store, $router, $t: create$T(), stubs: ['BiometricBanner'] });
@@ -138,13 +140,34 @@ describe('index', () => {
       expect(wrapper.find('#btn_messages_unreadIndicator').exists()).toBe(showIndicator);
     });
 
-  it('will show the correct app messaging text on the message home link if only app messaging enabled', () => {
-    wrapper = mountAs({ im1MessagingEnabled: false, context: false, appMessagingEnabled: true });
-    expect(wrapper.find('#btn_messages').text()).toBe('translate_navigationMenuList.appMessages');
-  });
+  describe('messaging link', () => {
+    const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
 
-  it('will show the correct messaging text on the message home link when more than one message service enabled', () => {
-    wrapper = mountAs({ im1MessagingEnabled: true, context: true, appMessagingEnabled: true });
-    expect(wrapper.find('#btn_messages').text()).toBe('translate_navigationMenuList.messages');
+    each([
+      [false, false, true, 'translate_navigationMenuList.appMessages'], // app messages only
+      [true, false, true, 'translate_navigationMenuList.messages'], // app messages and im1 messaging
+      [false, true, true, 'translate_navigationMenuList.messages'], // app messages and silver messaging
+      [true, true, true, 'translate_navigationMenuList.messages'], // app messages, im1 messaging, silver messaging
+      [false, true, false, 'translate_navigationMenuList.appMessages'], // app messages and (silver messaging but not P9)
+    ]).describe('sjrIm1MessagingEnabled enabled is %s, silverIntegrationMessagesEnabled is %s, isProofLevel9 is %s', (
+      sjrIm1MessagingEnabled, silverIntegrationMessagesEnabled,
+      isProofLevel9, expectedText,
+    ) => {
+      let messagesLink;
+
+      beforeEach(() => {
+        wrapper = mountAs({
+          appMessagingEnabled: true,
+          sjrIm1MessagingEnabled,
+          silverIntegrationMessagesEnabled,
+          isProofLevel9,
+        });
+        messagesLink = getMessagesLink(wrapper);
+      });
+
+      it(`home page message link will show text from ${expectedText}`, () => {
+        expect(messagesLink.text()).toBe(expectedText);
+      });
+    });
   });
 });

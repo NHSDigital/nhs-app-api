@@ -56,12 +56,13 @@ import orderBy from 'lodash/fp/orderBy';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
+import sjrIf from '@/lib/sjrIf';
 
 const loadData = async (store) => {
   store.dispatch('prescriptions/clear');
   await store.dispatch('prescriptions/load');
 
-  if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
+  if (sjrIf({ $store: store, journey: 'nominatedPharmacy' })) {
     store.dispatch('nominatedPharmacy/clearInterruptBackTo');
 
     if (store.state.nominatedPharmacy.hasLoaded === false) {

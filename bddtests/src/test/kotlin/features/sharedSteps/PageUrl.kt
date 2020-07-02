@@ -52,7 +52,8 @@ open class PageUrl {
                         "patient practice messaging delete" to "/messages/gp-messages/delete",
                         "patient practice messaging delete success" to "/messages/gp-messages/delete-success",
                         "notifications settings" to "/account/notifications",
-                        "symptoms" to "/symptoms"
+                        "symptoms" to "/symptoms",
+                        "messages hub" to "/messages"
                 )
 
         fun getPage(pageName: String): String {

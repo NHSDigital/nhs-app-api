@@ -1,4 +1,3 @@
-import each from 'jest-each';
 import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import getters from '@/store/modules/serviceJourneyRules/getters';
 import { initialState } from '@/store/modules/serviceJourneyRules/mutation-types';
@@ -297,10 +296,25 @@ describe('getters', () => {
         .toBe(true);
     });
 
-    it('will be false if im1Messaging can delete messages  is false', () => {
+    it('will be false if im1Messaging can delete messages is false', () => {
       currentState.rules.im1Messaging.canDeleteMessages = false;
       expect(deleteGpMessagesEnabled(currentState))
         .toBe(false);
+    });
+  });
+
+  describe('Silver Integration', () => {
+    const { silverIntegrationEnabled } = getters;
+
+    it.each([
+      [true, 'secondaryAppointments', ['ers', 'pkb'], 'ers'],
+      [false, 'secondaryAppointments', [], 'ers'],
+      [false, 'secondaryAppointments', undefined, 'ers'],
+      [false, 'secondaryAppointments', ['ers'], 'pkb'],
+    ])('will be %s if silverIntegrations.%s has %s value and provider is %s', (expectedResult, serviceType, value, provider) => {
+      currentState.rules.silverIntegrations[serviceType] = value;
+      expect(silverIntegrationEnabled(currentState)({ provider, serviceType }))
+        .toBe(expectedResult);
     });
   });
 
@@ -318,22 +332,48 @@ describe('getters', () => {
       expect(silverIntegrationAppointmentsEnabled(currentState))
         .toBe(false);
     });
+
+    it('will be false if silverIntegrations.secondaryAppointments is undefined', () => {
+      currentState.rules.silverIntegrations.secondaryAppointments = undefined;
+      expect(silverIntegrationAppointmentsEnabled(currentState))
+        .toBe(false);
+    });
   });
 
-  each([
-    [['pkb', 'pkbCie'], ['pkb', 'pkbCie'], true],
-    [[], ['pkb', 'pkbCie'], true],
-    [['pkb', 'pkbCie'], [], true],
-    [['pkbCie'], ['pkbCie'], true],
-    [['pkb', 'pkbCie'], [], true],
-    [[], [], false],
-  ]).describe('Silver Integration My Record Hub', (
-    providerCarePlans, providerHealthTrackers, expectedResult,
-  ) => {
+  describe('Silver Integration Messages', () => {
+    const { silverIntegrationMessagesEnabled } = getters;
+
+    it('will be true if silverIntegrations.messages is populated', () => {
+      currentState.rules.silverIntegrations.messages = ['pkb', 'pkbCie'];
+      expect(silverIntegrationMessagesEnabled(currentState))
+        .toBe(true);
+    });
+
+    it('will be false if silverIntegrations.messages is empty', () => {
+      currentState.rules.silverIntegrations.messages = [];
+      expect(silverIntegrationMessagesEnabled(currentState))
+        .toBe(false);
+    });
+
+    it('will be false if silverIntegrations.messages is undefined', () => {
+      currentState.rules.silverIntegrations.messages = undefined;
+      expect(silverIntegrationMessagesEnabled(currentState))
+        .toBe(false);
+    });
+  });
+
+  describe('Silver Integration My Record Hub', () => {
     const { myRecordHubEnabled } = getters;
 
-    it(`will be ${expectedResult} if carePlans is ${providerCarePlans} or 
-    HealthTrackers is ${providerHealthTrackers}`, () => {
+    it.each([
+      [true, ['pkb', 'pkbCie'], ['pkb', 'pkbCie']],
+      [true, [], ['pkb', 'pkbCie']],
+      [true, ['pkb', 'pkbCie'], []],
+      [true, ['pkbCie'], ['pkbCie']],
+      [true, ['pkb', 'pkbCie'], []],
+      [false, [], []],
+      [false, undefined, undefined],
+    ])('will be %s if carePlans is %s and HealthTrackers is %s', (expectedResult, providerCarePlans, providerHealthTrackers) => {
       currentState.rules.silverIntegrations.carePlans = providerCarePlans;
       currentState.rules.silverIntegrations.healthTrackers = providerHealthTrackers;
       expect(myRecordHubEnabled(currentState))

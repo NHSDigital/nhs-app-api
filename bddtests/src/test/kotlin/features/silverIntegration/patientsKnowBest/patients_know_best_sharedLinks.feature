@@ -2,6 +2,8 @@
 @patientsKnowBest
 Feature: Patients Know Best Shared Links
 
+  # P5 notes - the more page is not available to P5 users, preventing them from accessing any silver integration shared links jump offs.
+
   Scenario: A user navigates to PKB shared links and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Shared Links from Patients Know Best

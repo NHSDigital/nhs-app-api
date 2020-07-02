@@ -63,7 +63,7 @@ import sjrIf from '@/lib/sjrIf';
 
 const loadData = async (store) => {
   store.dispatch('repeatPrescriptionCourses/init');
-  if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
+  if (sjrIf({ $store: store, journey: 'nominatedPharmacy' })) {
     store.dispatch('nominatedPharmacy/clearInterruptBackTo');
 
     if (store.state.nominatedPharmacy.hasLoaded === false) {

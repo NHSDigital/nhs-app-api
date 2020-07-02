@@ -1,4 +1,4 @@
-import get from 'lodash/fp/get';
+import { get, getOr } from 'lodash/fp';
 import { getterNames, mutationNames } from './constants';
 
 const {
@@ -22,6 +22,7 @@ const {
   NOTIFICATIONS_ENABLED,
   SILVER_INTEGRATION_ENABLED,
   SILVER_INTEGRATION_APPOINTMENTS_ENABLED,
+  SILVER_INTEGRATION_MESSAGES_ENABLED,
   MY_RECORD_HUB_ENABLED,
   DOCUMENTS_ENABLED,
   IM1MESSAGING_ENABLED,
@@ -96,14 +97,17 @@ export default {
     return get('rules.notifications')(state);
   },
   [SILVER_INTEGRATION_ENABLED](state) {
-    return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
+    return ({ provider, serviceType }) => getOr([], `rules.silverIntegrations.${serviceType}`, state).includes(provider);
   },
   [SILVER_INTEGRATION_APPOINTMENTS_ENABLED](state) {
-    return get('rules.silverIntegrations.secondaryAppointments')(state).length > 0;
+    return get('rules.silverIntegrations.secondaryAppointments.length')(state) > 0;
+  },
+  [SILVER_INTEGRATION_MESSAGES_ENABLED](state) {
+    return get('rules.silverIntegrations.messages.length')(state) > 0;
   },
   [MY_RECORD_HUB_ENABLED](state) {
-    return get('rules.silverIntegrations.carePlans')(state).length > 0 ||
-      get('rules.silverIntegrations.healthTrackers')(state).length > 0;
+    return get('rules.silverIntegrations.carePlans.length')(state) > 0 ||
+      get('rules.silverIntegrations.healthTrackers.length')(state) > 0;
   },
   [DOCUMENTS_ENABLED](state) {
     return get('rules.documents')(state);

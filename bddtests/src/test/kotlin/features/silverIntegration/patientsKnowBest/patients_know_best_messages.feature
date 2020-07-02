@@ -2,6 +2,15 @@
 @patientsKnowBest
 Feature: Patients Know Best Messages
 
+  # P5 notes - P5 users are able to access the messaging hub page directly, but should not see any silver integration messaging jump offs
+
+  Scenario: A user with proof level 5 cannot see the menu item 'Messages and online consultations' on the more page
+    Given I am a user with proof level 5 who can view Messages and Online Consultations from Patients Know Best
+    And I am logged in
+    And I navigate to the Messages hub page
+    Then the Messages Hub page is displayed
+    And the link to Messages and consultations is not available on the Messages Hub page
+
   Scenario: A user navigates to PKB messages and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Patients Know Best
@@ -17,9 +26,7 @@ Feature: Patients Know Best Messages
   Scenario: A user without access to PKB cannot see the menu item 'Messages and online consultations' on the more page
     Given I am a user who cannot view Messages and Online Consultations from Patients Know Best
     And I am logged in
-    And I navigate to the More page
-    Then I am on the More Page
-    And I click the Messages link on the More page
+    And I navigate to the Messages hub page
     And the Messages Hub page is displayed
     And the link to Messages and consultations is not available on the Messages Hub page
 
