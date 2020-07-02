@@ -14,22 +14,22 @@ namespace NHSOnline.Backend.Auditing
 
         public RepositoryDbAuditSinkConfiguration(IConfiguration configuration, ILogger<RepositoryDbAuditSinkConfiguration> logger)
         {
-            ConnectionString = configuration.GetOrThrow("AUDIT_MONGO_CONNECTION_STRING", logger);
+            ConnectionString = configuration.GetOrThrow("MONGO_CONNECTION_STRING", logger);
             DatabaseName = configuration.GetOrThrow("AUDIT_MONGO_DATABASE_NAME", logger);
             CollectionName = configuration.GetOrThrow("AUDIT_MONGO_DATABASE_COLLECTION", logger);
         }
 
         public void Validate()
         {
-            if (ConnectionString == null)
+            if (string.IsNullOrWhiteSpace(ConnectionString))
             {
                 throw new ConfigurationNotFoundException(nameof(ConnectionString));
             }
-            if (DatabaseName == null)
+            if (string.IsNullOrWhiteSpace(DatabaseName))
             {
                 throw new ConfigurationNotFoundException(nameof(DatabaseName));
             }
-            if (CollectionName == null)
+            if (string.IsNullOrWhiteSpace(CollectionName))
             {
                 throw new ConfigurationNotFoundException(nameof(CollectionName));
             }

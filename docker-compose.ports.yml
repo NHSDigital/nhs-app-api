@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
 
-  nhsonline.mongodb:
+  mongodb.bitraft.io:
     ports:
       - "27017:27017"
 

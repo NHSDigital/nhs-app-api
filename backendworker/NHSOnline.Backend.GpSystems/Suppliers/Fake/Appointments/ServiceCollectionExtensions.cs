@@ -10,9 +10,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
             services.AddTransient<FakeAppointmentsService>();
             services.AddTransient<FakeAppointmentsValidationService>();
 
-            services.AddTransient<DefaultAppointmentsBehaviour>();
-            services.AddTransient<DefaultAppointmentSlotsBehaviour>();
-
             return services;
         }
     }

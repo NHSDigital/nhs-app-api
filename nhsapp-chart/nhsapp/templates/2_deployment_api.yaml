@@ -166,6 +166,8 @@ spec:
         {{- end }}
         - name: KNOWNSERVICES_PATH
           value: "/app/config/KnownServices.json"
+        - name: FAKE_GP_SUPPLIER_CONFIG_PATH
+          value: "/app/FakeGpSupplierConfig.yml"
         - name: NOMINATED_PHARMACY_ENABLED
           value: "{{ $.Values.nominatedpharmacyEnabled }}"
         - name: PHARMACY_API_RESULT_LIMIT
@@ -351,11 +353,6 @@ spec:
         - name: ASPNETCORE_HOSTINGSTARTUPASSEMBLIES
           value: "Microsoft.ApplicationInsights.Profiler.AspNetCore"
         {{- end }}
-        - name: AUDIT_MONGO_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
         - name: AUDIT_MONGO_DATABASE_NAME
           {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
@@ -364,6 +361,18 @@ spec:
           {{- end }}
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.api.mongoDatabaseAuditCollection }}
+        - name: AUDIT_MONGO_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
+          {{- else }}
+          value: {{ $.Values.global.environment }}-mongo
+          {{- end }}
+        - name: FAKE_GP_USERS_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
+          {{- else }}
+          value: {{ $.Values.global.environment }}-mongo
+          {{- end }}
         - name: VERSION_TAG
           value: "{{ $.Values.api.image_tag }}"
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.organDonationStubbed)) }}

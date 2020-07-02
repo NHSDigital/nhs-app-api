@@ -8,7 +8,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage
         {
             services.AddTransient<FakeLinkageService>();
             services.AddTransient<FakeLinkageValidationService>();
-            services.AddTransient<DefaultLinkageBehaviour>();
 
             return services;
         }

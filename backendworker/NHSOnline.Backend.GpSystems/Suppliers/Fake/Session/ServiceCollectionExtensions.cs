@@ -8,8 +8,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
         {
             services.AddTransient<FakeSessionService>();
             services.AddTransient<FakeSessionExtendService>();
-            services.AddTransient<DefaultSessionBehaviour>();
-            services.AddTransient<DefaultSessionExtendBehaviour>();
 
             return services;
         }
@@ -17,7 +15,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
         public static IServiceCollection RegisterFakeCidSessionServices(this IServiceCollection services)
         {
             services.AddTransient<FakeSessionService>();
-            services.AddTransient<DefaultSessionBehaviour>();
             return services;
         }
     }

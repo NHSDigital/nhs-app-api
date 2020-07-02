@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage
@@ -26,8 +27,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage
 
             try
             {
-                var fakeUser = FindUser(getLinkageRequest.NhsNumber);
-                return await fakeUser.LinkageBehaviour.GetLinkageKey(getLinkageRequest);
+                var fakeUser = await FindUser(getLinkageRequest.NhsNumber);
+                return await fakeUser.LinkageAreaBehaviour.GetLinkageKey(getLinkageRequest);
             }
             catch (Exception e)
             {

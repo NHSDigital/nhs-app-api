@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             // Act
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(Supplier.Emis);
-                
+
             // Assert
             gpSystem.Should().BeOfType<EmisGpSystem>();
         }
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             // Act
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(Supplier.Tpp);
-                
+
             // Assert
             gpSystem.Should().BeOfType<TppGpSystem>();
         }
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
         {
             // Act
             var act = new Action(() => _gpSystemFactory.CreateGpSystem((Supplier) (-1)));
-                
+
             // Assert
             act.Should().Throw<UnknownSupplierException>();
         }

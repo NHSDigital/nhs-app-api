@@ -7,7 +7,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.PatientRecord
         public static IServiceCollection RegisterFakePatientRecordServices(this IServiceCollection services)
         {
             services.AddTransient<FakePatientRecordService>();
-            services.AddTransient<DefaultPatientRecordBehaviour>();
 
             return services;
         }

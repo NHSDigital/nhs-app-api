@@ -3,6 +3,8 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi
@@ -16,13 +18,14 @@ namespace NHSOnline.Backend.PfsApi
 
         public static IConfigurationRoot BuildConfiguration(string[] args)
         {
-            var environment = Environment.GetEnvironmentVariable("KNOWNSERVICES_PATH");
+            var knownServicesConfigPath = EnvironmentExtensions.GetOrThrow("KNOWNSERVICES_PATH");
 
             return new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"{environment}", optional: false, reloadOnChange: false)
+                .AddJsonFile($"{knownServicesConfigPath}", optional: false, reloadOnChange: false)
+                .AddFakeGpConfigurationFile()
                 .Build();
         }
 

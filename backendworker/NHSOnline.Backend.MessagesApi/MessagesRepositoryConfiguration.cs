@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.MessagesApi
 
         public MessagesRepositoryConfiguration(IConfiguration configuration, ILogger<MessagesRepositoryConfiguration> logger)
         {
-            ConnectionString = configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", logger);
+            ConnectionString = configuration.GetOrThrow("MONGO_CONNECTION_STRING", logger);
             DatabaseName = configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_NAME", logger);
             CollectionName = configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION", logger);
         }

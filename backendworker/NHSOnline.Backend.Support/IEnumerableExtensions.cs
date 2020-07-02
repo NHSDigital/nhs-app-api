@@ -57,6 +57,13 @@ namespace NHSOnline.Backend.Support
             }
         }
 
+        public static void ForEach<T>(
+            this IEnumerable<T> self,
+            Action<T> handler)
+        {
+            self?.ForEachWithIndex((v, _) => handler(v));
+        }
+
         public static void ForEachWithIndex<T>(
             this IEnumerable<T> self,
             Action<T, int> handler)

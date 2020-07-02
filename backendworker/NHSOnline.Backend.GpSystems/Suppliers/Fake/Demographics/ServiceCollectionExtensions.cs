@@ -7,7 +7,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics
         public static IServiceCollection RegisterFakeDemographicsServices(this IServiceCollection services)
         {
             services.AddTransient<FakeDemographicsService>();
-            services.AddTransient<DefaultDemographicsBehaviour>();
 
             return services;
         }

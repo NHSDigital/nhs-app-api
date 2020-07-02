@@ -5,6 +5,7 @@ using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Models.Im1Connection;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -36,8 +37,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection
             {
                 var token = connectionToken.DeserializeJson<FakeConnectionToken>();
 
-                var fakeUser = FindUser(token.NhsNumber);
-                return await fakeUser.Im1ConnectionBehaviour.Verify(connectionToken, odsCode);
+                var fakeUser = await FindUser(token.NhsNumber);
+                return await fakeUser.Im1ConnectionAreaBehaviour.Verify(connectionToken, odsCode);
             }
             catch (Exception e)
             {
@@ -68,9 +69,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection
                     var connectionToken = cachedConnectionToken.ValueOrFailure();
                     _logger.LogDebug("IM1 connection token found in cache.");
 
-                    var fakeUser = FindUser(connectionToken.NhsNumber);
+                    var fakeUser = await FindUser(connectionToken.NhsNumber);
 
-                    return await fakeUser.Im1ConnectionBehaviour.Register(request, connectionToken);
+                    return await fakeUser.Im1ConnectionAreaBehaviour.Register(request, connectionToken);
                 }
 
                 _logger.LogDebug("IM1 connection token not found in cache.");

@@ -12,6 +12,7 @@
     <PackageReference Include="Open-XML-SDK" Version="2.9.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.0" />
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
+    <PackageReference Include="Yisoft.AspNetCore.Configuration.Yaml" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TppApiErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Remove="Suppliers\Fake\Users\Communal\**" />
+    <Compile Remove="Suppliers\Fake\Users\eRS\**" />
+    <Compile Remove="Suppliers\Fake\Users\PatientsKnowBest\**" />
+    <Compile Remove="Suppliers\Fake\Users\Substrakt\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +47,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TppApiErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Remove="Suppliers\Fake\Users\Communal\**" />
+    <EmbeddedResource Remove="Suppliers\Fake\Users\eRS\**" />
+    <EmbeddedResource Remove="Suppliers\Fake\Users\PatientsKnowBest\**" />
+    <EmbeddedResource Remove="Suppliers\Fake\Users\Substrakt\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,6 +90,10 @@
     <None Update="Suppliers\Vision\PublicKeys\vision-test-env.crt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Remove="Suppliers\Fake\Users\Communal\**" />
+    <None Remove="Suppliers\Fake\Users\eRS\**" />
+    <None Remove="Suppliers\Fake\Users\PatientsKnowBest\**" />
+    <None Remove="Suppliers\Fake\Users\Substrakt\**" />
   </ItemGroup>
 
 </Project>

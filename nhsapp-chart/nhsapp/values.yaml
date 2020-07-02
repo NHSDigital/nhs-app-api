@@ -329,6 +329,8 @@ api:
       value: consent
     - name: IM1CACHE_MONGO_DATABASE_COLLECTION
       value: im1cache
+    - name: FAKE_GP_USERS_DATABASE_COLLECTION
+      value: fake_gp_users
     - name: USERINFO_API_BASE_URL
       value: http://api.local.bitraft.io:8091/v1/api/me/info
 
@@ -359,6 +361,8 @@ cid:
       value: session
     - name: IM1CACHE_MONGO_DATABASE_COLLECTION
       value: im1cache
+    - name: FAKE_GP_USERS_DATABASE_COLLECTION
+      value: fake_gp_users
 
 logger:
   containerPort: 8080

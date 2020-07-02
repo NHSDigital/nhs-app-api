@@ -1,0 +1,431 @@
+---
+##
+# Config for Fake GP Supplier
+#
+# Note: Users are grouped by purpose and keyed by NHS Number
+##
+defaultUsers:
+  # users in this group are cached in mongo and can be edited in real time
+  dynamic:
+    9658218989:
+      userId: d27fd924-f86f-4692-acac-c8b08678eec8
+      emailAddress: testuserlive+6@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Mina
+      familyName: Leech
+      dateOfBirth: "1918-09-19T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9658218997"
+
+    9658218997:
+      userId: a69413e0-a66d-4840-babc-f137b6ceae72
+      emailAddress: testuserlive+7@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Lauren
+      familyName: Corr
+      dateOfBirth: "1944-12-28T00:00:00"
+      sex: Female
+
+    9690869094:
+      userId: 9fb87c98-a5b1-4e74-91fa-7bbdb5a26d9f
+      emailAddress: testuserlive+18@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Adam
+      familyName: Smith
+      dateOfBirth: "1976-07-16T00:00:00"
+      sex: Male
+
+    9690869108:
+      userId: 86b905c2-415d-4820-9f08-e84e145a4d43
+      emailAddress: testuserlive+19@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Eve
+      familyName: Smith
+      dateOfBirth: "1977-05-30T00:00:00"
+      sex: Female
+
+    9690869116:
+      userId: cf8daa08-359d-43b4-af62-9aebe2364f12
+      emailAddress: testuserlive+20@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: May
+      familyName: Smith
+      dateOfBirth: "1974-04-13T00:00:00"
+      sex: Female
+
+  communal:
+    9686368973:
+      userId: 9e39ad97-ec0d-457b-9947-34ec863fa100
+      emailAddress: testuserlive@demo.signin.nhs.uk
+      odsCode: C83615
+      givenName: Mona
+      familyName: Millar
+      dateOfBirth: "1968-02-12T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9686368906"
+
+    9686368906:
+      userId: 2fc256ae-4044-443f-a83a-5ad5bbc097df
+      emailAddress: testuserlive+1@demo.signin.nhs.uk
+      odsCode: C83615
+      givenName: iain
+      familyName: Hughes
+      dateOfBirth: "1942-02-01T00:00:00"
+      sex: Male
+
+    9658218865:
+      userId: b9fd14bd-0a86-4349-909a-dfd904859e1d
+      emailAddress: testuserlive+2@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Garth
+      familyName: Wright
+      dateOfBirth: "1933-11-14T00:00:00"
+      sex: Male
+      linkedAccountsNhsNumbers:
+        - "9658218873"
+        - "9658218881"
+        - "9658218903"
+
+    9658218873:
+      userId: 322226b5-b41d-4c6a-9269-1b4e20fb3a25
+      emailAddress: testuserlive+3@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Mike
+      familyName: Meakin
+      dateOfBirth: "1927-06-19T00:00:00"
+      sex: Male
+
+    9658218881:
+      userId: 7854b567-5239-47d4-baeb-4773903a9ad4
+      emailAddress: testuserlive+4@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Kevin
+      familyName: Leach
+      dateOfBirth: "1921-08-08T00:00:00"
+      sex: Male
+
+    9658218903:
+      userId: 11719623-7a50-4ec0-8a58-67ad08de8834
+      emailAddress: testuserlive+5@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Arnold
+      familyName: Olley
+      dateOfBirth: "1939-07-21T00:00:00"
+      sex: Male
+      behaviours:
+        appointmentSlots: BadGateway
+
+    9658219004:
+      userId: 038f4c5c-5cfb-4c84-bb2a-9a6be9876fb8
+      emailAddress: testuserlive+8@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Cassie
+      familyName: Bray
+      dateOfBirth: "1939-06-09T00:00:00"
+      sex: Female
+
+    9658219012:
+      userId: a3d2f4c6-19cf-4442-8ac4-6248fcece2b2
+      emailAddress: testuserlive+9@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Kim
+      familyName: Grigg
+      dateOfBirth: "1925-10-05T00:00:00"
+      sex: Male
+
+    9658220142:
+      userId: 99598613-c04a-436e-bad4-8c6c042505dc
+      emailAddress: testuserlive+11@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Emilie
+      familyName: Kewn
+      dateOfBirth: "1999-10-03T00:00:00"
+      sex: Female
+
+    9658220150:
+      userId: b632a0b7-8180-410c-a146-6daef5a74fad
+      emailAddress: testuserlive+12@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Amanda
+      familyName: Currie
+      dateOfBirth: "1964-02-13T00:00:00"
+      sex: Female
+
+    9690869035:
+      userId: 0fac7884-2c44-48bf-a9d4-4c3530af0826
+      emailAddress: testuserlive+13@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Michael Senior
+      familyName: Smith
+      dateOfBirth: "1946-07-04T00:00:00"
+      sex: Male
+
+    9690869043:
+      userId: e40dbd60-93fb-4171-bb8c-3ca8baf9e2c2
+      emailAddress: testuserlive+14@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Michael Junior
+      familyName: Smith
+      dateOfBirth: "1948-04-18T00:00:00"
+      sex: Male
+
+    9690869051:
+      userId: 3415448d-e45a-4466-a176-9c4830717c25
+      emailAddress: testuserlive+15@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Sam
+      familyName: Smith
+      dateOfBirth: "1989-09-24T00:00:00"
+      sex: Male
+
+    9690869078:
+      userId: 7d9c0f0b-6a5d-452e-a161-bbc61a84098e
+      emailAddress: testuserlive+16@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Boris
+      familyName: Smith
+      dateOfBirth: "2009-02-13T00:00:00"
+      sex: Male
+
+    9690869086:
+      userId: a4b91b6e-4793-4660-8d2a-745e1e888f8b
+      emailAddress: testuserlive+17@demo.signin.nhs.uk
+      odsCode: A20047
+      givenName: Jeremiah
+      familyName: Smith
+      dateOfBirth: "2017-09-04T00:00:00"
+      sex: Male
+
+  ers:
+    5900110915:
+      userId: be309d68-f401-4031-8aaf-f9c60d190bd9
+      emailAddress: testpatientf8d66+garfield@gmail.com
+      odsCode: A20047
+      givenName: Garfield
+      familyName: Nicholsen
+      dateOfBirth: "1995-12-31T00:00:00"
+      sex: Male
+
+    9462767270:
+      userId: 291531e6-92f5-49be-852c-365f229d17e0
+      emailAddress: testpatientf8d66+kieran@gmail.com
+      odsCode: A20047
+      givenName: Kieran
+      familyName: Logan
+      dateOfBirth: "1937-05-07T00:00:00"
+      sex: Male
+
+    9462767386:
+      userId: b6e52eb8-39ed-4d83-9bd2-92f926ea33b1
+      emailAddress: testpatientf8d66+sheri@gmail.com
+      odsCode: A20047
+      givenName: Sheri
+      familyName: Wrench
+      dateOfBirth: "1939-03-31T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "5900110915"
+
+  pkb:
+    9990555230:
+      userId: 3621c3e4-74d5-4a5f-a881-99373b070971
+      emailAddress: onboarding.nhsapp+pkb.user1@gmail.com
+      odsCode: F00001
+      givenName: Freya
+      familyName: Stephenson
+      dateOfBirth: "1945-02-12T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9990555265"
+
+    9990555265:
+      userId: 6d5d0f04-f163-4c0b-9fa8-91950f9a608e
+      emailAddress: onboarding.nhsapp+pkb.user2@gmail.com
+      odsCode: F00002
+      givenName: isaac
+      familyName: Johnson
+      dateOfBirth: "1955-02-01T00:00:00"
+      sex: Male
+
+    9990555281:
+      userId: 1477395f-bd65-46e9-b602-eb86046e1e93
+      emailAddress: onboarding.nhsapp+pkb.user3@gmail.com
+      odsCode: F00002
+      givenName: Jessica
+      familyName: Edwards
+      dateOfBirth: "1967-11-14T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9990555346"
+        - "9990555370"
+
+    9990555346:
+      userId: 2d29d98b-a283-407c-8449-73872e2bd764
+      emailAddress: onboarding.nhsapp+pkb.user4@gmail.com
+      odsCode: F00002
+      givenName: Millie
+      familyName: Green
+      dateOfBirth: "1943-06-19T00:00:00"
+      sex: Female
+
+    9990555370:
+      userId: 905c9df3-b9ce-4b36-b0cc-c2ee06ddfaa4
+      emailAddress: onboarding.nhsapp+pkb.user5@gmail.com
+      odsCode: F00002
+      givenName: Laurie
+      familyName: Jobson
+      dateOfBirth: "1989-08-08T00:00:00"
+      sex: Female
+
+    9990555389:
+      userId: bd1b5427-0a96-42cd-92cd-8e428c38be22
+      emailAddress: onboarding.nhsapp+pkb.user6@gmail.com
+      odsCode: F00002
+      givenName: Ada
+      familyName: Jones
+      dateOfBirth: "1978-07-21T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9990546762"
+
+    9990546762:
+      userId: 6fdef841-6f29-463b-9200-5ad0e7e9c70f
+      emailAddress: onboarding.nhsapp+pkb.user7@gmail.com
+      odsCode: F00001
+      givenName: Charlie
+      familyName: Smithson
+      dateOfBirth: "1954-09-19T00:00:00"
+      sex: Male
+
+    9990546770:
+      userId: a7ae6d5c-3920-4681-8e11-cd17b0aeb455
+      emailAddress: onboarding.nhsapp+pkb.user8@gmail.com
+      odsCode: F00001
+      givenName: Florance
+      familyName: Bennett
+      dateOfBirth: "1944-12-28T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9990551332"
+        - "9990551359"
+
+    9990551332:
+      userId: 38c110c2-2579-4794-ac54-caa64d1cf82d
+      emailAddress: onboarding.nhsapp+pkb.user9@gmail.com
+      odsCode: F00001
+      givenName: Toby
+      familyName: Day
+      dateOfBirth: "1939-06-09T00:00:00"
+      sex: Male
+
+    9990551359:
+      userId: fbac45f2-b377-496c-8395-6c9625fe5df8
+      emailAddress: onboarding.nhsapp+pkb.user10@gmail.com
+      odsCode: F00001
+      givenName: Jacob
+      familyName: Upton
+      dateOfBirth: "1925-11-02T00:00:00"
+      sex: Male
+
+  substrakt:
+    9990555095:
+      userId: e43cd1fe-7d42-4d5e-a092-224a9ae5a9fc
+      emailAddress: onboarding.nhsapp+substrakt.user1@gmail.com
+      odsCode: F00003
+      givenName: Henry
+      familyName: Carter
+      dateOfBirth: "1999-05-07T00:00:00"
+      sex: Male
+      linkedAccountsNhsNumbers:
+        - "9990555141"
+
+    9990555141:
+      userId: 9a1b6e74-81f6-492a-8106-903b6c06cf8c
+      emailAddress: onboarding.nhsapp+substrakt.user2@gmail.com
+      odsCode: F00003
+      givenName: Otis
+      familyName: Swift
+      dateOfBirth: "1964-02-13T00:00:00"
+      sex: Male
+
+    9990555168:
+      userId: e6fe3236-21dd-4f47-9d18-c9d5768b0c66
+      emailAddress: onboarding.nhsapp+substrakt.user3@gmail.com
+      odsCode: F00004
+      givenName: Rudy
+      familyName: Kilby
+      dateOfBirth: "1946-08-04T00:00:00"
+      sex: Male
+      linkedAccountsNhsNumbers:
+        - "9990555176"
+        - "9990555192"
+
+    9990555176:
+      userId: 08b05eb1-c5d7-4336-a8bc-914a24118ecc
+      emailAddress: onboarding.nhsapp+substrakt.user4@gmail.com
+      odsCode: F00004
+      givenName: Harriet
+      familyName: Slack
+      dateOfBirth: "1948-04-18T00:00:00"
+      sex: Female
+
+    9990555192:
+      userId: f43115c4-5218-4f9c-a97a-f307f2a421e5
+      emailAddress: onboarding.nhsapp+substrakt.user5@gmail.com
+      odsCode: F00004
+      givenName: Mia
+      familyName: Mcelroy
+      dateOfBirth: "2001-09-24T00:00:00"
+      sex: Female
+
+    9990546703:
+      userId: 80c95faa-79a6-4f0f-aad6-7dca4d89a10e
+      emailAddress: onboarding.nhsapp+substrakt.user6@gmail.com
+      odsCode: F00003
+      givenName: Keira
+      familyName: Lee
+      dateOfBirth: "2000-02-13T00:00:00"
+      sex: Female
+      linkedAccountsNhsNumbers:
+        - "9990546711"
+
+    9990546711:
+      userId: a9f452af-c94f-4abb-b4fa-d912a05906b7
+      emailAddress: onboarding.nhsapp+substrakt.user7@gmail.com
+      odsCode: F00003
+      givenName: James
+      familyName: Taylor
+      dateOfBirth: "2017-06-04T00:00:00"
+      sex: Male
+
+    9990546665:
+      userId: 8da96e79-f991-4dbf-a205-0377556d0dd6
+      emailAddress: onboarding.nhsapp+substrakt.user8@gmail.com
+      odsCode: F00003
+      givenName: Andy
+      familyName: Murs
+      dateOfBirth: "1976-07-19T00:00:00"
+      sex: Male
+      linkedAccountsNhsNumbers:
+        - "9990555443"
+        - "9990555486"
+
+    9990555443:
+      userId: 3fa39087-1823-49f0-b47c-2b626f61d8bb
+      emailAddress: onboarding.nhsapp+substrakt.user9@gmail.com
+      odsCode: F00004
+      givenName: Shaun
+      familyName: Blunt
+      dateOfBirth: "1977-05-04T00:00:00"
+      sex: Male
+
+    9990555486:
+      userId: c24d32e4-290c-4916-a856-8b9426c7bfb0
+      emailAddress: onboarding.nhsapp+substrakt.user10@gmail.com
+      odsCode: F00004
+      givenName: Claire
+      familyName: March
+      dateOfBirth: "1974-04-19T00:00:00"
+      sex: Female

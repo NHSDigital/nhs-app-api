@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -25,8 +26,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
 
             try
             {
-                var fakeUser = FindUser(nhsNumber);
-                return await fakeUser.SessionBehaviour.Create(connectionToken, odsCode, nhsNumber, fakeUser);
+                var fakeUser = await FindUser(nhsNumber);
+                return await fakeUser.SessionAreaBehaviour.Create(connectionToken, odsCode, nhsNumber, fakeUser);
             }
             catch (UnknownFakeUserException)
             {
@@ -51,8 +52,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
 
             try
             {
-                var fakeUser = FindUser(gpUserSession.NhsNumber);
-                return await fakeUser.SessionBehaviour.Logoff(gpUserSession);
+                var fakeUser = await FindUser(gpUserSession.NhsNumber);
+                return await fakeUser.SessionAreaBehaviour.Logoff(gpUserSession);
             }
             catch (Exception e)
             {

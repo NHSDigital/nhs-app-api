@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems
         {
             var logger = _loggerFactory.CreateLogger<MongoServiceConfigurationModule>();
 
-            var connectionString = configuration.GetOrThrow("AUDIT_MONGO_CONNECTION_STRING", logger);
+            var connectionString = configuration.GetOrThrow("MONGO_CONNECTION_STRING", logger);
 
             var mongoUrl = new MongoUrl(connectionString);
             var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);

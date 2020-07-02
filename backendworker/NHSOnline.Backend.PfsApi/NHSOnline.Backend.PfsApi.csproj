@@ -12,6 +12,7 @@
     <PackageReference Include="Hl7.Fhir.STU3" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
     <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.0.0-beta5" />
+    <PackageReference Include="Yisoft.AspNetCore.Configuration.Yaml" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,9 @@
 
   <ItemGroup>
     <Content Include="..\Rotativa\**\*" LinkBase="Rotativa\">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FakeGpSupplierConfig.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

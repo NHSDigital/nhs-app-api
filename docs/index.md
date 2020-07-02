@@ -26,6 +26,7 @@
 
 * [Known Services](Functionality-Documentation/known-services.md)
 * [Silver Integration Jump-Off Creation](Functionality-Documentation/silver-integration-jump-off-creation.md)
+* [Fake GP Supplier](Functionality-Documentation/fake-gp-supplier.md)
 
 ## How-tos
 

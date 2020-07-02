@@ -73,12 +73,7 @@ spec:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
-        - name: DEVICES_MONGO_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
-        - name: AUDIT_MONGO_CONNECTION_STRING
+        - name: MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}

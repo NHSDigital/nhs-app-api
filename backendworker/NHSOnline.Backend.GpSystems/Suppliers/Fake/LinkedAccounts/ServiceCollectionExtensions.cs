@@ -7,7 +7,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
         public static IServiceCollection RegisterFakeLinkedAccountsServices(this IServiceCollection services)
         {
             services.AddTransient<FakeLinkedAccountsService>();
-            services.AddTransient<DefaultLinkedAccountsBehaviour>();
 
             return services;
         }

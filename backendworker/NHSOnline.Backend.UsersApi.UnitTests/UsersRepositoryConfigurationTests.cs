@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
     {
         private Mock<IConfiguration> _mockConfiguration;
 
-        private const string ConnectionStringKey = "DEVICES_MONGO_CONNECTION_STRING";
+        private const string ConnectionStringKey = "MONGO_CONNECTION_STRING";
         private const string DatabaseKey = "USERS_MONGO_DATABASE_NAME";
         private const string CollectionKey = "USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION";
 

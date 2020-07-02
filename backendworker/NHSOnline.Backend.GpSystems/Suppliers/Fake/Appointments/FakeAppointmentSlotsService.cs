@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -26,8 +27,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
 
             try
             {
-                var fakeUser = FindUser(gpLinkedAccountModel);
-                return await fakeUser.AppointmentSlotsBehaviour.GetSlots(gpLinkedAccountModel, dateRange);
+                var fakeUser = await FindUser(gpLinkedAccountModel);
+                return await fakeUser.AppointmentSlotsAreaBehaviour.GetSlots(gpLinkedAccountModel, dateRange);
             }
             catch (Exception e)
             {

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -25,8 +26,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics
 
             try
             {
-                var fakeUser = FindUser(gpLinkedAccountModel);
-                return await fakeUser.DemographicsBehaviour.GetDemographics(gpLinkedAccountModel, fakeUser);
+                var fakeUser = await FindUser(gpLinkedAccountModel);
+                return await fakeUser.DemographicsAreaBehaviour.GetDemographics(gpLinkedAccountModel, fakeUser);
 
             }
             catch (Exception e)

@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.UserInfoApi
 
         public UserAndInfoRepositoryConfiguration(IConfiguration configuration, ILogger<UserAndInfoRepositoryConfiguration> logger)
         {
-            ConnectionString = configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", logger);
+            ConnectionString = configuration.GetOrThrow("MONGO_CONNECTION_STRING", logger);
             DatabaseName = configuration.GetOrThrow("USERINFO_MONGO_DATABASE_NAME", logger);
             CollectionName = configuration.GetOrThrow("USERINFO_MONGO_DATABASE_COLLECTION", logger);
         }

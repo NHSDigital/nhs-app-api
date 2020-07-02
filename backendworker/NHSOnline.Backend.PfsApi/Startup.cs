@@ -28,6 +28,7 @@ using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using Wkhtmltopdf.NetCore;
@@ -166,6 +167,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddOptions();
 
             services.Configure<KnownServices>(Configuration);
+            services.RegisterFakeUserConfiguration(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

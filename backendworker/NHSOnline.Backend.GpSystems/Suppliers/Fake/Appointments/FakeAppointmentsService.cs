@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -27,8 +28,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
 
             try
             {
-                var fakeUser = FindUser(gpLinkedAccountModel);
-                return await fakeUser.AppointmentsBehaviour.Book(gpLinkedAccountModel, request);
+                var fakeUser = await FindUser(gpLinkedAccountModel);
+                return await fakeUser.AppointmentsAreaBehaviour.Book(gpLinkedAccountModel, request);
             }
             catch (Exception e)
             {
@@ -48,8 +49,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
 
             try
             {
-                var fakeUser = FindUser(gpLinkedAccountModel);
-                return await fakeUser.AppointmentsBehaviour.Cancel(gpLinkedAccountModel, request);
+                var fakeUser = await FindUser(gpLinkedAccountModel);
+                return await fakeUser.AppointmentsAreaBehaviour.Cancel(gpLinkedAccountModel, request);
             }
             catch (Exception e)
             {
@@ -66,8 +67,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
         {
             try
             {
-                var fakeUser = FindUser(gpLinkedAccountModel);
-                return await fakeUser.AppointmentsBehaviour.GetAppointments(gpLinkedAccountModel);
+                var fakeUser = await FindUser(gpLinkedAccountModel);
+                return await fakeUser.AppointmentsAreaBehaviour.GetAppointments(gpLinkedAccountModel);
             }
             catch (Exception e)
             {

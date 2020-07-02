@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             _mongoCollectionMock.VerifyAll();
             result.Should().BeOfType<RepositoryDeleteResult<TestRepositoryRecord>.Deleted>();
         }
-        
+
         [TestMethod]
         public async Task Delete_NotFound()
         {

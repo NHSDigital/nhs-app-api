@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
@@ -16,16 +18,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             _fakeUserRepository = fakeUserRepository;
         }
 
-        protected IFakeUser FindUser(GpLinkedAccountModel gpLinkedAccountModel)
+        protected Task<FakeUser> FindUser(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var session = (FakeUserSession) gpLinkedAccountModel.GpUserSession;
-            return FindUser(session.NhsNumber);
+            var session = gpLinkedAccountModel.GpUserSession as FakeUserSession;
+
+            return FindUser(session?.NhsNumber);
         }
 
-        protected IFakeUser FindUser(string nhsNumber)
+        protected Task<FakeUser> FindUser(string nhsNumber)
         {
-            var user = _fakeUserRepository.Find(nhsNumber);
-            return user;
+            return _fakeUserRepository.Find(nhsNumber);
         }
     }
 }
