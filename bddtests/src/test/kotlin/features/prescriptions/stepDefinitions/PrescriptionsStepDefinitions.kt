@@ -152,9 +152,10 @@ open class PrescriptionsStepDefinitions {
 
     @Given("^the GP System session has expired when viewing prescriptions$")
     fun theGPSystemSessionHasExpired() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
+        var currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         if (currentProvider == null) {
             PrescriptionsDataSetup.initialize(SerenityHelpers.getGpSupplier())
+            currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         }
         PrescriptionsFactory.getForSupplier(currentProvider!!).gpSessionHasExpired()
     }

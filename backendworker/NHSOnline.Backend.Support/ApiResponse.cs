@@ -30,21 +30,7 @@ namespace NHSOnline.Backend.Support
                 }
             }
 
-            return await FormatStringResponse(responseMessage, logger);
-        }
-
-        private static async Task<string> FormatStringResponse(HttpResponseMessage responseMessage, ILogger logger)
-        {
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
-
-            if (string.IsNullOrEmpty(stringResponse))
-            {
-                logger.LogError($"Response with status code {responseMessage.StatusCode} and no body");
-            }
-
-            return stringResponse;
+            return await responseMessage.StringResponse(logger);
         }
     }
 }

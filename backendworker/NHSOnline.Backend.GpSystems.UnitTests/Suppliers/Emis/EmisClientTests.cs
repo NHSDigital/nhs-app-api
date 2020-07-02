@@ -856,6 +856,42 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
+        public async Task PatientMessagePost_EmisReturnsUnauthorised_UnauthorisedExceptionThrown()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+            var createPatientMessage = _fixture.Create<CreatePatientMessage>();
+
+            var expectedRequestContent = new PostMessageRequest(userPatientLinkToken, createPatientMessage);
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("X-API-EndUserSessionId", endUserSessionId),
+                new KeyValuePair<string, string>("X-API-SessionId", sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "messages")
+                .WithContent(JsonConvert.SerializeObject(expectedRequestContent))
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", "Missing or invalid EndUserSessionId");
+
+            // Act
+            Func<Task<EmisApiObjectResponse<MessagePostResponse>>> act = async () => await _systemUnderTest.PatientMessagePost(new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            }, createPatientMessage);
+
+            // Assert
+
+            await act.Should().ThrowAsync<UnauthorisedGpSystemHttpRequestException>();
+        }
+
+        [TestMethod]
         public async Task SessionsEndUserSessionPost_VerifyCustomTimeoutHeaderPresent()
         {
             // Arrange

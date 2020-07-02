@@ -20,10 +20,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         public bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
 
-        internal bool IsUnauthorisedResponse =>
-            StatusCode == HttpStatusCode.Unauthorized ||
-            string.Equals(RawResponse, EmisApiErrorMessages.EmisService_UnauthorisedRequest, StringComparison.Ordinal);
-
         public bool HasInternalErrorCode(EmisApiErrorCode code)
         {
             return StandardErrorResponse?.InternalResponseCode == (int)code;
@@ -45,11 +41,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
             return ExceptionErrorResponse?.Exceptions?.Any(x =>
                 x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
-        }
-
-        public bool HasExceptionWithAnyMessage(string[] messages)
-        {
-            return ExceptionErrorResponse?.Exceptions?.Any(x => messages.Contains(x.Message)) ?? false;
         }
 
         public bool HasForbiddenResponse()
