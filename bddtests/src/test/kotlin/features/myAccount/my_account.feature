@@ -85,4 +85,4 @@ Feature: View My Account Page
       | Login options |
       | Face ID       |
       | Touch ID      |
-      | Fingerprint   |
+      | fingerprint   |
