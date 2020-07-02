@@ -294,6 +294,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.onSessionExpiring.rawValue:
                 viewController.displayExtendSessionDialogue()
                 break
+            case UserContent.displayPageLeaveWarning.rawValue:
+                viewController.displayLeavingPageDialogue()
+                break
             case UserContent.openAppSettings.rawValue:
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
@@ -337,6 +340,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.updateBiometricRegistration.rawValue:
                 let biometricState = UserDefaultsManager.getBiometricAvailability()
                 viewController.handleBiometricStatusChangeRequest(biometricState: biometricState)
+                break
+            case UserContent.dismissPageLeaveWarningDialogue.rawValue:
+                viewController.dismissPageLeaveWarningDialogue()
+                break
+            case UserContent.dismissAllDialogues.rawValue:
+                viewController.dimissAlert()
                 break
             default:
                 break

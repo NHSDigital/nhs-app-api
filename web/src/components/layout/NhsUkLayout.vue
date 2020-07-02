@@ -259,7 +259,6 @@ export default {
         NativeCallbacks.fetchBiometricSpec();
       }
 
-      this.$store.dispatch('loginSettings/nativeLogin');
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
         window.validateSession =

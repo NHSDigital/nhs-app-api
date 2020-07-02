@@ -56,6 +56,7 @@ describe('demographics question', () => {
         EventBus.$emit.mockClear();
         NativeApp.resetPageFocus.mockClear();
       });
+
       it('will update store consent given if isAccepted is true and dispatch getServiceDefinition action', async () => {
         // Arrange
         const $store = defaultStore();
@@ -67,13 +68,13 @@ describe('demographics question', () => {
         await component.vm.demographicsContinueClicked();
 
         // Assert
-        expect($store.dispatch).toHaveBeenCalledTimes(2);
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setDemographicsConsentGiven', true);
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/getServiceDefinition', {
           provider: 'stubs',
           serviceDefinitionId: 'NHS_ADMIN',
         });
       });
+
       each([
         true,
         false,

@@ -142,6 +142,54 @@ class AppDialogsTest {
         Assert.assertNull(ShadowDialog.getLatestDialog())
     }
 
+    @Test
+    fun whenShowPageLeaveWarningDialogueIsCalled_thenMessageIsDisplayedCorrectly() {
+        // Arrange
+        val expectedMessageText =
+                "If you have entered any information, it will not be saved."
+
+        // Act
+        appDialogs.showLeavingPageWarningDialogue({}, {})
+        val pageLeaveWarningDialog = getCurrentActiveAlertDialog()
+        val message = extractAlertDialogMessage(pageLeaveWarningDialog)
+
+        // Assert
+        Assert.assertNotNull(message)
+        Assert.assertEquals(message, expectedMessageText)
+    }
+
+    @Test
+    fun whenShowPageLeaveWarningDialogueIsCalled_AndUserClicksStayOnPage_thenStayOnPageCallbackIsTriggered() {
+        // Arrange
+        val clickTester: ClickTester = mock()
+
+        // Act
+        appDialogs.showLeavingPageWarningDialogue({}, { clickTester.clicked() })
+        val pageLeaveWarningDialog = getCurrentActiveAlertDialog()
+        val stayButton: Button? = pageLeaveWarningDialog.getButton(Dialog.BUTTON_NEGATIVE)
+
+        // Assert
+        Assert.assertNotNull(stayButton)
+        stayButton?.callOnClick()
+        verify(clickTester).clicked()
+    }
+
+    @Test
+    fun whenShowPageLeaveWarningDialogueIsCalled__AndUserClicksLeavePage_thenLeavePageCallbackIsTriggered() {
+        // Arrange
+        val clickTester: ClickTester = mock()
+
+        //Act
+        appDialogs.showLeavingPageWarningDialogue({ clickTester.clicked() }, {})
+        val pageLeaveWarningDialog = getCurrentActiveAlertDialog()
+        val leaveButton: Button? = pageLeaveWarningDialog.getButton(Dialog.BUTTON_POSITIVE)
+
+        // Assert
+        Assert.assertNotNull(leaveButton)
+        leaveButton?.callOnClick()
+        verify(clickTester).clicked()
+    }
+
     private fun extractAlertDialogMessage(alertDialog: AlertDialog): String? {
         val messageTextView: TextView? = alertDialog.findViewById(android.R.id.message)
         Assert.assertNotNull(messageTextView)

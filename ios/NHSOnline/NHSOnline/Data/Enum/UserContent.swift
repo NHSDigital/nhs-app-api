@@ -1,6 +1,7 @@
 enum UserContent: String, CaseIterable {
     case addEventToCalendar = "addEventToCalendar"
     case getNotificationsStatus = "getNotificationsStatus"
+    case displayPageLeaveWarning = "displayPageLeaveWarning"
     case attemptBiometricLogin = "attemptBiometricLogin"
     case clearMenuBarItem = "clearMenuBarItem"
     case goToPage = "goToPage"
@@ -25,4 +26,6 @@ enum UserContent: String, CaseIterable {
     case updateHeaderText = "updateHeaderText"
     case startDownload = "startDownload"
     case updateBiometricRegistration = "updateBiometricRegistration"
+    case dismissPageLeaveWarningDialogue = "dismissPageLeaveWarningDialogue"
+    case dismissAllDialogues = "dismissAllDialogues"
 }

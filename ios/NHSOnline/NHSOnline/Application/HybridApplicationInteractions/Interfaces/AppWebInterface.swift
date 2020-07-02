@@ -40,6 +40,10 @@ class AppWebInterface {
         dispatchEvent(event: "session/extend")
     }
     
+    func leavePage() {
+        dispatchEvent(event: "pageLeaveWarning/leavePage")
+    }
+    
     func logout() {
         dispatchEvent(event: "auth/logout")
     }
@@ -58,6 +62,10 @@ class AppWebInterface {
             }
         """
         dispatchEvent(event: "notifications/authorised", args: response)
+    }
+    
+    func stayOnPage() {
+        dispatchEvent(event: "pageLeaveWarning/stayOnPage")
     }
     
     private func dispatchEvent(event: String, args: String = "") {

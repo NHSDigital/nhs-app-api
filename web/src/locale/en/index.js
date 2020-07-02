@@ -2662,6 +2662,12 @@ export default {
       warningGetMoreTime: 'Stay logged in',
       warningLogOut: 'Log out',
     },
+    pageLeavingWarning: {
+      header: 'Leave this page?',
+      warning: 'If you have entered any information, it will not be saved.',
+      stayButtonText: 'Stay on this page',
+      leaveButtonText: 'Leave this page',
+    },
   },
   careCard: {
     headingPrefix: {

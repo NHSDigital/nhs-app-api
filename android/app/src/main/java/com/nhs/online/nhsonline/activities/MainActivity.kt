@@ -451,6 +451,14 @@ class MainActivity :
         appDialogs.showExtendSessionDialogue(sessionExtendCallback, logoutCallback)
     }
 
+    override fun showLeavingPageWarningDialogue() {
+        logger.info("Entering showLeavingPageWarningDialogue")
+
+        val stayOnPageCallback = { appWebInterface.stayOnPage() }
+        val leavePageCallback = { appWebInterface.leavePage() }
+        appDialogs.showLeavingPageWarningDialogue(stayOnPageCallback, leavePageCallback)
+    }
+
     override fun showProgressDialog() {
         if (progressBarLayout.visibility == GONE) {
             progressBarLayout.visibility = VISIBLE
@@ -541,13 +549,17 @@ class MainActivity :
         }
     }
 
-    override fun setMenuBarItem(index: Int) {
+    override fun setMenuBarItem(index: Int, unlockNavBar: Boolean) {
         when (index) {
             MenuTab.Symptoms.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
             MenuTab.Appointments.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.appointments)
             MenuTab.Prescriptions.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
             MenuTab.More.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.more)
+        }
+
+        if (unlockNavBar) {
+            enableMenuBar();
         }
     }
 
@@ -718,5 +730,13 @@ class MainActivity :
     override fun updateBiometricRegistration() {
         biometricsInteractor.dismissBiometricNotification()
         biometricsInterface.requestBiometricsRegistrationStateChange()
+    }
+
+    override fun dismissAllDialogues() {
+        appDialogs.dismissAll()
+    }
+
+    override fun dismissPageLeaveWarningDialogue() {
+        appDialogs.dismissShowLeavingWarningDialog()
     }
 }

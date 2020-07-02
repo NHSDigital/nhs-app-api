@@ -128,6 +128,9 @@ export default {
           commit(SHOW_SESSION_EXPIRING);
 
           if (window.nativeApp) {
+            // ensure any page leave warning still open is dismissed
+            this.dispatch('pageLeaveWarning/stayOnPage');
+
             NativeCallbacks.onSessionExpiring();
           } else {
             this.dispatch('modal/show', { content: SessionExpiryModal });

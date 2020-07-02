@@ -11,44 +11,49 @@ import com.nhs.online.nhsonline.utils.Html
 class AppDialogs(private val activity: Activity) {
     private var upgradeDialog: AlertDialog? = null
     private var extendSessionDialogue: AlertDialog? = null
+    private var leavingPageWarningDialogue: AlertDialog? = null
     private var exitDialog: AlertDialog? = null
 
     fun showVersionUpgradeDialog() {
         if (!activity.isFinishing) {
-            val showing = showDialogIfAvailable(upgradeDialog)
-            if (showing) return
+            showDialogIfPresent(upgradeDialog)
 
-            val dialog = createDialog(
-                    R.string.updateRequiredTitle,
-                    R.string.updateRequiredMessage,
-                    R.string.close) {
-                activity.finishAndRemoveTask()
+            if (!isDialogActive(upgradeDialog)) {
+
+                val dialog = createDialog(
+                        R.string.updateRequiredTitle,
+                        R.string.updateRequiredMessage,
+                        R.string.close) {
+                    activity.finishAndRemoveTask()
+                }
+
+                dialog.setCancelable(false)
+                dialog.setCanceledOnTouchOutside(false)
+                upgradeDialog = dialog
+                dialog.show()
+                enableLinkMovementMethod(dialog)
             }
-
-            dialog.setCancelable(false)
-            dialog.setCanceledOnTouchOutside(false)
-            upgradeDialog = dialog
-            dialog.show()
-            enableLinkMovementMethod(dialog)
         }
         return
     }
 
     fun showExitDialog(onLogoutClicked: () -> Unit) {
         if (!activity.isFinishing) {
-            val showing = showDialogIfAvailable(exitDialog)
-            if (showing) return
+            showDialogIfPresent(exitDialog)
 
-            val dialog = createDialog(
-                    null,
-                    R.string.logoutWarning,
-                    R.string.logout,
-                    onLogoutClicked,
-                    R.string.cancel,
-                    null
-            )
-            exitDialog = dialog
-            dialog.show()
+            if (!isDialogActive(exitDialog)) {
+
+                val dialog = createDialog(
+                        null,
+                        R.string.logoutWarning,
+                        R.string.logout,
+                        onLogoutClicked,
+                        R.string.cancel,
+                        null
+                )
+                exitDialog = dialog
+                dialog.show()
+            }
         }
         return
     }
@@ -67,22 +72,55 @@ class AppDialogs(private val activity: Activity) {
     ) {
         if (!activity.isFinishing) {
             Log.d("AppDialogs", "Entering showExtendSessionDialogue")
-            val showing = showDialogIfAvailable(extendSessionDialogue)
-            if (showing) return
+            showDialogIfPresent(extendSessionDialogue)
 
-            val dialog = createDialog(
-                    null,
-                    R.string.sessionExpiryWarningMessage,
-                    R.string.sessionExpiryWarningStayLoggedIn,
-                    onExtendClicked,
-                    R.string.sessionExpiryWarningLogOut,
-                    onLogoutClicked
-            )
+            if (!isDialogActive(extendSessionDialogue)) {
 
-            dialog.setCancelable(false)
-            dialog.setCanceledOnTouchOutside(false)
-            extendSessionDialogue = dialog
-            dialog.show()
+                val dialog = createDialog(
+                        null,
+                        R.string.sessionExpiryWarningMessage,
+                        R.string.sessionExpiryWarningStayLoggedIn,
+                        onExtendClicked,
+                        R.string.sessionExpiryWarningLogOut,
+                        onLogoutClicked
+                )
+
+                dialog.setCancelable(false)
+                dialog.setCanceledOnTouchOutside(false)
+                extendSessionDialogue = dialog
+                dialog.show()
+            }
+        }
+    }
+
+    fun showLeavingPageWarningDialogue(
+            onStayClicked: () -> Unit,
+            onLeaveClicked: () -> Unit
+    ) {
+        if (activity.isFinishing) {
+            return
+        }
+        Log.d("AppDialogs", "Entering showLeavingPageWarningDialogue")
+        showDialogIfPresent(leavingPageWarningDialogue)
+
+        if (!isDialogActive(leavingPageWarningDialogue)) {
+            val dialog = with(
+                    createDialog(
+                            R.string.leavingPageWarningHeader,
+                            R.string.leavingPageWarningMessage,
+                            R.string.leavingPageWarningStayOnPage,
+                            onStayClicked,
+                            R.string.leavingPageWarningLeavePage,
+                            onLeaveClicked
+                    )
+            ) {
+                setCancelable(false)
+                setCanceledOnTouchOutside(false)
+                show()
+                this
+            }
+
+            leavingPageWarningDialogue = dialog
         }
     }
 
@@ -90,7 +128,15 @@ class AppDialogs(private val activity: Activity) {
 
     fun dismissExtendSessionDialog() = dismissDialogSafely(extendSessionDialogue)
 
+    fun dismissShowLeavingWarningDialog() = dismissDialogSafely(leavingPageWarningDialogue)
+
     fun isUpgradeDialogActive() = isDialogActive(upgradeDialog)
+
+    fun dismissAll() {
+        dismissVersionUpgradeDialog()
+        dismissExtendSessionDialog()
+        dismissShowLeavingWarningDialog()
+    }
 
     private fun createDialog(
             title: Int,
@@ -136,12 +182,10 @@ class AppDialogs(private val activity: Activity) {
         return builder.create()
     }
 
-    private fun showDialogIfAvailable(dialog: AlertDialog?): Boolean {
-        if (isDialogActive(dialog)) return true
-        return if (dialog != null) {
-            dialog.show(); true
-        } else {
-            false
+    private fun showDialogIfPresent(dialog: AlertDialog?) {
+        if (isDialogActive(dialog))
+        {
+            dialog?.show()
         }
     }
 
@@ -152,6 +196,4 @@ class AppDialogs(private val activity: Activity) {
     }
 
     private fun isDialogActive(alertDialog: AlertDialog?) = alertDialog?.isShowing ?: false
-
-    private fun getResourceString(resId: Int) = activity.resources.getString(resId)
 }

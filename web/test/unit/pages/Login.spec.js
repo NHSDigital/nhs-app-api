@@ -1,6 +1,7 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
 import { BEGINLOGIN } from '@/lib/routes';
+import NativeApp from '@/services/native-app';
 import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
@@ -78,6 +79,38 @@ describe('login page', () => {
       },
     });
   };
+
+  describe('created lifecycle hook', () => {
+    let dismissAllDialoguesSpy;
+
+    beforeEach(() => {
+      dismissAllDialoguesSpy = jest.spyOn(NativeApp, 'dismissAllDialogues').mockImplementation(() => true);
+      AuthorisationService.mockClear();
+
+      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
+    });
+
+    it('will call pre registration sync', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('preRegistrationInformation/sync');
+    });
+
+    it('will call page leave warning reset', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/reset');
+    });
+
+    it('sets window onbeforeunload event to null', () => {
+      window.onbeforeunload = () => {};
+
+      AuthorisationService.mockClear();
+      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
+
+      expect(window.onbeforeunload).toBe(null);
+    });
+
+    it('will call native app leave warning reset', () => {
+      expect(dismissAllDialoguesSpy).toHaveBeenCalled();
+    });
+  });
 
   describe('viewed instructions', () => {
     beforeEach(() => {

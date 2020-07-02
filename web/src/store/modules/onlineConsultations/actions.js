@@ -45,6 +45,33 @@ import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/sta
 import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
 import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 
+const initialiseLeaveWarnings = (store) => {
+  // Enable navigation prompt
+  store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+
+  if (typeof window !== 'object') {
+    return;
+  }
+
+  const browserString = store.app.i18n.t('web.pageLeavingWarning.warning');
+
+  window.onbeforeunload = function handleBeforeUnload(event) {
+    event.preventDefault();
+    return browserString;
+  };
+};
+
+const isTermsAndConditions = (parameters) => {
+  if (typeof parameters !== 'object') {
+    return false;
+  }
+
+  return parameters.find(p =>
+    p.name === 'inputData'
+      && Array.isArray(p.resource.item)
+      && p.resource.item.find(i => i.linkId === 'GLO_PRE_DISCLAIMERS_NHS_2'));
+};
+
 const showError = (store) => {
   store.dispatch('onlineConsultations/clearAndSetError');
 };
@@ -151,6 +178,10 @@ export default {
       return undefined;
     }
 
+    if (isTermsAndConditions(parameters.parameter)) {
+      initialiseLeaveWarnings(store);
+    }
+
     const requestParams = {
       provider,
       addJavascriptDisabledHeader,
@@ -168,6 +199,7 @@ export default {
     ) {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
+
     return store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate(
       requestParams,
     ).then((response) => {

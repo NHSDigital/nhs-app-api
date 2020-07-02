@@ -5,6 +5,7 @@ export const SET_BACK_LINK_OVERRIDE = 'SET_BACK_LINK_OVERRIDE';
 export const SET_ROUTE_CRUMB = 'SET_ROUTE_CRUMB';
 export const initialState = () => ({
   menuItemStatusAt: [],
+  previousMenuItemIndex: -1,
   crumbSetName: 'defaultCrumb',
 });
 

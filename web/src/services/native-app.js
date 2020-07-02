@@ -38,6 +38,15 @@ export default {
     return false;
   },
 
+  displayPageLeaveWarning() {
+    const app = window.nativeApp;
+    if (app && app.displayPageLeaveWarning) {
+      app.displayPageLeaveWarning();
+      return true;
+    }
+    return false;
+  },
+
   fetchNativeAppVersion() {
     const app = window.nativeApp;
     if (app && app.fetchNativeAppVersion) {
@@ -218,10 +227,10 @@ export default {
     return false;
   },
 
-  setMenuBarItem(index) {
+  setMenuBarItem(index, unlockNavBar) {
     const app = window.nativeApp;
     if (app && app.setMenuBarItem) {
-      app.setMenuBarItem(index);
+      app.setMenuBarItem(index, unlockNavBar);
       return true;
     }
     return false;
@@ -268,6 +277,28 @@ export default {
 
     if (app && app.updateBiometricRegistration) {
       app.updateBiometricRegistration();
+      return true;
+    }
+
+    return false;
+  },
+
+  dismissPageLeaveWarningDialogue: () => {
+    const app = window.nativeApp;
+
+    if (app && app.dismissPageLeaveWarningDialogue) {
+      app.dismissPageLeaveWarningDialogue();
+      return true;
+    }
+
+    return false;
+  },
+
+  dismissAllDialogues: () => {
+    const app = window.nativeApp;
+
+    if (app && app.dismissAllDialogues) {
+      app.dismissAllDialogues();
       return true;
     }
 

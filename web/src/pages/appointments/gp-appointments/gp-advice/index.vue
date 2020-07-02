@@ -40,6 +40,7 @@ import ConditionList from '@/components/online-consultations/ConditionList';
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
+import { findByPath, LOGIN } from '@/lib/routes';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
@@ -83,12 +84,36 @@ export default {
       return this.$store.state.onlineConsultations.adviceProviderName;
     },
   },
+  beforeRouteLeave(to, from, next) {
+    let shouldContinue = true;
+
+    if (to.path === LOGIN.path) {
+      next(shouldContinue);
+    }
+
+    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
+      const toPath = findByPath(to.path);
+
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', toPath);
+      this.showModal();
+
+      shouldContinue = false;
+    }
+
+    if (shouldContinue && typeof window === 'object') {
+      window.onbeforeunload = null;
+    }
+
+    next(shouldContinue);
+  },
   async asyncData({ store, req }) {
     const { provider } = store.state.serviceJourneyRules.rules.cdssAdvice;
 
     await store.dispatch('onlineConsultations/serviceDefinitionIsValid', provider);
 
     if (!store.state.onlineConsultations.available) {
+      store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+
       store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.gp_advice.unavailable.header'));
       store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.gp_advice.unavailable.headerCaption'));
 
@@ -159,7 +184,13 @@ export default {
     return data;
   },
   beforeDestroy() {
+    this.$store.dispatch('pageLeaveWarning/reset');
     this.$store.dispatch('onlineConsultations/clear', true);
+  },
+  methods: {
+    showModal() {
+      this.$store.dispatch('pageLeaveWarning/showLeavingModal');
+    },
   },
 };
 </script>

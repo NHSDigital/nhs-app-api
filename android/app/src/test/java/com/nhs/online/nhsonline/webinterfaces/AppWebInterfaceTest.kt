@@ -95,4 +95,20 @@ class AppWebInterfaceTest {
                 "window.\$nuxt.\$store.dispatch('login/handleBiometricLoginFailure')",
                 null)
     }
+
+    @Test
+    fun stayOnPage() {
+        appWebInterface.stayOnPage()
+        verify(webviewMock).evaluateJavascript(
+                "window.\$nuxt.\$store.dispatch('pageLeaveWarning/stayOnPage')",
+                null)
+    }
+
+    @Test
+    fun leavePage() {
+        appWebInterface.leavePage()
+        verify(webviewMock).evaluateJavascript(
+                "window.\$nuxt.\$store.dispatch('pageLeaveWarning/leavePage')",
+                null)
+    }
 }

@@ -41,6 +41,12 @@
 "sessionExpiryWarningStayLoggedIn" = "Stay logged in";
 "sessionExpiryWarningLogOut" = "Log out";
 
+/*Page leaving warning strings*/
+"leavingPageWarningTitle" = "Leave this page?";
+"leavingPageWarningMessage" = "If you have entered any information, it will not be saved.";
+"leavingPageWarningStayOnPage" = "Cancel";
+"leavingPageWarningLeavePage" = "Leave page";
+
 /*Data Download Errors*/
 "DataDownloadErrorHeader" = "Sorry, something went wrong";
 "DataDownloadErrorMessage" = "\nWe could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.";

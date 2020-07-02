@@ -39,7 +39,7 @@ interface IInteractor {
 
     fun setRetryPath(url: String)
 
-    fun setMenuBarItem(index: Int)
+    fun setMenuBarItem(index: Int, unlockNavBar: Boolean)
 
     fun hideHeader()
 
@@ -52,6 +52,8 @@ interface IInteractor {
     fun announcePageTitle(title: String?)
 
     fun showExtendSessionDialogue()
+
+    fun showLeavingPageWarningDialogue()
 
     fun showBiometricLoginIfEnabled(forceStart: Boolean = false): Boolean
 
@@ -73,4 +75,7 @@ interface IInteractor {
 
     fun updateBiometricRegistration()
 
+    fun dismissAllDialogues()
+
+    fun dismissPageLeaveWarningDialogue()
 }

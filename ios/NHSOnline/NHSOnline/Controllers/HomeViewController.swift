@@ -501,6 +501,21 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
         self.resetDisplayExtendSessionDialogueFlags()
     }
     
+    func displayLeavingPageDialogue(){
+        let alert = UIAlertController(title: NSLocalizedString("leavingPageWarningTitle", comment: ""), message: NSLocalizedString("leavingPageWarningMessage", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("leavingPageWarningStayOnPage", comment: ""), style: .default, handler: { _ in
+            self.appWebInterface?.stayOnPage()
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("leavingPageWarningLeavePage", comment: ""), style: .default, handler: { _ in
+            self.appWebInterface?.leavePage()
+        }))
+
+        NotificationCenter.default.addObserver(alert, selector: #selector(alert.close), name: CustomNotifications.dismissAllAlerts, object: nil)
+        NotificationCenter.default.addObserver(alert, selector: #selector(alert.close), name: CustomNotifications.dismissLeavingPageAlert, object: nil)
+        
+        alert.show()
+    }
+    
     func dimissAlert(){
         NotificationCenter.default.post(name: CustomNotifications.dismissAllAlerts, object: nil)
         resetDisplayExtendSessionDialogueFlags()
@@ -716,7 +731,11 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
             }
         })
     }
-    
+
+    func dismissPageLeaveWarningDialogue() {
+        NotificationCenter.default.post(name: CustomNotifications.dismissLeavingPageAlert, object: nil)
+    }
+
     private func addCalendarEvent(eventStore: EKEventStore, calendarData: CalendarData) {
         let event = EKEvent(eventStore: eventStore)
             

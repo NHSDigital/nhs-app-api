@@ -11,9 +11,15 @@ export default {
    *   width: override as string to define width e.g. '500px' or '80%' or '2em'
    * }
    */
-  show({ commit }, config) {
+  async show({ commit }, config) {
     if (!config || !config.content) {
       throw new Error('Modal config is required for modal display.');
+    }
+
+    // session expiry should take priority
+    if (config.content.name !== undefined && config.content.name === 'SessionExpiryModal') {
+      this.dispatch('pageLeaveWarning/sessionExpiryCheckAndCloseLeavePageWarningModal');
+      await commit(HIDE_MODAL);
     }
 
     const contentName = config.content.name ? config.content.name : config.content;

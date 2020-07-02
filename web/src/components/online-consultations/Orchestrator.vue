@@ -240,7 +240,11 @@ export default {
       return INDEX.path;
     },
     showBackToHomeButton() {
-      return this.isSuccess;
+      if (!this.isSuccess) {
+        return false;
+      }
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+      return true;
     },
     noJSPath() {
       if (this.serviceDefinitionId ===
@@ -265,7 +269,11 @@ export default {
       return true;
     },
     showBackButton() {
-      return this.$store.state.onlineConsultations.previousQuestion !== undefined;
+      if (this.$store.state.onlineConsultations.previousQuestion !== undefined) {
+        this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+        return true;
+      }
+      return false;
     },
     enctype() {
       return this.question.type === QuestionTypes.ATTACHMENT
@@ -318,6 +326,7 @@ export default {
       window.scrollTo(0, 0);
     },
     backToHomeClicked() {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       redirectTo(this, INDEX.path);
     },
     validationErrorMessages(localError, responseErrors) {
@@ -329,6 +338,7 @@ export default {
       return errorMessages;
     },
     goBack() {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       redirectTo(this, this.indexPath);
     },
   },

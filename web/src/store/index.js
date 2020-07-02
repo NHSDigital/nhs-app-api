@@ -23,6 +23,7 @@ import nominatedPharmacy from './modules/nominatedPharmacy';
 import notifications from './modules/notifications';
 import onlineConsultations from './modules/onlineConsultations';
 import organDonation from './modules/organDonation';
+import pageLeaveWarning from './modules/pageLeaveWarning';
 import pageTitle from './modules/pageTitle';
 import gpMessages from './modules/gpMessages';
 import practiceSettings from './modules/practiceSettings';
@@ -61,6 +62,7 @@ export const modules = {
   notifications,
   onlineConsultations,
   organDonation,
+  pageLeaveWarning,
   pageTitle,
   gpMessages,
   practiceSettings,

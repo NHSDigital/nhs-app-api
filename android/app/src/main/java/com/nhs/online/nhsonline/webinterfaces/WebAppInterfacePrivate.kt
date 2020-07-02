@@ -116,6 +116,12 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
+    fun displayPageLeaveWarning() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering displayPageLeaveWarning")
+        runAction { uiInteractor.showLeavingPageWarningDialogue() }
+    }
+
+    @JavascriptInterface
     fun pageLoadComplete() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering pageLoadComplete")
         nhsWeb.applicationState.unBlock()
@@ -140,9 +146,9 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun setMenuBarItem(index: Int) {
+    fun setMenuBarItem(index: Int, unlockNavBar: Boolean) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
-        runAction { uiInteractor.setMenuBarItem(index) }
+        runAction { uiInteractor.setMenuBarItem(index, unlockNavBar) }
     }
 
     @JavascriptInterface
@@ -179,6 +185,18 @@ class WebAppInterfacePrivate(
     fun updateBiometricRegistration() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateBiometricRegistration")
         runAction { uiInteractor.updateBiometricRegistration() }
+    }
+
+    @JavascriptInterface
+    fun dismissPageLeaveWarningDialogue() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissAllDialogues")
+        runAction { uiInteractor.dismissPageLeaveWarningDialogue() }
+    }
+
+    @JavascriptInterface
+    fun dismissAllDialogues() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissAllDialogues")
+        runAction { uiInteractor.dismissAllDialogues() }
     }
 
     private fun runAction(action: () -> Unit){

@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     backClicked() {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       redirectTo(this, this.backLink);
     },
   },

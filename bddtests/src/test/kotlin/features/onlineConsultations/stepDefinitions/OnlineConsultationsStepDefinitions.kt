@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
+import pages.PageLeavingWarning
 import pages.avoidChromeWebDriverServiceCrash
 import pages.onlineConsultations.OnlineConsultationsPage
 import pages.onlineConsultations.OnlineConsultationsUnavailablePage
@@ -14,6 +15,7 @@ open class OnlineConsultationsStepDefinitions {
 
     private lateinit var onlineConsultationsPage: OnlineConsultationsPage
     private lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
+    private lateinit var pageLeaveWarning: PageLeavingWarning
 
     private val onlineConsultationsFactory = OnlineConsultationsFactory()
 
@@ -119,6 +121,21 @@ open class OnlineConsultationsStepDefinitions {
     @Then("^I see the online consultations unavailable message for (gp advice|admin help)$")
     fun iSeeTheOnlineConsultationsSwitchedOffErrorMessages(journey: String) {
         onlineConsultationsUnavailablePage.assertIsVisible(journey == "gp advice")
+    }
+
+    @Then("^I see the page leave warning$")
+    fun iSeeThePageLeaveWarning() {
+        pageLeaveWarning.assertIsDisplayed()
+    }
+
+    @Then("^I click stay on page on the popup$")
+    fun iClickStayOnPage() {
+        pageLeaveWarning.clickStay()
+    }
+
+    @Then("^I click leave the page on the popup$")
+    fun iClickLeavePage() {
+        pageLeaveWarning.clickLeave()
     }
 
     private fun answerQuestionAndContinue(elementType: String = "input", elementId: String){

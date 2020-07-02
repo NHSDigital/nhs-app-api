@@ -107,6 +107,9 @@ export default {
       demographicsConsentGiven: this.$store.state.onlineConsultations.demographicsConsentGiven,
     };
   },
+  created() {
+    this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+  },
   methods: {
     async onConditionClicked(serviceDefinitionId) {
       await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
@@ -123,6 +126,7 @@ export default {
       window.scrollTo(0, 0);
     },
     endMyConsultationClicked() {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
       redirectTo(this, this.indexPath);
     },
   },

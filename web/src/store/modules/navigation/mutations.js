@@ -1,6 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
 import NativeCallbacks from '@/services/native-app';
 import {
   CLEAR_SELECTED_MENUITEM,
@@ -10,14 +7,16 @@ import {
   SET_ROUTE_CRUMB,
 } from './mutation-types';
 
-/* eslint-disable no-shadow */
 function clearPreviousSelectedMenuItem(state) {
-  let i;
-  const x = [];
-  for (i = 0; i < 5; i += 1) {
-    x.push(false);
-  }
-  state.menuItemStatusAt = x;
+  state.menuItemStatusAt = Array(5).fill(false);
+}
+
+function storePreviousSelectedMenuItem(state) {
+  state.menuItemStatusAt.forEach((menuItem, index) => {
+    if (menuItem === true) {
+      state.previousMenuItemIndex = index;
+    }
+  });
 }
 
 export default {
@@ -25,13 +24,15 @@ export default {
     if (process.client && window.nativeApp) {
       NativeCallbacks.clearMenuBarItem();
     } else {
+      storePreviousSelectedMenuItem(state);
       clearPreviousSelectedMenuItem(state);
     }
   },
   [SET_NEWMENUITEM](state, menuItemIndex) {
     if (process.client && window.nativeApp !== 'undefined') {
-      NativeCallbacks.setMenuBarItem(menuItemIndex);
+      NativeCallbacks.setMenuBarItem(menuItemIndex, true);
     }
+    storePreviousSelectedMenuItem(state);
     clearPreviousSelectedMenuItem(state);
     state.menuItemStatusAt[menuItemIndex] = true;
   },

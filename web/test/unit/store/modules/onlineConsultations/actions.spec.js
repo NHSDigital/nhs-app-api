@@ -39,6 +39,9 @@ const store = {
       getV2CdssServiceDefinitionByProviderDetails: jest.fn(),
       getV2CdssServiceDefinitionByProviderIsValid: jest.fn(),
     },
+    i18n: {
+      t: jest.fn(p => `translate_${p}`),
+    },
   },
   dispatch: jest.fn(),
   state: {
@@ -665,6 +668,101 @@ describe('online consultations store actions', () => {
                   });
               });
             });
+          });
+        });
+      });
+
+      describe('non terms and conditions screen', () => {
+        beforeEach(async () => {
+          store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
+            .mockImplementation(
+              () => Promise.resolve(undefined),
+            );
+
+          parameters = {
+            parameter: [
+              {
+                name: 'inputData',
+                resource: {
+                  item: [
+                    {
+                      linkId: 'SOME_OTHER_PLACE_OUT_THERE',
+                    },
+                  ],
+                },
+              },
+            ],
+          };
+
+          getParameters.mockClear();
+          getParameters.mockReturnValue(parameters);
+
+          await evaluateServiceDefinition.call(store, { commit, state, rootState }, actionParams);
+        });
+
+        it('will not set should skip leaving warning', async () => {
+          expect(store.dispatch).not.toHaveBeenCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+          expect(store.dispatch).not.toHaveBeenCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+        });
+
+        it('will not set the window onbeforeunload event handler', async () => {
+          expect(typeof window.onbeforeunload).not.toBe('function');
+        });
+      });
+
+      describe('terms and conditions screen', () => {
+        beforeEach(async () => {
+          store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
+            .mockImplementation(
+              () => Promise.resolve(undefined),
+            );
+
+          parameters = {
+            parameter: [
+              {
+                name: 'inputData',
+                resource: {
+                  item: [
+                    {
+                      linkId: 'GLO_PRE_DISCLAIMERS_NHS_2',
+                    },
+                  ],
+                },
+              },
+            ],
+          };
+
+          getParameters.mockClear();
+          getParameters.mockReturnValue(parameters);
+
+          await evaluateServiceDefinition.call(store, { commit, state, rootState }, actionParams);
+        });
+
+        it('will set should skip leaving warning to false', async () => {
+          expect(store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+        });
+
+        it('will set the window onbeforeunload event handler', async () => {
+          expect(typeof window.onbeforeunload).toBe('function');
+        });
+
+        describe('when window onbeforeunload event handler is called', () => {
+          it('prevent default is called', async () => {
+            const preventDefault = jest.fn();
+
+            window.onbeforeunload({
+              preventDefault,
+            });
+
+            expect(preventDefault).toHaveBeenCalled();
+          });
+
+          it('page leaving warning is returned', async () => {
+            const returnValue = window.onbeforeunload({
+              preventDefault: jest.fn(),
+            });
+
+            expect(returnValue).toBe('translate_web.pageLeavingWarning.warning');
           });
         });
       });

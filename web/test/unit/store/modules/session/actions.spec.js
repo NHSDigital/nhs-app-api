@@ -209,9 +209,9 @@ describe('actions', () => {
         window.nativeApp = undefined;
       });
 
-      it('will not call global dispatch', () => {
+      it('will call dispatch to stayOnPage for pageLeaveWarning', () => {
         app.validate(store);
-        expect(app.dispatch).not.toHaveBeenCalled();
+        expect(app.dispatch).toHaveBeenCalledWith('pageLeaveWarning/stayOnPage');
       });
 
       it('will return true', () => {

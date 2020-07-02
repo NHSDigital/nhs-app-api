@@ -48,6 +48,10 @@ window.nativeApp.onSessionExpiring = function() {
     window.webkit.messageHandlers.onSessionExpiring.postMessage(null);
 };
 
+window.nativeApp.displayPageLeaveWarning = function() {
+    window.webkit.messageHandlers.displayPageLeaveWarning.postMessage(null);
+};
+
 window.nativeApp.openAppSettings = function() {
     window.webkit.messageHandlers.openAppSettings.postMessage(null)
 }
@@ -91,4 +95,12 @@ window.nativeApp.startDownload = function(base64Data, fileName, mimeType) {
 
 window.nativeApp.updateBiometricRegistration = function() {
     window.webkit.messageHandlers.updateBiometricRegistration.postMessage(null);
+};
+
+window.nativeApp.dismissPageLeaveWarningDialogue = function() {
+    window.webkit.messageHandlers.dismissPageLeaveWarningDialogue.postMessage(null);
+};
+
+window.nativeApp.dismissAllDialogues = function() {
+    window.webkit.messageHandlers.dismissAllDialogues.postMessage(null);
 };

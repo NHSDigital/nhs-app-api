@@ -4,13 +4,13 @@ import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help/index
 import { noJsParameterName } from '@/lib/noJs';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
+import { INDEX, APPOINTMENTS } from '@/lib/routes';
 
 jest.mock('@/lib/online-consultations/noJs');
 jest.mock('@/lib/online-consultations/answer-validators');
 
 describe('Admin Help page', () => {
   let page;
-  let getters;
   const dispatch = jest.fn(() => Promise.resolve());
   const redirect = jest.fn();
   const tc = jest.fn();
@@ -25,6 +25,9 @@ describe('Admin Help page', () => {
       onlineConsultations: {
         available: true,
         adminProviderName: 'eConsult Health Ltd',
+      },
+      pageLeaveWarning: {
+        shouldSkipDisplayingLeavingWarning: false,
       },
       serviceJourneyRules: {
         rules: {
@@ -41,7 +44,10 @@ describe('Admin Help page', () => {
     desktopWeb: 'desktopWeb',
   };
 
-  const mountPage = ({ stubDemographicsQuestion = true, available = true } = {}) => {
+  const mountPage = ({
+    stubDemographicsQuestion = true,
+    available = true,
+    shouldShowLeavingModal = true } = {}) => {
     const stubs = {
       orchestrator: '<div class="orchestrator"></div>',
       'online-consultations-unavailable': '<div class="online-consultations-unavailable"></div>',
@@ -62,7 +68,9 @@ describe('Admin Help page', () => {
       $style,
       showTemplate: () => true,
       stubs,
-      getters,
+      getters: {
+        'pageLeaveWarning/shouldShowLeavingModal': shouldShowLeavingModal,
+      },
       $router: createRouter(),
     });
   };
@@ -71,6 +79,8 @@ describe('Admin Help page', () => {
     dispatch.mockClear();
     redirect.mockClear();
     tc.mockClear();
+
+    window.onbeforeunload = () => {};
   });
 
   describe('computed properties', () => {
@@ -100,9 +110,52 @@ describe('Admin Help page', () => {
     });
   });
 
+  describe('beforeRouteLeave', () => {
+    describe('should show modal', () => {
+      const next = jest.fn();
+      beforeEach(() => {
+        next.mockClear();
+        $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = false;
+        $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = true;
+      });
+      each([INDEX, APPOINTMENTS])
+        .it('will show page leaving warning', (to) => {
+          const showModal = jest.fn();
+          mountPage();
+          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, to, undefined, next);
+          expect(next).toHaveBeenCalledWith(false);
+          expect(dispatch).toHaveBeenCalledWith('pageLeaveWarning/setAttemptedRedirectRoute', to);
+          expect(showModal).toHaveBeenCalled();
+
+          expect(window.onbeforeunload).not.toBe(null);
+        });
+    });
+
+    describe('should not show modal', () => {
+      const next = jest.fn();
+      beforeEach(() => {
+        next.mockClear();
+        $store.state.pageLeaveWarning.shouldSkipDisplayingLeavingWarning = true;
+        $store.getters['pageLeaveWarning/shouldShowLeavingModal'] = false;
+      });
+      each([INDEX, APPOINTMENTS])
+        .it('will not show page leaving warning', (to) => {
+          const showModal = jest.fn();
+
+          mountPage();
+
+          AdminHelpPage.beforeRouteLeave.call({ $store, showModal }, to, undefined, next);
+
+          expect(next).toHaveBeenCalledWith(true);
+          expect(showModal).toHaveBeenCalledTimes(0);
+          expect(window.onbeforeunload).toBe(null);
+        });
+    });
+  });
+
   describe('lifecycle hooks', () => {
     describe('beforeDestroy', () => {
-      it('should call the onlineConsultations clear action with true to reset request id', () => {
+      it('should call the onlineConsultations clear action with true', () => {
         // Arrange
         mountPage();
 
@@ -111,6 +164,14 @@ describe('Admin Help page', () => {
 
         // Assert
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/clear', true);
+      });
+
+      it('should call the page leave warning reset action', () => {
+        mountPage();
+
+        page.destroy();
+
+        expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/reset');
       });
     });
   });

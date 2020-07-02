@@ -1,4 +1,4 @@
-import '@/static/js/v1/nhsapp';
+import '@/static/js/v1/src/nhsapp';
 
 describe('nhsapp third party API', () => {
   beforeEach(() => {

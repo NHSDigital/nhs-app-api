@@ -17,6 +17,45 @@ Scenario: A user can go through the online consultations gp advice journey and i
   And I am in an emergency and I agree to end my consultation
   Then I see advice on what to do next
 
+Scenario: A user going through the online consultations journey accidently navigates away can use the
+modal to stay on the page and then complete their journey
+  Given I am logged in as a EMIS user with no linked profiles
+  And I have access to online consultations gp advice journey and it is an emergency
+  And I have no booked appointments for EMIS
+  And I click on the Appointments link on the header
+  And I click the GP Appointments link
+  When I select "Book an appointment" button
+  Then I am on the Appointments Guidance page
+  When I select the GP Advice menu item on the guidance page
+  And I accept demographics and terms and conditions question
+  And I click on a condition
+  And I select my gender and click continue
+  And I am submitting the questionnaire for myself
+  And I click on the Appointments link on the header
+  Then I see the page leave warning
+  And I click stay on page on the popup
+  And I am in an emergency and I agree to end my consultation
+  And I see advice on what to do next
+
+Scenario: A user going through the online consultations journey navigates away and can use the
+modal to leave the page
+  Given I am logged in as a EMIS user with no linked profiles
+  And I have access to online consultations gp advice journey and it is an emergency
+  And I have no booked appointments for EMIS
+  And I click on the Appointments link on the header
+  And I click the GP Appointments link
+  When I select "Book an appointment" button
+  Then I am on the Appointments Guidance page
+  When I select the GP Advice menu item on the guidance page
+  And I accept demographics and terms and conditions question
+  And I click on a condition
+  And I select my gender and click continue
+  And I am submitting the questionnaire for myself
+  And I click the home icon
+  And I see the page leave warning
+  Then I click leave the page on the popup
+  And I see the home page
+
 Scenario: A user can go through the online consultations gp advice journey and it is not an emergency
   Given I am logged in as a EMIS user with no linked profiles
   And I have access to online consultations gp advice journey and it is not an emergency

@@ -60,6 +60,16 @@ export default {
   },
   created() {
     this.$store.dispatch('preRegistrationInformation/sync');
+
+    this.$store.dispatch('pageLeaveWarning/reset');
+
+    if (typeof window === 'object') {
+      window.onbeforeunload = null;
+
+      if (this.$store.state.device.isNativeApp) {
+        NativeCallbacks.dismissAllDialogues();
+      }
+    }
   },
   mounted() {
     sessionStorage.clear();

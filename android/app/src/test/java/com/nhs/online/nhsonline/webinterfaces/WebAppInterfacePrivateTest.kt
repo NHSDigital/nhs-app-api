@@ -99,6 +99,15 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
+    fun displayPageLeaveWarningTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfacePrivate.displayPageLeaveWarning()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showLeavingPageWarningDialogue()
+    }
+
+    @Test
     fun hideHeaderTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterfacePrivate.hideHeader()
@@ -119,10 +128,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun setMenuBarItemTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.setMenuBarItem(0)
+        webAppInterfacePrivate.setMenuBarItem(0, true)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).setMenuBarItem(0)
+        verify(contextMock).setMenuBarItem(0, true)
     }
 
     @Test

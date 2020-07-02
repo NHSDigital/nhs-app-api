@@ -1,4 +1,5 @@
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
+import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
 
 /** private modal body register */
 const modalRegister = {};
@@ -43,4 +44,5 @@ export default {
  */
 registerModalContent(
   SessionExpiryModal,
+  LeavingPageWarningModal,
 );

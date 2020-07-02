@@ -132,17 +132,22 @@ export default {
     },
     async demographicsContinueClicked() {
       document.activeElement.blur();
+
       const consentGiven = this.isDemographicsAccepted;
+
       await this.$store.dispatch('onlineConsultations/setDemographicsConsentGiven', consentGiven);
+
       await this.$store.dispatch('onlineConsultations/getServiceDefinition', {
         provider: this.provider,
         serviceDefinitionId: this.serviceDefinitionId,
       });
+
       if (this.isNativeApp) {
         NativeApp.resetPageFocus();
       } else {
         EventBus.$emit(FOCUS_NHSAPP_ROOT);
       }
+
       window.scrollTo(0, 0);
     },
   },

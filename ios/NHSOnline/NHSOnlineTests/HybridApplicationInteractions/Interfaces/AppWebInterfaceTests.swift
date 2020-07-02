@@ -140,4 +140,28 @@ class AppWebInterfacesTests: XCTestCase {
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
         assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/authorised\',     {\n        devicePns:\'pns\',\n        deviceType:\'ios\',\n        trigger:\'Test\'\n    \n    });"    )
     }
+    
+    func test_whenStayOnPageIsTriggered_thenStayOnPageIsDispatched(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        appWebInterface!.stayOnPage()
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'pageLeaveWarning/stayOnPage\');")
+    }
+    
+    func test_whenLeavePageIsTriggered_thenLeavePageIsDispatched(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        appWebInterface!.leavePage()
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'pageLeaveWarning/leavePage\');")
+    }
 }

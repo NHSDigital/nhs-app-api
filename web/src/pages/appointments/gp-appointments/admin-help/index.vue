@@ -38,6 +38,7 @@ import DemographicsQuestion from '@/components/online-consultations/Demographics
 import { noJsParameterName } from '@/lib/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
+import { findByPath, LOGIN } from '@/lib/routes';
 import {
   ANSWERING_DEMOGRAPHICS_NAME,
   DEMOGRAPHICS_QUESTION_NAME,
@@ -78,6 +79,8 @@ export default {
     }
 
     if (store.state.onlineConsultations.available === false) {
+      store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
+
       store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
       store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.admin_help.unavailable.headerCaption'));
 
@@ -134,8 +137,36 @@ export default {
       available: true,
     };
   },
+  beforeRouteLeave(to, from, next) {
+    let shouldContinue = true;
+
+    if (to.path === LOGIN.path) {
+      next(shouldContinue);
+    }
+
+    if (this.$store.getters['pageLeaveWarning/shouldShowLeavingModal']) {
+      const toPath = findByPath(to.path);
+
+      this.$store.dispatch('pageLeaveWarning/setAttemptedRedirectRoute', toPath);
+      this.showModal();
+
+      shouldContinue = false;
+    }
+
+    if (shouldContinue && typeof window === 'object') {
+      window.onbeforeunload = null;
+    }
+
+    next(shouldContinue);
+  },
   beforeDestroy() {
+    this.$store.dispatch('pageLeaveWarning/reset');
     this.$store.dispatch('onlineConsultations/clear', true);
+  },
+  methods: {
+    showModal() {
+      this.$store.dispatch('pageLeaveWarning/showLeavingModal');
+    },
   },
 };
 </script>

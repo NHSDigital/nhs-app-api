@@ -40,6 +40,10 @@ class AppWebInterface(private val webView: WebView) {
         loadDispatchEvent("login/handleBiometricLoginFailure")
     }
 
+    fun leavePage() {
+        loadDispatchEvent("pageLeaveWarning/leavePage")
+    }
+
     fun logout() {
         loadDispatchEvent("auth/logout")
     }
@@ -65,6 +69,10 @@ class AppWebInterface(private val webView: WebView) {
 
     fun notificationsUnauthorised() {
         loadDispatchEvent("notifications/unauthorised")
+    }
+
+    fun stayOnPage() {
+        loadDispatchEvent("pageLeaveWarning/stayOnPage")
     }
 
     fun goTo(path: String) {

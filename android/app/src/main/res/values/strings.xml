@@ -178,6 +178,12 @@
     <string name="add_calendar_event_dialog_negative_button_text">OK</string>
     <string name="add_calendar_event_dialog_positive_button_text">Add event</string>
 
+    <!-- Page leave warning dialog strings -->
+    <string name="leavingPageWarningHeader"><b>Leave this page?</b></string>
+    <string name="leavingPageWarningMessage"><b>If you have entered any information, it will not be saved.</b></string>
+    <string name="leavingPageWarningStayOnPage">Cancel</string>
+    <string name="leavingPageWarningLeavePage">Leave page</string>
+
     <!-- Local fonts -->
     <string name="frutiger45Light">FrutigerLTW01\-45Light.woff2</string>
     <string name="frutiger46LightItalic">FrutigerLTW01\-46LightItalic.woff2</string>
