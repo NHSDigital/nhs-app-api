@@ -11,5 +11,7 @@ namespace NHSOnline.Backend.Metrics
         Task UserResearchOptOut();
 
         Task UserResearchOptIn();
+
+        Task TermsAndConditionsInitialConsent();
     }
 }

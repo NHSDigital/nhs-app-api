@@ -125,6 +125,9 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             {
                 yield return new object[]{ Method(metricLogger => metricLogger.Login()), "Login" };
                 yield return new object[]{ Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
+                yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
+                yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
+                yield return new object[]{ Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }

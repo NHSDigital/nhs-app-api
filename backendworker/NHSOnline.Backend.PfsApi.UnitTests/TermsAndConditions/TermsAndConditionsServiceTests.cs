@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         private Mock<IConsentRequestToTermsAndConditionsMapper> _mockConsentRequestToTermsAndConditionsMapper;
         private Mock<IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockConsentRequestToUpdateMapper;
         private Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>>> _mockAnalyticsCookieAcceptanceToUpdateMapper;
+        private Mock<IMetricLogger> _mockMetricLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -39,13 +41,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
                 new Mock<IMapper<AnalyticsCookieAcceptance, DateTimeOffset,
                     UpdateRecordBuilder<TermsAndConditionsRecord>>>();
 
+            _mockMetricLogger = new Mock<IMetricLogger>();
+
             _systemUnderTest = new TermsAndConditionsService(
                 logger,
                 _mockTermsAndConditionsRepository.Object,
                 _mockTermsAndConditionsToConsentMapper.Object,
                 _mockConsentRequestToTermsAndConditionsMapper.Object,
                 _mockConsentRequestToUpdateMapper.Object,
-                _mockAnalyticsCookieAcceptanceToUpdateMapper.Object);
+                _mockAnalyticsCookieAcceptanceToUpdateMapper.Object,
+                _mockMetricLogger.Object);
         }
 
         [TestMethod]
@@ -71,6 +76,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
+
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Once);
+
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
         }
 
@@ -92,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
@@ -115,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
 
             // Assert
             _mockTermsAndConditionsRepository.Verify(x => x.Create(It.IsAny<TermsAndConditionsRecord>()));
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
@@ -142,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             // Assert
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
@@ -167,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
             _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
@@ -192,7 +200,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
             _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.InternalServerError>();
         }
@@ -216,7 +224,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
             _mockTermsAndConditionsRepository.VerifyNoOtherCalls();
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
@@ -343,7 +351,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             // Assert
             _mockTermsAndConditionsRepository.Verify(x =>
                 x.Update(_nhsLoginId, It.IsAny<UpdateRecordBuilder<TermsAndConditionsRecord>>()));
-
+            _mockMetricLogger.Verify(x => x.TermsAndConditionsInitialConsent(), Times.Never);
             result.Should().NotBeNull();
             result.Should().BeOfType<ToggleAnalyticsCookieAcceptanceResult.Success>();
         }

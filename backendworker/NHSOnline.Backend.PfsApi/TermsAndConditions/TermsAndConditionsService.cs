@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Repository;
@@ -17,6 +18,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         private readonly IConsentRequestToTermsAndConditionsMapper _consentRequestToTermsAndConditionsMapper;
         private readonly IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _consentRequestToUpdateMapper;
         private readonly IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> _analyticsCookieAcceptanceToUpdateMapper;
+        private readonly IMetricLogger _metricLogger;
 
         public TermsAndConditionsService
         (
@@ -25,7 +27,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             IMapper<TermsAndConditionsRecord, ConsentResponse> termsAndConditionsToConsentMapper,
             IConsentRequestToTermsAndConditionsMapper consentRequestToTermsAndConditionsMapper,
             IMapper<ConsentRequest, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> consentRequestToUpdateMapper,
-            IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper
+            IMapper<AnalyticsCookieAcceptance, DateTimeOffset, UpdateRecordBuilder<TermsAndConditionsRecord>> analyticsCookieAcceptanceToUpdateMapper,
+            IMetricLogger metricLogger
         )
         {
             _logger = logger;
@@ -34,6 +37,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             _consentRequestToTermsAndConditionsMapper = consentRequestToTermsAndConditionsMapper;
             _consentRequestToUpdateMapper = consentRequestToUpdateMapper;
             _analyticsCookieAcceptanceToUpdateMapper = analyticsCookieAcceptanceToUpdateMapper;
+            _metricLogger = metricLogger;
         }
 
         public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsLoginId)
@@ -80,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             {
                 var termsAndConditions = _consentRequestToTermsAndConditionsMapper.Map(request, consentTime, nhsLoginId);
                 var result = await _repository.Create(termsAndConditions);
-                return result.Accept(new RepositoryCreateConsentResponseVisitor());
+                return result.Accept(new RepositoryCreateConsentResponseVisitor(_metricLogger));
             }
             catch (Exception e)
             {
