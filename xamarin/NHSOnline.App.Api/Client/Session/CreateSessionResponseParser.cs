@@ -20,13 +20,11 @@ namespace NHSOnline.App.Api.Client.Session
             _jsonResponseParser = jsonResponseParser;
         }
 
-        public async Task<ApiCreateSessionResult> Parse(
-            HttpResponseMessage httpResponseMessage,
-            CookieContainer cookies)
+        public async Task<ApiCreateSessionResult> Parse(HttpResponseMessage httpResponseMessage)
         {
             var handler = httpResponseMessage.StatusCode switch
             {
-                HttpStatusCode.Created => HandleCreated(httpResponseMessage, cookies),
+                HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(),
                 HttpStatusCode.Forbidden => HandleForbidden(),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(),
@@ -41,10 +39,17 @@ namespace NHSOnline.App.Api.Client.Session
         }
 
         private async Task<ApiCreateSessionResult> HandleCreated(
-            HttpResponseMessage httpResponseMessage,
-            CookieContainer cookies)
+            HttpResponseMessage httpResponseMessage)
         {
             var responseModel = await _jsonResponseParser.Parse<UserSessionResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+
+            var cookies = new CookieContainer();
+            if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
+                setCookieHeaders != null)
+            {
+                cookies.SetCookies(httpResponseMessage.RequestMessage.RequestUri, string.Join(",", setCookieHeaders));
+            }
+
             var createSessionResponse = new ApiCreateSessionResponse(responseModel, cookies);
             return new ApiCreateSessionResult.Success(createSessionResponse);
         }

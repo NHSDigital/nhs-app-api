@@ -43,7 +43,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         public void GoToUrl(Uri uri) => _webDriver.Navigate().GoToUrl(uri);
 
-        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action) => _interactor.ActOnElement(by, action);
+        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action, Action<InteractorOptions>? configure)
+            => _interactor.ActOnElement(by, action, configure);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

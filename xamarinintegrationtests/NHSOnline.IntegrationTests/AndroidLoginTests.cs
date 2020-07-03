@@ -26,7 +26,6 @@ namespace NHSOnline.IntegrationTests
             _ = AndroidBeforeYouStartPage.AssertOnPage(driver);
         }
 
-        [Ignore("Issue raised with BrowserStack regarding accessing the api through the browser stack local process")]
         [NhsAppAndroidTest]
         public void APatientWithProofLevelFiveCanLogin(IAndroidDriverWrapper driver)
         {
@@ -49,7 +48,7 @@ namespace NHSOnline.IntegrationTests
                     .Login(patient);
             }
 
-            _ = AndroidCreateSessionPage.AssertOnPage(driver);
+            _ = AndroidLoggedInHomePage.AssertOnPage(driver);
         }
     }
 }

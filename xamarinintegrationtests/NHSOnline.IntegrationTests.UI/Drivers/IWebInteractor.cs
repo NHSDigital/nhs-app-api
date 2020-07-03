@@ -5,6 +5,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 {
     public interface IWebInteractor
     {
-        internal void ActOnElement(By by, Action<IWebElement> action);
+        internal void ActOnElement(By by, Action<IWebElement> action, Action<InteractorOptions>? configure = null);
     }
 }

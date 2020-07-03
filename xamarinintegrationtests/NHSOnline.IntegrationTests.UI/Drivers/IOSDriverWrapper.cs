@@ -40,7 +40,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         public INativeWebContext Web() => new NativeWebInteractor(_nativeDriverContext, Logs, _driver);
 
-        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action) => _interactor.ActOnElement(by, action);
+        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action, Action<InteractorOptions>? configure)
+            => _interactor.ActOnElement(by, action, configure);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

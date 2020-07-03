@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Api;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.DependencyServices
@@ -8,7 +9,8 @@ namespace NHSOnline.App.DependencyServices
         internal static IServiceCollection AddDependencyServices(this IServiceCollection services)
         {
             return services
-                .AddTransient(_ => DependencyService.Get<ICookies>());
+                .AddTransient(_ => DependencyService.Get<ICookies>())
+                .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>());
         }
     }
 }

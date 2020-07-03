@@ -14,8 +14,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _interactor = new Interactor<IWebElement>(logs, driver.FindElement);
         }
 
-        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action)
-            => _interactor.ActOnElement(by, action);
+        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action, Action<InteractorOptions>? configure)
+            => _interactor.ActOnElement(by, action, configure);
 
         public void Dispose() => _webContext.Dispose();
     }

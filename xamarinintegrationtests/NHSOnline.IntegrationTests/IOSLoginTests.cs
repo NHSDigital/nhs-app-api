@@ -26,7 +26,6 @@ namespace NHSOnline.IntegrationTests
             _ = IOSBeforeYouStartPage.AssertOnPage(driver);
         }
 
-        [Ignore("Issue raised with BrowserStack regarding accessing the api through the browser stack local process")]
         [NhsAppIOSTest]
         public void APatientWithProofLevelFiveCanLogin(IIOSDriverWrapper driver)
         {
@@ -49,7 +48,7 @@ namespace NHSOnline.IntegrationTests
                     .Login(patient);
             }
 
-            _ = IOSCreateSessionPage.AssertOnPage(driver);
+            _ = IOSLoggedInHomePage.AssertOnPage(driver);
         }
     }
 }
