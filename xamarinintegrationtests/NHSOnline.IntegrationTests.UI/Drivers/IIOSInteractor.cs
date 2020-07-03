@@ -6,7 +6,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 {
     public interface IIOSInteractor
     {
-        internal void ActOnElement(By by, Action<IOSElement> action, Action<InteractorOptions>? configure = null);
+        internal void ActOnElement(By by, Action<IOSElement> action);
         internal void AssertElementDoesntExist(By by);
     }
 }

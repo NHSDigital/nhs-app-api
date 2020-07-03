@@ -64,7 +64,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var createSessionModel = _model.AuthReturn(authorised.RedirectUri, authorised.AuthCode);
             var createSessionPage = _pageFactory.CreatePageFor(createSessionModel);
 
-            await _view.Navigation.ReplaceCurrentPageAsync(createSessionPage).PreserveThreadContext();
+            await _view.Navigation.ReplaceCurrentPage(createSessionPage).PreserveThreadContext();
         }
 
         public async Task Visit(AuthReturnCheckResult.Failed failed)
@@ -79,7 +79,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var nhsLoginErrorModel = _model.NhsLoginFailed();
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
-            await _view.Navigation.ReplaceCurrentPageAsync(nhsLoginErrorPage).PreserveThreadContext();
+            await _view.Navigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();
         }
     }
 }

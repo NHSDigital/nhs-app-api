@@ -45,6 +45,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\WebViews\DelegatingWebViewNavigationDelegate.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.template.plist">

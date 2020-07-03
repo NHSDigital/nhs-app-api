@@ -11,7 +11,7 @@ namespace NHSOnline.App.Areas.Home
         internal static IServiceCollection AddHomeArea(this IServiceCollection services)
         {
             return services
-                .AddModelViewPresenter<LoggedInHomeScreenModel, LoggedInHomeScreenPage, LoggedInHomeScreenPresenter>();
+                .AddModelViewPresenter<NhsAppWebModel, NhsAppWebPage, NhsAppWebPresenter>();
         }
     }
 }

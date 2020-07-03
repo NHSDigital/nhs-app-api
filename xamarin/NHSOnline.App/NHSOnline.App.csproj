@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Areas\Home\Views\LoggedInHomeScreen.xaml.cs">
-      <DependentUpon>LoggedInHomeScreen.xaml</DependentUpon>
+    <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
+      <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorPage.xaml.cs">
       <DependentUpon>CreateSessionErrorPage.xaml</DependentUpon>

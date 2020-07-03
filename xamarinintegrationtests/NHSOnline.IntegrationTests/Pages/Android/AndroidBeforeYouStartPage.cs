@@ -1,8 +1,5 @@
-using System;
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
 {

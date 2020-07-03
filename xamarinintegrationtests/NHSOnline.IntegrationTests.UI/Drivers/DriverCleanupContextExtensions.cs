@@ -47,20 +47,20 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 return fileName;
             });
 
-            context.TryCleanUp("Web page source", () =>
+            context.TryCleanUp(
+                "Web page sources",
+                () => nativeDriverContext.ForEachWebView(TryAttachWebContextPageSource));
+
+            void TryAttachWebContextPageSource(string webContext)
             {
-                if (nativeDriverContext.TryWeb(out var webContext))
+                context.TryAttach($"Web page source {webContext}", () =>
                 {
-                    using var _ = webContext;
-                    context.TryAttach("Web page source", () =>
-                    {
-                        var pageSource = driver.PageSource;
-                        var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.html");
-                        File.WriteAllText(fileName, pageSource);
-                        return fileName;
-                    });
-                }
-            });
+                    var pageSource = driver.PageSource;
+                    var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName} {webContext}.html");
+                    File.WriteAllText(fileName, pageSource);
+                    return fileName;
+                });
+            }
         }
     }
 }

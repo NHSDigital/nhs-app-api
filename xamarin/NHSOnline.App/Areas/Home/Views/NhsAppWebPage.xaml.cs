@@ -1,19 +1,19 @@
 using System;
 using System.ComponentModel;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 
-namespace NHSOnline.App.Areas.LoggedOut.Views
+namespace NHSOnline.App.Areas.Home.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsLoginPage: INhsLoginView
+    public partial class NhsAppWebPage : INhsAppWebView
     {
         private readonly ILogger _logger;
 
-        public event EventHandler<EventArgs>? NavigationFailed;
-
-        public NhsLoginPage(ILogger<NhsLoginPage> logger)
+        public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
             _logger = logger;
 
@@ -57,28 +57,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
         {
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
-
-            if (args.Result != WebNavigationResult.Success)
-            {
-                NavigationFailed?.Invoke(this, EventArgs.Empty);
-            }
         }
 
-        public void LoadUrlAndNotifyOnRedirect(Uri uri, Func<Uri, bool> isRedirect, Action<Uri> redirected)
-        {
-            void OnWebViewOnNavigating(object sender, WebNavigatingEventArgs args)
-            {
-                var redirectedUri = new Uri(args.Url);
-                if (isRedirect(redirectedUri))
-                {
-                    args.Cancel = true;
-                    WebView.Navigating -= OnWebViewOnNavigating;
-                    redirected(redirectedUri);
-                }
-            }
+        public async Task AddCookie(Cookie cookie) => await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();
 
-            WebView.Navigating += OnWebViewOnNavigating;
-            WebView.GoToUri(uri);
-        }
+        public void GoToUri(Uri uri) => WebView.GoToUri(uri);
     }
 }

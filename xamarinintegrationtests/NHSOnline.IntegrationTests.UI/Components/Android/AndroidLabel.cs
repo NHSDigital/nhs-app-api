@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
@@ -18,12 +17,11 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _text = text;
         }
 
-        public void AssertVisible(Action<InteractorOptions>? configure = null)
+        public void AssertVisible()
         {
             _interactor.ActOnElement(
                 XPath,
-                e => e.Displayed.Should().BeTrue("a label with text {1} should be displayed", _text),
-                configure);
+                e => e.Displayed.Should().BeTrue("a label with text {1} should be displayed", _text));
         }
 
         public void AssertNotVisible()

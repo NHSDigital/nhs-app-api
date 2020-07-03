@@ -51,7 +51,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var loginModel = new NhsLoginModel(pkceCodes);
 
             var loginPage = _pageFactory.CreatePageFor(loginModel);
-            await _view.Navigation.ReplaceCurrentPageAsync(loginPage).PreserveThreadContext();
+            await _view.Navigation.ReplaceCurrentPage(loginPage).PreserveThreadContext();
         }
 
         private async void LoadCovidUrl(object sender, EventArgs e)

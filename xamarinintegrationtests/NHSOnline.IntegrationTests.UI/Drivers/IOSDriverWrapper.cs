@@ -33,15 +33,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             _interactor = new Interactor<IOSElement>(Logs, _driver.FindElement);
-            _nativeDriverContext = new NativeDriverContext(_driver);
+            _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleContexts(_driver));
         }
 
         private TestLogs Logs { get; }
 
-        public INativeWebContext Web() => new NativeWebInteractor(_nativeDriverContext, Logs, _driver);
+        public INativeWebContext Web(WebViewContext webViewContext)
+            => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action, Action<InteractorOptions>? configure)
-            => _interactor.ActOnElement(by, action, configure);
+        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action) => _interactor.ActOnElement(by, action);
 
         void IIOSInteractor.AssertElementDoesntExist(By @by) => _interactor.AssertElementDoesntExist(by);
 

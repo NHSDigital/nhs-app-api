@@ -36,15 +36,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             _interactor = new Interactor<AndroidElement>(Logs, _driver.FindElement);
-            _nativeDriverContext = new NativeDriverContext(_driver);
+            _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleWindows(_driver));
         }
 
         private TestLogs Logs { get; }
 
-        public INativeWebContext Web() => new NativeWebInteractor(_nativeDriverContext, Logs, _driver);
+        public INativeWebContext Web(WebViewContext webViewContext)
+            => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action, Action<InteractorOptions>? configure)
-            => _interactor.ActOnElement(by, action, configure);
+        void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action) => _interactor.ActOnElement(by, action);
 
         void IAndroidInteractor.AssertElementDoesntExist(By @by)
             => _interactor.AssertElementDoesntExist(by);

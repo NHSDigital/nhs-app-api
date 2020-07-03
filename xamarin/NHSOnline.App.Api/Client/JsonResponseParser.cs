@@ -1,23 +1,25 @@
+using System;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Api.Client
 {
     internal sealed class JsonResponseParser
     {
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly JsonSerializerSettings _jsonSerializerOptions;
 
-        public JsonResponseParser(JsonSerializerOptions jsonSerializerOptions)
+        public JsonResponseParser(JsonSerializerSettings jsonSerializerOptions)
         {
             _jsonSerializerOptions = jsonSerializerOptions;
         }
 
         internal async Task<T> Parse<T>(HttpResponseMessage responseMessage)
         {
-            var responseStream = await responseMessage.Content.ReadAsStreamAsync().ResumeOnThreadPool();
-            return await JsonSerializer.DeserializeAsync<T>(responseStream, _jsonSerializerOptions).ResumeOnThreadPool();
+            var responseBody = await responseMessage.Content.ReadAsStringAsync().ResumeOnThreadPool();
+            return JsonConvert.DeserializeObject<T>(responseBody, _jsonSerializerOptions) ??
+                   throw new InvalidOperationException($"Failed to parse response as {typeof(T).FullName}");
         }
     }
 }

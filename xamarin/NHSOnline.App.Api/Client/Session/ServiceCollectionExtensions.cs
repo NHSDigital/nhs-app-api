@@ -7,7 +7,8 @@ namespace NHSOnline.App.Api.Client.Session
         public static IServiceCollection AddSessionEndpoints(this IServiceCollection services)
         {
             return services
-                .AddEndpoint<ApiCreateSessionRequest, CreateSessionRequestMessageBuilder, ApiCreateSessionResult, CreateSessionResponseParser>();
+                .AddEndpoint<ApiCreateSessionRequest, CreateSessionRequestMessageBuilder, ApiCreateSessionResult, CreateSessionResponseParser>()
+                .AddTransient<IResponseModelValidator<UserSessionResponseModel, UserSessionResponse>, UserSessionResponseValidator>();
         }
     }
 }

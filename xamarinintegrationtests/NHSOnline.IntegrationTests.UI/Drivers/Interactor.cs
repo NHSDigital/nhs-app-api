@@ -17,12 +17,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _findElement = findElement;
         }
 
-        internal void ActOnElement(By @by, Action<TElement> action, Action<InteractorOptions>? configure)
+        internal void ActOnElement(By @by, Action<TElement> action)
         {
-            var options = new InteractorOptions();
-            configure?.Invoke(options);
-
-            var retryUntil = DateTime.UtcNow.Add(options.Timeout);
+            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(2));
 
             while (true)
             {
@@ -31,14 +28,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                     var element = _findElement(by);
                     action(element);
                     return;
-                }
-                catch (StaleElementReferenceException e) when (DateTime.UtcNow < retryUntil)
-                {
-                    _logs.Info("{0}: Retrying", e.Message);
-                }
-                catch (NoSuchElementException e) when (DateTime.UtcNow < retryUntil)
-                {
-                    _logs.Info("{0}: Retrying", e.Message);
                 }
                 catch (WebDriverException e) when (DateTime.UtcNow < retryUntil)
                 {

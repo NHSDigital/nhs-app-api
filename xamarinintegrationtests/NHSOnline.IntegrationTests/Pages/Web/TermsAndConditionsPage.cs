@@ -1,3 +1,4 @@
+using System.Threading;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -26,6 +27,9 @@ namespace NHSOnline.IntegrationTests.Pages.Web
 
         internal TermsAndConditionsPage AcceptTermsAndConditions()
         {
+            // Allow time for the Javascript to initialise
+            // NHSO-10565: Remove once WebView is only displayed once fully loaded
+            Thread.Sleep(1000);
             AcceptTermsAndConditionsCheckbox.Click();
             ContinueButton.Click();
             return this;

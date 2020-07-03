@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace NHSOnline.App.Api.Session
 {
     public abstract class CreateSessionResult
@@ -8,9 +10,14 @@ namespace NHSOnline.App.Api.Session
 
         public sealed class Created : CreateSessionResult
         {
-            public Created(UserSession userSession) => UserSession = userSession;
+            public Created(UserSession userSession, CookieContainer cookies)
+            {
+                UserSession = userSession;
+                Cookies = cookies;
+            }
 
             public UserSession UserSession { get; }
+            public CookieContainer Cookies { get; }
 
             public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }

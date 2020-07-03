@@ -6,10 +6,10 @@
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginPage">
+             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage">
 
     <ContentPage.Content>
-        <webViews:NhsLoginWebView x:Name="WebView" />
+        <webViews:NhsAppWebView x:Name="WebView" />
     </ContentPage.Content>
 
 </ContentPage>

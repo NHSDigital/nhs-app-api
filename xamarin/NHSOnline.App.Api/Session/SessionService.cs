@@ -38,8 +38,8 @@ namespace NHSOnline.App.Api.Session
 
         public CreateSessionResult Visit(ApiCreateSessionResult.Success success)
         {
-            var userSession = new UserSession(success.Response);
-            return new CreateSessionResult.Created(userSession);
+            var userSession = new UserSession(success.UserSessionResponse);
+            return new CreateSessionResult.Created(userSession, success.Cookies);
         }
 
         public CreateSessionResult Visit(ApiCreateSessionResult.Failure failure)

@@ -8,14 +8,17 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         private readonly IDisposable _webContext;
         private readonly Interactor<IWebElement> _interactor;
 
-        public NativeWebInteractor(NativeDriverContext nativeDriverContext, TestLogs logs, IWebDriver driver)
+        public NativeWebInteractor(
+            NativeDriverContext nativeDriverContext,
+            TestLogs logs,
+            IWebDriver driver,
+            WebViewContext webViewContext)
         {
-            _webContext = nativeDriverContext.Web();
+            _webContext = nativeDriverContext.Web(webViewContext);
             _interactor = new Interactor<IWebElement>(logs, driver.FindElement);
         }
 
-        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action, Action<InteractorOptions>? configure)
-            => _interactor.ActOnElement(by, action, configure);
+        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action) => _interactor.ActOnElement(by, action);
 
         public void Dispose() => _webContext.Dispose();
     }

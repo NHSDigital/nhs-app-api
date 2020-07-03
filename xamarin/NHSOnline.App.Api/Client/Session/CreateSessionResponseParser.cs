@@ -13,11 +13,16 @@ namespace NHSOnline.App.Api.Client.Session
 
         private readonly ILogger _logger;
         private readonly JsonResponseParser _jsonResponseParser;
+        private readonly IResponseModelValidator<UserSessionResponseModel, UserSessionResponse> _responseModelValidator;
 
-        public CreateSessionResponseParser(ILogger<CreateSessionResponseParser> logger, JsonResponseParser jsonResponseParser)
+        public CreateSessionResponseParser(
+            ILogger<CreateSessionResponseParser> logger,
+            JsonResponseParser jsonResponseParser,
+            IResponseModelValidator<UserSessionResponseModel, UserSessionResponse> responseModelValidator)
         {
             _logger = logger;
             _jsonResponseParser = jsonResponseParser;
+            _responseModelValidator = responseModelValidator;
         }
 
         public async Task<ApiCreateSessionResult> Parse(HttpResponseMessage httpResponseMessage)
@@ -42,6 +47,7 @@ namespace NHSOnline.App.Api.Client.Session
             HttpResponseMessage httpResponseMessage)
         {
             var responseModel = await _jsonResponseParser.Parse<UserSessionResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var response = _responseModelValidator.Validate(responseModel);
 
             var cookies = new CookieContainer();
             if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
@@ -50,8 +56,7 @@ namespace NHSOnline.App.Api.Client.Session
                 cookies.SetCookies(httpResponseMessage.RequestMessage.RequestUri, string.Join(",", setCookieHeaders));
             }
 
-            var createSessionResponse = new ApiCreateSessionResponse(responseModel, cookies);
-            return new ApiCreateSessionResult.Success(createSessionResponse);
+            return new ApiCreateSessionResult.Success(response, cookies);
         }
 
         private Task<ApiCreateSessionResult> HandleBadRequest()

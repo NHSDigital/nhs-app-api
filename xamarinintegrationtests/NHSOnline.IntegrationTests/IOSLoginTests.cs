@@ -59,14 +59,65 @@ namespace NHSOnline.IntegrationTests
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web())
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
             {
                 StubbedLoginPage
                     .AssertOnPage(webInteractor)
                     .Login(patient);
             }
 
-            _ = IOSLoggedInHomePage.AssertOnPage(driver);
+            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
+            {
+                TermsAndConditionsPage
+                    .AssertOnPage(webInteractor)
+                    .AcceptTermsAndConditions();
+
+                UserResearchOptInPage
+                    .AssertOnPage(webInteractor)
+                    .OptInToUserResearch();
+
+                LoggedInHomePage
+                    .AssertOnPage(webInteractor)
+                    .AssertWelcomeMessageDisplayedFor("Fred Bloggs");
+            }
+        }
+
+        [NhsAppIOSTest]
+        public void APatientWithProofLevelNineCanLogin(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.Title("Mr").GivenName("Jack").FamilyName("Flash"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
+            {
+                TermsAndConditionsPage
+                    .AssertOnPage(webInteractor)
+                    .AcceptTermsAndConditions();
+
+                UserResearchOptInPage
+                    .AssertOnPage(webInteractor)
+                    .OptInToUserResearch();
+
+                LoggedInHomePage
+                    .AssertOnPage(webInteractor)
+                    .AssertWelcomeMessageDisplayedFor("Mr Jack Flash");
+            }
         }
 
         private static IOSBeforeYouStartPage NavigateToBeforeYouStartPage(IIOSDriverWrapper driver)

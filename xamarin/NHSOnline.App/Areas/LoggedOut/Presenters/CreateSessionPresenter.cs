@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Api.Session;
@@ -59,17 +60,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         }
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Created created)
-            => await NavigateToLoggedInHomePage().PreserveThreadContext();
+            => await NavigateToLoggedInHomePage(created.UserSession, created.Cookies).PreserveThreadContext();
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Failed failed)
             => await NavigateToFailedPage().PreserveThreadContext();
 
-        private async Task NavigateToLoggedInHomePage()
+        private async Task NavigateToLoggedInHomePage(UserSession userSession, CookieContainer cookies)
         {
-            var homePageModel = new LoggedInHomeScreenModel();
+            var homePageModel = new NhsAppWebModel(userSession, cookies);
             var homePage = _pageFactory.CreatePageFor(homePageModel);
 
-            await _view.Navigation.ReplaceCurrentPageAsync(homePage).PreserveThreadContext();
+            await _view.Navigation.PopToNewRoot(homePage).PreserveThreadContext();
         }
 
         private async Task NavigateToFailedPage()
@@ -77,7 +78,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorModel = _model.CreateSessionFailed();
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
-            await _view.Navigation.ReplaceCurrentPageAsync(errorPage).PreserveThreadContext();
+            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
         }
     }
 }

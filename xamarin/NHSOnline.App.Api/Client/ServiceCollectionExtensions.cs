@@ -1,7 +1,8 @@
 using System;
 using System.Net.Http;
-using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Api.Client.Session;
 using NHSOnline.App.Config;
 
@@ -19,7 +20,7 @@ namespace NHSOnline.App.Api.Client
                 .AddTransient(typeof(IApiClientEndpoint<,>), typeof(ApiClientEndpoint<,>))
                 .AddTransient<JsonRequestContentSerialiser>()
                 .AddTransient<JsonResponseParser>()
-                .AddSingleton(new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                .AddSingleton(new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()})
                 .AddSessionEndpoints();
         }
 
