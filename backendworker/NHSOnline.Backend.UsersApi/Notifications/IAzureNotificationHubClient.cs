@@ -8,7 +8,9 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         Task CreateOrUpdateInstallation(Installation installation);
         Task DeleteInstallation(string installationId);
+        Task DeleteRegistration(string registrationId);
         Task<bool> InstallationExists(string installationId);
-        Task<List<string>> FindInstallationIdentifiers(string devicePns);
+        Task<bool> RegistrationExists(string registrationId);
+        Task<List<NotificationRegistrationItem>> FindInstallationIdentifiers(string devicePns);
     }
 }

@@ -22,22 +22,39 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task DeleteInstallation(string installationId) => _hubClientWrapper.DeleteInstallationAsync(installationId);
 
+        public Task DeleteRegistration(string registrationId) => _hubClientWrapper.DeleteRegistrationAsync(registrationId);
+
         public Task<bool> InstallationExists(string installationId) => _hubClientWrapper.InstallationExistsAsync(installationId);
 
-        public async Task<List<string>> FindInstallationIdentifiers(string devicePns)
+        public Task<bool> RegistrationExists(string registrationId) => _hubClientWrapper.RegistrationExistsAsync(registrationId);
+
+        public async Task<List<NotificationRegistrationItem>> FindInstallationIdentifiers(string devicePns)
         {
             var foundRegistrations = await _hubClientWrapper.GetRegistrationsByChannelAsync(devicePns, InstallationRecordMaxResults);
+            var existingRegistrations = foundRegistrations as RegistrationDescription[] ?? foundRegistrations.ToArray();
 
-            if (foundRegistrations == null)
+            if (existingRegistrations.Length == 0)
             {
-                return new List<string>();
+                return new List<NotificationRegistrationItem>();
             }
 
-            return foundRegistrations.SelectMany(x => x.Tags)
-                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase))
+            var installTags = existingRegistrations.SelectMany(rd => rd.Tags)
+                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase));
+            var installationRegistrations = existingRegistrations.Where(x => x.Tags.Overlaps(installTags));
+
+            var installationItems = installTags
                 .Select(t => t.Substring(InstallationTagName.Length + 1, InstallationIdGuidLength))
                 .Distinct()
-                .ToList();
+                .Select(x => new NotificationRegistrationItem{ Id = x, Type = NotificationRegistrationItem.RegistrationType.Installation});
+
+            var registrationItems = existingRegistrations.Except(installationRegistrations)
+                .Select(x => new NotificationRegistrationItem
+                {
+                    Id = x.RegistrationId,
+                    Type = NotificationRegistrationItem.RegistrationType.Registration
+                });
+
+            return installationItems.Union(registrationItems).ToList();
         }
     }
 }

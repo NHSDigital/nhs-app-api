@@ -21,8 +21,11 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<bool> InstallationExistsAsync(string installationId) => _hubClient.InstallationExistsAsync(installationId);
 
-        public async Task<IEnumerable<RegistrationDescription>> GetRegistrationsByChannelAsync(string devicePns,
-            int installationRecordMaxResults) =>
+        public Task<bool> RegistrationExistsAsync(string registrationId) => _hubClient.RegistrationExistsAsync(registrationId);
+
+        public Task DeleteRegistrationAsync(string registrationId) => _hubClient.DeleteRegistrationAsync(registrationId);
+
+        public async Task<IEnumerable<RegistrationDescription>> GetRegistrationsByChannelAsync(string devicePns, int installationRecordMaxResults) =>
             await _hubClient.GetRegistrationsByChannelAsync(devicePns, installationRecordMaxResults);
     }
 }

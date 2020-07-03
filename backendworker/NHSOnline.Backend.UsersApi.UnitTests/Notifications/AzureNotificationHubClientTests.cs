@@ -28,19 +28,43 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task FindInstallationIdentifiers_Success()
         {
             // Arrange
-            var expectedResult = new List<string>
+            var installationIds = new List<string>
                 { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
+
+            var expectedResult = new List<NotificationRegistrationItem>
+            {
+                new NotificationRegistrationItem
+                {
+                    Id = installationIds[0],
+                    Type = NotificationRegistrationItem.RegistrationType.Installation
+                },
+                new NotificationRegistrationItem
+                {
+                    Id = installationIds[1],
+                    Type = NotificationRegistrationItem.RegistrationType.Installation
+                },
+                new NotificationRegistrationItem
+                {
+                    Id = "RegistrationId2",
+                    Type = NotificationRegistrationItem.RegistrationType.Registration
+                },
+                new NotificationRegistrationItem
+                {
+                    Id = "RegistrationId4",
+                    Type = NotificationRegistrationItem.RegistrationType.Registration
+                },
+            };
 
             var registrations = new List<RegistrationDescription>
             {
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" })
+                GenerateRegistration("RegistrationId1", new[]
+                    { $"$InstallationId:{{{installationIds[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId2", new[]
+                    { "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c33288142A" }),
+                GenerateRegistration("RegistrationId3", new[]
+                    { $"$InstallationId:{{{installationIds[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId4", new[]
+                    { "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c33288142B" })
             };
 
             _mockAzureNotificationHubClientWrapper
@@ -60,23 +84,37 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         public async Task FindInstallationIdentifiers_DuplicatedInstallationId_ReturnsDistinctInstallationIds()
         {
             // Arrange
-            var expectedResult = new List<string>
+            var installationIds = new List<string>
                 { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
+
+            var expectedResult = new List<NotificationRegistrationItem>
+            {
+                new NotificationRegistrationItem
+                {
+                    Id = installationIds[0],
+                    Type = NotificationRegistrationItem.RegistrationType.Installation
+                },
+                new NotificationRegistrationItem
+                {
+                    Id = installationIds[1],
+                    Type = NotificationRegistrationItem.RegistrationType.Installation
+                },
+            };
 
             var registrations = new List<RegistrationDescription>
             {
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
-                GenerateRegistration(new[]
-                    { $"$InstallationId:{{{expectedResult[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" })
+                GenerateRegistration("RegistrationId1", new[]
+                    { $"$InstallationId:{{{installationIds[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId2",new[]
+                    { $"$InstallationId:{{{installationIds[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId3",new[]
+                    { $"$InstallationId:{{{installationIds[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId4",new[]
+                    { $"$InstallationId:{{{installationIds[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId5",new[]
+                    { $"$InstallationId:{{{installationIds[0]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" }),
+                GenerateRegistration("RegistrationId6",new[]
+                    { $"$InstallationId:{{{installationIds[1]}}}", "nhsLoginId:3c90d2d7-5474-4acd-8722-c7c332881421" })
             };
 
             _mockAzureNotificationHubClientWrapper
@@ -109,6 +147,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             result.Should().BeEmpty();
         }
 
-        private RegistrationDescription GenerateRegistration(string[] tags) => new FcmRegistrationDescription("RegistrationId", tags);
+        private RegistrationDescription GenerateRegistration(string registrationId, string[] tags) => new FcmRegistrationDescription(DevicePns, tags)
+        {
+            RegistrationId = registrationId
+        };
     }
 }

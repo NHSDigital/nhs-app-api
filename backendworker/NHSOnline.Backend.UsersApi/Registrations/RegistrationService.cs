@@ -87,7 +87,6 @@ namespace NHSOnline.Backend.UsersApi.Registrations
                 }
 
                 var userDevice = foundDeviceResult.UserDevice;
-
                 var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
 
                 switch (deleteRegistrationResult)
