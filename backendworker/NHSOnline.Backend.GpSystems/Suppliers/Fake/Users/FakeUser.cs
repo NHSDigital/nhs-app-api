@@ -21,8 +21,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public FakeUser()
         {
             Timestamp = DateTime.Now;
-            LinkedAccountsNhsNumbers = Enumerable.Empty<string>();
-            Behaviours = new AreaBehaviours();
+
+            LinkedAccountsNhsNumbers ??= new List<string>();
+            Behaviours ??= new AreaBehaviours();
         }
 
         public string GroupName { get; set; }
@@ -36,9 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Users
         public string Sex { get; set; }
         public AreaBehaviours Behaviours { get; set; }
 
-        [YamlIgnore]
-        [BsonIgnore]
-        public IEnumerable<string> LinkedAccountsNhsNumbers { get; set; }
+        public IList<string> LinkedAccountsNhsNumbers { get; set; }
 
         [YamlIgnore]
         [BsonIgnore]
