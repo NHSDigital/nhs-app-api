@@ -165,6 +165,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
+        guard let _ = webView.url else {
+            self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+            return
+        }
         if !webView.url!.absoluteString.contains(config().AuthRedirectPath) {
             viewController.hideProgressBar()
         }
