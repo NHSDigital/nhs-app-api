@@ -3,7 +3,7 @@ import { mount } from '../helpers';
 
 describe('authReturn layout', () => {
   const CONTACT_US_URL = 'https://www.example.com';
-  const MY_HEALTH_ONLINE_URL = 'https://www.myhealthonline-inps2.wales.nhs.uk';
+  const MY_HEALTH_ONLINE_URL = 'https://111.wales.nhs.uk/contactus/myhealthonline/';
   const NHS_WALES_111_URL = 'https://111.wales.nhs.uk';
   const NHS_111_URL = 'https://111.nhs.uk';
   const serviceDeskReference = 'fooReference';

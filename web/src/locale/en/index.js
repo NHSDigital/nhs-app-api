@@ -129,7 +129,7 @@ export default {
             content: [
               {
                 text: 'If you need an appointment or prescription, go to ',
-                linkUrl: 'https://www.myhealthonline-inps2.wales.nhs.uk',
+                linkUrl: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
                 linkText: 'My Health Online',
               },
               {
@@ -161,7 +161,7 @@ export default {
           line3: {
             content: [
               {
-                text: 'If you still need to access the app, ',
+                text: 'If you still need help to access the app, ',
                 linkText: 'contact us',
               },
             ],

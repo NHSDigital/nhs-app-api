@@ -64,7 +64,7 @@ Feature: Login error messages
     Examples:
       | GP System | Link text           | Link url                                                        |
       | TPP       | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
-      | TPP       | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | TPP       | 'My Health Online'  | 'https://111.wales.nhs.uk/contactus/myhealthonline/'            |
       | TPP       | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
       | TPP       | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
@@ -72,7 +72,7 @@ Feature: Login error messages
     Examples:
       | GP System  | Link text           | Link url                                                        |
       | EMIS       | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
-      | EMIS       | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | EMIS       | 'My Health Online'  | 'https://111.wales.nhs.uk/contactus/myhealthonline/'            |
       | EMIS       | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
       | EMIS       | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
@@ -86,7 +86,7 @@ Feature: Login error messages
     Examples:
       | Link text           | Link url                                                        |
       | 'contact us'        | 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f' |
-      | 'My Health Online'  | 'https://www.myhealthonline-inps2.wales.nhs.uk'                 |
+      | 'My Health Online'  | 'https://111.wales.nhs.uk/contactus/myhealthonline/'            |
       | '111.wales.nhs.uk'  | 'https://111.wales.nhs.uk'                                      |
       | '111.nhs.uk'        | 'https://111.nhs.uk'                                            |
 
