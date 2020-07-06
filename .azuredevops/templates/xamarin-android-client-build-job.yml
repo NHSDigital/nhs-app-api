@@ -1,7 +1,7 @@
 parameters:
   - name: configuration
     type: string
-    default: 'Browserstack - Release'
+    default: 'BrowserStack - Release'
   - name: apkFilename
     type: string
     default: 'com.nhs.online.nhsonline.browserstack.apk'
@@ -19,7 +19,7 @@ jobs:
   - job:
     displayName: Build Xamarin Android - ${{ parameters.configuration }}
     pool:
-      vmImage: 'macos-latest'
+      vmImage: 'windows-latest'
 
     variables:
       output.directory: '$(build.binariesDirectory)/xamarin-android'
@@ -31,14 +31,15 @@ jobs:
       - task: MSBuild@1
         displayName: Restore packages
         inputs:
-          solution: 'xamarin/NhsOnline.App.sln'
+          solution: 'xamarin/NHSOnline.App.sln'
           msbuildArguments: '-m /t:Restore'
           configuration: '${{ parameters.configuration }}'
 
       - task: XamarinAndroid@1
         displayName: Build Android '${{ parameters.configuration }}'
         inputs:
-          projectFile: 'xamarin/NhsOnline.App.Android/NhsOnline.App.Android.csproj'
+          projectFile: 'xamarin/NHSOnline.App.Android/NHSOnline.App.Android.csproj'
+          msbuildVersionOption: 'latest'
           outputDirectory: '$(output.directory)'
           configuration: '${{ parameters.configuration }}'
 
