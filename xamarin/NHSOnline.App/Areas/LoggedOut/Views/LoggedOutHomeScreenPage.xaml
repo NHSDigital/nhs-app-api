@@ -7,12 +7,12 @@
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage">
 
-    <StackLayout BackgroundColor="White">
+    <StackLayout BackgroundColor="{ StaticResource NhsUkWhite}">
         <AbsoluteLayout VerticalOptions="FillAndExpand">
             <controls:GradientBackground AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                                       AbsoluteLayout.LayoutFlags="All"
-                                      InnerColour="#0072df"
-                                      OuterColour="#0053a3"
+                                      InnerColour="{ StaticResource HomeBlueInnerGradient }"
+                                      OuterColour="{ StaticResource HomeBlueOuterGradient }"
                                       Radius="Max" />
 
             <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
@@ -29,15 +29,18 @@
                     <BoxView VerticalOptions="FillAndExpand"
                              BackgroundColor="Transparent" />
 
-                    <BoxView HeightRequest="1" Color="White" />
+                    <BoxView HeightRequest="1" Color="{ StaticResource NhsUkWhite }" />
                 </StackLayout>
                 <StackLayout StyleClass="SymptomsPanel">
                     <Label Text="How are you feeling today?"
                            StyleClass="Heading2"
                            HorizontalOptions="Center"
                            VerticalOptions="End"
-                           TextColor="White" />
+                           TextColor="{ StaticResource NhsUkWhite }" />
                     <controls:Button Text="Check symptoms"
+                                     ButtonColour = "{StaticResource NhsUkWhite}"
+                                     ColourGradient="{ StaticResource NhsUkDarkGrey }"
+                                     TextColour = "Black"
                                   HorizontalOptions="FillAndExpand" />
                 </StackLayout>
 
@@ -45,11 +48,14 @@
             </StackLayout>
         </AbsoluteLayout>
 
-        <StackLayout StyleClass="LoginPanel" BackgroundColor="White">
+        <StackLayout StyleClass="LoginPanel" BackgroundColor="{ StaticResource NhsUkWhite }">
             <Label Text="To access your NHS services"
                    StyleClass="Heading2"
                    HorizontalOptions="Center" />
             <controls:Button Text="Continue with NHS login"
+                             ButtonColour = "{StaticResource NhsUkBlue}"
+                             TextColour = "{ StaticResource NhsUkWhite }"
+                             ColourGradient="{ StaticResource NhsUkDarkGrey }"
                           Clicked="LoginButton_OnClicked"
                           HorizontalOptions="FillAndExpand" />
             <Label Text="Version 2.Xamarin"

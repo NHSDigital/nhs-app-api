@@ -3,9 +3,9 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Colours
+    public partial class NhsUkColours
     {
-        public Colours()
+        public NhsUkColours()
         {
             InitializeComponent();
         }

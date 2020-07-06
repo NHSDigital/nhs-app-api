@@ -19,11 +19,29 @@ namespace NHSOnline.IntegrationTests
         [NhsAppIOSTest]
         public void APatientIsShownTheBeforeYouStartPage(IIOSDriverWrapper driver)
         {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
+            _ = NavigateToBeforeYouStartPage(driver);
+        }
 
-            _ = IOSBeforeYouStartPage.AssertOnPage(driver);
+        [NhsAppIOSTest]
+        public void APatientCanClickAllTheLinksAndGoToCorrectPages(IIOSDriverWrapper driver)
+        {
+            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
+
+            beforeYouStartPage.AssertAllLinkArePresent();
+            beforeYouStartPage.TriggerConditionsLinkClick();
+            IOSAppTab.AssertAppTabServiceByHeader(driver, "Conditions Service");
+            beforeYouStartPage.TriggerCovidLinkClick();
+            IOSAppTab.AssertAppTabServiceByHeader(driver, "Covid Service");
+            beforeYouStartPage.TriggerOneOneOneLinkClick();
+            IOSAppTab.AssertAppTabServiceByHeader(driver, "111 Service");
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanUseTheExpander(IIOSDriverWrapper driver)
+        {
+            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
+
+            beforeYouStartPage.AssertExpanderPresent();
         }
 
         [NhsAppIOSTest]
@@ -49,6 +67,16 @@ namespace NHSOnline.IntegrationTests
             }
 
             _ = IOSLoggedInHomePage.AssertOnPage(driver);
+        }
+
+        private static IOSBeforeYouStartPage NavigateToBeforeYouStartPage(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            var beforeYouStartPage = IOSBeforeYouStartPage.AssertOnPage(driver);
+            return beforeYouStartPage;
         }
     }
 }

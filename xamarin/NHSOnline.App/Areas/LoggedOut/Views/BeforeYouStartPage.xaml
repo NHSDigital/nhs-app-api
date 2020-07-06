@@ -3,57 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage">
+             x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage"
+             x:Name="Root">
 
-    <StackLayout BackgroundColor="#f0f4f5" Margin="2,20,0,0">
-        <Label FontSize="24" FontAttributes="Bold" Text="Before You Start"
-               Margin="30,0,0,0" FontFamily="Fruitiger W01" />
-        <Label FontSize="15" Text="To use this service you must be:" Margin="20" FontFamily="Fruitiger W01" />
-        <Label FontSize="15" Text="&#x2022; registered with a GP surgery in England" Margin="30,0,0,0" FontFamily="Fruitiger W01" />
-        <Label FontSize="15" Text="&#x2022; aged 13 and over" Margin="30,0,0,0" FontFamily="Fruitiger W01" />
-        <Label FontSize="15" Text="Other services you can use without logging in:" Margin="20" FontFamily="Fruitiger W01" />
-
-        <Label FontSize="15" Margin="30,0,0,0"> 
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="&#x2022; " />
-                    <Span Text="Check if you have coronavirus symptoms"
-                          TextColor="Blue"
-                          TextDecorations="Underline">
-                    </Span>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Label FontSize="15" Margin="30,0,0,0" > 
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="&#x2022; " />
-                    <Span Text="Search conditions and treatments"
-                          TextColor="Blue"
-                          TextDecorations="Underline">
-                    </Span>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Label FontSize="15" Margin="30,0,0,0"> 
-            <Label.FormattedText>
-                <FormattedString>
-                    <Span Text="&#x2022; " />
-                    <Span Text="Use NHS 111 online to check if you need urgent help"
-                          TextColor="Blue"
-                          TextDecorations="Underline">
-                    </Span>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-        <Button BackgroundColor="#007f3b"
-                Text="Continue"
-                TextColor="White"
-                Font="Fruitiger"
-                HorizontalOptions="Start"
-                Margin="30,20,0,0"
-                Clicked="LoginButton_OnClicked" Padding="10,0"/>
+    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey }">
+        <controls:Heading1 Text="Before You Start"/>
+        
+        <controls:Paragraph Text="To use this service you must be:"/>
+        <controls:BulletedParagraph Text="registered with a GP surgery in England"/>
+        <controls:BulletedParagraph Text="aged 13 and over"/>
+        
+        <controls:Expander HeaderText="What to do if you're aged 13 to 15"
+                           BodyText="You'll need to contact your GP surgery first and request access to GP online services."/>
+        
+        <controls:Paragraph Text="Other services you can use without logging in:"/>
+        <controls:ListItemLink Text="Check if you have coronavirus symptoms"
+                               Command="{Binding NhsUkCovidServiceCommand}"
+                               BindingContext="{Reference Name=Root}"/>
+        <controls:ListItemLink Text="Search conditions and treatments"
+                               Command="{Binding NhsUkConditionsCommand}"
+                               BindingContext="{Reference Name=Root}"/>
+        <controls:ListItemLink Text="Use NHS 111 online to check if you need urgent help"
+                               Command="{Binding NhsUkOneOneOneServiceCommand}"
+                               BindingContext="{Reference Name=Root}"/>
+        <controls:Button Text="Continue"
+                         ButtonColour = "{ StaticResource NhsUkGreen }"
+                         ColourGradient="{ StaticResource ButtonGreenLowerGradient }"
+                         TextColour = "{ StaticResource NhsUkWhite }"
+                         Margin="10,20,0,0"
+                         Padding="10,0"
+                         Clicked="LoginButton_OnClicked"
+                         HorizontalOptions="Start" />
     </StackLayout>
 
 </ContentPage>

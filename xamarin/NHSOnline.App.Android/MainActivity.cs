@@ -20,6 +20,7 @@ namespace NHSOnline.App.Droid
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Xamarin.Forms.Forms.SetFlags("Expander_Experimental");
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new NhsApp());
         }

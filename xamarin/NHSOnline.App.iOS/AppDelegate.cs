@@ -4,15 +4,15 @@ using UIKit;
 
 namespace NHSOnline.App.iOS
 {
-    // The UIApplicationDelegate for the application. This class is responsible for launching the 
-    // User Interface of the application, as well as listening (and optionally responding) to 
+    // The UIApplicationDelegate for the application. This class is responsible for launching the
+    // User Interface of the application, as well as listening (and optionally responding) to
     // application events from iOS.
     [Register("AppDelegate")]
     [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "iOS naming convention")]
     public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         //
-        // This method is invoked when the application has loaded and is ready to run. In this 
+        // This method is invoked when the application has loaded and is ready to run. In this
         // method you should instantiate the window, load the UI into it and then make the window
         // visible.
         //
@@ -20,6 +20,7 @@ namespace NHSOnline.App.iOS
         //
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
+            Xamarin.Forms.Forms.SetFlags("Expander_Experimental");
             Xamarin.Forms.Forms.Init();
             LoadApplication(new NhsApp());
 

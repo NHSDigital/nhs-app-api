@@ -54,5 +54,20 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 }
             }
         }
+
+        internal void AssertElementDoesntExist(By @by)
+        {
+            try
+            {
+                _findElement(by);
+            }
+            catch (NoSuchElementException e)
+            {
+                _logs.Info("Retrieved expected no such element exception", e.Message);
+                return;
+            }
+
+            throw new AssertFailedException($"Was expecting not to find the element at {by}.");
+        }
     }
 }

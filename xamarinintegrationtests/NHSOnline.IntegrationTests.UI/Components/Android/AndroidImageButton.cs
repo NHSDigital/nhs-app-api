@@ -2,14 +2,14 @@ using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
-namespace NHSOnline.IntegrationTests.UI.Components.IOS
+namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class IOSButton
+    public sealed class AndroidImageButton
     {
-        private readonly IIOSInteractor _interactor;
+        private readonly IAndroidInteractor _interactor;
         private readonly string _text;
 
-        public IOSButton(IIOSInteractor interactor, string text)
+        public AndroidImageButton(IAndroidInteractor interactor, string text)
         {
             _interactor = interactor;
             _text = text;
@@ -26,11 +26,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         {
             _interactor.ActOnElement(
                 XPath,
-                e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
+                e => e.Displayed.Should().BeTrue("a image button with text {1} should be displayed", _text));
         }
 
-        private By XPath =>
-            By.XPath(
-                $"//XCUIElementTypeButton[normalize-space(@label)={_text.QuoteXPathLiteral()} and @visible='true']");
+        private By XPath => By.XPath($"//android.widget.ImageButton[normalize-space(@content-desc)={_text.QuoteXPathLiteral()}]");
     }
 }

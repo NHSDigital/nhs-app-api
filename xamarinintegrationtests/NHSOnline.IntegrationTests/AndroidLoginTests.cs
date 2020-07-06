@@ -19,11 +19,7 @@ namespace NHSOnline.IntegrationTests
         [NhsAppAndroidTest]
         public void APatientIsShownTheBeforeYouStartPage(IAndroidDriverWrapper driver)
         {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            _ = AndroidBeforeYouStartPage.AssertOnPage(driver);
+            _ = NavigateToBeforeYouStartPage(driver);
         }
 
         [NhsAppAndroidTest]
@@ -49,6 +45,36 @@ namespace NHSOnline.IntegrationTests
             }
 
             _ = AndroidLoggedInHomePage.AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest()]
+        public void APatientCanClickTheLinksAndIsTakenToTheCorrectPages(IAndroidDriverWrapper driver)
+        {
+            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
+
+            beforeYouStartPage.TriggerCovidLinkClick();
+            AndroidAppTab.AssertFirstAppTabServiceByHeader(driver, "Covid Service");
+            beforeYouStartPage.TriggerConditionsLinkClick();
+            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "Conditions Service");
+            beforeYouStartPage.TriggerOneOneOneLinkClick();
+            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "111 Service");
+        }
+
+        [NhsAppAndroidTest()]
+        public void APatientCanUseTheExpander(IAndroidDriverWrapper driver)
+        {
+            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
+            beforeYouStartPage.AssertExpanderPresent();
+        }
+
+        private AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)
+        {
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            var beforeYouStartPage = AndroidBeforeYouStartPage.AssertOnPage(driver);
+            return beforeYouStartPage;
         }
     }
 }

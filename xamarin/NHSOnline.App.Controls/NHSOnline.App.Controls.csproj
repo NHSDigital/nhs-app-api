@@ -20,14 +20,36 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Colours.xaml">
+    <EmbeddedResource Update="NhsUkColours.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="FrutigerLTW01-55Roman.ttf" />
     <EmbeddedResource Include="FrutigerLTW01-65Bold.ttf" />
     <EmbeddedResource Include="NhsLogo.svg" />
+    <EmbeddedResource Include="icon-minus.svg" />
+    <EmbeddedResource Include="icon-plus.svg" />
     <EmbeddedResource Update="NhsUkStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ListItemLink.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Heading1.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Paragraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BulletedParagraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Expander.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
@@ -38,13 +60,28 @@
       <DependentUpon>Button.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Colours.xaml.cs">
+    <Compile Update="NhsUkColours.xaml.cs">
       <DependentUpon>Colours.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="NhsUkStyles.xaml.cs">
       <DependentUpon>NhsUkStyles.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ListItemLink.xaml.cs">
+      <DependentUpon>ListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Heading1.xaml.cs">
+      <DependentUpon>Heading1.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Paragraph.xaml.cs">
+      <DependentUpon>Paragraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="BulletedParagraph.xaml.cs">
+      <DependentUpon>BulletedParagraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Expander.xaml.cs">
+      <DependentUpon>Expander.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

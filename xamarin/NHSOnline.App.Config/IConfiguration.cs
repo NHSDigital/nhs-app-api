@@ -15,5 +15,6 @@ namespace NHSOnline.App.Config
         INhsLoginConfiguration NhsLogin { get; }
         INhsAppWebConfiguration NhsAppWeb { get; }
         INhsAppApiConfiguration NhsAppApi { get; }
+        IBeforeYouStartConfiguration BeforeYouStart { get; }
     }
 }

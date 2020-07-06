@@ -9,5 +9,6 @@ namespace NHSOnline.App.Config.Values.Staging
         public INhsLoginConfiguration NhsLogin { get; } = new StagingNhsLoginConfiguration();
         public INhsAppWebConfiguration NhsAppWeb { get; } = new StagingNhsAppWebConfiguration();
         public INhsAppApiConfiguration NhsAppApi { get; } = new StagingNhsAppApiConfiguration();
+        public IBeforeYouStartConfiguration BeforeYouStart { get; } = new StagingBeforeYouStartConfiguration();
     }
 }

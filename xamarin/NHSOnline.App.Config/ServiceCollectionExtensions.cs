@@ -10,7 +10,8 @@ namespace NHSOnline.App.Config
                 .AddSingleton(IConfiguration.Configuration)
                 .AddSingleton(IConfiguration.Configuration.NhsLogin)
                 .AddSingleton(IConfiguration.Configuration.NhsAppApi)
-                .AddSingleton(IConfiguration.Configuration.NhsAppWeb);
+                .AddSingleton(IConfiguration.Configuration.NhsAppWeb)
+                .AddSingleton(IConfiguration.Configuration.BeforeYouStart);
         }
     }
 }

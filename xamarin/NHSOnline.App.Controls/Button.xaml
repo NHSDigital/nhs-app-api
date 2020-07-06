@@ -6,13 +6,10 @@
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Colours.xaml" />
+                <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <x:Int16 x:Key="CornerRadius">4</x:Int16>
-            <!-- <x:Int16 x:Key="BorderWidth">2</x:Int16> -->
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkGreen}" />
-                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
                 <Setter Property="Padding" Value="16, 12" />
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
@@ -21,7 +18,6 @@
             </Style>
             <Style TargetType="BoxView" Class="BorderBackground">
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
-                <Setter Property="Color" Value="#00401e" />
             </Style>
             <Style TargetType="BoxView" Class="PositionalGuide">
                 <Setter Property="Opacity" Value="0" />
@@ -47,6 +43,7 @@
     <AbsoluteLayout>
         <BoxView AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
                  AbsoluteLayout.LayoutBounds="0, 1, 1, 28"
+                 Color="{Binding ColourGradient}" BindingContext="{Reference Name=Root}"
                  StyleClass="BorderBackground" />
         <StackLayout Spacing="0"
                      AbsoluteLayout.LayoutFlags="All"
@@ -60,7 +57,10 @@
                     Clicked="EncapsulatedButton_OnClicked"
                     Pressed="EncapsulatedButton_OnPressed"
                     Released="EncapsulatedButton_OnReleased"
-                    Text="{Binding Text}" BindingContext="{Reference Name=Root}" />
+                    Text="{Binding Text}" 
+                    TextColor="{Binding TextColour}"
+                    BackgroundColor="{Binding ButtonColour}"
+                    BindingContext="{Reference Name=Root}" />
             <BoxView VerticalOptions="Start"
                      HeightRequest="4"
                      StyleClass="PositionalGuide"

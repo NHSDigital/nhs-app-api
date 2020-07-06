@@ -1,5 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
@@ -7,11 +10,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class BeforeYouStartPage: IBeforeYouStartView
     {
         public event EventHandler<EventArgs>? LoginRequested;
+        public event EventHandler<EventArgs>? NhsUkCovidServicePageRequested;
+        public event EventHandler<EventArgs>? NhsUkConditionsServicePageRequested;
+        public event EventHandler<EventArgs>? NhsUkOneOneOneServicePageRequested;
 
         public BeforeYouStartPage()
         {
             InitializeComponent();
         }
+
+        public ICommand NhsUkCovidServiceCommand => new Command(() => NhsUkCovidServicePageRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand NhsUkConditionsCommand => new Command(() => NhsUkConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand NhsUkOneOneOneServiceCommand => new Command(() => NhsUkOneOneOneServicePageRequested?.Invoke(this, EventArgs.Empty));
 
         private void LoginButton_OnClicked(object sender, EventArgs e)
         {

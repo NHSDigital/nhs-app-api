@@ -46,6 +46,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action, Action<InteractorOptions>? configure)
             => _interactor.ActOnElement(by, action, configure);
 
+        void IAndroidInteractor.AssertElementDoesntExist(By @by)
+            => _interactor.AssertElementDoesntExist(by);
+
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
             context.TryAttachScreenshot(_driver);

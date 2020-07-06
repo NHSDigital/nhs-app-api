@@ -43,6 +43,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action, Action<InteractorOptions>? configure)
             => _interactor.ActOnElement(by, action, configure);
 
+        void IIOSInteractor.AssertElementDoesntExist(By @by) => _interactor.AssertElementDoesntExist(by);
+
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
             context.TryAttachScreenshot(_driver);

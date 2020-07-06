@@ -1,16 +1,15 @@
-using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class AndroidLabel
+    public class AndroidView
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _text;
 
-        public AndroidLabel(
+        public AndroidView(
             IAndroidInteractor interactor,
             string text)
         {
@@ -18,12 +17,11 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _text = text;
         }
 
-        public void AssertVisible(Action<InteractorOptions>? configure = null)
+        public void AssertVisible()
         {
             _interactor.ActOnElement(
                 XPath,
-                e => e.Displayed.Should().BeTrue("a label with text {1} should be displayed", _text),
-                configure);
+                e => e.Displayed.Should().BeTrue("a view with text {1} should be displayed", _text));
         }
 
         public void AssertNotVisible()
@@ -32,13 +30,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
                 XPath);
         }
 
-        public void Click()
-        {
-            _interactor.ActOnElement(
-                XPath,
-                e => e.Click());
-        }
-
-        private By XPath => By.XPath($"//android.widget.TextView[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
+        private By XPath => By.XPath($"//android.view.View[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
     }
 }
