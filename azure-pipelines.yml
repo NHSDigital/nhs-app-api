@@ -243,8 +243,7 @@ stages:
     dependsOn:
       - web
       - backend
-    condition: false # Disabling until twistlock is back in action
-    #condition: and(succeeded(), or(variables['security.run.scans'], eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')))
+    condition: and(succeeded(), or(variables['security.run.scans'], eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')))
     jobs:
       - template: .azuredevops/templates/run-security-scan-job.yml
 
