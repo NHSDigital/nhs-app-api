@@ -4,6 +4,7 @@ import net.serenitybdd.core.Serenity
 import utils.set
 import worker.JsonPatch
 import worker.WorkerClient
+import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 
@@ -29,14 +30,16 @@ class MessagesApi {
         fun postSetup(
                 request: MessageRequest,
                 nhsLoginId: String,
-                includeApiKey: Boolean = true) = post(request, nhsLoginId, includeApiKey)
+                includeApiKey: Boolean = true): MessageCreateResponse? = post(request, nhsLoginId, includeApiKey)
 
         fun post(request: MessageRequest,
                  nhsLoginId: String,
-                 includeApiKey: Boolean = true) {
-                Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                 includeApiKey: Boolean = true): MessageCreateResponse? {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                         .messages
                         .post(request, nhsLoginId, includeApiKey)
+            MessagesSerenityHelpers.CREATE_MESSAGE_RESPONSE.set(response)
+            return response
         }
 
         fun patch(authToken: String?, messageId: String, patch: JsonPatch) {

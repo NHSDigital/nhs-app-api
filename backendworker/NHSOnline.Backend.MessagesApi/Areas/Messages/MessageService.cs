@@ -55,6 +55,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                 };
 
                 var result = await _messageRepository.Create(userMessage);
+
                 return result.Accept(new RepositoryCreateResultVisitor());
             }
             catch (Exception e)

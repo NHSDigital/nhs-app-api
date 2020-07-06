@@ -4,17 +4,22 @@ import com.google.gson.Gson
 import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
+import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesResponse
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
     fun post(message: MessageRequest, nhsLoginId: String, includeApiKey:Boolean)
-            : HttpResponse? {
+            : MessageCreateResponse? {
         val httpPost = RequestBuilder.post(uri(nhsLoginId))
                 .addBody(message, gson)
                 .addExternalSystemApiKey(includeApiKey)
-        return httpPost.send(sender)
+        val response = httpPost.sendAndGetResult(sender)
+        if (response != null) {
+            return gson.fromJson(response, MessageCreateResponse::class.java)
+        }
+        return null
     }
 
     fun get(authToken: String?, summary:Boolean, targetSender:String? =null): Array<MessagesResponse> {

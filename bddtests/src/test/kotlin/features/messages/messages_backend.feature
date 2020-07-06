@@ -66,6 +66,7 @@ Feature: Messages Backend
     Given I am an api user wishing to post a message
     When I post a message to the api
     Then I receive a "Created" success code
+    And I receive the message id
     And the message is available in the database
 
   Scenario: An api user posting incomplete messages will receive a 400

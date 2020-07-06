@@ -8,8 +8,10 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.InvalidAccessTokenTester
 import models.IdentityProofingLevel
 import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import utils.SerenityHelpers
 import utils.getOrFail
+import worker.models.messages.MessageCreateResponse
 import worker.models.messages.MessagesSummaryFacade
 import worker.models.messages.SingleMessageFacade
 import worker.models.messages.MessagesResponse
@@ -108,6 +110,13 @@ class MessagesGetStepDefinitionsBackend {
         val expectedMessages =
                 MessagesSerenityHelpers.EXPECTED_MESSAGES_FROM_SENDER.getOrFail<MessagesSummaryFacade>()
         assertReceivedMessages(arrayListOf(expectedMessages), responseMessages)
+    }
+
+    @Then("^I receive the message id$")
+    fun iReceiveTheMessageId() {
+        val response =
+                MessagesSerenityHelpers.CREATE_MESSAGE_RESPONSE.getOrFail<MessageCreateResponse>()
+        assertNotNull("Message Id",response.messageId)
     }
 
     private fun assertReceivedMessages(expectedMessages: ArrayList<MessagesSummaryFacade>,

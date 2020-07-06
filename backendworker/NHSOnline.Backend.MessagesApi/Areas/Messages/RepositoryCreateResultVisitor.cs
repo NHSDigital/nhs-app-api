@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public MessageResult Visit(RepositoryCreateResult<UserMessage>.Created result)
         {
-            return new MessageResult.Success();
+            return new MessageResult.Success(result.Record.Id.ToString());
         }
     }
 }

@@ -104,12 +104,10 @@ class MessagesFactory {
         val patient = SerenityHelpers.getPatient()
         val nhsLoginId = patient.subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
-        val authToken = patient.accessToken
 
         val messageToPost = MessageRequest(senderOne, "Message One", 1)
-        MessagesApi.postSetup(messageToPost, nhsLoginId)
-        val response = MessagesApi.getFromSender(authToken, senderOne)!!.single()
-        MessagesSerenityHelpers.MESSAGE_ID.set(response.messages.single().id)
+        val response = MessagesApi.postSetup(messageToPost, nhsLoginId)
+        MessagesSerenityHelpers.MESSAGE_ID.set(response?.messageId)
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(messageToPost)
     }
 

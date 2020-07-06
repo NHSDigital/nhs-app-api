@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     public class MessageResultVisitor : IMessageResultVisitor<IActionResult>
     {
         public IActionResult Visit(MessageResult.Success result){
-            return new StatusCodeResult(StatusCodes.Status201Created);
+            return new CreatedResult(string.Empty, result.Response);
         }
 
         public IActionResult Visit(MessageResult.BadGateway result)

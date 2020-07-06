@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
         private AddMessageRequest _validAddMessageRequest;
         private string _nhsLoginId;
+        private const string MessageId = "MessageId";
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,7 +32,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
             _nhsLoginId = "Nhs login id";
-         
+
             _mockMessageService = new Mock<IMessageService>();
             _validAddMessageRequest = new AddMessageRequest();
 
@@ -39,7 +40,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessagesValidationService
                 .Setup(x => x.IsMessageRequestValid(_validAddMessageRequest, _nhsLoginId))
                 .Returns(true);
-            
+
             _mockMessagesValidationService
                 .Setup(x => x.IsPatchRequestValid(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
                 .Returns(true);
@@ -56,16 +57,23 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Post_Success()
         {
             // Arrange
+            var messageResult = new MessageResult.Success(MessageId);
+            var expectedResponse = new AddMessageResponse
+            {
+                MessageId = MessageId
+            };
+
             _mockMessageService.Setup(x => x.Send(_validAddMessageRequest, _nhsLoginId))
-                .ReturnsAsync(new MessageResult.Success());
+                .ReturnsAsync(messageResult);
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
 
             // Assert
             _mockMessageService.VerifyAll();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
+            var statusCodeResult = result.Should().BeAssignableTo<CreatedResult>();
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status201Created);
+            statusCodeResult.Subject.Value.Should().BeEquivalentTo(expectedResponse);
         }
 
         [TestMethod]
@@ -77,7 +85,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
@@ -109,23 +117,23 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
             statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
-        
+
         [TestMethod]
         public async Task Post_MessageIsNull_ReturnsBadRequest()
         {
             // Arrange
             _mockMessageService.Setup(x => x.Send(It.IsAny<AddMessageRequest>(), _nhsLoginId ))
                 .ReturnsAsync(new MessageResult.BadRequest());
-            
+
             // Act
             var result = await _systemUnderTest.Post(null, _nhsLoginId);
-            
+
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
         }
@@ -136,10 +144,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Arrange
             _mockMessageService.Setup(x => x.Send(It.IsAny<AddMessageRequest>(), _nhsLoginId ))
                 .ReturnsAsync(new MessageResult.BadRequest());
-            
+
             // Act
             var result = await _systemUnderTest.Post(_validAddMessageRequest, _nhsLoginId);
-            
+
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
         }
@@ -374,14 +382,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
         {
             // Arrange
-            
+
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.InternalServerError());
 
             // Act
             var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
@@ -398,7 +406,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Act
             var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
-            
+
             // Assert
             _mockMessageService.VerifyAll();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
@@ -412,7 +420,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageService.Setup(x => x.UpdateMessage(
                     It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadRequest());
-            
+
             var result = await _systemUnderTest.Patch(null, "message id");
 
             // Assert
