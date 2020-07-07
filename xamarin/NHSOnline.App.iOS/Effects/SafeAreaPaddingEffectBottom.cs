@@ -3,16 +3,15 @@ using NHSOnline.App.Controls;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
-using SafeAreaPaddingEffect = NHSOnline.App.iOS.Effects.SafeAreaPaddingEffect;
 
-[assembly: ResolutionGroupName(NhsAppEffects.ResolutionGroupName)]
-[assembly: ExportEffect(typeof(SafeAreaPaddingEffect), SafeAreaPadding.EffectName)]
+[assembly: ExportEffect(typeof(NHSOnline.App.iOS.Effects.SafeAreaPaddingEffectBottom), SafeAreaPaddingBottom.EffectName)]
 
 namespace NHSOnline.App.iOS.Effects
 {
-    internal class SafeAreaPaddingEffect : PlatformEffect
+    internal class SafeAreaPaddingEffectBottom : PlatformEffect
     {
         private Thickness _originalPadding;
+
         protected override void OnAttached()
         {
             if (!(Element is Layout element))
@@ -23,7 +22,7 @@ namespace NHSOnline.App.iOS.Effects
             _originalPadding = element.Padding;
 
             var insets = UIApplication.SharedApplication.Windows[0].SafeAreaInsets;
-            element.Padding = AddTopPadding(element, insets.Top > 0 ? insets.Top : 20);
+            element.Padding = AddBottomPadding(element, insets.Bottom);
         }
 
         protected override void OnDetached()
@@ -34,14 +33,16 @@ namespace NHSOnline.App.iOS.Effects
             }
         }
 
-        private static Thickness AddTopPadding(Layout element, nfloat topInsetPadding)
+        private static Thickness AddBottomPadding(
+            Layout element,
+            nfloat BottomInsetPadding)
         {
             var (left, top, right, bottom) = element.Padding;
             return new Thickness(
                 left,
-                top + topInsetPadding,
+                top,
                 right,
-                bottom);
+                bottom + BottomInsetPadding);
         }
     }
 }

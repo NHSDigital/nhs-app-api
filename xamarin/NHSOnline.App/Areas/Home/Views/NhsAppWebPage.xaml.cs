@@ -20,6 +20,8 @@ namespace NHSOnline.App.Areas.Home.Views
             InitializeComponent();
 
             AddEventHandlers();
+
+            NavigationPage.SetHasNavigationBar(this, false);
         }
 
         protected override void OnAppearing()
@@ -62,5 +64,8 @@ namespace NHSOnline.App.Areas.Home.Views
         public async Task AddCookie(Cookie cookie) => await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+
+        // This will be changed in NHSO-10645 when we update with web native changes
+        public void NavigateWithinApp(string spaPath) => WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')");
     }
 }

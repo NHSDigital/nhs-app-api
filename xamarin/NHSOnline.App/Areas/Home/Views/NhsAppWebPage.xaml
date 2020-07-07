@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<app:NhsAppFullHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
+             xmlns:app="clr-namespace:NHSOnline.App;assembly=NHSOnline.App"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage">
 
-    <ContentPage.Content>
-        <webViews:NhsAppWebView x:Name="WebView" />
-    </ContentPage.Content>
-
-</ContentPage>
+    <webViews:NhsAppWebView x:Name="WebView" VerticalOptions = "FillAndExpand"/>
+    
+</app:NhsAppFullHeaderPage>

@@ -42,7 +42,8 @@
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
-    <Compile Include="Effects\SafeAreaPaddingEffect.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\WebViews\DelegatingWebViewNavigationDelegate.cs" />

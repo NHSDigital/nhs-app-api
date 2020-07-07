@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue with NHS login");
         private AndroidButton CheckYourSymptoms => new AndroidButton(_driver, "Check symptoms");
-        private AndroidIcon HelpIcon => new AndroidIcon(_driver, "NHS app help icon");
+        private AndroidIcon HelpIcon => new AndroidIcon(_driver, "NHS App help icon");
 
         public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {

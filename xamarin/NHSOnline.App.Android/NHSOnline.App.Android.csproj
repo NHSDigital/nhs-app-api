@@ -53,6 +53,7 @@
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
+    <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -116,7 +117,6 @@
     <None Include="Properties\BuildConfiguration.env.Local.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\xml\network_security_config.xml" Condition="'$(NhsAppEnableStubs)' != 'true'" />
     <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />

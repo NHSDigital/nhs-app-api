@@ -6,6 +6,7 @@ namespace NHSOnline.App.Config
     {
         Uri NhsUkCovidUrl { get; }
         Uri NhsUkCovidConditionsUrl { get; }
+        Uri NhsUkBaseHelpUrl { get; }
         Uri NhsUkLoginHelpUrl { get; }
         Uri NhsUkConditionsUrl { get; }
         Uri OneOneOneUrl { get; }

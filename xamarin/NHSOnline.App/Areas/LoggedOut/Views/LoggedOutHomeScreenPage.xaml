@@ -11,10 +11,10 @@
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
              x:Name="Root">
     
-    <ContentView BackgroundColor="{ StaticResource NhsUkBlue}">                
-        <ContentView.Effects>                    
-            <controls:SafeAreaPadding/>               
-        </ContentView.Effects>       
+    <ContentView BackgroundColor="{ StaticResource NhsUkBlue}">
+        <ContentView.Effects>
+            <controls:SafeAreaPaddingTop/>
+        </ContentView.Effects>
 
         <StackLayout BackgroundColor="{ StaticResource NhsUkWhite}">
         <AbsoluteLayout VerticalOptions="FillAndExpand" Margin="0,0,0,0">

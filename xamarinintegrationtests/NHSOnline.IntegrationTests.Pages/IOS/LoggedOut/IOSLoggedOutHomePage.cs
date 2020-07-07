@@ -17,7 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSButton ContinueButton => new IOSButton(_driver, "Continue with NHS login");
         private IOSButton CheckYourSymptoms => new IOSButton(_driver, "Check symptoms");
 
-        private IOSIcon HelpIcon => new IOSIcon(_driver, "NHS app help icon");
+        private IOSIcon HelpIcon => new IOSIcon(_driver, "NHS App help icon");
 
 
         public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)

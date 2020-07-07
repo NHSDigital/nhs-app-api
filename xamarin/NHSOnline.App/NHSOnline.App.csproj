@@ -58,5 +58,32 @@
     <Compile Update="NhsApp.xaml.cs">
       <DependentUpon>NhsApp.xaml</DependentUpon>
     </Compile>
+    <Compile Update="NhsAppFullHeaderPage.xaml.cs">
+      <DependentUpon>NhsUkPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NhsAppBackSlimHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppBackSlimHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NhsAppCloseSlimHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppCloseSlimHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="NhsAppFullHeaderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="NhsAppBackSlimHeaderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="NhsAppCloseSlimHeaderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
