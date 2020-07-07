@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
@@ -19,13 +18,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             InitializeComponent();
         }
 
+        public ICommand LoginCommand => new Command(() => LoginRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkCovidServiceCommand => new Command(() => NhsUkCovidServicePageRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkConditionsCommand => new Command(() => NhsUkConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkOneOneOneServiceCommand => new Command(() => NhsUkOneOneOneServicePageRequested?.Invoke(this, EventArgs.Empty));
-
-        private void LoginButton_OnClicked(object sender, EventArgs e)
-        {
-            LoginRequested?.Invoke(this, EventArgs.Empty);
-        }
     }
 }

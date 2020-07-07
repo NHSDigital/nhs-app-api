@@ -20,5 +20,15 @@ namespace NHSOnline.HttpMocks.Domain
             patient.PersonalDetails.Name = build(new PatientNameBuilder()).Build();
             return patient;
         }
+
+        internal static TPatient WithBehaviour<TPatient, TBehaviour>(this TPatient patient, TBehaviour behaviour)
+            where TPatient : Patient
+            where TBehaviour: class
+        {
+            patient = patient ?? throw new ArgumentNullException(nameof(patient));
+
+            patient.Behaviours.Add(behaviour);
+            return patient;
+        }
     }
 }

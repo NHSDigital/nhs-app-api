@@ -13,6 +13,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             _by = new InputBy("checkbox", label);
         }
 
-        public void Click() => _driver.ActOnElement(_by.Label, e => e.Click());
+        public void Click()
+        {
+            _driver.ActOnElement(_by.Label, e => e.Click());
+        }
     }
 }

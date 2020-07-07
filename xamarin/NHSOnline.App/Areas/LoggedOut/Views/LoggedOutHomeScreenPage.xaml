@@ -60,8 +60,7 @@
                     </Grid>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer 
-                            Command="{Binding NhsUkCovidConditionsServiceCommand}"
-                            BindingContext="{Reference Name=Root}"/>
+                            Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Root}}" />
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
                 <StackLayout StyleClass="LogoPanel"
@@ -73,8 +72,7 @@
                                     AutomationProperties.IsInAccessibleTree="true">
                         <icons:IconHelp.GestureRecognizers>
                             <TapGestureRecognizer 
-                                Command="{Binding NhsUkLoginHelpServiceCommand}"
-                                BindingContext="{Reference Name=Root}"/>
+                                Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Root}}" />
                         </icons:IconHelp.GestureRecognizers>
                     </icons:IconHelp>
 
@@ -97,7 +95,7 @@
                                      ButtonColour = "{StaticResource NhsUkWhite}"
                                      ColourGradient="{ StaticResource NhsUkDarkGrey }"
                                      TextColour = "Black"
-                                  HorizontalOptions="FillAndExpand"/>
+                                     HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
 
             </StackLayout>
@@ -111,7 +109,7 @@
                              ButtonColour = "{StaticResource NhsUkBlue}"
                              TextColour = "{ StaticResource NhsUkWhite }"
                              ColourGradient="{ StaticResource NhsUkDarkGrey }"
-                             Clicked="LoginButton_OnClicked"
+                             Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
                              HorizontalOptions="FillAndExpand" />
             <Label Text="Version 2.Xamarin"
                    HorizontalOptions="Center" />

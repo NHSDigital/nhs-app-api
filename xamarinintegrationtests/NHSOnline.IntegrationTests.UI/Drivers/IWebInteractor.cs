@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers

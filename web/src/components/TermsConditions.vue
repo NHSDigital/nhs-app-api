@@ -52,7 +52,7 @@
       </error-message>
       <generic-checkbox :value="termsAcceptedValue"
                         checkbox-id="termsAndConditions-agree_checkbox"
-                        @input="termsSelectionChanged">
+                        @onCheckedChanged="termsSelectionChanged">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('termsAndConditions.checkBoxText1') }}
 
@@ -79,7 +79,7 @@
     </div>
     <generic-checkbox :value="analyticsAcceptedValue"
                       checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox"
-                      @input="analyticsSelectionChanged">
+                      @onCheckedChanged="analyticsSelectionChanged">
       {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
     </generic-checkbox>
     <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
@@ -154,11 +154,11 @@ export default {
       }
       return null;
     },
-    termsSelectionChanged() {
-      this.areTermsAccepted = !this.areTermsAccepted;
+    termsSelectionChanged(isChecked) {
+      this.areTermsAccepted = isChecked;
     },
-    analyticsSelectionChanged() {
-      this.isAnalyticsCookieAccepted = !this.isAnalyticsCookieAccepted;
+    analyticsSelectionChanged(isChecked) {
+      this.isAnalyticsCookieAccepted = isChecked;
     },
   },
 };

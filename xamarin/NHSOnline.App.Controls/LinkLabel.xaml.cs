@@ -7,11 +7,11 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ListItemLink
+    public partial class LinkLabel
     {
 
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(Span));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(LinkLabel));
 
         public static readonly BindableProperty CommandProperty = TapGestureRecognizer.CommandProperty;
 
@@ -27,7 +27,7 @@ namespace NHSOnline.App.Controls
             set => SetValue(CommandProperty, value);
         }
 
-        public ListItemLink()
+        public LinkLabel()
         {
             InitializeComponent();
         }

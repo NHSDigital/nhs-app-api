@@ -14,14 +14,26 @@ namespace NHSOnline.App.Controls
     {
         public static readonly BindableProperty TextProperty =
             BindableProperty.Create(nameof(Text), typeof(string), typeof(Label));
+
+        public static readonly BindableProperty TextColourProperty = BindableProperty.Create(
+            nameof(TextColour), typeof(Color), typeof(NhsPanelWithLabel),
+            NhsUkColours.NhsUkPrimaryText);
+
+        public Heading1()
+        {
+            InitializeComponent();
+        }
+
         public string Text
         {
             get => (string) GetValue(TextProperty);
             set => SetValue(TextProperty, value);
         }
-        public Heading1()
+
+        public Color TextColour
         {
-            InitializeComponent();
+            get => (Color) GetValue(TextColourProperty);
+            set => SetValue(TextColourProperty, value);
         }
     }
 }

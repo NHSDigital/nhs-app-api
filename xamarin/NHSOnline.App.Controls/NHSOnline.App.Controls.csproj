@@ -42,7 +42,19 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ListItemLink.xaml">
+    <EmbeddedResource Update="NhsPanelWithLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="NhsWarningCallout.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="NhsErrorCallout.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ListItem.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
@@ -54,11 +66,11 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="BulletedParagraph.xaml">
+    <EmbeddedResource Update="Expander.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Expander.xaml">
+    <EmbeddedResource Update="LinkLabel.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
@@ -81,7 +93,17 @@
       <DependentUpon>NhsUkStyles.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ListItemLink.xaml.cs">
+    <Compile Update="NhsPanelWithLabel.xaml.cs">
+      <DependentUpon>NhsPanelWithLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NhsWarningCallout.xaml.cs">
+      <DependentUpon>NhsWarningCallout.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="NhsErrorCallout.xaml.cs">
+      <DependentUpon>NhsErrorCallout.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ListItem.xaml.cs">
       <DependentUpon>ListItem.xaml</DependentUpon>
     </Compile>
     <Compile Update="Heading1.xaml.cs">
@@ -90,11 +112,11 @@
     <Compile Update="Paragraph.xaml.cs">
       <DependentUpon>Paragraph.xaml</DependentUpon>
     </Compile>
-    <Compile Update="BulletedParagraph.xaml.cs">
-      <DependentUpon>BulletedParagraph.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Expander.xaml.cs">
       <DependentUpon>Expander.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="LinkLabel.xaml.cs">
+      <DependentUpon>LinkLabel.xaml</DependentUpon>
     </Compile>
     <Compile Update="SafeAreaPadding.xaml.cs">
       <DependentUpon>SafeAreaPaddingEffect.xaml</DependentUpon>

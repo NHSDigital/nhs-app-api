@@ -10,9 +10,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private IOSBeforeYouStartPage(IIOSDriverWrapper driver) => _driver = driver;
 
         private IOSLabel Title => new IOSLabel(_driver, "Before You Start");
-        private IOSLabel CovidLink => new IOSLabel(_driver, "• Check if you have coronavirus symptoms");
-        private IOSLabel ConditionsLink => new IOSLabel(_driver, "• Search conditions and treatments");
-        private IOSLabel OneOneOneLink => new IOSLabel(_driver, "• Use NHS 111 online to check if you need urgent help");
+        private IOSLabel CovidLink => new IOSLabel(_driver, "Check if you have coronavirus symptoms");
+        private IOSLabel ConditionsLink => new IOSLabel(_driver, "Search conditions and treatments");
+        private IOSLabel OneOneOneLink => new IOSLabel(_driver, "Use NHS 111 online to check if you need urgent help");
 
         private IOSButton ContinueButton => new IOSButton(_driver, "Continue");
 

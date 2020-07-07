@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.Controls", "N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.NhsLogin", "NHSOnline.App.NhsLogin\NHSOnline.App.NhsLogin.csproj", "{7BDBCB7C-7B12-433B-AFA2-39E02C4D72EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.Config", "NHSOnline.App.Config\NHSOnline.App.Config.csproj", "{D6DDB9BE-CB40-49D1-89AE-E0023317C174}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.App.Config", "NHSOnline.App.Config\NHSOnline.App.Config.csproj", "{D6DDB9BE-CB40-49D1-89AE-E0023317C174}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.App.Api", "NHSOnline.App.Api\NHSOnline.App.Api.csproj", "{66B1EC4C-A6BC-4E74-B12D-546C56031F4C}"
 EndProject

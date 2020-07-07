@@ -16,18 +16,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public event EventHandler<EventArgs>? NhsUkCovidConditionsServicePageRequested;
         public event EventHandler<EventArgs>? NhsUkLoginHelpServicePageRequested;
 
-        public ICommand NhsUkCovidConditionsServiceCommand => new Command(() => NhsUkCovidConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
-        public ICommand NhsUkLoginHelpServiceCommand => new Command(() => NhsUkLoginHelpServicePageRequested?.Invoke(this, EventArgs.Empty));
-
         public LoggedOutHomeScreenPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        private void LoginButton_OnClicked(object sender, EventArgs e)
-        {
-            LoginRequested?.Invoke(this, EventArgs.Empty);
-        }
+        public ICommand LoginCommand => new Command(()=>LoginRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand NhsUkCovidConditionsServiceCommand => new Command(() => NhsUkCovidConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand NhsUkLoginHelpServiceCommand => new Command(() => NhsUkLoginHelpServicePageRequested?.Invoke(this, EventArgs.Empty));
     }
 }

@@ -42,6 +42,8 @@ export default {
         window.document.title = `${this.$t('updatedTermsAndConditions.title')} - ${this.$t('appTitle')}`;
       }
     }
+
+    this.$store.dispatch('device/pageLoadComplete');
   },
 
 };

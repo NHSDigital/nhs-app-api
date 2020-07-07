@@ -18,6 +18,13 @@ export default {
   unlockNavBar() {
     if (process.client) {
       NativeCallbacks.pageLoadComplete();
+      window.nhsAppPageLoadComplete = true;
+    }
+  },
+  pageLoadComplete() {
+    if (process.client) {
+      NativeCallbacks.pageLoadComplete();
+      window.nhsAppPageLoadComplete = true;
     }
   },
 };

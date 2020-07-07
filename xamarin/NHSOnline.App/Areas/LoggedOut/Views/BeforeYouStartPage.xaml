@@ -8,33 +8,50 @@
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage"
              x:Name="Root">
 
-    <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey }">
+    <StackLayout BindingContext="{x:Reference Name=Root}"
+                 BackgroundColor="{StaticResource NhsUkPageBackgroundGrey }">
         <controls:Heading1 Text="Before You Start"/>
         
-        <controls:Paragraph Text="To use this service you must be:"/>
-        <controls:BulletedParagraph Text="registered with a GP surgery in England"/>
-        <controls:BulletedParagraph Text="aged 13 and over"/>
+        <StackLayout Padding="20, 20, 20, 0">
         
-        <controls:Expander HeaderText="What to do if you're aged 13 to 15"
-                           BodyText="You'll need to contact your GP surgery first and request access to GP online services."/>
+            <controls:Paragraph Text="To use this service you must be:"/>
+            
+            <controls:ListItem>
+                <Label Text="registered with a GP surgery in England" />
+            </controls:ListItem>
+            <controls:ListItem>
+                <Label Text="aged 13 and over" />
+            </controls:ListItem>
+            
+            <controls:Expander HeaderText="What to do if you're aged 13 to 15"
+                               BodyText="You'll need to contact your GP surgery first and request access to GP online services."/>
+            
+            <controls:Paragraph Text="Other services you can use without logging in:"/>
+            
+            <controls:ListItem>
+                <controls:LinkLabel Text="Check if you have coronavirus symptoms"
+                                    Command="{Binding NhsUkCovidServiceCommand}" />
+            </controls:ListItem>
+            
+            <controls:ListItem>
+                <controls:LinkLabel Text="Search conditions and treatments"
+                                    Command="{Binding NhsUkConditionsCommand}" />
+            </controls:ListItem>
+            
+            <controls:ListItem>
+                <controls:LinkLabel Text="Use NHS 111 online to check if you need urgent help"
+                                    Command="{Binding NhsUkOneOneOneServiceCommand}" />
+            </controls:ListItem>
         
-        <controls:Paragraph Text="Other services you can use without logging in:"/>
-        <controls:ListItemLink Text="Check if you have coronavirus symptoms"
-                               Command="{Binding NhsUkCovidServiceCommand}"
-                               BindingContext="{Reference Name=Root}"/>
-        <controls:ListItemLink Text="Search conditions and treatments"
-                               Command="{Binding NhsUkConditionsCommand}"
-                               BindingContext="{Reference Name=Root}"/>
-        <controls:ListItemLink Text="Use NHS 111 online to check if you need urgent help"
-                               Command="{Binding NhsUkOneOneOneServiceCommand}"
-                               BindingContext="{Reference Name=Root}"/>
+        </StackLayout>
+        
         <controls:Button Text="Continue"
                          ButtonColour = "{ StaticResource NhsUkGreen }"
                          ColourGradient="{ StaticResource ButtonGreenLowerGradient }"
                          TextColour = "{ StaticResource NhsUkWhite }"
                          Margin="10,20,0,0"
                          Padding="10,0"
-                         Clicked="LoginButton_OnClicked"
+                         Command="{Binding LoginCommand}"
                          HorizontalOptions="Start" />
     </StackLayout>
 

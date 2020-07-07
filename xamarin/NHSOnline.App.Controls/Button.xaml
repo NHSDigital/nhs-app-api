@@ -43,7 +43,7 @@
     <AbsoluteLayout>
         <BoxView AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
                  AbsoluteLayout.LayoutBounds="0, 1, 1, 28"
-                 Color="{Binding ColourGradient}" BindingContext="{Reference Name=Root}"
+                 Color="{Binding ColourGradient, Source={x:Reference Name=Root}}"
                  StyleClass="BorderBackground" />
         <StackLayout Spacing="0"
                      AbsoluteLayout.LayoutFlags="All"
@@ -53,14 +53,12 @@
                      StyleClass="PositionalGuide"
                      x:Name="TopPositionalGuide" />
             <Button VerticalOptions="Start"
-                    x:Name="EncapsulatedButton"
-                    Clicked="EncapsulatedButton_OnClicked"
+                    Command="{Binding Command, Source={x:Reference Name=Root}}"
                     Pressed="EncapsulatedButton_OnPressed"
                     Released="EncapsulatedButton_OnReleased"
-                    Text="{Binding Text}" 
-                    TextColor="{Binding TextColour}"
-                    BackgroundColor="{Binding ButtonColour}"
-                    BindingContext="{Reference Name=Root}" />
+                    Text="{Binding Text, Source={x:Reference Name=Root}}" 
+                    TextColor="{Binding TextColour, Source={x:Reference Name=Root}}"
+                    BackgroundColor="{Binding ButtonColour, Source={x:Reference Name=Root}}" />
             <BoxView VerticalOptions="Start"
                      HeightRequest="4"
                      StyleClass="PositionalGuide"

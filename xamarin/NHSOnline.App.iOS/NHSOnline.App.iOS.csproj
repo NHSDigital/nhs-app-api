@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -85,7 +85,7 @@
       <Name>NHSOnline.App.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\NHSOnline.App\NHSOnline.App.csproj">
-      <Project>{E4B18CE6-D1B1-44F7-86F3-7DEAFDF47E31}</Project>
+      <Project>{61B85797-E631-4EC3-A3CC-6B8DB92A9B01}</Project>
       <Name>NHSOnline.App</Name>
     </ProjectReference>
   </ItemGroup>

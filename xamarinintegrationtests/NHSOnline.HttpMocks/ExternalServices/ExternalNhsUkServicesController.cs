@@ -65,5 +65,17 @@ namespace NHSOnline.HttpMocks.ExternalServices
                 </html>",
                 "text/html");
         }
+
+        [HttpGet("contactus")]
+        public IActionResult ContactUs()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>Contact Us</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
     }
 }

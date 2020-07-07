@@ -2,23 +2,24 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="NHSOnline.App.Controls.BulletedParagraph"
+             x:Class="NHSOnline.App.Controls.LinkLabel"
              x:Name="Root">
-
     <View.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryLinkBlue}" />
+                <Setter Property="TextDecorations" Value="Underline" />
                 <Setter Property="FontSize" Value="15" />
-                <Setter Property="FontFamily" Value="Fruitiger W01" />
-                <Setter Property="Margin" Value="30,0,0,0" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
-
-    <StackLayout>
-        <Label Text="{Binding Text, StringFormat='&#x2022; {0}'}" BindingContext="{Reference Name=Root}" />
-    </StackLayout>
+    
+    <Label AutomationProperties.IsInAccessibleTree="true" Text="{Binding Text, Source={x:Reference Name=Root}}">
+        <Label.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}"  />
+        </Label.GestureRecognizers>
+    </Label>
 </ContentView>

@@ -20,10 +20,13 @@
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
                 <Setter Property="FontSize" Value="15" />
             </Style>
+            <Style TargetType="Expander">
+                <Setter Property="Margin" Value="0, 20, 0, 20" />
+            </Style>
         </ResourceDictionary>
     </View.Resources>
     
-    <Expander Margin="20,20,0,0">
+    <Expander>
         <Expander.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -33,33 +36,30 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-                <icons:IconPlus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
-                                   HeightRequest="40" IsVisible="True">
+                
+                <icons:IconPlus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" HeightRequest="40" IsVisible="True">
                     <icons:IconPlus.Triggers>
-                        <DataTrigger TargetType="icons:IconPlus"
-                                      Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}"
-                                      Value="True">
-                            <Setter Property="IsVisible"
-                                    Value="False" />
+                        <DataTrigger TargetType="icons:IconPlus" Value="True"
+                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}">
+                            <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </icons:IconPlus.Triggers>
                 </icons:IconPlus>
-                <icons:IconMinus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
-                                    HeightRequest="40" IsVisible="False">
+                
+                <icons:IconMinus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" HeightRequest="40" IsVisible="False">
                     <icons:IconMinus.Triggers>
-                        <DataTrigger TargetType="icons:IconMinus"
-                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}"
-                                     Value="True">
-                            <Setter Property="IsVisible"
-                                    Value="True" />
+                        <DataTrigger TargetType="icons:IconMinus" Value="True"
+                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}">
+                            <Setter Property="IsVisible" Value="True" />
                         </DataTrigger>
                     </icons:IconMinus.Triggers>
                 </icons:IconMinus>
-                <Label Grid.Row="0" Grid.Column="1" Text="{Binding HeaderText}" BindingContext="{Reference Name=Root}"
-                       StyleClass="ExpanderHeader">
-                </Label>
+                
+                <Label Grid.Row="0" Grid.Column="1" StyleClass="ExpanderHeader"
+                       Text="{Binding HeaderText, Source={x:Reference Name=Root}}" />
             </Grid>
         </Expander.Header>
+        
         <Grid Padding="50,0,50,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -67,8 +67,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Text="{Binding BodyText}" BindingContext="{Reference Name=Root}"
-                   StyleClass="ExpanderBody"/>
+            
+            <Label Grid.Row="0" Grid.Column="0" StyleClass="ExpanderBody"
+                   Text="{Binding BodyText, Source={x:Reference Name=Root}}" />
         </Grid>
     </Expander>
 </ContentView>

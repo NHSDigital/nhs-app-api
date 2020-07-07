@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -56,7 +57,7 @@ namespace NHSOnline.HttpMocks.CitizenId
         }
 
         [HttpGet("complete-login")]
-        public IActionResult CompleteLogin(
+        public async Task<IActionResult> CompleteLogin(
             [FromQuery(Name = "redirect_uri")] string redirect,
             [FromQuery] string state,
             [FromQuery] string patientId)
@@ -67,7 +68,9 @@ namespace NHSOnline.HttpMocks.CitizenId
                 return Unauthorized();
             }
 
-            return Redirect($"{redirect}?state={state}&code={patient.Id}");
+            var behaviour = patient.Behaviours.Get<INhsLoginAuthoriseBehaviour>(() => new NhsLoginAuthoriseDefaultBehaviour());
+
+            return await behaviour.Behave(patient, redirect, state);
         }
 
         [HttpPost("token")]

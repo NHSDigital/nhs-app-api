@@ -10,9 +10,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidBeforeYouStartPage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => new AndroidLabel(_driver, "Before You Start");
-        private AndroidLabel CovidLink => new AndroidLabel(_driver, "• Check if you have coronavirus symptoms");
-        private AndroidLabel ConditionsLink => new AndroidLabel(_driver, "• Search conditions and treatments");
-        private AndroidLabel OneOneOneLink => new AndroidLabel(_driver, "• Use NHS 111 online to check if you need urgent help");
+        private AndroidLabel CovidLink => new AndroidLabel(_driver, "Check if you have coronavirus symptoms");
+        private AndroidLabel ConditionsLink => new AndroidLabel(_driver, "Search conditions and treatments");
+        private AndroidLabel OneOneOneLink => new AndroidLabel(_driver, "Use NHS 111 online to check if you need urgent help");
         private AndroidLabel ExpanderHeader => new AndroidLabel(_driver, "What to do if you're aged 13 to 15");
 
         private AndroidLabel ExpanderBody => new AndroidLabel(_driver,

@@ -51,9 +51,13 @@ export default {
       selectedCheckbox: this.isSelected,
     };
   },
+  mounted() {
+    this.$emit('onCheckedChanged', this.selectedCheckbox);
+  },
   methods: {
-    onChange() {
+    onChange(event) {
       this.$emit('input', this.value);
+      this.$emit('onCheckedChanged', event.target.checked);
     },
   },
 };

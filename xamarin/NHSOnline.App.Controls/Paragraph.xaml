@@ -13,13 +13,13 @@
                 <Style TargetType="Label">
                     <Setter Property="FontSize" Value="15" />
                     <Setter Property="FontFamily" Value="Fruitiger W01" />
-                    <Setter Property="Margin" Value="20" />
+                    <Setter Property="Margin" Value="0, 5, 0, 5" />
                     <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
                 </Style>
             </ResourceDictionary>
         </View.Resources>
 
         <StackLayout>
-            <Label Text="{Binding Text}" BindingContext="{Reference Name=Root}"/>
+            <Label Text="{Binding Text}" BindingContext="{x:Reference Name=Root}"/>
         </StackLayout>
 </ContentView>

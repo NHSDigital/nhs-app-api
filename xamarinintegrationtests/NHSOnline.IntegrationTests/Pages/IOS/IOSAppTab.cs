@@ -31,6 +31,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         internal static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Login Help");
 
+        internal static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Contact Us");
+
         private static IOSAppTab AssertOnPage(IIOSDriverWrapper driver, string title)
         {
             var page = new IOSAppTab(driver, title);
