@@ -67,7 +67,7 @@ namespace NHSOnline.IntegrationTests
             beforeYouStartPage.AssertExpanderPresent();
         }
 
-        private AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)
+        private static AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver)
