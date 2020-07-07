@@ -21,10 +21,12 @@ describe('load', () => {
       name: 'ben',
     }];
 
+    const response = { data: profiles };
+
     const that = {
       app: {
         $http: {
-          getV1PatientLinkedAccounts: jest.fn().mockImplementation(() => Promise.resolve(profiles)),
+          getV1PatientLinkedAccounts: jest.fn().mockImplementation(() => Promise.resolve(response)),
         },
       },
       dispatch: jest.fn(),

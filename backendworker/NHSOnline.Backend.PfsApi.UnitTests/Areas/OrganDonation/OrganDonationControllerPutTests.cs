@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
 
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             // Arrange
             var organDonationRegistrationResponse = new OrganDonationRegistrationResponse();
             var newResult = new OrganDonationRegistrationResult.SuccessfullyRegistered(organDonationRegistrationResponse);
-            
+
             _mockOrganDonationService
                 .Setup(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) newResult));
@@ -82,19 +82,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockValidator
                 .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
                 .Returns(false);
-            
+
             // Act
             var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest(), _userSession);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
-            
-            
+
+
             _mockOrganDonationService.Verify(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession), Times.Never);
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation update registration request failed validation"));
         }
-        
+
         [TestMethod]
         public async Task Put_ReturnsGatewayTimeout_WhenServiceReturnTimeoutResult()
         {
@@ -140,10 +140,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockOrganDonationService.Verify(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => 
+            _mockAuditor.Verify(x =>
                 x.Audit(ResponseAuditType, "There was an upstream error when registering the organ donation decision update"));
         }
-        
+
         [TestMethod]
         public async Task Put_ReturnsInternalServerError_WhenServiceReturnSystemErrorResult()
         {

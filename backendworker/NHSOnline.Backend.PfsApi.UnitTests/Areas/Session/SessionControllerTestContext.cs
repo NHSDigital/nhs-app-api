@@ -23,6 +23,7 @@ using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -131,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             SessionConfigSettings = new SessionConfigurationSettings(false);
 
-            UserSession = new P9UserSession(CsrfRequestToken, CitizenIdUserSession, EmisUserSession, string.Empty);
+            UserSession = new P9UserSession(CsrfRequestToken, "nhsNumber", CitizenIdUserSession, EmisUserSession, string.Empty);
 
             ConfigurationSettings = new ConfigurationSettings
             {

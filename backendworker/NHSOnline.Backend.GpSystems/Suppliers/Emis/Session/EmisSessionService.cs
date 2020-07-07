@@ -5,10 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
@@ -84,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                     NhsNumber = nhsNumber,
                     OdsCode = odsCode,
-                    AppointmentBookingReasonNecessity =  Necessity.Mandatory,
+                    AppointmentBookingReasonNecessity = Necessity.Mandatory,
                     PrescriptionSpecialRequestNecessity = Necessity.Optional
                 };
 
@@ -93,8 +95,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 var either = EmisConnectionTokenParser.Parse(connectionToken);
                 var accessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid);
 
-                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
-                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
+                var sessionRequestTask =
+                    SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
+                var practiceSettingsTask = _emisClient.PracticeSettingsGet(emisRequestParameters, odsCode);
                 await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
 
                 var processSessionsStep = await UpdateSessionWithUserSessionsResponse(session, sessionRequestTask);
@@ -102,6 +105,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 {
                     return processSessionsStepFinalResult;
                 }
+
                 var patientName = processSessionsStep.Result;
 
                 await UpdateSessionWithPracticeSettings(session, practiceSettingsTask, patientName);
@@ -110,8 +114,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             }
             catch (EmisSessionResponseErrorException responseError)
             {
-                _logger.LogError(responseError, $"{StandardErrorMessage}, {nameof(EmisSessionResponseErrorException)} has been thrown");
+                _logger.LogError(responseError,
+                    $"{StandardErrorMessage}, {nameof(EmisSessionResponseErrorException)} has been thrown");
                 return responseError.ErrorResult;
+            }
+            catch (NhsUnparsableException unparsableException)
+            {
+                _logger.LogError(unparsableException.Message);
+                return new GpSessionCreateResult.Unparseable(unparsableException.Message);
+            }
+            catch (NhsTimeoutException timeoutException)
+            {
+                _logger.LogError(timeoutException.Message);
+                return new GpSessionCreateResult.Timeout(timeoutException.Message);
             }
             catch (HttpRequestException e)
             {

@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void TestInitialize()
         {
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new VisionUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new VisionUserSession(), "im1token");
 
             _systemUnderTest = new MyRecordSectionController(
                 new Mock<ILogger<MyRecordSectionController>>().Object,
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             // Arrange
             var mockGpSystem = new Mock<IGpSystem>();
-            var userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            var userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             // Arrange
             var mockGpSystem = new Mock<IGpSystem>();
-            var userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), gpUserSession: new TppUserSession(), "im1token");
+            var userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), gpUserSession: new TppUserSession(), "im1token");
 
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             // Arrange
             var mockGpSystem = new Mock<IGpSystem>();
-            var userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new MicrotestUserSession(), "im1token");
+            var userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new MicrotestUserSession(), "im1token");
 
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);

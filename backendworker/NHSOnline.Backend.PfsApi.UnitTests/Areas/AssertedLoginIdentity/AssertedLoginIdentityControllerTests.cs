@@ -39,6 +39,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         {
             _p9UserSession = new P9UserSession(
                 "csrfToken",
+                "nhsNumber",
                 new CitizenIdUserSession{ OdsCode = "A12345" },
                 new EmisUserSession(),
                 "im1token");

@@ -8,6 +8,7 @@ describe('actions', () => {
   const sessionTimeout = 1200;
   const odsCode = 'P123';
   const token = 'sdfdhgmbnrdstgjxjcbv';
+  const data = { name, sessionTimeout, odsCode, token };
   const response = { consentGiven: true };
   let commit;
   let state;
@@ -15,7 +16,7 @@ describe('actions', () => {
   beforeEach(() => {
     actions.app = {
       $http: {
-        postV1Session: jest.fn(() => Promise.resolve({ name, sessionTimeout, odsCode, token })),
+        postV1Session: jest.fn(() => Promise.resolve({ data })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
         getV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve({ response })),
       },

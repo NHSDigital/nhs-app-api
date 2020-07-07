@@ -170,15 +170,21 @@ class AuthenticationStepDefinitionsBackend {
         val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
                 .getOrNull<UserSessionResponse>()
         val serviceJourneyRules = userSessionResponse!!.userSessionResponseBody.serviceJourneyRules
-        Assert.assertEquals("Service Journey Rules Appointments provider",
-                AppointmentsProvider.im1,
-                serviceJourneyRules.journeys.appointments.provider)
-        Assert.assertEquals("Service Journey Rules CdssAdmin provider",
-                CdssProvider.eConsult,
-                serviceJourneyRules.journeys.cdssAdmin.provider)
-        Assert.assertEquals("Service Journey Rules CdssAdvice provider",
-                CdssProvider.eConsult,
-                serviceJourneyRules.journeys.cdssAdvice.provider)
+        Assert.assertNotNull(serviceJourneyRules)
+
+        if(SerenityHelpers.getGpSupplier() === Supplier.EMIS ||
+                SerenityHelpers.getGpSupplier() === Supplier.TPP) {
+            Assert.assertEquals("Service Journey Rules Appointments provider",
+             AppointmentsProvider.im1,
+             serviceJourneyRules.journeys.appointments.provider)
+             Assert.assertEquals("Service Journey Rules CdssAdmin provider",
+                     CdssProvider.eConsult,
+                     serviceJourneyRules.journeys.cdssAdmin.provider)
+             Assert.assertEquals("Service Journey Rules CdssAdvice provider",
+                     CdssProvider.eConsult,
+                     serviceJourneyRules.journeys.cdssAdvice.provider)
+        }
+
     }
 
     @Then("^the cookie contains a session guid with http-only$")

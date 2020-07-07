@@ -88,7 +88,7 @@
 
              _demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-             _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1ConnectionToken");
+             _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1ConnectionToken");
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
              _mockDemographicsService = new Mock<IDemographicsService>();

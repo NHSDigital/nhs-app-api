@@ -13,27 +13,19 @@ Feature: Login error messages
     Then I see the login page
 
 #403
-  @nativesmoketest
-  Scenario: CitizenID login is successful but TPP GP System authentication fails
-    Given I am logged into Citizen ID but GP System authentication fails
-    Then In the error message I see the service reference number prefix with "3c"
-    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
-    When I click the error 'Back to home' link
-    Then I see the login page
-
-#403
   Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
     Given I attempt to log in as an EMIS user with no userPatientLinkToken
     Then In the error message I see the service reference number prefix with "3c"
     When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
     Then a new tab has been opened by the link
 
-#502
+
+  #Invalid auth token
   @nativesmoketest
-  Scenario: CitizenID login is successful but EMIS session cannot be established
-    Given I am logged into Citizen ID but EMIS session cannot be established
-    Then In the error message I see the service reference number prefix with "3e"
-    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3e'
+  Scenario: CitizenID login is successful but TPP GP System authentication fails I can still login to the app
+    Given I am logged into Citizen ID but GP System authentication fails
+    Then In the error message I see the service reference number prefix with "3c"
+    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
     When I click the error 'Back to home' link
     Then I see the login page
 

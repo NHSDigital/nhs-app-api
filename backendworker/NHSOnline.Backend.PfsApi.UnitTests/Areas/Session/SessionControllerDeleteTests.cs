@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             mockGpUserSession.Object.NhsNumber = nhsNumber ?? "NHS Number";
             var citizenIdUserSession = new CitizenIdUserSession { AccessToken =  accessToken ?? "Access Token"};
 
-            return new P9UserSession("CSRF", citizenIdUserSession, mockGpUserSession.Object, "Im1")
+            return new P9UserSession("CSRF", "nhsNumber", citizenIdUserSession, mockGpUserSession.Object, "Im1")
                 { Key = key ?? "Key" };
         }
 

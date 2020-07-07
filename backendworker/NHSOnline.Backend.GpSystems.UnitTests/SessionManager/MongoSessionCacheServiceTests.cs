@@ -50,7 +50,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task CreateUserSession_P9UserSession_SetsTypeNameAsP9UserSession()
         {
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new TppUserSession(), string.Empty);
+            var userSession = new P9UserSession(
+            string.Empty,
+            string.Empty,
+            new CitizenIdUserSession(),
+            new TppUserSession(),
+            string.Empty);
 
             ArrangeNoEncryption();
 
@@ -86,7 +91,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithTppGpSession_ReturnsTppGpSession()
         {
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new TppUserSession(), string.Empty);
+            var userSession = new P9UserSession(
+            string.Empty,
+            string.Empty,
+             new CitizenIdUserSession(),
+             new TppUserSession(),
+             string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -104,7 +114,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithEmisGpSession_ReturnsEmisGpSession()
         {
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
+            var userSession = new P9UserSession(
+            string.Empty,
+            string.Empty,
+            new CitizenIdUserSession(),
+            new EmisUserSession(),
+            string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -122,7 +137,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
         {
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new MicrotestUserSession(), string.Empty);
+            var userSession = new P9UserSession(string.Empty,
+            string.Empty,
+            new CitizenIdUserSession(),
+            new MicrotestUserSession(),
+            string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -140,7 +159,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithVisionGpSession_ReturnsVisionGpSession()
         {
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new VisionUserSession(), string.Empty);
+            var userSession = new P9UserSession(
+            string.Empty,
+            string.Empty,
+            new CitizenIdUserSession(),
+            new VisionUserSession(),
+            string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -177,6 +201,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         public async Task GetUserSession_CreatedWithP9Session_ReturnsP9Session()
         {
             var userSession = new P9UserSession(
+                string.Empty,
                 string.Empty,
                 new CitizenIdUserSession { ProofLevel = ProofLevel.P9 },
                 new EmisUserSession(),

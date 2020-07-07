@@ -33,6 +33,12 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
             userSessionOption.IfSome(userSession =>
             {
+
+                if (userSession.GpUserSession is null)
+                {
+                    return;
+                }
+
                 var gpSystem = context.RequestServices.GetRequiredService<IGpSystemFactory>().CreateGpSystem(userSession.GpUserSession.Supplier);
 
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))

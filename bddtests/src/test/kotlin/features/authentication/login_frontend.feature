@@ -79,10 +79,10 @@ Feature: Login frontend
     Given I am a patient with proof level 5
     And I am logged in
     Then I am asked to prove my identity
-    And I can't see the Book and manage appointments link
-    And I can't see the Order a repeat prescription link
-    And I can't see the View your GP medical record link
-    And I can't see the Manage your organ donation decision link
+    And I can't see the Book and manage appointments link on the homepage
+    And I can't see the Order a repeat prescription link on the homepage
+    And I can't see the View your GP medical record link on the homepage
+    And I can't see the Manage your organ donation decision link on the homepage
     And I can see and follow the Check your symptoms link
 
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
@@ -99,6 +99,19 @@ Feature: Login frontend
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
+
+  Scenario Outline: A <GP System> user can still login when the GP System fails
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    And I see my Date of birth on the home page
+    And I see my NHS number on the home page
+    And I can't see the Linked profiles link on the homepage
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
@@ -197,3 +210,16 @@ Feature: Login frontend
     And I am on the login logged-out page
     When I attempt biometric login and fail
     Then I see the login biometric error page is displayed
+
+#502
+  @nativesmoketest
+  Scenario: CitizenID login is successful but EMIS session cannot be established
+    Given I am logged into Citizen ID but EMIS session cannot be established
+    Then the Terms and Conditions page is displayed
+    When I check the agree to terms and conditions checkbox
+    And I click the continue button on Terms and Conditions
+    Then the User Research page is displayed
+    When I click the 'Yes' radio button
+    And I click the 'Continue' button
+    Then I see the home page
+    And I can't see the Linked profiles link on the homepage

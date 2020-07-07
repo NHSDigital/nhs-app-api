@@ -13,5 +13,11 @@ namespace NHSOnline.Backend.GpSystems.Session
         T Visit(GpSessionCreateResult.BadRequest result);
 
         T Visit(GpSessionCreateResult.InvalidConnectionToken result);
+
+        T Visit(GpSessionCreateResult.ErrorExceptionResult result);
+
+        T Visit(GpSessionCreateResult.Unparseable result);
+
+        T Visit(GpSessionCreateResult.Timeout result);
     }
 }

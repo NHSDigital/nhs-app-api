@@ -17,16 +17,19 @@ import {
 } from './mutation-types';
 
 export default {
-  load({ commit }) {
+  async load({ commit }) {
     this.dispatch('linkedAccounts/clearLinkedAccounts');
-    return this.app.$http
-      .getV1PatientLinkedAccounts()
-      .then((data) => {
-        commit(LOADED, data);
-      })
-      .finally(() => {
-        this.dispatch('device/unlockNavBar');
+    try {
+      const response = await this.app.$http.getV1PatientLinkedAccounts({
+        ignoreError: true,
+        returnResponse: true,
       });
+      commit(LOADED, response.data);
+    } catch (error) {
+      // Do nothing
+    } finally {
+      this.dispatch('device/unlockNavBar');
+    }
   },
   async initialiseConfig({ commit }) {
     const patientConfigResponse = await this.app.$http.getV1PatientConfiguration();

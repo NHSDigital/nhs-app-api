@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockNominatedPharmacyService = new Mock<INominatedPharmacyService>();
             _mockPharmacyService = new Mock<IPharmacyService>();
@@ -600,7 +600,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             {
                 Pharmacies = pharmacyResultList,
             };
-            
+
             _mockPharmacySearchService
                 .Setup(x => x.Search(postcode))
                 .Returns(Task.FromResult((PharmacySearchResult)pharmacySearchResult))
@@ -669,15 +669,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
-            
+
             _auditor.Verify(x => x.Audit(
-                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, 
+                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 "Attempting to fetch a random list of Online Pharmacies"));
-            
+
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
-        
-        
+
+
         [TestMethod]
         public async Task OnlineOnlyPharmacySearchByName_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
@@ -687,7 +687,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             const int pharmacyResultCount = 1;
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList, pharmacyResultCount);
-            
+
             var expectedResult = new PharmacySearchResultResponse
             {
                 Pharmacies = pharmacyResultList,
@@ -707,14 +707,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
-            
+
             _auditor.Verify(x => x.Audit(
-                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, 
+                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}"));
-            
+
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
-        
+
         [TestMethod]
         public async Task OnlineOnlyPharmacySearchByName_ReturnsUnsafeSearchTermResult_WhenSearchTermIsDeemedUnsafe()
         {
@@ -730,7 +730,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify(x => x.SearchOnlineOnlyPharmacies(It.IsAny<string>()), Times.Never);
-            
+
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 

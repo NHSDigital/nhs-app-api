@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Auditing
         private readonly string _appApiVersion;
 
         public HttpContextAuditorScope(
-            HttpContext httpContext, 
+            HttpContext httpContext,
             IConfiguration configuration)
         {
             _httpContext = httpContext;
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 return null;
             }
-            
+
             return new VersionTag(_appApiVersion, webAppVersion, nativeAppVersion);
         }
 
@@ -75,12 +75,24 @@ namespace NHSOnline.Backend.Auditing
                     _linkedAccountNhsNumber);
 
             public AuditUserContext Visit(P9UserSession userSession)
-                => new AuditUserContext(
+            {
+                if (userSession.GpUserSession is null)
+                {
+                    return new AuditUserContext(
+                        userSession.CitizenIdUserSession.AccessToken,
+                        userSession.NhsNumber,
+                        Supplier.Unknown,
+                        _isProxying,
+                        _linkedAccountNhsNumber);
+                }
+                return new AuditUserContext(
                     userSession.CitizenIdUserSession.AccessToken,
                     userSession.GpUserSession.NhsNumber,
                     userSession.GpUserSession.Supplier,
                     _isProxying,
                     _linkedAccountNhsNumber);
+            }
+
         }
     }
 }

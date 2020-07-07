@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.PfsApi.Session
         public async Task<CreateSessionResult> CreateSession(ICreateSessionRequest request)
         {
             var citizenIdSession = await _citizenIdService.FetchUserProfile(request);
+
             if (citizenIdSession.ProcessFinishedEarly(out var citizenIdSessionResult))
             {
                 return citizenIdSessionResult;

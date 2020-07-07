@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Session
         }
 
         public abstract T Accept<T>(IGpSessionCreateResultVisitor<T> visitor);
-        
+
         public sealed class Success : GpSessionCreateResult
         {
             public GpUserSession UserSession { get; }
@@ -17,6 +17,51 @@ namespace NHSOnline.Backend.GpSystems.Session
             public Success(GpUserSession userSession)
             {
                 UserSession = userSession;
+            }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public sealed class ErrorExceptionResult : GpSessionCreateResult
+        {
+            public string ErrorMessage { get; }
+
+            public ErrorExceptionResult(string errorMessage)
+            {
+                ErrorMessage = errorMessage;
+            }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public sealed class Unparseable : GpSessionCreateResult
+        {
+            public string ErrorMessage { get; }
+
+            public Unparseable(string errorMessage)
+            {
+                ErrorMessage = errorMessage;
+            }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public sealed class Timeout : GpSessionCreateResult
+        {
+            public string ErrorMessage { get; }
+
+            public Timeout(string errorMessage)
+            {
+                ErrorMessage = errorMessage;
             }
 
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
@@ -40,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.Session
 
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
         }
-        
+
         public sealed class BadRequest : GpSessionCreateResult
         {
             public BadRequest(string message) => Message = message;

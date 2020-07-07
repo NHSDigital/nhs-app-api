@@ -34,10 +34,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
-            
+
             _mockValidator = new Mock<IOrganDonationValidationService>();
             _mockValidator
                 .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         {
             // Arrange
             var newResult = new OrganDonationWithdrawResult.SuccessfullyWithdrawn();
-            
+
             _mockOrganDonationService
                 .Setup(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationWithdrawResult) newResult));
@@ -80,14 +80,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockValidator
                 .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
                 .Returns(false);
-            
+
             // Act
             var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
             _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession), Times.Never);
-            
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation withdraw request failed validation"));
         }
@@ -134,10 +134,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockOrganDonationService.Verify(x => x.Withdraw(It.IsAny<OrganDonationWithdrawRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => 
+            _mockAuditor.Verify(x =>
                 x.Audit(ResponseAuditType, "There was an upstream error when withdrawing the organ donation decision"));
         }
-        
+
         [TestMethod]
         public async Task Delete_WhenServiceReturnSystemErrorResult_ReturnsInternalServerError()
         {

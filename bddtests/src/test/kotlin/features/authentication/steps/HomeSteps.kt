@@ -26,7 +26,8 @@ enum class NavigationLinkText (val linkText: String) {
     MEDICAL_RECORD("View your GP medical record"),
     ORGAN_DONATION("Manage your organ donation decision"),
     MESSAGES("View your messages"),
-    HEALTH_INFORMATION_UPDATES("View health information and updates")
+    HEALTH_INFORMATION_UPDATES("View health information and updates"),
+    LINKED_PROFILES("Linked profiles")
 }
 
 open class HomeSteps {

@@ -147,9 +147,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         [ApiVersion("2")]
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> GetV2(
-            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)] 
+            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)]
             string connectionToken,
-            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] 
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)]
             string odsCode)
         {
             try
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
                 }
 
-                if (!validator.IsGetValid(connectionToken, odsCode)) 
+                if (!validator.IsGetValid(connectionToken, odsCode))
                 {
                     _logger.LogInformation("Im1 verification GET request is invalid");
                     return IsInvalidResponse(
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     return IsInvalidResponse(
                         Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                         StatusCodes.Status501NotImplemented,
-                        new[] { nameof(odsCode) });             
+                        new[] { nameof(odsCode) });
                 }
 
                 var gpSystem = gpSystemOption.ValueOrFailure();
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             {
                 _logger.LogExit();
             }
-        } 
+        }
 
         [ApiVersion("2")]
         [HttpPost, AllowAnonymous]
@@ -215,14 +215,14 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             try
             {
                 var validator = new Im1ConnectionValidator(_logger);
-                
+
                 if (im1RegistrationRequest.OdsCode != null)
                 {
                     im1RegistrationRequest.OdsCode = _odsCodeMassager.CheckOdsCode(im1RegistrationRequest.OdsCode);
                 }
 
                 var isCreateLinkageRequestValid = validator.IsCreateLinkageRequestValid(
-                    im1RegistrationRequest, 
+                    im1RegistrationRequest,
                     out var invalidLinkageParameters);
 
                 var isPatientIm1ConnectionRequestValid =
@@ -233,8 +233,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 {
                     _logger.LogInformation("Patient Im1 Connection Request invalid, cannot continue with registration");
                     return IsInvalidResponse(
-                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails, 
-                        StatusCodes.Status400BadRequest, 
+                        Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
+                        StatusCodes.Status400BadRequest,
                         invalidLinkageParameters.Concat(invalidIm1ConnectionParameters).Distinct());
                 }
 
@@ -271,7 +271,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             if (!isPatientIm1ConnectionRequestValid)
             {
                 _logger.LogInformation("Patient Im1 Connection Request invalid, requires linkage result to register");
-                
+
                 var retrieveLinkageRequest = CreateRetrieveLinkageKeysRequest(im1RegistrationRequest);
                 var retrieveLinkageResult = await _retrieveLinkageKeysService.RetrieveLinkageKey(retrieveLinkageRequest, gpSystem);
 
@@ -326,7 +326,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         }
 
         private IActionResult IsInvalidResponse(
-            Im1ConnectionErrorCodes.ExternalCode errorCode, 
+            Im1ConnectionErrorCodes.ExternalCode errorCode,
             int statusCode,
             IEnumerable<string> invalidParameters)
         {

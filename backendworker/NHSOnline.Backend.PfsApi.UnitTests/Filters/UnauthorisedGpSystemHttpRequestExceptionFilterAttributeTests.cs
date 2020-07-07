@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         public void TestInitialize()
         {
             var logger = new Mock<ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>>();
-            
+
             _userSessionManager = new Mock<IUserSessionManager>();
             _userSessionService = new Mock<IUserSessionService>();
 
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 _userSessionManager.Object,
                 new Mock<IAuditor>().Object,
                 logger.Object);
-            
+
             _mockHttpContext = new Mock<HttpContext>();
         }
 
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_CallUserSessionManagerDelete()
         {
             // Arrange
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
+            var userSession = new P9UserSession(string.Empty, "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
             ArrangeUserSession(userSession);
             var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
 
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_SetsResultTo401()
         {
             // Arrange
-            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
+            var userSession = new P9UserSession(string.Empty, "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
             ArrangeUserSession(userSession);
             var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
 
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             exceptionContext.Result.Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task OnException_ExceptionAlreadyHandled_ResultUnchanged()
         {
@@ -161,10 +161,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(
                 exceptionHandled: true,
                 result: new StatusCodeResult(StatusCodes.Status418ImATeapot));
-            
+
             // Act
             await _systemUnderTest.OnExceptionAsync(exceptionContext);
-            
+
             // Assert
             exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject
                 .StatusCode.Should().Be(StatusCodes.Status418ImATeapot);

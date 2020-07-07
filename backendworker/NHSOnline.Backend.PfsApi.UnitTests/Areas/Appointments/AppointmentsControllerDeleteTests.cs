@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
         private Guid _patientId;
-        
+
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
@@ -43,10 +43,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-            
+
             _appointmentCancelRequest = new AppointmentCancelRequest();
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockAppointmentsService = new Mock<IAppointmentsService>();
 
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAppointmentsService.Setup(x => x.Cancel(
                 It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession 
+                    d => d.GpUserSession == _userSession.GpUserSession
                          && d.PatientId == _patientId), _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.Success()));
 
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
-            
+
             _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _serviceDeskReference = "Error reference";
 
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Arrange
             _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
                 .Returns(false);
-            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
                     StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
 
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
         }
-        
+
         [DataTestMethod]
         [DataRow(typeof(AppointmentCancelResult.BadRequest), StatusCodes.Status400BadRequest,
             "Unable to cancel appointment due to a bad request for appointment with id: {0}")]
@@ -154,11 +154,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var serviceResult = (AppointmentCancelResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.Cancel(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession 
+                        d => d.GpUserSession == _userSession.GpUserSession
                              && d.PatientId == _patientId),
                     _appointmentCancelRequest))
                 .Returns(Task.FromResult(serviceResult));
-            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
 
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentCancelRequest.AppointmentId));
         }
-        
+
         [TestMethod]
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {

@@ -218,8 +218,18 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             return new P9UserSession(
                 string.Empty,
-                new CitizenIdUserSession { AccessToken = accessToken },
+                string.Empty,
+                new CitizenIdUserSession { AccessToken = accessToken, },
                 new EmisUserSession { NhsNumber = nhsNumber },
+                string.Empty);
+        }
+
+        private static UserSession CreateUserSessionNoGpSystem(string nhsNumber, string accessToken)
+        {
+            return new P9UserSession(
+                string.Empty,
+                new CitizenIdUserSession { AccessToken = accessToken },
+                nhsNumber,
                 string.Empty);
         }
 
@@ -297,6 +307,20 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Emis | Test Audit | SomeDetails 'with parameters' |");
         }
 
+        [TestMethod]
+        public async Task Audit_HappyPath_NoGpSession()
+        {
+            await _systemUnderTest.Audit(
+                CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenValid),
+                "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Unknown | Test Audit | SomeDetails 'with parameters' |");
+        }
+
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]
         [DataRow("")]
@@ -324,10 +348,36 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 "with", "parameters");
         }
 
+        [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Audit_AccessTokenNullOrEmpty_NoGpSession_Throws(string accessToken)
+        {
+            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, accessToken);
+
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit",
+                "SomeDetails '{0} {1}'",
+                "with", "parameters");
+        }
+
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public async Task Audit_AccessTokenInvalid_Throws()
         {
             var userSession = CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenInvalid);
+
+            await _systemUnderTest.Audit(
+                userSession,
+                "Test Audit",
+                "SomeDetails '{0} {1}'",
+                "with", "parameters");
+        }
+
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public async Task Audit_AccessTokenInvalid_NoGpSystem_Throws()
+        {
+            var userSession = CreateUserSessionNoGpSystem(_nhsNumber1, AuditorTestResources.AccessTokenInvalid);
 
             await _systemUnderTest.Audit(
                 userSession,
@@ -350,6 +400,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var testString = streamReader.ReadLine();
             testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
+
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]
         [DataRow(null)]

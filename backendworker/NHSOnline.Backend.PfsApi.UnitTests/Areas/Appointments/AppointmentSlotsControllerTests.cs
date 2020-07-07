@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             _patientId = Guid.NewGuid();
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockAppointmentSlotsService = new Mock<IAppointmentSlotsService>();
 

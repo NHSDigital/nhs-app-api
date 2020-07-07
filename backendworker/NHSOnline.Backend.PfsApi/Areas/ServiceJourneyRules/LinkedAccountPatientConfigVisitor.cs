@@ -46,6 +46,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         public async Task<LinkedAccountsConfigResult> Visit(P9UserSession userSession)
         {
+            LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(
+                Guid.Empty,
+                _sessionSettings,
+                Enumerable.Empty<LinkedAccount>());
+
+            if (userSession.GpUserSession is null)
+            {
+                await result.Accept(new LinkedAccountConfigResultAuditingVisitor(_auditor, _logger));
+                return result;
+            }
+
             await _auditor.Audit(AuditingOperations.GetPatientConfigRequest, "Attempting to get config for patient");
 
             var validAccounts = Enumerable.Empty<LinkedAccount>();
@@ -70,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 }
             }
 
-            LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(
+            result = new LinkedAccountsConfigResult.Success(
                 userSession.GpUserSession.Id,
                 _sessionSettings,
                 validAccounts);

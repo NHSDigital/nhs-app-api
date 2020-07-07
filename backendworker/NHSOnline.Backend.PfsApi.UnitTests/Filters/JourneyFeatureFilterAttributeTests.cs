@@ -38,10 +38,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             _userSession = new P9UserSession(
                 string.Empty,
-                new CitizenIdUserSession(), 
+                string.Empty,
+                new CitizenIdUserSession(),
                 new EmisUserSession { OdsCode = "X10000" },
-                string.Empty);            
-            
+                string.Empty);
+
             _sjrResponse = new ServiceJourneyRulesResponse()
             {
                 Journeys = new Journeys()
@@ -85,17 +86,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                     {
                         Body = _sjrResponse
                     });
-            
+
             var actionContext = new ActionContext
             {
                 HttpContext = _mockHttpContext.Object,
                 RouteData = new RouteData(),
                 ActionDescriptor = new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor(),
             };
-            
+
             _context = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
         }
-        
+
         [DataRow(false)]
         [DataRow(null)]
         [DataTestMethod]
@@ -111,15 +112,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.Result.Should().NotBeNull();
             var result = _context.Result.Should().BeOfType<StatusCodeResult>().Subject;
             result.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        }        
-        
+        }
+
         [TestMethod]
         public async Task OnAuthorizationAsync_FindsNominatedPharmacyIsNotEnabled_AndReturnsCustomErrorCode()
         {
             // Arrange
             _systemUnderTest = new JourneyFeatureFilterAttribute(
                 JourneyFeature.NominatedPharmacy, HttpStatusCode.InternalServerError);
-            
+
             _sjrResponse.Journeys.NominatedPharmacy = false;
 
             // Act
@@ -129,8 +130,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.Result.Should().NotBeNull();
             var result = _context.Result.Should().BeOfType<StatusCodeResult>().Subject;
             result.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        } 
-    
+        }
+
         [TestMethod]
         public async Task OnAuthorizationAsync_FindsNominatedPharmacyIstEnabled()
         {
@@ -143,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             _context.Result.Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task OnAuthorizationAsync_GetServiceJourneyRules_ReturnsUnsuccessfulResponse()
         {
@@ -157,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                     {
                         Body = _sjrResponse
                     });
-            
+
             // Act
             await _systemUnderTest.OnAuthorizationAsync(_context);
 

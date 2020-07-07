@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
                 }
 
                 var responseBody = response.Body;
-                if(!IsResponseBodyValid(responseBody))
+                if (!IsResponseBodyValid(responseBody))
                 {
                     const string message = "Vision HttpRequestException has been thrown.";
                     _logger.LogError(message);
@@ -74,6 +75,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
                 const string message = "Vision HttpRequestException has been thrown.";
                 _logger.LogError(ex, message);
                 return new GpSessionCreateResult.BadGateway(message);
+            }
+            catch (NhsUnparsableException unparsableException)
+            {
+                _logger.LogError(unparsableException.Message);
+                return new GpSessionCreateResult.Unparseable(unparsableException.Message);
+            }
+            catch (NhsTimeoutException timeoutException)
+            {
+                _logger.LogError(timeoutException, timeoutException.Message);
+                return new GpSessionCreateResult.Timeout(timeoutException.Message);
             }
             finally
             {

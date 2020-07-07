@@ -25,35 +25,37 @@ export default {
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   async getSession({ commit }) {
-    await this.app.$http.getV1Session()
-      .then((session) => {
-        const {
-          name,
-          odsCode,
-          sessionTimeout,
-          token,
-          nhsNumber,
-          dateOfBirth,
-          accessToken,
-          im1MessagingEnabled,
-          proofLevel,
-        } = (session || {});
+    const response = await this.app.$http.getV1Session({
+      ignoreError: true,
+      returnResponse: true,
+    });
+    if (response.status === 200) {
+      const {
+        name,
+        odsCode,
+        sessionTimeout,
+        token,
+        nhsNumber,
+        dateOfBirth,
+        accessToken,
+        im1MessagingEnabled,
+        proofLevel,
+      } = response.data;
 
-        commit(SET_INFO, {
-          name,
-          durationSeconds: sessionTimeout,
-          gpOdsCode: odsCode,
-          token,
-          nhsNumber,
-          dateOfBirth,
-          accessToken,
-          proofLevel,
-        });
-        commit(LOADED);
-        this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
-      })
-      .catch(() => {});
+      commit(SET_INFO, {
+        name,
+        durationSeconds: sessionTimeout,
+        gpOdsCode: odsCode,
+        token,
+        nhsNumber,
+        dateOfBirth,
+        accessToken,
+        proofLevel,
+      });
 
+      this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
+    }
+    commit(LOADED);
     return Promise.resolve();
   },
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {

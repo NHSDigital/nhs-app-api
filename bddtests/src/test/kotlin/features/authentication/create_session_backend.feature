@@ -1,9 +1,7 @@
 @authentication
 @authentication-session
 @backend
-Feature: Create Session Backend
-
-  The application verifies the user session
+Feature: Create Session Backend: The application verifies the user session
 
   Scenario: We check the session cookie and response body for http
     Given I have a valid authCode and codeVerifier
@@ -43,28 +41,23 @@ Feature: Create Session Backend
   Scenario: EMIS end user session fails to create
     Given I have valid OAuth details and the EMIS end user session endpoint fails to create
     When I create a user session
-    Then I receive a "Bad Gateway" error with service desk reference prefixed "3e"
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
 
   Scenario: EMIS session fails to create
     Given I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session
-    Then I receive a "Bad Gateway" error with service desk reference prefixed "3e"
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
 
   Scenario Outline: <GP System> is unavailable when creating a session
     Given I have valid OAuth details and <GP System> is not available
     When I create a user session
-    Then I receive a "Bad Gateway" error with service desk reference prefixed "<Prefix>"
-    Examples:
-      | GP System | Prefix |
-      | EMIS      | 3e     |
-      | TPP       | 3t     |
-      | VISION    | 3s     |
-      | MICROTEST | 3m     |
-
-  Scenario Outline: When creating a session with <GP System> an incomplete response returns an internal server error
-    Given I have valid OAuth details and <GP System> returns with an incomplete response
-    When I create a user session
-    Then I receive a "Internal Server Error" error with service desk reference prefixed "xx"
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
     Examples:
       | GP System |
       | EMIS      |
@@ -72,7 +65,20 @@ Feature: Create Session Backend
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: CID connection token fails to authenticate with <GP System>
+  Scenario Outline: When creating a session with <GP System> an incomplete response resulting in a parsing error
+    Given I have valid OAuth details and <GP System> returns with an incomplete response
+    When I create a user session
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: CID connection token fails to authenticate with <GP System> so the connection token is invalid
     Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>
     When I create a user session
     Then I receive a "Forbidden" error with service desk reference prefixed "3c"
@@ -82,22 +88,27 @@ Feature: Create Session Backend
       | TPP       |
       | VISION    |
 
-  Scenario Outline: <GP System> fails to respond in 31 seconds
+  Scenario Outline: <GP System> fails to respond in 31 seconds resulting in a timeout
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     When I create a user session
-    Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
     Examples:
-      | GP System | Prefix |
-      | EMIS      | ze     |
-      | TPP       | zt     |
-      | VISION    | zs     |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
 
   # covered in Manual Regression Test pack
   @manual
   Scenario Outline: <GP System> session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
-    Then I receive a "Server Error" error
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
     Examples:
       | GP System |
       | EMIS      |

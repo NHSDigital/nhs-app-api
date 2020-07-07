@@ -37,15 +37,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
 
-        private string RequestAuditMessage()  =>  
+        private string RequestAuditMessage()  =>
             $"Attempting to book appointment with id: { _appointmentBookRequest.SlotId} and startTime: {_appointmentBookRequest.StartTime:O}";
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _appointmentBookRequest = new AppointmentBookRequest();
 
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAppointmentsService.Setup(x => x.Book(
                     It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
                     _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Success()));
 
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
-            
+
             _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _serviceDeskReference = "service desk ref";
 
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Arrange
             _mockAppointmentsValidationService.Setup(x => x.IsPostValid(_appointmentBookRequest))
                 .Returns(false);
-            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
                     StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
 
@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             }
 
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, 
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to book appointment due to bad request for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
@@ -158,10 +158,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                     d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
                     _appointmentBookRequest))
                 .Returns(Task.FromResult(serviceResult));
-            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments, 
+            _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference
@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
-        
+
         [TestMethod]
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {

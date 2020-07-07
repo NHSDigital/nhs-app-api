@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
             var citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
 
-            _userSession = new P9UserSession(_csrfToken, citizenIdUserSession, emisUserSession, _userProfile.Im1ConnectionToken);
+            _userSession = new P9UserSession(_csrfToken, _userProfile.NhsNumber, citizenIdUserSession, emisUserSession, _userProfile.Im1ConnectionToken);
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<GpSessionManager>>>();
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();

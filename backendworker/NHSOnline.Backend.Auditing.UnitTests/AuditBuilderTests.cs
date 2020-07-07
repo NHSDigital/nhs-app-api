@@ -520,6 +520,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             var userSession = new P9UserSession(
                 "csrfToken",
+                "nhsNumber",
                 new CitizenIdUserSession { AccessToken = accessToken ?? CreateAccessTokenString("Test") },
                 gpUserSession.Object,
                 "im1ConnectionToken");

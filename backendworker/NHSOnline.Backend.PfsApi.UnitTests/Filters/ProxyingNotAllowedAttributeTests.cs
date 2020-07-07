@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             var userSession = new P9UserSession(
                 string.Empty,
+                string.Empty,
                 new CitizenIdUserSession(),
                 new EmisUserSession
                 {

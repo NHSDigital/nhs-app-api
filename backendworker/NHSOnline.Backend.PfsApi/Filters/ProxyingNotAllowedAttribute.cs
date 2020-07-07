@@ -22,11 +22,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
             p9UserSessionOpt.IfSome(p9UserSession =>
             {
-                if (IsProxying(p9UserSession, httpContext))
+                if (p9UserSession.GpUserSession != null && IsProxying(p9UserSession, httpContext))
                 {
                     logger.LogWarning(
-                        $"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
-                    context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                            $"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
+                        context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
             });
         }

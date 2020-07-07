@@ -5,6 +5,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.stepDefinitions.AuthenticationFactory
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
@@ -58,6 +59,19 @@ open class SharedStepDefinitions {
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
 
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    @Given("^I am an? (.*) patient whose GP system is unavailable$")
+    fun initialisePatientAndUnavailableGpSystem(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        mockingClient.favicon()
+
+        val patient = Patient.getDefault(supplier)
+        SerenityHelpers.setPatient(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable()
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 

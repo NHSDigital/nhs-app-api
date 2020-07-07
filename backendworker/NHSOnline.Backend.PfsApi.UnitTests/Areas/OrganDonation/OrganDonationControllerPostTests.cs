@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
 
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             // Arrange
             var organDonationRegistrationResponse = new OrganDonationRegistrationResponse();
             var newResult = new OrganDonationRegistrationResult.SuccessfullyRegistered(organDonationRegistrationResponse);
-            
+
             _mockOrganDonationService
                 .Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) newResult));
@@ -87,13 +87,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockValidator
                 .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
                 .Returns(false);
-            
+
             // Act
             var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest(), _userSession);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
-            
+
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession), Times.Never);
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
@@ -146,10 +146,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => 
+            _mockAuditor.Verify(x =>
                 x.Audit(ResponseAuditType, "There was an upstream error when registering the organ donation decision"));
         }
-        
+
         [TestMethod]
         public async Task Post_ReturnsInternalServerError_WhenServiceReturnSystemErrorResult()
         {

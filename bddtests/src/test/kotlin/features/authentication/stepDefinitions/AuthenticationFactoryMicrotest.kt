@@ -2,6 +2,7 @@ package features.authentication.stepDefinitions
 
 import constants.Supplier
 import models.Patient
+import java.time.Duration
 
 class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST) {
 
@@ -16,7 +17,10 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST)
     }
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
-        throw NotImplementedError("Not implemented for Microtest")
+        mockingClient.forMicrotest.mock {
+            demographics.demographicsRequest(patient).respondWithSuccess()
+                    .delayedBy(Duration.ofSeconds(delayBySeconds))
+        }
     }
 
     override fun patientDoesNotExist(patient: Patient) {

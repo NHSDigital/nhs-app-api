@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.Support
         }
 
         public abstract bool ProcessFinishedEarly(out TFinalResult finalResult);
+        public TFinalResult ErrorResult => throw new InvalidOperationException("No error present in this result");
         public abstract TStepResult Result { get; }
 
         internal sealed class StepResult : ProcessResult<TStepResult, TFinalResult>
@@ -44,6 +45,8 @@ namespace NHSOnline.Backend.Support
                 finalResult = _value;
                 return true;
             }
+
+            public new TFinalResult ErrorResult => _value;
 
             public override TStepResult Result => throw new InvalidOperationException("The process has ended early");
         }

@@ -17,10 +17,12 @@ describe('actions', () => {
   const sessionTimeout = 1200;
   const token = 'sdfdhgmbnrdstgjxjcbv';
   const postSessionResponse = {
-    odsCode,
-    name,
-    sessionTimeout,
-    token,
+    data: {
+      odsCode,
+      name,
+      sessionTimeout,
+      token,
+    },
   };
   let commit;
   let state;
@@ -158,7 +160,7 @@ describe('actions', () => {
     });
 
     it('will commit the AUTH_RESPONSE', () => {
-      expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse);
+      expect(commit).toHaveBeenCalledWith(AUTH_RESPONSE, postSessionResponse.data);
     });
   });
 

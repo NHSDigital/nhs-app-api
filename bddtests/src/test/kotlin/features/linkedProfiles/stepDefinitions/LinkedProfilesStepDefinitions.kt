@@ -27,7 +27,6 @@ import models.patients.PatientHandler
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
-import pages.isVisible
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
 import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
@@ -159,11 +158,6 @@ class LinkedProfilesStepDefinitions {
         MyRecordFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
             .enabledWithAllRecords(ProxySerenityHelpers.getPatientOrProxy())
-    }
-
-    @Then("^I see the linked profiles link$")
-    fun iSeeLinkedProfilesLink() {
-        Assert.assertTrue("Linked profiles link not visible", home.linkedProfilesLink.isVisible)
     }
 
     @Then("^the linked profiles page is displayed$")

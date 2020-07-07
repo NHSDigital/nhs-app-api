@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockSessionCacheService = new Mock<ISessionCacheService>();
             _auditor = new Mock<IAuditor>();
             _linkedAccountService = new Mock<ILinkedAccountsService>();
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _linkedAccountAuditInfo = new LinkedAccountAuditInfo();
 
             var mockGpSystem = new Mock<IGpSystem>();

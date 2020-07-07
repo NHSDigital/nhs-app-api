@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService = new Mock<IServiceJourneyRulesService>();
             _sessionConfigSettings = new SessionConfigurationSettings(true);
             _gpUserSession = new Mock<GpUserSession>();
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), _gpUserSession.Object, "im1token")
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpUserSession.Object, "im1token")
             {
                 GpUserSession = { NhsNumber = "Nhs number", OdsCode = "ODS Code" }
             };
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             var expectedResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys() };
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.OdsCode))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
             // Act
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task Get_WhenServiceDoesNotFindConfiguration_ReturnsNotFound()
         {
             // Arrange
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.OdsCode))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
 
             // Act
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task Get_WhenServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
+            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.OdsCode))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.InternalServerError());
 
             // Act

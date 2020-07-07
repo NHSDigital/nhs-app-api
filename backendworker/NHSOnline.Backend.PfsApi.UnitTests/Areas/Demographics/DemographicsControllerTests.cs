@@ -35,26 +35,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
         private  Guid _patientGuid;
 
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _patientGuid = Guid.NewGuid();
-            
+
             _mockAuditor = new Mock<IAuditor>();
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockDemographicsService = new Mock<IDemographicsService>();
-                
+
             _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.Setup(x => x.GetDemographicsService())
                 .Returns(_mockDemographicsService.Object);
-            
+
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
-            
+
             _visitor = new DemographicsResultVisitor(new SuccessfulDemographicsResultMapper());
 
             _systemUnderTest = new DemographicsController(
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 _visitor,
                 _mockAuditor.Object);
         }
-        
+
         [TestMethod]
         public async Task Get_Returns_SuccessfulResult_WhenServiceReturnsSuccessfully()
         {
@@ -83,11 +83,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             _mockDemographicsService.Verify();
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<SuccessfulDemographicsResult>();
-            
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Demographics successfully viewed" ));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsStatus403Forbidden_WhenPatientDoesNotHaveAccessToData()
         {
@@ -107,11 +107,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockDemographicsService.Verify();
-            
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: patient does not have access to data" ));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsBadGateway()
         {
@@ -129,11 +129,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockDemographicsService.Verify();
-            
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: bad gateway" ));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsStatus500InternalServerError_WhenServiceReturnsInternalServerError()
         {
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockDemographicsService.Verify();
-            
+
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
         }

@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _serviceDeskReference = "Service desk ref";
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _systemUnderTest = new PatientMessagesController(
                 _mockGpSystemFactory.Object,

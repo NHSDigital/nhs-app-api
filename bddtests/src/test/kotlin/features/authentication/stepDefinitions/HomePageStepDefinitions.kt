@@ -15,9 +15,9 @@ import features.sharedSteps.BrowserSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.AppointmentHubPage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
+import pages.AppointmentHubPage
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import utils.LinkedProfilesSerenityHelpers
@@ -97,6 +97,11 @@ class HomePageStepDefinitions {
         homeSteps.assertHeaderVisible()
     }
 
+    @Then("^I see the linked profiles link$")
+    fun iSeeLinkedProfilesLink() {
+        homeSteps.assertLinkIsVisible(NavigationLinkText.LINKED_PROFILES)
+    }
+
     @Then("^I see the current app version")
     fun iSeeTheCurrentAppVersion() {
         homeSteps.homePage.assertVersionNumberVisible()
@@ -136,7 +141,12 @@ class HomePageStepDefinitions {
         homeSteps.assertWelcomeMessageShownFor(patient)
     }
 
-    @Then("^I can't see the (.*) link$")
+    @Then("^I can see the (.*) link on the homepage")
+    fun iCanSeeTheSpecifiedLink(linkText: String){
+        homeSteps.homePage.assertLinkIsVisible(linkText)
+    }
+
+    @Then("^I can't see the (.*) link on the homepage$")
     fun iCantSeeTheSpecifiedLink(linkText: String) {
         homeSteps.homePage.assertLinkNotPresent(linkText)
     }

@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             _patientId = Guid.NewGuid();
 
-            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
             _mockCourseService = new Mock<ICourseService>();
             _mockAuditor = new Mock<IAuditor>();
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockGpSystem
                 .Setup(x => x.GetCourseService())
                 .Returns(_mockCourseService.Object);
-            
+
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
@@ -106,11 +106,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         }
 
         [DataTestMethod]
-        [DataRow(typeof(GetCoursesResult.Forbidden), StatusCodes.Status403Forbidden, 
+        [DataRow(typeof(GetCoursesResult.Forbidden), StatusCodes.Status403Forbidden,
             "Error retrieving courses: Insufficient permissions")]
-        [DataRow(typeof(GetCoursesResult.InternalServerError), StatusCodes.Status500InternalServerError, 
+        [DataRow(typeof(GetCoursesResult.InternalServerError), StatusCodes.Status500InternalServerError,
             "Error retrieving courses: Internal Server Error")]
-        [DataRow(typeof(GetCoursesResult.BadGateway), StatusCodes.Status502BadGateway, 
+        [DataRow(typeof(GetCoursesResult.BadGateway), StatusCodes.Status502BadGateway,
             "Error retrieving courses: Supplier Unavailable")]
         public async Task Get_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
             Type serviceResultType,
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             // Arrange
             var serviceResult = (GetCoursesResult) Activator.CreateInstance(serviceResultType);
             _mockCourseService.Setup(x => x.GetCourses(
-                    It.Is<GpLinkedAccountModel>(d => 
+                    It.Is<GpLinkedAccountModel>(d =>
                     d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumAllowanceDiscarded()
         {
@@ -157,13 +157,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             // Assert
             var expectedLogMessage =
-                $"Courses Count: Courses Received={MockNumberOfCourses} " + 
+                $"Courses Count: Courses Received={MockNumberOfCourses} " +
                 $"Courses remaining after filtering out non-repeats={MockNumberOfCourses} " +
                 $"Courses filtered out for exceeding maximum allowance={MockNumberOfCourses} " +
                 $"Courses Returned={MockNumberOfCourses}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumRequestableDiscarded()
         {
@@ -179,13 +179,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                     It.Is<GpLinkedAccountModel>(d =>
                         d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
                 .Returns(Task.FromResult((GetCoursesResult) result));
-            
+
             // Act
             await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             var expectedLogMessage =
-                $"Courses Count: Courses Received={MockNumberOfCourses} " + 
+                $"Courses Count: Courses Received={MockNumberOfCourses} " +
                 $"Courses remaining after filtering out non-repeats={MockNumberOfCourses} " +
                 $"Courses filtered out for exceeding maximum allowance={MockNumberOfCourses} " +
                 $"Courses Returned={MockNumberOfCourses}";

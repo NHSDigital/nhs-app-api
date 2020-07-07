@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 
@@ -87,9 +88,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             }
             catch (HttpRequestException e)
             {
-                const string message = "Failed request to create TPP user session, HttpRequestException has been thrown.";
+                const string message =
+                    "Failed request to create TPP user session, HttpRequestException has been thrown.";
                 _logger.LogError(e, message);
                 return new GpSessionCreateResult.BadGateway(message);
+            }
+            catch (NhsUnparsableException unparsableException)
+            {
+                _logger.LogError(unparsableException.Message);
+                return new GpSessionCreateResult.Unparseable(unparsableException.Message);
+            }
+            catch (NhsTimeoutException timeoutException)
+            {
+                _logger.LogError(timeoutException, timeoutException.Message);
+                return new GpSessionCreateResult.Timeout(timeoutException.Message);
             }
             finally
             {
@@ -167,6 +179,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 return new SessionLogoffResult.Success(gpUserSession);
             }
+
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Failed request to logoff TPP user session, HttpRequestException has been thrown.");

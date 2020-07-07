@@ -66,7 +66,7 @@ export default {
     }
     return cookieValue.accessToken;
   },
-  handleAuthResponse({ commit, state }, code) {
+  async handleAuthResponse({ commit, state }, code) {
     /**
      * This needs to fire a proxy method
      * as more work needs to be done before logging in
@@ -79,46 +79,54 @@ export default {
       consola.info(`handleAuthResponse - codeVerifier=${codeVerifier}, redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
     }
 
-    return this.app.$http
-      .postV1Session({
-        userSession: {
-          authCode: code,
-          codeVerifier,
-          redirectUrl,
-        },
-      })
-      .then((response) => {
-        const {
-          name,
-          odsCode,
-          sessionTimeout,
-          token,
-          nhsNumber,
-          dateOfBirth,
-          accessToken,
-          proofLevel,
-        } = (response || {});
-
-        this.dispatch('session/hideExpiryMessage');
-        this.dispatch('session/setInfo', {
-          name,
-          durationSeconds: sessionTimeout,
-          gpOdsCode: odsCode,
-          token,
-          nhsNumber,
-          dateOfBirth,
-          accessToken,
-          proofLevel,
+    try {
+      const response = await this.app.$http
+        .postV1Session({
+          userSession: {
+            authCode: code,
+            codeVerifier,
+            redirectUrl,
+          },
+          ignoreError: true,
+          returnResponse: true,
         });
 
-        commit(AUTH_RESPONSE, response);
-        this.dispatch('session/startValidationChecking');
 
-        removeCookies({
-          cookies: this.app.$cookies,
-          key: 'nhso.auth',
-        });
+      const {
+        name,
+        odsCode,
+        sessionTimeout,
+        token,
+        nhsNumber,
+        dateOfBirth,
+        accessToken,
+        proofLevel,
+      } = response.data;
+
+
+      this.dispatch('session/hideExpiryMessage');
+      this.dispatch('session/setInfo', {
+        name,
+        durationSeconds: sessionTimeout,
+        gpOdsCode: odsCode,
+        token,
+        nhsNumber,
+        dateOfBirth,
+        accessToken,
+        proofLevel,
       });
+
+      commit(AUTH_RESPONSE, response.data);
+    } catch (error) {
+      this.dispatch('errors/addApiError', error);
+    } finally {
+      this.dispatch('session/startValidationChecking');
+
+      removeCookies({
+        cookies: this.app.$cookies,
+        key: 'nhso.auth',
+      });
+    }
   },
   logoutWhenExpired() {
     this.dispatch('modal/hide');
