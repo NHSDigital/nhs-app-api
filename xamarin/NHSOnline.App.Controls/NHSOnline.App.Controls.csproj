@@ -26,9 +26,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrutigerLTW01-55Roman.ttf" />
     <EmbeddedResource Include="FrutigerLTW01-65Bold.ttf" />
+    <EmbeddedResource Include="Icons\icon-account.svg" />
+    <EmbeddedResource Include="Icons\icon-appointment.svg" />
+    <EmbeddedResource Include="Icons\icon-help.svg" />
+    <EmbeddedResource Include="Icons\icon-home.svg" />
+    <EmbeddedResource Include="Icons\icon-minus.svg" />
+    <EmbeddedResource Include="Icons\icon-more.svg" />
+    <EmbeddedResource Include="Icons\icon-plus.svg" />
+    <EmbeddedResource Include="Icons\icon-prescription.svg" />
+    <EmbeddedResource Include="Icons\icon-record.svg" />
+    <EmbeddedResource Include="Icons\icon-symptoms.svg" />
     <EmbeddedResource Include="NhsLogo.svg" />
-    <EmbeddedResource Include="icon-minus.svg" />
-    <EmbeddedResource Include="icon-plus.svg" />
     <EmbeddedResource Update="NhsUkStyles.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>

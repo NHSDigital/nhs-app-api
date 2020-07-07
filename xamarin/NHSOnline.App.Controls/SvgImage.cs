@@ -6,15 +6,16 @@ using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
 
 namespace NHSOnline.App.Controls
 {
-    public class IconPlus: ContentView
+    public class SvgImage : ContentView
     {
-        private static string LogoEmbeddedResourceName =>
-            $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.icon-plus.svg";
+        private readonly string? _resourceName;
 
         private readonly SKSize _svgSize;
 
-        public IconPlus()
+        internal SvgImage(string svgPath)
         {
+            _resourceName = $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{svgPath}";
+
             var canvasView = new SKCanvasView();
             canvasView.PaintSurface += (sender, args) => PaintBackground(args.Info, args.Surface);
             Content = canvasView;
@@ -72,10 +73,10 @@ namespace NHSOnline.App.Controls
             canvas.DrawPicture(picture, ref matrix);
         }
 
-        private static SKPicture LoadSvg()
+        private SKPicture LoadSvg()
         {
             var svg = new SKSvg();
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(LogoEmbeddedResourceName);
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_resourceName);
             var picture = svg.Load(stream);
             return picture;
         }

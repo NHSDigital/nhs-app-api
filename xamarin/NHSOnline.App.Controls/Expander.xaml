@@ -3,6 +3,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.Expander"
              x:Name="Root">
     <View.Resources>
@@ -33,28 +34,28 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-                <controls:IconPlus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
+                <icons:IconPlus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
                                    HeightRequest="40" IsVisible="True">
-                    <controls:IconPlus.Triggers>
-                        <DataTrigger TargetType="controls:IconPlus"
+                    <icons:IconPlus.Triggers>
+                        <DataTrigger TargetType="icons:IconPlus"
                                       Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}"
                                       Value="True">
                             <Setter Property="IsVisible"
                                     Value="False" />
                         </DataTrigger>
-                    </controls:IconPlus.Triggers>
-                </controls:IconPlus>
-                <controls:IconMinus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
+                    </icons:IconPlus.Triggers>
+                </icons:IconPlus>
+                <icons:IconMinus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"
                                     HeightRequest="40" IsVisible="False">
-                    <controls:IconMinus.Triggers>
-                        <DataTrigger TargetType="controls:IconMinus"
+                    <icons:IconMinus.Triggers>
+                        <DataTrigger TargetType="icons:IconMinus"
                                      Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}"
                                      Value="True">
                             <Setter Property="IsVisible"
                                     Value="True" />
                         </DataTrigger>
-                    </controls:IconMinus.Triggers>
-                </controls:IconMinus>
+                    </icons:IconMinus.Triggers>
+                </icons:IconMinus>
                 <Label Grid.Row="0" Grid.Column="1" Text="{Binding HeaderText}" BindingContext="{Reference Name=Root}"
                        StyleClass="ExpanderHeader">
                 </Label>
