@@ -80,73 +80,85 @@ const config = {
     },
   ],
   env: {
-    // URL Formats
-    URI_FORMAT_API_CLIENT: 'http://api{host}:8089',
-    API_HOST_SERVER: 'http://api.local.bitraft.io:8089',
-    URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
-    URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
+    // About us
+    ACCESSIBILITY_STATEMENT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/',
+    OPEN_SOURCE_LICENCES_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/',
+
+    // Additional Services
+    CORONA_SERVICE_URL: 'https://111.nhs.uk/service/COVID-19/',
+
+    // Analytics
+    ANALYTICS_ENVIRONMENT: 'development',
+    ANALYTICS_SCRIPT_URL: '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
+
+    // Citizen ID
+    CID_AUTH_ENDPOINT_URL: 'https://auth.ext.signin.nhs.uk/authorize',
+    CID_CLIENT_ID: 'nhs-online',
+    CID_P5_VECTOR_OF_TRUST_ENABLED: false,
+
     // Cookie settings
     SECURE_COOKIES: false,
+
     // Core
     COOKIE_DOMAIN: '.bitraft.io',
-    // Citizen ID
-    CID_CLIENT_ID: 'nhs-online',
-    CID_AUTH_ENDPOINT: 'https://auth.ext.signin.nhs.uk/authorize',
-    CID_P5_VECTOR_OF_TRUST_ENABLED: false,
-    // Organ Donation
-    ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
-    ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
-    BLOOD_DONATION_URL: 'https://www.blood.co.uk/',
-    ORGAN_DONATION_ALREADY_REGISTERED_URL: 'https://www.organdonation.nhs.uk/app/app-check/',
-    ORGAN_DONATION_SHARE_DECISION_URL: 'https://www.organdonation.nhs.uk/app/app-share/',
-    ORGAN_DONATION_TELL_FAMILY_URL: 'https://www.organdonation.nhs.uk/app/app-tell/',
-    ORGAN_DONATION_PRIVACY_URL: 'https://www.organdonation.nhs.uk/app/app-privacy/',
-    ORGAN_DONATION_LAW_CHANGE_URL: 'https://www.organdonation.nhs.uk/app/app-law/',
-    // Data Opt-Out
+    COMMIT_ID: 'dev',
+
+    // Data urls
     DATA_PREFERENCES_URL: 'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
-    // Symptom Checker
-    SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
-    SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS: '?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20',
-    CONDITIONS_CHECKER_URL: 'https://www.nhs.uk/conditions/',
-    // Analytics
-    ANALYTICS_SCRIPT_URL: '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
-    ANALYTICS_ENVIRONMENT: 'development',
+    OTHER_WAYS_TO_MAKE_A_CHOICE_URL: 'https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/',
+    YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
+
+    // Feature toggles
+    USER_RESEARCH_ENABLED: false,
+
     // Feedback
     HOTJAR_SITE_ID: '859152',
     HOTJAR_SURVEY_URL: 'https://in.hotjar.com/s?siteId=859152&surveyId=95785',
     HOTJAR_SURVEY_VISIBLE: false,
-    // Legal
-    TERMS_AND_CONDITIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/',
-    PRIVACY_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/',
-    COOKIES_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/',
-    COOKIES_BANNER_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage',
-    COOKIES_BANNER_EXPIRY_DAYS: 365,
-    // Contact us
-    CONTACT_US_URL: 'https://www.nhs.uk/contact-us/nhs-app-contact-us',
-    OPEN_SOURCE_LICENCES_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/',
-    HELP_AND_SUPPORT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
-    ACCESSIBILITY_STATEMENT: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/',
-    YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
-    OTHER_WAYS_TO_MAKE_A_CHOICE: 'https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/',
-    // Appointments
+
+    // Help urls
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
-    ONLINE_CONSULTATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
-    CORONA_SERVICE_URL: 'https://111.nhs.uk/service/COVID-19/',
-    // Nominated Pharmacy
-    NOM_PHARMA_DSP_LINK: 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies',
-    // App Version
-    VERSION_TAG: 'dev_web_npm',
-    COMMIT_ID: 'dev',
+    CONTACT_US_URL: 'https://www.nhs.uk/contact-us/nhs-app-contact-us',
+    HELP_AND_SUPPORT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
+
+    // Legal
     CE_MARK_ENABLED: false,
-    ORGAN_DONATION_INTEGRATION_ENABLED: true,
-    // Session
+    COOKIES_BANNER_EXPIRY_DAYS: 365,
+    COOKIES_BANNER_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage',
+    COOKIES_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/',
+    ONLINE_CONSULTATIONS_PRIVACY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
+    PRIVACY_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/',
+    TERMS_AND_CONDITIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/',
+
+    // Modals
     SESSION_EXPIRING_WARNING_SECONDS: 60,
-    // Click debounce delay in ms
-    DEBOUNCE_SHORT: 500,
-    DEBOUNCE_MEDIUM: 2000,
-    DEBOUNCE_LONG: 5000,
-    // Feature toggles
-    USER_RESEARCH_ENABLED: false,
+
+    // Native Application
+    VERSION_TAG: 'dev_web_npm',
+
+    // Nominated Pharmacy
+    NOMINATED_PHARMACY_DSP_URL: 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies',
+
+    // Organ Donation
+    BLOOD_DONATION_URL: 'https://www.blood.co.uk/',
+    ORGAN_DONATION_ALREADY_REGISTERED_URL: 'https://www.organdonation.nhs.uk/app/app-check/',
+    ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
+    ORGAN_DONATION_LAW_CHANGE_URL: 'https://www.organdonation.nhs.uk/app/app-law/',
+    ORGAN_DONATION_PRIVACY_URL: 'https://www.organdonation.nhs.uk/app/app-privacy/',
+    ORGAN_DONATION_SHARE_DECISION_URL: 'https://www.organdonation.nhs.uk/app/app-share/',
+    ORGAN_DONATION_TELL_FAMILY_URL: 'https://www.organdonation.nhs.uk/app/app-tell/',
+    ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
+
+    // Symptom Checker
+    CONDITIONS_CHECKER_URL: 'https://www.nhs.uk/conditions/',
+    SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
+    SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS: '?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20',
+
+    // URL Formats
+    API_BASE_URL: 'http://api.local.bitraft.io:8089',
+    URI_FORMAT_API_CLIENT: 'http://api{host}:8089',
+    URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
+    URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
   },
 };
 

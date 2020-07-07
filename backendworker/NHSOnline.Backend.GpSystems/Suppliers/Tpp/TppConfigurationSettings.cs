@@ -101,8 +101,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             var applicationVersion = configuration.GetOrWarn("TPP_APPLICATION_VERSION", logger);
             var applicationProviderId = configuration.GetOrWarn("TPP_APPLICATION_PROVIDER_ID", logger);
             var applicationDeviceType = configuration.GetOrWarn("TPP_APPLICATION_DEVICE_TYPE", logger);
-            var certificatePath = configuration.GetOrWarn("TPP_CERTIFICATE_PATH", logger);
-            var certificatePassphrase = configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", logger);
+            var certificatePath = configuration.GetOrWarn("TPP_CERT_PATH", logger);
+            var certificatePassphrase = configuration.GetOrWarn("TPP_CERT_PASSPHRASE", logger);
             var supportsLinkedAccounts = configuration.GetOrWarn("TPP_SUPPORTS_LINKED_ACCOUNTS", logger);
 
             var prescriptionsMaxCoursesSoftLimit = configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", logger);

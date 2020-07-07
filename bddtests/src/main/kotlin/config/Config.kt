@@ -103,7 +103,7 @@ class Config private constructor() {
         autoLogin = envOrDefault("AUTOLOGIN", "false")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "$appScheme://$webHostname:3000/auth-return")
         cidNativeRedirectUri = envOrDefault("CID_REDIRECT_URI", "$nativeAppScheme://$webHostname:3000/auth-return")
-        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")
+        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT_URL", "http://$cidHostname:8080/authorize")
         cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")

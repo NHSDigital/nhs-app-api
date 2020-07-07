@@ -13,11 +13,7 @@ const createStore = ({
 }) => ({
   dispatch: jest.fn(),
   app: {
-    $env: {
-      DEBOUNCE_SHORT: 500,
-      DEBOUNCE_MEDIUM: 1000,
-      DEBOUNCE_LONG: 2000,
-    },
+    $env: {},
   },
   state: {
     device: {
@@ -47,11 +43,7 @@ const createStoreForNoJsTesting = ({ selectedCoursesNoJs, submitted, specialRequ
     router: {
       push: jest.fn(),
     },
-    $env: {
-      DEBOUNCE_SHORT: 500,
-      DEBOUNCE_MEDIUM: 1000,
-      DEBOUNCE_LONG: 2000,
-    },
+    $env: {},
   },
   state: {
     device: {

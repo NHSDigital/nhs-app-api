@@ -5,7 +5,7 @@ secrets:
     file: "~/.nhsonline/secrets/azure_notification_hub_key"
   microtest_cert:
     file: "~/.nhsonline/secrets/microtest_client_cert.pfx"
-  microtest_cert_password:
+  microtest_cert_passphrase:
     file: "~/.nhsonline/secrets/microtest_client_cert.password"
   gp_lookup_api_key:
     file: "~/.nhsonline/secrets/gp_lookup_api_key"
@@ -17,21 +17,21 @@ secrets:
     file: "~/.nhsonline/secrets/nhslogin_ext_rsapass.password"
   organ_donation_cert:
     file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
-  organ_donation_cert_password:
+  organ_donation_cert_passphrase:
     file: "~/.nhsonline/secrets/organ_donation_cert.password"
   session_encryption_key:
     file: "~/.nhsonline/secrets/session_encryption_key"
   spine_cert:
     file: "~/.nhsonline/secrets/spine_client_cert.pfx"
-  spine_cert_password:
+  spine_cert_passphrase:
     file: "~/.nhsonline/secrets/spine_client_cert.password"
   tpp_cert:
     file: "~/.nhsonline/secrets/tpp_client_cert.pfx"
-  tpp_cert_password:
+  tpp_cert_passphrase:
     file: "~/.nhsonline/secrets/tpp_client_cert.password"
   vision_cert:
     file: "~/.nhsonline/secrets/vision_client_cert.pfx"
-  vision_cert_password:
+  vision_cert_passphrase:
     file: "~/.nhsonline/secrets/vision_client_cert.password"
   qualtrics_api_key:
     file: "~/.nhsonline/secrets/qualtrics_api_key"
@@ -75,8 +75,8 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
-          if [ -f "$$TPP_CERTIFICATE_PASSWORD" ]; then
-            export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          if [ -f "$$TPP_CERT_PASSPHRASE" ]; then
+            export TPP_CERT_PASSPHRASE=$$(<$$TPP_CERT_PASSPHRASE)
           fi
           if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
             export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
@@ -84,8 +84,8 @@ services:
           if [ -f "$$ORGAN_DONATION_CERT_PASSPHRASE" ]; then
             export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
           fi
-          if [ -f "$$SPINE_CERT_PASSWORD" ]; then
-            export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
+          if [ -f "$$SPINE_CERT_PASSPHRASE" ]; then
+            export SPINE_CERT_PASSPHRASE=$$(<$$SPINE_CERT_PASSPHRASE)
           fi
           if [ -f "$$GP_LOOKUP_API_KEY" ]; then
             export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
@@ -93,8 +93,8 @@ services:
           if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
             export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
-          if [ -f "$$NDOP_CERTIFICATE_PASSWORD" ]; then
-            export NDOP_CERTIFICATE_PASSWORD=$$(<$$NDOP_CERTIFICATE_PASSWORD)
+          if [ -f "$$NDOP_CERT_PASSPHRASE" ]; then
+            export NDOP_CERT_PASSPHRASE=$$(<$$NDOP_CERT_PASSPHRASE)
           fi
           if [ -f "$$VISION_CERT_PASSPHRASE" ]; then
             export VISION_CERT_PASSPHRASE=$$(<$$VISION_CERT_PASSPHRASE)
@@ -122,18 +122,18 @@ services:
     secrets:
       - gp_lookup_api_key
       - microtest_cert
-      - microtest_cert_password
+      - microtest_cert_passphrase
       - nhslogin_private_key
       - nhslogin_rsapass
       - organ_donation_cert
-      - organ_donation_cert_password
+      - organ_donation_cert_passphrase
       - session_encryption_key
       - spine_cert
-      - spine_cert_password
+      - spine_cert_passphrase
       - tpp_cert
-      - tpp_cert_password
+      - tpp_cert_passphrase
       - vision_cert
-      - vision_cert_password
+      - vision_cert_passphrase
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}
@@ -141,8 +141,8 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
-          if [ -f "$$TPP_CERTIFICATE_PASSWORD" ]; then
-            export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          if [ -f "$$TPP_CERT_PASSPHRASE" ]; then
+            export TPP_CERT_PASSPHRASE=$$(<$$TPP_CERT_PASSPHRASE)
           fi
           if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
             export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
@@ -168,12 +168,12 @@ services:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
       - microtest_cert
-      - microtest_cert_password
+      - microtest_cert_passphrase
       - session_encryption_key
       - tpp_cert
-      - tpp_cert_password
+      - tpp_cert_passphrase
       - vision_cert
-      - vision_cert_password
+      - vision_cert_passphrase
 
   servicejourneyrulesapi.config:
     image: ${SJRCONFIG_DOCKER_REGISTRY:-local}/nhsonline-service-journey-dev-config:${SJRCONFIG_DOCKER_TAG:-latest}

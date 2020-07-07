@@ -7,11 +7,11 @@ secrets:
     file: "./docker/bddtests/secrets/nhsapp_api_key"
   organ_donation_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  organ_donation_cert_password:
+  organ_donation_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   spine_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  spine_cert_password:
+  spine_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   azure_notification_hub_key:
     file: "~/.nhsonline/secrets/azure_notification_hub_key_bdd"
@@ -19,7 +19,7 @@ secrets:
     file: "./docker/bddtests/secrets/gp_lookup_api_key"
   ndop_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  ndop_cert_password:
+  ndop_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   qualtrics_api_key:
     file: "./docker/bddtests/secrets/qualtrics_api_key"
@@ -38,7 +38,7 @@ services:
       - ./docker/bddtests/env/pfs.env
     secrets:
       - ndop_cert
-      - ndop_cert_password
+      - ndop_cert_passphrase
 
   cid.local.bitraft.io:
     env_file:

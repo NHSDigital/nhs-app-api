@@ -52,7 +52,7 @@ describe('Authorisation Service', () => {
     });
 
     it('uses the correct authorisation URL in the request', () => {
-      expect(request.authoriseUrl).toEqual(environment.CID_AUTH_ENDPOINT);
+      expect(request.authoriseUrl).toEqual(environment.CID_AUTH_ENDPOINT_URL);
     });
 
     it('has a challenge in the request', () => {

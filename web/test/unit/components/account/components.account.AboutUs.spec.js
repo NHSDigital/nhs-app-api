@@ -15,7 +15,7 @@ describe('AboutUs', () => {
       PRIVACY_POLICY_URL: URL_EXTERNAL,
       OPEN_SOURCE_LICENCES_URL: URL_EXTERNAL,
       HELP_AND_SUPPORT_URL: URL_EXTERNAL,
-      ACCESSIBILITY_STATEMENT: URL_EXTERNAL } });
+      ACCESSIBILITY_STATEMENT_URL: URL_EXTERNAL } });
   });
 
   it('will have a header', () => {

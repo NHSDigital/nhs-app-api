@@ -26,9 +26,9 @@ namespace NHSOnline.Backend.PfsApi.Ndop
         {
             try
             {
-                var certPath = _configuration.GetOrWarn("NDOP_CERTIFICATE_PATH", _logger);
-                var password = _configuration.GetOrWarn("NDOP_CERTIFICATE_PASSWORD", _logger);
-                _logger.LogInformation("NDOP_CERTIFICATE_PATH: {path}", certPath);
+                var certPath = _configuration.GetOrWarn("NDOP_CERT_PATH", _logger);
+                var password = _configuration.GetOrWarn("NDOP_CERT_PASSPHRASE", _logger);
+                _logger.LogInformation("NDOP_CERT_PATH: {path}", certPath);
 
                 var certificate = _certificateService.GetCertificate(certPath, password);
 

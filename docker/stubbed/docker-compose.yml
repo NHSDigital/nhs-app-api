@@ -3,11 +3,11 @@ version: "3.4"
 secrets:
   tpp_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  tpp_cert_password:
+  tpp_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   microtest_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  microtest_cert_password:
+  microtest_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
   nhslogin_private_key:
     file: "./docker/stubbed/certs/private_key.pem"
@@ -15,7 +15,7 @@ secrets:
     file: "./docker/stubbed/certs/private_key.password"
   vision_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"
-  vision_cert_password:
+  vision_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
 
 services:

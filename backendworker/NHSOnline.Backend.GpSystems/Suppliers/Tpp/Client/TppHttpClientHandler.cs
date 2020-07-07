@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
             var path = configurationSettings.CertificatePath;
             var password = configurationSettings.CertificatePassphrase;
-            logger.LogInformation($"TPP_CERTIFICATE_PATH: {path}");
+            logger.LogInformation($"TPP_CERT_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);
 

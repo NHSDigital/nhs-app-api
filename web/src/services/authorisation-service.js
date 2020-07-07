@@ -48,7 +48,7 @@ class AuthorisationService {
     this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI;
     this.webCidRedirectUri = environment.CID_REDIRECT_URI;
     this.cidClientId = environment.CID_CLIENT_ID;
-    this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
+    this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT_URL;
     this.cidP5VectorOfTrustEnabled = environment.CID_P5_VECTOR_OF_TRUST_ENABLED;
   }
 

@@ -10,7 +10,7 @@ jest.mock('@/services/native-app');
 
 const defaultStore = () => (
   createStore({
-    $env: { ONLINE_CONSULTATIONS_URL: 'www.google.co.uk' },
+    $env: { ONLINE_CONSULTATIONS_PRIVACY_URL: 'www.google.co.uk' },
     state: {
       onlineConsultations: {},
       device: { isNativeApp: false },

@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
             var path = emisConfigurationSettings.CertificatePath;
             var password = emisConfigurationSettings.CertificatePassphrase;
-            logger.LogInformation($"EMIS_CERTIFICATE_PATH: {path}");
+            logger.LogInformation($"EMIS_CERT_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);
 

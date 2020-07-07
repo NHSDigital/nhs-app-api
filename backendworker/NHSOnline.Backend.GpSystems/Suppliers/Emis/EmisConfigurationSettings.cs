@@ -85,8 +85,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var emisBaseUrl = configuration.GetOrWarn("EMIS_BASE_URL", logger);
             var applicationId = configuration.GetOrWarn("EMIS_APPLICATION_ID", logger);
             var version = configuration.GetOrWarn("EMIS_VERSION", logger);
-            var certificatePath = configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", logger);
-            var certificatePassphrase = configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", logger);
+            var certificatePath = configuration.GetOrWarn("EMIS_CERT_PATH", logger);
+            var certificatePassphrase = configuration.GetOrWarn("EMIS_CERT_PASSPHRASE", logger);
 
             var emisExtendedHttpTimeoutSeconds = configuration.GetIntOrWarn("ConfigurationSettings:EmisExtendedHttpTimeoutSeconds", logger);
             var defaultHttpTimeoutSeconds = configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", logger);

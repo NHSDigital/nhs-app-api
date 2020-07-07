@@ -82,7 +82,7 @@ export default {
       dataPreferencesUrl: this.$store.app.$env.DATA_PREFERENCES_URL,
       doesNotApplyPath: DATA_SHARING_DOES_NOT_APPLY.path,
       ndopToken: undefined,
-      otherWaysToMakeChoiceUrl: this.$store.app.$env.OTHER_WAYS_TO_MAKE_A_CHOICE,
+      otherWaysToMakeChoiceUrl: this.$store.app.$env.OTHER_WAYS_TO_MAKE_A_CHOICE_URL,
     };
   },
   methods: {

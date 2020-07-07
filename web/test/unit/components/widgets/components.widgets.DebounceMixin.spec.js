@@ -29,11 +29,7 @@ const verifyDebounceClicks = ({ clickFuncName = 'clicked', createComponent }) =>
 
     $store = {
       app: {
-        $env: {
-          DEBOUNCE_SHORT: 500,
-          DEBOUNCE_MEDIUM: 1000,
-          DEBOUNCE_LONG: 2000,
-        },
+        $env: {},
       },
     };
 

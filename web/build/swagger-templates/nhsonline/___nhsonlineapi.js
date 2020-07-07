@@ -55,7 +55,7 @@ class NHSOnlineApi {
           }
       } = this.store;
       const domain = this.req ?
-          $env.API_HOST_SERVER :
+          $env.API_BASE_URL :
           resolveApiClient({
               host: this.req,
               env: $env

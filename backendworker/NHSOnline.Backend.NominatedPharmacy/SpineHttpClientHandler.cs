@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             var path = spineLdapConfigurationSettings.CertPath;
             var password = spineLdapConfigurationSettings.CertPassword;
-            logger.LogInformation($"SPINE_CERTIFICATE_PATH: {path}");
+            logger.LogInformation($"SPINE_CERT_PATH: {path}");
             var certificate = certificateService.GetCertificate(path, password);
 
             if (certificate != null)

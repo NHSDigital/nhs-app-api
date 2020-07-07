@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      visitOnlinePharmacyListPath: this.$store.app.$env.NOM_PHARMA_DSP_LINK,
+      visitOnlinePharmacyListPath: this.$store.app.$env.NOMINATED_PHARMACY_DSP_URL,
       returnToPrescriptionsPath: PRESCRIPTIONS.path,
     };
   },

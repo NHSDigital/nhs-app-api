@@ -98,7 +98,7 @@ export default {
       name: DEMOGRAPHICS_QUESTION_NAME,
       isDemographicsAccepted: false,
       privacyPolicyUrl: this.$store.app.$env.PRIVACY_POLICY_URL,
-      onlineConsultationsUrl: this.$store.app.$env.ONLINE_CONSULTATIONS_URL,
+      onlineConsultationsUrl: this.$store.app.$env.ONLINE_CONSULTATIONS_PRIVACY_URL,
     };
   },
   computed: {

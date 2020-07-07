@@ -15,7 +15,7 @@ describe('Account Page', () => {
     OPEN_SOURCE_LICENCES_URL: 'https://open-source',
     PRIVACY_POLICY_URL: 'https://privacy',
     HELP_AND_SUPPORT_URL: 'https://help',
-    ACCESSIBILITY_STATEMENT: 'https://accessibility',
+    ACCESSIBILITY_STATEMENT_URL: 'https://accessibility',
   };
 
   const $state = {

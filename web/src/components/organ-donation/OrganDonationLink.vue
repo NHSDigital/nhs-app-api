@@ -12,21 +12,16 @@
 
 <script>
 import get from 'lodash/fp/get';
-import flow from 'lodash/fp/flow';
 
 // For some reason, in this file, when the JEST tests run, it fails unless I add the '.vue'
 // extension.  Other tests seem fine but this one fails!
 // eslint-disable-next-line import/extensions
 import { ORGAN_DONATION } from '@/lib/routes';
-import { isTruthy, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import MenuItem from '@/components/MenuItem';
 
 const getIsNativeApp = get('$store.state.device.isNativeApp');
 const getOrganDonationUrl = get('$store.app.$env.ORGAN_DONATION_URL');
-const getOrganDonationIntegrationEnabled = flow(
-  get('$store.app.$env.ORGAN_DONATION_INTEGRATION_ENABLED'),
-  isTruthy,
-);
 
 export default {
   name: 'OrganDonationLink',
@@ -69,9 +64,8 @@ export default {
       return this.useIntegratedOrganDonation ? ORGAN_DONATION.path : getOrganDonationUrl(this);
     },
     useIntegratedOrganDonation() {
-      // Integrated organ donation is used if it has been switched on in the environment variables
-      // and the request is from the native app.
-      return getOrganDonationIntegrationEnabled(this) && getIsNativeApp(this);
+      // Integrated organ donation is used if the request is from the native app.
+      return getIsNativeApp(this);
     },
   },
   methods: {

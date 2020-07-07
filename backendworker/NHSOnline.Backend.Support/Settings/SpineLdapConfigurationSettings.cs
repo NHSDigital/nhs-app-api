@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Support.Settings
                 var ldapPort = configuration.GetIntOrThrow("SPINE_LDAP_PORT", logger);
                 var loginDn = configuration.GetOrThrow("SPINE_LDAP_LOGIN_DN", logger);
                 var certPath = configuration.GetOrThrow("SPINE_CERT_PATH", logger);
-                var certPassword = configuration.GetOrThrow("SPINE_CERT_PASSWORD", logger);
+                var certPassword = configuration.GetOrThrow("SPINE_CERT_PASSPHRASE", logger);
                 var nhsAppPartyId = configuration.GetOrThrow("NHS_APP_PARTY_ID_FOR_SPINE", logger);
 
                 config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword, nhsAppPartyId);

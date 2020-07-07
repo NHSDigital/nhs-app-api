@@ -116,9 +116,9 @@ spec:
         - name: EMIS_BASE_URL
           value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
         {{- end }}
-        - name: EMIS_CERTIFICATE_PATH
+        - name: EMIS_CERT_PATH
           value: "/secrets/emiscert/emis.pfx"
-        - name: EMIS_CERTIFICATE_PASSWORD
+        - name: EMIS_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
               name: emiscert-password-{{ .Chart.AppVersion }}
@@ -139,12 +139,12 @@ spec:
         - name: TPP_BASE_URL
           value: "{{ $.Values.tppProtocol }}://{{ $.Values.tppHostname }}:{{ $.Values.tppPort }}/Patient/"
         {{- end }}
-        - name: TPP_CERTIFICATE_PASSWORD
+        - name: TPP_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
               name: tpp-{{ .Chart.AppVersion }}
               key: password
-        - name: TPP_CERTIFICATE_PATH
+        - name: TPP_CERT_PATH
           value: "/secrets/tpp-cert/tpp.pfx"
         - name: TPP_APPLICATION_PROVIDER_ID
           value: "{{ $.Values.tppProviderID }}"
@@ -159,7 +159,7 @@ spec:
         - name: TPP_SUPPORTS_LINKED_ACCOUNTS
           value: "{{ $.Values.tppSupportsLinkedAccounts }}"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
-        - name: VISION_BASE_URI
+        - name: VISION_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"
         - name: VISION_CERT_PASSPHRASE
           valueFrom:
@@ -167,7 +167,7 @@ spec:
               name: vision-client-cert-pfx-password-stubbed-{{ .Chart.AppVersion }}
               key: password
         {{- else }}
-        - name: VISION_BASE_URI
+        - name: VISION_BASE_URL
           value: "{{ $.Values.visionProtocol }}://{{ $.Values.visionHostname }}:{{ $.Values.visionPort}}/"
         - name: VISION_CERT_PASSPHRASE
           valueFrom:
@@ -207,9 +207,9 @@ spec:
         - name: CITIZEN_ID_JWT_ISSUER
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
-        - name: NDOP_CERTIFICATE_PATH
+        - name: NDOP_CERT_PATH
           value: "/secrets/ndop-cert/ndop.pfx"
-        - name: NDOP_CERTIFICATE_PASSWORD
+        - name: NDOP_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
               name: ndop-cert-password-{{ .Chart.AppVersion }}

@@ -11,7 +11,7 @@ describe('nominated pharmacy not found', () => {
   let wrapper;
   let dspLink;
   let prescriptionHomeLink;
-  const NOM_PHARMA_DSP_LINK = 'bazz';
+  const NOMINATED_PHARMACY_DSP_URL = 'bazz';
 
   const createState = (state = {
     device: {
@@ -31,7 +31,7 @@ describe('nominated pharmacy not found', () => {
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(),
         $env: {
-          NOM_PHARMA_DSP_LINK,
+          NOMINATED_PHARMACY_DSP_URL,
         },
       });
       dependency.redirectTo = jest.fn();
@@ -49,7 +49,7 @@ describe('nominated pharmacy not found', () => {
           .toEqual('translate_nominated_pharmacy.dspInterrupt.visitOnlineListText');
       });
       it('will navigate to online only choices page when clicked ', () => {
-        expect(dspLink.attributes().href).toEqual(NOM_PHARMA_DSP_LINK);
+        expect(dspLink.attributes().href).toEqual(NOMINATED_PHARMACY_DSP_URL);
       });
     });
 

@@ -6,7 +6,7 @@ export const accountLinks = env =>
       localeLabel: 'myAccount.helpAndSupport',
     },
     {
-      url: env.ACCESSIBILITY_STATEMENT,
+      url: env.ACCESSIBILITY_STATEMENT_URL,
       localeLabel: 'myAccount.accessibilityStatement',
     },
     {
@@ -38,7 +38,7 @@ export const footerLinks = env =>
       localeLabel: 'myAccount.helpAndSupport',
     },
     {
-      url: env.ACCESSIBILITY_STATEMENT,
+      url: env.ACCESSIBILITY_STATEMENT_URL,
       localeLabel: 'myAccount.accessibilityStatement',
     },
   ];

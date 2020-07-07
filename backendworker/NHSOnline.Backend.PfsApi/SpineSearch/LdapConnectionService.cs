@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
             X509Certificate2 cert = null;
             try
             {
-                _logger.LogInformation($"SPINE_CERTIFICATE_PATH: {_spineConfigurationSettings.CertPath}");
+                _logger.LogInformation($"SPINE_CERT_PATH: {_spineConfigurationSettings.CertPath}");
                 cert = _certificateService.GetCertificate(_spineConfigurationSettings.CertPath,
                 _spineConfigurationSettings.CertPassword);
                 _certificateService.LogCertInfo("ClientCertificateSelectionHandler", cert);

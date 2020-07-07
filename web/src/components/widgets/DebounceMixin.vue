@@ -1,5 +1,6 @@
 <script>
 import debounce from 'lodash/debounce';
+import debounceWaitTime from '@/lib/debounceWaitTime';
 
 export default {
   name: 'DebounceMixin',
@@ -12,9 +13,9 @@ export default {
   },
   data() {
     return {
-      long: this.$store.app.$env.DEBOUNCE_LONG,
-      medium: this.$store.app.$env.DEBOUNCE_MEDIUM,
-      short: this.$store.app.$env.DEBOUNCE_SHORT,
+      long: debounceWaitTime.LONG,
+      medium: debounceWaitTime.MEDIUM,
+      short: debounceWaitTime.SHORT,
     };
   },
   created() {

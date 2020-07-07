@@ -9,13 +9,13 @@ describe('WebFooter.vue', () => {
     TERMS_AND_CONDITIONS_URL: 'https://terms',
     PRIVACY_POLICY_URL: 'https://privacy',
     HELP_AND_SUPPORT_URL: 'https://help',
-    ACCESSIBILITY_STATEMENT: 'https://accessibility',
+    ACCESSIBILITY_STATEMENT_URL: 'https://accessibility',
   };
   const urlAndTexts = {
     'myAccount.termsAndConditions': { url: $env.TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
     'myAccount.privacyPolicy': { url: $env.PRIVACY_POLICY_URL, text: 'Privacy policy' },
     'myAccount.helpAndSupport': { url: $env.HELP_AND_SUPPORT_URL, text: 'Help and support' },
-    'myAccount.accessibilityStatement': { url: $env.ACCESSIBILITY_STATEMENT, text: 'Accessibility statement' },
+    'myAccount.accessibilityStatement': { url: $env.ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
   };
 
   const $tKey = translated => translated.replace('translate_', '');

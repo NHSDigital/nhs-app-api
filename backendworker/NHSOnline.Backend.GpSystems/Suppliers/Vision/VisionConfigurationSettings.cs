@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public static VisionConfigurationSettings CreateAndValidate(IConfiguration configuration, ILogger logger)
         {
             var applicationProviderId = configuration.GetOrWarn("VISION_APPLICATION_PROVIDER_ID", logger);
-            var apiBaseUriString = configuration.GetOrWarn("VISION_BASE_URI", logger);
+            var apiBaseUriString = configuration.GetOrWarn("VISION_BASE_URL", logger);
             var visionPfsPath = configuration.GetOrWarn("VISION_PFS_PATH", logger);
             var certificatePath = configuration.GetOrWarn("VISION_CERT_PATH", logger);
             var certificatePassphrase = configuration.GetOrWarn("VISION_CERT_PASSPHRASE", logger);
