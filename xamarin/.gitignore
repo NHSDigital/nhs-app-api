@@ -1,5 +1,6 @@
 NHSOnline.App.iOS/Info.plist
 NHSOnline.App.Android/Properties/AndroidManifest.generated.xml
+remote_mac_config.sh
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,xamarinstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,xamarinstudio

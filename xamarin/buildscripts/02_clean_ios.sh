@@ -10,6 +10,6 @@ source "buildscripts/lib/set_env.sh"
 MSBUILD_ARGS=()
 
 MSBUILD_ARGS+=("-p:Configuration=${ENVIRONMENT} - ${DEBUGMODE}")
-MSBUILD_ARGS+=("-p:Platform=Any CPU")
+MSBUILD_ARGS+=("-p:Platform=iPhone")
 
 "${MSBUILD}" "${MSBUILD_ARGS[@]}" -t:Clean

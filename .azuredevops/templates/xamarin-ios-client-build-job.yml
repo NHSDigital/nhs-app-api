@@ -25,13 +25,6 @@ jobs:
       - task: NuGetAuthenticate@0
         displayName: NuGet Authenticate
 
-      - task: MSBuild@1
-        displayName: Restore packages
-        inputs:
-          solution: 'xamarin/NhsOnline.App.sln'
-          msbuildArguments: '-m /t:Restore'
-          configuration: '${{ parameters.configuration }}'
-
       - task: InstallAppleCertificate@2
         displayName: 'Install Apple certificate'
         inputs:
@@ -44,16 +37,13 @@ jobs:
           provProfileSecureFile: ${{ parameters.provProfileSecureFile }}
           removeProfile: true
 
-      - task: XamariniOS@2
-        displayName: Build iOS ${{ parameters.configuration }}
+      - task: ShellScript@2
+        displayName: Build iOS '${{ parameters.configuration }}'
+        env:
+          CONFIGURATION: '${{ parameters.configuration }}'
+          IPA_PACKAGE_DIR: '$(output.directory)'
         inputs:
-          solutionFile: 'xamarin/NhsOnline.App.sln'
-          configuration: '${{ parameters.configuration }}'
-          buildForSimulator: false
-          packageApp: true
-          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-          signingProvisioningProfileID: '$(APPLE_PROV_PROFILE_UUID)'
-          args: /p:IpaPackageDir="$(output.directory)"
+          scriptPath: xamarin/buildscripts/04_build_ios.sh
 
       - template: check-for-output-steps.yml
         parameters:
