@@ -11,7 +11,7 @@
     </Style>
     
     <Style TargetType="Label" ApplyToDerivedTypes="True" Class="Heading2">
-        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontSize" Value="19" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="TextColor" Value="#212B32" />
         <Setter Property="Padding" Value="0, 12" />

@@ -36,6 +36,7 @@
     <EmbeddedResource Include="Icons\icon-prescription.svg" />
     <EmbeddedResource Include="Icons\icon-record.svg" />
     <EmbeddedResource Include="Icons\icon-symptoms.svg" />
+    <EmbeddedResource Include="Icons\icon-arrow-right.svg" />
     <EmbeddedResource Include="NhsLogo.svg" />
     <EmbeddedResource Update="NhsUkStyles.xaml">
       <SubType>Designer</SubType>
@@ -58,6 +59,10 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Expander.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SafeAreaPadding.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
@@ -90,6 +95,9 @@
     </Compile>
     <Compile Update="Expander.xaml.cs">
       <DependentUpon>Expander.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SafeAreaPadding.xaml.cs">
+      <DependentUpon>SafeAreaPaddingEffect.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

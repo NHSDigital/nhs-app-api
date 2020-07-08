@@ -15,12 +15,12 @@ namespace NHSOnline.App.Controls
         internal SvgImage(string svgPath)
         {
             _resourceName = $"{nameof(NHSOnline)}.{nameof(App)}.{nameof(Controls)}.{svgPath}";
-
+            var svg = LoadSvg();
             var canvasView = new SKCanvasView();
-            canvasView.PaintSurface += (sender, args) => PaintBackground(args.Info, args.Surface);
+            canvasView.PaintSurface += (sender, args) => PaintBackground(args.Info, args.Surface, svg.Picture);
             Content = canvasView;
-
-            _svgSize = LoadSvg().CullRect.Size;
+            AutomationId = svg.Description;
+            _svgSize = svg.Picture.CullRect.Size;
         }
 
         protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
@@ -53,18 +53,14 @@ namespace NHSOnline.App.Controls
             {
                 return new SizeRequest(new Size(heightConstraint * svgAspect, heightConstraint));
             }
-            else
-            {
-                return new SizeRequest(new Size(widthConstraint, widthConstraint / svgAspect));
-            }
+
+            return new SizeRequest(new Size(widthConstraint, widthConstraint / svgAspect));
         }
 
-        private void PaintBackground(SKImageInfo info, SKSurface surface)
+        private void PaintBackground(SKImageInfo info, SKSurface surface, SKPicture picture)
         {
             var canvas = surface.Canvas;
             canvas.Clear();
-
-            var picture = LoadSvg();
 
             var targetSize = info.Rect.AspectFill(_svgSize.ToSizeI());
             var scale = targetSize.Size.Width / _svgSize.Width;
@@ -73,12 +69,12 @@ namespace NHSOnline.App.Controls
             canvas.DrawPicture(picture, ref matrix);
         }
 
-        private SKPicture LoadSvg()
+        private SKSvg LoadSvg()
         {
             var svg = new SKSvg();
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_resourceName);
-            var picture = svg.Load(stream);
-            return picture;
+            svg.Load(stream);
+            return svg;
         }
     }
 }

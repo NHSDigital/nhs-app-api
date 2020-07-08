@@ -14,7 +14,7 @@
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
                 <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="FontSize" Value="19" />
+                <Setter Property="FontSize" Value="12" />
             </Style>
             <Style TargetType="BoxView" Class="BorderBackground">
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />

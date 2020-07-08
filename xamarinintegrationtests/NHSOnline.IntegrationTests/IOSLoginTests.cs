@@ -14,13 +14,38 @@ namespace NHSOnline.IntegrationTests
         [NhsAppIOSTest]
         public void APatientCanStartTheApp(IIOSDriverWrapper driver)
         {
-            _ = IOSLoggedOutHomePage.AssertOnPage(driver);
+           IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .AssertCovidLinkOnPage()
+                .AssertHelpIconOnPage();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanClickToViewCovidConditions(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ClickCovidBanner();
+            IOSAppTab
+                .AssertOnCovidConditionsPage(driver)
+                .ReturnToApp();
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanClickToGetHelpWithLoggingIn(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ClickHelpIcon();
+            IOSAppTab
+                .AssertOnLoginHelpPage(driver)
+                .ReturnToApp();
         }
 
         [NhsAppIOSTest]
         public void APatientIsShownTheBeforeYouStartPage(IIOSDriverWrapper driver)
         {
-            _ = NavigateToBeforeYouStartPage(driver);
+            NavigateToBeforeYouStartPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -54,9 +79,8 @@ namespace NHSOnline.IntegrationTests
         [NhsAppIOSTest]
         public void APatientCanUseTheExpander(IIOSDriverWrapper driver)
         {
-            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
-
-            beforeYouStartPage.AssertExpanderPresent();
+            NavigateToBeforeYouStartPage(driver)
+                .AssertExpanderPresent();
         }
 
         [NhsAppIOSTest]

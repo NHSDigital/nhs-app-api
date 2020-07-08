@@ -22,11 +22,15 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         internal void ReturnToApp() => DoneButton.Click();
 
-        internal static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Conditions Service");
+        internal static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Conditions");
 
-        internal static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid Service");
+        internal static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid");
 
-        internal static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPage(driver, "111 Service");
+        internal static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPage(driver, "111");
+
+        internal static IOSAppTab AssertOnCovidConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid Conditions");
+
+        internal static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Login Help");
 
         private static IOSAppTab AssertOnPage(IIOSDriverWrapper driver, string title)
         {

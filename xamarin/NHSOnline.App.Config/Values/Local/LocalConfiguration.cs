@@ -9,6 +9,6 @@ namespace NHSOnline.App.Config.Values.Local
         public INhsLoginConfiguration NhsLogin { get; } = new LocalNhsLoginConfiguration();
         public INhsAppWebConfiguration NhsAppWeb { get; } = new LocalNhsAppWebConfiguration();
         public INhsAppApiConfiguration NhsAppApi { get; } = new LocalNhsAppApiConfiguration();
-        public IBeforeYouStartConfiguration BeforeYouStart { get; } = new LocalBeforeYouStartConfiguration();
+        public INhsExternalServicesConfiguration NhsExternalServices { get; } = new LocalNhsExternalServicesConfiguration();
     }
 }

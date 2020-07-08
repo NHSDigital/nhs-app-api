@@ -7,36 +7,60 @@ namespace NHSOnline.HttpMocks.ExternalServices
     {
 
         [HttpGet("covid")]
-        public IActionResult CovidService()
+        public IActionResult Covid()
         {
             return Content($@"
                 <html>
                     <body>
-                        <h1>Covid Service</h1>
+                        <h1>Covid</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
+        [HttpGet("covid/conditions")]
+        public IActionResult CovidConditions()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>Covid Conditions</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
+        [HttpGet("help/login")]
+        public IActionResult LoginHelp()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>Login Help</h1>
                     </body>
                 </html>",
                 "text/html");
         }
 
         [HttpGet("conditions")]
-        public IActionResult ConditionsService()
+        public IActionResult Conditions()
         {
             return Content($@"
                 <html>
                     <body>
-                        <h1>Conditions Service</h1>
+                        <h1>Conditions</h1>
                     </body>
                 </html>",
                 "text/html");
         }
 
         [HttpGet("111")]
-        public IActionResult OneOneOneService()
+        public IActionResult OneOneOne()
         {
             return Content($@"
                 <html>
                     <body>
-                        <h1>111 Service</h1>
+                        <h1>111</h1>
                     </body>
                 </html>",
                 "text/html");

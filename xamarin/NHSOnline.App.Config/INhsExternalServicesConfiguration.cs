@@ -2,9 +2,11 @@ using System;
 
 namespace NHSOnline.App.Config
 {
-    public interface IBeforeYouStartConfiguration
+    public interface INhsExternalServicesConfiguration
     {
         Uri NhsUkCovidUrl { get; }
+        Uri NhsUkCovidConditionsUrl { get; }
+        Uri NhsUkLoginHelpUrl { get; }
         Uri NhsUkConditionsUrl { get; }
         Uri OneOneOneUrl { get; }
     }

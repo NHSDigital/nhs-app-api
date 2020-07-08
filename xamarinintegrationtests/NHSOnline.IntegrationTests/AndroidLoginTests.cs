@@ -13,7 +13,26 @@ namespace NHSOnline.IntegrationTests
         [NhsAppAndroidTest]
         public void APatientCanStartTheApp(IAndroidDriverWrapper driver)
         {
-            _ = AndroidLoggedOutHomePage.AssertOnPage(driver);
+            _ = AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .AssertCovidLinkOnPage()
+                .AssertHelpIconOnPage();
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanClickToViewCovidConditions(IAndroidDriverWrapper driver)
+        {
+            var loginPage = AndroidLoggedOutHomePage.AssertOnPage(driver);
+            loginPage.ClickCovidBanner();
+            AndroidAppTab.AssertFirstAppTabServiceByHeader(driver, "Covid Conditions");
+        }
+
+        [NhsAppAndroidTest]
+        public void APatientCanClickToGetHelpWithLoggingIn(IAndroidDriverWrapper driver)
+        {
+            var loginPage = AndroidLoggedOutHomePage.AssertOnPage(driver);
+            loginPage.ClickHelpIcon();
+            AndroidAppTab.AssertFirstAppTabServiceByHeader(driver, "Login Help");
         }
 
         [NhsAppAndroidTest]
@@ -81,7 +100,7 @@ namespace NHSOnline.IntegrationTests
                     .AssertOnPage(webInteractor)
                     .Login(patient);
             }
-            
+
             using (var webInteractor = driver.Web(WebViewContext.NhsApp))
             {
                 TermsAndConditionsPage
@@ -104,11 +123,11 @@ namespace NHSOnline.IntegrationTests
             var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
 
             beforeYouStartPage.TriggerCovidLinkClick();
-            AndroidAppTab.AssertFirstAppTabServiceByHeader(driver, "Covid Service");
+            AndroidAppTab.AssertFirstAppTabServiceByHeader(driver, "Covid");
             beforeYouStartPage.TriggerConditionsLinkClick();
-            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "Conditions Service");
+            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "Conditions");
             beforeYouStartPage.TriggerOneOneOneLinkClick();
-            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "111 Service");
+            AndroidAppTab.AssertSubsequentAppTabServiceByHeader(driver, "111");
         }
 
         [NhsAppAndroidTest()]

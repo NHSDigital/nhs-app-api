@@ -18,7 +18,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
-        private readonly IBeforeYouStartConfiguration _beforeYouStartConfigurations;
+        private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
 
         public BeforeYouStartPresenter(
             IBeforeYouStartView view,
@@ -26,14 +26,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
-            IBeforeYouStartConfiguration beforeYouStartConfig)
+            INhsExternalServicesConfiguration nhsExternalServicesConfiguration)
         {
             _view = view;
             _logger = logger;
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
-            _beforeYouStartConfigurations = beforeYouStartConfig;
+            _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
             view.LoginRequested += ViewOnLoginRequested;
             view.NhsUkCovidServicePageRequested += LoadCovidUrl;
@@ -57,17 +57,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async void LoadCovidUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing covid url");
-            await OpenAppTab(_beforeYouStartConfigurations.NhsUkCovidUrl).ConfigureAwait(false);
+            await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkCovidUrl).PreserveThreadContext();
         }
         private async void LoadConditionsUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing conditions url");
-            await OpenAppTab(_beforeYouStartConfigurations.NhsUkConditionsUrl).ConfigureAwait(false);
+            await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkConditionsUrl).PreserveThreadContext();
         }
         private async void LoadOneOneOneUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing 111 url");
-            await OpenAppTab(_beforeYouStartConfigurations.OneOneOneUrl).ConfigureAwait(false);
+            await OpenAppTab(_nhsExternalServicesConfiguration.OneOneOneUrl).PreserveThreadContext();
         }
 
         private static async Task OpenAppTab(Uri requestedService)
@@ -78,7 +78,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
                 TitleMode = BrowserTitleMode.Show,
                 PreferredToolbarColor = (Color) Application.Current.Resources["NhsUkBlue"],
                 PreferredControlColor = (Color) Application.Current.Resources["NhsUkWhite"]
-            }).ConfigureAwait(false);
+            }).PreserveThreadContext();
         }
     }
 }

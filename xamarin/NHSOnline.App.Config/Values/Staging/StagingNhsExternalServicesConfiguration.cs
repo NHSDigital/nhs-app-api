@@ -1,0 +1,13 @@
+using System;
+
+namespace NHSOnline.App.Config.Values.Staging
+{
+    public class StagingNhsExternalServicesConfiguration: INhsExternalServicesConfiguration
+    {
+        public Uri NhsUkCovidUrl { get; } = new Uri("https://111.nhs.uk/service/COVID-19/");
+        public Uri NhsUkCovidConditionsUrl { get; } = new Uri("https://www.nhs.uk/conditions/coronavirus-covid-19/");
+        public Uri NhsUkLoginHelpUrl { get; } = new Uri("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/");
+        public Uri NhsUkConditionsUrl { get; } = new Uri("https://www.nhs.uk/conditions/");
+        public Uri OneOneOneUrl { get; } = new Uri("https://111.nhs.uk/");
+    }
+}
