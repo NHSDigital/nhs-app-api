@@ -5,7 +5,7 @@
     <string name="baseURL">https://www-scratch20.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="baseApiURL">https://api-scratch20.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
-    <string name="ersUrl">pat.dev.refer.nhs.uk</string>
+    <string name="ersUrl">pat.rc.refer.nhs.uk</string>
     <string name="ersUrlScheme">https</string>
     <string name="ersUrlPath">/nhslogin</string>
 </resources>
