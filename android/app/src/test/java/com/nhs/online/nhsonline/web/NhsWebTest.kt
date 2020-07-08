@@ -280,11 +280,12 @@ class NhsWebTest {
         assertFalse(webViewMock.settings.builtInZoomControls)
         verify(interactorMock).dismissSessionExtensionDialog()
 
-        verify(tempCacheDir).delete()
         verify(tempAppWebViewDir, atLeastOnce()).listFiles()
 
-        mockFiles.forEach {
-            file -> verify(file).delete()
+        mockFiles.forEach { file ->
+            if (file.name != null && !file.name.contains("Cookies")) {
+                file.delete()
+            }
         }
     }
 

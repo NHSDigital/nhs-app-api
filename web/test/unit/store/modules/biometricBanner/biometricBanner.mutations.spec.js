@@ -38,14 +38,6 @@ describe('biometric banner mutations', () => {
     it('will set `dismissed` state to true', () => {
       expect(state.dismissed).toEqual(true);
     });
-
-    it('will set cookie to true', () => {
-      expect(mutations.app.$cookies.set).toHaveBeenCalledWith(
-        'HideBiometricBanner',
-        true,
-        { secure: true, maxAge: expirySeconds, path: '/' },
-      );
-    });
   });
 
   describe('SYNC', () => {

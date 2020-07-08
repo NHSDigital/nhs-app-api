@@ -93,7 +93,8 @@ class NhsWeb(
         webView.webViewClient = webInterceptor
         webView.webChromeClient = chromeClient
         clearSessionCookies()
-        trimCachedFiles()
+
+        trimCachedFiles(buildCachedFiles())
     }
 
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
@@ -203,21 +204,23 @@ class NhsWeb(
 
         uiInteractor.dismissSessionExtensionDialog()
 
-        trimCachedFiles()
+        trimCachedFiles(buildCachedFiles())
     }
 
-    private fun trimCachedFiles() {
-        val contentsToDelete =
-                when (appWebViewDir.listFiles()) {
-                    null -> arrayOf(cacheDir)
-                    else -> appWebViewDir.listFiles().plus(cacheDir)
-                }
+    private fun buildCachedFiles(): Array<File> {
+        return when (appWebViewDir.listFiles()) {
+            null -> arrayOf(cacheDir)
+            else -> appWebViewDir.listFiles().plus(cacheDir)
+        }
+    }
+
+    private fun trimCachedFiles(contentsToDelete: Array<File>) {
 
         contentsToDelete.forEach { file ->
             try {
                 if (file.isDirectory) {
-                    file.deleteRecursively()
-                } else {
+                    trimCachedFiles(file.listFiles())
+                } else if (!file.name.toLowerCase().contains("cookie")) {
                     file.delete()
                 }
             } catch (e: Exception) {

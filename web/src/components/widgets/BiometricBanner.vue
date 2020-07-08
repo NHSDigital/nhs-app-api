@@ -76,6 +76,8 @@ export default {
   methods: {
     dismissBiometricsBannerClicked() {
       this.$store.dispatch('biometricBanner/dismiss');
+      this.$store.dispatch('biometricBanner/sync');
+      NativeCallbacks.resetPageFocus();
     },
     goToLoginOptions() {
       if (canVersionHandleBiometricsWeb(this)) {

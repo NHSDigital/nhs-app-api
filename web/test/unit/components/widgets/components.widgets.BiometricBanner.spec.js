@@ -84,8 +84,10 @@ describe('BiometricBanner', () => {
 
       it('will dispatch `biometricBanner/dismiss` when clicked', () => {
         global.digitalData = {};
+        $store.app.$cookies.set = jest.fn();
         dismissButton.trigger('click');
         expect($store.dispatch).toBeCalledWith('biometricBanner/dismiss');
+        expect($store.dispatch).toBeCalledWith('biometricBanner/sync');
       });
     });
 
