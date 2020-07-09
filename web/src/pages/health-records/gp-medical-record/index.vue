@@ -21,7 +21,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelNHS') }}:
+        {{ $t('my_record.patientInfo.fieldLabelNHS') }}
       </p>
       <p data-sid="user-nhs-number"
          :class="[$style['user-info'],
@@ -30,7 +30,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelAddress') }}:
+        {{ $t('my_record.patientInfo.fieldLabelAddress') }}
       </p>
       <p data-sid="user-address"
          :class="[$style['user-info'],

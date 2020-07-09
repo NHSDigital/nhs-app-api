@@ -1,13 +1,11 @@
 package features.myrecord.stepDefinitions
 
-//import pages.gpMedicalRecord.MedicalRecordHubPage
 import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -18,7 +16,6 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import utils.LinkedProfilesSerenityHelpers
@@ -39,7 +36,6 @@ open class MedicalRecordStepDefinitions {
     @Steps
     lateinit var nav: NavigationSteps
     private lateinit var headerNative: HeaderNative
-    private lateinit var myRecordWarningPage: MyRecordWarningPage
 
     var myRecordModuleCounts = MyRecordModuleCounts()
     var testResultOptions = TestResultOptions()
@@ -54,23 +50,6 @@ open class MedicalRecordStepDefinitions {
     fun givenTheGPPracticeHasDisabledProxyAccessToSummaryCareRecordFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         MyRecordFactory.getForSupplier(gpSystem).disabled(ProxySerenityHelpers.getPatientOrProxy())
-    }
-
-    @Given("^I am on the medical record page$")
-    fun givenINavigateToTheMedicalRecordPage() {
-        val patient = SerenityHelpers.getPatient()
-        browser.goToApp()
-
-        DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enableForPatientProxyAccounts(patient)
-
-        login.using(patient)
-        home.waitForLoginToCompleteSuccessfully()
-
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
-        myRecordWarningPage.clickWarningContinue()
-        myRecordWarningPage.locatorMethods.waitForNativeStepToComplete()
     }
 
     @Given("^I have (.*) Allergies$")

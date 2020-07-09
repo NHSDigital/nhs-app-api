@@ -6,7 +6,7 @@ Feature: Clinical Abbreviations Frontend - Medical Record v2
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the link called 'Help with abbreviations' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/'
     Then a new tab has been opened by the link

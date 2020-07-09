@@ -2,17 +2,17 @@ package features.myAccount.stepDefintions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.sharedSteps.BiometricSteps
+import net.thucydides.core.annotations.Steps
 import pages.account.MyAccountPage
 import pages.assertElementNotPresent
-import features.sharedSteps.BrowserSteps
-import net.thucydides.core.annotations.Steps
 
 class MyAccountStepDefinitions {
 
     lateinit var myAccount: MyAccountPage
 
     @Steps
-    lateinit var browser: BrowserSteps
+    lateinit var biometricSteps: BiometricSteps
 
     @When("I click the Notifications link on the Account page")
     fun iClickTheNotificationsLinkOnTheAccountPage() {
@@ -48,16 +48,16 @@ class MyAccountStepDefinitions {
     fun theLoginAndPasswordOptionsLinkIsDisplayed(linkText: String) {
         when (linkText) {
             "Face ID" -> {
-                browser.setBiometricType("face")
+                biometricSteps.setBiometricType("face")
                 myAccount.assertFaceIDIsPresent()
             }
             "Login options" -> myAccount.assertLoginAndPasswordOptionsIsPresent()
             "Touch ID" -> {
-                browser.setBiometricType("touch")
+                biometricSteps.setBiometricType("touch")
                 myAccount.assertTouchIDIsPresent()
             }
             "Fingerprint" -> {
-                browser.setBiometricType("fingerPrint")
+                biometricSteps.setBiometricType("fingerPrint")
                 myAccount.assertFingerprintIsPresent()
             }
         }
