@@ -107,7 +107,11 @@ export default {
              || !this.consultations.hasAccess;
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (store.state.myRecord.record.supplier !== 'EMIS') {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     if (!store.state.myRecord.record.consultations) {
       await store.dispatch('myRecord/load');
     }

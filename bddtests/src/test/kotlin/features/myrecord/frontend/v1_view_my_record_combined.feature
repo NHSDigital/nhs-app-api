@@ -6,9 +6,10 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies
     And the GP Practice has multiple consultations
     And the GP Practice has six test results
-    When I am on the Medical Record Warning page
-    Then I see the Medical Record Warning page
-    When I click continue
+    And I am logged in
+    And I navigate to the Medical Record Page
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the medical record page - Medical Record v1
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see one or more drug type allergies record displayed - Medical Record v1
@@ -28,8 +29,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has six test results
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the medical record page - Medical Record v1
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
@@ -50,8 +51,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice sends a bad test results response
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the medical record page - Medical Record v1
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
@@ -70,8 +71,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP practice returns bad medications data
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see an error occurred message with Acute (short-term) medications on My Record - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -89,8 +90,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has enabled medications functionality
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -110,8 +111,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has enabled problems functionality
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -127,8 +128,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has enabled problems functionality
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Immunisations section on My Record - Medical Record v1
     Then I see immunisation records displayed - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -144,8 +145,8 @@ Feature: Combined Frontend - Medical Record v1
     And there is bad problems data returned
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -160,8 +161,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the medical record page - Medical Record v1
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see a drug and non drug allergy record from VISION - Medical Record v1

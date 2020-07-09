@@ -100,7 +100,11 @@ export default {
       return orderBy([document => this.getEffectiveDate(document.effectiveDate, '')], ['desc'])(this.documents.data);
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (!['EMIS', 'TPP'].includes(store.state.myRecord.record.supplier)) {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     if (!store.state.myRecord.record.documents) {
       await store.dispatch('myRecord/load');
     }

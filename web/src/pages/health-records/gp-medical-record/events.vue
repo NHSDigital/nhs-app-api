@@ -82,7 +82,11 @@ export default {
              || !this.events.hasAccess;
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (store.state.myRecord.record.supplier !== 'TPP') {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     if (!store.state.myRecord.record.tppDcrEvents) {
       await store.dispatch('myRecord/load');
     }

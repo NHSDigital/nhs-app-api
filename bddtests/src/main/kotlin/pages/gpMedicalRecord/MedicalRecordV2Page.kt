@@ -1,52 +1,27 @@
 package pages.gpMedicalRecord
 
+import models.Patient
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.sharedElements.LinkElement
 import pages.sharedElements.LinksContent
 import pages.sharedElements.LinksElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
 
 class MedicalRecordV2Page : HybridPageObject() {
 
     val pageTitle = HybridPageElement(
-                    webDesktopLocator = "//h1[contains(text(),\"Your GP medical record\")]",
-                    androidLocator = null,
-                    page = this,
-                    helpfulName = "GP Medical Record Title")
+            webDesktopLocator = "//h1[contains(text(),\"Your GP medical record\")]",
+            androidLocator = null,
+            page = this,
+            helpfulName = "GP Medical Record Title")
 
     val clinicalAbbreviationsLink =
             HybridPageElement(
                     webDesktopLocator = "//a/span[contains(text(),'Help with abbreviations')]",
                     androidLocator = null,
                     page = this)
-
-    val patientName =
-            HybridPageElement(
-                    webDesktopLocator = "//h2[@data-sid='patient-name']",
-                    page = this,
-                    helpfulName = "Patient name"
-            )
-
-    val dateOfBirth =
-            HybridPageElement(
-                    webDesktopLocator = "//p[@data-sid='user-date-of-birth']",
-                    page = this,
-                    helpfulName = "Patient date of birth"
-            )
-
-    val nhsNumber =
-            HybridPageElement(
-                    webDesktopLocator = "//p[@data-sid='user-nhs-number']",
-                    page = this,
-                    helpfulName = "Patient nhs number"
-            )
-
-    val address =
-            HybridPageElement(
-                    webDesktopLocator = "//p[@data-sid='user-address']",
-                    page = this,
-                    helpfulName = "Patient address"
-            )
 
     fun getBody(message: String): HybridPageElement {
         return HybridPageElement(
@@ -68,8 +43,21 @@ class MedicalRecordV2Page : HybridPageObject() {
                 linkBlockTitle = "",
                 containerXPath = "//div[@data-purpose='medical-record-menu']")
                 .addLink(linkText)
-        val linkElement by lazy {LinksElement(this, linkContent)}
+        val linkElement by lazy { LinksElement(this, linkContent) }
 
         return linkElement.link(linkText);
+    }
+
+    fun assertDemographicsContent(patient: Patient) {
+        val fullContent =
+                ExpectedPageStructure()
+                        .h2(patient.formattedFullName())
+                        .paragraph("Date of birth")
+                        .paragraph(patient.age.formattedDateOfBirth())
+                        .paragraph("NHS number")
+                        .paragraph(patient.formattedNHSNumber())
+                        .paragraph("Address")
+                        .paragraph(patient.contactDetails.address.full())
+        ExpectedPageStructureAssertor().assert(this, fullContent.build())
     }
 }

@@ -38,6 +38,8 @@ open class SharedStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
+    lateinit var cookieSteps: CookieSteps
+    @Steps
     lateinit var home: HomeSteps
     @Steps
     lateinit var login: LoginSteps
@@ -124,7 +126,7 @@ open class SharedStepDefinitions {
 
         TermsAndConditionsJourneyFactory.consent(patient)
 
-        browser.setInstructionsCookie("true")
+        cookieSteps.setInstructionsCookie("true")
 
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()

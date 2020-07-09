@@ -54,7 +54,11 @@ export default {
       return (!this.markup);
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (store.state.myRecord.record.supplier !== 'VISION') {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     await store.dispatch('myRecord/loadExaminations');
     return {
       markup: get('markup', store.state.myRecord.examinations),

@@ -51,7 +51,9 @@ export default {
     },
   },
   async asyncData({ store }) {
-    await store.dispatch('myRecord/loadTestResults');
+    if (!store.state.myRecord.record.testResults) {
+      await store.dispatch('myRecord/loadTestResults');
+    }
     return {
       markup: get('markup', store.state.myRecord.testResults),
       testResults: get('testResults', store.state.myRecord.record) || {},

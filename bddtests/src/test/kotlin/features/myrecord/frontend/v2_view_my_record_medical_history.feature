@@ -6,8 +6,8 @@ Feature: Medical History Frontend - Medical Record V2
     And the my record wiremocks are populated
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Medical history link on my record - Medical Record v2
     Then I see the expected medical history - Medical Record v2
 
@@ -17,7 +17,7 @@ Feature: Medical History Frontend - Medical Record V2
     And the my record wiremocks are populated
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Medical history link on my record - Medical Record v2
     Then I see a message that this information isn't available through the NHS App - Medical Record v2

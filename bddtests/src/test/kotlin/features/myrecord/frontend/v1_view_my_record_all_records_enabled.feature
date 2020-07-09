@@ -6,8 +6,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -22,8 +22,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -41,8 +41,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -56,8 +56,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -78,8 +78,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -103,8 +103,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -124,8 +124,8 @@ Feature: All records enabled - Medical Record v1
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Examinations section on My Record - Medical Record v1
     Then I see examinations information - Medical Record v1
     And I click on the Back link on the Medical Record page - Medical Record v1

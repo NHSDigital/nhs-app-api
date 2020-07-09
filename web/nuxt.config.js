@@ -66,6 +66,7 @@ const config = {
       'proxyRecovery',
       'termsAndConditions',
       'myRecordAcceptance',
+      'gpMedicalRecordAcceptance',
       'viewedPreRegInstructions',
       'urlResolution',
       'onlineConsultations',

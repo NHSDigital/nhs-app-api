@@ -6,8 +6,8 @@ Feature: Medicines Frontend - Medical Record v2
     And the GP Practice has enabled all medical records for the patient
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
@@ -39,8 +39,8 @@ Feature: Medicines Frontend - Medical Record v2
     And The GP practice responds with bad medications data
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
@@ -64,8 +64,8 @@ Feature: Medicines Frontend - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
@@ -90,8 +90,8 @@ Feature: Medicines Frontend - Medical Record v2
       And the my record wiremocks are populated
       And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
       And I click the Medicines link on my record - Medical Record v2
       Then I see the medical record v2 medicines page
       When I click the Acute medicines link - Medical Record v2

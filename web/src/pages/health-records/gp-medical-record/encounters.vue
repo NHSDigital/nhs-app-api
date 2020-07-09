@@ -86,7 +86,11 @@ export default {
       );
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (store.state.myRecord.record.supplier !== 'MICROTEST') {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     if (!store.state.myRecord.record.encounters) {
       await store.dispatch('myRecord/load');
     }

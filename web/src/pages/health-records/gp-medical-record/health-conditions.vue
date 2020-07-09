@@ -88,7 +88,11 @@ export default {
              || !this.problems.hasAccess;
     },
   },
-  async asyncData({ store }) {
+  async asyncData({ store, redirect }) {
+    if (!['EMIS', 'VISION', 'MICROTEST'].includes(store.state.myRecord.record.supplier)) {
+      redirect(GP_MEDICAL_RECORD.path);
+      return {};
+    }
     if (!store.state.myRecord.record.problems) {
       await store.dispatch('myRecord/load');
     }
