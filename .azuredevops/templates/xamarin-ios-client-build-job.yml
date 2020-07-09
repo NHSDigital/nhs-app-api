@@ -1,7 +1,7 @@
 parameters:
   - name: configuration
     type: string
-    default: 'Browserstack - Debug'
+    default: 'Browserstack - Release'
   - name: certSecureFile
     type: string
     default: 'iOSDevelopmentCertificate.p12'

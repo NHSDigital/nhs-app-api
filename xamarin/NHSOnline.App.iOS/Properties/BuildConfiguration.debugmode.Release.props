@@ -3,5 +3,11 @@
   <PropertyGroup>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
+    <MtouchDebug>false</MtouchDebug>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchUseSGen>true</MtouchUseSGen>
   </PropertyGroup>
 </Project>
