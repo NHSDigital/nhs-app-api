@@ -8,7 +8,7 @@ describe('login settings page', () => {
 
   const mountPage = ({
     biometricsRegistrationStatus = false,
-    biometricType = 'loginSettings.biometrics.biometricType.face',
+    biometricType = 'face',
     isNativeApp = true,
     hasBiometricType = true,
   } = {}) => {
@@ -25,6 +25,7 @@ describe('login settings page', () => {
       },
       getters: {
         'loginSettings/biometricState': biometricsRegistrationStatus,
+        'loginSettings/getBiometricToggleText': `loginSettings.biometrics.toggleLabel.${biometricType}`,
         'loginSettings/getDeviceBiometricNameString': biometricType,
       },
     });
@@ -85,16 +86,39 @@ describe('login settings page', () => {
             expect($store.dispatch).toHaveBeenLastCalledWith('loginSettings/updateRegistration');
           });
       });
-
-      describe('label', () => {
+    });
+    describe('toggle label', () => {
+      describe('biometric type is face', () => {
         beforeEach(() => {
-          mountPage({ biometricType: 'loginSettings.biometrics.biometricTyp.fingerPrint' });
+          mountPage({ biometricType: 'face' });
         });
 
         it('will show the correct biometric type',
           () => {
             const label = wrapper.find('strong');
-            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel');
+            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.face');
+          });
+      });
+      describe('biometric type is fingerPrint', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'fingerPrint' });
+        });
+
+        it('will show the correct biometric type',
+          () => {
+            const label = wrapper.find('strong');
+            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.fingerPrint');
+          });
+      });
+      describe('biometric type is touch', () => {
+        beforeEach(() => {
+          mountPage({ biometricType: 'touch' });
+        });
+
+        it('will show the correct biometric type',
+          () => {
+            const label = wrapper.find('strong');
+            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.touch');
           });
       });
     });

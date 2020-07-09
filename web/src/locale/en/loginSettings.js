@@ -6,14 +6,15 @@ export default {
       touch: 'Touch ID lets you log in with your fingerprint instead of a password and security code.',
     },
     biometricType: {
-      header: {
-        fingerPrint: 'Fingerprint',
-      },
-      fingerPrint: 'fingerprint',
+      fingerPrint: 'Fingerprint',
       face: 'Face ID',
       touch: 'Touch ID',
     },
-    toggleLabel: 'Log in with {biometricType}',
+    toggleLabel: {
+      fingerPrint: 'Log in with fingerprint',
+      face: 'Log in with Face ID',
+      touch: 'Log in with Touch ID',
+    },
     warningText: {
       fingerPrint: 'All fingerprints registered on this device will be able to access connected health websites and apps that use your NHS login information.',
       face: 'All Face IDs registered on this device will be able to access connected health websites and apps that use your NHS login information.',

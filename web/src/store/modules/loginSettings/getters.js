@@ -11,6 +11,9 @@ export default {
     }
     return `loginSettings.biometrics.biometricType.${state.biometricType}`;
   },
+  getBiometricToggleText(state) {
+    return `loginSettings.biometrics.toggleLabel.${state.biometricType}`;
+  },
   getBiometricInformation(state) {
     return `loginSettings.biometrics.biometricInformation.${state.biometricType}`;
   },

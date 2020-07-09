@@ -45,7 +45,7 @@ export default {
     const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
     return {
       biometricType,
-      toggleLabel: this.$t('loginSettings.biometrics.toggleLabel', { biometricType }),
+      toggleLabel: this.$t(this.$store.getters['loginSettings/getBiometricToggleText']),
       biometricInformation: this.$t(this.$store.getters['loginSettings/getBiometricInformation']),
       biometricWarningText: this.$t(this.$store.getters['loginSettings/getBiometricWarningText']),
       hasBiometricType: this.$store.getters['loginSettings/deviceBiometricType'] !== undefined,
