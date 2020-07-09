@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +10,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     internal sealed class MultipleWindowsWebViewLocatorStrategy<TDriver> : WebViewLocatorStrategy
         where TDriver: class, IWebDriver, IContextAware
     {
-        private readonly Dictionary<WebViewContext, string> _knownHandles = new Dictionary<WebViewContext, string>();
+        private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
         private readonly TDriver _driver;
 
@@ -54,7 +53,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         private string WaitForWindowHandleToExist(WebViewContext webViewContext)
         {
-            if (_knownHandles.TryGetValue(webViewContext, out var knownWindowHandle) &&
+            if (_contextsCache.TryGet(webViewContext, out var knownWindowHandle) &&
                 _driver.WindowHandles.Contains(knownWindowHandle))
             {
                 return knownWindowHandle;
@@ -65,7 +64,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             {
                 if (TryGetWindowHandle(out var windowHandle))
                 {
-                    _knownHandles[webViewContext] = windowHandle;
+                    _contextsCache.Add(webViewContext, windowHandle);
                     return windowHandle;
                 }
             }
@@ -80,7 +79,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         private bool TryGetWindowHandle([NotNullWhen(true)] out string? windowHandle)
         {
-            windowHandle = _driver.WindowHandles.Except(_knownHandles.Values).FirstOrDefault();
+            windowHandle = _driver.WindowHandles.Except(_contextsCache.Contexts).FirstOrDefault();
             return windowHandle != null;
         }
     }

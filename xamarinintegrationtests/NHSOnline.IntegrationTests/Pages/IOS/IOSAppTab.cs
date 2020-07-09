@@ -1,4 +1,5 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
+using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
@@ -6,23 +7,36 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
     public class IOSAppTab
     {
         private readonly IIOSDriverWrapper _driver;
-        private readonly string _headerText;
+        private readonly string _title;
 
-        private IOSAppTab(IIOSDriverWrapper driver, string headerText = "")
+        private IOSAppTab(IIOSDriverWrapper driver, string title = "")
         {
             _driver = driver;
-            _headerText = headerText;
-
+            _title = title;
         }
 
-        private IOSLabel AppTabHeader => new IOSLabel(_driver, _headerText);
-        private IOSButton ReturnToAppButton => new IOSButton(_driver, "Done");
+        private IOSButton DoneButton => new IOSButton(_driver, "Done");
 
-        internal static void AssertAppTabServiceByHeader(IIOSDriverWrapper driver, string headerText)
+        private WebText TitleText(IWebInteractor webInteractor) => new WebText(webInteractor, "h1", _title);
+
+        internal void ReturnToApp() => DoneButton.Click();
+
+        internal static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Conditions Service");
+
+        internal static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid Service");
+
+        internal static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPage(driver, "111 Service");
+
+        private static IOSAppTab AssertOnPage(IIOSDriverWrapper driver, string title)
         {
-            var page = new IOSAppTab(driver, headerText);
-            page.AppTabHeader.AssertLabelVisible();
-            page.ReturnToAppButton.Click();
+            var page = new IOSAppTab(driver, title);
+
+            using (var webInteractor = driver.Web(WebViewContext.OneOff))
+            {
+                page.TitleText(webInteractor).AssertVisible();
+            }
+
+            return page;
         }
     }
 }

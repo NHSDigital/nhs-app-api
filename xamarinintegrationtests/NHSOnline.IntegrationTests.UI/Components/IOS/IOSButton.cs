@@ -1,6 +1,9 @@
+using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
@@ -15,22 +18,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             _text = text;
         }
 
-        public void Click()
-        {
-            _interactor.ActOnElement(
-                XPath,
-                e => e.Click());
-        }
+        public void Click() => ActOnElement(e => e.Click());
 
-        public void AssertVisible()
-        {
-            _interactor.ActOnElement(
-                XPath,
-                e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
-        }
+        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
 
-        private By XPath =>
-            By.XPath(
-                $"//XCUIElementTypeButton[normalize-space(@label)={_text.QuoteXPathLiteral()} and @visible='true']");
+        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+
+        private By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND label == {_text.QuotePredicateLiteral()}");
     }
 }

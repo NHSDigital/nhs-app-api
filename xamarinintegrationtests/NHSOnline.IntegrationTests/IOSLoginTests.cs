@@ -25,15 +25,29 @@ namespace NHSOnline.IntegrationTests
         [NhsAppIOSTest]
         public void APatientCanClickAllTheLinksAndGoToCorrectPages(IIOSDriverWrapper driver)
         {
-            var beforeYouStartPage = NavigateToBeforeYouStartPage(driver);
+            NavigateToBeforeYouStartPage(driver)
+                .AssertAllLinkArePresent()
+                .SearchConditionsAndTreatments();
 
-            beforeYouStartPage.AssertAllLinkArePresent();
-            beforeYouStartPage.TriggerConditionsLinkClick();
-            IOSAppTab.AssertAppTabServiceByHeader(driver, "Conditions Service");
-            beforeYouStartPage.TriggerCovidLinkClick();
-            IOSAppTab.AssertAppTabServiceByHeader(driver, "Covid Service");
-            beforeYouStartPage.TriggerOneOneOneLinkClick();
-            IOSAppTab.AssertAppTabServiceByHeader(driver, "111 Service");
+            IOSAppTab
+                .AssertOnConditionsPage(driver)
+                .ReturnToApp();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .CheckCoronavirusSymptoms();
+
+            IOSAppTab
+                .AssertOnCovidPage(driver)
+                .ReturnToApp();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .UseNhs111Online();
+
+            IOSAppTab
+                .AssertOn111Page(driver)
+                .ReturnToApp();
         }
 
         [NhsAppIOSTest]

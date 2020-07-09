@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 {
     internal sealed class MultipleContextsWebViewLocatorStrategy : WebViewLocatorStrategy
     {
-        private readonly Dictionary<WebViewContext, string> _knownContexts = new Dictionary<WebViewContext, string>();
+        private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
         private readonly IContextAware _driver;
 
@@ -32,7 +31,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         private string WaitForWebViewContextToExist(WebViewContext webViewContext)
         {
-            if (_knownContexts.TryGetValue(webViewContext, out var knownWebViewContext) &&
+            if (_contextsCache.TryGet(webViewContext, out var knownWebViewContext) &&
                 _driver.Contexts.Contains(knownWebViewContext))
             {
                 return knownWebViewContext;
@@ -43,7 +42,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             {
                 if (TryGetWebContextName(out var webContextName))
                 {
-                    _knownContexts[webViewContext] = webContextName;
+                    _contextsCache.Add(webViewContext, webContextName);
                     return webContextName;
                 }
             }
@@ -52,7 +51,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         private bool TryGetWebContextName([NotNullWhen(true)] out string? webContextName)
         {
-            webContextName = _driver.Contexts.Except(_knownContexts.Values).FirstOrDefault(IsWebViewContext);
+            webContextName = _driver.Contexts.Except(_contextsCache.Contexts).FirstOrDefault(IsWebViewContext);
             return webContextName != null;
         }
     }

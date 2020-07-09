@@ -26,25 +26,25 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             return page;
         }
 
-        internal void AssertAllLinkArePresent()
+        internal IOSBeforeYouStartPage AssertAllLinkArePresent()
         {
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
             OneOneOneLink.AssertVisible();
-
+            return this;
         }
 
-        internal void TriggerCovidLinkClick()
+        internal void CheckCoronavirusSymptoms()
         {
             CovidLink.Click();
         }
 
-        internal void TriggerConditionsLinkClick()
+        internal void SearchConditionsAndTreatments()
         {
             ConditionsLink.Click();
         }
 
-        internal void TriggerOneOneOneLinkClick()
+        internal void UseNhs111Online()
         {
             OneOneOneLink.Click();
         }
