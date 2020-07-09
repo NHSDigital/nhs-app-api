@@ -31,6 +31,10 @@ export default {
         type: 'medicines',
         redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action%3Ftab%3Dtreatments',
       },
+      testResults: {
+        type: 'testResults',
+        redirectPath: '/nhs-login/login?phrPath=%2Ftest%2FmyTests.action',
+      },
       appointmentsCie: {
         type: 'appointmentsCie',
         redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FlistAppointments.action&brand=cie',

@@ -14,6 +14,11 @@
                        'healthRecordHubPage.gpMedicalRecord.subheader',
                        'healthRecordHubPage.gpMedicalRecord.body')"
                      :prevent-default="preventDefault()"/>
+          <third-party-jump-off-button v-if="showPkbTestResults && !isProxying"
+                                       id="btn_pkb_test_results"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.testResults" />
           <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying"
                                        id="btn_pkb_care_plans"
                                        provider-id="pkb"
@@ -63,6 +68,14 @@ export default {
   },
   data() {
     return {
+      showPkbTestResults: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'testResults',
+        },
+      }),
       showPkbCarePlans: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',

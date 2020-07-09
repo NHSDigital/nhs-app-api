@@ -9,7 +9,7 @@ describe('healthRecords', () => {
   let $router;
 
   const mountAs = ({
-    context = true,
+    integrationEnabled = true,
     isProxying = false,
     isNativeApp = false,
   } = {}) => {
@@ -25,7 +25,7 @@ describe('healthRecords', () => {
         },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'serviceJourneyRules/silverIntegrationEnabled': () => (integrationEnabled),
         'session/isProxying': isProxying,
       },
       $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
@@ -76,8 +76,11 @@ describe('healthRecords', () => {
     });
   });
 
-  describe('view third-party care plans link', () => {
+  describe('view third-party links', () => {
     each([
+      ['pkb', 'Test Results', true, false, true, true],
+      ['pkb', 'Test Results', true, true, true, false],
+      ['pkb', 'Test Results', false, false, true, false],
       ['pkb', 'Care Plans', true, false, true, true],
       ['pkb', 'Care Plans', true, true, true, false],
       ['pkb', 'Care Plans', false, false, true, false],
@@ -93,9 +96,12 @@ describe('healthRecords', () => {
       ['cie', 'Health Trackers', true, true, true, false],
       ['cie', 'Health Trackers', false, false, true, false],
     ]).describe('%s %s enabled is %s, proxy is %s, native is %s', (
-      provider, linkType, context, isProxying, isNativeApp, expectedResult,
+      provider, linkType, integrationEnabled, isProxying, isNativeApp, expectedResult,
     ) => {
       switch (provider + linkType.replace(' ', '')) {
+        case 'pkbTestResults':
+          linkElement = '#btn_pkb_test_results';
+          break;
         case 'pkbCarePlans':
           linkElement = '#btn_pkb_care_plans';
           break;
@@ -113,7 +119,7 @@ describe('healthRecords', () => {
       }
 
       beforeEach(() => {
-        wrapper = mountAs({ context, isProxying, isNativeApp });
+        wrapper = mountAs({ integrationEnabled, isProxying, isNativeApp });
       });
 
       it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {

@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
-                        .SecondaryAppointments(new[] { SecondaryAppointmentsProvider.ers }))
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -76,7 +76,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
                     .MedicalRecord(MedicalRecordProvider.im1, "1")
-                    .SilverIntegrations(x => x.SecondaryAppointments(SecondaryAppointmentsProvider.ers))
+                    .SilverIntegrations(x => x
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
+                        .TestResults(TestResultsProvider.pkb))
                     .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification("1")))
                     .Build(),
                 new JourneysBuilder()
@@ -99,6 +101,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
                     .MedicalRecord(MedicalRecordProvider.im1, "2")
+                    .SilverIntegrations(x => x
+                        .TestResults(TestResultsProvider.pkb))
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .Build(),
                 new JourneysBuilder()
@@ -150,7 +154,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
-                    )
+                        .TestResults(TestResultsProvider.pkb))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -172,7 +176,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)
                         .Messages(MessagesProvider.pkb)
-                        .SecondaryAppointments(new [] { SecondaryAppointmentsProvider.ers , SecondaryAppointmentsProvider.pkb}))
+                        .SecondaryAppointments(SecondaryAppointmentsProvider.ers , SecondaryAppointmentsProvider.pkb)
+                        .TestResults(TestResultsProvider.pkb))
                     .HomeScreen(x => x.PublicHealthNotifications(new[] { CreatePublicHealthNotification("1") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,

@@ -20,6 +20,11 @@ open class MedicalRecordHubPageStepDefinitions {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, supplier)
     }
 
+    @Given("I am an (.*) patient and I have access to Patients Know Best Test Results")
+    fun setupPKBTestResultsPatient(supplier: String) {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB, supplier)
+    }
+
     @Given("I am an (.*) patient and I have access to Patients Know Best Care Plans")
     fun setupPKBCarePlansPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB, supplier)

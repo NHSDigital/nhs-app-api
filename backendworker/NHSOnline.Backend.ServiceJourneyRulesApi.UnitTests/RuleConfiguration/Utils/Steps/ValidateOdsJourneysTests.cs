@@ -97,8 +97,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .HealthTrackers(HealthTrackersProvider.pkb)
                                 .Libraries(LibrariesProvider.pkb)
                                 .Medicines(MedicinesProvider.pkb)
-                                .Messages( MessagesProvider.pkb )
-                                .SecondaryAppointments( SecondaryAppointmentsProvider.pkb ))
+                                .Messages(MessagesProvider.pkb)
+                                .SecondaryAppointments( SecondaryAppointmentsProvider.pkb )
+                                .TestResults(TestResultsProvider.pkb))
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true, true,
@@ -125,7 +126,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
-                                .SecondaryAppointments())
+                                .SecondaryAppointments()
+                                .TestResults())
                             .DocumentsEnabled(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
@@ -151,7 +153,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
-                                .SecondaryAppointments())
+                                .SecondaryAppointments()
+                                .TestResults())
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(
                                 true,
@@ -199,7 +202,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
-                                .SecondaryAppointments())
+                                .SecondaryAppointments()
+                                .TestResults())
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, false,
                                 false, false, false)
@@ -225,7 +229,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
-                                .SecondaryAppointments())
+                                .SecondaryAppointments()
+                                .TestResults())
                             .DocumentsEnabled(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
@@ -251,7 +256,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
-                                .SecondaryAppointments())
+                                .SecondaryAppointments()
+                                .TestResults())
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true, true,
@@ -351,53 +357,60 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     "A12",
                     ValidJourneys()
                         .SilverIntegrations(x => x.Consultations().HealthTrackers().Libraries()
-                            .Medicines().Messages().SecondaryAppointments())
+                            .Medicines().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A13",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().HealthTrackers().Libraries()
-                            .Medicines().Messages().SecondaryAppointments())
+                            .Medicines().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A14",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().Libraries()
-                            .Medicines().Messages().SecondaryAppointments())
+                            .Medicines().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A15",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
-                            .Medicines().Messages().SecondaryAppointments())
+                            .Medicines().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A16",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
-                            .Libraries().Messages().SecondaryAppointments())
+                            .Libraries().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A17",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
-                            .Libraries().Medicines().SecondaryAppointments())
+                            .Libraries().Medicines().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A18",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
-                            .Libraries().Medicines().Messages())
+                            .Libraries().Medicines().Messages().TestResults())
                         .Build()
                 },
                 {
                     "A19",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
+                            .Libraries().Medicines().Messages().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A20",
                     ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
@@ -426,7 +439,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A16", "journeys.SilverIntegrations.Medicines");
             AssertError("A17", "journeys.SilverIntegrations.Messages");
             AssertError("A18", "journeys.SilverIntegrations.SecondaryAppointments");
-            AssertError("A19", "journeys.Supplier");
+            AssertError("A19", "journeys.SilverIntegrations.TestResults");
+            AssertError("A20", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -459,7 +473,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Medicines()
                     .Messages()
                     .SecondaryAppointments()
-                    )
+                    .TestResults())
                 .DocumentsEnabled(true)
                 .Im1MessagingEnabled(true,
                     true,

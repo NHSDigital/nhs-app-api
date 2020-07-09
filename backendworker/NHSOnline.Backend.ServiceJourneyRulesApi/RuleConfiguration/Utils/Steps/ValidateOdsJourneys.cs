@@ -41,6 +41,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     "journeys.SilverIntegrations.Messages")
                 .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
                     "journeys.SilverIntegrations.SecondaryAppointments")
+                .Add(journeys => journeys.SilverIntegrations?.TestResults != null,
+                    "journeys.SilverIntegrations.TestResults")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
                 .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null,

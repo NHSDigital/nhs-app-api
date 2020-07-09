@@ -25,6 +25,7 @@ journeys:
     medicines: []
     messages: []
     secondaryAppointments: []
+    testResults: []
   documents: false
   im1Messaging: 
     isEnabled: false

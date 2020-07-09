@@ -187,6 +187,13 @@
             "type": "string",
             "enum": [ "ers", "pkb", "pkbCie" ]
           }
+        },
+        "testResults": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb" ]
+          }
         }
       },
       "additionalProperties": false

@@ -115,6 +115,21 @@ export default {
         },
       },
       {
+        id: 'testResults',
+        path: '/nhs-login/login?phrPath=/test/myTests.action',
+        jumpOffContent: {
+          headerText: 'Test results',
+          descriptionText: 'View test results from your hospital and other healthcare providers',
+        },
+        thirdPartyWarning: {
+          featureName: 'Test results',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'appointmentsCie',
         path: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=cie',
         jumpOffContent: {

@@ -43,9 +43,19 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
     }
 
+    @Given("^I am a user who can view test results from Patients Know Best$")
+    fun iAmAUserWhoCanViewTestResultsFromPatientsKnowBest() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB)
+    }
+
     @Given("^I am a user who can view care plans from Patients Know Best$")
     fun iAmAUserWhoCanViewCarePlansFromPatientsKnowBest() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
+    }
+
+    @Given("^I am a user who cannot view test results from Patients Know Best$")
+    fun iAmAUserWhoCannotViewTestResultsFromPatientsKnowBest() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
     }
 
     @Given("^I am a user who cannot view care plans from Patients Know Best$")
@@ -80,17 +90,22 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
 
     @Given("^I am a user who can view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCanViewSharedLinksFromPatientsKnowBest(){
-        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
     }
 
     @Given("^I am a user who cannot view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCannotViewSharedLinksFromPatientsKnowBest(){
-        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
     @Then("the link to PKB Track your health is not available on the health record hub page")
     fun theLinkToPkbHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("the link to PKB test results is not available on the health record hub page")
+    fun theLinkToPkbTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
     }
 
     @Then("the link to PKB Care plans is not available on the health record hub page")

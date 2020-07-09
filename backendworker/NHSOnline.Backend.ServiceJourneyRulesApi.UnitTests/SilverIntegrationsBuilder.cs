@@ -48,6 +48,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public SilverIntegrationsBuilder TestResults(params TestResultsProvider[] providers)
+        {
+            _silverIntegrations.TestResults = providers.ToList();
+            return this;
+        }
+
         public SilverIntegrations Build()
         {
             return _silverIntegrations;

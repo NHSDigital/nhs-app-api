@@ -23,3 +23,5 @@ journeys:
       - pkb
     secondaryAppointments:
       - pkb
+    testResults:
+      - pkb

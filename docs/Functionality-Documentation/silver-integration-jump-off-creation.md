@@ -18,7 +18,7 @@ Each silver integration rule describes a feature (appointments, medicines, healt
 
 If an entirely new silver integration rule is required, for a new feature that does not yet exist in the Silver integrations, the following areas of the code will need to be extended:
 
-* `backendworker/configurations/journeys/all_defaults.yaml` - to set default value for the new rule (likely an empty array).
+* `backendworker/configurations/journeys/defaults/all_defaults.yaml` - to set default value for the new rule (likely an empty array).
 * `backendworker/configurations/journeys/silver_integrations/(files)` - to set appropriate values for the new rule for test practices.
 * `backendworker/ServiceJourneyRulesApi.Models/SilverIntegrations`
 * `backendworker/ServiceJourneyRulesApi.Models/(add new Provider class)`
@@ -77,7 +77,7 @@ In general there are only two areas of the integration test suite that will requ
 
 * **Add a new feature file within the test / kotlin / features / silverIntegration folder for the specific jump-off point.**
 
-    This can be expedited by copying-and-pasting one of the existing PKB silver integration feature files, such as patients_know_best_sharedLinks.feature and using this as a stating point, changing the scenarios and step titles as necessary, then implementing any new step definitions as required. Note carefully the construction of the urls in the "When I navigate to the redirector page with a url of" step - some aspects of the URLs may need to be doubly-url-encoded for the test to match correctly.
+    This can be expedited by copying-and-pasting one of the existing PKB silver integration feature files, such as patients_know_best_sharedLinks.feature and using this as a starting point, changing the scenarios and step titles as necessary, then implementing any new step definitions as required. Note carefully the construction of the urls in the "When I navigate to the redirector page with a url of" step - some aspects of the URLs may need to be doubly-url-encoded for the test to match correctly.
     Also, for tests that assert that the link is not present on a page, be sure to have also included a step to check that the user has actually reached the expected page. If the test has failed to reach the page, the link will not be present, and the test will pass incorrectly.
 * **If required, edit the feature file for any 'Hub' or other pages which have behaviour affected by the presence or absence of the new jump off point.**
 
