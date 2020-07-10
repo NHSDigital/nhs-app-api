@@ -2,7 +2,7 @@ using System;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    public interface IDriverCleanupContext
+    internal interface IDriverCleanupContext
     {
         string TestName { get; }
         void TryAttach(string name, Func<string> createFile);

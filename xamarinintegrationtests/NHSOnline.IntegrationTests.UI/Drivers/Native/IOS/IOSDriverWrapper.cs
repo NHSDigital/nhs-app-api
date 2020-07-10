@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {

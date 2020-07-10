@@ -1,13 +1,13 @@
 using System.Net;
 using OpenQA.Selenium.Appium;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
-    internal sealed class AndroidConfig
+    internal sealed class IOSConfig
     {
-        public string? App { get; set; } = $"{Dns.GetHostName()}-android";
-        public string? Device { get; set; } = "Google Pixel 2";
-        public string? OperatingSystemVersion { get; set; } = "8.0";
+        public string? App { get; set; } = $"{Dns.GetHostName()}-ios";
+        public string? Device { get; set; } = "iPhone 8";
+        public string? OperatingSystemVersion { get; set; } = "12.1";
 
         internal void SetCapabilities(AppiumOptions options)
         {

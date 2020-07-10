@@ -2,7 +2,7 @@ using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal abstract class WebViewLocatorStrategy
     {

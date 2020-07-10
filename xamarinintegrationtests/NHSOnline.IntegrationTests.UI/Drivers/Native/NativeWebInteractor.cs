@@ -1,7 +1,7 @@
 using System;
 using OpenQA.Selenium;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal sealed class NativeWebInteractor : INativeWebContext
     {

@@ -1,6 +1,6 @@
 using OpenQA.Selenium.Appium;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal static class AppiumOptionsExtensions
     {

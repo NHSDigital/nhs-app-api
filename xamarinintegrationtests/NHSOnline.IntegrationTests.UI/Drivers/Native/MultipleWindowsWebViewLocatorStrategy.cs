@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal sealed class MultipleWindowsWebViewLocatorStrategy<TDriver> : WebViewLocatorStrategy
         where TDriver: class, IWebDriver, IContextAware

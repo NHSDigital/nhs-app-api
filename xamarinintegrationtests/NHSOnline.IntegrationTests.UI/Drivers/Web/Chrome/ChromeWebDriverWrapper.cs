@@ -6,7 +6,7 @@ using OpenQA.Selenium.Chrome;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Web.Chrome
 {
     internal sealed class ChromeWebDriverWrapper: IWebDriverWrapper
     {

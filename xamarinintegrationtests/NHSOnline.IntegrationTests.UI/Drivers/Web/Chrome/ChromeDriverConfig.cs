@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Web.Chrome
 {
     internal sealed class ChromeDriverConfig
     {

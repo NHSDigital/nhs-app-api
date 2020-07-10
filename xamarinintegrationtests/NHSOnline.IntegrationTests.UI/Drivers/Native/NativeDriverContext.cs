@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using OpenQA.Selenium.Appium.Interfaces;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal sealed class NativeDriverContext
     {

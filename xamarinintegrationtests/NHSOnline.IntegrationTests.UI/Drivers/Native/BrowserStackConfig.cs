@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using OpenQA.Selenium.Appium;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal sealed class BrowserStackConfig
     {
