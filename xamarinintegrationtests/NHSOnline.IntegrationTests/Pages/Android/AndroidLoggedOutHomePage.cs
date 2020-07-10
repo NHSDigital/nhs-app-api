@@ -21,39 +21,22 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         {
             var page = new AndroidLoggedOutHomePage(driver);
             page.HowAreYouFeelingText.AssertVisible();
-            page.AccessServicesText.AssertVisible();
-            page.CheckYourSymptoms.AssertVisible();
-            page.ContinueButton.AssertVisible();
             return page;
         }
 
-        internal AndroidLoggedOutHomePage AssertCovidLinkOnPage()
+        internal void AssertPageElements()
         {
             CovidConditions.AssertVisible();
-            return this;
+            AccessServicesText.AssertVisible();
+            ContinueButton.AssertVisible();
+            CheckYourSymptoms.AssertVisible();
+            HelpIcon.AssertVisible();
         }
 
-        internal AndroidLoggedOutHomePage AssertHelpIconOnPage()
-        {
-            HelpIcon.Click();
-            return this;
-        }
+        internal void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
-        internal AndroidLoggedOutHomePage ClickCovidBanner()
-        {
-            CovidConditions.Click();
-            return this;
-        }
+        internal void GetHelp() => HelpIcon.Click();
 
-        internal AndroidLoggedOutHomePage ClickHelpIcon()
-        {
-            HelpIcon.Click();
-            return this;
-        }
-
-        public void ContinueWithNhsLogin()
-        {
-            ContinueButton.Click();
-        }
+        internal void ContinueWithNhsLogin() => ContinueButton.Click();
     }
 }

@@ -26,12 +26,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             return page;
         }
 
-        internal IOSBeforeYouStartPage AssertAllLinkArePresent()
+        internal void AssertPageElements()
         {
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
             OneOneOneLink.AssertVisible();
-            return this;
+            ExpanderHeader.AssertVisible();
         }
 
         internal void CheckCoronavirusSymptoms()

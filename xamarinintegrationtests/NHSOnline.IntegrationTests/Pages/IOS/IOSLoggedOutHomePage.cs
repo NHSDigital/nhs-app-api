@@ -24,37 +24,22 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         {
             var page = new IOSLoggedOutHomePage(driver);
             page.HowAreYouFeelingText.AssertVisible();
-            page.AccessServicesText.AssertVisible();
-            page.ContinueButton.AssertVisible();
-            page.CheckYourSymptoms.AssertVisible();
             return page;
         }
 
-        internal IOSLoggedOutHomePage AssertCovidLinkOnPage()
+        internal void AssertPageElements()
         {
             CovidConditions.AssertVisible();
-            return this;
-        }
-
-        internal IOSLoggedOutHomePage AssertHelpIconOnPage()
-        {
+            AccessServicesText.AssertVisible();
+            ContinueButton.AssertVisible();
+            CheckYourSymptoms.AssertVisible();
             HelpIcon.AssertVisible();
-            return this;
         }
 
-        internal void ClickCovidBanner()
-        {
-            CovidConditions.Click();
-        }
+        internal void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
-        internal void ClickHelpIcon()
-        {
-            HelpIcon.Click();
-        }
+        internal void GetHelp() => HelpIcon.Click();
 
-        public void ContinueWithNhsLogin()
-        {
-            ContinueButton.Click();
-        }
+        internal void ContinueWithNhsLogin() => ContinueButton.Click();
     }
 }

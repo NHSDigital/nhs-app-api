@@ -8,10 +8,9 @@ namespace NHSOnline.IntegrationTests.UI
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class NhsAppIOSTestAttribute : TestMethodAttribute
     {
-
         public override TestResult[] Execute(ITestMethod testMethod)
         {
-            var testName = "[iOS] " + (DisplayName ?? testMethod.TestMethodName);
+            var testName = DisplayName ?? testMethod.TestMethodName;
 
             var testExecutor = new TestExecutor<IIOSDriverWrapper>(
                 testName,

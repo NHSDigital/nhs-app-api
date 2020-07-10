@@ -1,90 +1,56 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.Web;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using NHSOnline.IntegrationTests.UI.Drivers.Native;
 
-namespace NHSOnline.IntegrationTests
+namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    public class IOSLoginTests
+    public class LoginTests
     {
-        [NhsAppIOSTest]
-        public void APatientCanStartTheApp(IIOSDriverWrapper driver)
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelFiveCanLoginAndroid(IAndroidDriverWrapper driver)
         {
-           IOSLoggedOutHomePage
+            var patient = new P5Patient()
+                .WithName(b => b.GivenName("Fred").FamilyName("Bloggs"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
                 .AssertOnPage(driver)
-                .AssertCovidLinkOnPage()
-                .AssertHelpIconOnPage();
-        }
+                .ContinueWithNhsLogin();
 
-        [NhsAppIOSTest]
-        public void APatientCanClickToViewCovidConditions(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
+            AndroidBeforeYouStartPage
                 .AssertOnPage(driver)
-                .ClickCovidBanner();
-            IOSAppTab
-                .AssertOnCovidConditionsPage(driver)
-                .ReturnToApp();
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
+            {
+                TermsAndConditionsPage
+                    .AssertOnPage(webInteractor)
+                    .AcceptTermsAndConditions();
+
+                UserResearchOptInPage
+                    .AssertOnPage(webInteractor)
+                    .OptInToUserResearch();
+
+                LoggedInHomePage
+                    .AssertOnPage(webInteractor)
+                    .AssertWelcomeMessageDisplayedFor("Fred Bloggs");
+            }
         }
 
         [NhsAppIOSTest]
-        public void APatientCanClickToGetHelpWithLoggingIn(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ClickHelpIcon();
-            IOSAppTab
-                .AssertOnLoginHelpPage(driver)
-                .ReturnToApp();
-        }
-
-        [NhsAppIOSTest]
-        public void APatientIsShownTheBeforeYouStartPage(IIOSDriverWrapper driver)
-        {
-            NavigateToBeforeYouStartPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanClickAllTheLinksAndGoToCorrectPages(IIOSDriverWrapper driver)
-        {
-            NavigateToBeforeYouStartPage(driver)
-                .AssertAllLinkArePresent()
-                .SearchConditionsAndTreatments();
-
-            IOSAppTab
-                .AssertOnConditionsPage(driver)
-                .ReturnToApp();
-
-            IOSBeforeYouStartPage
-                .AssertOnPage(driver)
-                .CheckCoronavirusSymptoms();
-
-            IOSAppTab
-                .AssertOnCovidPage(driver)
-                .ReturnToApp();
-
-            IOSBeforeYouStartPage
-                .AssertOnPage(driver)
-                .UseNhs111Online();
-
-            IOSAppTab
-                .AssertOn111Page(driver)
-                .ReturnToApp();
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanUseTheExpander(IIOSDriverWrapper driver)
-        {
-            NavigateToBeforeYouStartPage(driver)
-                .AssertExpanderPresent();
-        }
-
-        [NhsAppIOSTest]
-        public void APatientWithProofLevelFiveCanLogin(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelFiveCanLoginIos(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
                 .WithName(b => b.GivenName("Fred").FamilyName("Bloggs"));
@@ -121,8 +87,46 @@ namespace NHSOnline.IntegrationTests
             }
         }
 
+        [NhsAppAndroidTest]
+        public void APatientWithProofLevelNineCanLoginAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithName(b => b.Title("Mr").GivenName("Jack").FamilyName("Flash"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
+            {
+                TermsAndConditionsPage
+                    .AssertOnPage(webInteractor)
+                    .AcceptTermsAndConditions();
+
+                UserResearchOptInPage
+                    .AssertOnPage(webInteractor)
+                    .OptInToUserResearch();
+
+                LoggedInHomePage
+                    .AssertOnPage(webInteractor)
+                    .AssertWelcomeMessageDisplayedFor("Mr Jack Flash");
+            }
+        }
+
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanLogin(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelNineCanLoginIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.Title("Mr").GivenName("Jack").FamilyName("Flash"));
@@ -157,16 +161,6 @@ namespace NHSOnline.IntegrationTests
                     .AssertOnPage(webInteractor)
                     .AssertWelcomeMessageDisplayedFor("Mr Jack Flash");
             }
-        }
-
-        private static IOSBeforeYouStartPage NavigateToBeforeYouStartPage(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .ContinueWithNhsLogin();
-
-            var beforeYouStartPage = IOSBeforeYouStartPage.AssertOnPage(driver);
-            return beforeYouStartPage;
         }
     }
 }

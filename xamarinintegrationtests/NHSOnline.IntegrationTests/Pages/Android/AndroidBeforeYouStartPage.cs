@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidLabel CovidLink => new AndroidLabel(_driver, "• Check if you have coronavirus symptoms");
         private AndroidLabel ConditionsLink => new AndroidLabel(_driver, "• Search conditions and treatments");
         private AndroidLabel OneOneOneLink => new AndroidLabel(_driver, "• Use NHS 111 online to check if you need urgent help");
-        private AndroidLabel Expander => new AndroidLabel(_driver, "What to do if you're aged 13 to 15");
+        private AndroidLabel ExpanderHeader => new AndroidLabel(_driver, "What to do if you're aged 13 to 15");
 
         private AndroidLabel ExpanderBody => new AndroidLabel(_driver,
             "You'll need to contact your GP surgery first and request access to GP online services.");
@@ -25,33 +25,38 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         {
             var page = new AndroidBeforeYouStartPage(driver);
             page.Title.AssertVisible();
-            page.CovidLink.AssertVisible();
-            page.ConditionsLink.AssertVisible();
-            page.OneOneOneLink.AssertVisible();
             return page;
         }
 
-        internal void AssertExpanderPresent()
+        internal void AssertPageElements()
         {
-            Expander.AssertVisible();
-            ExpanderBody.AssertNotVisible();
-            Expander.Click();
-            ExpanderBody.AssertVisible();
+            CovidLink.AssertVisible();
+            ConditionsLink.AssertVisible();
+            OneOneOneLink.AssertVisible();
+            ExpanderHeader.AssertVisible();
         }
 
-        internal void TriggerCovidLinkClick()
+        internal void CheckCoronavirusSymptoms()
         {
             CovidLink.Click();
         }
 
-        internal void TriggerConditionsLinkClick()
+        internal void SearchConditionsAndTreatments()
         {
             ConditionsLink.Click();
         }
 
-        internal void TriggerOneOneOneLinkClick()
+        internal void UseNhs111Online()
         {
             OneOneOneLink.Click();
+        }
+
+        internal void AssertExpanderPresent()
+        {
+            ExpanderHeader.AssertVisible();
+            ExpanderBody.AssertNotVisible();
+            ExpanderHeader.Click();
+            ExpanderBody.AssertVisible();
         }
 
         internal void Continue()

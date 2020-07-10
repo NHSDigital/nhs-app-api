@@ -1,4 +1,3 @@
-using NHSOnline.HttpMocks;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;

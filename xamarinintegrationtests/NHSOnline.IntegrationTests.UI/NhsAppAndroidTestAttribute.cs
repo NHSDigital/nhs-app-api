@@ -8,10 +8,9 @@ namespace NHSOnline.IntegrationTests.UI
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class NhsAppAndroidTestAttribute : TestMethodAttribute
     {
-
         public override TestResult[] Execute(ITestMethod testMethod)
         {
-            var testName = "[Android] " + (DisplayName ?? testMethod.TestMethodName);
+            var testName = DisplayName ?? testMethod.TestMethodName;
 
             var testExecutor = new TestExecutor<IAndroidDriverWrapper>(
                 testName,
