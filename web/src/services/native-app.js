@@ -227,10 +227,10 @@ export default {
     return false;
   },
 
-  setMenuBarItem(index, unlockNavBar) {
+  setMenuBarItem(index) {
     const app = window.nativeApp;
     if (app && app.setMenuBarItem) {
-      app.setMenuBarItem(index, unlockNavBar);
+      app.setMenuBarItem(index);
       return true;
     }
     return false;

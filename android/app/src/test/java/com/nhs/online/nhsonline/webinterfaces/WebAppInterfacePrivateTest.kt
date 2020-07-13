@@ -128,10 +128,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun setMenuBarItemTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.setMenuBarItem(0, true)
+        webAppInterfacePrivate.setMenuBarItem(0)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).setMenuBarItem(0, true)
+        verify(contextMock).setMenuBarItem(0)
     }
 
     @Test

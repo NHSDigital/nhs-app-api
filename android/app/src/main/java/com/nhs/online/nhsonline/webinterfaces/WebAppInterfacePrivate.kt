@@ -146,9 +146,9 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun setMenuBarItem(index: Int, unlockNavBar: Boolean) {
+    fun setMenuBarItem(index: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
-        runAction { uiInteractor.setMenuBarItem(index, unlockNavBar) }
+        runAction { uiInteractor.setMenuBarItem(index) }
     }
 
     @JavascriptInterface

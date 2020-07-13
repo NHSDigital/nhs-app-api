@@ -552,7 +552,7 @@ class MainActivity :
         }
     }
 
-    override fun setMenuBarItem(index: Int, unlockNavBar: Boolean) {
+    override fun setMenuBarItem(index: Int) {
         when (index) {
             MenuTab.Symptoms.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
             MenuTab.Appointments.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.appointments)
@@ -560,10 +560,7 @@ class MainActivity :
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
             MenuTab.More.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.more)
         }
-
-        if (unlockNavBar) {
-            enableMenuBar();
-        }
+        enableMenuBar();
     }
 
     override fun clearMenuBarItem() {

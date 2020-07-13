@@ -39,7 +39,7 @@ interface IInteractor {
 
     fun setRetryPath(url: String)
 
-    fun setMenuBarItem(index: Int, unlockNavBar: Boolean)
+    fun setMenuBarItem(index: Int)
 
     fun hideHeader()
 
