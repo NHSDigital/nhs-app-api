@@ -7,20 +7,30 @@ namespace NHSOnline.IntegrationTests.UI
 {
     internal sealed class TestContext
     {
+        private readonly DateTime _startTime = DateTime.UtcNow;
+
         private readonly ITestMethod _testMethod;
-        private readonly TestLogs _logs;
+        private readonly TestTempDirectory _testTempDirectory;
         private readonly IDriverWrapper _driver;
 
-        internal TestContext(ITestMethod testMethod, TestLogs logs, IDriverWrapper driver)
+        internal TestContext(
+            ITestMethod testMethod,
+            TestLogs logs,
+            TestTempDirectory testTempDirectory,
+            IDriverWrapper driver)
         {
             _testMethod = testMethod;
-            _logs = logs;
+            _testTempDirectory = testTempDirectory;
             _driver = driver;
+
+            Logs = logs;
         }
 
+        internal TestLogs Logs { get; }
+
         internal string TestName => _testMethod.TestMethodName;
-        internal DateTime StartTime { get; } = DateTime.UtcNow;
-        internal TestLogs Logs => _logs;
+
+        internal FileInfo GetTempFile(string filename) => _testTempDirectory.GetTempFile(filename);
 
         internal void Cleanup(TestResult testResult)
         {
@@ -49,10 +59,9 @@ namespace NHSOnline.IntegrationTests.UI
 
         private void AttachDockerLogs(TestResultContext testResultContext, string containerName)
         {
-            var filename = Path.Join(Path.GetTempPath(), $"{containerName}.log");
-            File.Delete(filename);
-
-            var arguments = $"logs {containerName} --since {StartTime:yyyy-MM-ddTHH:mm:ssZ}";
+            var file = _testTempDirectory.GetTempFile($"{containerName}.log");
+            
+            var arguments = $"logs {containerName} --since {_startTime:yyyy-MM-ddTHH:mm:ssZ}";
 
             // Add timestamps to the web logs as they are not included in the log lines
             if (containerName.Contains("web", StringComparison.OrdinalIgnoreCase))
@@ -61,11 +70,11 @@ namespace NHSOnline.IntegrationTests.UI
             }
 
             using var logs = new ProcessRunner("docker", arguments).Start();
-            File.AppendAllLines(filename, logs.Output());
+            File.AppendAllLines(file.FullName, logs.Output());
 
-            if (File.Exists(filename))
+            if (file.Exists)
             {
-                testResultContext.AddResultFile(filename);
+                testResultContext.Attach(file);
             }
         }
     }

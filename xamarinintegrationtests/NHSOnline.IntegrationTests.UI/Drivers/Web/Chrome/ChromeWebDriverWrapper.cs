@@ -10,13 +10,17 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Web.Chrome
 {
     internal sealed class ChromeWebDriverWrapper: IWebDriverWrapper
     {
+        private readonly FileInfo _chromeDriverLog;
         private readonly ChromeDriverService _chromeDriverService;
         private readonly IWebDriver _webDriver;
         private readonly Interactor<IWebElement> _interactor;
 
-        internal ChromeWebDriverWrapper(TestLogs logs)
+        internal ChromeWebDriverWrapper(TestLogs logs, TestTempDirectory tempDirectory)
         {
             Logs = logs;
+
+            _chromeDriverLog = tempDirectory.GetTempFile("ChromeDriver.log");
+
             var config = Config.Get<ChromeDriverConfig>("Chrome");
 
             new DriverManager().SetUpDriver(new ChromeConfig());
@@ -29,7 +33,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Web.Chrome
             options.AddArguments(config.Arguments.Where(kvp => kvp.Value).Select(kvp => kvp.Key));
 
             _chromeDriverService = ChromeDriverService.CreateDefaultService();
-            _chromeDriverService.LogPath = Path.Join(Path.GetTempPath(), "ChromeDriver.log");
+            _chromeDriverService.LogPath = _chromeDriverLog.FullName;
             _chromeDriverService.EnableVerboseLogging = config.EnableVerboseLogging;
             _chromeDriverService.SuppressInitialDiagnosticInformation = config.SuppressInitialDiagnosticInformation;
 
@@ -58,8 +62,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Web.Chrome
             context.TryCleanUp("quit web driver", () => _webDriver?.Quit());
         }
 
-        private static void TryAttachChromeDriverLog(IDriverCleanupContext context)
-            => context.TryAttach("chrome driver log", () => Path.Join(Path.GetTempPath(), "ChromeDriver.log"));
+        private void TryAttachChromeDriverLog(IDriverCleanupContext context)
+            => context.Attach(_chromeDriverLog);
 
         public void Dispose()
         {

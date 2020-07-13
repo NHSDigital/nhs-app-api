@@ -9,9 +9,12 @@ namespace NHSOnline.IntegrationTests.UI
     {
         private readonly string _displayName;
         private readonly ITestMethod _testMethod;
-        private readonly Func<TestLogs, TDriverWrapper> _createDriverWrapper;
+        private readonly Func<TestLogs, TestTempDirectory, TDriverWrapper> _createDriverWrapper;
 
-        public TestExecutor(string displayName, ITestMethod testMethod, Func<TestLogs, TDriverWrapper> driverWrapper)
+        public TestExecutor(
+            string displayName,
+            ITestMethod testMethod,
+            Func<TestLogs, TestTempDirectory, TDriverWrapper> driverWrapper)
         {
             _displayName = displayName;
             _testMethod = testMethod;
@@ -47,8 +50,9 @@ namespace NHSOnline.IntegrationTests.UI
 
             try
             {
-                using var driver = _createDriverWrapper(logs);
-                var context = new TestContext(_testMethod, logs, driver);
+                var tempDirectory = new TestTempDirectory();
+                using var driver = _createDriverWrapper(logs, tempDirectory);
+                var context = new TestContext(_testMethod, logs, tempDirectory, driver);
 
                 var testResult = _testMethod.Invoke(new object[] { driver });
 

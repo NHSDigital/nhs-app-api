@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.UI
     {
         private readonly TestContext _testContext;
         private readonly TestResult _testResult;
-
+        
         internal TestResultContext(TestContext testContext, TestResult testResult)
         {
             _testContext = testContext;
@@ -19,16 +19,24 @@ namespace NHSOnline.IntegrationTests.UI
 
         public string TestName => _testContext.TestName;
 
-        public void TryAttach(string name, Func<string> createFile)
+        public void TryAttach(string name, string filename, Action<FileInfo> createFile)
         {
             TryCleanUp(
-                $"attach {name}",
+                $"attach {name} ({filename})",
                 () =>
                 {
-                    var filename = createFile();
-                    _testContext.Logs.Info($"Attaching {name} from {filename} (Exists: {File.Exists(filename)})");
-                    AddResultFile(filename);
+                    var file = _testContext.GetTempFile(filename);
+
+                    createFile(file);
+
+                    _testContext.Logs.Info($"Attaching {name} from {file.FullName} (Exists: {file.Exists})");
+                    AddResultFile(file);
                 });
+        }
+
+        public void Attach(FileInfo file)
+        {
+            AddResultFile(file);
         }
 
         public void TryCleanUp(string description, Action cleanUp)
@@ -45,15 +53,15 @@ namespace NHSOnline.IntegrationTests.UI
             }
         }
 
-        internal void AddResultFile(string filename)
+        private void AddResultFile(FileInfo file)
         {
             if (_testResult.ResultFiles == null)
             {
-                _testResult.ResultFiles = new List<string> { filename };
+                _testResult.ResultFiles = new List<string> { file.FullName };
             }
             else
             {
-                _testResult.ResultFiles.Add(filename);
+                _testResult.ResultFiles.Add(file.FullName);
             }
         }
     }

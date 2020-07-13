@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.UI
             var testExecutor = new TestExecutor<IAndroidDriverWrapper>(
                 testName,
                 testMethod,
-                logs => new AndroidDriverWrapper(testName, logs));
+                (logs, _) => new AndroidDriverWrapper(testName, logs));
 
             return new[] {testExecutor.Execute()};
         }

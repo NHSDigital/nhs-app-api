@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.UI
             var testExecutor = new TestExecutor<IWebDriverWrapper>(
                 testName,
                 testMethod,
-                logs => new ChromeWebDriverWrapper(logs));
+                (logs, tempDir) => new ChromeWebDriverWrapper(logs, tempDir));
 
             return new[] { testExecutor.Execute() };
         }

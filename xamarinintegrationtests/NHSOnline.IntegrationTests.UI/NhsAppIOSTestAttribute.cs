@@ -15,7 +15,7 @@ namespace NHSOnline.IntegrationTests.UI
             var testExecutor = new TestExecutor<IIOSDriverWrapper>(
                 testName,
                 testMethod,
-                logs => new IOSDriverWrapper(testName, logs));
+                (logs, _) => new IOSDriverWrapper(testName, logs));
 
             return new[] { testExecutor.Execute() };
         }

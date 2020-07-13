@@ -12,13 +12,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             if (driver is ITakesScreenshot takesScreenShot)
             {
-                context.TryAttach("screen shot", () =>
-                {
-                    var screenShot = takesScreenShot.GetScreenshot();
-                    var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.png");
-                    screenShot.SaveAsFile(fileName);
-                    return fileName;
-                });
+                context.TryAttach(
+                    "screen shot",
+                    "ScreenShot.png",
+                    file => takesScreenShot.GetScreenshot().SaveAsFile(file.FullName));
             }
         }
 
@@ -26,13 +23,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             this IDriverCleanupContext context,
             IWebDriver driver)
         {
-            context.TryAttach("page source", () =>
-            {
-                var pageSource = driver.PageSource;
-                var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.html");
-                File.WriteAllText(fileName, pageSource);
-                return fileName;
-            });
+            context.TryAttach(
+                "page source",
+                "PageSourceWeb.html",
+                file => File.WriteAllText(file.FullName, driver.PageSource));
         }
 
         internal static void TryAttachNativePageSource(
@@ -40,13 +34,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             IWebDriver driver,
             NativeDriverContext nativeDriverContext)
         {
-            context.TryAttach("App page source", () =>
-            {
-                var pageSource = driver.PageSource;
-                var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName}.xml");
-                File.WriteAllText(fileName, pageSource);
-                return fileName;
-            });
+            context.TryAttach(
+                "App page source",
+                "PageSourceNative.xml",
+                file => File.WriteAllText(file.FullName, driver.PageSource));
 
             context.TryCleanUp(
                 "Web page sources",
@@ -54,13 +45,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
             void TryAttachWebContextPageSource(string webContext)
             {
-                context.TryAttach($"Web page source {webContext}", () =>
-                {
-                    var pageSource = driver.PageSource;
-                    var fileName = Path.Join(Path.GetTempPath(), $"{context.TestName} {webContext}.html");
-                    File.WriteAllText(fileName, pageSource);
-                    return fileName;
-                });
+                context.TryAttach(
+                    $"Web page source {webContext}",
+                    $"PageSourceWeb{webContext}.html",
+                    file => File.WriteAllText(file.FullName, driver.PageSource));
             }
         }
     }
