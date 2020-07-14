@@ -9,9 +9,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidLoggedOutHomePage(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel CovidConditions => new AndroidLabel(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
-        private AndroidLabel HowAreYouFeelingText => new AndroidLabel(_driver, "How are you feeling today?");
-        private AndroidLabel AccessServicesText => new AndroidLabel(_driver, "To access your NHS services");
+        private AndroidLabel CovidConditions => AndroidLabel.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
+        private AndroidLabel HowAreYouFeelingText => AndroidLabel.WithText(_driver, "How are you feeling today?");
+        private AndroidLabel AccessServicesText => AndroidLabel.WithText(_driver, "To access your NHS services");
 
         private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue with NHS login");
         private AndroidButton CheckYourSymptoms => new AndroidButton(_driver, "Check symptoms");

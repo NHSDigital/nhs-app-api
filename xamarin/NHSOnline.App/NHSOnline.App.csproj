@@ -28,6 +28,12 @@
     <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorFallbackPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorFallbackPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorForbiddenPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorForbiddenPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorPage.xaml.cs">
       <DependentUpon>CreateSessionErrorPage.xaml</DependentUpon>
     </Compile>

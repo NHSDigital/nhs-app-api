@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
+using NHSOnline.HttpMocks.Emis;
 using NHSOnline.IntegrationTests.Pages.Android;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.Web;
@@ -240,6 +241,89 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .ReturnToApp();
 
             IOSNhsLoginErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsForbiddenAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithBehaviour(new EmisCreateSessionForbiddenBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            AndroidCreateSessionForbiddenErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .ContactUs();
+
+            AndroidAppTab
+                .AssertOnBrowserChoice(driver)
+                .ChooseChrome()
+                .JustOnce()
+                .AssertOnContactUsPage()
+                .ReturnToApp();
+
+            AndroidCreateSessionForbiddenErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsForbiddenIos(IIOSDriverWrapper driver)
+        {
+            var patient = new EmisPatient()
+                .WithBehaviour(new EmisCreateSessionForbiddenBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            IOSCreateSessionForbiddenErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .ContactUs();
+
+            IOSAppTab
+                .AssertOnContactUsPage(driver)
+                .ReturnToApp();
+
+            IOSCreateSessionForbiddenErrorPage
                 .AssertOnPage(driver)
                 .BackHome();
 

@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
             public BrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
 
-            private AndroidLabel ChromeOption => new AndroidLabel(_driver, "Chrome");
+            private AndroidLabel ChromeOption => AndroidLabel.WithText(_driver, "Chrome");
             private AndroidButton JustOnceButtom => new AndroidButton(_driver, "JUST ONCE");
 
             public BrowserChoice ChooseChrome()

@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorPage"
+             x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorForbiddenPage"
              BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
              x:Name="Root">
 
@@ -14,8 +14,8 @@
         <controls:Heading1 Text="Login failed" />
 
         <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" LabelText="Error">
-            <StackLayout  BindingContext="{x:Reference Name=Root}">
-                <controls:Paragraph Text="We cannot log you in to the NHS App." />
+            <StackLayout BindingContext="{x:Reference Name=Root}">
+                <controls:Paragraph Text="We cannot get your details from your GP surgery." />
                 <controls:Paragraph Text="Go back to the home screen and try logging in again." />
                 <controls:Paragraph>
                     <FormattedString>

@@ -7,27 +7,60 @@ using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
-    public sealed class IOSLabel
+    public abstract class IOSLabel
     {
         private readonly IIOSInteractor _interactor;
-        private readonly string _text;
 
-        public IOSLabel(IIOSInteractor interactor, string text)
+        private IOSLabel(IIOSInteractor interactor)
         {
             _interactor = interactor;
-            _text = text;
         }
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a label with text {1} should be displayed", _text));
+        public static IOSLabel WithText(IIOSInteractor interactor, string text)
+        {
+            return new Text(interactor, text);
+        }
+
+        public static IOSLabel WhichMatches(IIOSInteractor interactor, string pattern)
+        {
+            return new Matches(interactor, pattern);
+        }
+
+        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
 
         public void AssertNotVisible() => _interactor.AssertElementDoesntExist(FindBy);
-
-        public void AssertLabelVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a label with text {1} should be displayed", _text));
 
         public void Click() => ActOnElement(e => e.Click());
 
         private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
 
-        private By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()} and visible == 1");
+        protected abstract By FindBy { get; }
+        protected abstract string Description { get; }
+
+        private sealed class Text : IOSLabel
+        {
+            private readonly string _text;
+
+            public Text(IIOSInteractor interactor, string text) : base(interactor)
+            {
+                _text = text;
+            }
+
+            protected override By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()} and visible == 1");
+            protected override string Description => $"with text '{_text}'";
+        }
+
+        private sealed class Matches : IOSLabel
+        {
+            private readonly string _pattern;
+
+            public Matches(IIOSInteractor interactor, string pattern) : base(interactor)
+            {
+                _pattern = pattern;
+            }
+
+            protected override By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value MATCHES {_pattern.QuotePredicateLiteral()}");
+            protected override string Description => $"which matches '{_pattern}'";
+        }
     }
 }

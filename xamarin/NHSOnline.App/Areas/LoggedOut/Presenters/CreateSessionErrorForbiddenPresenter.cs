@@ -5,15 +5,15 @@ using NHSOnline.App.Services;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class CreateSessionErrorPresenter
+    internal sealed class CreateSessionErrorForbiddenPresenter
     {
-        private readonly ICreateSessionErrorView _view;
+        private readonly ICreateSessionErrorForbiddenView _view;
         private readonly IAppBrowserTab _appBrowserTab;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
-        public CreateSessionErrorPresenter(
-            ICreateSessionErrorView view,
-            CreateSessionErrorModel model,
+        public CreateSessionErrorForbiddenPresenter(
+            ICreateSessionErrorForbiddenView view,
+            CreateSessionErrorForbiddenModel model,
             IAppBrowserTab appBrowserTab,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {

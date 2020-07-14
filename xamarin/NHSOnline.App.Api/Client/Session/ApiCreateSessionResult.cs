@@ -1,4 +1,5 @@
 using System.Net;
+using NHSOnline.App.Api.Client.Errors;
 
 namespace NHSOnline.App.Api.Client.Session
 {
@@ -24,6 +25,15 @@ namespace NHSOnline.App.Api.Client.Session
 
         internal sealed class Failure : ApiCreateSessionResult
         {
+            internal override T Accept<T>(IApiCreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        internal sealed class Forbidden : ApiCreateSessionResult
+        {
+            public Forbidden(PfsErrorResponse pfsErrorResponse) => PfsErrorResponse = pfsErrorResponse;
+
+            internal PfsErrorResponse PfsErrorResponse { get; }
+
             internal override T Accept<T>(IApiCreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }
     }

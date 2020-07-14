@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Api.Client.Errors;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Api.Client.Session
@@ -14,15 +15,18 @@ namespace NHSOnline.App.Api.Client.Session
         private readonly ILogger _logger;
         private readonly JsonResponseParser _jsonResponseParser;
         private readonly IResponseModelValidator<UserSessionResponseModel, UserSessionResponse> _responseModelValidator;
+        private readonly IResponseModelValidator<PfsErrorResponseModel, PfsErrorResponse> _errorResponseModelValidator;
 
         public CreateSessionResponseParser(
             ILogger<CreateSessionResponseParser> logger,
             JsonResponseParser jsonResponseParser,
-            IResponseModelValidator<UserSessionResponseModel, UserSessionResponse> responseModelValidator)
+            IResponseModelValidator<UserSessionResponseModel, UserSessionResponse> responseModelValidator,
+            IResponseModelValidator<PfsErrorResponseModel, PfsErrorResponse> errorResponseModelValidator)
         {
             _logger = logger;
             _jsonResponseParser = jsonResponseParser;
             _responseModelValidator = responseModelValidator;
+            _errorResponseModelValidator = errorResponseModelValidator;
         }
 
         public async Task<ApiCreateSessionResult> Parse(HttpResponseMessage httpResponseMessage)
@@ -31,7 +35,7 @@ namespace NHSOnline.App.Api.Client.Session
             {
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(),
-                HttpStatusCode.Forbidden => HandleForbidden(),
+                HttpStatusCode.Forbidden => HandleForbidden(httpResponseMessage),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(),
                 FailedAgeRequirement => HandleFailedAgeRequirement(),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(),
@@ -46,17 +50,24 @@ namespace NHSOnline.App.Api.Client.Session
         private async Task<ApiCreateSessionResult> HandleCreated(
             HttpResponseMessage httpResponseMessage)
         {
-            var responseModel = await _jsonResponseParser.Parse<UserSessionResponseModel>(httpResponseMessage).ResumeOnThreadPool();
-            var response = _responseModelValidator.Validate(responseModel);
+            var model = await _jsonResponseParser.Parse<UserSessionResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _responseModelValidator.Validate(model);
 
-            var cookies = new CookieContainer();
-            if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
-                setCookieHeaders != null)
-            {
-                cookies.SetCookies(httpResponseMessage.RequestMessage.RequestUri, string.Join(",", setCookieHeaders));
-            }
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response =>
+                {
+                    var cookies = new CookieContainer();
+                    if (httpResponseMessage.Headers.TryGetValues("Set-Cookie", out var setCookieHeaders) &&
+                        setCookieHeaders != null)
+                    {
+                        cookies.SetCookies(
+                            httpResponseMessage.RequestMessage.RequestUri,
+                            string.Join(",", setCookieHeaders));
+                    }
 
-            return new ApiCreateSessionResult.Success(response, cookies);
+                    return new ApiCreateSessionResult.Success(response, cookies);
+                },
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private Task<ApiCreateSessionResult> HandleBadRequest()
@@ -65,10 +76,16 @@ namespace NHSOnline.App.Api.Client.Session
             return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleForbidden()
+        private async Task<ApiCreateSessionResult> HandleForbidden(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned forbidden");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.Forbidden(response),
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private Task<ApiCreateSessionResult> HandleOdsCodeNotSupportedOrNoNhsNumber()

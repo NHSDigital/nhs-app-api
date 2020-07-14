@@ -6,22 +6,22 @@ using Xamarin.Forms;
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
     [DesignTimeVisible(false)]
-    public partial class CreateSessionErrorPage : ICreateSessionErrorView
+    public partial class CreateSessionErrorForbiddenPage : ICreateSessionErrorForbiddenView
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorForbiddenPage), "3h");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorForbiddenPage), "3c");
 
         public event EventHandler<EventArgs>? BackHomeRequested;
         public event EventHandler<EventArgs>? ContactUsRequested;
 
-        public CreateSessionErrorPage()
+        public CreateSessionErrorForbiddenPage()
         {
             InitializeComponent();
         }
 
         public string ServiceDeskReference
         {
-            get => (string)GetValue(ServiceDeskReferenceProperty);
+            get => (string) GetValue(ServiceDeskReferenceProperty);
             set => SetValue(ServiceDeskReferenceProperty, value);
         }
 

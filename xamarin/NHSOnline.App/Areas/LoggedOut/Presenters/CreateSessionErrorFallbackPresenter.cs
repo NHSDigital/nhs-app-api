@@ -5,23 +5,23 @@ using NHSOnline.App.Services;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class CreateSessionErrorPresenter
+    internal sealed class CreateSessionErrorFallbackPresenter
     {
-        private readonly ICreateSessionErrorView _view;
+        private readonly ICreateSessionErrorFallbackView _view;
+        private readonly CreateSessionErrorFallbackModel _model;
         private readonly IAppBrowserTab _appBrowserTab;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
-        public CreateSessionErrorPresenter(
-            ICreateSessionErrorView view,
-            CreateSessionErrorModel model,
+        public CreateSessionErrorFallbackPresenter(
+            ICreateSessionErrorFallbackView view,
+            CreateSessionErrorFallbackModel model,
             IAppBrowserTab appBrowserTab,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
+            _model = model;
             _appBrowserTab = appBrowserTab;
             _externalServicesConfiguration = externalServicesConfiguration;
-
-            _view.ServiceDeskReference = model.ServiceDeskReference;
 
             _view.BackHomeRequested += ViewOnBackHomeRequested;
             _view.ContactUsRequested += ViewOnContactUsRequested;

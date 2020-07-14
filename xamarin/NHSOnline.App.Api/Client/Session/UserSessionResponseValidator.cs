@@ -1,11 +1,11 @@
 namespace NHSOnline.App.Api.Client.Session
 {
-    internal sealed class UserSessionResponseValidator :
-        IResponseModelValidator<UserSessionResponseModel, UserSessionResponse>
+    internal sealed class UserSessionResponseValidator
+        : IResponseModelValidator<UserSessionResponseModel, UserSessionResponse>
     {
-        public UserSessionResponse Validate(UserSessionResponseModel model)
+        public ModelValidationResult<UserSessionResponse> Validate(UserSessionResponseModel model)
         {
-            return new UserSessionResponse(
+            var response = new UserSessionResponse(
                 model.Name,
                 model.SessionTimeout,
                 model.OdsCode,
@@ -15,6 +15,8 @@ namespace NHSOnline.App.Api.Client.Session
                 model.AccessToken,
                 model.Im1MessagingEnabled,
                 model.ProofLevel);
+
+            return new ModelValidationResult<UserSessionResponse>.Valid(response);
         }
     }
 }

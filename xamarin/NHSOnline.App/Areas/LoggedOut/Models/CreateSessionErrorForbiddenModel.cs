@@ -1,8 +1,8 @@
 namespace NHSOnline.App.Areas.LoggedOut.Models
 {
-    internal sealed class CreateSessionErrorModel : CreateSessionModel
+    internal sealed class CreateSessionErrorForbiddenModel : CreateSessionModel
     {
-        public CreateSessionErrorModel(CreateSessionModel createSessionModel, string serviceDeskReference)
+        public CreateSessionErrorForbiddenModel(CreateSessionModel createSessionModel, string serviceDeskReference)
             : base(createSessionModel)
         {
             ServiceDeskReference = serviceDeskReference;

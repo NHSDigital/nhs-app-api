@@ -43,8 +43,9 @@ namespace NHSOnline.App.Api.Session
         }
 
         public CreateSessionResult Visit(ApiCreateSessionResult.Failure failure)
-        {
-            return new CreateSessionResult.Failed();
-        }
+            => new CreateSessionResult.Failed();
+
+        public CreateSessionResult Visit(ApiCreateSessionResult.Forbidden forbidden)
+            => new CreateSessionResult.Forbidden(forbidden.PfsErrorResponse.ServiceDeskReference);
     }
 }

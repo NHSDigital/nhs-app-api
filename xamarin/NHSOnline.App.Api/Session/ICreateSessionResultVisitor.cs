@@ -4,5 +4,6 @@ namespace NHSOnline.App.Api.Session
     {
         T Visit(CreateSessionResult.Created created);
         T Visit(CreateSessionResult.Failed failed);
+        T Visit(CreateSessionResult.Forbidden forbidden);
     }
 }

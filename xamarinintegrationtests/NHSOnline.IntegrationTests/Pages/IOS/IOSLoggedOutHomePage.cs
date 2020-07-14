@@ -9,10 +9,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSLoggedOutHomePage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel CovidConditions => new IOSLabel(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
+        private IOSLabel CovidConditions => IOSLabel.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
 
-        private IOSLabel HowAreYouFeelingText => new IOSLabel(_driver, "How are you feeling today?");
-        private IOSLabel AccessServicesText => new IOSLabel(_driver, "To access your NHS services");
+        private IOSLabel HowAreYouFeelingText => IOSLabel.WithText(_driver, "How are you feeling today?");
+        private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "To access your NHS services");
 
         private IOSButton ContinueButton => new IOSButton(_driver, "Continue with NHS login");
         private IOSButton CheckYourSymptoms => new IOSButton(_driver, "Check symptoms");
