@@ -121,7 +121,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
                 LoggedInHomePage
                     .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Mr Jack Flash");
+                    .AssertWelcomeMessageDisplayedFor("Jack Flash");
             }
         }
 
@@ -159,7 +159,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 
                 LoggedInHomePage
                     .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Mr Jack Flash");
+                    .AssertWelcomeMessageDisplayedFor("Jack Flash");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -25,9 +25,6 @@
     </NuGetPackageImportStamp>
     <Environment>$(Configuration.Split('-')[0].Trim())</Environment>
     <DebugMode>$(Configuration.Split('-')[1].Trim())</DebugMode>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|AnyCPU' " />
@@ -92,11 +89,7 @@
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
-  <Target Name="Generate Android Manifest" BeforeTargets="_ValidateAndroidPackageProperties">
-    <Copy SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml" DestinationFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" />
-    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppPackackeName)" Query="/manifest/@package" Namespaces="$(ManifestNamespace)" />
-    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" Value="$(NhsAppLabel)" Query="/manifest/application/@android:label" Namespaces="$(ManifestNamespace)" />
-  </Target>
+  <Import Project="GenerateAndroidManifest.targets" />
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App.Api\NHSOnline.App.Api.csproj">
       <Project>{66b1ec4c-a6bc-4e74-b12d-546c56031f4c}</Project>
@@ -124,5 +117,9 @@
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\network_security_config.xml" Condition="'$(NhsAppEnableStubs)' != 'true'" />
+    <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

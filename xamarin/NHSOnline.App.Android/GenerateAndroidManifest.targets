@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ManifestNamespace>&lt;Namespace Prefix='android' Uri='http://schemas.android.com/apk/res/android'/&gt;</ManifestNamespace>
+  </PropertyGroup>
+
+  <Target Name="Generate Android Manifest" BeforeTargets="_ValidateAndroidPackageProperties">
+    <Copy
+      SourceFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.template.xml"
+      DestinationFiles="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml" />
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/@package"
+      Value="$(NhsAppPackageName)" />
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/@android:label"
+      Value="$(NhsAppLabel)" />
+
+    <XmlPoke
+      XmlInputPath="$(MSBuildProjectDirectory)/Properties/AndroidManifest.generated.xml"
+      Namespaces="$(ManifestNamespace)"
+      Query="/manifest/application/@android:networkSecurityConfig"
+      Value="@xml/network_security_config_stubs"
+      Condition=" '$(NhsAppEnableStubs)' == 'true' " />
+  </Target>
+</Project>
