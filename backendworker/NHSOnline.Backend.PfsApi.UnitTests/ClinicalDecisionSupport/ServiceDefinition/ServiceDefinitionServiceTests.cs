@@ -120,7 +120,6 @@
 
              _service = new ServiceDefinitionService(
                  _mockLogger.Object,
-                 _mockDemographicsOlcMapper.Object,
                  _mockAuditor.Object,
                  _mockGpSystemFactory.Object,
                  _mockFhirParameterHelpers.Object,
@@ -416,8 +415,7 @@
              _mockDemographicsOlcMapper.Setup(d => d.Map(It.IsAny<DemographicsResponse>())).Returns(olcDemographics);
 
              _mockFhirParameterHelpers.Setup(h => h.CreateFhirPatient(
-                 It.IsAny<IMapper<DemographicsResponse, OlcDemographics>>(),
-                 It.IsAny<DemographicsResult.Success>())).Returns(new Patient
+                 It.IsAny<P9UserSession>(), It.IsAny<string>())).Returns(new Patient
              {
                  Address = new List<Address>
                  {

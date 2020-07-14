@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
         private readonly IVisionDemographicsMapper _visionDemographicsMapper;
 
         public VisionDemographicsService(
-            ILoggerFactory loggerFactory, 
+            ILoggerFactory loggerFactory,
             IVisionClient visionClient,
             IVisionDemographicsMapper visionDemographicsMapper)
         {
@@ -51,18 +51,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
                         _logger.LogError(
                             $"Unsuccessful request retrieving demographics information for Vision. Status code: {(int) demographicsResponse.StatusCode}");
                         _logger.LogVisionErrorResponse(demographicsResponse);
-                        return new DemographicsResult.BadGateway();  
+                        return new DemographicsResult.BadGateway();
                     }
 
                     var result = _visionDemographicsMapper.Map(demographicsResponse.Body.Demographics, visionUserSession.NhsNumber);
-                    
+
                     return new DemographicsResult.Success(result);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Something went wrong building the Vision Demographics response");
                     return new DemographicsResult.InternalServerError();
-                }  
+                }
             }
             catch (HttpRequestException e)
             {
@@ -74,5 +74,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
                 _logger.LogExit();
             }
         }
+
     }
 }

@@ -11,6 +11,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {
@@ -18,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
     public class OrganDonationRegistrationMapperTests
     {
         private IFixture _fixture;
-        private IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>
+        private IMapper<DemographicsResponse, P9UserSession, OrganDonationRegistration>
             _demographicsToRegistrationMapper;
 
         private IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
@@ -46,10 +47,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapDemographicsResponseToOrganDonationRegistration_WhenPassingNullResponse_ThrowsArgumentNullException()
         {
             // Arrange
-            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
+            var p9UserSession = _fixture.Create<P9UserSession>();
 
             // Act and Assert
-            Action act = () => _demographicsToRegistrationMapper.Map(null, citizenIdUserSession);
+            Action act = () => _demographicsToRegistrationMapper.Map(null, p9UserSession);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("firstSource");
         }
@@ -71,17 +72,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Arrange
             var response = _fixture.Create<DemographicsResponse>();
-            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
+            var p9UserSession = _fixture.Create<P9UserSession>();
 
             // Act
-            var result = _demographicsToRegistrationMapper.Map(response, citizenIdUserSession);
+            var result = _demographicsToRegistrationMapper.Map(response, p9UserSession);
 
             // Assert
             result.Should().NotBeNull();
-            result.NameFull.Should().Be(citizenIdUserSession.Name);
+            result.NameFull.Should().Be(p9UserSession.CitizenIdUserSession.Name);
             result.Name.Should().NotBeNull();
-            result.Name.GivenName.Should().Be(citizenIdUserSession.GivenName);
-            result.Name.Surname.Should().Be(citizenIdUserSession.FamilyName);
+            result.Name.GivenName.Should().Be(p9UserSession.CitizenIdUserSession.GivenName);
+            result.Name.Surname.Should().Be(p9UserSession.CitizenIdUserSession.FamilyName);
             result.Name.Title.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().NotBeNull();
@@ -91,8 +92,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.Address.Town.Should().Be(response.AddressParts.Town);
             result.Address.County.Should().Be(response.AddressParts.County);
             result.Address.PostCode.Should().Be(response.AddressParts.Postcode);
-            result.DateOfBirth.Should().Be(response.DateOfBirth);
-            result.NhsNumber.Should().Be(response.NhsNumber);
+            result.DateOfBirth.Should().Be(p9UserSession.CitizenIdUserSession.DateOfBirth);
+            result.NhsNumber.Should().Be(p9UserSession.NhsNumber);
             result.Gender.Should().Be(response.Sex);
         }
 
@@ -100,24 +101,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapDemographicsResponseToOrganDonationRegistration_WithNoAddressParts_MapsCorrectly()
         {
             // Arrange
-            var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
+            var p9UserSession = _fixture.Create<P9UserSession>();
             var response = _fixture.Create<DemographicsResponse>();
             response.AddressParts = null;
 
             // Act
-            var result = _demographicsToRegistrationMapper.Map(response, citizenIdUserSession);
+            var result = _demographicsToRegistrationMapper.Map(response, p9UserSession);
 
             // Assert
             result.Should().NotBeNull();
-            result.NameFull.Should().Be(citizenIdUserSession.Name);
+            result.NameFull.Should().Be(p9UserSession.CitizenIdUserSession.Name);
             result.Name.Should().NotBeNull();
-            result.Name.GivenName.Should().Be(citizenIdUserSession.GivenName);
-            result.Name.Surname.Should().Be(citizenIdUserSession.FamilyName);
+            result.Name.GivenName.Should().Be(p9UserSession.CitizenIdUserSession.GivenName);
+            result.Name.Surname.Should().Be(p9UserSession.CitizenIdUserSession.FamilyName);
             result.Name.Title.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().BeNull();
-            result.DateOfBirth.Should().Be(response.DateOfBirth);
-            result.NhsNumber.Should().Be(response.NhsNumber);
+            result.DateOfBirth.Should().Be(p9UserSession.CitizenIdUserSession.DateOfBirth);
+            result.NhsNumber.Should().Be(p9UserSession.NhsNumber);
             result.Gender.Should().Be(response.Sex);
         }
 

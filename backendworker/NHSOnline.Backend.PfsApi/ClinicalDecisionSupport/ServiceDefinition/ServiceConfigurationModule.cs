@@ -38,8 +38,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             services.AddTransient<IServiceDefinitionService, ServiceDefinitionService>();
             services.AddTransient<ServiceDefinitionQuerySender>();
-            services.AddSingleton<IMapper<DemographicsResponse, OlcDemographics>, OlcDemographicsMapper>();
-            services.AddSingleton<IMapper<string, DemographicsName, Name>, OlcDemographicsNameMapper>();
             services.AddSingleton<IOlcDataMaps, OlcDataMaps>();
             services.AddTransient<IFhirParameterHelpers, FhirParameterHelpers>();
 

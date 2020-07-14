@@ -22,6 +22,13 @@ open class CheckMySymptomsPage : HybridPageObject() {
             page = this
     )
 
+    private val gpAdviceHeader = HybridPageElement(
+            webDesktopLocator = "//h2[contains(text(),'Ask your GP for advice')]",
+            androidLocator = null,
+            page = this
+    )
+
+
     fun isConditionsHeaderVisible(): Boolean {
         switchWebview()
         for(window in driver.windowHandles.toList()) {
@@ -56,5 +63,9 @@ open class CheckMySymptomsPage : HybridPageObject() {
 
     fun clickCoronaVirusHeader() {
         coronaVirusHeader.click()
+    }
+
+    fun clickGPAdviceHeader(){
+        gpAdviceHeader.click()
     }
 }

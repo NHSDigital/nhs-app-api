@@ -26,11 +26,14 @@ open class OnlineConsultationsMappingBuilder(method:String="POST", relativePath 
             serviceDefinitionId = OnlineConsultationConstants.CONDITION_LIST,
             configuration = TermsAndConditionsQuestionConfigurationI())
 
-    fun conditionsRequest() = setUpRequest(
+    fun conditionsRequest(hasGpSession: Boolean = true) = setUpRequest(
+            hasGpSession,
             serviceDefinitionId = OnlineConsultationConstants.CONDITION_LIST,
             configuration = ConditionsConfigurations())
 
-    fun genderRequest() = setUpRequest(configuration = GenderQuestionConfiguration())
+    fun genderRequest(hasGpSession: Boolean = true) = setUpRequest(
+            hasGpSession,
+            configuration = GenderQuestionConfiguration())
 
     fun selfOrChildRequest() = setUpRequest(configuration = SelfOrChildConfiguration())
 
@@ -52,8 +55,9 @@ open class OnlineConsultationsMappingBuilder(method:String="POST", relativePath 
 
     fun carePlan() = setUpRequest(configuration = CarePlanConfiguration())
 
-    private fun setUpRequest(serviceDefinitionId: String = OnlineConsultationConstants.BREATHING_PROBLEMS_CONDITION_ID,
+    private fun setUpRequest(hasGpSession: Boolean = true,
+                             serviceDefinitionId: String = OnlineConsultationConstants.BREATHING_PROBLEMS_CONDITION_ID,
                              configuration: IQuestionConfiguration): EvaluateServiceDefinitionBuilder {
-        return EvaluateServiceDefinitionBuilder(serviceDefinitionId, configuration)
+        return EvaluateServiceDefinitionBuilder(hasGpSession, serviceDefinitionId, configuration)
     }
 }

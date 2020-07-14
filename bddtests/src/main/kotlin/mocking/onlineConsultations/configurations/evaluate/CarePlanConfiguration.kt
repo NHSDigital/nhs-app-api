@@ -5,9 +5,9 @@ import utils.SerenityHelpers
 
 class CarePlanConfiguration: IQuestionConfiguration {
 
-    private val patientFirstName = SerenityHelpers.getPatient().name.firstName
+    private val patient = SerenityHelpers.getPatient()
 
-    override val request: String  = """{
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
@@ -40,7 +40,7 @@ class CarePlanConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {
@@ -62,8 +62,8 @@ class CarePlanConfiguration: IQuestionConfiguration {
              "activity":[
                 {
                    "detail":{
-                      "description":"<h1>Thank you $patientFirstName. The answers to your consultation have been 
-                        securely sent to your GPs 
+                      "description":"<h1>Thank you ${patient.name.firstName}. The answers to your consultation have 
+                        been securely sent to your GPs 
                         at Integration Test Practice.</h1><p>We've also emailed you a confirmation of your consultation.
                         </p><h2>What happens next?</h2><ul><li>One of your GPs will now review your consultation.</li>
                         <li>Your practice will respond to you by 

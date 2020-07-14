@@ -7,7 +7,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have a valid authCode and codeVerifier
     When I create a user session
     Then I receive a response
-    And the response has a name
+    And the response has a name for the EMIS patient with no title
     And the response has a session timeout
     And the response has service journey rules
     And the cookie contains a session guid with http-only
@@ -18,7 +18,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have a valid authCode and codeVerifier
     When I create a user session
     Then I receive a response
-    And the response has a name
+    And the response has a name for the EMIS patient with no title
     And the response has a session timeout
     And the response has service journey rules
     And the cookie contains a session guid with tls-only
@@ -38,17 +38,11 @@ Feature: Create Session Backend: The application verifies the user session
     When I create a user session
     Then I receive a "Bad Gateway" error with service desk reference prefixed "3n"
 
-  Scenario: EMIS end user session fails to create
-    Given I have valid OAuth details and the EMIS end user session endpoint fails to create
-    When I create a user session
-    Then I receive a response
-    And the response has a session timeout
-    And the response has service journey rules
-
   Scenario: EMIS session fails to create
-    Given I have valid OAuth details and the EMIS session endpoint fails to create
+    And I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session
     Then I receive a response
+    And the response has a name for the EMIS patient with no title
     And the response has a session timeout
     And the response has service journey rules
 
@@ -56,6 +50,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have valid OAuth details and <GP System> is not available
     When I create a user session
     Then I receive a response
+    And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
     Examples:
@@ -69,6 +64,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have valid OAuth details and <GP System> returns with an incomplete response
     When I create a user session
     Then I receive a response
+    And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
     Examples:
@@ -92,6 +88,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     When I create a user session
     Then I receive a response
+    And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
     Examples:
@@ -107,6 +104,7 @@ Feature: Create Session Backend: The application verifies the user session
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
     Then I receive a response
+    And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
     Examples:

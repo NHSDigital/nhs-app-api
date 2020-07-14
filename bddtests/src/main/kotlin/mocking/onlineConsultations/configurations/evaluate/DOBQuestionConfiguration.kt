@@ -5,7 +5,7 @@ import utils.SerenityHelpers
 
 class DOBQuestionConfiguration: IQuestionConfiguration {
     private val patientDateOfBirth = SerenityHelpers.getPatient().age.dateOfBirth
-    override val request: String = """{
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
@@ -35,7 +35,7 @@ class DOBQuestionConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {

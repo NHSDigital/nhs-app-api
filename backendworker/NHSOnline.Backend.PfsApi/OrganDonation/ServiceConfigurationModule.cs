@@ -7,6 +7,7 @@ using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
+using NHSOnline.Backend.Support.Session;
 using Address = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Address;
 using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
 
@@ -37,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
             services.AddSingleton<IOrganDonationDataMaps, OrganDonationDataMaps>();
 
-            services.AddSingleton<IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>,
+            services.AddSingleton<IMapper<DemographicsResponse, P9UserSession, OrganDonationRegistration>,
                 OrganDonationRegistrationMapper>();
 
             services

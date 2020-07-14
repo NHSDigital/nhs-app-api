@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private readonly ILogger<OrganDonationLookupService> _logger;
         private readonly IOrganDonationClient _organDonationClient;
 
-        private readonly IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>
+        private readonly IMapper<DemographicsResponse, P9UserSession, OrganDonationRegistration>
             _demographicsRegistrationMapper;
         private readonly IMapper<OrganDonationRegistration, RegistrationLookupRequest> _lookupRegistrationRequestMapper;
         private readonly IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public OrganDonationLookupService(
             ILogger<OrganDonationLookupService> logger,
-            IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration> demographicsRegistrationMapper,
+            IMapper<DemographicsResponse, P9UserSession, OrganDonationRegistration> demographicsRegistrationMapper,
             IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
                 registrationMapper,
             IMapper<OrganDonationRegistration, RegistrationLookupRequest> lookupRegistrationRequestMapper,
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             }
 
             var response = _demographicsRegistrationMapper
-                .Map(demographicsResult.Response, userSession.CitizenIdUserSession);
+                .Map(demographicsResult.Response, userSession);
             var lookupRegistrationRequest = _lookupRegistrationRequestMapper.Map(response);
 
             try

@@ -34,7 +34,7 @@ class OnlineConsultationsFactory {
         }
     }
 
-    fun setupOnlineConsultationsDataNonEmergency() {
+    fun setupOnlineConsultationsDataNonEmergency(hasGpSession: Boolean = true) {
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
         }
@@ -42,7 +42,7 @@ class OnlineConsultationsFactory {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.conditionsRequest().respondWithSuccess()
+            onlineConsultationsMappingBuilder.conditionsRequest(hasGpSession).respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
@@ -51,7 +51,7 @@ class OnlineConsultationsFactory {
             onlineConsultationsMappingBuilder.urgencyQuestion().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.genderRequest().respondWithSuccess()
+            onlineConsultationsMappingBuilder.genderRequest(hasGpSession).respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.howWeCanHelpQuestion().respondWithSuccess()

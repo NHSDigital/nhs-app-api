@@ -38,6 +38,12 @@ open class OneOneOneStepDefinitions {
         checkMySymptoms.clickCoronaVirusHeader()
     }
 
+
+    @When("I press the gp advice menu item")
+    fun iPressGPAdvice() {
+        checkMySymptoms.clickGpAdviceLink()
+    }
+
     @Then("^the Symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
         checkMySymptoms.assertConditionsHeaderVisible()

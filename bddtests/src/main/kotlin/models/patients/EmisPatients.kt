@@ -4,6 +4,7 @@ import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.Sex
 import models.Patient
 import models.PatientAge
+import models.PatientContactDetails
 import models.PatientName
 import worker.models.patient.Im1ConnectionToken
 
@@ -76,6 +77,7 @@ class EmisPatients {
                 name = PatientName(title = "Mr",
                         firstName = "Montel",
                         surname = "Frye"),
+                contactDetails = PatientContactDetails(),
                 age = PatientAge(dateOfBirth = "1972-04-12"),
                 sex = Sex.Male,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,

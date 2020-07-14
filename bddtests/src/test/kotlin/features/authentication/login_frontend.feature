@@ -7,7 +7,7 @@ Feature: Login frontend
   Scenario Outline: A <GP System> user can see the home page after logging in
     Given I am a <GP System> patient
     And I am logged in
-    Then I see a welcome message
+    Then I see a welcome message for the <GP System> patient with no title
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
@@ -34,7 +34,7 @@ Feature: Login frontend
   Scenario: A EMIS user can see the home page after logging in
     Given I am a EMIS patient
     And I am logged in
-    Then I see a welcome message
+    Then I see a welcome message for the EMIS patient with no title
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
@@ -71,7 +71,7 @@ Feature: Login frontend
   Scenario: A patient with proof level 5 sees no NHS number when logging in
     Given I am a patient with proof level 5
     And I am logged in
-    Then I see a welcome message
+    Then I see a welcome message for the EMIS patient with no title
     And I see my Date of birth on the home page
     And I don't see my NHS number on the home page
 
@@ -88,14 +88,14 @@ Feature: Login frontend
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient
     And I am logged in
-    Then I see a welcome message
+    Then I see a welcome message for the EMIS patient with no title
     And I do not see the yellow banner
 
   #Once prescriptions are completed for microtest, this test can be merged with above
   Scenario: A Microtest user sees the home page after logging in
     Given I am a MICROTEST patient
     And I am logged in
-    Then I see a welcome message
+    Then I see a welcome message for the MICROTEST patient with no title
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
@@ -105,6 +105,7 @@ Feature: Login frontend
     And I am logged in
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
+    And I see a welcome message for the <GP System> patient with no title
     And I can't see the Linked profiles link on the homepage
     Examples:
       | GP System |
@@ -115,7 +116,7 @@ Feature: Login frontend
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
-    Then I see a welcome message
+    Then I see a welcome message for the <GP System> patient with no title
     Examples:
       | GP System |
       | EMIS      |
@@ -222,4 +223,5 @@ Feature: Login frontend
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
+    And I see a welcome message for the EMIS patient with no title
     And I can't see the Linked profiles link on the homepage

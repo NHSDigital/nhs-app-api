@@ -9,7 +9,6 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
@@ -24,7 +23,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly ILogger<ServiceDefinitionService> _logger;
 
         private readonly FhirJsonSerializer _serializer;
-        private readonly IMapper<DemographicsResponse, OlcDemographics> _demographicsOlcMapper;
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IFhirParameterHelpers _fhirParameterHelpers;
@@ -34,7 +32,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
-            IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
             IAuditor auditor,
             IGpSystemFactory gpSystemFactory,
             IFhirParameterHelpers fhirParameterHelpers,
@@ -48,7 +45,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _serializer = new FhirJsonSerializer();
 
-            _demographicsOlcMapper = demographicsRegistrationMapper;
 
             _auditor = auditor;
 
@@ -68,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 _logger.LogEnter();
 
-                var odsCode = userSession.GpUserSession.OdsCode;
+                var odsCode = userSession.OdsCode;
 
                 var parameters = _fhirParameterHelpers.CreateInitialServiceDefinitionEvaluateParameters(odsCode);
 
@@ -128,24 +124,38 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                 if (demographicsConsentGiven)
                 {
-                    _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
-
-                    var demographicsService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
-                        .GetDemographicsService();
-
-                    _logger.LogDebug("Fetching Demographics");
-                    var demographics = await demographicsService.GetDemographics(
-                        new GpLinkedAccountModel(userSession.GpUserSession));
-
-                    if (!(demographics is DemographicsResult.Success demographicsResult))
+                    // This code can be removed when the address can be retrieved from NHS login
+                    if (userSession.GpUserSession != null)
                     {
-                        return GetDemographicsErrorResult(demographics);
-                    }
+                        var demographicsService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
+                            .GetDemographicsService();
 
-                    parameters.Add("patient", _fhirParameterHelpers.CreateFhirPatient(_demographicsOlcMapper, demographicsResult));
-                    await _auditor.Audit(
-                        AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
-                        "User has agreed to share their name, age, NHS number and postal address.");
+                        _logger.LogDebug("Fetching Demographics Address from GP system");
+                        var result = await demographicsService.GetDemographics(
+                            new GpLinkedAccountModel(userSession.GpUserSession));
+
+                        if (result is DemographicsResult.Success demographicsResult)
+                        {
+
+                            parameters.Add("patient",
+                                _fhirParameterHelpers.CreateFhirPatient(userSession, demographicsResult.Response.Address ??= ""));
+                            await _auditor.Audit(
+                                AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
+                                "User has agreed to share their name, age, NHS number and postal address.");
+                        }
+                        else
+                        {
+                            _logger.LogDebug("Fetching Demographics Address from GP system failed. Setting address to blank.");
+                            parameters.Add("patient",
+                                _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogDebug("Cannot fetch address from GP System. GP System unavailable. Setting address to blank.");
+                        parameters.Add("patient",
+                            _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
+                    }
                 }
                 else
                 {
@@ -160,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     serviceDefinitionDescription,
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
-                    userSession.GpUserSession.OdsCode,
+                    userSession.OdsCode,
                     GetSessionIdFromParameters(parameters));
             }
             finally
@@ -175,7 +185,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             {
                 _logger.LogEnter();
 
-                var odsCode = userSession.GpUserSession.OdsCode;
+                var odsCode = userSession.OdsCode;
 
                 _logger.LogInformation($"Checking if online consultations are enabled for practice: {odsCode}");
 

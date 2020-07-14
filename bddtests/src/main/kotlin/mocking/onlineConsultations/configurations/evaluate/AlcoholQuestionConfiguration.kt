@@ -3,8 +3,7 @@ package mocking.onlineConsultations.configurations.evaluate
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class AlcoholQuestionConfiguration: IQuestionConfiguration {
-
-    override val request: String = """{
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
@@ -34,7 +33,7 @@ class AlcoholQuestionConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {

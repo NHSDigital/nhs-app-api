@@ -7,7 +7,6 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.DropdownElement
-import pages.text
 import pages.typeTextIntoTextArea
 import pages.value
 import pages.withNormalisedText
@@ -54,6 +53,7 @@ class OnlineConsultationsPage: HybridPageObject() {
     }
 
     fun clickFormElement(element: String = "input", id: String) {
+
         return HybridPageElement(
                 webDesktopLocator = "//$element[@id='$id']",
                 page = this).click()

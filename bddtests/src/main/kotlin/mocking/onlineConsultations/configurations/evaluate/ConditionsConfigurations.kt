@@ -3,7 +3,6 @@ package mocking.onlineConsultations.configurations.evaluate
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class ConditionsConfigurations: IQuestionConfiguration {
-
     override val request = """{
    "resourceType":"Parameters",
    "parameter":[
@@ -51,11 +50,8 @@ class ConditionsConfigurations: IQuestionConfiguration {
                }
             ],
             "name":[
-               {
-                  "family":"{{familyName}}",
-                  "given":[
-                     "{{name}}"
-                  ]
+               {    
+                  "text" : "{{name}} {{familyName}}"
                }
             ],
             "birthDate":"{{dob}}",

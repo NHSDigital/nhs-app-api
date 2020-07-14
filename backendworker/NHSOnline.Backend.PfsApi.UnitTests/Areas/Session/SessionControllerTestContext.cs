@@ -23,7 +23,6 @@ using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
-using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -98,6 +97,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Birthdate = "1980-01-02",
                 Im1ConnectionToken = ConnectionToken.SerializeJson(),
                 NhsNumber = "012 345 6789",
+                GivenName = "Given",
+                FamilyName = "Family",
                 GpIntegrationCredentials = { OdsCode = "OdsCode" }
             };
             UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken);
@@ -106,7 +107,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 OdsCode = UserProfile.OdsCode,
                 NhsNumber = UserProfile.NhsNumber,
-                Name = Name
+                Name = $"{UserProfile.GivenName}{UserProfile.FamilyName}"
             };
 
             CitizenIdUserSession = new CitizenIdUserSession
@@ -114,7 +115,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 AccessToken = AccessToken,
                 ProofLevel = ProofLevel.P9,
                 OdsCode = UserProfile.OdsCode,
-                RefreshToken = RefreshToken
+                RefreshToken = RefreshToken,
+                GivenName = "Given",
+                FamilyName = "Family"
             };
 
             CitizenIdSessionResult = new CitizenIdSessionResult

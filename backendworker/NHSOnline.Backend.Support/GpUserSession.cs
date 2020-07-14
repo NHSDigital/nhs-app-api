@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Support
     public abstract class GpUserSession
     {
         public string Name { get; set; }
-        
+
         public string NhsNumber { get; set; }
 
         public string OdsCode { get; set; }
@@ -14,9 +14,9 @@ namespace NHSOnline.Backend.Support
         public abstract Supplier Supplier { get; }
 
         public abstract bool HasLinkedAccounts { get; }
-        
+
         public bool Im1MessagingEnabled { get; set; }
-        
+
         public Guid Id { get; set; }
     }
 }

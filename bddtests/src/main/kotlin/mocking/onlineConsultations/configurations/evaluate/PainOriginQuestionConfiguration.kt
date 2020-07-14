@@ -3,7 +3,7 @@ package mocking.onlineConsultations.configurations.evaluate
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class PainOriginQuestionConfiguration: IQuestionConfiguration {
-    override val request = """{
+    override val request  = """{
        "resourceType":"Parameters",
        "parameter":[
           {

@@ -387,7 +387,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var gpUserSession = new EmisUserSession
             {
                 Im1MessagingEnabled = true,
-                Name = SessionControllerTestContext.Name,
+                Name = $"{Context.UserProfile.GivenName} {Context.UserProfile.FamilyName}",
                 NhsNumber = Context.UserProfile.NhsNumber
             };
 
@@ -403,7 +403,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             var expectedUserSessionResponse = new PostUserSessionResponse
             {
-                Name = SessionControllerTestContext.Name,
+                Name = $"{Context.UserProfile.GivenName} {Context.UserProfile.FamilyName}",
                 SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
                 OdsCode = Context.UserProfile.OdsCode,
                 DateOfBirth = Context.CitizenIdUserSession.DateOfBirth,
@@ -443,7 +443,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Assert
             var expectedUserSessionResponse = new PostUserSessionResponse
             {
-                Name = SessionControllerTestContext.Name,
+                Name = $"{Context.UserProfile.GivenName} {Context.UserProfile.FamilyName}",
                 SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
                 OdsCode = Context.UserProfile.OdsCode,
                 DateOfBirth = Context.CitizenIdUserSession.DateOfBirth,
@@ -456,8 +456,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
                 var actualUserSessionResponse = createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
-                // This should be updated as part of the demographics work to get the name off the CID session
-                actualUserSessionResponse.Name.Should().Be(null);
+                actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
                 actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
                 actualUserSessionResponse.Token.Should().Be(SessionControllerTestContext.CsrfRequestToken);
                 actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);

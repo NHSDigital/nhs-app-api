@@ -3,8 +3,7 @@ package mocking.onlineConsultations.configurations.evaluate
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class EmergencyCarePlanConfiguration: IQuestionConfiguration {
-
-    override val request: String = """{
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
@@ -36,7 +35,7 @@ class EmergencyCarePlanConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {

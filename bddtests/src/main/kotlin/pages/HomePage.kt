@@ -109,16 +109,13 @@ open class HomePage : HybridPageObject() {
         unreadIndicator.assertIsVisible()
     }
 
-    fun assertHasWelcomeMessageFor(patient: Patient) {
-        val name = patient.formattedFullName()
-        val expected = "Welcome, $name"
-        val text = greeting.text
-        assertEquals("Welcome message did not match", expected, text)
+    fun assertHasWelcomeMessageFor(patient: Patient, includeTitle: Boolean = true) {
+        val name = patient.formattedFullName(includeTitle)
+        assertEquals("Welcome message did not match", "Welcome, $name", greeting.text)
     }
 
     fun assertPatientDetailIsVisible(detail:String, value: String) {
-        val element = getPatientDetailElement(detail)
-        element.assertIsVisible()
+        val element = getPatientDetailElement(detail).assertIsVisible()
         assertEquals("Expected $detail to be $value", value, element.text)
     }
 

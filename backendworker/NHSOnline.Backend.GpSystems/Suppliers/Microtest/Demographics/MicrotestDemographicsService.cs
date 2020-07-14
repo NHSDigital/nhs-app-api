@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
         private readonly IMicrotestDemographicsMapper _microtestDemographicsMapper;
 
         public MicrotestDemographicsService(
-            ILoggerFactory loggerFactory, 
+            ILoggerFactory loggerFactory,
             IMicrotestClient microtestClient,
             IMicrotestDemographicsMapper microtestDemographicsMapper)
         {
@@ -62,5 +62,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                 _logger.LogExit();
             }
         }
+
     }
 }

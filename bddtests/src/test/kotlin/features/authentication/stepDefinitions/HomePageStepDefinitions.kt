@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -13,6 +14,7 @@ import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
+import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HybridPageElement
@@ -139,6 +141,12 @@ class HomePageStepDefinitions {
     fun iSeeAWelcomeMessageFor() {
         val patient = SerenityHelpers.getPatient()
         homeSteps.assertWelcomeMessageShownFor(patient)
+    }
+
+    @Then("^I see a welcome message for the (.*) patient with no title$")
+    fun iSeeAWelcomeMessageWithNoTitle(gpSystem: String) {
+        val patient = Patient.getDefault(Supplier.valueOf(gpSystem))
+        homeSteps.assertWelcomeMessageShownFor(patient, false)
     }
 
     @Then("^I can see the (.*) link on the homepage")

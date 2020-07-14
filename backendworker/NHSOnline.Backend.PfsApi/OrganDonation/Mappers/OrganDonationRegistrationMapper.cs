@@ -5,6 +5,7 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 using Address = NHSOnline.Backend.PfsApi.OrganDonation.Models.Address;
@@ -13,7 +14,7 @@ using Name = NHSOnline.Backend.PfsApi.OrganDonation.Models.Name;
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
     internal class OrganDonationRegistrationMapper :
-        IMapper<DemographicsResponse, CitizenIdUserSession, OrganDonationRegistration>,
+        IMapper<DemographicsResponse, P9UserSession, OrganDonationRegistration>,
         IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
     {
         private readonly IEnumMapper<string, Decision> _organDonationDecisionMapper;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             _logger = logger;
         }
 
-        public OrganDonationRegistration Map(DemographicsResponse firstSource, CitizenIdUserSession secondSource)
+        public OrganDonationRegistration Map(DemographicsResponse firstSource, P9UserSession secondSource)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(firstSource, nameof(firstSource), ThrowError)
@@ -44,10 +45,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 Gender = firstSource.Sex,
                 AddressFull = firstSource.Address,
                 Address = MapAddress(firstSource),
-                NameFull = secondSource.Name,
-                Name = MapName(secondSource),
-                NhsNumber = firstSource.NhsNumber,
-                DateOfBirth = firstSource.DateOfBirth
+                NameFull = secondSource.CitizenIdUserSession.Name,
+                Name = MapName(secondSource.CitizenIdUserSession),
+                NhsNumber = secondSource.NhsNumber,
+                DateOfBirth = secondSource.CitizenIdUserSession.DateOfBirth
             };
         }
 

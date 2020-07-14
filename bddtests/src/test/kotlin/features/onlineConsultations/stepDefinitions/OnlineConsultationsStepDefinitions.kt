@@ -29,6 +29,11 @@ open class OnlineConsultationsStepDefinitions {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency()
     }
 
+    @Given("^I have access to online consultations gp advice journey and it is not an emergency with no GP session$")
+    fun iHaveAccessToOnlineConsultationsNonEmergencyWithNoGpSession() {
+        onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency(false)
+    }
+
     @Given("^I have access to online consultations gp advice journey and it is switched off$")
     fun iHaveAccessToOnlineConsultationsAndItIsSwitchedOff() {
         onlineConsultationsFactory.setupOnlineConsultationsDataIsNotValid()

@@ -89,14 +89,13 @@ class AuthenticationStepDefinitionsBackend {
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
-        val supplier = Supplier.EMIS
         CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis.mock {
             authentication.endUserSessionRequest()
-                    .respondWithSuccess(Patient.getDefault(supplier).endUserSessionId)
+                    .respondWithSuccess(EmisMockDefaults.patientEmis.endUserSessionId)
         }
         mockingClient.forEmis.mock {
-            authentication.sessionRequest(Patient.getDefault(supplier)).respondWithServerError() }
+            authentication.sessionRequest(EmisMockDefaults.patientEmis).respondWithServerError() }
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")
@@ -155,6 +154,16 @@ class AuthenticationStepDefinitionsBackend {
         val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
                 .getOrNull<UserSessionResponse>()
         Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(),
+                userSessionResponse?.userSessionResponseBody?.name)
+    }
+
+    @Then("^the response has a name for the (.*) patient with no title$")
+    fun theResponseHasANameWithNoTitle(gpSystem: String) {
+        val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
+                .getOrNull<UserSessionResponse>()
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
+        Assert.assertEquals(patient.formattedFullName(false),
                 userSessionResponse?.userSessionResponseBody?.name)
     }
 

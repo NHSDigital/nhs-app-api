@@ -51,10 +51,7 @@ class GenderQuestionConfiguration: IQuestionConfiguration {
                 ],
                 "name":[
                    {
-                      "family":"{{familyName}}",
-                      "given":[
-                         "{{name}}"
-                      ]
+                        "text" : "{{name}} {{familyName}}"
                    }
                 ],
                 "birthDate":"{{dob}}",

@@ -41,4 +41,9 @@ open class CheckMySymptoms {
     fun clickCoronaVirusHeader() {
         checkMySymptoms.clickCoronaVirusHeader()
     }
+
+    @Step
+    fun clickGpAdviceLink() {
+        checkMySymptoms.clickGPAdviceHeader()
+    }
 }

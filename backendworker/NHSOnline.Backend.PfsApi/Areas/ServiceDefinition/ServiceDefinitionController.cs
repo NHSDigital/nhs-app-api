@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 {
                     var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
 
-                    _logger.LogInformation($"Starting online consultation for {description}. ODSCode: {userSession.GpUserSession.OdsCode}");
+                    _logger.LogInformation($"Starting online consultation for {description}. ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
 
                     return (await _service.GetServiceDefinition(provider, metaData.Id, description, userSession))
                         .Accept(new ServiceDefinitionResultVisitor());
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 {
                     var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
 
-                    _logger.LogInformation($"Evaluating for {description}. ODSCode: {userSession.GpUserSession.OdsCode}");
+                    _logger.LogInformation($"Evaluating for {description}. ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
 
                     return (await _service.EvaluateServiceDefinition(
                             provider,
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[type];
 
             _logger.LogInformation($"Starting online consultation for {description}. " +
-                                   $"ODSCode: {userSession.GpUserSession.OdsCode}");
+                                   $"ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
 
             return (await _service.GetServiceDefinition(provider, serviceDefinitionId, description, userSession))
                 .Accept(new ServiceDefinitionResultVisitor());
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[type];
 
             _logger.LogInformation($"Evaluating for {description}. " +
-                                   $"ODSCode: {userSession.GpUserSession.OdsCode}");
+                                   $"ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
 
             return (await _service.EvaluateServiceDefinition(
                     provider,

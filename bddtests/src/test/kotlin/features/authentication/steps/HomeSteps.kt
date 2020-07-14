@@ -40,8 +40,8 @@ open class HomeSteps {
     lateinit var webHeader: WebHeader
 
     @Step
-    fun assertWelcomeMessageShownFor(patient: Patient) {
-        homePage.assertHasWelcomeMessageFor(patient)
+    fun assertWelcomeMessageShownFor(patient: Patient, includeTitle: Boolean = true) {
+        homePage.assertHasWelcomeMessageFor(patient, includeTitle)
     }
 
     @Step
