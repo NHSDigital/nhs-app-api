@@ -29,6 +29,11 @@ namespace NHSOnline.Backend.Support
             _argumentsAreValid = true;
         }
 
+        public static ValidateAndLog Using(ILogger logger)
+        {
+            return new ValidateAndLog(logger);
+        }
+
         public ValidateAndLog IsNotNullOrWhitespace(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -47,7 +52,17 @@ namespace NHSOnline.Backend.Support
 
             return this;
         }
-        
+
+        public ValidateAndLog IsNotEmpty(string value, string name, ValidationOptions options = ValidationOptions.None)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                HandleNullError(name, options);
+            }
+
+            return this;
+        }
+
         public ValidateAndLog IsValidOdsCode(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -81,7 +96,7 @@ namespace NHSOnline.Backend.Support
                 HandleNullError(name, options);
                 return this;
             }
-            
+
             if (!string.IsNullOrWhiteSpace(value) && (value.Length > maxLength || value.Length < minLength))
             {
                 HandleError(name, "String provided is outside of valid range", options);
@@ -99,7 +114,7 @@ namespace NHSOnline.Backend.Support
 
             return this;
         }
-        
+
         public ValidateAndLog IsListValid<T>(IEnumerable<T> value, Func<T, bool> invalidItemsSelector, string name, ValidationOptions options = ValidationOptions.None)
         {
             if(value == null || value.Any(invalidItemsSelector))
@@ -116,16 +131,16 @@ namespace NHSOnline.Backend.Support
             {
                 HandleError(name, NotSuppliedErrorLogMessage, options);
             }
-            
+
             return this;
         }
 
         private void HandleNullError(string name, ValidationOptions options)
             => HandleError(name, options, NotSuppliedErrorLogMessage, paramName => new ArgumentNullException(paramName));
-        
+
         private void HandleError(string name, string message, ValidationOptions options)
             => HandleError(name, options, message, paramName => new ArgumentException(paramName, paramName));
-        
+
         private void HandleError(string name, ValidationOptions options, string message, Func<string, ArgumentException> createException)
         {
             _errorNames.Add(name);

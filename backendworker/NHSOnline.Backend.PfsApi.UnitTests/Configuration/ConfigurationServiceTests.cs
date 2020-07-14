@@ -57,8 +57,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 {
                     new RootService()
                     {
-                        MenuTab = MenuTab.Prescriptions, Id = "MyId",
-                        SubServices = null,
+                        MenuTab = MenuTab.Prescriptions,
+                        Id = "MyId",
+                        SubServices = new List<SubService>()
+                        {
+                            new SubService()
+                            {
+                                Path = "test path"
+                            }
+                        },
                         Url = new Uri("http://test.test.com"),
                         ValidateSession = false,
                         RequiresAssertedLoginIdentity = false,
@@ -117,6 +124,168 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         }
 
         [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasNullServices_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = null
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasNullRootService_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    null
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasNullRootServiceId_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = null,
+                        Url = new Uri("https://somewhere.net"),
+                        SubServices = new List<SubService>()
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasBlankRootServiceId_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = "  ",
+                        Url = new Uri("https://somewhere.net"),
+                        SubServices = new List<SubService>()
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasNullRootServiceUrl_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = "test",
+                        Url = null,
+                        SubServices = new List<SubService>()
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasNullSubService_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = "test",
+                        Url = new Uri("https://somewhere.net"),
+                        SubServices = new List<SubService>
+                        {
+                            null
+                        }
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasSubServiceWithNullPath_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = "test",
+                        Url = new Uri("https://somewhere.net"),
+                        SubServices = new List<SubService>
+                        {
+                            new SubService
+                            {
+                                Path = null
+                            }
+                        }
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_KnownServicesOptionValuesHasSubServiceWithEmptyPath_ThrowsException()
+        {
+            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
+            {
+                Services = new List<RootService>
+                {
+                    new RootService
+                    {
+                        Id = "test",
+                        Url = new Uri("https://somewhere.net"),
+                        SubServices = new List<SubService>
+                        {
+                            new SubService
+                            {
+                                Path = "  "
+                            }
+                        }
+                    }
+                }
+            });
+            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
         public void Constructor_DeviceConfigurationNull_ThrowsException()
         {
             Action act = () => _ = new ConfigurationService(_logger.Object, _mockKnownServices.Object, null);
@@ -158,7 +327,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
                 FidoServerUrl = _testFidoServerUrl,
-                WebAppBaseUrl = _testWebAppBaseUrl
+                WebAppBaseUrl = _testWebAppBaseUrl,
             };
 
             var sut = new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);

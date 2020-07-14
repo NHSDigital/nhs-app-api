@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -15,19 +16,17 @@ namespace NHSOnline.Backend.PfsApi.Configuration
         private readonly GetConfigurationResultV2 _result;
         private const char Separator = '|';
 
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException", Justification = "ValidateAndLog covers this")]
         public ConfigurationService(
             ILogger<ConfigurationService> logger,
             IOptions<KnownServices> knownServicesOptions,
             DeviceConfigurationSettings settings)
         {
-            new ValidateAndLog(logger)
-                .IsNotNull(knownServicesOptions, nameof(knownServicesOptions), 
-                    ValidateAndLog.ValidationOptions.ThrowError)
-                .IsNotNull(knownServicesOptions?.Value, nameof(knownServicesOptions.Value), 
-                    ValidateAndLog.ValidationOptions.ThrowError)
+            ValidateAndLog.Using(logger)
+                .KnownServicesConfigIsValid(knownServicesOptions)
                 .IsValid();
 
-            new ValidateAndLog(logger)
+            ValidateAndLog.Using(logger)
                 .IsNotNull(settings, nameof(settings), ValidateAndLog.ValidationOptions.ThrowError)
                 .IsNotNullOrWhitespace(settings?.NhsLoginLoggedInPaths, nameof(settings.NhsLoginLoggedInPaths),
                     ValidateAndLog.ValidationOptions.ThrowError)
@@ -42,17 +41,18 @@ namespace NHSOnline.Backend.PfsApi.Configuration
                 .IsValid();
 
             var nhsLoginLoggedInPaths = settings.NhsLoginLoggedInPaths
-                .Split(Separator, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
+                .Split(Separator, StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => p.Trim())
+                .ToList();
+
             var knownServices = knownServicesOptions.Value.Services;
 
-            foreach (var service in knownServices)
-            {
-                if (string.Equals(service.Url.Host, "WebAppBaseUrl", StringComparison.OrdinalIgnoreCase))
-                {
-                    service.Url = settings.WebAppBaseUrl;
-                }
-            }
-            
+            knownServices.Where(s =>
+                string.Equals(s.Url.Host, "WebAppBaseUrl", StringComparison.OrdinalIgnoreCase)
+            ).ForEach(s =>
+                s.Url = settings.WebAppBaseUrl
+            );
+
             _result = new GetConfigurationResultV2.Success(
                 nhsLoginLoggedInPaths,
                 settings.FidoServerUrl,
