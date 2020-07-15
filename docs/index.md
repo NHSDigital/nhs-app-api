@@ -15,6 +15,7 @@
 * [Integration Tests](Solution-Areas/integration-tests.md) - BDD tests, written in Kotlin
 * [Silver Integration API Test Site](Solution-Areas/silver-integrationapi-test-site) - a simulated third-party provider site, for testing the Silver Integration JS API
 * [Web](Solution-Areas/web.md) - The Vue web project
+* [Xamarin](Solution-Areas/xamarin.md) - The Xamarin app and integration tests
 
 ## Tools and Utilities
 
