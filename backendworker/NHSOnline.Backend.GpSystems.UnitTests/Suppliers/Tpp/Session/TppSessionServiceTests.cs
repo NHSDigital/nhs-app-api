@@ -377,7 +377,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Create_WhenCalledWithErrorResponseProblemLoggingOn_ReturnsForbidden()
+        public async Task Create_WhenCalledWithErrorResponseProblemLoggingOn_ReturnsInternalServerError()
         {
             // Arrange
             var reply = CreateReply();
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             _mockListServicesAccessesPost.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.InternalServerError>();
         }
 
         [TestMethod]

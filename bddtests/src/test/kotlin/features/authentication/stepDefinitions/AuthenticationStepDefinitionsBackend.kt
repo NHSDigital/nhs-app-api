@@ -112,8 +112,8 @@ class AuthenticationStepDefinitionsBackend {
         AuthenticationFactory.getForSupplier(supplier).patientWithIncompleteResponse(Patient.getDefault(supplier))
     }
 
-    @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
-    fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
+    @Given("^I have valid OAuth details and CID connection token fails to authenticate with (.*)$")
+    fun iHaveValidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
         AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsCidConnectionTokenFailsToAuthenticate()

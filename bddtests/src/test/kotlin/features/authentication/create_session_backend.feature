@@ -75,14 +75,20 @@ Feature: Create Session Backend: The application verifies the user session
       | MICROTEST |
 
   Scenario Outline: CID connection token fails to authenticate with <GP System> so the connection token is invalid
-    Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>
+    Given I have valid OAuth details and CID connection token fails to authenticate with <GP System>
     When I create a user session
     Then I receive a "Forbidden" error with service desk reference prefixed "3c"
     Examples:
       | GP System |
       | EMIS      |
-      | TPP       |
       | VISION    |
+
+  Scenario: CID connection token fails to authenticate with TPP error code 9
+    Given I have valid OAuth details and CID connection token fails to authenticate with TPP
+    When I create a user session
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
 
   Scenario Outline: <GP System> fails to respond in 31 seconds resulting in a timeout
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds

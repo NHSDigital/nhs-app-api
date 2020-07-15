@@ -38,7 +38,7 @@ class TppSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
                 onlineUserId = patient.patientId,
                 uuid = "01068966-0a47-429c-9abd-e5c05736a6f7",
                 user = User(person),
-                person = mutableListOf<Person>(person),
+                person = mutableListOf(person),
                 registration = Registration(
                         mutableListOf(PatientAccess(patientId = patient.patientId))
                 )

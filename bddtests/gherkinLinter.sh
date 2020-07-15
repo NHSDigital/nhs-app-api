@@ -46,6 +46,12 @@ function lint() {
 
   generate_html
 
+  if [ $RESULT == 0 ]; then
+    echo "✅ No linting issues found"
+  else
+    echo "❌ Linting issues found"
+  fi
+
   exit $RESULT
 }
 

@@ -256,9 +256,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             if (authenticateReply.HasErrorWithCode(TppApiErrorCodes.ProblemLoggingOn))
             {
-                const string message = "Failed to authenticate user for TPP - Problem logging on";
+                const string message = "Failed to authenticate user for TPP - Error code 9: Problem logging on";
                 _logger.LogError(message);
-                return new GpSessionCreateResult.Forbidden(message);
+
+                // Error code 9 is a general error so we treat it as such, also
+                // TPP is the only supplier that returns such a vague response
+                // hence there is not a different create result for it.
+                return new GpSessionCreateResult.InternalServerError(message);
             }
             else
             {

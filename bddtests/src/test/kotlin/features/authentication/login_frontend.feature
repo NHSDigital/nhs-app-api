@@ -225,3 +225,14 @@ Feature: Login frontend
     Then I see the home page
     And I see a welcome message for the EMIS patient with no title
     And I can't see the Linked profiles link on the homepage
+
+  Scenario: CitizenID login is successful but TPP session returns error code 9
+    Given I am logged into Citizen ID but TPP session returns error code 9
+    Then the Terms and Conditions page is displayed
+    When I check the agree to terms and conditions checkbox
+    And I click the continue button on Terms and Conditions
+    Then the User Research page is displayed
+    When I click the 'Yes' radio button
+    And I click the 'Continue' button
+    Then I see the home page
+    And I can't see the Linked profiles link on the homepage
