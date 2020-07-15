@@ -107,7 +107,8 @@ export default {
   },
   [MY_RECORD_HUB_ENABLED](state) {
     return get('rules.silverIntegrations.carePlans.length')(state) > 0 ||
-      get('rules.silverIntegrations.healthTrackers.length')(state) > 0;
+      get('rules.silverIntegrations.healthTrackers.length')(state) > 0 ||
+      get('rules.silverIntegrations.testResults.length')(state) > 0;
   },
   [DOCUMENTS_ENABLED](state) {
     return get('rules.documents')(state);
