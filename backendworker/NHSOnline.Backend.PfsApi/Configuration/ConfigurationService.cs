@@ -47,11 +47,8 @@ namespace NHSOnline.Backend.PfsApi.Configuration
 
             var knownServices = knownServicesOptions.Value.Services;
 
-            knownServices.Where(s =>
-                string.Equals(s.Url.Host, "WebAppBaseUrl", StringComparison.OrdinalIgnoreCase)
-            ).ForEach(s =>
-                s.Url = settings.WebAppBaseUrl
-            );
+            knownServices.Where(s => string.Equals(s.Url.Host, "WebAppBaseUrl", StringComparison.OrdinalIgnoreCase))
+                .ForEach(s => s.Url = settings.WebAppBaseUrl);
 
             _result = new GetConfigurationResultV2.Success(
                 nhsLoginLoggedInPaths,

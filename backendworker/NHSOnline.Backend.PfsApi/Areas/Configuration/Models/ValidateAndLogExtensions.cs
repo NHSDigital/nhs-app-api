@@ -8,8 +8,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
     {
         public static ValidateAndLog KnownServicesConfigIsValid(
             this ValidateAndLog validateAndLog,
-            IOptions<KnownServices> knownServicesOptions
-        )
+            IOptions<KnownServices> knownServicesOptions)
         {
             if (validateAndLog is null)
             {
@@ -19,18 +18,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
             validateAndLog.IsNotNull(
                 knownServicesOptions,
                 nameof(knownServicesOptions),
-                ValidateAndLog.ValidationOptions.ThrowError
-            )
+                ValidateAndLog.ValidationOptions.ThrowError)
             .IsNotNull(
                 knownServicesOptions?.Value,
                 nameof(knownServicesOptions.Value),
-                ValidateAndLog.ValidationOptions.ThrowError
-            )
+                ValidateAndLog.ValidationOptions.ThrowError)
             .IsNotNull(
                 knownServicesOptions?.Value?.Services,
                 nameof(knownServicesOptions.Value.Services),
-                ValidateAndLog.ValidationOptions.ThrowError
-            );
+                ValidateAndLog.ValidationOptions.ThrowError);
 
             // validate root services
             knownServicesOptions?.Value
@@ -39,19 +35,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
                     validateAndLog.IsNotNull(
                         rs,
                         nameof(RootService),
-                        ValidateAndLog.ValidationOptions.ThrowError
-                    )
+                        ValidateAndLog.ValidationOptions.ThrowError)
                     .IsNotEmpty(
                         rs?.Id,
                         nameof(RootService.Id),
-                        ValidateAndLog.ValidationOptions.ThrowError
-                    )
+                        ValidateAndLog.ValidationOptions.ThrowError)
                     .IsNotNull(
                         rs?.Url,
                         nameof(RootService.Url),
-                        ValidateAndLog.ValidationOptions.ThrowError
-                    )
-                );
+                        ValidateAndLog.ValidationOptions.ThrowError));
 
             // validate all sub-services
             knownServicesOptions?.Value
@@ -62,14 +54,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
                     validateAndLog.IsNotNull(
                         ss,
                         nameof(SubService),
-                        ValidateAndLog.ValidationOptions.ThrowError
-                    )
+                        ValidateAndLog.ValidationOptions.ThrowError)
                     .IsNotEmpty(
                         ss?.Path,
                         nameof(SubService.Path),
-                        ValidateAndLog.ValidationOptions.ThrowError
-                    )
-                );
+                        ValidateAndLog.ValidationOptions.ThrowError));
 
             return validateAndLog;
         }

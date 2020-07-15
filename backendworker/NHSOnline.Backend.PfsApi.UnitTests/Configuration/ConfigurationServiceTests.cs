@@ -59,9 +59,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                     {
                         MenuTab = MenuTab.Prescriptions,
                         Id = "MyId",
-                        SubServices = new List<SubService>()
+                        SubServices = new List<SubService>
                         {
-                            new SubService()
+                            new SubService
                             {
                                 Path = "test path"
                             }
