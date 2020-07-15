@@ -7,8 +7,8 @@ Feature: User Not Enabled Frontend - Medical Record v2
     And the GP Practice has disabled dcr events functionality for TPP
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see Service not offered by GP or to specific user or access revoked warning message
 
   Scenario: A user with partial access to their medical record can see some of their record - Medical Record v2
@@ -17,8 +17,8 @@ Feature: User Not Enabled Frontend - Medical Record v2
     And the GP Practice has multiple dcr events for TPP
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see the Consultations section link on my record - Medical Record v2
 
   Scenario: A MICROTEST user who does not have medical record access will get a 403 returned - Medical Record v2
@@ -26,6 +26,6 @@ Feature: User Not Enabled Frontend - Medical Record v2
     And the my record wiremocks return a 403
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see Service not offered by GP or to specific user or access revoked warning message

@@ -5,7 +5,7 @@ Feature: Demographics Frontend - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then I click the 'Continue' button
+    Then I click continue
     And I see header text is Your GP medical record
     And I see the Your details heading on My Record - Medical Record v1
     And I see the patient information details - Medical Record v1
@@ -22,7 +22,7 @@ Feature: Demographics Frontend - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Your details section on My Record - Medical Record v1
     Then I do not see patient information details - Medical Record v1

@@ -7,8 +7,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has no documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
     Examples:
@@ -21,8 +21,8 @@ Feature: Documents Frontend - Medical Record v2
     And the Patient has no access to Documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
@@ -31,8 +31,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     Examples:
@@ -45,8 +45,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has a document with a null page count
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
@@ -55,8 +55,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has a document with a null size property
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
@@ -65,8 +65,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents with no name or term
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -77,8 +77,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents with no name or term
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -89,8 +89,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents with no name or term
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -101,8 +101,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple letters with no name or term
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -113,8 +113,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP practice has a file that is still uploading
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -125,8 +125,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple large documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -141,8 +141,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has documents with invalid types
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -157,8 +157,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -178,8 +178,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -196,8 +196,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple non-viewable documents
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
@@ -211,8 +211,8 @@ Feature: Documents Frontend - Medical Record v2
     And the GP Practice has multiple documents where one has an invalid id
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select a document that has an invalid id
@@ -225,7 +225,7 @@ Feature: Documents Frontend - Medical Record v2
     And the EMIS GP Practice has three document results where the first record has no date
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Documents link on my record - Medical Record v2
     Then I see the expected list of documents displayed with unknown date for the last result

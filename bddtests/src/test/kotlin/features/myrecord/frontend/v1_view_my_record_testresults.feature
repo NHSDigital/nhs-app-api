@@ -7,8 +7,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the GP Practice has a single test result with multiple child values with ranges for EMIS
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Test results section on My Record - Medical Record v1
     Then I see test results with multiple child values some of which have ranges - Medical Record v1
 
@@ -17,8 +17,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the EMIS GP Practice has three test results where the second record has no date
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Test results section on My Record - Medical Record v1
     And I click a test result - Medical Record v1
     Then I see 3 test results - Medical Record v1
@@ -29,8 +29,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the GP Practice has six test results
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Test results section on My Record - Medical Record v1
     Then I see 6 test results - Medical Record v1
 
@@ -40,8 +40,8 @@ Feature: Test Results Frontend - Medical Record v1
     And an error occurs retrieving the test result detail
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Test results section on My Record - Medical Record v1
     And I click a test result - Medical Record v1
     Then I see the appropriate error message for retrieving test result detail
@@ -51,8 +51,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the GP Practice sends a bad test results response
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Test results section on My Record - Medical Record v1
     Then I see an error occurred message with Test results on My Record - Medical Record v1
     Examples:
@@ -66,8 +66,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the GP Practice has test result details
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I select a test result - Medical Record v1
     Then I see header text is Your GP medical record
     And I see the test result content - Medical Record v1
@@ -78,8 +78,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the GP Practice has test result details with HTML entities
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I select a test result - Medical Record v1
     Then I see header text is Your GP medical record
     And there are no wrongly displayed HTML entities - Medical Record v1
@@ -91,8 +91,8 @@ Feature: Test Results Frontend - Medical Record v1
     And the my record wiremocks are populated
     And I am logged in
     When I retrieve the 'my record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see the Test results heading on My Record - Medical Record v1
     And I do not see a message informing me to contact my GP for this information - Medical Record v1
     When I click the Test results section on My Record - Medical Record v1

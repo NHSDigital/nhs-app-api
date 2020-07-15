@@ -7,7 +7,6 @@ import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -79,12 +78,6 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend {
         assertEquals("Expected two ChildLineItems in TestResult",
                 2,
                 result.response.testResults.data.first().testResultChildLineItems.count())
-    }
-
-    @Then("^the field indicating supplier is set$")
-    fun thenTheFlagIndicatingSupplierIsSetTo() {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(SerenityHelpers.getGpSupplier().toString().toUpperCase(), result.response.supplier.toUpperCase())
     }
 
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")

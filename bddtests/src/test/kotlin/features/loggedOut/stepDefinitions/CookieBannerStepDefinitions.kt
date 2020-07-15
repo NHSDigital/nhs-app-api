@@ -28,7 +28,7 @@ class CookieBannerStepDefinitions {
     @Steps
     private lateinit var cookieSteps : CookieSteps
     @Steps
-    private lateinit var cookieBannerSteps: CookieBannerSteps
+    lateinit var cookieBannerSteps: CookieBannerSteps
 
     private lateinit var cookieBanner: CookieBanner
 
@@ -42,14 +42,14 @@ class CookieBannerStepDefinitions {
     fun iAmOnTheLoginLoggedOutPageForTheFirstTime() {
         browserSteps.goToApp()
         if (GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrNull<Boolean>() == true) {
-            cookieSteps.setInstructionsCookie("true")
+            browserSteps.setInstructionsCookie("true")
         }
     }
 
     @When("^I am on the login logged-out page for the first time$")
     fun iAmOnTheLoginLoggedOutPage() {
         browserSteps.goToApp()
-        cookieSteps.verifyCookieDoesntExist("SkipPreRegistrationPage")
+        browserSteps.verifyCookieDoesntExist("SkipPreRegistrationPage")
     }
 
     @When("^I reopen the app$")

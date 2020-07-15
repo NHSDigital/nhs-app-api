@@ -2,7 +2,6 @@ package features.sharedSteps
 
 import junit.framework.TestCase
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -49,16 +48,5 @@ open class CookieSteps {
 
         return (executor.executeScript(String.format(
                 "return window.sessionStorage.getItem('%s');", sessionKey))?.toString())
-    }
-
-    @Step
-    fun setInstructionsCookie(seen: String) {
-        val cookie = Cookie("SkipPreRegistrationPage", seen)
-        loginPage.driver.manage().addCookie(cookie)
-    }
-
-    @Step
-    fun verifyCookieDoesntExist(cookieName: String) {
-        Assert.assertTrue(loginPage.driver.manage().getCookieNamed(cookieName) == null)
     }
 }

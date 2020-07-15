@@ -1,30 +1,24 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
-import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordV2Page
 import pages.text
 import utils.SerenityHelpers
-import utils.toSingleElementList
 
 open class V2MedicalRecordStepDefinitions {
 
     private lateinit var medicalRecordV2Page: MedicalRecordV2Page
-    @Steps
-    lateinit var browser: BrowserSteps
 
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
     fun iAmAUserSetupToUseMedicalRecordV2(gpSystem: String) {
@@ -84,16 +78,6 @@ open class V2MedicalRecordStepDefinitions {
             " - Medical Record v2$")
     fun thenISeeAMessageIndicatingThatIHaveNoAccessToViewSection() {
         assertTextOnPage("You do not currently have access to this section")
-    }
-
-    @Then("^retrieving the Medical Record pages directly displays the Medical Record main page$")
-    fun retrievingTheMedicalRecordPageDirectlyDisplaysTheCorrectTitle(table: DataTable) {
-        table.toSingleElementList().forEach { url ->
-            browser.browseToInternal(url)
-            val patient = SerenityHelpers.getPatient()
-            medicalRecordV2Page.pageTitle.waitForElement()
-            medicalRecordV2Page.assertDemographicsContent(patient)
-        }
     }
 
     private fun assertTextOnPage(message: String) {

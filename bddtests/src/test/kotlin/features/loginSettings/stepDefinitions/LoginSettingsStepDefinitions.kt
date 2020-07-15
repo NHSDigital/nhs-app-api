@@ -3,7 +3,7 @@ package features.loginSettings.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedSteps.BiometricSteps
+import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import pages.account.LoginSettingsErrorPage
 import pages.account.LoginSettingsPage
@@ -14,7 +14,7 @@ class LoginSettingsStepDefinitions {
     lateinit var loginSettingsError: LoginSettingsErrorPage
 
     @Steps
-    lateinit var biometricSteps: BiometricSteps
+    lateinit var browser: BrowserSteps
 
     @Then("I see the (.*) settings page")
     fun iSeeTheLoginAndPasswordOptionsPage(biometricType: String) {
@@ -32,30 +32,30 @@ class LoginSettingsStepDefinitions {
 
     @Then("I see my (.*) registration was successful")
     fun iSeeMyRegistrationWasSuccessful(biometricType: String) {
-        biometricSteps.setBiometricCompletionResult("Register", "Success","")
+        browser.setBiometricCompletionResult("Register", "Success","")
         loginSettings.assertToggleChecked(biometricType)
     }
 
     @Then("I see my (.*) deregistration was successful")
     fun iSeeMyDeregistrationWasSuccessful(biometricType: String) {
-        biometricSteps.setBiometricCompletionResult("Deregister", "Success","")
+        browser.setBiometricCompletionResult("Deregister", "Success","")
         loginSettings.assertToggleNotChecked(biometricType)
     }
 
     @Given("I have already registered for biometrics")
     fun iAmAlreadyRegistered() {
-        biometricSteps.setBiometricCompletionResult("Register", "Success","")
+        browser.setBiometricCompletionResult("Register", "Success","")
     }
 
     @Then("I see my (.*) deregistration was unsuccessful as it could not be found")
     fun iSeeMyDeregistrationWasUnsuccessfulAsItCouldNotBeFound(biometricType: String) {
-        biometricSteps.setBiometricCompletionResult("Deregister", "Failed","10004")
+        browser.setBiometricCompletionResult("Deregister", "Failed","10004")
         loginSettingsError.assertCannotFindContentDisplayed(biometricType)
     }
 
     @Then("I see my (.*) deregistration was unsuccessful as it could not be changed")
     fun iSeeMyDeregistrationWasUnsuccessfulAsItCouldNotBeChanged(biometricType: String) {
-        biometricSteps.setBiometricCompletionResult("Deregister", "Failed","10005")
+        browser.setBiometricCompletionResult("Deregister", "Failed","10005")
         loginSettingsError.assertCannotChangeContentDisplayed(biometricType)
     }
 }

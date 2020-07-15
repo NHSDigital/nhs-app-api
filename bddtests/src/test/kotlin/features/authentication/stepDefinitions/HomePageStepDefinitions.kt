@@ -8,6 +8,7 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.authentication.steps.NavigationLinkText
 import features.authentication.steps.PatientDetail
+import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
@@ -16,9 +17,9 @@ import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.AppointmentHubPage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
+import pages.AppointmentHubPage
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import utils.LinkedProfilesSerenityHelpers
@@ -45,6 +46,8 @@ class HomePageStepDefinitions {
     private lateinit var navBar: NavBarNative
     @Steps
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
+    @Steps
+    private lateinit var recordWarning: MedicalRecordWarningStepDefinitions
 
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
@@ -203,6 +206,7 @@ class HomePageStepDefinitions {
 
     private fun followMedicalRecordLink(linkElement: HybridPageElement) {
         linkElement.click()
+        recordWarning.thenISeeRecordWarningPageOpened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
 

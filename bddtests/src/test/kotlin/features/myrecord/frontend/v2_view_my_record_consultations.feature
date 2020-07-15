@@ -6,8 +6,8 @@ Feature: Consultations Frontend - Medical Record v2
     And the GP Practice has multiple consultations
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see the expected consultations and events - Medical Record v2
 
@@ -21,8 +21,8 @@ Feature: Consultations Frontend - Medical Record v2
     And the GP Practice has no consultations
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
@@ -36,8 +36,8 @@ Feature: Consultations Frontend - Medical Record v2
     And the Patient has no access to consultations
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
@@ -46,8 +46,8 @@ Feature: Consultations Frontend - Medical Record v2
     And the GP practice returns bad consultations data
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 
@@ -56,7 +56,7 @@ Feature: Consultations Frontend - Medical Record v2
     And the EMIS GP Practice has two consultations where the first record has no date
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then the Medical Record Warning Page is displayed
-    When I click the 'Continue' button
+    Then I see the Medical Record Warning page
+    When I click continue
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see the second consultation record have unknown date - Medical Record v2

@@ -112,7 +112,7 @@ Feature: Login with proxy access
     And I click the View Orders link
     Then the prescriptions shutter page is displayed
     When I navigate to My_Record
-    And I click the 'Continue' button
+    And I click continue
     Then the medical record shutter page is displayed
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
@@ -253,7 +253,7 @@ Feature: Login with proxy access
     And I have switched to a linked profile
     And the GP Practice has enabled all medical records for the proxy patient
     When I click on the My Record link on the header
-    And I click the 'Continue' button
+    And I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
@@ -294,7 +294,7 @@ Feature: Login with proxy access
     And I click the Order a repeat prescription button
     Then the prescriptions shutter page is displayed
     When I navigate to My_Record
-    And I click the 'Continue' button
+    And I click continue
     Then the medical record shutter page is displayed
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
