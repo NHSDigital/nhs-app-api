@@ -330,5 +330,88 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
         }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsBadRequestAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new P5Patient()
+                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            AndroidCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .ContactUs();
+
+            AndroidAppTab
+                .AssertOnBrowserChoice(driver)
+                .ChooseChrome()
+                .JustOnce()
+                .AssertOnContactUsPage()
+                .ReturnToApp();
+
+            AndroidCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsBadRequestIos(IIOSDriverWrapper driver)
+        {
+            var patient = new P5Patient()
+                .WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
+
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
+            {
+                StubbedLoginPage
+                    .AssertOnPage(webInteractor)
+                    .Login(patient);
+            }
+
+            IOSCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements()
+                .ContactUs();
+
+            IOSAppTab
+                .AssertOnContactUsPage(driver)
+                .ReturnToApp();
+
+            IOSCreateSessionBadRequestErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
     }
 }

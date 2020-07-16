@@ -34,7 +34,7 @@ namespace NHSOnline.App.Api.Client.Session
             var handler = httpResponseMessage.StatusCode switch
             {
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
-                HttpStatusCode.BadRequest => HandleBadRequest(),
+                HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
                 HttpStatusCode.Forbidden => HandleForbidden(httpResponseMessage),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(),
                 FailedAgeRequirement => HandleFailedAgeRequirement(),
@@ -70,10 +70,16 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleBadRequest()
+        private async Task<ApiCreateSessionResult> HandleBadRequest(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned bad bequest");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.BadRequest(response), 
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private async Task<ApiCreateSessionResult> HandleForbidden(HttpResponseMessage httpResponseMessage)
@@ -84,7 +90,7 @@ namespace NHSOnline.App.Api.Client.Session
             var validationResult = _errorResponseModelValidator.Validate(model);
 
             return validationResult.Accept<ApiCreateSessionResult>(
-                response => new ApiCreateSessionResult.Forbidden(response),
+                response => new ApiCreateSessionResult.Forbidden(response), 
                 () => new ApiCreateSessionResult.Failure());
         }
 

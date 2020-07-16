@@ -65,6 +65,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Failed failed)
             => await NavigateToFailedPage().PreserveThreadContext();
 
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.BadRequest badRequest)
+            => await NavigateToBadRequestPage(badRequest.ServiceDeskReference).PreserveThreadContext();
+
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Forbidden forbidden)
             => await NavigateToForbiddenPage(forbidden.ServiceDeskReference).PreserveThreadContext();
 
@@ -79,6 +82,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task NavigateToFailedPage()
         {
             var errorModel = _model.FallbackError();
+            var errorPage = _pageFactory.CreatePageFor(errorModel);
+
+            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private async Task NavigateToBadRequestPage(string serviceDeskReference)
+        {
+            var errorModel = _model.BadRequestError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();

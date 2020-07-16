@@ -45,6 +45,9 @@ namespace NHSOnline.App.Api.Session
         public CreateSessionResult Visit(ApiCreateSessionResult.Failure failure)
             => new CreateSessionResult.Failed();
 
+        public CreateSessionResult Visit(ApiCreateSessionResult.BadRequest badRequest)
+            => new CreateSessionResult.BadRequest(badRequest.PfsErrorResponse.ServiceDeskReference);
+
         public CreateSessionResult Visit(ApiCreateSessionResult.Forbidden forbidden)
             => new CreateSessionResult.Forbidden(forbidden.PfsErrorResponse.ServiceDeskReference);
     }

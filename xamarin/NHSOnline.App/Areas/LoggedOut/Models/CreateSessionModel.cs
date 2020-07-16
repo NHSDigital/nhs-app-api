@@ -25,6 +25,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
         internal CreateSessionErrorFallbackModel FallbackError()
             => new CreateSessionErrorFallbackModel(this);
 
+        public CreateSessionErrorBadRequestModel BadRequestError(string serviceDeskReference)
+            => new CreateSessionErrorBadRequestModel(this, serviceDeskReference);
+
         public CreateSessionErrorForbiddenModel ForbiddenError(string serviceDeskReference)
             => new CreateSessionErrorForbiddenModel(this, serviceDeskReference);
     }

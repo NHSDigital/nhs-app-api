@@ -14,6 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut
                 .AddModelViewPresenter<BeforeYouStartModel, BeforeYouStartPage, BeforeYouStartPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorModel, CreateSessionErrorPage, CreateSessionErrorPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorFallbackModel, CreateSessionErrorFallbackPage, CreateSessionErrorFallbackPresenter>()
+                .AddModelViewPresenter<CreateSessionErrorBadRequestModel, CreateSessionErrorBadRequestPage, CreateSessionErrorBadRequestPresenter>()
                 .AddModelViewPresenter<CreateSessionErrorForbiddenModel, CreateSessionErrorForbiddenPage, CreateSessionErrorForbiddenPresenter>()
                 .AddModelViewPresenter<CreateSessionModel, CreateSessionPage, CreateSessionPresenter>()
                 .AddModelViewPresenter<LoggedOutHomeScreenModel, LoggedOutHomeScreenPage, LoggedOutHomeScreenPresenter>()

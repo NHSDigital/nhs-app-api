@@ -31,6 +31,9 @@
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorFallbackPage.xaml.cs">
       <DependentUpon>CreateSessionErrorFallbackPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorBadRequestPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorBadRequestPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorForbiddenPage.xaml.cs">
       <DependentUpon>CreateSessionErrorForbiddenPage.xaml</DependentUpon>
     </Compile>
