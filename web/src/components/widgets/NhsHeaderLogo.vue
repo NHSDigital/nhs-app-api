@@ -21,7 +21,9 @@
           4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7
           3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"/>
       </svg>
-      <span id="logo-text" class="nhsuk-header__service-name">
+      <span v-if="!$store.state.device.isNativeApp"
+            id="logo-text"
+            class="nhsuk-header__service-name">
         {{ $t('webHeader.logoText') }}</span>
     </a>
   </div>
