@@ -9,6 +9,6 @@ namespace NHSOnline.App.Config.Values.Staging
         public Uri NhsUkLoginHelpUrl { get; } = new Uri("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/app-login/");
         public Uri NhsUkConditionsUrl { get; } = new Uri("https://www.nhs.uk/conditions/");
         public Uri OneOneOneUrl { get; } = new Uri("https://111.nhs.uk/");
-        public Uri NhsUkContactUsUrl { get; } = new Uri("https://www.nhswebsite-staging.nhs.uk/contact-us/nhs-app-contact-us");
+        public Uri NhsUkContactUsUrl { get; } = new Uri("https://www.nhs.uk/contact-us/nhs-app-contact-us");
     }
 }
