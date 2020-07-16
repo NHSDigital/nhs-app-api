@@ -41,13 +41,20 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private TestLogs Logs { get; }
 
-        public INativeWebContext Web(WebViewContext webViewContext)
+        public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action) => _interactor.ActOnElement(by, action);
+        void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action)
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.ActOnElement(@by, action);
+        }
 
         void IAndroidInteractor.AssertElementDoesntExist(By @by)
-            => _interactor.AssertElementDoesntExist(by);
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.AssertElementDoesntExist(@by);
+        }
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

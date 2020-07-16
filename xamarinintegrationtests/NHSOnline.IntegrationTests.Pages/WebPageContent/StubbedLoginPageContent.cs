@@ -2,13 +2,13 @@ using NHSOnline.HttpMocks.Domain;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Web
+namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    internal sealed class StubbedLoginPage
+    public sealed class StubbedLoginPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        private StubbedLoginPage(IWebInteractor interactor) => _interactor = interactor;
+        internal StubbedLoginPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebText TitleText => new WebText(_interactor, "h1", "NHS Login");
 
@@ -16,18 +16,15 @@ namespace NHSOnline.IntegrationTests.Pages.Web
 
         private WebInputSubmit LoginButton => new WebInputSubmit(_interactor, "Login");
 
-        internal static StubbedLoginPage AssertOnPage(IWebInteractor interactor)
+        internal void AssertOnPage()
         {
-            var page = new StubbedLoginPage(interactor);
-            page.TitleText.AssertVisible();
-            return page;
+            TitleText.AssertVisible();
         }
 
-        internal StubbedLoginPage Login(Patient patient)
+        public void Login(Patient patient)
         {
             PatientIdWebInputText.EnterText(patient.Id);
             LoginButton.Click();
-            return this;
         }
     }
 }

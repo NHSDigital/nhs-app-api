@@ -1,9 +1,9 @@
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android
+namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    internal sealed class AndroidBeforeYouStartPage
+    public sealed class AndroidBeforeYouStartPage
     {
         private readonly IAndroidDriverWrapper _driver;
 
@@ -21,14 +21,14 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue");
 
-        internal static AndroidBeforeYouStartPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidBeforeYouStartPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidBeforeYouStartPage(driver);
             page.Title.AssertVisible();
             return page;
         }
 
-        internal void AssertPageElements()
+        public void AssertPageElements()
         {
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
@@ -36,22 +36,22 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             ExpanderHeader.AssertVisible();
         }
 
-        internal void CheckCoronavirusSymptoms()
+        public void CheckCoronavirusSymptoms()
         {
             CovidLink.Click();
         }
 
-        internal void SearchConditionsAndTreatments()
+        public void SearchConditionsAndTreatments()
         {
             ConditionsLink.Click();
         }
 
-        internal void UseNhs111Online()
+        public void UseNhs111Online()
         {
             OneOneOneLink.Click();
         }
 
-        internal void AssertExpanderPresent()
+        public void AssertExpanderPresent()
         {
             ExpanderHeader.AssertVisible();
             ExpanderBody.AssertNotVisible();
@@ -59,7 +59,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             ExpanderBody.AssertVisible();
         }
 
-        internal void Continue()
+        public void Continue()
         {
             ContinueButton.Click();
         }

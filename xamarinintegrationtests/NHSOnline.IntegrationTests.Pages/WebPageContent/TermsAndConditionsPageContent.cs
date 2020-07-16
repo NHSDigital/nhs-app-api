@@ -1,14 +1,13 @@
-using System.Threading;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Web
+namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    internal sealed class TermsAndConditionsPage
+    public sealed class TermsAndConditionsPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        private TermsAndConditionsPage(IWebInteractor interactor) => _interactor = interactor;
+        internal TermsAndConditionsPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebText Title => new WebText(_interactor, "h1", "Accept conditions of use");
 
@@ -18,18 +17,15 @@ namespace NHSOnline.IntegrationTests.Pages.Web
 
         private WebButton ContinueButton => new WebButton(_interactor, "Continue");
 
-        internal static TermsAndConditionsPage AssertOnPage(IWebInteractor interactor)
+        internal void AssertOnPage()
         {
-            var page = new TermsAndConditionsPage(interactor);
-            page.Title.AssertVisible();
-            return page;
+            Title.AssertVisible();
         }
 
-        internal TermsAndConditionsPage AcceptTermsAndConditions()
+        public void AcceptTermsAndConditions()
         {
             AcceptTermsAndConditionsCheckbox.Click();
             ContinueButton.Click();
-            return this;
         }
     }
 }

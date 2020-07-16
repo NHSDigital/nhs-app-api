@@ -1,13 +1,13 @@
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Web
+namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    internal sealed class UserResearchOptInPage
+    public sealed class UserResearchOptInPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        private UserResearchOptInPage(IWebInteractor interactor) => _interactor = interactor;
+        internal UserResearchOptInPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebText Title => new WebText(_interactor, "h1", "Help improve the NHS App");
 
@@ -18,18 +18,15 @@ namespace NHSOnline.IntegrationTests.Pages.Web
 
         private WebButton ContinueButton => new WebButton(_interactor, "Continue");
 
-        internal static UserResearchOptInPage AssertOnPage(IWebInteractor interactor)
+        internal void AssertOnPage()
         {
-            var page = new UserResearchOptInPage(interactor);
-            page.Title.AssertVisible();
-            return page;
+            Title.AssertVisible();
         }
 
-        internal UserResearchOptInPage OptInToUserResearch()
+        public void OptInToUserResearch()
         {
             OptIn.Click();
             ContinueButton.Click();
-            return this;
         }
     }
 }

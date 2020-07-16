@@ -1,9 +1,9 @@
 using NHSOnline.IntegrationTests.UI.Components.Android;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android
+namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    internal sealed class AndroidLoggedOutHomePage
+    public sealed class AndroidLoggedOutHomePage
     {
         private readonly IAndroidDriverWrapper _driver;
 
@@ -17,14 +17,14 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         private AndroidButton CheckYourSymptoms => new AndroidButton(_driver, "Check symptoms");
         private AndroidIcon HelpIcon => new AndroidIcon(_driver, "NHS app help icon");
 
-        internal static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidLoggedOutHomePage(driver);
             page.HowAreYouFeelingText.AssertVisible();
             return page;
         }
 
-        internal void AssertPageElements()
+        public void AssertPageElements()
         {
             CovidConditions.AssertVisible();
             AccessServicesText.AssertVisible();
@@ -33,10 +33,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             HelpIcon.AssertVisible();
         }
 
-        internal void GetInformationAboutCoronavirus() => CovidConditions.Click();
+        public void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
-        internal void GetHelp() => HelpIcon.Click();
+        public void GetHelp() => HelpIcon.Click();
 
-        internal void ContinueWithNhsLogin() => ContinueButton.Click();
+        public void ContinueWithNhsLogin() => ContinueButton.Click();
     }
 }

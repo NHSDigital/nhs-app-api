@@ -1,9 +1,9 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS
+namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 {
-    internal sealed class IOSBeforeYouStartPage
+    public sealed class IOSBeforeYouStartPage
     {
         private readonly IIOSDriverWrapper _driver;
 
@@ -19,14 +19,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private IOSLabel ExpanderHeader => IOSLabel.WithText(_driver, "What to do if you're aged 13 to 15");
         private IOSLabel ExpanderBody => IOSLabel.WithText(_driver, "You'll need to contact your GP surgery first and request access to GP online services.");
 
-        internal static IOSBeforeYouStartPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSBeforeYouStartPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSBeforeYouStartPage(driver);
             page.Title.AssertVisible();
             return page;
         }
 
-        internal void AssertPageElements()
+        public void AssertPageElements()
         {
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
@@ -34,22 +34,22 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             ExpanderHeader.AssertVisible();
         }
 
-        internal void CheckCoronavirusSymptoms()
+        public void CheckCoronavirusSymptoms()
         {
             CovidLink.Click();
         }
 
-        internal void SearchConditionsAndTreatments()
+        public void SearchConditionsAndTreatments()
         {
             ConditionsLink.Click();
         }
 
-        internal void UseNhs111Online()
+        public void UseNhs111Online()
         {
             OneOneOneLink.Click();
         }
 
-        internal void AssertExpanderPresent()
+        public void AssertExpanderPresent()
         {
             ExpanderHeader.AssertVisible();
             ExpanderBody.AssertNotVisible();
@@ -57,7 +57,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             ExpanderBody.AssertVisible();
         }
 
-        internal void Continue()
+        public void Continue()
         {
             ContinueButton.Click();
         }

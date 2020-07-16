@@ -1,14 +1,13 @@
 using System;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.Extensions;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
-    internal sealed class NativeWebInteractor : INativeWebContext
+    internal sealed class NativeWebInteractor : IWebInteractor
     {
+        private readonly NativeDriverContext _nativeDriverContext;
         private readonly IWebDriver _driver;
-        private readonly IDisposable _webContext;
+        private readonly WebViewContext _webViewContext;
         private readonly Interactor<IWebElement> _interactor;
 
         public NativeWebInteractor(
@@ -17,15 +16,17 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             IWebDriver driver,
             WebViewContext webViewContext)
         {
+            _nativeDriverContext = nativeDriverContext;
             _driver = driver;
-            _webContext = nativeDriverContext.Web(webViewContext);
-            webViewContext.AssertContextReady(_driver);
+            _webViewContext = webViewContext;
             _interactor = new Interactor<IWebElement>(logs, driver.FindElement);
         }
 
-        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action) => _interactor.ActOnElement(by, action);
-
-
-        public void Dispose() => _webContext.Dispose();
+        void IWebInteractor.ActOnElement(By @by, Action<IWebElement> action)
+        {
+            _nativeDriverContext.SwitchToWebContext(_webViewContext);
+            _webViewContext.AssertContextReady(_driver);
+            _interactor.ActOnElement(@by, action);
+        }
     }
 }

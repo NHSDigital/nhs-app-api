@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.HttpMocks\NHSOnline.HttpMocks.csproj" />
+    <ProjectReference Include="..\NHSOnline.IntegrationTests.Pages\NHSOnline.IntegrationTests.Pages.csproj" />
     <ProjectReference Include="..\NHSOnline.IntegrationTests.UI\NHSOnline.IntegrationTests.UI.csproj" />
   </ItemGroup>
 

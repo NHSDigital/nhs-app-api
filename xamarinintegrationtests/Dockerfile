@@ -11,6 +11,7 @@ COPY ./NHSOnline.HttpMocks/NHSOnline.HttpMocks.csproj NHSOnline.HttpMocks/
 COPY ./NHSOnline.HttpMocks.Dev/NHSOnline.HttpMocks.Dev.csproj NHSOnline.HttpMocks.Dev/
 COPY ./NHSOnline.IntegrationTests/NHSOnline.IntegrationTests.csproj NHSOnline.IntegrationTests/
 COPY ./NHSOnline.IntegrationTests.UI/NHSOnline.IntegrationTests.UI.csproj NHSOnline.IntegrationTests.UI/
+COPY ./NHSOnline.IntegrationTests.Pages/NHSOnline.IntegrationTests.Pages.csproj NHSOnline.IntegrationTests.Pages/
 
 RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config dotnet restore
 

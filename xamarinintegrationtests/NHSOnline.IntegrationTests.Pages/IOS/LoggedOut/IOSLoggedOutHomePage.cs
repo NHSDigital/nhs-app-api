@@ -1,9 +1,9 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS
+namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 {
-    internal sealed class IOSLoggedOutHomePage
+    public sealed class IOSLoggedOutHomePage
     {
         private readonly IIOSDriverWrapper _driver;
 
@@ -20,14 +20,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         private IOSIcon HelpIcon => new IOSIcon(_driver, "NHS app help icon");
 
 
-        internal static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSLoggedOutHomePage(driver);
             page.HowAreYouFeelingText.AssertVisible();
             return page;
         }
 
-        internal void AssertPageElements()
+        public void AssertPageElements()
         {
             CovidConditions.AssertVisible();
             AccessServicesText.AssertVisible();
@@ -36,10 +36,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             HelpIcon.AssertVisible();
         }
 
-        internal void GetInformationAboutCoronavirus() => CovidConditions.Click();
+        public void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
-        internal void GetHelp() => HelpIcon.Click();
+        public void GetHelp() => HelpIcon.Click();
 
-        internal void ContinueWithNhsLogin() => ContinueButton.Click();
+        public void ContinueWithNhsLogin() => ContinueButton.Click();
     }
 }

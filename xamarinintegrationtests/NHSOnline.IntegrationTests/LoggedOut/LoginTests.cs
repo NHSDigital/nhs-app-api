@@ -3,8 +3,11 @@ using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.Emis;
 using NHSOnline.IntegrationTests.Pages.Android;
+using NHSOnline.IntegrationTests.Pages.Android.Home;
+using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS;
-using NHSOnline.IntegrationTests.Pages.Web;
+using NHSOnline.IntegrationTests.Pages.IOS.Home;
+using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -28,27 +31,21 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
-            {
-                TermsAndConditionsPage
-                    .AssertOnPage(webInteractor)
-                    .AcceptTermsAndConditions();
+            AndroidTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
 
-                UserResearchOptInPage
-                    .AssertOnPage(webInteractor)
-                    .OptInToUserResearch();
+            AndroidUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
 
-                LoggedInHomePage
-                    .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Fred Jones");
-            }
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .AssertPageDisplayedFor("Fred Jones");
         }
 
         [NhsAppIOSTest]
@@ -66,27 +63,21 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
-            {
-                TermsAndConditionsPage
-                    .AssertOnPage(webInteractor)
-                    .AcceptTermsAndConditions();
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
 
-                UserResearchOptInPage
-                    .AssertOnPage(webInteractor)
-                    .OptInToUserResearch();
+            IOSUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
 
-                LoggedInHomePage
-                    .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Fred Williams");
-            }
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .AssertPageDisplayedFor("Fred Williams");
         }
 
         [NhsAppAndroidTest]
@@ -104,27 +95,21 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
-            {
-                TermsAndConditionsPage
-                    .AssertOnPage(webInteractor)
-                    .AcceptTermsAndConditions();
+            AndroidTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
 
-                UserResearchOptInPage
-                    .AssertOnPage(webInteractor)
-                    .OptInToUserResearch();
+            AndroidUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
 
-                LoggedInHomePage
-                    .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Jack Flash");
-            }
+            AndroidLoggedInHomePage
+                .AssertOnPage(driver)
+                .AssertPageDisplayedFor("Jack Flash");
         }
 
         [NhsAppIOSTest]
@@ -142,28 +127,24 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsApp))
-            {
-                TermsAndConditionsPage
-                    .AssertOnPage(webInteractor)
-                    .AcceptTermsAndConditions();
 
-                UserResearchOptInPage
-                    .AssertOnPage(webInteractor)
-                    .OptInToUserResearch();
+            IOSTermsAndConditionsPage
+                .AssertOnPage(driver)
+                .PageContent.AcceptTermsAndConditions();
 
-                LoggedInHomePage
-                    .AssertOnPage(webInteractor)
-                    .AssertWelcomeMessageDisplayedFor("Jack Flash");
-            }
+            IOSUserResearchOptInPage
+                .AssertOnPage(driver)
+                .PageContent.OptInToUserResearch();
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .AssertPageDisplayedFor("Jack Flash");
         }
+
 
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectAndroid(IAndroidDriverWrapper driver)
@@ -181,12 +162,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             AndroidNhsLoginErrorPage
                 .AssertOnPage(driver)
@@ -224,12 +202,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             IOSNhsLoginErrorPage
                 .AssertOnPage(driver)
@@ -264,12 +239,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             AndroidCreateSessionForbiddenErrorPage
                 .AssertOnPage(driver)
@@ -307,12 +279,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             IOSCreateSessionForbiddenErrorPage
                 .AssertOnPage(driver)
@@ -347,12 +316,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             AndroidCreateSessionBadRequestErrorPage
                 .AssertOnPage(driver)
@@ -390,12 +356,9 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
-            using (var webInteractor = driver.Web(WebViewContext.NhsLogin))
-            {
-                StubbedLoginPage
-                    .AssertOnPage(webInteractor)
-                    .Login(patient);
-            }
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
 
             IOSCreateSessionBadRequestErrorPage
                 .AssertOnPage(driver)

@@ -38,12 +38,20 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         private TestLogs Logs { get; }
 
-        public INativeWebContext Web(WebViewContext webViewContext)
+        public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action) => _interactor.ActOnElement(by, action);
+        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action)
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.ActOnElement(@by, action);
+        }
 
-        void IIOSInteractor.AssertElementDoesntExist(By @by) => _interactor.AssertElementDoesntExist(by);
+        void IIOSInteractor.AssertElementDoesntExist(By @by)
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.AssertElementDoesntExist(@by);
+        }
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
