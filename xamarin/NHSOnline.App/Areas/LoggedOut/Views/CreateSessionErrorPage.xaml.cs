@@ -9,7 +9,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     public partial class CreateSessionErrorPage : ICreateSessionErrorView
     {
         public static readonly BindableProperty ServiceDeskReferenceProperty
-            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorForbiddenPage), "3h");
+            = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorPage), "3h");
 
         public event EventHandler<EventArgs>? BackHomeRequested;
         public event EventHandler<EventArgs>? ContactUsRequested;

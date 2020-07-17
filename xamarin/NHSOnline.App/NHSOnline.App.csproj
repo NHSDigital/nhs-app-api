@@ -34,6 +34,9 @@
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorBadRequestPage.xaml.cs">
       <DependentUpon>CreateSessionErrorBadRequestPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorForbiddenPage.xaml.cs">
       <DependentUpon>CreateSessionErrorForbiddenPage.xaml</DependentUpon>
     </Compile>

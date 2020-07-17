@@ -9,7 +9,7 @@ namespace NHSOnline.HttpMocks.Domain
         internal NhsNumber Next()
         {
             var number = Interlocked.Increment(ref _nextNumber);
-            return new NhsNumber(number);
+            return NhsNumber.FromInt(number);
         }
     }
 }

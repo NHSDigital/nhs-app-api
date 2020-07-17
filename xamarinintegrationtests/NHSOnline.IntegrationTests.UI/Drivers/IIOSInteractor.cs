@@ -1,12 +1,10 @@
-using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    public interface IIOSInteractor
+    public interface IIOSInteractor: IInteractor<IOSDriver<IOSElement>, IOSElement>
     {
-        internal void ActOnElement(By by, Action<IOSElement> action);
         internal void AssertElementDoesntExist(By by);
     }
 }

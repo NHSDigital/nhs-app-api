@@ -1,9 +1,7 @@
-using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
@@ -26,13 +24,12 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             return new Matches(interactor, pattern);
         }
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
+        public void AssertVisible()
+            => _interactor.ActOnElement(FindBy, e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
 
         public void AssertNotVisible() => _interactor.AssertElementDoesntExist(FindBy);
 
-        public void Click() => ActOnElement(e => e.Click());
-
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+        public void Click() => _interactor.ActOnElementContext(FindBy, context => context.Tap());
 
         protected abstract By FindBy { get; }
         protected abstract string Description { get; }

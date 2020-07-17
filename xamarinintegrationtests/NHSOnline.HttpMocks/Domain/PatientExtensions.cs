@@ -21,6 +21,14 @@ namespace NHSOnline.HttpMocks.Domain
             return patient;
         }
 
+        public static TPatient WithNhsNumber<TPatient>(this TPatient patient, NhsNumber nhsNumber) where TPatient : Patient
+        {
+            patient = patient ?? throw new ArgumentNullException(nameof(patient));
+
+            patient.NhsNumber = nhsNumber;
+            return patient;
+        }
+
         internal static TPatient WithBehaviour<TPatient, TBehaviour>(this TPatient patient, TBehaviour behaviour)
             where TPatient : Patient
             where TBehaviour: class

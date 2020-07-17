@@ -4,20 +4,23 @@ using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    internal sealed class Interactor<TElement>
+    internal sealed class Interactor<TDriver, TElement>
     {
         private readonly TestLogs _logs;
+        private readonly TDriver _driver;
         private readonly Func<By, TElement> _findElement;
 
         internal Interactor(
             TestLogs logs,
+            TDriver driver,
             Func<By, TElement> findElement)
         {
             _logs = logs;
+            _driver = driver;
             _findElement = findElement;
         }
 
-        internal void ActOnElement(By @by, Action<TElement> action)
+        internal void ActOnElementContext(By @by, Action<ElementContext<TDriver, TElement>> action)
         {
             var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(2));
 
@@ -26,7 +29,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 try
                 {
                     var element = _findElement(by);
-                    action(element);
+                    action(new ElementContext<TDriver, TElement>(_driver, element));
                     return;
                 }
                 catch (WebDriverException e) when (DateTime.UtcNow < retryUntil)

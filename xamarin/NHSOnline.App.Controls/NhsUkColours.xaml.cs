@@ -13,6 +13,7 @@ namespace NHSOnline.App.Controls
         }
 
         public static Color NhsUkBlue => GetColour();
+        public static Color NhsUkPrimaryLinkBlue => GetColour();
         public static Color NhsUkWhite => GetColour();
         public static Color NhsUkPrimaryText => GetColour();
 

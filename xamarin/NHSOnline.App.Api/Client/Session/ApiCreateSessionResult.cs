@@ -45,5 +45,14 @@ namespace NHSOnline.App.Api.Client.Session
 
             internal override T Accept<T>(IApiCreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }
+
+        internal sealed class OdsCodeNotSupportedOrNoNhsNumber : ApiCreateSessionResult
+        {
+            public OdsCodeNotSupportedOrNoNhsNumber(PfsErrorResponse pfsErrorResponse) => PfsErrorResponse = pfsErrorResponse;
+
+            internal PfsErrorResponse PfsErrorResponse { get; }
+
+            internal override T Accept<T>(IApiCreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
     }
 }

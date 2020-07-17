@@ -20,6 +20,9 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Heading2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="NhsUkColours.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
@@ -110,6 +113,9 @@
     <Compile Update="Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Heading2.xaml.cs">
+      <DependentUpon>Heading2.xaml</DependentUpon>
     </Compile>
     <Compile Update="NhsUkColours.xaml.cs">
       <DependentUpon>Colours.xaml</DependentUpon>

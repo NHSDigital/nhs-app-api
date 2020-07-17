@@ -1,12 +1,10 @@
-using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    public interface IAndroidInteractor
+    public interface IAndroidInteractor: IInteractor<AndroidDriver<AndroidElement>, AndroidElement>
     {
-        internal void ActOnElement(By by, Action<AndroidElement> action);
         internal void AssertElementDoesntExist(By by);
     }
 }

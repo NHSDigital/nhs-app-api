@@ -1,11 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    public interface IWebInteractor
+    public interface IWebInteractor: IInteractor<IWebDriver, IWebElement>
     {
-        internal void ActOnElement(By by, Action<IWebElement> action);
     }
 }

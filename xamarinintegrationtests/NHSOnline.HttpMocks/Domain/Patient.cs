@@ -8,7 +8,7 @@ namespace NHSOnline.HttpMocks.Domain
 
         public string Id { get; internal set; } = Guid.NewGuid().ToString();
 
-        public NhsNumber NhsNumber { get; } = NhsNumberGenerator.Next();
+        public NhsNumber NhsNumber { get; internal set; } = NhsNumberGenerator.Next();
 
         public PatientPersonalDetails PersonalDetails { get; } = new PatientPersonalDetails();
 

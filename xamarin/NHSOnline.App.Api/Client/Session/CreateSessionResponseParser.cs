@@ -36,7 +36,7 @@ namespace NHSOnline.App.Api.Client.Session
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
                 HttpStatusCode.Forbidden => HandleForbidden(httpResponseMessage),
-                OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(),
+                OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
                 FailedAgeRequirement => HandleFailedAgeRequirement(),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(),
                 HttpStatusCode.BadGateway => HandleBadGateway(),
@@ -94,10 +94,16 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleOdsCodeNotSupportedOrNoNhsNumber()
+        private async Task<ApiCreateSessionResult> HandleOdsCodeNotSupportedOrNoNhsNumber(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned not supported or no NHS number");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber(response),
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private Task<ApiCreateSessionResult> HandleFailedAgeRequirement()

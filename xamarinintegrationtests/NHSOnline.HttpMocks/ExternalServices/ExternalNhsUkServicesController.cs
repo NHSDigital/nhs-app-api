@@ -66,6 +66,18 @@ namespace NHSOnline.HttpMocks.ExternalServices
                 "text/html");
         }
 
+        [HttpGet("111wales")]
+        public IActionResult OneOneOneWales()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>111 Wales</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
         [HttpGet("contactus")]
         public IActionResult ContactUs()
         {
@@ -73,6 +85,18 @@ namespace NHSOnline.HttpMocks.ExternalServices
                 <html>
                     <body>
                         <h1>Contact Us</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
+        [HttpGet("myhealthonline")]
+        public IActionResult MyHealthOnline()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>My Health Online</h1>
                     </body>
                 </html>",
                 "text/html");

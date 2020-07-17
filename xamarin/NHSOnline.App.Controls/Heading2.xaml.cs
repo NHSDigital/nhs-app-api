@@ -4,15 +4,15 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Heading1
+    public partial class Heading2
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(Heading1));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(Heading2));
 
         public static readonly BindableProperty TextColourProperty =
-            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(Heading1), NhsUkColours.NhsUkPrimaryText);
+            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(Heading2), NhsUkColours.NhsUkPrimaryText);
 
-        public Heading1()
+        public Heading2()
         {
             InitializeComponent();
         }

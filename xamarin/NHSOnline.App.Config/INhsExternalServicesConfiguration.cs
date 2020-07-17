@@ -10,6 +10,8 @@ namespace NHSOnline.App.Config
         Uri NhsUkLoginHelpUrl { get; }
         Uri NhsUkConditionsUrl { get; }
         Uri OneOneOneUrl { get; }
+        Uri OneOneOneWalesUrl { get; }
         Uri NhsUkContactUsUrl { get; }
+        Uri MyHealthOnlineUrl { get; }
     }
 }

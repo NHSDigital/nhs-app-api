@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
         private readonly IOSDriver<IOSElement> _driver;
-        private readonly Interactor<IOSElement> _interactor;
+        private readonly Interactor<IOSDriver<IOSElement>, IOSElement> _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
 
         internal IOSDriverWrapper(string testName, TestLogs logs)
@@ -32,7 +32,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _interactor = new Interactor<IOSElement>(Logs, _driver.FindElement);
+            _interactor = new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement);
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleContexts(_driver));
         }
 
@@ -40,11 +40,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
+        void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
+            By by,
+            Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
 
-        void IIOSInteractor.ActOnElement(By @by, Action<IOSElement> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnElement(@by, action);
+            _interactor.ActOnElementContext(by, action);
         }
 
         void IIOSInteractor.AssertElementDoesntExist(By @by)

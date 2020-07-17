@@ -71,6 +71,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Forbidden forbidden)
             => await NavigateToForbiddenPage(forbidden.ServiceDeskReference).PreserveThreadContext();
 
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber)
+            => await NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(odsCodeNotSupportedOrNoNhsNumber.ServiceDeskReference).PreserveThreadContext();
+
         private async Task NavigateToLoggedInHomePage(UserSession userSession, CookieContainer cookies)
         {
             var homePageModel = new NhsAppWebModel(userSession, cookies);
@@ -98,6 +101,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task NavigateToForbiddenPage(string serviceDeskReference)
         {
             var errorModel = _model.ForbiddenError(serviceDeskReference);
+            var errorPage = _pageFactory.CreatePageFor(errorModel);
+
+            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private async Task NavigateToOdsCodeNotSupportedOrNoNhsNumberPage(string serviceDeskReference)
+        {
+            var errorModel = _model.OdsCodeNotSupportedOrNoNhsNumberError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();

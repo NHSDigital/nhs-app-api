@@ -38,7 +38,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public void Click()
         {
-            _interactor.ActOnElement(FindBy, e => e.Click());
+            _interactor.ActOnElementContext(FindBy, context => context.Tap());
         }
 
         protected abstract By FindBy { get; }

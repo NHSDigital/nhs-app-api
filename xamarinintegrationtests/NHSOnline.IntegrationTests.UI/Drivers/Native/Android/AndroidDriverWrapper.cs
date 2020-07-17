@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
     internal sealed class AndroidDriverWrapper : IAndroidDriverWrapper
     {
         private readonly AndroidDriver<AndroidElement> _driver;
-        private readonly Interactor<AndroidElement> _interactor;
+        private readonly Interactor<AndroidDriver<AndroidElement>, AndroidElement> _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
 
         internal AndroidDriverWrapper(string testName, TestLogs logs)
@@ -35,7 +35,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _interactor = new Interactor<AndroidElement>(Logs, _driver.FindElement);
+            _interactor = new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement);
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleWindows(_driver));
         }
 
@@ -44,10 +44,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IAndroidInteractor.ActOnElement(By @by, Action<AndroidElement> action)
+        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(
+            By by,
+            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
         {
             _nativeDriverContext.SwitchToNativeContext();
-            _interactor.ActOnElement(@by, action);
+            _interactor.ActOnElementContext(by, action);
         }
 
         void IAndroidInteractor.AssertElementDoesntExist(By @by)

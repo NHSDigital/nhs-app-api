@@ -30,5 +30,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         public CreateSessionErrorForbiddenModel ForbiddenError(string serviceDeskReference)
             => new CreateSessionErrorForbiddenModel(this, serviceDeskReference);
+
+        public CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel OdsCodeNotSupportedOrNoNhsNumberError(string serviceDeskReference)
+            => new CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberModel(this, serviceDeskReference);
     }
 }
