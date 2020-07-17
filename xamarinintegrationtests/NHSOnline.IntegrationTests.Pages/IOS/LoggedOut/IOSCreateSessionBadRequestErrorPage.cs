@@ -1,9 +1,9 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS
+namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 {
-    internal sealed class IOSCreateSessionBadRequestErrorPage
+    public sealed class IOSCreateSessionBadRequestErrorPage
     {
         private readonly IIOSDriverWrapper _driver;
 
@@ -15,18 +15,18 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3a[0-9a-z]{4} to help us resolve the problem more quickly.");
 
-        private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.");
+        private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
         private IOSLabel ContactUsLink => IOSLabel.WithText(_driver, "Contact us");
         private IOSLabel BackHomeLink => IOSLabel.WithText(_driver, "Back to home");
 
-        internal static IOSCreateSessionBadRequestErrorPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSCreateSessionBadRequestErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSCreateSessionBadRequestErrorPage(driver);
             page.Title.AssertVisible();
             return page;
         }
 
-        internal IOSCreateSessionBadRequestErrorPage AssertPageElements()
+        public IOSCreateSessionBadRequestErrorPage AssertPageElements()
         {
             GoBackText.AssertVisible();
             ErrorCodeText.AssertVisible();
@@ -36,7 +36,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             return this;
         }
 
-        internal void ContactUs()
+        public void ContactUs()
         {
             ContactUsLink.Click();
         }

@@ -145,7 +145,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageDisplayedFor("Jack Flash");
         }
 
-
         [NhsAppAndroidTest]
         public void AnErrorIsDisplayedWhenNhsLoginReturnsAnErrorRedirectAndroid(IAndroidDriverWrapper driver)
         {

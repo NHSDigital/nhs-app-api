@@ -51,7 +51,7 @@
 
                     <controls:Paragraph>
                         <FormattedString>
-                            <Span Text="Reference: " FontSize="10"  />
+                            <Span Text="Reference: " FontSize="12" />
                             <Span Text="{Binding ServiceDeskReference}" FontSize="12" />
                         </FormattedString>
                     </controls:Paragraph>

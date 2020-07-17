@@ -11,8 +11,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public static readonly BindableProperty ServiceDeskReferenceProperty
             = BindableProperty.Create(nameof(ServiceDeskReference), typeof(string), typeof(CreateSessionErrorBadRequestPage), "3c");
 
-        public event EventHandler<EventArgs>? BackHomeRequested;
+        public event EventHandler<EventArgs>? OneOneOneRequested;
         public event EventHandler<EventArgs>? ContactUsRequested;
+        public event EventHandler<EventArgs>? BackHomeRequested;
 
         public CreateSessionErrorBadRequestPage()
         {
@@ -25,7 +26,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
             set => SetValue(ServiceDeskReferenceProperty, value);
         }
 
-        public ICommand BackHomeCommand => new Command(() => BackHomeRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand OneOneOneCommand => new Command(() => OneOneOneRequested?.Invoke(this, EventArgs.Empty));
         public ICommand ContactUsCommand => new Command(() => ContactUsRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand BackHomeCommand => new Command(() => BackHomeRequested?.Invoke(this, EventArgs.Empty));
     }
 }

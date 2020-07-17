@@ -23,7 +23,13 @@
                         <Span Text=" to help us resolve the problem more quickly."/>
                     </FormattedString>
                 </controls:Paragraph>
-                <controls:Paragraph Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111." />
+                <controls:Paragraph>
+                    <FormattedString>
+                        <Span Text="If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to " />
+                        <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand}" />
+                        <Span Text=" or call 111." />
+                    </FormattedString>
+                </controls:Paragraph>
                 <controls:LinkLabel Text="Contact us" Command="{Binding ContactUsCommand}" />
                 <controls:LinkLabel Text="Back to home" Command="{Binding BackHomeCommand}" />
             </StackLayout>
