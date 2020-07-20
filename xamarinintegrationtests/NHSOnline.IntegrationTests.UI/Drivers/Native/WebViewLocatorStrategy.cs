@@ -6,7 +6,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 {
     internal abstract class WebViewLocatorStrategy
     {
-        protected static TimeSpan WaitForWebContext { get; } = TimeSpan.FromSeconds(10);
+        protected static TimeSpan WaitForWebContext { get; } = TimeSpan.FromSeconds(20);
 
         internal static WebViewLocatorStrategy MultipleContexts(IContextAware driver)
             => new MultipleContextsWebViewLocatorStrategy(driver);

@@ -38,24 +38,24 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public void CheckCoronavirusSymptoms()
         {
-            CovidLink.Click();
+            CovidLink.Touch();
         }
 
         public void SearchConditionsAndTreatments()
         {
-            ConditionsLink.Click();
+            ConditionsLink.Touch();
         }
 
         public void UseNhs111Online()
         {
-            OneOneOneLink.Click();
+            OneOneOneLink.Touch();
         }
 
         public void AssertExpanderPresent()
         {
             ExpanderHeader.AssertVisible();
             ExpanderBody.AssertNotVisible();
-            ExpanderHeader.Click();
+            ExpanderHeader.Touch();
             ExpanderBody.AssertVisible();
         }
 

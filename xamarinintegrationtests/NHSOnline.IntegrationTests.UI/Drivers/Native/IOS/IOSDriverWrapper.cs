@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
     internal sealed class IOSDriverWrapper: IIOSDriverWrapper
     {
         private readonly IOSDriver<IOSElement> _driver;
-        private readonly Interactor<IOSDriver<IOSElement>, IOSElement> _interactor;
+        private readonly IIOSInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
 
@@ -33,7 +33,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _interactor = new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement);
+            _interactor = new IOSInteractor(_nativeDriverContext,
+                new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleContexts(_driver));
         }
 
@@ -73,5 +74,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         }
 
         public void Dispose() => _driver.Dispose();
+
+        IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
     }
 }

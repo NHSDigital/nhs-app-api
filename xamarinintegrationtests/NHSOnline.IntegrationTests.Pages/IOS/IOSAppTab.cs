@@ -1,6 +1,7 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
 {
@@ -32,6 +33,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
         public static IOSAppTab AssertOnLoginHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Login Help");
 
         public static IOSAppTab AssertOnContactUsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Contact Us");
+
+        public static IOSAppTab AssertOnHomeHelpPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Home Help");
 
         private static IOSAppTab AssertOnPage(IIOSDriverWrapper driver, string title)
         {

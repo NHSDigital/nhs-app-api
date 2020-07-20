@@ -53,7 +53,6 @@
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
-    <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

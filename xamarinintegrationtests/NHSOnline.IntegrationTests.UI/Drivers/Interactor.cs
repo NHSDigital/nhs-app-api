@@ -1,10 +1,12 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.IntegrationTests.UI.Drivers.Native.Android;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
-    internal sealed class Interactor<TDriver, TElement>
+    internal sealed class Interactor<TDriver, TElement> where TElement : IWebElement
     {
         private readonly TestLogs _logs;
         private readonly TDriver _driver;
@@ -38,10 +40,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 }
                 catch (NoSuchElementException e)
                 {
+                    _logs.Error(e.Message);
                     throw new AssertFailedException($"No {typeof(TElement).Name} found matching {by}", e);
                 }
                 catch (WebDriverException e)
                 {
+                    _logs.Error(e.Message);
                     throw new AssertFailedException($"Failed to act on {typeof(TElement).Name} matching {by}", e);
                 }
             }
@@ -60,6 +64,14 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             }
 
             throw new AssertFailedException($"Was expecting not to find the element at {by}.");
+        }
+
+        public Interactor<TDriver, TElement> CreateContainedInteractor(By findContainerBy)
+        {
+            return new Interactor<TDriver, TElement>(
+                _logs,
+                _driver,
+                findBy => (TElement) _findElement(findContainerBy).FindElement(findBy));
         }
     }
 }

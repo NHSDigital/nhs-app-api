@@ -45,12 +45,12 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         public void ContactUs()
         {
-            ContactUsLink.Click();
+            ContactUsLink.Touch();
         }
 
         public void BackHome()
         {
-            BackHomeLink.Click();
+            BackHomeLink.Touch();
         }
     }
 }

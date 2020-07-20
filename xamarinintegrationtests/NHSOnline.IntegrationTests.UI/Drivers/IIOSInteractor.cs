@@ -6,5 +6,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     public interface IIOSInteractor: IInteractor<IOSDriver<IOSElement>, IOSElement>
     {
         internal void AssertElementDoesntExist(By by);
+        internal IIOSInteractor CreateContainedInteractor(By findContainerBy);
     }
 }

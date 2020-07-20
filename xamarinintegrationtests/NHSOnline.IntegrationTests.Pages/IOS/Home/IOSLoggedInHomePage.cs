@@ -5,10 +5,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 {
     public class IOSLoggedInHomePage
     {
+
+        public IOSFullNavigation Navigation { get; }
         public LoggedInHomePageContent PageContent { get; }
 
         private IOSLoggedInHomePage(IIOSDriverWrapper driver)
         {
+            Navigation = new IOSFullNavigation(driver);
             PageContent = new LoggedInHomePageContent(driver.Web(WebViewContext.NhsApp));
         }
 
@@ -21,6 +24,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
         public void AssertPageDisplayedFor(string name)
         {
+            Navigation.AssertNavigationPresent();
             PageContent.AssertWelcomeMessageDisplayedFor(name);
         }
     }

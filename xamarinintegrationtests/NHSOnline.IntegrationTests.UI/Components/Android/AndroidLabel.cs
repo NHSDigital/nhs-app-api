@@ -36,9 +36,14 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             _interactor.AssertElementDoesntExist(FindBy);
         }
 
-        public void Click()
+        public void Touch()
         {
             _interactor.ActOnElementContext(FindBy, context => context.Tap());
+        }
+
+        public void Click()
+        {
+            _interactor.ActOnElementContext(FindBy, context=>context.Element.Click());
         }
 
         protected abstract By FindBy { get; }

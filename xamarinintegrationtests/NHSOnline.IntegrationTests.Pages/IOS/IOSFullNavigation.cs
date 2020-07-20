@@ -1,0 +1,81 @@
+using NHSOnline.IntegrationTests.UI.Components.IOS;
+using NHSOnline.IntegrationTests.UI.Drivers;
+
+namespace NHSOnline.IntegrationTests.Pages.IOS
+{
+    public class IOSFullNavigation
+    {
+        private readonly IIOSDriverWrapper _driver;
+
+        internal IOSFullNavigation(IIOSDriverWrapper driver)
+        {
+            _driver = driver;
+        }
+
+        private IOSIcon HomeIcon => new IOSIcon(_driver, "NHS App home icon");
+
+        private IOSIcon HelpIcon => new IOSIcon(_driver, "NHS App help icon");
+
+        private IOSIcon SettingsIcon => new IOSIcon(_driver, "NHS App settings icon");
+
+        private IOSFullNavigationHeader FullNavigationHeader => new IOSFullNavigationHeader(_driver);
+
+        private IOSFullNavigationFooter FullNavigationFooter => new IOSFullNavigationFooter(_driver);
+
+        private IOSNavigationMenuItem SymptomsMenuItem => new IOSNavigationMenuItem(_driver, "NHS App symptoms icon", "Symptoms");
+
+        private IOSNavigationMenuItem AppointmentsMenuItem => new IOSNavigationMenuItem(_driver, "NHS App appointments icon", "Appointments");
+
+        private IOSNavigationMenuItem PrescriptionsMenuItem => new IOSNavigationMenuItem(_driver, "NHS App prescriptions icon", "Prescriptions");
+
+        private IOSNavigationMenuItem MyRecordMenuItem => new IOSNavigationMenuItem(_driver, "NHS App records icon", "My Record");
+
+        private IOSNavigationMenuItem MoreMenuItem => new IOSNavigationMenuItem(_driver, "NHS App more icon", "More");
+
+        internal void AssertNavigationPresent()
+        {
+            FullNavigationHeader.AssertVisible();
+            FullNavigationFooter.AssertVisible();
+        }
+
+        public void Home()
+        {
+            HomeIcon.Click();
+        }
+
+        public void Settings()
+        {
+            SettingsIcon.Click();
+        }
+
+        public void Symptoms()
+        {
+            SymptomsMenuItem.Click();
+        }
+
+        public void Appointments()
+        {
+            AppointmentsMenuItem.Click();
+        }
+
+        public void Prescriptions()
+        {
+            PrescriptionsMenuItem.Click();
+        }
+
+        public void MyRecord()
+        {
+            MyRecordMenuItem.Click();
+        }
+
+        public void More()
+        {
+            MoreMenuItem.Click();
+        }
+
+        public void Help()
+        {
+            HelpIcon.Click();
+        }
+    }
+}

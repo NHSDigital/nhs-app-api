@@ -22,6 +22,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidView LoginHelpPageView => new AndroidView(_driver, "Login Help");
 
+        private AndroidView HomeHelpPageView => new AndroidView(_driver, "Home Help");
+
         private AndroidView ContactUsPageView => new AndroidView(_driver, "Contact Us");
 
         private AndroidImageButton AndroidAppTabClose => new AndroidImageButton(_driver, "Close tab");
@@ -41,6 +43,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
         public AndroidAppTab AssertOn111Page() => AssertOnPage(OneOneOnePageView);
 
         public AndroidAppTab AssertOnLoginHelpPage() => AssertOnPage(LoginHelpPageView);
+
+        public AndroidAppTab AssertOnHomeHelpPage() => AssertOnPage(HomeHelpPageView);
 
         public AndroidAppTab AssertOnContactUsPage() => AssertOnPage(ContactUsPageView);
 

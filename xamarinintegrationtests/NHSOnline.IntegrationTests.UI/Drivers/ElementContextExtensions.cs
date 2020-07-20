@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             where TDriver : IPerformsTouchActions
             where TElement: IWebElement
         {
-            interactor.PerformTouchAction(action => action.Press(interactor.Element, 5, 5).Wait(100).Release());
+            interactor.PerformTouchAction(action => action.Press(interactor.Element, 5, 5).Wait(5).Release());
         }
 
         private static void PerformTouchAction<TDriver, TElement>(

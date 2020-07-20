@@ -24,6 +24,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             options.AddAdditionalCapability("browserstack.local", "true");
             options.AddAdditionalCapability("browserstack.debug", "true");
             options.AddAdditionalCapabilityIf(EnableNetworkLogs, "browserstack.networkLogs", "true");
+            options.AddAdditionalCapability("browserstack.appium_version", "1.17.0");
         }
 
         internal string? GetKey()

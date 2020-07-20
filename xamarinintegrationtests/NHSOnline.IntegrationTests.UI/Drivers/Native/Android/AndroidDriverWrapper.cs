@@ -8,7 +8,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
     internal sealed class AndroidDriverWrapper : IAndroidDriverWrapper
     {
         private readonly AndroidDriver<AndroidElement> _driver;
-        private readonly Interactor<AndroidDriver<AndroidElement>, AndroidElement> _interactor;
+        private readonly IAndroidInteractor _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
         private readonly BrowserStackConfig _browserStackConfig;
 
@@ -36,8 +36,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _interactor = new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement);
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleWindows(_driver));
+
+            _interactor = new AndroidInteractor(_nativeDriverContext,
+                new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement));
         }
 
         private TestLogs Logs { get; }
@@ -45,19 +47,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(
-            By by,
-            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
-        {
-            _nativeDriverContext.SwitchToNativeContext();
+        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(By by,
+            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action) =>
             _interactor.ActOnElementContext(by, action);
+
+        void IAndroidInteractor.AssertElementDoesntExist(By by)
+        {
+            _interactor.AssertElementDoesntExist(by);
         }
 
-        void IAndroidInteractor.AssertElementDoesntExist(By @by)
-        {
-            _nativeDriverContext.SwitchToNativeContext();
-            _interactor.AssertElementDoesntExist(@by);
-        }
+        IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

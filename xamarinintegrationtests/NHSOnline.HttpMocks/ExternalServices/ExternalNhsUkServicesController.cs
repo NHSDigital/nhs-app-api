@@ -42,6 +42,18 @@ namespace NHSOnline.HttpMocks.ExternalServices
                 "text/html");
         }
 
+        [HttpGet("help/home")]
+        public IActionResult HomeHelp()
+        {
+            return Content($@"
+                <html>
+                    <body>
+                        <h1>Home Help</h1>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
         [HttpGet("conditions")]
         public IActionResult Conditions()
         {

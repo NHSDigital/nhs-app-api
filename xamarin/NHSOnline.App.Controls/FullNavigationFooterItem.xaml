@@ -24,9 +24,10 @@
     </View.Resources>
 
     <ContentView.Content>
-        <StackLayout>
+        <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}">
             <ContentView Content="{Binding Icon, Source={x:Reference Name=Root}}"/>
-            <Label Text="{Binding Text, Source={x:Reference Name=Root}}"/>
+            <Label 
+                Text="{Binding Text, Source={x:Reference Name=Root}}"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>
