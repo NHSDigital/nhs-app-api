@@ -36,5 +36,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         public CreateSessionErrorFailedAgeRequirementModel FailedAgeRequirementError(string serviceDeskReference)
             => new CreateSessionErrorFailedAgeRequirementModel(this, serviceDeskReference);
+
+        public CreateSessionErrorBadResponseFromUpstreamSystemModel BadResponseFromUpstreamSystemError(string serviceDeskReference)
+            => new CreateSessionErrorBadResponseFromUpstreamSystemModel(this, serviceDeskReference);
     }
 }

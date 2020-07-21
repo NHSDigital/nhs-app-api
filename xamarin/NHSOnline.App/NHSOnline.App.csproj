@@ -31,6 +31,9 @@
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorFailedAgeRequirementPage.xaml.cs">
       <DependentUpon>CreateSessionErrorFailedAgeRequirementPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorBadResponseFromUpstreamSystemPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorBadResponseFromUpstreamSystemPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorFallbackPage.xaml.cs">
       <DependentUpon>CreateSessionErrorFallbackPage.xaml</DependentUpon>
     </Compile>
