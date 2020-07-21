@@ -16,7 +16,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 
         private AndroidLabel ErrorCodeText => AndroidLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3c[0-9a-z]{4} to help us resolve the problem more quickly.");
 
-        private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.");
+        private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
         private AndroidLabel ContactUsLink => AndroidLabel.WithText(_driver, "Contact us");
         private AndroidLabel BackHomeLink => AndroidLabel.WithText(_driver, "Back to home");
 
