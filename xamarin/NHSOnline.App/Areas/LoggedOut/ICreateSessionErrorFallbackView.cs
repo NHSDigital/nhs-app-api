@@ -5,8 +5,9 @@ namespace NHSOnline.App.Areas.LoggedOut
 {
     internal interface ICreateSessionErrorFallbackView
     {
-        public event EventHandler<EventArgs>? BackHomeRequested;
-        public event EventHandler<EventArgs>? ContactUsRequested;
+        event EventHandler<EventArgs>? OneOneOneRequested;
+        event EventHandler<EventArgs>? ContactUsRequested;
+        event EventHandler<EventArgs>? BackHomeRequested;
 
         INavigation Navigation { get; }
     }
