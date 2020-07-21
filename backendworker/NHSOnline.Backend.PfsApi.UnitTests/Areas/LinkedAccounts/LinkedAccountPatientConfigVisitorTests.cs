@@ -62,7 +62,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             var userSession = new P9UserSession("csrfToken",
                 It.IsAny<CitizenIdUserSession>(),
                 "nhsNumber",
-                "im1ConnectionToken");
+                "im1ConnectionToken",
+                "serviceDeskReference");
 
             // Act
             var result = await _systemUnderTest.Visit(userSession);

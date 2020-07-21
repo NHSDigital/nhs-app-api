@@ -12,6 +12,7 @@ import {
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
   HIDE_SESSION_EXPIRING,
+  SET_USER_SESSION_REFERENCE,
 } from './mutation-types';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
@@ -39,6 +40,7 @@ export default {
         dateOfBirth,
         accessToken,
         im1MessagingEnabled,
+        userSessionCreateReferenceCode,
         proofLevel,
       } = response.data;
 
@@ -52,6 +54,8 @@ export default {
         accessToken,
         proofLevel,
       });
+
+      commit(SET_USER_SESSION_REFERENCE, userSessionCreateReferenceCode);
 
       this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
     }

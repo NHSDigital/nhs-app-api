@@ -105,6 +105,13 @@ class AuthenticationStepDefinitionsBackend {
         AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable()
     }
 
+    @Given("^I have valid OAuth details and (.*) returns a Bad Gateway response$")
+    fun iHaveValidOAuthDetailsAndGpSystemReturnsBadGateway(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemBadGateway()
+    }
+
     @Given("^I have valid OAuth details and (.*) returns with an incomplete response$")
     fun iHaveValidOAuthDetailsAndGpSystemReturnsAnIncompleteResponse(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
@@ -172,6 +179,14 @@ class AuthenticationStepDefinitionsBackend {
         val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
                 .getOrNull<UserSessionResponse>()
         checkNotNull(userSessionResponse?.userSessionResponseBody?.sessionTimeout)
+    }
+
+    @Then("^the response has a service desk reference with a prefix of \"(.*)\"$")
+    fun theResponseHasAServiceDeskReference(prefix: String) {
+        val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
+                .getOrNull<UserSessionResponse>()
+        val serviceDeskReference = userSessionResponse?.userSessionResponseBody?.userSessionCreateReferenceCode!!
+        Assert.assertTrue(serviceDeskReference.contains(prefix))
     }
 
     @Then("^the response has service journey rules$")

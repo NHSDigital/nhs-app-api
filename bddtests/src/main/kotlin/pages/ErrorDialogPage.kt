@@ -26,6 +26,12 @@ class ErrorDialogPage : HybridPageObject() {
         return this
     }
 
+    fun assertReferenceCode(referenceCode: String): ErrorDialogPage {
+        val message = getElement("//p[contains(text(), 'Reference: $referenceCode')]")
+        message.assertIsVisible()
+        return this
+    }
+
     fun assertSubHeader(paragraphText: String): ErrorDialogPage {
         val message = getElement("//h2[normalize-space()=\"$paragraphText\"]")
         message.assertIsVisible()

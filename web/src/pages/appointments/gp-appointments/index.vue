@@ -21,26 +21,23 @@
                    header="appointments.error.header.problem" />
       <error-paragraph from="appointments.error.400.message" />
       <error-link from="generic.backButton.text"
-                  :action="backToHomeUrl"
+                  :action="backUrl"
                   :desktop-only="true"/>
     </error-container>
     <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
       <error-title title="appointments.error.title.problemLoading"/>
-      <error-paragraph from="appointments.error.message.tryAgainNow"
-                       :variable="error.serviceDeskReference"/>
+      <error-paragraph from="errors.tryAgainNow"/>
       <error-paragraph from="appointments.error.message.ifItContinues"/>
       <error-button from="generic.tryAgainButton.text" @click="reload" />
-      <error-link from="generic.contactUsButton.text"
-                  :action="contactUsUrl"
-                  target="_blank"/>
+      <report-a-problem v-if="hasReferenceCode" :reference="hasReferenceCode"/>
       <error-link from="generic.backButton.text"
-                  :action="backToHomeUrl"
+                  :action="backUrl"
                   :desktop-only="true"/>
     </error-container>
     <error-container v-else-if="error.status===504" :id="generateErrorId()">
       <error-title title="appointments.error.title.problemLoading"/>
       <error-paragraph from="appointments.error.message.tryAgainNow"
-                       :variable="error.serviceDeskReference"/>
+                       :variable="hasReferenceCode"/>
       <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
       <error-button from="generic.tryAgainButton.text" @click="reload" />
       <error-link from="generic.contactUsButton.text"
@@ -103,12 +100,13 @@ import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorTitle from '@/components/errors/ErrorTitle';
+import ReportAProblem from '@/components/errors/ReportAProblem';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import showShutterPage from '@/lib/proxy/shutter';
-import { APPOINTMENT_BOOKING_GUIDANCE, INDEX, findByName } from '@/lib/routes';
+import { APPOINTMENT_BOOKING_GUIDANCE, APPOINTMENTS, findByName } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 const loadData = async (store) => {
@@ -131,11 +129,12 @@ export default {
     NoJsForm,
     PastAppointments,
     UpcomingAppointments,
+    ReportAProblem,
   },
   mixins: [ErrorPageMixin],
   data() {
     return {
-      backToHomeUrl: INDEX.path,
+      backUrl: APPOINTMENTS.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
       coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
       guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE.path,
@@ -163,6 +162,10 @@ export default {
     },
     pastAppointments() {
       return this.$store.state.myAppointments.pastAppointments;
+    },
+    hasReferenceCode() {
+      return this.$store.state.session.userSessionCreateReferenceCode ||
+        this.error.serviceDeskReference;
     },
     showNoPastAppointments() {
       return this.hasLoaded &&

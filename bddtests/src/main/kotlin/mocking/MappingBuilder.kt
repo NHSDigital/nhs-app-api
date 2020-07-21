@@ -51,6 +51,12 @@ abstract class MappingBuilder(method: String, url: String) {
         }
     }
 
+    open fun respondWithBadGateway(): Mapping {
+        return respondWith(HttpStatus.SC_BAD_GATEWAY) {
+            andXmlBody("")
+        }
+    }
+
     open fun respondWithCorruptedContent(content: String? = null): Mapping {
         return respondWith(HttpStatus.SC_OK) { andJsonBody(content ?: "{blah}") }
     }

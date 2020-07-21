@@ -3,6 +3,7 @@ import Vue from 'vue';
 import ApiError from '@/components/errors/ApiError';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import ReportAProblem from '@/components/errors/ReportAProblem';
 import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
 import { createStore, locale, mount } from '../../helpers';
@@ -35,7 +36,11 @@ const createState = ({
   isNativeApp = false,
   path,
   status,
+  userSessionCreateReferenceCode,
 }) => ({
+  session: {
+    userSessionCreateReferenceCode,
+  },
   errors: {
     ...initialErrorsState(),
     ...{
@@ -174,6 +179,18 @@ describe('api errors', () => {
           expect(wrapper.find(MessageDialog).exists()).toBe(true);
         });
 
+        it('will show the user session service desk reference code if it exists', () => {
+          state = createState({
+            isNativeApp: true,
+            path: '/prescriptions/confirm_prescription_details',
+            status: 466,
+            userSessionCreateReferenceCode: 'xxxxxx' });
+          $store = createStore({ getters, state });
+          wrapper = mountApiError();
+
+          expect(wrapper.find(ReportAProblem).exists()).toBe(true);
+        });
+
         it('will have three message texts', () => {
           expect(wrapper.findAll(MessageText).length).toBe(3);
         });
@@ -200,6 +217,18 @@ describe('api errors', () => {
 
         it('will have a message dialog', () => {
           expect(wrapper.find(MessageDialog).exists()).toBe(true);
+        });
+
+        it('will show the user session service desk reference code if it exists', () => {
+          state = createState({
+            isNativeApp: true,
+            path: '/prescriptions/confirm_prescription_details',
+            status: 466,
+            userSessionCreateReferenceCode: 'xxxxxx' });
+          $store = createStore({ getters, state });
+          wrapper = mountApiError();
+
+          expect(wrapper.find(ReportAProblem).exists()).toBe(true);
         });
 
         it('will have three message texts', () => {

@@ -25,7 +25,7 @@ export default {
       return this.$t(this.title);
     },
   },
-  beforeMount() {
+  created() {
     this.updatePageTitle();
     this.updatePageHeader();
   },

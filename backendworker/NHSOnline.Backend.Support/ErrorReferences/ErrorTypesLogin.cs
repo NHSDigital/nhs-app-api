@@ -10,6 +10,14 @@ namespace NHSOnline.Backend.Support
             return LookupErrorType(logger, ErrorCategory.Login, StatusCodes.Status502BadGateway, SupplierSourceApiConverter.Instance[supplier]);
         }
 
+        public abstract class ErrorTypeBadGateway: ErrorTypes
+        {
+            public override ErrorCategory Category => ErrorCategory.Login;
+
+            public override int StatusCode => StatusCodes.Status502BadGateway;
+        }
+
+
         public class LoginBadRequest : ErrorTypes
         {
             public override string Prefix => "3a";
@@ -39,7 +47,18 @@ namespace NHSOnline.Backend.Support
 
         public class GPSessionUnavailable: ErrorTypes
         {
-            public override string Prefix => "3u";
+
+            public GPSessionUnavailable()
+            {
+                Prefix = "3u";
+            }
+
+            public GPSessionUnavailable(string prefix)
+            {
+                Prefix = prefix;
+            }
+
+            public override string Prefix { get; }
 
             public override ErrorCategory Category => ErrorCategory.Login;
 
@@ -75,57 +94,62 @@ namespace NHSOnline.Backend.Support
             public override SourceApi SourceApi => SourceApi.ServiceJourneyRules;
         }
 
-        public class LoginBadGatewayEmis : ErrorTypes
+        public class LoginBadGatewayEmis : ErrorTypeBadGateway
         {
             public override string Prefix => "3e";
-
-            public override ErrorCategory Category => ErrorCategory.Login;
-
-            public override int StatusCode => StatusCodes.Status502BadGateway;
 
             public override SourceApi SourceApi => SourceApi.Emis;
         }
 
-        public class LoginBadGatewayTpp : ErrorTypes
+        public class LoginBadGatewayFakeGp : ErrorTypeBadGateway
         {
-            public override string Prefix => "3t";
+            public override string Prefix => "3f";
+
+            public override SourceApi SourceApi => SourceApi.Fake;
+        }
+
+        public class LoginGPUnparseable : ErrorTypes
+        {
+            public override string Prefix => "3p";
 
             public override ErrorCategory Category => ErrorCategory.Login;
 
-            public override int StatusCode => StatusCodes.Status502BadGateway;
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable;
+        }
+
+        public class LoginErrorExceptionResult : ErrorTypes
+        {
+            public override string Prefix => "3ee";
+
+            public override ErrorCategory Category => ErrorCategory.Login;
+
+            public override int StatusCode => Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable;
+        }
+
+        public class LoginBadGatewayTpp : ErrorTypeBadGateway
+        {
+            public override string Prefix => "3t";
 
             public override SourceApi SourceApi => SourceApi.Tpp;
         }
 
-        public class LoginBadGatewayMicrotest : ErrorTypes
+        public class LoginBadGatewayMicrotest : ErrorTypeBadGateway
         {
             public override string Prefix => "3m";
-
-            public override ErrorCategory Category => ErrorCategory.Login;
-
-            public override int StatusCode => StatusCodes.Status502BadGateway;
 
             public override SourceApi SourceApi => SourceApi.Microtest;
         }
 
-        public class LoginBadGatewayVision : ErrorTypes
+        public class LoginBadGatewayVision : ErrorTypeBadGateway
         {
             public override string Prefix => "3s";
-
-            public override ErrorCategory Category => ErrorCategory.Login;
-
-            public override int StatusCode => StatusCodes.Status502BadGateway;
 
             public override SourceApi SourceApi => SourceApi.Vision;
         }
 
-        public class LoginBadGatewayNhsLogin : ErrorTypes
+        public class LoginBadGatewayNhsLogin : ErrorTypeBadGateway
         {
             public override string Prefix => "3n";
-
-            public override ErrorCategory Category => ErrorCategory.Login;
-
-            public override int StatusCode => StatusCodes.Status502BadGateway;
 
             public override SourceApi SourceApi => SourceApi.NhsLogin;
         }

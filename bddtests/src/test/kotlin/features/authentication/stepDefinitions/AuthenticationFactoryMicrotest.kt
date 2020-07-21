@@ -12,6 +12,12 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST)
         }
     }
 
+    override fun validOAuthDetailsAndGpSystemBadGateway() {
+        mockingClient.forMicrotest.mock {
+            demographics.demographicsRequest(patient).respondWithBadGateway()
+        }
+    }
+
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         throw NotImplementedError("Not implemented for Microtest")
     }

@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.Support
         [SourceApi(SourceApi.Microtest)]
         Microtest = 4,
         Qualtrics = 5,
+        [SourceApi(SourceApi.Fake)]
         Fake = 6
     }
 }

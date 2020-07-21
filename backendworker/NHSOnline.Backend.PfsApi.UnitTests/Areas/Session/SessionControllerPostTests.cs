@@ -424,18 +424,27 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
                 actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
                 actualUserSessionResponse.Im1MessagingEnabled.Should().BeTrue();
+                actualUserSessionResponse.UserSessionCreateReferenceCode.Should().BeNull();
                 actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
             }
         }
 
-        [TestMethod]
-        public async Task Post_HappyPathNoGpSession_ReturnsUsersSessionResponse()
+        [DataTestMethod]
+        [DynamicData(nameof(TestDataServiceReference), DynamicDataSourceType.Property)]
+        public async Task Post_HappyPathNoGpSession_ReturnsUsersSessionResponse_WithServiceDeskReference(
+            GpSessionCreateResult gpSessionCreateResult,
+            string expectedServiceDeskReference)
         {
             Context.UserSession.Key = "123";
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.BadRequest(
-                "Gp system returned a bad request"));
+            ArrangeGpSessionManagerCreateSession(gpSessionCreateResult);
             ArrangeAudit();
+
+            Context.MockErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    It.IsAny<ErrorTypes>()))
+                .Returns(expectedServiceDeskReference)
+                .Verifiable();
 
             // Act
             var result = await CreateSystemUnderTest().Post(Context.UserSessionRequest);
@@ -464,7 +473,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
                 actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
                 actualUserSessionResponse.Im1MessagingEnabled.Should().BeFalse();
+                actualUserSessionResponse.UserSessionCreateReferenceCode.Should().Contain(expectedServiceDeskReference);
+                actualUserSessionResponse.UserSessionCreateReferenceCode.Length.Equals(6);
                 actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+            }
+        }
+
+        private static IEnumerable<object[]> TestDataServiceReference
+        {
+            get
+            {
+                yield return new object [] { new GpSessionCreateResult.Timeout("Timeout"), "ze" };
+                yield return new object [] { new GpSessionCreateResult.Unparseable("Unparseable"), "3u" };
+                yield return new object [] { new GpSessionCreateResult.BadGateway("BadGateway"), "3e"};
+                yield return new object [] { new GpSessionCreateResult.BadGateway("BadGateway"), "3t"};
+                yield return new object [] { new GpSessionCreateResult.BadGateway("BadGateway"), "3m"};
+                yield return new object [] { new GpSessionCreateResult.BadGateway("BadGateway"), "3s"};
+                yield return new object[]  { new GpSessionCreateResult.BadRequest("BadRequest"), "3a" };
+                yield return new object[]  { new GpSessionCreateResult.InternalServerError("InternalServerError"), "3h" };
             }
         }
 

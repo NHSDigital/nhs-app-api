@@ -82,6 +82,13 @@ class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
                 .respondWithSuccess(patient, associationType) }
     }
 
+    override fun validOAuthDetailsAndGpSystemBadGateway() {
+        mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest().respondWithBadGateway() }
+        mockingClient.forEmis.mock { authentication.sessionRequest(patient)
+                .respondWithSuccess(patient, associationType) }
+    }
+
     private fun createInvalidLinkageTest( patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
         mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis.mock { emisResponse(authentication

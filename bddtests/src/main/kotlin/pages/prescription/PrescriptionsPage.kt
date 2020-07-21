@@ -18,13 +18,13 @@ open class PrescriptionsPage : HybridPageObject() {
     val timeoutPageHeader = "Prescription data error"
     val timeoutHeader = "There's been a problem getting your prescription information"
     val timeoutMessage = "Try again now. If the problem continues and you need this information now," +
-            " contact your GP surgery directly. For urgent medical advice, call 111."
+            " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
     val timeoutRetryButtonText = "Try again"
 
     val serverErrorPageHeader = "Prescription data error"
     val serverErrorHeader = "There\'s been a problem getting your prescription information"
     val serverErrorMessage = "Try again later. If the problem continues and you need this information now," +
-            " contact your GP surgery directly. For urgent medical advice, call 111."
+            " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
 
     val nominatedPharmacyPanel = HybridPageElement(
             webDesktopLocator = "//div[@id='nominated-pharmacy-section']",

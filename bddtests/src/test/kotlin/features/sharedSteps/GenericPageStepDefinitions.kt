@@ -56,6 +56,11 @@ class GenericPageStepDefinitions {
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
+    @Then("I see the error reference code with prefix '(.*)'")
+    fun iSeeTheErrorReferenceCode(prefix: String){
+        genericPage.containsText("Reference: $prefix")
+    }
+
     @Then("^a new tab has been opened by the link")
     fun aNewTabOpens() {
         browser.assertNewTab()

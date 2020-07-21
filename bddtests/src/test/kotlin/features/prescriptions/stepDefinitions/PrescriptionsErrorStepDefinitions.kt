@@ -129,6 +129,6 @@ class PrescriptionsErrorStepDefinitions {
         webHeader.getPageTitle().withText("Repeat prescriptions unavailable")
         Assert.assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
         Assert.assertEquals("Contact your GP surgery for more information. " +
-                "For urgent medical help, call 111.", errorPage.errorText1.text)
+                "For urgent medical help, go to 111.nhs.uk or call 111.", errorPage.errorText1.text)
     }
 }

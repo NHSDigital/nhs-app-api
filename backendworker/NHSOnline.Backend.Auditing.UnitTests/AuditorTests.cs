@@ -230,6 +230,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 string.Empty,
                 new CitizenIdUserSession { AccessToken = accessToken },
                 nhsNumber,
+                string.Empty,
                 string.Empty);
         }
 

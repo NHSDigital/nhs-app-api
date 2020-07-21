@@ -88,6 +88,14 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         }
     }
 
+    override fun validOAuthDetailsAndGpSystemBadGateway() {
+        mockingClient.forTpp.mock {
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
+                    .respondWithBadGateway()
+        }
+    }
+
     private fun createInvalidLinkageTest(patient: Patient) {
         mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()

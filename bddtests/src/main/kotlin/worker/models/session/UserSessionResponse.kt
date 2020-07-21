@@ -10,5 +10,6 @@ data class UserSessionResponse(var userSessionResponseCookie: UserSessionRespons
 
     class UserSessionResponseBody(var name: String,
                                   var sessionTimeout: Number,
-                                  var serviceJourneyRules: ServiceJourneyRulesResponse)
+                                  var serviceJourneyRules: ServiceJourneyRulesResponse,
+                                  var userSessionCreateReferenceCode: String?)
 }

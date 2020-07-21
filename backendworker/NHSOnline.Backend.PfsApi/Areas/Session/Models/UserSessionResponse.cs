@@ -23,6 +23,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 
         public bool Im1MessagingEnabled { get; set; }
 
+        public string UserSessionCreateReferenceCode { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter), false)]
         public ProofLevel ProofLevel { get; set; }
     }

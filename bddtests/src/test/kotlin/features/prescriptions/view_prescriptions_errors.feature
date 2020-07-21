@@ -17,6 +17,20 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
 
+  Scenario Outline: A <GP System> user sees a reference code when they login without a GP system due to a timeout
+    Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
+    And I am logged in
+    When I retrieve the 'Prescription Repeat Courses' page directly
+    Then I see the error reference code with prefix '<Prefix>'
+    And I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    And a new tab has been opened by the link
+    Examples:
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
+
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given I am patient using the <GP System> GP System

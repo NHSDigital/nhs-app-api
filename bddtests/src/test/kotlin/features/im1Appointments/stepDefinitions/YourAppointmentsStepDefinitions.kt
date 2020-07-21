@@ -79,18 +79,11 @@ class YourAppointmentsStepDefinitions {
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(ERROR_SCENARIO_SECOND)
         }
-        // this is setup twice because appointments index retrieves
-        // my appointments twice when loading
-        viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
-            respondWithCorrupted()
-                    .inScenario(ERROR_SCENARIO)
-                    .whenScenarioStateIs(ERROR_SCENARIO_SECOND)
-                    .willSetStateTo(ERROR_SCENARIO_WILL_SUCCEED)
-        }
         viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
             respondWithSuccess(example)
                     .inScenario(ERROR_SCENARIO)
-                    .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)
+                    .whenScenarioStateIs(ERROR_SCENARIO_SECOND)
+                    .willSetStateTo(ERROR_SCENARIO_WILL_SUCCEED)
         }
     }
 
@@ -266,9 +259,9 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I see appropriate try again error message when there is an error with '(.*)'$")
     fun iSeeAppropriateTryAgainErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
-        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
-        errorDialogPage.assertParagraphText(tryAgainParagraph)
+        errorDialogPage.assertReferenceCode(prefix)
                 .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.tryAgainNow)
                 .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
     }

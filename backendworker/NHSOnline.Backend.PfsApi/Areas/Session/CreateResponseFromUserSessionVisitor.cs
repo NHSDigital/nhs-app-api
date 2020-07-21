@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         public TUserSessionResponse Visit(P9UserSession userSession)
         {
             SetCommonProperties(userSession);
+            _userSessionResponse.UserSessionCreateReferenceCode = userSession.UserSessionCreateReferenceCode;
             _userSessionResponse.NhsNumber = userSession.NhsNumber;
             _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession?.Im1MessagingEnabled ?? false;
             return _userSessionResponse;

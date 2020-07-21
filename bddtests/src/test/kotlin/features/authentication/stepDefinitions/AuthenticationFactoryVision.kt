@@ -71,6 +71,14 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
         }
     }
 
+    override fun validOAuthDetailsAndGpSystemBadGateway() {
+        mockingClient.forVision.mock {
+            authentication.getConfigurationRequest(
+                    VisionMockDefaults.getVisionUserSession(patient))
+                    .respondWithBadGateway()
+        }
+    }
+
     companion object {
         val mockingClient = SerenityHelpers.getMockingClient()
 

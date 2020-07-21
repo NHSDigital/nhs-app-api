@@ -45,6 +45,7 @@ Feature: Create Session Backend: The application verifies the user session
     And the response has a name for the EMIS patient with no title
     And the response has a session timeout
     And the response has service journey rules
+    And the response has a service desk reference with a prefix of "3e"
 
   Scenario Outline: <GP System> is unavailable when creating a session
     Given I have valid OAuth details and <GP System> is not available
@@ -53,12 +54,27 @@ Feature: Create Session Backend: The application verifies the user session
     And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
+    And the response has a service desk reference with a prefix of "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | 3e     |
+      | TPP       | 3t     |
+      | VISION    | 3s     |
+      | MICROTEST | 3m     |
+
+  Scenario Outline: <GP System> responds with a bad gateway
+    Given I have valid OAuth details and <GP System> returns a Bad Gateway response
+    When I create a user session
+    Then I receive a response
+    And the response has a session timeout
+    And the response has service journey rules
+    And the response has a service desk reference with a prefix of "<Prefix>"
+    Examples:
+      | GP System | Prefix |
+      | EMIS      | 3e     |
+      | TPP       | 3t     |
+      | VISION    | 3s     |
+      | MICROTEST | 3m     |
 
   Scenario Outline: When creating a session with <GP System> an incomplete response resulting in a parsing error
     Given I have valid OAuth details and <GP System> returns with an incomplete response
@@ -67,6 +83,7 @@ Feature: Create Session Backend: The application verifies the user session
     And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
+    And the response has a service desk reference with a prefix of "3p"
     Examples:
       | GP System |
       | EMIS      |
@@ -97,12 +114,13 @@ Feature: Create Session Backend: The application verifies the user session
     And the response has a name for the <GP System> patient with no title
     And the response has a session timeout
     And the response has service journey rules
+    And the response has a service desk reference with a prefix of "<Prefix>"
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   # covered in Manual Regression Test pack
   @manual

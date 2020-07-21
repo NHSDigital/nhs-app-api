@@ -17,6 +17,7 @@ abstract class AuthenticationFactory(protected val gpSystem: Supplier) {
     }
 
     abstract fun validOAuthDetailsAndGpSystemUnavailable()
+    abstract fun validOAuthDetailsAndGpSystemBadGateway()
     abstract fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
     abstract fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long)
     abstract fun patientDoesNotExist(patient: Patient)

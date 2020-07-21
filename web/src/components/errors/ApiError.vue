@@ -28,6 +28,9 @@
         </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :class="$style.additionalInformation" />
+        <message-text v-if="hasSessionReferenceCode">
+          <report-a-problem :reference="hasSessionReferenceCode"/>
+        </message-text>
       </message-dialog>
       <form v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
             ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
@@ -70,6 +73,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessagesSenderError from '@/components/errors/additional-info/MessagesSenderError';
 import MessageText from '@/components/widgets/MessageText';
+import ReportAProblem from '@/components/errors/ReportAProblem';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { getMessage, getComponentErrorCodeKey, getComponentKey } from '@/lib/errors';
 import NativeApp from '@/services/native-app';
@@ -95,6 +99,7 @@ export default {
     MessagesSenderError,
     MessageText,
     NativeApp,
+    ReportAProblem,
   },
   mixins: [ErrorMessageMixin],
   props: {
@@ -126,6 +131,9 @@ export default {
     },
     hasAdditionalInfo() {
       return this.additionalInfo !== '';
+    },
+    hasSessionReferenceCode() {
+      return this.$store.state.session.userSessionCreateReferenceCode;
     },
     header() {
       const headerMessage = getMessage(this, 'header');

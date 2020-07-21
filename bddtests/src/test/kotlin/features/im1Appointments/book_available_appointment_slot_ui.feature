@@ -193,6 +193,7 @@ Feature: Book Appointments Frontend
       | Prefix | GP System |
       | 4s     | VISION    |
 
+
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking

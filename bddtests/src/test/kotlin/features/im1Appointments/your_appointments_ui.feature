@@ -133,35 +133,57 @@ Feature: Your Appointments Frontend
   Scenario: TPP user sees appropriate error message when it returns corrupt data
     Given TPP returns corrupted response for my appointments
     And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
     Then I see appropriate try again error message when there is an error with 'xx'
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
     Then a new tab has been opened by the link
 
   Scenario: EMIS user retries to view my appointments after it returns corrupt data
     Given EMIS returns corrupted response once when trying to retrieve my appointments
     And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
-    Then I see appropriate try again error message when there is an error with 'xx'
-    When I click the 'Try again' button
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
+    And I see appropriate try again error message when there is an error with 'xx'
+    And I click the 'Try again' button
     Then the page title is "Your GP appointments"
     And I am informed I have no historical appointments
+
+  Scenario Outline: A <GP System> user sees a reference code when they login without a GP system due to a timeout
+    Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
+    And I am logged in
+    When I retrieve the 'Your GP Appointments' page directly
+    Then I see appropriate try again error message when there is an error with '<Prefix>'
+    And I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    And a new tab has been opened by the link
+    Examples:
+      | GP System | Prefix |
+      | EMIS      | ze     |
+      | TPP       | zt     |
+      | VISION    | zs     |
+      | MICROTEST | zm     |
 
   #502
   @nativesmoketest
   Scenario: MICROTEST user sees appropriate error message when it returns unknown exception viewing appointments
     Given an unknown exception occurs when I want to view my MICROTEST appointments
     And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
     Then I see appropriate try again error message when there is an error with '4m'
     When I click the error 'Back' link
-    Then I see the home page
+    Then the Appointments Hub page is displayed
 
   #504
   Scenario: VISION user opens up contact us after a timeout
     Given VISION will time out when trying to retrieve my appointments
     And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
     Then I see appropriate try again book/cancel error message when there is an error with 'zs'
     When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
     Then a new tab has been opened by the link

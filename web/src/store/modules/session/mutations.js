@@ -11,6 +11,7 @@ import {
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
+  SET_USER_SESSION_REFERENCE,
   initialState,
 } from './mutation-types';
 
@@ -60,6 +61,9 @@ export default {
   },
   [SET_LAST_CALLED_AT](state, date) {
     state.lastCalledAt = date;
+  },
+  [SET_USER_SESSION_REFERENCE](state, userSessionCreateReferenceCode) {
+    state.userSessionCreateReferenceCode = userSessionCreateReferenceCode;
   },
   [SHOW_EXPIRY_MESSAGE](state) {
     state.showExpiryMessage = true;

@@ -1,29 +1,32 @@
 import each from 'jest-each';
 import GPAppointments from '@/pages/appointments/gp-appointments';
-import { createStore, mount } from '../../helpers';
+import { mount } from '../../helpers';
 
-const createAppointmentsPage = ({ $store }) => mount(GPAppointments, {
-  $store,
+const createAppointmentsPage = ({
+  status,
+  userSessionCreateReferenceCode,
+} = {}) => mount(GPAppointments, {
+  $store: {
+    state: {
+      device: {},
+      myAppointments: {
+        error: {
+          status,
+        },
+      },
+      session: {
+        userSessionCreateReferenceCode,
+      },
+    },
+    dispatch: jest.fn(),
+  },
   methods: {
     reload: jest.fn(),
   },
 });
 
 describe('index.vue', () => {
-  let state;
   let wrapper;
-
-  beforeEach(() => {
-    state = {
-      device: {},
-      myAppointments: {
-        error: null,
-      },
-    };
-    const $store = createStore({ state });
-    wrapper = createAppointmentsPage({ $store });
-  });
-
   describe('errors', () => {
     each([
       400,
@@ -32,8 +35,13 @@ describe('index.vue', () => {
       502,
       504,
     ]).it('will display an error dialog for status code: %s', (status) => {
-      state.myAppointments.error = { status };
+      wrapper = createAppointmentsPage({ status });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
+  });
+
+  it('will return the session serviceDeskReference code', () => {
+    wrapper = createAppointmentsPage({ userSessionCreateReferenceCode: 'code123' });
+    expect(wrapper.vm.hasReferenceCode).toBe('code123');
   });
 });
