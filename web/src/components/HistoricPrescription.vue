@@ -49,7 +49,7 @@
         {{ $t('rp02.proxyOrderedByDisplayPrefix') + prescriptionCourse.orderedBy }}
       </p>
       <p data-label="status-description" :class="$style['nhs-app-prescription__instructions']"
-         class="nhsuk-u-margin-bottom-0 nhsuk-body-s" :aria-label="getStatusDescription">
+         class="nhsuk-u-margin-bottom-0 nhsuk-body-s" :aria-label="getStatusDescription()">
         {{ getStatusDescription() }}
       </p>
     </div>
