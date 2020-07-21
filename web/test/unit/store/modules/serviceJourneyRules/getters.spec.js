@@ -366,16 +366,17 @@ describe('getters', () => {
     const { myRecordHubEnabled } = getters;
 
     it.each([
-      [true, ['pkb', 'pkbCie'], ['pkb', 'pkbCie']],
-      [true, [], ['pkb', 'pkbCie']],
-      [true, ['pkb', 'pkbCie'], []],
-      [true, ['pkbCie'], ['pkbCie']],
-      [true, ['pkb', 'pkbCie'], []],
-      [false, [], []],
-      [false, undefined, undefined],
-    ])('will be %s if carePlans is %s and HealthTrackers is %s', (expectedResult, providerCarePlans, providerHealthTrackers) => {
+      [true, ['pkb', 'pkbCie'], ['pkb', 'pkbCie'], ['pkb']],
+      [true, ['pkb', 'pkbCie'], [], []],
+      [true, [], ['pkb', 'pkbCie'], []],
+      [true, [], [], ['pkb']],
+      [true, ['pkbCie'], ['pkbCie'], ['pkb']],
+      [false, [], [], []],
+      [false, undefined, undefined, undefined],
+    ])('will be %s if carePlans is %s and HealthTrackers is %s and testResults is %s', (expectedResult, providerCarePlans, providerHealthTrackers, providerTestResults) => {
       currentState.rules.silverIntegrations.carePlans = providerCarePlans;
       currentState.rules.silverIntegrations.healthTrackers = providerHealthTrackers;
+      currentState.rules.silverIntegrations.testResults = providerTestResults;
       expect(myRecordHubEnabled(currentState))
         .toBe(expectedResult);
     });
