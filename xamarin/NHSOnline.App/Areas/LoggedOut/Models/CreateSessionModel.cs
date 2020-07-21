@@ -39,5 +39,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Models
 
         public CreateSessionErrorBadResponseFromUpstreamSystemModel BadResponseFromUpstreamSystemError(string serviceDeskReference)
             => new CreateSessionErrorBadResponseFromUpstreamSystemModel(this, serviceDeskReference);
+
+        public CreateSessionErrorUpstreamSystemTimeoutModel UpstreamSystemTimeoutError(string serviceDeskReference)
+            => new CreateSessionErrorUpstreamSystemTimeoutModel(this, serviceDeskReference);
     }
 }

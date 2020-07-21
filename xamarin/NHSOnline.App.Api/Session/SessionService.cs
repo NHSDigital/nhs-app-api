@@ -59,5 +59,8 @@ namespace NHSOnline.App.Api.Session
 
         public CreateSessionResult Visit(ApiCreateSessionResult.BadResponseFromUpstreamSystem badResponseFromUpstreamSystem)
             => new CreateSessionResult.BadResponseFromUpstreamSystem(badResponseFromUpstreamSystem.PfsErrorResponse.ServiceDeskReference);
+
+        public CreateSessionResult Visit(ApiCreateSessionResult.UpstreamSystemTimeout upstreamSystemTimeout)
+            => new CreateSessionResult.UpstreamSystemTimeout(upstreamSystemTimeout.PfsErrorResponse.ServiceDeskReference);
     }
 }

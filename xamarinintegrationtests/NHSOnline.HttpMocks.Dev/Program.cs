@@ -10,6 +10,8 @@ namespace NHSOnline.HttpMocks.Dev
 {
     class Program
     {
+        private static readonly NhsLoginGetUserProfileDelayBehaviour GetUserProfileDelayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
+
         private static IEnumerable<Patient> Patients
         {
             get
@@ -17,6 +19,7 @@ namespace NHSOnline.HttpMocks.Dev
                 yield return new P5Patient().WithId("P5Patient").WithName(b => b.FamilyName("P5"));
                 yield return new P5Patient().WithId("BadRequest").WithBehaviour(new NhsLoginAuthoriseBlankCodeBehaviour());
                 yield return new P5Patient().WithId("BadResponse").WithBehaviour(new NhsLoginTokenBadGatewayBehaviour());
+                yield return new P5Patient().WithId("Timeout").WithBehaviour(GetUserProfileDelayBehaviour);
                 yield return new P5Patient().WithId("NoNhsNumber").WithNhsNumber(NhsNumber.None);
                 yield return new P5Patient().WithId("TooYoung").WithAge(12, 300);
                 yield return new P9Patient().WithId("UnknownSupplier").WithUnknownSupplierOdsCode();

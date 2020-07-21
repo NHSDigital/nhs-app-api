@@ -40,7 +40,7 @@ namespace NHSOnline.App.Api.Client.Session
                 FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(),
                 HttpStatusCode.BadGateway => HandleBadGateway(httpResponseMessage),
-                HttpStatusCode.GatewayTimeout => HandleGatewayTimeout(),
+                HttpStatusCode.GatewayTimeout => HandleGatewayTimeout(httpResponseMessage),
                 _ => HandleUnknownStatusCode(httpResponseMessage)
             };
 
@@ -136,10 +136,16 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleGatewayTimeout()
+        private async Task<ApiCreateSessionResult> HandleGatewayTimeout(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned gateway timeout");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.UpstreamSystemTimeout(response),
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private Task<ApiCreateSessionResult> HandleUnknownStatusCode(HttpResponseMessage httpResponseMessage)

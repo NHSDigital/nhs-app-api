@@ -28,6 +28,9 @@
     <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorUpstreamSystemTimeoutPage.xaml.cs">
+      <DependentUpon>CreateSessionErrorUpstreamSystemTimeoutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorFailedAgeRequirementPage.xaml.cs">
       <DependentUpon>CreateSessionErrorFailedAgeRequirementPage.xaml</DependentUpon>
     </Compile>

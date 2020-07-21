@@ -80,6 +80,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.BadResponseFromUpstreamSystem badResponseFromUpstreamSystem)
             => await NavigateToBadResponseFromUpstreamSystemPage(badResponseFromUpstreamSystem.ServiceDeskReference).PreserveThreadContext();
 
+        async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.UpstreamSystemTimeout upstreamSystemTimeout)
+            => await NavigateToUpstreamSystemTimeoutPage(upstreamSystemTimeout.ServiceDeskReference).PreserveThreadContext();
+
         private async Task NavigateToLoggedInHomePage(UserSession userSession, CookieContainer cookies)
         {
             var homePageModel = new NhsAppWebModel(userSession, cookies);
@@ -131,6 +134,14 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task NavigateToBadResponseFromUpstreamSystemPage(string serviceDeskReference)
         {
             var errorModel = _model.BadResponseFromUpstreamSystemError(serviceDeskReference);
+            var errorPage = _pageFactory.CreatePageFor(errorModel);
+
+            await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private async Task NavigateToUpstreamSystemTimeoutPage(string serviceDeskReference)
+        {
+            var errorModel = _model.UpstreamSystemTimeoutError(serviceDeskReference);
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();

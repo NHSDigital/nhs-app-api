@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
@@ -492,6 +494,89 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .ReturnToApp();
 
             IOSCreateSessionBadResponseFromUpstreamSystemErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenNhsLoginGetProfileTimesOutAndroid(IAndroidDriverWrapper driver)
+        {
+            using var delayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
+            var patient = new P5Patient()
+                .WithBehaviour(delayBehaviour);
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            using (ExtendedTimeout.FromSeconds(15))
+            {
+                AndroidCreateSessionUpstreamSystemTimeoutErrorPage
+                    .AssertOnPage(driver)
+                    .AssertPageElements()
+                    .ContactUs();
+            }
+
+            AndroidAppTab
+                .AssertOnBrowserChoice(driver)
+                .ChooseChrome()
+                .JustOnce()
+                .AssertOnContactUsPage()
+                .ReturnToApp();
+
+            AndroidCreateSessionUpstreamSystemTimeoutErrorPage
+                .AssertOnPage(driver)
+                .BackHome();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenNhsLoginGetProfileTimesOutIos(IIOSDriverWrapper driver)
+        {
+            using var delayBehaviour = new NhsLoginGetUserProfileDelayBehaviour();
+            var patient = new P5Patient()
+                .WithBehaviour(delayBehaviour);
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            using (ExtendedTimeout.FromSeconds(15))
+            {
+                IOSCreateSessionUpstreamSystemTimeoutErrorPage
+                    .AssertOnPage(driver)
+                    .AssertPageElements()
+                    .ContactUs();
+            }
+
+            IOSAppTab
+                .AssertOnContactUsPage(driver)
+                .ReturnToApp();
+
+            IOSCreateSessionUpstreamSystemTimeoutErrorPage
                 .AssertOnPage(driver)
                 .BackHome();
 

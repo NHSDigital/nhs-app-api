@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
 
         internal void ActOnElementContext(By @by, Action<ElementContext<TDriver, TElement>> action)
         {
-            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(2));
+            var retryUntil = DateTime.UtcNow.Add(ExtendedTimeout.Value);
 
             while (true)
             {
