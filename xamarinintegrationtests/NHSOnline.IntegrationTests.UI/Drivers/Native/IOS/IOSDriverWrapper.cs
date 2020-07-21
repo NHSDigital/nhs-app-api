@@ -33,15 +33,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _interactor = new IOSInteractor(_nativeDriverContext,
-                new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleContexts(_driver));
+
+            _interactor = new IOSInteractor(
+                _driver,
+                _nativeDriverContext,
+                new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
         }
 
         private TestLogs Logs { get; }
 
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
+
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
             By by,
             Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
@@ -51,11 +55,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _interactor.ActOnElementContext(by, action);
         }
 
-        void IIOSInteractor.AssertElementDoesntExist(By @by)
-        {
-            _nativeDriverContext.SwitchToNativeContext();
-            _interactor.AssertElementDoesntExist(@by);
-        }
+        void IIOSInteractor.AssertElementNotVisible(By by) => _interactor.AssertElementNotVisible(by);
+
+        IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
@@ -74,7 +76,5 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         }
 
         public void Dispose() => _driver.Dispose();
-
-        IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
     }
 }

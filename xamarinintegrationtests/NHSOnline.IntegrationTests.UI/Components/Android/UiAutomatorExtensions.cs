@@ -6,7 +6,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
     {
         internal static string QuoteUiAutomatorLiteral(this string text)
         {
-            return $"\"{text.Replace("\"", "\\\"", StringComparison.Ordinal)}\"";
+            return @$"""{text.Replace(@"""", @"\""", StringComparison.Ordinal)}""";
         }
     }
 }

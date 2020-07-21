@@ -1,63 +1,113 @@
+using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
-    public abstract class IOSLabel
+    public sealed class IOSLabel
     {
         private readonly IIOSInteractor _interactor;
+        private readonly ILocatorStrategy _locatorStrategy;
 
-        private IOSLabel(IIOSInteractor interactor)
+        private IOSLabel(IIOSInteractor interactor, ILocatorStrategy locatorStrategy)
         {
             _interactor = interactor;
+            _locatorStrategy = locatorStrategy;
         }
 
         public static IOSLabel WithText(IIOSInteractor interactor, string text)
-        {
-            return new Text(interactor, text);
-        }
+            => new IOSLabel(interactor, new TextLocatorStrategy(interactor, text));
 
         public static IOSLabel WhichMatches(IIOSInteractor interactor, string pattern)
+            => new IOSLabel(interactor, new MatchesLocatorStrategy(interactor, pattern));
+
+        public IOSLabel ScrollIntoView()
+            => new IOSLabel(_interactor, new ScrollLocatorStrategy(_interactor, _locatorStrategy));
+
+        public void AssertVisible() => _locatorStrategy.ActOnElementContext(
+            context => context.Element.Displayed.Should().BeTrue($"a label with text '{_locatorStrategy.Description}' should be displayed"));
+
+        public void AssertNotVisible() => _interactor.AssertElementNotVisible(_locatorStrategy.FindBy);
+
+        public void Click() => _locatorStrategy.ActOnElementContext(context => context.Tap());
+
+        private interface ILocatorStrategy
         {
-            return new Matches(interactor, pattern);
+            string Description { get; }
+            By FindBy { get; }
+            void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action);
         }
 
-        public void AssertVisible()
-            => _interactor.ActOnElement(FindBy, e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
-
-        public void AssertNotVisible() => _interactor.AssertElementDoesntExist(FindBy);
-
-        public void Click() => _interactor.ActOnElementContext(FindBy, context => context.Tap());
-
-        protected abstract By FindBy { get; }
-        protected abstract string Description { get; }
-
-        private sealed class Text : IOSLabel
+        private sealed class TextLocatorStrategy : ILocatorStrategy
         {
+            private readonly IIOSInteractor _interactor;
             private readonly string _text;
 
-            public Text(IIOSInteractor interactor, string text) : base(interactor)
+            public TextLocatorStrategy(IIOSInteractor interactor, string text)
             {
+                _interactor = interactor;
                 _text = text;
             }
 
-            protected override By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()} and visible == 1");
-            protected override string Description => $"with text '{_text}'";
+            public string Description => $"with text '{_text}'";
+
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()}");
+
+            public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
         }
 
-        private sealed class Matches : IOSLabel
+        private sealed class MatchesLocatorStrategy : ILocatorStrategy
         {
+            private readonly IIOSInteractor _interactor;
             private readonly string _pattern;
 
-            public Matches(IIOSInteractor interactor, string pattern) : base(interactor)
+            public MatchesLocatorStrategy(IIOSInteractor interactor, string pattern)
             {
+                _interactor = interactor;
                 _pattern = pattern;
             }
 
-            protected override By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value MATCHES {_pattern.QuotePredicateLiteral()}");
-            protected override string Description => $"which matches '{_pattern}'";
+            public string Description => $"which matches '{_pattern}'";
+
+            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value MATCHES {_pattern.QuotePredicateLiteral()}");
+
+            public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+        }
+
+        private sealed class ScrollLocatorStrategy : ILocatorStrategy
+        {
+            private readonly IIOSInteractor _interactor;
+            private readonly ILocatorStrategy _wrappedStrategy;
+
+            public ScrollLocatorStrategy(IIOSInteractor interactor, ILocatorStrategy wrappedStrategy)
+            {
+                _interactor = interactor;
+                _wrappedStrategy = wrappedStrategy;
+            }
+
+            public string Description => _wrappedStrategy.Description;
+
+            public By FindBy => throw new NotSupportedException("Cannot assert that an element that needs scrolling to is not present");
+
+            void ILocatorStrategy.ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+            {
+                _interactor.ActOnElementContext(
+                    _wrappedStrategy.FindBy,
+                    context =>
+                    {
+                        if (!context.Element.Displayed)
+                        {
+                            _interactor.ActOnElementContext(
+                                MobileBy.IosNSPredicate("type == 'XCUIElementTypeScrollView'"),
+                                scrollContext => scrollContext.SwipeUp());
+                        }
+
+                        action(context);
+                    });
+            }
         }
     }
 }

@@ -38,7 +38,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
             _nativeDriverContext = new NativeDriverContext(_driver, WebViewLocatorStrategy.MultipleWindows(_driver));
 
-            _interactor = new AndroidInteractor(_nativeDriverContext,
+            _interactor = new AndroidInteractor(
+                _nativeDriverContext,
                 new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement));
         }
 
@@ -47,14 +48,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         public IWebInteractor Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
-        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(By by,
-            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action) =>
-            _interactor.ActOnElementContext(by, action);
+        void IInteractor<AndroidDriver<AndroidElement>, AndroidElement>.ActOnElementContext(
+            By by,
+            Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
+            => _interactor.ActOnElementContext(by, action);
 
-        void IAndroidInteractor.AssertElementDoesntExist(By by)
-        {
-            _interactor.AssertElementDoesntExist(by);
-        }
+        void IAndroidInteractor.AssertElementDoesntExist(By by) => _interactor.AssertElementDoesntExist(@by);
 
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 

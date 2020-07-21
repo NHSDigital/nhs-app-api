@@ -1,8 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.IntegrationTests.UI.Drivers.Native.Android;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
