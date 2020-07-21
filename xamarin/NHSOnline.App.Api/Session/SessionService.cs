@@ -53,5 +53,8 @@ namespace NHSOnline.App.Api.Session
 
         public CreateSessionResult Visit(ApiCreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber)
             => new CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber(odsCodeNotSupportedOrNoNhsNumber.PfsErrorResponse.ServiceDeskReference);
+
+        public CreateSessionResult Visit(ApiCreateSessionResult.FailedAgeRequirement failedAgeRequirement)
+            => new CreateSessionResult.FailedAgeRequirement(failedAgeRequirement.PfsErrorResponse.ServiceDeskReference);
     }
 }

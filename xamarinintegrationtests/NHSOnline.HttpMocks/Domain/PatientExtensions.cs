@@ -21,6 +21,14 @@ namespace NHSOnline.HttpMocks.Domain
             return patient;
         }
 
+        public static TPatient WithAge<TPatient>(this TPatient patient, int years, int days) where TPatient : Patient
+        {
+            patient = patient ?? throw new ArgumentNullException(nameof(patient));
+
+            patient.PersonalDetails.Age = new PatientAge(years, days);
+            return patient;
+        }
+
         public static TPatient WithNhsNumber<TPatient>(this TPatient patient, NhsNumber nhsNumber) where TPatient : Patient
         {
             patient = patient ?? throw new ArgumentNullException(nameof(patient));

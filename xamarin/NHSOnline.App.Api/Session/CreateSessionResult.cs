@@ -49,6 +49,15 @@ namespace NHSOnline.App.Api.Session
             public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        public sealed class FailedAgeRequirement : CreateSessionResult
+        {
+            public FailedAgeRequirement(string serviceDeskReference) => ServiceDeskReference = serviceDeskReference;
+
+            public string ServiceDeskReference { get; }
+
+            public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public sealed class Failed : CreateSessionResult
         {
             public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);

@@ -375,5 +375,53 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
         }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsFailedAgeRequirementAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new P5Patient()
+                .WithAge(12, 300);
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidCreateSessionFailedAgeRequirementErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenCreateSessionReturnsFailedAgeRequirementIos(IIOSDriverWrapper driver)
+        {
+            var patient = new P5Patient()
+                .WithAge(12, 300);
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSCreateSessionFailedAgeRequirementErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
     }
 }

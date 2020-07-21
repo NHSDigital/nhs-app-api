@@ -7,5 +7,6 @@ namespace NHSOnline.App.Api.Session
         T Visit(CreateSessionResult.BadRequest badRequest);
         T Visit(CreateSessionResult.Forbidden forbidden);
         T Visit(CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber);
+        T Visit(CreateSessionResult.FailedAgeRequirement failedAgeRequirement);
     }
 }

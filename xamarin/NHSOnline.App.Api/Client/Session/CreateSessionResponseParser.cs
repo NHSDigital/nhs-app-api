@@ -37,7 +37,7 @@ namespace NHSOnline.App.Api.Client.Session
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
                 HttpStatusCode.Forbidden => HandleForbidden(httpResponseMessage),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
-                FailedAgeRequirement => HandleFailedAgeRequirement(),
+                FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(),
                 HttpStatusCode.BadGateway => HandleBadGateway(),
                 HttpStatusCode.GatewayTimeout => HandleGatewayTimeout(),
@@ -106,10 +106,16 @@ namespace NHSOnline.App.Api.Client.Session
                 () => new ApiCreateSessionResult.Failure());
         }
 
-        private Task<ApiCreateSessionResult> HandleFailedAgeRequirement()
+        private async Task<ApiCreateSessionResult> HandleFailedAgeRequirement(HttpResponseMessage httpResponseMessage)
         {
             _logger.LogWarning("Create Session returned failed age requirement");
-            return Task.FromResult<ApiCreateSessionResult>(new ApiCreateSessionResult.Failure());
+
+            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
+            var validationResult = _errorResponseModelValidator.Validate(model);
+
+            return validationResult.Accept<ApiCreateSessionResult>(
+                response => new ApiCreateSessionResult.FailedAgeRequirement(response),
+                () => new ApiCreateSessionResult.Failure());
         }
 
         private Task<ApiCreateSessionResult> HandleInternalServerError()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace NHSOnline.HttpMocks.Domain
@@ -12,6 +12,11 @@ namespace NHSOnline.HttpMocks.Domain
                 "yyyy-MM-dd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+        }
+
+        public PatientAge(int years, int days)
+        {
+            DateOfBirth = DateTime.UtcNow.Date.AddYears(-years).AddDays(-days);
         }
 
         public DateTime DateOfBirth { get; }
