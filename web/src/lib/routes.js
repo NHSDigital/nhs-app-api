@@ -17,7 +17,7 @@ const sjrRedirectRules = {
   },
   documentsDisabledRedirect: {
     journey_disabled: 'documents',
-    url: '/',
+    url: '/health-records/gp-medical-record',
   },
   gpAdviceDisabledRedirect: {
     journey_disabled: 'cdssAdvice',

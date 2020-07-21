@@ -332,8 +332,8 @@ describe('middleware/sjrRedirect', () => {
         documentsRoutes.forEach(route => callSjrRedirect(route));
       });
 
-      it('will redirect to home', () => {
-        expect(redirect).toBeCalledWith('302', INDEX.path);
+      it('will redirect to medical record home', () => {
+        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
         expect(redirect).toHaveBeenCalledTimes(documentsRoutes.length);
       });
     });

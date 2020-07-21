@@ -249,6 +249,7 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/encounters                              |
       |/health-records/gp-medical-record/referrals                               |
       |/health-records/gp-medical-record/events                                  |
+      |/health-records/gp-medical-record/documents                               |
 
   Scenario: A MICROTEST user attempting to view pages not provided by their supplier will be directed to the Medical Record main page - Medical Record v2
     Given I am a MICROTEST user setup to use medical record version 2
@@ -263,3 +264,4 @@ Feature: Combined Frontend - Medical Record v2
       |/health-records/gp-medical-record/examinations                            |
       |/health-records/gp-medical-record/procedures                              |
       |/health-records/gp-medical-record/events                                  |
+      |/health-records/gp-medical-record/documents                               |

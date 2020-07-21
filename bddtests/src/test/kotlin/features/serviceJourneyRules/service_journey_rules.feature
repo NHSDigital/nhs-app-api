@@ -96,13 +96,13 @@ Feature: Service Journey Rules Frontend
     And I see the home page
     Then I see the home screen public health notifications
 
-  Scenario Outline: A user with documents disabled navigates directly to any documents page is redirected to the home page
+  Scenario Outline: A user with documents disabled navigates directly to any documents page is redirected to the gp medical record page
     Given I am a EMIS user where the journey configurations are:
       | Journey   | Value    |
       | documents | disabled |
     And I am logged in
     When I retrieve the '<Documents Page>' page directly
-    Then I am redirected to the 'Home' page
+    Then I am redirected to the 'gp medical record' page
     Examples:
       | Documents Page                         |
       | Gp Medical Record Documents            |
