@@ -52,7 +52,7 @@ namespace NHSOnline.IntegrationTests.UI
             {
                 var tempDirectory = new TestTempDirectory();
                 using var driver = _createDriverWrapper(logs, tempDirectory);
-                var context = new TestContext(_testMethod, logs, tempDirectory, driver);
+                using var context = new TestContext(_testMethod, logs, tempDirectory, driver);
 
                 var testResult = _testMethod.Invoke(new object[] { driver });
 

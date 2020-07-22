@@ -24,12 +24,12 @@ namespace NHSOnline.HttpMocks
             _task = task;
         }
 
-        public static MockWebServer Start(IPatients patients)
+        public static MockWebServer Start(IPatients patients, Action<ILoggingBuilder> configureLogging)
         {
             var host = new HostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration(config => config.AddJsonFile("appsettings.json").AddEnvironmentVariables())
-                .ConfigureLogging(config => config.AddConsole())
+                .ConfigureLogging(configureLogging)
                 .ConfigureWebHost(builder => builder
                     .UseKestrel()
                     .UseUrls("http://*:8080")
@@ -48,7 +48,7 @@ namespace NHSOnline.HttpMocks
                 .Build();
 
             var task = Task.Run(async () => await host.StartAsync());
-            
+
             return new MockWebServer(host, task);
         }
 

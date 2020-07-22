@@ -12,15 +12,13 @@ namespace NHSOnline.IntegrationTests
         public static void Initialize(TestContext context)
 #pragma warning restore CA1801 // Remove unused parameter
         {
-            Config.Initialize();
-            Mocks.Initialize();
+            NhsAppIntegrationTests.Initialize();
         }
 
         [AssemblyCleanup]
         public static async Task CleanUp()
         {
-            await Mocks.CleanUp();
+            await NhsAppIntegrationTests.Cleanup();
         }
-
     }
 }

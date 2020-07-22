@@ -16,8 +16,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         {
             Logs = logs;
 
-            _browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
-            var iosConfig = Config.Get<IOSConfig>("iOS");
+            _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
+            var iosConfig = Configuration.Get<IOSConfig>("iOS");
 
             var options = new AppiumOptions
             {

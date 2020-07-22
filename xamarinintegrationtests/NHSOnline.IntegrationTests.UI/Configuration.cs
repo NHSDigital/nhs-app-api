@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace NHSOnline.IntegrationTests.UI
 {
-    public static class Config
+    internal static class Configuration
     {
-        public static void Initialize()
+        internal static void Initialize()
         {
             ConfigurationRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

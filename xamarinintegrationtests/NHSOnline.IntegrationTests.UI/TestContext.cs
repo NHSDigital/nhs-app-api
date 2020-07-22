@@ -5,13 +5,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.UI
 {
-    internal sealed class TestContext
+    internal sealed class TestContext : IDisposable
     {
-        private readonly DateTime _startTime = DateTime.UtcNow;
 
         private readonly ITestMethod _testMethod;
         private readonly TestTempDirectory _testTempDirectory;
         private readonly IDriverWrapper _driver;
+        private readonly DockerLogs _dockerLogs;
+        private readonly MocksLogs _mocksLogs;
 
         internal TestContext(
             ITestMethod testMethod,
@@ -22,6 +23,8 @@ namespace NHSOnline.IntegrationTests.UI
             _testMethod = testMethod;
             _testTempDirectory = testTempDirectory;
             _driver = driver;
+            _dockerLogs = new DockerLogs(testTempDirectory);
+            _mocksLogs = new MocksLogs();
 
             Logs = logs;
         }
@@ -39,44 +42,18 @@ namespace NHSOnline.IntegrationTests.UI
             if (testResult.Outcome != UnitTestOutcome.Passed)
             {
                 _driver.AttachDebugInfo(testResultContext);
-                AttachDockerLogs(testResultContext);
+                _dockerLogs.AttachDockerLogs(testResultContext);
+                _mocksLogs.AttachMocksLogs(testResultContext);
                 _driver.UpdateBrowserStackStatusToFailed(testResultContext);
             }
 
             _driver.Cleanup(testResultContext);
         }
 
-        private void AttachDockerLogs(TestResultContext testResultContext)
+
+        public void Dispose()
         {
-            using var listContainerNames = new ProcessRunner("docker", "ps -a --filter=network=int_test_default --format {{.Names}}").Start();
-
-            foreach (var containerName in listContainerNames.Output())
-            {
-                testResultContext.TryCleanUp(
-                    $"attach docker logs {containerName}",
-                    () => AttachDockerLogs(testResultContext, containerName));
-            }
-        }
-
-        private void AttachDockerLogs(TestResultContext testResultContext, string containerName)
-        {
-            var file = _testTempDirectory.GetTempFile($"{containerName}.log");
-
-            var arguments = $"logs {containerName} --since {_startTime:yyyy-MM-ddTHH:mm:ssZ}";
-
-            // Add timestamps to the web logs as they are not included in the log lines
-            if (containerName.Contains("web", StringComparison.OrdinalIgnoreCase))
-            {
-                arguments += " --timestamps";
-            }
-
-            using var logs = new ProcessRunner("docker", arguments).Start();
-            File.AppendAllLines(file.FullName, logs.Output());
-
-            if (file.Exists)
-            {
-                testResultContext.Attach(file);
-            }
+            _mocksLogs.Dispose();
         }
     }
 }

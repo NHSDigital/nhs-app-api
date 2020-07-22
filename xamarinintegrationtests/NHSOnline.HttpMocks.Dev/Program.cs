@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.HttpMocks.CitizenId;
 using NHSOnline.HttpMocks.Domain;
 using NHSOnline.HttpMocks.Emis;
@@ -49,7 +50,7 @@ namespace NHSOnline.HttpMocks.Dev
                 patients.Add(patient);
             }
 
-            await using var _ = MockWebServer.Start(patients);
+            await using var _ = MockWebServer.Start(patients, config => config.AddConsole());
 
             using var semaphore = new SemaphoreSlim(0, 1);
             Console.CancelKeyPress += (sender, eventArgs) => semaphore.Release();

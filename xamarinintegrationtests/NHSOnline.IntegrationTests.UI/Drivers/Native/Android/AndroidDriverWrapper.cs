@@ -16,8 +16,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         {
             Logs = logs;
 
-            _browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
-            var androidConfig = Config.Get<AndroidConfig>("Android");
+            _browserStackConfig = Configuration.Get<BrowserStackConfig>("BrowserStack");
+            var androidConfig = Configuration.Get<AndroidConfig>("Android");
 
             var options = new AppiumOptions
             {
