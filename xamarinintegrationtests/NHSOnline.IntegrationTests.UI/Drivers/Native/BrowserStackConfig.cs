@@ -26,7 +26,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             options.AddAdditionalCapabilityIf(EnableNetworkLogs, "browserstack.networkLogs", "true");
         }
 
-        private string? GetKey()
+        internal string? GetKey()
         {
             if (Key != null)
             {

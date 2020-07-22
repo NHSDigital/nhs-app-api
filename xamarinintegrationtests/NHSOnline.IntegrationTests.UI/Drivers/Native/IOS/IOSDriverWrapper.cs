@@ -10,12 +10,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         private readonly IOSDriver<IOSElement> _driver;
         private readonly Interactor<IOSDriver<IOSElement>, IOSElement> _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
+        private readonly BrowserStackConfig _browserStackConfig;
 
         internal IOSDriverWrapper(string testName, TestLogs logs)
         {
             Logs = logs;
 
-            var browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
+            _browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
             var iosConfig = Config.Get<IOSConfig>("iOS");
 
             var options = new AppiumOptions
@@ -24,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 PageLoadStrategy = PageLoadStrategy.Normal
             };
 
-            browserStackConfig.SetCapabilities(options);
+            _browserStackConfig.SetCapabilities(options);
             iosConfig.SetCapabilities(options);
 
             options.AddAdditionalCapability("name", testName);
@@ -64,6 +65,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         void IDriverWrapper.Cleanup(IDriverCleanupContext context)
         {
             context.TryCleanUp("quit iOS driver", () => _driver?.Quit());
+        }
+
+        void IDriverWrapper.UpdateBrowserStackStatusToFailed(IDriverCleanupContext context)
+        {
+            context.UpdateBrowserStackStatusToFailed(_driver, _browserStackConfig);
         }
 
         public void Dispose() => _driver.Dispose();

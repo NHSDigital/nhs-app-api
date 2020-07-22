@@ -10,12 +10,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly AndroidDriver<AndroidElement> _driver;
         private readonly Interactor<AndroidDriver<AndroidElement>, AndroidElement> _interactor;
         private readonly NativeDriverContext _nativeDriverContext;
+        private readonly BrowserStackConfig _browserStackConfig;
 
         internal AndroidDriverWrapper(string testName, TestLogs logs)
         {
             Logs = logs;
 
-            var browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
+            _browserStackConfig = Config.Get<BrowserStackConfig>("BrowserStack");
             var androidConfig = Config.Get<AndroidConfig>("Android");
 
             var options = new AppiumOptions
@@ -24,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
                 PageLoadStrategy = PageLoadStrategy.Normal
             };
 
-            browserStackConfig.SetCapabilities(options);
+            _browserStackConfig.SetCapabilities(options);
             androidConfig.SetCapabilities(options);
 
             options.AddAdditionalCapability("name", testName);
@@ -67,6 +68,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IDriverWrapper.Cleanup(IDriverCleanupContext context)
         {
             context.TryCleanUp("quit Android driver", () => _driver?.Quit());
+        }
+
+        void IDriverWrapper.UpdateBrowserStackStatusToFailed(IDriverCleanupContext context)
+        {
+            context.UpdateBrowserStackStatusToFailed(_driver, _browserStackConfig);
         }
 
         public void Dispose() => _driver.Dispose();

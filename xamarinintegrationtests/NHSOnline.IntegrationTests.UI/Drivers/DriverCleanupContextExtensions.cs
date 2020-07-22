@@ -1,6 +1,7 @@
 using System.IO;
 using NHSOnline.IntegrationTests.UI.Drivers.Native;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers
 {
@@ -50,6 +51,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                     $"PageSourceWeb{webContext}.html",
                     file => File.WriteAllText(file.FullName, driver.PageSource));
             }
+        }
+
+        internal static void UpdateBrowserStackStatusToFailed(
+            this IDriverCleanupContext context,
+            IHasSessionId driver,
+            BrowserStackConfig browserStackConfig)
+        {
+            context.TryCleanUp("Update BrowserStack status", () =>
+            {
+                var browserStackClient = new BrowerStackApiClient(browserStackConfig);
+                browserStackClient.UpdateStatus(driver.SessionId, "Failed", "Integration Test Failed");
+            });
         }
     }
 }

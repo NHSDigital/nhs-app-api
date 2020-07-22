@@ -40,6 +40,7 @@ namespace NHSOnline.IntegrationTests.UI
             {
                 _driver.AttachDebugInfo(testResultContext);
                 AttachDockerLogs(testResultContext);
+                _driver.UpdateBrowserStackStatusToFailed(testResultContext);
             }
 
             _driver.Cleanup(testResultContext);
@@ -60,7 +61,7 @@ namespace NHSOnline.IntegrationTests.UI
         private void AttachDockerLogs(TestResultContext testResultContext, string containerName)
         {
             var file = _testTempDirectory.GetTempFile($"{containerName}.log");
-            
+
             var arguments = $"logs {containerName} --since {_startTime:yyyy-MM-ddTHH:mm:ssZ}";
 
             // Add timestamps to the web logs as they are not included in the log lines
