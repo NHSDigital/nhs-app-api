@@ -5,8 +5,8 @@ Feature: Medical Record Errors
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     And I am logged in
     When I retrieve the 'gp medical record' page directly
-    Then I see the Medical Record Warning page
-    When I click continue
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
     Then I see the error reference code with prefix '<Prefix>'
     And I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
     And a new tab has been opened by the link
