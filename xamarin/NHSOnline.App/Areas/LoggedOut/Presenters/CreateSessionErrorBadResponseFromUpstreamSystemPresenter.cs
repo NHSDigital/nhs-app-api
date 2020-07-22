@@ -8,6 +8,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class CreateSessionErrorBadResponseFromUpstreamSystemPresenter
     {
         private readonly ICreateSessionErrorBadResponseFromUpstreamSystemView _view;
+        private readonly CreateSessionErrorBadResponseFromUpstreamSystemModel _model;
         private readonly IAppBrowserTab _appBrowserTab;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
@@ -18,6 +19,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
+            _model = model;
             _appBrowserTab = appBrowserTab;
             _externalServicesConfiguration = externalServicesConfiguration;
 
@@ -37,8 +39,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void ViewOnContactUsRequested(object sender, EventArgs e)
         {
+            var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
             await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.NhsUkContactUsUrl)
+                .OpenAppBrowserTab(contactUsUri)
                 .PreserveThreadContext();
         }
 
