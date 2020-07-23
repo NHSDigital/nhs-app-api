@@ -16,8 +16,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "If you keep seeing this message, contact us. Quote the error code 3a[0-9a-z]{4} to help us resolve the problem more quickly.");
 
         private IOSLabel IfYouNeedText => IOSLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.");
-        private IOSLabel ContactUsLink => IOSLabel.WithText(_driver, "Contact us");
-        private IOSLabel BackHomeLink => IOSLabel.WithText(_driver, "Back to home");
+        private IOSLink ContactUsLink => IOSLink.WithText(_driver, "Contact us");
+        private IOSLink BackHomeLink => IOSLink.WithText(_driver, "Back to home");
 
         public static IOSCreateSessionBadRequestErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -38,12 +38,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void ContactUs()
         {
-            ContactUsLink.Click();
+            ContactUsLink.Touch();
         }
 
         public void BackHome()
         {
-            BackHomeLink.Click();
+            BackHomeLink.Touch();
         }
     }
 }

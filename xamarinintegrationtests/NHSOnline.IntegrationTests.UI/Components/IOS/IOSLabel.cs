@@ -10,9 +10,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
     public sealed class IOSLabel
     {
         private readonly IIOSInteractor _interactor;
-        private readonly ILocatorStrategy _locatorStrategy;
+        private readonly IIOSLocatorStrategy _locatorStrategy;
 
-        private IOSLabel(IIOSInteractor interactor, ILocatorStrategy locatorStrategy)
+        private IOSLabel(IIOSInteractor interactor, IIOSLocatorStrategy locatorStrategy)
         {
             _interactor = interactor;
             _locatorStrategy = locatorStrategy;
@@ -25,23 +25,16 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             => new IOSLabel(interactor, new MatchesLocatorStrategy(interactor, pattern));
 
         public IOSLabel ScrollIntoView()
-            => new IOSLabel(_interactor, new ScrollLocatorStrategy(_interactor, _locatorStrategy));
+            => new IOSLabel(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
 
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
-            context => context.Element.Displayed.Should().BeTrue($"a label with text '{_locatorStrategy.Description}' should be displayed"));
+            context => context.Element.Displayed.Should().BeTrue($"a label {_locatorStrategy.Description} should be displayed"));
 
         public void AssertNotVisible() => _interactor.AssertElementNotVisible(_locatorStrategy.FindBy);
 
         public void Click() => _locatorStrategy.ActOnElementContext(context => context.Tap());
 
-        private interface ILocatorStrategy
-        {
-            string Description { get; }
-            By FindBy { get; }
-            void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action);
-        }
-
-        private sealed class TextLocatorStrategy : ILocatorStrategy
+        private sealed class TextLocatorStrategy : IIOSLocatorStrategy
         {
             private readonly IIOSInteractor _interactor;
             private readonly string _text;
@@ -59,7 +52,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
         }
 
-        private sealed class MatchesLocatorStrategy : ILocatorStrategy
+        private sealed class MatchesLocatorStrategy : IIOSLocatorStrategy
         {
             private readonly IIOSInteractor _interactor;
             private readonly string _pattern;
@@ -75,39 +68,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value MATCHES {_pattern.QuotePredicateLiteral()}");
 
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
-        }
-
-        private sealed class ScrollLocatorStrategy : ILocatorStrategy
-        {
-            private readonly IIOSInteractor _interactor;
-            private readonly ILocatorStrategy _wrappedStrategy;
-
-            public ScrollLocatorStrategy(IIOSInteractor interactor, ILocatorStrategy wrappedStrategy)
-            {
-                _interactor = interactor;
-                _wrappedStrategy = wrappedStrategy;
-            }
-
-            public string Description => _wrappedStrategy.Description;
-
-            public By FindBy => throw new NotSupportedException("Cannot assert that an element that needs scrolling to is not present");
-
-            void ILocatorStrategy.ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
-            {
-                _interactor.ActOnElementContext(
-                    _wrappedStrategy.FindBy,
-                    context =>
-                    {
-                        if (!context.Element.Displayed)
-                        {
-                            _interactor.ActOnElementContext(
-                                MobileBy.IosNSPredicate("type == 'XCUIElementTypeScrollView'"),
-                                scrollContext => scrollContext.SwipeUp());
-                        }
-
-                        action(context);
-                    });
-            }
         }
     }
 }

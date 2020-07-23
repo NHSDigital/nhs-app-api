@@ -9,10 +9,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSBeforeYouStartPage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel Title => IOSLabel.WithText(_driver, "Before You Start");
-        private IOSLabel CovidLink => IOSLabel.WithText(_driver, "Check if you have coronavirus symptoms");
-        private IOSLabel ConditionsLink => IOSLabel.WithText(_driver, "Search conditions and treatments");
-        private IOSLabel OneOneOneLink => IOSLabel.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
+        private IOSLink Title => IOSLink.WithText(_driver, "Before You Start");
+        private IOSLink CovidLink => IOSLink.WithText(_driver, "Check if you have coronavirus symptoms");
+        private IOSLink ConditionsLink => IOSLink.WithText(_driver, "Search conditions and treatments");
+        private IOSLink OneOneOneLink => IOSLink.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
 
         private IOSButton ContinueButton => new IOSButton(_driver, "Continue");
 
@@ -36,17 +36,17 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void CheckCoronavirusSymptoms()
         {
-            CovidLink.Click();
+            CovidLink.Touch();
         }
 
         public void SearchConditionsAndTreatments()
         {
-            ConditionsLink.Click();
+            ConditionsLink.Touch();
         }
 
         public void UseNhs111Online()
         {
-            OneOneOneLink.Click();
+            OneOneOneLink.Touch();
         }
 
         public void AssertExpanderPresent()
