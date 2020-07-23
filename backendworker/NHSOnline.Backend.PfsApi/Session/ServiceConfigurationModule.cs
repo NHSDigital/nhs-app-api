@@ -1,9 +1,13 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.PfsApi.Areas.Session;
+using NHSOnline.Backend.PfsApi.Filters;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Session
@@ -21,6 +25,8 @@ namespace NHSOnline.Backend.PfsApi.Session
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
             services.AddTransient<IMetricContext, UserSessionMetricContext>();
+            services.AddTransient<ICreateSessionResultVisitor<Task<IActionResult>>, SessionCreateResultVisitor>();
+            services.AddSingleton<ISessionErrorResultBuilder, SessionErrorResultBuilder>();
 
             services.AddTransient<SessionLoggerScope>();
 
@@ -28,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             {
                 opts.ModelBinderProviders.Insert(0, new UserSessionBinderProvider());
 
-                // Special binding source prevents the user session parameter from being validated as part of the model state
+                // Special binding source prevents the session parameters from being validated as part of the model state
                 // https://stackoverflow.com/a/56893947
                 opts.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(UserSession), BindingSource.Special));
             });

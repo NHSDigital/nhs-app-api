@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Session
                 => ProcessResult.StepResult<TStepResult, CreateSessionResult>(result);
 
             private static ProcessResult<TFinalResult, CreateSessionResult> FinalResult<TFinalResult>(ErrorTypes errorTypes)
-                => ProcessResult.FinalResult<TFinalResult, CreateSessionResult>(new CreateSessionResult.Error(errorTypes));
+                => ProcessResult.FinalResult<TFinalResult, CreateSessionResult>(new CreateSessionResult.ErrorResult(errorTypes));
         }
     }
 }

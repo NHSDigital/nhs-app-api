@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Http;
+
 namespace NHSOnline.Backend.PfsApi.Session
 {
-    internal interface ICreateSessionResultVisitor<out T>
+    public interface ICreateSessionResultVisitor<out T>
     {
-        T Visit(CreateSessionResult.Success success);
-        T Visit(CreateSessionResult.Error error);
+        T Visit(CreateSessionResult.Success success, HttpContext httpContext);
+        T Visit(CreateSessionResult.ErrorResult errorResultResult);
     }
 }

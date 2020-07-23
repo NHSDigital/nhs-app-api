@@ -8,9 +8,9 @@ using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Support.Logging;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection

@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Support
 
         public string GenerateAndLogErrorReference(ErrorTypes errorTypes)
         {
-            errorTypes = errorTypes ?? new ErrorTypes.UnhandledError();
+            errorTypes ??= new ErrorTypes.UnhandledError();
 
             var reference = string.Concat(errorTypes.Prefix,
                 _randomStringGenerator.GenerateString(4, CharactersForGenerator));

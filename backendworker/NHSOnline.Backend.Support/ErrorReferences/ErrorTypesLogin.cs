@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.Support
             public override int StatusCode => StatusCodes.Status502BadGateway;
         }
 
-
         public class LoginBadRequest : ErrorTypes
         {
             public override string Prefix => "3a";
@@ -47,7 +46,6 @@ namespace NHSOnline.Backend.Support
 
         public class GPSessionUnavailable: ErrorTypes
         {
-
             public GPSessionUnavailable()
             {
                 Prefix = "3u";

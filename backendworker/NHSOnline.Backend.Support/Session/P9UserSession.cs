@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Support.Session
 {
@@ -43,6 +42,8 @@ namespace NHSOnline.Backend.Support.Session
         public string UserSessionCreateReferenceCode { get; set; }
 
         public string NhsNumber { get; set; }
+
+        public bool HasGpSession => !(GpUserSession is null) && GpUserSession.Supplier != Supplier.Unknown;
 
         public override TResult Accept<TResult>(IUserSessionVisitor<TResult> visitor)
             => visitor.Visit(this);
