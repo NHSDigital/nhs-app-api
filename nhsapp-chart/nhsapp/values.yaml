@@ -231,6 +231,9 @@ spinePdsPort: 443
 proxyAccessEnabled: true
 tppSupportsLinkedAccounts: true
 
+# 16 weeks appointment slots
+sixteenWeeksSlotsEnabled: true
+
 # Placeholder values
 cosmosdbKey: cGxhY2Vob2xkZXI=
 cosmosdbMongoKey: cGxhY2Vob2xkZXI=

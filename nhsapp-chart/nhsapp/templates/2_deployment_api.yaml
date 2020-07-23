@@ -426,6 +426,8 @@ spec:
         - name: SPINE_LDAP_CONNECTION_RETRY_WAIT_TIME_SECONDS
           value: "{{ $.Values.spineLdapConnectionRetryWaitTimeSeconds }}"
       {{- end }}
+        - name: SIXTEEN_WEEKS_SLOTS_ENABLED
+          value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
         volumeMounts:
     {{- if (and ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
         - name: emiscert

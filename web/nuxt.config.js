@@ -111,6 +111,7 @@ const config = {
 
     // Feature toggles
     USER_RESEARCH_ENABLED: false,
+    SIXTEEN_WEEKS_SLOTS_ENABLED: true,
 
     // Feedback
     HOTJAR_SITE_ID: '859152',

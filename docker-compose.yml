@@ -68,6 +68,7 @@ services:
       - ./docker/web.env
       - ./docker/gplookup_connectivity.env
       - ./docker/nhslogin_connectivity_ext.env
+      - ./docker/appointments.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}
@@ -116,6 +117,7 @@ services:
       - ./docker/userinfo_connectivity.env
       - ./docker/vision_connectivity.env
       - ./docker/proxy_access.env
+      - ./docker/appointments.env
       - ./docker/pfs.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io

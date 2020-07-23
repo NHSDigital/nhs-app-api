@@ -9,7 +9,7 @@ export default class LoadMutation {
     this.dateProvider = DateProvider;
   }
 
-  execute(data) {
+  execute(data, sixteenWeeksSlotsEnabled) {
     const filters = new Map();
     const types = [];
     const locations = [];
@@ -45,8 +45,18 @@ export default class LoadMutation {
       { value: DateFilterValues.TOMORROW, name: 'appointments.booking.filters.date.options.tomorrow', translate: true },
       { value: DateFilterValues.THIS_WEEK, name: 'appointments.booking.filters.date.options.this_week', translate: true },
       { value: DateFilterValues.NEXT_WEEK, name: 'appointments.booking.filters.date.options.next_week', translate: true },
-      { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.all', translate: true },
     ];
+
+    if (sixteenWeeksSlotsEnabled) {
+      dates.push(
+        { value: DateFilterValues.NEXT_EIGHT_WEEKS, name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+        { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.all', translate: true },
+      );
+    } else {
+      dates.push(
+        { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+      );
+    }
 
     types.sort(namedObjectComparator);
     types.unshift({ value: '', name: 'appointments.booking.filters.type.default_option', translate: true });

@@ -15,6 +15,7 @@ using NHSOnline.Backend.Support;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -157,6 +158,8 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton(MicrotestConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(VisionConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(SessionConfigurationSettings.CreateAndValidate(Configuration, _logger));
+
+            services.AddSingleton(AppointmentsConfigurationSettings.CreateAndValidate(Configuration, _logger));
 
             services.AddSingleton(SpineLdapConfigurationSettings.CreateAndValidate(Configuration, _logger));
 

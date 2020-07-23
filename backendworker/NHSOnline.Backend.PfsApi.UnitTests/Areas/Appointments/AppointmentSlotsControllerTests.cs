@@ -40,6 +40,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private AppointmentSlotsResponse _slotsResponse;
         private Guid _patientId;
         private AppointmentSlotsResult.Success _serviceResult;
+        private AppointmentsConfigurationSettings _settings;
 
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
@@ -91,6 +92,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _serviceDeskReference = "service desk ref";
 
+            _settings = new AppointmentsConfigurationSettings(true);
+
             _systemUnderTest = new AppointmentSlotsController(
                 _mockGpSystemFactory.Object,
                 _dateTimeOffsetProvider,
@@ -98,7 +101,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockAuditor.Object,
                 new Mock<IAppointmentSlotMetadataLogger>().Object,
                 _mockErrorReferenceGenerator.Object,
-                _mockAppointmentTypeTransformingVisitor.Object);
+                _mockAppointmentTypeTransformingVisitor.Object,
+                _settings);
         }
 
         [TestMethod]

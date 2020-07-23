@@ -8,11 +8,16 @@ namespace NHSOnline.Backend.GpSystems.Appointments
         public DateTimeOffset FromDate { get; private set; }
         public DateTimeOffset ToDate { get; private set; }
 
-        public int DayRange { get; } = 56;    // Eight weeks in days = 8 * 7 = 56.
+        private static int EightWeeksDayRange { get; } = 56;    // Eight weeks in days = 8 * 7 = 56.
+        private static int SixteenWeeksDayRange { get; } = 112; // Sixteen weeks in days = 16 * 7 = 112.
 
-        public AppointmentSlotsDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public int DayRange { get; private set; }
+
+        public AppointmentSlotsDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider, bool sixteenWeeksSlotsEnabled)
         {
             var nowDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+
+            DayRange = sixteenWeeksSlotsEnabled ? SixteenWeeksDayRange : EightWeeksDayRange;
             FromDate = nowDateTimeOffset;
             ToDate = dateTimeOffsetProvider.CreateDateTimeOffset(nowDateTimeOffset.DateTime.AddDays(DayRange).AddDays(1)).SetTimeToMidnight();
         }

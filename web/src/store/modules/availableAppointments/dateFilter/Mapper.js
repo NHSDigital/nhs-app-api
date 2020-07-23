@@ -43,6 +43,9 @@ export default class Mapper {
       case DateFilterValues.NEXT_WEEK:
         rangeInDays = (today.day() === 0) ? 7 : 14 - today.day();
         break;
+      case DateFilterValues.NEXT_EIGHT_WEEKS:
+        rangeInDays = (today.day() === 0) ? 49 : 56 - today.day();
+        break;
       default:
         rangeInDays = (today.day() === 0) ? 0 : 7 - today.day();
         break;

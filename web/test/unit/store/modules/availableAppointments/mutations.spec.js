@@ -4,6 +4,12 @@ import DateProvider from '@/services/DateProvider';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 import FilterDataProvider from './mutation/FilterDataProvider';
 
+const callLoadMutation = (state, data, sixteenWeeksSlotsEnabled = true) => {
+  mutations.LOAD.call({
+    app: { $env: { SIXTEEN_WEEKS_SLOTS_ENABLED: sixteenWeeksSlotsEnabled } },
+  }, state, data);
+};
+
 describe('mustations', () => {
   describe('ADD_ERROR', () => {
     const error = {
@@ -140,7 +146,7 @@ describe('mustations', () => {
     beforeEach(() => {
       const slots = dataCollection;
       mutations.INIT(state);
-      mutations.LOAD(state, { slots });
+      callLoadMutation(state, { slots });
     });
 
     each([
@@ -273,7 +279,7 @@ describe('mustations', () => {
       const state = {};
 
       mutations.INIT(state);
-      mutations.LOAD(state, data);
+      callLoadMutation(state, data);
 
       expect(state.slots).toEqual(slots);
     });
@@ -281,64 +287,76 @@ describe('mustations', () => {
     it('will change value of hasLoaded property', () => {
       const state = {};
       mutations.INIT(state);
-      mutations.LOAD(state, { slots: [] });
+      callLoadMutation(state, { slots: [] });
 
       expect(state.hasLoaded).toEqual(true);
     });
 
-    it('will set filtersOptions', () => {
-      const state = {
-        filtersOptions: {
-          types: [],
-          locations: [],
-          clinicians: [],
-          dates: [],
-        },
-        selectedOptions: {
-          type: '',
-          location: '',
-          clinician: '',
-          date: 'this_week',
-        },
-      };
+    describe('filtersOptions', () => {
+      const additionalSixteenWeeksSlotsEnabledOptions = [
+        { value: 'next_eight_weeks', name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+        { value: 'all', name: 'appointments.booking.filters.date.options.all', translate: true },
+      ];
 
-      const slots = [
-        {
+      const additionalSixteenWeeksSlotsDisabledOptions = [
+        { value: 'all', name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+      ];
+
+      it.each([
+        ['without 16 weeks option when toggle is disabled', false, additionalSixteenWeeksSlotsDisabledOptions],
+        ['with 16 weeks option when toggle is enabled', true, additionalSixteenWeeksSlotsEnabledOptions],
+      ])('will set filtersOptions %s', (_, toggle, dateOptions) => {
+        const state = {
+          filtersOptions: {
+            types: [],
+            locations: [],
+            clinicians: [],
+            dates: [],
+          },
+          selectedOptions: {
+            type: '',
+            location: '',
+            clinician: '',
+            date: 'this_week',
+          },
+        };
+
+        const slots = [{
           id: 1,
           type: 'Baby immunisations',
           startTime: '2018-04-21T17:11:59.084865+01:00',
           endTime: '2018-04-21T17:11:59.084865+01:00',
           location: 'Leeds',
           clinicians: ['Dr Who', 'Dr House'],
-        },
-      ];
+        }];
 
-      mutations.LOAD(state, { slots });
+        const expectedFiltersOptions = {
+          types: [
+            { value: '', name: 'appointments.booking.filters.type.default_option', translate: true },
+            { value: 'Baby immunisations', name: 'Baby immunisations', translate: false },
+          ],
+          locations: [
+            { value: '', name: 'appointments.booking.filters.location.default_option', translate: true },
+            { value: 'Leeds', name: 'Leeds', translate: false },
+          ],
+          clinicians: [
+            { value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true },
+            { value: 'Dr House', name: 'Dr House', translate: false },
+            { value: 'Dr Who', name: 'Dr Who', translate: false },
+          ],
+          dates: [
+            { value: 'today', name: 'appointments.booking.filters.date.options.today', translate: true },
+            { value: 'tomorrow', name: 'appointments.booking.filters.date.options.tomorrow', translate: true },
+            { value: 'this_week', name: 'appointments.booking.filters.date.options.this_week', translate: true },
+            { value: 'next_week', name: 'appointments.booking.filters.date.options.next_week', translate: true },
+            ...dateOptions,
+          ],
+        };
 
-      const expectedFiltersOptions = {
-        types: [
-          { value: '', name: 'appointments.booking.filters.type.default_option', translate: true },
-          { value: 'Baby immunisations', name: 'Baby immunisations', translate: false },
-        ],
-        locations: [
-          { value: '', name: 'appointments.booking.filters.location.default_option', translate: true },
-          { value: 'Leeds', name: 'Leeds', translate: false },
-        ],
-        clinicians: [
-          { value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true },
-          { value: 'Dr House', name: 'Dr House', translate: false },
-          { value: 'Dr Who', name: 'Dr Who', translate: false },
-        ],
-        dates: [
-          { value: 'today', name: 'appointments.booking.filters.date.options.today', translate: true },
-          { value: 'tomorrow', name: 'appointments.booking.filters.date.options.tomorrow', translate: true },
-          { value: 'this_week', name: 'appointments.booking.filters.date.options.this_week', translate: true },
-          { value: 'next_week', name: 'appointments.booking.filters.date.options.next_week', translate: true },
-          { value: 'all', name: 'appointments.booking.filters.date.options.all', translate: true },
-        ],
-      };
+        callLoadMutation(state, { slots }, toggle);
 
-      expect(state.filtersOptions).toEqual(expectedFiltersOptions);
+        expect(state.filtersOptions).toEqual(expectedFiltersOptions);
+      });
     });
 
     it('will be defaulted to location if only one location has been returned', () => {
@@ -376,7 +394,7 @@ describe('mustations', () => {
         },
       ];
 
-      mutations.LOAD(state, { slots });
+      callLoadMutation(state, { slots });
       expect(state.selectedOptions.location).toEqual('Leeds');
     });
   });

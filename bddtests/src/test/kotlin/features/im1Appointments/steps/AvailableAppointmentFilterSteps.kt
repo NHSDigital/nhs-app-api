@@ -83,6 +83,7 @@ open class AvailableAppointmentFilterSteps {
                         TOMORROW_OPTION,
                         THIS_WEEK_OPTION,
                         NEXT_WEEK_OPTION,
+                        NEXT_EIGHT_WEEKS_OPTION,
                         ALL_OPTION
                 )
         )
@@ -163,6 +164,7 @@ open class AvailableAppointmentFilterSteps {
         const val TOMORROW_OPTION = "Tomorrow"
         const val THIS_WEEK_OPTION = "This week"
         const val NEXT_WEEK_OPTION = "Next week"
-        const val ALL_OPTION = "Next eight weeks"
+        const val NEXT_EIGHT_WEEKS_OPTION = "Next 8 weeks"
+        const val ALL_OPTION = "Next 16 weeks"
     }
 }

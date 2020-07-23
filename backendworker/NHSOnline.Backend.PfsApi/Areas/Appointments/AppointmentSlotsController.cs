@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IAppointmentTypeTransformingVisitor _appointmentTypeTransformingVisitor;
+        private readonly AppointmentsConfigurationSettings _appointmentsConfigurationSettings;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
@@ -33,7 +34,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             IAuditor auditor,
             IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor)
+            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor,
+            AppointmentsConfigurationSettings appointmentsConfigurationSettings)
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
@@ -42,6 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;
             _errorReferenceGenerator = errorReferenceGenerator;
             _appointmentTypeTransformingVisitor = appointmentTypeTransformingVisitor;
+            _appointmentsConfigurationSettings = appointmentsConfigurationSettings;
         }
 
         [HttpGet]
@@ -58,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetAppointmentSlotsService();
 
-                var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);
+                var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider, _appointmentsConfigurationSettings.SixteenWeeksSlotsEnabled);
 
                 var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 

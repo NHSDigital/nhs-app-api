@@ -116,6 +116,8 @@ spec:
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
         - name: USER_RESEARCH_ENABLED
           value: "{{ $.Values.userResearchEnabled }}"
+        - name: SIXTEEN_WEEKS_SLOTS_ENABLED
+          value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates
