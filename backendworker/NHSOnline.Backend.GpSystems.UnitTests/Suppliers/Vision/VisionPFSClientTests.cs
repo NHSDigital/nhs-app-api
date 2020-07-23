@@ -23,6 +23,7 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Certificate;
 using RichardSzalay.MockHttp;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 {
@@ -138,7 +139,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         [TestMethod]
         public async Task VisionRespondsWithInvalidUserCredentials()
         {
-            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
 
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/invalidUserCredentialsResponse.xml");
@@ -148,12 +148,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .WithVisionHeaders(GetConfigurationServiceDefinitionName)
                 .Respond(HttpStatusCode.OK, responseContent);
 
-            // Act
-            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
-
-            // Assert
-            response.HasErrorResponse.Should().BeTrue();
-            response.IsInvalidUserCredentialsError.Should().BeTrue();
+            await Assert.ThrowsExceptionAsync<ApiResponseGpSystemHttpRequestException>(() =>
+                _systemUnderTest.GetConfiguration(_connectionToken, _odsCode));
         }
 
         [TestMethod]

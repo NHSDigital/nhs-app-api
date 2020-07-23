@@ -39,6 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Client
                 _logger.LogInformation("Unauthorised EMIS response");
                 throw new UnauthorisedGpSystemHttpRequestException();
             }
+
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode, request.Type, request.SuccessStatusCodes);
             await response.Parse(responseMessage, _responseParser, _logger);
             return response;

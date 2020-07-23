@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
@@ -84,7 +85,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new VisionPfsApiObjectResponse<TResponse>(responseMessage.StatusCode);
-            return await response.Parse(responseMessage, _responseParser, _logger);
+
+            var parsedResponse = await response.Parse(responseMessage, _responseParser, _logger);
+
+            if (parsedResponse.IsUnauthorisedResponse)
+            {
+                _logger.LogError("Unauthorised Vision response");
+                _logger.LogVisionErrorResponse(response);
+
+                throw new ApiResponseGpSystemHttpRequestException(response);
+            }
+
+            return parsedResponse;
         }
     }
 }

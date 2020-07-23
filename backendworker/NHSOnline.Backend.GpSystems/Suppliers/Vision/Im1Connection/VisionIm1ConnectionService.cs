@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
@@ -65,6 +66,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 _logger.LogCritical("Critical Error sending configuration request to vision");
                 _logger.LogCritical(ex.ToString());
+
+                return new Im1ConnectionVerifyResult.BadGateway();
+            }
+            catch (ApiResponseGpSystemHttpRequestException ex)
+            {
+                _logger.LogCritical("Vision verification returned unauthorised response");
+
+                if (ex.ApiResponse is VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse)
+                {
+                    return VisionIm1VerifyErrorMapper.Map(configResponse, _logger);
+                }
+
+                _logger.LogCritical(ex.ToString());
+
+                return new Im1ConnectionVerifyResult.BadGateway();
+            }
+            catch (UnauthorisedGpSystemHttpRequestException ex)
+            {
+                _logger.LogCritical("Vision verification returned unauthorised response");
+                _logger.LogCritical(ex.ToString());
+
                 return new Im1ConnectionVerifyResult.BadGateway();
             }
             finally
@@ -198,6 +220,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             string odsCode)
         {
             var configResponse = await _visionClient.GetConfiguration(connectionToken, odsCode);
+
             if (configResponse.HasErrorResponse)
             {
                 if (configResponse.FaultExists)

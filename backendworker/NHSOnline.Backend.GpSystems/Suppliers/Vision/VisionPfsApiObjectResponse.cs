@@ -67,6 +67,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public bool IsInvalidUserCredentialsError =>
             HasVisionApiErrorCode(VisionApiErrorCodes.InvalidUserCredentials);
 
+        public bool IsUnauthorisedResponse =>
+            IsInvalidUserCredentialsError || StatusCode == HttpStatusCode.Unauthorized;
+
         public bool IsUnknownError => HasVisionApiErrorCode(VisionApiErrorCodes.UnknownError);
 
         public bool IsAccessDeniedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccessDenied);
@@ -83,11 +86,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public bool IsAppointmentBookingLimitReachedError =>
             HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentBookingLimitReached);
 
-        private bool HasVisionApiErrorCode(string visionErrorCode)
-        {
-            return visionErrorCode.Equals(Outcome?.Error?.Code, StringComparison.Ordinal);
-        }
+        private bool HasVisionApiErrorCode(string visionErrorCode) => 
+            visionErrorCode.Equals(Outcome?.Error?.Code, StringComparison.Ordinal);
+
         public string ErrorCode => Outcome?.Error?.Code;
+
         public string ErrorMessage => Outcome?.Error?.Description;
 
         private VisionPfsApiObjectResponse<TBody> ParseResponse(

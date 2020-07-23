@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet.Filters;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
@@ -85,6 +87,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             {
                 _logger.LogError(timeoutException, timeoutException.Message);
                 return new GpSessionCreateResult.Timeout(timeoutException.Message);
+            }
+            catch (ApiResponseGpSystemHttpRequestException ex)
+            {
+                if (ex.ApiResponse is VisionPfsApiObjectResponse<PatientConfigurationResponse> configResponse)
+                {
+                    return GetCorrectErrorResult(configResponse);
+                }
+
+                return new GpSessionCreateResult.BadGateway(
+                    $"Vision unknown error {ex.ApiResponse?.StatusCode}");
+            }
+            catch (UnauthorisedGpSystemHttpRequestException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                return new GpSessionCreateResult.BadGateway("Vision unauthorised response");
             }
             finally
             {
