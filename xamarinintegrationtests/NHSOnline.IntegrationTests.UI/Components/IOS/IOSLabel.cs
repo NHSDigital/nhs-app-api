@@ -30,10 +30,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         public void AssertVisible() => _locatorStrategy.ActOnElementContext(
             context => context.Element.Displayed.Should().BeTrue($"a label {_locatorStrategy.Description} should be displayed"));
 
-        public void AssertNotVisible() => _interactor.AssertElementNotVisible(_locatorStrategy.FindBy);
-
-        public void Click() => _locatorStrategy.ActOnElementContext(context => context.Tap());
-
         private sealed class TextLocatorStrategy : IIOSLocatorStrategy
         {
             private readonly IIOSInteractor _interactor;

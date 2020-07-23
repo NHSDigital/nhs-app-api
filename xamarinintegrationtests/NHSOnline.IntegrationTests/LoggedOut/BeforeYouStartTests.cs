@@ -100,10 +100,10 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        public void APatientCanUseTheExpanderIos(IIOSDriverWrapper driver)
+        public void APatientCanViewTheGuidanceForAges13To15Ios(IIOSDriverWrapper driver)
         {
             NavigateToBeforeYouStartPage(driver)
-                .AssertExpanderPresent();
+                .AssertCanShowAndHideGuidanceForAges13To15();
         }
 
         private static AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)

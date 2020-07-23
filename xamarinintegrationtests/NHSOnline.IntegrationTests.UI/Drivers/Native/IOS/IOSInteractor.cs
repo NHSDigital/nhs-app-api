@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.iOS;
 
@@ -21,18 +20,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _interactor = createContainedInteractor;
         }
         
-        void IIOSInteractor.AssertElementNotVisible(By by)
-        {
-            _nativeDriverContext.SwitchToNativeContext();
-            try
-            {
-                var element = _driver.FindElement(by);
-                element.Displayed.Should().BeFalse($"element {by} should not be visible");
-            }
-            catch (NoSuchElementException)
-            { }
-        }
-
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy)
         {
             return new IOSInteractor(_driver, _nativeDriverContext, _interactor.CreateContainedInteractor(findContainerBy));

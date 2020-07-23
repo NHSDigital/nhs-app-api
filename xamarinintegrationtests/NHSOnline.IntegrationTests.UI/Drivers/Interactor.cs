@@ -38,13 +38,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 }
                 catch (NoSuchElementException e)
                 {
-                    _logs.Error(e.Message);
-                    throw new AssertFailedException($"No {typeof(TElement).Name} found matching {by}", e);
+                    var message = $"No {typeof(TElement).Name} found matching {@by}\n{e.Message}";
+                    _logs.Error($"{message}\n{e.StackTrace}");
+                    throw new AssertFailedException(message, e);
                 }
                 catch (WebDriverException e)
                 {
-                    _logs.Error(e.Message);
-                    throw new AssertFailedException($"Failed to act on {typeof(TElement).Name} matching {by}", e);
+                    var message = $"Failed to act on {typeof(TElement).Name} matching {by}\n{e.Message}";
+                    _logs.Error($"{message}\n{e.StackTrace}");
+                    throw new AssertFailedException(message, e);
                 }
             }
         }

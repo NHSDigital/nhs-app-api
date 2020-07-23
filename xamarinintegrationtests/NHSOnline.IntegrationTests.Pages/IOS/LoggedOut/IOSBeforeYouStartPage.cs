@@ -16,8 +16,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSButton ContinueButton => new IOSButton(_driver, "Continue");
 
-        private IOSLabel ExpanderHeader => IOSLabel.WithText(_driver, "What to do if you're aged 13 to 15");
-        private IOSLabel ExpanderBody => IOSLabel.WithText(_driver, "You'll need to contact your GP surgery first and request access to GP online services.");
+        private IOSExpander GuidanceForAges13To15Expander => IOSExpander.WithHeaderAndBodyText(
+            _driver,
+            "What to do if you're aged 13 to 15",
+            "You'll need to contact your GP surgery first and request access to GP online services.");
 
         public static IOSBeforeYouStartPage AssertOnPage(IIOSDriverWrapper driver)
         {
@@ -31,7 +33,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
             OneOneOneLink.AssertVisible();
-            ExpanderHeader.AssertVisible();
+            GuidanceForAges13To15Expander.AssertVisible();
         }
 
         public void CheckCoronavirusSymptoms()
@@ -49,12 +51,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             OneOneOneLink.Touch();
         }
 
-        public void AssertExpanderPresent()
+        public void AssertCanShowAndHideGuidanceForAges13To15()
         {
-            ExpanderHeader.AssertVisible();
-            ExpanderBody.AssertNotVisible();
-            ExpanderHeader.Click();
-            ExpanderBody.AssertVisible();
+            GuidanceForAges13To15Expander.AssertCollapsed();
+            GuidanceForAges13To15Expander.Toggle();
+            GuidanceForAges13To15Expander.AssertExpanded();
+            GuidanceForAges13To15Expander.Toggle();
+            GuidanceForAges13To15Expander.AssertCollapsed();
         }
 
         public void Continue()

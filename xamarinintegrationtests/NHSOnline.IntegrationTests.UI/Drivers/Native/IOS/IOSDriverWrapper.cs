@@ -55,8 +55,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             _interactor.ActOnElementContext(by, action);
         }
 
-        void IIOSInteractor.AssertElementNotVisible(By by) => _interactor.AssertElementNotVisible(by);
-
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
