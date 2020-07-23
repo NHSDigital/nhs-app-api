@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLoggedOutHomePage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSLabel CovidConditions => IOSLabel.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
+        private IOSBanner CovidConditions => IOSBanner.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
 
         private IOSLabel HowAreYouFeelingText => IOSLabel.WithText(_driver, "How are you feeling today?");
         private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "To access your NHS services");
