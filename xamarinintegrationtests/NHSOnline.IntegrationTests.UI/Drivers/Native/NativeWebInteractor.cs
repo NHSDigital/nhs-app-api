@@ -26,9 +26,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             By by,
             Action<ElementContext<IWebDriver, IWebElement>> action)
         {
-            _nativeDriverContext.SwitchToWebContext(_webViewContext);
-            _webViewContext.AssertContextReady(_driver);
+            ChangeContext();
             _interactor.ActOnElementContext(by, action);
+        }
+
+        private void ChangeContext()
+        {
+            _nativeDriverContext.SwitchToWebContext(_webViewContext);
         }
     }
 }

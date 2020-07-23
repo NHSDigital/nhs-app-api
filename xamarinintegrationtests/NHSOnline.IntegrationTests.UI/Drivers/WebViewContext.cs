@@ -34,25 +34,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             internal override void AssertContextReady(IWebDriver driver)
             {
-                var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(10));
-                while (true)
-                {
-                    try
-                    {
-                        Assert.IsTrue(driver.ExecuteJavaScript<bool>(
-                            "return window.nhsAppPageLoadComplete === true;"),
-                            "Javascript has not completed to load");
-                        return;
-                    }
-                    catch (AssertFailedException) when (DateTime.UtcNow < retryUntil)
-                    {
-                    }
-                    catch (WebDriverException) when (DateTime.UtcNow < retryUntil)
-                    {
-                    }
-
-                    Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
-                }
+                Assert.IsTrue(driver.ExecuteJavaScript<bool>(
+                    "return window.nhsAppPageLoadComplete === true;"),
+                    "window.nhsAppPageLoadComplete was not found to be true");
             }
         }
     }

@@ -3,18 +3,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Interfaces;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers.Native
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
-    internal sealed class MultipleWindowsWebViewLocatorStrategy<TDriver> : WebViewLocatorStrategy
-        where TDriver: class, IWebDriver, IContextAware
+    internal sealed class AndroidWebViewLocatorStrategy : WebViewLocatorStrategy
     {
         private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
-        private readonly TDriver _driver;
+        private readonly AndroidDriver<AndroidElement> _driver;
 
-        public MultipleWindowsWebViewLocatorStrategy(TDriver driver) => _driver = driver;
+        public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver) => _driver = driver;
 
         internal override void ForEachWebView(Action<string> action)
         {

@@ -4,15 +4,15 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Appium.Interfaces;
 
-namespace NHSOnline.IntegrationTests.UI.Drivers.Native
+namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 {
-    internal sealed class MultipleContextsWebViewLocatorStrategy : WebViewLocatorStrategy
+    internal sealed class IOSWebViewLocatorStrategy : WebViewLocatorStrategy
     {
         private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
         private readonly IContextAware _driver;
 
-        public MultipleContextsWebViewLocatorStrategy(IContextAware driver) => _driver = driver;
+        public IOSWebViewLocatorStrategy(IContextAware driver) => _driver = driver;
 
         internal override void ForEachWebView(Action<string> action)
         {
