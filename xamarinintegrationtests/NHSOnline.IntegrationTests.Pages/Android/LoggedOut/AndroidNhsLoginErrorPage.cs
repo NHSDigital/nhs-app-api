@@ -15,8 +15,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidLabel GoBackText => AndroidLabel.WithText(_driver, "Go back to the home screen and try logging in again.");
         private AndroidLabel ErrorCodeText => AndroidLabel.WithText(_driver, "If you keep seeing this message, contact us. Quote the error code XXXXX to help us resolve the problem quicker.");
         private AndroidLabel IfYouNeedText => AndroidLabel.WithText(_driver, "If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.");
-        private AndroidLabel ContactUsLink => AndroidLabel.WithText(_driver, "Contact us");
-        private AndroidLabel BackHomeLink => AndroidLabel.WithText(_driver, "Back home");
+        private AndroidLink ContactUsLink => AndroidLink.WithText(_driver, "Contact us");
+        private AndroidLink BackHomeLink => AndroidLink.WithText(_driver, "Back home");
 
         public static AndroidNhsLoginErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {

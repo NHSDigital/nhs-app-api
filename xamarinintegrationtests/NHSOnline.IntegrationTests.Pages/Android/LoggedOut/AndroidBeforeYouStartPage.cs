@@ -10,12 +10,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidBeforeYouStartPage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Before You Start");
-        private AndroidLabel CovidLink => AndroidLabel.WithText(_driver, "Check if you have coronavirus symptoms");
-        private AndroidLabel ConditionsLink => AndroidLabel.WithText(_driver, "Search conditions and treatments");
-        private AndroidLabel OneOneOneLink => AndroidLabel.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
+        private AndroidLink CovidLink => AndroidLink.WithText(_driver, "Check if you have coronavirus symptoms");
+        private AndroidLink ConditionsLink => AndroidLink.WithText(_driver, "Search conditions and treatments");
+        private AndroidLink OneOneOneLink => AndroidLink.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
         private AndroidLabel ExpanderHeader => AndroidLabel.WithText(_driver, "What to do if you're aged 13 to 15");
 
-        private AndroidLabel ExpanderBody => AndroidLabel.WithText(_driver,
+        private AndroidLabel ExpanderBody => AndroidLabel.WithText(
+            _driver,
             "You'll need to contact your GP surgery first and request access to GP online services.");
 
 
@@ -55,7 +56,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         {
             ExpanderHeader.AssertVisible();
             ExpanderBody.AssertNotVisible();
-            ExpanderHeader.Touch();
+            ExpanderHeader.Click();
             ExpanderBody.AssertVisible();
         }
 
