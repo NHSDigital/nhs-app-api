@@ -7,10 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android
     {
         private readonly IAndroidDriverWrapper _driver;
 
-        internal AndroidAppTab(IAndroidDriverWrapper driver)
-        {
-            _driver = driver;
-        }
+        internal AndroidAppTab(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidView ConditionsPageView => new AndroidView(_driver, "Conditions");
 
@@ -28,11 +25,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidImageButton AndroidAppTabClose => new AndroidImageButton(_driver, "Close tab");
 
-        public static BrowserChoice AssertOnBrowserChoice(IAndroidDriverWrapper driver)
-        {
-            var browserChoice = new BrowserChoice(driver);
-            return browserChoice;
-        }
+        public static AndroidAppTabBrowserChoice AssertOnBrowserChoice(IAndroidDriverWrapper driver)
+            => new AndroidAppTabBrowserChoice(driver);
 
         public AndroidAppTab AssertOnConditionsPage() => AssertOnPage(ConditionsPageView);
 

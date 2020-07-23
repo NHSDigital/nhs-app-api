@@ -3,16 +3,16 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android
 {
-    public sealed class BrowserChoice
+    public sealed class AndroidAppTabBrowserChoice
     {
         private readonly IAndroidDriverWrapper _driver;
 
-        public BrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
+        public AndroidAppTabBrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
 
-        private AndroidLabel ChromeOption => AndroidLabel.WithText(_driver, "Chrome");
+        private AndroidAppTabBrowserChoiceOption ChromeOption => AndroidAppTabBrowserChoiceOption.WithText(_driver, "Chrome");
         private AndroidButton JustOnceButton => new AndroidButton(_driver, "JUST ONCE");
 
-        public BrowserChoice ChooseChrome()
+        public AndroidAppTabBrowserChoice ChooseChrome()
         {
             ChromeOption.Click();
             return this;
