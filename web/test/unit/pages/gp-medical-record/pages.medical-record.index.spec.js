@@ -11,12 +11,11 @@ describe('healthRecords', () => {
   const mountAs = ({
     integrationEnabled = true,
     isProxying = false,
-    isNativeApp = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
-        device: { isNativeApp },
+        device: { isNativeApp: false },
         knownServices: {
           knownServices: [{
             id: 'pkb',
@@ -78,25 +77,23 @@ describe('healthRecords', () => {
 
   describe('view third-party links', () => {
     each([
-      ['pkb', 'Test Results', true, false, true, true],
-      ['pkb', 'Test Results', true, true, true, false],
-      ['pkb', 'Test Results', false, false, true, false],
-      ['pkb', 'Care Plans', true, false, true, true],
-      ['pkb', 'Care Plans', true, true, true, false],
-      ['pkb', 'Care Plans', false, false, true, false],
-      ['cie', 'Care Plans', true, false, true, true],
-      ['cie', 'Care Plans', true, true, true, false],
-      ['cie', 'Care Plans', false, false, true, false],
-      ['pkb', 'Health Trackers', true, false, true, true],
-      ['pkb', 'Health Trackers', true, false, false, false],
-      ['pkb', 'Health Trackers', true, true, true, false],
-      ['pkb', 'Health Trackers', false, false, true, false],
-      ['cie', 'Health Trackers', true, false, true, true],
-      ['cie', 'Health Trackers', true, false, false, false],
-      ['cie', 'Health Trackers', true, true, true, false],
-      ['cie', 'Health Trackers', false, false, true, false],
-    ]).describe('%s %s enabled is %s, proxy is %s, native is %s', (
-      provider, linkType, integrationEnabled, isProxying, isNativeApp, expectedResult,
+      ['pkb', 'Test Results', true, false, true],
+      ['pkb', 'Test Results', true, true, false],
+      ['pkb', 'Test Results', false, false, false],
+      ['pkb', 'Care Plans', true, false, true],
+      ['pkb', 'Care Plans', true, true, false],
+      ['pkb', 'Care Plans', false, false, false],
+      ['cie', 'Care Plans', true, false, true],
+      ['cie', 'Care Plans', true, true, false],
+      ['cie', 'Care Plans', false, false, false],
+      ['pkb', 'Health Trackers', true, false, true],
+      ['pkb', 'Health Trackers', true, true, false],
+      ['pkb', 'Health Trackers', false, false, false],
+      ['cie', 'Health Trackers', true, false, true],
+      ['cie', 'Health Trackers', true, true, false],
+      ['cie', 'Health Trackers', false, false, false],
+    ]).describe('%s %s enabled is %s, proxy is %s', (
+      provider, linkType, integrationEnabled, isProxying, expectedResult,
     ) => {
       switch (provider + linkType.replace(' ', '')) {
         case 'pkbTestResults':
@@ -112,14 +109,14 @@ describe('healthRecords', () => {
           linkElement = '#btn_pkb_health_trackers';
           break;
         case 'cieHealthTrackers':
-          linkElement = '#btn_pkb_health_trackers';
+          linkElement = '#btn_pkb_cie_health_trackers';
           break;
         default:
           break;
       }
 
       beforeEach(() => {
-        wrapper = mountAs({ integrationEnabled, isProxying, isNativeApp });
+        wrapper = mountAs({ integrationEnabled, isProxying });
       });
 
       it(`${expectedResult ? 'will' : 'will not'} show the link`, () => {

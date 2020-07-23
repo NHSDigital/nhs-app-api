@@ -29,12 +29,12 @@
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider
                                          .pkb.carePlansCie" />
-          <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying && isNativeApp"
+          <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying"
                                        id="btn_pkb_health_trackers"
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider.pkb
                                          .healthTrackers" />
-          <third-party-jump-off-button v-if="showPkbCieHealthTracker && !isProxying && isNativeApp"
+          <third-party-jump-off-button v-if="showPkbCieHealthTracker && !isProxying"
                                        id="btn_pkb_cie_health_trackers"
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider.pkb
@@ -116,7 +116,6 @@ export default {
           serviceType: 'carePlans',
         },
       }),
-      isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };

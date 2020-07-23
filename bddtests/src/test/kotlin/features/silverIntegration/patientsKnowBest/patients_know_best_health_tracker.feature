@@ -15,19 +15,11 @@ Feature: Patients Know Best Health Tracker
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Track your health' on the Health Record Hub
-    Given I am using the native app user agent
-    And I am a user who cannot view health tracker from Patients Know Best
+    Given I am a user who cannot view health tracker from Patients Know Best
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
     And the link to PKB Track your health is not available on the health record hub page
-
-  Scenario: The menu item 'Track your health' is not visible on desktop
-    Given I am a user who can view health tracker from Patients Know Best
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I do not see the Third Party menu item 'Track your health'
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view health tracker from Patients Know Best
