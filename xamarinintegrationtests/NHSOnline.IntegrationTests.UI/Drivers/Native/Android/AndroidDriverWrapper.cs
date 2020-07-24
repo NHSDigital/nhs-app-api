@@ -53,8 +53,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
             => _interactor.ActOnElementContext(by, action);
 
-        void IAndroidInteractor.AssertElementDoesntExist(By by) => _interactor.AssertElementDoesntExist(@by);
-
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)

@@ -24,12 +24,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
                 e => e.Displayed.Should().BeTrue("a view with text {1} should be displayed", _text));
         }
 
-        public void AssertNotVisible()
-        {
-            _interactor.AssertElementDoesntExist(
-                XPath);
-        }
-
         private By XPath => By.XPath($"//android.view.View[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
     }
 }

@@ -24,13 +24,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnElementContext(by, action);
         }
-
-        void IAndroidInteractor.AssertElementDoesntExist(By by)
-        {
-            _nativeDriverContext.SwitchToNativeContext();
-            _interactor.AssertElementDoesntExist(by);
-        }
-
+        
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)
         {
             return new AndroidInteractor(_nativeDriverContext, _interactor.CreateContainedInteractor(findContainerBy));

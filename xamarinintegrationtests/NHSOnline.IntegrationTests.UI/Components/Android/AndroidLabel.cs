@@ -32,11 +32,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
                 e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
         }
 
-        public void AssertNotVisible()
-        {
-            _interactor.AssertElementDoesntExist(FindBy);
-        }
-
         public void Click()
         {
             _interactor.ActOnElementContext(FindBy, context=>context.Element.Click());

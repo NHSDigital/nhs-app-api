@@ -13,10 +13,10 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidLink CovidLink => AndroidLink.WithText(_driver, "Check if you have coronavirus symptoms");
         private AndroidLink ConditionsLink => AndroidLink.WithText(_driver, "Search conditions and treatments");
         private AndroidLink OneOneOneLink => AndroidLink.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
-        private AndroidLabel ExpanderHeader => AndroidLabel.WithText(_driver, "What to do if you're aged 13 to 15");
 
-        private AndroidLabel ExpanderBody => AndroidLabel.WithText(
+        private AndroidExpander GuidanceForAges13To15Expander => AndroidExpander.WithHeaderAndBodyText(
             _driver,
+            "What to do if you're aged 13 to 15",
             "You'll need to contact your GP surgery first and request access to GP online services.");
 
 
@@ -34,7 +34,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             CovidLink.AssertVisible();
             ConditionsLink.AssertVisible();
             OneOneOneLink.AssertVisible();
-            ExpanderHeader.AssertVisible();
+            GuidanceForAges13To15Expander.AssertVisible();
         }
 
         public void CheckCoronavirusSymptoms()
@@ -52,12 +52,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             OneOneOneLink.Touch();
         }
 
-        public void AssertExpanderPresent()
+        public void AssertCanShowAndHideGuidanceForAges13To15()
         {
-            ExpanderHeader.AssertVisible();
-            ExpanderBody.AssertNotVisible();
-            ExpanderHeader.Click();
-            ExpanderBody.AssertVisible();
+            GuidanceForAges13To15Expander.AssertCollapsed();
+            GuidanceForAges13To15Expander.Toggle();
+            GuidanceForAges13To15Expander.AssertExpanded();
+            GuidanceForAges13To15Expander.Toggle();
+            GuidanceForAges13To15Expander.AssertCollapsed();
         }
 
         public void Continue()
