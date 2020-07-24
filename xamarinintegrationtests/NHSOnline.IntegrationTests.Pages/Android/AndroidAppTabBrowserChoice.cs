@@ -7,10 +7,18 @@ namespace NHSOnline.IntegrationTests.Pages.Android
     {
         private readonly IAndroidDriverWrapper _driver;
 
-        public AndroidAppTabBrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
+        private AndroidAppTabBrowserChoice(IAndroidDriverWrapper driver) => _driver = driver;
 
+        private AndroidLabel OpenWithText => AndroidLabel.WithText(_driver, "Open with");
         private AndroidAppTabBrowserChoiceOption ChromeOption => AndroidAppTabBrowserChoiceOption.WithText(_driver, "Chrome");
-        private AndroidButton JustOnceButton => new AndroidButton(_driver, "JUST ONCE");
+        private AndroidButton AlwaysButton => AndroidButton.WithText(_driver, "ALWAYS");
+
+        public static AndroidAppTabBrowserChoice AssertDisplayed(IAndroidDriverWrapper driver)
+        {
+            var browserChoice = new AndroidAppTabBrowserChoice(driver);
+            browserChoice.OpenWithText.AssertVisible();
+            return browserChoice;
+        }
 
         public AndroidAppTabBrowserChoice ChooseChrome()
         {
@@ -18,10 +26,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             return this;
         }
 
-        public AndroidAppTab JustOnce()
+        public void Always()
         {
-            JustOnceButton.Click();
-            return new AndroidAppTab(_driver);
+            AlwaysButton.Click();
         }
     }
 }

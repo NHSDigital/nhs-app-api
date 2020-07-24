@@ -1,7 +1,6 @@
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
-using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
 {
@@ -16,9 +15,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _title = title;
         }
 
-        private IOSButton DoneButton => new IOSButton(_driver, "Done");
+        private IOSButton DoneButton => IOSButton.WithText(_driver, "Done");
 
-        private WebText TitleText(IWebInteractor webInteractor) => new WebText(webInteractor, "h1", _title);
+        private WebText TitleText(IWebInteractor webInteractor) => WebText.WithTagAndText(webInteractor, "h1", _title);
 
         public void ReturnToApp() => DoneButton.Click();
 

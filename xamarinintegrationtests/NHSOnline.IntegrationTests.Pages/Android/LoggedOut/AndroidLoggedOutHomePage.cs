@@ -13,9 +13,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidLabel HowAreYouFeelingText => AndroidLabel.WithText(_driver, "How are you feeling today?");
         private AndroidLabel AccessServicesText => AndroidLabel.WithText(_driver, "To access your NHS services");
 
-        private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue with NHS login");
-        private AndroidButton CheckYourSymptoms => new AndroidButton(_driver, "Check symptoms");
-        private AndroidIcon HelpIcon => new AndroidIcon(_driver, "NHS App help icon");
+        private AndroidButton ContinueButton => AndroidButton.WithText(_driver, "Continue with NHS login");
+        private AndroidButton CheckYourSymptoms => AndroidButton.WithText(_driver, "Check symptoms");
+        private AndroidIcon HelpIcon => AndroidIcon.WithDescription(_driver, "NHS App help icon");
 
         public static AndroidLoggedOutHomePage AssertOnPage(IAndroidDriverWrapper driver)
         {

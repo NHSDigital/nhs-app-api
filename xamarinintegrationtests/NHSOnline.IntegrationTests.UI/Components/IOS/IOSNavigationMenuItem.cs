@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         private readonly string _text;
         private readonly IIOSInteractor _containedInteractor;
 
-        public IOSNavigationMenuItem(IIOSInteractor interactor, string iconDescription, string text)
+        private IOSNavigationMenuItem(IIOSInteractor interactor, string iconDescription, string text)
         {
             _interactor = interactor;
             _text = text;
@@ -22,10 +22,14 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             _iconDescription = iconDescription;
         }
 
-        private IOSIcon Icon => new IOSIcon(_containedInteractor, _iconDescription);
+        public static IOSNavigationMenuItem WithIconDescriptionAndText(IIOSInteractor interactor, string iconDescription, string text)
+            => new IOSNavigationMenuItem(interactor, iconDescription, text);
+
+        private IOSIcon Icon => IOSIcon.WithDescription(_containedInteractor, _iconDescription);
         private IOSLabel Label => IOSLabel.WithText(_containedInteractor, _text);
 
-        public void Click() => ActOnElement(e => e.Click());
+        public void Click()
+            => ActOnElement(e => e.Click());
 
         public void AssertVisible()
         {
@@ -34,8 +38,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             Label.AssertVisible();
         }
 
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(ContainerFindBy, action);
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(ContainerFindBy, action);
 
-        private By ContainerFindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_text.QuotePredicateLiteral()}");
+        private By ContainerFindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_text.QuotePredicateLiteral()}");
     }
 }

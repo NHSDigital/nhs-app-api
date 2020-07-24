@@ -14,7 +14,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         private IOSLink ConditionsLink => IOSLink.WithText(_driver, "Search conditions and treatments");
         private IOSLink OneOneOneLink => IOSLink.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
 
-        private IOSButton ContinueButton => new IOSButton(_driver, "Continue");
+        private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue");
 
         private IOSExpander GuidanceForAges13To15Expander => IOSExpander.WithHeaderAndBodyText(
             _driver,

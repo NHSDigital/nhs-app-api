@@ -120,11 +120,13 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertOnPage(driver)
                 .Navigation.Help();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnHomeHelpPage();
+                .Always();
+
+            AndroidAppTab
+                .AssertOnHomeHelpPage(driver);
         }
 
         [NhsAppIOSTest]

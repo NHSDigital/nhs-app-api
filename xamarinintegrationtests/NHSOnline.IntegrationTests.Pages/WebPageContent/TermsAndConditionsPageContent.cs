@@ -9,13 +9,13 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal TermsAndConditionsPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText Title => new WebText(_interactor, "h1", "Accept conditions of use");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Accept conditions of use");
 
-        private WebCheckbox AcceptTermsAndConditionsCheckbox => new WebCheckbox(
+        private WebCheckbox AcceptTermsAndConditionsCheckbox => WebCheckbox.WithLabel(
             _interactor,
             "I understand and accept the terms of use and privacy policy. I accept the use of 'strictly necessary' cookies as detailed in the cookies policy.");
 
-        private WebButton ContinueButton => new WebButton(_interactor, "Continue");
+        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         internal void AssertOnPage()
         {

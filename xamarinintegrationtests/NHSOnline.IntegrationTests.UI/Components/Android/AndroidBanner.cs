@@ -1,7 +1,9 @@
+using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
@@ -20,10 +22,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => new AndroidBanner(interactor, text);
 
         public void Click()
-            => _interactor.ActOnElement(FindBy, e => e.Click());
+            => ActOnElement(e => e.Click());
 
         public void AssertVisible()
-            => _interactor.ActOnElement(FindBy, e => e.Displayed.Should().BeTrue("a banner with text {1} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a banner with text {1} should be displayed", _text));
+
+        private void ActOnElement(Action<AndroidElement> action)
+            => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
             => MobileBy.AndroidUIAutomator($"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})");

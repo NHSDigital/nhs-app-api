@@ -31,11 +31,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             NavigateToBeforeYouStartPage(driver)
                 .SearchConditionsAndTreatments();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnConditionsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnConditionsPage(driver)
                 .ReturnToApp();
 
             AndroidBeforeYouStartPage
@@ -43,9 +45,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .CheckCoronavirusSymptoms();
 
             AndroidAppTab
-                .AssertOnBrowserChoice(driver)
-                .JustOnce()
-                .AssertOnCovidPage()
+                .AssertOnCovidPage(driver)
                 .ReturnToApp();
 
             AndroidBeforeYouStartPage
@@ -53,9 +53,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .UseNhs111Online();
 
             AndroidAppTab
-                .AssertOnBrowserChoice(driver)
-                .JustOnce()
-                .AssertOn111Page()
+                .AssertOn111Page(driver)
                 .ReturnToApp();
 
             AndroidBeforeYouStartPage

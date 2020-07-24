@@ -172,11 +172,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnContactUsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
             AndroidNhsLoginErrorPage
@@ -249,11 +251,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnContactUsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionForbiddenErrorPage
@@ -326,11 +330,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnContactUsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionBadRequestErrorPage
@@ -594,11 +600,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements()
                 .ContactUs();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnContactUsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionBadResponseFromUpstreamSystemErrorPage
@@ -673,11 +681,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                     .ContactUs();
             }
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnContactUsPage()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnContactUsPage(driver)
                 .ReturnToApp();
 
             AndroidCreateSessionUpstreamSystemTimeoutErrorPage

@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => new WebText(_interactor, "h1", "Symptoms");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Symptoms");
 
         internal void AssertOnPage()
         {

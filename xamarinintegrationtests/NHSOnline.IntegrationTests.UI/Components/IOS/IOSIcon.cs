@@ -10,20 +10,27 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
     public sealed class IOSIcon
     {
         private readonly IIOSInteractor _interactor;
-        private readonly string _text;
+        private readonly string _description;
 
-        public IOSIcon(IIOSInteractor interactor, string text)
+        private IOSIcon(IIOSInteractor interactor, string description)
         {
             _interactor = interactor;
-            _text = text;
+            _description = description;
         }
 
-        public void Click() => ActOnElement(e => e.Click());
+        public static IOSIcon WithDescription(IIOSInteractor interactor, string description)
+            => new IOSIcon(interactor, description);
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with the name {1} should be displayed", _text));
+        public void Click()
+            => ActOnElement(e => e.Click());
 
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+        public void AssertVisible()
+            => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with description {1} should be displayed", _description));
 
-        private By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_text.QuotePredicateLiteral()}");
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(FindBy, action);
+
+        private By FindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {_description.QuotePredicateLiteral()}");
     }
 }

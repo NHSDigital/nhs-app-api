@@ -9,14 +9,14 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal UserResearchOptInPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText Title => new WebText(_interactor, "h1", "Help improve the NHS App");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Help improve the NHS App");
 
-        private WebRadioOption OptIn => new WebRadioOption(
+        private WebRadioOption OptIn => WebRadioOption.InFieldsetLegendWithLabel(
             _interactor,
             "Can we contact you to take part in NHS App user research?",
             "Yes, you can contact me about taking part in user research");
 
-        private WebButton ContinueButton => new WebButton(_interactor, "Continue");
+        private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         internal void AssertOnPage()
         {

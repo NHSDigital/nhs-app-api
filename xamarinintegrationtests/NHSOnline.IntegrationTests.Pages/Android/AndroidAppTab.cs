@@ -6,48 +6,39 @@ namespace NHSOnline.IntegrationTests.Pages.Android
     public class AndroidAppTab
     {
         private readonly IAndroidDriverWrapper _driver;
+        private readonly string _text;
 
-        internal AndroidAppTab(IAndroidDriverWrapper driver) => _driver = driver;
+        private AndroidAppTab(IAndroidDriverWrapper driver, string text)
+        {
+            _driver = driver;
+            _text = text;
+        }
 
-        private AndroidView ConditionsPageView => new AndroidView(_driver, "Conditions");
+        private AndroidAppBrowserTabContents Contents => AndroidAppBrowserTabContents.WithText(_driver, _text);
 
-        private AndroidView CovidPageView => new AndroidView(_driver, "Covid");
+        private AndroidImageButton AndroidAppTabClose => AndroidImageButton.WithDescription(_driver, "Close tab");
 
-        private AndroidView CovidConditionsPageView => new AndroidView(_driver, "Covid Conditions");
+        public static AndroidAppTab AssertOnConditionsPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Conditions");
 
-        private AndroidView OneOneOnePageView => new AndroidView(_driver, "111");
+        public static AndroidAppTab AssertOnCovidPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Covid");
 
-        private AndroidView LoginHelpPageView => new AndroidView(_driver, "Login Help");
+        public static AndroidAppTab AssertOnCovidConditionsPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Covid Conditions");
 
-        private AndroidView HomeHelpPageView => new AndroidView(_driver, "Home Help");
+        public static AndroidAppTab AssertOn111Page(IAndroidDriverWrapper driver) => AssertOnPage(driver, "111");
 
-        private AndroidView ContactUsPageView => new AndroidView(_driver, "Contact Us");
+        public static AndroidAppTab AssertOnLoginHelpPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Login Help");
 
-        private AndroidImageButton AndroidAppTabClose => new AndroidImageButton(_driver, "Close tab");
+        public static AndroidAppTab AssertOnHomeHelpPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Home Help");
 
-        public static AndroidAppTabBrowserChoice AssertOnBrowserChoice(IAndroidDriverWrapper driver)
-            => new AndroidAppTabBrowserChoice(driver);
-
-        public AndroidAppTab AssertOnConditionsPage() => AssertOnPage(ConditionsPageView);
-
-        public AndroidAppTab AssertOnCovidPage() => AssertOnPage(CovidPageView);
-
-        public AndroidAppTab AssertOnCovidConditionsPage() => AssertOnPage(CovidConditionsPageView);
-
-        public AndroidAppTab AssertOn111Page() => AssertOnPage(OneOneOnePageView);
-
-        public AndroidAppTab AssertOnLoginHelpPage() => AssertOnPage(LoginHelpPageView);
-
-        public AndroidAppTab AssertOnHomeHelpPage() => AssertOnPage(HomeHelpPageView);
-
-        public AndroidAppTab AssertOnContactUsPage() => AssertOnPage(ContactUsPageView);
+        public static AndroidAppTab AssertOnContactUsPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Contact Us");
 
         public void ReturnToApp() => AndroidAppTabClose.Click();
 
-        private AndroidAppTab AssertOnPage(AndroidView pageView)
+        private static AndroidAppTab AssertOnPage(IAndroidDriverWrapper driver, string title)
         {
-            pageView.AssertVisible();
-            return this;
+            var androidAppTab = new AndroidAppTab(driver, title);
+            androidAppTab.Contents.AssertVisible();
+            return androidAppTab;
         }
     }
 }

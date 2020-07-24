@@ -1,51 +1,39 @@
+using System;
 using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
     public sealed class AndroidLink
     {
         private readonly IAndroidInteractor _interactor;
-        private readonly IAndroidLocatorStrategy _locatorStrategy;
+        private readonly string _text;
 
-        private AndroidLink(IAndroidInteractor interactor, IAndroidLocatorStrategy locatorStrategy)
+        private AndroidLink(IAndroidInteractor interactor, string text)
         {
             _interactor = interactor;
-            _locatorStrategy = locatorStrategy;
+            _text = text;
         }
 
         public static AndroidLink WithText(IAndroidInteractor interactor, string text)
-            => new AndroidLink(interactor, new TextLocatorStrategy(text));
-
-        public AndroidLink ScrollIntoView()
-            => new AndroidLink(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
+            => new AndroidLink(interactor, text);
 
         public void AssertVisible()
-        {
-            _interactor.ActOnElement(
-                FindBy,
-                e => e.Displayed.Should().BeTrue("a link {1} should be displayed", Description));
-        }
-        
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _text));
+
         public void Touch()
-        {
-            _interactor.ActOnElementContext(FindBy, context => context.Tap());
-        }
+            => ActOnElementContext(context => context.Tap());
 
-        private By FindBy => MobileBy.AndroidUIAutomator(_locatorStrategy.Selector);
-        private string Description => _locatorStrategy.Description;
+        private void ActOnElementContext(Action<ElementContext<AndroidDriver<AndroidElement>, AndroidElement>> action)
+            => _interactor.ActOnElementContext(FindBy, action);
 
-        private sealed class TextLocatorStrategy : IAndroidLocatorStrategy
-        {
-            private readonly string _text;
+        private void ActOnElement(Action<AndroidElement> action)
+            => _interactor.ActOnElement(FindBy, action);
 
-            public TextLocatorStrategy(string text)
-                => _text = text;
-
-            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})";
-            public string Description => $"with text '{_text}'";
-        }
+        private By FindBy
+            => MobileBy.AndroidUIAutomator($"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})");
     }
 }

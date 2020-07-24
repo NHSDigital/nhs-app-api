@@ -10,11 +10,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal StubbedLoginPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
-        private WebText TitleText => new WebText(_interactor, "h1", "NHS Login");
+        private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login");
 
-        private WebInputText PatientIdWebInputText => new WebInputText(_interactor, "Patient ID");
+        private WebInputText PatientIdWebInputText => WebInputText.WithLabel(_interactor, "Patient ID");
 
-        private WebInputSubmit LoginButton => new WebInputSubmit(_interactor, "Login");
+        private WebInputSubmit LoginButton => WebInputSubmit.WithText(_interactor, "Login");
 
         internal void AssertOnPage()
         {

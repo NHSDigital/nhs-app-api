@@ -34,11 +34,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .GetInformationAboutCoronavirus();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnCovidConditionsPage();
+                .Always();
+
+            AndroidAppTab
+                .AssertOnCovidConditionsPage(driver);
         }
 
         [NhsAppIOSTest]
@@ -59,11 +61,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .GetHelp();
 
-            AndroidAppTab
-                .AssertOnBrowserChoice(driver)
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
                 .ChooseChrome()
-                .JustOnce()
-                .AssertOnLoginHelpPage();
+                .Always();
+
+            AndroidAppTab
+                .AssertOnLoginHelpPage(driver);
         }
 
         [NhsAppIOSTest]

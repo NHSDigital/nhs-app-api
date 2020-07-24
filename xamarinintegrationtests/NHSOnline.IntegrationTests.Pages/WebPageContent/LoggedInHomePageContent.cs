@@ -12,7 +12,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             _interactor = interactor;
         }
 
-        private WebText Title => new WebText(_interactor, "h1", "Home");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Home");
 
         internal void AssertOnPage()
         {
@@ -21,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         public LoggedInHomePageContent AssertWelcomeMessageDisplayedFor(string patientName)
         {
-            new WebText(_interactor, "h2", $"Welcome, {patientName}").AssertVisible();
+            WebText.WithTagAndText(_interactor, "h2", $"Welcome, {patientName}").AssertVisible();
             return this;
         }
     }

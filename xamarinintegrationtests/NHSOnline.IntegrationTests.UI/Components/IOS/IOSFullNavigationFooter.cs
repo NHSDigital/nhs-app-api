@@ -9,21 +9,23 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
     public class IOSFullNavigationFooter
     {
-        private readonly IIOSInteractor _interactor;
         private const string Name = "NHS App Full Navigation Footer";
 
-        public IOSFullNavigationFooter(IIOSInteractor interactor)
-        {
-            _interactor = interactor;
-        }
+        private readonly IIOSInteractor _interactor;
+
+        private IOSFullNavigationFooter(IIOSInteractor interactor)
+            => _interactor = interactor;
+
+        public static IOSFullNavigationFooter Create(IIOSInteractor interactor)
+            => new IOSFullNavigationFooter(interactor);
 
         public void AssertVisible()
-        {
-            ActOnElement(e => e.Displayed.Should().BeTrue("a navigation bar should be displayed"));
-        }
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a navigation bar should be displayed"));
 
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(FindBy, action);
 
-        private static By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {Name.QuotePredicateLiteral()}");
+        private static By FindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeOther' AND name == {Name.QuotePredicateLiteral()}");
     }
 }

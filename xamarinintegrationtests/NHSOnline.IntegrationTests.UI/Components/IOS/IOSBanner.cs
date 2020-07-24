@@ -18,14 +18,19 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             _text = text;
         }
 
-        public static IOSBanner WithText(IIOSInteractor interactor, string text) => new IOSBanner(interactor, text);
+        public static IOSBanner WithText(IIOSInteractor interactor, string text)
+            => new IOSBanner(interactor, text);
 
-        public void Click() => ActOnElement(e => e.Click());
+        public void Click()
+            => ActOnElement(e => e.Click());
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a banner with text {1} should be displayed", _text));
+        public void AssertVisible()
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a banner with text {1} should be displayed", _text));
 
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(FindBy, action);
 
-        private By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND label == {_text.QuotePredicateLiteral()}");
+        private By FindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND label == {_text.QuotePredicateLiteral()}");
     }
 }

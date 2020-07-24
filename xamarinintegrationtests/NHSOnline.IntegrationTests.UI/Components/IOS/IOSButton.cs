@@ -12,18 +12,25 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         private readonly IIOSInteractor _interactor;
         private readonly string _text;
 
-        public IOSButton(IIOSInteractor interactor, string text)
+        private IOSButton(IIOSInteractor interactor, string text)
         {
             _interactor = interactor;
             _text = text;
         }
 
-        public void Click() => ActOnElement(e => e.Click());
+        public static IOSButton WithText(IIOSInteractor interactor, string text)
+            => new IOSButton(interactor, text);
 
-        public void AssertVisible() => ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
+        public void Click()
+            => ActOnElement(e => e.Click());
 
-        private void ActOnElement(Action<IOSElement> action) => _interactor.ActOnElement(FindBy, action);
+        public void AssertVisible()
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a button with text {1} should be displayed", _text));
 
-        private By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND label == {_text.QuotePredicateLiteral()}");
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(FindBy, action);
+
+        private By FindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND label == {_text.QuotePredicateLiteral()}");
     }
 }

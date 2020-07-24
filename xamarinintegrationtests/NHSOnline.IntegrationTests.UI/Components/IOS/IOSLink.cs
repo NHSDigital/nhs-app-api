@@ -10,41 +10,30 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
     public sealed class IOSLink
     {
         private readonly IIOSInteractor _interactor;
-        private readonly IIOSLocatorStrategy _locatorStrategy;
+        private readonly string _text;
 
-        private IOSLink(IIOSInteractor interactor, IIOSLocatorStrategy locatorStrategy)
+        private IOSLink(IIOSInteractor interactor, string text)
         {
             _interactor = interactor;
-            _locatorStrategy = locatorStrategy;
+            _text = text;
         }
 
         public static IOSLink WithText(IIOSInteractor interactor, string text)
-            => new IOSLink(interactor, new TextLocatorStrategy(interactor, text));
+            => new IOSLink(interactor, text);
 
-        public IOSLink ScrollIntoView()
-            => new IOSLink(_interactor, new IOSScrollLocatorStrategy(_interactor, _locatorStrategy));
+        public void AssertVisible()
+            => ActOnElement(e => e.Displayed.Should().BeTrue($"a link with text '{_text}' should be displayed"));
 
-        public void AssertVisible() => _locatorStrategy.ActOnElementContext(
-            context => context.Element.Displayed.Should().BeTrue($"a link '{_locatorStrategy.Description}' should be displayed"));
+        public void Touch()
+            => ActOnElementContext(context => context.Tap());
 
-        public void Touch() => _locatorStrategy.ActOnElementContext(context => context.Tap());
+        private void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
+            => _interactor.ActOnElementContext(FindBy, action);
 
-        private sealed class TextLocatorStrategy : IIOSLocatorStrategy
-        {
-            private readonly IIOSInteractor _interactor;
-            private readonly string _text;
+        private void ActOnElement(Action<IOSElement> action)
+            => _interactor.ActOnElement(FindBy, action);
 
-            public TextLocatorStrategy(IIOSInteractor interactor, string text)
-            {
-                _interactor = interactor;
-                _text = text;
-            }
-
-            public string Description => $"with text '{_text}'";
-
-            public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()}");
-
-            public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
-        }
+        private By FindBy
+            => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeStaticText' AND value == {_text.QuotePredicateLiteral()}");
     }
 }

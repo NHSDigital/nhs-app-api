@@ -20,7 +20,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             "You'll need to contact your GP surgery first and request access to GP online services.");
 
 
-        private AndroidButton ContinueButton => new AndroidButton(_driver, "Continue");
+        private AndroidButton ContinueButton => AndroidButton.WithText(_driver, "Continue");
 
         public static AndroidBeforeYouStartPage AssertOnPage(IAndroidDriverWrapper driver)
         {
