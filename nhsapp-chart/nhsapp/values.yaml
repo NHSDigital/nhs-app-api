@@ -234,6 +234,9 @@ tppSupportsLinkedAccounts: true
 # 16 weeks appointment slots
 sixteenWeeksSlotsEnabled: true
 
+# Add Appointment to Native Calendar
+addAppointmentToCalendarEnabled: true
+
 # Placeholder values
 cosmosdbKey: cGxhY2Vob2xkZXI=
 cosmosdbMongoKey: cGxhY2Vob2xkZXI=

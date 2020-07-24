@@ -9,6 +9,7 @@ import {
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_BOOKING_SUCCESS,
+  APPOINTMENT_ADD_TO_CALENDAR,
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CANCELLING_SUCCESS,
   APPOINTMENT_CONFIRMATIONS,
@@ -197,6 +198,10 @@ export default function ({ route, store, app }) {
       }
       break;
     }
+    case APPOINTMENT_ADD_TO_CALENDAR.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.pageTitleKey = 'pageTitles.appointmentAddToCalendar';
+      break;
     case APPOINTMENT_CANCELLING.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentCancelling';

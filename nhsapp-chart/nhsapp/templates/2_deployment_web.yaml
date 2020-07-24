@@ -118,6 +118,8 @@ spec:
           value: "{{ $.Values.userResearchEnabled }}"
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
+        - name: ADD_APPOINTMENT_TO_CALENDAR_ENABLED
+          value: "{{ $.Values.addAppointmentToCalendarEnabled }}"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates

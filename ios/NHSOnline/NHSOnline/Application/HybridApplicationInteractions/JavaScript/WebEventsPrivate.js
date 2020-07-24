@@ -84,3 +84,7 @@ window.nativeApp.dismissPageLeaveWarningDialogue = function() {
 window.nativeApp.dismissAllDialogues = function() {
     window.webkit.messageHandlers.dismissAllDialogues.postMessage(null);
 };
+
+window.nativeApp.addEventToCalendar = function(calendarData) {
+    window.webkit.messageHandlers.addEventToCalendar.postMessage(calendarData);
+};

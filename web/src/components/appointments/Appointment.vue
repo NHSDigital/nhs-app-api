@@ -42,6 +42,14 @@
       </p>
     </div>
 
+    <span v-if="showAddToCalendar()" :class="$style.appointmentGroup">
+      <hr class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1" aria-hidden="true">
+      <desktopGenericBackLink :path="appointmentAddToCalendarPath"
+                              :button-text="'appointments.index.addToCalendarText'"
+                              clazz="nhsuk-body-s nhsuk-u-margin-bottom-0"
+                              @clickAndPrevent="onAddToCalendar"/>
+    </span>
+
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation"
           :class="$style.appointmentGroup">
       <hr class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1" aria-hidden="true">
@@ -68,13 +76,17 @@
 
 <script>
 import moment from 'moment-timezone';
-import { APPOINTMENT_CANCELLING } from '@/lib/routes';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import { APPOINTMENT_CANCELLING, APPOINTMENT_ADD_TO_CALENDAR } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 import channel from '@/lib/channel';
 
 export default {
   name: 'Appointment',
+  components: {
+    DesktopGenericBackLink,
+  },
   props: {
     appointment: {
       type: Object,
@@ -82,6 +94,10 @@ export default {
     },
     showCancellationLink: {
       default: true,
+      type: Boolean,
+    },
+    showAddToCalendarLink: {
+      default: false,
       type: Boolean,
     },
     cancellationDisabled: {
@@ -97,6 +113,13 @@ export default {
       type: String,
       default: undefined,
     },
+  },
+  data() {
+    return {
+      isNativeApp: this.$store.state.device.isNativeApp,
+      isAddToCalendarEnabled: this.$store.app.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED,
+      appointmentAddToCalendarPath: APPOINTMENT_ADD_TO_CALENDAR.path,
+    };
   },
   computed: {
     appointmentCancellingPath() {
@@ -117,6 +140,15 @@ export default {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
       redirectTo(this, APPOINTMENT_CANCELLING.path);
+    },
+    onAddToCalendar() {
+      if (this.showAddToCalendar()) {
+        this.$store.dispatch('myAppointments/select', this.appointment);
+      }
+      redirectTo(this, APPOINTMENT_ADD_TO_CALENDAR.path);
+    },
+    showAddToCalendar() {
+      return this.showAddToCalendarLink && this.isAddToCalendarEnabled && this.isNativeApp;
     },
     showPhoneNumber() {
       return (this.appointment || {}).channel === channel.Telephone;

@@ -517,6 +517,7 @@ export default {
       cancellationDisabledText: 'To cancel this appointment, contact your GP surgery.',
       locationLabel: 'Location',
       appointmentTypeLabel: 'Appointment type',
+      addToCalendarText: 'Add to calendar',
       empty: {
         header: 'Upcoming appointments',
         text1: 'If you have an upcoming appointment that is not shown here, contact your GP surgery for more information.',
@@ -722,6 +723,10 @@ export default {
       proxyMessage: 'You have booked an appointment for {name}.',
       message: 'Your GP appointment has been booked',
       back: 'Go to your appointments',
+    },
+    addToCalendar: {
+      paragraph1: 'If this appointment changes, you\'ll have to update your calendar yourself',
+      paragraph2: 'Your calendar will not update automatically if the appointment is changed or cancelled.',
     },
     cancellingSuccess: {
       proxyMessage: 'You have cancelled {name}\'s appointment.',
@@ -1723,6 +1728,7 @@ export default {
     appointmentConfirmation: 'Confirm your GP appointment',
     appointmentProxyBookingSuccess: '{name}\'s GP appointment has been booked',
     appointmentBookingSuccess: 'Your GP appointment has been booked',
+    appointmentAddToCalendar: 'Add appointment to calendar',
     gpMessages: 'GP surgery messages',
     gpMessagesViewMessage: 'Conversation with {name}',
     gpMessagesViewAttachment: 'View file - Messages',

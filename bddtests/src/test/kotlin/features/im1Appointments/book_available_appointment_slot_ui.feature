@@ -290,3 +290,24 @@ Feature: Book Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
+
+
+  @pending
+  @native
+  Scenario: An EMIS user can book an appointment and add it to the native calendar
+    Given there are EMIS appointments available to book where booking reason is set optional
+    And a booked appointment can be cancelled
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success page is displayed
+    And I click on the Add to calendar link
+    And the Add to calendar interrupt page is displayed
+    When I click on the Add to calendar button
+    # TODO - figure out how to get browerstack and the native calendar working together ??
+    #Then the native calendar is shown
+    #And I save the appointment to the calendar
+    #And the Appointment Hub page is displayed
+

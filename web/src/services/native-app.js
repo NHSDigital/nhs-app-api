@@ -283,6 +283,15 @@ export default {
     return false;
   },
 
+  addEventToCalendar(calendarEvent) {
+    const app = window.nativeApp;
+    if (app && app.addEventToCalendar) {
+      app.addEventToCalendar(calendarEvent);
+      return true;
+    }
+    return false;
+  },
+
   updateBiometricRegistration() {
     const app = window.nativeApp;
     if (app && app.updateBiometricRegistration) {

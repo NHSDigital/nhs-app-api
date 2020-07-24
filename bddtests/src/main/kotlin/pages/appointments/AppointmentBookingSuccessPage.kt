@@ -16,6 +16,7 @@ class AppointmentBookingSuccessPage : HybridPageObject() {
             androidLocator = null,
             page = this
     )
+
     fun isLoaded(patientName: String) {
         headerNative.waitForPageHeaderText(patientName + "\'s GP appointment has been booked")
     }

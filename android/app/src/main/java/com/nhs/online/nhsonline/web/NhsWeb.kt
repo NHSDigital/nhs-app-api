@@ -90,9 +90,9 @@ class NhsWeb(
         val webInterceptor =
                 WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, loggingService)
 
-        val addToCalendarHandler = AddToCalendarHandler(activity)
+        val addToCalendarHandler = AddToCalendarHandler(activity, loggingService)
 
-        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this, uiInteractor, settingsService)
+        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this, uiInteractor, settingsService, addToCalendarHandler)
         val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, addToCalendarHandler)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)

@@ -16,6 +16,7 @@
                                   id="appointmentDetails"
                                   :appointment="slot"
                                   :show-cancellation-link="false"
+                                  :show-add-to-calendar-link="true"
                                   data-purpose="appointment-info"
                                   date-time-header="h2"/>
               </Card>
@@ -64,10 +65,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
-    this.$store.dispatch('availableAppointments/completeBookingJourney');
-  },
-  beforeDestroy() {
-    this.$store.dispatch('availableAppointments/deselect');
   },
   methods: {
     backButtonClicked() {

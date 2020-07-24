@@ -5,6 +5,7 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
+import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
@@ -14,7 +15,8 @@ class WebAppInterfacePrivate(
     private val activity: Activity,
     private val nhsWeb: NhsWeb,
     private val uiInteractor: IInteractor,
-    private val settingsService: SettingsService
+    private val settingsService: SettingsService,
+    private val addToCalendarHelper: IAddToCalendarHandler
 ) {
     @JavascriptInterface
     fun attemptBiometricLogin() {
@@ -161,6 +163,13 @@ class WebAppInterfacePrivate(
     fun dismissAllDialogues() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissAllDialogues")
         runAction { uiInteractor.dismissAllDialogues() }
+    }
+
+    @JavascriptInterface
+    fun addEventToCalendar(calendarData: String) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering addEventToCalendar")
+        var addToCalendarData = addToCalendarHelper.parseCalendarData(calendarData, JavaScriptInteractionMode.NhsApp)
+        runAction { addToCalendarHelper.addToCalendar(addToCalendarData) }
     }
 
     private fun runAction(action: () -> Unit){

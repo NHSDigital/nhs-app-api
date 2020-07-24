@@ -8,6 +8,8 @@ import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.data.AddToCalendarData
+import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.SettingsService
@@ -26,6 +28,8 @@ class WebAppInterfacePrivateTest {
     private lateinit var nhsWebMock: NhsWeb
     private lateinit var webAppInterfacePrivate: WebAppInterfacePrivate
     private lateinit var settingsService: SettingsService
+    private lateinit var addToCalendarHandlerMock: IAddToCalendarHandler
+    private lateinit var addToCalendarData: AddToCalendarData
 
     @Before
     fun setUp() {
@@ -55,7 +59,19 @@ class WebAppInterfacePrivateTest {
             on { applicationState }.thenReturn((mock()))
             on { javaScriptInteractionMode }.thenReturn( JavaScriptInteractionMode.NhsApp )
         }
-        webAppInterfacePrivate = WebAppInterfacePrivate(contextMock, nhsWebMock, contextMock, settingsService)
+
+        addToCalendarData = AddToCalendarData(
+                "subject",
+                "body",
+                "location",
+                123L,
+                124L,
+                JavaScriptInteractionMode.SilverThirdParty)
+
+        addToCalendarHandlerMock = mock {
+            on { parseCalendarData(any(), any()) }.thenReturn(addToCalendarData)
+        }
+        webAppInterfacePrivate = WebAppInterfacePrivate(contextMock, nhsWebMock, contextMock, settingsService, addToCalendarHandlerMock)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
 
     }
@@ -241,5 +257,14 @@ class WebAppInterfacePrivateTest {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterfacePrivate.updateBiometricRegistration()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+    }
+
+    @Test
+    fun onAddToCalendar() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfacePrivate.addEventToCalendar("stringifiedData")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(addToCalendarHandlerMock).addToCalendar(addToCalendarData)
     }
 }

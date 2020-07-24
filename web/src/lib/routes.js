@@ -362,6 +362,20 @@ const routes = {
       url: '/appointments/gp-appointments',
     }],
   },
+  APPOINTMENT_ADD_TO_CALENDAR: {
+    name: 'appointments-gp-appointments-add-to-calendar-interrupt',
+    path: '/appointments/gp-appointments/add-to-calendar-interrupt',
+    proofLevel: proofLevel.P9,
+    upliftPath: '/uplift/appointments',
+    crumb: {
+      nativeDisabled: false,
+      i18nKey: 'appointmentsConfirmation',
+      get defaultCrumb() {
+        return [this.allRoutes.APPOINTMENT_BOOKING_SUCCESS];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
   APPOINTMENT_GP_AT_HAND: {
     name: 'appointments-gp-at-hand',
     path: '/appointments/gp-at-hand',
@@ -2015,6 +2029,7 @@ export const {
   APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_BOOKING_SUCCESS,
+  APPOINTMENT_ADD_TO_CALENDAR,
   APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,

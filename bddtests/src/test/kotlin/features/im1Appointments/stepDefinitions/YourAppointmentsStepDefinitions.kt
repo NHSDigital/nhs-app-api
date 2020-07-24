@@ -18,6 +18,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.AppointmentHubPage
 import pages.ErrorDialogPage
+import pages.appointments.AddToCalendarInterruptPage
 import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
 import pages.assertIsVisible
@@ -40,6 +41,8 @@ class YourAppointmentsStepDefinitions {
     lateinit var yourAppointmentsUISteps: YourAppointmentsUISteps
     @Steps
     lateinit var bookingSuccessPage: BookingSuccessPage
+    @Steps
+    lateinit var addToCalendarInterruptPage: AddToCalendarInterruptPage
     @Steps
     lateinit var cancelSuccessPage: CancellingSuccessPage
     @Steps
@@ -124,6 +127,21 @@ class YourAppointmentsStepDefinitions {
         bookingSuccessPage.checkBookingSuccessMessage()
         yourAppointmentsUISteps.checkBackToAppointmentsLink()
         bookingSuccessPage.checkAppointmentDetails()
+    }
+
+    @Then("^I click on the Add to calendar link$")
+    fun iClickOnTheAddToCalendarLink() {
+        bookingSuccessPage.clickAddToCalendarLink();
+    }
+
+    @Then("^the Add to calendar interrupt page is displayed$")
+    fun addToCalendarInterruptPageIsShown() {
+        addToCalendarInterruptPage.checkAddToCalendarMessage()
+    }
+
+    @Then("^I click on the Add to calendar button$")
+    fun iClickOnTheAddToCalendarButton() {
+        addToCalendarInterruptPage.clickAddToCalendarButton();
     }
 
     @Then("^the Appointment Cancel success page is displayed$")

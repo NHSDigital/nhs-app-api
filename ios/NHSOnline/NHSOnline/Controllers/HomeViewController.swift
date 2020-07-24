@@ -729,6 +729,9 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                                  endTimeEpochInSeconds: calendarData.endTimeEpochSeconds)) {
             
             showErrorDialog()
+            
+            let failureMessage = "Add to calendar failure from " + buildLoggingMessageSource(source: calendarData.source);
+            self.webViewDelegate?.loggingService.logError(message: failureMessage)
             return
         }
         
@@ -738,6 +741,9 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                 if (error == nil) {
                     if (granted) {
                         self.addCalendarEvent(eventStore: eventStore, calendarData: calendarData)
+                        
+                        let successMessage = "Add to calendar success from " + self.buildLoggingMessageSource(source: calendarData.source);
+                        self.webViewDelegate?.loggingService.logInfo(message: successMessage)
                     } else {
                         self.showOpenSettingsAlert()
                     }
@@ -765,6 +771,17 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
 
         eventController.editViewDelegate = self
         self.present(eventController, animated: true, completion: nil)
+    }
+    
+    private func buildLoggingMessageSource(source: JavaScriptInteractionMode) -> String {
+        switch (source) {
+        case JavaScriptInteractionMode.NhsApp:
+            return "the NhsApp"
+        case JavaScriptInteractionMode.SilverThirdParty:
+            return "the a third party"
+        default:
+            return "an unknown source"
+        }
     }
 
     private func showOpenSettingsAlert() {
