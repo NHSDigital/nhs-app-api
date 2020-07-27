@@ -31,15 +31,6 @@ namespace NHSOnline.App.Api.Session
             public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public sealed class Forbidden : CreateSessionResult
-        {
-            public Forbidden(string serviceDeskReference) => ServiceDeskReference = serviceDeskReference;
-
-            public string ServiceDeskReference { get; }
-
-            public override T Accept<T>(ICreateSessionResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
         public sealed class OdsCodeNotSupportedOrNoNhsNumber : CreateSessionResult
         {
             public OdsCodeNotSupportedOrNoNhsNumber(string serviceDeskReference) => ServiceDeskReference = serviceDeskReference;

@@ -8,6 +8,16 @@ export default {
     return false;
   },
 
+  supportsNativeNavigation() {
+    const app = window.nativeApp;
+    return app && app.navigateToThirdParty;
+  },
+
+  navigateToThirdParty(path) {
+    const app = window.nativeApp;
+    app.navigateToThirdParty(path);
+  },
+
   clearMenuBarItem() {
     const app = window.nativeApp;
     if (app && app.clearMenuBarItem) {
@@ -274,7 +284,6 @@ export default {
 
   updateBiometricRegistration() {
     const app = window.nativeApp;
-
     if (app && app.updateBiometricRegistration) {
       app.updateBiometricRegistration();
       return true;

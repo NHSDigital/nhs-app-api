@@ -16,6 +16,7 @@ import consola from 'consola';
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
+import NativeApp from '@/services/native-app';
 import { REDIRECT_PAGE_PARAMETER, REDIRECT_PARAMETER, INDEX, findByName, findByPage, findByPath } from '@/lib/routes';
 import { getPathAndQuery, getThirdPartyJumpOff } from '@/lib/utils';
 
@@ -93,7 +94,7 @@ export default {
         if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
           this.getAssertedLoginIdentityAndNavigate();
         } else {
-          window.location = this.redirectPath;
+          this.navigateToExternalPath(this.redirectPath);
         }
         return;
       }
@@ -116,7 +117,9 @@ export default {
           ignoreError: true,
         })
         .then((response) => {
-          window.location = this.appendAssertedLoginIdentity(this.redirectPath, response);
+          this.navigateToExternalPath(
+            this.appendAssertedLoginIdentity(this.redirectPath, response),
+          );
         })
         .catch((error) => {
           consola.error(new Error(`Failed to get AssertedLoginIdentity: ${error.response.status}`));
@@ -131,6 +134,13 @@ export default {
     },
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';
+    },
+    navigateToExternalPath(path) {
+      if (NativeApp.supportsNativeNavigation()) {
+        NativeApp.navigateToThirdParty(path);
+      } else {
+        window.location = path;
+      }
     },
   },
 };

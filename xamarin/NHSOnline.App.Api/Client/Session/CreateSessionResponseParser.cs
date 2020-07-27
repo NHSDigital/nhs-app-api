@@ -35,7 +35,6 @@ namespace NHSOnline.App.Api.Client.Session
             {
                 HttpStatusCode.Created => HandleCreated(httpResponseMessage),
                 HttpStatusCode.BadRequest => HandleBadRequest(httpResponseMessage),
-                HttpStatusCode.Forbidden => HandleForbidden(httpResponseMessage),
                 OdsCodeNotSupportedOrNoNhsNumber => HandleOdsCodeNotSupportedOrNoNhsNumber(httpResponseMessage),
                 FailedAgeRequirement => HandleFailedAgeRequirement(httpResponseMessage),
                 HttpStatusCode.InternalServerError => HandleInternalServerError(),
@@ -78,19 +77,7 @@ namespace NHSOnline.App.Api.Client.Session
             var validationResult = _errorResponseModelValidator.Validate(model);
 
             return validationResult.Accept<ApiCreateSessionResult>(
-                response => new ApiCreateSessionResult.BadRequest(response), 
-                () => new ApiCreateSessionResult.Failure());
-        }
-
-        private async Task<ApiCreateSessionResult> HandleForbidden(HttpResponseMessage httpResponseMessage)
-        {
-            _logger.LogWarning("Create Session returned forbidden");
-
-            var model = await _jsonResponseParser.Parse<PfsErrorResponseModel>(httpResponseMessage).ResumeOnThreadPool();
-            var validationResult = _errorResponseModelValidator.Validate(model);
-
-            return validationResult.Accept<ApiCreateSessionResult>(
-                response => new ApiCreateSessionResult.Forbidden(response), 
+                response => new ApiCreateSessionResult.BadRequest(response),
                 () => new ApiCreateSessionResult.Failure());
         }
 

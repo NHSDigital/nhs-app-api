@@ -13,6 +13,8 @@ namespace NHSOnline.App.Areas.Home.Views
     {
         private readonly ILogger _logger;
 
+        public event EventHandler<string>? NavigateToThirdPartyRequested;
+
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
             _logger = logger;
@@ -23,6 +25,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
             NavigationPage.SetHasNavigationBar(this, false);
         }
+
+        public Command<string> NavigateToThirdPartyCommand => new Command<string>(url => NavigateToThirdPartyRequested?.Invoke(this, url));
 
         protected override void OnAppearing()
         {

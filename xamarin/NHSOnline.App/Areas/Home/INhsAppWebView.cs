@@ -18,6 +18,8 @@ namespace NHSOnline.App.Areas.Home
         event EventHandler<EventArgs> RecordRequested;
         event EventHandler<EventArgs> MoreRequested;
 
+        event EventHandler<string> NavigateToThirdPartyRequested;
+
         INavigation Navigation { get; }
         void GoToUri(Uri uri);
         void NavigateWithinApp(string spaPath);

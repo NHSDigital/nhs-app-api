@@ -47,6 +47,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.PrescriptionsRequested += PrescriptionsRequested;
             _view.RecordRequested += RecordRequested;
             _view.MoreRequested += MoreRequested;
+
+            _view.NavigateToThirdPartyRequested += NavigateToThirdPartyRequested;
+        }
+
+        private void NavigateToThirdPartyRequested(object sender, string url)
+        {
+            _logger.LogInformation("NavigateToThirdPartyRequested - {Url}", url);
         }
 
         private async void ViewOnAppearing(object sender, EventArgs e)

@@ -6,8 +6,11 @@
              xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
              xmlns:app="clr-namespace:NHSOnline.App;assembly=NHSOnline.App"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage">
+             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage"
+             x:Name="Page">
 
-    <webViews:NhsAppWebView x:Name="WebView" VerticalOptions = "FillAndExpand"/>
+    <webViews:NhsAppWebView x:Name="WebView"
+                            VerticalOptions="FillAndExpand"
+                            NavigateToThirdPartyCommand="{Binding NavigateToThirdPartyCommand, Source={x:Reference Name=Page}}" />
     
 </app:NhsAppFullHeaderPage>

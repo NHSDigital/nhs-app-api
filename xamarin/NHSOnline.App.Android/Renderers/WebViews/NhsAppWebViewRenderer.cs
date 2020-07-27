@@ -16,6 +16,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         public NhsAppWebViewRenderer(Context context) : base(context)
         { }
 
+        private NhsAppJavascriptBridge? _nhsAppJavascriptBridge;
+
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
@@ -28,11 +30,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             if (e.OldElement is NhsAppWebView oldNhsAppWebView)
             {
                 oldNhsAppWebView.SetCookie = null;
+                Control.RemoveJavascriptInterface(NhsAppJavascriptBridge.JavascriptObjectName);
+                _nhsAppJavascriptBridge?.Dispose();
             }
 
             if (e.NewElement is NhsAppWebView newNhsAppWebView)
             {
                 newNhsAppWebView.SetCookie = SetCookie;
+                _nhsAppJavascriptBridge = new NhsAppJavascriptBridge(newNhsAppWebView);
+                Control.AddJavascriptInterface(_nhsAppJavascriptBridge, NhsAppJavascriptBridge.JavascriptObjectName);
             }
         }
 
@@ -40,6 +46,16 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             CookieManager.Instance.SetCookie(cookie.Domain, cookie.ToString());
             return Task.CompletedTask;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _nhsAppJavascriptBridge?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }
