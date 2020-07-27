@@ -22,8 +22,9 @@ const addApiError = ({ dispatch }, statusCode, errorCode, message) => dispatch('
 });
 
 export default {
-  updateRegistration({ commit }) {
+  async updateRegistration({ commit }) {
     commit(SET_WAITING, true);
+    await this.dispatch('auth/ensureAccessToken');
     NativeApp.updateBiometricRegistration();
   },
 

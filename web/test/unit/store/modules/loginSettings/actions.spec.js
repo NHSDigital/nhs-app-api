@@ -13,12 +13,14 @@ jest.mock('@/services/native-app');
 describe('loginSettings actions', () => {
   describe('updateRegistration', () => {
     let commit;
-    beforeEach(() => {
+    beforeEach(async () => {
       commit = jest.fn();
-      actions.updateRegistration({ commit });
+      actions.dispatch = jest.fn();
+      await actions.updateRegistration({ commit });
     });
     it('will redirect to biometric login error page', () => {
       expect(commit).toHaveBeenCalledWith(SET_WAITING, true);
+      expect(actions.dispatch).toHaveBeenCalledWith('auth/ensureAccessToken');
       expect(NativeCallbacks.updateBiometricRegistration).toHaveBeenCalled();
     });
   });
