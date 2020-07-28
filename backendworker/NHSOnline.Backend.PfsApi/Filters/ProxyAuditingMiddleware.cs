@@ -29,16 +29,12 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
         public async Task Invoke(HttpContext context)
         {
-            var userSessionOption = context.RequestServices.GetRequiredService<IUserSessionService>().GetUserSession<P9UserSession>();
+            var userSessionOption = context.RequestServices
+                .GetRequiredService<IUserSessionService>()
+                .GetUserSession<P9UserSession>();
 
             userSessionOption.IfSome(userSession =>
             {
-
-                if (userSession.GpUserSession is null)
-                {
-                    return;
-                }
-
                 var gpSystem = context.RequestServices.GetRequiredService<IGpSystemFactory>().CreateGpSystem(userSession.GpUserSession.Supplier);
 
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))

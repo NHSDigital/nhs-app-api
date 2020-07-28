@@ -18,5 +18,7 @@ namespace NHSOnline.Backend.Support
         public bool Im1MessagingEnabled { get; set; }
 
         public Guid Id { get; set; }
+
+        public abstract T Accept<T>(IGpUserSessionVisitor<T> visitor);
     }
 }

@@ -1,11 +1,14 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.Areas.Session;
+using NHSOnline.Backend.PfsApi.GpSession;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 
@@ -14,21 +17,24 @@ namespace NHSOnline.Backend.PfsApi.Filters
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public sealed class UnauthorisedGpSystemHttpRequestExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly IUserSessionService _userSessionService;
-        private readonly IUserSessionManager _userSessionManager;
-        private readonly IAuditor _auditor;
         private readonly ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> _logger;
+        private readonly IUserSessionService _userSessionService;
+        private readonly ISessionCacheService _sessionCacheService;
+        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
+        private readonly ISessionErrorResultBuilder _sessionErrorResultBuilder;
 
         public UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(
+            ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> logger,
             IUserSessionService userSessionService,
-            IUserSessionManager userSessionManager,
-            IAuditor auditor,
-            ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> logger)
+            ISessionCacheService sessionCacheService,
+            IErrorReferenceGenerator errorReferenceGenerator,
+            ISessionErrorResultBuilder sessionErrorResultBuilder)
         {
-            _userSessionService = userSessionService;
-            _userSessionManager = userSessionManager;
-            _auditor = auditor;
             _logger = logger;
+            _userSessionService = userSessionService;
+            _sessionCacheService = sessionCacheService;
+            _errorReferenceGenerator = errorReferenceGenerator;
+            _sessionErrorResultBuilder = sessionErrorResultBuilder;
         }
 
         public override async Task OnExceptionAsync(ExceptionContext context)
@@ -37,29 +43,66 @@ namespace NHSOnline.Backend.PfsApi.Filters
             {
                 return;
             }
-            
-            if (context.Exception is UnauthorisedGpSystemHttpRequestException)
+
+            if (!(context.Exception is UnauthorisedGpSystemHttpRequestException))
             {
-                _logger.LogWarning($"{nameof(UnauthorisedGpSystemHttpRequestException)} was caught - returning {nameof(StatusCodes.Status401Unauthorized)}");
-                _logger.LogDebug($"{context.Exception}");
-
-                var userSession = _userSessionService.GetUserSession<UserSession>();
-
-                await userSession
-                    .IfSome<Task>(async session => await DeleteUserSession(context.HttpContext, session))
-                    .IfNone(Task.CompletedTask);
-
-                context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
-                context.ExceptionHandled = true;
+                return;
             }
+
+            await ClearDownGpUserSessionIfPresent(context);
+
+            _logger.LogDebug(context.Exception, $"{nameof(UnauthorisedGpSystemHttpRequestException)} handled");
+
+            context.ExceptionHandled = true;
         }
 
-        private async Task<DeleteUserSessionResult> DeleteUserSession(HttpContext httpContext, UserSession session)
+        [SuppressMessage("ReSharper", "CA1031", Justification = "Exception filter should not throw an exception")]
+        private async Task ClearDownGpUserSessionIfPresent(ExceptionContext context)
         {
-            // Exception filters execute outside of action filters so we need to setup the auditor scope manually
-            using var _ = _auditor.BeginScope(httpContext);
+            UserSession userSession = null;
 
-            return await _userSessionManager.Delete(httpContext, session);
+            _userSessionService.GetUserSession<UserSession>()
+                .IfSome(s => userSession = s);
+
+            var p9UserSession = userSession as P9UserSession;
+
+            if (p9UserSession is null)
+            {
+                context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
+
+                var sessionType = userSession is null ? "user with no session" : "P5 user";
+                _logger.LogWarning($"{ nameof(UnauthorisedGpSystemHttpRequestException) } was caught - " +
+                                   $"returning { nameof(StatusCodes.Status401Unauthorized) } for { sessionType }");
+
+                return;
+            }
+
+            try
+            {
+                _logger.LogInformation(
+                    "Attempting to clear down GP User Session for P9 user after receiving an unauthorised " +
+                    "response from GP System");
+
+                var clearDownVisitor = new GpUserSessionClearDownVisitor(
+                    _logger,
+                    _errorReferenceGenerator,
+                    _sessionCacheService,
+                    p9UserSession);
+
+                await clearDownVisitor.Visit(p9UserSession.GpUserSession);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to clear down P9 GP User Session", ex);
+            }
+            finally
+            {
+                context.Result = _sessionErrorResultBuilder.BuildResult(new ErrorTypes.GPSessionUnavailable());
+
+                _logger.LogWarning($"{ nameof(UnauthorisedGpSystemHttpRequestException) } was caught - " +
+                                   $"returning { Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable } for " +
+                                   "P9 user");
+            }
         }
     }
 }

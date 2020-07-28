@@ -1,44 +1,40 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.CitizenId;
+using NHSOnline.Backend.PfsApi.GpSession;
+using NHSOnline.Backend.PfsApi.GpSession.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Session
 {
-    internal sealed class P9UserSessionCreator
+    public sealed class P9UserSessionCreator
     {
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IAuditor _auditor;
-        private readonly ILogger<UserSessionManager> _logger;
-        private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly IGpSessionManager _gpSessionManager;
+        private readonly ILogger<P9UserSessionCreator> _logger;
+        private readonly IGpSessionCreator _gpSessionCreator;
         private readonly IIm1CacheService _im1CacheService;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public P9UserSessionCreator(
             ISessionCacheService sessionCacheService,
             IAuditor auditor,
-            ILogger<UserSessionManager> logger,
-            IGpSystemFactory gpSystemFactory,
-            IGpSessionManager gpSessionManager,
+            ILogger<P9UserSessionCreator> logger,
+            IGpSessionCreator gpSessionCreator,
             IIm1CacheService im1CacheService,
             IErrorReferenceGenerator errorReferenceGenerator)
         {
             _sessionCacheService = sessionCacheService;
             _auditor = auditor;
+            _gpSessionCreator = gpSessionCreator;
             _logger = logger;
-            _gpSystemFactory = gpSystemFactory;
-            _gpSessionManager = gpSessionManager;
             _im1CacheService = im1CacheService;
             _errorReferenceGenerator = errorReferenceGenerator;
         }
@@ -54,61 +50,36 @@ namespace NHSOnline.Backend.PfsApi.Session
                 .Supplier(serviceJourneyRules.Journeys.Supplier)
                 .Operation(AuditingOperations.GpSessionCreate)
                 .Details("Attempting to create Session")
-                .Execute(async () => await CreateP9UserSession(citizenIdSessionResult, serviceJourneyRules.Journeys.Supplier, csrfToken));
+                .Execute(() => CreateP9UserSession(
+                    citizenIdSessionResult,
+                    serviceJourneyRules.Journeys.Supplier,
+                    citizenIdSessionResult.Session.OdsCode,
+                    csrfToken));
         }
 
         private async Task<CreateUserSessionResult> CreateP9UserSession(
             CitizenIdSessionResult citizenIdSessionResult,
             Supplier supplier,
+            string odsCode,
             string csrfToken)
-        {
-            var gpSystem = FetchGpSystem(citizenIdSessionResult, supplier);
-            if (gpSystem.ProcessFinishedEarly(out var gpSystemResult))
-            {
-                return gpSystemResult;
-            }
-
-            var gpSessionCreateResult = await CreateGpSession(citizenIdSessionResult, gpSystem.Result);
-            if (gpSessionCreateResult.ProcessFinishedEarly(out var gpSessionResult))
-            {
-                if (gpSessionResult is CreateUserSessionResult.Failure gpSessionResultFailure
-                    && gpSessionResultFailure.ErrorType is ErrorTypes.GPSessionUnavailable)
-                {
-                    var reference =
-                        _errorReferenceGenerator.GenerateAndLogErrorReference(gpSessionResultFailure.ErrorType);
-                    var userSessionNoGp = await CreateP9UserSessionNoGpSystem(citizenIdSessionResult, csrfToken, reference);
-                    await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
-                    return CreateUserSessionResult.SucceededNoGpSession(userSessionNoGp);
-                }
-
-                return gpSessionResult;
-            }
-
-            var userSession = await CreateP9UserSession(citizenIdSessionResult, gpSessionCreateResult.Result, csrfToken);
-            await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
-            return CreateUserSessionResult.Succeeded(userSession);
-        }
-
-        private ProcessResult<IGpSystem, CreateUserSessionResult> FetchGpSystem(
-            CitizenIdSessionResult citizenIdSessionResult,
-            Supplier supplier)
         {
             if (supplier == Supplier.Unknown)
             {
-                return FinalResult<IGpSystem>(
-                    $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.Session.OdsCode}'",
-                    new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
+                return new CreateUserSessionResult.Failure(
+                    new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported(),
+                    $"Failed to determine the GP system based on ODS code '{odsCode}'");
             }
-            var gpSystem = _gpSystemFactory.CreateGpSystem(supplier);
-                _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-                return ProcessResult.StepResult<IGpSystem, CreateUserSessionResult>(gpSystem);
-        }
 
-        private async Task<ProcessResult<GpUserSession, CreateUserSessionResult>> CreateGpSession(
-            CitizenIdSessionResult citizenIdSessionResult, IGpSystem gpSystem)
-        {
-            var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
-            return gpSessionCreateResult.Accept(new GpSessionCreateResultVisitor(_logger, gpSystem.Supplier));
+            var gpSessionCreateResult = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
+            var gpUserSession = gpSessionCreateResult.Accept(new GpSessionCreateResultVisitor(
+                _logger, odsCode, supplier, _errorReferenceGenerator));
+
+            var userSession = await CreateP9UserSession(
+                citizenIdSessionResult, gpUserSession, csrfToken);
+
+            await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
+
+            return CreateUserSessionResult.Succeeded(userSession);
         }
 
         private async Task<P9UserSession> CreateP9UserSession(CitizenIdSessionResult citizenIdSessionResult,
@@ -120,22 +91,6 @@ namespace NHSOnline.Backend.PfsApi.Session
                 citizenIdSessionResult.Session,
                 gpUserSession,
                 citizenIdSessionResult.Im1ConnectionToken);
-
-            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
-            _logger.LogDebug($"Created Session Id: '{sessionId}'");
-            return userSession;
-        }
-
-        private async Task<P9UserSession> CreateP9UserSessionNoGpSystem(CitizenIdSessionResult citizenIdSessionResult,
-            string csrfToken, string serviceDeskReferenceCode)
-        {
-            _logger.LogInformation("P9 user session created with no GP session");
-            var userSession = new P9UserSession(
-                csrfToken,
-                citizenIdSessionResult.Session,
-                citizenIdSessionResult.NhsNumber,
-                citizenIdSessionResult.Im1ConnectionToken,
-                serviceDeskReferenceCode);
 
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
             _logger.LogDebug($"Created Session Id: '{sessionId}'");
@@ -155,70 +110,11 @@ namespace NHSOnline.Backend.PfsApi.Session
                 StringComparison.Ordinal,
                 out var cacheKeyToken))
             {
-                var cacheKey = cacheKeyToken?.ToString();
+                var cacheKey = cacheKeyToken.ToString();
                 if (!string.IsNullOrEmpty(cacheKey))
                 {
                     await _im1CacheService.DeleteIm1ConnectionToken(cacheKey);
                 }
-            }
-        }
-
-        private ProcessResult<TStepResult, CreateUserSessionResult> FinalResult<TStepResult>(string message, ErrorTypes errorTypes)
-        {
-            _logger.LogError(message);
-            return ProcessResult.FinalResult<TStepResult, CreateUserSessionResult>(CreateUserSessionResult.Failed(errorTypes, message));
-        }
-
-        private sealed class GpSessionCreateResultVisitor : IGpSessionCreateResultVisitor<ProcessResult<GpUserSession, CreateUserSessionResult>>
-        {
-            private readonly ILogger _logger;
-            private readonly Supplier _supplier;
-
-            public GpSessionCreateResultVisitor(ILogger logger, Supplier supplier)
-            {
-                _logger = logger;
-                _supplier = supplier;
-            }
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Success success)
-                => ProcessResult.StepResult<GpUserSession, CreateUserSessionResult>(success.UserSession);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Forbidden result)
-                => Failed(new ErrorTypes.LoginForbidden(), result.Message);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadGateway result)
-            => Failed(ErrorTypes.LoginBadGateway(_logger, _supplier), result.Message);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.ErrorExceptionResult result)
-                => Failed(new ErrorTypes.LoginErrorExceptionResult(), result.ErrorMessage);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Timeout result)
-                => Failed(ErrorTypes.LoginTimeout(_logger, _supplier), result.ErrorMessage);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Unparseable result)
-                => Failed(new ErrorTypes.LoginGPUnparseable(), result.ErrorMessage);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InternalServerError result)
-                => Failed(new ErrorTypes.LoginUnexpectedError(), result.Message);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadRequest result)
-                => Failed(new ErrorTypes.LoginBadRequest(), result.Message);
-
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InvalidConnectionToken result)
-                => Failed(new ErrorTypes.LoginForbidden(), "Invalid connection token");
-
-            private ProcessResult<GpUserSession, CreateUserSessionResult> Failed(ErrorTypes errorType, string message)
-            {
-                var errorMessage = $"Creating the session failed: {message}";
-                var result = CreateUserSessionResult.Failed(errorType, errorMessage);
-                _logger.LogError(errorMessage);
-
-                if (errorType is ErrorTypes.LoginForbidden)
-                {
-                    return ProcessResult.FinalResult<GpUserSession, CreateUserSessionResult>(result);
-                }
-                result = CreateUserSessionResult.Failed(new ErrorTypes.GPSessionUnavailable(errorType.Prefix), message);
-                return ProcessResult.FinalResult<GpUserSession, CreateUserSessionResult>(result);
             }
         }
     }

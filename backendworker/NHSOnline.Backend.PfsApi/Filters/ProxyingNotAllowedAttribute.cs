@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support.Session;
 using Constants = NHSOnline.Backend.Support.Constants;
 
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
             p9UserSessionOpt.IfSome(p9UserSession =>
             {
-                if (p9UserSession.GpUserSession != null && IsProxying(p9UserSession, httpContext))
+                if (IsProxying(p9UserSession, httpContext))
                 {
                     logger.LogWarning(
                             $"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
@@ -33,6 +34,15 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
         private static bool IsProxying(P9UserSession userSession, HttpContext httpContext)
         {
+            var gpSystem = httpContext.RequestServices
+                .GetRequiredService<IGpSystemFactory>()
+                .CreateGpSystem(userSession.GpUserSession.Supplier);
+
+            if (!gpSystem.SupportsLinkedAccounts)
+            {
+                return false;
+            }
+
             var loggedInPatientIdFromSession = userSession.GpUserSession.Id;
             var patientIdInRequestHeader = httpContext.Request.Headers[Constants.HttpHeaders.PatientId];
 

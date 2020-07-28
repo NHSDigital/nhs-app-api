@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.Support;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         private AuthorizationFilterContext _context;
         private HttpContext _httpContext;
         private Mock<IUserSessionService> _mockUserSessionService;
+        private Mock<IGpSystem> _mockGpSystem;
 
         [TestInitialize]
         public void TestInitialize()
@@ -33,6 +35,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _mockUserSessionService = new Mock<IUserSessionService>();
             var mockServiceProvider = new Mock<IServiceProvider>();
 
+            var mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            _mockGpSystem = new Mock<IGpSystem>();
+
+            _mockGpSystem.Setup(s => s.SupportsLinkedAccounts).Returns(true);
+
+            mockGpSystemFactory.Setup(f => f.CreateGpSystem(It.IsAny<Supplier>()))
+                .Returns(_mockGpSystem.Object);
+
             _httpContext = new DefaultHttpContext { RequestServices = mockServiceProvider.Object };
 
             mockServiceProvider
@@ -42,6 +52,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             mockServiceProvider
                 .Setup(x => x.GetService(typeof(IUserSessionService)))
                 .Returns(_mockUserSessionService.Object);
+
+            mockServiceProvider
+                .Setup(x => x.GetService(typeof(IGpSystemFactory)))
+                .Returns(mockGpSystemFactory.Object);
 
             var actionContext = new ActionContext
             {

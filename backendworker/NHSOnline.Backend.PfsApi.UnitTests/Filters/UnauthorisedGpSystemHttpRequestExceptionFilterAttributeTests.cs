@@ -2,18 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Jose;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.Filters;
-using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
@@ -23,178 +21,164 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
     [TestClass]
     public class UnauthorisedGpSystemHttpRequestExceptionFilterAttributeTests
     {
+        private P9UserSession _p9Session;
+        private GpUserSession _gpSession;
+
+        private IUserSessionService _sessionService;
+        private ISessionCacheService _sessionCacheService;
+        private IErrorReferenceGenerator _errorReferenceGenerator;
+
+        private HttpContext _mockHttpContext;
+        private ActionContext _actionContext;
+        private ExceptionContext _exceptionContext;
+        private IActionResult _gpSessionUnavailableResult;
+
         private UnauthorisedGpSystemHttpRequestExceptionFilterAttribute _systemUnderTest;
-        private Mock<HttpContext> _mockHttpContext;
-        private Mock<IUserSessionManager> _userSessionManager;
-        private Mock<IUserSessionService> _userSessionService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            var logger = new Mock<ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>>();
+            var logger = Mock.Of<ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>>();
 
-            _userSessionManager = new Mock<IUserSessionManager>();
-            _userSessionService = new Mock<IUserSessionService>();
+            _gpSession = Mock.Of<GpUserSession>();
+            _p9Session = new P9UserSession(
+                "csrf",
+                "1234567890",
+                new CitizenIdUserSession
+                {
+                    OdsCode = "A12345"
+                },
+                _gpSession,
+                "con_token");
+
+            Mock.Get(_gpSession)
+                .Setup(gp => gp.Supplier)
+                .Returns(Supplier.Emis);
+
+            _sessionService = Mock.Of<IUserSessionService>();
+            _sessionCacheService = Mock.Of<ISessionCacheService>();
+            _errorReferenceGenerator = Mock.Of<IErrorReferenceGenerator>();
+
+            _gpSessionUnavailableResult = Mock.Of<IActionResult>();
+
+            var sessionErrorResultBuilder = Mock.Of<ISessionErrorResultBuilder>();
+
+            Mock.Get(sessionErrorResultBuilder)
+                .Setup(b => b.BuildResult(It.IsAny<ErrorTypes.GPSessionUnavailable>()))
+                .Returns(_gpSessionUnavailableResult);
+
+            Mock.Get(_sessionService)
+                .Setup(s => s.GetUserSession<UserSession>())
+                .Returns(Option.Some<UserSession>(_p9Session));
+
+            _mockHttpContext = Mock.Of<HttpContext>();
+
+            _actionContext = new ActionContext
+            {
+                HttpContext = _mockHttpContext,
+                RouteData = new Microsoft.AspNetCore.Routing.RouteData(),
+                ActionDescriptor = new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor(),
+            };
+
+            _exceptionContext = new ExceptionContext(_actionContext, new List<IFilterMetadata>())
+            {
+                Exception = new UnauthorisedGpSystemHttpRequestException(),
+                ExceptionHandled = false
+            };
 
             _systemUnderTest = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(
-                _userSessionService.Object,
-                _userSessionManager.Object,
-                new Mock<IAuditor>().Object,
-                logger.Object);
-
-            _mockHttpContext = new Mock<HttpContext>();
+                logger,
+                _sessionService,
+                _sessionCacheService,
+                _errorReferenceGenerator,
+                sessionErrorResultBuilder);
         }
 
         [TestMethod]
-        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_CallUserSessionManagerDelete()
+        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_SetsResultToGpSessionUnavailable()
         {
-            // Arrange
-            var userSession = new P9UserSession(string.Empty, "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
-            ArrangeUserSession(userSession);
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
-
-            // Assert
-            _userSessionManager.Verify(x => x.Delete(_mockHttpContext.Object, userSession));
-        }
-
-        [TestMethod]
-        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_SetsResultTo401()
-        {
-            // Arrange
-            var userSession = new P9UserSession(string.Empty, "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
-            ArrangeUserSession(userSession);
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
-
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
-
-            // Assert
-            exceptionContext.Result.Should().NotBeNull()
-                .And.BeOfType<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
-        }
-
-        [TestMethod]
-        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP5UserSession_CallsUserSessionManagerDelete()
-        {
-            // Arrange
-            var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession());
-            ArrangeUserSession(userSession);
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
-
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
-
-            // Assert
-            _userSessionManager.Verify(x => x.Delete(_mockHttpContext.Object, userSession));
+            Assert.AreEqual(_gpSessionUnavailableResult, _exceptionContext.Result);
         }
 
         [TestMethod]
         public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP5UserSession_SetsResultTo401()
         {
-            // Arrange
-            var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession());
-            ArrangeUserSession(userSession);
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
+            Mock.Get(_sessionService)
+                .Setup(s => s.GetUserSession<UserSession>())
+                .Returns(
+                    Option.Some<UserSession>(new P5UserSession(string.Empty, new CitizenIdUserSession())));
 
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-            // Assert
-            exceptionContext.Result.Should().NotBeNull()
+            _exceptionContext.Result.Should().NotBeNull()
                 .And.BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
-        }
-
-        [TestMethod]
-        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionNoUserSession_DoesNotCallUserSessionManagerDelete()
-        {
-            // Arrange
-            ArrangeUserSession(Option.None<UserSession>());
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
-
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
-
-            // Assert
-            _userSessionManager.Verify(
-                x => x.Delete(_mockHttpContext.Object, It.IsAny<UserSession>()),
-                Times.Never);
         }
 
         [TestMethod]
         public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionNoUserSession_SetsResultTo401()
         {
-            // Arrange
-            ArrangeUserSession(Option.None<UserSession>());
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(exceptionHandled: false);
+            Mock.Get(_sessionService)
+                .Setup(s => s.GetUserSession<UserSession>())
+                .Returns(Option.None<UserSession>());
 
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-            // Assert
-            exceptionContext.Result.Should().NotBeNull()
-                .And.BeOfType<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+            _exceptionContext.Result
+                .Should()
+                .NotBeNull()
+                .And
+                .BeOfType<StatusCodeResult>()
+                .Subject
+                .StatusCode
+                .Should()
+                .Be(StatusCodes.Status401Unauthorized);
         }
 
         [TestMethod]
         public async Task OnExceptionAsync_DoesNotCatchOtherExceptionType_ResultIsNotSet()
         {
-            // Arrange
-            var exceptionContext = CreateExceptionContext<InvalidOperationException>(exceptionHandled: false);
+            _exceptionContext.Exception = new InvalidAlgorithmException("oops");
 
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-            // Assert
-            exceptionContext.Result.Should().BeNull();
+            _exceptionContext.Result
+                .Should()
+                .BeNull();
         }
 
         [TestMethod]
         public async Task OnException_ExceptionAlreadyHandled_ResultUnchanged()
         {
-            // Arrange
-            var exceptionContext = CreateExceptionContext<UnauthorisedGpSystemHttpRequestException>(
-                exceptionHandled: true,
-                result: new StatusCodeResult(StatusCodes.Status418ImATeapot));
+            _exceptionContext.Exception = new InvalidCastException("bad");
+            _exceptionContext.ExceptionHandled = true;
+            _exceptionContext.Result = new StatusCodeResult(StatusCodes.Status418ImATeapot);
 
-            // Act
-            await _systemUnderTest.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-            // Assert
-            exceptionContext.Result.Should().BeOfType<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(StatusCodes.Status418ImATeapot);
-            exceptionContext.ExceptionHandled.Should().BeTrue();
+            _exceptionContext.Result
+                .Should()
+                .BeOfType<StatusCodeResult>()
+                .Subject
+                .StatusCode
+                .Should()
+                .Be(StatusCodes.Status418ImATeapot);
+
+            _exceptionContext.ExceptionHandled
+                .Should()
+                .BeTrue();
         }
 
-        private ExceptionContext CreateExceptionContext<TException>(
-            IActionResult result = null,
-            bool? exceptionHandled = null)
-            where TException : Exception, new()
+        [TestMethod]
+        public async Task OnExceptionAsync_UnauthorisedHttpResponseExceptionP9UserSession_ClearsDownGpUserSession()
         {
-            var actionContext = new ActionContext
-            {
-                HttpContext = _mockHttpContext.Object,
-                RouteData = new RouteData(),
-                ActionDescriptor = new ActionDescriptor()
-            };
-            return new ExceptionContext(actionContext, new List<IFilterMetadata>())
-            {
-                Exception = new TException(),
-                ExceptionHandled = exceptionHandled ?? false,
-                Result = result
-            };
-        }
+            await _systemUnderTest.OnExceptionAsync(_exceptionContext);
 
-        private void ArrangeUserSession(UserSession userSession) => ArrangeUserSession(Option.Some(userSession));
-
-        private void ArrangeUserSession(Option<UserSession> userSession)
-        {
-            _userSessionService.Setup(x => x.GetUserSession<UserSession>()).Returns(userSession);
+            Assert.AreEqual(typeof(NullGpSession), _p9Session.GpUserSession.GetType());
+            Mock.Get(_sessionCacheService)
+                .Verify(s => s.UpdateUserSession(_p9Session));
         }
     }
 }

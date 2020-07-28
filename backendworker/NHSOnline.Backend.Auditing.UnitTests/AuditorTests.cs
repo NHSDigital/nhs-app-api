@@ -228,9 +228,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             return new P9UserSession(
                 string.Empty,
-                new CitizenIdUserSession { AccessToken = accessToken },
                 nhsNumber,
-                string.Empty,
+                new CitizenIdUserSession { AccessToken = accessToken },
+                new NullGpSession(Supplier.Tpp, "1 plus 2 is three"),
                 string.Empty);
         }
 

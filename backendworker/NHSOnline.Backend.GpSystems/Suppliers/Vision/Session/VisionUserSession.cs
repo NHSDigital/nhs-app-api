@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
     public class VisionUserSession : GpUserSession, IVisionUserSession
     {
         public override Supplier Supplier => Supplier.Vision;
-        
+
         public override bool HasLinkedAccounts => false;
 
         public string RosuAccountId { get; set; }
@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
         public string PatientId { get; set; }
 
         public string ApiKey { get; set; }
-        
+
         public bool IsRepeatPrescriptionsEnabled { get; set; }
 
         public bool IsAppointmentsEnabled { get; set; } = true;
@@ -26,5 +26,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
         public Necessity AppointmentBookingReasonNecessity { get; set; } = Necessity.Optional;
 
         public List<string> LocationIds { get; set; }
+
+        public override T Accept<T>(IGpUserSessionVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
     }
 }

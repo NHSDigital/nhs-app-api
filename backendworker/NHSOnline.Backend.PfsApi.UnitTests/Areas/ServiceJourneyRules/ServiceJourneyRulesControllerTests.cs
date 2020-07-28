@@ -50,6 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService = new Mock<IServiceJourneyRulesService>();
             _sessionConfigSettings = new SessionConfigurationSettings(true);
             _gpUserSession = new Mock<GpUserSession>();
+
             _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpUserSession.Object, "im1token")
             {
                 GpUserSession = { NhsNumber = "Nhs number", OdsCode = "ODS Code" }

@@ -10,23 +10,30 @@ namespace NHSOnline.Backend.PfsApi
 {
     internal static class PfsMvcOptions
     {
+        /**
+         *  NB - order of adding these filters is important. LIFO stack is used, and the optional
+         *      'Order' parameter appears to be ignored.
+         *      Therefore please ensure UnhandledExceptionFilterAttribute is added first, so that
+         *      it is invoked as a last resort.
+         */
         internal static void Configure(MvcOptions options)
         {
-            options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
-            options.Filters.Add(new AuthorizeFilter(
-                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
-            );
+            var filters = options.Filters;
+            var authPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            var authFilter = new AuthorizeFilter(authPolicy);
 
-            /* NB - order of adding these filters is important. LIFO stack is used, and the optional
-             *      'Order' parameter appears to be ignored.
-             *      Therefore please ensure UnhandledExceptionFilterAttribute is added first, so that
-             *      it is invoked as a last resort. */
-            options.Filters.Add(typeof(UnhandledExceptionFilterAttribute));
-            options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
-            options.Filters.Add(typeof(UnparsableExceptionFilterAttribute));
-            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
-            options.Filters.Add(typeof(InvalidPatientIdExceptionFilterAttribute));
-            options.Filters.Add<UserSessionFilter>();
+            filters.Add<HttpContextAuditActionFilterAttribute>(1);
+            filters.Add(authFilter);
+            filters.Add<UnhandledExceptionFilterAttribute>();
+            filters.Add<TimeoutExceptionFilterAttribute>();
+            filters.Add<UnparsableExceptionFilterAttribute>();
+            filters.Add<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>();
+            filters.Add<InvalidPatientIdExceptionFilterAttribute>();
+            filters.Add<UserSessionFilter>();
+            // the GP session filter requires auditing, so it must invoked after the audit filter
+            filters.Add<GpSessionFilter>(2);
 
             options.InputFormatters.Insert(0, new FhirParametersInputFormatter());
         }

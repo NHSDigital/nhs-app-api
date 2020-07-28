@@ -14,6 +14,8 @@ namespace NHSOnline.Backend.Support
         Microtest = 4,
         Qualtrics = 5,
         [SourceApi(SourceApi.Fake)]
-        Fake = 6
+        Fake = 6,
+        [SourceApi(SourceApi.None)]
+        Disconnected = 7
     }
 }

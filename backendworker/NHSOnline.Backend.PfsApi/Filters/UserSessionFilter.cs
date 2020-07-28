@@ -1,44 +1,44 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.Session;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Filters
 {
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "ASP.NET Filter")]
     public sealed class UserSessionFilter : IAsyncActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            foreach (var userSessionParameter in context.ActionDescriptor.Parameters.OfType<ControllerParameterDescriptor>().Where(HasUserSessionAttribute))
+            var userSessionParameters = context.ActionDescriptor
+                .Parameters
+                .OfType<ControllerParameterDescriptor>()
+                .Where(d => d.HasAttribute<UserSessionAttribute>());
+
+            foreach (var userSessionParameter in userSessionParameters)
             {
-                var session = context.HttpContext.RequestServices.GetRequiredService<IUserSessionService>().GetRequiredUserSession<UserSession>();
-                if (userSessionParameter.ParameterType.IsInstanceOfType(session))
+                var session = context.GetRequiredService<IUserSessionService>()
+                    .GetRequiredUserSession<UserSession>();
+                var invalidParameterTypeDetected = !userSessionParameter.ParameterType
+                    .IsInstanceOfType(session);
+
+                if (invalidParameterTypeDetected)
                 {
-                    context.ActionArguments[userSessionParameter.Name] = session;
-                }
-                else
-                {
-                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<UserSessionFilter>>();
-                    logger.LogInformation(
-                        $"Action requires {userSessionParameter.ParameterType.Name} session but current session is {session.GetType().Name}");
-                    context.Result = new UnauthorizedResult();
+                    context.EmitUnauthorisedResult<UserSessionFilter>(
+                        $"Action requires {userSessionParameter.ParameterType.Name} session but current " +
+                        $"session is {session.GetType().Name}");
+
                     return;
                 }
+
+                context.ActionArguments[userSessionParameter.Name] = session;
             }
 
             await next();
         }
-
-        private bool HasUserSessionAttribute(ControllerParameterDescriptor descriptor)
-            => descriptor.ParameterInfo.CustomAttributes.Any(HasUserSessionAttribute);
-
-        private static bool HasUserSessionAttribute(CustomAttributeData attribute)
-            => attribute.AttributeType == typeof(UserSessionAttribute);
     }
 }

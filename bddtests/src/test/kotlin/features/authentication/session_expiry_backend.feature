@@ -47,7 +47,7 @@ Feature: Session Extend Backend
     Given I have logged into <GP System> and have a valid session cookie
     And the GP System session has expired when viewing prescriptions
     When I request prescriptions for the last 6 months
-    Then I receive a "Unauthorized" error
+    Then I receive a "gp supplier unavailable" error
     Examples:
       | GP System |
       | EMIS      |

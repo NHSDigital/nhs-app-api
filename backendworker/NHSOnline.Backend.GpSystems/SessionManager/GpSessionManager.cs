@@ -27,9 +27,9 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _gpSystemFactory = gpSystemFactory;
         }
 
-        public async Task<GpSessionCreateResult> CreateSession(IGpSessionCreateArgs args)
+        public async Task<GpSessionCreateResult> CreateSession(IGpSystem gpSystem, IGpSessionCreateArgs args)
         {
-            var sessionService = args.GpSystem.GetSessionService();
+            var sessionService = gpSystem.GetSessionService();
 
             return await sessionService.Create(args.Im1ConnectionToken, args.OdsCode, args.NhsNumber);
         }

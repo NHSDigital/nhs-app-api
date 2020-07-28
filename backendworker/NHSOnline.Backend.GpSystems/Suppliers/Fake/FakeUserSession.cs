@@ -10,5 +10,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         public override bool HasLinkedAccounts => ProxyPatients != null && ProxyPatients.Any();
 
         public ICollection<FakeProxyUserSession> ProxyPatients { get; set; }
+
+        public override T Accept<T>(IGpUserSessionVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
     }
 }

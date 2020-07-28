@@ -227,6 +227,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddMockLoggers();
 
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
+            new PfsApi.GpSession.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
         }

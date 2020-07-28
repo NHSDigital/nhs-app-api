@@ -51,20 +51,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 _sessionSettings,
                 Enumerable.Empty<LinkedAccount>());
 
-            if (userSession.GpUserSession is null)
-            {
-                await result.Accept(new LinkedAccountConfigResultAuditingVisitor(_auditor, _logger));
-                return result;
-            }
-
             await _auditor.Audit(AuditingOperations.GetPatientConfigRequest, "Attempting to get config for patient");
 
             var validAccounts = Enumerable.Empty<LinkedAccount>();
 
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
 
-            if (gpSystem.SupportsLinkedAccounts &&
-                userSession.GpUserSession.HasLinkedAccounts)
+            if (gpSystem.SupportsLinkedAccounts && userSession.GpUserSession.HasLinkedAccounts)
             {
                 var linkedAccountsService = gpSystem.GetLinkedAccountsService();
 

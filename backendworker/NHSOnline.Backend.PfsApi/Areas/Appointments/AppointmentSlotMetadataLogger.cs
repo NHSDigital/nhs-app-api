@@ -110,10 +110,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         internal virtual AppointmentSlotsInformation BuildSlotsInformation(GpUserSession gpUserSession, 
             AppointmentSlotsResult.Success successfulResult)
         {
-            Debug.Assert(gpUserSession != null);
-            Debug.Assert(successfulResult != null);
-            Debug.Assert(successfulResult.Response.Slots?.Any() == true);
-
             var response = successfulResult.Response;
             var responseSlots = response.Slots;
             var slotTypes = responseSlots.Select(x => x.Type).Distinct().ToArray();
@@ -132,9 +128,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         internal virtual bool ShouldBeLogged(AppointmentSlotsInformation appointmentSlotsInformation)
-        {
-            Debug.Assert(appointmentSlotsInformation!=null);
-            
+        {            
             var today = _dateTimeProvider.Today;
             
             var appointmentSlotsValue =
@@ -157,7 +151,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         internal virtual void LogInformation(AppointmentSlotsInformation appointmentSlotsInformation)
         {
-            Debug.Assert(appointmentSlotsInformation!=null);
             _logger.LogInformation("slot_type_data=" + appointmentSlotsInformation.SerializeJson());
         }
     }

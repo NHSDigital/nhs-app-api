@@ -12,14 +12,6 @@ Feature: Login error messages
     When I click the error 'Back to home' link
     Then I see the login page
 
-#403
-  Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
-    Given I attempt to log in as an EMIS user with no userPatientLinkToken
-    Then In the error message I see the service reference number prefix with "3c"
-    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
-    Then a new tab has been opened by the link
-
-
   #465
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
     Given I attempt to log in as a <GP System> user without a date of birth
@@ -32,14 +24,6 @@ Feature: Login error messages
     Examples:
       | GP System |
       | EMIS      |
-
-  @nativesmoketest
-  Scenario: CitizenID login is successful but TPP GP System authentication fails I can still login to the app
-    Given I am logged into Citizen ID but GP System authentication fails
-    Then In the error message I see the service reference number prefix with "3c"
-    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
-    When I click the error 'Back to home' link
-    Then I see the login page
 
     #465
   Scenario: Cannot log in as a TPP user with an age under 13

@@ -518,6 +518,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             gpUserSession.Object.NhsNumber = nhsNumber;
             gpUserSession.Setup(x => x.Supplier).Returns(supplier);
 
+            gpUserSession.Setup(g => g.Accept(It.IsAny<IGpUserSessionVisitor<AuditUserContext>>()))
+                .Returns<IGpUserSessionVisitor<AuditUserContext>>(v => v.Visit(gpUserSession.Object));;
+
             var userSession = new P9UserSession(
                 "csrfToken",
                 "nhsNumber",

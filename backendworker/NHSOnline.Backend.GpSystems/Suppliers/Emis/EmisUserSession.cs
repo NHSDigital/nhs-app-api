@@ -15,5 +15,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public Necessity AppointmentBookingReasonNecessity { get; set; }
         public Necessity PrescriptionSpecialRequestNecessity { get; set; }
         public ICollection<EmisProxyUserSession> ProxyPatients { get; set; }
+
+        public override T Accept<T>(IGpUserSessionVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
     }
 }

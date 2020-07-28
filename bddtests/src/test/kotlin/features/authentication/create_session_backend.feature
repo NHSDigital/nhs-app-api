@@ -39,7 +39,7 @@ Feature: Create Session Backend: The application verifies the user session
     Then I receive a "Bad Gateway" error with service desk reference prefixed "3n"
 
   Scenario: EMIS session fails to create
-    And I have valid OAuth details and the EMIS session endpoint fails to create
+    Given I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session
     Then I receive a response
     And the response has a name for the EMIS patient with no title
@@ -91,10 +91,11 @@ Feature: Create Session Backend: The application verifies the user session
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: CID connection token fails to authenticate with <GP System> so the connection token is invalid
+  Scenario Outline: When user CID connection token fails to authenticate with <GP System> they can log in
     Given I have valid OAuth details and CID connection token fails to authenticate with <GP System>
     When I create a user session
-    Then I receive a "Forbidden" error with service desk reference prefixed "3c"
+    Then I receive a response
+    And the response has service journey rules
     Examples:
       | GP System |
       | EMIS      |
@@ -137,3 +138,9 @@ Feature: Create Session Backend: The application verifies the user session
       | TPP       |
       | VISION    |
       | MICROTEST |
+
+  Scenario: When an EMIS user has no userPatientLinkToken they can log in
+    Given I attempt to log in as an EMIS user with no userPatientLinkToken
+    Then I receive a response
+    And the response has a name for the EMIS patient with no title
+    And the response has service journey rules

@@ -59,11 +59,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task VisitP9WithNoGpSessionSuccessfulDoesNotReturnAnyLinkedAccounts()
         {
             // Arrange
+            _mockGpSystem.Setup(g => g.SupportsLinkedAccounts).Returns(false);
+
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Disconnected))
+                .Returns(_mockGpSystem.Object);
+
             var userSession = new P9UserSession("csrfToken",
-                It.IsAny<CitizenIdUserSession>(),
                 "nhsNumber",
-                "im1ConnectionToken",
-                "serviceDeskReference");
+                It.IsAny<CitizenIdUserSession>(),
+                new NullGpSession(Supplier.Emis, "failure at life"),
+                "im1ConnectionToken");
 
             // Act
             var result = await _systemUnderTest.Visit(userSession);

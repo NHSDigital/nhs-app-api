@@ -1,7 +1,9 @@
 using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Session
@@ -23,7 +25,8 @@ namespace NHSOnline.Backend.PfsApi.Session
         private static bool IsUserSessionParameter(ModelMetadata modelMetadata)
         {
             return modelMetadata.MetadataKind == ModelMetadataKind.Parameter &&
-                   typeof(UserSession).IsAssignableFrom(modelMetadata.ModelType);
+                   (typeof(UserSession).IsAssignableFrom(modelMetadata.ModelType)
+                    || typeof(GpUserSession).IsAssignableFrom(modelMetadata.ModelType));
         }
     }
 }

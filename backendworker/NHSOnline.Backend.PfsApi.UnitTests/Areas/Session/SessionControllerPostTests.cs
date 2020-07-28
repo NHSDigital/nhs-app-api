@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -154,11 +155,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_GpSessionManagerReturnInvalidConnectionToken_ReturnsForbidden()
+        public async Task Post_GpSessionManagerReturnInvalidConnectionToken_ReturnsCreated()
         {
             // Arrange
             Context.MockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginForbidden>()))
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.GPSessionUnavailable>()))
                 .Returns(SessionControllerTestContext.ServiceDeskReference)
                 .Verifiable();
 
@@ -167,9 +168,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.InvalidConnectionToken());
 
             // Act
-            var expectedValue = new PfsErrorResponse
+            var expectedValue = new PostUserSessionResponse()
             {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference
+                Name = $"{Context.UserProfile.GivenName} {Context.UserProfile.FamilyName}",
+                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
+                OdsCode = Context.UserProfile.OdsCode,
+                DateOfBirth = Context.CitizenIdUserSession.DateOfBirth,
+                NhsNumber = Context.UserProfile.NhsNumber,
+                AccessToken = Context.UserProfile.AccessToken,
+                ServiceJourneyRules = Context.ServiceJourneyRulesResponse,
+                ProofLevel = ProofLevel.P9,
+                Token = SessionControllerTestContext.CsrfRequestToken,
+                UserSessionCreateReferenceCode = SessionControllerTestContext.ServiceDeskReference
             };
             var result = await CreateSystemUnderTest().Post(Context.UserSessionRequest);
 
@@ -177,14 +187,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+                objectResult.StatusCode.Should().Be(StatusCodes.Status201Created);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
                 auditStub.AccessTokenString.Should().Be(Context.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Creating the session failed: Invalid connection token");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
 
             Context.MockAuditor.Verify();
@@ -192,7 +202,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_GpSessoinManagerReturnsForbidden_ReturnsForbidden()
+        public async Task Post_GpSessionManagerReturnsForbidden_ReturnsCreated()
         {
             // Arrange
             Context.MockErrorReferenceGenerator
@@ -200,7 +210,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.Is<ErrorTypes>(
                         et =>
                             et.Category == ErrorCategory.Login &&
-                            et.StatusCode == StatusCodes.Status403Forbidden &&
+                            et.StatusCode == Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable &&
                             et.SourceApi == SourceApi.None)))
                 .Returns(SessionControllerTestContext.ServiceDeskReference)
                 .Verifiable();
@@ -212,23 +222,32 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("Message"));
 
             // Act
-            var expectedValue = new PfsErrorResponse
+            var expectedValue = new PostUserSessionResponse()
             {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference
+                Name = $"{Context.UserProfile.GivenName} {Context.UserProfile.FamilyName}",
+                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
+                OdsCode = Context.UserProfile.OdsCode,
+                DateOfBirth = Context.CitizenIdUserSession.DateOfBirth,
+                NhsNumber = Context.UserProfile.NhsNumber,
+                AccessToken = Context.UserProfile.AccessToken,
+                ServiceJourneyRules = Context.ServiceJourneyRulesResponse,
+                ProofLevel = ProofLevel.P9,
+                Token = SessionControllerTestContext.CsrfRequestToken,
+                UserSessionCreateReferenceCode = SessionControllerTestContext.ServiceDeskReference
             };
             var result = await CreateSystemUnderTest().Post(Context.UserSessionRequest);
 
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+                objectResult.StatusCode.Should().Be(StatusCodes.Status201Created);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
                 auditStub.AccessTokenString.Should().Be(Context.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Creating the session failed: Message");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
 
             Context.MockAuditor.Verify();
@@ -268,7 +287,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Session successfully created with no gp session.");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
 
             Context.MockSessionControllerLogger.Verify();
@@ -573,9 +592,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.MockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
+                        It.Is<IGpSystem>(p => ReferenceEquals(p, Context.MockGpSystem.Object)),
                         It.Is<IGpSessionCreateArgs>(p
-                            => ReferenceEquals(p.GpSystem, Context.MockGpSystem.Object) &&
-                               p.NhsNumber.Equals(Context.CitizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                            => p.NhsNumber.Equals(Context.CitizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
                                p.OdsCode.Equals(Context.CitizenIdSessionResult.Session.OdsCode, StringComparison.Ordinal) &&
                                p.Im1ConnectionToken.Equals(Context.CitizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);

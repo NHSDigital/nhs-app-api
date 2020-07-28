@@ -1,5 +1,6 @@
 using System;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 
@@ -29,11 +30,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         public TUserSessionResponse Visit(P9UserSession userSession)
         {
             SetCommonProperties(userSession);
-            _userSessionResponse.UserSessionCreateReferenceCode = userSession.UserSessionCreateReferenceCode;
+            _userSessionResponse.UserSessionCreateReferenceCode =
+                userSession.GpUserSession.Accept(new GpUserSessionReferenceCodeVisitor());
             _userSessionResponse.NhsNumber = userSession.NhsNumber;
             _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession?.Im1MessagingEnabled ?? false;
-            return _userSessionResponse;
 
+            return _userSessionResponse;
         }
 
         private void SetCommonProperties(P5UserSession userSession)

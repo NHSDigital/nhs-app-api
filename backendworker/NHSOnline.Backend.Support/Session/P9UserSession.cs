@@ -7,18 +7,6 @@ namespace NHSOnline.Backend.Support.Session
         private P9UserSession()
         { }
 
-        public P9UserSession(string csrfToken,
-            CitizenIdUserSession citizenIdUserSession,
-            string nhsNumber,
-            string im1ConnectionToken,
-            string userSessionCreateReferenceCode) :  base(csrfToken, citizenIdUserSession)
-        {
-            NhsNumber = nhsNumber;
-            Im1ConnectionToken = im1ConnectionToken;
-            UserSessionCreateReferenceCode = userSessionCreateReferenceCode;
-            OrganDonationSessionId = Guid.NewGuid();
-        }
-
         public P9UserSession(
             string csrfToken,
             string nhsNumber,
@@ -39,11 +27,7 @@ namespace NHSOnline.Backend.Support.Session
 
         public string Im1ConnectionToken { get; set; }
 
-        public string UserSessionCreateReferenceCode { get; set; }
-
         public string NhsNumber { get; set; }
-
-        public bool HasGpSession => !(GpUserSession is null) && GpUserSession.Supplier != Supplier.Unknown;
 
         public override TResult Accept<TResult>(IUserSessionVisitor<TResult> visitor)
             => visitor.Visit(this);

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing

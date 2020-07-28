@@ -9,13 +9,11 @@ namespace NHSOnline.Backend.PfsApi.Session
     {
         internal static CreateUserSessionResult Succeeded(UserSession userSession) => new Success(userSession);
 
-        internal static CreateUserSessionResult SucceededNoGpSession(UserSession userSession)
-            => new SuccessNoGpSession(userSession);
         internal static CreateUserSessionResult Failed(ErrorTypes errorType, string details) => new Failure(errorType, details);
 
         public abstract string Details { get; }
 
-        internal abstract TResult Accept<TResult>(Func<Failure, TResult> onFailure, Func<Success, TResult> onSuccess, Func<SuccessNoGpSession, TResult> onSuccessNoGpSession);
+        internal abstract TResult Accept<TResult>(Func<Failure, TResult> onFailure, Func<Success, TResult> onSuccess);
 
         internal sealed class Success: CreateUserSessionResult
         {
@@ -25,20 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             public override string Details => "Session successfully created.";
 
             internal override TResult Accept<TResult>(Func<Failure, TResult> onFailure,
-                Func<Success, TResult> onSuccess,
-                Func<SuccessNoGpSession, TResult> onSuccessNoGpSession) => onSuccess(this);
-        }
-
-        internal sealed class SuccessNoGpSession: CreateUserSessionResult
-        {
-            internal SuccessNoGpSession(UserSession result) => UserSession = result;
-
-            internal UserSession UserSession { get; }
-            public override string Details => "Session successfully created with no gp session.";
-
-            internal override TResult Accept<TResult>(Func<Failure, TResult> onFailure,
-                Func<Success, TResult> onSuccess,
-                Func<SuccessNoGpSession, TResult> onSuccessNoGpSession) => onSuccessNoGpSession(this);
+                Func<Success, TResult> onSuccess) => onSuccess(this);
         }
 
         internal sealed class Failure: CreateUserSessionResult
@@ -54,8 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             internal override TResult Accept<TResult>(
                 Func<Failure, TResult> onFailure,
-                Func<Success, TResult> onSuccess,
-                Func<SuccessNoGpSession, TResult> onSuccessNoGpSession) => onFailure(this);
+                Func<Success, TResult> onSuccess) => onFailure(this);
         }
     }
 }

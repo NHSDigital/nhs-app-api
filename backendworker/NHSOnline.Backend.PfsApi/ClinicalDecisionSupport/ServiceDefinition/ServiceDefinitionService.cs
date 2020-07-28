@@ -12,6 +12,7 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
@@ -125,7 +126,16 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 if (demographicsConsentGiven)
                 {
                     // This code can be removed when the address can be retrieved from NHS login
-                    if (userSession.GpUserSession != null)
+                    var gpSessionSupportsDemographics =
+                        userSession.GpUserSession.Accept(new GpUserSessionSupportsDemographicsVisitor());
+
+                    if (!gpSessionSupportsDemographics)
+                    {
+                        _logger.LogDebug("Cannot fetch address from GP System. GP System unavailable. Setting address to blank.");
+                        parameters.Add("patient",
+                            _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
+                    }
+                    else
                     {
                         var demographicsService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
                             .GetDemographicsService();
@@ -149,12 +159,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                             parameters.Add("patient",
                                 _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
                         }
-                    }
-                    else
-                    {
-                        _logger.LogDebug("Cannot fetch address from GP System. GP System unavailable. Setting address to blank.");
-                        parameters.Add("patient",
-                            _fhirParameterHelpers.CreateFhirPatient(userSession, string.Empty));
                     }
                 }
                 else

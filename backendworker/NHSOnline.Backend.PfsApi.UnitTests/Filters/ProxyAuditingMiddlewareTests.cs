@@ -42,7 +42,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<ProxyAuditingMiddleware>>>();
+
             _userSession = _fixture.Create<P9UserSession>();
+
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockLinkedAccountService = _fixture.Freeze<Mock<ILinkedAccountsService>>();

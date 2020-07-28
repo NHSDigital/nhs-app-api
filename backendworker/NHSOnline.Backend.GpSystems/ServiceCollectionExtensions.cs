@@ -54,6 +54,7 @@ namespace NHSOnline.Backend.GpSystems
             services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
             services.AddTransient<ICancellationReasonService, CancellationReasonService>();
             services.AddTransient<IGpSystemFactory, GpSystemFactory>();
+            services.AddTransient<IGpSystem, NullGpSystem>();
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddTransient<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();
             services.AddTransient<IAppointmentCancellationReasonLogger, AppointmentCancellationReasonLogger>();

@@ -22,5 +22,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             return Suid != null ? Id : ProxyPatients?.FirstOrDefault(x => x.Suid != null)?.Id;
         }
+
+        public override T Accept<T>(IGpUserSessionVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
     }
 }

@@ -78,8 +78,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         internal static MedicalRecordMetadata BuildMyRecordMetadata(P9UserSession userSession, 
             GetMyRecordResult.Success successfulResult)
         {
-            Debug.Assert(successfulResult != null);
-
             var response = successfulResult.Response;
 
             var recordDetailMetaData = new List<RecordDetailMetaData>
@@ -128,7 +126,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
         private void LogInformation(MedicalRecordMetadata myRecordMetadata)
         {
-            Debug.Assert(myRecordMetadata!=null);
             _logger.LogInformation("medical_record_metadata=" + myRecordMetadata.SerializeJson());
         }
     }

@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var args = CreateGpSessionCreateArgs();
 
             // Act
-            var result = await _gpSessionManager.CreateSession(args.Object);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, args.Object);
 
             // Assert
             result.Should().BeOfType<GpSessionCreateResult.BadGateway>();
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var args = CreateGpSessionCreateArgs();
 
             // Act
-            var result = await _gpSessionManager.CreateSession(args.Object);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, args.Object);
 
             // Assert
             var successResult = result.Should().BeOfType<GpSessionCreateResult.Success>().Subject;
@@ -347,7 +347,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         private Mock<IGpSessionCreateArgs> CreateGpSessionCreateArgs()
         {
             var args = new Mock<IGpSessionCreateArgs>();
-            args.Setup(x => x.GpSystem).Returns(_mockGpSystem.Object);
             args.Setup(x => x.Im1ConnectionToken).Returns(_userProfile.Im1ConnectionToken);
             args.Setup(x => x.OdsCode).Returns(_userProfile.OdsCode);
             args.Setup(x => x.NhsNumber).Returns(_userProfile.NhsNumber);

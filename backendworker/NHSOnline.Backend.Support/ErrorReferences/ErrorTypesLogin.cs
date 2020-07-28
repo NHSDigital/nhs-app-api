@@ -46,19 +46,20 @@ namespace NHSOnline.Backend.Support
 
         public class GPSessionUnavailable: ErrorTypes
         {
+            private readonly ErrorTypes _cause;
+
             public GPSessionUnavailable()
             {
-                Prefix = "3u";
             }
 
-            public GPSessionUnavailable(string prefix)
+            public GPSessionUnavailable(ErrorTypes cause)
             {
-                Prefix = prefix;
+                _cause = cause;
             }
 
-            public override string Prefix { get; }
+            public override string Prefix => _cause?.Prefix ?? "3u";
 
-            public override ErrorCategory Category => ErrorCategory.Login;
+            public override ErrorCategory Category => _cause?.Category ?? ErrorCategory.Login;
 
             public override int StatusCode => Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable;
         }

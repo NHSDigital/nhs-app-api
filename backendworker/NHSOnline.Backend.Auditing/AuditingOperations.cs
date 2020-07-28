@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.Auditing
         public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
         public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
         public const string GpSessionCreate = "GP_Session_Create";
+        public const string GpSessionRecreate = "GP_Session_Recreate";
         public const string CitizenIdSessionCreate = "CitizenId_Session_Create";
         public const string SessionDelete = "Session_Delete";
         public const string ViewAppointmentAuditTypeRequest = "Appointments_ViewBooked_Request";
