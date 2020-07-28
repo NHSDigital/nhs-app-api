@@ -2,7 +2,6 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   supplier: "tpp"
 journeys:
-  notifications: true
   messaging: true
   userInfo: true
   im1Messaging:
