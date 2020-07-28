@@ -236,3 +236,7 @@ Feature: Login frontend
     And I click the 'Continue' button
     Then I see the home page
     And I can't see the Linked profiles link on the homepage
+
+  Scenario: When an EMIS user has no userPatientLinkToken they can log in
+    Given I attempt to log in as an EMIS user with no userPatientLinkToken
+    Then I see the home page

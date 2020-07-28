@@ -282,7 +282,7 @@ Feature: Session Expiry and Extend Frontend
     And the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions
     And I click the Order a repeat prescription button
-    Then I see the login page with the session expiry notification
+    Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
       | TPP       |

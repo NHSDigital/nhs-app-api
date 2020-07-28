@@ -138,9 +138,3 @@ Feature: Create Session Backend: The application verifies the user session
       | TPP       |
       | VISION    |
       | MICROTEST |
-
-  Scenario: When an EMIS user has no userPatientLinkToken they can log in
-    Given I attempt to log in as an EMIS user with no userPatientLinkToken
-    Then I receive a response
-    And the response has a name for the EMIS patient with no title
-    And the response has service journey rules
