@@ -49,5 +49,5 @@ fetch_container_logs
 destroy_services_under_test
 
 if [ $TESTS_EXIT_CODE -ne 0 ]; then
-  die "Integration tests failed: $TESTS_EXIT_CODE"
+  die "Xamarin Integration tests failed"
 fi

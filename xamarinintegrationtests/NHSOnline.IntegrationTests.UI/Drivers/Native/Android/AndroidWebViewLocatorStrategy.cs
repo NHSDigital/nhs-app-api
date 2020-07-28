@@ -2,9 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Appium.Interfaces;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 {
@@ -13,6 +11,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
         private readonly AndroidDriver<AndroidElement> _driver;
+        private string? _webContextName = null;
 
         public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver) => _driver = driver;
 
@@ -73,7 +72,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private bool TryGetWebContextName([NotNullWhen(true)] out string? webContextName)
         {
-            webContextName = _driver.Contexts.FirstOrDefault(IsWebViewContext);
+            _webContextName ??= _driver.Contexts.FirstOrDefault(IsWebViewContext);
+            webContextName = _webContextName;
             return webContextName != null;
         }
 

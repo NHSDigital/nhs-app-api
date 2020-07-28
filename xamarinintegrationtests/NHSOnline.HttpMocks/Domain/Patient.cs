@@ -6,7 +6,14 @@ namespace NHSOnline.HttpMocks.Domain
     {
         private static readonly NhsNumberGenerator NhsNumberGenerator = new NhsNumberGenerator();
 
-        public string Id { get; internal set; } = Guid.NewGuid().ToString();
+        protected Patient()
+        {
+            Login = Id;
+        }
+
+        public string Id { get; } = Guid.NewGuid().ToString();
+
+        public string Login { get; internal set; }
 
         public NhsNumber NhsNumber { get; internal set; } = NhsNumberGenerator.Next();
 

@@ -32,6 +32,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                     action(new ElementContext<TDriver, TElement>(_driver, element));
                     return;
                 }
+                catch (StaleElementReferenceException e)
+                {
+                    _logs.Info("{0}: Retrying", e.Message);
+                }
                 catch (WebDriverException e) when (DateTime.UtcNow < retryUntil)
                 {
                     _logs.Info("{0}: Retrying", e.Message);

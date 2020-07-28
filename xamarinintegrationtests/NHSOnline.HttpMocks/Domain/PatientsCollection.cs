@@ -15,6 +15,10 @@ namespace NHSOnline.HttpMocks.Domain
         {
             patient = patient ?? throw new ArgumentNullException(nameof(patient));
             _idLookup.TryAdd(patient.Id, patient);
+            if (patient.Login != patient.Id)
+            {
+                _idLookup.TryAdd(patient.Login, patient);
+            }
             _nhsNumberLookup.TryAdd(patient.NhsNumber.IntValue, patient);
 
             return new RemovePatient(this, patient);
@@ -23,6 +27,7 @@ namespace NHSOnline.HttpMocks.Domain
         private void Remove(Patient patient)
         {
             _idLookup.Remove(patient.Id, out _);
+            _idLookup.Remove(patient.Login, out _);
             _nhsNumberLookup.Remove(patient.NhsNumber.IntValue, out _);
         }
 

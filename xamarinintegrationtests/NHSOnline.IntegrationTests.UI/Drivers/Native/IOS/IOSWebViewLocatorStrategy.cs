@@ -31,8 +31,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         private string WaitForWebViewContextToExist(WebViewContext webViewContext)
         {
-            if (_contextsCache.TryGet(webViewContext, out var knownWebViewContext) &&
-                _driver.Contexts.Contains(knownWebViewContext))
+            if (_contextsCache.TryGet(webViewContext, out var knownWebViewContext))
             {
                 return knownWebViewContext;
             }

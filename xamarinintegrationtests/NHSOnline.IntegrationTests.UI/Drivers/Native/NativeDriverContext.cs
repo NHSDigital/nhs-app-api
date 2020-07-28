@@ -43,7 +43,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 
         private static CurrentDriverContext SwitchContextWithRetry(Func<CurrentDriverContext> contextSwitchAction)
         {
-
             var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(10));
             while (true)
             {
@@ -57,9 +56,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
                 catch (WebDriverException) when (DateTime.UtcNow < retryUntil)
                 {
                 }
+                catch (InvalidOperationException e) when (DateTime.UtcNow < retryUntil && IsNoSuchContextFound(e))
+                {
+                }
 
                 Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
             }
+
+            static bool IsNoSuchContextFound(InvalidOperationException e)
+                => e.Message.StartsWith("No such context found.", StringComparison.Ordinal);
         }
 
 

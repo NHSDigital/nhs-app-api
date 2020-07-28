@@ -4,11 +4,11 @@ namespace NHSOnline.HttpMocks.Domain
 {
     public static class PatientExtensions
     {
-        public static TPatient WithId<TPatient>(this TPatient patient, string id) where TPatient: Patient
+        public static TPatient WithLogin<TPatient>(this TPatient patient, string login) where TPatient: Patient
         {
             patient = patient ?? throw new ArgumentNullException(nameof(patient));
 
-            patient.Id = id;
+            patient.Login = login;
             return patient;
         }
 
