@@ -36,7 +36,8 @@ KnownServices is a list of RootServices (domains) which can be optionally broken
     * **viewMode**: enum, webView or appTab
     * **showThirdPartyWarning**: boolean, flag for silver third-party integrations to show the warning message before progressing to their site
     * **requiresAssertedLoginIdentity**: boolean, 
-    * **validateSession**: boolean, 
+    * **validateSession**: boolean, ensures that the blank screen that is hidden when the app is foregrounded does so when the session is validated first. Thusly preventing showing personal information from momentarily flashing up. 
+    * **integrationLevel**: enum, controls header and footer strategy for the native apps.
 
 ## How it works
 
@@ -82,7 +83,7 @@ If you find pages that shouldn't be opening in `webView`, these can be added as 
     ]
 }
 ```
-Now any pages starting with the URL https://111.nhs.uk/isolation-note will open in an `AppTab` pattern
+Now any pages starting with the URL https://111.nhs.uk/isolation-note will open in an `AppTab` pattern, whilst the rest of https://111.nhs.uk opens in the `WebView`.
 
 ## Making changes to the data
 Each environment uses a specific `KnownServices.json` to populate the data. Care must be take when copying data between environments as some urls vary between environments.

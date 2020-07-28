@@ -96,48 +96,6 @@ class LifeCycleObserverTest : ResourceMockingClass() {
     }
 
     @Test
-    fun onMoveToForeground_whenKnownServiceValidateIsFalseAndIsAuthReturnCid_doesNotHideBlankScreen() {
-        val url = "https://www.iscid.com/auth-return"
-        doReturn(url).whenever(context).url
-        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
-                RootService(
-                        requiresAssertedLoginIdentity = true,
-                        validateSession = false,
-                        menuTab = MenuTab.Unknown,
-                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
-                        integrationLevel = IntegrationLevel.Unknown,
-                        url = url,
-                        showSpinner = false,
-                        subServices = null
-                )
-        )
-
-        lifeCycleObserver.onMoveToForeground()
-        verify(context, never()).hideBlankScreen()
-    }
-
-    @Test
-    fun onMoveToForeground_whenKnownServiceValidateIsFalseAndIsFidoCid_doesNotHideBlankScreen() {
-        val url = "https://www.iscid.com/?fidoAuthResponse"
-        doReturn(url).whenever(context).url
-        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
-                RootService(
-                        requiresAssertedLoginIdentity = true,
-                        validateSession = false,
-                        menuTab = MenuTab.Unknown,
-                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
-                        integrationLevel = IntegrationLevel.Unknown,
-                        url = url,
-                        showSpinner = false,
-                        subServices = null
-                )
-        )
-
-        lifeCycleObserver.onMoveToForeground()
-        verify(context, never()).hideBlankScreen()
-    }
-
-    @Test
     fun onMoveToForeground_whenKnownServiceValidateIsTrueAndIsAuthReturnCid_doesNotHideBlankScreen() {
         val url = "https://www.iscid.com/auth-return"
         doReturn(url).whenever(context).url

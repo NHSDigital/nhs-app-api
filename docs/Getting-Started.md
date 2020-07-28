@@ -6,7 +6,7 @@
 
 ```bash
 git config --global user.name "Your name"
-git config --globak user.email "Your email address"
+git config --global user.email "Your email address"
 git config --global pull.rebase true
 git config --global push.default current
 git config --global core.autocrlf false

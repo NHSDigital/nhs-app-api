@@ -16,7 +16,7 @@ class LifeCycleObserver(
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
 
-        if (!validateUserSession() && !isCurrentWebViewUrlFromCID()) {
+        if (!validateUserSession()) {
             context.hideBlankScreen()
         }
 
@@ -37,16 +37,6 @@ class LifeCycleObserver(
                 Log.d(Application.TAG,
                     "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > $currentUrl and shouldValidateSession")
                 appWebInterface.validateSession { context.hideBlankScreen() }
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun isCurrentWebViewUrlFromCID(): Boolean {
-        context.url?.let { url: String ->
-            if (url.contains(context.getString(R.string.authRedirectPath)) ||
-                    url.contains(context.getString(R.string.fidoAuthQueryKey))) {
                 return true
             }
         }
