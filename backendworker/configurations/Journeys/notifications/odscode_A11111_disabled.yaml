@@ -1,0 +1,5 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A11111"
+journeys:
+  notifications: false
