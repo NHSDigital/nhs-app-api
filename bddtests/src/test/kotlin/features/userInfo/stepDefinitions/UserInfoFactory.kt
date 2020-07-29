@@ -19,15 +19,18 @@ class UserInfoFactory {
         setUpUser { it }
     }
 
+    fun setUpUser(patient: Patient) {
+        SerenityHelpers.setGpSupplier(targetGpSystem)
+        SerenityHelpers.setPatient(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(targetGpSystem).createFor(patient)
+        MongoDBConnection.UserInfoCollection.clearCache()
+    }
+
     fun setUpUser(getPatient: (Patient) -> Patient) {
-        val gpSystem = targetGpSystem
         val patientToUse = getPatient.invoke(Patient.getDefault(targetGpSystem))
 
-        SerenityHelpers.setGpSupplier(gpSystem)
-        SerenityHelpers.setPatient(patientToUse)
-        CitizenIdSessionCreateJourney().createFor(patientToUse)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patientToUse)
-        MongoDBConnection.UserInfoCollection.clearCache()
+        setUpUser(patientToUse)
     }
 
     fun setUpExistingUserInfo() {

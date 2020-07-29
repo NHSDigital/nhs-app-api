@@ -3,6 +3,8 @@ package features.userInfo.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.serviceJourneyRules.factories.SJRJourneyType
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.InvalidAccessTokenTester
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -20,8 +22,10 @@ class UserInfoGetStepDefinitionsBackend {
 
     @Given("^I am an api user without stored details wishing to get my details")
     fun iAmAnApiUserWithoutStoredDetailsWishingToGetMyDetails() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, SJRJourneyType.USER_INFO_DISABLED)
+
         val factory = UserInfoFactory()
-        factory.setUpUser()
+        factory.setUpUser(patient)
     }
 
     @When("^I get user info details from the user info endpoint$")
