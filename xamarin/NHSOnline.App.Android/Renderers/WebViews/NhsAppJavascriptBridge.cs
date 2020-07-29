@@ -20,8 +20,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         [Export("navigateToThirdParty")]
         public void NavigateToThirdParty(string thirdParty)
         {
-            _nhsAppWebView.NavigateToThirdPartyCommand.Execute(thirdParty);
+            _nhsAppWebView.Dispatcher.BeginInvokeOnMainThread(
+                () => _nhsAppWebView.NavigateToThirdPartyCommand.Execute(thirdParty));
         }
-
     }
 }

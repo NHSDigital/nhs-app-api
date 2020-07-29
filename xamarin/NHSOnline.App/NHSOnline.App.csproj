@@ -67,32 +67,44 @@
     <Compile Update="NhsApp.xaml.cs">
       <DependentUpon>NhsApp.xaml</DependentUpon>
     </Compile>
-    <Compile Update="NhsAppFullHeaderPage.xaml.cs">
+    <Compile Update="Navigation\Pages\NhsAppFullHeaderPage.xaml.cs">
       <DependentUpon>NhsUkPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="NhsAppBackSlimHeaderPage.xaml.cs">
+    <Compile Update="Navigation\Pages\NhsAppBackSlimHeaderPage.xaml.cs">
       <DependentUpon>NhsAppBackSlimHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="NhsAppCloseSlimHeaderPage.xaml.cs">
+    <Compile Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml.cs">
       <DependentUpon>NhsAppCloseSlimHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\ThirdParty\Views\NhsAppSilverWebPage.xaml.cs">
+      <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Areas\ThirdParty\Views\NhsAppWebPage.xaml.cs">
+      <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="NhsAppFullHeaderPage.xaml">
+    <EmbeddedResource Update="Navigation\Pages\NhsAppFullHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="NhsAppBackSlimHeaderPage.xaml">
+    <EmbeddedResource Update="Navigation\Pages\NhsAppBackSlimHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="NhsAppCloseSlimHeaderPage.xaml">
+    <EmbeddedResource Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Areas\ThirdParty\Views\NhsAppSilverWebPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

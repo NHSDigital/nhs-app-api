@@ -7,11 +7,10 @@
              xmlns:app="clr-namespace:NHSOnline.App;assembly=NHSOnline.App"
              xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.Home.Views.NhsAppWebPage"
+             x:Class="NHSOnline.App.Areas.ThirdParty.Views.NhsAppSilverWebPage"
              x:Name="Page">
 
-    <webViews:NhsAppWebView x:Name="WebView"
-                            VerticalOptions="FillAndExpand"
-                            NavigateToThirdPartyCommand="{Binding NavigateToThirdPartyCommand, Source={x:Reference Name=Page}}" />
+    <webViews:NhsAppSilverWebView x:Name="WebView"
+                            VerticalOptions="FillAndExpand"/>
     
 </pages:NhsAppFullHeaderPage>

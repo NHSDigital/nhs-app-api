@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Navigation;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 

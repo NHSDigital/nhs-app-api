@@ -3,7 +3,7 @@ using NHSOnline.App.Areas;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace NHSOnline.App
+namespace NHSOnline.App.Navigation.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(PageContent))]

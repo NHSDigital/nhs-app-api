@@ -7,7 +7,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
+using NHSOnline.App.Areas.ThirdParty.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
 
 namespace NHSOnline.App.Areas.Home.Presenters
@@ -22,6 +25,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly ILogger _logger;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IPageFactory _pageFactory;
+        private readonly INhsAppNavigationHandler _navigationHandler;
 
         public NhsAppWebPresenter(
             INhsAppWebView view,
@@ -29,7 +34,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IAppBrowserTab appBrowserTab)
+            IAppBrowserTab appBrowserTab,
+            IPageFactory pageFactory)
         {
             _view = view;
             _model = model;
@@ -37,23 +43,34 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _logger = logger;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _appBrowserTab = appBrowserTab;
+            _pageFactory = pageFactory;
+            _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing += ViewOnAppearing;
-            _view.SettingsRequested += SettingsRequested;
-            _view.HomeRequested += HomeRequested;
+            _view.SettingsRequested += _navigationHandler.SettingsRequested;
+            _view.HomeRequested += _navigationHandler.HomeRequested;
             _view.HelpRequested += HelpRequested;
-            _view.SymptomsRequested += SymptomsRequested;
-            _view.AppointmentsRequested += AppointmentsRequested;
-            _view.PrescriptionsRequested += PrescriptionsRequested;
-            _view.RecordRequested += RecordRequested;
-            _view.MoreRequested += MoreRequested;
+            _view.SymptomsRequested += _navigationHandler.SymptomsRequested;
+            _view.AppointmentsRequested += _navigationHandler.AppointmentsRequested;
+            _view.PrescriptionsRequested += _navigationHandler.PrescriptionsRequested;
+            _view.RecordRequested += _navigationHandler.RecordRequested;
+            _view.MoreRequested += _navigationHandler.MoreRequested;
 
             _view.NavigateToThirdPartyRequested += NavigateToThirdPartyRequested;
         }
 
-        private void NavigateToThirdPartyRequested(object sender, string url)
+        private async void NavigateToThirdPartyRequested(object sender, string url)
         {
-            _logger.LogInformation("NavigateToThirdPartyRequested - {Url}", url);
+            _logger.LogInformation("GoToThirdPartyRequested - {Url}", url);
+            await NavigateToSilverWebPage(url).PreserveThreadContext();
+        }
+
+        private async Task NavigateToSilverWebPage(string url)
+        {
+            var silverWebModel = new NhsAppSilverWebModel(new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation), url);
+
+            var silverPage = _pageFactory.CreatePageFor(silverWebModel);
+            await _view.Navigation.PushAsync(silverPage).PreserveThreadContext();
         }
 
         private async void ViewOnAppearing(object sender, EventArgs e)
@@ -62,46 +79,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
-        private void SettingsRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("account");
-        }
-
-        private void HomeRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("/");
-        }
-
         private async void HelpRequested(object sender, EventArgs e)
         {
             await _appBrowserTab.OpenAppBrowserTab(
                 _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
-        }
-
-        private void SymptomsRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("symptoms");
-        }
-
-        private void AppointmentsRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("appointments");
-        }
-
-        private void PrescriptionsRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("prescriptions");
-        }
-
-        private void RecordRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("my-record-warning");
-        }
-
-        private void MoreRequested(object sender, EventArgs e)
-        {
-            _view.NavigateWithinApp("more");
         }
 
         private async Task DisplayNhsAppWeb()

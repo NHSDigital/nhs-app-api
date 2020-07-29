@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
+using NHSOnline.App.Navigation;
 using NHSOnline.App.NhsLogin;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters

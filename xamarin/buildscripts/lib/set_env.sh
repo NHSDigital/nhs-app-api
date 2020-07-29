@@ -12,5 +12,5 @@ MSBUILD=${MSBUILD:-$(command -v msbuild || true)}
 if [[ $(uname -s) =~ ^MING.* ]]; then
   MSBUILD=${MSBUILD:-$(/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/Installer/vswhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild/**/Bin/MSBuild.exe | tr -d '\r')}
 elif [ ! -e "$HOME/.config/NuGet" ]; then
-  ln -sf ~/.nuget/NuGet ~/.config/
+  ln -sfn ~/.nuget/NuGet ~/.config/
 fi

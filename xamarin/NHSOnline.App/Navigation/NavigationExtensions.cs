@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
+using NHSOnline.App.Areas;
 using Xamarin.Forms;
 
-namespace NHSOnline.App.Areas
+namespace NHSOnline.App.Navigation
 {
     internal static class NavigationExtensions
     {
