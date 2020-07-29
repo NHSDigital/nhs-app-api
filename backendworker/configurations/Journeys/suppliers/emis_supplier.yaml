@@ -4,8 +4,6 @@ target:
 journeys:
   appointments:
     provider: im1
-  messaging: true
-  userInfo: false
   documents: true
   im1Messaging:
     isEnabled: true
