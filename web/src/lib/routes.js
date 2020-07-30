@@ -115,7 +115,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.ACCOUNT];
       },
     },
-    helpUrl: `${baseNhsAppHelpUrl}account/`,
+    helpUrl: `${baseNhsAppHelpUrl}security/`,
   },
   ACCOUNT_NOTIFICATIONS: {
     name: 'account-notifications',
