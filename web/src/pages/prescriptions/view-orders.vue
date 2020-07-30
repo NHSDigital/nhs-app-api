@@ -44,9 +44,16 @@
                                class="nhsuk-u-margin-bottom-0"/>
       </div>
     </div>
-  </div></template>
+    <desktop-generic-back-link v-if="hasLoaded && !$store.state.device.isNativeApp"
+                               id="desktopBackLink"
+                               :path="backPath"
+                               class="nhsuk-u-margin-top-3"
+                               @clickAndPrevent="backLinkClicked"/>
+  </div>
+</template>
 
 <script>
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
@@ -54,7 +61,7 @@ import SjrIf from '@/components/SjrIf';
 import isEmpty from 'lodash/fp/isEmpty';
 import orderBy from 'lodash/fp/orderBy';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_INTERRUPT, PRESCRIPTIONS } from '@/lib/routes';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import sjrIf from '@/lib/sjrIf';
 
@@ -78,9 +85,11 @@ export default {
   components: {
     HistoricPrescription,
     SjrIf,
+    DesktopGenericBackLink,
   },
   data() {
     return {
+      backPath: PRESCRIPTIONS.path,
       statusDisplayPriority: {
         [MedicationCourseStatus.Requested]: 3,
         [MedicationCourseStatus.Approved]: 2,
@@ -160,6 +169,9 @@ export default {
     },
     ariaLabelCaption(header, body) {
       return `${header}. ${body}`;
+    },
+    backLinkClicked() {
+      redirectTo(this, this.backPath);
     },
   },
 };
