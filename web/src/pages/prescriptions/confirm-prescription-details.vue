@@ -20,7 +20,7 @@
           <div v-if="specialRequestNecessity !== 'NotAllowed'">
             <strong class="nhsuk-u-margin-bottom-0">{{ $t('rp04.specialRequestsLabel') }}</strong>
             <p v-if="specialRequest"
-               id="specialRequestText">{{ specialRequest }}
+               id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
             </p>
             <p v-else id="specialRequestText">
               {{ $t('rp03.noSpecialRequestDefaultText') }}
@@ -206,5 +206,8 @@ export default {
 <style module lang="scss" scoped>
  hr {
   margin: 0.5em auto 0.5em;
+ }
+ .wrapContent {
+   word-wrap: break-word;
  }
 </style>
