@@ -23,7 +23,11 @@ namespace NHSOnline.App
                 var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
                 var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());
 
-                MainPage = new NavigationPage(loggedOutHomeScreenPage);
+                var navigationPage = new NavigationPage(loggedOutHomeScreenPage);
+
+                NhsAppResilience.Init(navigationPage.Navigation, Dispatcher);
+
+                MainPage = navigationPage;
             }
             catch (Exception e)
             {

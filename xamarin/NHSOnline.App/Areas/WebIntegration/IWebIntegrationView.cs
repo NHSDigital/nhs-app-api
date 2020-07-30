@@ -1,11 +1,9 @@
 using System;
-using System.Net;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace NHSOnline.App.Areas.ThirdParty
+namespace NHSOnline.App.Areas.WebIntegration
 {
-    internal interface INhsAppSilverWebView
+    internal interface IWebIntegrationView
     {
         event EventHandler Appearing;
 

@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
-using NHSOnline.App.Areas.ThirdParty.Models;
+using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls.WebViews.KnownServices;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
@@ -47,36 +48,44 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing += ViewOnAppearing;
+            _view.HelpRequested += HelpRequested;
+            _view.OpenWebIntegrationRequested += OpenWebIntegrationRequested;
+            _view.ResetAndShowErrorRequested += ResetAndShowErrorRequested;
+
             _view.SettingsRequested += _navigationHandler.SettingsRequested;
             _view.HomeRequested += _navigationHandler.HomeRequested;
-            _view.HelpRequested += HelpRequested;
             _view.SymptomsRequested += _navigationHandler.SymptomsRequested;
             _view.AppointmentsRequested += _navigationHandler.AppointmentsRequested;
             _view.PrescriptionsRequested += _navigationHandler.PrescriptionsRequested;
             _view.RecordRequested += _navigationHandler.RecordRequested;
             _view.MoreRequested += _navigationHandler.MoreRequested;
-
-            _view.NavigateToThirdPartyRequested += NavigateToThirdPartyRequested;
         }
 
-        private async void NavigateToThirdPartyRequested(object sender, string url)
+        private async void OpenWebIntegrationRequested(object sender, OpenWebIntegrationRequest request)
         {
-            _logger.LogInformation("GoToThirdPartyRequested - {Url}", url);
-            await NavigateToSilverWebPage(url).PreserveThreadContext();
+            _logger.LogInformation("Opening Web Integration - {Url} ({MenuTab})", request.Url, request.MenuTab);
+
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation);
+            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, request.MenuTab);
+
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.Navigation
+                .PushAsync(page)
+                .PreserveThreadContext();
         }
 
-        private async Task NavigateToSilverWebPage(string url)
+        private void ResetAndShowErrorRequested(object sender, EventArgs eventArgs)
         {
-            var silverWebModel = new NhsAppSilverWebModel(new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation), url);
-
-            var silverPage = _pageFactory.CreatePageFor(silverWebModel);
-            await _view.Navigation.PushAsync(silverPage).PreserveThreadContext();
+            DisplayNhsAppWeb();
+            //TODO ShowError
+            _logger.LogInformation($"Showing unexpected error");
         }
 
         private async void ViewOnAppearing(object sender, EventArgs e)
         {
             _view.Appearing -= ViewOnAppearing;
-            await DisplayNhsAppWeb().PreserveThreadContext();
+            await ConfigureNhsOnlineCookies().PreserveThreadContext();
+            DisplayNhsAppWeb();
         }
 
         private async void HelpRequested(object sender, EventArgs e)
@@ -86,16 +95,17 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
-        private async Task DisplayNhsAppWeb()
+        private void DisplayNhsAppWeb()
         {
             var homeUri = _config.BaseAddress;
 
-            await ConfigureCookies(homeUri).PreserveThreadContext();
             _view.GoToUri(homeUri);
         }
 
-        private async Task ConfigureCookies(Uri homeUri)
+        private async Task ConfigureNhsOnlineCookies()
         {
+            var homeUri = _config.BaseAddress;
+
             await CopyCookiesFromModel(homeUri).PreserveThreadContext();
 
             await CreateNhsOnlineSessionCookie(homeUri).PreserveThreadContext();

@@ -4,16 +4,20 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Controls.WebViews.KnownServices;
+using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppWebPage : INhsAppWebView
+    public partial class NhsAppWebPage : INhsAppWebView, IRootPage
     {
         private readonly ILogger _logger;
 
-        public event EventHandler<string>? NavigateToThirdPartyRequested;
+        public event EventHandler<OpenWebIntegrationRequest>? OpenWebIntegrationRequested;
+
+        public event EventHandler<EventArgs>? ResetAndShowErrorRequested;
 
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
@@ -26,7 +30,8 @@ namespace NHSOnline.App.Areas.Home.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        public Command<string> NavigateToThirdPartyCommand => new Command<string>(url => NavigateToThirdPartyRequested?.Invoke(this, url));
+        public Command<OpenWebIntegrationRequest> OpenWebIntegrationCommand
+            => new Command<OpenWebIntegrationRequest>(service => OpenWebIntegrationRequested?.Invoke(this, service));
 
         protected override void OnAppearing()
         {
@@ -71,5 +76,10 @@ namespace NHSOnline.App.Areas.Home.Views
 
         // This will be changed in NHSO-10645 when we update with web native changes
         public void NavigateWithinApp(string spaPath) => WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')");
+
+        public void ResetAndShowError()
+        {
+            ResetAndShowErrorRequested?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

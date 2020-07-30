@@ -79,8 +79,8 @@
       <DependentUpon>NhsAppCloseSlimHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Areas\ThirdParty\Views\NhsAppSilverWebPage.xaml.cs">
-      <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
+    <Compile Update="Areas\WebIntegration\Views\WebIntegrationPage.xaml.cs">
+      <DependentUpon>WebIntegrationPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Areas\ThirdParty\Views\NhsAppWebPage.xaml.cs">
@@ -102,7 +102,7 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Areas\ThirdParty\Views\NhsAppSilverWebPage.xaml">
+    <EmbeddedResource Update="Areas\WebIntegration\Views\WebIntegrationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

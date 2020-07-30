@@ -1,7 +1,9 @@
 using Android.Webkit;
 using Java.Interop;
-using Java.Lang;
+using Newtonsoft.Json;
 using NHSOnline.App.Controls.WebViews;
+using NHSOnline.App.Controls.WebViews.KnownServices;
+using Object = Java.Lang.Object;
 
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
@@ -17,11 +19,14 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
-        [Export("navigateToThirdParty")]
-        public void NavigateToThirdParty(string thirdParty)
+        [Export("openWebIntegration")]
+        public void OpenWebIntegration(string argumentJson)
         {
-            _nhsAppWebView.Dispatcher.BeginInvokeOnMainThread(
-                () => _nhsAppWebView.NavigateToThirdPartyCommand.Execute(thirdParty));
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                var argument = JsonConvert.DeserializeObject<OpenWebIntegrationRequest>(argumentJson);
+                _nhsAppWebView.OpenWebIntegrationCommand.Execute(argument);
+            });
         }
     }
 }

@@ -89,12 +89,12 @@ export default {
         return;
       }
 
-      if (this.services[0].showThirdPartyWarning === false ||
+      if (matchedService.showThirdPartyWarning === false ||
           agreedToThirdPartyWarning(this.sessionStorageName)) {
         if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
-          this.getAssertedLoginIdentityAndNavigate();
+          this.getAssertedLoginIdentityAndNavigate(matchedService);
         } else {
-          this.navigateToExternalPath(this.redirectPath);
+          this.navigateToExternalPath(this.redirectPath, matchedService);
         }
         return;
       }
@@ -105,7 +105,7 @@ export default {
     this.$router.push(INDEX.path);
   },
   methods: {
-    async getAssertedLoginIdentityAndNavigate() {
+    async getAssertedLoginIdentityAndNavigate(knownService) {
       return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
@@ -119,6 +119,7 @@ export default {
         .then((response) => {
           this.navigateToExternalPath(
             this.appendAssertedLoginIdentity(this.redirectPath, response),
+            knownService,
           );
         })
         .catch((error) => {
@@ -135,11 +136,11 @@ export default {
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';
     },
-    navigateToExternalPath(path) {
-      if (NativeApp.supportsNativeNavigation()) {
-        NativeApp.navigateToThirdParty(path);
+    navigateToExternalPath(url, knownService) {
+      if (NativeApp.supportsNativeWebIntegration()) {
+        NativeApp.openWebIntegration(url, knownService);
       } else {
-        window.location = path;
+        window.location = url;
       }
     },
   },

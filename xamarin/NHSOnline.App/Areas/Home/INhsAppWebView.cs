@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.App.Controls.WebViews.KnownServices;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
@@ -18,7 +19,8 @@ namespace NHSOnline.App.Areas.Home
         event EventHandler<EventArgs> RecordRequested;
         event EventHandler<EventArgs> MoreRequested;
 
-        event EventHandler<string> NavigateToThirdPartyRequested;
+        event EventHandler<OpenWebIntegrationRequest> OpenWebIntegrationRequested;
+        event EventHandler<EventArgs> ResetAndShowErrorRequested;
 
         INavigation Navigation { get; }
         void GoToUri(Uri uri);

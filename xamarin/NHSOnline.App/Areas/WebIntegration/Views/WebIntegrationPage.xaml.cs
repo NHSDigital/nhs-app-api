@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 
-namespace NHSOnline.App.Areas.ThirdParty.Views
+namespace NHSOnline.App.Areas.WebIntegration.Views
 {
     [DesignTimeVisible(false)]
-    public partial class NhsAppSilverWebPage : INhsAppSilverWebView
+    public partial class WebIntegrationPage : IWebIntegrationView
     {
         private readonly ILogger _logger;
 
-        public NhsAppSilverWebPage(ILogger<NhsAppSilverWebPage> logger)
+        public WebIntegrationPage(ILogger<WebIntegrationPage> logger)
         {
             _logger = logger;
 

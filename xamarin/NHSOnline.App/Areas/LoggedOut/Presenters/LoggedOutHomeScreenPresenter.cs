@@ -38,6 +38,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             view.LoginRequested += ViewOnLoginRequested;
             view.NhsUkCovidConditionsServicePageRequested += LoadCovidConditionsUrl;
             view.NhsUkLoginHelpServicePageRequested += LoadLoginHelpUrl;
+            view.ResetAndShowErrorRequested += ResetAndShowErrorRequested;
         }
 
         private async void ViewOnLoginRequested(object sender, EventArgs e)
@@ -79,6 +80,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Accessing login help url");
             await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkLoginHelpUrl).PreserveThreadContext();
+        }
+
+        private void ResetAndShowErrorRequested(object sender, EventArgs e)
+        {
+            // TODO ShowError
+            _logger.LogInformation($"Showing unexpected error");
         }
 
         private static async Task OpenAppTab(Uri requestedService)

@@ -8,14 +8,15 @@ export default {
     return false;
   },
 
-  supportsNativeNavigation() {
+  supportsNativeWebIntegration() {
     const app = window.nativeApp;
-    return app && app.navigateToThirdParty;
+    return app && app.openWebIntegration;
   },
 
-  navigateToThirdParty(path) {
+  openWebIntegration(url, knownService) {
     const app = window.nativeApp;
-    app.navigateToThirdParty(path);
+    const request = JSON.stringify({ url, menuTab: knownService.menuTab });
+    app.openWebIntegration(request);
   },
 
   clearMenuBarItem() {

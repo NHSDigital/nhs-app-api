@@ -1,21 +1,20 @@
 using System;
-using NHSOnline.App.Areas.ThirdParty.Models;
+using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
 
-namespace NHSOnline.App.Areas.ThirdParty.Presenters
+namespace NHSOnline.App.Areas.WebIntegration.Presenters
 {
-    internal sealed class NhsAppSilverWebPresenter
+    internal sealed class WebIntegrationPresenter
     {
-
-        private readonly INhsAppSilverWebView _view;
-        private readonly NhsAppSilverWebModel _model;
+        private readonly IWebIntegrationView _view;
+        private readonly WebIntegrationModel _model;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IAppBrowserTab _appBrowserTab;
 
-        public NhsAppSilverWebPresenter(
-            INhsAppSilverWebView view,
-            NhsAppSilverWebModel model,
+        public WebIntegrationPresenter(
+            IWebIntegrationView view,
+            WebIntegrationModel model,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
             IAppBrowserTab appBrowserTab)
         {
@@ -39,7 +38,7 @@ namespace NHSOnline.App.Areas.ThirdParty.Presenters
         private void ViewOnAppearing(object sender, EventArgs e)
         {
             _view.Appearing -= ViewOnAppearing;
-            DisplayNhsAppSilverWeb(_model.SilverUrl);
+            _view.GoToUri(_model.Url);
         }
 
         private async void HelpRequested(object sender, EventArgs e)
@@ -47,11 +46,6 @@ namespace NHSOnline.App.Areas.ThirdParty.Presenters
             await _appBrowserTab.OpenAppBrowserTab(
                 _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
-        }
-
-        private void DisplayNhsAppSilverWeb(string url)
-        {
-            _view.GoToUri(new Uri(url));
         }
     }
 }

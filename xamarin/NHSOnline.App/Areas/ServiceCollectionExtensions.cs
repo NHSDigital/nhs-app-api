@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Areas.Home;
 using NHSOnline.App.Areas.LoggedOut;
-using NHSOnline.App.Areas.ThirdParty;
+using NHSOnline.App.Areas.WebIntegration;
 
 namespace NHSOnline.App.Areas
 {
@@ -12,7 +12,7 @@ namespace NHSOnline.App.Areas
             return services
                 .AddHomeArea()
                 .AddLoggedOutArea()
-                .AddSilverWebService();
+                .AddWebIntegrationArea();
         }
     }
 }
