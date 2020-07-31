@@ -9,13 +9,13 @@ namespace NHSOnline.App.Controls.WebViews
     public sealed class NhsAppWebView: WebView
     {
         public static readonly BindableProperty OpenWebIntegrationCommandProperty =
-            BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(Command<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
+            BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(AsyncCommand<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
 
         public Func<Cookie, Task>? SetCookie { get; set; }
 
-        public Command<OpenWebIntegrationRequest> OpenWebIntegrationCommand
+        public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
         {
-            get => (Command<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
+            get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
             set => SetValue(OpenWebIntegrationCommandProperty, value);
         }
     }

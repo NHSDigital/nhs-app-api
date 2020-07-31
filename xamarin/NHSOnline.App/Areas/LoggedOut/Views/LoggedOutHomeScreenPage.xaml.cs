@@ -1,12 +1,8 @@
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows.Input;
-using NHSOnline.App.Navigation;
-using Xamarin.Essentials;
+using NHSOnline.App.Controls;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using Page = Xamarin.Forms.PlatformConfiguration.iOSSpecific.Page;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {

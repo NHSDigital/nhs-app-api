@@ -1,6 +1,7 @@
 using Android.Webkit;
 using Java.Interop;
 using Newtonsoft.Json;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.KnownServices;
 using Object = Java.Lang.Object;

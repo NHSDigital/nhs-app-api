@@ -19,8 +19,9 @@ namespace NHSOnline.App.Areas.Home
         event EventHandler<EventArgs> RecordRequested;
         event EventHandler<EventArgs> MoreRequested;
 
-        event EventHandler<OpenWebIntegrationRequest> OpenWebIntegrationRequested;
         event EventHandler<EventArgs> ResetAndShowErrorRequested;
+
+        Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
 
         INavigation Navigation { get; }
         void GoToUri(Uri uri);

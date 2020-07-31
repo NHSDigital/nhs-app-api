@@ -1,12 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Areas;
 using NHSOnline.App.Logging;
-using NHSOnline.App.Navigation;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace NHSOnline.App
+namespace NHSOnline.App.Controls
 {
     public static class NhsAppResilience
     {
@@ -21,14 +20,32 @@ namespace NHSOnline.App
 
         public static void ExecuteOnMainThread(Action action)
         {
-            try
+            MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception e)
+                    {
+                        AttemptRecovery(e);
+                    }
+                });
+        }
+
+        public static void ExecuteOnMainThread(Func<Task> action)
+        {
+            MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                MainThread.BeginInvokeOnMainThread(action);
-            }
-            catch (Exception e)
-            {
-                AttemptRecovery(e);
-            }
+                try
+                {
+                    await action().ConfigureAwait(true);
+                }
+                catch (Exception e)
+                {
+                    AttemptRecovery(e);
+                }
+            });
         }
 
         public static void AttemptRecovery(Exception e) => _attemptRecovery(e);
@@ -39,7 +56,7 @@ namespace NHSOnline.App
 
             dispatcher.BeginInvokeOnMainThread(async () =>
             {
-                await navigation.PopToRootAsync().PreserveThreadContext()!;
+                await navigation.PopToRootAsync().ConfigureAwait(true);
                 if (navigation.NavigationStack[0] is IRootPage rootPage)
                 {
                     rootPage.ResetAndShowError();

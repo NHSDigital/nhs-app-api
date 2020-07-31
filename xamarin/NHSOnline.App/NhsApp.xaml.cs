@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
+using NHSOnline.App.Controls;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Logging;
 using Xamarin.Forms;

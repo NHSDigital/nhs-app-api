@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.AppCenter" Version="3.3.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.3.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.5" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
@@ -43,6 +44,7 @@
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />
     <EmbeddedResource Include="NhsLogo.svg" />
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <EmbeddedResource Update="NhsUkStyles.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>

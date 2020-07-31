@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
-
-namespace NHSOnline.App.Navigation
+namespace NHSOnline.App.Controls
 {
     public interface IRootPage
     {

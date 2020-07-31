@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using Foundation;
 using Newtonsoft.Json;
+using NHSOnline.App.Controls;
 using WebKit;
 using Xamarin.Forms;
 

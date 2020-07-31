@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Controls.WebViews.KnownServices;
-using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views
@@ -15,7 +15,7 @@ namespace NHSOnline.App.Areas.Home.Views
     {
         private readonly ILogger _logger;
 
-        public event EventHandler<OpenWebIntegrationRequest>? OpenWebIntegrationRequested;
+        public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
 
         public event EventHandler<EventArgs>? ResetAndShowErrorRequested;
 
@@ -30,8 +30,8 @@ namespace NHSOnline.App.Areas.Home.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        public Command<OpenWebIntegrationRequest> OpenWebIntegrationCommand
-            => new Command<OpenWebIntegrationRequest>(service => OpenWebIntegrationRequested?.Invoke(this, service));
+        public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
+            => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
 
         protected override void OnAppearing()
         {

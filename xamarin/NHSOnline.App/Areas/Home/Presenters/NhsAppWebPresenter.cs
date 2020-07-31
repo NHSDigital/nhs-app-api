@@ -61,7 +61,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.MoreRequested += _navigationHandler.MoreRequested;
         }
 
-        private async void OpenWebIntegrationRequested(object sender, OpenWebIntegrationRequest request)
+        private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
         {
             _logger.LogInformation("Opening Web Integration - {Url} ({MenuTab})", request.Url, request.MenuTab);
 
