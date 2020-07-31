@@ -3,7 +3,7 @@
     <message-dialog id="demographicsWarning"
                     message-type="warning"
                     :icon-text="$t('messageIconText.important')">
-      <p class="nhsuk-u-margin-3 nhsuk-u-padding-left-2 nhsuk-u-margin-bottom-0">
+      <message-text>
         {{ $t('onlineConsultations.warning.warningText',
               { providerName: providerName }) }}
         <span><a id="online_consultations_help_link"
@@ -11,7 +11,7 @@
                  target="_blank" rel="noopener noreferrer">
           {{ $t('onlineConsultations.warning.warningLink') }}</a>
         </span>
-      </p>
+      </message-text>
     </message-dialog>
     <question>
       <div slot="question-slot" class="demographicsQuestion">
@@ -51,6 +51,7 @@
 
 <script>
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import Question from '@/components/online-consultations/Question';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
@@ -75,6 +76,7 @@ export default {
   name: 'DemographicsQuestion',
   components: {
     MessageDialog,
+    MessageText,
     Question,
     GenericCheckbox,
     GenericButton,

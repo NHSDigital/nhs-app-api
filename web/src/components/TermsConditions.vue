@@ -3,10 +3,10 @@
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <message-dialog :class="$style.customErrorBox" message-type="error"
                       role="alert">
-        <p :class="$style.customErrorText"> {{ $t('termsAndConditions.errorMsgHeader') }} </p>
-        <ul>
+        <message-text> {{ $t('termsAndConditions.errorMsgHeader') }} </message-text>
+        <message-list>
           <li> {{ $t('termsAndConditions.errorMsgText') }}</li>
-        </ul>
+        </message-list>
       </message-dialog>
     </div>
     <div id="text_body" :class="$style.info">
@@ -92,6 +92,8 @@
 <script>
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageList from '@/components/widgets/MessageList';
+import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
@@ -109,6 +111,8 @@ export default {
     GenericButton,
     ErrorMessage,
     MessageDialog,
+    MessageList,
+    MessageText,
     GenericCheckbox,
   },
   mixins: [TermsConditionsMixin],

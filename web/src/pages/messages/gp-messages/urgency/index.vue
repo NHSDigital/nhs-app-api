@@ -8,8 +8,7 @@
           </message-text>
           <message-list>
             <li>
-              <p class="nhsuk-u-margin-left-2">
-                {{ $t('im02.noOptionSelectedErrorText') }}</p>
+              {{ $t('im02.noOptionSelectedErrorText') }}
             </li>
           </message-list>
         </message-dialog>

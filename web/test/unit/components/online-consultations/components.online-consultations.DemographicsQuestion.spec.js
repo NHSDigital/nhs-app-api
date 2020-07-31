@@ -129,7 +129,7 @@ describe('demographics question', () => {
       const warning = component.find('#demographicsWarning');
       const warningHelpLink = warning.find('a');
       // Assert
-      expect(warning.find('p').text()).toContain('translate_onlineConsultations.warning.warningText');
+      expect(warning.text()).toContain('translate_onlineConsultations.warning.warningText');
       expect(warningHelpLink.text()).toEqual('translate_onlineConsultations.warning.warningLink');
       expect(warningHelpLink.attributes().href).toEqual(ONLINE_CONSULTATIONS_PRIVACY_URL);
     });

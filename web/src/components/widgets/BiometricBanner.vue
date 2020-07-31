@@ -7,8 +7,7 @@
       <message-text>
         {{ $t('biometricBanner.message.text') }}
       </message-text>
-      <div :class="[$style.msgText,
-                    !$store.state.device.isNativeApp && $style.desktopWeb]">
+      <message-text>
         <analytics-tracked-tag :text="$t('biometricBanner.message.settingsButton')">
           <generic-button
             id="btn_goToSettings"
@@ -28,7 +27,7 @@
             {{ $t('biometricBanner.message.dismissLink') }}
           </analytics-tracked-tag>
         </p>
-      </div>
+      </message-text>
     </message-dialog>
   </div>
 </template>

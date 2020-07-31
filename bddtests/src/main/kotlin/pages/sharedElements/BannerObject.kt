@@ -50,8 +50,9 @@ class BannerObject private constructor(private val page : HybridPageObject,
         assertMessage("/p", message)
     }
 
-    fun assertMessageItem(message: String) {
+    fun assertMessageItem(message: String) : BannerObject {
         assertMessage("/ul/li", message)
+        return this
     }
 
     private fun assertMessage(locator: String, message: String) {

@@ -1,5 +1,5 @@
 <template>
-  <ul :class="[$style.msgList, isError ? $style.error : undefined]">
+  <ul :class="[$style.msgList, 'nhsuk-u-margin-left-2', isError ? $style.error : undefined]">
     <slot/>
   </ul>
 </template>

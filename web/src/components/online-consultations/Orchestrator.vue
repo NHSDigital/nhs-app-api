@@ -3,7 +3,6 @@
     <div v-if="question && isDataRequired" id="questionnaire-container">
       <message-dialog v-if="isValidationError"
                       :key="questionKey"
-                      :class="$style.errorDialog"
                       message-type="error"
                       role="alert">
         <message-text>
@@ -336,9 +335,6 @@ export default {
 
 
 <style module lang="scss" scoped>
-  .errorDialog {
-    margin-bottom: 2em;
-  }
   .container {
     margin-top: 1em;
 

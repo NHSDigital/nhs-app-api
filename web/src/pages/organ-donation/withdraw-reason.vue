@@ -1,8 +1,8 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div :class="[$style.form]">
-        <message-dialog v-if="showErrors" id="errors">
+      <div>
+        <message-dialog v-if="showErrors" id="errors" message-type="error" role="alert">
           <message-text data-purpose="error-heading">
             {{ $t('organDonation.withdrawReason.errorMessageHeader') }}
           </message-text>
@@ -10,7 +10,7 @@
             <li>{{ $t('organDonation.withdrawReason.errorMessageText') }}</li>
           </message-list>
         </message-dialog>
-        <div>
+        <div :class="[$style.form]">
           <h2>{{ $t('organDonation.withdrawReason.subheader') }}</h2>
           <p v-for="(item, index) in $t('organDonation.withdrawReason.explanations')"
              :key="index">

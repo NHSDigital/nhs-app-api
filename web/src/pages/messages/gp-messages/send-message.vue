@@ -7,20 +7,14 @@
             <message-text data-purpose="error-heading">
               {{ $t('appointments.confirmation.errorDialog') }}
             </message-text>
-            <div data-purpose="error-dialog-list">
-              <message-list>
-                <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
-                  <p class="nhsuk-u-margin-left-2">
-                    {{ $t('gp_messages.createMessage.subjectTextError') }}
-                  </p>
-                </li>
-                <li v-if="messageTextError" data-purpose="message-error">
-                  <p class="nhsuk-u-margin-left-2">
-                    {{ $t('gp_messages.createMessage.messageTextError') }}
-                  </p>
-                </li>
-              </message-list>
-            </div>
+            <message-list>
+              <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
+                {{ $t('gp_messages.createMessage.subjectTextError') }}
+              </li>
+              <li v-if="messageTextError" data-purpose="message-error">
+                {{ $t('gp_messages.createMessage.messageTextError') }}
+              </li>
+            </message-list>
           </message-dialog>
         </div>
       </div>

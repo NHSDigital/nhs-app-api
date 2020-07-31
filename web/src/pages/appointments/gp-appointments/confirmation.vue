@@ -65,18 +65,14 @@
             <message-text data-purpose="error-heading">
               {{ $t('appointments.confirmation.errorDialog') }}
             </message-text>
-            <div data-purpose="error-dialog-list">
-              <message-list>
-                <li v-if="showTelephoneError" data-purpose="telephone-error">
-                  <p class="nhsuk-u-margin-left-2">
-                    {{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
-                </li>
-                <li v-if="showReasonError" data-purpose="reason-error">
-                  <p class="nhsuk-u-margin-left-2">
-                    {{ $t('appointments.confirmation.noReasonError') }}</p>
-                </li>
-              </message-list>
-            </div>
+            <message-list>
+              <li v-if="showTelephoneError" data-purpose="telephone-error">
+                {{ $t('appointments.confirmation.noPhoneNumberError') }}
+              </li>
+              <li v-if="showReasonError" data-purpose="reason-error">
+                {{ $t('appointments.confirmation.noReasonError') }}
+              </li>
+            </message-list>
           </message-dialog>
         </div>
       </div>

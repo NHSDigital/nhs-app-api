@@ -4,12 +4,12 @@
       <message-dialog :class="$style.customErrorBox"
                       message-type="error"
                       role="alert">
-        <p :class="$style.customErrorText">
+        <message-text>
           {{ $t('updatedTermsAndConditions.errorMsgHeader') }}
-        </p>
-        <ul>
+        </message-text>
+        <message-list>
           <li> {{ $t('updatedTermsAndConditions.errorMsgText') }} </li>
-        </ul>
+        </message-list>
       </message-dialog>
     </div>
     <div id="text_body" :class="$style.info">
@@ -76,6 +76,8 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageList from '@/components/widgets/MessageList';
+import MessageText from '@/components/widgets/MessageText';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
 import {
   TERMS_AND_CONDITIONS_URL,
@@ -90,6 +92,8 @@ export default {
     GenericButton,
     GenericCheckbox,
     MessageDialog,
+    MessageList,
+    MessageText,
   },
   mixins: [TermsConditionsMixin],
   data() {

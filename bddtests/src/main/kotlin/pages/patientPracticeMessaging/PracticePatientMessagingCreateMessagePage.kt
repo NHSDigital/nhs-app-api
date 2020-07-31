@@ -26,14 +26,7 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
     }
 
     fun assertValidationErrorsDisplayed() {
-        val message = errorMessage("message")
-        val subject = errorMessage("subject")
-
-        message.isDisplayed
-        subject.isDisplayed
-
-        assertEquals("Enter a subject", subject.text)
-        assertEquals("Enter a message", message.text)
+        validationBanner.assertMessageItem("Enter a subject").assertMessageItem("Enter a message")
     }
 
     fun insertMessageText(message: String) {
@@ -62,10 +55,6 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
                 androidLocator = null,
                 page = this
         )
-    }
-
-    private fun errorMessage(input: String) : HybridPageElement {
-        return pageElement("//li[@data-purpose='$input-error']//p")
     }
 
     private fun messageSubHeader(): HybridPageElement {
