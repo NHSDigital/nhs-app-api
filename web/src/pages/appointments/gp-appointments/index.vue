@@ -165,7 +165,7 @@ export default {
       return this.$store.state.myAppointments.pastAppointments;
     },
     hasReferenceCode() {
-      if (typeof this.error === 'object' && this.error.status === 599) {
+      if (typeof this.error === 'object') {
         return this.error.serviceDeskReference;
       }
 

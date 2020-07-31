@@ -3,9 +3,8 @@ import GPAppointments from '@/pages/appointments/gp-appointments';
 import { mount } from '../../helpers';
 
 const createAppointmentsPage = ({
-  status,
   userSessionCreateReferenceCode,
-  errorServiceDeskReference,
+  error = undefined,
 } = {}) => mount(GPAppointments, {
   $store: {
     app: {
@@ -14,10 +13,7 @@ const createAppointmentsPage = ({
     state: {
       device: {},
       myAppointments: {
-        error: {
-          status,
-          serviceDeskReference: errorServiceDeskReference,
-        },
+        error,
       },
       session: {
         userSessionCreateReferenceCode,
@@ -40,7 +36,7 @@ describe('index.vue', () => {
       502,
       504,
     ]).it('will display an error dialog for status code: %s', (status) => {
-      wrapper = createAppointmentsPage({ status });
+      wrapper = createAppointmentsPage({ error: { status } });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });
@@ -51,12 +47,12 @@ describe('index.vue', () => {
   });
 
   it('will return the gp session response error serviceDeskReference code instead of session serviceDeskReference', () => {
-    wrapper = createAppointmentsPage({ status: 599, userSessionCreateReferenceCode: 'code123', errorServiceDeskReference: 'show me instead' });
+    wrapper = createAppointmentsPage({ error: { status: 599, serviceDeskReference: 'show me instead' }, userSessionCreateReferenceCode: 'code123' });
     expect(wrapper.vm.hasReferenceCode).toBe('show me instead');
   });
 
   it('will return the gp session response error serviceDeskReference code when session serviceDeskReference is not present', () => {
-    wrapper = createAppointmentsPage({ status: 599, errorServiceDeskReference: 'show me instead' });
-    expect(wrapper.vm.hasReferenceCode).toBe('show me instead');
+    wrapper = createAppointmentsPage({ error: { status: 502, serviceDeskReference: 'show me please' } });
+    expect(wrapper.vm.hasReferenceCode).toBe('show me please');
   });
 });
