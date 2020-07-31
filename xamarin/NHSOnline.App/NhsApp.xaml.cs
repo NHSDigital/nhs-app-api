@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -17,9 +18,16 @@ namespace NHSOnline.App
 
             try
             {
-                var loggerFactory = NhsAppLogging.Init(DependencyService.Get<INativeLog>());
+                var loggerFactory = NhsAppLogging.Init(
+                    DependencyService.Get<INativeLog>());
 
-                var serviceProvider = NhsAppDependencyInjection.Init(Startup.ConfigureServices, loggerFactory);
+                var serviceProvider = NhsAppDependencyInjection.Init(
+                    services => Startup.ConfigureServices(
+                        services,
+                        loggerFactory),
+                    loggerFactory);
+
+                NhsAppLogging.AddProvidersFromServiceProvider(loggerFactory, serviceProvider);
 
                 var pageFactory = serviceProvider.GetRequiredService<IPageFactory>();
                 var loggedOutHomeScreenPage = pageFactory.CreatePageFor(new LoggedOutHomeScreenModel());

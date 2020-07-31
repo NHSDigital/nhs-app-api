@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Api;
+using NHSOnline.App.Logging;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.DependencyServices
@@ -10,7 +11,8 @@ namespace NHSOnline.App.DependencyServices
         {
             return services
                 .AddTransient(_ => DependencyService.Get<ICookies>())
-                .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>());
+                .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>())
+                .AddTransient(_ => DependencyService.Get<INativeLog>());
         }
     }
 }

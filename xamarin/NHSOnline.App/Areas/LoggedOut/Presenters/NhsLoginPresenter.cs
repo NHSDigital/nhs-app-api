@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
@@ -72,10 +73,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnNavigationFailed()
         {
             _logger.LogWarning("NHS login navigation failed");
+            var errorReferenceCode =
+                $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
+            _logger.LogError($"NHS login navigation failed, error reference {errorReferenceCode} generated");
 
             DetachEventHandlers();
 
-            await NavigateToLoginErrorPage().PreserveThreadContext();
+            await NavigateToLoginErrorPage(errorReferenceCode).PreserveThreadContext();
         }
 
         private bool IsRedirect(Uri uri) => _loginState.IsAuthReturn(uri);
@@ -101,13 +105,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         public async Task Visit(AuthReturnCheckResult.Failed failed)
         {
             _logger.LogWarning("Auth Return Failed");
+            var errorReferenceCode =
+                $"3w{RandomErrorReferenceGenerator.GenerateString(4, "acefghjkmnorstuwxyz3456789")}";
+            _logger.LogError($"Auth Return failed, error reference {errorReferenceCode} generated");
 
-            await NavigateToLoginErrorPage().PreserveThreadContext();
+            await NavigateToLoginErrorPage(errorReferenceCode).PreserveThreadContext();
         }
 
-        private async Task NavigateToLoginErrorPage()
+        private async Task NavigateToLoginErrorPage(string errorReferenceCode)
         {
-            var nhsLoginErrorModel = _model.NhsLoginFailed();
+            var nhsLoginErrorModel = _model.NhsLoginFailed(errorReferenceCode);
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
             await _view.Navigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();

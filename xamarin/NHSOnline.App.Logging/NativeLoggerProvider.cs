@@ -19,7 +19,12 @@ namespace NHSOnline.App.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return _loggers.GetOrAdd(categoryName, name => new NativeLogger(name, _minimumLevel, _nativeLog));
+            return _loggers.GetOrAdd(
+                categoryName,
+                name => new NativeLogger(
+                    name,
+                    _minimumLevel,
+                    _nativeLog));
         }
 
         public void Dispose()

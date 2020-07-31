@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Configurations>Local - Debug;Local - Release;Staging - Debug;Staging - Release;BrowserStack - Debug;BrowserStack - Release</Configurations>
+    <Configurations>Local - Debug;Local - Release;Preview - Debug;Preview - Release;Staging - Debug;Staging - Release;BrowserStack - Debug;BrowserStack - Release</Configurations>
 
     <!-- When restored as a project dependency an invalid configuration ("Debug" or "Release") is supplied -->
     <Environment Condition=" $(Configuration.Contains('-')) == 'true' ">$(Configuration.Split('-')[0].Trim())</Environment>

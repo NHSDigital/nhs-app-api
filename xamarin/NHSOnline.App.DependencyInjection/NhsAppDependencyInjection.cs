@@ -9,11 +9,12 @@ namespace NHSOnline.App.DependencyInjection
         public static IServiceProvider Init(Action<IServiceCollection> configureServices, ILoggerFactory loggerFactory)
         {
             var logger = loggerFactory.CreateLogger(typeof(NhsAppDependencyInjection));
+            
             logger.LogInformation("Initialising dependency injection");
 
             try
             {
-                var services = ConfigureServices(configureServices, loggerFactory);
+                var services = ConfigureServices(configureServices);
 
                 return BuildServiceProvider(services);
             }
@@ -24,11 +25,9 @@ namespace NHSOnline.App.DependencyInjection
             }
         }
 
-        private static IServiceCollection ConfigureServices(Action<IServiceCollection> configureServices, ILoggerFactory loggerFactory)
+        private static IServiceCollection ConfigureServices(Action<IServiceCollection> configureServices)
         {
             var services = new ServiceCollection()
-                .AddSingleton(loggerFactory)
-                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
                 .AddPageFactory();
 
             configureServices(services);

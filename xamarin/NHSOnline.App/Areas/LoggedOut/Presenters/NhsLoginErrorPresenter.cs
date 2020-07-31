@@ -25,6 +25,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _view.BackHomeRequested += ViewOnBackHomeRequested;
             _view.ContactUsRequested += ViewOnContactUsRequested;
+            _view.ServiceDeskReference = model.ServiceDeskReference;
         }
 
         private async void ViewOnBackHomeRequested(object sender, EventArgs e)
@@ -36,8 +37,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void ViewOnContactUsRequested(object sender, EventArgs e)
         {
+            var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
             await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.NhsUkContactUsUrl)
+                .OpenAppBrowserTab(contactUsUri)
                 .PreserveThreadContext();
         }
     }

@@ -17,10 +17,10 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging.Models
                 Message = "test log message",
                 TimeStamp = new DateTimeOffset(2000, 6, 1, 13, 30, 1, TimeSpan.Zero),
             };
-            
+
             // Act
-            var message = systemUnderTest.FormattedLogMessage;
-            
+            var message = systemUnderTest.FormattedErrorLogMessage;
+
             // Assert
             message.Should().Be(@"client_error_message=""test log message"" client_timestamp=""2000-06-01 13:30:01""");
         }

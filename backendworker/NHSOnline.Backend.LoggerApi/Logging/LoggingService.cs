@@ -17,15 +17,15 @@ namespace NHSOnline.Backend.LoggerApi.Logging
             switch (createLogRequest.Level)
             {
                 case Level.Debug:
-                    _logger.LogDebug(createLogRequest.FormattedLogMessage);
+                    _logger.LogDebug(createLogRequest.FormattedDebugLogMessage);
                     break;
 
                 case Level.Error:
-                    _logger.LogError(createLogRequest.FormattedLogMessage);
+                    _logger.LogError(createLogRequest.FormattedErrorLogMessage);
                     break;
 
                 default:
-                    _logger.LogInformation(createLogRequest.FormattedLogMessage);
+                    _logger.LogInformation(createLogRequest.FormattedInformationLogMessage);
                     break;
             }
         }

@@ -6,6 +6,8 @@ namespace NHSOnline.App.Config
         static IConfiguration Configuration { get; } = new Values.Local.LocalConfiguration();
 #elif ENV_STAGING
         static IConfiguration Configuration { get; } = new Values.Staging.StagingConfiguration();
+#elif ENV_PREVIEW
+        static IConfiguration Configuration { get; } = new Values.Preview.PreviewConfiguration();
 #else
 #error No supported environemnt defined
 #endif

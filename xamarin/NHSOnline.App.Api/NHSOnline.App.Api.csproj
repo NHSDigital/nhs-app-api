@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.App.Config\NHSOnline.App.Config.csproj" />
+    <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <ProjectReference Include="..\NHSOnline.App.Threading\NHSOnline.App.Threading.csproj" />
   </ItemGroup>
 

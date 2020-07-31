@@ -9,5 +9,7 @@ namespace NHSOnline.App.Areas.LoggedOut
         public event EventHandler<EventArgs>? ContactUsRequested;
 
         INavigation Navigation { get; }
+
+        public string ServiceDeskReference { get; set; }
     }
 }

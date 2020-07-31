@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -31,6 +31,10 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Release|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhoneSimulator' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Preview - Release|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Debug|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BrowserStack - Release|iPhone' " />
@@ -101,6 +105,7 @@
     <None Include="Properties\BuildConfiguration.env.BrowserStack.props" />
     <None Include="Properties\BuildConfiguration.env.Dev.props" />
     <None Include="Properties\BuildConfiguration.env.Local.props" />
+    <None Include="Properties\BuildConfiguration.env.Preview.props" />
     <None Include="Properties\BuildConfiguration.env.Staging.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhone.props" />
     <None Include="Properties\BuildConfiguration.platform.iPhoneSimulator.props" />

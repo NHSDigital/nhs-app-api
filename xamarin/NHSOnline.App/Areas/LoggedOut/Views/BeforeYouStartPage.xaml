@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
-             mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage"
-             x:Name="Root">
+<pages:NhsAppBackSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+                             xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                             mc:Ignorable="d"
+                             x:Class="NHSOnline.App.Areas.LoggedOut.Views.BeforeYouStartPage">
 
     <StackLayout BindingContext="{x:Reference Name=Root}"
                  BackgroundColor="{StaticResource NhsUkPageBackgroundGrey }">
@@ -55,4 +55,4 @@
                          HorizontalOptions="Start" />
     </StackLayout>
 
-</ContentPage>
+</pages:NhsAppBackSlimHeaderPage>

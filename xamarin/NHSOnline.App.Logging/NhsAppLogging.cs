@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Config;
 
@@ -30,6 +32,15 @@ namespace NHSOnline.App.Logging
             {
                 System.Diagnostics.Debug.WriteLine("Failed to initialise logging: {0}", e);
                 throw;
+            }
+        }
+
+        public static void AddProvidersFromServiceProvider(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        {
+            var services = serviceProvider.GetServices<ILoggerProvider>();
+            foreach (var provider in services)
+            {
+                loggerFactory.AddProvider(provider);
             }
         }
 

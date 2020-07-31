@@ -10,7 +10,10 @@ namespace NHSOnline.App.Logging
         private readonly LogLevel _minimumLevel;
         private readonly INativeLog _nativeLog;
 
-        internal NativeLogger(string name, LogLevel minimumLevel, INativeLog nativeLog)
+        internal NativeLogger(
+            string name,
+            LogLevel minimumLevel,
+            INativeLog nativeLog)
         {
             _name = name;
             _minimumLevel = minimumLevel;
