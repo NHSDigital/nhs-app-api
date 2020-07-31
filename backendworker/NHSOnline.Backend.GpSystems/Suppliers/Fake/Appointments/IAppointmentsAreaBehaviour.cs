@@ -10,7 +10,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
     {
         Task<AppointmentBookResult> Book(GpLinkedAccountModel gpLinkedAccountModel, AppointmentBookRequest request);
 
-        Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel,
+        Task<AppointmentCancelResult> Cancel(
+            GpLinkedAccountModel gpLinkedAccountModel,
             AppointmentCancelRequest request);
 
         Task<AppointmentsResult> GetAppointments(GpLinkedAccountModel gpLinkedAccountModel);

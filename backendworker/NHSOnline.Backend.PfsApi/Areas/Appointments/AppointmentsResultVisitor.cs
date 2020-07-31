@@ -10,15 +10,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentsResultVisitor : ResultVisitorBase, IAppointmentsResultVisitor<Task<IActionResult>>
     {
+        private readonly UserSession _userSession;
         private readonly ISessionCacheService _sessionCacheService;
 
         public AppointmentsResultVisitor(
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
-            P9UserSession userSession)
-        : base (errorReferenceGenerator, userSession)
+            UserSession userSession,
+            Supplier supplier)
+        : base (errorReferenceGenerator, supplier)
         {
             _sessionCacheService = sessionCacheService;
+            _userSession = userSession;
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
@@ -27,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             if (result.BookingReasonNecessity != null)
             {
-                await _sessionCacheService.UpdateUserSession(UserSession);
+                await _sessionCacheService.UpdateUserSession(_userSession);
             }
 
             return new OkObjectResult(result.Response);

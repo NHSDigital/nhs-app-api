@@ -24,7 +24,8 @@
                   :action="backUrl"
                   :desktop-only="true"/>
     </error-container>
-    <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
+    <error-container v-else-if="error.status===500 || error.status===502 || error.status===599"
+                     :id="generateErrorId()">
       <error-title title="appointments.error.title.problemLoading"/>
       <error-paragraph from="errors.tryAgainNow"/>
       <error-paragraph from="appointments.error.message.ifItContinues"/>
@@ -164,8 +165,11 @@ export default {
       return this.$store.state.myAppointments.pastAppointments;
     },
     hasReferenceCode() {
-      return this.$store.state.session.userSessionCreateReferenceCode ||
-        this.error.serviceDeskReference;
+      if (typeof this.error === 'object' && this.error.status === 599) {
+        return this.error.serviceDeskReference;
+      }
+
+      return this.$store.state.session.userSessionCreateReferenceCode;
     },
     showNoPastAppointments() {
       return this.hasLoaded &&

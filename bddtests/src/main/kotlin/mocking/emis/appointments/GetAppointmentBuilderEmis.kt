@@ -48,6 +48,10 @@ class GetAppointmentBuilderEmis(
         return respondWithEmisUnknownError()
     }
 
+    override fun respondWithUnauthorised(): Mapping {
+        return respondWithEmisNotAuthorised()
+    }
+
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
         return respondWith(statusCode) {
             andJsonBody(body, GsonFactory.asPascal)

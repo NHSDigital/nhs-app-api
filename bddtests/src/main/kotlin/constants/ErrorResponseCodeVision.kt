@@ -9,6 +9,7 @@ object ErrorResponseCodeVision {
     const val APPOINTMENT_SLOT_NOT_FOUND = "-21"
     const val INVALID_DETAILS = "-33"
     const val INVALID_PARAMETERS = "-31"
+    const val INVALID_USER_CREDENTIALS = "-30"
     const val UNKNOWN_ERROR = "-100"
 
     const val NON_VISION_ERROR_CODE = "9999"

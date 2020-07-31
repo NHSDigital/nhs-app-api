@@ -25,11 +25,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             public int? FurthestSlotDays { get; }
 
             public AppointmentSlotsInformation(
-                P9UserSession userSession,
+                GpUserSession userSession,
                 ICollection<Slot> slots)
             {
-                Supplier = userSession.GpUserSession.Supplier.ToString();
-                OdsCode = userSession.GpUserSession.OdsCode;
+                Supplier = userSession.Supplier.ToString();
+                OdsCode = userSession.OdsCode;
                 SlotTypes = slots.Select(x => x.Type).Distinct().ToArray();
                 SlotTypesFromGpSystem = slots.Select(x => x.TypeFromGpSystem).Distinct().ToArray();
                 Locations = slots.Select(x => x.Location).Distinct().ToArray();
@@ -40,16 +40,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
-        private readonly P9UserSession _userSession;
+        private readonly GpUserSession _gpUserSession;
 
         public AppointmentSlotsLoggingVisitor(
             ILogger<AppointmentSlotsController> logger,
             IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger,
-            P9UserSession userSession)
+            GpUserSession gpUserSession)
         {
             _logger = logger;
             _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;
-            _userSession = userSession;
+            _gpUserSession = gpUserSession;
         }
 
         public Task Visit(AppointmentSlotsResult.Success result)
@@ -69,23 +69,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         private void LogAppointmentSlotsInformation(AppointmentSlotsResult.Success result)
         {
-            var gpUserSession = _userSession.GpUserSession;
-
-            _appointmentSlotMetadataLogger.CaptureAppointmentSlotTypes(gpUserSession, result);
+            _appointmentSlotMetadataLogger.CaptureAppointmentSlotTypes(_gpUserSession, result);
 
             var slots = result.Response?.Slots ?? Array.Empty<Slot>();
             var slotCount = slots.Count;
 
             var kvp = new Dictionary<string, string>
             {
-                { "Supplier", gpUserSession.Supplier.ToString() },
-                { "OdsCode", gpUserSession.OdsCode },
+                { "Supplier", _gpUserSession.Supplier.ToString() },
+                { "OdsCode", _gpUserSession.OdsCode },
                 { "Count", slotCount.ToString(CultureInfo.InvariantCulture) }
             };
 
             _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);
 
-            var slotInfo = new AppointmentSlotsInformation(_userSession, slots);
+            var slotInfo = new AppointmentSlotsInformation(_gpUserSession, slots);
 
             _logger.LogInformation("appointment_slot_data=" + slotInfo.SerializeJson());
         }

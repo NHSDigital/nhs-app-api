@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
     public sealed class AppointmentsControllerDeleteTests : IDisposable
     {
         private AppointmentCancelRequest _appointmentCancelRequest;
-        private P9UserSession _userSession;
+        private EmisUserSession _gpSession;
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private Mock<IAppointmentsValidationService> _mockAppointmentsValidationService;
         private Mock<IGpSystem> _mockGpSystem;
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _appointmentCancelRequest = new AppointmentCancelRequest();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _gpSession = new EmisUserSession();
 
             _mockAppointmentsService = new Mock<IAppointmentsService>();
 
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAppointmentsService.Setup(x => x.Cancel(
                 It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession
+                    d => d.GpUserSession == _gpSession
                          && d.PatientId == _patientId), _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.Success()));
 
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_AppointmentsServiceCancelReturnsSuccess_ReturnsNoContent()
         {
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _gpSession);
 
             // Assert
             result.Should().BeAssignableTo<NoContentResult>();
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
                 .Returns(false);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
-                    StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
+                    StatusCodes.Status400BadRequest, _gpSession.Supplier))
                 .Returns(_serviceDeskReference);
 
             var expectedValue = new PfsErrorResponse
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _gpSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -154,12 +154,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var serviceResult = (AppointmentCancelResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.Cancel(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession
+                        d => d.GpUserSession == _gpSession
                              && d.PatientId == _patientId),
                     _appointmentCancelRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,
-                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                    expectedStatusCode, _gpSession.Supplier))
                 .Returns(_serviceDeskReference);
 
             var expectedValue = new PfsErrorResponse
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _gpSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
+            await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _gpSession);
 
             // Assert
             _mockGpSystem.VerifyAll();

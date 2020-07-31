@@ -30,11 +30,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.AppointmentSlotsAreaBehaviour.GetSlots(gpLinkedAccountModel, dateRange);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<AppointmentSlotsResult>(new AppointmentSlotsResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();

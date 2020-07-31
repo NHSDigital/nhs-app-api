@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
         InvalidConnectionToken,
         InternalServerError,
         Timeout,
+        Unauthorised
     }
 }

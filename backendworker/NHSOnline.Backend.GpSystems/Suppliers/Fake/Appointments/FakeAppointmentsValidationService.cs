@@ -6,18 +6,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
 {
     public class FakeAppointmentsValidationService : AppointmentsValidationService
     {
-        public FakeAppointmentsValidationService(ILogger logger) : base(logger)
+        public FakeAppointmentsValidationService(ILogger<FakeAppointmentsService> logger) : base(logger)
         {
         }
 
-        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request)
-        {
-            return true;
-        }
+        protected override bool IsSupplierDeleteValid(AppointmentCancelRequest request) => true;
 
-        protected override bool IsSupplierPostValid(AppointmentBookRequest request)
-        {
-            return true;
-        }
+        protected override bool IsSupplierPostValid(AppointmentBookRequest request) => true;
     }
 }

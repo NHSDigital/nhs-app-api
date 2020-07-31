@@ -29,11 +29,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.PrescriptionAreaBehaviour.GetPrescriptions(gpLinkedAccountModel, fromDate, toDate);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<GetPrescriptionsResult>(new GetPrescriptionsResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();
@@ -48,11 +43,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.PrescriptionAreaBehaviour.OrderPrescription(gpLinkedAccountModel,
                     repeatPrescriptionRequest);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<OrderPrescriptionResult>(new OrderPrescriptionResult.InternalServerError());
             }
             finally
             {

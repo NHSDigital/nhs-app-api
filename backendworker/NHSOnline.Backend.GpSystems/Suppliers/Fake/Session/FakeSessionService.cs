@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
@@ -34,6 +35,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
                 return await Task.FromResult<GpSessionCreateResult>(
                     new GpSessionCreateResult.Forbidden("Unknown user"));
             }
+            catch (UnauthorisedGpSystemHttpRequestException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 const string errorMessage = "Something went wrong during building the response.";
@@ -54,6 +59,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
             {
                 var fakeUser = await FindUser(gpUserSession.NhsNumber);
                 return await fakeUser.SessionAreaBehaviour.Logoff(gpUserSession);
+            }
+            catch (UnauthorisedGpSystemHttpRequestException)
+            {
+                throw;
             }
             catch (Exception e)
             {

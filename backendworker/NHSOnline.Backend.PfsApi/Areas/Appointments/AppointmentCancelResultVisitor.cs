@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support;
@@ -8,13 +8,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentCancelResultVisitor : ResultVisitorBase, IAppointmentCancelResultVisitor<IActionResult>
     {
-        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
-            : base(errorReferenceGenerator, userSession)
+        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, Supplier supplier)
+            : base(errorReferenceGenerator, supplier)
         {
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
-        
+
         public IActionResult Visit(AppointmentCancelResult.Success result)
         {
             return new NoContentResult();

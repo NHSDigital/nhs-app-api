@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -29,11 +28,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Demographics
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.DemographicsAreaBehaviour.GetDemographics(gpLinkedAccountModel, fakeUser);
 
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<DemographicsResult>(new DemographicsResult.InternalServerError());
             }
             finally
             {

@@ -29,6 +29,12 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST)
         }
     }
 
+    override fun validOAuthDetailsAndGpSystemReturnsError() {
+        mockingClient.forMicrotest.mock {
+            demographics.demographicsRequest(patient).respondWithCorruptedContent()
+        }
+    }
+
     override fun patientDoesNotExist(patient: Patient) {
         throw NotImplementedError("Not implemented for Microtest")
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +16,7 @@ using GpSessionRecreateResult = NHSOnline.Backend.PfsApi.GpSession.GpSessionRecr
 namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
 {
     [TestClass]
-    public class GpSessionRecreatorTests
+    public class GpSessionCreatorTests
     {
         private IGpSystemFactory _gpSystemFactory;
         private ISessionCacheService _sessionCacheService;
@@ -153,6 +152,65 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
                 .Verify(g => g.GenerateAndLogErrorReference(errorCaptor.Capture()));
 
             Assert.AreEqual("3e", errorCaptor.Value.Prefix);
+        }
+
+        [TestMethod]
+        public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsFailure_ThenErrorResultIsReturned()
+        {
+            _sessionCreateResult = new GpSessionCreateResult.Timeout("downstream system is asleep");
+
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+
+            Assert.AreEqual(
+                typeof(GpSessionRecreateResult.ErrorResult),
+                result.GetType());
+        }
+
+        [TestMethod]
+        public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsFailure_ThenErrorResultHasCorrectErrorType()
+        {
+            _sessionCreateResult = new GpSessionCreateResult.Unparseable("the error due to parsing");
+
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var errorResult = result as GpSessionRecreateResult.ErrorResult;
+
+            Assert.AreEqual(
+                typeof(ErrorTypes.LoginGPUnparseable),
+                errorResult.ErrorType.GetType());
+        }
+
+        [TestMethod]
+        public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsFailure_ThenErrorResultHasDetails()
+        {
+            _sessionCreateResult = new GpSessionCreateResult.InternalServerError("this should come back");
+
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var errorResult = result as GpSessionRecreateResult.ErrorResult;
+
+            Assert.AreEqual(
+                "this should come back",
+                errorResult.Details);
+        }
+
+        [TestMethod]
+        public async Task WhenRecreateGpSessionCalled_WithUnknownSupplier_ThenErrorResultIsReturned()
+        {
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Unknown);
+
+            Assert.AreEqual(
+                typeof(GpSessionRecreateResult.ErrorResult),
+                result.GetType());
+        }
+
+        [TestMethod]
+        public async Task WhenRecreateGpSessionCalled_WithUnknownSupplier_ThenErrorResultIsOdsCodeNotFound()
+        {
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Unknown);
+            var errorResult = result as GpSessionRecreateResult.ErrorResult;
+
+            Assert.AreEqual(
+                typeof(ErrorTypes.LoginOdsCodeNotFoundOrNotSupported),
+                errorResult.ErrorType.GetType());
         }
 
         [TestMethod]

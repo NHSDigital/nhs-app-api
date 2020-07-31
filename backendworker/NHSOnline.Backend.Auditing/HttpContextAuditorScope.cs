@@ -76,10 +76,12 @@ namespace NHSOnline.Backend.Auditing
 
             public AuditUserContext Visit(P9UserSession userSession)
             {
-                var sessionVisitor =
-                    new AuditContextGpUserSessionVisitor(userSession, _isProxying, _linkedAccountNhsNumber);
-
-                return userSession.GpUserSession.Accept(sessionVisitor);
+                return new AuditUserContext(
+                    userSession.CitizenIdUserSession.AccessToken,
+                    userSession.NhsNumber,
+                    userSession.GpUserSession.Supplier,
+                    _isProxying,
+                    _linkedAccountNhsNumber);
             }
 
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
@@ -31,11 +30,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.AppointmentsAreaBehaviour.Book(gpLinkedAccountModel, request);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<AppointmentBookResult>(new AppointmentBookResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();
@@ -52,11 +46,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.AppointmentsAreaBehaviour.Cancel(gpLinkedAccountModel, request);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<AppointmentCancelResult>(new AppointmentCancelResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();
@@ -69,11 +58,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Appointments
             {
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.AppointmentsAreaBehaviour.GetAppointments(gpLinkedAccountModel);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<AppointmentsResult>(new AppointmentsResult.InternalServerError());
             }
             finally
             {

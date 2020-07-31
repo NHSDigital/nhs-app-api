@@ -77,6 +77,14 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         }
     }
 
+    override fun validOAuthDetailsAndGpSystemReturnsError() {
+        mockingClient.forTpp.mock {
+            authentication.authenticateRequest(
+                TppMockDefaults.tppAuthenticateRequest(patient))
+                .respondWithCorruptedContent()
+        }
+    }
+
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forTpp.mock {
             authentication.authenticateRequest(

@@ -218,7 +218,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             return new P9UserSession(
                 string.Empty,
-                string.Empty,
+                nhsNumber,
                 new CitizenIdUserSession { AccessToken = accessToken, },
                 new EmisUserSession { NhsNumber = nhsNumber },
                 string.Empty);
@@ -319,7 +319,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Unknown | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(AuditorTestResources.AccessTokenSubject + " | " +  _nhsNumber1 + " | False | Disconnected | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [DataTestMethod, ExpectedException(typeof(NoAuditKeyException))]

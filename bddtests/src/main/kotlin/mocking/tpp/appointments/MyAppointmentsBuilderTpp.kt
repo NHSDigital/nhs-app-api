@@ -48,6 +48,10 @@ class MyAppointmentsBuilderTpp(
         return respondWithTppUnknownError("Unknown exception")
     }
 
+    override fun respondWithUnauthorised(): Mapping {
+        return respondWithTppNotAuthorised("Not authorized")
+    }
+
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
         val viewAppointmentsReply = viewAppointmentsReplyBase()
         if (facade.myAppointments != null) {

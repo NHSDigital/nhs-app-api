@@ -7,7 +7,6 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.GpSession;
-using NHSOnline.Backend.PfsApi.GpSession.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
@@ -21,22 +20,19 @@ namespace NHSOnline.Backend.PfsApi.Session
         private readonly ILogger<P9UserSessionCreator> _logger;
         private readonly IGpSessionCreator _gpSessionCreator;
         private readonly IIm1CacheService _im1CacheService;
-        private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
         public P9UserSessionCreator(
             ISessionCacheService sessionCacheService,
             IAuditor auditor,
             ILogger<P9UserSessionCreator> logger,
             IGpSessionCreator gpSessionCreator,
-            IIm1CacheService im1CacheService,
-            IErrorReferenceGenerator errorReferenceGenerator)
+            IIm1CacheService im1CacheService)
         {
             _sessionCacheService = sessionCacheService;
             _auditor = auditor;
             _gpSessionCreator = gpSessionCreator;
             _logger = logger;
             _im1CacheService = im1CacheService;
-            _errorReferenceGenerator = errorReferenceGenerator;
         }
 
         public async Task<CreateUserSessionResult> Create(
@@ -70,12 +66,9 @@ namespace NHSOnline.Backend.PfsApi.Session
                     $"Failed to determine the GP system based on ODS code '{odsCode}'");
             }
 
-            var gpSessionCreateResult = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
-            var gpUserSession = gpSessionCreateResult.Accept(new GpSessionCreateResultVisitor(
-                _logger, odsCode, supplier, _errorReferenceGenerator));
+            var gpUserSession = await _gpSessionCreator.CreateGpSession(citizenIdSessionResult, supplier);
 
-            var userSession = await CreateP9UserSession(
-                citizenIdSessionResult, gpUserSession, csrfToken);
+            var userSession = await CreateP9UserSession(citizenIdSessionResult, gpUserSession, csrfToken);
 
             await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
 

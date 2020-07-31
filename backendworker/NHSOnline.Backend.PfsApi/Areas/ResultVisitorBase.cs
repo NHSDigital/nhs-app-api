@@ -8,24 +8,32 @@ namespace NHSOnline.Backend.PfsApi.Areas
     {
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
-        protected P9UserSession UserSession { get; }
+        protected Supplier Supplier { get; }
 
         protected abstract ErrorCategory ErrorCategory { get; }
+
+        protected ResultVisitorBase(
+            IErrorReferenceGenerator errorReferenceGenerator,
+            Supplier supplier)
+        {
+            _errorReferenceGenerator = errorReferenceGenerator;
+            Supplier = supplier;
+        }
 
         protected ResultVisitorBase(
             IErrorReferenceGenerator errorReferenceGenerator,
             P9UserSession userSession)
         {
             _errorReferenceGenerator = errorReferenceGenerator;
-            UserSession = userSession;
+            Supplier = userSession.GpUserSession.Supplier;
         }
-        
+
         protected IActionResult BuildErrorResult(int statusCode)
         {
             var serviceDeskReference =
                 _errorReferenceGenerator.GenerateAndLogErrorReference(
                     ErrorCategory, statusCode,
-                    UserSession.GpUserSession.Supplier);
+                    Supplier);
 
             return new ObjectResult(new PfsErrorResponse
             {

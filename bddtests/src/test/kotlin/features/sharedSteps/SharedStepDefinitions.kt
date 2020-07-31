@@ -77,6 +77,25 @@ open class SharedStepDefinitions {
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
+    @When("^The (.*) GP system becomes available$")
+    fun makeGpSystemAvailable(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = SerenityHelpers.getPatient()
+
+        SessionCreateJourneyFactory.getForSupplier(supplier)
+            .createFor(patient)
+    }
+
+    @When("^The (.*) GP system is still unavailable$")
+    fun makeGpSystemStillUnavailable(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+
+        // this needs to generate a different service desk reference from initialisePatientAndUnavailableGpSystem
+        // to allow asserting the login error code is not shown in P9 journey error screens
+        AuthenticationFactory.getForSupplier(supplier)
+            .validOAuthDetailsAndGpSystemReturnsError()
+    }
+
     @Given("^I am an? (.*) patient using the native app$")
     fun initialisePatientAndGpSystemOnNativeApp(gpSystem: String) {
         browser.setUserAgentSource("ios")

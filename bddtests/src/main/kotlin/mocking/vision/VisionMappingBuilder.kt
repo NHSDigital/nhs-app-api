@@ -8,7 +8,6 @@ import mocking.vision.models.ServiceDefinition
 import org.apache.http.HttpStatus
 
 abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(method, "/vision/pfs/") {
-
     fun respondWithCorruptedContent(serviceDefinition: ServiceDefinition, content: String = ""): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             val corruptedResponse = VisionConstantsHelper
@@ -20,7 +19,7 @@ abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(me
         }
     }
 
-    fun respondVisionErrorWhenServiceNotEnabled(serviceDefinition: ServiceDefinition):Mapping {
+    fun respondVisionErrorWhenServiceNotEnabled(serviceDefinition: ServiceDefinition): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
                     serviceDefinition,
@@ -28,11 +27,19 @@ abstract class VisionMappingBuilder(method: String = "POST") : MappingBuilder(me
         }
     }
 
-    fun respondWithUnknownVisionError(serviceDefinition: ServiceDefinition):Mapping {
+    fun respondWithUnknownVisionError(serviceDefinition: ServiceDefinition): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
                     serviceDefinition,
                     ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
+        }
+}
+
+    fun respondVisionUnauthorised(serviceDefinition: ServiceDefinition): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                serviceDefinition,
+                ErrorResponseCodeVision.INVALID_USER_CREDENTIALS)).build()
         }
     }
 }

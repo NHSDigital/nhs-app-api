@@ -63,6 +63,14 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
                 }
     }
 
+    override fun validOAuthDetailsAndGpSystemReturnsError() {
+        mockingClient.forVision.mock {
+            authentication.getConfigurationRequest(
+                VisionMockDefaults.getVisionUserSession(patient))
+                .respondWithCorruptedContent()
+        }
+    }
+
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forVision.mock {
             authentication.getConfigurationRequest(

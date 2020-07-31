@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Im1Connection;
@@ -12,9 +13,19 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems
 {
-    [SuppressMessage("Microsoft.Naming", "CA1024", Justification = "Methods are needed to match interface definition.")]
+    [SuppressMessage(
+        "Microsoft.Naming",
+        "CA1024",
+        Justification = "Methods are needed to match interface definition.")]
     public class NullGpSystem : IGpSystem
     {
+        private ILogger<NullGpSystem> _logger;
+
+        public NullGpSystem(ILogger<NullGpSystem> logger)
+        {
+            _logger = logger;
+        }
+
         public Supplier Supplier => Supplier.Disconnected;
         public bool SupportsLinkedAccounts => false;
 
@@ -22,7 +33,8 @@ namespace NHSOnline.Backend.GpSystems
 
         public IAppointmentSlotsService GetAppointmentSlotsService() => throw new NoGpSessionAvailableException();
 
-        public IAppointmentsValidationService GetAppointmentsValidationService() => throw new NoGpSessionAvailableException();
+        public IAppointmentsValidationService GetAppointmentsValidationService() =>
+            throw new NoGpSessionAvailableException();
 
         public ICourseService GetCourseService() => throw new NoGpSessionAvailableException();
 
@@ -32,11 +44,16 @@ namespace NHSOnline.Backend.GpSystems
 
         public IPrescriptionService GetPrescriptionService() => throw new NoGpSessionAvailableException();
 
-        public IPrescriptionValidationService GetPrescriptionValidationService() => throw new NoGpSessionAvailableException();
+        public IPrescriptionValidationService GetPrescriptionValidationService() =>
+            throw new NoGpSessionAvailableException();
 
         public ISessionService GetSessionService() => throw new NoGpSessionAvailableException();
 
-        public ISessionExtendService GetSessionExtendService() => throw new NoGpSessionAvailableException();
+        /// <summary>
+        /// This returns a stub service so that session extend calls succeed without requiring
+        /// a GP session to be valid.
+        /// </summary>
+        public ISessionExtendService GetSessionExtendService() => new NullGpSessionExtendService(_logger);
 
         public ITokenValidationService GetTokenValidationService() => throw new NoGpSessionAvailableException();
 

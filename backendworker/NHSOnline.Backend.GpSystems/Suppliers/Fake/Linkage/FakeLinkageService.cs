@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
@@ -29,11 +28,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Linkage
             {
                 var fakeUser = await FindUser(getLinkageRequest.NhsNumber);
                 return await fakeUser.LinkageAreaBehaviour.GetLinkageKey(getLinkageRequest);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<LinkageResult>(new LinkageResult.InternalServerError());
             }
             finally
             {

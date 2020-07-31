@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.GpSession
             public override string Details { get; }
             public ErrorTypes ErrorType { get; }
 
-            public ErrorResult(ErrorTypes errorType, string details)
+            public ErrorResult(ErrorTypes errorType, string details = "Gp session recreate failed")
             {
                 ErrorType = errorType;
                 Details = details;

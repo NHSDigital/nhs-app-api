@@ -64,6 +64,14 @@ abstract class MicrotestMappingBuilder(method: String, relativePath: String = ""
         }
     }
 
+    fun respondWithUnauthorized(): Mapping {
+        return respondWith(HttpStatus.SC_UNAUTHORIZED) {  andJsonBody("""
+            {
+                "Error": "Authentication problem."
+            }
+        """.trimIndent()) }
+    }
+
     override fun respondWithError(httpStatusCode: Int, errorCode: String, message: String?): Mapping {
         Assert.assertEquals("Test set up is incorrect, Microtest does not support error codes", "", errorCode)
         Assert.assertEquals("Test set up is incorrect, Microtest does not support error messages", "", message)

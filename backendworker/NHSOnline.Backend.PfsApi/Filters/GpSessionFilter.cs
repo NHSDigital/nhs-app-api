@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.GpSession;
-using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
@@ -161,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
             public async Task<bool> Visit(GpSessionRecreateResult.RecreatedResult createRecreatedResult)
             {
                 _gpSessionFilter._logger.LogInformation(
-                    $"Successfully recreated gp session for user from ODS code: {_p9UserSession.OdsCode}");
+                    $"Successfully recreated gp session for user from odsCode={_p9UserSession.OdsCode}");
 
                 await InjectPatientIdParameterValues();
 
@@ -171,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
             public Task<bool> Visit(GpSessionRecreateResult.SessionStillValidResult createRecreatedResult)
             {
                 _gpSessionFilter._logger.LogInformation(
-                    $"GP session still valid for user from ODS code: {_p9UserSession.OdsCode}");
+                    $"GP session still valid for user from odsCode={_p9UserSession.OdsCode}");
 
                 return Task.FromResult(true);
             }
@@ -179,10 +178,12 @@ namespace NHSOnline.Backend.PfsApi.Filters
             public Task<bool> Visit(GpSessionRecreateResult.ErrorResult errorResult)
             {
                 _gpSessionFilter._logger.LogError(
-                    "Authentication failure when recreating gp session for " +
-                    $"user from ODS code: {_p9UserSession.OdsCode}");
+                    "Login failure when recreating gp session for " +
+                    $"user from odsCode={_p9UserSession.OdsCode}");
 
-                _context.Result = _gpSessionFilter._errorResultBuilder.BuildResult(errorResult.ErrorType);
+                _context.Result = _gpSessionFilter._errorResultBuilder.BuildResult(
+                    new ErrorTypes.GPSessionUnavailable(errorResult.ErrorType)
+                );
 
                 return Task.FromResult(false);
             }

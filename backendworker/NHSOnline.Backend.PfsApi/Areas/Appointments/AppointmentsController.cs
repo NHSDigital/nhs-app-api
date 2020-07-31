@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -46,19 +47,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public async Task<IActionResult> Delete(
             [FromBody] AppointmentCancelRequest request,
             [FromHeader(Name=PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Delete)} with patientId {patientId}");
 
-                await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {request.AppointmentId}");
+                await _auditor.Audit(
+                    AuditingOperations.CancelAppointmentAuditTypeRequest,
+                    $"Attempting to cancel appointment with id: {request.AppointmentId}");
 
-                var result = await Cancel(request, userSession, patientId);
+                var result = await Cancel(request, gpUserSession, patientId);
 
                 await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId));
-                return result.Accept(new AppointmentCancelResultVisitor(_errorReferenceGenerator, userSession));
+
+                return result.Accept(
+                    new AppointmentCancelResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
             }
             finally
             {
@@ -67,23 +72,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId, [UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession p9UserSession,
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
 
-                await _auditor.Audit(AuditingOperations.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
+                await _auditor.Audit(
+                    AuditingOperations.ViewAppointmentAuditTypeRequest,
+                    "Attempting to view booked appointments");
 
-                var gpLinkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+                var gpLinkedAccountModel = new GpLinkedAccountModel(gpUserSession, patientId);
 
-                var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountModel);
+                var result = await GetAppointmentsService(gpUserSession).GetAppointments(gpLinkedAccountModel);
 
                 await result.Accept(_appointmentTypeTransformingVisitor);
-                await result.Accept(new AppointmentsLoggingVisitor(_logger, userSession));
+                await result.Accept(new AppointmentsLoggingVisitor(_logger, p9UserSession));
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger));
-                return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
+
+                return await result.Accept(
+                    new AppointmentsResultVisitor(
+                        _sessionCacheService, _errorReferenceGenerator, p9UserSession, gpUserSession.Supplier));
             }
             finally
             {
@@ -95,20 +108,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public async Task<IActionResult> Post(
             [FromBody] AppointmentBookRequest request,
             [FromHeader(Name=PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Post)} with patientId {patientId}");
 
-                await _auditor.Audit(AuditingOperations.BookAppointmentAuditTypeRequest,
-                    $"Attempting to book appointment with id: {request.SlotId} and startTime: {request.StartTime:O}");
+                await _auditor.Audit(
+                    AuditingOperations.BookAppointmentAuditTypeRequest,
+                    $"Attempting to book appointment with id: {request.SlotId} and " +
+                    $"startTime: {request.StartTime:O}");
 
-                var result = await Book(request, userSession, patientId);
+                var result = await Book(request, gpUserSession, patientId);
 
-                await result.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));
-                return result.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, userSession));
+                await result.Accept(
+                    new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));
+
+                return result.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
             }
             finally
             {
@@ -116,9 +133,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        private async Task<AppointmentCancelResult> Cancel(AppointmentCancelRequest request, P9UserSession userSession, Guid patientId)
+        private async Task<AppointmentCancelResult> Cancel(
+            AppointmentCancelRequest request,
+            GpUserSession userSession,
+            Guid patientId)
         {
             var appointmentValidator = GetAppointmentsValidationService(userSession);
+
             if (!appointmentValidator.IsDeleteValid(request))
             {
                 _logger.LogError("Invalid request body supplied to delete request");
@@ -126,41 +147,46 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
 
             var appointmentsService = GetAppointmentsService(userSession);
-            var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+            var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession, patientId);
+
             return await appointmentsService.Cancel(gpLinkedAccountsModel, request);
         }
 
-        private async Task<AppointmentBookResult> Book(AppointmentBookRequest request, P9UserSession userSession, Guid patientId)
+        private async Task<AppointmentBookResult> Book(
+            AppointmentBookRequest request,
+            GpUserSession userSession,
+            Guid patientId)
         {
             var appointmentValidator = GetAppointmentsValidationService(userSession);
+
             if (!appointmentValidator.IsPostValid(request))
             {
                 _logger.LogError("Invalid request body supplied to post request");
+
                 return new AppointmentBookResult.BadRequest();
             }
 
             var appointmentsService = GetAppointmentsService(userSession);
-            var gpLinkedAccountModel = new GpLinkedAccountModel(
-                userSession.GpUserSession, patientId
-            );
+            var gpLinkedAccountModel = new GpLinkedAccountModel(userSession, patientId);
+
             return await appointmentsService.Book(gpLinkedAccountModel, request);
         }
 
-        private IAppointmentsService GetAppointmentsService(P9UserSession userSession)
+        private IAppointmentsService GetAppointmentsService(GpUserSession userSession)
         {
-            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
+            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.Supplier}'.");
 
             return _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .CreateGpSystem(userSession.Supplier)
                 .GetAppointmentsService();
         }
 
-        private IAppointmentsValidationService GetAppointmentsValidationService(P9UserSession userSession)
+        private IAppointmentsValidationService GetAppointmentsValidationService(GpUserSession userSession)
         {
-            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
+            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.Supplier}'.");
 
             return _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .CreateGpSystem(userSession.Supplier)
                 .GetAppointmentsValidationService();
         }
     }

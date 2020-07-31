@@ -53,6 +53,10 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
         return respondWithUnknownVisionError(serviceDefinition)
     }
 
+    override fun respondWithUnauthorised(): Mapping {
+        return respondVisionUnauthorised(serviceDefinition)
+    }
+
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
         val bookedAppointmentsResponse = extractResponseFromFacade(facade.myAppointments!!)
 

@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
     internal class CourseResultVisitor : ResultVisitorBase, ICourseResultVisitor<Task<IActionResult>>
     {
         private readonly ISessionCacheService _sessionCacheService;
+        private readonly P9UserSession _userSession;
 
         public CourseResultVisitor(
             ISessionCacheService sessionCacheService,
@@ -19,6 +20,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             base(errorReferenceGenerator, userSession)
         {
             _sessionCacheService = sessionCacheService;
+
+            _userSession = userSession;
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Prescriptions;
@@ -27,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             if (result.AllowFreeTextPrescriptions != null)
             {
-                await _sessionCacheService.UpdateUserSession(UserSession);
+                await _sessionCacheService.UpdateUserSession(_userSession);
             }
 
             return new OkObjectResult(result.Response);

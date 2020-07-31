@@ -60,6 +60,10 @@ class GetAppointmentBuilderMicrotest(val patient: Patient)
         return respondWithUnknownExceptionError()
     }
 
+    override fun respondWithUnauthorised(): Mapping {
+        return respondWithUnauthorized()
+    }
+
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         return respondWith(HttpStatus.SC_FORBIDDEN) {  andJsonBody("") }
     }

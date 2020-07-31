@@ -28,11 +28,9 @@ class YourAppointmentsStepDefinitionsBackend {
     private val appointmentSlotsExample = AppointmentsSlotsExample()
     private val appointmentSlotsTelephoneExample = AppointmentSlotsTelephoneExample()
 
-    @Given("^I have no booked appointments for (.*)$")
-    fun iHaveNoBookedAppointments(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
-        viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse()
+    @Given("^I am an (.*) user with no booked appointments$")
+    fun givenIHaveNoBookedAppointments(gpSystem: String) {
+        iHaveNoBookedAppointments(gpSystem)
     }
 
     @Given("^I have upcoming appointments before cutoff time for (\\w+)$")
@@ -218,6 +216,24 @@ class YourAppointmentsStepDefinitionsBackend {
             respondWithServiceUnavailable()
         }
     }
+
+    @When("^(.*) GP appointments returns unauthorized$")
+    fun gpAppointsReturnsUnauthorized(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
+
+        currentViewAppointmentFactory.createMyAppointments {
+            respondWithUnauthorised()
+        }
+    }
+
+    @When("^I have no booked appointments for (.*)$")
+    fun iHaveNoBookedAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
+        viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse()
+    }
+
 
     @When("^my appointments are requested$")
     fun whenTheAPIRetrievesMyAppointments() {

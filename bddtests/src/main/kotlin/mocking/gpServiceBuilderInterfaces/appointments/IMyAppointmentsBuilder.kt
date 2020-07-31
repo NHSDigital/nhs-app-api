@@ -10,6 +10,8 @@ interface IMyAppointmentsBuilder : IBuilderCommonResponses {
 
     fun respondWithSuccess(body: String): Mapping
 
+    fun respondWithUnauthorised(): Mapping
+
     enum class AppointmentType {
         UPCOMING_ONLY,
         PAST_ONLY,

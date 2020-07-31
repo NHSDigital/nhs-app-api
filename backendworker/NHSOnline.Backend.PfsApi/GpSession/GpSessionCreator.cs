@@ -36,12 +36,19 @@ namespace NHSOnline.Backend.PfsApi.GpSession
             _errorReferenceGenerator = errorReferenceGenerator;
         }
 
-        public async Task<GpSessionCreateResult> CreateGpSession(
+        public async Task<GpUserSession> CreateGpSession(
             CitizenIdSessionResult citizenIdUserSession, Supplier supplier)
         {
             var gpSessionCreateArgs = new GpSessionCreateArgs(citizenIdUserSession);
 
-            return await CreateGpSession(gpSessionCreateArgs, supplier);
+            var createResult = await CreateGpSession(gpSessionCreateArgs, supplier);
+
+            return createResult.Accept(
+                new GpUserSessionCreateResultVisitor(
+                    _logger,
+                    supplier,
+                    gpSessionCreateArgs.OdsCode,
+                    _errorReferenceGenerator));
         }
 
         public async Task<GpSessionRecreateResult> RecreateGpSession(
@@ -77,12 +84,12 @@ namespace NHSOnline.Backend.PfsApi.GpSession
 
             var gpSession = await CreateGpSession(gpSessionCreateArgs, supplier);
 
-            userSession.GpUserSession = gpSession.Accept(new GpSessionCreateResultVisitor(
-                _logger, userSession.OdsCode, supplier, _errorReferenceGenerator));
+            userSession.GpUserSession = gpSession.Accept(new GpUserSessionCreateResultVisitor(
+                _logger, supplier, userSession.OdsCode, _errorReferenceGenerator));
 
             await _sessionCacheService.UpdateUserSession(userSession);
 
-            return new GpSessionRecreateResult.RecreatedResult();
+            return gpSession.Accept(new GpUserSessionRecreateResultVisitor(_logger, supplier, userSession.OdsCode));
         }
 
         private async Task<GpSessionCreateResult> CreateGpSession(

@@ -31,6 +31,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         private IUserSessionService _userSessionService;
         private IGpSessionCreator _gpSessionCreator;
         private IGpSystem _gpSystem;
+        private int _responseStatusCode;
+        private PfsErrorResponse _errorResponse;
         private ISessionErrorResultBuilder _errorResultBuilder;
         private ILinkedAccountsService _linkedAccountsService;
 
@@ -53,7 +55,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
         private List<LinkedAccount> _linkedAccounts;
 
-        // methods to mock controller endpoints
         public static void MethodWithCorrectGpSessionTypeAndAttribute([GpSession] GpUserSession gpUserSession)
         {
         }
@@ -102,7 +103,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _logger = Mock.Of<ILogger<GpSessionFilter>>();
             _userSessionService = Mock.Of<IUserSessionService>();
 
+            _responseStatusCode = 599;
+            _errorResponse = new PfsErrorResponse()
+            {
+                ServiceDeskReference = "z8wuejh"
+            };
+
             _errorResultBuilder = Mock.Of<ISessionErrorResultBuilder>();
+
+            Mock.Get(_errorResultBuilder)
+                .Setup(b => b.BuildResult(It.IsAny<ErrorTypes>()))
+                .Returns(() =>
+                    new ObjectResult(_errorResponse)
+                    {
+                        StatusCode = _responseStatusCode
+                    }
+                );
 
             _linkedAccounts = new List<LinkedAccount>();
             _linkedAccountsService = Mock.Of<ILinkedAccountsService>();
@@ -254,6 +270,69 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             Assert.IsFalse(_nextCalled);
         }
+
+        [TestMethod]
+        public async Task WhenFilterInvoked_WithInvalidP9Session_AndSessionRecreateReturnsAnError_ThenGpUnavailableErrorPassedToResponseBuilder()
+        {
+            UseP9Session(false);
+
+            _sessionRecreateResult = _sessionRecreateErrorResult;
+
+            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
+
+            Mock.Get(_errorResultBuilder)
+                .Verify(b => b.BuildResult(It.IsAny<ErrorTypes.GPSessionUnavailable>()));
+        }
+
+        [TestMethod]
+        public async Task WhenFilterInvoked_WithInvalidP9Session_AndSessionRecreateReturnsAnError_ThenGpUnavailableErrorPassedToResponseBuilderHasCorrectErrorDetails()
+        {
+            UseP9Session(false);
+
+            _sessionRecreateResult = _sessionRecreateErrorResult;
+
+            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
+
+            var errorCaptor = new ArgumentCaptor<ErrorTypes.GPSessionUnavailable>();
+
+            Mock.Get(_errorResultBuilder)
+                .Verify(b => b.BuildResult(errorCaptor.Capture()));
+
+            Assert.AreEqual(ErrorCategory.None, errorCaptor.Value.Category);
+            Assert.AreEqual("xx", errorCaptor.Value.Prefix);
+        }
+
+        [TestMethod]
+        public async Task WhenFilterInvoked_WithInvalidP9Session_AndSessionRecreateReturnsAnError_ThenContextResultHasStatusCode()
+        {
+            UseP9Session(false);
+
+            _sessionRecreateResult = _sessionRecreateErrorResult;
+
+            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
+
+            var result = _context.Result as ObjectResult;
+
+            Assert.AreEqual(_responseStatusCode, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task WhenFilterInvoked_WithInvalidP9Session_AndSessionRecreateReturnsAnError_ThenContextResultHasObject()
+        {
+            UseP9Session(false);
+
+            _sessionRecreateResult = _sessionRecreateErrorResult;
+
+            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
+
+            var result = _context.Result as ObjectResult;
+
+            Assert.AreEqual(
+                _errorResponse,
+                result.Value);
+        }
+
+        //new PfsErrorResponse { ServiceDeskReference = serviceDeskReference }
 
         [DataTestMethod]
         public async Task WhenFilterInvoked_WithValidP9Session_AndGpSessionIsInvalid_ThenSessionIsRecreated()

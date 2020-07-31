@@ -68,6 +68,13 @@ class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
                 .respondWithSuccess(patient, associationType) }
     }
 
+    override fun validOAuthDetailsAndGpSystemReturnsError() {
+        mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest().respondWithCorruptedContent() }
+        mockingClient.forEmis.mock { authentication.sessionRequest(patient)
+            .respondWithSuccess(patient, associationType) }
+    }
+
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis.mock { authentication.endUserSessionRequest()

@@ -29,11 +29,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.CourseAreaBehaviour.GetCourses(gpLinkedAccountModel);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<GetCoursesResult>(new GetCoursesResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();

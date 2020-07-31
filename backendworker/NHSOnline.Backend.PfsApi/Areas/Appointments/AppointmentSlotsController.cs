@@ -6,11 +6,10 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support.AspNet;
-using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
@@ -48,7 +47,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId, [UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
@@ -57,21 +58,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
-                _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.GpUserSession.Supplier}'.");
-                var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
+                _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{gpUserSession.Supplier}'.");
+                var appointmentService = _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier)
                     .GetAppointmentSlotsService();
 
                 var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider, _appointmentsConfigurationSettings.SixteenWeeksSlotsEnabled);
 
-                var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+                var gpLinkedAccountsModel = new GpLinkedAccountModel(gpUserSession, patientId);
 
                 var result = await appointmentService.GetSlots(gpLinkedAccountsModel, dateRange);
 
                 await result.Accept(_appointmentTypeTransformingVisitor);
                 await result.Accept(
-                    new AppointmentSlotsLoggingVisitor(_logger, _appointmentSlotMetadataLogger, userSession));
+                    new AppointmentSlotsLoggingVisitor(_logger, _appointmentSlotMetadataLogger, gpUserSession));
                 await result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger));
-                return result.Accept(new AppointmentSlotsResultVisitor(_errorReferenceGenerator, userSession));
+                return result.Accept(
+                    new AppointmentSlotsResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
             }
             finally
             {

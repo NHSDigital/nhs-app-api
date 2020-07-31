@@ -40,12 +40,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection
                 var fakeUser = await FindUser(token.NhsNumber);
                 return await fakeUser.Im1ConnectionAreaBehaviour.Verify(connectionToken, odsCode);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<Im1ConnectionVerifyResult>(
-                    new Im1ConnectionVerifyResult.InternalServerError());
-            }
             finally
             {
                 _logger.LogExit();
@@ -78,12 +72,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Im1Connection
                 return await Task.FromResult<Im1ConnectionRegisterResult>(
                     new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode
                     .LinkageKeysNotSupportedBySupplier));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<Im1ConnectionRegisterResult>(
-                    new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
             }
             finally
             {

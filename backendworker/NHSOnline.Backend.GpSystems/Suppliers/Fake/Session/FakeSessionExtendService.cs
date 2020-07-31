@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
@@ -26,11 +25,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
             {
                 var fakeUser = await FindUser(gpLinkedAccountModel);
                 return await fakeUser.SessionExtendAreaBehaviour.Extend(gpLinkedAccountModel);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during building the response.");
-                return await Task.FromResult<SessionExtendResult>(new SessionExtendResult.InternalServerError());
             }
             finally
             {
