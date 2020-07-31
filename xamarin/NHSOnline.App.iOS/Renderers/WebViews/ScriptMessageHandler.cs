@@ -60,7 +60,9 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
             private void ExecuteCommand(string argumentJson)
             {
-                var argument = JsonConvert.DeserializeObject<TArgument>(argumentJson);
+                var argument = JsonConvert.DeserializeObject<TArgument>(argumentJson) ??
+                               throw new ArgumentException($"Failed to deserialise JSON to {typeof(TArgument).FullName}", nameof(argumentJson));
+
                 _command().Execute(argument);
             }
         }

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Foundation;
@@ -14,13 +12,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal sealed class NhsAppWebViewRenderer : WkWebViewRenderer
     {
-        private const string JavaScriptFunction = @"window.nativeApp = {};
-                                                    window.nativeApp.openWebIntegration = function(request) {
-                                                        window.webkit.messageHandlers.openWebIntegration.postMessage(request);
-                                                    }";
-
-        private readonly NSString _javascriptFunction;
-        private readonly List<IDisposable> _disposables = new List<IDisposable>();
+        private readonly JavascriptBridge<NhsAppWebView> _javascriptBridge;
 
         public NhsAppWebViewRenderer() : this(CustomConfiguration)
         {
@@ -28,14 +20,10 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private NhsAppWebViewRenderer(WKWebViewConfiguration config) : base(config)
         {
-            var userController = config.UserContentController;
-            _javascriptFunction = new NSString(JavaScriptFunction);
-            var script = new WKUserScript(_javascriptFunction, WKUserScriptInjectionTime.AtDocumentStart, false);
-            userController.AddUserScript(script);
-            _disposables.Add(script);
-            var handler = ScriptMessageHandler.For(() => ((NhsAppWebView)Element).OpenWebIntegrationCommand);
-            userController.AddScriptMessageHandler(handler, "openWebIntegration");
-            _disposables.Add(handler);
+            _javascriptBridge = JavascriptBridge
+                    .ForWebView(() => (NhsAppWebView)Element)
+                    .AddFunction("openWebIntegration", webView => webView.OpenWebIntegrationCommand)
+                    .Apply(config.UserContentController);
         }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
@@ -62,8 +50,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             if (disposing)
             {
-                _disposables.ForEach(d => d.Dispose());
-                _javascriptFunction.Dispose();
+                _javascriptBridge.Dispose();
             }
 
             base.Dispose(disposing);

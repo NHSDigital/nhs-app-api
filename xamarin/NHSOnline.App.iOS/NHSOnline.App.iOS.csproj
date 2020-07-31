@@ -47,6 +47,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\WebViews\DelegatingWebViewNavigationDelegate.cs" />
+    <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
