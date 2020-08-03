@@ -23,7 +23,6 @@ services:
   web.local.bitraft.io:
     env_file:
       - ./docker/stubbed/env/gplookup_connectivity.env
-      - ./docker/stubbed/env/web.env
 
   pfs.local.bitraft.io:
     env_file:
@@ -49,3 +48,8 @@ services:
       - ./docker/stubbed/env/qualtrics_connectivity.env
 
   stubs.local.bitraft.io:
+    networks:
+      default:
+        aliases:
+          - auth.nhslogin.stubs.local.bitraft.io
+          - uaf.nhslogin.stubs.local.bitraft.io

@@ -9,27 +9,20 @@ class Config private constructor() {
     var apiBackendUrl: String
     var cidBackendUrl: String
     var wiremockUrl: String
-    var nodeEnv: String
-    var port: String
 
     var cidClientId: String
     var cidRedirectUri: String
     var cidNativeRedirectUri: String
-    var cidAuthEndpoint: String
-    val cidRegisterEndpoint: String
     val cidJwtIssuer: String
     var emisApplicationId: String
     var emisVersion: String
     var organDonation: String
     var updatedOrganDonation: String
     var symptomChecker: String
-    var dataPreferencesHost: String
     var dataPreferencesPath: String
     var dataPreferencesUrl: String
 
-    var browserstackAccessKey: String
     var browserstackUrl: String
-    var browserstackLocal: String
     var browserstackLocalIdentifier: String?
     var browserstackBrowserResolution: String
     var browserstackTimezone: String
@@ -55,14 +48,11 @@ class Config private constructor() {
     val messagesMongoDbPort: Long
     val consentMongoDbHost: String
     val consentMongoDbPort: Long
-    val auditMongoDbHost: String
-    val auditMongoDbPort: Long
 
     val accessibilityOutputFolder: String
 
     val nhsAppApiKey:String
 
-    val qualtricsBaseUrl:String
     val qualtricsDirectoryId:String
     val qualtricsMailingList:String
 
@@ -71,14 +61,11 @@ class Config private constructor() {
         wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
-        nodeEnv = envOrDefault("NODE_ENV", "production")
-        port = envOrDefault("PORT", "3000")
         isDockerised = envOrDefault("DOCKER",false)
 
         val browserstackUsername = envOrDefault("BROWSERSTACK_USERNAME", "NOT_PROVIDED")
-        browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESS_KEY", "NOT_PROVIDED")
+        val browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESS_KEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
-        browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
         browserstackLocalIdentifier = envOrNull("BROWSERSTACK_LOCAL_IDENTIFIER")
         browserstackBrowserResolution = envOrDefault("BROWSERSTACK_BROWSER_RESOLUTION","")
         browserstackAppVersion = envOrNull("BROWSERSTACK_APP_VERSION")
@@ -95,16 +82,15 @@ class Config private constructor() {
         isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
-        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "http://stubs.local.bitraft.io:8080/citizenid/")
-        val cidHostname = envOrDefault("CID_HOST", "stubs.local.bitraft.io")
+        cidJwtIssuer = envOrDefault(
+                "CITIZEN_ID_JWT_ISSUER",
+                "http://auth.nhslogin.stubs.local.bitraft.io:8080/citizenid/")
         val webHostname = envOrDefault("WEB_HOST", "web.local.bitraft.io")
         val appScheme = envOrDefault("APP_SCHEME", "http")
         val nativeAppScheme = envOrDefault("NATIVE_APP_SCHEME", "nhsapp")
         autoLogin = envOrDefault("AUTOLOGIN", "false")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "$appScheme://$webHostname:3000/auth-return")
         cidNativeRedirectUri = envOrDefault("CID_REDIRECT_URI", "$nativeAppScheme://$webHostname:3000/auth-return")
-        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT_URL", "http://$cidHostname:8080/authorize")
-        cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
@@ -113,7 +99,7 @@ class Config private constructor() {
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
 
-        dataPreferencesHost = wiremockUrl
+        val dataPreferencesHost = wiremockUrl
         dataPreferencesPath = "/ndop/createsession"
         dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
 
@@ -129,15 +115,11 @@ class Config private constructor() {
         consentMongoDbHost = envOrDefault("CONSENT_MONGO_DATABASE_HOST", "127.0.0.1")
         consentMongoDbPort = envOrDefault("CONSENT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
-        auditMongoDbHost = envOrDefault("AUDIT_MONGO_DATABASE_HOST", "127.0.0.1")
-        auditMongoDbPort = envOrDefault("AUDIT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
-
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
         nhsAppApiKey = envOrDefault("NHSAPP_API_KEY", "testnhssearchservicekey")
 
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
 
-        qualtricsBaseUrl = envOrDefault("QUALTRICS_BASE_URL", "http://stubs.local.bitraft.io:8080/qualtrics/")
         qualtricsDirectoryId = envOrDefault("QUALTRICS_DIRECTORY_ID", "MockQualtricsDirectoryId")
         qualtricsMailingList = envOrDefault("QUALTRICS_MAILING_LIST_ID","MockQualtricsMailingListId")
     }
