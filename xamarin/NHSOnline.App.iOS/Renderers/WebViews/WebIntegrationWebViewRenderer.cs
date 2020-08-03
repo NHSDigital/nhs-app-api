@@ -4,13 +4,13 @@ using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(NhsLoginWebView), typeof(NhsLoginWebViewRenderer))]
+[assembly: ExportRenderer(typeof(WebIntegrationWebView), typeof(WebIntegrationWebViewRenderer))]
 namespace NHSOnline.App.iOS.Renderers.WebViews
 {
-    internal sealed class NhsLoginWebViewRenderer : WkWebViewRenderer
+    internal sealed class WebIntegrationWebViewRenderer : WkWebViewRenderer
     {
-        public NhsLoginWebViewRenderer() : base(CustomConfiguration)
-        {}
+        public WebIntegrationWebViewRenderer() : base(CustomConfiguration)
+        { }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {

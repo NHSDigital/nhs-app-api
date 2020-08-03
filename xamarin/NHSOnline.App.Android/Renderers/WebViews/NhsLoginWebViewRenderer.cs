@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Android.Content;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
@@ -9,20 +7,18 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using WebView = Xamarin.Forms.WebView;
 
-[assembly: ExportRenderer(typeof(NhsAppWebView), typeof(NhsAppWebViewRenderer))]
+[assembly: ExportRenderer(typeof(NhsLoginWebView), typeof(NhsLoginWebViewRenderer))]
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
-    public sealed class NhsAppWebViewRenderer: WebViewRenderer
+    public sealed class NhsLoginWebViewRenderer: WebViewRenderer
     {
         private readonly List<IWebViewRendererExtension> _extensions;
 
-        public NhsAppWebViewRenderer(Context context) : base(context)
+        public NhsLoginWebViewRenderer(Context context) : base(context)
         {
             _extensions = new List<IWebViewRendererExtension>
             {
-                new UserAgentWebViewRendererExtension(this),
-                new NhsAppSetCookieWebViewRendererExtension(),
-                new NhsAppJavascriptBridgeWebViewRendererExtension(this)
+                new UserAgentWebViewRendererExtension(this)
             };
         }
 
@@ -34,20 +30,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             {
                 extension.OnElementChanged(e);
             }
-
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                foreach (var disposableExtension in _extensions.OfType<IDisposable>())
-                {
-                    disposableExtension.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

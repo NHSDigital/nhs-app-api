@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Local - Debug</Configuration>
@@ -55,8 +55,14 @@
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\NhsAppSetCookieWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />
+    <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\UserAgentWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashScreenActivity.cs" />
@@ -122,5 +128,6 @@
     <AndroidResource Include="Resources\xml\network_security_config.xml" Condition="'$(NhsAppEnableStubs)' != 'true'" />
     <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

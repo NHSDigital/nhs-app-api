@@ -51,6 +51,8 @@
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\ScriptMessageHandler.cs" />
+    <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\WebViewConfigurationBuilder.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.template.plist">
     </None>

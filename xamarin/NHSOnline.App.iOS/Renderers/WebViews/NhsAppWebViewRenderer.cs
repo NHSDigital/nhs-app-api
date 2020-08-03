@@ -63,10 +63,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             await Configuration.WebsiteDataStore.HttpCookieStore.SetCookieAsync(nsHttpCookie).ConfigureAwait(true);
         }
 
-        private static WKWebViewConfiguration CustomConfiguration => new WKWebViewConfiguration
-        {
-            ApplicationNameForUserAgent = " nhsapp-ios/1.0.0",
-            SuppressesIncrementalRendering = true
-        };
+        private static WKWebViewConfiguration CustomConfiguration
+            => new WebViewConfigurationBuilder().Build();
     }
 }
