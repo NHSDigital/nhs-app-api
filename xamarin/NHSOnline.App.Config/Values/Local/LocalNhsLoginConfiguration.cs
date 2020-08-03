@@ -1,8 +1,9 @@
-﻿namespace NHSOnline.App.Config.Values.Local
+namespace NHSOnline.App.Config.Values.Local
 {
     internal sealed class LocalNhsLoginConfiguration : INhsLoginConfiguration
     {
         public string Scheme { get; } = "http";
+        public string BaseHost { get; } = "stubs.local.bitraft.io";
         public string AuthHost { get; } = "stubs.local.bitraft.io";
         public string UafHost { get; } = "stubs.local.bitraft.io";
         public int Port { get; } = 8080;

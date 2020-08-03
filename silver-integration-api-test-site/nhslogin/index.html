@@ -1,0 +1,81 @@
+<!DOCTYPE html><!DOCTYPE html>
+<!--[if lt IE 9]><html class="ie8" lang="en"><![endif]--><!--[if IE 9]><html class="ie9" lang="en"><![endif]--><!--[if gt IE 9]><!--><html lang="en" style=""><!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+
+    <title>eRS - NHS App Web Integration Test Site</title>
+
+    <link href="https://www.nhs.uk/" rel="preconnect">
+    <link href="https://assets.nhs.uk/" rel="preconnect" crossorigin>
+
+    <link type="font/woff2" href="https://assets.nhs.uk/fonts/FrutigerLTW01-55Roman.woff2" rel="preload" as="font" crossorigin>
+    <link type="font/woff2" href="https://assets.nhs.uk/fonts/FrutigerLTW01-65Bold.woff2" rel="preload" as="font" crossorigin>
+
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/main.css">
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/design-example-overrides.css">
+    
+    <script src="https://service-manual.nhs.uk/js/main.min.js" defer></script>
+  </head>
+  <body>
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div class="nhsuk-width-container">
+      <main class="nhsuk-main-wrapper app-main-wrapper" id="maincontent" role="main">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column">
+            <h1>eRS Web Integration Test Site</h1>
+            <div class="nhsuk-table-responsive">
+              <table class="nhsuk-table">
+                <caption class="nhsuk-table__caption">Query String</caption>
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th class="nhsuk-table__header" scope="col">Name</th>
+                    <th class="nhsuk-table__header" scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body" id="QueryStringTableBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer role="contentinfo">
+      <div class="nhsuk-footer" id="nhsuk-footer">
+        <div class="nhsuk-width-container">
+          <h2 class="nhsuk-u-visually-hidden">Support links</h2>
+          <ul class="nhsuk-footer__list">
+            <li class="nhsuk-footer__list-item"><a class="nhsuk-footer__list-item-link" href="../">Silver Integration JS API test site</a></li>
+          </ul>
+          <p class="nhsuk-footer__copyright">&copy; Crown copyright</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    window.onload = function() {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      for (const entry of urlParams.entries()) {
+        const nameCell = document.createElement('td');
+        nameCell.className = 'nhsuk-table__cell';
+        nameCell.appendChild(document.createTextNode(entry[0]))
+
+        const valueCell = document.createElement('td');
+        valueCell.className = 'nhsuk-table__cell';
+        valueCell.appendChild(document.createTextNode(entry[1]))
+        
+        const tr = document.createElement('tr');
+        tr.className = 'nhsuk-table__row';
+        tr.appendChild(nameCell);
+        tr.appendChild(valueCell);
+
+        document.getElementById('QueryStringTableBody').appendChild(tr);
+      }
+    }
+  </script>
+</html>

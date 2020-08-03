@@ -54,7 +54,7 @@ services:
       - userinfo.local.bitraft.io
       - users.local.bitraft.io
 
-  silver.integrations.bitraft.io:
+  silver.local.bitraft.io:
     image: nginx:alpine
     volumes:
       - type: bind

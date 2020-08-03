@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
 
-  silver.integrations.bitraft.io:
+  silver.local.bitraft.io:
     ports:
       - "5000:5000"
 

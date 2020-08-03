@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 
@@ -22,12 +24,20 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
+        Func<Task>? IWebIntegrationView.Appearing { get; set; }
+        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((IWebIntegrationView)this).Appearing);
+
+        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+        
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
             RemoveEventHandlers();
             AddEventHandlers();
+
+            AppearingCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
@@ -52,6 +62,7 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
+            NavigatingCommand.Execute(args);
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
@@ -60,8 +71,5 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         }
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
-
-        // This will be changed in NHSO-10645 when we update with web native changes
-        public void NavigateWithinApp(string spaPath) => WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')");
     }
 }

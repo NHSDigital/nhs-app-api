@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace NHSOnline.App.Controls
 {
     public interface IRootPage
     {
-        void ResetAndShowError();
+        Task ResetAndShowError();
     }
 }

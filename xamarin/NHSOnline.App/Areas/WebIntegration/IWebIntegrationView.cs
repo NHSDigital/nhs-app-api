@@ -1,23 +1,25 @@
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
 {
     internal interface IWebIntegrationView
     {
-        event EventHandler Appearing;
+        Func<Task>? Appearing { get; set; }
+        Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
 
-        event EventHandler<EventArgs> SettingsRequested;
-        event EventHandler<EventArgs> HelpRequested;
-        event EventHandler<EventArgs> HomeRequested;
-        event EventHandler<EventArgs> SymptomsRequested;
-        event EventHandler<EventArgs> AppointmentsRequested;
-        event EventHandler<EventArgs> PrescriptionsRequested;
-        event EventHandler<EventArgs> RecordRequested;
-        event EventHandler<EventArgs> MoreRequested;
+        Func<Task>? SettingsRequested { get; set; }
+        Func<Task>? HelpRequested { get; set; }
+        Func<Task>? HomeRequested { get; set; }
+        Func<Task>? SymptomsRequested { get; set; }
+        Func<Task>? AppointmentsRequested { get; set; }
+        Func<Task>? PrescriptionsRequested { get; set; }
+        Func<Task>? RecordRequested { get; set; }
+        Func<Task>? MoreRequested { get; set; }
 
         INavigation Navigation { get; }
+
         void GoToUri(Uri uri);
-        void NavigateWithinApp(string spaPath);
     }
 }

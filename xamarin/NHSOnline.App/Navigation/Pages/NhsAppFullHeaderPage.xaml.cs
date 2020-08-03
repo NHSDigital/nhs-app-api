@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using NHSOnline.App.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,16 +9,16 @@ namespace NHSOnline.App.Navigation.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(PageContent))]
-    public partial class NhsAppFullHeaderPage : ContentPage
+    public partial class NhsAppFullHeaderPage
     {
-        public event EventHandler<EventArgs>? SettingsRequested;
-        public event EventHandler<EventArgs>? HelpRequested;
-        public event EventHandler<EventArgs>? HomeRequested;
-        public event EventHandler<EventArgs>? SymptomsRequested;
-        public event EventHandler<EventArgs>? AppointmentsRequested;
-        public event EventHandler<EventArgs>? PrescriptionsRequested;
-        public event EventHandler<EventArgs>? RecordRequested;
-        public event EventHandler<EventArgs>? MoreRequested;
+        public Func<Task>? SettingsRequested { get; set; }
+        public Func<Task>? HelpRequested { get; set; }
+        public Func<Task>? HomeRequested { get; set; }
+        public Func<Task>? SymptomsRequested { get; set; }
+        public Func<Task>? AppointmentsRequested { get; set; }
+        public Func<Task>? PrescriptionsRequested { get; set; }
+        public Func<Task>? RecordRequested { get; set; }
+        public Func<Task>? MoreRequested { get; set; }
 
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
@@ -33,20 +35,20 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(PageContentProperty, value);
         }
 
-        public ICommand SettingsClicked => new Command( () => SettingsRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand SettingsClicked => new AsyncCommand(() => SettingsRequested);
 
-        public ICommand HelpClicked => new Command( () => HelpRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand HelpClicked => new AsyncCommand(() => HelpRequested);
 
-        public ICommand SymptomsClicked => new Command(() => SymptomsRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand SymptomsClicked => new AsyncCommand(() => SymptomsRequested);
 
-        public ICommand AppointmentsClicked => new Command( () => AppointmentsRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand AppointmentsClicked => new AsyncCommand(() => AppointmentsRequested);
 
-        public ICommand PrescriptionsClicked => new Command( () => PrescriptionsRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand PrescriptionsClicked => new AsyncCommand(() => PrescriptionsRequested);
 
-        public ICommand RecordClicked => new Command( () => RecordRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand RecordClicked => new AsyncCommand(() => RecordRequested);
 
-        public ICommand MoreClicked => new Command( () => MoreRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand MoreClicked => new AsyncCommand(() => MoreRequested);
 
-        public ICommand HomeClicked => new Command( () => HomeRequested?.Invoke(this, EventArgs.Empty));
+        public ICommand HomeClicked => new AsyncCommand(() => HomeRequested);
     }
 }

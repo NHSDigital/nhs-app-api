@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using NHSOnline.App.Controls;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public event EventHandler<EventArgs>? NhsUkCovidConditionsServicePageRequested;
         public event EventHandler<EventArgs>? NhsUkLoginHelpServicePageRequested;
 
-        public event EventHandler<EventArgs>? ResetAndShowErrorRequested;
+        public Func<Task>? ResetAndShowErrorRequested { get; set; }
 
         public LoggedOutHomeScreenPage()
         {
@@ -25,9 +26,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public ICommand NhsUkCovidConditionsServiceCommand => new Command(() => NhsUkCovidConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkLoginHelpServiceCommand => new Command(() => NhsUkLoginHelpServicePageRequested?.Invoke(this, EventArgs.Empty));
 
-        public void ResetAndShowError()
+        public async Task ResetAndShowError()
         {
-            ResetAndShowErrorRequested?.Invoke(this, EventArgs.Empty);
+            await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
         }
     }
 }

@@ -5,6 +5,7 @@ namespace NHSOnline.App.Config
     public interface INhsLoginConfiguration
     {
         string Scheme { get; }
+        string BaseHost { get; }
         string AuthHost { get; }
         string UafHost { get; }
         int Port { get; }

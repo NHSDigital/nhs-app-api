@@ -28,6 +28,7 @@ services:
   pfs.local.bitraft.io:
     env_file:
       - ./docker/stubbed/env/emis_connectivity.env
+      - ./docker/stubbed/env/ers_connectivity.env
       - ./docker/stubbed/env/gplookup_connectivity.env
       - ./docker/stubbed/env/microtest_connectivity.env
       - ./docker/stubbed/env/onlineconsultationsproviders_connectivity.env

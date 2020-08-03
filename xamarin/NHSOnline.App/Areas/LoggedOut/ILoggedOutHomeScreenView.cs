@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut
@@ -8,7 +9,8 @@ namespace NHSOnline.App.Areas.LoggedOut
         event EventHandler<EventArgs> LoginRequested;
         event EventHandler<EventArgs> NhsUkCovidConditionsServicePageRequested;
         event EventHandler<EventArgs> NhsUkLoginHelpServicePageRequested;
-        event EventHandler<EventArgs> ResetAndShowErrorRequested;
+
+        Func<Task>? ResetAndShowErrorRequested { get; set; }
 
         INavigation Navigation { get; }
     }

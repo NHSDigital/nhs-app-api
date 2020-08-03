@@ -15,10 +15,6 @@ namespace NHSOnline.App.Areas.Home.Views
     {
         private readonly ILogger _logger;
 
-        public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
-
-        public event EventHandler<EventArgs>? ResetAndShowErrorRequested;
-
         public NhsAppWebPage(ILogger<NhsAppWebPage> logger)
         {
             _logger = logger;
@@ -30,8 +26,16 @@ namespace NHSOnline.App.Areas.Home.Views
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
+        Func<Task>? INhsAppWebView.Appearing { get; set; }
+
+        public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
+
+        public Func<Task>? ResetAndShowErrorRequested { get; set; }
+
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
+
+        private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView)this).Appearing);
 
         protected override void OnAppearing()
         {
@@ -39,6 +43,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
             RemoveEventHandlers();
             AddEventHandlers();
+
+            AppearingCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
@@ -70,16 +76,17 @@ namespace NHSOnline.App.Areas.Home.Views
             _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
         }
 
-        public async Task AddCookie(Cookie cookie) => await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();
+        public async Task AddCookie(Cookie cookie) =>
+            await (WebView.SetCookie?.Invoke(cookie) ?? Task.CompletedTask).PreserveThreadContext();
 
-        public void GoToUri(Uri uri) => WebView.GoToUri(uri);
+        public void GoToUri(Uri uri) =>
+            WebView.GoToUri(uri);
 
         // This will be changed in NHSO-10645 when we update with web native changes
-        public void NavigateWithinApp(string spaPath) => WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')");
+        public async Task NavigateWithinApp(string spaPath) =>
+            await WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')").PreserveThreadContext();
 
-        public void ResetAndShowError()
-        {
-            ResetAndShowErrorRequested?.Invoke(this, EventArgs.Empty);
-        }
+        public async Task ResetAndShowError() =>
+            await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
     }
 }

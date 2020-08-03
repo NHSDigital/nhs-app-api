@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 using Xamarin.Forms;
 
@@ -17,46 +17,46 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _navigation = navigation;
         }
 
-        public async void SettingsRequested(object sender, EventArgs e)
+        public async Task SettingsRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.SettingsRequested(sender, e);
+            await _rootHandler.SettingsRequested().PreserveThreadContext();
         }
 
-        public async void HomeRequested(object sender, EventArgs e)
+        public async Task HomeRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.HomeRequested(sender, e);
+            await _rootHandler.HomeRequested().PreserveThreadContext();
         }
 
-        public async void SymptomsRequested(object sender, EventArgs e)
+        public async Task SymptomsRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.SymptomsRequested(sender, e);
+            await _rootHandler.SymptomsRequested().PreserveThreadContext();
         }
 
-        public async void AppointmentsRequested(object sender, EventArgs e)
+        public async Task AppointmentsRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.AppointmentsRequested(sender, e);
+            await _rootHandler.AppointmentsRequested().PreserveThreadContext();
         }
 
-        public async void PrescriptionsRequested(object sender, EventArgs e)
+        public async Task PrescriptionsRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.PrescriptionsRequested(sender, e);
+            await _rootHandler.PrescriptionsRequested().PreserveThreadContext();
         }
 
-        public async void RecordRequested(object sender, EventArgs e)
+        public async Task RecordRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.RecordRequested(sender, e);
+            await _rootHandler.RecordRequested().PreserveThreadContext();
         }
 
-        public async void MoreRequested(object sender, EventArgs e)
+        public async Task MoreRequested()
         {
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
-            _rootHandler.MoreRequested(sender, e);
+            await _rootHandler.MoreRequested().PreserveThreadContext();
         }
     }
 }

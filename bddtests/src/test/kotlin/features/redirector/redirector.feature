@@ -4,7 +4,7 @@ Feature: Redirector
   Scenario: A user navigating to a nhs partner site via a redirector url will not see a warning page
     Given I am a EMIS patient
     And I am logged in
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fpat.rc.refer.nhs.uk%2Fnhslogin'
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=http%3A%2F%2Fsilver.local.bitraft.io%3A5000%2Fnhslogin'
     Then I am navigated to a third party site
 
   Scenario: A user navigating to a redirector url with no params will be directed to home page

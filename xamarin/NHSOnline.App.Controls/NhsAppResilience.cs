@@ -59,7 +59,7 @@ namespace NHSOnline.App.Controls
                 await navigation.PopToRootAsync().ConfigureAwait(true);
                 if (navigation.NavigationStack[0] is IRootPage rootPage)
                 {
-                    rootPage.ResetAndShowError();
+                    await rootPage.ResetAndShowError().ConfigureAwait(true);
                 }
             });
         }

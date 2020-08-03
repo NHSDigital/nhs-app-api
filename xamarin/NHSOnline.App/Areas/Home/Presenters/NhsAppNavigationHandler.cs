@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
 namespace NHSOnline.App.Areas.Home.Presenters
@@ -12,39 +12,46 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view = view;
         }
 
-        public void SettingsRequested(object sender, EventArgs e)
+        public Task SettingsRequested()
         {
             _view.NavigateWithinApp("account");
+            return Task.CompletedTask;
         }
 
-        public void HomeRequested(object sender, EventArgs e)
+        public Task HomeRequested()
         {
             _view.NavigateWithinApp("/");
+            return Task.CompletedTask;
         }
 
-        public void SymptomsRequested(object sender, EventArgs e)
+        public Task SymptomsRequested()
         {
             _view.NavigateWithinApp("symptoms");
+            return Task.CompletedTask;
         }
 
-        public void AppointmentsRequested(object sender, EventArgs e)
+        public Task AppointmentsRequested()
         {
             _view.NavigateWithinApp("appointments");
+            return Task.CompletedTask;
         }
 
-        public void PrescriptionsRequested(object sender, EventArgs e)
+        public Task PrescriptionsRequested()
         {
             _view.NavigateWithinApp("prescriptions");
+            return Task.CompletedTask;
         }
 
-        public void RecordRequested(object sender, EventArgs e)
+        public Task RecordRequested()
         {
             _view.NavigateWithinApp("my-record-warning");
+            return Task.CompletedTask;
         }
 
-        public void MoreRequested(object sender, EventArgs e)
+        public Task MoreRequested()
         {
             _view.NavigateWithinApp("more");
+            return Task.CompletedTask;
         }
     }
 }

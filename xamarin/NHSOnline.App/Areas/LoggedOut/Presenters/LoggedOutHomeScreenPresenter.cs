@@ -38,7 +38,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             view.LoginRequested += ViewOnLoginRequested;
             view.NhsUkCovidConditionsServicePageRequested += LoadCovidConditionsUrl;
             view.NhsUkLoginHelpServicePageRequested += LoadLoginHelpUrl;
-            view.ResetAndShowErrorRequested += ResetAndShowErrorRequested;
+
+            view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
         }
 
         private async void ViewOnLoginRequested(object sender, EventArgs e)
@@ -82,10 +83,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await OpenAppTab(_nhsExternalServicesConfiguration.NhsUkLoginHelpUrl).PreserveThreadContext();
         }
 
-        private void ResetAndShowErrorRequested(object sender, EventArgs e)
+        private Task ResetAndShowErrorRequested()
         {
             // TODO ShowError
-            _logger.LogInformation($"Showing unexpected error");
+            _logger.LogInformation("Showing unexpected error");
+            return Task.CompletedTask;
         }
 
         private static async Task OpenAppTab(Uri requestedService)

@@ -6,10 +6,9 @@
              xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
              xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage"
-             x:Name="Page">
+             x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage">
 
     <webViews:WebIntegrationWebView x:Name="WebView"
-                            VerticalOptions="FillAndExpand"/>
+                                    VerticalOptions="FillAndExpand"/>
     
 </pages:NhsAppFullHeaderPage>

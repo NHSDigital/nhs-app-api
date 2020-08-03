@@ -47,18 +47,18 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _pageFactory = pageFactory;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
-            _view.Appearing += ViewOnAppearing;
-            _view.HelpRequested += HelpRequested;
-            _view.OpenWebIntegrationRequested += OpenWebIntegrationRequested;
-            _view.ResetAndShowErrorRequested += ResetAndShowErrorRequested;
+            _view.Appearing = ViewOnAppearing;
+            _view.HelpRequested = HelpRequested;
+            _view.OpenWebIntegrationRequested = OpenWebIntegrationRequested;
+            _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
 
-            _view.SettingsRequested += _navigationHandler.SettingsRequested;
-            _view.HomeRequested += _navigationHandler.HomeRequested;
-            _view.SymptomsRequested += _navigationHandler.SymptomsRequested;
-            _view.AppointmentsRequested += _navigationHandler.AppointmentsRequested;
-            _view.PrescriptionsRequested += _navigationHandler.PrescriptionsRequested;
-            _view.RecordRequested += _navigationHandler.RecordRequested;
-            _view.MoreRequested += _navigationHandler.MoreRequested;
+            _view.SettingsRequested = _navigationHandler.SettingsRequested;
+            _view.HomeRequested = _navigationHandler.HomeRequested;
+            _view.SymptomsRequested = _navigationHandler.SymptomsRequested;
+            _view.AppointmentsRequested = _navigationHandler.AppointmentsRequested;
+            _view.PrescriptionsRequested = _navigationHandler.PrescriptionsRequested;
+            _view.RecordRequested = _navigationHandler.RecordRequested;
+            _view.MoreRequested = _navigationHandler.MoreRequested;
         }
 
         private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
@@ -74,32 +74,34 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
-        private void ResetAndShowErrorRequested(object sender, EventArgs eventArgs)
+        private async Task ResetAndShowErrorRequested()
         {
-            DisplayNhsAppWeb();
+            await DisplayNhsAppWeb().PreserveThreadContext();
             //TODO ShowError
             _logger.LogInformation($"Showing unexpected error");
         }
 
-        private async void ViewOnAppearing(object sender, EventArgs e)
+        private async Task ViewOnAppearing()
         {
-            _view.Appearing -= ViewOnAppearing;
+            _view.Appearing = null;
             await ConfigureNhsOnlineCookies().PreserveThreadContext();
-            DisplayNhsAppWeb();
+            await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
-        private async void HelpRequested(object sender, EventArgs e)
+        private async Task HelpRequested()
         {
             await _appBrowserTab.OpenAppBrowserTab(
                 _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
         }
 
-        private void DisplayNhsAppWeb()
+        private Task DisplayNhsAppWeb()
         {
             var homeUri = _config.BaseAddress;
 
             _view.GoToUri(homeUri);
+
+            return Task.CompletedTask;
         }
 
         private async Task ConfigureNhsOnlineCookies()
