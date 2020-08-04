@@ -33,3 +33,7 @@ MSBUILD_ARGS+=("-restore")
 configure_key_store
 
 "${MSBUILD}" "${MSBUILD_ARGS[@]}" -t:SignAndroidPackage NHSOnline.App.Android/NHSOnline.App.Android.csproj
+
+if [ -f "NHSOnline.App.Android/bin/Release/com.nhs.online.nhsonline.browserstack-Signed.apk" ]; then
+  cp -f NHSOnline.App.Android/bin/Release/com.nhs.online.nhsonline.browserstack-Signed.apk ../xamarinintegrationtests/com.nhs.online.nhsonline.browserstack.apk
+fi

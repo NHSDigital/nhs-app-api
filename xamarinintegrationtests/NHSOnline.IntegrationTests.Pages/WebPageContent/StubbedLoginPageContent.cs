@@ -10,6 +10,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal StubbedLoginPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
+        private WebLink BackLink => WebLink.WithText(_interactor, "Back");
+
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login");
 
         private WebInputText PatientIdWebInputText => WebInputText.WithLabel(_interactor, "Patient ID");
@@ -25,6 +27,11 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         {
             PatientIdWebInputText.EnterText(patient.Id);
             LoginButton.Click();
+        }
+
+        public void Back()
+        {
+            BackLink.Click();
         }
     }
 }

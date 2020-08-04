@@ -18,5 +18,8 @@ services:
         -h \
         -A /web.local.bitraft.io/10.0.2.2 \
         -A /api.local.bitraft.io/10.0.2.2 \
+        -A /silver.local.bitraft.io/10.0.2.2 \
         -A /stubs.local.bitraft.io/10.0.2.2 \
-        -A /silver.local.bitraft.io/10.0.2.2
+        -A /auth.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
+        -A /uaf.nhslogin.stubs.local.bitraft.io/10.0.2.2 \
+        -A /ers.stubs.local.bitraft.io/10.0.2.2

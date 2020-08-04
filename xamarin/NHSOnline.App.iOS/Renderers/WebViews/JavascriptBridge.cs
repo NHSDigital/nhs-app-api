@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Windows.Input;
 using Foundation;
+using NHSOnline.App.Controls;
 using WebKit;
-using Xamarin.Forms;
 
 namespace NHSOnline.App.iOS.Renderers.WebViews
 {
@@ -31,19 +30,19 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _webViewAccessor = webViewAccessor;
         }
 
-        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, ICommand> command)
+        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, AsyncCommand> command)
         {
             _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
             return this;
         }
 
-        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, Command<string>> command)
+        public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, AsyncCommand<string>> command)
         {
             _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
             return this;
         }
 
-        public JavascriptBridge<TWebView> AddFunction<TArgument>(string name, Func<TWebView, Command<TArgument>> command)
+        public JavascriptBridge<TWebView> AddFunction<TArgument>(string name, Func<TWebView, AsyncCommand<TArgument>> command)
         {
             _functions.Add(name, ScriptMessageHandler.For(() => command(_webViewAccessor())));
             return this;

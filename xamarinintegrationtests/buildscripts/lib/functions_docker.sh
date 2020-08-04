@@ -27,7 +27,7 @@ function set_docker_compose_files_args () {
 
   if [ "$RUN_LOCAL" == 1 ]
   then
-    DOCKER_COMPOSE_FILES+=(../docker-compose.ports.yml  ../docker/inttests/docker-compose.local.yml)
+    DOCKER_COMPOSE_FILES+=(../docker/android/docker-compose.yml ../docker-compose.ports.yml  ../docker/inttests/docker-compose.local.yml)
     for PORT_FILE in $(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../docker/#'); do
       DOCKER_COMPOSE_FILES+=("$PORT_FILE")
     done

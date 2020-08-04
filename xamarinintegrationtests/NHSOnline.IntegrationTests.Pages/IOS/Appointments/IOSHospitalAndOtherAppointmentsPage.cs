@@ -3,21 +3,21 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.Appointments
 {
-    public sealed class IOSAppointmentsPage
+    public sealed class IOSHospitalAndOtherAppointmentsPage
     {
-        private IOSAppointmentsPage(IIOSDriverWrapper driver)
+        private IOSHospitalAndOtherAppointmentsPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new AppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new HospitalAndOtherAppointmentsPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
         private IOSFullNavigation Navigation { get; }
 
-        public AppointmentsPageContent PageContent { get; }
+        public HospitalAndOtherAppointmentsPageContent PageContent { get; }
 
-        public static IOSAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSHospitalAndOtherAppointmentsPage AssertOnPage(IIOSDriverWrapper driver)
         {
-            var page = new IOSAppointmentsPage(driver);
+            var page = new IOSHospitalAndOtherAppointmentsPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

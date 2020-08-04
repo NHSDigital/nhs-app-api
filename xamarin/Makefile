@@ -6,16 +6,13 @@ BUILD_SCRIPTS := $(sort $(filter-out $(CLEAN_SCRIPTS),$(ALL_SCRIPTS)))
 ANDROID_BUILD_SCRIPTS := $(sort $(filter-out $(CLEAN_SCRIPTS),$(ANDROID_SCRIPTS)))
 IOS_BUILD_SCRIPTS := $(sort $(filter-out $(CLEAN_SCRIPTS),$(IOS_SCRIPTS)))
 
-build: build-deps ## Build xamarin clients
-	$(BUILD_SCRIPTS)
+build: build-deps $(BUILD_SCRIPTS) ## Build Xamarin clients
 
-build-android: build-deps	## Build android xamarin clients
-	$(ANDROID_BUILD_SCRIPTS)
+build-android: build-deps $(ANDROID_BUILD_SCRIPTS)	## Build Android Xamarin client
 
-build-ios: build-deps	## Build ios xamarin clients
-	$(IOS_BUILD_SCRIPTS)
+build-ios: build-deps $(IOS_BUILD_SCRIPTS)	## Build iOS Xamarin client
 
-clean: $(CLEAN_SCRIPTS)	## Clean xamarin clients
+clean: $(CLEAN_SCRIPTS)	## Clean Xamarin clients
 
 .PHONY: $(ALL_SCRIPTS)
 $(ALL_SCRIPTS):

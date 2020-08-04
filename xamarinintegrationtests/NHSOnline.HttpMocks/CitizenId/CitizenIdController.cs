@@ -38,6 +38,7 @@ namespace NHSOnline.HttpMocks.CitizenId
             return Content($@"
                 <html>
                     <body>
+                        <p><a href=""javascript: window.history.back();"">Back</a></p>
                         <h1>NHS Login</h1>
                         <form action='complete-login' method='get'>
                             <fieldset>

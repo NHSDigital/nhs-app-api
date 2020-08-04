@@ -3,7 +3,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    public class AppointmentsPageContent
+    public sealed class AppointmentsPageContent
     {
         private readonly IWebInteractor _interactor;
 
@@ -14,6 +14,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Appointments");
 
+        private WebMenuItem HospitalAndOtherAppointmentsMenuItem => WebMenuItem.WithTitle(_interactor, "Hospital and other appointments");
+
         internal void AssertOnPage()
         {
             Title.AssertVisible();
@@ -22,6 +24,12 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public AppointmentsPageContent AssertPageElements()
         {
             Title.AssertVisible();
+            return this;
+        }
+
+        public AppointmentsPageContent HospitalAndOtherAppointments()
+        {
+            HospitalAndOtherAppointmentsMenuItem.Click();
             return this;
         }
     }

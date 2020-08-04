@@ -4,12 +4,17 @@ services:
 
   pfs.local.bitraft.io:
     env_file:
+      - ./docker/inttests/env/ers_connectivity.env
       - ./docker/inttests/env/vision_connectivity.env
 
   stubs.local.bitraft.io:
     image: alpine/socat
     entrypoint: ["socat"]
     command: tcp-l:8080,fork,reuseaddr tcp:int_test_test_runner:8080
+    networks:
+      default:
+        aliases:
+          - ers.stubs.local.bitraft.io
 
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}
