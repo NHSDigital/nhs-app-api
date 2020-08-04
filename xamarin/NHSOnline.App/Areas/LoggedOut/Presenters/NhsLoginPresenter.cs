@@ -2,10 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
+using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.NhsLogin;
+using NHSOnline.App.Services;
+using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
@@ -15,6 +18,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly INhsLoginView _view;
         private readonly ILogger<NhsLoginPresenter> _logger;
         private readonly IPageFactory _pageFactory;
+        private readonly INhsLoginConfiguration _nhsLoginConfiguration;
+        private readonly IAppBrowserTab _appBrowserTab;
         private readonly LoginState _loginState;
 
         public NhsLoginPresenter(
@@ -23,14 +28,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<NhsLoginPresenter> logger,
             ICookies cookies,
             IPageFactory pageFactory,
+            INhsLoginConfiguration nhsLoginConfiguration,
+            IAppBrowserTab appBrowserTab,
             INhsLoginService nhsLoginService)
         {
             _model = model;
             _view = view;
             _logger = logger;
             _pageFactory = pageFactory;
+            _nhsLoginConfiguration = nhsLoginConfiguration;
+            _appBrowserTab = appBrowserTab;
 
-            _view.NavigationFailed += ViewOnNavigationFailed;
+            AttachEventHandlers();
 
             // TODO: NHSO-10323 addresses cookie management in web views
             cookies.Clear();
@@ -39,11 +48,32 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
         }
 
-        private async void ViewOnNavigationFailed(object sender, EventArgs e)
+        private void AttachEventHandlers()
+        {
+            _view.Navigating = ViewOnNavigating;
+            _view.NavigationFailed = ViewOnNavigationFailed;
+        }
+
+        private void DetachEventHandlers()
+        {
+            _view.Navigating = null;
+            _view.NavigationFailed = null;
+        }
+
+        private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
+        {
+            var url = new Uri(webNavigatingEventArgs.Url);
+            if (ShouldOpenInAppBrowserTab(url))
+            {
+                await OpenInAppBrowserTab(webNavigatingEventArgs, url).PreserveThreadContext();
+            }
+        }
+
+        private async Task ViewOnNavigationFailed()
         {
             _logger.LogWarning("NHS login navigation failed");
 
-            _view.NavigationFailed -= ViewOnNavigationFailed;
+            DetachEventHandlers();
 
             await NavigateToLoginErrorPage().PreserveThreadContext();
         }
@@ -52,7 +82,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void OnRedirect(Uri redirectUri)
         {
-            _view.NavigationFailed -= ViewOnNavigationFailed;
+            DetachEventHandlers();
 
             var result = _loginState.CheckAuthReturn(redirectUri);
             await result.Accept(this).PreserveThreadContext();
@@ -81,6 +111,27 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var nhsLoginErrorPage = _pageFactory.CreatePageFor(nhsLoginErrorModel);
 
             await _view.Navigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();
+        }
+
+        private bool ShouldOpenInAppBrowserTab(Uri url)
+        {
+            if (IsNhsLoginHost(url))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsNhsLoginHost(Uri url)
+        {
+            return url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private async Task OpenInAppBrowserTab(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
+        {
+            webNavigatingEventArgs.Cancel = true;
+            await _appBrowserTab.OpenAppBrowserTab(url).PreserveThreadContext();
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Foundation;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Logging;
 using WebKit;
 
@@ -23,38 +24,69 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         private static ILogger Logger { get; } = NhsAppLogging.CreateLogger<DelegatingWebViewNavigationDelegate>();
 
         public override void DecidePolicy(WKWebView webView, WKNavigationAction navigationAction, Action<WKNavigationActionPolicy> decisionHandler)
-            => _wrappedNavigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
+        {
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                if (IsNewWindow(navigationAction) || IsMainFrame(navigationAction))
+                {
+                    _wrappedNavigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
+                }
+                else
+                {
+                    decisionHandler(WKNavigationActionPolicy.Allow);
+                }
+            });
+        }
+
+        private static bool IsNewWindow(WKNavigationAction navigationAction) => navigationAction.TargetFrame is null;
+        private static bool IsMainFrame(WKNavigationAction navigationAction) => navigationAction.TargetFrame?.MainFrame ?? false;
 
         public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
         {
-            Log(LogLevel.Debug, navigation);
-            _wrappedNavigationDelegate.DidStartProvisionalNavigation(webView, navigation);
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                Log(LogLevel.Debug, navigation);
+                _wrappedNavigationDelegate.DidStartProvisionalNavigation(webView, navigation);
+            });
         }
 
         public override void DidReceiveServerRedirectForProvisionalNavigation(WKWebView webView, WKNavigation navigation)
-            => Log(LogLevel.Debug, navigation);
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => Log(LogLevel.Debug, navigation));
+        }
 
         public override void DidFailProvisionalNavigation(WKWebView webView, WKNavigation navigation, NSError error)
         {
-            LogError(navigation, error);
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                LogError(navigation, error);
 
-            // Call DidFailNavigation as default navigation handler does not handle DidFailProvisionalNavigation
-            _wrappedNavigationDelegate.DidFailNavigation(webView, navigation, error);
+                // Call DidFailNavigation as default navigation handler does not handle DidFailProvisionalNavigation
+                _wrappedNavigationDelegate.DidFailNavigation(webView, navigation, error);
+            });
         }
 
         public override void DidCommitNavigation(WKWebView webView, WKNavigation navigation)
-            => Log(LogLevel.Debug, navigation);
+        {
+            NhsAppResilience.ExecuteOnMainThread(() => Log(LogLevel.Debug, navigation));
+        }
 
         public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
         {
-            Log(LogLevel.Debug, navigation);
-            _wrappedNavigationDelegate.DidFinishNavigation(webView, navigation);
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                Log(LogLevel.Debug, navigation);
+                _wrappedNavigationDelegate.DidFinishNavigation(webView, navigation);
+            });
         }
 
         public override void DidFailNavigation(WKWebView webView, WKNavigation navigation, NSError error)
         {
-            LogError(navigation, error);
-            _wrappedNavigationDelegate.DidFailNavigation(webView, navigation, error);
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                LogError(navigation, error);
+                _wrappedNavigationDelegate.DidFailNavigation(webView, navigation, error);
+            });
         }
 
         private static void Log(LogLevel level, WKNavigation navigation, [CallerMemberName] string method = "")

@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 
@@ -11,7 +13,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
 
-        public event EventHandler<EventArgs>? NavigationFailed;
+        public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
+
+        public Func<Task>? NavigationFailed { get; set; }
+        private AsyncCommand NavigationFailedCommand => new AsyncCommand(() => NavigationFailed);
 
         public NhsLoginPage(ILogger<NhsLoginPage> logger)
         {
@@ -52,6 +58,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         private void WebViewOnNavigating(object sender, WebNavigatingEventArgs args)
         {
             _logger.LogInformation("Navigating: {Uri}", args.Url);
+            NavigatingCommand.Execute(args);
         }
 
         private void WebViewOnNavigated(object sender, WebNavigatedEventArgs args)
@@ -60,7 +67,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
             if (args.Result != WebNavigationResult.Success)
             {
-                NavigationFailed?.Invoke(this, EventArgs.Empty);
+                NavigationFailedCommand.Execute(null);
             }
         }
 
