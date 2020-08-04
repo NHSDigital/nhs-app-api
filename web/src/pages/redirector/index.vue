@@ -92,9 +92,9 @@ export default {
       if (matchedService.showThirdPartyWarning === false ||
           agreedToThirdPartyWarning(this.sessionStorageName)) {
         if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
-          this.getAssertedLoginIdentityAndNavigate(matchedService);
+          this.getAssertedLoginIdentityAndNavigate();
         } else {
-          this.navigateToExternalPath(this.redirectPath, matchedService);
+          this.navigateToExternalPath(this.redirectPath);
         }
         return;
       }
@@ -105,7 +105,7 @@ export default {
     this.$router.push(INDEX.path);
   },
   methods: {
-    async getAssertedLoginIdentityAndNavigate(knownService) {
+    async getAssertedLoginIdentityAndNavigate() {
       return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
@@ -119,7 +119,6 @@ export default {
         .then((response) => {
           this.navigateToExternalPath(
             this.appendAssertedLoginIdentity(this.redirectPath, response),
-            knownService,
           );
         })
         .catch((error) => {
@@ -136,9 +135,9 @@ export default {
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';
     },
-    navigateToExternalPath(url, knownService) {
+    navigateToExternalPath(url) {
       if (NativeApp.supportsNativeWebIntegration()) {
-        NativeApp.openWebIntegration(url, knownService);
+        NativeApp.openWebIntegration(url);
       } else {
         window.location = url;
       }

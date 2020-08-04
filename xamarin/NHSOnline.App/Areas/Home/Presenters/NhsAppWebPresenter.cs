@@ -9,7 +9,7 @@ using NHSOnline.App.Api.Session;
 using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
-using NHSOnline.App.Controls.WebViews.KnownServices;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
@@ -63,10 +63,10 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
         {
-            _logger.LogInformation("Opening Web Integration - {Url} ({MenuTab})", request.Url, request.MenuTab);
+            _logger.LogInformation("Opening Web Integration - {Url}", request.Url);
 
             var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation);
-            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url, request.MenuTab);
+            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url);
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.Navigation

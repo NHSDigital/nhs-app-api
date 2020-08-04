@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
-using NHSOnline.App.Controls.WebViews.KnownServices;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Views

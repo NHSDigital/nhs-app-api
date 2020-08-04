@@ -13,9 +13,9 @@ export default {
     return app && app.openWebIntegration;
   },
 
-  openWebIntegration(url, knownService) {
+  openWebIntegration(url) {
     const app = window.nativeApp;
-    const request = JSON.stringify({ url, menuTab: knownService.menuTab });
+    const request = JSON.stringify({ url });
     app.openWebIntegration(request);
   },
 

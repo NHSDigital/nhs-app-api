@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using NHSOnline.App.Controls.WebViews.KnownServices;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls.WebViews
