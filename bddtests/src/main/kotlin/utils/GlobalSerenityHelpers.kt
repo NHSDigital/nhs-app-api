@@ -13,5 +13,6 @@ enum class GlobalSerenityHelpers : ISerenityHelperEnums{
     SCENARIO_TITLE,
     PATIENT,
     HTTP_EXCEPTION,
-    HTTP_RESPONSE
+    HTTP_RESPONSE,
+    APP_BUNDLE_ID
 }

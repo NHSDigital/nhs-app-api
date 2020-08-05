@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 import utils.GlobalSerenityHelpers
 import utils.getOrFail
+import utils.set
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -20,6 +21,8 @@ private const val DEFAULT_OS_VERSION = "8.0"
 class BrowserstackAndroidDriver : DriverSource {
 
     override fun newDriver(): WebDriver {
+        GlobalSerenityHelpers.APP_BUNDLE_ID.set("com.nhs.online.nhsonline")
+
         val driver: AndroidDriver<WebElementFacade> = AndroidDriver(URL(Config.instance.browserstackUrl), caps())
         driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS)
         driver.unlockDevice()
