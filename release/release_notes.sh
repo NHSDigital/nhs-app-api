@@ -69,7 +69,8 @@ WEBVER="1.XX.0"
 IOSVER="1.XX.0"
 ANDROIDVER="1.XX.0"
 
-GITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG | awk 'ORS="<br/>"' | sed "s/\"/'/g"`
+SLACKGITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG | awk 'ORS="\n"' | sed "s/\"/'/g"`
+EMAILGITLOG=`git log --pretty=format:"%s" $VERSION_BELOW..$TAG | awk 'ORS="<br/>"' | sed "s/\"/'/g"`
 
 IMPLEMENTATIONDATE=`date -dnext-monday +%d-%m-%Y`
 
@@ -79,7 +80,7 @@ MESSAGE="${MESSAGE}This change is approved by Solution Assurance and approval ha
 MESSAGE="${MESSAGE}<b>SERVICE AFFECTED</b> : NHS App<br>"
 MESSAGE="${MESSAGE}<b>PRIORITY</b> : Standard Change<br>"
 MESSAGE="${MESSAGE}<b>DESCRIPTION</b> : Standard Feature Release for NHS App<br>"
-MESSAGE="${MESSAGE}${GITLOG}<br><br>"
+MESSAGE="${MESSAGE}${EMAILGITLOG}<br><br>"
 MESSAGE="${MESSAGE}<b>PRIMARY CI</b> : NHS App<br>"
 MESSAGE="${MESSAGE}<b>NHS App Web Version</b> : $WEBVER<br>"
 MESSAGE="${MESSAGE}<b>NHS App iOS Version</b> : $IOSVER<br>"
@@ -107,11 +108,11 @@ TOEMAILADDRESS=$1
 FROMEMAILADDRESS="TeamCity@teamcity.dev.nonlive.nhsapp.service.nhs.uk"
 FROMEMAILNAME="TeamCity"
 
-JSON_FMT='{"personalizations" : [{"to": [%s],"subject": "%s"}],"from": {"email": "%s", "name": "%s"},"reply_to": {"email": "%s", "name": "%s"},"content": [{"type": "text/html","value": "%s"}]}'
+JSON_FMT='{"personalizations" : [{"to": %s,"subject": "%s"}],"from": {"email": "%s", "name": "%s"},"reply_to": {"email": "%s", "name": "%s"},"content": [{"type": "text/html","value": "%s"}]}'
 
 printf "$JSON_FMT" "$TOEMAILADDRESS" "$SUBJECT" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$FROMEMAILADDRESS" "$FROMEMAILNAME" "$MESSAGE" > $TAG.json
 
-printf "$GITLOG" > $TAG.txt
+printf "$SLACKGITLOG" > $TAG.txt
 
 info "Release email written to $TAG.txt"
 
