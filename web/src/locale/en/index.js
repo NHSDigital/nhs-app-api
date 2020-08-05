@@ -2704,7 +2704,11 @@ export default {
         two: 'Search conditions and treatments',
         three: 'Use NHS 111 online to check if you need urgent help',
       },
-      appStorePanelTitle: 'Get the NHS App on your smartphone or tablet',
+      appStorePanel: {
+        title: 'Get the NHS App on your smartphone or tablet',
+        appStoreLabel: 'Download on the App Store',
+        googlePlayLabel: 'Get it on Google Play',
+      },
     },
     sessionExpiry: {
       warningDurationInformation:

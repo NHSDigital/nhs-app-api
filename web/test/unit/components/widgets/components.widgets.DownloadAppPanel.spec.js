@@ -26,11 +26,11 @@ describe('download app panel', () => {
   });
 
   it('the title will contain the correct text', () => {
-    expect(wrapper.find('[data-id="panel-title"]').text()).toBe('translate_web.home.appStorePanelTitle');
+    expect(wrapper.find('[data-id="panel-title"]').text()).toBe('translate_web.home.appStorePanel.title');
   });
 
   it('the images will contain alt tags', () => {
-    expect(wrapper.find('[data-id="apple-store-icon"]').find('img').attributes('alt')).toEqual('Download on the App Store');
-    expect(wrapper.find('[data-id="play-store-icon"]').find('img').attributes('alt')).toEqual('Get it on Google Play');
+    expect(wrapper.find('[data-id="apple-store-icon"]').find('img').attributes('alt')).toEqual('translate_web.home.appStorePanel.appStoreLabel');
+    expect(wrapper.find('[data-id="play-store-icon"]').find('img').attributes('alt')).toEqual('translate_web.home.appStorePanel.googlePlayLabel');
   });
 });

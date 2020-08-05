@@ -1,19 +1,29 @@
 <template>
   <div data-id="app-panel">
     <p><strong data-id="panel-title">
-      {{ $t('web.home.appStorePanelTitle') }}</strong>
+      {{ $t('web.home.appStorePanel.title') }}</strong>
     </p>
-    <a data-id="apple-store-icon" href="https://apps.apple.com/gb/app/nhs-app/id1388411277"
-       class="nhsuk-u-margin-bottom-2 nhsuk-u-margin-right-3"
-       target="_blank" rel="noopener noreferrer">
-      <img alt="Download on the App Store"
-           src="~assets/download-on-the-app-store.png">
-    </a>
-    <a data-id="play-store-icon" href="https://play.google.com/store/apps/details?id=com.nhs.online.nhsonline" target="_blank"
-       rel="noopener noreferrer">
-      <img alt="Get it on Google Play"
-           src="~assets/google-play-store.png">
-    </a>
+    <ul>
+      <li>
+        <a data-id="apple-store-icon"
+           :aria-label="$t('web.home.appStorePanel.appStoreLabel')"
+           href="https://apps.apple.com/gb/app/nhs-app/id1388411277"
+           class="nhsuk-u-margin-bottom-2 nhsuk-u-margin-right-3"
+           target="_blank" rel="noopener noreferrer">
+          <img :alt="$t('web.home.appStorePanel.appStoreLabel')"
+               src="~assets/download-on-the-app-store.png">
+        </a>
+      </li>
+      <li>
+        <a data-id="play-store-icon"
+           :aria-label="$t('web.home.appStorePanel.googlePlayLabel')"
+           href="https://play.google.com/store/apps/details?id=com.nhs.online.nhsonline" target="_blank"
+           rel="noopener noreferrer">
+          <img :alt="$t('web.home.appStorePanel.googlePlayLabel')"
+               src="~assets/google-play-store.png">
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -23,14 +33,23 @@ export default {
 };
 </script>
 
-<style scoped>
-  a {
-    display: inline-block;
-    vertical-align: top;
-  }
-  a:hover {
-    color: transparent;
-    background: none;
-    box-shadow: 0 0 0 4px transparent;
+<style lang="scss" scoped>
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
+      a {
+        display: inline-block;
+        vertical-align: top;
+        &:focus,
+        &:hover {
+          border-radius: 4px;
+        }
+        img{
+          display: block;
+        }
+      }
+    }
   }
 </style>
