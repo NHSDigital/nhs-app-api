@@ -11,6 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal StubbedLoginPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebLink BackLink => WebLink.WithText(_interactor, "Back");
+        private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
+        private WebLink InternalPageNewWindowLink => WebLink.WithText(_interactor, "Internal Page (New Window)");
+        private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
 
         private WebText TitleText => WebText.WithTagAndText(_interactor, "h1", "NHS Login");
 
@@ -32,6 +35,21 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         public void Back()
         {
             BackLink.Click();
+        }
+
+        public void InternalPage()
+        {
+            InternalPageLink.Click();
+        }
+
+        public void InternalPageNewWindow()
+        {
+            InternalPageNewWindowLink.Click();
+        }
+
+        public void Covid()
+        {
+            CovidLink.Click();
         }
     }
 }

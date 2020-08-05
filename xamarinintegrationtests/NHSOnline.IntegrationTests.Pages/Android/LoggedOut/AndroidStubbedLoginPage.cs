@@ -3,14 +3,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
 {
-    public class AndroidStubbedLoginPage
+    public sealed class AndroidStubbedLoginPage
     {
-        public StubbedLoginPageContent PageContent { get; }
-
         private AndroidStubbedLoginPage(IAndroidDriverWrapper driver)
         {
             PageContent = new StubbedLoginPageContent(driver.Web(WebViewContext.NhsLogin));
         }
+
+        public StubbedLoginPageContent PageContent { get; }
 
         public static AndroidStubbedLoginPage AssertOnPage(IAndroidDriverWrapper driver)
         {

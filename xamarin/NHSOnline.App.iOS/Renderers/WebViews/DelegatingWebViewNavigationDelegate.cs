@@ -27,6 +27,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             NhsAppResilience.ExecuteOnMainThread(() =>
             {
+                Log(navigationAction);
+
                 if (IsNewWindow(navigationAction) || IsMainFrame(navigationAction))
                 {
                     _wrappedNavigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
@@ -87,6 +89,20 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
                 LogError(navigation, error);
                 _wrappedNavigationDelegate.DidFailNavigation(webView, navigation, error);
             });
+        }
+
+        private static void Log(WKNavigationAction navigationAction, [CallerMemberName] string method = "")
+        {
+            Logger.LogDebug(
+                "NavigationAction {Type} {Target} {Method}",
+                navigationAction.NavigationType,
+                navigationAction.TargetFrame switch
+                {
+                    { MainFrame: true} => "Main Frame",
+                    { MainFrame: false } => "Sub Frame",
+                    null => "New Window"
+                },
+                method);
         }
 
         private static void Log(LogLevel level, WKNavigation navigation, [CallerMemberName] string method = "")

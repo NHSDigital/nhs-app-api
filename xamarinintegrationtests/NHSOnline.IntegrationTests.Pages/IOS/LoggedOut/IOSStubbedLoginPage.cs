@@ -3,16 +3,14 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 {
-    public class IOSStubbedLoginPage
+    public sealed class IOSStubbedLoginPage
     {
-        private readonly IIOSDriverWrapper _driver;
-        public StubbedLoginPageContent PageContent { get; }
-
         private IOSStubbedLoginPage(IIOSDriverWrapper driver)
         {
-            _driver = driver;
-            PageContent = new StubbedLoginPageContent(_driver.Web(WebViewContext.NhsLogin));
+            PageContent = new StubbedLoginPageContent(driver.Web(WebViewContext.NhsLogin));
         }
+
+        public StubbedLoginPageContent PageContent { get; }
 
         public static IOSStubbedLoginPage AssertOnPage(IIOSDriverWrapper driver)
         {

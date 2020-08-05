@@ -37,19 +37,86 @@ namespace NHSOnline.HttpMocks.CitizenId
         {
             return Content($@"
                 <html>
+                    <head>
+                        <meta charset='utf-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                        <title>NHS Login Stubbed</title>
+                    </head>
                     <body>
-                        <p><a href=""javascript: window.history.back();"">Back</a></p>
-                        <h1>NHS Login</h1>
-                        <form action='complete-login' method='get'>
-                            <fieldset>
-                                <legend>Login</legend>
+                        <div class='container'>
+                            <h1 class='display-4'>NHS Login</h1>
+                            <ul>
+                                <li><a href='javascript: window.history.back();'>Back</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html' target='_blank'>Internal Page (New Window)</a></li>
+                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
+                            </ul>
+                            <hr>
+                            <form action='complete-login' method='get'>
                                 <input value='{redirect}' type='hidden' name='redirect_uri'>
                                 <input value='{state}' type='hidden' name='state'>
-                                <label for='PatientId'>Patient ID</label>
-                                <input placeholder='Patient ID' type='text' name='patientId' id='PatientId'>
+                                <div class='form-group'>
+                                    <label for='PatientId'>Patient ID</label>
+                                    <input class='form-control placeholder='Patient ID' type='text' name='patientId' id='PatientId'>
+                                </div>
                                 <input type='submit' value='Login'>
-                            </fieldset>
-                        </form>
+                            </form>
+                        </div>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/Internal.html")]
+        public IActionResult InternalPage()
+        {
+            return Content($@"
+                <html>
+                    <head>
+                        <meta charset='utf-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                        <title>NHS Login Stubbed - Internal Page</title>
+                    </head>
+                    <body>
+                        <div class='container'>
+                            <h1 class='display-4'>NHS Login - Internal Page</h1>
+                            <ul>
+                                <li><a href='javascript: window.history.back();'>Back</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html' target='_blank'>Other Page (New Window)</a></li>
+                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
+                            </ul>
+                        </div>
+                    </body>
+                </html>",
+                "text/html");
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/Other.html")]
+        public IActionResult OtherPage()
+        {
+            return Content($@"
+                <html>
+                    <head>
+                        <meta charset='utf-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                        <title>NHS Login Stubbed - Other Page</title>
+                    </head>
+                    <body>
+                        <div class='container'>
+                            <h1 class='display-4'>NHS Login - Other Page</h1>
+                            <ul>
+                                <li><a href='javascript: window.history.back();'>Back</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html' target='_blank'>Internal Page (New Window)</a></li>
+                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
+                            </ul>
+                        </div>
                     </body>
                 </html>",
                 "text/html");
