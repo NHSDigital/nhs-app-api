@@ -1,6 +1,7 @@
 import components from './components';
 import loginSettings from './loginSettings';
 import thirdPartyProviders from './third-party-providers';
+import gpSessionErrors from './gpSessionErrors';
 
 export default {
   language: 'en-GB',
@@ -2747,4 +2748,5 @@ export default {
   components,
   loginSettings,
   thirdPartyProviders,
+  gpSessionErrors,
 };

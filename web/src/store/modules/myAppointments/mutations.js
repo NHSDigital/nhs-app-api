@@ -3,6 +3,7 @@ import mapKeys from 'lodash/fp/mapKeys';
 import get from 'lodash/fp/get';
 import {
   ADD_ERROR,
+  SET_RETRY_GP_SESSION,
   CANCELLING_JOURNEY_COMPLETE,
   CANCELLING_JOURNEY_START,
   CLEAR,
@@ -56,7 +57,14 @@ export default {
   [INIT](state) {
     const blank = initialState();
     mapKeys((key) => {
-      state[key] = blank[key];
+      /*
+        We do not want to clear this field
+         as it stores whether the user has retried after
+         an initial session failure
+      */
+      if (key !== 'hasRetried') {
+        state[key] = blank[key];
+      }
     })(state);
   },
   [LOADED](state, data) {
@@ -66,9 +74,13 @@ export default {
 
     state.upcomingAppointments = sortSlots(state.upcomingAppointments);
     state.pastAppointments = sortSlots(state.pastAppointments).reverse();
+    state.hasRetried = false;
     state.hasLoaded = true;
   },
   [SELECT](state, selected) {
     state.selectedAppointment = selected;
+  },
+  [SET_RETRY_GP_SESSION](state) {
+    state.hasRetried = true;
   },
 };

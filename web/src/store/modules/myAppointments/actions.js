@@ -10,6 +10,7 @@ import {
   INIT,
   LOADED,
   SELECT,
+  SET_RETRY_GP_SESSION,
 } from './mutation-types';
 
 const createError = ({ response }) => ({
@@ -51,6 +52,9 @@ export default {
   },
   init({ commit }) {
     commit(INIT);
+  },
+  setRetry({ commit }) {
+    commit(SET_RETRY_GP_SESSION);
   },
   async load({ commit }) {
     this.dispatch('myAppointments/init');

@@ -53,7 +53,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         let currentlySelectedItem = Menu(rawValue: didSelect.tag)!
         
         if(viewController.selectedTab == didSelect.tag) {
-            if(currentlySelectedItem != .More && currentlySelectedItem != .Symptoms) {
+            if(currentlySelectedItem != .More && currentlySelectedItem != .Symptoms && currentlySelectedItem != .Appointments) {
                 return
             }
         }
@@ -61,7 +61,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         viewController.selectedTab = didSelect.tag
 
         var _: String
-        if(currentlySelectedItem != .Symptoms && previouslySelectedItem != .More) {
+        if(currentlySelectedItem != .Symptoms && previouslySelectedItem != .More && currentlySelectedItem != .Appointments) {
             viewController.applicationState.block()
         }
         processTabBarSelection(selectedTag: didSelect.tag)

@@ -27,7 +27,7 @@ class ErrorDialogPage : HybridPageObject() {
     }
 
     fun assertReferenceCode(referenceCode: String): ErrorDialogPage {
-        val message = getElement("//p[contains(text(), 'Reference: $referenceCode')]")
+        val message = getElement("//div[contains(text(), 'Reference: $referenceCode')]")
         message.assertIsVisible()
         return this
     }

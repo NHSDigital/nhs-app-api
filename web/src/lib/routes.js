@@ -1920,6 +1920,10 @@ export const backLinkOverrides = {
     ignoreStore: true,
     defaultPath: routes.APPOINTMENTS.path,
   },
+  [routes.GP_APPOINTMENTS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
   [routes.APPOINTMENT_CANCELLING_SUCCESS.name]: {
     ignoreStore: true,
     defaultPath: routes.APPOINTMENTS.path,

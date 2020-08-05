@@ -54,7 +54,7 @@ class TabBarDelegateTests : XCTestCase {
     
     func test_WhenSymptomsIsClickedOnThenTheApplicationStateIsNotBlocked() {
         let symptomsTabBarItem = UITabBarItem(title: "symptomsItem", image: nil, tag: 0)
-        viewController!.selectedTab = 1
+        viewController!.selectedTab = symptomsTabBarItem.tag
         tabBarDelegate!.tabBar(tabBar!, didSelect: symptomsTabBarItem)
            
         XCTAssert(viewController!.applicationState.isReady())
@@ -63,7 +63,15 @@ class TabBarDelegateTests : XCTestCase {
     func test_WhenMoreIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
         let moreTabBarItem = UITabBarItem(title: "moreItem", image: nil, tag: 4)
         viewController!.selectedTab = moreTabBarItem.tag
-        tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
+        tabBarDelegate!.tabBar(tabBar!, didSelect: moreTabBarItem)
+             
+        XCTAssert(viewController!.applicationState.isReady())
+    }
+    
+    func test_WhenAppointmentsIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
+        let appointmentsItemTabBar = UITabBarItem(title: "appointmentsItem", image: nil, tag: 1)
+        viewController!.selectedTab = 1
+        tabBarDelegate!.tabBar(tabBar!, didSelect: appointmentsItemTabBar)
              
         XCTAssert(viewController!.applicationState.isReady())
     }

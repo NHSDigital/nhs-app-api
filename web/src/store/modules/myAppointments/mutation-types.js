@@ -7,7 +7,9 @@ export const CLEAR_ERROR = 'CLEAR_ERROR';
 export const CLEAR_SELECTED_APPOINTMENT = 'CLEAR_SELECTED_APPOINTMENT';
 export const INIT = 'INIT';
 export const LOADED = 'LOADED';
+export const SET_RETRY_GP_SESSION = 'SET_RETRY_GP_SESSION';
 export const SELECT = 'SELECT';
+
 export const initialState = () => ({
   cancellationReasons: [],
   cancellingInProgress: false,
@@ -16,4 +18,5 @@ export const initialState = () => ({
   pastAppointments: [],
   pastAppointmentsEnabled: false,
   upcomingAppointments: [],
+  hasRetried: false,
 });

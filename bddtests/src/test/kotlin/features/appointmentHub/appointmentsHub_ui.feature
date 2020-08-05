@@ -18,7 +18,7 @@ Feature: Appointments Hub Frontend
     And <GP System> GP appointments returns unauthorized
     When I navigate to Appointments
     And I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '3u'
+    Then I see appropriate try again error message when there is no GP session
     When I click the error 'Back' link
     Then the Appointments Hub page is displayed
     And I have no booked appointments for <GP System>
@@ -27,8 +27,8 @@ Feature: Appointments Hub Frontend
     Then the Your Appointments page is displayed
     Examples:
       | GP System |
-      | TPP       |
       | EMIS      |
+      | TPP       |
       | VISION    |
       | MICROTEST |
 
@@ -38,16 +38,14 @@ Feature: Appointments Hub Frontend
     And I am logged in
     And <GP System> GP appointments returns unauthorized
     When I navigate to Appointments
-    And I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '3u'
-    And I have no booked appointments for <GP System>
-    And there are <GP System> appointments available to book
-    When I click the 'Try again' button
-    Then the Your Appointments page is displayed
+    Then the Appointments Hub page is displayed
+    And The <GP System> GP system is still unavailable
+    When I click the GP Appointments link
+    Then I see appropriate try again error message when there is no GP session
     Examples:
       | GP System |
-      | TPP       |
       | EMIS      |
+      | TPP       |
       | VISION    |
       | MICROTEST |
 
@@ -55,6 +53,10 @@ Feature: Appointments Hub Frontend
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     When I navigate to Appointments
+    And The <GP System> GP system is still unavailable
+    And I click the GP Appointments link
+    Then I see appropriate try again error message when there is no GP session
+    When I click the error 'Back' link
     Then the Appointments Hub page is displayed
     And The <GP System> GP system becomes available
     And I have no booked appointments for <GP System>
@@ -63,22 +65,68 @@ Feature: Appointments Hub Frontend
     Then the Your Appointments page is displayed
     Examples:
       | GP System |
-      | TPP       |
       | EMIS      |
+      | TPP       |
       | VISION    |
       | MICROTEST |
 
-  Scenario Outline: An <GP System> user without a GP session who is unable to recover their session on navigate to GP Appointments sees a new error code
+  Scenario Outline: An <GP System> user recovers their GP session before the error
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
     When I navigate to Appointments
-    Then the Appointments Hub page is displayed
-    And The <GP System> GP system is still unavailable
-    When I click the GP Appointments link
-    Then I see appropriate try again error message when there is an error with '3p'
+    And The <GP System> GP system becomes available
+    And I have no booked appointments for <GP System>
+    And there are <GP System> appointments available to book
+    And I click the GP Appointments link
+    Then the Your Appointments page is displayed
     Examples:
       | GP System |
-      | TPP       |
       | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: An <GP System> user without a GP session is able to recover their session on try again
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I navigate to Appointments
+    And The <GP System> GP system is still unavailable
+    And I click the GP Appointments link
+    Then I see appropriate try again error message when there is no GP session
+    And The <GP System> GP system becomes available
+    And I have no booked appointments for <GP System>
+    And there are <GP System> appointments available to book
+    When I click the 'Try again' button
+    Then the Your Appointments page is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: A <GP System> user GP session eventually becomes available
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I navigate to Appointments
+    And The <GP System> GP system is still unavailable
+    And I click the GP Appointments link
+    Then I see appropriate try again error message when there is no GP session
+    When I click the 'Try again' button
+    Then I see what I can do next with an error message and reference code '3p'
+    And I click the session error back link
+    And I click the GP Appointments link
+    And I see what I can do next with an error message and reference code '3p'
+    And I click the session error back link
+    And the Appointments Hub page is displayed
+    And The <GP System> GP system becomes available
+    And I have no booked appointments for <GP System>
+    And there are <GP System> appointments available to book
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
       | VISION    |
       | MICROTEST |

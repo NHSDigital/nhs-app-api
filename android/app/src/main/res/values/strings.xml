@@ -215,5 +215,6 @@
     <string-array name="reSelectableMenuItems">
         <item>@string/more</item>
         <item>@string/symptoms</item>
+        <item>@string/appointment</item>
     </string-array>
 </resources>

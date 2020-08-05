@@ -1,5 +1,7 @@
 <template>
   <div v-if="error">
+    <appointments-gp-session-error v-if="hasRetried && error.status===599"
+                                   :code="error.serviceDeskReference"/>
     <error-container v-if="error.status===403"
                      :id="generateErrorId()"
                      message-type="error"
@@ -24,13 +26,21 @@
                   :action="backUrl"
                   :desktop-only="true"/>
     </error-container>
-    <error-container v-else-if="error.status===500 || error.status===502 || error.status===599"
-                     :id="generateErrorId()">
+    <error-container v-else-if="error.status===599 && !hasRetried" :id="generateErrorId()">
+      <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
+      <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
+      <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
+      <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
+      <error-link from="generic.backButton.text"
+                  :action="backUrl"
+                  :desktop-only="true"/>
+    </error-container>
+    <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
       <error-title title="appointments.error.title.problemLoading"/>
       <error-paragraph from="errors.tryAgainNow"/>
       <error-paragraph from="appointments.error.message.ifItContinues"/>
       <error-button from="generic.tryAgainButton.text" @click="reload" />
-      <report-a-problem v-if="hasReferenceCode" :reference="hasReferenceCode"/>
+      <report-a-problem :reference="error.serviceDeskReference"/>
       <error-link from="generic.backButton.text"
                   :action="backUrl"
                   :desktop-only="true"/>
@@ -38,7 +48,7 @@
     <error-container v-else-if="error.status===504" :id="generateErrorId()">
       <error-title title="appointments.error.title.problemLoading"/>
       <error-paragraph from="appointments.error.message.tryAgainNow"
-                       :variable="hasReferenceCode"/>
+                       :variable="error.serviceDeskReference"/>
       <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
       <error-button from="generic.tryAgainButton.text" @click="reload" />
       <error-link from="generic.contactUsButton.text"
@@ -94,6 +104,7 @@
 <script>
 import isEmpty from 'lodash/fp/isEmpty';
 import CoronaVirusMessage from '@/components/widgets/CoronaVirusMessage';
+import AppointmentsGpSessionError from '@/components/errors/gp-session-errors/AppointmentsGpSessionError';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
@@ -131,6 +142,7 @@ export default {
     PastAppointments,
     UpcomingAppointments,
     ReportAProblem,
+    AppointmentsGpSessionError,
   },
   mixins: [ErrorPageMixin],
   data() {
@@ -161,15 +173,14 @@ export default {
     hasLoaded() {
       return this.$store.state.myAppointments.hasLoaded;
     },
+    hasApiError() {
+      return this.$store.getters['errors/showApiError'];
+    },
+    hasRetried() {
+      return this.$store.state.myAppointments.hasRetried;
+    },
     pastAppointments() {
       return this.$store.state.myAppointments.pastAppointments;
-    },
-    hasReferenceCode() {
-      if (typeof this.error === 'object') {
-        return this.error.serviceDeskReference;
-      }
-
-      return this.$store.state.session.userSessionCreateReferenceCode;
     },
     showNoPastAppointments() {
       return this.hasLoaded &&
@@ -224,6 +235,10 @@ export default {
   methods: {
     generateErrorId() {
       return `error-dialog-${this.error.status}`;
+    },
+    tryAgain() {
+      this.reload();
+      this.$store.dispatch('myAppointments/setRetry');
     },
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidanceUrl, true);

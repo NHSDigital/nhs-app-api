@@ -151,19 +151,23 @@ Feature: Your Appointments Frontend
     Then the page title is "Your GP appointments"
     And I am informed I have no historical appointments
 
-  Scenario Outline: A <GP System> user sees a reference code when they login without a GP system due to a timeout
-    Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
+  Scenario Outline: A <GP System> user sees a reference code when they login without a GP system
+    Given I have valid OAuth details and <GP System> returns a Bad Gateway response
     And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
-    Then I see appropriate try again error message when there is an error with '<Prefix>'
-    And I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the GP Appointments link
+    Then I see appropriate try again error message when there is no GP session
+    When I click the 'Try again' button
+    Then I see what I can do next with an error message and reference code '<Prefix>'
+    And I click the report a problem link
     And a new tab has been opened by the link
     Examples:
       | GP System | Prefix |
-      | EMIS      | ze     |
-      | TPP       | zt     |
-      | VISION    | zs     |
-      | MICROTEST | zm     |
+      | EMIS      | 3e     |
+      | TPP       | 3t     |
+      | VISION    | 3s     |
+      | MICROTEST | 3m     |
 
   #502
   @nativesmoketest
