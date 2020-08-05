@@ -13,6 +13,7 @@ using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Services;
+using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home.Presenters
 {
@@ -48,6 +49,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _navigationHandler = new NhsAppNavigationHandler(view);
 
             _view.Appearing = ViewOnAppearing;
+            _view.Navigating = ViewOnNavigating;
+            _view.Navigated = ViewOnNavigated;
             _view.HelpRequested = HelpRequested;
             _view.OpenWebIntegrationRequested = OpenWebIntegrationRequested;
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
@@ -59,6 +62,37 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.PrescriptionsRequested = _navigationHandler.PrescriptionsRequested;
             _view.RecordRequested = _navigationHandler.RecordRequested;
             _view.MoreRequested = _navigationHandler.MoreRequested;
+        }
+
+        private async Task ViewOnAppearing()
+        {
+            _view.Appearing = null;
+            await ConfigureNhsOnlineCookies().PreserveThreadContext();
+            await DisplayNhsAppWeb().PreserveThreadContext();
+        }
+
+        private async Task ViewOnNavigating(WebNavigatingEventArgs args)
+        {
+            _logger.LogInformation("Navigating: {Uri}", args.Url);
+            var uri = new Uri(args.Url);
+            if (! IsNhsAppWeb(uri))
+            {
+                args.Cancel = true;
+                await _appBrowserTab
+                    .OpenAppBrowserTab(uri)
+                    .PreserveThreadContext();
+            }
+        }
+
+        private bool IsNhsAppWeb(Uri uri)
+        {
+            return string.Equals(uri.Host, _config.Host, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Task ViewOnNavigated(WebNavigatedEventArgs args)
+        {
+            _logger.LogInformation("Navigated ({Result}): {Uri}", args.Result, args.Url);
+            return Task.CompletedTask;
         }
 
         private async Task OpenWebIntegrationRequested(OpenWebIntegrationRequest request)
@@ -79,13 +113,6 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await DisplayNhsAppWeb().PreserveThreadContext();
             //TODO ShowError
             _logger.LogInformation($"Showing unexpected error");
-        }
-
-        private async Task ViewOnAppearing()
-        {
-            _view.Appearing = null;
-            await ConfigureNhsOnlineCookies().PreserveThreadContext();
-            await DisplayNhsAppWeb().PreserveThreadContext();
         }
 
         private async Task HelpRequested()

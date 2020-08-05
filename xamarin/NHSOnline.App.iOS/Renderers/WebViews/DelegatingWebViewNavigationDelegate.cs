@@ -29,7 +29,15 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             {
                 Log(navigationAction);
 
-                if (IsNewWindow(navigationAction) || IsMainFrame(navigationAction))
+                if (IsNewWindow(navigationAction))
+                {
+                    // The default navigation delegate requests to load the page in the current webView
+                    // and calls the Navigating event, resulting in the navigating event firing twice.
+                    // We cancel the request for a new window and create a new request in the current webView.
+                    decisionHandler(WKNavigationActionPolicy.Cancel);
+                    webView.LoadRequest(navigationAction.Request);
+                }
+                else if (IsMainFrame(navigationAction))
                 {
                     _wrappedNavigationDelegate.DecidePolicy(webView, navigationAction, decisionHandler);
                 }

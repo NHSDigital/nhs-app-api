@@ -9,6 +9,8 @@ namespace NHSOnline.App.Areas.Home
     internal interface INhsAppWebView
     {
         Func<Task>? Appearing { get; set; }
+        Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
+        Func<WebNavigatedEventArgs, Task>? Navigated { get; set; }
 
         Func<Task>? SettingsRequested { get; set; }
         Func<Task>? HelpRequested { get; set; }

@@ -4,6 +4,8 @@
 
       <menu-item id="btn_corona"
                  header-tag="h2"
+                 :click-func="navigateToWebIntegration"
+                 :click-param="coronaCheckerUrl"
                  :href="coronaCheckerUrl"
                  :description="$t('sy01.corona.body')"
                  target="_blank"
@@ -14,6 +16,8 @@
 
       <menu-item id="btn_choices"
                  header-tag="h2"
+                 :click-func="navigateToWebIntegration"
+                 :click-param="coronaCheckerUrl"
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
@@ -25,6 +29,8 @@
 
       <menu-item id="btn_111"
                  header-tag="h2"
+                 :click-func="navigateToWebIntegration"
+                 :click-param="coronaCheckerUrl"
                  :href="symptomsCheckerUrl"
                  :description="$t('sy01.111.body')"
                  target="_blank"
@@ -49,12 +55,13 @@
 </template>
 
 <script>
-import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
-import sjrIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { redirectTo } from '@/lib/utils';
+import NativeApp from '@/services/native-app';
+import sjrIf from '@/lib/sjrIf';
+import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'SymptomsCheck',
@@ -107,6 +114,13 @@ export default {
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
+    },
+    navigateToWebIntegration(url) {
+      if (NativeApp.supportsNativeWebIntegration()) {
+        NativeApp.openWebIntegration(url);
+      } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
     },
   },
 };
