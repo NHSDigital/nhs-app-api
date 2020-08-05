@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NHSOnline.App.Areas.Home.Presenters;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.Services;
@@ -14,19 +16,22 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
         private readonly IAppBrowserTab _appBrowserTab;
+        private readonly ILogger _logger;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
             WebIntegrationModel model,
             INhsLoginConfiguration nhsLoginConfiguration,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IAppBrowserTab appBrowserTab)
+            IAppBrowserTab appBrowserTab,
+            ILogger<WebIntegrationPresenter> logger)
         {
             _view = view;
             _model = model;
             _nhsLoginConfiguration = nhsLoginConfiguration;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
             _appBrowserTab = appBrowserTab;
+            _logger = logger;
 
             _view.Appearing = ViewOnAppearing;
             _view.HelpRequested = HelpRequested;
@@ -39,6 +44,15 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
             _view.PrescriptionsRequested = model.NavigationHandler.PrescriptionsRequested;
             _view.RecordRequested = model.NavigationHandler.RecordRequested;
             _view.MoreRequested = model.NavigationHandler.MoreRequested;
+
+            _view.RedirectToNhsAppPageRequested = RedirectToNhsAppPageRequested;
+        }
+
+        private async Task RedirectToNhsAppPageRequested(string page)
+        {
+            _logger.LogInformation("Redirecting to NHS App Page - {page}", page);
+
+            await _model.NavigationHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
         }
 
         private Task ViewOnAppearing()

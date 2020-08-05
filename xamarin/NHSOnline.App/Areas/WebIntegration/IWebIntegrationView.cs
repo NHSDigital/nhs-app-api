@@ -18,6 +18,8 @@ namespace NHSOnline.App.Areas.WebIntegration
         Func<Task>? RecordRequested { get; set; }
         Func<Task>? MoreRequested { get; set; }
 
+        Func<string, Task>? RedirectToNhsAppPageRequested { get; set; }
+
         INavigation Navigation { get; }
 
         void GoToUri(Uri uri);

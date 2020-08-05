@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
@@ -51,6 +52,13 @@ namespace NHSOnline.App.Areas.Home.Presenters
         public Task MoreRequested()
         {
             _view.NavigateWithinApp("more");
+            return Task.CompletedTask;
+        }
+
+        public Task RedirectToNhsAppPageRequested(string page)
+        {
+            // TODO deal with homepage mapping to route as part of NHSO-10645
+            _view.NavigateWithinApp(page == "homePage" ? "/": page);
             return Task.CompletedTask;
         }
     }

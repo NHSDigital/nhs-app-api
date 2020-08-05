@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.Content;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
@@ -17,7 +19,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         {
             _extensions = new List<IWebViewRendererExtension>
             {
-                new UserAgentWebViewRendererExtension(this)
+                new UserAgentWebViewRendererExtension(this),
+                new WebIntegrationJavascriptBridgeWebViewRendererExtension(this)
             };
         }
 
@@ -29,6 +32,19 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             {
                 extension.OnElementChanged(e);
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (var disposableExtension in _extensions.OfType<IDisposable>())
+                {
+                    disposableExtension.Dispose();
+                }
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

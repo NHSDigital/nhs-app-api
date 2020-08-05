@@ -60,10 +60,12 @@
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\NhsAppSetCookieWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\WebIntegrationJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\UserAgentWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\WebIntegrationJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\WebIntegrationWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

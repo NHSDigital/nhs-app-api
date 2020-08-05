@@ -9,6 +9,8 @@
              x:Class="NHSOnline.App.Areas.WebIntegration.Views.WebIntegrationPage">
 
     <webViews:WebIntegrationWebView x:Name="WebView"
-                                    VerticalOptions="FillAndExpand"/>
-    
+                                    VerticalOptions="FillAndExpand"
+                                    RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"/>
+
+
 </pages:NhsAppFullHeaderPage>

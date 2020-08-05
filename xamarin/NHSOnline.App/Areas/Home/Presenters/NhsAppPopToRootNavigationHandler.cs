@@ -58,5 +58,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await _navigation.PopToRootAsync(true).PreserveThreadContext();
             await _rootHandler.MoreRequested().PreserveThreadContext();
         }
+
+        public async Task RedirectToNhsAppPageRequested(string page)
+        {
+            await _navigation.PopToRootAsync(true).PreserveThreadContext();
+            await _rootHandler.RedirectToNhsAppPageRequested(page).PreserveThreadContext();
+        }
     }
 }

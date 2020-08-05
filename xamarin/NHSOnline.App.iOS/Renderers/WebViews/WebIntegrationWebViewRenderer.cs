@@ -9,8 +9,18 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal sealed class WebIntegrationWebViewRenderer : WkWebViewRenderer
     {
-        public WebIntegrationWebViewRenderer() : base(CustomConfiguration)
+        private readonly JavascriptBridge<WebIntegrationWebView> _javascriptBridge;
+
+        public WebIntegrationWebViewRenderer() : this(CustomConfiguration)
         { }
+
+        private WebIntegrationWebViewRenderer(WKWebViewConfiguration config) : base(config)
+        {
+            _javascriptBridge = JavascriptBridge
+                .ForWebView(() => (WebIntegrationWebView)Element, WebIntegrationWebView.JavascriptObjectName)
+                .AddFunction("goToPage", webView => webView.RedirectToNhsAppPageCommand)
+                .Apply(config.UserContentController);
+        }
 
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {
@@ -24,5 +34,15 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private static WKWebViewConfiguration CustomConfiguration
             => new WebViewConfigurationBuilder().Build();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _javascriptBridge.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

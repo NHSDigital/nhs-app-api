@@ -10,8 +10,8 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 {
     internal static class JavascriptBridge
     {
-        public static JavascriptBridge<TWebView> ForWebView<TWebView>(Func<TWebView> webViewAccessor)
-            => new JavascriptBridge<TWebView>(webViewAccessor);
+        public static JavascriptBridge<TWebView> ForWebView<TWebView>(Func<TWebView> webViewAccessor, string javascriptObjectName)
+            => new JavascriptBridge<TWebView>(webViewAccessor, javascriptObjectName);
     }
 
     internal sealed class JavascriptBridge<TWebView>: IDisposable
@@ -23,11 +23,14 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         private WKUserScript? _shimJavascriptScript;
         private NSString? _shimJavascript;
 
+        private readonly string _javascriptObjectName;
+
         // The webview does not exist at the point we instantiate the bridge, and so we pass an
         // accessor to ensure we can get hold of the instance at the point of command execution
-        internal JavascriptBridge(Func<TWebView> webViewAccessor)
+        internal JavascriptBridge(Func<TWebView> webViewAccessor, string javascriptObjectName)
         {
             _webViewAccessor = webViewAccessor;
+            _javascriptObjectName = javascriptObjectName;
         }
 
         public JavascriptBridge<TWebView> AddFunction(string name, Func<TWebView, AsyncCommand> command)
@@ -64,16 +67,17 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
 
         private string GenerateShimJavascript()
         {
-            var shimJavascript = new StringBuilder("window.nativeApp = {};");
+            var shimJavascript = new StringBuilder($"window.{_javascriptObjectName} = {{}};");
 
             foreach (var (name, _) in _functions)
             {
                 shimJavascript.AppendFormat(
                     CultureInfo.InvariantCulture,
                     @"
-window.nativeApp.{0} = function(request) {{
-    window.webkit.messageHandlers.{0}.postMessage(request);
+window.{0}.{1} = function(request) {{
+    window.webkit.messageHandlers.{1}.postMessage(request);
 }}",
+                    _javascriptObjectName,
                     name);
             }
 

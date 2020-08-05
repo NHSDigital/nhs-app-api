@@ -11,5 +11,7 @@ namespace NHSOnline.App.Navigation
         Task PrescriptionsRequested();
         Task RecordRequested();
         Task MoreRequested();
+
+        Task RedirectToNhsAppPageRequested(string page);
     }
 }
