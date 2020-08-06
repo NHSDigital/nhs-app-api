@@ -40,6 +40,7 @@ class BrowserstackAndroidDriver : DriverSource {
             caps.setCapability("autoWebview", true)
             caps.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true)
             caps.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true)
+            caps.setCapability(AndroidMobileCapabilityType.DONT_STOP_APP_ON_RESET, true)
 
             caps.setCapability("project", "NHSApp")
             caps.setCapability("build", Config.instance.browserstackBuild)

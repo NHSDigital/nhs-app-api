@@ -3,10 +3,10 @@ package pages
 import config.Config
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
+import io.appium.java_client.android.AndroidDriver
 import utils.GlobalSerenityHelpers
 import utils.getOrFail
 import webdrivers.getSpecificDriver
-import webdrivers.isAndroid
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -99,13 +99,11 @@ open class SessionExpiry : NativePageObject() {
 
     private fun backgroundAppFor(delay: Duration) {
         val driver = driver.getSpecificDriver<AppiumDriver<MobileElement>>()
-        when (driver.isAndroid()) {
-            true -> driver.runAppInBackground(delay)
-            false -> {
-                driver.runAppInBackground(Duration.ofSeconds(-1))
-                waitFor(delay)
-                driver.activateApp(GlobalSerenityHelpers.APP_BUNDLE_ID.getOrFail())
-            }
+        driver.runAppInBackground(Duration.ofSeconds(-1))
+        waitFor(delay)
+        when (driver is AndroidDriver) {
+            true -> driver.launchApp()
+            false -> driver.activateApp(GlobalSerenityHelpers.APP_BUNDLE_ID.getOrFail())
         }
     }
 
