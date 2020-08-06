@@ -1,6 +1,7 @@
 # Configure Service Journey Rules
 
 ## Introduction
+
 The service journey rules configuration within the backendworker allows for certain features to be turned on and off for specific GP suppliers and GP practices using their ODS code. It also allows for different GP supplier behaviours to be catered for without having to handle this logic on the front end.
 
 The configurations are within the configurations folder in the backendworker:
@@ -26,6 +27,7 @@ The `Globals` folder currently holds `PublicHealthNotifications` which contains 
 One of the files in this folder is `gpinfo.csv` this file is useful if you are wanting to find out which supplier an ODS code belongs to. Just search for the ODS code in this file.
 
 ## Example: Turning off GP surgery Messages for an EMIS user
+
 Say you wanted to test that GP Surgery Messages was not accessible in the app when the user did not have it turned on.
 
 - If you know the ODS code of that user, for example if it was A29928, navigate to the folder `configurations > im1_messaging > odscode_A29928_enabled.yaml` and change isEnabled from true to false.
@@ -38,11 +40,10 @@ Say you wanted to test that GP Surgery Messages was not accessible in the app wh
 
 Due to the need of the NHS app to integrate with a range of different suppliers. Different suppliers of course have different functionality for the same area. The best example of using SJR to determine how the front end should handle these differences is in GP Surgery Messaging.
 
-Under `im1Messaging` in a yaml file there are other properties as well as `isEnabled`. 
+Under `im1Messaging` in a yaml file there are other properties as well as `isEnabled`.
 
 ![im1 Messaging](../images/How_Tos/configure_sjr_im1_messaging.png)
 
-Take `sendMessageSubject` as an example. When a patient sends a message using the EMIS system a subject is required, so for EMIS ods codes and in `emis_supplier.yaml` it is set to true. TPP does not need a subject to send a message so we then turn it off in the TPP SJR configuration files. 
+Take `sendMessageSubject` as an example. When a patient sends a message using the EMIS system a subject is required, so for EMIS ods codes and in `emis_supplier.yaml` it is set to true. TPP does not need a subject to send a message so we then turn it off in the TPP SJR configuration files.
 
-The same goes
-for the `requiresDetailsRequest` property, EMIS requires an extra API call to retrieve more details about a message but TPP responds with all the information to populate the front end from the initial API call so we use this property to determine the web behaviour.
+The same goes for the `requiresDetailsRequest` property, EMIS requires an extra API call to retrieve more details about a message but TPP responds with all the information to populate the front end from the initial API call so we use this property to determine the web behaviour.

@@ -16,6 +16,10 @@ done
 
 DOCKER_COMPOSE_FILES_ARGS+=(-f "docker/docker-compose.nhslogin-${LOGINENV:-ext}.yml")
 
+if [ -n "$PROXY" ]; then
+  DOCKER_COMPOSE_FILES_ARGS+=(-f "docker/squid/docker-compose.yml")
+fi
+
 for file in $(env | grep _DOCKER_PORTS | sed "s#^.*_DOCKER_PORTS=#docker/#"); do
   DOCKER_COMPOSE_FILES_ARGS+=(-f "$file")
 done
