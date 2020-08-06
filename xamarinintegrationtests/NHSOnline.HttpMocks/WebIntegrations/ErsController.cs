@@ -17,6 +17,7 @@ namespace NHSOnline.HttpMocks.WebIntegrations
                         <meta name=""viewport"" content=""width=device-width, initial-scale=1, shrink-to-fit=no"">
                         <link rel=""stylesheet"" href=""https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"" integrity=""sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"" crossorigin=""anonymous"">
                         <title>eRS Web Integration</title>
+                        <script type=""text/javascript"" src=""http://web.local.bitraft.io:3000/js/v1/nhsapp.js""></script>
                     </head>
                     <body>
                         <div class=""jumbotron"">
@@ -28,6 +29,8 @@ namespace NHSOnline.HttpMocks.WebIntegrations
                                 <li class=""list-group-item""><a href=""http://auth.nhslogin.stubs.local.bitraft.io:8080/citizenid/authorize"">NHS Login</a></li>
                                 <li class=""list-group-item""><a href=""http://stubs.local.bitraft.io:8080/nhsuk/covid"">Covid</a></li>
                             </ul>
+                            <button onclick=""nhsapp.navigation.goToPage(nhsapp.navigation.AppPage.APPOINTMENTS);"">NHS App Appointments</button>
+                            <h2 class=""display-5"">Headers</h2>
                             <ul class=""list-group"">
                                 <li class=""list-group-item"">Host: {Request.Host}</li>
                                 <li class=""list-group-item"">Path: {Request.Path}</li>
@@ -56,6 +59,7 @@ namespace NHSOnline.HttpMocks.WebIntegrations
                         <meta name=""viewport"" content=""width=device-width, initial-scale=1, shrink-to-fit=no"">
                         <link rel=""stylesheet"" href=""https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"" integrity=""sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"" crossorigin=""anonymous"">
                         <title>eRS Web Integration Internal Page</title>
+                        <script type=""text/javascript"" src=""http://web.local.bitraft.io:3000/js/v1/nhsapp.js""></script>
                     </head>
                     <body>
                         <div class=""jumbotron"">
@@ -65,6 +69,8 @@ namespace NHSOnline.HttpMocks.WebIntegrations
                             <ul class=""list-group"">
                                 <li class=""list-group-item""><a href=""/NhsLogin"">Back</a></li>
                             </ul>
+                            <button onclick=""nhsapp.navigation.goToPage(nhsapp.navigation.AppPage.APPOINTMENTS);"">NHS App Appointments</button>
+                            <h2 class=""display-5"">Headers</h2>
                             <ul class=""list-group"">
                                 <li class=""list-group-item"">Host: {Request.Host}</li>
                                 <li class=""list-group-item"">Path: {Request.Path}</li>

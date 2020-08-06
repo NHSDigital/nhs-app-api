@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     public class WebIntegrationTests
     {
         [NhsAppAndroidTest]
-        public void APatientCanFollowLinksInAWebIntegrationAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanFollowLinksInAWebIntegrationAndReturnUsingJsApiAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new TppPatient()
                 .WithName(b => b.GivenName("David").FamilyName("April"));
@@ -74,11 +74,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .ReturnToApp();
 
             AndroidErsPage
+                .AssertOnPage(driver)
+                .PageContent.NhsAppAppointments();
+
+            AndroidAppointmentsPage
                 .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
-        public void APatientCanFollowLinksInAWebIntegrationIos(IIOSDriverWrapper driver)
+        public void APatientCanFollowLinksInAWebIntegrationAndReturnUsingJsApiIos(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
                 .WithName(b => b.GivenName("David").FamilyName("June"));
@@ -128,6 +132,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .ReturnToApp();
 
             IOSErsPage
+                .AssertOnPage(driver)
+                .PageContent.NhsAppAppointments();
+
+            IOSAppointmentsPage
                 .AssertOnPage(driver);
         }
 
