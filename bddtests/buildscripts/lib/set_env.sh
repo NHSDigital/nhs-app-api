@@ -41,6 +41,13 @@ if [ -n "${TF_BUILD}" ]; then
   
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
   DOCKER_USER="${USER}"
+else
+  # cache gradle files locally in a volume
+  if [ -n "$(docker volume ls -q -f "name=${GRADLE_CACHE_VOLUME}")" ]; then
+    docker volume create "${GRADLE_CACHE_VOLUME}"
+  fi
+
+  DOCKER_ARGS+=(-v "${GRADLE_CACHE_VOLUME}:${DOCKER_ROOT}data/.gradle")
 fi
 
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")

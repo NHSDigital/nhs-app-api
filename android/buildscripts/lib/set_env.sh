@@ -15,6 +15,13 @@ if [ -n "${TF_BUILD}" ]; then
   # cache gradle files when running in devops
   mkdir -p "${GRADLE_PATH}"
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
+else
+  # cache gradle files locally in a volume
+  if [ -n "$(docker volume ls -q -f "name=${GRADLE_CACHE_VOLUME}")" ]; then
+    docker volume create "${GRADLE_CACHE_VOLUME}"
+  fi
+
+  DOCKER_ARGS+=(-v "${GRADLE_CACHE_VOLUME}:${DOCKER_ROOT}data/.gradle")
 fi
 
 DOCKER_ARGS+=(-v "${REPO_ROOT}:${DOCKER_ROOT}data/repo")

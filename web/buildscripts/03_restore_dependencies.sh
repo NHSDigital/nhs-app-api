@@ -13,7 +13,6 @@ source "buildscripts/lib/functions.sh"
 function restore_build_dependencies() {
   docker build \
     --progress=plain \
-    --no-cache \
     --target=build_dependencies \
     --cache-from=local/nhsonline-web-production-dependencies \
     --cache-from=local/nhsonline-web-build-dependencies \
@@ -24,6 +23,7 @@ function restore_build_dependencies() {
 
 function restore_production_dependencies() {
   docker build \
+    --progress=plain \
     --target=production_dependencies \
     --cache-from=local/nhsonline-web-production-dependencies \
     --tag local/nhsonline-web-production-dependencies \

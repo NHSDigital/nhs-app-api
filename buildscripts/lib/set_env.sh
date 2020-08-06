@@ -28,6 +28,8 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd)"
 NPMRC_PATH="${HOME}/.npmrc"
 MVN_CFG_PATH="${HOME}/.m2/settings.xml"
 
+GRADLE_CACHE_VOLUME="gradle-cache"
+
 DOCKER_ROOT="/"
 
 if [[ $(uname -s) =~ ^MING.* ]]; then

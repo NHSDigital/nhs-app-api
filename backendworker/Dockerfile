@@ -4,7 +4,24 @@ WORKDIR /src
 
 COPY . .
 
-RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config dotnet restore
+# fetch nuget caches from volume (nuget does not work with a direct mount)
+RUN --mount=type=cache,id=nuget-cache,dst=/tmp/nuget-cache \
+    --mount=type=cache,id=nuget-packages,dst=/tmp/nuget-packages \
+    mkdir -p /root/.local/share/NuGet \
+      && mkdir -p /root/.nuget \
+      && mkdir -p /root/.local/share/NuGet/plugins-cache \
+      && cp -r /tmp/nuget-cache /root/.local/share/NuGet \
+      && cp -r /tmp/nuget-packages /root/.nuget
+
+RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config \
+    dotnet restore
+
+# update nuget caches volume
+RUN --mount=type=cache,id=nuget-cache,dst=/tmp/nuget-cache \
+    --mount=type=cache,id=nuget-packages,dst=/tmp/nuget-packages \
+    cp -r /root/.local/share/NuGet/v3-cache /tmp/nuget-cache \
+      && cp -r /root/.local/share/NuGet/plugins-cache /tmp/nuget-cache \
+      && cp -r /root/.nuget/packages /tmp/nuget-packages
 
 FROM dependencies as built
 ARG COMMIT_ID

@@ -11,11 +11,12 @@ COPY lint/.npmrc lint/.npmrc
 COPY lint/package.json lint/package.json
 COPY lint/package-lock.json lint/package-lock.json
 
-RUN npm install -g npm-audit-ci-wrapper
-
-RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc npm run audit \
-  && cd lint \
-  && npm run audit
+RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
+    --mount=type=cache,id=npm,dst=/root/.npm \
+    npm install -g npm-audit-ci-wrapper \
+      && npm run audit \
+      && cd lint \
+      && npm run audit
 
 # Production Dependencies
 FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 AS production_dependencies
@@ -27,7 +28,9 @@ COPY package-lock.json .
 RUN npm set progress=false \
   && npm config set depth 0
 
-RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc npm install --only=production
+RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
+    --mount=type=cache,id=npm,dst=/root/.npm \
+    npm install --only=production
 
 # Build Dependencies
 FROM production_dependencies as build_dependencies
@@ -36,13 +39,17 @@ COPY lint/.npmrc lint/.npmrc
 COPY lint/package.json lint/package.json
 COPY lint/package-lock.json lint/package-lock.json
 
-RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc npm install \
-  && cd lint \
-  && npm install
+RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
+    --mount=type=cache,id=npm,dst=/root/.npm \
+    npm install \
+      && cd lint \
+      && npm install
 
-RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc npm run outdated \
-  && cd lint \
-  && npm run outdated
+RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
+    --mount=type=cache,id=npm,dst=/root/.npm \
+    npm run outdated \
+      && cd lint \
+      && npm run outdated
 
 # Lint
 FROM build_dependencies as lint
