@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace NHSOnline.HttpMocks.Domain
 {
@@ -53,6 +54,8 @@ namespace NHSOnline.HttpMocks.Domain
 
             return null;
         }
+
+        public IEnumerable<Patient> All() => _idLookup.Values.Distinct();
 
         public IEnumerator<Patient> GetEnumerator() => _idLookup.Values.GetEnumerator();
 
