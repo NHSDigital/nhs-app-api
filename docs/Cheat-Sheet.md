@@ -86,6 +86,10 @@ See [Android - Running in Emulator](Solution-Areas/android.md#running-in-emulato
 
 See [Access local services from physical iOS device](How-Tos/access-local-services-from-physical-ios-device.md).
 
+### Run physical Android device pointing at local services
+
+See [Access local services from physical Android device](How-Tos/access-local-services-from-physical-android-device.md).
+
 ### Debugging web locally
 
 ```bash
