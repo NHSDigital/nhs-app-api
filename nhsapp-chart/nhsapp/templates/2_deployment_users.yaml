@@ -114,6 +114,11 @@ spec:
         {{- end }}
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
+        - name: NHSAPP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-api-key-{{ .Chart.AppVersion }}
+              key: apikey
         volumeMounts:
         - name: session-key
           mountPath: "/secrets/session-key"

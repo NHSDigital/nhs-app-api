@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
             // Arrange
             var userDevice = new UserDevice();
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice }));
 
             // Act
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(),-1))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
 
             // Act
@@ -121,6 +121,36 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Act
             Func<Task> act = async () => await _systemUnderTest.Delete(nhsLoginId, deviceId);
+
+            // Assert
+            act.Should().Throw<AggregateException>();
+        }
+
+        [TestMethod]
+        public async Task UpdateOne_WhenRecordExists_ReturnsUpdatedResult()
+        {
+            // Arrange
+            _mockRepository.Setup(x =>
+                    x.Update(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<UpdateRecordBuilder<UserDevice>>(), It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryUpdateResult<UserDevice>.Updated());
+
+            // Act
+            var result = await _systemUnderTest.UpdateOne("NhsLoginId", "DeviceId", new UpdateRecordBuilder<UserDevice>());
+
+            // Assert
+            _mockRepository.VerifyAll();
+
+            result.Should().BeOfType<RepositoryUpdateResult<UserDevice>.Updated>();
+        }
+
+        [TestMethod]
+        [DataRow(null, null)]
+        [DataRow(null, "test")]
+        [DataRow("test", null)]
+        public void UpdateOne_WithInvalidArguments_ThrowsException(string nhsLoginId, string deviceId)
+        {
+            // Act
+            Func<Task> act = async () => await _systemUnderTest.UpdateOne(nhsLoginId, deviceId, new UpdateRecordBuilder<UserDevice>());
 
             // Assert
             act.Should().Throw<AggregateException>();

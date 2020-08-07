@@ -22,7 +22,8 @@ namespace NHSOnline.Backend.Repository
 
         public Task<RepositoryFindResult<TRecord>> Find(
             Expression<Func<TRecord, bool>> filter,
-            string recordName);
+            string recordName,
+            int maxRecords = -1);
 
         public Task<RepositoryDeleteResult<TRecord>> Delete(
             Expression<Func<TRecord, bool>> filter,

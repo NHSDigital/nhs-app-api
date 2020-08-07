@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         private const string DevicePns = "DevicePns";
         private const string InstallationId = "InstallId";
         private const string RegistrationId = "RegistrationId";
+        private const string NhsLoginId = "Nhsloginid";
         private readonly DeviceType _deviceType = DeviceType.Android;
 
         [TestInitialize]
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var mockLogger = new Mock<ILogger<AzureNotificationHubRegistrationService>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, "NhsLoginId"),
+                new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),
                 new Claim("nhs_number", "NhsNumber"),
             });
 
@@ -76,7 +77,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();
@@ -119,7 +120,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();
@@ -137,11 +138,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .ReturnsAsync(new List<NotificationRegistrationItem>());
 
             _mockInstallationFactory
-                .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<DeviceType>(), It.IsAny<string>()))
+                .Setup(x => x.Create(DevicePns, _deviceType, NhsLoginId))
                 .Throws<ArgumentOutOfRangeException>();
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();
@@ -172,7 +173,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .ThrowsAsync(new HttpRequestException());
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockAzureNotificationsHubClient.VerifyAll();
@@ -201,7 +202,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .ThrowsAsync(new DivideByZeroException());
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockAzureNotificationsHubClient.VerifyAll();
@@ -237,7 +238,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Throws<HttpRequestException>();
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();
@@ -275,7 +276,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 .Throws<Exception>();
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();
@@ -325,7 +326,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                             HttpWebResponseHelper.CreateFromStatusCode(statusCode))));
 
             // Act
-            var result = await _systemUnderTest.Register(DevicePns, _deviceType, _accessToken);
+            var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
 
             // Assert
             _mockInstallationFactory.VerifyAll();

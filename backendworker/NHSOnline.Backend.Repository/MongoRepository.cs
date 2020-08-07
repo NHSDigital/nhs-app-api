@@ -100,39 +100,26 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
-        public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName)
+        public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName, int maxRecords = -1)
         {
             try
             {
-                var records = await FindRecords(filter, recordName);
+                var cursor = await FindRecords(filter, recordName);
 
-                if (!await records.MoveNextAsync() || !records.Current.Any())
+                if (!await cursor.MoveNextAsync() || !cursor.Current.Any())
                 {
                     _logger.LogInformation($"Mongo Find {recordName} Successful. " +
                                            "No records found");
 
-                    records.Dispose();
+                    cursor.Dispose();
                     return new RepositoryFindResult<TRecord>.NotFound();
                 }
 
                 _logger.LogInformation($"Mongo Find {recordName} Successful. " +
                                        $"One or more records found");
 
-                IEnumerable<TRecord> EnumerateResults()
-                {
-                    using (records)
-                    {
-                        do
-                        {
-                            foreach (var record in records.Current)
-                            {
-                                yield return record;
-                            }
-                        } while (records.MoveNext());
-                    }
-                }
-
-                return new RepositoryFindResult<TRecord>.Found(EnumerateResults());
+                var records = EnumerateResults(cursor, maxRecords).ToList();
+                return new RepositoryFindResult<TRecord>.Found(records);
             }
             catch (MongoException exception)
             {
@@ -172,6 +159,27 @@ namespace NHSOnline.Backend.Repository
             {
                 _logger.LogError(exception, $"Mongo Failure. Delete {recordName}.");
                 return new RepositoryDeleteResult<TRecord>.RepositoryError();
+            }
+        }
+
+        private IEnumerable<TRecord> EnumerateResults(IAsyncCursor<TRecord> records, int maxRecords)
+        {
+            using (records)
+            {
+                var recordCount = 0;
+                do
+                {
+                    foreach (var record in records.Current)
+                    {
+                        recordCount++;
+                        if (maxRecords != -1 && maxRecords < recordCount)
+                        {
+                            yield break;
+                        }
+
+                        yield return record;
+                    }
+                } while (records.MoveNext());
             }
         }
 

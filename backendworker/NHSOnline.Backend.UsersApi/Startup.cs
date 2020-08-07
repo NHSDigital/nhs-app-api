@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -47,6 +47,8 @@ namespace NHSOnline.Backend.UsersApi
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
+            SetupApiKeys(services);
+
             services.AddOptions();
             services.AddCorrelationId();
 
@@ -56,6 +58,14 @@ namespace NHSOnline.Backend.UsersApi
             _modularStartup.ConfigureServices(services);
 
             ConfigureAuth(services);
+        }
+
+        private void SetupApiKeys(IServiceCollection services)
+        {
+            var secureKeyValue = Configuration.GetOrThrow("NHSAPP_API_KEY", _logger);
+            var apiKeyConfig = new ApiKeyConfig(new[] { new SecureApiKey("ExternalService", secureKeyValue) });
+            services.AddSingleton<IApiKeyConfig>(apiKeyConfig);
+            services.AddSingleton<IGetApiKeyQuery, InMemoryGetApiKeyQuery>();
         }
 
         private void SetupConfigurationSettings(IServiceCollection services)
@@ -92,6 +102,7 @@ namespace NHSOnline.Backend.UsersApi
             app.UseRouting();
             app.UseCors(Configuration);
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCorrelationId(new CorrelationIdOptions
             {
@@ -134,6 +145,9 @@ namespace NHSOnline.Backend.UsersApi
                         RequireExpirationTime = true,
                         ValidateLifetime = true
                     };
+                })
+                .AddApiKeySupport(options =>
+                {
                 });
         }
     }

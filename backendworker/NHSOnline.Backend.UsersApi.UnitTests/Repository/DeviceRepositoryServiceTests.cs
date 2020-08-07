@@ -23,18 +23,19 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         private Mock<IUserDeviceRepository> _mockDeviceRepository;
         private Mock<IDeviceIdGenerator> _mockDeviceIdGenerator;
         private AccessToken _accessToken;
-        private string _devicePns;
+        private const string DevicePns = "DevicePns";
+        private const string DeviceId = "deviceId";
+        private const string NhsLoginId = "nhsLoginId";
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _devicePns = "DevicePns";
             _mockDeviceRepository = new Mock<IUserDeviceRepository>();
             _mockDeviceIdGenerator = new Mock<IDeviceIdGenerator>();
             var mockLogger = new Mock<ILogger<DevicesController>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, "Subject"),
+                new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),
                 new Claim("nhs_number", "NHSNumber"),
             });
 
@@ -45,7 +46,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 
         private RegisterDeviceRequest CreateRegisterDeviceRequest()
         {
-            return new RegisterDeviceRequest { DevicePns = _devicePns, DeviceType = DeviceType.Android };
+            return new RegisterDeviceRequest { DevicePns = DevicePns, DeviceType = DeviceType.Android };
         }
 
         [TestMethod]
@@ -57,10 +58,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
             var registrationExpiry = DateTime.Now;
             var registration = new NotificationRegistrationResult
                 { Id = registrationId };
-            var deviceId = "DeviceId";
-            var expectedUserDevice = new UserDevice { DeviceId = deviceId };
+            var expectedUserDevice = new UserDevice { DeviceId = DeviceId };
 
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(deviceId);
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(DeviceId);
             _mockDeviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>()))
                 .ReturnsAsync(new RepositoryCreateResult<UserDevice>.Created(expectedUserDevice));
 
@@ -81,9 +81,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Arrange
             var request = CreateRegisterDeviceRequest();
-            var deviceId = "DeviceId";
 
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(deviceId);
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(DeviceId);
             _mockDeviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>())).Throws(new ArgumentException("Test"));
 
             // Act
@@ -101,9 +100,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Arrange
             var request = CreateRegisterDeviceRequest();
-            var deviceId = "DeviceId";
 
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(deviceId);
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, request)).Returns(DeviceId);
             _mockDeviceRepository.Setup(x => x.Create(It.IsAny<UserDevice>()))
                 .ReturnsAsync(new RepositoryCreateResult<UserDevice>.RepositoryError());
 
@@ -121,15 +119,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Find_Success()
         {
             // Arrange
-            var deviceId = "DeviceId";
-            var userDevice = new UserDevice { DeviceId = deviceId };
+            var userDevice = new UserDevice { DeviceId = DeviceId };
 
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, _devicePns)).Returns(deviceId);
-            _mockDeviceRepository.Setup(x => x.Find(_accessToken.Subject, deviceId))
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, DevicePns)).Returns(DeviceId);
+            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId, DeviceId))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice }));
 
             // Act
-            var result = await _systemUnderTest.Find(_devicePns, _accessToken);
+            var result = await _systemUnderTest.Find(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceIdGenerator.VerifyAll();
@@ -143,14 +140,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Find_RepositoryDoesNotFindRecord_ReturnNotFound()
         {
             // Arrange
-            var deviceId = "DeviceId";
-
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, _devicePns)).Returns(deviceId);
-            _mockDeviceRepository.Setup(x => x.Find(_accessToken.Subject, deviceId))
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, DevicePns)).Returns(DeviceId);
+            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId, DeviceId))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Find(_devicePns, _accessToken);
+            var result = await _systemUnderTest.Find(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceIdGenerator.VerifyAll();
@@ -163,14 +158,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Find_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            var deviceId = "DeviceId";
-
-            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, _devicePns)).Returns(deviceId);
-            _mockDeviceRepository.Setup(x => x.Find(_accessToken.Subject, It.IsAny<string>()))
+            _mockDeviceIdGenerator.Setup(x => x.Generate(_accessToken, DevicePns)).Returns(DeviceId);
+            _mockDeviceRepository.Setup(x => x.Find(NhsLoginId, It.IsAny<string>()))
                 .Throws(new ArgumentException("Test"));
 
             // Act
-            var result = await _systemUnderTest.Find(_devicePns, _accessToken);
+            var result = await _systemUnderTest.Find(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceIdGenerator.VerifyAll();
@@ -180,15 +173,87 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         }
 
         [TestMethod]
+        public async Task FindRegistrations_RecordsFound_ReturnsFoundMany()
+        {
+            // Arrange
+            var userDevice1 = new UserDevice { DeviceId = "DeviceId1" };
+            var userDevice2 = new UserDevice { DeviceId = "DeviceId2" };
+            var userDevice3 = new UserDevice { DeviceId = "DeviceId3" };
+
+            _mockDeviceRepository
+                .Setup(x => x.FindRegistrations(3) )
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice1, userDevice2, userDevice3 }));
+
+            // Act
+            var result = await _systemUnderTest.FindRegistrations(3);
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            var objectResult = result.Should().BeAssignableTo<SearchDeviceResult.FoundMany>();
+            objectResult.Subject.UserDevices.Should().BeEquivalentTo(userDevice1, userDevice2, userDevice3);
+        }
+
+        [TestMethod]
+        public async Task FindRegistrations_RecordsNotFound_ReturnsNotFound()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.FindRegistrations(3) )
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.FindRegistrations(3);
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<SearchDeviceResult.NotFound>();
+        }
+
+        [TestMethod]
+        public async Task FindRegistrations_RepositoryError_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.FindRegistrations(3) )
+                .ReturnsAsync(new RepositoryFindResult<UserDevice>.RepositoryError());
+
+            // Act
+            var result = await _systemUnderTest.FindRegistrations(3);
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<SearchDeviceResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task FindRegistrations_RepositoryThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.FindRegistrations(3) )
+                .Throws(new ArgumentException("Test"));
+
+            // Act
+            var result = await _systemUnderTest.FindRegistrations(3);
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<SearchDeviceResult.InternalServerError>();
+        }
+
+        [TestMethod]
         public async Task Delete_Success()
         {
             // Arrange
-            var deviceId = "DeviceId";
-            _mockDeviceRepository.Setup(x => x.Delete(_accessToken.Subject, deviceId))
+            _mockDeviceRepository.Setup(x => x.Delete(NhsLoginId, DeviceId))
                 .ReturnsAsync(new RepositoryDeleteResult<UserDevice>.Deleted());
 
             // Act
-            var result = await _systemUnderTest.Delete(deviceId, _accessToken);
+            var result = await _systemUnderTest.Delete(DeviceId, NhsLoginId);
 
             // Assert
             _mockDeviceRepository.VerifyAll();
@@ -200,12 +265,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Delete_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            var deviceId = "DeviceId";
-            _mockDeviceRepository.Setup(x => x.Delete(_accessToken.Subject, deviceId))
+            _mockDeviceRepository.Setup(x => x.Delete(NhsLoginId, DeviceId))
                 .Throws(new ArgumentException("Test"));
 
             // Act
-            var result = await _systemUnderTest.Delete(deviceId, _accessToken);
+            var result = await _systemUnderTest.Delete(DeviceId, NhsLoginId);
 
             // Assert
             _mockDeviceRepository.VerifyAll();
@@ -217,17 +281,101 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         public async Task Delete_RepositoryError_ReturnsBadGateway()
         {
             // Arrange
-            var deviceId = "DeviceId";
-            _mockDeviceRepository.Setup(x => x.Delete(_accessToken.Subject, deviceId))
+            _mockDeviceRepository.Setup(x => x.Delete(NhsLoginId, DeviceId))
                 .ReturnsAsync(new RepositoryDeleteResult<UserDevice>.RepositoryError());
 
             // Act
-            var result = await _systemUnderTest.Delete(deviceId, _accessToken);
+            var result = await _systemUnderTest.Delete(DeviceId, NhsLoginId);
 
             // Assert
             _mockDeviceRepository.VerifyAll();
 
             result.Should().BeAssignableTo<DeleteDeviceResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task Update_RespositoryUpdateSuccessful_ReturnsUpdated()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.UpdateOne(NhsLoginId, DeviceId, It.IsAny<UpdateRecordBuilder<UserDevice>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<UserDevice>.Updated());
+
+            // Act
+            var result = await _systemUnderTest.Update(DeviceId, NhsLoginId, "registrationId");
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<UpdateDeviceResult.Updated>();
+        }
+
+        [TestMethod]
+        public async Task Update_RespositoryNotFound_ReturnsNotfound()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.UpdateOne(NhsLoginId, DeviceId, It.IsAny<UpdateRecordBuilder<UserDevice>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<UserDevice>.NotFound());
+
+            // Act
+            var result = await _systemUnderTest.Update(DeviceId, NhsLoginId,"registrationId");
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<UpdateDeviceResult.NotFound>();
+        }
+
+        [TestMethod]
+        public async Task Update_RespositoryError_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.UpdateOne(NhsLoginId, DeviceId, It.IsAny<UpdateRecordBuilder<UserDevice>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<UserDevice>.RepositoryError());
+
+            // Act
+            var result = await _systemUnderTest.Update(DeviceId, NhsLoginId,"registrationId");
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<UpdateDeviceResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task Update_RecordHasNotChanged_ReturnsUpdated()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.UpdateOne(NhsLoginId, DeviceId, It.IsAny<UpdateRecordBuilder<UserDevice>>()))
+                .ReturnsAsync(new RepositoryUpdateResult<UserDevice>.NoChange());
+
+            // Act
+            var result = await _systemUnderTest.Update(DeviceId, NhsLoginId,"registrationId");
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<UpdateDeviceResult.Updated>();
+        }
+
+        [TestMethod]
+        public async Task Update_RepositoryThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockDeviceRepository
+                .Setup(x => x.UpdateOne(NhsLoginId, DeviceId, It.IsAny<UpdateRecordBuilder<UserDevice>>()))
+                .Throws(new ArgumentException("test"));
+
+            // Act
+            var result = await _systemUnderTest.Update(DeviceId, NhsLoginId,"registrationId");
+
+            // Assert
+            _mockDeviceRepository.VerifyAll();
+
+            result.Should().BeAssignableTo<UpdateDeviceResult.InternalServerError>();
         }
     }
 }

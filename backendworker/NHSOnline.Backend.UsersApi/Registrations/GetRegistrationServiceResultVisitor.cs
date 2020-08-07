@@ -11,6 +11,11 @@ namespace NHSOnline.Backend.UsersApi.Registrations
             return new RegistrationExistsResult.Found();
         }
 
+        public RegistrationExistsResult Visit(SearchDeviceResult.FoundMany result)
+        {
+            return new RegistrationExistsResult.InternalServerError();
+        }
+
         public RegistrationExistsResult Visit(SearchDeviceResult.NotFound result)
         {
             return new RegistrationExistsResult.NotFound();

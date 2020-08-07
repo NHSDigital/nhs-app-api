@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
@@ -76,19 +77,63 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
         }
 
-        public async Task<DeleteDeviceResult> Delete(string deviceId, AccessToken accessToken)
+        public async Task<SearchDeviceResult> FindRegistrations(int maxRecords)
         {
             _logger.LogEnter();
 
             try
             {
-                var result = await _deviceRepository.Delete(accessToken.Subject, deviceId);
+                var repositoryResult = await _deviceRepository.FindRegistrations(maxRecords);
+                return repositoryResult.Accept(new RepositoryFindResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"User Device find failed with exception: {e}");
+                return new SearchDeviceResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<DeleteDeviceResult> Delete(string deviceId, string nhsLoginId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result = await _deviceRepository.Delete(nhsLoginId, deviceId);
                 return result.Accept(new RepositoryDeleteResultVisitor(deviceId));
             }
             catch (Exception e)
             {
                 _logger.LogError($"User Device deletion failed with exception: {e}");
                 return new DeleteDeviceResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<UpdateDeviceResult> Update(string deviceId, string nhsLoginId, string registrationId)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var recordBuilder = new UpdateRecordBuilder<UserDevice>();
+                recordBuilder.Set(x => x.RegistrationId, registrationId);
+                recordBuilder.Build();
+
+                var result = await _deviceRepository.UpdateOne(nhsLoginId, deviceId, recordBuilder);
+                return result.Accept(new RepositoryUpdateResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"User Device update failed with exception: {e}");
+                return new UpdateDeviceResult.InternalServerError();
             }
             finally
             {

@@ -198,6 +198,9 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
+          if [ -f "$$NHSAPP_API_KEY" ]; then
+            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
+          fi
           if [ -f "$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
             export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
           fi
@@ -214,6 +217,7 @@ services:
       - nhslogin_private_key
       - nhslogin_rsapass
       - azure_notification_hub_key
+      - nhsapp_api_key
 
   userinfo.local.bitraft.io:
     image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}

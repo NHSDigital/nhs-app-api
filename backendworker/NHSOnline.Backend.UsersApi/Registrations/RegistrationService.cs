@@ -8,27 +8,33 @@ using NHSOnline.Backend.UsersApi.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Registrations
 {
-    public class RegistrationService : IRegistrationService
+    internal class RegistrationService : IRegistrationService
     {
         private readonly INotificationRegistrationService _notificationService;
         private readonly IDeviceRepositoryService _deviceRepositoryService;
         private readonly ILogger<RegistrationService> _logger;
 
-        public RegistrationService(IDeviceRepositoryService deviceRepositoryService, INotificationRegistrationService notificationService,
-            ILogger<RegistrationService> logger)
+        public RegistrationService
+        (
+            IDeviceRepositoryService deviceRepositoryService,
+            INotificationRegistrationService notificationService,
+            ILogger<RegistrationService> logger
+        )
         {
             _notificationService = notificationService;
             _deviceRepositoryService = deviceRepositoryService;
             _logger = logger;
         }
 
-        public async Task<RegisterDeviceResult> CreateRegistration(RegisterDeviceRequest request, AccessToken accessToken)
+        public async Task<RegisterDeviceResult> CreateRegistration
+            (RegisterDeviceRequest request, AccessToken accessToken)
         {
             try
             {
                 _logger.LogEnter();
 
-                var registrationResult = await _notificationService.Register(request.DevicePns, request.DeviceType.Value, accessToken);
+                var registrationResult = await _notificationService.Register(request.DevicePns,
+                    request.DeviceType.Value, accessToken.Subject);
 
                 if (!(registrationResult is RegistrationResult.Success registrationSuccessResult))
                 {
@@ -58,7 +64,9 @@ namespace NHSOnline.Backend.UsersApi.Registrations
                 var registrationResult = await _notificationService.Exists(foundDeviceResult.UserDevice);
                 if (registrationResult is RegistrationExistsResult.NotFound)
                 {
-                    var deleteDeviceResult = await _deviceRepositoryService.Delete(foundDeviceResult.UserDevice.DeviceId, accessToken);
+                    var deleteDeviceResult =
+                        await _deviceRepositoryService.Delete(foundDeviceResult.UserDevice.DeviceId,
+                            accessToken.Subject);
 
                     if (!(deleteDeviceResult is DeleteDeviceResult.Success))
                     {
@@ -93,7 +101,8 @@ namespace NHSOnline.Backend.UsersApi.Registrations
                 {
                     case DeleteRegistrationResult.Success _:
                     case DeleteRegistrationResult.NotFound _:
-                        var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
+                        var deleteDeviceResult =
+                            await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken.Subject);
                         return deleteDeviceResult.Accept(new DeleteRegistrationServiceResultVisitor());
                     default:
                         return deleteRegistrationResult;

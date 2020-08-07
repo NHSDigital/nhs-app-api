@@ -24,9 +24,9 @@ namespace NHSOnline.Backend.Repository
 
         public class Found : RepositoryFindResult<TRecord>
         {
-            public IEnumerable<TRecord> Records { get; }
+            public ICollection<TRecord> Records { get; }
 
-            public Found(IEnumerable<TRecord> records)
+            public Found(ICollection<TRecord> records)
             {
                 Records = records;
             }

@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             // Arrange
             var userInfo = new UserAndInfo();
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(new[] { userInfo }));
 
             // Act
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
@@ -97,9 +97,9 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             var userInfo2 = new UserAndInfo();
             var expectedResults = new[] { userInfo1, userInfo2 };
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
-            
+
             // Act
             var result = await _systemUnderTest.FindByNhsNumber("NhsLoginId");
 
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             var userInfo2 = new UserAndInfo();
             var expectedResults = new[] { userInfo1, userInfo2 };
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.Found(expectedResults));
 
             // Act
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>()))
+                    x.Find(It.IsAny<Expression<Func<UserAndInfo, bool>>>(), It.IsAny<string>(), -1))
                 .ReturnsAsync(new RepositoryFindResult<UserAndInfo>.NotFound());
 
             // Act

@@ -20,8 +20,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         private Mock<IDeviceRepositoryService> _mockDeviceRepositoryService;
         private const string NhsNumber = "NhsNumber";
         private const string NhsLoginId = "NhsLoginId";
-        private const string devicePns = "device PNS";
-        private AccessToken AccessToken;
+        private const string DevicePns = "device PNS";
+        private AccessToken _accessToken;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,23 +34,23 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
                 _mockNotificationService.Object,
                 new Mock<ILogger<RegistrationService>>().Object);
 
-            AccessToken = AccessTokenMock.Generate(NhsLoginId, NhsNumber);
+            _accessToken = AccessTokenMock.Generate(NhsLoginId, NhsNumber);
         }
 
         [TestMethod]
         public async Task GetRegistration_SuccessResult()
         {
             // Arrange
-            var userDevice = new UserDevice { PnsToken = devicePns };
+            var userDevice = new UserDevice { PnsToken = DevicePns };
 
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.Found());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -63,11 +63,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_NotFoundUserDevice_ReturnsNotFoundResult()
         {
             // Arrange
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -79,19 +79,19 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_FoundOrphanUserDevice_DeletesOrphanAndReturnsNotFoundResult()
         {
             // Arrange
-            var userDevice = new UserDevice { PnsToken = devicePns };
+            var userDevice = new UserDevice { PnsToken = DevicePns };
 
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
-            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, AccessToken))
-                .ReturnsAsync(new DeleteDeviceResult.Success(devicePns));
+            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
+                .ReturnsAsync(new DeleteDeviceResult.Success(DevicePns));
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -104,19 +104,19 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_FoundOrphanUserDevice_DeleteBadGateway_ReturnsBadGatewayResult()
         {
             // Arrange
-            var userDevice = new UserDevice { PnsToken = devicePns };
+            var userDevice = new UserDevice { PnsToken = DevicePns };
 
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.NotFound());
 
-            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
                 .ReturnsAsync(new DeleteDeviceResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -129,11 +129,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_FindDeviceException_ReturnsInternalServerErrorResult()
         {
             // Arrange
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -145,11 +145,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_FindDeviceBadGateway_ReturnsBadGatewayResult()
         {
             // Arrange
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -161,16 +161,16 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_RegistrationExistsException_ReturnsInternalServerErrorResult()
         {
             // Arrange
-            var userDevice = new UserDevice { PnsToken = devicePns };
+            var userDevice = new UserDevice { PnsToken = DevicePns };
 
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -183,16 +183,16 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_RegistrationExistsBadGateway_ReturnsBadGatewayResult()
         {
             // Arrange
-            var userDevice = new UserDevice { PnsToken = devicePns };
+            var userDevice = new UserDevice { PnsToken = DevicePns };
 
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            var result = await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             // Assert
             _mockDeviceRepositoryService.VerifyAll();
@@ -205,11 +205,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         public async Task GetRegistration_DeviceDeletionException_ReturnsInternalServerErrorResult()
         {
             // Arrange
-            _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, AccessToken))
+            _mockDeviceRepositoryService.Setup(x => x.Find(DevicePns, _accessToken))
                 .Throws(new ArgumentException("Test"));
 
             // Act
-            Func<Task> act = async () => await _systemUnderTest.GetRegistration(devicePns, AccessToken);
+            Func<Task> act = async () => await _systemUnderTest.GetRegistration(DevicePns, _accessToken);
 
             //Assert
             await act.Should().ThrowAsync<ArgumentException>().WithMessage("Test");

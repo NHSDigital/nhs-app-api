@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Repository;
@@ -27,7 +26,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             _logger = logger;
         }
 
-        public async Task<RegistrationResult> Register(string devicePns, DeviceType deviceType, AccessToken accessToken)
+        public async Task<RegistrationResult> Register(string devicePns, DeviceType deviceType, string nhsLoginId)
         {
             try
             {
@@ -45,7 +44,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                     _logger.LogInformation("Existing registrations deleted");
                 }
 
-                var installation = _installationFactory.Create(devicePns, deviceType, accessToken.Subject);
+                var installation = _installationFactory.Create(devicePns, deviceType, nhsLoginId);
                 await _azureHubClient.CreateOrUpdateInstallation(installation);
 
                 _logger.LogInformation("New registration created");

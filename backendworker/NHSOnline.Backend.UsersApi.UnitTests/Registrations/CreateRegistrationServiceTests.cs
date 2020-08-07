@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             var userDevice = new UserDevice();
             var expectedResult = new RegisterDeviceResult.Created(userDevice);
 
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.BadGateway());
 
             // Act
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.InternalServerError());
 
             // Act
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .Throws(new ArgumentException("Test"));
 
             // Act
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
             // Assert
             _mockNotificationService.VerifyAll();
             _mockDeviceRepositoryService.VerifyAll();
-            
+
             result.Should().BeOfType<RegisterDeviceResult.InternalServerError>();
         }
 
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         {
             // Arrange
             var validRegisterDeviceRequest = CreateValidRegisterDeviceRequest();
-            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, _accessToken))
+            _mockNotificationService.Setup(x => x.Register(DevicePns, _deviceType, NhsLoginId))
                 .ReturnsAsync(new RegistrationResult.Success(new NotificationRegistrationResult()));
 
             _mockDeviceRepositoryService.Setup(x => x.Create(
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
 
             //Assert
             await act.Should().ThrowAsync<ArgumentException>().WithMessage("Test");
-            
+
             _mockNotificationService.VerifyAll();
             _mockDeviceRepositoryService.VerifyAll();
         }

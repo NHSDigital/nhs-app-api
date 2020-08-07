@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
         {
             // Arrange
             var record = new TestRepositoryRecord();
-            IEnumerable<TestRepositoryRecord>[] values = new[] { new[] { record } };
+            IEnumerable<TestRepositoryRecord>[] values = { new[] { record } };
             using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
             SetupFind().ReturnsAsync(cursorMock);
 
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Assert
             _mongoCollectionMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(new[] { record });
+                .Subject.Records.Should().BeEquivalentTo(record);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Arrange
             var record1 = new TestRepositoryRecord();
             var record2 = new TestRepositoryRecord();
-            IEnumerable<TestRepositoryRecord>[] values = new[] { new[] { record1 }, new[] { record2 } };
+            IEnumerable<TestRepositoryRecord>[] values = { new[] { record1 }, new[] { record2 } };
             using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
             SetupFind().ReturnsAsync(cursorMock);
 
@@ -57,7 +57,29 @@ namespace NHSOnline.Backend.Repository.UnitTests
             // Assert
             _mongoCollectionMock.VerifyAll();
             result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(new[] { record1, record2 });
+                .Subject.Records.Should().BeEquivalentTo(record1, record2);
+        }
+
+        [TestMethod]
+        public async Task Find_WhenMaxRecordsIsPassed_ReturnsFoundWithSpecifiedNumberOfRecords()
+        {
+            // Arrange
+            var record1 = new TestRepositoryRecord();
+            var record2 = new TestRepositoryRecord();
+            var record3 = new TestRepositoryRecord();
+            var record4 = new TestRepositoryRecord();
+            var record5 = new TestRepositoryRecord();
+            IEnumerable<TestRepositoryRecord>[] values = { new[] { record1, record2 }, new[] { record3, record4, record5 } };
+            using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
+            SetupFind().ReturnsAsync(cursorMock);
+
+            // Act
+            var result = await _systemUnderTest.Find(_ => true, "recordName", 3);
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(record1, record2, record3);
         }
 
         [TestMethod]
@@ -105,7 +127,7 @@ namespace NHSOnline.Backend.Repository.UnitTests
         private class MockAsyncCursor<T> : IAsyncCursor<T>
         {
             private readonly Queue<IEnumerable<T>> _batches;
-            private IEnumerable<T> _current = null;
+            private IEnumerable<T> _current;
 
             public MockAsyncCursor(IEnumerable<IEnumerable<T>> batches)
             {
