@@ -30,7 +30,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
         {
             if (e.OldElement == null)
             {
-                NavigationDelegate = new DelegatingWebViewNavigationDelegate(NavigationDelegate);
+                NavigationDelegate = new WebViewNavigationDelegate(this);
             }
 
             if (e.OldElement is NhsAppWebView oldNhsAppWebView)

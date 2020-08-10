@@ -1,10 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Logging.Scopes;
 using NHSOnline.App.Threading;
 
 namespace NHSOnline.App.Logging
@@ -36,19 +34,39 @@ namespace NHSOnline.App.Logging
                 return;
             }
 
-            if (IsEnabled(logLevel)
-                && TryCreateMessage(state, exception, formatter, out var message))
+            if (IsEnabled(logLevel) &&
+                TryCreateMessage(state, exception, formatter, out var message))
             {
-                Task.Run(async () =>
+                Task.Run(async () => await LogInternal(logLevel, message).ResumeOnThreadPool())
+                    .ContinueWith(ReportFailure, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+            }
+        }
+
+        private async Task LogInternal(LogLevel logLevel, string message)
+        {
+            using (BeginScope(NhsCloudLogging.Instance))
+            {
+                await _cloudLog
+                    .Log(logLevel, _name, message, DateTime.UtcNow)
+                    .ResumeOnThreadPool();
+            }
+        }
+
+        private void ReportFailure(Task task)
+        {
+            try
+            {
+                if (task.Exception != null)
                 {
-                    using (BeginScope(typeof(NhsCloudLogging)))
-                    {
-                        await _cloudLog.Log(logLevel, _name, message, DateTime.UtcNow).ResumeOnThreadPool();
-                    }
-                }).ContinueWith(task =>
+                    _nativeLog.Log(LogLevel.Error, nameof(CloudLogger), $"Failed to log message: {task.Exception}");
+                }
+                else
                 {
-                    _nativeLog.Log(LogLevel.Error, "clougLogger", "Failed to log message");
-                }, TaskScheduler.Default);
+                    _nativeLog.Log(LogLevel.Error, nameof(CloudLogger), "Failed to log message");
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -78,9 +96,9 @@ namespace NHSOnline.App.Logging
         private bool ScopeIncludesNhsCloud<TState>(TState state)
         {
             var containsExpectedScope = false;
-            _scopeProvider.ForEachScope((s, scopeLevel) =>
+            _scopeProvider.ForEachScope((scope, scopeLevel) =>
             {
-                if (Equals(s, typeof(NhsCloudLogging)))
+                if (scope is NhsCloudLogging)
                 {
                     containsExpectedScope = true;
                 }
@@ -92,6 +110,15 @@ namespace NHSOnline.App.Logging
         public IDisposable BeginScope<TState>(TState state)
         {
             return _scopeProvider.Push(state);
+        }
+
+        private sealed class NhsCloudLogging
+        {
+            internal static NhsCloudLogging Instance { get; } = new NhsCloudLogging();
+
+            private NhsCloudLogging()
+            {
+            }
         }
     }
 }

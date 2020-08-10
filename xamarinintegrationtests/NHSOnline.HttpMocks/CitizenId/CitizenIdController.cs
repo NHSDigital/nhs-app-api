@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,7 @@ namespace NHSOnline.HttpMocks.CitizenId
                         <meta charset='utf-8'>
                         <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
                         <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                        <link rel='stylesheet' href='http://{AuthHostName}:8080/citizenid/Page/InternalServerError.html'>
                         <title>NHS Login Stubbed</title>
                         <script>
                             function Login(patientId) {{
@@ -72,6 +74,9 @@ namespace NHSOnline.HttpMocks.CitizenId
                                 <li><a href='javascript: window.history.back();'>Back</a></li>
                                 <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
                                 <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html' target='_blank'>Internal Page (New Window)</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/NotFound.html'>Not Found</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/InternalServerError.html'>Internal Server Error</a></li>
+                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/FailFast.html'>Boom</a></li>
                                 <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
                             </ul>
                             <hr>
@@ -167,6 +172,76 @@ namespace NHSOnline.HttpMocks.CitizenId
                     </body>
                 </html>",
                 "text/html");
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/InternalServerError.html")]
+        public IActionResult InternalServerError()
+        {
+            return new ContentResult
+            {
+                Content = $@"
+                    <html>
+                        <head>
+                            <meta charset='utf-8'>
+                            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+                            <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                            <title>NHS Login Stubbed - Internal Server Error</title>
+                        </head>
+                        <body>
+                            <div class='container'>
+                                <h1 class='display-4'>NHS Login - Internal Server Error</h1>
+                                <ul>
+                                    <li><a href='javascript: window.history.back();'>Back</a></li>
+                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
+                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
+                                    <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
+                                </ul>
+                            </div>
+                        </body>
+                    </html>",
+                ContentType = "text/html",
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            };
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/NotFound.html")]
+        public IActionResult NotFoundPage()
+        {
+            return new ContentResult
+            {
+                Content = $@"
+                    <html>
+                        <head>
+                            <meta charset='utf-8'>
+                            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+                            <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
+                            <title>NHS Login Stubbed - Not Found</title>
+                        </head>
+                        <body>
+                            <div class='container'>
+                                <h1 class='display-4'>NHS Login - Not Found</h1>
+                                <ul>
+                                    <li><a href='javascript: window.history.back();'>Back</a></li>
+                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
+                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
+                                    <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
+                                </ul>
+                            </div>
+                        </body>
+                    </html>",
+                ContentType = "text/html",
+                StatusCode = (int)HttpStatusCode.NotFound
+            };
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/FailFast.html")]
+        public IActionResult FailFast()
+        {
+            HttpContext.Abort();
+            return new NoContentResult();
         }
 
         [Host(AuthHostName)]
