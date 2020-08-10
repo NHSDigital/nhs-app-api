@@ -49,22 +49,17 @@ class FingerprintService(
 
         val fingerprintDialog = FingerprintDialog(activity, biometricState, signingHelper)
 
-        val cookieService = FingerprintCookieService(activity)
-
         deRegistrationService =
             DeRegistrationService(fidoDataHelper,
                 preferencesService,
                 biometricState,
                 biometricAsyncHandler,
-                cookieService,
                 appWebInterface
             )
 
         registrationService =
             RegistrationService(activity,
                 biometricAsyncHandler,
-                biometricsInteractor,
-                cookieService,
                 fidoDataHelper,
                 fidoKeystore,
                 fingerprintDialog,
@@ -89,9 +84,9 @@ class FingerprintService(
 
     fun cancelAllProgressingTasks() = biometricAsyncHandler.cancelAllTasks()
 
-    fun deRegisterBiometrics() = deRegistrationService.deRegisterBiometrics()
+    fun deRegisterBiometrics(accessToken: String) = deRegistrationService.deRegisterBiometrics(accessToken)
 
-    fun startFidoRegistration() = registrationService.startFidoRegistration()
+    fun startFidoRegistration(accessToken: String) = registrationService.startFidoRegistration(accessToken)
 
     fun doFingerprintsExist() = registrationService.doFingerprintsExist()
 

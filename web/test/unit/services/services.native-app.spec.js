@@ -236,4 +236,57 @@ describe('native app', () => {
       });
     });
   });
+
+  describe('updateBiometricRegistrationWithToken', () => {
+    describe('native methods exists', () => {
+      let result;
+      beforeEach(() => {
+        global.nativeApp.updateBiometricRegistrationWithToken = jest.fn();
+        global.nativeApp.updateBiometricRegistration = jest.fn();
+        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
+      });
+
+      it('will return true', () => {
+        expect(result).toBe(true);
+      });
+
+      it('will call native method with accessToken', () => {
+        expect(global.nativeApp.updateBiometricRegistrationWithToken).toBeCalledWith('accessToken');
+      });
+
+      it('will call not call legacy native method', () => {
+        expect(global.nativeApp.updateBiometricRegistration).not.toBeCalled();
+      });
+    });
+
+    describe('only legacy native method exists', () => {
+      let result;
+      beforeEach(() => {
+        global.nativeApp.updateBiometricRegistrationWithToken = undefined;
+        global.nativeApp.updateBiometricRegistration = jest.fn();
+        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
+      });
+
+      it('will return true', () => {
+        expect(result).toBe(true);
+      });
+
+      it('will call legacy native method', () => {
+        expect(global.nativeApp.updateBiometricRegistration).toBeCalled();
+      });
+    });
+
+    describe('native methods do not exist', () => {
+      let result;
+      beforeEach(() => {
+        global.nativeApp.updateBiometricRegistrationWithToken = undefined;
+        global.nativeApp.updateBiometricRegistration = undefined;
+        result = nativeApp.updateBiometricRegistrationWithToken('accessToken');
+      });
+
+      it('will return false', () => {
+        expect(result).toBe(false);
+      });
+    });
+  });
 });

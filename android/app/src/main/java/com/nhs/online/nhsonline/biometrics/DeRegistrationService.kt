@@ -16,17 +16,14 @@ class DeRegistrationService(
     private val preferencesService: FingerprintSharedPreferences,
     private val biometricState: BiometricState,
     private val biometricAsyncHandler: BiometricAsyncHandler,
-    private val cookieService: FingerprintCookieService,
     private val appWebInterface: AppWebInterface
         ) {
-    fun deRegisterBiometrics() {
+    fun deRegisterBiometrics(accessToken: String) {
         biometricState.registrationStateChangeInProgress = true
 
         try {
             val appId = preferencesService.readStringFromSharedPref(BiometricConstants.APP_ID)
             val keyId = preferencesService.readStringFromSharedPref(BiometricConstants.KEY_ID)
-
-            val accessToken = cookieService.getAccessTokenFromCookie()
 
             biometricAsyncHandler.sendDeRegistrationOperation(appId, keyId, accessToken) {
                 biometricCleanupHelper.removeFidoData()

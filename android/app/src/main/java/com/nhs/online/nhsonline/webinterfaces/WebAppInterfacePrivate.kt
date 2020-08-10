@@ -148,9 +148,9 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun updateBiometricRegistration() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateBiometricRegistration")
-        runAction { uiInteractor.updateBiometricRegistration() }
+    fun updateBiometricRegistrationWithToken(accessToken: String) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateBiometricRegistrationWithToken")
+        runAction { uiInteractor.updateBiometricRegistration(accessToken) }
     }
 
     @JavascriptInterface

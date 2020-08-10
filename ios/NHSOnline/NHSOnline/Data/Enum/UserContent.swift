@@ -25,7 +25,7 @@ enum UserContent: String, CaseIterable {
     case showHeaderSlim = "showHeaderSlim"
     case updateHeaderText = "updateHeaderText"
     case startDownload = "startDownload"
-    case updateBiometricRegistration = "updateBiometricRegistration"
+    case updateBiometricRegistrationWithToken = "updateBiometricRegistrationWithToken"
     case dismissPageLeaveWarningDialogue = "dismissPageLeaveWarningDialogue"
     case dismissAllDialogues = "dismissAllDialogues"
 }

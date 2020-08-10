@@ -292,8 +292,14 @@ export default {
     return false;
   },
 
-  updateBiometricRegistration() {
+  updateBiometricRegistrationWithToken(accessToken) {
     const app = window.nativeApp;
+    if (app && app.updateBiometricRegistrationWithToken) {
+      app.updateBiometricRegistrationWithToken(accessToken);
+      return true;
+    }
+
+    // NHSO-10729: Remove once minimum native supported version is 1.38
     if (app && app.updateBiometricRegistration) {
       app.updateBiometricRegistration();
       return true;

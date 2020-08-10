@@ -25,7 +25,8 @@ export default {
   async updateRegistration({ commit }) {
     commit(SET_WAITING, true);
     await this.dispatch('auth/ensureAccessToken');
-    NativeApp.updateBiometricRegistration();
+    const { accessToken } = this.app.$cookies.get('nhso.session');
+    NativeApp.updateBiometricRegistrationWithToken(accessToken);
   },
 
   biometricCompletion({ commit }, deviceResponse) {

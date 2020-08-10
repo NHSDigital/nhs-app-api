@@ -292,6 +292,7 @@ class MainActivityTest {
             on { isFingerprintServiceInitialised() }.thenReturn(false)
             on { isFingerprintRegistered }.thenReturn(false)
         }
+        val mockAccessToken = "mockAccessToken"
 
         val nhsWebMock: NhsWeb = mock { }
 
@@ -303,7 +304,7 @@ class MainActivityTest {
 
         //assert
         verify(biometricsInterfaceMock, times(1)).initializeFingerprintService("")
-        verify(biometricsInterfaceMock, times(0)).requestBiometricsRegistrationStateChange()
+        verify(biometricsInterfaceMock, times(0)).requestBiometricsRegistrationStateChange(mockAccessToken)
         verifyZeroInteractions(nhsWebMock)
     }
 
@@ -317,17 +318,18 @@ class MainActivityTest {
             on { doFingerprintsExist() }.thenReturn(true)
         }
 
+        val mockAccessToken = "mockAccessToken"
         val biometricsInteractorMock: BiometricsInteractor = mock()
 
         ReflectionHelpers.setField(mainActivity, "biometricsInterface", biometricsInterfaceMock)
         ReflectionHelpers.setField(mainActivity, "biometricsInteractor", biometricsInteractorMock)
 
         // act
-        mainActivity.updateBiometricRegistration()
+        mainActivity.updateBiometricRegistration(mockAccessToken)
 
         //assert
         verify(biometricsInteractorMock, times(1)).dismissBiometricNotification()
-        verify(biometricsInterfaceMock, times(1)).requestBiometricsRegistrationStateChange()
+        verify(biometricsInterfaceMock, times(1)).requestBiometricsRegistrationStateChange(mockAccessToken)
     }
 
     @Test

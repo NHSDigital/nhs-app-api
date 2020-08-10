@@ -737,9 +737,10 @@ class MainActivity :
 
     override fun getActivity(): FragmentActivity = this
 
-    override fun updateBiometricRegistration() {
+    override fun updateBiometricRegistration(accessToken: String) {
+
         biometricsInteractor.dismissBiometricNotification()
-        biometricsInterface.requestBiometricsRegistrationStateChange()
+        biometricsInterface.requestBiometricsRegistrationStateChange(accessToken)
     }
 
     override fun dismissAllDialogues() {

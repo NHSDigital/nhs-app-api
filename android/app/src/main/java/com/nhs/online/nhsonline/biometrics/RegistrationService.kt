@@ -11,7 +11,6 @@ import com.nhs.online.fidoclient.constants.ATTESTATION_STATUS_VALID
 import com.nhs.online.fidoclient.constants.REGISTRATION_RESPONSE_ERROR
 import com.nhs.online.fidoclient.constants.REGISTRATION_STATUS
 import com.nhs.online.fidoclient.constants.REGISTRATION_STATUS_SUCCESS
-import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.fidoclient.uaf.client.RegAssertionBuilder
 import com.nhs.online.fidoclient.uaf.client.operation.Registration
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
@@ -35,8 +34,6 @@ private const val KEY_ID_PREFIX = "nhs-app-key"
 class RegistrationService(
     private val activity: FragmentActivity,
     private val biometricAsyncHandler: BiometricAsyncHandler,
-    private val biometricsInteractor: IBiometricsInteractor,
-    private val cookieService: FingerprintCookieService,
     private val biometricCleanupHelper: BiometricCleanupHelper,
     private val fidoKeystore: FidoKeystoreAndroidM,
     private val fingerprintDialog: FingerprintDialog,
@@ -47,7 +44,7 @@ class RegistrationService(
     val assertionFactory: (publicKey: PublicKey, signature: Signature, keyId: String) ->
         RegAssertionBuilder = {p,s,k -> RegAssertionBuilder(p, s, k) }
     ) {
-    fun startFidoRegistration() {
+    fun startFidoRegistration(accessToken: String) {
         if (!isRegistrationReady()) {
             appWebInterface.biometricCompletion(
                 BiometricConstants.REGISTER,
@@ -57,7 +54,6 @@ class RegistrationService(
         }
 
         val facetId = fidoHelpers.getFacetId(activity)
-        val accessToken = cookieService.getAccessTokenFromCookie()
         if (facetId.isNullOrBlank() || accessToken.isNullOrBlank()) {
             appWebInterface.biometricCompletion(
                 BiometricConstants.REGISTER,

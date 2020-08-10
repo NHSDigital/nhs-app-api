@@ -76,7 +76,7 @@ interface IInteractor {
 
     fun getActivity(): FragmentActivity
 
-    fun updateBiometricRegistration()
+    fun updateBiometricRegistration(accessToken: String)
 
     fun dismissAllDialogues()
 

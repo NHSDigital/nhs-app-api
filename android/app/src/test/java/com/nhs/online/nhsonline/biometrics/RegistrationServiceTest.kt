@@ -12,14 +12,12 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class RegistrationServiceTest {
     private lateinit var preferencesService: FingerprintSharedPreferences
-    private lateinit var cookieService: FingerprintCookieService
     lateinit var fingerprintSystemChecker: FingerprintSystemChecker
     private lateinit var appWebInterface: AppWebInterface
     private lateinit var registrationService: RegistrationService
@@ -40,6 +38,8 @@ class RegistrationServiceTest {
     private lateinit var fingerprintContent: FingerprintContent
 
     private val androidHash = BiometricMockTestData.getAndroidHash()
+    private val mockAccessToken = "mockAccessToken"
+
 
     @Before
     fun setUp() {
@@ -86,10 +86,6 @@ class RegistrationServiceTest {
 
         appWebInterface = mock()
 
-        cookieService = mock{
-            on { getAccessTokenFromCookie()} doReturn "accessToken"
-        }
-
         fingerprintSystemChecker = mock {
             on { preRegistrationCheck() } doReturn true
         }
@@ -109,13 +105,12 @@ class RegistrationServiceTest {
         }
 
         registrationService =
-            RegistrationService(mock(), mock(), mock(),
-                cookieService, mock(), mock(), mock(), fingerprintSystemChecker, preferencesService,
+            RegistrationService(mock(), mock(), mock(), mock(), mock(), fingerprintSystemChecker, preferencesService,
                 mock(), appWebInterface){
                     _,_,_-> mock()
             }
 
-        registrationService.startFidoRegistration()
+        registrationService.startFidoRegistration(mockAccessToken)
         verify(appWebInterface).biometricCompletion(
             BiometricConstants.REGISTER,
             BiometricConstants.FAILURE,
@@ -128,8 +123,6 @@ class RegistrationServiceTest {
             RegistrationService(fragmentActivity,
                 biometricAsyncHandler,
                 mock(),
-                cookieService,
-                mock(),
                 mock(),
                 fingerprintDialog,
                 fingerprintSystemChecker,
@@ -137,10 +130,10 @@ class RegistrationServiceTest {
                 mock(),
                 appWebInterface){_,_,_ -> mock()}
 
-        registrationService.startFidoRegistration()
+        registrationService.startFidoRegistration(mockAccessToken)
 
         val uafRegistrationMessageCaptor = argumentCaptor<(BiometricCallResult?) -> Unit>()
-        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq("accessToken"), uafRegistrationMessageCaptor.capture())
+        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq(mockAccessToken), uafRegistrationMessageCaptor.capture())
         uafRegistrationMessageCaptor.firstValue(uafCallResult)
 
         val fingerprintAuthCallbackCaptor = argumentCaptor<FingerprintAuthCallback>()
@@ -159,8 +152,6 @@ class RegistrationServiceTest {
             RegistrationService(fragmentActivity,
                 biometricAsyncHandler,
                 mock(),
-                cookieService,
-                mock(),
                 mock(),
                 fingerprintDialog,
                 fingerprintSystemChecker,
@@ -168,10 +159,10 @@ class RegistrationServiceTest {
                 mock(),
                 appWebInterface){_,_,_ -> mock()}
 
-        registrationService.startFidoRegistration()
+        registrationService.startFidoRegistration(mockAccessToken)
 
         val uafRegistrationMessageCaptor = argumentCaptor<(BiometricCallResult?) -> Unit>()
-        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq("accessToken"), uafRegistrationMessageCaptor.capture())
+        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq(mockAccessToken), uafRegistrationMessageCaptor.capture())
         uafRegistrationMessageCaptor.firstValue(uafCallResult)
 
         val fingerprintAuthCallbackCaptor = argumentCaptor<FingerprintAuthCallback>()
@@ -191,8 +182,6 @@ class RegistrationServiceTest {
             RegistrationService(fragmentActivity,
                 biometricAsyncHandler,
                 mock(),
-                cookieService,
-                mock(),
                 fidoKeystore,
                 fingerprintDialog,
                 fingerprintSystemChecker,
@@ -200,11 +189,11 @@ class RegistrationServiceTest {
                 mock(),
                 appWebInterface){_,_,_ -> mock()}
 
-        registrationService.startFidoRegistration()
+        registrationService.startFidoRegistration(mockAccessToken)
 
         //Capture callback for fetchUafRegistrationMessage and execute
         val uafRegistrationMessageCaptor = argumentCaptor<(BiometricCallResult?) -> Unit>()
-        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq("accessToken"),
+        verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash), eq(mockAccessToken),
             uafRegistrationMessageCaptor.capture())
         uafRegistrationMessageCaptor.firstValue(uafCallResult)
 
@@ -235,8 +224,6 @@ class RegistrationServiceTest {
             RegistrationService(fragmentActivity,
                 biometricAsyncHandler,
                 mock(),
-                cookieService,
-                mock(),
                 fidoKeystore,
                 fingerprintDialog,
                 fingerprintSystemChecker,
@@ -244,11 +231,11 @@ class RegistrationServiceTest {
                 mock(),
                 appWebInterface){_,_,_ -> mock()}
 
-        registrationService.startFidoRegistration()
+        registrationService.startFidoRegistration(mockAccessToken)
 
         val uafRegistrationMessageCaptor = argumentCaptor<(BiometricCallResult?) -> Unit>()
         verify(biometricAsyncHandler).fetchUafRegistrationMessage(eq(androidHash),
-            eq("accessToken"),
+            eq(mockAccessToken),
             uafRegistrationMessageCaptor.capture())
         uafRegistrationMessageCaptor.firstValue(uafCallResult)
 
@@ -264,5 +251,4 @@ class RegistrationServiceTest {
             BiometricConstants.FAILURE,
             BiometricConstants.CANNOT_CHANGE_CODE)
     }
-
 }

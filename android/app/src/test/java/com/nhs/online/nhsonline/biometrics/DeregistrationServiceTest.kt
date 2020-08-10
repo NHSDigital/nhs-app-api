@@ -14,10 +14,11 @@ import java.lang.ClassCastException
 @RunWith(RobolectricTestRunner::class)
 class DeregistrationServiceTest {
     private lateinit var preferencesService: FingerprintSharedPreferences
-    private lateinit var cookieService: FingerprintCookieService
     private lateinit var appWebInterface: AppWebInterface
     private lateinit var deRegistrationService: DeRegistrationService
     private lateinit var biometricAsyncHandler: BiometricAsyncHandler
+
+    private val accessToken = "mockAccessToken"
 
     @Before
     fun setUp() {
@@ -31,16 +32,11 @@ class DeregistrationServiceTest {
 
         biometricAsyncHandler = mock()
 
-        cookieService = mock{
-            on { getAccessTokenFromCookie()} doReturn "accessToken"
-        }
-
         deRegistrationService =
             DeRegistrationService(mock(),
                 preferencesService,
                 mock(),
                 biometricAsyncHandler,
-                cookieService,
                 appWebInterface)
     }
 
@@ -49,9 +45,9 @@ class DeregistrationServiceTest {
         //Act
         val callResult: BiometricCallResult = mock()
         val captor = argumentCaptor<(BiometricCallResult?) -> Unit>()
-        deRegistrationService.deRegisterBiometrics()
+        deRegistrationService.deRegisterBiometrics(accessToken)
         verify(biometricAsyncHandler).sendDeRegistrationOperation(eq("appId"), eq("keyId"),
-            eq("accessToken"), captor.capture())
+            eq(accessToken), captor.capture())
 
         captor.firstValue(callResult)
 
@@ -75,10 +71,9 @@ class DeregistrationServiceTest {
                 preferencesService,
                 mock(),
                 mock(),
-                cookieService,
                 appWebInterface)
 
-        deRegistrationService.deRegisterBiometrics()
+        deRegistrationService.deRegisterBiometrics(accessToken)
 
         //Assert
         verify(appWebInterface).biometricCompletion(

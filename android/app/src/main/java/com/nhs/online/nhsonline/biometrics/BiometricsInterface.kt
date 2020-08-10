@@ -26,7 +26,7 @@ class BiometricsInterface(private val biometricsInteractor: BiometricsInteractor
         return true
     }
 
-    fun requestBiometricsRegistrationStateChange(): Boolean {
+    fun requestBiometricsRegistrationStateChange(accessToken: String): Boolean {
 
         if (!FingerprintSystemChecker.checkIfAndroidMOrAbove() || !doFingerprintsExist()) {
             appWebInterface.biometricCompletion(
@@ -38,9 +38,9 @@ class BiometricsInterface(private val biometricsInteractor: BiometricsInteractor
 
         fingerprintService?.let {
             if (it.biometricState.registered){
-                it.deRegisterBiometrics()
+                it.deRegisterBiometrics(accessToken)
             } else {
-                it.startFidoRegistration()
+                it.startFidoRegistration(accessToken)
             }
             return true
         }

@@ -445,8 +445,6 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                 biometricService?.sendBiometricSpec(enabled: false)
             }
         }
-        
-        CookieHandler().readAccessTokenFromCookie()
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {

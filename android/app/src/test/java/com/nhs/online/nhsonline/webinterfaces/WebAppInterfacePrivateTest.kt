@@ -253,9 +253,10 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
-    fun updateBiometricRegistrationTest() {
+    fun updateBiometricRegistrationWithTokenTest() {
+        val mockAccessToken = "mockAccessToken"
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.updateBiometricRegistration()
+        webAppInterfacePrivate.updateBiometricRegistrationWithToken(mockAccessToken)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
     }
 

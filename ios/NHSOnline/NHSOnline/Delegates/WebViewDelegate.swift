@@ -330,7 +330,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
                 break
-            case UserContent.updateBiometricRegistration.rawValue:
+            case UserContent.updateBiometricRegistrationWithToken.rawValue:
+                UserDefaultsManager.setAccessToken(message.body as? String ?? "")
                 let biometricState = UserDefaultsManager.getBiometricAvailability()
                 viewController.handleBiometricStatusChangeRequest(biometricState: biometricState)
                 break

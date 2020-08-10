@@ -10,18 +10,40 @@ import { SET_WAITING,
 
 jest.mock('@/services/native-app');
 
+const mockAccessToken = 'MockAccessToken';
+
 describe('loginSettings actions', () => {
   describe('updateRegistration', () => {
     let commit;
     beforeEach(async () => {
       commit = jest.fn();
       actions.dispatch = jest.fn();
+      actions.app = {
+        $cookies: {
+          get: (cookieName) => {
+            switch (cookieName) {
+              case 'nhso.session':
+                return {
+                  accessToken: mockAccessToken,
+                };
+              default:
+                return undefined;
+            }
+          },
+        },
+      };
       await actions.updateRegistration({ commit });
     });
-    it('will redirect to biometric login error page', () => {
-      expect(commit).toHaveBeenCalledWith(SET_WAITING, true);
-      expect(actions.dispatch).toHaveBeenCalledWith('auth/ensureAccessToken');
-      expect(NativeCallbacks.updateBiometricRegistration).toHaveBeenCalled();
+    it('will call commit with SET_WAITING to true', () => {
+      expect(commit).toBeCalledWith(SET_WAITING, true);
+    });
+
+    it('will dispatch auth/ensureAccessToken', () => {
+      expect(actions.dispatch).toBeCalledWith('auth/ensureAccessToken');
+    });
+
+    it('will call NativeCallbacks.updateBiometricRegistrationWithToken with the access token', () => {
+      expect(NativeCallbacks.updateBiometricRegistrationWithToken).toBeCalledWith(mockAccessToken);
     });
   });
 
