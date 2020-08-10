@@ -22,6 +22,18 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "true"
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                  - {{ $.Values.messages.role }}
+              topologyKey: kubernetes.io/hostname
       volumes:
       - name: session-key
         secret:
