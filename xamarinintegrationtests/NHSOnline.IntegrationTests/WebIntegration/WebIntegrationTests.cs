@@ -82,7 +82,7 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        public void APatientCanFollowLinksInAWebIntegrationAndReturnUsingJsApiIos(IIOSDriverWrapper driver)
+        public void APatientCanFollowLinksInAWebIntegrationIos(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
                 .WithName(b => b.GivenName("David").FamilyName("June"));
@@ -130,6 +130,31 @@ namespace NHSOnline.IntegrationTests.WebIntegration
             IOSAppTab
                 .AssertOnCovidPage(driver)
                 .ReturnToApp();
+
+            IOSErsPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanAccessAWebIntegrationAndReturnUsingJsApiIos(IIOSDriverWrapper driver)
+        {
+            var patient = new TppPatient()
+                .WithName(b => b.GivenName("David").FamilyName("June"));
+            using var patients = Mocks.Patients.Add(patient);
+
+            Login(driver, patient);
+
+            IOSLoggedInHomePage
+                .AssertOnPage(driver)
+                .Navigation.Appointments();
+
+            IOSAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.HospitalAndOtherAppointments();
+
+            IOSHospitalAndOtherAppointmentsPage
+                .AssertOnPage(driver)
+                .PageContent.BookOrCancelYourReferralAppointment();
 
             IOSErsPage
                 .AssertOnPage(driver)
