@@ -4,6 +4,7 @@ import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.EmisMappingRouter
+import mocking.externalSites.ExternalSitesMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.microtest.MicrotestMappingRouter
 import mocking.ndop.NdopMappingBuilder
@@ -36,6 +37,8 @@ class MockingClient(configuration: MockingConfiguration) {
     val forVision = ExternalSupplierMockingClient(VisionMappingRouter(), wiremockHelper)
     val forEmis = ExternalSupplierMockingClient(EmisMappingRouter(configuration.emisConfiguration), wiremockHelper)
     val forTpp = ExternalSupplierMockingClient(TppMappingRouter(), wiremockHelper)
+
+    val forExternalSites = ExternalSupplierMockingClient(ExternalSitesMappingBuilder(), wiremockHelper)
 
     fun favicon() = wiremockHelper.postMapping(FaviconMappingBuilder().respondWithNotFound())
 

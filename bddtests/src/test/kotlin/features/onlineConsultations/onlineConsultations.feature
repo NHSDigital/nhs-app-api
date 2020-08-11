@@ -80,7 +80,7 @@ Scenario: A user can go through the online consultations gp advice journey and i
     And I have access to online consultations gp advice journey and it is not an emergency with no GP session
     And I am logged in
     And I navigate to Symptoms
-    And I press the gp advice menu item
+    And I click Ask your GP for Advice
     And I accept demographics and terms and conditions question
     And I click on a condition
     And I select my gender and click continue

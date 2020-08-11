@@ -122,9 +122,6 @@ import {
   APPOINTMENT_BOOKING_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import {
-  CORONA_SERVICE_URL,
-} from '@/router/externalLinks';
 
 const FILTER_PARAMETERS = [
   'clinician',
@@ -170,7 +167,7 @@ export default {
       availableAppointmentsScreenReaderMessage: [],
       bookingPath: APPOINTMENT_BOOKING_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
-      coronaServiceUrl: CORONA_SERVICE_URL,
+      coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       filtered: false,
     };
   },

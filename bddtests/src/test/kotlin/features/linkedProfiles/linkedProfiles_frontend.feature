@@ -119,7 +119,7 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
+    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'http://stubs.local.bitraft.io:8080/external/covid'
     Then a new tab has been opened by the link
 
   Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
@@ -303,5 +303,5 @@ Feature: Login with proxy access
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
-    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
+    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'http://stubs.local.bitraft.io:8080/external/covid'
     Then a new tab has been opened by the link

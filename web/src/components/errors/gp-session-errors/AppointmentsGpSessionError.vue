@@ -68,9 +68,7 @@ import {
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import {
-  SYMPTOM_CHECKER_URL,
   SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS,
-  CORONA_SERVICE_URL,
 } from '@/router/externalLinks';
 
 export default {
@@ -86,14 +84,14 @@ export default {
     },
   },
   data() {
-    let symptomsCheckerUrl = SYMPTOM_CHECKER_URL;
+    let symptomsCheckerUrl = this.$store.$env.SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
       symptomsCheckerUrl += SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       backUrl: APPOINTMENTS_PATH,
       symptomsCheckerUrl,
-      coronaCheckerUrl: CORONA_SERVICE_URL,
+      coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
       adminHelpPath: APPOINTMENT_ADMIN_HELP_PATH,
       gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_PATH,
     };

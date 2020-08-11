@@ -8,7 +8,6 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.authentication.steps.NavigationLinkText
 import features.authentication.steps.PatientDetail
-import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
@@ -17,6 +16,7 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.AppointmentHubPage
+import pages.CheckMySymptomsPage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
 import pages.assertSingleElementPresent
@@ -36,8 +36,6 @@ class HomePageStepDefinitions {
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
-    private lateinit var checkMySymptoms: CheckMySymptoms
-    @Steps
     private lateinit var homeSteps: HomeSteps
     @Steps
     private lateinit var loginSteps: LoginSteps
@@ -47,6 +45,7 @@ class HomePageStepDefinitions {
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
+    private lateinit var checkMySymptomsPage: CheckMySymptomsPage
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -184,9 +183,9 @@ class HomePageStepDefinitions {
 
     private fun followSymptomLink(linkElement: HybridPageElement) {
         linkElement.click()
-        checkMySymptoms.assertConditionsHeaderVisible()
-        checkMySymptoms.assertNhs111HeaderVisible()
-        checkMySymptoms.assertCoronaHeaderVisible()
+        checkMySymptomsPage.assertAdviceAboutCoronavirusIsVisible()
+        checkMySymptomsPage.assertSearchConditionsAndTreatmentsIsVisible()
+        checkMySymptomsPage.assertUseNhsOneOneOneOnlineIsVisible()
         navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 

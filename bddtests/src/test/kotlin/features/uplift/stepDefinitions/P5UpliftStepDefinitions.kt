@@ -34,22 +34,28 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Given("^I am a patient with proof level 5$")
   fun iAmAPatientWithProofLevel5() {
-    val supplier = Supplier.EMIS
-    mockingClient.favicon()
-
-    val patient = Patient.getDefault(supplier).copy(identityProofingLevel = IdentityProofingLevel.P5)
-
-    SerenityHelpers.setPatient(patient)
-    SerenityHelpers.setGpSupplier(supplier)
-
-    CitizenIdSessionCreateJourney().createFor(patient)
-    SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+    setupPatient()
   }
 
   @Given("^I am a patient logging in natively with proof level 5$")
   fun iAmAPatientLoggingInNativelyWithProofLevel5() {
     GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
+    setupPatient()
+  }
 
+  @Given("^I am a patient with proof level 5 who wishes to view the Health A to Z$")
+  fun iAmAUserWhoWishesToViewAdviceAboutCoronavirus() {
+    setupPatient()
+    MockingClient.instance.forExternalSites.mock { healthAToZRequest().respondWithPage() }
+  }
+
+  @Given("^I am a patient with proof level 5 who wishes to view 111 online$")
+  fun iAmAUserWhoWishesToViewOneOneOneOnline() {
+    setupPatient()
+    MockingClient.instance.forExternalSites.mock { oneOneOneOnlineRequest().respondWithPage() }
+  }
+
+  private fun setupPatient() {
     val supplier = Supplier.EMIS
     mockingClient.favicon()
 

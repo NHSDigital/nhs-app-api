@@ -242,9 +242,6 @@ import {
   APPOINTMENT_CONFIRMATIONS_PATH,
   APPOINTMENT_BOOKING_SUCCESS_PATH,
 } from '@/router/paths';
-import {
-  CORONA_SERVICE_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'GpAppointmentsConfirmationPage',
@@ -274,7 +271,7 @@ export default {
       appointmentsPath: GP_APPOINTMENTS_PATH,
       confirmBookingPath: APPOINTMENT_CONFIRMATIONS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
-      coronaServiceUrl: CORONA_SERVICE_URL,
+      coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       isJavascriptOn: false,
       otherTelephoneNumber: '',
       patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),

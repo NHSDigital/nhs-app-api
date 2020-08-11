@@ -61,14 +61,6 @@ class SessionExpiryStepDefinitions  {
                 .setSessionExtendMockResponse(patient, expectedResponse)
     }
 
-    @When("^I click Use NHS 111 online$")
-    fun iClickCheckIfYouNeedUrgentHelp() = checkMySymptoms.clickNHS111Header()
-
-    @When("^I click Get advice about coronavirus$")
-    fun iClickGetAdviceAboutCoronaVirus() {
-        checkMySymptoms.clickCoronaVirusHeader()
-    }
-
     @When("^I try to extend my session$")
     fun iTryToExtendMySession() {
         val response = Serenity

@@ -63,10 +63,7 @@ import { SYMPTOMS_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
 import { APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
 import {
-  SYMPTOM_CHECKER_URL,
   SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS,
-  CONDITIONS_CHECKER_URL,
-  CORONA_SERVICE_URL,
 } from '@/router/externalLinks';
 
 export default {
@@ -76,15 +73,15 @@ export default {
     MenuItem,
   },
   data() {
-    let symptomsCheckerUrl = SYMPTOM_CHECKER_URL;
+    let symptomsCheckerUrl = this.$store.$env.SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
       symptomsCheckerUrl += SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       symptomsCheckerUrl,
-      conditionsCheckerUrl: CONDITIONS_CHECKER_URL,
+      conditionsCheckerUrl: this.$store.$env.CONDITIONS_CHECKER_URL,
       symptomsPath: SYMPTOMS_PATH,
-      coronaCheckerUrl: CORONA_SERVICE_URL,
+      coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
       gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_NAME,
     };
   },

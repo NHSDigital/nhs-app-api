@@ -1,71 +1,56 @@
 package pages
 
-import org.openqa.selenium.WebDriverException
-
 open class CheckMySymptomsPage : HybridPageObject() {
 
-    private val conditionsHeader = HybridPageElement(
+    private val searchConditionsAndTreatments = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(),'Search conditions and treatments')]",
             androidLocator = null,
             page = this
     )
 
-    private val nhs111Header = HybridPageElement(
+    private val useNhsOneOneOneOnline = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(),'Use NHS 111 online')]",
             androidLocator = null,
             page = this
     )
 
-    private val coronaVirusHeader = HybridPageElement(
+    private val adviceAboutCoronavirus = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(),'Get advice about coronavirus')]",
             androidLocator = null,
             page = this
     )
 
-    private val gpAdviceHeader = HybridPageElement(
+    private val askYourGpForAdvice = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(),'Ask your GP for advice')]",
             androidLocator = null,
             page = this
     )
 
-
-    fun isConditionsHeaderVisible(): Boolean {
-        switchWebview()
-        for(window in driver.windowHandles.toList()) {
-            locatorMethods.waitForNativeStepToComplete()
-            driver.switchTo().window(window)
-            try {
-                if (conditionsHeader.isDisplayed)
-                    return true
-            }
-            catch(e: WebDriverException){
-                println("Did not find element; switching window")
-            }
-        }
-        return false
+    fun assertSearchConditionsAndTreatmentsIsVisible() {
+        searchConditionsAndTreatments.assertIsVisible()
     }
 
-    fun isNhs111HeaderVisible(): Boolean {
-        return nhs111Header.isDisplayed
+    fun clickSearchConditionsAndTreatments() {
+        searchConditionsAndTreatments.click()
     }
 
-    fun isCoronaHeaderVisible(): Boolean {
-        return coronaVirusHeader.isDisplayed
+    fun assertUseNhsOneOneOneOnlineIsVisible() {
+        useNhsOneOneOneOnline.assertIsVisible()
     }
 
-    fun clickNHS111Header(){
-        nhs111Header.click()
+    fun clickUseNhsOneOneOneOnline(){
+        useNhsOneOneOneOnline.click()
     }
 
-    fun clickConditionsHeader() {
-        conditionsHeader.click()
+    fun assertAdviceAboutCoronavirusIsVisible() {
+        adviceAboutCoronavirus.assertIsVisible()
     }
 
-    fun clickCoronaVirusHeader() {
-        coronaVirusHeader.click()
+    fun clickAdviceAboutCoronavirus() {
+        adviceAboutCoronavirus.click()
     }
 
-    fun clickGPAdviceHeader(){
-        gpAdviceHeader.click()
+    fun clickAskYourGpForAdvice(){
+        askYourGpForAdvice.click()
     }
 }

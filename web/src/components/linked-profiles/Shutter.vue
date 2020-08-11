@@ -41,9 +41,6 @@ import { redirectTo } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import get from 'lodash/fp/get';
-import {
-  CORONA_SERVICE_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'Shutter',
@@ -60,7 +57,7 @@ export default {
   },
   data() {
     return {
-      coronaServiceUrl: CORONA_SERVICE_URL,
+      coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       coronaVirusBodyText: '',
       coronaVirusHeaderText: '',
       coronaVirusLinkLabelText: undefined,

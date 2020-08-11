@@ -113,9 +113,6 @@ import UpcomingAppointments from '@/components/appointments/UpcomingAppointments
 import showShutterPage from '@/lib/proxy/shutter';
 import { APPOINTMENTS_PATH, APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import {
-  CORONA_SERVICE_URL,
-} from '@/router/externalLinks';
 
 const loadData = async (store) => {
   store.dispatch('myAppointments/clear');
@@ -143,7 +140,7 @@ export default {
     return {
       backUrl: APPOINTMENTS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
-      coronaServiceUrl: CORONA_SERVICE_URL,
+      coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
       guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE_PATH,
     };
   },
