@@ -1,6 +1,7 @@
 import isEmpty from 'lodash/fp/isEmpty';
 import isString from 'lodash/fp/isString';
 import values from 'lodash/fp/values';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import {
   ADD_API_ERROR,
   SET_ROUTE_PATH,
@@ -35,5 +36,10 @@ export default {
   },
   setConnectionProblem({ commit }, hasConnectionProblem) {
     commit(SET_CONNECTION_PROBLEM, hasConnectionProblem);
+
+    if (hasConnectionProblem) {
+      EventBus.$emit(UPDATE_HEADER, 'noConnection.header');
+      EventBus.$emit(UPDATE_TITLE, 'noConnection.header');
+    }
   },
 };

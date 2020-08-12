@@ -1,5 +1,11 @@
 import actions from '@/store/modules/errors/actions';
-import { SET_ROUTE_PATH } from '@/store/modules/errors/mutation-types';
+import { SET_ROUTE_PATH, SET_CONNECTION_PROBLEM } from '@/store/modules/errors/mutation-types';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 describe('errors actions', () => {
   const app = {};
@@ -37,6 +43,30 @@ describe('errors actions', () => {
         actions.setRoutePath.call(that, app, '/boo/hoo');
         expect(app.commit).toHaveBeenCalledWith(SET_ROUTE_PATH, '/boo/hoo');
       });
+    });
+  });
+
+  describe('setConnectionProblem', () => {
+    beforeEach(() => {
+      EventBus.$emit.mockClear();
+    });
+
+    it('will call commit and update the header when true', () => {
+      actions.setConnectionProblem(app, true);
+
+      // assert
+      expect(app.commit).toHaveBeenCalledWith(SET_CONNECTION_PROBLEM, true);
+      expect(EventBus.$emit).toHaveBeenCalledTimes(2);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'noConnection.header');
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'noConnection.header');
+    });
+
+    it('will call commit but will not update the header when connection error is false', () => {
+      actions.setConnectionProblem(app, false);
+
+      // assert
+      expect(app.commit).toHaveBeenCalledWith(SET_CONNECTION_PROBLEM, false);
+      expect(EventBus.$emit).toHaveBeenCalledTimes(0);
     });
   });
 });

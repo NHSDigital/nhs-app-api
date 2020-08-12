@@ -25,12 +25,6 @@ const RoutingPlugin = {
         }
         router.previousPaths.push(get('path')(from));
       }
-
-      /*
-      Vue.nextTick(() => {
-        configureAnalytics(app, store, _);
-      });
-      */
     });
   },
 };

@@ -19,7 +19,6 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { redirectTo } from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'ConnectionError',
@@ -53,13 +52,6 @@ export default {
     showError() {
       return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
     },
-  },
-  updated() {
-    if (this.showError) {
-      this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
-      EventBus.$emit(UPDATE_HEADER, 'noConnection.header');
-      EventBus.$emit(UPDATE_TITLE, 'noConnection.header');
-    }
   },
   methods: {
     onRetryButtonClicked() {

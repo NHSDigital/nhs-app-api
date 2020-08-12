@@ -126,7 +126,4 @@ router.afterEach((to) => {
 
 export const isAnonymous = route => (route.meta && route.meta.isAnonymous);
 
-// todo: do we need to import other stuff from routing.js
-// like manually keep a list of previousPaths
-
 export default router;

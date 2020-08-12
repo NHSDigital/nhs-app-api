@@ -15,11 +15,8 @@ export default {
   name: 'defaultMixin',
   computed: {
     showTemplate() {
-      let hasConnectionError = false;
-      if (!navigator.onLine) {
-        this.$store.dispatch('errors/setConnectionProblem', true);
-        hasConnectionError = true;
-      }
+      const hasConnectionError = !navigator.onLine;
+      this.$store.dispatch('errors/setConnectionProblem', hasConnectionError);
       return !this.$store.getters['errors/showApiError'] && !hasConnectionError;
     },
   },
