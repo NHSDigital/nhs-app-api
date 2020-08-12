@@ -151,10 +151,6 @@ open class HomePage : HybridPageObject() {
         }
     }
 
-    fun isWelcomeHeaderVisible(): Boolean {
-        return greeting.isVisible
-    }
-
     private fun assertCollection(message: String, expected: ArrayList<String>, actual: ArrayList<String>) {
         val listed = "Expected = ${expected.joinToString(", ")} Actual = ${actual.joinToString(", ")}"
         assertEquals("$message. Expected number. $listed", expected.count(), actual.count())

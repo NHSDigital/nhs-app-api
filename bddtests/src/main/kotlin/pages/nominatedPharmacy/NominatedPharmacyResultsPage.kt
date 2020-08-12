@@ -6,7 +6,7 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.isVisible
+import pages.assertIsVisible
 import pages.assertIsNotVisible
 import pages.text
 
@@ -59,15 +59,15 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
     }
 
     fun showsNoResultsFoundHeader() {
-        noResultsFoundHeader.isVisible
+        noResultsFoundHeader.assertIsVisible()
     }
 
     fun showsNoResults() {
         listOfPharmacies.assertIsNotVisible()
     }
 
-    fun isLoaded(): Boolean {
-        return listOfPharmacies.isVisible
+    fun assertIsLoaded() {
+        listOfPharmacies.assertIsVisible()
     }
 
     fun getPharmacies(): List<PharmacySearchResult> {

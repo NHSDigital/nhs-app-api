@@ -4,7 +4,7 @@ import config.Config
 import models.Patient
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.isVisible
+import pages.assertIsVisible
 import pages.sendKeys
 
 open class CIDAccountCreationPage : HybridPageObject() {
@@ -21,8 +21,9 @@ open class CIDAccountCreationPage : HybridPageObject() {
             page = this
     )
 
-    fun isVisible() : Boolean {
-        return createAccountButton.isVisible.and(mockPatientInput.isVisible)
+    fun assertIsVisible() {
+        createAccountButton.assertIsVisible()
+        mockPatientInput.assertIsVisible()
     }
 
     fun completeAccountCreation(patient: Patient) {

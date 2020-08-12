@@ -12,12 +12,12 @@ import models.nominatedPharmacy.Postcode
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.PrescriptionsHubPage
-import pages.isVisible
+import pages.assertIsVisible
 import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
 import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
+import pages.nominatedPharmacy.NominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -188,8 +188,7 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see the nominated pharmacy panel on the prescriptions hub page$")
     fun iSeeTheNominatedPharmacyBanner() {
-        Assert.assertTrue(
-                "Nominated pharmacy panel is visible", prescriptionsHubPage.nominatedPharmacyLink.isVisible)
+        prescriptionsHubPage.nominatedPharmacyLink.assertIsVisible("Nominated pharmacy panel is visible")
     }
 
     @Then("^I see my nominated pharmacy on the prescriptions hub page$")
@@ -245,9 +244,8 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see the change my nominated pharmacy link$")
     fun iSeeChangePharmacyLink() {
-        Assert.assertTrue(
-                "Change my nominated pharmacy link is not visible",
-                nominatedPharmacyPage.changePharmacyLink.isVisible)
+        nominatedPharmacyPage.changePharmacyLink
+                .assertIsVisible("Change my nominated pharmacy link is not visible")
     }
 
     @Then("^I see the no results found page$")
@@ -257,7 +255,7 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see list of pharmacies displayed on the result page$")
     fun iSeePharmaciesOnResultsPage() {
-        nominatedPharmacyResultsPage.isLoaded()
+        nominatedPharmacyResultsPage.assertIsLoaded()
         val expectedData = NominatedPharmacySerenityHelpers
                 .SEARCH_RESULTS
                 .getOrFail<NhsAzureSearchOrganisationReply>().value
@@ -388,10 +386,9 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see how to change dispensing practice instruction$")
     fun iSeeHowToChangeDispensingPractise() {
-        Assert.assertTrue("Instruction 1 to change pharmacy is not visible",
-                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1.isVisible)
-
-        Assert.assertTrue("Instruction 2 to change pharmacy is not visible",
-                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2.isVisible)
+        nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1
+                .assertIsVisible("Instruction 1 to change pharmacy is not visible")
+        nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2
+                .assertIsVisible("Instruction 2 to change pharmacy is not visible")
     }
 }

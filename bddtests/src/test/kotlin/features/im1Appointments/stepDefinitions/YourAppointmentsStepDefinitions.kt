@@ -25,10 +25,10 @@ import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
 import pages.avoidChromeWebDriverServiceCrash
 import pages.assertSingleElementPresent
-import pages.assertIsVisible
 import pages.waitUntilPresent
-import pages.isCurrentlyEnabled
-import pages.isDisplayed
+import pages.assertIsCurrentlyEnabled
+import pages.assertIsDisplayed
+import pages.assertIsVisible
 import pages.navigation.WebHeader
 
 private const val ERROR_SCENARIO = "error scenario"
@@ -192,11 +192,10 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.yourAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
         yourAppointmentsUISteps.yourAppointmentsPage.bookButton.waitUntilPresent()
 
-        Assert.assertTrue("Book an appointment is not displaying",
-                yourAppointmentsUISteps.yourAppointmentsPage.bookButton.isDisplayed)
-
-        Assert.assertTrue("Book an appointment is not enabled",
-                yourAppointmentsUISteps.yourAppointmentsPage.bookButton.isCurrentlyEnabled)
+        yourAppointmentsUISteps.yourAppointmentsPage.bookButton.assertIsDisplayed(
+                "Book an appointment is not displaying")
+        yourAppointmentsUISteps.yourAppointmentsPage.bookButton.assertIsCurrentlyEnabled(
+                "Book an appointment is not enabled")
     }
 
     @Then("^the page title is \"Your GP appointments\"$")

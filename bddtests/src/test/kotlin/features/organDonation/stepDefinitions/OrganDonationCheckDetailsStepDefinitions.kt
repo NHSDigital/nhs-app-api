@@ -4,7 +4,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.organDonation.models.OrganDonationDemographics
-import pages.assertIsVisible
 import pages.organDonation.OrganDonationAdditionalDetailsModule
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers

@@ -7,7 +7,6 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mongodb.MongoDBConnection
 import utils.SerenityHelpers
-import utils.set
 
 class UserInfoStepDefinitions {
 

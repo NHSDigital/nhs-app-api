@@ -4,7 +4,7 @@ import mocking.patientPracticeMessaging.MessageReply
 import org.junit.Assert.assertEquals
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isVisible
+import pages.assertIsVisible
 import pages.text
 
 class PatientPracticeMessagingDetailsPage: HybridPageObject() {
@@ -55,7 +55,7 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
 
     fun assertUnreadDividerIsOnSceen(){
         val pageDivider = getElementById("//*[@id='receivedMessagesDivider']")
-        return assert(pageDivider.isVisible)
+        pageDivider.assertIsVisible()
     }
 
     fun assertDateTimeCorrect(expectedSentMessageDate: String, id: String){
@@ -75,7 +75,7 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
     }
 
     fun assertLink(linkType: String){
-        return assert(getElementById("//*[@id='$linkType']").isVisible)
+        getElementById("//*[@id='$linkType']").assertIsVisible()
     }
 
     fun clickLink(linkType: String){

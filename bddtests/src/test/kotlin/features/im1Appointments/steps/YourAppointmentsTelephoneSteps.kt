@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.appointments.YourAppointmentsPage
-import pages.isDisplayed
+import pages.assertIsDisplayed
 import pages.navigation.HeaderNative
 
 open class YourAppointmentsTelephoneSteps {
@@ -20,7 +20,8 @@ open class YourAppointmentsTelephoneSteps {
 
     @Step
     fun checkUpcomingTelephoneAppointmentsAreCorectlyPopulated() {
-        yourAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.upcomingAppointmentsHeading
+                .assertIsDisplayed("Expected Upcoming Appointment Heading")
         yourAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS,
                 true
@@ -30,7 +31,8 @@ open class YourAppointmentsTelephoneSteps {
 
     @Step
     fun checkPastTelephoneAppointmentsAreCorectlyPopulated() {
-        yourAppointmentsPage.pastAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.pastAppointmentsHeading
+                .assertIsDisplayed("Expected Telephone Appointment Heading")
         yourAppointmentsUiSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS,
                 true

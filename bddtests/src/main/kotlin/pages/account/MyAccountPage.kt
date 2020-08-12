@@ -3,8 +3,8 @@ package pages.account
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertIsVisible
 import pages.assertElementNotPresent
+import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject() {

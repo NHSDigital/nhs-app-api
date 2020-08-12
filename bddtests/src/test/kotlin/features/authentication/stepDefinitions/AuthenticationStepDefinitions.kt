@@ -4,7 +4,6 @@ import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
@@ -24,9 +23,10 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
-import pages.navigation.BreadcrumbHeader
 import pages.assertElementNotPresent
-import pages.isPresent
+import pages.assertSingleElementPresent
+import pages.loggedOut.CIDAccountCreationPage
+import pages.navigation.BreadcrumbHeader
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
@@ -35,8 +35,6 @@ const val INVALID_VALUE = "xxx-wrong-format-xxx"
 
 class AuthenticationStepDefinitions {
 
-    @Steps
-    lateinit var accountCreation: CIDAccountCreationSteps
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
@@ -54,6 +52,7 @@ class AuthenticationStepDefinitions {
     lateinit var breadcrumbs: BreadcrumbHeader
     lateinit var myAccount: MyAccountPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
+    lateinit var accountCreationpage: CIDAccountCreationPage
     lateinit var currentUrl: String
 
     private val mockingClient = MockingClient.instance
@@ -260,7 +259,7 @@ class AuthenticationStepDefinitions {
 
     @Then("^I see the yellow banner$")
     fun iSeeYellowBanner() {
-        Assert.assertTrue("Can't find yellow banner", home.homePage.banner.isPresent)
+        home.homePage.banner.assertSingleElementPresent("Expected yellow banner")
     }
 
     @Then("^I click the proxy warning$")
@@ -286,7 +285,7 @@ class AuthenticationStepDefinitions {
 
     @Then("^I see the CID create an account page$")
     fun thenISeeTheCIDCreateAnAccountPage() {
-        accountCreation.assertPageIsVisible()
+        accountCreationpage.assertIsVisible()
     }
 
     @Then("^I see the signed in home page$")

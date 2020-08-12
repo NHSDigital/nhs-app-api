@@ -18,8 +18,7 @@ class ServiceUnavailablePage : HybridPageObject() {
 
     fun assertIsPresent(titleText: String, message: String) {
         assert(titleText.equals(titleText))
-        assert(header.isVisible)
+        header.assertIsVisible()
         content.withText(message, false).assertSingleElementPresent()
     }
-
 }

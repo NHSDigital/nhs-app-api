@@ -183,9 +183,7 @@ class HomePageStepDefinitions {
 
     private fun followSymptomLink(linkElement: HybridPageElement) {
         linkElement.click()
-        checkMySymptomsPage.assertAdviceAboutCoronavirusIsVisible()
-        checkMySymptomsPage.assertSearchConditionsAndTreatmentsIsVisible()
-        checkMySymptomsPage.assertUseNhsOneOneOneOnlineIsVisible()
+        checkMySymptomsPage.assertPageDisplayed()
         navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 

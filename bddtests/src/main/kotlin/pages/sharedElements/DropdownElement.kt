@@ -4,11 +4,10 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
-import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.assertIsVisible
-import pages.selectedVisibleTextValue
+import pages.HybridPageObject
 import pages.assertElementNotPresent
+import pages.assertIsVisible
 import pages.text
 
 const val DROPDOWN_WAIT_TIME = 20
@@ -59,7 +58,9 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
     }
 
     fun getSelectedValue(): String {
-        return dropDown.selectedVisibleTextValue.trim()
+        var text = ""
+        dropDown.actOnTheElement { text = it.selectedVisibleTextValue }
+        return text.trim()
     }
 
     fun getContents(): ArrayList<String> {

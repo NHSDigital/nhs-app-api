@@ -2,9 +2,9 @@ package pages
 
 import org.junit.Assert
 
-fun HybridPageElement.assertSingleElementPresent(): HybridPageElement {
+fun HybridPageElement.assertSingleElementPresent(message: String? = null): HybridPageElement {
     Assert.assertEquals(
-            "Expected only one matching element for $helpfulNameToUse, with xpath $webDesktopLocator",
+            message ?: "Expected only one matching element for $helpfulNameToUse, with xpath $webDesktopLocator",
             1,
             elements.count())
     return this
@@ -14,6 +14,16 @@ fun HybridPageElement.assertIsVisible(message: String? = null): HybridPageElemen
     actOnTheElement {
         Assert.assertTrue(message ?: "Expected $helpfulNameToUse to be visible", it.isVisible)
     }
+    return this
+}
+
+fun HybridPageElement.assertIsDisplayed(message:String) : HybridPageElement {
+    actOnTheElement { Assert.assertTrue(message, it.isDisplayed) }
+    return this
+}
+
+fun HybridPageElement.assertIsCurrentlyEnabled(message:String) : HybridPageElement {
+    actOnTheElement { Assert.assertTrue(message, it.isCurrentlyEnabled) }
     return this
 }
 
@@ -39,4 +49,12 @@ fun HybridPageElement.assertElementNotPresent(): HybridPageElement {
 fun HybridPageElement.withoutRetrying(): HybridPageElement {
     this.timeToWaitForElement = 0
     return this
+}
+
+fun HybridPageElement.assertCurrentlyVisible() {
+    actOnTheElement {
+        Assert.assertTrue(
+                "Expected element $helpfulNameToUse, with xpath $webDesktopLocator to be visible",
+                it.isCurrentlyVisible)
+    }
 }

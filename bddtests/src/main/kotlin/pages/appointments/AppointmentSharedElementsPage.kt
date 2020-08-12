@@ -8,7 +8,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isPresent
 import pages.navigation.HeaderNative
 import pages.withoutRetrying
 import worker.models.ErrorCodeParagraph
@@ -143,7 +142,7 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
                                        relativePath: String ) {
         slot.channel = "Unknown"
 
-        if(phoneConfirmation.withoutRetrying().isPresent)
+        if(phoneConfirmation.withoutRetrying().elements.any())
             slot.channel = "Telephone"
         else {
             if (isTelephoneAppointment)

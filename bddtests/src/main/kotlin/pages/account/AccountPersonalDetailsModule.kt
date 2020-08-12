@@ -3,7 +3,6 @@ package pages.account
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertIsVisible
 import pages.text
 
 class AccountPersonalDetailsModule(page : HybridPageObject) {
@@ -33,10 +32,6 @@ class AccountPersonalDetailsModule(page : HybridPageObject) {
     fun assertVisible(expectedUsername: String,
                       expectedDateOfBirth: String,
                       expectedNhsNumber: String) {
-        usernameText.assertIsVisible()
-        dateOfBirthText.assertIsVisible()
-        nhsNumberText.assertIsVisible()
-
         val actualUsername = usernameText.text.trim().toLowerCase()
         val actualDateOfBirth = dateOfBirthText.text.trim().toLowerCase()
         val actualNhsNumber = nhsNumberText.text.trim()

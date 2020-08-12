@@ -10,10 +10,10 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
-import pages.assertIsVisible
 import pages.RedirectorPage
 import pages.appointments.HospitalAppointmentsPage
 import pages.assertElementNotPresent
+import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
 

@@ -3,11 +3,10 @@ package pages.loggedOut
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isDisplayed
-import pages.isVisible
+import pages.assertIsDisplayed
+import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
@@ -21,7 +20,7 @@ class LoginPage : HybridPageObject() {
     )
 
     val downloadAppPanel = HybridPageElement(
-             webDesktopLocator = "//div[@data-id='app-panel']",
+            webDesktopLocator = "//div[@data-id='app-panel']",
             webMobileLocator = "//div[@data-id='app-panel']",
             androidLocator = null,
             page = this
@@ -85,14 +84,10 @@ class LoginPage : HybridPageObject() {
 
     override fun shouldBeDisplayed() {
         super.shouldBeDisplayed()
-
-        assertTrue("Page heading is not displayed correctly.",
-                pageHeadingIsDisplayed())
+        pageHeading.assertIsDisplayed("Page heading is not displayed correctly.")
     }
 
-    private fun pageHeadingIsDisplayed() = pageHeading.isDisplayed
-
-    fun helpIconIsVisible() = helpIcon.isVisible
+    fun helpIconIsVisible() = helpIcon.assertIsVisible()
 
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {
@@ -100,6 +95,7 @@ class LoginPage : HybridPageObject() {
     }
 
     fun assertTimeoutBannerIsVisible() {
-        assertTrue("Expected timeout banner to be visible", timeoutBanner.isVisible)
+        timeoutBanner.assertIsVisible("Expected timeout banner to be visible")
     }
 }
+

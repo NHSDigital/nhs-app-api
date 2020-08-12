@@ -5,12 +5,11 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.WebElement
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 import pages.asciiText
-import pages.typeTextIntoTextArea
-import pages.isVisible
 import pages.navigation.HeaderNative
+import pages.typeTextIntoTextArea
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 
@@ -41,7 +40,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
             page = this
     )
 
-    private val specialRequestTextArea = HybridPageElement(
+    val specialRequestTextArea = HybridPageElement(
             webDesktopLocator = specialRequestTextAreaXpath,
             page = this
     )
@@ -170,7 +169,4 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         return specialRequestTextArea.typeTextIntoTextArea(text)
     }
 
-    fun isSpecialRequestTextAreaVisible(): Boolean {
-        return specialRequestTextArea.elements.isNotEmpty() && specialRequestTextArea.isVisible
-    }
 }

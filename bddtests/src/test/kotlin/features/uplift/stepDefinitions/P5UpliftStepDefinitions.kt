@@ -12,12 +12,12 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.HybridPageObject
 import pages.P5UpliftPage
-import pages.assertIsVisible
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.SerenityHelpers
 import pages.navigation.NavBarNative
 import features.sharedSteps.NavigationSteps
+import pages.assertIsVisible
 import utils.GlobalSerenityHelpers
 import utils.set
 

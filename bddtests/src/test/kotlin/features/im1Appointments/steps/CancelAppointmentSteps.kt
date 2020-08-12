@@ -14,9 +14,9 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
+import pages.assertElementNotPresent
 import pages.navigation.WebHeader
 import pages.text
 import utils.LinkedProfilesSerenityHelpers
@@ -58,12 +58,11 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheDropDownMenuLabelIsNotVisible() {
-        assertFalse("Drop-Down menu is visible", cancelAppointmentPage.containsDropDownMenu())
+        cancelAppointmentPage.dropDownMenu.assertElementNotPresent()
     }
 
     @Step
     fun verifyTheValidationErrorSummary() {
-
         cancelAppointmentPage.validationBanner.assertVisible(arrayListOf("There's a problem",
                 "Select a reason for cancelling"))
     }

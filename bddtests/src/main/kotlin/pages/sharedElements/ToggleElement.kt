@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.MILLISECONDS_IN_A_SECOND
-import pages.isCurrentlyVisible
 import pages.waitUntilPresent
 
 const val NUMBER_OF_RETRIES = 10
@@ -22,7 +21,6 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
     private val toggleSpinner = HybridPageElement(
             webDesktopLocator = "//*[@id='${id}_spinner']",
             page = page)
-
 
     fun assertIsVisible() {
         toggleElement.waitUntilPresent()
@@ -42,7 +40,9 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
 
     private fun isLoading(): Boolean {
         toggleSpinner.waitUntilPresent()
-        return toggleSpinner.isCurrentlyVisible
+        var isVisible = false
+        toggleSpinner.actOnTheElement { isVisible = it.isCurrentlyVisible }
+        return isVisible
     }
 
     private fun assertState(expectedChecked: Boolean) {

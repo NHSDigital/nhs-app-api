@@ -1,6 +1,7 @@
 package pages
 
 import io.appium.java_client.MobileElement
+import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -8,7 +9,6 @@ import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.WebElement
 import webdrivers.getLocatorStrategy
 import webdrivers.isIOS
-import java.lang.AssertionError
 
 const val MAX_WEB_DRIVER_EXCEPTIONS = 5
 const val MAX_ASSERTION_ERRORS = 2
@@ -142,11 +142,23 @@ class NativePageElement(
         }
     }
 
-
     fun isDisplayed(): Boolean {
+        return when (page.onMobile()) {
+            true -> {
+                this.selectNativeElement().isDisplayed
+            }
+            false -> {
+                var isDisplayed = false
+                this.actOnTheElement { isDisplayed = it.isDisplayed }
+                return isDisplayed
+            }
+        }
+    }
+
+    fun assertIsDisplayed(message: String) {
         return when(page.onMobile()) {
-                true -> {this.selectNativeElement().isDisplayed }
-                false -> {this.isDisplayed }
+                true -> { Assert.assertTrue(message, this.selectNativeElement().isDisplayed) }
+                false -> {this.actOnTheElement { Assert.assertTrue(message, it.isDisplayed) } }
             }
     }
 

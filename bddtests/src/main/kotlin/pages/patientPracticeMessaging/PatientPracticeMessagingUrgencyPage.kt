@@ -4,7 +4,6 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.avoidChromeWebDriverServiceCrash
-import pages.isDisplayed
 import pages.navigation.WebHeader
 import pages.sharedElements.RadioButtons
 import pages.text
@@ -48,7 +47,6 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
                 "//div[@id='noRecipients']//p",
                 page=this
         )
-        Assert.assertTrue(noRecipientsMessage.isDisplayed)
         Assert.assertEquals("Contact your GP surgery for more information. For urgent medical advice, " +
                 "go to 111.nhs.uk or call 111.",
                 noRecipientsMessage.text);

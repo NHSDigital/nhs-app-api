@@ -214,7 +214,7 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
 
     @Then("^I see list of online only pharmacies displayed on the result page$")
     fun iSeeOnlineOnlyPharmaciesOnResultsPage(){
-        nominatedPharmacyResultsPage.isLoaded()
+        nominatedPharmacyResultsPage.assertIsLoaded()
         val expectedData = NominatedPharmacySerenityHelpers
                 .SEARCH_RESULTS
                 .getOrFail<NhsAzureSearchOrganisationReply>().value
@@ -254,7 +254,7 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
 
     @Then("^I see list of random online pharmacies displayed on the result page$")
     fun iSeeOnlinePharmaciesOnResultsPage(){
-        nominatedPharmacyResultsPage.isLoaded()
+        nominatedPharmacyResultsPage.assertIsLoaded()
         val searchResults = nominatedPharmacyResultsPage.getOnlinePharmacies()
         Assert.assertEquals(DEFAULT_SEARCH_RESULT_COUNT, searchResults.size)
     }

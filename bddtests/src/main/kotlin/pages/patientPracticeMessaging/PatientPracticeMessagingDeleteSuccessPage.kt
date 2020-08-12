@@ -2,12 +2,12 @@ package pages.patientPracticeMessaging
 
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isDisplayed
+import pages.assertIsDisplayed
 
 class PatientPracticeMessagingDeleteSuccessPage: HybridPageObject() {
 
     fun assertDisplayed() {
-        goToMessagesLink().isDisplayed
+        goToMessagesLink().assertIsDisplayed("Expected Go To Messages Link")
     }
 
     private fun pageElement(xPath: String): HybridPageElement {

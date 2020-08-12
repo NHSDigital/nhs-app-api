@@ -2,6 +2,7 @@ package mocking.data.patientPracticeMessaging
 
 import constants.DateTimeFormats
 import mocking.patientPracticeMessaging.ConversationDeletedResponse
+import mocking.patientPracticeMessaging.DateAndFormat
 import mocking.patientPracticeMessaging.MessageDetails
 import mocking.patientPracticeMessaging.MessageReadStatusUpdateResponse
 import mocking.patientPracticeMessaging.MessageRecipientsResponseModel
@@ -9,16 +10,14 @@ import mocking.patientPracticeMessaging.MessageReply
 import mocking.patientPracticeMessaging.MessageResponseModel
 import mocking.patientPracticeMessaging.MessagesResponseModel
 import mocking.patientPracticeMessaging.PatientMessageSummary
+import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import mocking.patientPracticeMessaging.Recipient
 import mocking.patientPracticeMessaging.RecipientResponse
-import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
-import mocking.patientPracticeMessaging.DateAndFormat
 import utils.set
 import utils.setIfNotAlreadySet
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 object EmisMessagingData {
     private const val MESSAGE_ID_OFFSET = 10

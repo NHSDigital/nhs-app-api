@@ -2,23 +2,23 @@ package pages.ndop
 
 import pages.HybridPageObject
 import pages. HybridPageElement
-import pages.isDisplayed
-import pages.isPresent
+import pages.assertIsDisplayed
+import pages.assertSingleElementPresent
 
 class NdopPage : HybridPageObject() {
 
-    private val pageTitle = HybridPageElement(
+    private val token = HybridPageElement(
             webDesktopLocator = "//p[contains(text(),'token')]",
             androidLocator = null,
             iOSLocator = "//*[@id=\"ndop-token-form\"]",
             page = this
     )
 
-    fun tokenIsDisplayed(): Boolean {
+    fun assertTokenIsDisplayed() {
         if (onMobile()){
-            return pageTitle.isPresent
+            token.assertSingleElementPresent()
         } else {
-            return pageTitle.isDisplayed
+            token.assertIsDisplayed("Expected token to be displayed")
         }
     }
 }

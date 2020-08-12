@@ -3,19 +3,19 @@ package pages.patientPracticeMessaging
 import net.serenitybdd.core.pages.WebElementFacade
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isDisplayed
+import pages.assertIsDisplayed
 import org.junit.Assert.assertEquals
 import pages.text
 
 class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
 
     fun assertDisplayed(assertSubject: Boolean) {
-        messageTextInput().isDisplayed
+        messageTextInput().assertIsDisplayed("Expected MessageTextInput")
         if (assertSubject) {
-            subjectTextInput().isDisplayed
+            subjectTextInput().assertIsDisplayed("Expected Subject")
         }
-        messageSubHeader().isDisplayed
-        sendMessageButton().isDisplayed
+        messageSubHeader().assertIsDisplayed("Expected SubHeader")
+        sendMessageButton().assertIsDisplayed("Expected Send Message Button")
 
         assertEquals("For advice now, contact your GP surgery directly, go to 111.nhs.uk or call 111.",
                 messageSubHeader().text)

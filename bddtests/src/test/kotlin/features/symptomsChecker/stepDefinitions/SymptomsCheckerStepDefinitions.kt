@@ -13,6 +13,7 @@ import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndCondi
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.CheckMySymptomsPage
+import pages.assertIsVisible
 import pages.externalSites.AdviceAboutCoronavirusPage
 import pages.externalSites.HealthAToZPage
 import pages.externalSites.OneOneOneOnlinePage
@@ -67,31 +68,31 @@ open class SymptomsCheckerStepDefinitions {
     @When("^I click Search Conditions and Treatments$")
     fun clickSearchConditionsAndTreatments() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.clickSearchConditionsAndTreatments()
+        checkMySymptomsPage.searchConditionsAndTreatments.click()
     }
 
     @When("^I click Use NHS 111 online$")
     fun clickUserNhsOneOneOneOnline() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.clickUseNhsOneOneOneOnline()
+        checkMySymptomsPage.useNhsOneOneOneOnline.click()
     }
 
     @When("^I click Advice About Coronavirus$")
     fun clickAdviceAboutCoronavirus() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.clickAdviceAboutCoronavirus()
+        checkMySymptomsPage.adviceAboutCoronavirus.click()
     }
 
     @When("^I click Ask your GP for Advice$")
     fun clickAskYourGpForAdvice() {
-        checkMySymptomsPage.clickAskYourGpForAdvice()
+        checkMySymptomsPage.askYourGpForAdvice.click()
     }
 
     @Then("^the Symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
-        checkMySymptomsPage.assertSearchConditionsAndTreatmentsIsVisible()
-        checkMySymptomsPage.assertUseNhsOneOneOneOnlineIsVisible()
-        checkMySymptomsPage.assertAdviceAboutCoronavirusIsVisible()
+        checkMySymptomsPage.searchConditionsAndTreatments.assertIsVisible()
+        checkMySymptomsPage.useNhsOneOneOneOnline.assertIsVisible()
+        checkMySymptomsPage.adviceAboutCoronavirus.assertIsVisible()
     }
 
     @Then("^the Symptoms page header and navigation menu are correct$")

@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isVisible
+import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/biometric-login-error")
 class LoginBiometricErrorPage : HybridPageObject() {
@@ -42,9 +42,7 @@ class LoginBiometricErrorPage : HybridPageObject() {
                     helpfulName = "secondParagraph")
         }
 
-        Assert.assertTrue(title.isVisible)
-        Assert.assertTrue(paragraphOne.isVisible)
-        Assert.assertTrue(paragraphTwo.isVisible)
+        title.assertIsVisible()
         Assert.assertEquals(
                 expectedParagraphOne,
                 paragraphOne.textValue)

@@ -25,11 +25,12 @@ import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import models.prescriptions.PrescriptionLoaderConfiguration
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import pages.prescription.ViewOrdersPrescriptionsPage
+import pages.assertElementNotPresent
+import pages.assertIsVisible
 import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
+import pages.prescription.ViewOrdersPrescriptionsPage
 import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -300,9 +301,8 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see the name of the proxy user who ordered the prescription$")
     fun thenISeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
-        assertTrue(viewOrders.isOrderedByLabelVisible())
+        viewOrders.orderedByLabel.assertIsVisible()
     }
-
 
     @Then("^I click the change nominated pharmacy link on the view orders page$")
     fun thenIClickTheChangeNominatedPharmacyLink() {
@@ -311,7 +311,7 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I do not see the name of the proxy user who ordered the prescription$")
     fun thenIDoNotSeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
-        assertFalse(viewOrders.isOrderedByLabelVisible())
+        viewOrders.orderedByLabel.assertElementNotPresent()
     }
 
     @Then("^I see a message indicating that I have no repeat prescriptions$")

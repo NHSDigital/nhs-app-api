@@ -9,7 +9,6 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
-import org.junit.Assert
 import pages.ndop.ChoiceApplyDataSharingPage
 import pages.ndop.ConfidentialDataSharingPage
 import pages.ndop.DataSharingPage
@@ -72,14 +71,10 @@ class DataSharingStepDefinitions {
 
     @Then("^the NDOP website is displayed$")
     fun iAmOnTheNDOPWebsite() {
-        Assert.assertTrue("Expected token to be displayed", ndopTokenIsDisplayed())
-    }
-
-    private fun ndopTokenIsDisplayed(): Boolean {
         if(ndopPage.onMobile()){
             URL(Config.instance.dataPreferencesUrl)
         }
-        return ndopPage.tokenIsDisplayed()
+        ndopPage.assertTokenIsDisplayed()
     }
 
     private fun getPage(title: String): DataSharingPage {

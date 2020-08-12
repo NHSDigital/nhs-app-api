@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
-import pages.isPresent
 import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/view-orders")
@@ -65,10 +64,6 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
         // note: needs double quotes in "contains" expression because message has apostrophe
         val message = "You don't currently have any repeat prescriptions ordered"
         return findByXpath("//h2[contains(., \"$message\")]").isVisible
-    }
-
-    fun isOrderedByLabelVisible(): Boolean {
-        return orderedByLabel.isPresent
     }
 
     fun iClickTheChangeNominatedPharmacyLink() {

@@ -4,7 +4,6 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.isVisible
 import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/search")

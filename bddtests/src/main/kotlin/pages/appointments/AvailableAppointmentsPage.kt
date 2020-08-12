@@ -1,16 +1,13 @@
 package pages.appointments
 
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert.assertTrue
 import pages.HybridPageElement
-import pages.withoutRetrying
-import pages.assertSingleElementPresent
-import pages.isPresent
-import pages.text
 import pages.assertIsVisible
+import pages.assertSingleElementPresent
 import pages.sharedElements.BannerObject
 import pages.sharedElements.DropdownElement
 import pages.sharedElements.ExpandElement
+import pages.withoutRetrying
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
@@ -24,8 +21,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             containsTextXpathSubstring
     )
     private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "", "")
-    private val noAppointmentsAvailableForDateTextByDateXpathFormat =
-            "$dateHeadingByTextXpathFormat/following-sibling::p"
 
     override val titleText: String = "Book an appointment"
 
@@ -98,13 +93,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             helpfulName = "Date heading by text. "
     )
 
-    private fun noAppointmentsAvailableForDateTextByDate(date: String) = HybridPageElement(
-            webDesktopLocator = String.format(noAppointmentsAvailableForDateTextByDateXpathFormat, date),
-            androidLocator = null,
-            page = this,
-            helpfulName = "Text displayed when there are no appointments on a particular date. "
-    )
-
     private val desktopBackLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='main-back-button']",
             page = this
@@ -129,26 +117,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         dateHeadingByText(expectedDateHeading).assertSingleElementPresent()
     }
 
-    fun getNoSlotsAvailableTextAtDate(date: String): String {
-        val hybridPageElement = noAppointmentsAvailableForDateTextByDate(date)
-        hybridPageElement.assertSingleElementPresent()
-        return hybridPageElement.text
-    }
-
     fun getNumberOfDateHeadingsPresent(): Int {
-        assertTrue(
-                "No date headings are present. Please use assertElementNotPresent() if this is correct behaviour. ",
-                dateHeading.isPresent
-        )
         return dateHeading.elements.size
     }
 
     fun getNumberOfTimeSlotsPresent(): Int {
-        assertTrue(
-                "No time slots are present. Please use assertElementNotPresent() if this is correct behaviour. ",
-                timeSlots.isPresent
-        )
         return timeSlots.elements.size
     }
-
 }

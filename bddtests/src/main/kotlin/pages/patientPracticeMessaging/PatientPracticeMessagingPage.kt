@@ -1,14 +1,13 @@
 package pages.patientPracticeMessaging
 
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
-import org.junit.Assert.assertEquals
 import models.ExpectedMessage
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertEquals
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isDisplayed
-import pages.isVisible
+import pages.assertIsDisplayed
 import pages.text
+import pages.assertIsVisible
 import utils.getOrNull
 
 class PatientPracticeMessagingPage: HybridPageObject() {
@@ -63,7 +62,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
                 }
 
                 if (message.hasUnreadReplies!!) {
-                    assert(getUnreadIndicator().isVisible)
+                    getUnreadIndicator().assertIsVisible()
                 }
             }
     }
@@ -78,7 +77,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
     }
 
     fun assertNoMessagesTextDisplayed() {
-        assertTrue("Expected No patient practice messages to be displayed", noMessagesText().isDisplayed)
+        noMessagesText().assertIsDisplayed("Expected No patient practice messages to be displayed")
     }
 
     private fun noMessagesText(): HybridPageElement {

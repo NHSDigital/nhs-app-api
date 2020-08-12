@@ -9,7 +9,6 @@ import mocking.tpp.models.LinkAccount
 import mocking.tpp.models.LinkAccountReply
 import mockingFacade.linkage.LinkageInformationFacade
 import org.apache.http.HttpStatus
-import java.util.*
 
 class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "/tpp/") {
     init {

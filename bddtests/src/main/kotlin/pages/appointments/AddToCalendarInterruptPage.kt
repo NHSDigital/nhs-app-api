@@ -1,7 +1,7 @@
 package pages.appointments
 
 import pages.HybridPageElement
-import pages.isVisible
+import pages.assertIsVisible
 
 open class AddToCalendarInterruptPage : AppointmentSharedElementsPage() {
 
@@ -20,7 +20,7 @@ open class AddToCalendarInterruptPage : AppointmentSharedElementsPage() {
     override val titleText: String = "N/A"
 
     fun checkAddToCalendarMessage() {
-        assert(headerMessage.isVisible);
+        headerMessage.assertIsVisible();
     }
 
     fun clickAddToCalendarButton() {

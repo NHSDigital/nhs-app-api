@@ -9,7 +9,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import pages.appointments.YourAppointmentsPage
-import pages.isDisplayed
+import pages.assertIsDisplayed
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 import java.util.*
@@ -63,7 +63,8 @@ open class YourAppointmentsUISteps {
 
     @Step
     fun checkUpcomingAppointmentsAreCorrectlyPopulated() {
-        yourAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.upcomingAppointmentsHeading
+                .assertIsDisplayed("Expected Upcoming Appointment Heading")
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         )
@@ -71,7 +72,8 @@ open class YourAppointmentsUISteps {
 
     @Step
     fun checkHistoricalAppointmentsAreCorrectlyPopulated() {
-        yourAppointmentsPage.pastAppointmentsHeading.isDisplayed
+        yourAppointmentsPage.pastAppointmentsHeading
+                .assertIsDisplayed("Expected Historical Appointment Heading")
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS
         )

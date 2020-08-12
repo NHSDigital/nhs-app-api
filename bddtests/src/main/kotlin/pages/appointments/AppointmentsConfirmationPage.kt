@@ -2,13 +2,8 @@ package pages.appointments
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
 import pages.HybridPageElement
-import pages.text
 import pages.typeTextIntoTextArea
-import pages.value
-import pages.assertIsVisible
-import pages.isSelected
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
 open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
@@ -49,25 +44,9 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
         )
     }
 
-    private fun telephoneNumberRadioButtonSection(telephoneNumber: String): HybridPageElement {
-        return HybridPageElement(
-                webDesktopLocator = String.format("$telephoneNumberRadioButtonByValueXpath/..", telephoneNumber),
-                webMobileLocator = String.format("$telephoneNumberRadioButtonByValueXpath/..", telephoneNumber),
-                androidLocator = null,
-                page = this
-        )
-    }
-
     private val alternateTelephoneNumberRadioButton = HybridPageElement(
             webDesktopLocator = alternateNumberRadioButtonXpath,
             webMobileLocator = alternateNumberRadioButtonXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    private val alternateTelephoneNumberRadioButtonSection = HybridPageElement(
-            webDesktopLocator = "$alternateNumberRadioButtonXpath/..",
-            webMobileLocator = "$alternateNumberRadioButtonXpath/..",
             androidLocator = null,
             page = this
     )
@@ -89,41 +68,14 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
 
     override val titleText: String = "Confirm your appointment"
 
-    private fun getTelephoneNumberRadioButtonText(telephoneNumber: String): String {
-        return telephoneNumberRadioButtonSection(telephoneNumber).text.trim()
-    }
-
     fun describeSymptoms(symptoms: String) {
         reasonFormField.typeTextIntoTextArea(symptoms)
         hideKeyboardIfOnMobile()
     }
 
-    fun getSymptoms(): String {
-        return reasonFormField.value
-    }
-
     fun describeTelephoneNumber(telephoneNumber: String) {
         telephoneNumberDiv.actOnTheElement { it.type<WebElementFacade>(telephoneNumber) }
         hideKeyboardIfOnMobile()
-    }
-
-    fun assertRadioButtonDisplayedForPhoneNumber(phoneNumber: String) {
-        telephoneNumberRadioButtonSection(phoneNumber).assertIsVisible()
-        Assert.assertEquals(
-                "Phone number not displayed against the radio button. ",
-                phoneNumber,
-                getTelephoneNumberRadioButtonText(phoneNumber)
-        )
-    }
-
-    fun assertRadioButtonDisplayedForAlternateNumber() {
-        alternateTelephoneNumberRadioButtonSection.assertIsVisible()
-        val expectedText = "Use other phone number"
-        Assert.assertEquals(
-                "Expected text for the radio button for entering an alternate number is incorrect. ",
-                expectedText,
-                alternateTelephoneNumberRadioButtonSection.text
-        )
     }
 
     fun getNumberOfSelectedPhoneNumberRadioButtons(): Int {
@@ -138,13 +90,5 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
 
     fun selectRadioButtonForAlternativePhoneNumber() {
         alternateTelephoneNumberRadioButton.click()
-    }
-
-    fun assertRadioButtonForAlternativePhoneNumberIsSelected() {
-        Assert.assertTrue("Radio button for alternate telephone number is not selected. " +
-                "${getNumberOfSelectedPhoneNumberRadioButtons()} " +
-                "radio buttons are selected. ",
-                alternateTelephoneNumberRadioButton.isSelected
-        )
     }
 }

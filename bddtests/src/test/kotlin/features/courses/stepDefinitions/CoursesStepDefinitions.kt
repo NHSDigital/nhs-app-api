@@ -5,7 +5,6 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.authentication.steps.LoginSteps
-import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
 import mocking.MockingClient
@@ -13,12 +12,15 @@ import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHisto
 import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
 import pages.PrescriptionsHubPage
+import pages.assertElementNotPresent
+import pages.assertIsVisible
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.RepeatPrescriptionsPage
@@ -241,13 +243,15 @@ open class CoursesStepDefinitions {
     @Then("^I see the special request text area$")
     fun iSeeTheSpecialRequestTextbox() {
         repeatPrescriptions.shouldBeDisplayed()
-        Assert.assertTrue(repeatPrescriptions.isSpecialRequestTextAreaVisible())
+        Assert.assertTrue(repeatPrescriptions.specialRequestTextArea.elements.isNotEmpty())
+        repeatPrescriptions.specialRequestTextArea.assertIsVisible()
     }
 
     @Then("^I don't see the special request text area$")
     fun iDontSeeTheSpecialRequestTextbox() {
         repeatPrescriptions.shouldBeDisplayed()
-        Assert.assertFalse(repeatPrescriptions.isSpecialRequestTextAreaVisible())
+        Assert.assertFalse(repeatPrescriptions.specialRequestTextArea.elements.isNotEmpty())
+        repeatPrescriptions.specialRequestTextArea.assertElementNotPresent()
     }
 
     @Then("^I see my previously selected repeat prescriptions selected$")

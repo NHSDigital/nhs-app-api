@@ -1,10 +1,9 @@
 package pages.account
 
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isVisible
+import pages.assertIsVisible
 import pages.sharedElements.ToggleElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account/login-settings")
@@ -43,7 +42,7 @@ class LoginSettingsPage : HybridPageObject() {
 
     private fun assertDisplayWithNoInfoText(titleLocator: String) {
         val title = getTitle(titleLocator)
-        Assert.assertTrue(title.isVisible)
+        title.assertIsVisible()
     }
 
     private fun getTitle(titleLocator: String): HybridPageElement {

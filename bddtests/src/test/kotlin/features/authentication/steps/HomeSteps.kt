@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
 import pages.HybridPageElement
+import pages.assertIsVisible
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
@@ -62,7 +63,7 @@ open class HomeSteps {
     @Step
     fun assertHeaderVisible() {
         webHeader.getPageTitle().withText("Home")
-        Assert.assertTrue(homePage.isWelcomeHeaderVisible())
+        homePage.greeting.assertIsVisible()
     }
 
     @Step

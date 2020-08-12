@@ -1,7 +1,5 @@
 package pages
 
-import org.junit.Assert
-
 open class AppointmentsGpSessionError: GpSessionError() {
 
     private val coronaVirusHeader = setupElement("Get advice about coronavirus");
@@ -10,22 +8,22 @@ open class AppointmentsGpSessionError: GpSessionError() {
     private val nhs111Header = setupElement("Use NHS 111 online")
 
     fun assertGpAdviceMenuItem() : AppointmentsGpSessionError{
-        Assert.assertTrue(gpAdviceHeader.isVisible)
+        gpAdviceHeader.assertIsVisible()
         return this
     }
 
     fun assertGpAdminMenuItem(): AppointmentsGpSessionError{
-        Assert.assertTrue(gpAdminHeader.isVisible)
+        gpAdminHeader.assertIsVisible()
         return this
     }
 
     fun assertCoronaVirusMenuItem(): AppointmentsGpSessionError{
-        Assert.assertTrue(coronaVirusHeader.isVisible)
+        coronaVirusHeader.assertIsVisible()
         return this
     }
 
     fun assertNHS111Online(): AppointmentsGpSessionError{
-        Assert.assertTrue(nhs111Header.isVisible)
+        nhs111Header.assertIsVisible()
         return this
     }
 }

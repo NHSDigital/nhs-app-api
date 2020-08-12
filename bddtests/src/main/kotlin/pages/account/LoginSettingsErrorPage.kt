@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isVisible
+import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account/login-settings/error")
 class LoginSettingsErrorPage : HybridPageObject() {
@@ -77,9 +77,9 @@ class LoginSettingsErrorPage : HybridPageObject() {
                     helpfulName = "informationParaTwo")
         }
 
-        Assert.assertTrue(firstParagraph.isVisible)
+        firstParagraph.assertIsVisible()
         Assert.assertEquals(expectedCannotFindFirstParagraph, firstParagraph.textValue)
-        Assert.assertTrue(secondParagraph.isVisible)
+        secondParagraph.assertIsVisible()
         Assert.assertEquals(
                 expectedCannotChangeSecondParagraph,
                 secondParagraph.textValue)
@@ -88,8 +88,8 @@ class LoginSettingsErrorPage : HybridPageObject() {
     private fun assertDisplayWithInfoText(text: HybridPageElement, titleLocator: String, expectedText: String) {
         val title = getTitle(titleLocator)
 
-        Assert.assertTrue(title.isVisible)
-        Assert.assertTrue(text.isVisible)
+        title.assertIsVisible()
+        text.assertIsVisible()
         Assert.assertEquals(
                 expectedText,
                 text.textValue)
@@ -97,7 +97,7 @@ class LoginSettingsErrorPage : HybridPageObject() {
 
     private fun assertDisplayWithNoInfoText(titleLocator: String) {
         val title = getTitle(titleLocator)
-        Assert.assertTrue(title.isVisible)
+        title.assertIsVisible()
     }
 
     private fun getTitle(titleLocator: String): HybridPageElement {

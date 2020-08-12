@@ -57,14 +57,15 @@ class HeaderNative : NativePageObject() {
     }
 
     fun assertIsVisible(title: String) {
-        Assert.assertTrue("Expected logo to be visible", homeIcon.isDisplayed())
+        homeIcon.assertIsDisplayed("Expected logo to be visible")
+
         Assert.assertTrue("Expected account icon to be visible",
-                accountIcon.isDisplayed() || accountLink.isDisplayed())
+                accountIcon.elements.count() == 1 || accountLink.elements.count() == 1)
 
         val optionManager = OptionManager.instance()
         when {
             optionManager.isEnabled(DeviceWebDesktop::class) ->
-                Assert.assertTrue("Expected help icon to be visible", helpIcon.isDisplayed())
+                 helpIcon.assertIsDisplayed("Expected help icon to be visible")
         }
 
         waitForPageHeaderText(title)

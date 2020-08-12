@@ -6,6 +6,7 @@ import mocking.JSonXmlConverter.wrapAroundXmlTag
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
+import mocking.vision.VisionConstants.defaultOwnerId
 import mocking.vision.VisionMappingBuilder
 import mocking.vision.appointments.helpers.AppointmentsSlotsHelper
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
@@ -13,7 +14,6 @@ import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
 import mocking.vision.models.appointments.Location
-import mocking.vision.VisionConstants.defaultOwnerId
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -22,7 +22,6 @@ import utils.SerenityHelpers
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class AppointmentSlotsBuilderVision(
         patient: Patient,

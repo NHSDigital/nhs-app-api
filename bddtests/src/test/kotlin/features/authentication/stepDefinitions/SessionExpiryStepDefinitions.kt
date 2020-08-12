@@ -12,7 +12,6 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import pages.CheckMySymptomsPage
 import pages.SessionExpiry
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
@@ -31,10 +30,6 @@ class SessionExpiryStepDefinitions  {
     lateinit var login: LoginSteps
 
     lateinit var sessionExpiry: SessionExpiry
-
-    lateinit var patient: Patient
-
-    lateinit var checkMySymptoms: CheckMySymptomsPage
 
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
