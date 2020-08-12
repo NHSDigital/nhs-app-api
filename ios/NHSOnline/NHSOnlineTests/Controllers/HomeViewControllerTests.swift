@@ -424,4 +424,61 @@ class HomeViewControllerTests: XCTestCase {
         XCTAssert(appWebInterface?.biometricEnabled == false)
         XCTAssert(appWebInterface?.biometricTypeRef == "face")
     }
+    
+    func test_whenPaycassoOnSuccessIsCalled_andResponseIsInstaSureResponse_willSendExpectedMessagethroughAppWebInterface() {
+        let response: PCSFlowResponse = PCSInstaSureFlowResponse()
+        
+        vcHome.onSuccess(response)
+        
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoTransactionType == "InstaSureFlowResponse")
+        XCTAssert(appWebInterface?.paycassoTransactionId == response.transactionId)
+        XCTAssert(appWebInterface?.paycassoFaceMatched == true)
+        
+    }
+    
+    func test_whenPaycassoOnSuccessIsCalled_andResponseIsDocuSureResponse_willSendExpectedMessagethroughAppWebInterface() {
+        let response: PCSFlowResponse = PCSDocuSureFlowResponse()
+        
+        vcHome.onSuccess(response)
+        
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoTransactionType == "DocuSureFlowResponse")
+        XCTAssert(appWebInterface?.paycassoTransactionId == response.transactionId)
+        XCTAssert(appWebInterface?.paycassoFaceMatched == false)
+    }
+    
+    func test_whenPaycassoOnSuccessIsCalled_andResponseIsVeriSureResponse_willSendExpectedMessagethroughAppWebInterface() {
+        let response: PCSFlowResponse = PCSVeriSureFlowResponse()
+        
+        vcHome.onSuccess(response)
+        
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoTransactionType == "VeriSureFlowResponse")
+        XCTAssert(appWebInterface?.paycassoTransactionId == response.transactionId)
+        XCTAssert(appWebInterface?.paycassoFaceMatched == false)
+    }
+    
+    func test_whenPaycassoOnFailureIsCalled_andResponseIsInstaSureResponse_willSendExpectedMessagethroughAppWebInterface() {
+        
+        let response = PCSFlowFailureResponse()
+        
+        vcHome.onFailure(response)
+        
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoErrorcode == response.failureCode)
+        XCTAssert(appWebInterface?.paycassoErrorMessage == response.failureMessage)
+        XCTAssert(appWebInterface?.paycassoFaceMatched == false)
+        
+    }
+    
+    func test_whenHandleShowPaycassoCalled_andConfigurationStringIsEmpty_willSendExpectedMessageThroughAppWebInterface() {
+        
+        vcHome.handleShowPaycasso(paycassoConfiguration: "")
+        
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoCallbackCalled == true)
+        XCTAssert(appWebInterface?.paycassoErrorMessage == "Paycasso configuration passed is empty/invalid")
+        XCTAssert(appWebInterface?.paycassoFaceMatched == false)
+    }
 }

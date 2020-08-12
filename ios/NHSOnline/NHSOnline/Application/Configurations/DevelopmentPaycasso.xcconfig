@@ -1,0 +1,5 @@
+#include "Defaults.xcconfig"
+#include "Pods/Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.development.xcconfig"
+
+HOME_URL = local.bitraft.io/
+BASE_API_URL = local.bitraft.io:444/

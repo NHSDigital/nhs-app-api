@@ -1,0 +1,6 @@
+#include "Defaults.xcconfig"
+#include "Pods/Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.development.xcconfig"
+
+BASE_SCHEME = http
+HOME_URL = web.local.bitraft.io:3000/
+BASE_API_URL = api.local.bitraft.io:8089/

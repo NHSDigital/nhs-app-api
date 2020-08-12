@@ -8,7 +8,7 @@ import FidoClientIOS
 import EventKit
 import EventKitUI
 
-class HomeViewController : UIViewController, EKEventEditViewDelegate {
+class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFlowDelegate {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     var progressSpinner: ProgressSpinner?
@@ -45,6 +45,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
     var isPresented: Bool = false
     var goingBack: Bool = false
     var biometricService: BiometricService?
+    var paycassoService: PaycassoService?
     var notificationsService: NotificationsService?
     var knownServicesProvider: KnownServicesProtocol?
     var configurationServiceProvider: ConfigurationServiceProtocol?
@@ -122,6 +123,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                                             appWebInterface: appWebInterface!,
                                             fidoClient: fidoClient,
                                             laContext: laContext)
+        paycassoService = PaycassoService(homeViewController: self, appWebInterface: appWebInterface!, loggingService: LoggingService())
         
 
         DispatchQueue.main.async {
@@ -445,6 +447,53 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                 biometricService?.sendBiometricSpec(enabled: false)
             }
         }
+    }
+    
+    open func handleShowPaycasso(paycassoConfiguration: String){
+        
+        let configData = Data(String(paycassoConfiguration).utf8);
+        
+        if (configData.isEmpty) {
+            LoggingService().logError(message: "Invalid configuration received. Returning to login with failure")
+            
+            PaycassoErrors.init(errorMessage: "Paycasso configuration passed is empty/invalid", appWebInterface: appWebInterface!).callbackCustomResponseToWeb()
+            
+        } else {
+            self.paycassoService?.startTransaction(configData: configData)
+        }
+    }
+    
+    func onSuccess(_ response: PCSFlowResponse) {
+        
+        var transactionType = ""
+        var isFaceMatched = false
+        
+        switch (response) {
+            case is PCSInstaSureFlowResponse:
+                isFaceMatched = true
+                transactionType = "InstaSureFlowResponse"
+            
+            case is PCSDocuSureFlowResponse:
+                transactionType = "DocuSureFlowResponse"
+            
+            case is PCSVeriSureFlowResponse:
+                transactionType = "VeriSureFlowResponse"
+            default:
+                LoggingService().logError(message: "The returned response document type is not recognisedn")
+                PaycassoErrors.init(errorMessage: "The returned response document type is not recognised", appWebInterface: appWebInterface!).callbackCustomResponseToWeb()
+        }
+        
+        if (transactionType == "") {
+            return
+        }
+        
+        LoggingService().logInfo(message: "Success response received from Paycasso with transaction type of \(transactionType), sending response to login")
+        self.appWebInterface?.paycassoSuccessCallback(isFaceMatched: isFaceMatched, transactionId: response.transactionId, transactionType: transactionType)
+    }
+
+    func onFailure(_ response: PCSFlowFailureResponse) {
+        LoggingService().logError(message: "Failure response returned from Paycasso with failure code \(response.failureCode), returning response to login")
+        PaycassoErrors.init(errorMessage: response.failureMessage, appWebInterface: appWebInterface!).callbackPaycassoResponseToWeb(code: response.failureCode)
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <!--HomeViewController-->
         <scene sceneID="fSg-JL-25l">
             <objects>
-                <viewController storyboardIdentifier="HomeViewController" title="HomeViewController" id="fl5-i3-NEv" customClass="HomeViewController" customModule="NHSOnline" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" title="HomeViewController" id="fl5-i3-NEv" customClass="HomeViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DCw-4H-MWg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -118,7 +118,7 @@
         <!--Unsecure Web View Controller-->
         <scene sceneID="VWA-rN-H3W">
             <objects>
-                <viewController storyboardIdentifier="UnsecureWebViewController" title="Unsecure Web View Controller" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="O49-bb-iEe" customClass="UnsecureWebViewController" customModule="NHSOnline" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UnsecureWebViewController" title="Unsecure Web View Controller" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="O49-bb-iEe" customClass="UnsecureWebViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jP3-VZ-6Nw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -163,7 +163,7 @@
         <!--Web View Controller-->
         <scene sceneID="BHj-VG-B0k">
             <objects>
-                <viewController storyboardIdentifier="WebViewController" title="Web View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gYs-SY-5nG" customClass="WebViewController" customModule="NHSOnline" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" title="Web View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gYs-SY-5nG" customClass="WebViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sqL-hQ-eXV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -178,7 +178,7 @@
         <!--Native View Controller-->
         <scene sceneID="qG7-qH-FGG">
             <objects>
-                <viewController storyboardIdentifier="PageUnavailabilityViewController" title="Native View Controller" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i9L-px-mbd" customClass="PageUnavailabilityViewController" customModule="NHSOnline" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PageUnavailabilityViewController" title="Native View Controller" extendedLayoutIncludesOpaqueBars="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i9L-px-mbd" customClass="PageUnavailabilityViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J0Q-Cj-kkS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -257,6 +257,7 @@
             <point key="canvasLocation" x="-2954.4000000000001" y="-877.51124437781118"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <image name="AppointmentActiveIcon" width="25.5" height="25.5"/>
         <image name="AppointmentIcon" width="26.5" height="26.5"/>
@@ -269,5 +270,4 @@
         <image name="SymptomsActiveIcon" width="25.5" height="25.5"/>
         <image name="SymptomsIcon" width="26.5" height="26.5"/>
     </resources>
-    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

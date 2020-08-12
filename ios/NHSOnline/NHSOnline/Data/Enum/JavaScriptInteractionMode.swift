@@ -1,6 +1,7 @@
 enum JavaScriptInteractionMode: String, Codable {
     case None
     case NhsApp
+    case NhsLogin
     case SilverThirdParty
     case Unknown
 

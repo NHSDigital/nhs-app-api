@@ -49,11 +49,11 @@ class BiometricService: BiometricProtocol {
         var authError: NSError?
         if !laContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
             switch authError?.code {
-            case LAError.touchIDNotAvailable.rawValue: //same raw value as LAError.BiometryNotAvailable
+            case Int(kLAErrorBiometryNotAvailable):
                 Logger.logError(message: "touch/face id is not available")
-            case LAError.touchIDNotEnrolled.rawValue: //same raw value as LAError.BiometryNotEnrolled
+            case Int(kLAErrorBiometryNotEnrolled):
                 Logger.logError(message: "touch/face id is not enrolled")
-            case LAError.touchIDLockout.rawValue: //same raw value as LAError.BiometryLockout
+            case Int(kLAErrorBiometryLockout):
                 Logger.logError(message: "touch/face id has been locked and requires a passcode entered")
             case .none:
                 Logger.logError(message: "Local auth failed with error type .none ")
@@ -172,7 +172,6 @@ class BiometricService: BiometricProtocol {
         }
     }
     
-    @available(iOS 10.0, *)
     func getBiometricType() -> BiometricType {
         
         if #available(iOS 11.0, *) {
@@ -188,12 +187,11 @@ class BiometricService: BiometricProtocol {
         if #available(iOS 11.0, *) {
             if (laContext.biometryType == .faceID) {
                 self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.faceId.rawValue, enabled: enabled)
-            }
-            if (laContext.biometryType == .touchID) {
+            } else if (laContext.biometryType == .touchID) {
+                self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
+            } else {
                 self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
             }
-        } else if #available(iOS 10.0, *) {
-            self.appWebInterface.biometricSpec(biometricTypeReference: BiometricTypeWebReferences.touchId.rawValue, enabled: enabled)
-        }
     }
+}
 }

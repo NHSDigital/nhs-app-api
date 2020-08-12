@@ -164,4 +164,46 @@ class AppWebInterfacesTests: XCTestCase {
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
         assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'pageLeaveWarning/leavePage\');")
     }
+    
+    func test_whenPaycassoSuccessCallbackIsTriggered_thenExpectedMessageIsDispatched(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        let expectedString = "window.authentication.paycassoOnSuccess(`{\n    \"isFaceMatched\": false,\n    \"transactionId\": \"test\",\n    \"transactionType\": \"DocuSureResponse\"\n}`);"
+        
+        appWebInterface!.paycassoSuccessCallback(isFaceMatched: false, transactionId: "test", transactionType: "DocuSureResponse")
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == expectedString)
+    }
+    
+    func test_whenPaycassoResponseFailureCallbackCallbackIsTriggered_thenExpectedMessageIsDispatched(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        let expectedString = "window.authentication.paycassoOnFailure(`{\n    \"isFaceMatched\": false,\n    \"error\": {\n        \"errorCode\": 100,\n        \"errorMessage\": \"Test\"\n    }\n}`);"
+        
+        appWebInterface!.paycassoResponseFailureCallback(isFaceMatched: false, errorCode: 100, errorMessage: "Test")
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == expectedString)
+    }
+    
+    func test_whenPaycassoCustomFailureCallbackCallbackIsTriggered_thenExpectedMessageIsDispatched(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        let expectedString = "window.authentication.paycassoOnFailure(`{\n    \"isFaceMatched\": false,\n    \"error\": {\n        \"errorMessage\": \"Test\"\n    }\n}`);"
+        
+        appWebInterface!.paycassoCustomFailureCallback(isFaceMatched: false, errorMessage: "Test")
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == expectedString)
+    }
 }

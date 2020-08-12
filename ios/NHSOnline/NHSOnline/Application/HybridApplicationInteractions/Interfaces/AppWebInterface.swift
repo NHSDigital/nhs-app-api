@@ -64,6 +64,42 @@ class AppWebInterface {
         dispatchEvent(event: "notifications/authorised", args: response)
     }
     
+    func paycassoResponseFailureCallback(isFaceMatched: Bool, errorCode: Int, errorMessage: String) {
+        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: """
+            `{
+                "isFaceMatched": \(isFaceMatched),
+                "error": {
+                    "errorCode": \(errorCode),
+                    "errorMessage": "\(errorMessage)"
+                }
+            }`
+            """
+        )
+    }
+    
+    func paycassoCustomFailureCallback(isFaceMatched: Bool, errorMessage: String) {
+        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: """
+            `{
+                "isFaceMatched": \(isFaceMatched),
+                "error": {
+                    "errorMessage": "\(errorMessage)"
+                }
+            }`
+            """
+        )
+    }
+    
+    func paycassoSuccessCallback(isFaceMatched: Bool, transactionId: String, transactionType: String) {
+        dispatchNHSLoginEvent(functionName: "paycassoOnSuccess", functionArg: """
+            `{
+                "isFaceMatched": \(isFaceMatched),
+                "transactionId": "\(String(describing: transactionId))",
+                "transactionType": "\(String(describing: transactionType))"
+            }`
+            """
+        )
+    }
+    
     func stayOnPage() {
         dispatchEvent(event: "pageLeaveWarning/stayOnPage")
     }
@@ -76,8 +112,17 @@ class AppWebInterface {
         }
         
         let eventString = "window.$nuxt.$store.dispatch(\(eventArgs));"
+        evaluateWebviewJavascript(javascriptText: eventString)
+    }
+    
+    private func dispatchNHSLoginEvent(functionName: String, functionArg: String) {
+        let eventString = "window.authentication.\(functionName)(\(functionArg));"
+        evaluateWebviewJavascript(javascriptText: eventString)
+    }
+    
+    private func evaluateWebviewJavascript(javascriptText: String) {
         DispatchQueue.main.async {
-            self.webView?.evaluateJavaScript(eventString)
+            self.webView?.evaluateJavaScript(javascriptText)
         }
     }
 }

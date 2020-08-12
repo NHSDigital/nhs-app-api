@@ -1,22 +1,30 @@
-platform :ios, '9.0'
 use_frameworks!
 inhibit_all_warnings!
-
 source 'https://cdn.cocoapods.org/'
 source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-fido-client-ios-cocoapod'
-
-target 'NHSOnline' do
-  pod 'FidoClientIOS'
-  pod 'SwiftyJSON', '~> 4.0.0'
-  pod 'iProov', '~> 7.3.0'
-
-  target 'NHSOnlineTests' do
-    inherit! :search_paths
-    # Pods for testing
+if ENV['PAYCASSO'].present?
+  target 'NHSOnlinePaycasso' do
+    platform :ios, '11.0'
+    source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/paycasso-framework-cocoapod'
+    source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/paycasso-view-framework-cocoapod'
+    pod 'FidoClientIOS'
+    pod 'paycasso-framework'
+    pod 'paycasso-view-framework', '~> 2020.8.26'
+    pod 'SwiftyJSON', '~> 4.0.0'
+    pod 'iProov', '~> 7.3.0'
   end
-
+else
+  target 'NHSOnline' do
+    platform :ios, '9.0'
+    pod 'FidoClientIOS'
+    pod 'SwiftyJSON', '~> 4.0.0'
+    pod 'iProov', '~> 7.3.0'
+    target 'NHSOnlineTests' do
+      inherit! :search_paths
+      # Pods for testing
+    end
+  end
 end
-
 post_install do |installer|
     installer.pods_project.targets.each do |target|
       if ['KeychainAccess', 'Socket.IO-Client-Swift', 'SwiftyJSON'].include? target.name

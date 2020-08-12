@@ -16,6 +16,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         let contentController = WKUserContentController()
         LoadUserScript(name: "WebEventsThirdParty", contentController: contentController)
         LoadUserScript(name: "WebEventsPrivate", contentController: contentController)
+        LoadUserScript(name: "WebEventsNHSLogin", contentController: contentController)
         
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let config = WKWebViewConfiguration()

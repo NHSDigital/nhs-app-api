@@ -257,6 +257,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break;
             }
         }
+        
+        if (knownService.javaScriptInteractionMode == .NhsLogin) {
+            switch message.name {
+            case UserContent.showPaycasso.rawValue:
+                viewController.handleShowPaycasso(paycassoConfiguration: String(describing: message.body))
+                break
+            default:
+                break;
+            }
+        }
 
         if (knownService.javaScriptInteractionMode == .NhsApp) {
             switch message.name {

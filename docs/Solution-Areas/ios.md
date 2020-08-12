@@ -38,6 +38,17 @@ In a terminal run the following commands
 
 See more [here](https://guides.cocoapods.org/using/using-cocoapods.html).
 
+## Cocoapod install with Paycasso
+
+*Ensure you have committed all your changes before doing this*
+
+In a terminal run the following command if you wish to use Paycasso
+
+    ```bash
+    git clean -fxd && PAYCASSO=true pod install
+    ```
+
+
 ## Troubleshooting
 
 if when you try to run 'pod update' or 'pod install'you see an error that mentions a target opvveride the 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' build setting then go to the build settings for NHSOnline and in build options change 'Yes' to '$(inherited)'
