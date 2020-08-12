@@ -2,8 +2,8 @@ package features.authentication.stepDefinitions
 
 import com.google.gson.GsonBuilder
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.authentication.factories.Im1ConnectionV2Factory
 import features.authentication.factories.Im1ConnectionV2GetFactory
 import models.Patient

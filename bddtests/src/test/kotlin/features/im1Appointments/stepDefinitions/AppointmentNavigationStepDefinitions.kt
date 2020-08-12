@@ -1,7 +1,7 @@
 package features.im1Appointments.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.When
 import features.im1Appointments.steps.AppointmentGuidanceSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps

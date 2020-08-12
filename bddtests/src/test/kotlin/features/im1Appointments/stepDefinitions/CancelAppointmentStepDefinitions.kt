@@ -1,8 +1,8 @@
 package features.im1Appointments.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.im1Appointments.steps.CancelAppointmentSteps
 import mocking.stubs.StubbedEnvironment
 import mockingFacade.appointments.MyAppointmentsFacade

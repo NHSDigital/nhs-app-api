@@ -1,7 +1,7 @@
 package features.organDonation.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.OrganDonationDemographics
@@ -50,7 +50,7 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
         organDonationFaithAndBeliefsPage.radioButtons.assertAllUnselected()
     }
 
-    @Then("a validation message is shown if a user attempts to continue without selecting a faith and belief option")
+    @Then("^a validation message is shown if a user attempts to continue without selecting a faith and belief option$")
     fun aValidationMessageIsShownIfAUserAttemptsToContinueWithoutSelectingAFaithAndBeliefOption() {
 
         organDonationFaithAndBeliefsPage.radioButtons.assertAllUnselected()

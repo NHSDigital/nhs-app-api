@@ -1,6 +1,6 @@
 package features.analytics.stepDefinitions
 
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import pages.HomePage

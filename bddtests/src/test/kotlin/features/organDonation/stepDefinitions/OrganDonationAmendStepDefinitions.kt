@@ -1,7 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
@@ -17,7 +17,7 @@ import utils.set
 
 open class OrganDonationAmendStepDefinitions {
 
-    @Given("I am a (\\w+) user registered as opt-in who then amends their decision to opt-out")
+    @Given("^I am a (\\w+) user registered as opt-in who then amends their decision to opt-out$")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToOptOut(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -29,7 +29,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as opt-in who then amends their decision to some")
+    @Given("^I am a (\\w+) user registered as opt-in who then amends their decision to some$")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToSome(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -43,7 +43,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as opt-in who then amends their faith and beliefs")
+    @Given("^I am a (\\w+) user registered as opt-in who then amends their faith and beliefs$")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendMyFaithAndBeliefs(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -73,7 +73,7 @@ open class OrganDonationAmendStepDefinitions {
         }
     }
 
-    @Given("I am a (\\w+) user registered as some who then amends their decision to opt-out")
+    @Given("^I am a (\\w+) user registered as some who then amends their decision to opt-out$")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendToOptOut(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -85,7 +85,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as some who then amends their decision to opt-in")
+    @Given("^I am a (\\w+) user registered as some who then amends their decision to opt-in$")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendToOptIn(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -98,7 +98,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as some who then amends their selected organs")
+    @Given("^I am a (\\w+) user registered as some who then amends their selected organs$")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgans(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -112,7 +112,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered to donate some organs, with some undecided, who amends their decision")
+    @Given("^I am a (.*) user registered to donate some organs, with some undecided, who amends their decision$")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgansToDecideUndecided(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -128,7 +128,7 @@ open class OrganDonationAmendStepDefinitions {
         }
     }
 
-    @Given("I am a (\\w+) user registered as opt-out who then amends their decision to opt-in")
+    @Given("^I am a (\\w+) user registered as opt-out who then amends their decision to opt-in$")
     fun iAmRegisteredWithOrganDonationAsOptOutButAmendToOptIn(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -140,7 +140,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as opt-out who then amends their decision to some")
+    @Given("^I am a (\\w+) user registered as opt-out who then amends their decision to some$")
     fun iAmRegisteredWithOrganDonationAsOptOutButAmendToSome(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -153,8 +153,8 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to opt-out but will cause " +
-            "a conflict")
+    @Given("^I am a (.*) user registered as opt-in with organ donation," +
+            " who wishes to opt-out but will cause a conflict$")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToOutAndCauseConflict(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -178,7 +178,7 @@ open class OrganDonationAmendStepDefinitions {
         factory.existing.optIn()
     }
 
-    @Given("I am a (\\w+) user registered as opt-in who wishes to reaffirm their decision")
+    @Given("^I am a (\\w+) user registered as opt-in who wishes to reaffirm their decision$")
     fun iAmAUserRegisteredAsOptInWhoWishesToReaffirmTheirDecision(gpSystem: String){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -190,7 +190,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as opt-out who wishes to reaffirm their decision")
+    @Given("^I am a (\\w+) user registered as opt-out who wishes to reaffirm their decision$")
     fun iAmAUserRegisteredAsOptOutWhoWishesToReaffirmTheirDecision(gpSystem: String){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -202,7 +202,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) user registered as opt-in with some organs who wishes to reaffirm their decision")
+    @Given("^I am a (\\w+) user registered as opt-in with some organs who wishes to reaffirm their decision$")
     fun iAmAUserRegisteredAsOptInWithSomeOrgansWhoWishesToReaffirmTheirDecision(gpSystem: String){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)

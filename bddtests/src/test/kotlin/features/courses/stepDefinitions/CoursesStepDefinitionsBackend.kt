@@ -1,7 +1,7 @@
 package features.courses.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
@@ -11,7 +11,7 @@ import worker.models.courses.CoursesListResponse
 
 class CoursesStepDefinitionsBackend {
 
-    @When("I get the users courses with a valid cookie")
+    @When("^I get the users courses with a valid cookie$")
     fun whenIGetTheUsersCoursesWithAnValidCookie() {
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         val result = Serenity

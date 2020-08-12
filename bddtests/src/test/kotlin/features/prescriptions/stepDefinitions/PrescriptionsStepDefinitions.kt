@@ -1,10 +1,10 @@
 package features.prescriptions.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
@@ -99,7 +99,7 @@ open class PrescriptionsStepDefinitions {
         PrescriptionsDataSetup.initialize(supplier)
     }
 
-    @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
+    @Given("^From date is 6 months ago and I have 10 prescriptions in the last 6 months$")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
@@ -160,19 +160,19 @@ open class PrescriptionsStepDefinitions {
         PrescriptionsFactory.getForSupplier(currentProvider!!).gpSessionHasExpired()
     }
 
-    @Given("prescriptions is disabled at a GP Practice level")
+    @Given("^prescriptions is disabled at a GP Practice level$")
     fun prescriptionsIsDisabledAtAGPLevel() {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         val currentPatient = SerenityHelpers.getPatient()
         PrescriptionsDataSetup.disabled(currentPatient, currentProvider!!)
     }
 
-    @Given("prescriptions is disabled for the proxy account at a GP Practice level")
+    @Given("^prescriptions is disabled for the proxy account at a GP Practice level$")
     fun prescriptionsIsDisabledAtAGPLevelForProxy() {
         PrescriptionsDataSetup.disabled(ProxySerenityHelpers.getPatientOrProxy(), Supplier.TPP)
     }
 
-    @Given("the prescription was ordered by proxy user")
+    @Given("^the prescription was ordered by proxy user$")
     fun thePrescriptionWasOrderedByProxyUser() {
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
@@ -196,7 +196,7 @@ open class PrescriptionsStepDefinitions {
                 }
     }
 
-    @Given("each course has (.*)")
+    @Given("^each course has (.*)$")
     fun eachCourseHasX(contents: String) {
         val showDosage = contents.toLowerCase().contains("dosage")
         val showQuantity = contents.toLowerCase().contains("quantity")
@@ -259,7 +259,7 @@ open class PrescriptionsStepDefinitions {
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         var statusIndex = 0
-        val data = statuses.raw()
+        val data = statuses.cells()
 
         val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
         val prgr = prescriptionLoader.data as PrescriptionRequestsGetResponse
@@ -355,7 +355,7 @@ open class PrescriptionsStepDefinitions {
                 currentProvider == Supplier.MICROTEST
     }
 
-    @Then("I select (\\d+) prescription to order")
+    @Then("^I select (\\d+) prescription to order$")
     fun iSelectXPrescriptionsToOrder(prescriptionToOrder: Int) {
         repeatPrescriptions.selectXPrescriptionsToOrder(prescriptionToOrder)
         repeatPrescriptions.orderRepeatPrescriptionButton.click()

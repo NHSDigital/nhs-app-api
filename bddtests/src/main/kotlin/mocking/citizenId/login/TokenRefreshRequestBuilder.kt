@@ -1,7 +1,7 @@
 package mocking.citizenId.login
 
+import com.thoughtworks.xstream.InitializationException
 import constants.SessionConstants
-import cucumber.deps.com.thoughtworks.xstream.InitializationException
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRefreshRequest
 import mocking.citizenId.models.login.token.SucceededResponse

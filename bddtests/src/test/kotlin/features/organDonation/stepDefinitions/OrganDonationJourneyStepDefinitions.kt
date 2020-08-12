@@ -1,6 +1,6 @@
 package features.organDonation.stepDefinitions
 
-import cucumber.api.java.en.When
+import io.cucumber.java.en.When
 import pages.assertIsVisible
 import pages.organDonation.OrganDonationAdditionalDetailsPage
 import pages.organDonation.OrganDonationCheckDetailsPage
@@ -24,7 +24,7 @@ open class OrganDonationJourneyStepDefinitions {
     lateinit var organDonationCheckDetailsPage: OrganDonationCheckDetailsPage
     lateinit var organDonationViewRegistrationPage: OrganDonationViewRegistrationPage
 
-    @When("I follow the opt-in journey to the '(.*)' page")
+    @When("^I follow the opt-in journey to the '(.*)' page$")
     fun iFollowTheOrganDonationOptInJourney(pageTitle: String) {
         organDonationChoicePage.yesButton.assertIsVisible().click()
         organDonationYourChoicePage.assertDisplayed()

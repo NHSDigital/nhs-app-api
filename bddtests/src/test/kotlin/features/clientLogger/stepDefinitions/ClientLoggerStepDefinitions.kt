@@ -1,6 +1,6 @@
 package features.configuration.stepDefinitions
 
-import cucumber.api.java.en.When
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import utils.set
 import worker.WorkerClient

@@ -1,6 +1,6 @@
 package features.nominatedPharmacy.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.nominatedPharmacy.NominatedPharmacyInterruptPage
 
 class NominatedPharmacyInterruptStepDefinitions {

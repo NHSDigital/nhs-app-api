@@ -1,7 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import constants.DateTimeFormats
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import features.myrecord.factories.AllergiesFactory
 import org.junit.Assert
 import pages.gpMedicalRecord.AllergiesAndReactionsPage

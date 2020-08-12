@@ -1,6 +1,6 @@
 package features.auditing.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryAuditInfo
 import org.junit.Assert

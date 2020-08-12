@@ -2,10 +2,10 @@ package features.messages.stepDefinitions
 
 import config.Config
 import constants.Supplier
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
@@ -206,7 +206,7 @@ class MessagesStepDefinitions {
         messagesPage.assertLinkExists(linkTitle,link, internal = true).click()
     }
 
-    @Then("the email address '(.*)' is identified as a link in the message")
+    @Then("^the email address '(.*)' is identified as a link in the message$")
     fun theNamedEmailAddressIsIdentifiedAsALinkInTheMessage(email: String){
         val href = "mailto:$email"
         messagesPage.assertLinkExists(email,href, internal = false)

@@ -1,8 +1,8 @@
 package features.patientPracticeMessaging.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import mocking.patientPracticeMessaging.Recipient
 import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
@@ -43,7 +43,7 @@ class PatientPracticeMessageCreateStepDefinitions {
         patientPracticePatientMessagingCreateMessagePage.sendMessage()
     }
 
-    @Then("I see validation errors for subject and message")
+    @Then("^I see validation errors for subject and message$")
     fun iSeeValidationErrorsForSubjectAndMessage(){
         patientPracticePatientMessagingCreateMessagePage.assertValidationErrorsDisplayed()
     }

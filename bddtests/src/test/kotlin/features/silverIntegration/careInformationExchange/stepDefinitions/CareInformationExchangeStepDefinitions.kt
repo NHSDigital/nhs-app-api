@@ -1,8 +1,8 @@
 package features.silverIntegration.careInformationExchange.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -89,12 +89,12 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
-    @Then("the link to CIE Track your health is not available on the health record hub page")
+    @Then("^the link to CIE Track your health is not available on the health record hub page$")
     fun theLinkToCieHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
-    @Then("the link to CIE Care plans is not available on the health record hub page")
+    @Then("^the link to CIE Care plans is not available on the health record hub page$")
     fun theLinkToCieCarePlansIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Care plans").assertElementNotPresent()
     }
@@ -113,7 +113,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services.")
     }
 
-    @Then("the link to CIE View Appointments is not available on the Appointments page")
+    @Then("^the link to CIE View Appointments is not available on the Appointments page$")
     fun theLinkToCieViewAppointmentsIsNotAvailableOnTheAppointmentsPage() {
         hospitalAppointmentsPage.btnCieAppointments.assertElementNotPresent()
     }

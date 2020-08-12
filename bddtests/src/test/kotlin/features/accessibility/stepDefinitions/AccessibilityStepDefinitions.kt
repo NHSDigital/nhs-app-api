@@ -1,8 +1,8 @@
 package features.accesibility.stepDefinitions
 
 import config.Config
-import cucumber.api.java.Before
-import cucumber.api.java.en.Then
+import io.cucumber.java.Before
+import io.cucumber.java.en.Then
 import org.openqa.selenium.JavascriptExecutor
 import pages.HybridPageObject
 import java.io.File

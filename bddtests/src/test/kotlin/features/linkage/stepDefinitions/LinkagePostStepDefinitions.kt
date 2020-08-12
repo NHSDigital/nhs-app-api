@@ -2,8 +2,8 @@ package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.When
 import features.linkage.LinkageResult
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
@@ -69,14 +69,14 @@ open class LinkagePostStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
-    @Given("I have valid (.*) linkage details but I already have an online account")
+    @Given("^I have valid (.*) linkage details but I already have an online account$")
     fun iAlreadyHaveAnOnlineAccount(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.PatientAlreadyHasAnOnlineAccount)
     }
 
-    @Given("I have valid (.*) linkage details but a linkage key already exists")
+    @Given("^I have valid (.*) linkage details but a linkage key already exists$")
     fun iHaveValidLinkageDetailsButALinkageKeyAlreadyExists(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)

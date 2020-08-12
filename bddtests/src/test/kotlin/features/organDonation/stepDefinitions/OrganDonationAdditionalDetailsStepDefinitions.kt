@@ -1,7 +1,7 @@
 package features.organDonation.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.organDonation.models.OrganDonationDemographics
 import pages.navigation.HeaderNative
@@ -13,14 +13,14 @@ open class OrganDonationAdditionalDetailsStepDefinitions {
     lateinit var header: HeaderNative
     lateinit var organDonationAdditionalDetailsPage: OrganDonationAdditionalDetailsPage
 
-    @When("I select an ethnicity to record for organ donation")
+    @When("^I select an ethnicity to record for organ donation$")
     fun iSelectAnEthnicityToRecordForOrganDonation() {
         organDonationAdditionalDetailsPage.ethnicitySelector.selectByText(
                 OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED
                         .getOrFail<OrganDonationDemographics>().ethnicity.value)
     }
 
-    @When("I select a religion to record for organ donation")
+    @When("^I select a religion to record for organ donation$")
     fun iSelectAReligionToRecordForOrganDonation() {
         organDonationAdditionalDetailsPage.religionSelector.selectByText(
                 OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED

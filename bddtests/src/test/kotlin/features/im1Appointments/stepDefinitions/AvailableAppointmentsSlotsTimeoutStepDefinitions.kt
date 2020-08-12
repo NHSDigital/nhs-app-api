@@ -2,7 +2,7 @@ package features.im1Appointments.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.emis.appointments.AppointmentSlotsBuilderEmis
 import mocking.emis.appointments.AppointmentSlotsMetaBuilderEmis

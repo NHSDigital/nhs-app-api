@@ -1,7 +1,7 @@
 package features.linkedProfiles.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -51,7 +51,7 @@ class SwitchProfileStepDefinitions {
                 currentProxyPatient.gpPracticeName, displayedProxyDetails.gpPracticeName)
     }
 
-    @When("I click the Switch to my profile button for the main user")
+    @When("^I click the Switch to my profile button for the main user$")
     fun iClickTheSwitchToThisProfileButtonForTheProxyUser() {
         switchProfilePage.switchToMyProfileButton.click()
     }

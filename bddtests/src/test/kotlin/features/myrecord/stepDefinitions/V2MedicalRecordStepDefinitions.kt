@@ -1,10 +1,10 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps

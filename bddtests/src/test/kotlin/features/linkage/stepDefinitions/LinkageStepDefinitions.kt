@@ -1,8 +1,8 @@
 package features.linkage.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.linkage.LinkageResult
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
@@ -93,14 +93,14 @@ open class LinkageStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
-    @Given("I have valid (.*) linkage details but my nhs number is invalid")
+    @Given("^I have valid (.*) linkage details but my nhs number is invalid$")
     fun iHaveValidLinkageDetailsButMyNhsNumberIsInvalid(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.InvalidNhsNumber)
     }
 
-    @Given("I have valid (.*) linkage details but my patient record was not found")
+    @Given("^I have valid (.*) linkage details but my patient record was not found$")
     fun iHaveValidLinkageDetailsButMyPatientRecordWasNotFound(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)

@@ -1,8 +1,8 @@
 package features.prescriptions.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
@@ -18,7 +18,7 @@ class PrescriptionsStepDefinitionsBackend {
 
     private val fromDateKey = "FromDate"
 
-    @When("I request the users prescriptions with a valid cookie")
+    @When("^I request the users prescriptions with a valid cookie$")
     fun whenIRequestTheUsersPrescriptionsWithAValidCookie() {
         val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
@@ -46,7 +46,7 @@ class PrescriptionsStepDefinitionsBackend {
         PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
     }
 
-    @Then("I receive a list of (\\d+) prescriptions")
+    @Then("^I receive a list of (\\d+) prescriptions$")
     fun thenIReceiveAListOfXPrescriptions(count: Int) {
 
         val prescriptionsListResponse = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE

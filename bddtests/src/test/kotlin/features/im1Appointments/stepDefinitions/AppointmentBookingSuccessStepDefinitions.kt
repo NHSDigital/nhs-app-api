@@ -1,6 +1,6 @@
 package features.im1Appointments.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.appointments.AppointmentBookingSuccessPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail

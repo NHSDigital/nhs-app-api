@@ -2,8 +2,8 @@ package features.authentication.stepDefinitions
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
 import utils.SerenityHelpers

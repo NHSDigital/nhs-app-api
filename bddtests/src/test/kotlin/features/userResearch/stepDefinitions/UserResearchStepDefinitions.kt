@@ -1,6 +1,6 @@
 package features.userResearch.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.UserResearchPage
 
 class UserResearchStepDefinitions {

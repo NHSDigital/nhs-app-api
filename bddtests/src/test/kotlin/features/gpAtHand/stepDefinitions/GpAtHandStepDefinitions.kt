@@ -1,6 +1,6 @@
 package features.gpAtHand.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.gpAtHand.GpAtHandAppointmentsPage
 import pages.gpAtHand.GpAtHandMedicalRecordPage
 import pages.gpAtHand.GpAtHandPrescriptionsPage

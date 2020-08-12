@@ -1,9 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
@@ -15,32 +15,32 @@ import pages.assertSingleElementPresent
 open class MedicalRecordHubPageStepDefinitions {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
 
-    @Given("I am an (.*) patient with no access to any Third Party Health Record Hub Features")
+    @Given("^I am an (.*) patient with no access to any Third Party Health Record Hub Features$")
     fun setupUser(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, supplier)
     }
 
-    @Given("I am an (.*) patient and I have access to Patients Know Best Test Results")
+    @Given("^I am an (.*) patient and I have access to Patients Know Best Test Results$")
     fun setupPKBTestResultsPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_PKB, supplier)
     }
 
-    @Given("I am an (.*) patient and I have access to Patients Know Best Care Plans")
+    @Given("^I am an (.*) patient and I have access to Patients Know Best Care Plans$")
     fun setupPKBCarePlansPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB, supplier)
     }
 
-    @Given("I am an (.*) patient and I have access to Patients Know Best Health Tracker")
+    @Given("^I am an (.*) patient and I have access to Patients Know Best Health Tracker$")
     fun setupPKBHealthTrackerPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB, supplier)
     }
 
-    @Given("I am an (.*) patient and I have access to Care Information Exchange Care Plans")
+    @Given("^I am an (.*) patient and I have access to Care Information Exchange Care Plans$")
     fun setupCIECarePlansPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE, supplier)
     }
 
-    @Given("I am an (.*) patient and I have access to Care Information Exchange Health Tracker")
+    @Given("^I am an (.*) patient and I have access to Care Information Exchange Health Tracker$")
     fun setupCIEHealthTrackerPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE, supplier)
     }
@@ -50,12 +50,12 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getHeaderElement(title).click()
     }
 
-    @Then("I see the 'GP medical record' page")
+    @Then("^I see the 'GP medical record' page$")
     fun assertMedicalHubPage() {
         medicalRecordHubPage.pageTitleGpMedicalRecord().assertSingleElementPresent()
     }
 
-    @Then("I see the health records hub page")
+    @Then("^I see the health records hub page$")
     fun assertHealthRecordsHubPage() {
         medicalRecordHubPage.pageTitleHealthRecords().assertSingleElementPresent()
     }
@@ -70,7 +70,7 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getHeaderElement(item).assertElementNotPresent()
     }
 
-    @Then("I see 'Your GP medical record' page")
+    @Then("^I see 'Your GP medical record' page$")
     fun iSeeGpMedicalRecordPage() {
         medicalRecordHubPage.getGpRecordHeader("Your GP medical record").assertSingleElementPresent()
     }

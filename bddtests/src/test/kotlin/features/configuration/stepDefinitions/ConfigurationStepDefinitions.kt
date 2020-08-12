@@ -1,7 +1,7 @@
 package features.configuration.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.getOrFail

@@ -1,14 +1,14 @@
 package features.organDonation.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import utils.set
 
 class OrganDonationAmendStepDefinitionsBackend {
 
-    @Given("I am a (\\w+) api user registered as opt-out who amends their decision to opt-in")
+    @Given("^I am a (\\w+) api user registered as opt-out who amends their decision to opt-in$")
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptIn(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -19,7 +19,7 @@ class OrganDonationAmendStepDefinitionsBackend {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) api user registered as opt-in who amends their decision to some organs")
+    @Given("^I am a (\\w+) api user registered as opt-in who amends their decision to some organs$")
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToSomeOrgans(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -30,7 +30,7 @@ class OrganDonationAmendStepDefinitionsBackend {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (\\w+) api user registered as some organs who amend their decision to opt-out")
+    @Given("^I am a (\\w+) api user registered as some organs who amend their decision to opt-out$")
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptOut(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)

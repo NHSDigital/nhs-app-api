@@ -12,7 +12,7 @@ Feature: View prescriptions Frontend
     And I am logged in
     And I navigate to prescriptions
     Then the Prescriptions Hub page is displayed
-    And the prescriptions menu button is highlighted on mobile
+    And the prescriptions menu button is highlighted
     Examples:
       | GP System |
       | EMIS      |

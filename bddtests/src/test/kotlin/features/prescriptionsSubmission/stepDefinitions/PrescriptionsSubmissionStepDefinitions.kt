@@ -2,9 +2,9 @@ package features.prescriptionsSubmission.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.PrescriptionSerenityHelpers
@@ -276,7 +276,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
     }
 
-    @When("I submit the repeat prescription")
+    @When("^I submit the repeat prescription$")
     fun whenISubmitTheRepeatPrescription() {
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         val response = Serenity
@@ -285,13 +285,13 @@ open class PrescriptionsSubmissionStepDefinitions {
         SerenityHelpers.setHttpResponse(response)
     }
 
-    @When("I click Confirm and order repeat prescription")
+    @When("^I click Confirm and order repeat prescription$")
     fun iClickConfirmAndOrderRepeatPrescription() {
         confirmRepeatPrescriptionsOrderPage
                 .clickConfirmAndOrderRepeatPrescriptionButton()
     }
 
-    @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
+    @Then("^EMIS responds with an unknown internal server error when a repeat prescription is submitted$")
     fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
         val currentPatient = SerenityHelpers.getPatient()
         mockingClient.forEmis.mock {
@@ -300,21 +300,21 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
     }
 
-    @Given("GP system responds with a conflict error when a repeat prescription is submitted")
+    @Given("^GP system responds with a conflict error when a repeat prescription is submitted$")
     fun gpSystemRespondsWithConflictErrorWhenARepeatPrescriptionIsSubmitted() {
         PrescriptionsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .orderPrescriptionReturnsConflictResponse()
     }
 
-    @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
+    @Then("^I see a order successful message on the Repeat prescription page with (\\d+) prescriptions$")
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
         assertTrueWithRetry(viewOrdersPrescriptionsPage.isOrderSuccessfullTextVisible(),
                 "Expected order success text to be visible")
         assertAmountOfPrescriptionsIsCorrect(amount)
     }
 
-    @Then("I see the Repeat prescription page with (\\d+) prescriptions")
+    @Then("^I see the Repeat prescription page with (\\d+) prescriptions$")
     fun iSeeNumberOfPrescriptions(amount: Int) {
         assertAmountOfPrescriptionsIsCorrect(amount)
     }
@@ -351,7 +351,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
     }
 
-    @Then("I see a message indicating there was an error sending my order")
+    @Then("^I see a message indicating there was an error sending my order$")
     fun iSeeAMessageOrderNotSuccessful() {
         Assert.assertTrue("Expected error to be visible",
                 confirmRepeatPrescriptionsOrderPage.errorSendingOrderErrorIsVisible())
@@ -371,7 +371,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 expectedText, errorPage.errorText1.text)
     }
 
-    @Then("I can view which medications from my prescription order succeeded and failed")
+    @Then("^I can view which medications from my prescription order succeeded and failed$")
     fun iSeeAMessageIndicatingThePrescriptionWasPartiallySuccessful() {
         partiallySuccessfulPrescriptionsOrderPage.shouldBeDisplayed()
 
@@ -381,7 +381,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         partiallySuccessfulPrescriptionsOrderPage.verifyMedications(partialSuccessExpected)
     }
 
-    @When("I see nominated pharmacy information is shown and correct")
+    @When("^I see nominated pharmacy information is shown and correct$")
     fun iSeeNominatedPharmacyInformationIsCorrect() {
 
         val component = confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent

@@ -1,7 +1,7 @@
 package features.im1Appointments.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory

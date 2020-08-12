@@ -2,7 +2,7 @@ package features.authentication.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.Supplier
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory

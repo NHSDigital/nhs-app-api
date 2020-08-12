@@ -1,7 +1,7 @@
 package features.sharedSteps.backend
 
 import com.google.gson.GsonBuilder
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

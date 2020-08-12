@@ -1,9 +1,9 @@
 package features.authentication.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.authentication.steps.NavigationLinkText
@@ -169,7 +169,7 @@ class HomePageStepDefinitions {
         }
     }
 
-    @Then("I do not see the home page links")
+    @Then("^I do not see the home page links$")
     fun iDoNotSeeTheHomePageLinks() {
         homeSteps.homePage.assertHomePageLinksNotPresent()
     }

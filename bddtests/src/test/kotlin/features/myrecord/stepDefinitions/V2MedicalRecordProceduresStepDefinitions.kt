@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.gpMedicalRecord.ProceduresPage
 
 open class V2MedicalRecordProceduresStepDefinitions {

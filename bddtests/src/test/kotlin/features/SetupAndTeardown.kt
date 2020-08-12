@@ -1,14 +1,16 @@
 package features
 
 import config.Config
-import cucumber.api.Scenario
-import cucumber.api.java.After
-import cucumber.api.java.Before
+import io.cucumber.java.After
+import io.cucumber.java.Before
+import io.cucumber.java.Scenario
 import mocking.MockingClient
 import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity.getCurrentSession
 import net.serenitybdd.core.Serenity.getWebdriverManager
 import net.serenitybdd.core.Serenity.setSessionVariable
+import net.serenitybdd.screenplay.actors.OnStage
+import net.serenitybdd.screenplay.actors.OnlineCast
 import org.junit.Assert
 import org.openqa.selenium.WebDriver
 import pages.WEB_CONTEXT
@@ -16,7 +18,6 @@ import utils.GlobalSerenityHelpers
 import utils.contains
 import utils.getOrNull
 import utils.set
-import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -38,6 +39,9 @@ class SetupAndTeardown {
 
     @Before
     fun beforeEachScenario(scenario: Scenario) {
+        // IntelliJ seems determined to tear this down; that fails if it hasn't been set up
+        OnStage.setTheStage(OnlineCast())
+
         getCurrentSession().clear()
         MongoDBConnection.collections().forEach { connection -> connection.clearCache() }
 
@@ -63,11 +67,6 @@ class SetupAndTeardown {
 
             throw e
         }
-    }
-
-    @After
-    fun stopBrowserstackIfRunning() {
-        BrowserstackLocalService.stop()
     }
 
     private fun assertNoConsoleLogs(scenario: Scenario) {

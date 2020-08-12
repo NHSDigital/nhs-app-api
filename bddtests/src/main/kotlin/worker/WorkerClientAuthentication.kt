@@ -59,7 +59,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
             val result = rd.use { it.readText() }
 
             // Extract csrfToken
-            val parsedResponse = JsonParser().parse(result)
+            val parsedResponse = JsonParser.parseString(result)
             sender.setCsrfToken(parsedResponse.asJsonObject.get("token").asString)
 
             val userSessionResponseBody = gson.fromJson<UserSessionResponse.UserSessionResponseBody>(result,

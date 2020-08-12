@@ -1,7 +1,7 @@
 package features.authentication.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.sharedSteps.BiometricSteps
 import net.thucydides.core.annotations.Steps
 import pages.loggedOut.LoginBiometricErrorPage
@@ -13,12 +13,12 @@ open class LoginBiometricErrorStepDefinitions {
    @Steps
    lateinit var biometricSteps: BiometricSteps
 
-   @Then("I see the login biometric error page is displayed")
+   @Then("^I see the login biometric error page is displayed$")
    fun iSeeTheLoginAndPasswordOptionsPage() {
       loginBiometricError.assertDisplayed()
    }
 
-   @When("I attempt biometric login and fail")
+   @When("^I attempt biometric login and fail$")
    fun iAttemptBiometricLoginAndFail() {
       biometricSteps.triggerBiometricLoginError()
    }

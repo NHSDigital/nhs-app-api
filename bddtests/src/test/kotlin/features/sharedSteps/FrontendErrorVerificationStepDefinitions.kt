@@ -1,6 +1,6 @@
 package features.sharedSteps
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject

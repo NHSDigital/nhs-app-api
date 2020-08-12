@@ -1,5 +1,6 @@
 package pages.organDonation
 
+import net.thucydides.core.annotations.NotImplementedException
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
@@ -8,9 +9,9 @@ import pages.avoidChromeWebDriverServiceCrash
 
 const val RACE_CONDITION_WAIT: Long = 60
 
-abstract class OrganDonationBasePage: HybridPageObject() {
+open class OrganDonationBasePage: HybridPageObject() {
 
-    abstract val titleText: String
+    open val titleText: String = "Not Set"
 
     protected val title by lazy {
         HybridPageElement(
@@ -46,7 +47,9 @@ abstract class OrganDonationBasePage: HybridPageObject() {
             }
     }
 
-    abstract fun assertDisplayed()
+    open fun assertDisplayed() {
+        throw NotImplementedException("assertDisplayed is not implemented on Organ Donation base page")
+    }
 
     protected fun assertPageFullyLoaded() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed

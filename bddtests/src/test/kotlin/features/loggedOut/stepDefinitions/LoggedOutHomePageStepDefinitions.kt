@@ -1,6 +1,6 @@
 package features.loggedOut.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.assertElementNotPresent
 import pages.isDisplayed
 import pages.loggedOut.LoginPage

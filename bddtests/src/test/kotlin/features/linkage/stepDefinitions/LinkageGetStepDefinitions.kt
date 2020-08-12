@@ -2,9 +2,9 @@ package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.linkage.LinkageResult
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
@@ -75,21 +75,21 @@ open class LinkageGetStepDefinitions {
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.SuccessfullyRetrieved)
     }
 
-    @Given("I have valid (.*) linkage details but my linkage key has been revoked")
+    @Given("^I have valid (.*) linkage details but my linkage key has been revoked$")
     fun iHaveValidLinkageDetailsButMyLinkageKeyHasBeenRevoked(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.LinkageKeyRevoked)
     }
 
-    @Given("(^.*) was unable to find the user for my NHS number")
+    @Given("^(^.*) was unable to find the user for my NHS number$")
     fun wasUnableToFindTheUserForMyNHSNumber(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)
         LinkageFactory.setLinkageInformation(linkage, LinkageResult.NoUserAssociatedWithNHSNumber)
     }
 
-    @Given("(^.*) was unable to find the api key for my NHS number")
+    @Given("^(^.*) was unable to find the api key for my NHS number$")
     fun wasUnableToFindTheApiKeyForMyNHSNumber(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val linkage = LinkageFactory.validLinkage(supplier)

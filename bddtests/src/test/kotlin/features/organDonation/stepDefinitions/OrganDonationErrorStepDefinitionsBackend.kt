@@ -1,8 +1,8 @@
 package features.organDonation.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
@@ -70,7 +70,7 @@ class OrganDonationErrorStepDefinitionsBackend {
             a.respondWithError(HttpStatus.SC_CONFLICT)}
     }
 
-    @Given("I am a (\\w+) api user who wants to opt-in to organ donation but will cause a conflict")
+    @Given("^I am a (\\w+) api user who wants to opt-in to organ donation but will cause a conflict$")
     fun iAmAApiUserWhoWantsToOptInToOrganDonationButWillCauseAConflict(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -80,7 +80,7 @@ class OrganDonationErrorStepDefinitionsBackend {
             request.respondWithError(registrationId, HttpStatus.SC_OK) }}
     }
 
-    @Given("I am a (\\w+) api user who wants amend their decision, but will cause a conflict")
+    @Given("^I am a (\\w+) api user who wants amend their decision, but will cause a conflict$")
     fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButConflict(gpSystem: String){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)

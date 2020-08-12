@@ -1,10 +1,10 @@
 package features.redirector.stepDefinitions
 
-import cucumber.api.java.en.When
+import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import config.Config
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.RedirectorPage
 import java.net.URL
 
@@ -35,7 +35,7 @@ class RedirectorStepDefinitions {
         browser.shouldHaveUrl(host)
     }
 
-    @Then("I am navigated to a third party site")
+    @Then("^I am navigated to a third party site$")
     fun assertNoLongerOnNhsAppSite() {
         browser.shouldNotHaveUrl(Config.instance.url)
     }

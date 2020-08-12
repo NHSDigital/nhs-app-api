@@ -1,6 +1,6 @@
 package features.userInfo.stepDefinitions
 
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney

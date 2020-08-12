@@ -1,9 +1,9 @@
 package features.linkedProfiles.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
@@ -118,7 +118,7 @@ class LinkedProfilesStepDefinitions {
         login.using(patient)
     }
 
-    @Given("I have switched to a linked profile")
+    @Given("^I have switched to a linked profile$")
     fun iHaveSwitchedToALinkedProfile(){
         iSelectTheLinkedProfilesLink()
         iSelectALinkedProfile()
@@ -264,14 +264,14 @@ class LinkedProfilesStepDefinitions {
         }
     }
 
-    @Then("details for the selected linked profile are displayed")
+    @Then("^details for the selected linked profile are displayed$")
     fun detailsForTheSelectedLinkedProfileAreDisplayed() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
 
         linkedProfileSummaryPage.isLoaded(selectedProfile.profile.formattedFullName())
     }
 
-    @When("I click the Switch to this profile button for the proxy user")
+    @When("^I click the Switch to this profile button for the proxy user$")
     fun iClickTheSwitchToThisProfileButtonForTheProxyUser() {
         linkedProfileSummaryPage.switchProfileButton.click()
     }

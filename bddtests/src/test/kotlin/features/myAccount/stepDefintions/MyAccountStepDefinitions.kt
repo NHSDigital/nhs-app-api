@@ -1,7 +1,7 @@
 package features.myAccount.stepDefintions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.sharedSteps.BiometricSteps
 import net.thucydides.core.annotations.Steps
 import pages.account.MyAccountPage
@@ -14,7 +14,7 @@ class MyAccountStepDefinitions {
     @Steps
     lateinit var biometricSteps: BiometricSteps
 
-    @When("I click the Notifications link on the Account page")
+    @When("^I click the Notifications link on the Account page$")
     fun iClickTheNotificationsLinkOnTheAccountPage() {
         myAccount.settings.notifications.click()
     }
@@ -78,22 +78,22 @@ class MyAccountStepDefinitions {
         }
     }
 
-    @Then("the Account Settings are available")
+    @Then("^the Account Settings are available$")
     fun theAccountSettingsAreAvailable() {
         myAccount.settings.assertLinksPresent()
     }
 
-    @Then("there are no Account Settings available")
+    @Then("^there are no Account Settings available$")
     fun thereAreNoAccountSettingsAvailable() {
         myAccount.settings.assertNotDisplayed()
     }
 
-    @Then("there is no notification link available")
+    @Then("^there is no notification link available$")
     fun thereIsNoNotificationsLinkAvailable() {
         myAccount.notificationsLink.assertElementNotPresent()
     }
 
-    @Then("the link to Notifications is not available on the Account page")
+    @Then("^the link to Notifications is not available on the Account page$")
     fun theLinkToNotificationsIsNotAvailableOnTheAccountPage() {
         myAccount.settings.assertNotDisplayed()
     }

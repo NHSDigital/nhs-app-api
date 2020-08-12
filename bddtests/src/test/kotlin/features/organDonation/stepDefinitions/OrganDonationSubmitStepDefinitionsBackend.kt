@@ -1,9 +1,9 @@
 package features.organDonation.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney

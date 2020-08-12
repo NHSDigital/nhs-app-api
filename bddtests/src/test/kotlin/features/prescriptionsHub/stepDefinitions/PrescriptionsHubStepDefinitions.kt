@@ -1,9 +1,9 @@
 package features.prescriptionsHub.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.When
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.When
+import io.cucumber.java.en.Then
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -45,12 +45,12 @@ class PrescriptionsHubStepDefinitions {
         prescriptionsHubPage.clickOrderARepeatPrescriptionButton()
     }
 
-    @Given("I am an (.*) patient and I have access to PKB Medicines")
+    @Given("^I am an (.*) patient and I have access to PKB Medicines$")
     fun setupPKBCarePlansPatient(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB, supplier)
     }
 
-    @Given("I am an (.*) patient without access to PKB Medicines")
+    @Given("^I am an (.*) patient without access to PKB Medicines$")
     fun setupUser(supplier: String) {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE, supplier)
     }

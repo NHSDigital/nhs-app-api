@@ -1,8 +1,8 @@
 package features.appointmentHub.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.myrecord.factories.DemographicsFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper

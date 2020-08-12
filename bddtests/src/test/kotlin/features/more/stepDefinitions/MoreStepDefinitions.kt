@@ -1,7 +1,7 @@
 package features.more.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -74,22 +74,22 @@ class MoreStepDefinitions {
         webHeader.getPageTitle().waitForElement().withText("More")
     }
 
-    @Then("the link to Messages is not available on the More page")
+    @Then("^the link to Messages is not available on the More page$")
     fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
         morePage.btnMessages.assertElementNotPresent()
     }
 
-    @Then("the link to Shared links is available on the More page")
+    @Then("^the link to Shared links is available on the More page$")
     fun theLinkToSharedLinksIsAvailableOnTheMorePage() {
         morePage.btnSharedLinks.assertSingleElementPresent()
     }
 
-    @Then("the link to Shared links is not available on the More page")
+    @Then("^the link to Shared links is not available on the More page$")
     fun theLinkToSharedLinksIsNotAvailableOnTheMorePage() {
         morePage.btnSharedLinks.assertElementNotPresent()
     }
 
-    @Then("the More page explains that it is not possible to access it while acting on behalf of someone else")
+    @Then("^the More page explains that it is not possible to access it while acting on behalf of someone else$")
     fun theMorePageExplainsThatItIsNotPossibleToAccessItWhileActingOnBehalfOfSomeoneElse(){
         morePage.assertProxyText(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
     }
@@ -108,7 +108,7 @@ class MoreStepDefinitions {
         }
     }
 
-    @Then("I see and can follow links including online consultation links within the more page body")
+    @Then("^I see and can follow links including online consultation links within the more page body$")
     fun iSeeAndCanFollowLinksIncludingOnlineConsultationsWithinTheMorePageBody() {
         val linksToFollow = arrayListOf(
                 { followRequestGPHelpLink() },

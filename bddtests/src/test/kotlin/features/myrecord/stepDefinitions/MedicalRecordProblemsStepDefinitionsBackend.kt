@@ -1,8 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.myrecord.factories.ProblemsFactory
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
@@ -28,7 +28,7 @@ open class MedicalRecordProblemsStepDefinitionsBackend {
         ProblemsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
-    @When("there is bad problems data returned")
+    @When("^there is bad problems data returned$")
     fun badProblemsDataReturned() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         ProblemsFactory.getForSupplier(gpSystem).badDataResponse(SerenityHelpers.getPatient())

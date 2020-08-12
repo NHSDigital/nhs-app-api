@@ -1,8 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.myrecord.factories.ConsultationsFactory
 import mocking.MockingClient
 import mocking.data.myrecord.ConsultationsData
@@ -67,7 +67,7 @@ open class MedicalRecordConsultationStepDefinitionsBackend {
         ConsultationsFactory.getForSupplier(gpSystem).recordWithBadConsultationsData(patient)
     }
 
-    @When("I get the users consultations")
+    @When("^I get the users consultations$")
     fun whenIGetTheUsersConsultations() {
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
@@ -75,7 +75,7 @@ open class MedicalRecordConsultationStepDefinitionsBackend {
         Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
-    @Then("I receive \"(.*)\" consultations as part of the my record object")
+    @Then("^I receive \"(.*)\" consultations as part of the my record object$")
     fun thenIReceiveATestResultsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.consultations.data.count())

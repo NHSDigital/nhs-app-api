@@ -1,8 +1,8 @@
 package features.uplift.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import mocking.MockingClient
 import mocking.citizenId.login.UpliftLoginRequestBuilder
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -78,13 +78,13 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     p5ShutterPage.assertUpliftBanner(page)
   }
 
-  @Then("the uplift journey starts")
+  @Then("^the uplift journey starts$")
   fun theUpliftJourneyStarts() {
     webHeader.getPageTitle().withNormalisedText(UpliftLoginRequestBuilder.title).assertIsVisible()
   }
 
 
-  @Then("the navbar is working")
+  @Then("^the navbar is working$")
   fun checkTheNavbarIsWorking(){
     val linksToFollow = arrayListOf(
             {followAppointmentNativeNavBarLink()},

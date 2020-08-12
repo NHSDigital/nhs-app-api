@@ -1,6 +1,6 @@
 package features.informaticaAppointments.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import pages.appointments.InformaticaAppointmentsPage
 
 class InformaticaAppointmentsStepDefinitions {

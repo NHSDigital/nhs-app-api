@@ -1,7 +1,7 @@
 package features.messages.stepDefinitions
 
 import config.Config
-import cucumber.api.DataTable
+import io.cucumber.datatable.DataTable
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney

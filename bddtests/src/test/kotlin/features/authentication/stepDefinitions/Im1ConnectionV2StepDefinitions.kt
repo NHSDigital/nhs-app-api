@@ -1,9 +1,9 @@
 package features.authentication.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.factories.Im1ConnectionV2Factory
 import mocking.GsonFactory
 import net.serenitybdd.core.Serenity
@@ -65,7 +65,7 @@ class Im1ConnectionV2StepDefinitions {
         Im1ConnectionSerenityHelpers.Im1ConnectionResponse.set(response)
     }
 
-    @When("I verify patient data using the v2 endpoint")
+    @When("^I verify patient data using the v2 endpoint$")
     fun whenIVerifyPatientData() {
         val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
         val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
@@ -74,7 +74,7 @@ class Im1ConnectionV2StepDefinitions {
         Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
     }
 
-    @When("I verify patient data without sending the ODS Code using the v2 endpoint")
+    @When("^I verify patient data without sending the ODS Code using the v2 endpoint$")
     fun whenIVerifyPatientDataWithoutSendingTheOdsCode() {
         val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)

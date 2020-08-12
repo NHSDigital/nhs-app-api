@@ -1,7 +1,7 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.myrecord.factories.ReferralsFactory
 import org.junit.Assert
 import pages.gpMedicalRecord.ReferralsPage

@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Then
 import org.junit.Assert
 import pages.gpMedicalRecord.EncountersPage
 

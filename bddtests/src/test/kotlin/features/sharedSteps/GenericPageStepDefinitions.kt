@@ -1,7 +1,7 @@
 package features.sharedSteps
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.openqa.selenium.Keys
@@ -42,20 +42,20 @@ class GenericPageStepDefinitions {
         browser.browseTo(urlForPage)
     }
 
-    @When("I click the link called '(.*)' with a url of '(.*)'")
+    @When("^I click the link called '(.*)' with a url of '(.*)'$")
     fun iClickANamedLinkWithAUrl(linkTitle: String, url: String) {
         browser.storeCurrentTabCount()
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
-    @When("I click the link called '(.*)' with the COVID-19 service url")
+    @When("^I click the link called '(.*)' with the COVID-19 service url$")
     fun iClickANamedLinkWithTheCovidServiceUrl(linkTitle: String) {
         val url = "http://stubs.local.bitraft.io:8080/external/covid"
         browser.storeCurrentTabCount()
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
-    @Then("I see the error reference code with prefix '(.*)'")
+    @Then("^I see the error reference code with prefix '(.*)'$")
     fun iSeeTheErrorReferenceCode(prefix: String){
         genericPage.containsText("Reference: $prefix")
     }

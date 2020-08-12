@@ -2,9 +2,9 @@ package features.dataSharing.stepDefinitions
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -70,7 +70,7 @@ class DataSharingStepDefinitions {
         getPage(page).assertContent()
     }
 
-    @Then("the NDOP website is displayed")
+    @Then("^the NDOP website is displayed$")
     fun iAmOnTheNDOPWebsite() {
         Assert.assertTrue("Expected token to be displayed", ndopTokenIsDisplayed())
     }

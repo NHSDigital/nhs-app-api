@@ -2,8 +2,8 @@ package features.organDonation.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -233,7 +233,7 @@ class OrganDonationErrorStepDefinitions {
                     .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)}}
     }
 
-    @Given("I am a (\\w+) user registered with organ donation but existing registration is in conflicted state")
+    @Given("^I am a (\\w+) user registered with organ donation but existing registration is in conflicted state$")
     fun iAmAUserRegisteredWithOrganDonationButExistingRegistrationIsInConflictedState(gpSystem: String){
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)

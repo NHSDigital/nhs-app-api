@@ -1,8 +1,8 @@
 package features.silverIntegration.patientsKnowBest.stepDefinitions
 
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -98,17 +98,17 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
-    @Then("the link to PKB Track your health is not available on the health record hub page")
+    @Then("^the link to PKB Track your health is not available on the health record hub page$")
     fun theLinkToPkbHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
-    @Then("the link to PKB test results is not available on the health record hub page")
+    @Then("^the link to PKB test results is not available on the health record hub page$")
     fun theLinkToPkbTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
     }
 
-    @Then("the link to PKB Care plans is not available on the health record hub page")
+    @Then("^the link to PKB Care plans is not available on the health record hub page$")
     fun theLinkToPkbCarePlansIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Care plans").assertElementNotPresent()
     }
@@ -127,7 +127,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
                 "Find out more about personal health record services.")
     }
 
-    @Then("the link to PKB View Appointments is not available on the Appointments page")
+    @Then("^the link to PKB View Appointments is not available on the Appointments page$")
     fun theLinkToPkbViewAppointmentsIsNotAvailableOnTheAppointmentsPage() {
         hospitalAppointmentsPage.btnPkbAppointments.assertElementNotPresent()
     }

@@ -1,8 +1,8 @@
 package features.im1Appointments.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.en.Given
 import features.im1Appointments.steps.AppointmentSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney

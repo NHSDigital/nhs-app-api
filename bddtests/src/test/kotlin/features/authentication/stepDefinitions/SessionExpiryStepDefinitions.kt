@@ -1,9 +1,9 @@
 package features.authentication.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
@@ -84,8 +84,8 @@ class SessionExpiryStepDefinitions  {
     @When("^I am idle long enough for the session to expire after the dialog$")
     fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() = sessionExpiry.waitForSessionExpiryAfterModalDisplay()
 
-    @Given("I allow my session to expire")
-    @When("I am idle long enough for the desktop session to expire")
+    @Given("^I allow my session to expire$")
+    @When("^I am idle long enough for the desktop session to expire$")
     fun givenIAllowMySessionToExpire() {
         sessionExpiry.waitForSessionExpiry()
     }

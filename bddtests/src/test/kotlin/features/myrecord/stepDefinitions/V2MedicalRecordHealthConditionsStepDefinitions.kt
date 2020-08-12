@@ -1,8 +1,8 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.myrecord.factories.ProblemsFactory
 import org.junit.Assert
 import pages.gpMedicalRecord.HealthConditionsPage
@@ -42,7 +42,7 @@ open class V2MedicalRecordHealthConditionsStepDefinitions {
             Assert.assertEquals(expectedData[supplier]?.get(i), message.text) }
     }
 
-    @Given("the GP practice responds with bad problems data")
+    @Given("^the GP practice responds with bad problems data$")
     fun thereIsBadDataReceivedForProblems() {
         ProblemsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                 .badDataResponse(SerenityHelpers.getPatient())

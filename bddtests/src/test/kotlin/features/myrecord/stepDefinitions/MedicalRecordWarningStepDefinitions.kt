@@ -1,8 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps

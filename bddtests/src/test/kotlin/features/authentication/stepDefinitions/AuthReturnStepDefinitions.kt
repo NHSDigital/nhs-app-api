@@ -1,7 +1,7 @@
 package features.authentication.stepDefinitions
 
 import constants.ErrorResponseCodeTpp.LOGIN_PROBLEM
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient

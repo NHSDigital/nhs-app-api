@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import features.myrecord.factories.DiagnosisFactoryVision
 import utils.SerenityHelpers
 

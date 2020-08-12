@@ -1,8 +1,8 @@
 package features.im1Appointments.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import pages.ErrorDialogPage
 import pages.appointments.AvailableAppointmentsPage

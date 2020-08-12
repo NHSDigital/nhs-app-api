@@ -2,9 +2,9 @@ package features.organDonation.stepDefinitions
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
@@ -30,12 +30,12 @@ open class OrganDonationStepDefinitions {
 
     lateinit var header: HeaderNative
     lateinit var organDonationChoicePage: OrganDonationChoicePage
-    @Steps
+
     lateinit var page: OrganDonationBasePage
 
     lateinit var homePage: HomePage
 
-    @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
+    @Given("^I am a (\\w+) user registered with organ donation to not donate my organs$")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -51,7 +51,7 @@ open class OrganDonationStepDefinitions {
         factory.existing.optIn()
     }
 
-    @Given("I am a (\\w+) user registered with organ donation with an appointed representative")
+    @Given("^I am a (\\w+) user registered with organ donation with an appointed representative$")
     fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
@@ -67,7 +67,7 @@ open class OrganDonationStepDefinitions {
         factory.existing.optInSome()
     }
 
-    @Given("I am a (\\w+) user registered with organ donation to donate some organs, but not all are decided on")
+    @Given("^I am a (\\w+) user registered with organ donation to donate some organs, but not all are decided on$")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgansButNotAllDecidedOn(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)

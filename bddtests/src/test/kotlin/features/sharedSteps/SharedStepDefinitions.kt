@@ -2,9 +2,9 @@ package features.sharedSteps
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.stepDefinitions.AuthenticationFactory
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
@@ -170,7 +170,7 @@ open class SharedStepDefinitions {
         login.using(patient)
     }
 
-    @Given("Azure organisation search is working")
+    @Given("^Azure organisation search is working$")
     fun azureOrganisationSearchIsWorking() {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(null)
@@ -193,7 +193,7 @@ open class SharedStepDefinitions {
         EmisSessionCreateJourneyFactory().createFor(EmisMockDefaults.patientEmis)
     }
 
-    @Given("My session has expired")
+    @Given("^My session has expired$")
     fun givenMySessionHasExpired() {
         Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
         iWaitForXSeconds(WAIT_IN_SECONDS)
@@ -233,7 +233,7 @@ open class SharedStepDefinitions {
         browser.shouldHaveUrl(url)
     }
 
-    @Then("I wait for (\\d+) seconds")
+    @Then("^I wait for (\\d+) seconds$")
     fun iWaitForXSeconds(secondsToWaitFor: Long) {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
     }

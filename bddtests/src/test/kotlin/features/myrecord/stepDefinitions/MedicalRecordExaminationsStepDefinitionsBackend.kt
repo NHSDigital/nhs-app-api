@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.Given
+import io.cucumber.java.en.Given
 import features.myrecord.factories.ExaminationsFactoryVision
 import utils.SerenityHelpers
 
@@ -26,7 +26,7 @@ open class MedicalRecordExaminationsStepDefinitionsBackend {
         examinationsFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
 
-    @Given("the GP practice responds with bad examinations data")
+    @Given("^the GP practice responds with bad examinations data$")
     fun gpPracticeRespondsWithBadExaminationsData() {
         ExaminationsFactoryVision().badData(SerenityHelpers.getPatient())
     }

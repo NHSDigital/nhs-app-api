@@ -1,7 +1,7 @@
 package features.ndop.stepDefinitions
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
@@ -11,7 +11,7 @@ import worker.models.ndop.NdopResponse
 
 open class NdopStepDefinitions {
 
-    @When("I request a Ndop Token")
+    @When("^I request a Ndop Token$")
     fun whenIRequestaNdopToken() {
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
@@ -19,7 +19,7 @@ open class NdopStepDefinitions {
         Serenity.setSessionVariable(NdopResponse::class).to(result)
     }
 
-    @Then("I receive a signed JWT Token")
+    @Then("^I receive a signed JWT Token$")
     fun thenIReceiveASignedJwtToken() {
         val result = Serenity.sessionVariableCalled<NdopResponse>(NdopResponse::class)
         Assert.assertTrue(result.token.isNotEmpty())

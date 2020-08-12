@@ -1,7 +1,7 @@
 package features.sharedSteps
 
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
 import pages.ErrorDialogPage
 

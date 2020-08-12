@@ -1,10 +1,9 @@
 package features.authentication.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.DataTable
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
@@ -13,6 +12,7 @@ import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.CookieSteps
 import features.sharedSteps.NavigationSteps
+import io.cucumber.datatable.DataTable
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
@@ -103,18 +103,18 @@ class AuthenticationStepDefinitions {
         browser.goToApp()
     }
 
-    @When("I log out")
+    @When("^I log out$")
     fun iLogOut() {
         navHeader.clickMyAccount()
         myAccount.signOutButton.click()
     }
 
-    @When("I use the header link to log out of the website")
+    @When("^I use the header link to log out of the website$")
     fun iLogOutUsingHeaderLink() {
         webHeader.clickLogout()
     }
 
-    @When("I log in again")
+    @When("^I log in again$")
     fun iLogInAgain() {
         val patient = SerenityHelpers.getPatient()
         login.using(patient)
@@ -128,12 +128,11 @@ class AuthenticationStepDefinitions {
 
     @When("^I browse to the pages at the following urls I see the (.*) page$")
     fun iBrowseToPageAtXAndSeeTheXPage(page: String, table: DataTable) {
-        for (row in table.raw()) {
-            if(row.size > 1) {
-                iBrowseToPageXAndSeePageX(page, row.get(0), row.get(1))
-            } else {
-                iBrowseToPageXAndSeePageX(page, row.get(0))
-            }
+        for (row in table.cells()) {
+            val path: String = row[0]
+            val destination = if (row.size > 1) row[1] ?: "" else ""
+
+            iBrowseToPageXAndSeePageX(page, path, destination)
         }
     }
 
@@ -186,7 +185,7 @@ class AuthenticationStepDefinitions {
         cookies.waitUntilSignoutCompletes()
     }
 
-    @Then("I can cycle through the header links")
+    @Then("^I can cycle through the header links$")
     fun iLCycleTheHeaderLinks() {
         val linksToFollow = arrayListOf(
                 { NativeHeaderHelper.followSymptomsHeaderLink(webHeader) },
@@ -202,7 +201,7 @@ class AuthenticationStepDefinitions {
         }
     }
 
-    @Then("I can cycle through the native header links")
+    @Then("^I can cycle through the native header links$")
     fun iLCycleTheNativeHeaderLinks(){
         val linksToFollow = arrayListOf(
                 {followAppointmentNativeNavBarLink()},
