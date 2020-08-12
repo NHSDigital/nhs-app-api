@@ -16,7 +16,7 @@ import utils.getOrFail
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class V1MedicalRecordTppDcrEventStepDefinitions {
+open class MedicalRecordTppDcrEventStepDefinitionsBackend {
 
     private val mockingClient = MockingClient.instance
 

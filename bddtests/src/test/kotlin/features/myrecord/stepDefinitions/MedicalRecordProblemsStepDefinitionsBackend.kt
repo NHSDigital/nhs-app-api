@@ -4,20 +4,12 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ProblemsFactory
-import mocking.data.myrecord.ProblemsData
 import net.serenitybdd.core.Serenity
-import constants.DateTimeFormats
 import org.junit.Assert.assertEquals
-import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
-open class V1MedicalRecordProblemsStepDefinitions {
-
-    private lateinit var medicalRecordV1Page: MedicalRecordV1Page
+open class MedicalRecordProblemsStepDefinitionsBackend {
 
     @Given("^the GP Practice has enabled problems functionality$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionality() {
@@ -70,36 +62,5 @@ open class V1MedicalRecordProblemsStepDefinitions {
     fun thenIReceiveAProblemsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.problems.data.count())
-    }
-
-    @Then("^I see health condition records displayed - Medical Record v1$")
-    fun thenISeeProblemsRecordsDisplayedV1() {
-        assertEquals(
-                NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED,
-                medicalRecordV1Page.healthConditions.allRecordItems().count())
-    }
-
-    @Then("^I see the expected Health conditions displayed with unknown date for the third result$")
-    fun thenISeeTheExpectedHealthConditionsDisplayedWithUnknownDateForThirdResult() {
-        val expectedProblems =
-                ProblemsData.getEmisProblemRecordsWhereTheSecondRecordHasNoEffectiveDate().medicalRecord.problems
-        val sortedExpectedProblems = expectedProblems.sortedByDescending { it.observation.effectiveDate?.value }
-
-        val onScreenProblems = medicalRecordV1Page.healthConditions.allRecordItems()
-        assertEquals(expectedProblems.size, onScreenProblems.count())
-
-        for (i in onScreenProblems.indices) {
-            if (i == expectedProblems.lastIndex) {
-                assertEquals("Unknown Date", onScreenProblems[i].label)
-            } else {
-                val expectedDate = (sortedExpectedProblems[i].observation.effectiveDate?.value)?.takeWhile {
-                    !it.isLetter() }
-                val actualDate = LocalDate.parse(onScreenProblems[i].label,
-                        DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)).toString()
-
-                assertEquals(expectedDate, actualDate)
-            }
-
-        }
     }
 }

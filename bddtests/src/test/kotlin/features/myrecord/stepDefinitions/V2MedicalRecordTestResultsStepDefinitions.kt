@@ -4,10 +4,11 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.myrecord.factories.TestResultsFactoryVision
 import features.myrecord.factories.TestResultsFactory
+import features.myrecord.factories.TestResultsFactoryVision
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import pages.ErrorPage
 import pages.gpMedicalRecord.TestResultsPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
@@ -16,6 +17,7 @@ open class V2MedicalRecordTestResultsStepDefinitions {
 
     private lateinit var testResultsPage: TestResultsPage
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
+    private lateinit var errorPage: ErrorPage
 
     @Given("^an error occurred retrieving the test results")
     fun andAnErrorOccurredRetrievingTheProcedures() {
@@ -121,6 +123,18 @@ open class V2MedicalRecordTestResultsStepDefinitions {
     @Then("^there are no wrongly displayed HTML entities - Medical Record v2$")
     fun thereAreNoWronglyDisplayedHTMLEntitiesV2() {
         myRecordDetailedTestResultPage.assertContentWithNoWronglyDisplayedHTMLEntities()
+    }
+
+    @Then("I see the appropriate error message for retrieving test result detail")
+    fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
+        val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
+        val header = myRecordDetailedTestResultPage.serverErrorHeader
+        val message = myRecordDetailedTestResultPage.serverErrorMessage
+
+        errorPage.assertHeaderText(header)
+                .assertMessageText(message)
+                .assertPageHeader(pageHeader)
+                .assertNoRetryButton()
     }
 
     companion object {

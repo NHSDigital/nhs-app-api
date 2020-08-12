@@ -8,6 +8,7 @@ import pages.sharedElements.LinksContent
 import pages.sharedElements.LinksElement
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
+import pages.text
 
 class MedicalRecordV2Page : HybridPageObject() {
 
@@ -20,6 +21,12 @@ class MedicalRecordV2Page : HybridPageObject() {
     val clinicalAbbreviationsLink =
             HybridPageElement(
                     webDesktopLocator = "//a/span[contains(text(),'Help with abbreviations')]",
+                    androidLocator = null,
+                    page = this)
+
+    private val noSummaryCareAccessMessage =
+            HybridPageElement(
+                    webDesktopLocator = "//div[@id='errorMsg']",
                     androidLocator = null,
                     page = this)
 
@@ -59,5 +66,9 @@ class MedicalRecordV2Page : HybridPageObject() {
                         .paragraph("Address")
                         .paragraph(patient.contactDetails.address.full())
         ExpectedPageStructureAssertor().assert(this, fullContent.build())
+    }
+
+    fun getSummaryCareNoAccessMessage(): String {
+        return noSummaryCareAccessMessage.text
     }
 }

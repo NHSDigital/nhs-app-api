@@ -1,6 +1,5 @@
 package features.myrecord.stepDefinitions
 
-import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -9,18 +8,14 @@ import mocking.MockingClient
 import mocking.data.myrecord.ImmunisationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
-import pages.myrecord.MedicalRecordV1Page
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-open class V1MedicalRecordImmunisationStepDefinitions {
+open class MedicalRecordImmunisationStepDefinitionsBackend {
 
-    private lateinit var medicalRecordV1Page: MedicalRecordV1Page
     private val mockingClient = MockingClient.instance
 
     @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist$")
@@ -74,35 +69,5 @@ open class V1MedicalRecordImmunisationStepDefinitions {
     fun thenIReceiveAnImmunisationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.immunisations.data.count())
-    }
-
-    @Then("^I see immunisation records displayed - Medical Record v1$")
-    fun thenISeeImmunisationRecordsDisplayedV1() {
-        assertEquals(2, medicalRecordV1Page.immunisations.allRecordItems().count())
-    }
-
-    @Then("^I see the expected immunisations displayed - Medical Record v1$")
-    fun thenISeeTheExpectedImmunisationsDisplayedV1() {
-        val expectedImmunisations = ImmunisationsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .getExpectedImmunisations()
-
-        val onScreenImmunisations = medicalRecordV1Page.immunisations.allRecordItems()
-
-        assertEquals(expectedImmunisations.count(), onScreenImmunisations.count())
-
-        for (i in onScreenImmunisations.indices) {
-            assertEquals(
-                    LocalDate.parse(
-                            expectedImmunisations[i].effectiveDate.value),
-                    LocalDate.parse(
-                            onScreenImmunisations[i].label,
-                            DateTimeFormatter.ofPattern(DateTimeFormats.frontendBasicDateFormat)
-                    ))
-
-            assertEquals(expectedImmunisations[i].term, onScreenImmunisations[i].bodyElements[0])
-            assertEquals(expectedImmunisations[i].nextDate, onScreenImmunisations[i].bodyElements[1])
-            assertEquals(expectedImmunisations[i].status, onScreenImmunisations[i].bodyElements[2])
-        }
     }
 }

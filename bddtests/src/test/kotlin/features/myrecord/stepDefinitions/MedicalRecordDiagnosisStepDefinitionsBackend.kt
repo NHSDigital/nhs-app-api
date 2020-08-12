@@ -1,21 +1,11 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
 import features.myrecord.factories.DiagnosisFactoryVision
-import features.sharedSteps.BrowserSteps
-import net.thucydides.core.annotations.Steps
-import org.junit.Assert
-import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
 
-open class V1MedicalRecordDiagnosisStepDefinitions {
+open class MedicalRecordDiagnosisStepDefinitionsBackend {
 
-    @Steps
-    lateinit var browser: BrowserSteps
-
-    private lateinit var medicalRecordV1Page: MedicalRecordV1Page
     private lateinit var diagnosisFactoryVision: DiagnosisFactoryVision
 
     @Given( "^I do not have access to diagnosis$" )
@@ -39,22 +29,5 @@ open class V1MedicalRecordDiagnosisStepDefinitions {
     @Given("^the GP practice responds with bad diagnosis data")
     fun theGpPracticeRespondsWithBadDiagnosisData(){
         DiagnosisFactoryVision().badData(SerenityHelpers.getPatient())
-    }
-
-    @When("^I click the diagnosis section$" )
-    fun whenIClickTheDiagnosisSection() {
-        medicalRecordV1Page.diagnosis.toggleShrub()
-    }
-
-    @When("^I enter url address for diagnosis detail directly into the url$")
-    fun whenIEnterUrlAddressForDiagnosisDetailDirectlyIntoTheUrl() {
-        val fullUrl = "/my-record/diagnosis-detail"
-        browser.browseTo(fullUrl)
-    }
-
-    @Then( "^I see diagnosis information - Medical Record v1$" )
-    fun thenISeeDiagnosisInformationV1() {
-        val sectionName = "Diagnosis"
-        Assert.assertTrue(medicalRecordV1Page.isVisionSectionPageVisible(sectionName, sectionName))
     }
 }

@@ -13,6 +13,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordV2Page
@@ -94,6 +95,13 @@ open class V2MedicalRecordStepDefinitions {
             medicalRecordV2Page.pageTitle.waitForElement()
             medicalRecordV2Page.assertDemographicsContent(patient)
         }
+    }
+
+    @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
+    fun thenISeeServiceNotOfferedByGPOrToSpecificUserOrAccessRevokedWarningMessage() {
+        Assert.assertEquals("You do not currently have online access to your medical record\n" +
+                "Contact your GP surgery for more information.",
+                medicalRecordV2Page.getSummaryCareNoAccessMessage())
     }
 
     private fun assertTextOnPage(message: String) {

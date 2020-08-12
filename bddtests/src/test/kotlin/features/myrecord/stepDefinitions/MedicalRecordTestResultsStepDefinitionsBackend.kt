@@ -1,35 +1,28 @@
 package features.myrecord.stepDefinitions
 
-import config.Config
-import constants.DateTimeFormats
-import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
-import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
+import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.data.myrecord.TestResultsData
-import net.thucydides.core.annotations.Steps
-import org.junit.Assert
+import mocking.emis.testResults.TestResultValue
+import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
-import pages.ErrorPage
-import pages.myrecord.MedicalRecordV1Page
-import pages.myrecord.MyRecordTestResultDetailPage
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import utils.getOrFail
+import worker.WorkerClient
+import worker.models.myrecord.MyRecordResponse
+
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO = 0
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE = 1
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO = 2
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
-open class V1MedicalRecordTestResultsStepDefinitions {
 
-    @Steps
-    lateinit var browser: BrowserSteps
-    private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
-    lateinit var errorPage: ErrorPage
-    lateinit var medicalRecordV1Page: MedicalRecordV1Page
+open class MedicalRecordTestResultsStepDefinitionsBackend {
+
     private val mockingClient = MockingClient.instance
 
     @Given("^an error occurs retrieving the test result detail$")
@@ -172,103 +165,98 @@ open class V1MedicalRecordTestResultsStepDefinitions {
         TestResultsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
-    @When("I click a test result - Medical Record v1$")
-    fun whenIClickATestResult() {
-        medicalRecordV1Page.testResults.clickFirst()
+    @When("^I get the users test results$")
+    fun whenIGetTheUsersMyRecordData() {
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
+
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
-
-    @When("^I enter url address for test results detail directly into the url$")
-    fun whenIEnterUrlAddressForTestResultsDetailDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/my-record/test-results-detail"
-        browser.browseTo(fullUrl)
+    @Then("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")
+    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.testResults.hasAccess)
     }
 
-    @Then("I see the appropriate error message for retrieving test result detail")
-    fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
-        val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
-        val header = myRecordDetailedTestResultPage.serverErrorHeader
-        val message = myRecordDetailedTestResultPage.serverErrorMessage
-
-        errorPage.assertHeaderText(header)
-                .assertMessageText(message)
-                .assertPageHeader(pageHeader)
-                .assertNoRetryButton()
+    @When("^the flag informing that there was an error retrieving the test results data is set to \"(.*)\"$")
+    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.testResults.hasErrored)
     }
 
-    @Then("I select a test result - Medical Record v1")
-    fun thenISelectATestResultV1() {
-        medicalRecordV1Page.testResults.toggleShrub()
-        medicalRecordV1Page.testResults.clickFirst()
+    @Then("^I receive (.*) test results as part of the my record object$")
+    fun thenIReceiveATestResultsObject(count: Int) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(count, result.response.testResults.data.count())
     }
 
-    @Then("^I see the test result content - Medical Record v1$")
-    fun thenISeeTheTestResulsContentV1() {
-        myRecordDetailedTestResultPage.assertContent()
+    @Then("^I receive the test result with term set correctly to Term$")
+    fun thenIReceiveATestResultWithTermSetCorrectly() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
+        assertEquals(testResultValue.term, result.response.testResults.data.first().description)
     }
 
-    @Then("^there are no wrongly displayed HTML entities - Medical Record v1$")
-    fun thenThereAreNoWronglyDisplayedHTMLEntitiesV1() {
-        myRecordDetailedTestResultPage.assertContentWithNoWronglyDisplayedHTMLEntities()
+    @Then("^the line item displays text value and range$")
+    fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT_CHILD.getOrFail<TestResultValue>()
+        val lowerRange = testResultValue.range!!.minimumText
+        val upperRange = testResultValue.range!!.maximumText
+        assertEquals("Child LineItem Description does not match",
+                "${testResultValue.term}: ${testResultValue.textValue} " +
+                        "${testResultValue.numericUnits} (normal range: $lowerRange - $upperRange)",
+                result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
-    @Then("^I see test results with multiple child values some of which have ranges - Medical Record v1$")
-    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRangesV1() {
-        Assert.assertTrue("Expected test result equal to or greater than 1, but was" +
-                "${medicalRecordV1Page.testResults.allRecordItems().size}"
-                , medicalRecordV1Page.testResults.allRecordItems().isNotEmpty())
-        Assert.assertTrue("Expected child test result equal to or greater than 1, but was " +
-                "${medicalRecordV1Page.getTestResultChildCount()}",
-                medicalRecordV1Page.getTestResultChildCount() > 1)
+    @Then("^the line item value is set correctly$")
+    fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT_CHILD.getOrFail<TestResultValue>()
+        assertEquals("Child LineItem Description does not match",
+                "${testResultValue.term}: ${testResultValue.textValue} " +
+                        "${testResultValue.numericUnits}",
+                result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
-    @Then("^I see test result information - Medical Record v1$")
-    fun thenISeeTestResultInformationV1() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-
-        if (gpSystem == Supplier.VISION) {
-            Assert.assertTrue(medicalRecordV1Page.isVisionTestResultsLinkVisible())
-        } else {
-            Assert.assertTrue(medicalRecordV1Page.isTestResultsTextMsgVisible())
-        }
+    @Then("^I receive line items for each child value$")
+    fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals("Expected two ChildLineItems in TestResult",
+                2,
+                result.response.testResults.data.first().testResultChildLineItems.count())
     }
 
-    @Then("^I see (.*) test results - Medical Record v1$")
-    fun thenISeeMultipleTestResultsV1(count: Int) {
-        assertEquals("Expected test results", count, medicalRecordV1Page.testResults.allRecordItems().count())
+    @Then("^the field indicating supplier is set$")
+    fun thenTheFlagIndicatingSupplierIsSetTo() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(SerenityHelpers.getGpSupplier().toString().toUpperCase(), result.response.supplier.toUpperCase())
     }
 
-    @Then("^The third test result record has an unknown date - Medical Record v1$")
-    fun thenTheThirdResultHasAnUnknownDateV1() {
-        val dateLabel = medicalRecordV1Page.testResults.allRecordItems()[2].label
-        assertEquals("Test result date", "Unknown Date", dateLabel)
+    @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
+    fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
+        assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +
+                "${testResultValue.numericUnits}", result.response.testResults.data.first().description)
     }
 
-    @Then("^I see the expected test results displayed - Medical Record v1$")
-    fun thenISeeTheExpectedTestResultsDisplayedV1() {
-        val expectedTestResults = TestResultsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .getExpectedTestResults()
-
-        val onScreenTestResults = medicalRecordV1Page.testResults.allRecordItems()
-
-        assertEquals(expectedTestResults.count(), onScreenTestResults.count())
-
-        for (i in onScreenTestResults.indices) {
-            assertEquals(
-                    LocalDate.parse(
-                            expectedTestResults[i].date.value
-                    ),
-                    LocalDate.parse(
-                            onScreenTestResults[i].label,
-                            DateTimeFormatter.ofPattern(
-                                    DateTimeFormats.frontendBasicDateFormat)
-                    )
-            )
-
-            for (j in expectedTestResults[i].associatedTexts.indices) {
-               assertEquals(expectedTestResults[i].associatedTexts[j], onScreenTestResults[i].bodyElements[j])
-            }
-        }
+    @Then("^I receive the term set correctly to Term TextValue NumericUnits Range$")
+    fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        val testResultValue =
+                MyRecordSerenityHelpers.EXPECTED_TEST_RESULT.getOrFail<TestResultValue>()
+        val lowerRange = testResultValue.range!!.minimumText
+        val upperRange = testResultValue.range!!.maximumText
+        assertEquals("${testResultValue.term}: ${testResultValue.textValue} " +
+                "${testResultValue.numericUnits} (normal range: $lowerRange - $upperRange)",
+                result.response.testResults.data.first().description)
     }
 }
+

@@ -8,16 +8,14 @@ import mocking.MockingClient
 import mocking.data.myrecord.ConsultationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
-import pages.myrecord.MedicalRecordV1Page
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class V1MedicalRecordConsultationStepDefinitions {
+open class MedicalRecordConsultationStepDefinitionsBackend {
 
-    private lateinit var medicalRecordV1Page: MedicalRecordV1Page
     private val mockingClient = MockingClient.instance
 
     @Given("^the GP Practice has multiple consultations$")
@@ -94,16 +92,5 @@ open class V1MedicalRecordConsultationStepDefinitions {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(hasError, result.response.consultations.hasErrored)
     }
-
-    @Then("^I see Consultations records displayed - Medical Record v1$")
-    fun thenISeeConsultationsRecordsDisplayedV1() {
-        assertEquals(2, medicalRecordV1Page.consultations.allRecordItems().count())
-    }
-
-    @Then("^I see (.*) Consultations records displayed - Medical Record v1$")
-    fun thenISeeConsultationsRecordsDisplayedV1(count: Int) {
-        assertEquals(count, medicalRecordV1Page.consultations.allRecordItems().count())
-    }
-
 }
 
