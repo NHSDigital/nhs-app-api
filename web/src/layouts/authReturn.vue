@@ -132,11 +132,13 @@
               </div>
               <div v-else>
                 <main >
-                  <spinner />
-                  <connection-error />
-                  <api-error />
-                  <flash-message />
-                  <slot />
+                  <div :class="$style['blue-body']">
+                    <spinner />
+                    <connection-error />
+                    <api-error />
+                    <flash-message />
+                    <slot />
+                  </div>
                 </main>
               </div>
             </div>
@@ -261,5 +263,14 @@ div {
       width: 100%;
     }
   }
+}
+
+.blue-body {
+  background-color: rgb(0, 94, 184);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>

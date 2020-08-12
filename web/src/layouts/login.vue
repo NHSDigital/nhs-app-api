@@ -4,7 +4,7 @@
       <connection-error/>
       <api-error/>
     </div>
-    <div v-else id="app">
+    <div v-else id="app" :class="{ [$style['no-footer']]: isNativeApp }">
       <corona-virus-banner v-if="isNativeApp"
                            :should-be-floating="true"/>
       <div :class="dynamicStyle('login-app-header-flex-container')">
@@ -157,6 +157,7 @@ export default {
   @import "../style/home";
   @import "../style/spacings";
   @import "../style/webshared";
+  @import "../style/nofooter";
 
   .error-container {
     @include space(padding, all, 1em);
