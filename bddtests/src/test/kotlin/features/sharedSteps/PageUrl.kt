@@ -1,3 +1,4 @@
+
 package features.sharedSteps
 
 open class PageUrl {
@@ -53,10 +54,6 @@ open class PageUrl {
                         "symptoms" to "/symptoms",
                         "messages hub" to "/messages"
                 )
-
-        /*fun getPage(pageName: String): String {
-            return "${Config.instance.url}$${getRelativePagePath(pageName)}"
-        }*/
 
         fun getRelativePagePath(pageName: String): String {
             return map[pageName.toLowerCase()]!!

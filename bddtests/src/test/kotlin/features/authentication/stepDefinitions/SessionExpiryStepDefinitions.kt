@@ -80,7 +80,6 @@ class SessionExpiryStepDefinitions  {
     fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() = sessionExpiry.waitForSessionExpiryAfterModalDisplay()
 
     @Given("^I allow my session to expire$")
-    @When("^I am idle long enough for the desktop session to expire$")
     fun givenIAllowMySessionToExpire() {
         sessionExpiry.waitForSessionExpiry()
     }
