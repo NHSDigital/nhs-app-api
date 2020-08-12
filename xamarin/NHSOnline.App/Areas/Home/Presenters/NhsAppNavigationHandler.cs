@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using NHSOnline.App.Navigation;
 
@@ -45,7 +44,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         public Task RecordRequested()
         {
-            _view.NavigateWithinApp("my-record-warning");
+            _view.NavigateWithinApp("health-records");
             return Task.CompletedTask;
         }
 
