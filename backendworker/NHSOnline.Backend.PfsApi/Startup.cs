@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi
             if (_env.IsDevelopment())
             {
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SameSite = SameSiteMode.Lax;
             }
             else
             {
