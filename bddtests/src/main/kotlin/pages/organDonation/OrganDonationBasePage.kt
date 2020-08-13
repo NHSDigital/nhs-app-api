@@ -11,7 +11,10 @@ const val RACE_CONDITION_WAIT: Long = 60
 
 open class OrganDonationBasePage: HybridPageObject() {
 
-    open val titleText: String = "Not Set"
+    open val titleText: String
+        get() {
+            throw NotImplementedException("titleText is not implemented on Organ Donation base page")
+        }
 
     protected val title by lazy {
         HybridPageElement(
