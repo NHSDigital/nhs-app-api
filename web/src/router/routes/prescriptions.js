@@ -48,7 +48,6 @@ export const UPLIFT_PRESCRIPTIONS = {
     headerKey: 'pageHeaders.prescriptions',
     titleKey: 'pageTitles.prescriptions',
     crumb: breadcrumbs.UPLIFT_PRESCRIPTIONS_CRUMB,
-    nativeDisabled: true,
     i18nKey: 'prescriptions',
     proofLevel: proofLevel.P5,
     helpUrl: prescriptionsHelpUrl,

@@ -24,8 +24,6 @@ import {
   USER_RESEARCH_NAME,
 } from '@/router/names';
 
-import breadcrumbs from '@/breadcrumbs/login';
-
 import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
 import urlResolution from '@/middleware/urlResolution';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -44,7 +42,7 @@ export const LOGIN = {
   component: LoginPage,
   meta: {
     isAnonymous: true,
-    crumb: breadcrumbs.LOGIN_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     shouldShowContentHeader: false,
     helpUrl: appLoginHelpUrl,
@@ -60,7 +58,7 @@ export const LOGIN_BIOMETRIC_ERROR = {
     headerKey: 'pageTitles.loginBiometricError',
     titleKey: 'pageTitles.loginBiometricError',
     isAnonymous: true,
-    crumb: breadcrumbs.LOGIN_BIOMETRIC_ERROR_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: appLoginHelpUrl,
     redirectRules: [{
@@ -80,7 +78,7 @@ export const PRE_REGISTRATION = {
     titleKey: 'pageTitles.preRegistrationInformation',
     isAnonymous: true,
     middleware: [urlResolution, viewedPreRegInstructions],
-    crumb: breadcrumbs.PRE_REGISTRATION_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: appLoginHelpUrl,
   },
@@ -91,7 +89,7 @@ export const BEGIN_LOGIN = {
   name: BEGINLOGIN_NAME,
   meta: {
     isAnonymous: true,
-    crumb: breadcrumbs.BEGINLOGIN_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     middleware: [urlResolution],
     helpUrl: appLoginHelpUrl,
@@ -104,7 +102,7 @@ export const AUTH_RETURN = {
   component: AuthReturnPage,
   meta: {
     isAnonymous: true,
-    crumb: breadcrumbs.AUTH_RETURN_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: appLoginHelpUrl,
   },
@@ -118,7 +116,7 @@ export const TERMS_AND_CONDITIONS = {
     headerKey: getTermsConditionTitle,
     titleKey: getTermsConditionTitle,
     proofLevel: proofLevel.P5,
-    crumb: breadcrumbs.TERMSANDCONDITIONS_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: baseNhsAppHelpUrl,
   },
@@ -132,7 +130,7 @@ export const USER_RESEARCH = {
     headerKey: 'pageHeaders.userResearch',
     titleKey: 'pageTitles.userResearch',
     proofLevel: proofLevel.P5,
-    crumb: breadcrumbs.USERRESEARCH_CRUMB,
+    crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
     helpUrl: baseNhsAppHelpUrl,
   },

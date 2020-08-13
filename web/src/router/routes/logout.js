@@ -5,7 +5,6 @@ import { LOGOUT_NAME } from '@/router/names';
 
 import { appLoginHelpUrl } from '@/router/externalLinks';
 import proofLevel from '@/lib/proofLevel';
-import breadcrumbs from '@/breadcrumbs/logout';
 
 export const LOGOUT = {
   path: LOGOUT_PATH,
@@ -15,7 +14,7 @@ export const LOGOUT = {
     headerKey: 'pageHeaders.logout',
     titleKey: 'pageTitles.logout',
     proofLevel: proofLevel.P5,
-    crumb: breadcrumbs.LOGOUT_CRUMB,
+    crumb: {},
     helpUrl: appLoginHelpUrl,
   },
 };

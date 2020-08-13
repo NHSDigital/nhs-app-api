@@ -1,115 +1,78 @@
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import {
-  UPLIFT_APPOINTMENTS_NAME,
   APPOINTMENTS_NAME,
   GP_APPOINTMENTS_NAME,
   HOSPITAL_APPOINTMENTS_NAME,
-  APPOINTMENT_GP_AT_HAND_NAME,
-  APPOINTMENT_INFORMATICA_NAME,
-  APPOINTMENT_BOOKING_GUIDANCE_NAME,
-  APPOINTMENT_BOOKING_NAME,
-  APPOINTMENT_CONFIRMATIONS_NAME,
-  APPOINTMENT_BOOKING_SUCCESS_NAME,
-  APPOINTMENT_ADD_TO_CALENDAR_NAME,
-  APPOINTMENT_CANCELLING_NAME,
-  APPOINTMENT_CANCELLING_SUCCESS_NAME,
-  APPOINTMENT_ADMIN_HELP_NAME,
-  APPOINTMENT_GP_ADVICE_NAME,
 } from '@/router/names';
 
 const UPLIFT_APPOINTMENTS_CRUMB = {
-  i18nKey: 'appointments',
   defaultCrumb: [INDEX_CRUMB],
-  name: UPLIFT_APPOINTMENTS_NAME,
   nativeDisabled: true,
 };
 
 export const APPOINTMENTS_CRUMB = {
-  i18nKey: 'appointments',
   defaultCrumb: [INDEX_CRUMB],
+  i18nKey: 'appointments',
   name: APPOINTMENTS_NAME,
   nativeDisabled: true,
 };
 
 export const GP_APPOINTMENTS_CRUMB = {
-  i18nKey: 'gpAppointments',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
+  i18nKey: 'gpAppointments',
   name: GP_APPOINTMENTS_NAME,
 };
 
 const HOSPITAL_APPOINTMENTS_CRUMB = {
-  i18nKey: 'hospitalAppointments',
-  defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
   name: HOSPITAL_APPOINTMENTS_NAME,
+  defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
 };
 
 const GP_AT_HAND_CRUMB = {
-  i18nKey: 'appointmentsGpAtHand',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_GP_AT_HAND_NAME,
 };
 
 const INFORMATICA_CRUMB = {
-  i18nKey: 'appointmentsInformatica',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_INFORMATICA_NAME,
 };
 
 const BOOKING_GUIDANCE_CRUMB = {
-  i18nKey: 'appointmentsGuidanceBooking',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_BOOKING_GUIDANCE_NAME,
 };
 
 const BOOKING_CRUMB = {
-  i18nKey: 'appointmentsBooking',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_BOOKING_NAME,
 };
 
 const CONFIRMATION_CRUMB = {
-  i18nKey: 'appointmentsConfirmation',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_CONFIRMATIONS_NAME,
 };
 
 const BOOKING_SUCCESS_CRUMB = {
-  i18nKey: 'appointmentBookingSuccess',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_BOOKING_SUCCESS_NAME,
   nativeDisabled: true,
 };
 
 const ADD_TO_CALENDAR_CRUMB = {
-  i18nKey: 'appointmentAddToCalendar',
-  defaultCrumb: [BOOKING_SUCCESS_CRUMB],
-  name: APPOINTMENT_ADD_TO_CALENDAR_NAME,
+  defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB],
 };
 
 const CANCELLING_CRUMB = {
-  i18nKey: 'appointmentsCancelling',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_CANCELLING_NAME,
 };
 
 const CANCELLING_SUCCESS_CRUMB = {
-  i18nKey: 'appointmentsConfirmation',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  name: APPOINTMENT_CANCELLING_SUCCESS_NAME,
 };
 
 const ADMIN_HELP_CRUMB = {
-  i18nKey: 'appointmentsAdminHelp',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
   moreCrumb: [INDEX_CRUMB],
-  name: APPOINTMENT_ADMIN_HELP_NAME,
 };
 
 const GP_ADVICE_CRUMB = {
-  i18nKey: 'appointmentsGpAdvice',
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
   symptomsCrumb: [INDEX_CRUMB],
-  name: APPOINTMENT_GP_ADVICE_NAME,
 };
 
 export default {
