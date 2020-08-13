@@ -14,6 +14,7 @@ import {
   SHOW_SESSION_EXPIRING,
   HIDE_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
+  SET_RETRY_GP_SESSION,
 } from './mutation-types';
 
 export default {
@@ -119,6 +120,9 @@ export default {
     clearInterval(state.validationInterval);
     commit(END_VALIDATION_CHECKING);
     commit(HIDE_SESSION_EXPIRING);
+  },
+  setRetry({ commit }, hasRetried) {
+    commit(SET_RETRY_GP_SESSION, hasRetried);
   },
   validate({ getters, state, commit }) {
     if (getters.isLoggedIn()) {

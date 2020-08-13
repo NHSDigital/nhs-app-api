@@ -3,7 +3,6 @@ import mapKeys from 'lodash/fp/mapKeys';
 import get from 'lodash/fp/get';
 import {
   ADD_ERROR,
-  SET_RETRY_GP_SESSION,
   CANCELLING_JOURNEY_COMPLETE,
   CANCELLING_JOURNEY_START,
   CLEAR,
@@ -74,13 +73,9 @@ export default {
 
     state.upcomingAppointments = sortSlots(state.upcomingAppointments);
     state.pastAppointments = sortSlots(state.pastAppointments).reverse();
-    state.hasRetried = false;
     state.hasLoaded = true;
   },
   [SELECT](state, selected) {
     state.selectedAppointment = selected;
-  },
-  [SET_RETRY_GP_SESSION](state) {
-    state.hasRetried = true;
   },
 };

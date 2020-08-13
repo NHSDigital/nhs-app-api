@@ -12,6 +12,7 @@ import {
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
   SET_USER_SESSION_REFERENCE,
+  SET_RETRY_GP_SESSION,
   initialState,
 } from './mutation-types';
 
@@ -19,7 +20,9 @@ export default {
   [INIT](state) {
     const blank = initialState();
     return mapKeys((key) => {
-      state[key] = blank[key];
+      if (key !== 'hasRetried') {
+        state[key] = blank[key];
+      }
     })(state);
   },
   [CLEAR](state) {
@@ -76,5 +79,8 @@ export default {
   },
   [HIDE_SESSION_EXPIRING](state) {
     delete (state.showSessionExpiring);
+  },
+  [SET_RETRY_GP_SESSION](state, hasRetried) {
+    state.hasRetried = hasRetried;
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="error">
+  <div v-if="error && hasLoaded">
     <appointments-gp-session-error v-if="hasRetried && error.status===599"
                                    :code="error.serviceDeskReference"/>
     <error-container v-if="error.status===403"
@@ -154,11 +154,18 @@ export default {
     hasLoaded() {
       return this.$store.state.myAppointments.hasLoaded;
     },
+    hasRetried() {
+      const { session, device } = this.$store.state;
+      /* session storage is used to avoid the issue of the retry
+      flag being reset after a store rebuild which occurs when navigating
+      to external links on the native apps */
+      if (device.isNativeApp) {
+        return sessionStorage.getItem('hasRetried') || session.hasRetried;
+      }
+      return session.hasRetried;
+    },
     hasApiError() {
       return this.$store.getters['errors/showApiError'];
-    },
-    hasRetried() {
-      return this.$store.state.myAppointments.hasRetried;
     },
     pastAppointments() {
       return this.$store.state.myAppointments.pastAppointments;
@@ -204,6 +211,10 @@ export default {
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
+
+    if (this.$route.query.hr) {
+      this.$store.dispatch('session/setRetry', true);
+    }
   },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearAppointments');
@@ -213,8 +224,11 @@ export default {
       return `error-dialog-${this.error.status}`;
     },
     tryAgain() {
-      this.reload();
-      this.$store.dispatch('myAppointments/setRetry');
+      if (this.$store.state.device.isNativeApp) {
+        sessionStorage.setItem('hasRetried', true);
+      }
+      this.$store.dispatch('session/setRetry', true);
+      redirectTo(this, this.$route.path, { hr: true }, true);
     },
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidanceUrl, true);

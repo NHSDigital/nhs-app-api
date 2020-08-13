@@ -34,10 +34,15 @@ describe('actions', () => {
 
     describe('on success', () => {
       const response = 'response data';
+      let rootState = {
+        device: {
+          isNativeApp: false,
+        },
+      };
 
       beforeEach(async () => {
         that.app.$http.getV1PatientAppointments = jest.fn().mockResolvedValue(response);
-        await actions.load.call(that, { commit });
+        await actions.load.call(that, { commit, rootState });
       });
 
       it('will request the patient appointments from the backend', () => {
@@ -52,6 +57,23 @@ describe('actions', () => {
 
       it('will dispatch device/unlockNavBar', async () => {
         expect(that.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+      });
+
+      it('will dispatch session/setRetry', async () => {
+        expect(that.dispatch).toHaveBeenCalledWith('session/setRetry', false);
+      });
+
+      it('will call sessionStorage removeItem', async () => {
+        rootState = {
+          device: {
+            isNativeApp: true,
+          },
+        };
+        Storage.prototype.removeItem = jest.fn();
+        await actions.load.call(that, { commit, rootState });
+
+        expect(sessionStorage.removeItem).toBeCalledWith('hasRetried');
+        expect(that.dispatch).toHaveBeenCalledWith('session/setRetry', false);
       });
 
       it('will not commit ADD_ERROR', () => {

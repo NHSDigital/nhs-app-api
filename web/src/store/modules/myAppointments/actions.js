@@ -10,7 +10,6 @@ import {
   INIT,
   LOADED,
   SELECT,
-  SET_RETRY_GP_SESSION,
 } from './mutation-types';
 
 const createError = ({ response }) => ({
@@ -51,10 +50,7 @@ export default {
   init({ commit }) {
     commit(INIT);
   },
-  setRetry({ commit }) {
-    commit(SET_RETRY_GP_SESSION);
-  },
-  async load({ commit }) {
+  async load({ commit, rootState }) {
     this.dispatch('myAppointments/init');
     try {
       const data = await this.app.$http.getV1PatientAppointments({
@@ -62,6 +58,12 @@ export default {
       });
 
       commit(LOADED, data);
+
+      if (rootState.device.isNativeApp) {
+        sessionStorage.removeItem('hasRetried');
+      }
+
+      this.dispatch('session/setRetry', false);
     } catch (error) {
       commit(ADD_ERROR, createError(error));
     } finally {

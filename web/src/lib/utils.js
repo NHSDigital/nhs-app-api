@@ -217,15 +217,18 @@ export const createRoutePathObject = ({ path, query, store }) => {
   return routeObject;
 };
 
-export const redirectTo = ({ $router, $store }, path, query) => {
+export const redirectTo = ({ $router, $store }, path, query, fullyRefresh = false) => {
   const currentRoute = get('currentRoute.path')($router);
   if (currentRoute !== undefined && currentRoute.endsWith(path)) {
-    const localQuery = !query || isEqual($router.currentRoute.query, query)
-      ? {
+    let localQuery = {};
+    if (!query || isEqual($router.currentRoute.query, query)) {
+      localQuery = {
         ...$router.currentRoute.query,
         ts: moment().unix(),
-      }
-      : query;
+      };
+    } else {
+      localQuery = (fullyRefresh) ? { ...query, ts: moment().unix() } : query;
+    }
 
     $router.push(createRoutePathObject({ path, query: localQuery, store: $store }));
   } else if (!query) {
