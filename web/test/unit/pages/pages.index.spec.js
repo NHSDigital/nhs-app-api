@@ -25,6 +25,7 @@ describe('index', () => {
     appMessagingEnabled = false,
     hasUnreadAppMessages = false,
     hasUnreadGpMessages = false,
+    silverIntegrationHealthLinksEnabled = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -64,6 +65,7 @@ describe('index', () => {
         'session/currentProfile': { name: '' },
         'serviceJourneyRules/messagingEnabled': appMessagingEnabled,
         'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
+        'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationHealthLinksEnabled),
       },
     });
     return mount(Index, { $store, $router, $t: create$T(), stubs: ['BiometricBanner'] });
@@ -167,6 +169,28 @@ describe('index', () => {
 
       it(`home page message link will show text from ${expectedText}`, () => {
         expect(messagesLink.text()).toBe(expectedText);
+      });
+    });
+  });
+
+  describe('health record link', () => {
+    describe('hub link', () => {
+      it('home page health record link will show text for health records hub page', () => {
+        wrapper = mountAs({
+          silverIntegrationHealthLinksEnabled: true,
+        });
+        const healthRecordsHubLink = wrapper.find('#menu-item-health-record-hub');
+        expect(healthRecordsHubLink.text()).toBe('translate_navigationMenuList.healthRecords');
+      });
+    });
+
+    describe('gp health record link', () => {
+      it('home page health record link will show text for gp health record hub page', () => {
+        wrapper = mountAs({
+          silverIntegrationHealthLinksEnabled: false,
+        });
+        const healthRecordsHubLink = wrapper.find('#menu-item-myRecord');
+        expect(healthRecordsHubLink.text()).toBe('translate_navigationMenuList.myRecord');
       });
     });
   });

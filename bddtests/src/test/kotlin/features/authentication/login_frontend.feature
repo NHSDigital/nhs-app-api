@@ -21,7 +21,7 @@ Feature: Login frontend
     And I can see and follow the Order a repeat prescription link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the View your GP medical record link
+    And I can see and follow the View your health records link
     When I click the home icon
     Then I see the home page
     And I can see and follow the Manage your organ donation decision link
@@ -240,3 +240,19 @@ Feature: Login frontend
   Scenario: When an EMIS user has no userPatientLinkToken they can log in
     Given I attempt to log in as an EMIS user with no userPatientLinkToken
     Then I see the home page
+
+  Scenario: A user with 3rd party health services enabled will see the 'View your health records' link
+    Given I am a user who can view care plans from Patients Know Best
+    And I am logged in
+    And I see the home page header
+    And I see the navigation menu
+    And I can see and follow the View your health records link
+    Then I see the health records hub page
+
+  Scenario: A user with no 3rd party health services enabled will see the 'View your GP health record' link
+    Given I am a user who cannot view care plans from Patients Know Best and has an IM1 Medical Record journey
+    And I am logged in
+    And I see the home page header
+    And I see the navigation menu
+    And I can see and follow the View your GP health record link
+    Then the Medical Record Warning Page is displayed

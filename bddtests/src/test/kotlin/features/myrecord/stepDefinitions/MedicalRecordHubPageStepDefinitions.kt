@@ -49,12 +49,12 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getHeaderElement(title).click()
     }
 
-    @Then("^I see the 'GP medical record' page$")
+    @Then("I see the 'GP health record' page")
     fun assertMedicalHubPage() {
         medicalRecordHubPage.pageTitleGpMedicalRecord().assertSingleElementPresent()
     }
 
-    @Then("^I see the health records hub page$")
+    @Then("I see the health records hub page")
     fun assertHealthRecordsHubPage() {
         medicalRecordHubPage.pageTitleHealthRecords().assertSingleElementPresent()
     }

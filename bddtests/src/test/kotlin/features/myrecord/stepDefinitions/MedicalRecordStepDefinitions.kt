@@ -141,9 +141,9 @@ open class MedicalRecordStepDefinitions {
         nav.select(NavBarNative.NavBarType.SYMPTOMS)
     }
 
-    @Then("^I see header text is Your GP medical record$")
-    fun thenISeeHeaderTextIsYourGPMedicalRecord() {
-        headerNative.waitForPageHeaderText("Your GP medical record")
+    @Then("^I see header text is Your GP health record$")
+    fun thenISeeHeaderTextIsYourGPHealthRecord() {
+        headerNative.waitForPageHeaderText("Your GP health record")
     }
 
     @Then("^I see my record button on the nav bar is highlighted$")

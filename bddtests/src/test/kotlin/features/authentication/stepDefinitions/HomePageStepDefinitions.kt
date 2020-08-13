@@ -153,6 +153,7 @@ class HomePageStepDefinitions {
             NavigationLinkText.APPOINTMENTS.linkText -> followAppointmentsLink(linkElement)
             NavigationLinkText.PRESCRIPTIONS.linkText -> followPrescriptionLink(linkElement)
             NavigationLinkText.MEDICAL_RECORD.linkText -> followMedicalRecordLink(linkElement)
+            NavigationLinkText.HEALTH_RECORDS.linkText -> followMedicalRecordLink(linkElement)
             NavigationLinkText.ORGAN_DONATION.linkText -> followOrganDonationLink(linkElement)
             else -> Assert.fail("Test set up incorrect, there is no matching follow on function for `$linkText`")
         }

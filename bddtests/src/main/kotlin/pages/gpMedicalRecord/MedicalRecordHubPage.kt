@@ -6,13 +6,13 @@ import pages.HybridPageObject
 class MedicalRecordHubPage : HybridPageObject() {
 
     fun pageTitleGpMedicalRecord(): HybridPageElement {
-        val webDesktopLocator = "//h1[contains(text(),\"Your GP medical record\")]"
+        val webDesktopLocator = "//h1[contains(text(),\"Your GP health record\")]"
         return HybridPageElement(
                 webDesktopLocator = webDesktopLocator,
                 androidLocator = webDesktopLocator,
                 iOSLocator = webDesktopLocator,
                 page = this,
-                helpfulName = "Your GP medical record"
+                helpfulName = "Your GP health record"
         )
     }
 

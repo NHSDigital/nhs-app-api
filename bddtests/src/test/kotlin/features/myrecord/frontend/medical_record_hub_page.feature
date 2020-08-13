@@ -43,10 +43,10 @@ Feature: Medical record hub page
     Then I see the health records hub page
     And I see the Third Party menu item 'Track your health'
 
-  Scenario: The GP medical record button redirects to GP medical record page
+  Scenario: The GP health record button redirects to GP health record page
     Given I am an EMIS patient and I have access to Patients Know Best Care Plans
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    And I click the menu item 'GP medical record'
-    And I see the 'GP medical record' page
+    And I click the menu item 'GP health record'
+    And I see the 'GP health record' page

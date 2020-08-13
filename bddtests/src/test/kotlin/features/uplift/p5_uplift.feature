@@ -11,7 +11,7 @@ Feature: Proof level 5 shutter screens
     Examples:
       | Page               | Page Title                |
       | appointment hub    | Appointments              |
-      | gp medical record  | Your GP medical record    |
+      | gp medical record  | Your GP health record     |
       | more               | More                      |
       | organ donation     | More                      |
       | your prescriptions | Prescriptions             |
@@ -27,7 +27,7 @@ Feature: Proof level 5 shutter screens
     Examples:
     | Page               | Page Title                |
     | appointment hub    | Appointments              |
-    | gp medical record  | Your GP medical record    |
+    | gp medical record  | Your GP health record     |
     | more               | More                      |
     | organ donation     | More                      |
     | your prescriptions | Prescriptions             |

@@ -13,10 +13,10 @@ import pages.text
 class MedicalRecordV2Page : HybridPageObject() {
 
     val pageTitle = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(),\"Your GP medical record\")]",
+            webDesktopLocator = "//h1[contains(text(),\"Your GP health record\")]",
             androidLocator = null,
             page = this,
-            helpfulName = "GP Medical Record Title")
+            helpfulName = "GP Health Record Title")
 
     val clinicalAbbreviationsLink =
             HybridPageElement(

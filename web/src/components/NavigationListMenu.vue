@@ -29,7 +29,7 @@
                :click-func="goToUrl"
                :click-param="prescriptionsPath"/>
 
-    <menu-item v-if="isProofLevel9"
+    <menu-item v-if="isProofLevel9 && !isAny3rdPartyHealthServiceEnabled"
                id="menu-item-myRecord"
                :header-tag="headerTag"
                data-sid="myrecord-menu-item"
@@ -38,6 +38,16 @@
                :aria-label="$t('navigationMenuList.myRecord')"
                :click-func="goToUrl"
                :click-param="gpMedicalRecordPath"/>
+
+    <menu-item v-if="isProofLevel9 && isAny3rdPartyHealthServiceEnabled"
+               id="menu-item-health-record-hub"
+               :header-tag="headerTag"
+               data-sid="health-record-hub-menu-item"
+               :href="healthRecordsHubPath"
+               :text="$t('navigationMenuList.healthRecords')"
+               :aria-label="$t('navigationMenuList.healthRecords')"
+               :click-func="goToUrl"
+               :click-param="healthRecordsHubPath"/>
 
     <menu-item id="btn_messages"
                :header-tag="headerTag"
@@ -75,6 +85,7 @@ import {
   APPOINTMENTS_PATH,
   MESSAGES_PATH,
   GP_MEDICAL_RECORD_PATH,
+  HEALTH_RECORDS_PATH,
   PRESCRIPTIONS_PATH,
   SYMPTOMS_PATH,
   LINKED_PROFILES_PATH,
@@ -82,6 +93,7 @@ import {
   HEALTH_INFORMATION_UPDATES_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'NavigationListMenu',
@@ -111,11 +123,20 @@ export default {
       appointmentsPath: APPOINTMENTS_PATH,
       prescriptionsPath: PRESCRIPTIONS_PATH,
       gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
+      healthRecordsHubPath: HEALTH_RECORDS_PATH,
       linkedProfilesPath: LINKED_PROFILES_PATH,
       indexPath: INDEX_PATH,
     };
   },
   computed: {
+    isAny3rdPartyHealthServiceEnabled() {
+      return (this.is3rdPartyHealthServiceEnabled('pkb', 'testResults') ||
+        this.is3rdPartyHealthServiceEnabled('pkb', 'healthTrackers') ||
+        this.is3rdPartyHealthServiceEnabled('pkb', 'carePlans') ||
+        this.is3rdPartyHealthServiceEnabled('pkbCie', 'healthTrackers') ||
+        this.is3rdPartyHealthServiceEnabled('pkbCie', 'carePlans') ||
+        this.is3rdPartyHealthServiceEnabled('substraktPatientPack', 'carePlans'));
+    },
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
@@ -138,6 +159,16 @@ export default {
     },
   },
   methods: {
+    is3rdPartyHealthServiceEnabled(provider, serviceType) {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider,
+          serviceType,
+        },
+      });
+    },
     navigateToMessages() {
       if (this.linkToAppMessages) {
         this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');

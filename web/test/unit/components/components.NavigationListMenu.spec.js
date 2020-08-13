@@ -11,6 +11,7 @@ let $router;
 let propsData;
 
 const mountAs = ({
+  silverIntegrationsEnabled = false,
   isNativeApp = false,
   isLinkedEnabledEnabled = false,
   isProofLevel9 = true,
@@ -30,6 +31,7 @@ const mountAs = ({
     getters: {
       'linkedAccounts/hasLinkedAccounts': isLinkedEnabledEnabled,
       'session/isProofLevel9': isProofLevel9,
+      'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationsEnabled),
     },
   });
   return mount(NavigationListMenu, { $store, $router, propsData });
@@ -129,6 +131,23 @@ describe('Navigation Links ', () => {
 
       it('will set route crumb to appMessagesOnlyCrumb', () => {
         expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      });
+    });
+  });
+
+  describe('Health Record Links', () => {
+    describe('Gp Health Record link', () => {
+      it('GP Health record Link will be shown', () => {
+        expect(wrapper.find('#menu-item-health-record-hub').exists()).toBe(false);
+        expect(wrapper.find('#menu-item-myRecord').exists()).toBe(true);
+      });
+    });
+
+    describe('Health Record Hub link', () => {
+      it('health record hub link will be shown', () => {
+        wrapper = mountAs({ silverIntegrationsEnabled: true });
+        expect(wrapper.find('#menu-item-health-record-hub').exists()).toBe(true);
+        expect(wrapper.find('#menu-item-myRecord').exists()).toBe(false);
       });
     });
   });

@@ -103,6 +103,10 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_CIE))
+                .add(Supplier.MICROTEST, "A21410",
+                        EnumSet.of(
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
+                                SJRJourneyType.MEDICAL_RECORD_IM1))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,

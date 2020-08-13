@@ -8,6 +8,7 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
+import models.Patient
 import pages.HybridPageObject
 import pages.PrescriptionsHubPage
 import pages.RedirectorPage
@@ -61,6 +62,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view care plans from Patients Know Best$")
     fun iAmAUserWhoCannotViewCarePlansFromPatientsKnowBest() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE)
+    }
+
+    @Given("^I am a user who cannot view care plans from Patients Know Best and has an IM1 Medical Record journey$")
+    fun iAmAUserWhoCannotViewCarePlansFromPatientsKnowBestAndHasAnIM1MedicalRecordJourney() {
+        setupPatient(arrayListOf(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, SJRJourneyType.MEDICAL_RECORD_IM1));
     }
 
     @Given("^I am a user who can view health tracker from Patients Know Best$")
@@ -153,8 +159,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null, configuration, proofLevel)
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)
+        setupJourney(patient)
+    }
+
+    private fun setupPatient(configuration: ArrayList<SJRJourneyType>, proofLevel: IdentityProofingLevel? = null) {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)
+        setupJourney(patient)
+    }
+
+    private fun setupJourney(patient: Patient) {
         val supplier = SerenityHelpers.getGpSupplier()
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         CitizenIdSessionCreateJourney().createFor(patient)
