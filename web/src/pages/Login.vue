@@ -3,7 +3,7 @@
     <div :class="dynamicStyle('loginMain')">
       <div>
         <h2 v-if="isUsingNativeApp" id="native-header"
-            class="nhsuk-u-margin-bottom-2">
+            class="nhsuk-u-margin-bottom-2 nhsuk-u-padding-left-0 nhsuk-u-padding-right-0">
           {{ $t('login.desc') }}
         </h2>
         <generic-button id="viewInstructionsButton"
