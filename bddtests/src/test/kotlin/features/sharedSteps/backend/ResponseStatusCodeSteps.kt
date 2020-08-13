@@ -31,7 +31,7 @@ class ResponseStatusCodeSteps {
     fun thenIReceiveAnErrorWithServiceDeskReferencePrefixed(expectedStatusCodeName: String,
                                                             expectedServiceDeskReferencePrefix: String) {
         val expectedStatusCode = httpStatusCodeTransform(expectedStatusCodeName)
-        assertNhsoException(expectedStatusCode!!, null, expectedServiceDeskReferencePrefix);
+        assertNhsoException(expectedStatusCode!!, null, expectedServiceDeskReferencePrefix)
     }
 
     @Then("the response contains an empty body$")
@@ -55,21 +55,10 @@ class ResponseStatusCodeSteps {
         assertEquals(converted, httpResponse.statusLine.statusCode)
     }
 
-    @Then("^I receive (?:a|an) \"(.*)\" error status code$")
-    fun thenIReceiveAStatusCode(expectedStatusCode: Int) {
-        val exception = SerenityHelpers.getHttpException()!!
-        assertEquals(expectedStatusCode, exception.statusCode)
-    }
-
     @Then("^I receive (?:a|an) \"(.*)\" error status code with service desk reference prefixed \"(.*)\"$")
     fun thenIReceiveAStatusCodeWithServiceDeskReferencePrefixed(expectedStatusCode: Int,
                                                                 expectedServiceDeskReferencePrefix: String) {
         assertNhsoException(expectedStatusCode, null, expectedServiceDeskReferencePrefix)
-    }
-
-    @Then("^I receive (?:a|an) \"(.*)\" error status code with code \"(.*)\"$")
-    fun thenIReceiveAStatusCodeWithCode(expectedStatusCode: Int, errorCode:String) {
-        assertNhsoException(expectedStatusCode, errorCode)
     }
 
     @Then("the Bad Gateway error response includes a retry option$")

@@ -162,12 +162,6 @@ class YourAppointmentsStepDefinitions {
         appointmentHubPage.assertAppointmentsHubIsDisplayed()
     }
 
-    @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
-    fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
-        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
-    }
-
     @Then("^booked appointments before and one appointment within cutoff time " +
             "are correctly displayed with relevant ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancelExceptOnesWithinCutoffTime() {
@@ -179,12 +173,6 @@ class YourAppointmentsStepDefinitions {
     fun appointmentBookingConfirmationPageIsDisplayedWithoutReferenceToCancel() {
         bookingSuccessPage.checkBookingSuccessMessage()
         bookingSuccessPage.checkAppointmentDetails()
-    }
-
-    @Then("^the booked appointment is correctly displayed without ability to cancel$")
-    fun bookedAppointmentIsCorrectlyDisplayedWithoutCancel() {
-        yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
-        yourAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
     @Then("^I can book an appointment$")
@@ -260,12 +248,6 @@ class YourAppointmentsStepDefinitions {
     @Then("^I can see the list of past telephone appointments$")
     fun thenICanSeeTheListOfPastTelephoneAppointments() {
         yourAppointmentsTelephoneSteps.checkPastTelephoneAppointmentsAreCorectlyPopulated()
-    }
-
-    @Then("^I can see the booked telephone appointment and it has a cancel link")
-    fun thenICanSeeTheBookedTelephoneAppointmentAndItHasACancelLink() {
-        yourAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
-        yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
     @Then("^I see appropriate error message when appointments are disabled$")

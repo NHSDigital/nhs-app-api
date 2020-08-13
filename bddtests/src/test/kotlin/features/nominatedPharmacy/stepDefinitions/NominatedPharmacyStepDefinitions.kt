@@ -104,16 +104,6 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyPage.changePharmacyLink.click()
     }
 
-    @When("^I click on the nominated pharmacy panel when pharmacy is set$")
-    fun iClickTheNominatedPharmacyPanelWhenPharmacyIsSet() {
-        prescriptionsHubPage.nominatedPharmacyLink.click()
-    }
-
-    @When("^I click on the nominated pharmacy panel when pharmacy is not set$")
-    fun iClickTheNominatedPharmacyPanelWhenPharmacyIsNotSet() {
-        prescriptionsHubPage.nominatedPharmacyLink.click()
-    }
-
     @When("^I click on item (\\d+) pharmacy from the list of pharmacies$")
     fun iClickOnAPharmacyFromTheListOfPharmacies(positionInTheList: Int) {
         val index = positionInTheList - 1
@@ -232,11 +222,6 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyPage.isLoadedWithPharmacy()
     }
 
-    @Then("^I see nominated pharmacy page loaded with dispensing practise header$")
-    fun iAmRedirectedToNominatedPharmacyPageShowingDispensingPractise() {
-        nominatedPharmacyPage.isLoadedWithDispensingPractiseHeader()
-    }
-
     @When("^I select high street pharmacy$")
     fun iSelectHighStreetPharmacy() {
         nominatedPharmacyChooseTypePage.highStreetPharmacyRadioButton.click()
@@ -246,11 +231,6 @@ class NominatedPharmacyStepDefinitions {
     fun iSeeChangePharmacyLink() {
         nominatedPharmacyPage.changePharmacyLink
                 .assertIsVisible("Change my nominated pharmacy link is not visible")
-    }
-
-    @Then("^I see the no results found page$")
-    fun iSeeNoResultsFound() {
-        nominatedPharmacyResultsPage.showsNoResultsFoundHeader()
     }
 
     @Then("^I see list of pharmacies displayed on the result page$")
@@ -279,7 +259,6 @@ class NominatedPharmacyStepDefinitions {
             }
         }
     }
-
 
     @Then("^I see confirm nominated page with selected pharmacy details$")
     fun iSeeConfirmNominatedPharmacyPage() {
@@ -323,72 +302,5 @@ class NominatedPharmacyStepDefinitions {
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
-    }
-
-    fun checkPharmacyDetailsAreCorrect() {
-        val selectedPharmacy = NominatedPharmacySerenityHelpers
-                .MY_NOMINATED_PHARMACY
-                .getOrFail<NhsAzureSearchOrganisationItem>()
-
-        Assert.assertEquals(
-                "Pharmacy name is not correct",
-                selectedPharmacy.OrganisationName, nominatedPharmacyPage.pharmacyName.text)
-
-        Assert.assertEquals(
-                "Address Line 1 is not correct",
-                selectedPharmacy.Address1, nominatedPharmacyPage.pharmacyAddressLine1.text)
-
-
-        Assert.assertEquals(
-                "Address Line 2 is not correct",
-                selectedPharmacy.Address2, nominatedPharmacyPage.pharmacyAddressLine2.text)
-
-        Assert.assertEquals(
-                "Address Line 3 is not correct",
-                selectedPharmacy.Address3, nominatedPharmacyPage.pharmacyAddressLine3.text)
-
-        Assert.assertEquals(
-                "City is not correct",
-                selectedPharmacy.City, nominatedPharmacyPage.pharmacyCity.text)
-
-        Assert.assertEquals(
-                "County is not correct",
-                selectedPharmacy.County, nominatedPharmacyPage.pharmacyCounty.text)
-
-        Assert.assertEquals(
-                "Postcode is not correct",
-                selectedPharmacy.Postcode, nominatedPharmacyPage.pharmacyPostcode.text)
-
-        val phoneNumber = selectedPharmacy.primaryPhone()
-
-        if (phoneNumber != null) {
-            Assert.assertEquals(
-                    "Phone number is not correct",
-                    "Telephone: " + phoneNumber, nominatedPharmacyPage.pharmacyPhoneNumber.text)
-        }
-    }
-
-    @Then("^I see my nominated pharmacy page with updated pharmacy details$")
-    fun iSeeNominatedPharmacyPageWithUpdatedPharmacyDetails() {
-        nominatedPharmacyPage.isLoadedWithPharmacy()
-        nominatedPharmacyPage.assertYouHaveChangedYourPharmacySuccessBannerIsVisible()
-
-        checkPharmacyDetailsAreCorrect()
-    }
-
-    @Then("^I see your nominated pharmacy page with chosen pharmacy details$")
-    fun iSeeNominatedPharmacyPageWithChosenPharmacyDetails() {
-        nominatedPharmacyPage.isLoadedWithPharmacy()
-        nominatedPharmacyPage.assertYouHaveChosenYourNominatedPharmacyBannerIsVisible()
-
-        checkPharmacyDetailsAreCorrect()
-    }
-
-    @Then("^I see how to change dispensing practice instruction$")
-    fun iSeeHowToChangeDispensingPractise() {
-        nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1
-                .assertIsVisible("Instruction 1 to change pharmacy is not visible")
-        nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2
-                .assertIsVisible("Instruction 2 to change pharmacy is not visible")
     }
 }

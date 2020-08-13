@@ -63,11 +63,6 @@ class MyAccountStepDefinitions {
         }
     }
 
-    @Then("^the Login options link is not displayed$")
-    fun theLoginAndPasswordOptionsLinkIsNotDisplayed() {
-        myAccount.assertLoginAndPasswordOptionsIsNotPresent()
-    }
-
     @Then("^I click the (.*) link on the settings page$")
     fun iClickTheLoginAndPasswordOptionsLink(linkText: String) {
         when (linkText) {
@@ -83,18 +78,8 @@ class MyAccountStepDefinitions {
         myAccount.settings.assertLinksPresent()
     }
 
-    @Then("^there are no Account Settings available$")
-    fun thereAreNoAccountSettingsAvailable() {
-        myAccount.settings.assertNotDisplayed()
-    }
-
     @Then("^there is no notification link available$")
     fun thereIsNoNotificationsLinkAvailable() {
         myAccount.notificationsLink.assertElementNotPresent()
-    }
-
-    @Then("^the link to Notifications is not available on the Account page$")
-    fun theLinkToNotificationsIsNotAvailableOnTheAccountPage() {
-        myAccount.settings.assertNotDisplayed()
     }
 }

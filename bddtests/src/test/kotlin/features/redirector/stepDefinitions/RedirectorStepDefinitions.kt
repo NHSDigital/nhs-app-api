@@ -1,12 +1,11 @@
 package features.redirector.stepDefinitions
 
-import io.cucumber.java.en.When
-import features.sharedSteps.BrowserSteps
-import net.thucydides.core.annotations.Steps
 import config.Config
+import features.sharedSteps.BrowserSteps
 import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
+import net.thucydides.core.annotations.Steps
 import pages.RedirectorPage
-import java.net.URL
 
 class RedirectorStepDefinitions {
 
@@ -27,12 +26,6 @@ class RedirectorStepDefinitions {
     @Then("I am redirected to the redirector page with the header '(.*)'$")
     fun assertRedirectorPageIsVisible(header: String) {
         redirector.title(header).waitForElement()
-    }
-
-    @Then("I am navigated to the third party site with the base url of '(.*)'$")
-    fun assertNavigatedTo(url: String) {
-        val host = URL(url).host
-        browser.shouldHaveUrl(host)
     }
 
     @Then("^I am navigated to a third party site$")

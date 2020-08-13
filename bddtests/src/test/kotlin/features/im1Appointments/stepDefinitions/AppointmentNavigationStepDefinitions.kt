@@ -1,11 +1,10 @@
 package features.im1Appointments.stepDefinitions
 
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.When
 import features.im1Appointments.steps.AppointmentGuidanceSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
+import io.cucumber.java.en.Given
 import net.thucydides.core.annotations.Steps
 import pages.AppointmentHubPage
 import pages.navigation.NavBarNative
@@ -23,15 +22,10 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var navigation: NavigationSteps
 
-    @Given("^I am on the Appointments hub page$")
-    fun iAmOnTheAppointmentsHubPage() {
-        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        appointmentsHubPage.assertAppointmentsHubIsDisplayed()
-    }
-
     @Given("^I am on the Your Appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        iAmOnTheAppointmentsHubPage()
+        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
+        appointmentsHubPage.assertAppointmentsHubIsDisplayed()
         appointmentsHubPage.btnGPAppointmentsLinksWithDescriptionsContent.click()
         myAppointmentsUI.yourAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
@@ -45,7 +39,7 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled();
+        appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled()
     }
 
     @Given("^I click through to the online consultations Appointment Guidance page$")
@@ -58,14 +52,9 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        iTryToProgressToTheAvailableAppointmentsPage()
-        availableAppointments.availableAppointmentsPage.assertPageFullyLoaded()
-        availableAppointments.checkIfPageHeaderIsCorrect()
-    }
-
-    @When("^I try to progress to the available appointments page$")
-    fun iTryToProgressToTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.appointmentGuidancePage.bookButton.click()
+        availableAppointments.availableAppointmentsPage.assertPageFullyLoaded()
+        availableAppointments.checkIfPageHeaderIsCorrect()
     }
 }

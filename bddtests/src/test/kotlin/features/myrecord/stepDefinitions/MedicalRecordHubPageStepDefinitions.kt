@@ -9,7 +9,6 @@ import pages.gpMedicalRecord.MedicalRecordHubPage
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 
 open class MedicalRecordHubPageStepDefinitions {
@@ -63,16 +62,6 @@ open class MedicalRecordHubPageStepDefinitions {
     @Then("^I see the Third Party menu item '(.*)'$")
     fun assertISeeTheseMenuItems(item: String) {
         medicalRecordHubPage.getHeaderElement(item).assertSingleElementPresent()
-    }
-
-    @Then("^I do not see the Third Party menu item '(.*)'$")
-    fun assertIDontSeeTheseMenuItems(item: String) {
-        medicalRecordHubPage.getHeaderElement(item).assertElementNotPresent()
-    }
-
-    @Then("^I see 'Your GP medical record' page$")
-    fun iSeeGpMedicalRecordPage() {
-        medicalRecordHubPage.getGpRecordHeader("Your GP medical record").assertSingleElementPresent()
     }
 
     @When("^I click on the Gp medical record link$")

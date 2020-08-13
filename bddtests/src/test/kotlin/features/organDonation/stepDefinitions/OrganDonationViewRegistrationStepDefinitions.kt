@@ -85,13 +85,6 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsYes()
     }
 
-    @Then("^the decision to opt in to organ donation with some organs is displayed$")
-    fun theDecisionToOptInToSomeOrganDonationIsDisplayed() {
-        organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(
-                OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED.getOrFail()
-        )
-    }
-
     @Then("^the existing decision to opt in to organ donation with some organs is displayed$")
     fun theExistingDecisionToOptInToSomeOrganDonationIsDisplayed() {
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(

@@ -209,13 +209,6 @@ open class SharedStepDefinitions {
         Thread.sleep(FOUR_SECOND_SLEEP)
     }
 
-    @Then("^I see the (.*) menu button on mobile")
-    fun iSeeAMenuButtonOnMobile(type: String) {
-        if(home.headerNative.onMobile()) {
-            Assert.assertTrue(navBar.hasVisible(type))
-        }
-    }
-
     @Then("^the (.*) menu button is highlighted")
     fun iSeeAHighlightedMenuButton(type: String) {
         Assert.assertTrue(navBar.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))

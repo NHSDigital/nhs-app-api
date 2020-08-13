@@ -19,7 +19,6 @@ import worker.models.myrecord.MyRecordResponse
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO = 0
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE = 1
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO = 2
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
 
 open class MedicalRecordTestResultsStepDefinitionsBackend {
 
@@ -31,16 +30,6 @@ open class MedicalRecordTestResultsStepDefinitionsBackend {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
                     TestResultsData.mockTestResultId)
                     .respondWithServiceNotAvailableException()
-        }
-    }
-
-    @Given("^the test result details are retrieved successfully$")
-    fun successGettingTestResultDetailForTpp() {
-        mockingClient.forTpp.mock {
-            myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
-                    TestResultsData.mockTestResultId)
-                    .respondWithSuccess(TestResultsData
-                            .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_FOUR))
         }
     }
 
@@ -86,13 +75,6 @@ open class MedicalRecordTestResultsStepDefinitionsBackend {
                             .getTestResultWithChildValueCountAndRangePresent(
                                     NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE, false))
         }
-    }
-
-    @Given("^the GP Practice sends a bad test results response$")
-    fun givenTheGpPracticeHasSendCorruptedContent() {
-        TestResultsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .respondWithACorruptedResponse(SerenityHelpers.getPatient())
     }
 
     @Given("^the EMIS GP Practice has three test results where the second record has no date$")

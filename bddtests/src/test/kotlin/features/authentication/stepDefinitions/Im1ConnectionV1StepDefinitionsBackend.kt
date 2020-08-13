@@ -216,19 +216,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 DateOfBirth = patient.age.dateOfBirth))
     }
 
-    @Given("^I have a microtest user's IM1 credentials with a emis connection token$")
-    fun iHaveAMicrotestUsersIMCredentialsEmisConnectionToken(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(patient)
-        AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
-                AccountId = patient.accountId,
-                OdsCode = patient.odsCode,
-                Surname = patient.name.surname,
-                DateOfBirth = patient.age.dateOfBirth
-        ))
-    }
-
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAUsersIMCredentials() {
         val im1ConnectionRequest = AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST

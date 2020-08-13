@@ -34,11 +34,6 @@ class UserInfoGetStepDefinitionsBackend {
         UserInfoApi.getUserInfoWithGivenToken(authToken)
     }
 
-    @When("^I get the user info endpoint without an access token$")
-    fun iPostToTheUserInfoEndpointWithoutAuthToken() {
-        UserInfoApi.postUserInfoWithGivenToken(null)
-    }
-
     @When("^I get user info details from the user info endpoint without an access token$")
     fun iGetTheUserInfoEndpointWithoutAuthToken() {
         UserInfoApi.getUserInfoWithGivenToken(null)

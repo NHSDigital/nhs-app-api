@@ -19,6 +19,7 @@ configure_env() {
 
   GRADLE_TASKS+=(detektCheck)
   GRADLE_TASKS+=(lintGherkin)
+  GRADLE_TASKS+=(findUnusedSteps)
 }
 
 run_analysis() {
@@ -41,6 +42,23 @@ run_analysis() {
     " || die "Integration Tests Code Analysis Failed"
 }
 
+check_for_unused_steps() {
+  local UNUSED_STEPS
+
+  if [ -f "target/Unused-Steps.txt" ]; then
+    IFS=$'\r\n' GLOBIGNORE='*' command eval "UNUSED_STEPS=(\$(<target/Unused-Steps.txt))"
+
+    if [ ${#UNUSED_STEPS[@]} -gt 1 ]; then
+      for UNUSED_STEP in "${UNUSED_STEPS[@]:1:5}"; do
+        error "Unused Step: $UNUSED_STEP"
+      done
+
+      die "${UNUSED_STEPS[0]/:/}"
+    fi
+  fi
+}
+
 if [ "$SKIP_ANALYSIS" != 1 ] && [ "$RUN_LOCAL_BDD" != 1 ]; then
   run_analysis
+  check_for_unused_steps
 fi

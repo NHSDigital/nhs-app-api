@@ -179,15 +179,6 @@ class ServiceJourneyRulesStepDefinitions {
                 actualValue)
     }
 
-    @Then("^the service journey rules response will have im1Messaging required details call set to (enabled|disabled)$")
-    fun theServiceJourneyRulesResponseWillHaveim1MessagingRequiresDetailsCallSetTo(enabled: String) {
-        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
-        val actualValue = serviceJourneyRulesResponse.journeys.im1Messaging.requiresDetailsRequest
-        Assert.assertEquals("Service Journey Rules im1 messaging requires additional call for details",
-                enabled == "enabled",
-                actualValue)
-    }
-
     @Then("^the service journey rules response will have silver integration messages set to (.*)$")
     fun theServiceJourneyRulesResponseWillHaveMessagesSetTo(values: String) {
         val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()

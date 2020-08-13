@@ -74,11 +74,6 @@ class MoreStepDefinitions {
         webHeader.getPageTitle().waitForElement().withText("More")
     }
 
-    @Then("^the link to Messages is not available on the More page$")
-    fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
-        morePage.btnMessages.assertElementNotPresent()
-    }
-
     @Then("^the link to Shared links is available on the More page$")
     fun theLinkToSharedLinksIsAvailableOnTheMorePage() {
         morePage.btnSharedLinks.assertSingleElementPresent()

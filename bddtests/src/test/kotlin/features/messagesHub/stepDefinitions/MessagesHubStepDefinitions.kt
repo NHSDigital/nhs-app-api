@@ -7,11 +7,6 @@ import pages.MessagesHubPage
 class MessagesHubStepDefinitions {
     private lateinit var messagesHubPage: MessagesHubPage
 
-    @When("^I click on the NHS App Messages link on the Messages Hub page$")
-    fun clickOnNHSAppMessages() {
-        messagesHubPage.clickOnMenuItem("btn_appMessaging")
-    }
-
     @When("^I click the PKB Messages and online consultations link on the Messages Hub page$")
     fun clickOnPkbMessagesConsultations() {
         messagesHubPage.clickOnMenuItem("btn_pkb_messages_and_consultations")

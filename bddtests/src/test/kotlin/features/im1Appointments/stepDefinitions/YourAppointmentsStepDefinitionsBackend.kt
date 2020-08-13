@@ -208,15 +208,6 @@ class YourAppointmentsStepDefinitionsBackend {
         }
     }
 
-    @Given("^the (.*) GP appointment system is unavailable$")
-    fun theAppointmentSystemIsUnavailable(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
-        currentViewAppointmentFactory.createMyAppointments {
-            respondWithServiceUnavailable()
-        }
-    }
-
     @When("^(.*) GP appointments returns unauthorized$")
     fun gpAppointsReturnsUnauthorized(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)

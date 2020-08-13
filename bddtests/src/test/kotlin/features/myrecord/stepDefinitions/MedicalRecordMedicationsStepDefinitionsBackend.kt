@@ -7,7 +7,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.myrecord.factories.MedicationsFactory
 import mocking.MockingClient
-import mocking.data.myrecord.MedicationsData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
@@ -45,39 +44,6 @@ open class MedicalRecordMedicationsStepDefinitionsBackend {
                 }
             }
             else -> throw UnsupportedOperationException("Not implemented for $gpSystem")
-        }
-    }
-
-    @Given("^the EMIS GP Practice has acute medication results where the first record has no date$")
-    fun theEmisGpPracticeHasAcuteMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis.mock {
-            myRecord.medicationsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(MedicationsData.getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate())
-        }
-    }
-
-    @When("^the GP practice returns bad medications data")
-    fun theGpPracticeReturnsBadMedicationsData() {
-        MedicationsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
-                .respondWithBadData(SerenityHelpers.getPatient())
-    }
-
-    @Given("^the EMIS GP Practice has current repeat medication results where the first record has no date$")
-    fun theEmisGpPracticeHasCurrentRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis.mock {
-            myRecord.medicationsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(MedicationsData.
-                            getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate())
-        }
-    }
-
-
-    @Given("^the EMIS GP Practice has discontinued repeat medication results where the first record has no date$")
-    fun theEmisGpPracticeHasDiscontinuedRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis.mock {
-            myRecord.medicationsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(MedicationsData.
-                            getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate())
         }
     }
 

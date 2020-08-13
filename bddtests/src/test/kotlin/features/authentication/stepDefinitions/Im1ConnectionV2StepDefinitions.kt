@@ -74,14 +74,6 @@ class Im1ConnectionV2StepDefinitions {
         Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
     }
 
-    @When("^I verify patient data without sending the ODS Code using the v2 endpoint$")
-    fun whenIVerifyPatientDataWithoutSendingTheOdsCode() {
-        val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
-        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .authentication.getIm1ConnectionV2(connectionToken, null)
-        Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
-    }
-
     @Then("^the Im1 connection response has the expected connection token$")
     fun theResponseHasTheExpectedConnectionToken() {
         val result = Im1ConnectionSerenityHelpers.Im1ConnectionResponse.getOrFail<Im1ConnectionResponse>()

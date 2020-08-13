@@ -1,15 +1,13 @@
 package features.loggedOut.stepDefinitions
 
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.loggedOut.steps.CookieBannerSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.CookieSteps
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.assertElementNotPresent
-import pages.assertIsNotVisible
 import pages.assertIsVisible
 import pages.loggedOut.CookieBanner
 import utils.GlobalSerenityHelpers
@@ -57,11 +55,6 @@ class CookieBannerStepDefinitions {
         browserSteps.goToApp()
     }
 
-    @When("^I close the app$")
-    fun iCloseTheApp() {
-        browserSteps.closeApp()
-    }
-
     @When("^I refresh the page$")
     fun iRefreshThePage() {
         browserSteps.refreshPage()
@@ -78,21 +71,6 @@ class CookieBannerStepDefinitions {
             DO_NOT_SEE -> cookieBannerSteps.iSeeCookieBanner(false)
             DO_SEE -> cookieBannerSteps.iSeeCookieBanner(true)
         }
-    }
-
-    @Then("^I do not see the cookie banner with javascript disabled$")
-    fun iDoNotSeeTheCookieBannerWithJsDisabled() {
-        cookieBanner.cookieWrapper.assertIsNotVisible()
-    }
-
-    @Then("^session storage is not present$")
-    fun sessionStorageIsNotPresent() {
-        Assert.assertNull("Cookie exists. ",  cookieSteps.hasClosedCookies("hasClosedCookies"))
-    }
-
-    @Then("^session storage is created with the value of true$")
-    fun sessionStorageIsCreatedWithTheValueOfTrue() {
-        Assert.assertEquals("Session storage exists. ","true", cookieSteps.hasClosedCookies("hasClosedCookies"))
     }
 
     @Then("^pages ($WILL|$WILL_NOT) display the cookie banner$")

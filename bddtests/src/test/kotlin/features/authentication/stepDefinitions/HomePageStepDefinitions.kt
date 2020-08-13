@@ -133,21 +133,10 @@ class HomePageStepDefinitions {
         homeSteps.assertProxyPatientDetailsShownFor(selectedProfile)
     }
 
-    @Then("^I see a welcome message$")
-    fun iSeeAWelcomeMessageFor() {
-        val patient = SerenityHelpers.getPatient()
-        homeSteps.assertWelcomeMessageShownFor(patient)
-    }
-
     @Then("^I see a welcome message for the (.*) patient with no title$")
     fun iSeeAWelcomeMessageWithNoTitle(gpSystem: String) {
         val patient = Patient.getDefault(Supplier.valueOf(gpSystem))
         homeSteps.assertWelcomeMessageShownFor(patient, false)
-    }
-
-    @Then("^I can see the (.*) link on the homepage")
-    fun iCanSeeTheSpecifiedLink(linkText: String){
-        homeSteps.homePage.assertLinkIsVisible(linkText)
     }
 
     @Then("^I can't see the (.*) link on the homepage$")

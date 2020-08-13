@@ -156,6 +156,9 @@ task rerun (type: Test) {
 
 test {
     testLogging.showStandardStreams = true
+    filter {
+        includeTestsMatching "TestRunner"
+    }
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()
     afterTest { desc, result ->
@@ -165,4 +168,15 @@ test {
             }
         }
 }}
+
+task findUnusedSteps {
+    dependsOn testClasses
+    doLast {
+        test.testLogging.showStandardStreams = false
+        test.filter.includePatterns.clear()
+        test.filter.includeTestsMatching "UnusedStepsRunner"
+        test.executeTests()
+    }
+}
+
 gradle.startParameter.continueOnFailure = false

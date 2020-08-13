@@ -86,22 +86,6 @@ open class MedicalRecordStepDefinitions {
         myRecordModuleCounts.referralCount = count
     }
 
-    @Given("^I have (.*) INR TestResults and (.*) Path TestResults$")
-    fun givenIHaveCountOfTestResults(inrCount: Int, pathCount: Int) {
-        myRecordModuleCounts.inrResultCount = inrCount
-        myRecordModuleCounts.pathResultCount = pathCount
-    }
-
-    @Given("^I have Path TestResults Filtered out$")
-    fun givenIHavePathTestResultsFilteredOut() {
-        testResultOptions.includeFilteredOutPathStatuses = true
-    }
-
-    @Given("^the TestResults have interleaved dates$")
-    fun givenTestResultsHaveInterleavedDates () {
-        testResultOptions.interleavedPathAndInrDates = true
-    }
-
     @Given("^I have (.*) MedicalHistories$")
     fun givenIHaveCountOfMedicalHistories(count: Int) {
         myRecordModuleCounts.medicalHistoryCount = count

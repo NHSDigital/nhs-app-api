@@ -95,17 +95,6 @@ class CancelAppointmentStepDefinitions {
         }
     }
 
-    @Then("^I see an appropriate error message when there is an error sending data on cancellation page$")
-    fun iSeeAnAppropriateErrorMessageWhenThereIsAnErrorSendingDataOnCancellationPage() {
-        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.problemTitle
-        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.problemHeader
-        val message = cancelAppointmentSteps.cancelAppointmentPage.goBackAndTryAgainWithoutErrorCode
-
-        errorDialogPage.assertParagraphText(message)
-                .assertPageHeader(pageHeader)
-                .assertPageTitle(pageTitle)
-    }
-
     @Then("^I see an appropriate error message when not allowed to cancel$")
     fun iSeeAnAppropriateErrorMessageWhenNotAllowedToCancel() {
         val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.serviceProblemTitle

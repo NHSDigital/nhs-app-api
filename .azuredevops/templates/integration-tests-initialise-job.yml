@@ -4,6 +4,7 @@ jobs:
     variables:
       report.path.detekt: bddtests/target/site/detekt
       report.path.gherkin: bddtests/target/site/Gherkin-Report.html
+      report.path.unused.steps: bddtests/target/Unused-Steps.txt
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
@@ -39,6 +40,12 @@ jobs:
               cp "$REPORT_PATH_GHERKIN" "$BUILD_ARTIFACTSTAGINGDIRECTORY/CodeAnalysis"
               echo "##vso[task.setvariable variable=report.path.gherkin.exists]Yes"
             fi
+            if [ -f "$REPORT_PATH_UNUSED_STEPS" ]; then
+              echo "Unused Steps report exists"
+              mkdir -p "$BUILD_ARTIFACTSTAGINGDIRECTORY/CodeAnalysis"
+              cp "$REPORT_PATH_UNUSED_STEPS" "$BUILD_ARTIFACTSTAGINGDIRECTORY/CodeAnalysis"
+              echo "##vso[task.setvariable variable=report.path.unused.steps.exists]Yes"
+            fi
 
       - task: ArchiveFiles@2
         displayName: Zip detekt report
@@ -51,7 +58,7 @@ jobs:
 
       - task: PublishBuildArtifacts@1
         displayName: Publish artifacts
-        condition: and(succeededOrFailed(), or(eq(variables['report.path.detekt.exists'], 'Yes'), eq(variables['report.path.gherkin.exists'], 'Yes')))
+        condition: and(succeededOrFailed(), or(eq(variables['report.path.detekt.exists'], 'Yes'), eq(variables['report.path.gherkin.exists'], 'Yes'), eq(variables['report.path.unused.steps.exists'], 'Yes')))
         inputs:
           pathToPublish: '$(Build.ArtifactStagingDirectory)/CodeAnalysis'
           artifactName: Integration Tests Code Analysis

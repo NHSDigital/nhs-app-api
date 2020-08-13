@@ -1,11 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import features.myrecord.factories.ReferralsFactory
 import org.junit.Assert
 import pages.gpMedicalRecord.ReferralsPage
-import utils.SerenityHelpers
 
 open class V2MedicalRecordReferralsStepDefinitions {
 
@@ -26,11 +23,5 @@ open class V2MedicalRecordReferralsStepDefinitions {
         Assert.assertEquals("Expected records", expectedData.size, referralsElements.size )
         referralsElements.forEachIndexed { i, message ->
             Assert.assertEquals(expectedData[i], message.text) }
-    }
-
-    @Given("^there is a corrupted referrals response returned$")
-    fun givenThereIsCorruptedARecallsResponse() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        ReferralsFactory.getForSupplier(gpSystem).respondWithCorruptedReponse()
     }
 }

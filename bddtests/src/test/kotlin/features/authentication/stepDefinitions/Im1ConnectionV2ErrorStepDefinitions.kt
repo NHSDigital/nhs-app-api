@@ -91,22 +91,6 @@ class Im1ConnectionV2ErrorStepDefinitions {
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
     }
 
-    @Given("^I am a (.*) user registering but getting my linkage key will return a '(.*)' '(.*)' error$")
-    fun iAmAUserWishingToRegisterButRetrievingLinkageKeyWillReturnError(gpSystem: String,
-                                                                        gpHttpCode:Int,
-                                                                        gpError:String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
-        val linkage = factory.validLinkageDetails
-
-        Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
-
-        factory.linkageGet(linkage) {x -> x.respondWithError(gpHttpCode, gpError)}
-        Im1ConnectionSerenityHelpers.LinkageFacade.set(linkage)
-    }
-
     @Given("^I am a (.*) user registering but getting linkage details returns '(.*)' '(.*)' '(.*)'$")
     fun iAmAUserWishingToRegisterButRegisteringWillReturnError(gpSystem: String,
                                                                gpHttpCode:Int,

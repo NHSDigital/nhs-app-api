@@ -36,12 +36,6 @@ open class MedicalRecordImmunisationStepDefinitionsBackend {
         ImmunisationsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
     }
 
-    @Given("^there is an error retrieving immunisations data$")
-    fun givenThereIsAnErrorRetrievingImmunisationsData() {
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        ImmunisationsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
-    }
-
     @Given("^the GP practice returns a bad immunisations response$")
     fun givenThereIsACorruptedImmunisationsResponse() {
         val gpSystem = SerenityHelpers.getGpSupplier()

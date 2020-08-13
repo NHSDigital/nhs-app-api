@@ -19,15 +19,6 @@ class ConfigurationV2StepDefinitions {
         ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.set(response)
     }
 
-    @Then("^the v2 configuration response will have a nhsLoginLoggedInPaths property$")
-    fun theConfigurationResponseWillHaveANhsLoginLoggedInPathsProperty() {
-        val response = ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.getOrFail<ConfigurationV2Response>()
-
-        Assert.assertNotNull("Configuration response expected, but was null", response)
-        Assert.assertNotNull("NhsLoginLoggedInPaths property is not populated",
-                response.nhsLoginLoggedInPaths)
-    }
-
     @Then("^the v2 configuration response will have a minimumSupportedAndroidVersion property$")
     fun theConfigurationResponseWillHaveAMinimumSupportedAndroidVersionProperty() {
         val response = ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.getOrFail<ConfigurationV2Response>()

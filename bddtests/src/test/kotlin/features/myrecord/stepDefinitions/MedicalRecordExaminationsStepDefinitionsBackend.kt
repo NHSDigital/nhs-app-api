@@ -25,9 +25,4 @@ open class MedicalRecordExaminationsStepDefinitionsBackend {
         examinationsFactoryVision = ExaminationsFactoryVision()
         examinationsFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
-
-    @Given("^the GP practice responds with bad examinations data$")
-    fun gpPracticeRespondsWithBadExaminationsData() {
-        ExaminationsFactoryVision().badData(SerenityHelpers.getPatient())
-    }
 }

@@ -38,16 +38,9 @@ fi
 if [ -n "${TF_BUILD}" ]; then
   # cache gradle files when running in devops
   mkdir -p "${GRADLE_PATH}"
-  
+
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
   DOCKER_USER="${USER}"
-else
-  # cache gradle files locally in a volume
-  if [ -n "$(docker volume ls -q -f "name=${GRADLE_CACHE_VOLUME}")" ]; then
-    docker volume create "${GRADLE_CACHE_VOLUME}"
-  fi
-
-  DOCKER_ARGS+=(-v "${GRADLE_CACHE_VOLUME}:${DOCKER_ROOT}data/.gradle")
 fi
 
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")
@@ -56,6 +49,7 @@ DOCKER_ARGS+=(-e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle")
 DOCKER_ARGS+=('--shm-size=256m')
 
 export DOCKER_ARGS
+export DOCKER_USER
 
 export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-../android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk}
 

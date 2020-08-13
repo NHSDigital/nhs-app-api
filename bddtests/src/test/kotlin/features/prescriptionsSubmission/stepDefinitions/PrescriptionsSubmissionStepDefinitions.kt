@@ -2,9 +2,6 @@ package features.prescriptionsSubmission.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.PrescriptionSerenityHelpers
@@ -13,6 +10,9 @@ import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.data.prescriptions.IPrescriptionLoader
@@ -40,7 +40,6 @@ import pages.text
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
-import utils.assertTrueWithRetry
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
@@ -305,13 +304,6 @@ open class PrescriptionsSubmissionStepDefinitions {
         PrescriptionsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .orderPrescriptionReturnsConflictResponse()
-    }
-
-    @Then("^I see a order successful message on the Repeat prescription page with (\\d+) prescriptions$")
-    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-        assertTrueWithRetry(viewOrdersPrescriptionsPage.isOrderSuccessfullTextVisible(),
-                "Expected order success text to be visible")
-        assertAmountOfPrescriptionsIsCorrect(amount)
     }
 
     @Then("^I see the Repeat prescription page with (\\d+) prescriptions$")

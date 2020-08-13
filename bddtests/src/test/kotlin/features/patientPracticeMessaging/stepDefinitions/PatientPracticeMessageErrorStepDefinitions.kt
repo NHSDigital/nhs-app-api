@@ -5,7 +5,6 @@ import io.cucumber.java.en.Then
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import pages.ErrorPage
 import utils.SerenityHelpers
-import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 class PatientPracticeMessageErrorStepDefinitions {
 
@@ -23,14 +22,6 @@ class PatientPracticeMessageErrorStepDefinitions {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .forbiddenErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
-    }
-
-    @Given("^The patient receives an error trying to send a message to their practice")
-    fun thePatientReceivesAnErrorWhenTryingToSendAMessage() {
-        val createMessageRequest = CreateMessageRequest("Test Results",
-                "When will my test results be ready", "Recipient 1")
-        PracticePatientMessagingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorSendingAMessage(SerenityHelpers.getPatient(), createMessageRequest)
     }
 
     @Given("^there is an unknown error getting patient practice message details$")

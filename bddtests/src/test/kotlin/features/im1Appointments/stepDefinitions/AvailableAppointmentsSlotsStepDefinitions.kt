@@ -93,14 +93,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         appointmentsSlotsFactory.generateExample(example)
     }
 
-    @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
-    fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        val example = appointmentSlotsExample.slotForEndOfToday()
-        appointmentsSlotsFactory.generateExample(example)
-    }
-
     @Given("^there are appointment slots on some days next week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysNextWeekButNotAllForGPSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)

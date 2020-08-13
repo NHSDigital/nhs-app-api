@@ -22,11 +22,6 @@ class MedicalRecordProceduresStepDefinitionsBackend {
         proceduresFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
     }
 
-    @When("^the GP Practice responds with bad procedures data")
-    fun theGpPracticeRespondsWithBadData(){
-        ProceduresFactoryVision().badData(SerenityHelpers.getPatient())
-    }
-
     @Then("^an error occurred retrieving the procedures")
     fun andAnErrorOccurredRetrievingTheProcedures() {
         proceduresFactoryVision = ProceduresFactoryVision()

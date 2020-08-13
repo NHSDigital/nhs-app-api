@@ -1,11 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
-import io.cucumber.java.en.Given
+import features.myrecord.factories.TestResultsFactory
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import features.myrecord.factories.TestResultsFactory
-import features.myrecord.factories.TestResultsFactoryVision
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
@@ -19,16 +17,11 @@ open class V2MedicalRecordTestResultsStepDefinitions {
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     private lateinit var errorPage: ErrorPage
 
-    @Given("^an error occurred retrieving the test results")
-    fun andAnErrorOccurredRetrievingTheProcedures() {
-        val testResultsFactory = TestResultsFactoryVision()
-        testResultsFactory.errorRetrieving(SerenityHelpers.getPatient())
-    }
-
     @When("I click a test result - Medical Record v2$")
     fun whenIClickATestResultV2() {
         testResultsPage.clickTestResult()
     }
+    
     @When("^there is a corrupted test results response returned$")
     fun thereIsACorruptedTestResultsResponse() {
         val gpSystem = SerenityHelpers.getGpSupplier()

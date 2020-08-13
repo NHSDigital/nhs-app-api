@@ -1,21 +1,20 @@
 package features.im1Appointments.stepDefinitions
 
-import io.cucumber.java.en.Given
-import io.cucumber.java.en.Then
-import io.cucumber.java.en.When
 import features.im1Appointments.steps.AppointmentSerenityHelpers
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
 import features.im1Appointments.steps.AvailableAppointmentFilterSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
+import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.FilterSlotDetails
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ErrorDialogPage
-import pages.assertDoesElementHaveFocus
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.avoidChromeWebDriverServiceCrash
@@ -134,16 +133,6 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^I see a text input to enter phone number$")
     fun iSeeATextInputToEnterPhoneNumber() {
         appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertSingleElementPresent()
-    }
-
-    @Then("^the focus will go back to empty phone number input box$")
-    fun theFocusWillGoBackToEmptyPhoneNumberInputbox() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertDoesElementHaveFocus()
-    }
-
-    @Then("^the focus will go back to empty booking reason input box$")
-    fun theFocusWillGoBackToEmptyBookingReasonInputbox() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.reasonFormField.assertDoesElementHaveFocus()
     }
 
     @Then("^a message is displayed indicating a phone number is required$")

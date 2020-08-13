@@ -63,20 +63,6 @@ class PatientPracticeMessageStepDefinitions {
                 .enabled(patient)
     }
 
-    @Given("^I am a user who can access patient practice messaging$")
-    fun iAmAUserWishingToViewTheirMessages() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabled(SerenityHelpers.getPatient())
-    }
-
-    @Given("^the Patient has no access to patient practice messaging$")
-    fun thePatientHasNoAccessToPracticePatientMessaging() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .disabled(SerenityHelpers.getPatient())
-    }
-
     @Given("^I have patient practice messages in my inbox, some of which are unread$")
     fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessages() {
         PracticePatientMessagingFactory
@@ -110,13 +96,6 @@ class PatientPracticeMessageStepDefinitions {
                 .enabledWithInvalidAttachmentOnMessage(SerenityHelpers.getPatient())
     }
 
-    @Given("^I have patient practice messages in my inbox$")
-    fun thePatientHasPatientPracticeMessagesInTheirInbox() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), true)
-    }
-
     @Given("^I have patient practice messages in my inbox, all of which are read$")
     fun thePatientHasPatientPracticeMessagesInTheirInboxWithoutUnreadMessages() {
         PracticePatientMessagingFactory
@@ -131,27 +110,11 @@ class PatientPracticeMessageStepDefinitions {
                 .enabledWithPatientPracticeMessagingFromGP(SerenityHelpers.getPatient(), false)
     }
 
-    @Given("^The patient can successfully send a message to their practice")
-    fun thePatientSuccessfullySendsAMessage() {
-        val createMessageRequest = CreateMessageRequest("Test Results",
-                "When will my test results be ready", "Recipient 1")
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .patientSuccessfullySendsAMessage(SerenityHelpers.getPatient(), createMessageRequest)
-
-    }
-
     @Given("^I have no patient practice messages in my inbox$")
     fun thePatientHasNoPatientPracticeMessagesInTheirInbox() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .patientHasNoMessages(SerenityHelpers.getPatient())
-    }
-
-    @When("^I enter url address for the send message page$")
-    fun whenIEnterTheUrlAddressForSendMessagePage() {
-        val fullUrl = "/messages/gp-messages/send-message"
-        browser.browseTo(fullUrl)
     }
 
     @When("^I click on the view link$")

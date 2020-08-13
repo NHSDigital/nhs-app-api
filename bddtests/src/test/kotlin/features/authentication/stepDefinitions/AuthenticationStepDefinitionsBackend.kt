@@ -10,7 +10,6 @@ import mocking.citizenId.models.signingKeys.SucceededResponse
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.emis.models.AssociationType
 import models.Patient
 import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
@@ -32,7 +31,6 @@ class AuthenticationStepDefinitionsBackend {
 
     private var authCode: String? = EmisMockDefaults.patientEmis.authCode
     private var codeVerifier: String? = EmisMockDefaults.patientEmis.codeVerifier
-    private val associationType = AssociationType.Self
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
@@ -74,17 +72,6 @@ class AuthenticationStepDefinitionsBackend {
             signingKeyRequest().respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-    }
-
-    @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
-    fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
-        val supplier = Supplier.EMIS
-        CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
-        mockingClient.forEmis.mock { authentication.endUserSessionRequest().respondWithServerError() }
-        mockingClient.forEmis.mock {
-            authentication.sessionRequest(Patient.getDefault(supplier))
-                    .respondWithSuccess(Patient.getDefault(supplier), associationType)
-        }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
@@ -150,18 +137,10 @@ class AuthenticationStepDefinitionsBackend {
                 .getOrNull<UserSessionResponse>()
         val im1ConnectionResponse = AuthenticationSerenityHelpers.IM1_CONNECTION_RESPONSE
                 .getOrNull<Im1ConnectionResponse?>()
-        val responses = arrayListOf(userSessionResponse, im1ConnectionResponse).filter { it != null }
+        val responses = arrayListOf(userSessionResponse, im1ConnectionResponse).filterNotNull()
         val errorResponse = SerenityHelpers.getHttpException()
-        Assert.assertEquals("No responses found.  Errors: ${errorResponse}", responses.size, 1)
+        Assert.assertEquals("No responses found.  Errors: $errorResponse", responses.size, 1)
         Assert.assertEquals(errorResponse, null)
-    }
-
-    @Then("^the response has a name$")
-    fun theResponseHasAName() {
-        val userSessionResponse = AuthenticationSerenityHelpers.USER_SESSION_RESPONSE
-                .getOrNull<UserSessionResponse>()
-        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(),
-                userSessionResponse?.userSessionResponseBody?.name)
     }
 
     @Then("^the response has a name for the (.*) patient with no title$")

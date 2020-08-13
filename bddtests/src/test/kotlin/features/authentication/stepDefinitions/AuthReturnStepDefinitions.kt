@@ -37,16 +37,6 @@ class AuthReturnStepDefinitions {
         login.using(this.patient)
     }
 
-    @Given("^I am logged into Citizen ID but GP System authentication fails$")
-    fun loggedInInCitizenIdGpAuthenticationFails() {
-        this.patient = TppPatients.kevinBarry
-
-        CitizenIdSessionCreateJourney().createInvalidAuthenticationTokenFor(patient)
-
-        browser.goToApp()
-        login.using(this.patient)
-    }
-
     @Given("^I am logged into Citizen ID but EMIS session cannot be established$")
     fun loggedInInCitizenIdSessionNotEstablished() {
         this.patient = EmisPatients.montelFrye
