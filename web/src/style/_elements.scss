@@ -28,10 +28,6 @@ a {
   }
 }
 
-p {
-  @include default_text;
-}
-
 input[type='checkbox']:focus + label::before {
   box-shadow: 0 0 0 4px #ffb81B;
 }
