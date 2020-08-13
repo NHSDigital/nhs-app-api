@@ -17,8 +17,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
         private WebLink InternalPageLink => WebLink.WithText(_interactor, "Internal Page");
         private WebLink NhsLoginLink => WebLink.WithText(_interactor, "NHS Login");
         private WebLink CovidLink => WebLink.WithText(_interactor, "Covid");
-
-        private WebButton NhsAppAppointmentsButton => WebButton.WithText(_interactor, "NHS App Appointments");
+        private WebLink NhsAppAppointmentsLink => WebLink.WithText(_interactor, "NHS App Appointments");
 
         internal void AssertOnPage()
         {
@@ -45,7 +44,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         public ErsPageContent NhsAppAppointments()
         {
-            NhsAppAppointmentsButton.Click();
+            NhsAppAppointmentsLink.Click();
             return this;
         }
     }
