@@ -123,6 +123,18 @@
         }
       ]
     },
+    "cid-settings": {
+      "url": "https://settings.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
     "cid-account": {
       "url": "https://account.ext.signin.nhs.uk",
       "subServices": null,
