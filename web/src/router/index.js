@@ -39,6 +39,8 @@ import NhsukLayout from '@/layouts/nhsuk-layout';
 
 import { INDEX_PATH } from '@/router/paths';
 
+export const PATIENT_ID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const routerPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return routerPush.call(this, location).catch((error) => {

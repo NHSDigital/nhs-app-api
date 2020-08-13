@@ -183,7 +183,10 @@ const definePatientIdPathParams = (store) => {
   return retObj;
 };
 
-const getPathWithPatientIdPrefix = ({ trimmedPath, store }) => {
+export const getPathWithPatientIdPrefix = ({ trimmedPath, store }) => {
+  if (trimmedPath && trimmedPath.match(/^patient\//)) {
+    return `/${trimmedPath}`;
+  }
   const { patientId, paramString } = definePatientIdPathParams(store);
   let replacedPatientIdPath = INDEX_PATH.replace(paramString, patientId);
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import isEmpty from 'lodash/fp/isEmpty';
 import moment from 'moment';
+import { PATIENT_ID_REGEX } from '@/router/index';
 
 import { APPOINTMENTS_PATH, TERMSANDCONDITIONS_PATH } from '@/router/paths';
 
@@ -12,7 +13,7 @@ const getFields = (path) => {
   if (fields.length > 0 && fields[0] === 'patient') {
     fields = fields.slice(1); // remove patient
   }
-  if (fields.length > 0 && fields[0].match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
+  if (fields.length > 0 && fields[0].match(PATIENT_ID_REGEX)) {
     fields = fields.slice(1); // remove patient guid
   }
   return fields;

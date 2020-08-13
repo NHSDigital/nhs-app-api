@@ -14,6 +14,7 @@ import {
   getThirdPartyLocaleText,
   mimeType,
   resetPageFocus,
+  getPathWithPatientIdPrefix,
 } from '@/lib/utils';
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
@@ -82,6 +83,33 @@ describe('util library', () => {
         push: jest.fn(),
       },
     };
+  });
+
+  describe('getPathWithPatientIdPrefix', () => {
+    it('will not add patient id prefix when url begins with patient/', () => {
+      const param = { trimmedPath: 'patient/pathName', store: self.$store };
+      // act
+      const result = getPathWithPatientIdPrefix(param);
+      expect(result).toBe('/patient/pathName');
+    });
+
+    it('will not add patient id prefix when url begins with patient/<id>/', () => {
+      const patientId = '330b2795-e20f-427e-9699-7943dd31d4db';
+      const param = { trimmedPath: `patient/${patientId}/pathName`, store: self.$store };
+      // act
+      const result = getPathWithPatientIdPrefix(param);
+      expect(result).toBe(`/patient/${patientId}/pathName`);
+    });
+
+    it('will add patient id prefix when url does not begin with patient', () => {
+      const patientId = '330b2795-e20f-427e-9699-7943dd31d4db';
+      self.$store.getters['linkedAccounts/isPatientIdNotEmpty'] = true;
+      self.$store.getters['linkedAccounts/getPatientId'] = patientId;
+      const param = { trimmedPath: 'pathName', store: self.$store };
+      // act
+      const result = getPathWithPatientIdPrefix(param);
+      expect(result).toBe(`/patient/${patientId}/pathName`);
+    });
   });
 
   describe('isFalsy', () => {
