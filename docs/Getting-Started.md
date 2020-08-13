@@ -51,10 +51,10 @@ Before running the app locally, some entries need to be added to your machine's 
 Run the following command in the root of the repository:
 
 ```bash
-make configure-package-feed` from the root of the repo.
+make configure-package-feed
 ```
 
-You will be prompted for parameters when needed or you can follow the [manual instructions](How-Tos/configure-azure-dev-ops-feeds.md#manually-configure-feeds).
+You will be prompted for parameters when needed. Alternatively you can follow the [manual instructions](How-Tos/configure-azure-dev-ops-feeds.md#manually-configure-feeds).
 
 ## Secrets
 
