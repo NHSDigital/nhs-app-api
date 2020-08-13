@@ -43,7 +43,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
 
         private static CurrentDriverContext SwitchContextWithRetry(Func<CurrentDriverContext> contextSwitchAction)
         {
-            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(30));
+            var retryUntil = DateTime.UtcNow.Add(TimeSpan.FromMinutes(1));
             while (true)
             {
                 try
