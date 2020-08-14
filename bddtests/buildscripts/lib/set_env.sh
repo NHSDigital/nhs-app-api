@@ -40,7 +40,6 @@ if [ -n "${TF_BUILD}" ]; then
   mkdir -p "${GRADLE_PATH}"
 
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
-  DOCKER_USER="${USER}"
 fi
 
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")

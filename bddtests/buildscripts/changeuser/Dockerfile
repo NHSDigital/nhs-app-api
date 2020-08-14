@@ -9,7 +9,7 @@ ARG USER_NAME
 ARG USER_ID
 ARG GROUP_ID
 
-RUN addgroup --gid ${GROUP_ID} ${USER_NAME}
+RUN if ! [ $(getent group ${GROUP_ID}) ]; then addgroup --gid ${GROUP_ID} ${USER_NAME}; fi
 RUN adduser --system --uid ${USER_ID} --gid ${GROUP_ID} ${USER_NAME}
 
 RUN usermod -a -G audio ${USER_NAME}

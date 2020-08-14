@@ -108,18 +108,17 @@ function rebuild_image_with_user() {
     docker pull "${baseImage}"
   fi
 
-  if ! [[ $(uname -s) =~ ^Linux.* ]]; then
-    # permission only needs to be fixed on linux hosts
-    return
-  fi
+  if [[ $(uname -s) =~ ^Linux.* ]]; then
+    docker build \
+      -t "${baseImage}" \
+      --build-arg "BASE_IMAGE=${baseImage}" \
+      --build-arg "USER_NAME=${USER}" \
+      --build-arg "USER_ID=$(id -u)" \
+      --build-arg "GROUP_ID=$(id -g)" \
+      "buildscripts/changeuser" || die "Failed to build docker image with Linux permissions"
 
-  docker build \
-    -t "${baseImage}" \
-    --build-arg "BASE_IMAGE=${baseImage}" \
-    --build-arg "USER_NAME=${USER}" \
-    --build-arg "USER_ID=$(id -u)" \
-    --build-arg "GROUP_ID=$(id -g)" \
-    "buildscripts/changeuser" || die "Failed to build docker image with Linux permissions"
+    export DOCKER_USER="${USER}"
+  fi
 }
 
 function configure_npmrc_and_m2_volumes () {
