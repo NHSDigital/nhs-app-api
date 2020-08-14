@@ -76,6 +76,20 @@ export default {
         redirectPath: '/appointment',
       },
     },
+    engage: {
+      admin: {
+        type: 'admin',
+        redirectPath: '/?sso_route=admin',
+      },
+      medical: {
+        type: 'medical',
+        redirectPath: '/?sso_route=medical',
+      },
+      messages: {
+        type: 'messages',
+        redirectPath: '/?sso_route=messages',
+      },
+    },
     testProvider: {
       messages: {
         type: 'messages',

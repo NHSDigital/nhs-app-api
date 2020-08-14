@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     /// </summary>
     public enum MessagesProvider
     {
+        engage,
         pkb,
         pkbCie,
         testSilverThirdPartyProvider

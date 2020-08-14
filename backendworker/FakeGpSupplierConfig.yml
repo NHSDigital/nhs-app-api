@@ -470,3 +470,30 @@ defaultUsers:
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Male
 
+  engage:
+    9998571235:
+      userId: b1b203b7-6da0-4b30-b094-bdde63015ebc
+      emailAddress: onboarding.nhsapp+engage.user1@gmail.com
+      odsCode: F00006
+      givenName: Steve
+      familyName: Duran
+      dateOfBirth: "1999-05-03T00:00:00"
+      sex: Male
+
+    9990893047:
+      userId: 4a34ed60-5599-4062-b1a3-175638fa212c
+      emailAddress: onboarding.nhsapp+engage.user2@gmail.com
+      odsCode: F00006
+      givenName: Jane
+      familyName: Callen
+      dateOfBirth: "1964-02-11T00:00:00"
+      sex: Female
+
+    9993829978:
+      userId: 8e57be4a-60b1-403b-b372-013767d14458
+      emailAddress: onboarding.nhsapp+engage.user3@gmail.com
+      odsCode: F00006
+      givenName: Roberta
+      familyName: Jobs
+      dateOfBirth: "1964-02-15T00:00:00"
+      sex: Female

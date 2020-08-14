@@ -12,6 +12,10 @@
                    :description="$t('messages.hub.sendOrViewMessagesFromYourSurgery')"
                    :aria-label="ariaLabelGpMessages()"
                    :click-func="navigateToGpMessages"/>
+        <third-party-jump-off-button v-if="engageEnabled"
+                                     id="btn_engage_messages"
+                                     provider-id="engage"
+                                     :provider-configuration="thirdPartyProvider.engage.messages" />
         <third-party-jump-off-button v-if="pkbEnabled"
                                      id="btn_pkb_messages_and_consultations"
                                      provider-id="pkb"
@@ -69,6 +73,14 @@ export default {
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
+      hasEngageMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'messages',
+        },
+      }),
       hasPkbMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -99,16 +111,20 @@ export default {
     hasAnyAccess() {
       return this.gpMessagesEnabled ||
         this.appMessagingSjrEnabled ||
+        this.engageEnabled ||
         this.pkbEnabled ||
         this.pkbCieEnabled ||
         this.testProviderEnabled;
     },
     onlyAppMessagingEnabled() {
       return !this.gpMessagesEnabled && this.appMessagingSjrEnabled &&
-      !this.pkbEnabled && !this.testProviderEnabled;
+      !this.engageEnabled && !this.pkbEnabled && !this.testProviderEnabled;
     },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
+    },
+    engageEnabled() {
+      return this.hasEngageMessages && !this.isProxying && this.isProofLevel9;
     },
     pkbEnabled() {
       return this.hasPkbMessages && !this.isProxying && this.isProofLevel9;

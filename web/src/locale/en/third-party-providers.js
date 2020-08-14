@@ -5,6 +5,57 @@ export default {
     button: 'Continue',
     linkText: 'Find out more about {{ serviceTypePlural }}',
   },
+  engage: {
+    serviceId: 'engage',
+    providerName: 'Engage',
+    jumpOffs: [
+      {
+        id: 'admin',
+        path: '/?sso_route=admin',
+        jumpOffContent: {
+          headerText: 'Additional GP services',
+          descriptionText: 'Get sick notes and GP letters or ask about recent tests',
+        },
+        thirdPartyWarning: {
+          featureName: 'Additional GP services',
+          servicePurchaser: 'Your GP surgery',
+          serviceType: 'online consultation service',
+          serviceTypePlural: 'online consultation  services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
+        },
+      },
+      {
+        id: 'medical',
+        path: '/?sso_route=medical',
+        jumpOffContent: {
+          headerText: 'Ask a health professional for advice',
+          descriptionText: 'Answer questions online and get a reply from your GP surgery',
+        },
+        thirdPartyWarning: {
+          featureName: 'Ask a health professional for advice',
+          servicePurchaser: 'Your GP surgery',
+          serviceType: 'online consultation service',
+          serviceTypePlural: 'online consultation  services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
+        },
+      },
+      {
+        id: 'messages',
+        path: '/?sso_route=messages',
+        jumpOffContent: {
+          headerText: 'Online Consultations',
+          descriptionText: 'View your online consultations and any responses from your GP surgery',
+        },
+        thirdPartyWarning: {
+          featureName: 'Messages',
+          servicePurchaser: 'Your GP surgery',
+          serviceType: 'online consultation service',
+          serviceTypePlural: 'online consultation  services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
+        },
+      },
+    ],
+  },
   ers: {
     serviceId: 'ers',
     providerName: 'Electronic Referral Service',
