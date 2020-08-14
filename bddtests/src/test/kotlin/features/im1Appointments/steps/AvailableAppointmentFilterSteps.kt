@@ -1,12 +1,11 @@
 package features.im1Appointments.steps
 
-import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.metadata.LocationFacade
 import mockingFacade.appointments.metadata.SlotTypeFacade
 import mockingFacade.appointments.metadata.StaffDetailsFacade
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
@@ -23,14 +22,14 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
-        val expected = Serenity.sessionVariableCalled<List<SlotTypeFacade>>(
+        val expected = sessionVariableCalled<List<SlotTypeFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_TYPE_KEY
         )
 
         availableAppointmentsPage.appointmentTypeFilter.assertContents(
-                expected.map { it -> it.slotTypeName }
+                expected.map { it.slotTypeName }
                         .plus(appointmentTypeDefaultOption) as ArrayList<String>
         )
 
@@ -40,7 +39,7 @@ open class AvailableAppointmentFilterSteps {
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val expectedLocations =
-                Serenity.sessionVariableCalled<List<LocationFacade>>(
+                sessionVariableCalled<List<LocationFacade>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
                                 .AppointmentSlotSerenityKeys
                                 .EXPECTED_APPOINTMENT_LOCATIONS_KEY
@@ -109,7 +108,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatLocationIsSelected() {
-        val locations = Serenity.sessionVariableCalled<List<LocationFacade>>(
+        val locations = sessionVariableCalled<List<LocationFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_LOCATIONS_KEY

@@ -10,7 +10,6 @@ import io.cucumber.java.en.When
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.FilterSlotDetails
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -51,7 +50,7 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I enter symptoms$")
     fun whenIEnterSymptoms() {
-        val symptoms = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
+        val symptoms = sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
     }

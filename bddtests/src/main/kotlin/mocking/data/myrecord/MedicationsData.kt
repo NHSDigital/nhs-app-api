@@ -14,7 +14,7 @@ object MedicationsData {
     private const val TWO_MONTHS: Long = 2
     private const val ONE_MONTH: Long = 1
 
-    val now = LocalDateTime.now()
+    val now: LocalDateTime = LocalDateTime.now()
     val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
     val twoMonthsAgo = now.minusMonths(TWO_MONTHS).toString()
     val threeMonthsAgo = now.minusMonths(THREE_MONTHS).toString()
@@ -74,7 +74,7 @@ object MedicationsData {
                                 isMixture = true,
                                 mixture = MedicationMixture (
                                         mixtureName = "MegaMix",
-                                        constituents = mutableListOf<MedicationMixtureItem> (
+                                        constituents = mutableListOf (
                                                 MedicationMixtureItem (
                                                         constituentName = "Ventolin",
                                                         strength = "150ml"
@@ -107,7 +107,7 @@ object MedicationsData {
                                 isMixture = true,
                                 mixture = MedicationMixture (
                                         mixtureName = "MegaMix",
-                                        constituents = mutableListOf<MedicationMixtureItem> (
+                                        constituents = mutableListOf (
                                                 MedicationMixtureItem (
                                                         constituentName = "Cocodomol",
                                                         strength = "150ml"
@@ -162,103 +162,5 @@ object MedicationsData {
                 medicalRecord =  MedicationMedicalRecord(
                         medication = mutableListOf()
                 ))
-    }
-
-    fun getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
-        return MedicationsResponse (
-                medicalRecord = MedicationMedicalRecord (
-                        medication = mutableListOf(
-                                MedicationItem (
-                                        firstIssueDate = "",
-                                        prescriptionType = "Acute",
-                                        drugStatus = "Active",
-                                        term = "Penicillin",
-                                        isMixture = false,
-                                        dosage = "One to be taken four times a day",
-                                        quantityRepresentation = "28 Capsules",
-                                        lastIssueDate = ""
-                                ),
-                                MedicationItem (
-                                        firstIssueDate = twentyMonthsAgo,
-                                        prescriptionType = "Acute",
-                                        drugStatus = "Active",
-                                        term = "Ibuprofen",
-                                        isMixture = false,
-                                        dosage = "One to be taken twice a day",
-                                        quantityRepresentation = "14 Capsules",
-                                        lastIssueDate = twentyMonthsAgo
-                                ),
-                                MedicationItem (
-                                        firstIssueDate = twentyMonthsAgo,
-                                        prescriptionType = "Acute",
-                                        drugStatus = "Active",
-                                        term = "Ibuprofen Plus",
-                                        isMixture = false,
-                                        dosage = "One to be taken once a day",
-                                        quantityRepresentation = "7 Capsules",
-                                        lastIssueDate = tenMonthsAgo
-                                )
-                        )
-                )
-        )
-    }
-    
-    fun getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
-        return MedicationsResponse (
-                medicalRecord = MedicationMedicalRecord (
-                        medication = mutableListOf(
-                                MedicationItem (
-                                        firstIssueDate = "",
-                                        prescriptionType = "Repeat",
-                                        drugStatus = "Active",
-                                        term = "Penicillin",
-                                        isMixture = false,
-                                        dosage = "One to be taken four times a day",
-                                        quantityRepresentation = "28 Capsules",
-                                        lastIssueDate = tenMonthsAgo
-                                ),
-                                MedicationItem (
-                                        firstIssueDate = tenMonthsAgo,
-                                        prescriptionType = "Repeat",
-                                        drugStatus = "Active",
-                                        term = "Ibuprofen",
-                                        isMixture = false,
-                                        dosage = "One to be taken twice a day",
-                                        quantityRepresentation = "14 Capsules",
-                                        lastIssueDate = twentyMonthsAgo
-
-                                )
-                        )
-                )
-        )
-    }
-
-    fun getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate(): MedicationsResponse {
-        return MedicationsResponse (
-                medicalRecord = MedicationMedicalRecord (
-                        medication = mutableListOf(
-                                MedicationItem (
-                                        firstIssueDate = "",
-                                        prescriptionType = "Repeat",
-                                        drugStatus = "Cancelled",
-                                        term = "Penicillin",
-                                        isMixture = false,
-                                        dosage = "One to be taken four times a day",
-                                        quantityRepresentation = "28 Capsules",
-                                        lastIssueDate = tenMonthsAgo
-                                ),
-                                MedicationItem (
-                                        firstIssueDate = twentyMonthsAgo,
-                                        prescriptionType = "Repeat",
-                                        drugStatus = "Cancelled",
-                                        term = "Ibuprofen",
-                                        isMixture = false,
-                                        dosage = "One to be taken twice a day",
-                                        quantityRepresentation = "14 Capsules",
-                                        lastIssueDate = twentyMonthsAgo
-                                )
-                        )
-                )
-        )
     }
 }

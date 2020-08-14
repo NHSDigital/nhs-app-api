@@ -5,15 +5,15 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 
 class OnlineConsultationsUnavailablePage: HybridPageObject() {
-    private val headingLocator = "//h1[contains(text(),'Online consultations are currently unavailable')]";
+    private val headingLocator = "//h1[contains(text(),'Online consultations are currently unavailable')]"
 
     private val gpAdviceHeading = HybridPageElement(
-        webDesktopLocator = "$headingLocator" +
+        webDesktopLocator = headingLocator +
             "//span[@data-purpose='header-caption'][contains(text(), 'Ask your GP for advice')]",
         page = this)
 
     private val adminHelpHeading = HybridPageElement(
-        webDesktopLocator = "$headingLocator" +
+        webDesktopLocator = headingLocator +
             "//span[@data-purpose='header-caption'][contains(text(), 'Additional GP services')]",
         page = this)
 

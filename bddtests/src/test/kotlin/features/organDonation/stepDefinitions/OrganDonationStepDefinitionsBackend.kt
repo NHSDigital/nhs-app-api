@@ -4,7 +4,6 @@ import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpStatus
@@ -76,8 +75,8 @@ class OrganDonationStepDefinitionsBackend {
 
     @Then("^I receive organ donation details with an '(.*)' decision$")
     fun iReceiveOrganDonationDetails(expectedDecision : String) {
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+        val organDonationResponse =
+                sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
 
         Assert.assertNotEquals("Organ donation decision incorrect",
                 "Unknown",
@@ -96,8 +95,8 @@ class OrganDonationStepDefinitionsBackend {
 
     @Then("^I receive no organ donation details$")
     fun iDoNotReceiveOrganDonationDetail() {
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+        val organDonationResponse =
+                sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
 
         Assert.assertEquals("Organ donation decision incorrect",
                 "Unknown",
@@ -113,8 +112,8 @@ class OrganDonationStepDefinitionsBackend {
     fun iReceiveTheUsersPersonalDetails() {
         val patient = SerenityHelpers.getPatient()
 
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+        val organDonationResponse =
+                sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
 
         Assert.assertEquals("Nhs number in response does not match the patient",
                 patient.formattedNHSNumber(),

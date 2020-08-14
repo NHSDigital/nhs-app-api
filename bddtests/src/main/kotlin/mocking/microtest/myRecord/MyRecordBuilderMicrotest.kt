@@ -1,7 +1,7 @@
 package mocking.microtest.myRecord
 
 import mocking.GsonFactory
-import mocking.microtest.models.ExceptionResponse
+import mocking.models.ExceptionResponse
 import mocking.microtest.HEADER_API_NHS_NUMBER
 import mocking.microtest.HEADER_API_ODS_CODE
 import mocking.microtest.MicrotestMappingBuilder

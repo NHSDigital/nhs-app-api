@@ -32,9 +32,6 @@ open class NhsAzureSearchPostcodesAndPlacesMappingBuilder(method: String)
                 .andHeader(HEADER_API_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
                 .andQueryParameter(API_VERSION_QUERY_NAME, API_VERSION_QUERY_VALUE)
     }
-
-    var nhsAzureSearch = NhsAzureSearchServiceMappingBuilder()
-
 }
 
 open class NhsAzureSearchPostcodesMappingBuilder(method: String)

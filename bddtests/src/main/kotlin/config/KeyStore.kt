@@ -13,7 +13,7 @@ class KeyStore(keys: String) {
     var verifier: RSASSAVerifier
 
     init {
-        var jwk = RSAKey.parse(keys)
+        val jwk = RSAKey.parse(keys)
         publicJwk = jwk.toPublicJWK()
         privateKey = jwk.toRSAPrivateKey()
         signer = RSASSASigner(privateKey)

@@ -6,7 +6,7 @@ class OverviewDataSharingPage : DataSharingPage() {
 
     override val pageTitle = overviewPageTitle
     override val nextPageTitle = confidentialDataPageTitle
-    override val previousPageTitle = null
+    override val previousPageTitle: String? = null
     override val expectedPageStructure =
             ExpectedPageStructure()
                     .paragraph(dataSharingSubheader)

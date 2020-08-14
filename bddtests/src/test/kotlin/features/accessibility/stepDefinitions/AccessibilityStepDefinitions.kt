@@ -9,7 +9,7 @@ import java.io.File
 
 class AccessibilityStepDefinitions {
     lateinit var page: HybridPageObject
-    private val outputFolder = "${Config.instance.accessibilityOutputFolder}"
+    private val outputFolder = Config.instance.accessibilityOutputFolder
 
     @Before("@accessibility")
     fun createOutputFolderIfRequired() {

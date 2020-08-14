@@ -38,17 +38,6 @@ class MedicalRecordHubPage : HybridPageObject() {
         )
     }
 
-    fun getGpRecordHeader(pageTitle: String): HybridPageElement {
-        val locator = "//h1[contains(text(),\"$pageTitle\")]"
-        return HybridPageElement(
-                webDesktopLocator = locator,
-                androidLocator = locator,
-                iOSLocator = locator,
-                page = this,
-                helpfulName = pageTitle
-        )
-    }
-
     val gpMedicalRecordPanel = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_gp_medical_record']",
             page = this

@@ -34,7 +34,7 @@ open class BiometricSteps {
     private fun triggerWindowDispatch(event: String, arg: String) {
         val jsExecutor = genericPage.driver as JavascriptExecutor
         jsExecutor.executeScript("""
-            window.appEvent({ event: "${event}", payload: ${arg} });
+            window.appEvent({ event: "$event", payload: $arg });
         """.trimIndent())
     }
 }

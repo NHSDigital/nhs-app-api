@@ -40,7 +40,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
                 documents = documents.medicalRecord.documents)
-        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf(
                 expectedDocuments[expectedDocuments.lastIndex]))
     }
 
@@ -54,7 +54,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
                 documents = documents.medicalRecord.documents, includeSize = false)
-        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf(expectedDocuments[0]))
     }
 
     override fun enabledWithDocuments(patient: Patient, documentStatus: DocumentStatus?) {

@@ -4,12 +4,7 @@ import constants.Supplier
 import mocking.MockingClient
 import mocking.SupplierSpecificFactory
 import models.Patient
-import net.serenitybdd.core.Serenity
-import utils.LinkedProfilesSerenityHelpers
-import utils.getOrNull
-import worker.WorkerClient
 import worker.models.myrecord.MedicationsData
-import worker.models.myrecord.MyRecordResponse
 import java.util.*
 
 const val TWENTY_MONTHS: Long = 20
@@ -24,13 +19,6 @@ abstract class MedicationsFactory {
     abstract fun enabledWithRecords(patient:Patient)
     abstract fun getExpectedMedications(): MedicationsData
     abstract fun respondWithBadData(patient: Patient)
-
-    fun getResult() {
-        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .myRecord.getMyRecord(patientId)
-        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-    }
 
     companion object : SupplierSpecificFactory<MedicationsFactory>() {
 

@@ -7,6 +7,7 @@ import wiremock.com.fasterxml.jackson.databind.JavaType
 import wiremock.com.fasterxml.jackson.databind.ObjectMapper
 import java.lang.reflect.Type
 
+@Suppress("unused") // Transformers discovered by cucumber test runner
 class DataTableSteps {
     private val objectMapper: ObjectMapper = ObjectMapper()
 

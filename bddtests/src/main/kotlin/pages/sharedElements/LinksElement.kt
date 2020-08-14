@@ -89,9 +89,9 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
     }
 
     private fun assertPresentWithLinks(expectedLinks: List<LinkContent>, withUlLinks: Boolean = false) {
-        var links = listOfLinks().elements;
-        if (withUlLinks == true) {
-           links = listOfUlLinks().elements;
+        var links = listOfLinks().elements
+        if (withUlLinks) {
+           links = listOfUlLinks().elements
         }
 
         Assert.assertEquals("Number of expected LinksElement",

@@ -9,9 +9,6 @@ import org.apache.http.HttpStatus
 
 class EmisEndUserSessionBuilder(configuration: EmisConfiguration)
     : EmisMappingBuilder(configuration, "POST", "/sessions/endusersession") {
-    init {
-        // no extra params required
-    }
 
     fun respondWithSuccess(endUserSessionId: String, milliSecondDelay: Int = 0): Mapping {
         val responseBody = EndUserSessionResponse(endUserSessionId)

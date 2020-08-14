@@ -6,8 +6,12 @@ import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import org.apache.http.HttpStatus
 
-class VisionGetPatientDataBuilder(private val userSession: VisionUserSession, private val serviceDefinition:
-ServiceDefinition, private val view: String, private val responseFormat: String) : VisionMappingBuilder("POST"){
+class VisionGetPatientDataBuilder(
+        userSession: VisionUserSession,
+        private val serviceDefinition: ServiceDefinition,
+        view: String,
+        responseFormat: String)
+    : VisionMappingBuilder("POST"){
 
     init {
         val contentTypeHeader = "content-type"

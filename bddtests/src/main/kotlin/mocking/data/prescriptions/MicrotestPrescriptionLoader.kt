@@ -38,7 +38,7 @@ object MicrotestPrescriptionLoader : IPrescriptionLoader<PrescriptionHistoryGetR
     }
 
     fun orderCourses(orderedCourses: MutableList<Course>,
-                     oldPrescriptionHistory: PrescriptionHistoryGetResponse = MicrotestPrescriptionLoader.data)
+                     oldPrescriptionHistory: PrescriptionHistoryGetResponse = data)
             : PrescriptionHistoryGetResponse {
 
         // Combine "just ordered" courses and existing courses so prescription history is reflective of current state.

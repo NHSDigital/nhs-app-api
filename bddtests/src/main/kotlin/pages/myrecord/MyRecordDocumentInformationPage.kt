@@ -57,7 +57,7 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
     }
 
     fun hasFileDownloaded(expectedFileName: String): Boolean {
-        return DownloadHelpers().downloadFile(expectedFileName);
+        return DownloadHelpers().downloadFile(expectedFileName)
     }
 
 

@@ -6,7 +6,6 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddNhsUserResponse
 import mocking.emis.models.ErrorResponse
-import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
@@ -60,12 +59,6 @@ class EmisLinkagePOSTBuilder (addNhsUserRequest: AddNhsUserRequest) :
     fun respondWithInternalServerError(): Mapping {
         val errorResponse = ErrorResponse(0)
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
-    }
-
-    fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
-                "Bad Gateway")
-        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
 
     fun respondWithMultipleRecordsFound(): Mapping {

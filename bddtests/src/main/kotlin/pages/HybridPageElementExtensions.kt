@@ -60,7 +60,7 @@ fun HybridPageElement.typeTextIntoTextArea(text: String): String {
     //Each letter sent individually
     //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
     //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
-    var returnedText: String = ""
+    var returnedText = ""
     text.toCharArray().map { letter ->
         actOnTheElement { elem ->
             elem.sendKeys(letter.toString())

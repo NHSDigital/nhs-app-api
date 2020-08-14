@@ -79,7 +79,7 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
     }
 }
 
-class RadioButton(private val element : WebElementFacade) {
+class RadioButton(element : WebElementFacade) {
 
     private val allTextElements = element.findElements<WebElement>(
             By.xpath("./descendant::*[text()]")).map{e->e.text}

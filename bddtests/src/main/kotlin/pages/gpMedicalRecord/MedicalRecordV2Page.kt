@@ -52,7 +52,7 @@ class MedicalRecordV2Page : HybridPageObject() {
                 .addLink(linkText)
         val linkElement by lazy { LinksElement(this, linkContent) }
 
-        return linkElement.link(linkText);
+        return linkElement.link(linkText)
     }
 
     fun assertDemographicsContent(patient: Patient) {

@@ -80,7 +80,7 @@ open class HomeSteps {
 
     @Step
     fun assertLinkIsVisible(link: NavigationLinkText): HybridPageElement {
-        return homePage.assertLinkIsVisible(link.linkText);
+        return homePage.assertLinkIsVisible(link.linkText)
     }
 
     fun assertUnreadMessageIndicatorIsDisplayed() {

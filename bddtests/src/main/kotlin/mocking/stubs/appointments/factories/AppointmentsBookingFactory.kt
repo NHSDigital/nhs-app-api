@@ -97,8 +97,8 @@ abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFa
                 toBeBooked.telephoneNumber,
                 toBeBooked.telephoneContactType
         )
-        Serenity.setSessionVariable(appointmentToBookKey).to(appointmentRequest)
-        Serenity.setSessionVariable(symptomsToEnter).to(toBeBooked.bookingReason)
+        setSessionVariable(appointmentToBookKey).to(appointmentRequest)
+        setSessionVariable(symptomsToEnter).to(toBeBooked.bookingReason)
     }
 
     private fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) ->

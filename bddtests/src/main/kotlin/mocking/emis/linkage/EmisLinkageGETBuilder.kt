@@ -6,7 +6,6 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.AddVerificationRequest
 import mocking.emis.models.AddVerificationResponse
 import mocking.emis.models.ErrorResponse
-import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
@@ -28,24 +27,6 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest) :
         return respondWith(HttpStatus.SC_CREATED) {
             andJsonBody(addVerificationResponse, GsonFactory.asPascal)
         }
-    }
-
-    fun respondWithForbiddenException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
-                "Forbidden Exception")
-        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_FORBIDDEN)
-    }
-
-    fun respondWithNotImplementedException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
-                "Not Implemented")
-        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
-    }
-
-    fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
-                "Bad Gateway")
-        return respondWithBodyAndStatus(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
 
     fun respondWithInternalServerError(): Mapping {

@@ -51,7 +51,7 @@ object EmisPrescriptionMapper {
             val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendDateFormat)
 
             val filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
-                it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
+                repeatCourseguids.contains(it.requestedMedicationCourseGuid)
                     && it.requestedMedicationCourseStatus in displayedEmisMedicationCourseStatuses
             }
 
@@ -82,7 +82,7 @@ object EmisPrescriptionMapper {
     private fun getGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {
         val courseGuids = ArrayList<String>()
 
-        repeatCourses.forEach { it -> courseGuids.add(it.medicationCourseGuid) }
+        repeatCourses.forEach { courseGuids.add(it.medicationCourseGuid) }
 
         return courseGuids
     }

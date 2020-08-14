@@ -24,6 +24,6 @@ class PatientPracticeMessagingStubs(private val mockingClient: MockingClient) {
     }
 
     companion object {
-        const val REPLY_COUNT = 3;
+        const val REPLY_COUNT = 3
     }
 }

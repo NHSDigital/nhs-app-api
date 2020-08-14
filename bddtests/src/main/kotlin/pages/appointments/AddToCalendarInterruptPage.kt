@@ -20,7 +20,7 @@ open class AddToCalendarInterruptPage : AppointmentSharedElementsPage() {
     override val titleText: String = "N/A"
 
     fun checkAddToCalendarMessage() {
-        headerMessage.assertIsVisible();
+        headerMessage.assertIsVisible()
     }
 
     fun clickAddToCalendarButton() {

@@ -81,7 +81,7 @@ open class OrganDonationAmendStepDefinitions {
         val existingRegistration = factory.existing.optInSome()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.optOut() {
+        factory.amend { registration->registration.optOut {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 

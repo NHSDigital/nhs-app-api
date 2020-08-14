@@ -125,7 +125,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                     )
                                             )
                                     ),
-                                    person =  mutableListOf<Person>()
+                                    person =  mutableListOf()
                             )
                     )
         }

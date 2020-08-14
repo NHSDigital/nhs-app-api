@@ -36,7 +36,7 @@ object VisionPrescriptionMapper {
                 )
                 if (repeatPrescription.status != null) {
                     val status = repeatPrescription.status!!
-                    historicPrescription.status = visionPrescriptionStatusToDisplayedStatus[status.code.toInt()]
+                    historicPrescription.status = visionPrescriptionStatusToDisplayedStatus[status.code]
                 }
                 historicPrescription.orderDate = prescriptionOrderDate
                 historicPrescriptions.add(historicPrescription)

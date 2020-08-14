@@ -35,7 +35,7 @@ class PrescriptionSubmissionBuilderMicrotest (
         for (i in partialSuccess.successfulMedications.indices) {
             body.PatientRequests.add(PatientRequest(
                     "success_$i",
-                    "${partialSuccess.successfulMedications[i]}",
+                    partialSuccess.successfulMedications[i],
                     "success",
                     ""))
         }
@@ -43,7 +43,7 @@ class PrescriptionSubmissionBuilderMicrotest (
         for (i in partialSuccess.unsuccessfulMedications.indices) {
             body.PatientRequests.add(PatientRequest(
                     "failed_$i",
-                    "${partialSuccess.unsuccessfulMedications[i]}",
+                    partialSuccess.unsuccessfulMedications[i],
                     "failed",
                     ""))
         }

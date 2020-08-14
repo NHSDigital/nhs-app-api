@@ -7,7 +7,7 @@ class MakeChoiceDataSharingPage: DataSharingPage() {
 
     override val pageTitle: String = makeChoicePageTitle
     override val previousPageTitle = choiceApplyPageTitle
-    override val nextPageTitle = null
+    override val nextPageTitle: String? = null
     override val expectedPageStructure =
             ExpectedPageStructure()
                     .paragraph(dataSharingSubheader)

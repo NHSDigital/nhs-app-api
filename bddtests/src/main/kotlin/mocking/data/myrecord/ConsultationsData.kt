@@ -28,7 +28,7 @@ object ConsultationsData {
         val consultationsResponseModel = getMultipleConsultationRecords(2)
         consultationsResponseModel.medicalRecord.consultations[0].effectiveDate = null
 
-        return consultationsResponseModel;
+        return consultationsResponseModel
     }
 
     fun getMultipleConsultationRecords(count :Int = NUMBER_OF_CONSULTATION_RECORDS): ConsultationsResponseModel {

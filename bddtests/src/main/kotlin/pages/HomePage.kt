@@ -11,7 +11,7 @@ import pages.sharedElements.PublicHealthNotificationElement
 import worker.models.serviceJourneyRules.PublicHealthNotification
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
-open class HomePage : HybridPageObject() {
+class HomePage : HybridPageObject() {
 
     val headerText: String = "Home"
 
@@ -91,19 +91,9 @@ open class HomePage : HybridPageObject() {
                 helpfulName = "$linkText Link")
     }
 
-    val checkSymptomsLink = link("Check your symptoms")
-
-    val bookAndManageAppointmentsLink = link("Book and manage appointments")
-
-    val orderRepeatPrescriptionLink = link("Order a repeat prescription")
-
-    val viewMedicalRecordLink = link("View your GP medical record")
-
     val organDonationLink = link("Manage your organ donation decision")
 
     val linkedProfilesLink = link("Linked profiles")
-
-    val messagesLink = link("View your messages")
 
     fun assertUnreadIndicatorPresent() {
         unreadIndicator.assertIsVisible()

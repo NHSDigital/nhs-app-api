@@ -49,6 +49,6 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
         )
         Assert.assertEquals("Contact your GP surgery for more information. For urgent medical advice, " +
                 "go to 111.nhs.uk or call 111.",
-                noRecipientsMessage.text);
+                noRecipientsMessage.text)
     }
 }

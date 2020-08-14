@@ -138,7 +138,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I click on the Add to calendar link$")
     fun iClickOnTheAddToCalendarLink() {
-        bookingSuccessPage.clickAddToCalendarLink();
+        bookingSuccessPage.clickAddToCalendarLink()
     }
 
     @Then("^the Add to calendar interrupt page is displayed$")
@@ -148,7 +148,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I click on the Add to calendar button$")
     fun iClickOnTheAddToCalendarButton() {
-        addToCalendarInterruptPage.clickAddToCalendarButton();
+        addToCalendarInterruptPage.clickAddToCalendarButton()
     }
 
     @Then("^the Appointment Cancel success page is displayed$")

@@ -1,19 +1,18 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
+import features.myrecord.factories.DemographicsFactory
+import features.myrecord.factories.MyRecordFactory
+import features.sharedSteps.BrowserSteps
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import features.myrecord.factories.DemographicsFactory
-import features.myrecord.factories.MyRecordFactory
-import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordV2Page
@@ -99,7 +98,7 @@ open class V2MedicalRecordStepDefinitions {
 
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     fun thenISeeServiceNotOfferedByGPOrToSpecificUserOrAccessRevokedWarningMessage() {
-        Assert.assertEquals("You do not currently have online access to your medical record\n" +
+        assertEquals("You do not currently have online access to your medical record\n" +
                 "Contact your GP surgery for more information.",
                 medicalRecordV2Page.getSummaryCareNoAccessMessage())
     }

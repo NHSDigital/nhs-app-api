@@ -18,7 +18,7 @@ class LoginSettingsStepDefinitions {
 
     @Then("^I see the (.*) settings page$")
     fun iSeeTheLoginAndPasswordOptionsPage(biometricType: String) {
-        loginSettings.assertTitleDisplayed(biometricType);
+        loginSettings.assertTitleDisplayed(biometricType)
     }
 
     @When("^I click the Login with (.*) toggle$")

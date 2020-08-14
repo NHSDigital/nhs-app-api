@@ -5,7 +5,6 @@ import constants.Supplier
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
-import mocking.tpp.models.Person
 import models.Patient
 import java.time.Duration
 
@@ -15,7 +14,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         val response = AuthenticateReply()
         response.onlineUserId = ""
         response.patientId = ""
-        response.person =  mutableListOf<Person>()
+        response.person =  mutableListOf()
 
         mockingClient.forTpp.mock {
             authentication.authenticateRequest(

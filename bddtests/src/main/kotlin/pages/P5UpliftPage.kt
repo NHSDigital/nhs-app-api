@@ -37,6 +37,6 @@ open class P5UpliftPage : HybridPageObject() {
         headerElement.assertSingleElementPresent()
         descriptionMap[page]?.let {
             descriptionElement.withText(it).assertSingleElementPresent()
-        } ?: Assert.fail("Test setup error: cannot find the uplift banner description for the '$page' page");
+        } ?: Assert.fail("Test setup error: cannot find the uplift banner description for the '$page' page")
     }
 }

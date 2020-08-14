@@ -1,12 +1,9 @@
 package mocking.microtest.appointments
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.microtest.MicrotestMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
-import org.apache.http.HttpStatus
 import java.time.Duration
 
 class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
@@ -22,15 +19,6 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
         requestBuilder
                 .andJsonBody(requestBody)
         }
-
-    private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
-        return respondWith(statusCode) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
-                    .andDelay(delayMillisecs)
-        }
-    }
 
     override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderMicrotest {
         delayMillisecs = delayMilliseconds.toMillis().toInt()

@@ -161,7 +161,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val appointmentBookRequest = AppointmentBookRequest(
                 slotId = AppointmentsBookingFactory.defaultApptBookingSlotId.toString(),
                 bookingReason = AppointmentsBookingFactory.defaultApptBookingReason,
-                telephoneNumber = AppointmentsBookingFactory.defaultTelephoneNumber,
+                telephoneNumber = defaultTelephoneNumber,
                 telephoneContactType = AppointmentsBookingFactory.defaultTelephoneContactType)
         submitAppointmentRequest(appointmentBookRequest)
     }

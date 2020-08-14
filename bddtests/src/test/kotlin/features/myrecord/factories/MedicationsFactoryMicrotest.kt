@@ -53,19 +53,19 @@ class MedicationsFactoryMicrotest: MedicationsFactory(){
                 lineItems = mutableListOf(
                         MedicationLineItem(
                                 text = med.name,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         ),
                         MedicationLineItem(
                                 text = med.dosage,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         ),
                         MedicationLineItem(
                                 text = med.quantity,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         ),
                         MedicationLineItem(
                                 text = "Reason: " + med.reason,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         )
                 )
         )

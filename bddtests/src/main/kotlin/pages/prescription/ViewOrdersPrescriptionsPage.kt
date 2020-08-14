@@ -25,12 +25,6 @@ open class ViewOrdersPrescriptionsPage : HybridPageObject() {
     val serverErrorMessage = "Try again later. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
 
-    val nominatedPharmacyPanelInformation = HybridPageElement(
-            webDesktopLocator = "//div[@id='nominated-pharmacy-section']",
-            helpfulName = "nominated pharmacy panel",
-            page = this
-    )
-
     val orderedByLabel = HybridPageElement(
             webDesktopLocator = "//p[@id='orderedByValue']",
             helpfulName = "ordered by label",

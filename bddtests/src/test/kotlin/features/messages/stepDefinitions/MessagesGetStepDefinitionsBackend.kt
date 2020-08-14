@@ -124,7 +124,7 @@ class MessagesGetStepDefinitionsBackend {
 
         Assert.assertEquals("Number Of Messages", expectedMessages.count(), responseMessages.count())
         responseMessages.forEach { response ->
-            response.messages.forEach { message -> Assert.assertNotNull("SentTime", message.sentTime) }
+            response.messages.forEach { message -> assertNotNull("SentTime", message.sentTime) }
         }
 
         val responseMessagesFacades = responseMessages.map { message ->

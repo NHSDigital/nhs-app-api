@@ -50,11 +50,3 @@ fun HybridPageElement.withoutRetrying(): HybridPageElement {
     this.timeToWaitForElement = 0
     return this
 }
-
-fun HybridPageElement.assertCurrentlyVisible() {
-    actOnTheElement {
-        Assert.assertTrue(
-                "Expected element $helpfulNameToUse, with xpath $webDesktopLocator to be visible",
-                it.isCurrentlyVisible)
-    }
-}

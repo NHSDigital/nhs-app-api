@@ -27,12 +27,12 @@ class GetNominatedPharmacyRequestBuilder
                 </wsa:From>
                 <communicationFunctionRcv typeCode="RCV">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="$toAsid"/>
                   </device>
                 </communicationFunctionRcv>
                 <communicationFunctionSnd typeCode="SND">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="$fromAsid"/>
                   </device>
                 </communicationFunctionSnd>
                 <wsa:RelatesTo>uuid:289852c1-b232-4ae2-b6c8-f3556e44e2b8</wsa:RelatesTo>
@@ -54,12 +54,12 @@ class GetNominatedPharmacyRequestBuilder
                     </acknowledgement>
                     <communicationFunctionRcv typeCode="RCV">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="$toAsid"/>
                       </device>
                     </communicationFunctionRcv>
                     <communicationFunctionSnd typeCode="SND">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="$fromAsid"/>
                       </device>
                     </communicationFunctionSnd>
                     <ControlActEvent classCode="CACT" moodCode="EVN">
@@ -81,10 +81,10 @@ class GetNominatedPharmacyRequestBuilder
                           </pertinentInformation>
                           <subject typeCode="SBJ">
                             <patientRole classCode="PAT">
-                              <id root="2.16.840.1.113883.2.1.4.1" extension="${nhsNumber}"/>
+                              <id root="2.16.840.1.113883.2.1.4.1" extension="$nhsNumber"/>
                               <patientPerson classCode="PSN" determinerCode="INSTANCE">
                                 <administrativeGenderCode code="1"/>
-                                <birthTime value="${dateOfBirth}"/>
+                                <birthTime value="$dateOfBirth"/>
                                 <playedOtherProviderPatient classCode="PAT">
                                   <subjectOf typeCode="SBJ">
                                     <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
@@ -152,7 +152,7 @@ class GetNominatedPharmacyRequestBuilder
         }
 
         fun getResponse(personalCheckDetails: PersonalCheckDetails,
-                        odsCode: String, pharmacyTypes: kotlin.Array<String>, code : String? = null): String {
+                        odsCode: String, pharmacyTypes: Array<String>, code : String? = null): String {
             return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -170,12 +170,12 @@ class GetNominatedPharmacyRequestBuilder
                 </wsa:From>
                 <communicationFunctionRcv typeCode="RCV">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="$toAsid"/>
                   </device>
                 </communicationFunctionRcv>
                 <communicationFunctionSnd typeCode="SND">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="$fromAsid"/>
                   </device>
                 </communicationFunctionSnd>
                 <wsa:RelatesTo>uuid:289852c1-b232-4ae2-b6c8-f3556e44e2b8</wsa:RelatesTo>
@@ -197,12 +197,12 @@ class GetNominatedPharmacyRequestBuilder
                     </acknowledgement>
                     <communicationFunctionRcv typeCode="RCV">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="$toAsid"/>
                       </device>
                     </communicationFunctionRcv>
                     <communicationFunctionSnd typeCode="SND">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="$fromAsid"/>
                       </device>
                     </communicationFunctionSnd>
                     <ControlActEvent classCode="CACT" moodCode="EVN">
@@ -307,25 +307,25 @@ class GetNominatedPharmacyRequestBuilder
             val ccBuilder = StringBuilder()
             if (code != null) {
                 ccBuilder.append(
-                        """<confidentialityCode codeSystem="2.16.840.1.113883.2.1.3.2.4.16.1" code="${code}"/>""")
+                        """<confidentialityCode codeSystem="2.16.840.1.113883.2.1.3.2.4.16.1" code="$code"/>""")
             }
             return ccBuilder
         }
 
-        fun getPlayedOtherProviderPatient(odsCode: String, pharmacyTypes: kotlin.Array<String>) : StringBuilder {
+        fun getPlayedOtherProviderPatient(odsCode: String, pharmacyTypes: Array<String>) : StringBuilder {
             val patientCareProvisionBuilder = StringBuilder()
             if(pharmacyTypes.size > 0) {
                 for (pharmacyType in pharmacyTypes) {
                     patientCareProvisionBuilder.append("""<playedOtherProviderPatient classCode="PAT">
                                   <subjectOf typeCode="SBJ"> <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
-                                        <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="${pharmacyType}"/>
+                                        <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="$pharmacyType"/>
                                       <effectiveTime>
                                         <low value="20190402"/>
                                       </effectiveTime>
                                       <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="P000000042"/>
                                       <performer typeCode="PRF">
                                         <assignedEntity classCode="ASSIGNED">
-                                          <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
+                                          <id root="2.16.840.1.113883.2.1.4.3" extension="$odsCode"/>
                                         </assignedEntity>
                                       </performer>
                                         </patientCareProvisionEvent> </subjectOf>

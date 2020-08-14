@@ -87,9 +87,9 @@ class MedicationsFactoryTpp: MedicationsFactory() {
 
     private fun getTppDefaultMedicationsModel(): ViewPatientOverviewReply {
         return ViewPatientOverviewReply(
-                drugs = mutableListOf<ViewPatientOverviewItem>(),
-                currentRepeats = mutableListOf<ViewPatientOverviewItem>(),
-                pastRepeats = mutableListOf<ViewPatientOverviewItem>()
+                drugs = mutableListOf(),
+                currentRepeats = mutableListOf(),
+                pastRepeats = mutableListOf()
         )
     }
 }

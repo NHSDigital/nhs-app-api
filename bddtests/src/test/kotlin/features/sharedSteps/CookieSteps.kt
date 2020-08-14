@@ -44,14 +44,6 @@ open class CookieSteps {
     }
 
     @Step
-    fun hasClosedCookies(sessionKey: String): String? {
-        val executor = loginPage.driver as JavascriptExecutor
-
-        return (executor.executeScript(String.format(
-                "return window.sessionStorage.getItem('%s');", sessionKey))?.toString())
-    }
-
-    @Step
     fun setInstructionsCookie(seen: String) {
         val cookie = Cookie("SkipPreRegistrationPage", seen)
         loginPage.driver.manage().addCookie(cookie)

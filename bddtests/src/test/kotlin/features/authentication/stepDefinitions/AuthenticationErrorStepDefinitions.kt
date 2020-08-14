@@ -62,7 +62,7 @@ class AuthenticationErrorStepDefinitions {
     @Given("^I attempt to log in as a (.*) user with an age under (\\d+)$")
     fun iAmLoggedInToWithAgeUnderMinAge(gpSystem: String, age: Int) {
         val supplier = Supplier.valueOf(gpSystem)
-        val birthdayToday = DateTime.now().minusYears(age);
+        val birthdayToday = DateTime.now().minusYears(age)
         val birthdayTomorrow = birthdayToday.plusDays(1)
         val dateOfBirth = birthdayTomorrow.toString(DateTimeFormats.dateWithoutTimeFormat)
         val patient = Patient.getDefault(supplier).copy(age = PatientAge(dateOfBirth))

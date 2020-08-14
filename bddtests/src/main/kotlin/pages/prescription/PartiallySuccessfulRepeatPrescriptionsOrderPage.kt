@@ -18,11 +18,6 @@ open class PartiallySuccessfulRepeatPrescriptionsOrderPage : HybridPageObject() 
                 helpfulName = "header")
     }
 
-    val backToPrescriptionsButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Go to your prescription orders')]",
-            page = this
-    )
-
     override fun shouldBeDisplayed() {
         title.waitForElement(HEADER_RETRIES)
         super.shouldBeDisplayed()

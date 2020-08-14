@@ -55,7 +55,7 @@ class GeneralAppointmentsHelper {
         }
 
         private fun extractLocationsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
-                List<mocking.vision.models.appointments.Location> {
+                List<Location> {
             return slotsResponseFacade.locations.map { location ->
                 Location(location.locationId, location.locationName)
             }

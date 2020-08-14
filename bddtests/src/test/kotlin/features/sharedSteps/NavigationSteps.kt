@@ -30,11 +30,6 @@ open class NavigationSteps {
         return navBarNative.hasSingleSelection()
     }
 
-    @Step
-    fun hasVisible(tab: String): Boolean {
-        return hasVisible(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
-    }
-
     private fun hasVisible(tab: NavBarNative.NavBarType): Boolean {
         return navBarNative.isVisible(tab)
     }

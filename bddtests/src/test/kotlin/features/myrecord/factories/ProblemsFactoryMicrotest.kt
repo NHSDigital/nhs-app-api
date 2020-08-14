@@ -27,11 +27,11 @@ class ProblemsFactoryMicrotest: ProblemsFactory(){
                     lineItems = mutableListOf(
                         ProblemLineItem(
                                 text = "Finish Date: " + item.finish_date,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         ),
                         ProblemLineItem(
                                 text = item.rubric,
-                                lineItems = mutableListOf<String>()
+                                lineItems = mutableListOf()
                         )
                     )
             )

@@ -24,7 +24,7 @@ open class PublicHealthNotificationsMapper {
             configurations.forEach {
                 configuration ->
                 when (Pair(odsCode, configuration.toJourneyType())) {
-                    Pair(ServiceJourneyRulesMapper.Companion.ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION,
+                    Pair(ServiceJourneyRulesMapper.ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION,
                          SJRJourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS) -> {
                         ServiceJourneyRulesSerenityHelpers.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS
                             .setIfNotAlreadySet(mutableListOf(coronavirus_covid19))

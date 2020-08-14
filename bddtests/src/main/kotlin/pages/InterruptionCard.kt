@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement
 
 class InterruptionCard(private val path: String,private val page: HybridPageObject){
 
-    private var found = false;
+    private var found = false
 
     fun assertContent(expectedHeader:String, expectedContent:String, expectedLinkText:String) {
         initialiseIfNeeded()

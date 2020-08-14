@@ -94,10 +94,6 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
             createInvalidTestForVision(patient, "Already Registered")
         }
 
-        fun patientHasALockedAccount(patient: Patient) {
-            createInvalidTestForVision(patient, "Patient Locked")
-        }
-
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision.mock {
                 authentication.getRegisterRequest(

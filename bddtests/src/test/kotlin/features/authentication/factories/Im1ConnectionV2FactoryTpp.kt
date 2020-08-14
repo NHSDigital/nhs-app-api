@@ -132,7 +132,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
                                                     )
                                             )
                                     ),
-                                    person =  mutableListOf<Person>()
+                                    person =  mutableListOf()
                             )
                     )
         }

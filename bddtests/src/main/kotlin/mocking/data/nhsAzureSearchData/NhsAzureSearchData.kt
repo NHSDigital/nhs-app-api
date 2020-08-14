@@ -10,13 +10,12 @@ object NhsAzureSearchData {
 
     const val ORGANISATION_LIMIT = 20
     const val POSTCODES_AND_PLACES_LIMIT = 1
-    const val DEFAULT_LATITUDE = -10
+    private const val DEFAULT_LATITUDE = -10
     const val DEFAULT_LONGITUDE = 20
     // 1 less than F81090 in redis cache
     const val ORGANISATION_NAME = "Clay Cross Medical Centre"
-    const val PHARMACY_NAME = "My Pharmacy"
-    const val RANDOMIZED_INTERNET_PHARMACY_LIMIT = 1000
-    const val SEARCHED_INTERNET_PHARMACY_LIMIT = 20
+    private const val PHARMACY_NAME = "My Pharmacy"
+    private const val RANDOMIZED_INTERNET_PHARMACY_LIMIT = 1000
 
     private const val BASE_NACSCODE = 81089
     private const val BASE_ORGANISATION_ID = 4648
@@ -25,7 +24,7 @@ object NhsAzureSearchData {
     fun generateOrganisationData(numberOfItems: Int): NhsAzureSearchOrganisationReply {
         val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
 
-        for(i in 1..Math.min(numberOfItems, NhsAzureSearchData.ORGANISATION_LIMIT)) {
+        for(i in 1..numberOfItems.coerceAtMost(ORGANISATION_LIMIT)) {
             searchItems.add(createOrganisationResultFromIndex(i))
         }
 
@@ -35,8 +34,8 @@ object NhsAzureSearchData {
     fun generatePharmacyData(numberOfItems: Int): NhsAzureSearchOrganisationReply {
         val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
 
-        for(i in 1..Math.min(numberOfItems, NhsAzureSearchData.ORGANISATION_LIMIT)) {
-            searchItems.add(createPharmacyResultFromIndex(i, isPharmacySearch = true))
+        for(i in 1..numberOfItems.coerceAtMost(ORGANISATION_LIMIT)) {
+            searchItems.add(createPharmacyResultFromIndex(i))
         }
 
         return NhsAzureSearchOrganisationReply(searchItems, numberOfItems)
@@ -45,19 +44,10 @@ object NhsAzureSearchData {
     fun generateOnlinePharmacyData(): NhsAzureSearchOrganisationReply {
         val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
 
-        for(i in 1..NhsAzureSearchData.RANDOMIZED_INTERNET_PHARMACY_LIMIT) {
-            searchItems.add(createOnlinePharmacyResultFromIndex(i, isPharmacySearch = false))
+        for(i in 1..RANDOMIZED_INTERNET_PHARMACY_LIMIT) {
+            searchItems.add(createOnlinePharmacyResultFromIndex(i))
         }
-        return NhsAzureSearchOrganisationReply(searchItems, NhsAzureSearchData.RANDOMIZED_INTERNET_PHARMACY_LIMIT)
-    }
-
-    fun generateOnlinePharmacySearchData(numberOfItems: Int): NhsAzureSearchOrganisationReply {
-        val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
-
-        for(i in 1..Math.min(numberOfItems, NhsAzureSearchData.SEARCHED_INTERNET_PHARMACY_LIMIT)) {
-            searchItems.add(createOnlinePharmacyResultFromIndex(i, isPharmacySearch = true))
-        }
-        return NhsAzureSearchOrganisationReply(searchItems, NhsAzureSearchData.SEARCHED_INTERNET_PHARMACY_LIMIT)
+        return NhsAzureSearchOrganisationReply(searchItems, RANDOMIZED_INTERNET_PHARMACY_LIMIT)
     }
 
     fun getSuccessfulPostcodeMatch(): NHSAzureSearchPostcodesAndPlacesReply {
@@ -84,13 +74,13 @@ object NhsAzureSearchData {
         val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
 
         val geocode = Geocode(
-                Coordinates = mutableListOf<Double>(
+                Coordinates = mutableListOf(
                         DEFAULT_LATITUDE.toDouble() + i, DEFAULT_LONGITUDE.toDouble() + i
                 ))
 
         return NhsAzureSearchOrganisationItem(
                 "$organisationId",
-                "$organisationName",
+                organisationName,
                 "P1",
                 "Community Pharmacy",
                 "$i Bridge Street",
@@ -103,21 +93,20 @@ object NhsAzureSearchData {
                 geocode)
     }
 
-    private fun createPharmacyResultFromIndex
-            (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
+    private fun createPharmacyResultFromIndex(i: Int): NhsAzureSearchOrganisationItem {
         val numericNACSCode = BASE_NACSCODE + i
         val organisationId = BASE_ORGANISATION_ID + i
 
-        val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+        val organisationName = "$PHARMACY_NAME $i"
 
         val geocode = Geocode(
-                Coordinates = mutableListOf<Double>(
+                Coordinates = mutableListOf(
                 DEFAULT_LATITUDE.toDouble() + i, DEFAULT_LONGITUDE.toDouble() + i
         ))
 
         return NhsAzureSearchOrganisationItem(
                 "$organisationId",
-                "$organisationName",
+                organisationName,
                 "P1",
                 "Community Pharmacy",
                 "$i Bridge Street",
@@ -141,14 +130,13 @@ object NhsAzureSearchData {
     }
 
 
-    private fun createOnlinePharmacyResultFromIndex
-            (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
-        val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+    private fun createOnlinePharmacyResultFromIndex(i: Int): NhsAzureSearchOrganisationItem {
+        val organisationName = "$ORGANISATION_NAME $i"
         val numericNACSCode = BASE_NACSCODE + i
 
         return NhsAzureSearchOrganisationItem(
                 "",
-                "$organisationName",
+                organisationName,
                 "P1",
                 "Internet Pharmacy",
                 "",

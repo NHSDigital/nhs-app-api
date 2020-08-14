@@ -22,7 +22,7 @@ enum class WebDriverOption(val key: String, val message: String) {
             """).toString()) {
 
         override fun isEnabled() = Serenity.getCurrentSession()
-                .getOrDefault(WebDriverOption.NO_JS.key, false) as Boolean
+                .getOrDefault(NO_JS.key, false) as Boolean
     };
 
     /**

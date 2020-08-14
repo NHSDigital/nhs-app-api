@@ -4,7 +4,6 @@ class OnlineConsultationConstants {
     companion object {
         /*** SERVICE DEFINITIONS ***/
         const val CONDITION_LIST = "CONDITION_LIST"
-        const val BREATHING_PROBLEMS = "BRP_BRP"
 
         /*** ElementIds ***/
         const val EMERGENCY_ACCEPTANCE_CHECKBOX = "checkbox-ADVICE_EMERGENCY_CONFIRM"

@@ -35,19 +35,19 @@ object MicrotestMyRecordData {
 
     fun getEmptyMicrotestMyRecord(): MyRecordResponseModel {
 
-        val allergies = Allergies("true", "false", 0, mutableListOf<Allergy>())
-        val medications = Medications("true", "false", 0, mutableListOf<Medication>())
-        val immunisations = Immunisations("true", "false", 0, mutableListOf<Immunisation>())
-        val problems = Problems("true", "false", 0, mutableListOf<Problem>())
+        val allergies = Allergies("true", "false", 0, mutableListOf())
+        val medications = Medications("true", "false", 0, mutableListOf())
+        val immunisations = Immunisations("true", "false", 0, mutableListOf())
+        val problems = Problems("true", "false", 0, mutableListOf())
 
-        val inrResults = InrResults(0, mutableListOf<InrResult>())
-        val pathResults = PathResults(0, mutableListOf<PathResult>())
+        val inrResults = InrResults(0, mutableListOf())
+        val pathResults = PathResults(0, mutableListOf())
         val testResultData = TestResultData(inrResults, pathResults)
         val testResults = TestResults("true", "false", 0, testResultData)
-        val medicalHistories = MedicalHistories("true", "false",0, mutableListOf<MedicalHistory>())
-        val recalls = Recalls("true", "false",0, mutableListOf<Recall>())
-        val encounters = Encounters("true", "false", 0, mutableListOf<Encounter>())
-        val referrals = Referrals("true", "false", 0, mutableListOf<Referral>())
+        val medicalHistories = MedicalHistories("true", "false",0, mutableListOf())
+        val recalls = Recalls("true", "false",0, mutableListOf())
+        val encounters = Encounters("true", "false", 0, mutableListOf())
+        val referrals = Referrals("true", "false", 0, mutableListOf())
 
         return MyRecordResponseModel(
                 allergies, medications, immunisations, problems, testResults, medicalHistories,
@@ -134,10 +134,10 @@ object MicrotestMyRecordData {
     }
 
     private fun buildMedications(medicationCount: Int) : Medications {
-        val statusList = listOf<String>(MicrotestMedicationStatus.Repeat,
+        val statusList = listOf(MicrotestMedicationStatus.Repeat,
                 MicrotestMedicationStatus.Repeat, MicrotestMedicationStatus.Acute)
 
-        val typeList = listOf<String>(MicrotestMedicationType.Current,
+        val typeList = listOf(MicrotestMedicationType.Current,
                 MicrotestMedicationType.History, MicrotestMedicationType.History)
 
         val medicationList = mutableListOf<Medication>()
@@ -258,7 +258,7 @@ object MicrotestMyRecordData {
             options: TestResultOptions, pathResults: List<PathResult>, inrResults: List<InrResult>) {
 
         if (options.includeFilteredOutPathStatuses) {
-            val statusList = mutableListOf<String>(
+            val statusList = mutableListOf(
                     MicrotestPathResultStatus.AwaitingResults,
                     "Valid Status",
                     MicrotestPathResultStatus.ResultsReceived)
@@ -269,10 +269,10 @@ object MicrotestMyRecordData {
         }
 
         if (options.interleavedPathAndInrDates) {
-            val inrDateList = mutableListOf<String>(
+            val inrDateList = mutableListOf(
                     "2019-05-03", "2019-02-03", "2019-03-03")
 
-            val pathDateList = mutableListOf<String>(
+            val pathDateList = mutableListOf(
                     "2019-04-03", "2019-01-03", "2019-03-06")
 
             for (i in 0..inrResults.size - 1) {

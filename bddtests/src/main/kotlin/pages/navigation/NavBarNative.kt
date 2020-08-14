@@ -108,11 +108,11 @@ open class NavBarNative : NativePageObject() {
         var highlightedCount = 0
         if (onMobile()) {
             val navBar = arrayListOf(
-                    NavBarNative.NavBarType.SYMPTOMS,
-                    NavBarNative.NavBarType.APPOINTMENTS,
-                    NavBarNative.NavBarType.PRESCRIPTIONS,
-                    NavBarNative.NavBarType.MORE,
-                    NavBarNative.NavBarType.MY_RECORD
+                    NavBarType.SYMPTOMS,
+                    NavBarType.APPOINTMENTS,
+                    NavBarType.PRESCRIPTIONS,
+                    NavBarType.MORE,
+                    NavBarType.MY_RECORD
             )
             for (eachElement in navBar) {
                 if (isHighlighted(eachElement))

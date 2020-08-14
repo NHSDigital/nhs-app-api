@@ -202,7 +202,7 @@ class LinkedProfilesStepDefinitions {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(
                     nhsAzureSearchOrganisationByOdsCodeRequestBody(
-                            odsCode = "${linkedAccount.odsCode}")
+                            odsCode = linkedAccount.odsCode)
             )
                     .respondWithSuccess(gpPractice)
         }

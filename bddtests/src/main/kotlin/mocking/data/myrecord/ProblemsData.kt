@@ -35,7 +35,7 @@ object ProblemsData {
                     observation = Observation(
                             effectiveDate = EffectiveDate("YearMonthDay", date.plusDays(i).toString()),
                             term="Conjunctivitis",
-                            associatedText = mutableListOf<AssociatedText> (
+                            associatedText = mutableListOf(
                                     AssociatedText (text = "Patient advice given"),
                                     AssociatedText (text = "Repeated use of eye drops")
                             )
@@ -85,7 +85,7 @@ object ProblemsData {
     }
 
     fun getEmisProblemRecordsWhereTheSecondRecordHasNoEffectiveDate(): ProblemResponseModel {
-        val problemResponseModel = getProblemsData();
+        val problemResponseModel = getProblemsData()
         problemResponseModel.medicalRecord.problems[1].observation.effectiveDate = null
         return problemResponseModel
     }

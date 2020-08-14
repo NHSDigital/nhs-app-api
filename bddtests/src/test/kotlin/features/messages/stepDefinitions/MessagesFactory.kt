@@ -80,7 +80,7 @@ class MessagesFactory {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
-        val links = table.toSingleElementList();
+        val links = table.toSingleElementList()
         val messages = links.mapIndexed{ index, link -> createReadMessage(senderOne,
                 "message ${prefixInternalLink(link)}", twoMonthsAgo.minusDays(index.toLong()))}
 
@@ -164,6 +164,6 @@ class MessagesFactory {
         if(link.startsWith("/")) {
           return "${Config.instance.url}$link"
         }
-        return link;
+        return link
     }
 }

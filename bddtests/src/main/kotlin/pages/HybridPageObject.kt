@@ -80,7 +80,7 @@ open class HybridPageObject : PageObject() {
 
         val driver = driver.getMobileDriver()
         if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
-            println("Already in ${WEB_CONTEXT} context: ${driver.context}")
+            println("Already in $WEB_CONTEXT context: ${driver.context}")
         } else {
             for (context in driver.contextHandles) {
                 if (context.contains(WEB_CONTEXT, true)) {

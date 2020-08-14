@@ -10,12 +10,6 @@ class CookieBanner : HybridPageObject() {
 
     private val cookieBannerXpath = "//div[@data-purpose='cookie-banner']"
 
-    val cookieWrapper = HybridPageElement(
-            webDesktopLocator = "//div[@id='cookieWrapper']",
-            page = this,
-            timeToWaitForElement = 1
-    )
-
     val cookieBannerText1 = HybridPageElement(
             webDesktopLocator = "$cookieBannerXpath/p",
             page = this,

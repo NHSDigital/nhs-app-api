@@ -27,13 +27,7 @@ data class NhsAzureSearchOrganisationItem(
         var Geocode: Geocode,
         var Metrics: String? = null,
         var Contacts: String? = null,
-        var URL: String? = null
-) {
-        fun addressFormatted(): String {
-            val addressElements = listOfNotNull(Address1, Address2, Address3, City, County, Postcode)
-            return addressElements.stream().filter{item->item.isNotEmpty()}.toArray().joinToString(", ")
-        }
-
+        var URL: String? = null) {
     fun primaryPhone(): String? {
         if (Contacts != null) {
             val contacts = Gson().fromJson(Contacts, Array<Contact>::class.java)

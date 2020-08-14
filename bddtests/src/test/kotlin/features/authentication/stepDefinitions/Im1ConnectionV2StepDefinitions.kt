@@ -58,7 +58,7 @@ class Im1ConnectionV2StepDefinitions {
 
     @When("^I register the user's IM1 credentials using the v2 endpoint$")
     fun iRegisterAUsersIMCredentialsUsingV2Endpoint() {
-        val request = Im1ConnectionSerenityHelpers.Im1ConnectionRequest.getOrFail<Im1ConnectionRequest>();
+        val request = Im1ConnectionSerenityHelpers.Im1ConnectionRequest.getOrFail<Im1ConnectionRequest>()
         val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .authentication
                 .postIm1ConnectionV2(request)

@@ -91,7 +91,7 @@ open class AvailableAppointmentsSteps {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         val unmatchedExpectedSlots = getExpectedResponseSlots()
 
-        Assert.assertEquals("Number of response slots", unmatchedExpectedSlots.count(), result.slots.count())
+        assertEquals("Number of response slots", unmatchedExpectedSlots.count(), result.slots.count())
 
         for (resultSlot in result.slots) {
             assertSlotIsNotNull(resultSlot)

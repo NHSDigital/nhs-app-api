@@ -35,7 +35,7 @@ data class Request(
         }
 
         fun compareByStatus(thisRequest: Request, otherRequest: Request ) : Int{
-                var result : Int
+                val result : Int
                 if (thisRequest.status?.statusValue == "Rejected" && otherRequest.status?.statusValue != "Rejected")  {
                         result = -1
                 } else if (thisRequest.status?.statusValue == "Requested" &&

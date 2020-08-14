@@ -7,7 +7,6 @@ import mockingFacade.appointments.metadata.LocationFacade
 import mockingFacade.appointments.metadata.SlotTypeFacade
 import mockingFacade.appointments.metadata.StaffDetailsFacade
 import models.AppointmentDate
-import java.time.DayOfWeek.MONDAY
 import java.time.LocalDateTime
 
 private const val DAY_AFTER_TOMORROW = 2L
@@ -39,7 +38,6 @@ const val SIXTEEN_WEEKS_IN_DAYS = DAYS_IN_WEEK * 16
 open class AppointmentsSlotsExample {
 
     protected val currentTime = LocalDateTime.now()!!
-    private var currentDateToAdd = currentTime
 
     private val tomorrowDate = LocalDateTime.now().plusDays(1)
     private val nextWeekDate = LocalDateTime.now().plusDays(DAYS_IN_WEEK)
@@ -317,16 +315,5 @@ open class AppointmentsSlotsExample {
         val aWeekToday = LocalDateTime.now().plusDays(DAYS_IN_WEEK)
         val date = AppointmentDate(aWeekToday, DEFAULT_TIME_HOUR, DEFAULT_TIME_MIN)
         return singleSlotExample(arrayListOf(date))
-    }
-
-    fun setWeek(currentArray: ArrayList<String> = arrayListOf()): ArrayList<String> {
-        val timeOfDay = FilterSlotDetails(currentDateToAdd)
-        currentArray.add(timeOfDay.dateAsUIString)
-        currentDateToAdd = currentDateToAdd.plusDays(1)
-        return if (currentDateToAdd.dayOfWeek != MONDAY) {
-            setWeek(currentArray)
-        } else {
-            currentArray
-        }
     }
 }

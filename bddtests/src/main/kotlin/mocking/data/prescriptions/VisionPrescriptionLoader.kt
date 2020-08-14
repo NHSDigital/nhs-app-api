@@ -47,7 +47,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
 
                 if (!isSecondIteration) {
 
-                    val myEnum = VisionPrescriptionLoader.getPrescriptionStatus()
+                    val myEnum = getPrescriptionStatus()
 
                     repeats.add(repeat)
                     prescriptions.add(
@@ -80,7 +80,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
 
     fun getPrescriptionStatus(): VisionPrescriptionStatus {
         val statusEnums = enumValues<VisionPrescriptionStatus>()
-        return statusEnums[(0..VisionPrescriptionLoader.MAX_RANDOM_NUMBER).random()]
+        return statusEnums[(0..MAX_RANDOM_NUMBER).random()]
     }
 
     fun IntRange.random() =

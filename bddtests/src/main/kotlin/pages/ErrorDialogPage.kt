@@ -18,7 +18,7 @@ class ErrorDialogPage : HybridPageObject() {
                 Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
             }
             else {
-                break;
+                break
             }
         }
         assertEquals("$title - NHS App", this.title)
@@ -55,7 +55,7 @@ class ErrorDialogPage : HybridPageObject() {
 
         val regex = ("${Regex.escape(paragraph.startText)} " +
                 "${paragraph.errorCodePrefix}\\w{4} " +
-                "${Regex.escape(paragraph.endText)}")
+                Regex.escape(paragraph.endText))
                 .toRegex()
 
         assertTrue("Expected '${message.text}' text to match '${regex.toPattern()}' pattern",
