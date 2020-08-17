@@ -64,7 +64,7 @@ export default {
       });
 
       const { location } = this.appointment;
-      const startTimeEpochInSeconds = moment(this.appointment.startTime, 'YYYY-M-D H:mm').valueOf() / 1000;
+      const startTimeEpochInSeconds = moment(this.appointment.startTime).valueOf() / 1000;
       const endTimeEpochInSeconds = startTimeEpochInSeconds;
 
       const calendarEvent = JSON.stringify({

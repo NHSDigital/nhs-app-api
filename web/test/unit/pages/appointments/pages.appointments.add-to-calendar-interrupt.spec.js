@@ -26,8 +26,8 @@ describe('add-to-calendar-interrupt.vue', () => {
         },
         myAppointments: {
           selectedAppointment: {
-            startTime: '2020-06-25T12:40:00+01:00',
-            endTime: '2020-06-25T12:50:00+01:00',
+            startTime: '2020-08-19T12:00:00-05:00',
+            endTime: '2020-08-19T12:30:00-05:00',
             location: 'EMISWebCR1 50002',
             clinicians: ['IAN, Clinic (Mr)'],
             type: 'General',
@@ -44,7 +44,7 @@ describe('add-to-calendar-interrupt.vue', () => {
       dateAndTime = wrapper.find('.nhsuk-caption-m');
 
       expect(dateAndTime.exists()).toBe(true);
-      expect(dateAndTime.text()).toContain('Thursday 25 June 2020 at 12:40pm');
+      expect(dateAndTime.text()).toContain('Wednesday 19 August 2020 at 6:00pm');
     });
   });
 
@@ -82,9 +82,11 @@ describe('add-to-calendar-interrupt.vue', () => {
     it('calls addEventToCalendar when clicked', () => {
       addToCalendarButton.trigger('click');
 
+      const expectedCalendarData = '{"subject":"General","body":"1234\\nIAN, Clinic (Mr)","location":"EMISWebCR1 50002","startTimeEpochInSeconds":1597856400,"endTimeEpochInSeconds":1597856400}';
+
       expect($store.dispatch).toHaveBeenCalledWith('availableAppointments/completeBookingJourney');
       expect($store.dispatch).toHaveBeenCalledWith('availableAppointments/deselect');
-      expect(NativeApp.addEventToCalendar).toHaveBeenCalled();
+      expect(NativeApp.addEventToCalendar).toHaveBeenCalledWith(expectedCalendarData);
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_PATH);
     });
   });
