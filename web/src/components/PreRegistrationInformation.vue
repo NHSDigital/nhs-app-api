@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import CollapsibleDetails from '@/components/CollapsibleDetails';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 
 export default {
   name: 'PreRegistrationInformation',
@@ -43,12 +43,6 @@ export default {
     @import "../style/home";
     @import "../style/spacings";
     @import "../style/webshared";
-
-    @include desktopAndBelow() {
-    }
-
-    @include fromDesktop() {
-    }
 
     a {
         display: inline-block;

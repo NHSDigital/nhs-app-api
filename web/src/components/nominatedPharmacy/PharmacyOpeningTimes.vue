@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
+import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialog';
 
 export default {
   name: 'PharmacyOpeningTimes',

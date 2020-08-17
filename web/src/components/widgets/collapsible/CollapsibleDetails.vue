@@ -12,9 +12,13 @@
 </template>
 
 <script>
+import Details from './details';
 
 export default {
   name: 'CollapsibleDetails',
+  mounted() {
+    Details();
+  },
 };
 </script>
 

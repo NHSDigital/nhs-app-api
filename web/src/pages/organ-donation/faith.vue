@@ -42,7 +42,7 @@
 
 <script>
 import BackButton from '@/components/BackButton';
-import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
+import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';

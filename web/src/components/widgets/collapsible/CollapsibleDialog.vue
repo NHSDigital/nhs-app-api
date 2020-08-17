@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import CollapsibleDetails from '@/components/CollapsibleDetails';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 
 export default {
   name: 'CollapsibleDialog',

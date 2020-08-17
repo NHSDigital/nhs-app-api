@@ -64,7 +64,7 @@
 
 <script>
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
+import CollapsibleDialog from '@/components/widgets/collapsible/CollapsibleDialog';
 import cloneDeep from 'lodash/fp/cloneDeep';
 
 export default {

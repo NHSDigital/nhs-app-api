@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import CollapsibleDetails from '@/components/CollapsibleDetails';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';

@@ -1,6 +1,7 @@
 <template>
+  <!--eslint-disable vue/html-self-closing -->
   <div v-if="isVisible" class="loading-spinner-background" tabindex="-1" focusable="false">
-    <div class="loading-spinner" tabindex="-1" focusable="false" />
+    <div class="loading-spinner" tabindex="-1" focusable="false"></div>
   </div>
 </template>
 
