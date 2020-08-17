@@ -27,6 +27,10 @@ namespace NHSOnline.Backend.Metrics
 
         public Task MessageRead() => LogMetric();
 
+        public Task NotificationsEnabled() => LogMetric();
+
+        public Task NotificationsDisabled() => LogMetric();
+
         private Task LogMetric([CallerMemberName] string action = "")
         {
             var metricLog = string.Join(" ", MetricData(action).Select(kvp => $"{kvp.Key}={kvp.Value}"));

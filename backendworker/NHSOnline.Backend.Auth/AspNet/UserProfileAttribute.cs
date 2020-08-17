@@ -2,7 +2,7 @@ using System;
 
 namespace NHSOnline.Backend.Auth.AspNet
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter)]
     public sealed class UserProfileAttribute: Attribute
     { }
 }

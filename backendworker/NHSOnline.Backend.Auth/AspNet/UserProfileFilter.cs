@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,17 +10,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auth.AspNet
 {
     public class UserProfileFilter : IAsyncActionFilter
     {
+        private static readonly Type UserProfileAttributeType = typeof(UserProfileAttribute);
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<UserProfileFilter>>();
 
-            foreach (var userProfileParameter in context.ActionDescriptor.Parameters
-                .OfType<ControllerParameterDescriptor>().Where(HasUserProfileAttribute))
+            var hasUserProfileMethodAttribute = ((ControllerActionDescriptor) context.ActionDescriptor)
+                .MethodInfo.HasAttribute<UserProfileAttribute>();
+
+            var userProfileParameters = context.ActionDescriptor.Parameters
+                .OfType<ControllerParameterDescriptor>().Where(HasUserProfileAttribute)
+                .ToList();
+
+            if (hasUserProfileMethodAttribute || userProfileParameters.Count > 0)
             {
                 var userProfileService = context.HttpContext.RequestServices.GetRequiredService<UserProfileService>();
                 var userProfileOption = await userProfileService.GetUserProfile();
@@ -34,15 +44,19 @@ namespace NHSOnline.Backend.Auth.AspNet
 
                 var userProfile = userProfileOption.ValueOrFailure();
                 userProfileService.SetUserProfile(userProfile);
-                if (!userProfileParameter.ParameterType.IsInstanceOfType(userProfile))
-                {
-                    logger.LogInformation(
-                        $"Action requires {userProfileParameter.ParameterType.Name} but user profile found was of type {userProfile.GetType().Name}");
-                    context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
-                    return;
-                }
 
-                context.ActionArguments[userProfileParameter.Name] = userProfile;
+                foreach (var userProfileParameter in userProfileParameters)
+                {
+                    if (!userProfileParameter.ParameterType.IsInstanceOfType(userProfile))
+                    {
+                        logger.LogInformation(
+                            $"Action requires {userProfileParameter.ParameterType.Name} but user profile found was of type {userProfile.GetType().Name}");
+                        context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                        return;
+                    }
+
+                    context.ActionArguments[userProfileParameter.Name] = userProfile;
+                }
             }
 
             await next();
@@ -52,6 +66,6 @@ namespace NHSOnline.Backend.Auth.AspNet
             => descriptor.ParameterInfo.CustomAttributes.Any(HasUserProfileAttribute);
 
         private static bool HasUserProfileAttribute(CustomAttributeData attribute)
-            => attribute.AttributeType == typeof(UserProfileAttribute);
+            => attribute.AttributeType == UserProfileAttributeType;
     }
 }

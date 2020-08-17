@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -90,12 +89,10 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         }
 
         [HttpPatch]
+        [UserProfile]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/messages/{messageId}")]
-        [SuppressMessage("Microsoft.Design", "CA1801", Justification = "Metric logger requires the user profile")]
-        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument,
-            string messageId,
-            [UserProfile] UserProfile userProfile)
+        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument, string messageId)
         {
             try
             {

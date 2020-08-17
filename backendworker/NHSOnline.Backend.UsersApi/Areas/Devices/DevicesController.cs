@@ -1,9 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
+using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
@@ -14,13 +17,21 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     [Route("api/users/devices")]
     public class DevicesController : Controller
     {
+        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IRegistrationService _registrationService;
         private readonly ILogger<DevicesController> _logger;
+        private readonly IMetricLogger _metricLogger;
 
-        public DevicesController(IRegistrationService registrationService, ILogger<DevicesController> logger)
+        public DevicesController(
+            IRegistrationService registrationService,
+            ILogger<DevicesController> logger,
+            IMetricLogger metricLogger,
+            IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
             _registrationService = registrationService;
+            _metricLogger = metricLogger;
+            _accessTokenProvider = accessTokenProvider;
         }
 
         [HttpGet]
@@ -35,7 +46,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                     return BadRequest();
                 }
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
+                var accessToken = _accessTokenProvider.AccessToken;
 
                 try
                 {
@@ -55,6 +66,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         }
 
         [HttpDelete]
+        [UserProfile]
         public async Task<IActionResult> Delete([FromQuery] string devicePns)
         {
             try
@@ -66,12 +78,12 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                     return BadRequest();
                 }
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
+                var accessToken = _accessTokenProvider.AccessToken;
 
                 try
                 {
                     var result = await _registrationService.DeleteRegistration(devicePns, accessToken);
-                    return result.Accept(new DeleteRegistrationResultVisitor());
+                    return await result.Accept(new DeleteRegistrationResultVisitor(_metricLogger));
                 }
                 catch (Exception e)
                 {
@@ -86,6 +98,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         }
 
         [HttpPost]
+        [UserProfile]
         public async Task<IActionResult> Post([FromBody] RegisterDeviceRequest model)
         {
             try
@@ -97,12 +110,12 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                     return BadRequest();
                 }
 
-                var accessToken = HttpContext.GetAccessToken(_logger);
+                var accessToken = _accessTokenProvider.AccessToken;
 
                 try
                 {
                     var registrationResult = await _registrationService.CreateRegistration(model, accessToken);
-                    return registrationResult.Accept(new RegisterDeviceResultVisitor(model));
+                    return await registrationResult.Accept(new RegisterDeviceResultVisitor(model, _metricLogger));
                 }
                 catch (Exception e)
                 {

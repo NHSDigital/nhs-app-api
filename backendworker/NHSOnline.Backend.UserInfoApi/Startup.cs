@@ -65,12 +65,12 @@ namespace NHSOnline.Backend.UserInfoApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var configurationSettings = CreateAndValidateEnvironmentVariables();
+            var configurationSettings = CreateHttpTimeoutConfiguration();
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
         }
 
-        private HttpTimeoutConfigurationSettings CreateAndValidateEnvironmentVariables()
+        private HttpTimeoutConfigurationSettings CreateHttpTimeoutConfiguration()
         {
             var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
@@ -155,15 +155,5 @@ namespace NHSOnline.Backend.UserInfoApi
                 {
                 });
         }
-    }
-
-    internal class HttpTimeoutConfigurationSettings : IHttpTimeoutConfigurationSettings
-    {
-        public HttpTimeoutConfigurationSettings(int defaultHttpTimeoutSeconds)
-        {
-            DefaultHttpTimeoutSeconds = defaultHttpTimeoutSeconds;
-        }
-
-        public int DefaultHttpTimeoutSeconds { get; set; }
     }
 }

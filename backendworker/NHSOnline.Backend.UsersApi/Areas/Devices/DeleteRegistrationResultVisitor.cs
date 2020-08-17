@@ -1,29 +1,39 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.UsersApi.Notifications;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    public class DeleteRegistrationResultVisitor : IDeleteRegistrationResultVisitor<IActionResult>
+    public class DeleteRegistrationResultVisitor : IDeleteRegistrationResultVisitor<Task<IActionResult>>
     {
-        public IActionResult Visit(DeleteRegistrationResult.Success result)
+        private readonly IMetricLogger _metricLogger;
+
+        public DeleteRegistrationResultVisitor(IMetricLogger metricLogger)
         {
+            _metricLogger = metricLogger;
+        }
+
+        public async Task<IActionResult> Visit(DeleteRegistrationResult.Success result)
+        {
+            await _metricLogger.NotificationsDisabled();
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
-        public IActionResult Visit(DeleteRegistrationResult.NotFound result)
+        public async Task<IActionResult> Visit(DeleteRegistrationResult.NotFound result)
         {
-            return new StatusCodeResult(StatusCodes.Status404NotFound);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status404NotFound));
         }
 
-        public IActionResult Visit(DeleteRegistrationResult.BadGateway result)
+        public async Task<IActionResult> Visit(DeleteRegistrationResult.BadGateway result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
 
-        public IActionResult Visit(DeleteRegistrationResult.InternalServerError result)
+        public async Task<IActionResult> Visit(DeleteRegistrationResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
     }
 }

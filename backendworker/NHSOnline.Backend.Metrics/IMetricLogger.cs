@@ -15,5 +15,9 @@ namespace NHSOnline.Backend.Metrics
         Task TermsAndConditionsInitialConsent();
 
         Task MessageRead();
+
+        Task NotificationsEnabled();
+
+        Task NotificationsDisabled();
     }
 }

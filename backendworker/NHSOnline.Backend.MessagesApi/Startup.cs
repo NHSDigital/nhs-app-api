@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -65,12 +64,12 @@ namespace NHSOnline.Backend.MessagesApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var configurationSettings = CreateAndValidateEnvironmentVariables();
+            var configurationSettings = CreateHttpTimeoutConfiguration();
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
         }
 
-        private HttpTimeoutConfigurationSettings CreateAndValidateEnvironmentVariables()
+        private HttpTimeoutConfigurationSettings CreateHttpTimeoutConfiguration()
         {
             var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
@@ -152,15 +151,5 @@ namespace NHSOnline.Backend.MessagesApi
                 {
                 });
         }
-    }
-
-    internal class HttpTimeoutConfigurationSettings : IHttpTimeoutConfigurationSettings
-    {
-        public HttpTimeoutConfigurationSettings(int defaultHttpTimeoutSeconds)
-        {
-            DefaultHttpTimeoutSeconds = defaultHttpTimeoutSeconds;
-        }
-
-        public int DefaultHttpTimeoutSeconds { get; set; }
     }
 }

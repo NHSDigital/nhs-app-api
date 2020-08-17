@@ -95,10 +95,10 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
         private void SetupAllConfiguration()
         {
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns("https://authority.which.must.be.https.com/");
-           _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns("Valid Value");
-           _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns("Valid Value");
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns("https://authority.which.must.be.https.com/");
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns("Valid Value");
+            _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
         }
     }
 }

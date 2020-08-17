@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.UsersApi.Areas.Devices;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -21,24 +23,29 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
     {
         private DevicesController _systemUnderTest;
         private Mock<IRegistrationService> _mockRegistrationService;
+        private Mock<IMetricLogger> _mockMetricLogger;
+        private Mock<ILogger<DevicesController>> _mockLogger;
         private const string DevicePns = "PNS";
-        private readonly DeviceType _deviceType = DeviceType.Android;
+        private const DeviceType DeviceType = UsersApi.Areas.Devices.Models.DeviceType.Android;
         private const string DeviceId = "DeviceId";
+        private const string NhsNumber = "NhsNumber";
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _mockLogger = new Mock<ILogger<DevicesController>>();
+            _mockMetricLogger = new Mock<IMetricLogger>();
             _mockRegistrationService = new Mock<IRegistrationService>();
 
+            var mockAccessTokenProvider = new Mock<IAccessTokenProvider>();
+            mockAccessTokenProvider.SetupGet(x => x.AccessToken)
+                .Returns(AccessTokenMock.Generate(nhsNumber: NhsNumber));
+
             _systemUnderTest = new DevicesController(
-                    _mockRegistrationService.Object,
-                    new Mock<ILogger<DevicesController>>().Object)
-            {
-                ControllerContext = new ControllerContext
-                {
-                    HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext().Object
-                }
-            };
+                _mockRegistrationService.Object,
+                _mockLogger.Object,
+                _mockMetricLogger.Object,
+                mockAccessTokenProvider.Object);
         }
 
         [TestMethod]
@@ -155,6 +162,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
+            _mockMetricLogger.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -170,6 +178,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.Verify(x => x.NotificationsDisabled());
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status204NoContent);
@@ -188,6 +197,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
@@ -206,6 +216,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
@@ -224,6 +235,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -242,6 +254,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -254,6 +267,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(null);
 
             // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
@@ -265,7 +279,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var expectedResult = new Device
             {
                 DeviceId = DeviceId,
-                DeviceType = _deviceType
+                DeviceType = DeviceType
             };
 
             _mockRegistrationService
@@ -277,6 +291,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.Verify(x => x.NotificationsEnabled());
 
             var subject = result.Should().BeOfType<ObjectResult>().Subject;
             subject.StatusCode.Should().Be(StatusCodes.Status201Created);
@@ -298,6 +313,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
@@ -318,6 +334,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -338,6 +355,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
 
             // Assert
             _mockRegistrationService.VerifyAll();
+            _mockMetricLogger.VerifyNoOtherCalls();
 
             result.Should().BeOfType<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -360,6 +378,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(registerRequest);
 
             // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
@@ -377,6 +396,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             var result = await _systemUnderTest.Post(registerRequest);
 
             // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
             result.Should().BeAssignableTo<BadRequestResult>();
         }
 
@@ -384,7 +404,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             => new RegisterDeviceRequest
             {
                 DevicePns = DevicePns,
-                DeviceType = _deviceType
+                DeviceType = DeviceType
             };
 
         public void Dispose()

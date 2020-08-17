@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -18,6 +19,7 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Middleware;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UsersApi
 {
@@ -70,8 +72,11 @@ namespace NHSOnline.Backend.UsersApi
 
         private void SetupConfigurationSettings(IServiceCollection services)
         {
-            var config = CreateAzureNotificationConfiguration();
-            services.AddSingleton(config);
+            var azureNotificationConfiguration = CreateAzureNotificationConfiguration();
+            services.AddSingleton(azureNotificationConfiguration);
+
+            var httpTimeoutConfig = CreateHttpTimeoutConfiguration();
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(httpTimeoutConfig);
         }
 
         private AzureNotificationConfiguration CreateAzureNotificationConfiguration()
@@ -82,10 +87,18 @@ namespace NHSOnline.Backend.UsersApi
             return new AzureNotificationConfiguration(azureConnectionString, notificationHubPath, sharedAccessKey);
         }
 
+        private HttpTimeoutConfigurationSettings CreateHttpTimeoutConfiguration()
+        {
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var config = new HttpTimeoutConfigurationSettings(defaultHttpTimeoutSeconds);
+            return config;
+        }
+
         private static void ConfigureMvcOptions(MvcOptions options)
         {
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.Filters.Add<UserProfileFilter>();
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );

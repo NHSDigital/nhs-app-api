@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 using NHSOnline.Backend.UsersApi.Notifications;
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 _logger.LogEnter();
                 var result = await _migrationService.Delete(registrationId);
 
-                return result.Accept(new DeleteRegistrationResultVisitor());
+                return await result.Accept(new DeleteRegistrationResultVisitor(new NullMetricLogger()));
             }
             finally
             {
@@ -186,6 +186,49 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             public int FailedDeleteCount { get; set; }
             public int DeletedOrphanCount { get; set; }
             public int FailedDeleteOrphanCount { get; set; }
+        }
+
+        private class NullMetricLogger : IMetricLogger
+        {
+            public Task Login()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task UpliftStarted()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task UserResearchOptOut()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task UserResearchOptIn()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task TermsAndConditionsInitialConsent()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task MessageRead()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task NotificationsEnabled()
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task NotificationsDisabled()
+            {
+                return Task.CompletedTask;
+            }
         }
     }
 }

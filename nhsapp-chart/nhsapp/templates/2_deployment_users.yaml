@@ -47,6 +47,9 @@ spec:
       - name: sidecar-proxy-config
         configMap:
           name: users-sidecar-proxy-config-{{ .Chart.AppVersion }}
+      - name: nhslogin-key
+        secret:
+          secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
       containers:
       - name: users
         image: {{ $.Values.registry }}/{{ $.Values.users.image }}:{{ $.Values.users.image_tag }}
@@ -119,7 +122,17 @@ spec:
             secretKeyRef:
               name: nhsapp-api-key-{{ .Chart.AppVersion }}
               key: apikey
+        - name: NHSLOGIN_KEY_PATH
+          value: "/secrets/nhslogin-key/nhslogin.pem"
+        - name: NHSLOGIN_KEY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
+              key: password
         volumeMounts:
+        - name: nhslogin-key
+          mountPath: "/secrets/nhslogin-key"
+          readOnly: true
         - name: session-key
           mountPath: "/secrets/session-key"
           readOnly: true

@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         private AddMessageRequest _validAddMessageRequest;
         private Mock<IMetricLogger> _mockMetricLogger;
         private const string NhsNumber = "NhsNumber";
-        private const string OdsCode = "OdsCode";
         private const string MessageId = "MessageId";
         private const string NhsLoginId = "Nhs login id";
 
@@ -338,13 +337,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_Success()
         {
             // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.Updated());
 
             // Act
-            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id", userProfile);
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -357,13 +355,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_MessageServiceReturnsNotFound_ReturnsNotFound()
         {
             // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id", userProfile);
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -377,13 +374,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_MessageServiceReturnsBadGatewayResult_ReturnsBadGateway()
         {
             // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id", userProfile);
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -397,13 +393,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_MessageServiceReturnsInternalServerErrorResult_ReturnsInternalServerError()
         {
             // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id", userProfile);
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -417,13 +412,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Patch_MessageServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
             _mockMessageService.Setup(x =>
                     x.UpdateMessage(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id", userProfile);
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -436,15 +430,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         [TestMethod]
         public async Task Patch_PatchRequestIsInvalid_ReturnsBadRequest()
         {
-            // Arrange
-            var userProfile = MockUserProfileSetup(OdsCode, NhsNumber);
-
             // Act
             _mockMessageService.Setup(x => x.UpdateMessage(
                     It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadRequest());
 
-            var result = await _systemUnderTest.Patch(null, "message id", userProfile);
+            var result = await _systemUnderTest.Patch(null, "message id");
 
             // Assert
             _mockMetricLogger.VerifyNoOtherCalls();
@@ -455,16 +446,5 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
         [TestCleanup]
         public void Dispose() => _systemUnderTest?.Dispose();
-
-
-        private UserProfile MockUserProfileSetup(string odsCode, string nhsNumber)
-        {
-            var userInfo = new UserInfo
-            {
-                GpIntegrationCredentials = { OdsCode = odsCode },
-                NhsNumber = nhsNumber,
-            };
-            return new UserProfile(userInfo, "Access token", "Refresh Token");
-        }
     }
 }
