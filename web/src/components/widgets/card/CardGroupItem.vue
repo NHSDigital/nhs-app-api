@@ -36,4 +36,15 @@ export default {
       }
     }
   }
+
+  /**
+  The below styling is used for ie11 specifically. Can be removed once we don't support ie11.
+   */
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .nhsuk-card-group__item {
+      @include govuk-media-query($until: desktop) {
+        flex: 1 0 80%;
+      }
+    }
+  }
 </style>

@@ -26,7 +26,7 @@ export default {
   @import '~nhsuk-frontend/packages/core/tools/spacing';
   @import '~nhsuk-frontend/packages/core/settings/spacing';
   @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-
+  @import '~nhsuk-frontend/packages/core/settings/globals';
   /* ==========================================================================
    COMPONENTS / #card
    ========================================================================== */
@@ -57,4 +57,16 @@ export default {
     box-sizing: border-box;
   }
 
+  /**
+  The below styling is used for ie11 specifically. Can be removed once we don't support ie11.
+   */
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .nhsuk-card {
+      flex-basis: 85%;
+      @include govuk-media-query($until: desktop) {
+        flex: 0 0 80%;
+        padding-right: 0;
+      }
+    }
+  }
 </style>
