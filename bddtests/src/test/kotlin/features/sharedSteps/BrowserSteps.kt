@@ -5,12 +5,15 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageObject
 import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
 import utils.set
+import webdrivers.isAndroid
+import webdrivers.isIOS
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -146,14 +149,14 @@ open class BrowserSteps {
 
     @Step
     fun storeCurrentTabCount() {
-        Serenity.setSessionVariable(TAB_COUNT_VARIABLE).to(loginPage.driver.windowHandles.count())
+        Serenity.setSessionVariable(TAB_COUNT_VARIABLE).to(getWindowHandleCount(loginPage.driver))
     }
 
     @Step
     fun assertNewTab() {
-        val handles = loginPage.driver.windowHandles
+        val windowCount = getWindowHandleCount(loginPage.driver)
         Assert.assertTrue("Expected a new tab to be opened",
-                handles.count()==Serenity.sessionVariableCalled<Int>(TAB_COUNT_VARIABLE) + 1)
+                windowCount == Serenity.sessionVariableCalled<Int>(TAB_COUNT_VARIABLE) + 1)
     }
 
     @Step
@@ -174,5 +177,11 @@ open class BrowserSteps {
     @Step
     fun closeApp() {
         loginPage.driver.close()
+    }
+
+    private fun getWindowHandleCount(currentDriver: WebDriver): Int {
+        return if (!currentDriver.isIOS() && !currentDriver.isAndroid()) {
+            currentDriver.windowHandles.count()
+        } else 0
     }
 }
