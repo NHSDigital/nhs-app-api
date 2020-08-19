@@ -18,6 +18,11 @@
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider
                                          .pkb.testResults" />
+          <third-party-jump-off-button v-if="showPkbCieTestResults && !isProxying"
+                                       id="btn_pkb_cie_test_results"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.testResultsCie" />
           <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying"
                                        id="btn_pkb_care_plans"
                                        provider-id="pkb"
@@ -73,6 +78,14 @@ export default {
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
+          serviceType: 'testResults',
+        },
+      }),
+      showPkbCieTestResults: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
           serviceType: 'testResults',
         },
       }),

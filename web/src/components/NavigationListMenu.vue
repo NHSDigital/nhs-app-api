@@ -131,6 +131,7 @@ export default {
   computed: {
     isAny3rdPartyHealthServiceEnabled() {
       return (this.is3rdPartyHealthServiceEnabled('pkb', 'testResults') ||
+        this.is3rdPartyHealthServiceEnabled('pkbCie', 'testResults') ||
         this.is3rdPartyHealthServiceEnabled('pkb', 'healthTrackers') ||
         this.is3rdPartyHealthServiceEnabled('pkb', 'carePlans') ||
         this.is3rdPartyHealthServiceEnabled('pkbCie', 'healthTrackers') ||

@@ -43,6 +43,16 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
     }
 
+    @Given("^I am a user who can view test results from Care Information Exchange$")
+    fun iAmAUserWhoCanViewTestResultsFromCareInformationExchange() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_CIE)
+    }
+
+    @Given("^I am a user who cannot view test results from Care Information Exchange$")
+    fun iAmAUserWhoCannotViewTestResultsFromCareInformationExchange() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_NONE)
+    }
+
     @Given("^I am a user who can view care plans from Care Information Exchange$")
     fun iAmAUserWhoCanViewCarePlansFromCareInformationExchange() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE)
@@ -92,6 +102,11 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("^the link to CIE Track your health is not available on the health record hub page$")
     fun theLinkToCieHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("^the link to CIE test results is not available on the health record hub page$")
+    fun theLinkToCieTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()
     }
 
     @Then("^the link to CIE Care plans is not available on the health record hub page$")

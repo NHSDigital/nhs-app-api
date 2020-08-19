@@ -96,6 +96,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
                 .add(Supplier.EMIS, "B86013",
                         EnumSet.of(
+                                SJRJourneyType.SILVER_INTEGRATION_TEST_RESULTS_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_CIE,
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_CIE,

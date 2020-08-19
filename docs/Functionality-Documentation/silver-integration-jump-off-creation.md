@@ -55,7 +55,7 @@ If an entirely new third-party provider is being introduced, add a new entry to 
 
 ### Web Changes
 
-Changes to the web project to add a new silver integration jump-off point should be limited to editing the following four files:
+Changes to the web project to add a new silver integration jump-off point should be limited to editing the following five files:
 
 * **web / src / lib / third-party-providers / jump-off-configuration.js** - edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump-off for a particular provider. Note that in the redirectPath field, any querystring parameters should be url encoded.
 If adding a new child brand for the same primary provider (e.g Care Information Exchange as a child brand of Patients Know Best), add these as new jump-offs within the same parent thirdPartyProvider, disambiguated with suffixes - e.g. appointmentsCie for the CIE-branded version of PKB appointments.
@@ -70,6 +70,8 @@ If adding a new child brand for the same primary provider (e.g Care Information 
     * Add an instance of the vue component ThirdPartyJumpOffButton, specifying the `provider-configuration` by referencing the relevant object from jump-off-configuration.js.
     * Use the sjrIf library to add a computed property to determine whether the jump-off component should be shown. It may be necessary to combine this with additional checks, e.g. that the user is not proxying, or has a p9 proof level.
 * **The unit test fixture for the above page.**
+* **The NavigationListMenu**
+    * If you've added a new jump-off to the medical record hub, a new check will need added to `isAny3rdPartyHealthServiceEnabled`, as this link bypasses the hub if no silver integrations accessed via the hub are enabled.
 
 ### Integration Tests
 

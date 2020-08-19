@@ -23,3 +23,5 @@ journeys:
       - pkbCie
     secondaryAppointments:
       - pkbCie
+    testResults:
+      - pkbCie
