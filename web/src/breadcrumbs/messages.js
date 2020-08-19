@@ -17,12 +17,10 @@ const GP_MESSAGES_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, MESSAGES_CRUMB],
   i18nKey: 'gpMessages',
   name: GP_MESSAGES_NAME,
-  nativeDisabled: true,
 };
 
 const GP_MESSAGES_URGENCY_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, MESSAGES_CRUMB, GP_MESSAGES_CRUMB],
-  nativeDisabled: true,
 };
 
 const GP_MESSAGES_URGENCY_CONTACT_YOUR_GP_CRUMB = {
