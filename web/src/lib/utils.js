@@ -9,6 +9,7 @@ import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
+export const GP_SESSION_ERROR_STATUS = 599;
 
 const customMimeTypes = new Mime({
   'image/bmp': ['dib'],
@@ -41,6 +42,16 @@ export const isTruthy = value => !isFalsy(value);
 export const isBlankString = value => typeof value !== 'string' || value.trim() === '';
 
 export const isNumber = value => typeof value === 'number';
+
+/*
+   session storage is used to avoid the issue of the retry
+   flag being reset after a store rebuild which occurs when navigating
+   to external links on the native apps
+*/
+export const gpSessionErrorHasRetried = store =>
+  ((store.state.device.isNativeApp) ?
+    sessionStorage.getItem('hasRetried') || store.state.session.hasRetried :
+    store.state.session.hasRetried);
 
 const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
   let localeValue;

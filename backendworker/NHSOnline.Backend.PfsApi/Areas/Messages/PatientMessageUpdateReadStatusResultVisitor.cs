@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {
     public class PatientMessageUpdateReadStatusResultVisitor : ResultVisitorBase, IPatientMessageUpdateReadStatusResultVisitor<IActionResult>
     {
-        public PatientMessageUpdateReadStatusResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession)
-            : base(errorReferenceGenerator, userSession){}
+        public PatientMessageUpdateReadStatusResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, Supplier supplier)
+            : base(errorReferenceGenerator, supplier){}
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.PatientPracticeMessages;
 

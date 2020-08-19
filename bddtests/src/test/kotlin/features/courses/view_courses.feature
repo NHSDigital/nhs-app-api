@@ -355,3 +355,71 @@ Feature: View Courses Frontend
     And I select 1 repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
+
+  Scenario Outline: An <GP System> user recovers the GP session before an error when ordering a prescription
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I navigate to prescriptions
+    And The <GP System> GP system becomes available
+    And I have no booked appointments for <GP System>
+    And I have historic prescriptions
+    And I have 1 assigned prescriptions which have only quantity info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    And I click the Order a repeat prescription button
+    Then I see the available repeatable prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: An <GP System> user without a GP session is able to recover their session on try again
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And The <GP System> GP system is still unavailable
+    And I click the Order a repeat prescription button
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+    And The <GP System> GP system becomes available
+    And I have historic prescriptions
+    And I have 1 assigned prescriptions which have only quantity info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    When I click the 'Try again' button
+    Then I see the available repeatable prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: A <GP System> user GP session eventually becomes available when ordering a prescription
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And The <GP System> GP system is still unavailable
+    And I click the Order a repeat prescription button
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+    When I click the 'Try again' button
+    Then I see what I can do next with a prescriptions error message and reference code '3p'
+    And I click the session error back link
+    And I click the Order a repeat prescription button
+    And I see what I can do next with a prescriptions error message and reference code '3p'
+    And I click the session error back link
+    And the Prescriptions Hub page is displayed
+    And The <GP System> GP system becomes available
+    And I have historic prescriptions
+    And I have 1 assigned prescriptions which have only quantity info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    When I click 'Order a new repeat prescription'
+    Then I see the available repeatable prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |

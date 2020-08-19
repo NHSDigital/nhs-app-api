@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.GetMessageDetails(messageId, gpUserSession);
 
             await result.Accept(new PatientMessageResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PatientMessageResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientMessageResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
 
         [HttpPut]
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.UpdateMessageMessageReadStatus(gpUserSession, updateMessageReadStatusRequest);
 
             await result.Accept(new PatientMessageUpdateReadStatusAuditingVisitor(_auditor, _logger, updateMessageReadStatusRequest));
-            return result.Accept(new PatientMessageUpdateReadStatusResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientMessageUpdateReadStatusResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
 
         [HttpGet]
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.GetMessageRecipients(gpUserSession);
 
             await result.Accept(new PatientMessageRecipientsResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PatientMessageRecipientsResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientMessageRecipientsResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
 
         [HttpPost]
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.SendMessage(gpUserSession, message);
 
             await result.Accept(new PatientSendMessageResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PatientSendMessageResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientSendMessageResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
 
         [HttpDelete]
@@ -203,7 +203,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.DeleteMessage(gpUserSession, messageId);
 
             await result.Accept(new PatientMessageDeleteResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PatientMessageDeleteResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientMessageDeleteResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
     }
 }

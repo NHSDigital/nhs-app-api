@@ -39,6 +39,12 @@ open class GpSessionError: HybridPageObject() {
         ).click()
     }
 
+    fun assertMenuListHeader(headerText: String) : GpSessionError{
+        val menuListHeader = getElement("//h2[contains(text(),'$headerText')]")
+        menuListHeader.assertIsVisible()
+        return this
+    }
+
    fun setupElement(headerText: String): HybridPageElement{
         return HybridPageElement(
                 webDesktopLocator = "//h2[contains(text(),'$headerText')]",

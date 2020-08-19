@@ -12,12 +12,11 @@ import {
   PRESCRIPTIONS_JOURNEY_START,
   initialState,
 } from './mutation-types';
+import { ADD_ERROR } from '../prescriptions/mutation-types';
 
 
 export default {
-  /* eslint-disable no-shadow */
   /* eslint-disable no-param-reassign */
-  /* eslint-disable no-unused-vars */
   [REPEAT_PRESCRIPTION_COURSES_LOADED](state, data) {
     const courses = assign({}, data);
     mapKeys((key) => {
@@ -29,6 +28,7 @@ export default {
       return result;
     })(state.courses);
     state.hasLoaded = true;
+    state.error = undefined;
   },
   [INIT_REPEAT_PRESCRIPTIONS](state) {
     const defaultValues = initialState();
@@ -60,6 +60,9 @@ export default {
   },
   [PRESCRIPTIONS_JOURNEY_START](state) {
     state.orderInProgress = true;
+  },
+  [ADD_ERROR](state, error) {
+    state.error = error;
   },
 };
 

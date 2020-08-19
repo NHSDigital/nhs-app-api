@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate && !prescriptionsApiError">
     <sjr-if journey="nominatedPharmacy">
       <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
         <div v-if="nominatedPharmacyName" id="nominated-pharmacy">
@@ -46,9 +46,23 @@
     </div>
     <desktop-generic-back-link v-if="hasLoaded && !$store.state.device.isNativeApp"
                                id="desktopBackLink"
-                               :path="backPath"
+                               :path="backUrl"
                                class="nhsuk-u-margin-top-3"
                                @clickAndPrevent="backLinkClicked"/>
+  </div>
+  <div v-else-if="prescriptionsApiError && hasLoaded">
+    <prescriptions-gp-session-error v-if="hasRetried"
+                                    id="presciptionsGpSessionError"
+                                    :code="referenceCode"/>
+    <error-container v-else id="error-dialog-599">
+      <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
+      <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
+      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
+      <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
+      <error-link from="generic.backButton.text"
+                  :action="backUrl"
+                  :desktop-only="true"/>
+    </error-container>
   </div>
 </template>
 
@@ -57,16 +71,25 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
+import ErrorButton from '@/components/errors/ErrorButton';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorLink from '@/components/errors/ErrorLink';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
 import SjrIf from '@/components/SjrIf';
 import isEmpty from 'lodash/fp/isEmpty';
 import orderBy from 'lodash/fp/orderBy';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_INTERRUPT_PATH,
   PRESCRIPTIONS_PATH,
+  PRESCRIPTIONS_VIEW_ORDERS_PATH,
 } from '@/router/paths';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import sjrIf from '@/lib/sjrIf';
+import showShutterPage from '@/lib/proxy/shutter';
+import PrescriptionsGpSessionError from '@/components/errors/gp-session-errors/PrescriptionsGpSessionError';
 
 const loadData = async (store) => {
   store.dispatch('prescriptions/clear');
@@ -80,6 +103,13 @@ const loadData = async (store) => {
       await store.dispatch('nominatedPharmacy/load');
     }
   }
+
+  const { error } = store.state.prescriptions;
+
+  if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried(store)) {
+    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.header');
+    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.header');
+  }
 };
 
 export default {
@@ -89,10 +119,16 @@ export default {
     HistoricPrescription,
     SjrIf,
     DesktopGenericBackLink,
+    PrescriptionsGpSessionError,
+    ErrorButton,
+    ErrorContainer,
+    ErrorLink,
+    ErrorParagraph,
+    ErrorTitle,
   },
   data() {
     return {
-      backPath: PRESCRIPTIONS_PATH,
+      backUrl: PRESCRIPTIONS_PATH,
       statusDisplayPriority: {
         [MedicationCourseStatus.Requested]: 3,
         [MedicationCourseStatus.Approved]: 2,
@@ -101,6 +137,15 @@ export default {
     };
   },
   computed: {
+    prescriptionsApiError() {
+      return this.$store.state.prescriptions.error;
+    },
+    referenceCode() {
+      return this.$store.state.prescriptions.error.serviceDeskReference;
+    },
+    hasApiError() {
+      return this.$store.getters['errors/showApiError'];
+    },
     showNoPrescriptions() {
       const {
         hasLoaded,
@@ -125,6 +170,9 @@ export default {
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
     },
+    hasRetried() {
+      return gpSessionErrorHasRetried(this.$store);
+    },
     showNominatedPharmacy() {
       return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
     },
@@ -134,16 +182,25 @@ export default {
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
-      loadData(this.$store);
+      loadData(this.$store, this.$t);
     },
     hasLoaded() {
       if (this.hasLoaded) {
         this.$store.dispatch('flashMessage/show');
       }
     },
+    hasApiError(value) {
+      if (value) {
+        showShutterPage(this.$router.currentRoute, this);
+      }
+    },
   },
-  async mounted() {
-    await loadData(this.$store);
+  async created() {
+    if (this.$route.query.hr) {
+      this.$store.dispatch('session/setRetry', true);
+    }
+
+    await loadData(this.$store, this.$t);
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
@@ -167,7 +224,14 @@ export default {
       return `${header}. ${body}`;
     },
     backLinkClicked() {
-      redirectTo(this, this.backPath);
+      redirectTo(this, this.backUrl);
+    },
+    tryAgain() {
+      if (this.$store.state.device.isNativeApp) {
+        sessionStorage.setItem('hasRetried', true);
+      }
+      this.$store.dispatch('session/setRetry', true);
+      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS_PATH, { hr: true }, true);
     },
   },
 };

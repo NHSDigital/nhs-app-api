@@ -1,5 +1,7 @@
 <template>
-  <gp-session-error v-if="true" :code="code" area="appointments" :back-url="backUrl">
+  <gp-session-error :code="code"
+                    area="appointments"
+                    :back-url="backUrl">
     <template v-slot:content>
       <p>{{ $t('gpSessionErrors.appointments.youCannotBookOnline') }}</p>
       <p>{{ $t('gpSessionErrors.appointments.ifTheProblemContinues') }}
@@ -103,10 +105,6 @@ export default {
     isCdssAdvice() {
       return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
     },
-  },
-  created() {
-    this.$store.dispatch('header/updateHeaderText',
-      this.$t('gpSessionErrors.appointments.header'));
   },
   methods: {
     ariaLabelCaption(header, body) {

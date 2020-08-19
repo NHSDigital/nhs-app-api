@@ -2,8 +2,10 @@
 /* eslint-disable import/first */
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { createLocalVue, mount } from '@vue/test-utils';
+import { createLocalVue } from '@vue/test-utils';
 import ViewOrders from '@/pages/prescriptions/view-orders';
+import { PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
+import { create$T, shallowMount } from '../../helpers';
 
 const mockDependency = (name) => {
   ViewOrders.components[name] = {
@@ -30,12 +32,27 @@ const createMockMixinPlugin = () => Vue.mixin({
   },
 });
 
-const createStore = hasLoaded => ({
+const createStore = ({
+  hasLoaded = true,
+  hasRetried = false,
+  error } = {}) => ({
   dispatch: jest.fn(() => Promise.resolve()),
+  app: {
+    i18n: {
+      tc: jest.fn(),
+    },
+  },
   state: {
     prescriptions: {
       hasLoaded,
       prescriptionCourses: {},
+      error,
+    },
+    device: {
+      isNativeApp: false,
+    },
+    session: {
+      hasRetried,
     },
     nominatedPharmacy: {
       pharmacy: {
@@ -46,6 +63,7 @@ const createStore = hasLoaded => ({
   },
   getters: {
     'serviceJourneyRules/nominatedPharmacyEnabled': false,
+    'session/isLoggedIn': () => true,
   },
 });
 
@@ -55,14 +73,25 @@ const createViewOrdersPrescriptionsPage = ($store) => {
   localVue.use(Vuex);
   localVue.mixin(createMockMixinPlugin());
 
+  const $route = {
+    query: {
+      hr: true,
+    },
+    path: PRESCRIPTIONS_VIEW_ORDERS_PATH,
+  };
+
   mockDependency('HistoricPrescription');
 
-  return mount(ViewOrders, {
+  return shallowMount(ViewOrders, {
     localVue,
+    methods: {
+      reload: jest.fn(),
+    },
     mocks: {
       $http,
       $store,
-      $t: jest.fn(),
+      $route,
+      $t: create$T(),
       $style: {
         info: 'info',
       },
@@ -74,7 +103,7 @@ const createViewOrdersPrescriptionsPage = ($store) => {
 describe('prescriptions/view-orders.vue -', () => {
   describe('page load', () => {
     it('will clear and load the prescriptions and will clear and load nominated pharmacy when enabled via sjr and is not already loaded', async () => {
-      const $store = createStore(true);
+      const $store = createStore();
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = false;
       jest.spyOn($store, 'dispatch');
@@ -92,7 +121,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will clear and load the prescriptions but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
-      const $store = createStore(true);
+      const $store = createStore();
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = true;
       jest.spyOn($store, 'dispatch');
@@ -112,7 +141,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will clear and load prescriptions, but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
-      const $store = createStore(true);
+      const $store = createStore();
       jest.spyOn($store, 'dispatch');
 
       createViewOrdersPrescriptionsPage($store);
@@ -126,7 +155,7 @@ describe('prescriptions/view-orders.vue -', () => {
 
   describe('showNoPrescriptions', () => {
     it('will show the no prescriptions banner after data loading is complete.', () => {
-      const $store = createStore(true);
+      const $store = createStore();
 
       const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions)
@@ -134,7 +163,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will not show the no prescriptions and yield true as data not loaded yet.', () => {
-      const $store = createStore(false);
+      const $store = createStore({ hasLoaded: false });
 
       const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions)
@@ -142,7 +171,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will show prescriptions after loading as there is data to show.', () => {
-      const $store = createStore(true);
+      const $store = createStore();
       $store.state.prescriptions.prescriptionCourses.Approved = {};
       const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions)
@@ -153,7 +182,7 @@ describe('prescriptions/view-orders.vue -', () => {
 
   describe('showPrescriptions', () => {
     it('will show prescriptions after data loading is complete.', () => {
-      const $store = createStore(true);
+      const $store = createStore();
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
       const page = createViewOrdersPrescriptionsPage($store);
@@ -162,7 +191,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will not show prescriptions as the prescriptions have not been loaded yet.', () => {
-      const $store = createStore(false);
+      const $store = createStore({ hasLoaded: false });
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
       const page = createViewOrdersPrescriptionsPage($store);
@@ -171,7 +200,7 @@ describe('prescriptions/view-orders.vue -', () => {
     });
 
     it('will not show prescriptions as there is no data to show.', () => {
-      const $store = createStore(true);
+      const $store = createStore();
       const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showPrescriptions)
         .toBe(false);
@@ -200,6 +229,12 @@ describe('prescriptions/view-orders.vue -', () => {
           nominatedPharmacy: {
             pharmacy: {},
             nominatedPharmacyEnabled: true,
+          },
+          device: {
+            hasNativeApp: false,
+          },
+          session: {
+            hasRetried: false,
           },
         },
         getters: {
@@ -253,6 +288,12 @@ describe('prescriptions/view-orders.vue -', () => {
             pharmacy: {},
             nominatedPharmacyEnabled: true,
           },
+          device: {
+            isNativeApp: false,
+          },
+          session: {
+            hasRetried: false,
+          },
         },
         getters: {
           'serviceJourneyRules/nominatedPharmacyEnabled': false,
@@ -271,6 +312,45 @@ describe('prescriptions/view-orders.vue -', () => {
           { courseId: 'abc', orderDate: '2019-10-01T00:00:00+00:00', statusDisplayPriority: 2, status: 'Approved' },
           { courseId: 'pqr', orderDate: '2019-10-01T00:00:00+00:00', statusDisplayPriority: 3, status: 'Requested' },
         ]);
+    });
+  });
+
+  describe('Prescriptions GP Session error', () => {
+    it('will show the try again error if the error status is 599 and hasRetried is false', () => {
+      const error = { status: 599 };
+      const store = createStore({ error });
+
+      const page = createViewOrdersPrescriptionsPage(store);
+      expect(page.find('#error-dialog-599').exists()).toBe(true);
+      expect(page.vm.prescriptionsApiError).toStrictEqual(error);
+      expect(page.vm.hasRetried).toBe(false);
+    });
+
+    it('will show the permanent error when hasRetried is true and the status is 599', () => {
+      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
+      const $store = createStore({ error, hasRetried: true });
+
+      const page = createViewOrdersPrescriptionsPage($store);
+      expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
+      expect(page.vm.prescriptionsApiError).toStrictEqual(error);
+      expect(page.vm.hasRetried).toBe(true);
+    });
+
+
+    it('will return the correct serviceDeskReference', () => {
+      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
+      const $store = createStore({ error, hasRetried: true });
+
+      const page = createViewOrdersPrescriptionsPage($store);
+      expect(page.vm.referenceCode).toBe('xxxxxx');
+    });
+
+    it('will set hasRetried to true on try again', () => {
+      const $store = createStore();
+
+      const page = createViewOrdersPrescriptionsPage($store);
+      page.vm.tryAgain();
+      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
     });
   });
 });

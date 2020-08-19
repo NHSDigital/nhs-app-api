@@ -1,12 +1,22 @@
 export default {
-  whatYouCanDo: 'What you can do next',
   nhs111Link: '111.nhs.uk',
   orCall: 'or call 111.',
+  temporaryProblem: 'This may be a temporary problem.',
   appointments: {
+    menuListHeader: 'What you can do next',
     header: 'Sorry, GP appointment booking is unavailable',
     temporaryHeader: 'Sorry, there is a problem with GP appointment booking',
     temporaryProblem: 'This may be a temporary problem.',
     youCannotBookOnline: 'You are not currently able to book and manage GP appointments online.',
     ifTheProblemContinues: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice go to ',
+  },
+  prescriptions: {
+    menuListHeader: 'Other things you can do',
+    tryAgainHeader: 'Sorry, there is a problem getting your repeat prescription information',
+    youAreNotCurrentlyAble: 'You are not currently able to order or view repeat prescriptions online.',
+    header: 'Sorry, you cannot order or view repeat prescriptions online',
+    ifTheProblemContinues: 'If the problem continues and you need to get a prescription now, contact your GP surgery directly. For urgent medical advice, go to ',
+    emergencyHeader: 'Find out how to get an emergency prescription',
+    emergencyDescription: 'Find out what to do if you have run out of your prescribed medicines',
   },
 };

@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Act
-            var result = await _systemUnderTest.Get(_patientId, _userSession);
+            var result = await _systemUnderTest.Get(_patientId, _userSession, _userSession.GpUserSession);
 
             // Assert
             _mockCourseService.VerifyAll();
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Get(_patientId, _userSession);
+            var result = await _systemUnderTest.Get(_patientId, _userSession, _userSession.GpUserSession);
 
             // Assert
             _mockCourseService.Verify();
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumAllowanceDiscarded()
         {
             // Act
-            await _systemUnderTest.Get(_patientId, _userSession);
+            await _systemUnderTest.Get(_patientId, _userSession, _userSession.GpUserSession);
 
             // Assert
             var expectedLogMessage =
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((GetCoursesResult) result));
 
             // Act
-            await _systemUnderTest.Get(_patientId, _userSession);
+            await _systemUnderTest.Get(_patientId, _userSession, _userSession.GpUserSession);
 
             // Assert
             var expectedLogMessage =

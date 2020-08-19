@@ -7,6 +7,11 @@ import {
 const { load, orderRepeatPrescription, updateAdditionalInfo } = actions;
 
 describe('load', () => {
+  const rootState = {
+    device: {
+      isNativeApp: false,
+    },
+  };
   it('will request repeat prescription courses from the backend', () => {
     const that = {
       app: {
@@ -17,7 +22,7 @@ describe('load', () => {
       dispatch: jest.fn(),
     };
 
-    return load.call(that, { commit: jest.fn() }).then(() => {
+    return load.call(that, { commit: jest.fn(), rootState }).then(() => {
       expect(that.app.$http.getV1PatientCourses).toBeCalled();
     });
   });
@@ -33,7 +38,7 @@ describe('load', () => {
       dispatch,
     };
 
-    await load.call(that, { commit: jest.fn() });
+    await load.call(that, { commit: jest.fn(), rootState });
 
     expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
   });
@@ -59,7 +64,7 @@ describe('load', () => {
     const commit = jest.fn();
 
     return load
-      .call(that, { commit })
+      .call(that, { commit, rootState })
       .then(() => {
         expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_COURSES_LOADED, expected);
       });

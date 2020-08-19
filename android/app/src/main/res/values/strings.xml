@@ -210,11 +210,14 @@
     <string-array name="nonBlockingMenuItems">
         <item>@string/more</item>
         <item>@string/symptoms</item>
+        <item>@string/appointment</item>
+        <item>@string/prescription</item>
     </string-array>
 
     <string-array name="reSelectableMenuItems">
         <item>@string/more</item>
         <item>@string/symptoms</item>
         <item>@string/appointment</item>
+        <item>@string/prescription</item>
     </string-array>
 </resources>

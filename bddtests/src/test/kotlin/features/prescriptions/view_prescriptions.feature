@@ -178,3 +178,50 @@ Feature: View prescriptions Frontend
     And I click the View Orders link
     Then I see 4 prescriptions
 
+  Scenario Outline: An <GP System> user without a GP session is able to recover their session on try again
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And The <GP System> GP system is still unavailable
+    And I click the View Orders link
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+    And The <GP System> GP system becomes available
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And each course has only quantity info
+    When I click the 'Try again' button
+    Then I see 1 prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: A <GP System> user GP session eventually becomes available when viewing orders
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And The <GP System> GP system is still unavailable
+    And I click the View Orders link
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+    When I click the 'Try again' button
+    Then I see what I can do next with a prescriptions error message and reference code '3p'
+    And I click the session error back link
+    And I click the View Orders link
+    And I see what I can do next with a prescriptions error message and reference code '3p'
+    And I click the session error back link
+    And the Prescriptions Hub page is displayed
+    And The <GP System> GP system becomes available
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And each course has only quantity info
+    When I click the View Orders link
+    Then I see 1 prescriptions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+

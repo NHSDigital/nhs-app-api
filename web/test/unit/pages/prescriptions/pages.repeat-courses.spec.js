@@ -1,9 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { createLocalVue, mount } from '@vue/test-utils';
+import { createLocalVue } from '@vue/test-utils';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
+import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 import Necessity from '@/lib/necessity';
+import { create$T, shallowMount } from '../../helpers';
 
 const createMockMixinPlugin = () => Vue.mixin({
   computed: {
@@ -23,12 +25,17 @@ const repeatPrescriptionCourses = [
   { id: 'repeat-course-id-3' },
 ];
 
-const createStore = (
-  hasLoaded,
+const createStore = ({
+  hasLoaded = true,
   validated,
-  specialRequestNecessity,
+  specialRequestNecessity = Necessity.Mandatory,
   specialRequest,
-) => ({
+  error,
+  hasRetried = false,
+  specialRequestIds = [],
+  isValid = false,
+  specialRequestValid = false,
+} = {}) => ({
   dispatch: jest.fn(() => Promise.resolve()),
   app: {
     router: {
@@ -38,6 +45,9 @@ const createStore = (
       validationError: jest.fn(),
     },
   },
+  $analytics: {
+    validationError: jest.fn(),
+  },
   state: {
     repeatPrescriptionCourses: {
       hasLoaded,
@@ -45,7 +55,21 @@ const createStore = (
       validated,
       specialRequestNecessity,
       specialRequest,
+      error,
     },
+    nominatedPharmacy: {},
+    session: {
+      hasRetried,
+    },
+    device: {
+      isNativeApp: false,
+    },
+  },
+  getters: {
+    'repeatPrescriptionCourses/selectedIds': specialRequestIds,
+    'repeatPrescriptionCourses/isValid': isValid,
+    'repeatPrescriptionCourses/specialRequestValid': specialRequestValid,
+    'session/isLoggedIn': () => true,
   },
 });
 
@@ -55,12 +79,26 @@ const createRepeatCoursesPage = async ($store) => {
   localVue.use(Vuex);
   localVue.mixin(createMockMixinPlugin());
 
-  return mount(RepeatCoursesPage, {
+  const $route = {
+    query: {
+      hr: true,
+    },
+    path: PRESCRIPTION_REPEAT_COURSES_PATH,
+  };
+
+  return shallowMount(RepeatCoursesPage, {
     localVue,
+    methods: {
+      reload: jest.fn(),
+    },
     mocks: {
       $http,
+      $route,
       $store,
-      $t: jest.fn(),
+      $t: create$T(),
+      $style: {
+        msg: 'mock msg',
+      },
       showTemplate: () => true,
     },
   });
@@ -70,7 +108,7 @@ describe('prescriptions/repeat-courses.vue -', () => {
   describe('mounted', () => {
     it('will fetch courses', async () => {
       // Arrange
-      const $store = createStore(false);
+      const $store = createStore({ hasLoaded: false });
       $store.getters = {
         'repeatPrescriptionCourses/selectedIds': [],
       };
@@ -90,12 +128,10 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
     it('will show an error if the course selection is invalid', async () => {
       // Arrange
-      const $store = createStore(true, true);
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': [],
-        'repeatPrescriptionCourses/isValid': false,
-        'repeatPrescriptionCourses/specialRequestValid': true,
-      };
+      const $store = createStore({
+        validated: true,
+        specialRequestValid: true,
+      });
 
       // Act
       page = await createRepeatCoursesPage($store);
@@ -106,12 +142,12 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
     it('will show an error if the special request is invalid and Mandatory', async () => {
       // Arrange
-      const $store = createStore(true, true, Necessity.Mandatory);
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
-        'repeatPrescriptionCourses/isValid': true,
-        'repeatPrescriptionCourses/specialRequestValid': false,
-      };
+      const $store = createStore({
+        submitted: false,
+        validated: true,
+        isValid: true,
+        specialRequestIds: ['repeat-course-id-1'],
+      });
 
       // Act
       page = await createRepeatCoursesPage($store);
@@ -122,12 +158,13 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
     it('will not show an error if the special request is invalid and not Mandatory', async () => {
       // Arrange
-      const $store = createStore(true, [], true, Necessity.Optional);
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
-        'repeatPrescriptionCourses/isValid': true,
-        'repeatPrescriptionCourses/specialRequestValid': false,
-      };
+      const $store = createStore({
+        validated: true,
+        specialRequestNecessity: Necessity.Optional,
+        selectedIds: ['repeat-course-id-1'],
+        isValid: true,
+        specialRequestValid: false,
+      });
 
       // Act
       page = await createRepeatCoursesPage($store);
@@ -138,12 +175,12 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
     it('will show an error if the course selection and Mandatory special request are invalid', async () => {
       // Arrange
-      const $store = createStore(true, true, Necessity.Mandatory);
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': [],
-        'repeatPrescriptionCourses/isValid': false,
-        'repeatPrescriptionCourses/specialRequestValid': false,
-      };
+      const $store = createStore({
+        validated: true,
+        isValid: false,
+        seletedIds: [],
+        specialRequestValid: false,
+      });
 
       // Act
       page = await createRepeatCoursesPage($store);
@@ -154,18 +191,53 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
     it('will not show an error if the course selection and Mandatory special request are valid', async () => {
       // Arrange
-      const $store = createStore(true, true, Necessity.Mandatory, 'specialRequest');
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': ['repeat-course-id-1'],
-        'repeatPrescriptionCourses/isValid': true,
-        'repeatPrescriptionCourses/specialRequestValid': true,
-      };
+      const $store = createStore({
+        validated: true,
+        specialRequest: 'specialRequest',
+        selectedIds: ['repeat-course-id-1'],
+        isValid: true,
+        specialRequestValid: true,
+      });
 
       // Act
       page = await createRepeatCoursesPage($store);
 
       // Assert
       expect(page.vm.error).toBe(false);
+    });
+
+    it('will show the try again error if the error is a GP session error and has not retried', async () => {
+      const error = { status: 599 };
+      const $store = createStore({ error });
+
+      page = await createRepeatCoursesPage($store);
+
+      expect(page.find('#error-dialog-599').exists()).toBe(true);
+      expect(page.vm.hasRetried).toBe(false);
+    });
+
+    it('will return the correct status code on the 599 error', async () => {
+      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
+      const $store = createStore({ error });
+
+      page = await createRepeatCoursesPage($store);
+      expect(page.vm.gpSessionApiError.serviceDeskReference).toBe('xxxxxx');
+    });
+
+    it('will set hasRetried to true on try again', async () => {
+      const $store = createStore();
+
+      page = await createRepeatCoursesPage($store);
+      page.vm.tryAgain();
+      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
+    });
+
+    it('will show the permanent error when hasRetried is true and the status is 599', async () => {
+      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
+      const $store = createStore({ error, hasRetried: true });
+
+      page = await createRepeatCoursesPage($store);
+      expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
     });
   });
 });

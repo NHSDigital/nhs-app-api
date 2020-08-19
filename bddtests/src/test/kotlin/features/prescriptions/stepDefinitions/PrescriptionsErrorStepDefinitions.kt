@@ -9,7 +9,9 @@ import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.Error
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import pages.ErrorDialogPage
 import pages.ErrorPage
+import pages.PrescriptionsGpSessionError
 import pages.navigation.WebHeader
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.ViewOrdersPrescriptionsPage
@@ -24,6 +26,8 @@ class PrescriptionsErrorStepDefinitions {
     private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
     private lateinit var errorPage: ErrorPage
     private lateinit var webHeader: WebHeader
+    private lateinit var prescriptionsGpSessionError: PrescriptionsGpSessionError
+    private lateinit var errorDialogPage: ErrorDialogPage
 
 
     @Given("^The prescriptions endpoint is timing out$")
@@ -130,5 +134,24 @@ class PrescriptionsErrorStepDefinitions {
         Assert.assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
         Assert.assertEquals("Contact your GP surgery for more information. " +
                 "For urgent medical help, go to 111.nhs.uk or call 111.", errorPage.errorText1.text)
+    }
+
+    @Then("^I see appropriate try again error message for prescriptions when there is no GP session$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsNoGpSession() {
+        errorDialogPage.assertParagraphText("You are not currently able to order or view repeat prescriptions online.")
+                .assertParagraphText("This may be a temporary problem.")
+                .assertPageHeader("Sorry, there is a problem getting your repeat prescription information")
+                .assertPageTitle("Sorry, there is a problem getting your repeat prescription information")
+    }
+
+    @Then("^I see what I can do next with a prescriptions error message and reference code '(.*)'$")
+    fun iSeePrescriptionsUnavailableNoGpSession(prefix: String){
+        prescriptionsGpSessionError.assertPageHeader("Sorry, you cannot order or view repeat prescriptions online")
+                .assertReferenceCode(prefix)
+                .assertMenuListHeader("Other things you can do")
+                .assertParagraphText("If the problem continues and you need to get a prescription now, contact " +
+                        "your GP surgery directly. For urgent medical advice, go to ")
+                .assertReportAProblemLink()
+        prescriptionsGpSessionError.assertEmergencyMenuItem()
     }
 }

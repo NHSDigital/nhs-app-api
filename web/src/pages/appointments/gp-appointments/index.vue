@@ -111,8 +111,12 @@ import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 
 import showShutterPage from '@/lib/proxy/shutter';
-import { APPOINTMENTS_PATH, APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
+import {
+  APPOINTMENTS_PATH,
+  APPOINTMENT_BOOKING_GUIDANCE_PATH,
+  GP_APPOINTMENTS_PATH,
+} from '@/router/paths';
+import { redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
 
 const loadData = async (store) => {
   store.dispatch('myAppointments/clear');
@@ -154,15 +158,9 @@ export default {
     hasLoaded() {
       return this.$store.state.myAppointments.hasLoaded;
     },
+
     hasRetried() {
-      const { session, device } = this.$store.state;
-      /* session storage is used to avoid the issue of the retry
-      flag being reset after a store rebuild which occurs when navigating
-      to external links on the native apps */
-      if (device.isNativeApp) {
-        return sessionStorage.getItem('hasRetried') || session.hasRetried;
-      }
-      return session.hasRetried;
+      return gpSessionErrorHasRetried(this.$store);
     },
     hasApiError() {
       return this.$store.getters['errors/showApiError'];
@@ -228,7 +226,7 @@ export default {
         sessionStorage.setItem('hasRetried', true);
       }
       this.$store.dispatch('session/setRetry', true);
-      redirectTo(this, this.$route.path, { hr: true }, true);
+      redirectTo(this, GP_APPOINTMENTS_PATH, { hr: true }, true);
     },
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidanceUrl, true);

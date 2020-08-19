@@ -128,6 +128,8 @@ spec:
           value: "https://www.nhs.uk/conditions/"
         - name: CORONA_SERVICE_URL
           value: "https://111.nhs.uk/service/COVID-19/"
+        - name: EMERGENCY_PRESCRIPTIONS_URL
+          value: "https://111.nhs.uk/emergency-prescription/"
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates

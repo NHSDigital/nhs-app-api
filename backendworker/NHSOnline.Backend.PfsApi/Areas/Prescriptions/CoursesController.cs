@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -44,15 +45,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         [HttpGet]
         public async Task<IActionResult> Get(
             [FromHeader(Name=PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession)
+            [UserSession] P9UserSession userSession,
+            [GpSession] GpUserSession gpSession)
         {
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+            var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpSession, patientId);
 
             await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
-            _logger.LogInformation($"Fetching courses interface for supplier {userSession.GpUserSession.Supplier}");
+            _logger.LogInformation($"Fetching courses interface for supplier {gpSession.Supplier}");
 
             var courseService = _gpSystemFactory
-                .CreateGpSystem(gpLinkedAccountUserSession.GpUserSession.Supplier)
+                .CreateGpSystem(gpSession.Supplier)
                 .GetCourseService();
 
             var result = await courseService.GetCourses(gpLinkedAccountUserSession);
@@ -65,7 +67,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
 
             await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger, coursesCount));
-            return await result.Accept(new CourseResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
+            return await result.Accept(
+                new CourseResultVisitor(_sessionCacheService, _errorReferenceGenerator,
+                userSession, gpSession.Supplier));
         }
 
         private void LogCourseInformation(FilteringCounts result)

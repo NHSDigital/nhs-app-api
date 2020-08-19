@@ -7,6 +7,7 @@ export const PARTIAL_ORDER_RESULT = 'PARTIAL_ORDER_RESULT';
 export const PRESCRIPTION_ORDER_JOURNEY_COMPLETE = 'PRESCRIPTION_ORDER_JOURNEY_COMPLETE';
 export const PRESCRIPTIONS_JOURNEY_COMPLETE = 'PRESCRIPTIONS_JOURNEY_COMPLETE';
 export const PRESCRIPTIONS_JOURNEY_START = 'PRESCRIPTIONS_JOURNEY_START';
+export const ADD_ERROR = 'ADD_ERROR';
 
 export const initialState = () => ({
   courses: [],
@@ -20,4 +21,5 @@ export const initialState = () => ({
   selectedCoursesNoJs: [],
   submitted: false,
   orderInProgress: false,
+  error: undefined,
 });

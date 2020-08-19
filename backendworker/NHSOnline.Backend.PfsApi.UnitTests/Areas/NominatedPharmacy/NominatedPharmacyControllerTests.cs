@@ -47,7 +47,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber",
+                new CitizenIdUserSession{ OdsCode = OdsCode},
+                new EmisUserSession(),
+                "im1token");
 
             _mockNominatedPharmacyService = new Mock<INominatedPharmacyService>();
             _mockPharmacyService = new Mock<IPharmacyService>();
@@ -75,7 +78,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_ReturnsSuccessfulResult_WhenServicesReturnsSuccessfully()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(
                 new GetNominatedPharmacyResponse(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
@@ -85,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -164,7 +167,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, false);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -189,7 +192,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.InternalServerError);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -216,7 +219,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(httpStatusCode);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -237,7 +240,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_ReturnsSuccessWithEnabledFalse_WhenIsValidPharmacySubTypeReturnsFalse()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
                 HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
@@ -247,7 +250,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -284,7 +287,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_ReturnsSuccessfulResult_WhenNoNominatedPharmacySet(string odsCode)
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
 
             var response = new PharmacyDetailsResponse
             {
@@ -297,7 +300,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -324,13 +327,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_Returns500AndDoesNotCallPharmacySearch_IfSpineSearchForNominatedPharmacyIsUnsuccessful()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.InternalServerError();
 
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -356,7 +359,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_Returns502_IfGetNominatedPharmacySpineIsSuccessfulButGetPharmacyDetailIsUnsuccessful()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
                 HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
@@ -364,7 +367,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
-                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.CitizenIdUserSession.OdsCode))
                 .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
                 .Verifiable();
 
@@ -397,7 +400,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsResultFromService_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var updatePharmacyResult = new UpdateNominatedPharmacyResponse.Success(OdsCode, UpdatedOdsCode);
 
             _mockNominatedPharmacyGatewayUpdateService
@@ -427,7 +430,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_Returns502FromService_WhenServiceReturnsUpdatedButStillOldCode()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var updatePharmacyResult = new UpdateNominatedPharmacyResponse.UpdatedButStillOldCode(OdsCode, UpdatedOdsCode);
 
             _mockNominatedPharmacyGatewayUpdateService
@@ -456,7 +459,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_Returns502FromService_WhenServiceReturnsBadGateway()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var updatePharmacyResult = new UpdateNominatedPharmacyResponse.BadGateway(OdsCode, UpdatedOdsCode);
 
             _mockNominatedPharmacyGatewayUpdateService
@@ -485,7 +488,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_Returns500FromService_WhenServiceReturnsInternalServerError()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var updatePharmacyResult = new UpdateNominatedPharmacyResponse.InternalServerError(HttpStatusCode.InternalServerError);
 
             _mockNominatedPharmacyGatewayUpdateService
@@ -517,7 +520,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsCorrectStatusCodeFromService_WhenServiceReturnsGetNominatedPharmacyFailure(HttpStatusCode statusCode)
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
             var updatePharmacyResult = new UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure(new StatusCodeResult((int)statusCode));
 
             _mockNominatedPharmacyGatewayUpdateService
@@ -546,7 +549,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsInternalServerError_WhenServiceThrowsException()
         {
             // Arrange
-            var nhsNumber = _userSession.GpUserSession.NhsNumber;
+            var nhsNumber = _userSession.NhsNumber;
 
             _mockNominatedPharmacyGatewayUpdateService
                 .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession))

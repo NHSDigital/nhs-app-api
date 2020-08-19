@@ -1,11 +1,12 @@
 <template>
   <div>
-    <error-title :title="this.$t(`gpSessionErrors.${area}.header`)" />
+    <error-title v-if="updateHeader" :title="$t(`gpSessionErrors.${area}.header`)" />
     <slot name="content"/>
     <hr>
     <report-a-problem :reference="code"/>
-    <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 nhsuk-u-margin-bottom-0">
-      {{ this.$t('gpSessionErrors.whatYouCanDo') }}
+    <h2 id="listHeader"
+        class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 nhsuk-u-margin-bottom-0">
+      {{ $t(`gpSessionErrors.${area}.menuListHeader`) }}
     </h2>
     <menu-item-list>
       <slot name="items"/>
@@ -34,6 +35,10 @@ export default {
     code: {
       type: String,
       default: undefined,
+    },
+    updateHeader: {
+      type: Boolean,
+      default: true,
     },
     area: {
       type: String,

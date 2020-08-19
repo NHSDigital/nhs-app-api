@@ -8,13 +8,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
     internal class OrderPrescriptionResultVisitor : ResultVisitorBase, IOrderPrescriptionResultVisitor<IActionResult>
     {
-        public OrderPrescriptionResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
+        public OrderPrescriptionResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession)
             : base(errorReferenceGenerator, userSession)
         {
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Prescriptions;
-        
+
         public IActionResult Visit(OrderPrescriptionResult.Success result)
         {
             return new CreatedResult(string.Empty, null);
@@ -24,22 +24,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             return BuildErrorResult(StatusCodes.Status502BadGateway);
         }
-        
+
         public IActionResult Visit(OrderPrescriptionResult.Forbidden result)
         {
             return BuildErrorResult(StatusCodes.Status403Forbidden);
         }
-        
+
         public IActionResult Visit(OrderPrescriptionResult.BadRequest result)
         {
             return BuildErrorResult(StatusCodes.Status400BadRequest);
         }
-        
+
         public IActionResult Visit(OrderPrescriptionResult.InternalServerError result)
         {
             return BuildErrorResult(StatusCodes.Status500InternalServerError);
         }
-        
+
         public IActionResult Visit(OrderPrescriptionResult.CannotReorderPrescription result)
         {
             return BuildErrorResult(StatusCodes.Status409Conflict);

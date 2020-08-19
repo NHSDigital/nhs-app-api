@@ -21,8 +21,10 @@ Feature: View prescriptions error cases
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     And I am logged in
     When I retrieve the 'Prescription Repeat Courses' page directly
+    Then I see appropriate try again error message for prescriptions when there is no GP session
+    When I click the 'Try again' button
     Then I see the error reference code with prefix '<Prefix>'
-    And I click the error 'Report a problem' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    And I click the report a problem link
     And a new tab has been opened by the link
     Examples:
       | GP System | Prefix |

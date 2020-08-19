@@ -10,13 +10,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentsResultVisitor : ResultVisitorBase, IAppointmentsResultVisitor<Task<IActionResult>>
     {
-        private readonly UserSession _userSession;
+        private readonly P9UserSession _userSession;
         private readonly ISessionCacheService _sessionCacheService;
 
         public AppointmentsResultVisitor(
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
-            UserSession userSession,
+            P9UserSession userSession,
             Supplier supplier)
         : base (errorReferenceGenerator, supplier)
         {

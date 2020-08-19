@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate && !gpSessionApiError">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="error" message-type="error" role="alert">
@@ -85,10 +85,23 @@
       </div>
     </div>
   </div>
+  <div v-else-if="gpSessionApiError">
+    <prescriptions-gp-session-error v-if="hasRetried"
+                                    id="presciptionsGpSessionError"
+                                    :code="gpSessionApiError.serviceDeskReference"/>
+    <error-container v-else id="error-dialog-599">
+      <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
+      <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
+      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
+      <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
+      <error-link from="generic.backButton.text"
+                  :action="getBackPath"
+                  :desktop-only="true"/>
+    </error-container>
+  </div>
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -98,16 +111,38 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import ErrorButton from '@/components/errors/ErrorButton';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorLink from '@/components/errors/ErrorLink';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
+import PrescriptionsGpSessionError from '@/components/errors/gp-session-errors/PrescriptionsGpSessionError';
+
 import {
   NOMINATED_PHARMACY_CHECK_PATH,
   PRESCRIPTIONS_PATH,
   PRESCRIPTION_CONFIRM_COURSES_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
+import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import showShutterPage from '@/lib/proxy/shutter';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
+
+const loadData = async (store) => {
+  if (!store.state.repeatPrescriptionCourses.hasLoaded) {
+    await store.dispatch('repeatPrescriptionCourses/load');
+  }
+
+  const { error } = store.state.repeatPrescriptionCourses;
+
+  if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried(store)) {
+    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.header');
+    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.header');
+  }
+};
 
 export default {
   name: 'RepeatCoursesPage',
@@ -124,6 +159,12 @@ export default {
     Card,
     CardGroupItem,
     CardGroup,
+    PrescriptionsGpSessionError,
+    ErrorButton,
+    ErrorContainer,
+    ErrorLink,
+    ErrorParagraph,
+    ErrorTitle,
   },
   data() {
     return {
@@ -133,6 +174,15 @@ export default {
     };
   },
   computed: {
+    gpSessionApiError() {
+      return this.$store.state.repeatPrescriptionCourses.error;
+    },
+    hasRetried() {
+      return gpSessionErrorHasRetried(this.$store);
+    },
+    hasApiError() {
+      return this.$store.getters['errors/showApiError'];
+    },
     error() {
       const { validated } = this.$store.state.repeatPrescriptionCourses;
 
@@ -166,9 +216,6 @@ export default {
     },
     showMandatoryReasonError() {
       return this.error && !this.specialRequestValid;
-    },
-    hasLoaded() {
-      return this.$store.state.repeatPrescriptionCourses.hasLoaded;
     },
     specialRequestNecessity() {
       return this.$store.state.repeatPrescriptionCourses
@@ -206,10 +253,22 @@ export default {
       return (this.error && !this.courseSelectionValid) ? 'nhsuk-form-group--error' : '';
     },
   },
-  async mounted() {
-    if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
-      await this.$store.dispatch('repeatPrescriptionCourses/load');
+  watch: {
+    '$route.query.ts': function watchTimestamp() {
+      loadData(this.$store, this.$t);
+    },
+    hasApiError(value) {
+      if (value) {
+        showShutterPage(this.$router.currentRoute, this);
+      }
+    },
+  },
+  async created() {
+    if (this.$route.query.hr) {
+      this.$store.dispatch('session/setRetry', true);
     }
+
+    await loadData(this.$store, this.$t);
   },
   methods: {
     validate() {
@@ -231,6 +290,13 @@ export default {
         this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
         window.scrollTo(0, 0);
       }
+    },
+    tryAgain() {
+      if (this.$store.state.device.isNativeApp) {
+        sessionStorage.setItem('hasRetried', true);
+      }
+      this.$store.dispatch('session/setRetry', true);
+      redirectTo(this, PRESCRIPTION_REPEAT_COURSES_PATH, { hr: true }, true);
     },
     backButtonClicked() {
       redirectTo(this, this.getBackPath);

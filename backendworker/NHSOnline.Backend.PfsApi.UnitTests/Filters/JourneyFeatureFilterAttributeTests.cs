@@ -39,8 +39,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _userSession = new P9UserSession(
                 string.Empty,
                 string.Empty,
-                new CitizenIdUserSession(),
-                new EmisUserSession { OdsCode = "X10000" },
+                new CitizenIdUserSession { OdsCode = "X10000" },
+                new EmisUserSession(),
                 string.Empty);
 
             _sjrResponse = new ServiceJourneyRulesResponse()
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 .Returns(mockUserSessionService.Object);
 
             _mockSjrClient
-                .Setup(x => x.GetServiceJourneyRules(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.GetServiceJourneyRules(_userSession.OdsCode))
                 .ReturnsAsync(
                     new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.Created)
                     {
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _sjrResponse.Journeys.NominatedPharmacy = true;
 
             _mockSjrClient
-                .Setup(x => x.GetServiceJourneyRules(_userSession.GpUserSession.OdsCode))
+                .Setup(x => x.GetServiceJourneyRules(_userSession.OdsCode))
                 .ReturnsAsync(
                     new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.InternalServerError)
                     {

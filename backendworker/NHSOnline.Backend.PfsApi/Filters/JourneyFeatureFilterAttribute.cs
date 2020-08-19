@@ -30,7 +30,6 @@ namespace NHSOnline.Backend.PfsApi.Filters
             var odsCode = context.HttpContext.RequestServices
                 .GetRequiredService<IUserSessionService>()
                 .GetRequiredUserSession<P9UserSession>()
-                .GpUserSession
                 .OdsCode;
 
             ValidateObjects(logger, sjrClient, odsCode);
@@ -49,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
                         break;
 
                     default:
-                        logger.LogWarning($"{_journeyFeature} not handled by [{this.GetType().Name}]");
+                        logger.LogWarning($"{_journeyFeature} not handled by [{GetType().Name}]");
                         break;
                 }
             }

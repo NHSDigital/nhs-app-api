@@ -14,6 +14,7 @@
           <menu-item
             id="view-orders"
             :text="$t('gpPrescriptionsHub.menuOptions.viewOrders')"
+            :href="viewOrdersPath"
             :aria-label="ariaLabelCaption
               ($t('gpPrescriptionsHub.menuOptions.viewOrders'),
                $t('gpPrescriptionsHub.menuOptions.viewOrdersHelpText'))"
@@ -133,6 +134,9 @@ export default {
     showPkbCieMedicines() {
       return !this.isProxying && this.hasPkbCieMedicines;
     },
+    viewOrdersPath() {
+      return PRESCRIPTIONS_VIEW_ORDERS_PATH;
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
@@ -162,7 +166,7 @@ export default {
       return GetNavigationPathFromPrescriptions(this.$store);
     },
     onViewOrdersClicked() {
-      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS_PATH);
+      redirectTo(this, this.viewOrdersPath);
     },
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {

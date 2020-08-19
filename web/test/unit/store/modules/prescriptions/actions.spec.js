@@ -4,6 +4,11 @@ import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '@/store/modules/presc
 const { load, clear } = actions;
 
 describe('load', () => {
+  const rootState = {
+    device: {
+      isNativeApp: false,
+    },
+  };
   it('will dispatch device/unlockNavBar', async () => {
     const dispatch = jest.fn();
     const that = {
@@ -15,7 +20,7 @@ describe('load', () => {
       dispatch,
     };
 
-    await load.call(that, { commit: jest.fn() });
+    await load.call(that, { commit: jest.fn(), rootState });
 
     expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
   });
@@ -31,7 +36,7 @@ describe('load', () => {
     };
 
     return load
-      .call(that, { commit: jest.fn() })
+      .call(that, { commit: jest.fn(), rootState })
       .then(() => expect(that.app.$http.getV1PatientPrescriptions).toBeCalled());
   });
 
@@ -52,7 +57,7 @@ describe('load', () => {
     const commit = jest.fn();
 
     return load
-      .call(that, { commit })
+      .call(that, { commit, rootState })
       .then(() =>
         expect(commit).toBeCalledWith(PRESCRIPTIONS_LOADED, expected));
   });

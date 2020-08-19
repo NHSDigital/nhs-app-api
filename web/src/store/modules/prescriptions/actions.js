@@ -1,30 +1,40 @@
 import moment from 'moment/moment';
-import { PRESCRIPTIONS_CLEAR, PRESCRIPTIONS_LOADED } from './mutation-types';
+import get from 'lodash/fp/get';
+import { GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import {
+  PRESCRIPTIONS_CLEAR,
+  PRESCRIPTIONS_LOADED,
+  ADD_ERROR,
+} from './mutation-types';
 
-function getFromDate() {
-  return moment()
-    .subtract(6, 'months')
-    .toISOString();
-}
-
-function getPrescriptionsParameters() {
-  return {
-    fromDate: getFromDate(),
-  };
-}
+const createError = ({ response }) => ({
+  status: response.status || '',
+  serviceDeskReference: get('serviceDeskReference')(response.data) || '',
+});
 
 export default {
-  load({ commit }) {
-    return this.app.$http
-      .getV1PatientPrescriptions(getPrescriptionsParameters())
-      .then((data) => {
-        commit(PRESCRIPTIONS_LOADED, data);
-        return true;
-      })
-      .catch(() => false)
-      .finally(() => {
-        this.dispatch('device/unlockNavBar');
+  async load({ commit, rootState }) {
+    try {
+      const data = await this.app.$http.getV1PatientPrescriptions({
+        fromDate: moment().subtract(6, 'months').toISOString(),
+        ignoreError: true,
       });
+
+      commit(PRESCRIPTIONS_LOADED, data);
+
+      if (rootState.device.isNativeApp) {
+        sessionStorage.removeItem('hasRetried');
+      }
+      this.dispatch('session/setRetry', false);
+    } catch (error) {
+      if (error.response.status !== GP_SESSION_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      } else {
+        commit(ADD_ERROR, createError(error));
+      }
+    } finally {
+      this.dispatch('device/unlockNavBar');
+    }
   },
   clear({ commit }) {
     commit(PRESCRIPTIONS_CLEAR);

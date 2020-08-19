@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IPrescriptionService> _mockPrescriptionsService;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
+        private EmisUserSession _gpSession;
         private ConfigurationSettings _options;
 
         private P9UserSession _userSession;
@@ -65,6 +66,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockAuditor = new Mock<IAuditor>();
 
+            _gpSession = new EmisUserSession();
+
             _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes,
                 MinimumAppAge, MinimumLinkageAge);
 
@@ -99,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _repeatPrescriptionRequest.CourseIds = new List<string> { "Course 1", "Course 2" };
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                 It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                d => d.GpUserSession == _gpSession && d.PatientId == _patientId),
                 _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.Success()));
 
@@ -108,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(true);
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -133,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                        d => d.GpUserSession == _gpSession && d.PatientId == _patientId),
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.PartialSuccess(response)));
 
@@ -142,7 +145,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(true);
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -175,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
                 .Returns(false);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
-                    StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
+                    StatusCodes.Status400BadRequest,  _gpSession.Supplier))
                 .Returns(_serviceDeskReference);
 
             var expectedValue = new PfsErrorResponse
@@ -184,7 +187,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession, _gpSession);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -221,14 +224,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var serviceResult = (OrderPrescriptionResult) Activator.CreateInstance(serviceResultType);
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                        d => d.GpUserSession ==  _gpSession && d.PatientId == _patientId),
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockPrescriptionValidationService
                 .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
                 .Returns(true);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
-                    expectedStatusCode, _userSession.GpUserSession.Supplier))
+                    expectedStatusCode, _gpSession.Supplier))
                 .Returns(_serviceDeskReference);
 
             var expectedValue = new PfsErrorResponse
@@ -237,7 +240,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession, _gpSession);
 
             // Assert
             _mockPrescriptionsService.Verify();

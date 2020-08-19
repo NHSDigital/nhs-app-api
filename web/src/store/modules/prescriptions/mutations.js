@@ -3,11 +3,16 @@ import find from 'lodash/fp/find';
 import {
   PRESCRIPTIONS_CLEAR,
   PRESCRIPTIONS_LOADED,
+  ADD_ERROR,
 } from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 
 export default {
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+    state.hasLoaded = true;
+  },
   [PRESCRIPTIONS_LOADED](state, data) {
     const prescriptionsResponse = assign({}, data);
     const prescriptionCourses = [];
@@ -31,10 +36,12 @@ export default {
       });
 
     state.prescriptionCourses = prescriptionCourses;
+    state.error = undefined;
     state.hasLoaded = true;
   },
   [PRESCRIPTIONS_CLEAR](state) {
     state.prescriptionCourses = {};
     state.hasLoaded = false;
+    state.error = undefined;
   },
 };

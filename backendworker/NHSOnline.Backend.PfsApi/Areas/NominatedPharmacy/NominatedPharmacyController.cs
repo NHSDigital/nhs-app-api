@@ -14,6 +14,7 @@ using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.AspNet;
@@ -145,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation("Fetching random list of online pharmacies");
                 return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
             }
-            
+
             var isValid = new ValidateAndLog(_logger)
                 .IsSafeString(searchTerm, nameof(searchTerm))
                 .IsValid();
@@ -168,7 +169,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         }
 
 
-        private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model, P9UserSession userSession)
+        private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model,
+            P9UserSession userSession)
         {
             if (!_config.IsNominatedPharmacyEnabled)
             {
@@ -185,7 +187,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             try
             {
                 return await _nominatedPharmacyGatewayUpdateService.UpdateNominatedPharmacy(
-                    userSession.GpUserSession.NhsNumber, model.OdsCode, userSession.CitizenIdUserSession);
+                    userSession.NhsNumber, model.OdsCode, userSession.CitizenIdUserSession);
             }
             catch (Exception ex)
             {
@@ -203,21 +205,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
 
             var isGpPracticeEpsEnabledResult =
-                await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
+                await _gpSearchService.IsGpPracticeEPSEnabled(userSession.OdsCode);
 
             if (!isGpPracticeEpsEnabledResult.HttpStatusCode.IsSuccessStatusCode())
             {
                 return new GetNominatedPharmacyResult.GpPracticeFailure(
-                    userSession.GpUserSession.OdsCode, isGpPracticeEpsEnabledResult.HttpStatusCode);
+                    userSession.CitizenIdUserSession.OdsCode, isGpPracticeEpsEnabledResult.HttpStatusCode);
             }
 
             if (!isGpPracticeEpsEnabledResult.IsGpEpsEnabled)
             {
-                return new GetNominatedPharmacyResult.GpPracticeEpsNotEnabled(userSession.GpUserSession.OdsCode);
+                return new GetNominatedPharmacyResult.GpPracticeEpsNotEnabled(userSession.OdsCode);
             }
 
             var result = await _nominatedPharmacyService.GetNominatedPharmacy(
-                userSession.GpUserSession.NhsNumber, userSession.CitizenIdUserSession);
+                userSession.NhsNumber, userSession.CitizenIdUserSession);
 
             if (!result.IsSuccess())
             {

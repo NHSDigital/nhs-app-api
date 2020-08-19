@@ -35,13 +35,6 @@ class TabBarDelegateTests : XCTestCase {
         XCTAssert(tabBarItem!.tag == viewController!.selectedTab)
         XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled)
     }
-    
-    func test_WhenASelectedItemIsClickedOnTheMenuBarTheSelectionIsNotProcessed() {
-        viewController!.selectedTab = 2
-        tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
-
-        XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled == false)
-    }
 
     func test_WhenTheApplicationStateIsBusyTheMenuBarSelectionIsNotProcessedAndTheSelectedTabIsNotUpdated() {
         viewController!.applicationState.block()
@@ -72,6 +65,14 @@ class TabBarDelegateTests : XCTestCase {
         let appointmentsItemTabBar = UITabBarItem(title: "appointmentsItem", image: nil, tag: 1)
         viewController!.selectedTab = 1
         tabBarDelegate!.tabBar(tabBar!, didSelect: appointmentsItemTabBar)
+             
+        XCTAssert(viewController!.applicationState.isReady())
+    }
+    
+    func test_WhenPrescriptionsIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
+        let prescriptionsItemTabBar = UITabBarItem(title: "prescriptionsItem", image: nil, tag: 2)
+        viewController!.selectedTab = 1
+        tabBarDelegate!.tabBar(tabBar!, didSelect: prescriptionsItemTabBar)
              
         XCTAssert(viewController!.applicationState.isReady())
     }
