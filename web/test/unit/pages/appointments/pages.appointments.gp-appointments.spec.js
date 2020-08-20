@@ -10,7 +10,7 @@ describe('index.vue', () => {
   let $route;
   let $router;
 
-  const mountPage = ({ status,
+  const mountPage = async ({ status,
     userSessionCreateReferenceCode,
     isNativeApp = false,
     query = {},
@@ -45,7 +45,15 @@ describe('index.vue', () => {
       path: GP_APPOINTMENTS_PATH,
     };
 
-    return mount(GPAppointments, { $store, $route, $router, methods: { reload: jest.fn() } });
+    const gpAppointments = mount(GPAppointments, {
+      $store, $route, $router, methods: { reload: jest.fn() },
+    });
+
+    // As the mounted hook is async in the Gp Appointments page, we must await $nextTick
+    // to ensure any expected changes to the instance/dom have been applied.
+    await gpAppointments.vm.$nextTick();
+
+    return gpAppointments;
   };
 
   describe('errors', () => {
@@ -56,29 +64,29 @@ describe('index.vue', () => {
       502,
       504,
       599,
-    ]).it('will display an error dialog for status code: %s', (status) => {
-      wrapper = mountPage({ status });
+    ]).it('will display an error dialog for status code: %s', async (status) => {
+      wrapper = await mountPage({ status });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
 
-    it('will dispatch the retry function if the hasRetried flag is set on the route', () => {
-      wrapper = mountPage({ query: { hr: true } });
+    it('will dispatch the retry function if the hasRetried flag is set on the route', async () => {
+      wrapper = await mountPage({ query: { hr: true } });
       expect($store.dispatch).toBeCalledWith('session/setRetry', true);
     });
 
-    it('will set the flag in the sessionStorage when isNative app is true', () => {
+    it('will set the flag in the sessionStorage when isNative app is true', async () => {
       Storage.prototype.setItem = jest.fn();
 
-      wrapper = mountPage({ isNativeApp: true });
+      wrapper = await mountPage({ isNativeApp: true });
       wrapper.vm.tryAgain();
 
       expect(sessionStorage.setItem).toBeCalledWith('hasRetried', true);
     });
 
-    it('will not call sessionStorage when isNative app is false', () => {
+    it('will not call sessionStorage when isNative app is false', async () => {
       Storage.prototype.setItem = jest.fn();
 
-      wrapper = mountPage();
+      wrapper = await mountPage();
       wrapper.vm.tryAgain();
 
       expect(sessionStorage.setItem).not.toBeCalled();

@@ -1,93 +1,95 @@
 <template>
-  <div v-if="error && hasLoaded">
-    <appointments-gp-session-error v-if="hasRetried && error.status===599"
-                                   :code="error.serviceDeskReference"/>
-    <error-container v-if="error.status===403"
-                     :id="generateErrorId()"
-                     message-type="error"
-                     override-style="plain"
-                     aria-live="off">
-      <error-title title="appointments.error.title.unavailable" />
-      <error-paragraph from="appointments.error.403.line1" />
-      <error-paragraph from="appointments.error.403.line2" />
-      <error-header from="appointments.error.403.coronaHeader" />
-      <error-paragraph from="appointments.error.403.coronaText" />
-      <error-link :class="$style['inline-link']"
-                  from="appointments.error.403.coronaServiceLink"
-                  :action="coronaServiceUrl"
-                  data-purpose="corona-service"
-                  target="_blank"/>
-    </error-container>
-    <error-container v-else-if="error.status===400" :id="generateErrorId()">
-      <error-title title="appointments.error.title.problem"
-                   header="appointments.error.header.problem" />
-      <error-paragraph from="appointments.error.400.message" />
-      <error-link from="generic.backButton.text"
-                  :action="backUrl"
-                  :desktop-only="true"/>
-    </error-container>
-    <error-container v-else-if="error.status===599 && !hasRetried" :id="generateErrorId()">
-      <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
-      <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
-      <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
-      <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
-      <error-link from="generic.backButton.text"
-                  :action="backUrl"
-                  :desktop-only="true"/>
-    </error-container>
-    <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
-      <error-title title="appointments.error.title.problemLoading"/>
-      <error-paragraph from="errors.tryAgainNow"/>
-      <error-paragraph from="appointments.error.message.ifItContinues"/>
-      <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
-      <report-a-problem :reference="error.serviceDeskReference"/>
-      <error-link from="generic.backButton.text"
-                  :action="backUrl"
-                  :desktop-only="true"/>
-    </error-container>
-    <error-container v-else-if="error.status===504" :id="generateErrorId()">
-      <error-title title="appointments.error.title.problemLoading"/>
-      <error-paragraph from="appointments.error.message.tryAgainNow"
-                       :variable="error.serviceDeskReference"/>
-      <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
-      <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
-      <error-link from="generic.contactUsButton.text"
-                  :action="contactUsUrl"
-                  target="_blank"/>
-    </error-container>
-  </div>
-  <div v-else-if="hasLoaded">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <corona-virus-message />
-        <generic-button id="book-appointments-button"
-                        :button-classes="['nhsuk-button',
-                                          'nhsuk-u-margin-bottom-3',
-                                          'nhsuk-u-margin-top-3']"
-                        @click="onBookButtonClicked">
-          {{ $t('appointments.guidance.bookButtonText') }}
-        </generic-button>
+  <div v-if="showTemplate">
+    <div v-if="error && hasLoaded">
+      <appointments-gp-session-error v-if="hasRetried && error.status===599"
+                                     :code="error.serviceDeskReference"/>
+      <error-container v-if="error.status===403"
+                       :id="generateErrorId()"
+                       message-type="error"
+                       override-style="plain"
+                       aria-live="off">
+        <error-title title="appointments.error.title.unavailable" />
+        <error-paragraph from="appointments.error.403.line1" />
+        <error-paragraph from="appointments.error.403.line2" />
+        <error-header from="appointments.error.403.coronaHeader" />
+        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-link :class="$style['inline-link']"
+                    from="appointments.error.403.coronaServiceLink"
+                    :action="coronaServiceUrl"
+                    data-purpose="corona-service"
+                    target="_blank"/>
+      </error-container>
+      <error-container v-else-if="error.status===400" :id="generateErrorId()">
+        <error-title title="appointments.error.title.problem"
+                     header="appointments.error.header.problem" />
+        <error-paragraph from="appointments.error.400.message" />
+        <error-link from="generic.backButton.text"
+                    :action="backUrl"
+                    :desktop-only="true"/>
+      </error-container>
+      <error-container v-else-if="error.status===599 && !hasRetried" :id="generateErrorId()">
+        <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
+        <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
+        <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
+        <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
+        <error-link from="generic.backButton.text"
+                    :action="backUrl"
+                    :desktop-only="true"/>
+      </error-container>
+      <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
+        <error-title title="appointments.error.title.problemLoading"/>
+        <error-paragraph from="errors.tryAgainNow"/>
+        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
+        <report-a-problem :reference="error.serviceDeskReference"/>
+        <error-link from="generic.backButton.text"
+                    :action="backUrl"
+                    :desktop-only="true"/>
+      </error-container>
+      <error-container v-else-if="error.status===504" :id="generateErrorId()">
+        <error-title title="appointments.error.title.problemLoading"/>
+        <error-paragraph from="appointments.error.message.tryAgainNow"
+                         :variable="error.serviceDeskReference"/>
+        <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
+        <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
+        <error-link from="generic.contactUsButton.text"
+                    :action="contactUsUrl"
+                    target="_blank"/>
+      </error-container>
+    </div>
+    <div v-else-if="hasLoaded">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <corona-virus-message />
+          <generic-button id="book-appointments-button"
+                          :button-classes="['nhsuk-button',
+                                            'nhsuk-u-margin-bottom-3',
+                                            'nhsuk-u-margin-top-3']"
+                          @click="onBookButtonClicked">
+            {{ $t('appointments.guidance.bookButtonText') }}
+          </generic-button>
 
-        <div v-if="showNoUpcomingAppointments"
-             class="nhsuk-u-margin-bottom-3"
-             data-purpose="upcoming-info">
-          <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.empty.header') }}</h2>
-          <p class="nhsuk-u-margin-top-0">{{ $t('appointments.index.empty.text1') }}</p>
-        </div>
-        <upcoming-appointments v-if="showUpcomingAppointments"
-                               :appointments="upcomingAppointments"
-                               :cancellation-disabled="cancellationDisabled"/>
-
-        <div v-if="showNoPastAppointments" data-purpose="past-info">
-          <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.emptyPast.header') }}</h2>
-          <div>
-            <p class="nhsuk-u-padding-bottom-3">
-              {{ $t('appointments.index.emptyPast.text1') }}
-            </p>
+          <div v-if="showNoUpcomingAppointments"
+               class="nhsuk-u-margin-bottom-3"
+               data-purpose="upcoming-info">
+            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.empty.header') }}</h2>
+            <p class="nhsuk-u-margin-top-0">{{ $t('appointments.index.empty.text1') }}</p>
           </div>
+          <upcoming-appointments v-if="showUpcomingAppointments"
+                                 :appointments="upcomingAppointments"
+                                 :cancellation-disabled="cancellationDisabled"/>
+
+          <div v-if="showNoPastAppointments" data-purpose="past-info">
+            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.emptyPast.header') }}</h2>
+            <div>
+              <p class="nhsuk-u-padding-bottom-3">
+                {{ $t('appointments.index.emptyPast.text1') }}
+              </p>
+            </div>
+          </div>
+          <past-appointments v-if="showPastAppointments"
+                             :appointments="pastAppointments"/>
         </div>
-        <past-appointments v-if="showPastAppointments"
-                           :appointments="pastAppointments"/>
       </div>
     </div>
   </div>
@@ -203,8 +205,8 @@ export default {
       }
     },
   },
-  mounted() {
-    loadData(this.$store);
+  async mounted() {
+    await loadData(this.$store);
 
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
