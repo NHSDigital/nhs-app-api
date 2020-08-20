@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages;
@@ -14,6 +15,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 {
+    [TestClass]
     public class MessageServiceSendTests
     {
         private MessageService _systemUnderTest;
@@ -41,12 +43,23 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Send_Success()
         {
             // Arrange
-            UserMessage actualUserMessage = null;
-            var request = new AddMessageRequest();
+            UserMessage savedUserMessage = null;
+
+            var returnedUserMessage = new UserMessage
+            {
+                Id = ObjectId.GenerateNewId(),
+            };
+
+            var request = new AddMessageRequest
+            {
+                Version = 1,
+                Body = "Body",
+                Sender = "Sender"
+            };
 
             _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
-                .Callback<UserMessage>(u => actualUserMessage = u)
-                .ReturnsAsync(new RepositoryCreateResult<UserMessage>.Created(actualUserMessage));
+                .Callback<UserMessage>(u => savedUserMessage = u)
+                .ReturnsAsync(new RepositoryCreateResult<UserMessage>.Created(returnedUserMessage));
 
             _mockMessagesValidationService.Setup(x =>
                     x.IsMessageRequestValid(request, _nhsLoginId))
@@ -58,12 +71,14 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             _mockMessageRepository.VerifyAll();
             _mockMessagesValidationService.VerifyAll();
-            result.Should().BeAssignableTo<MessageResult.Success>();
-            actualUserMessage.NhsLoginId.Should().BeEquivalentTo(_nhsLoginId);
-            actualUserMessage.Sender.Should().BeEquivalentTo(request.Sender);
-            actualUserMessage.Version.Should().Be(request.Version);
-            actualUserMessage.Body.Should().BeEquivalentTo(request.Body);
-            actualUserMessage.SentTime.Should().BeCloseTo(DateTime.UtcNow, precision: 60);
+            result.Should().BeAssignableTo<MessageResult.Success>()
+                .Subject.Response.MessageId.Should().Be(returnedUserMessage.Id.ToString());
+
+            savedUserMessage.NhsLoginId.Should().BeEquivalentTo(_nhsLoginId);
+            savedUserMessage.Sender.Should().BeEquivalentTo(request.Sender);
+            savedUserMessage.Version.Should().Be(request.Version);
+            savedUserMessage.Body.Should().BeEquivalentTo(request.Body);
+            savedUserMessage.SentTime.Should().BeCloseTo(DateTime.UtcNow, precision: 60);
         }
 
         [TestMethod]
@@ -87,13 +102,35 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             result.Should().BeAssignableTo<MessageResult.InternalServerError>();
         }
 
+
         [TestMethod]
-        public async Task Send_RepositoryThrowsMongoException_ReturnsBadGateway()
+        public async Task Send_RepositoryThrowsMongoException_ReturnsInternalServerError()
         {
             // Arrange
             var request = new AddMessageRequest();
             _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
                 .Throws(new MongoException("Test"));
+
+            _mockMessagesValidationService.Setup(x =>
+                    x.IsMessageRequestValid(request, _nhsLoginId))
+                .Returns(true);
+
+            // Act
+            var result = await _systemUnderTest.Send(request, _nhsLoginId);
+
+            // Assert
+            _mockMessageRepository.VerifyAll();
+            _mockMessagesValidationService.VerifyAll();
+            result.Should().BeAssignableTo<MessageResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task Send_RepositoryReturnsError_ReturnsBadGateway()
+        {
+            // Arrange
+            var request = new AddMessageRequest();
+            _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
+                .ReturnsAsync(new RepositoryCreateResult<UserMessage>.RepositoryError());
 
             _mockMessagesValidationService.Setup(x =>
                     x.IsMessageRequestValid(request, _nhsLoginId))

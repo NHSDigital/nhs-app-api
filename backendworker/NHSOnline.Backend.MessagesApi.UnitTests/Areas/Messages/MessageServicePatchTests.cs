@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages;
@@ -129,7 +130,29 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task Patch_RepositoryReturnsFailure_ReturnsInternalServerError()
+        public async Task Patch_RepositoryThrowException_ReturnsInternalServerError()
+        {
+            // Arrange
+            var jsonPatchDoc = new JsonPatchDocument<Message>();
+            _mockMessageRepository.Setup(x =>
+                    x.UpdateOne(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<UpdateRecordBuilder<UserMessage>>()))
+                .Throws(new MongoException("Test"));
+
+            _mockMessagesValidationService.Setup(x =>
+                    x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
+                .Returns(true);
+
+            // Act
+            var result = await _systemUnderTest.UpdateMessage(jsonPatchDoc, _accessToken, _userMessageId);
+
+            // Assert
+            _mockMessageRepository.VerifyAll();
+            _mockMessagesValidationService.VerifyAll();
+            result.Should().BeAssignableTo<MessagePatchResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task Patch_RepositoryReturnsFailure_ReturnsBadGateway()
         {
             // Arrange
             var jsonPatchDoc = new JsonPatchDocument<Message>();
@@ -147,7 +170,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Assert
             _mockMessageRepository.VerifyAll();
             _mockMessagesValidationService.VerifyAll();
-            result.Should().BeAssignableTo<MessagePatchResult.InternalServerError>();
+            result.Should().BeAssignableTo<MessagePatchResult.BadGateway>();
         }
 
         [TestMethod]

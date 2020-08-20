@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.RepositoryError result)
         {
-            return new MessagePatchResult.InternalServerError();
+            return new MessagePatchResult.BadGateway();
         }
 
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.NoChange result)

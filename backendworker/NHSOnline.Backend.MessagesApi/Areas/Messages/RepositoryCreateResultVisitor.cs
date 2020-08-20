@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
     {
         public MessageResult Visit(RepositoryCreateResult<UserMessage>.RepositoryError result)
         {
-            return new MessageResult.InternalServerError();
+            return new MessageResult.BadGateway();
         }
 
         public MessageResult Visit(RepositoryCreateResult<UserMessage>.Created result)
