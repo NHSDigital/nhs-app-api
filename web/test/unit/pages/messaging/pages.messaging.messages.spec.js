@@ -21,6 +21,7 @@ describe('messaging messages', () => {
   const mountMessages = ({
     sender,
     senderMessages = [],
+    isNativeApp = true,
   } = {}) => {
     $store = createStore({
       state: {
@@ -30,7 +31,7 @@ describe('messaging messages', () => {
           hasUnread: false,
         },
         device: {
-          isNativeApp: true,
+          isNativeApp,
         },
       },
     });
@@ -81,6 +82,52 @@ describe('messaging messages', () => {
 
       it('will redirect to `HEALTH_INFORMATION_UPDATES`', () => {
         expect(redirectTo).toBeCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+      });
+    });
+
+    describe('back link', () => {
+      let backLink;
+
+      describe('native', () => {
+        beforeEach(async () => {
+          wrapper = mountMessages({
+            sender: testSender,
+            senderMessages: [{
+              sender: testSender,
+              messages: [{ body: 'read message 1', read: true }],
+            }],
+          });
+          await wrapper.vm.$nextTick();
+          backLink = wrapper.find('[data-purpose=back-link]');
+        });
+
+        it('will not be shown', () => {
+          expect(backLink.exists()).toBe(false);
+        });
+      });
+
+      describe('desktop', () => {
+        beforeEach(async () => {
+          wrapper = mountMessages({
+            sender: testSender,
+            senderMessages: [{
+              sender: testSender,
+              messages: [{ body: 'read message 1', read: true }],
+            }],
+            isNativeApp: false,
+          });
+          await wrapper.vm.$nextTick();
+          backLink = wrapper.find('[data-purpose=back-link]');
+        });
+
+        it('will be shown', () => {
+          expect(backLink.exists()).toBe(true);
+        });
+
+        it('backlink will redirect to app messages', () => {
+          backLink.find('a').trigger('click');
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
+        });
       });
     });
   });

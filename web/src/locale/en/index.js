@@ -1556,6 +1556,7 @@ export default {
     messages: {
       titlePrefix: 'Messages from:',
       unreadMessages: 'Unread messages',
+      backLink: 'Back',
     },
   },
   user_research: {
@@ -2504,6 +2505,7 @@ export default {
     appMessaging: {
       subheader: 'Health information and updates',
       body: 'View messages from health services and the NHS App',
+      backLink: 'Back',
     },
   },
   ds01: {

@@ -12,6 +12,7 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.IdentityProofingLevel
+import pages.assertElementNotPresent
 import pages.messages.MessagesErrorPage
 import pages.messages.MessagesInboxPage
 import pages.messages.MessagesPage
@@ -144,6 +145,36 @@ class MessagesStepDefinitions {
     fun theMessagesInboxPageIsDisplayed() {
         messagesInboxPage.assertHeaderDisplayed()
         messagesInboxPage.assertSubHeaderDisplayed()
+    }
+
+    @Then("^the Back link on the Messages Inbox page is displayed$")
+    fun theBackLinkOnMessagesInboxPageIsDisplayed() {
+        messagesInboxPage.assertBackLinkDisplayed()
+    }
+
+    @Then("^the Back link on the App Messages page is displayed$")
+    fun theBackLinkOnAppMessagesPageIsDisplayed() {
+        messagesPage.assertBackLinkDisplayed()
+    }
+
+    @Then("^the Back link is not shown on the Messages Inbox page$")
+    fun theBackLinkOnMessagesInboxPageIsNotDisplayed() {
+        messagesInboxPage.backLink.assertElementNotPresent()
+    }
+
+    @Then("^the Back link is not shown on the Messages page$")
+    fun theBackLinkOnAppMessagesPageIsNotDisplayed() {
+        messagesPage.backLink.assertElementNotPresent()
+    }
+
+    @Then("^I click on the Back link on the Messages Inbox page$")
+    fun iClickOnTheBackLinkOnTheMessagesInboxPage() {
+        messagesInboxPage.backLink.click()
+    }
+
+    @Then("^I click on the Back link on the App Messages page$")
+    fun iClickOnTheBackLinkOnTheAppMessagesPage() {
+        messagesPage.backLink.click()
     }
 
     @Then("^the senders and latest messages are displayed on the Messages Inbox page$")

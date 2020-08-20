@@ -177,9 +177,29 @@ Feature: Messages
     Then the Messages page is displayed
     And my messages from the sender are displayed
 
-  Scenario: A desktop user can see their messages if enabled
+  Scenario: A desktop user can see back links on the app messages journey
     Given I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
     And I click the App Messages link on the More page
     And the Messages Inbox page is displayed
+    And the Back link on the Messages Inbox page is displayed
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    And the Back link on the App Messages page is displayed
+    And I click on the Back link on the App Messages page
+    And the Messages Inbox page is displayed
+    And I click on the Back link on the Messages Inbox page
+    And the Messages Hub page is displayed
+
+  Scenario: A native user cannot see back links on the app messages journey
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
+    And I am logged in
+    When I navigate to the More page
+    And I click the App Messages link on the More page
+    And the Messages Inbox page is displayed
+    And the Back link is not shown on the Messages Inbox page
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    And the Back link is not shown on the Messages page

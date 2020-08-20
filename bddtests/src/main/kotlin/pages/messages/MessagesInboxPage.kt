@@ -9,6 +9,11 @@ import pages.assertSingleElementPresent
 class MessagesInboxPage : HybridPageObject() {
     val messages by lazy { InboxSummaryMessageBlockElements(this) }
 
+    val backLink = HybridPageElement(
+            "//a[@data-purpose='main-back-button']",
+            page = this
+    )
+
     fun assertHeaderDisplayed() {
         val path = "//h1[normalize-space(text())='Health information and updates']"
         val header = HybridPageElement(
@@ -19,6 +24,10 @@ class MessagesInboxPage : HybridPageObject() {
                 this,
                 helpfulName = "header")
         header.waitForElement()
+    }
+
+    fun assertBackLinkDisplayed() {
+        backLink.assertSingleElementPresent()
     }
 
     fun assertSubHeaderDisplayed() {

@@ -1,6 +1,10 @@
 import Index from '@/pages/messages/app-messaging/index';
 import { initialState } from '@/store/modules/messaging/mutation-types';
+import { MESSAGES_PATH } from '@/router/paths';
+import * as dependency from '@/lib/utils';
 import { create$T, createStore, mount } from '../../helpers';
+
+dependency.redirectTo = jest.fn();
 
 describe('messaging index', () => {
   const messageItemClass = 'nhs-app-message__item';
@@ -36,6 +40,9 @@ describe('messaging index', () => {
     $store = createStore({
       state: {
         messaging: initialState(),
+        device: {
+          isNativeApp: true,
+        },
       },
     });
     $t = create$T();
@@ -108,6 +115,33 @@ describe('messaging index', () => {
         expect(unreadMessages.at(0).text()).toContain('unread summary message 2');
         expect(unreadMessages.at(1).text()).toContain('unread summary message 4');
       });
+    });
+
+    describe('back link', () => {
+      it('will not be shown', () => {
+        expect(wrapper.find('[data-purpose=back-link]').exists()).toBe(false);
+      });
+    });
+  });
+
+  describe('desktop', () => {
+    let backLink;
+    beforeEach(async () => {
+      $store.state.device.isNativeApp = false;
+      wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
+      dependency.redirectTo = jest.fn();
+
+      backLink = wrapper.find('[data-purpose=back-link]');
+    });
+
+    it('backlink will be shown', () => {
+      expect(backLink.exists()).toBe(true);
+    });
+
+    it('backlink will redirect to messages hub', () => {
+      backLink.find('a').trigger('click');
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, MESSAGES_PATH);
     });
   });
 });

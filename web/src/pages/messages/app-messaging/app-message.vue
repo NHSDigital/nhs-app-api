@@ -23,6 +23,13 @@
         <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
       </ul>
     </template>
+
+    <desktopGenericBackLink v-if="!isNativeApp"
+                            data-purpose="back-link"
+                            :path="backLink"
+                            :button-text="$t('app_messaging.messages.backLink')"
+                            @clickAndPrevent="backClicked"/>
+
   </div>
 </template>
 
@@ -37,6 +44,7 @@ import get from 'lodash/fp/get';
 import first from 'lodash/fp/first';
 import takeWhile from 'lodash/fp/takeWhile';
 import dropWhile from 'lodash/fp/dropWhile';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'AppMessagingAppMessagePage',
@@ -45,11 +53,14 @@ export default {
     PageDivider,
     PageTitle,
     ScrollToAnchor,
+    DesktopGenericBackLink,
   },
   data() {
     return {
       loaded: false,
       sender: this.$store.state.messaging.selectedSender,
+      isNativeApp: this.$store.state.device.isNativeApp,
+      backLink: HEALTH_INFORMATION_UPDATES_PATH,
     };
   },
   computed: {
@@ -93,6 +104,9 @@ export default {
       }
 
       this.loaded = true;
+    },
+    backClicked() {
+      redirectTo(this, this.backLink);
     },
   },
 };

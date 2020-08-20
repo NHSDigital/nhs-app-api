@@ -25,23 +25,34 @@
     </ul>
 
     <span v-else id="noMessages">{{ $t('app_messaging.index.noMessages') }}</span>
+
+    <desktopGenericBackLink v-if="!isNativeApp"
+                            data-purpose="back-link"
+                            :path="backLink"
+                            :button-text="$t('messagesHub.appMessaging.backLink')"
+                            @clickAndPrevent="backClicked"/>
+
   </div>
 </template>
 
 <script>
 import { formatDate } from '@/plugins/filters';
 import { redirectTo, stripHtml } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH } from '@/router/paths';
+import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH, MESSAGES_PATH } from '@/router/paths';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'AppMessagingPage',
   components: {
     SummaryMessage,
+    DesktopGenericBackLink,
   },
   data() {
     return {
       loaded: false,
+      isNativeApp: this.$store.state.device.isNativeApp,
+      backLink: MESSAGES_PATH,
     };
   },
   computed: {
@@ -64,6 +75,9 @@ export default {
     async loadMessages() {
       await this.$store.dispatch('messaging/load');
       this.loaded = true;
+    },
+    backClicked() {
+      redirectTo(this, this.backLink);
     },
     generateMessageUrl(senderMessage) {
       return senderMessage.unreadCount > 0
