@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacySubmitClient> _logger;
         private readonly IXmlResponseParser _responseParser;
-        private readonly string _pdsPath;
+        private readonly INominatedPharmacyConfigurationSettings _configSettings;
 
         public NominatedPharmacySubmitClient(NominatedPharmacyHttpClient httpClient,
             ILogger<NominatedPharmacySubmitClient> logger, IXmlResponseParser responseParser, INominatedPharmacyConfigurationSettings configSettings)
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             _logger = logger;
             _httpClient = httpClient;
             _responseParser = responseParser;
-            _pdsPath = configSettings.PdsPath;
+            _configSettings = configSettings;
         }
 
         public async Task<UpdateNominatedPharmacyApiObjectResponse> UpdateNominatedPharmacy(
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
                 var content = BuildContent(nominatedPharmacyUpdateRequest);
 
-                using (var httpRequest = BuildHttpRequest(_pdsPath, content))
+                using (var httpRequest = BuildHttpRequest(_configSettings.PdsPath, content))
                 {
                     return await SendRequestAndParseResponse(httpRequest);
                 }
