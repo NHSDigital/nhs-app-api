@@ -189,6 +189,30 @@ class AppDialogsTest {
         verify(clickTester).clicked()
     }
 
+    @Test
+    fun dismissAll_WillDismissExtendSessionDialog_IfShown() {
+        appDialogs.showExtendSessionDialogue({}, {})
+        appDialogs.dismissAll()
+        val currentDialog = ShadowDialog.getLatestDialog()
+        Assert.assertFalse(currentDialog.isShowing)
+    }
+
+    @Test
+    fun dismissAll_WillDismissPageLeaveWarningDialog_IfShown() {
+        appDialogs.showLeavingPageWarningDialogue({}, {})
+        appDialogs.dismissAll()
+        val currentDialog = ShadowDialog.getLatestDialog()
+        Assert.assertFalse(currentDialog.isShowing)
+    }
+
+    @Test
+    fun dismissAll_WillNotDismissVersionUpgradeDialog_IfShown() {
+        appDialogs.showVersionUpgradeDialog()
+        appDialogs.dismissAll()
+        val currentDialog = ShadowDialog.getLatestDialog()
+        Assert.assertTrue(currentDialog.isShowing)
+    }
+
     private fun extractAlertDialogMessage(alertDialog: AlertDialog): String? {
         val messageTextView: TextView? = alertDialog.findViewById(android.R.id.message)
         Assert.assertNotNull(messageTextView)

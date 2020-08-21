@@ -133,7 +133,6 @@ class AppDialogs(private val activity: Activity) {
     fun isUpgradeDialogActive() = isDialogActive(upgradeDialog)
 
     fun dismissAll() {
-        dismissVersionUpgradeDialog()
         dismissExtendSessionDialog()
         dismissShowLeavingWarningDialog()
     }
