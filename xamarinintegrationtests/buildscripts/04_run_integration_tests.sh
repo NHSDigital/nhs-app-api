@@ -49,5 +49,9 @@ fetch_container_logs
 destroy_services_under_test
 
 if [ $TESTS_EXIT_CODE -ne 0 ]; then
-  die "Xamarin Integration tests failed"
+  if [ -n "$TF_BUILD" ]; then
+    echo "##vso[build.addbuildtag]xamarin-tests-failed"
+  else
+    die "Xamarin Integration tests failed"
+  fi
 fi
