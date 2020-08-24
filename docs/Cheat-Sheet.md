@@ -96,6 +96,10 @@ See [Access local services from physical Android device](How-Tos/access-local-se
 make run WEB=host
 ```
 
+```bash
+make -C web dev-run
+```
+
 ### Debugging API locally
 
 ```bash

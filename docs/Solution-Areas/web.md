@@ -4,6 +4,28 @@
 
 [Host file entries](../getting-started.md?anchor=host-file-entries)
 
+## Develop in Docker
+
+### Init
+
+```bash
+make dev-init
+```
+
+### Run
+
+Start other components
+
+```bash
+make -C .. run WEB=host
+```
+
+Start development server
+
+```bash
+make dev-run
+```
+
 ## Other build options
 
 To get a list of available build options run make

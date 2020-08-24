@@ -1,5 +1,11 @@
 # syntax=docker/dockerfile:experimental
 
+# run for hot reload of files while developing
+FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 as dev-serve
+RUN mkdir -p /data/web/node_modules
+WORKDIR /data/web
+CMD ["npm", "run", "dev"]
+
 # Security Audit
 FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 as security_audit
 

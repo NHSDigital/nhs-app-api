@@ -5,7 +5,16 @@ BUILD_SCRIPTS := $(sort $(filter-out $(TEST_SCRIPTS),$(ALL_SCRIPTS)))
 build: $(BUILD_SCRIPTS) ## Build all web components
 test: $(TEST_SCRIPTS) ## Unit test all web components
 
-.PHONY: $(ALL_SCRIPTS) build test
+dev-init:
+	run/dev_init.sh
+
+dev-run:
+	run/dev_run.sh
+
+dev-audit:
+	run/dev_audit.sh
+
+.PHONY: $(ALL_SCRIPTS) build test dev-init dev-run dev-audit
 $(ALL_SCRIPTS):
 	$@
 

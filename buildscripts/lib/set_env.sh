@@ -45,5 +45,6 @@ export REPO_ROOT
 export NPMRC_PATH
 export MVN_CFG_PATH
 export DOCKER_ROOT
+export GRADLE_CACHE_VOLUME
 
 export DOCKER_BUILDKIT=1
