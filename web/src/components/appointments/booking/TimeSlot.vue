@@ -3,8 +3,10 @@
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
     @keypress.enter="select">
-    <a :href="appointmentConfirmationPath" @click.prevent="select">
-      <span >
+    <a :href="appointmentConfirmationPath"
+       data-purpose="confirm-timeslot"
+       @click.prevent="select">
+      <span>
         <span :class="$style.strong"
               data-label="start time"
               :aria-label="formatTime(timeSlot.startTime)">

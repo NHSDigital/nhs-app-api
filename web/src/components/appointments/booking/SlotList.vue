@@ -1,22 +1,23 @@
 <template>
-  <div :class="[$style.appointmentTime]">
-    <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
-      <div v-if="hasAppointments(daySlots)" data-purpose="appointment-day">
-        <h3 data-purpose="appointment-day-heading"
-            class="nhsuk-u-margin-bottom-1">
+  <div :class="[$style.appointmentTime, 'nhsuk-expander-group']">
+    <collapsible-details v-for="daySlots in availableSlotsWithAppointments"
+                         :key="formatDate(daySlots[0])"
+                         class="nhsuk-expander"
+                         data-purpose="appointment-day">
+      <template slot="header">
+        <span data-purpose="appointment-day-heading">
           {{ formatDate(daySlots[0]) }}
-        </h3>
-        <ul
-          :class="[$style['selector-list'], 'nhsuk-u-padding-left-0']">
-          <time-slot v-for="slot in daySlots[1]"
-                     :key="slot.ref"
-                     :ref="slot.ref"
-                     :time-slot="slot"
-                     @click.native="select(slot.ref)"
-                     @select="select($event)" />
-        </ul>
-      </div>
-    </span>
+        </span>
+      </template>
+      <ul :class="[$style['selector-list'], 'nhsuk-u-padding-left-0']">
+        <time-slot v-for="slot in daySlots[1]"
+                   :key="slot.ref"
+                   :ref="slot.ref"
+                   :time-slot="slot"
+                   @click.native="select(slot.ref)"
+                   @select="select($event)" />
+      </ul>
+    </collapsible-details>
   </div>
 </template>
 
@@ -26,16 +27,23 @@ import TimeSlot from '@/components/appointments/booking/TimeSlot';
 import DateProvider from '@/services/DateProvider';
 import { APPOINTMENT_CONFIRMATIONS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 
 export default {
   name: 'SlotList',
   components: {
     TimeSlot,
+    CollapsibleDetails,
   },
   props: {
     availableSlots: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    availableSlotsWithAppointments() {
+      return this.availableSlots.filter(this.hasAppointments);
     },
   },
   methods: {
@@ -54,5 +62,4 @@ export default {
 <style module lang="scss" scoped>
 @import "../../../style/selectors";
 @import "../../../style/errorvalidation";
-@import "../../../style/appointmentsnew";
 </style>

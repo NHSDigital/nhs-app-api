@@ -13,8 +13,9 @@ import pages.withoutRetrying
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
-    private val timeSlotXpathFormat = "$dateHeadingXpath%s/following-sibling::ul/li/a" +
-            "//*$appointmentTimeXpath%s/ancestor::a"
+    private val timeSlotXpathFormat = "$dateHeadingXpath%s" +
+            "/ancestor::summary/following-sibling::div//*$appointmentTimeXpath%s" +
+            "/ancestor::a[@data-purpose='confirm-timeslot']"
     private val timeSlotByDateAndTimeXpath = String.format(
             timeSlotXpathFormat,
             containsTextXpathSubstring,
@@ -103,6 +104,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun selectSlot(date: String, time: String, sessionName: String?) {
+        dateHeadingByText(date)
+                .assertSingleElementPresent()
+                .assertIsVisible()
+                .click()
+
         timeSlotForDateTimeSession(date, time, sessionName)
                 .assertSingleElementPresent()
                 .assertIsVisible()
