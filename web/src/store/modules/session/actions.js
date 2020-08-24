@@ -72,9 +72,7 @@ export default {
         key: 'nhso.session',
         value: session,
         cookies: this.$cookies,
-        options: {
-          secure: this.$env.SECURE_COOKIES,
-        },
+        secure: this.$env.SECURE_COOKIES,
       });
     }
 
@@ -100,9 +98,7 @@ export default {
       key: 'nhso.session',
       value,
       cookies: this.$cookies,
-      options: {
-        secure: this.$env.SECURE_COOKIES,
-      },
+      secure: this.$env.SECURE_COOKIES,
     });
 
     commit(SET_INFO, info);

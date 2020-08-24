@@ -1,5 +1,3 @@
-
-import moment from 'moment';
 import { setCookie } from '@/lib/cookie-manager';
 import { DISMISS, SYNC } from './mutation-types';
 
@@ -15,10 +13,8 @@ export default {
         cookies: this.$cookies,
         key: 'HideBiometricBanner',
         value: state.dismissed,
-        options: {
-          maxAge: moment.duration(5, 'y').asSeconds(),
-          secure: this.$env.SECURE_COOKIES,
-        },
+        expires: '5y',
+        secure: this.$env.SECURE_COOKIES,
       });
     }
   },

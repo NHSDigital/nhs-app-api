@@ -16,7 +16,7 @@ export default {
         areAccepted: state.areAccepted,
         analyticsCookieAccepted: state.analyticsCookieAccepted,
       },
-      options: { secure: this.$env.SECURE_COOKIES },
+      secure: this.$env.SECURE_COOKIES,
     });
   },
   [SET_UPDATED_CONSENT_REQUIRED](state, result) {
@@ -25,7 +25,7 @@ export default {
       cookies: this.$cookies,
       key: 'nhso.terms',
       value: { updatedConsentRequired: state.updatedConsentRequired },
-      options: { secure: this.$env.SECURE_COOKIES },
+      secure: this.$env.SECURE_COOKIES,
     });
   },
   [INIT_ACCEPTANCE](state) {

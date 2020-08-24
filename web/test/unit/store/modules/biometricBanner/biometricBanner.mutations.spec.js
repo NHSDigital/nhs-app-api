@@ -1,11 +1,9 @@
-import mockdate from 'mockdate';
-import moment from 'moment';
 import mutations from '@/store/modules/biometricBanner/mutations';
 import { DISMISS, SYNC } from '@/store/modules/biometricBanner/mutation-types';
 import { mockCookies } from '../../../helpers';
 
 describe('biometric banner mutations', () => {
-  let expirySeconds;
+  const expires = '5y';
 
   beforeEach(() => {
     mutations.$env = {
@@ -14,14 +12,6 @@ describe('biometric banner mutations', () => {
     mutations.$cookies = mockCookies();
 
     jest.spyOn(mutations.$cookies, 'set');
-
-    const nowDate = moment.duration(5, 'y');
-    expirySeconds = nowDate.asSeconds();
-    mockdate.set(nowDate);
-  });
-
-  afterEach(() => {
-    mockdate.reset();
   });
 
   describe('DISMISS', () => {
@@ -102,7 +92,11 @@ describe('biometric banner mutations', () => {
           expect(mutations.$cookies.set).toBeCalledWith(
             'HideBiometricBanner',
             true,
-            { secure: true, maxAge: expirySeconds, path: '/' },
+            expires,
+            '/',
+            null,
+            true,
+            'Lax',
           );
         });
       });

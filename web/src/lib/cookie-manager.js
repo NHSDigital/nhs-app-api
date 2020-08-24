@@ -2,22 +2,40 @@
 import merge from 'deepmerge';
 import isString from 'lodash/fp/isString';
 
-export const setCookie = ({ cookies, key, value, options = {} }) => {
+export const setCookie = ({
+  cookies,
+  key,
+  value,
+  expires = null,
+  path = '/',
+  domain = null,
+  secure = 'false',
+  sameSite = 'Lax',
+}) => {
   if (cookies) {
-    const sanitised = value === '' ? undefined : value;
-
-    if (sanitised) {
-      cookies.set(key, sanitised, { ...options, path: '/' });
-    } else {
+    if (value === undefined || value === '') {
       cookies.remove(key);
+    } else {
+      const isSecure = typeof secure === 'boolean' ? secure : secure === 'true';
+      cookies.set(key, value, expires, path, domain, isSecure, sameSite);
     }
   }
 };
 
-export const mergeCookie = ({ cookies, key, value, options = {} }) => {
+export const mergeCookie = ({
+  cookies,
+  key,
+  value,
+  expires = null,
+  path = '/',
+  domain = null,
+  secure = 'false',
+  sameSite = 'Lax',
+}) => {
   const cookie = cookies.get(key) || {};
   const mergedCookie = merge(cookie, value);
-  cookies.set(key, mergedCookie, { ...options, path: '/' });
+  const isSecure = typeof secure === 'boolean' ? secure : secure === 'true';
+  cookies.set(key, mergedCookie, expires, path, domain, isSecure, sameSite);
 };
 
 export const removeCookies = ({ cookies, key = [] }) => {

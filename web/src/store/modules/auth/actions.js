@@ -57,9 +57,7 @@ export default {
         key: 'nhso.session',
         value: cookieValue,
         cookies: this.$cookies,
-        options: {
-          secure: this.$env.SECURE_COOKIES,
-        },
+        secure: this.$env.SECURE_COOKIES,
       });
     }
     return cookieValue.accessToken;
@@ -72,10 +70,6 @@ export default {
      */
 
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
-
-    // const { nhsoRequestId } = this.app.context.res.locals;
-    // consola.info(`handleAuthResponse - codeVerifier=${codeVerifier},
-    // redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
 
     try {
       const response = await this.app.$http

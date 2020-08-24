@@ -1,5 +1,3 @@
-
-import moment from 'moment';
 import { setCookie } from '@/lib/cookie-manager';
 import { CONTINUE, SYNC } from './mutation-types';
 
@@ -10,10 +8,8 @@ export default {
       cookies: this.$cookies,
       key: 'SkipPreRegistrationPage',
       value: true,
-      options: {
-        maxAge: moment.duration(5, 'y').asSeconds(),
-        secure: this.$env.SECURE_COOKIES,
-      },
+      expires: '5y',
+      secure: this.$env.SECURE_COOKIES,
     });
   },
   [SYNC](state) {
@@ -24,10 +20,8 @@ export default {
         cookies: this.$cookies,
         key: 'SkipPreRegistrationPage',
         value: state.seen,
-        options: {
-          maxAge: moment.duration(5, 'y').asSeconds(),
-          secure: this.$env.SECURE_COOKIES,
-        },
+        expires: '5y',
+        secure: this.$env.SECURE_COOKIES,
       });
     }
   },

@@ -17,7 +17,11 @@ describe('termsAndConditions/mutations', () => {
     expect(mutations.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
       { analyticsCookieAccepted: true, areAccepted: true },
-      { secure: true, path: '/' },
+      null,
+      '/',
+      null,
+      true,
+      'Lax',
     );
     expect(state.analyticsCookieAccepted).toEqual(true);
   });
@@ -29,7 +33,11 @@ describe('termsAndConditions/mutations', () => {
     expect(mutations.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
       { analyticsCookieAccepted: false, areAccepted: false },
-      { secure: true, path: '/' },
+      null,
+      '/',
+      null,
+      true,
+      'Lax',
     );
     expect(state.analyticsCookieAccepted).toEqual(false);
   });

@@ -12,21 +12,32 @@ describe('cookie-manager', () => {
   });
 
   describe('setCookie', () => {
-    it('will set a cookie', () => {
-      setCookie({
-        cookies: store.$cookies,
-        key: 'nhso.terms',
-        value: { areAccepted: true },
-        options: { secure: true },
+    describe.each([
+      [true, true],
+      [false, false],
+      ['true', true],
+      ['false', false],
+      ['anything else', false],
+    ])('will set a cookie', (secure, isSecure) => {
+      it(`with ${secure} secure flag`, () => {
+        setCookie({
+          cookies: store.$cookies,
+          key: 'nhso.terms',
+          value: { areAccepted: true },
+          secure,
+        });
+
+        expect(store.$cookies.set).toHaveBeenCalledWith(
+          'nhso.terms',
+          { areAccepted: true },
+          null,
+          '/',
+          null,
+          isSecure,
+          'Lax',
+        );
       });
-
-      expect(store.$cookies.set).toHaveBeenCalledWith(
-        'nhso.terms',
-        { areAccepted: true },
-        { secure: true, path: '/' },
-      );
     });
-
 
     it('will remove a cookie when blank', () => {
       setCookie({
@@ -52,21 +63,33 @@ describe('cookie-manager', () => {
   });
 
   describe('mergeCookie', () => {
-    it('will create a new cookie', () => {
-      store.$cookies.get = jest.fn(() => (undefined));
+    describe.each([
+      [true, true],
+      [false, false],
+      ['true', true],
+      ['false', false],
+      ['anything else', false],
+    ])('will create a new cookie', (secure, isSecure) => {
+      it(`with ${secure} secure flag`, () => {
+        store.$cookies.get = jest.fn(() => (undefined));
 
-      mergeCookie({
-        cookies: store.$cookies,
-        key: 'nhso.terms',
-        value: { areAccepted: true },
-        options: { secure: true },
+        mergeCookie({
+          cookies: store.$cookies,
+          key: 'nhso.terms',
+          value: { areAccepted: true },
+          secure,
+        });
+
+        expect(store.$cookies.set).toHaveBeenCalledWith(
+          'nhso.terms',
+          { areAccepted: true },
+          null,
+          '/',
+          null,
+          isSecure,
+          'Lax',
+        );
       });
-
-      expect(store.$cookies.set).toHaveBeenCalledWith(
-        'nhso.terms',
-        { areAccepted: true },
-        { secure: true, path: '/' },
-      );
     });
 
     it('will amalgamate an existing cookie', () => {
@@ -76,13 +99,17 @@ describe('cookie-manager', () => {
         cookies: store.$cookies,
         key: 'nhso.terms',
         value: { areAccepted: true },
-        options: { secure: true },
+        secure: true,
       });
 
       expect(store.$cookies.set).toHaveBeenCalledWith(
         'nhso.terms',
         { areAccepted: true, updatedConsentRequired: true },
-        { secure: true, path: '/' },
+        null,
+        '/',
+        null,
+        true,
+        'Lax',
       );
     });
   });

@@ -187,7 +187,11 @@ describe('actions', () => {
         expect(actions.$cookies.set).toBeCalledWith(
           'nhso.session',
           { accessToken: refreshedToken },
-          { path: '/', secure: actions.$env.SECURE_COOKIES },
+          null,
+          '/',
+          null,
+          actions.$env.SECURE_COOKIES,
+          'Lax',
         );
       });
 

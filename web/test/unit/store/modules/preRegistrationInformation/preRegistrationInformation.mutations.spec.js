@@ -1,11 +1,9 @@
-import mockdate from 'mockdate';
-import moment from 'moment';
 import mutations from '@/store/modules/preRegistrationInformation/mutations';
 import { CONTINUE, SYNC } from '@/store/modules/preRegistrationInformation/mutation-types';
 import { mockCookies } from '../../../helpers';
 
 describe('pre-registration information mutations', () => {
-  let expirySeconds;
+  const expires = '5y';
 
   beforeEach(() => {
     mutations.$cookies = mockCookies();
@@ -14,14 +12,6 @@ describe('pre-registration information mutations', () => {
     };
 
     jest.spyOn(mutations.$cookies, 'set');
-
-    const nowDate = moment.duration(5, 'y');
-    expirySeconds = nowDate.asSeconds();
-    mockdate.set(nowDate);
-  });
-
-  afterEach(() => {
-    mockdate.reset();
   });
 
   describe('CONTINUE', () => {
@@ -40,7 +30,11 @@ describe('pre-registration information mutations', () => {
       expect(mutations.$cookies.set).toHaveBeenCalledWith(
         'SkipPreRegistrationPage',
         true,
-        { secure: true, maxAge: expirySeconds, path: '/' },
+        expires,
+        '/',
+        null,
+        true,
+        'Lax',
       );
     });
   });
@@ -110,7 +104,11 @@ describe('pre-registration information mutations', () => {
           expect(mutations.$cookies.set).toBeCalledWith(
             'SkipPreRegistrationPage',
             true,
-            { secure: true, maxAge: expirySeconds, path: '/' },
+            expires,
+            '/',
+            null,
+            true,
+            'Lax',
           );
         });
       });
