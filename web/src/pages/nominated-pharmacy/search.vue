@@ -3,17 +3,17 @@
     <div v-if="foundNoResultsMessage" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p>{{ foundNoResultsMessage }}</p>
-        <h2>{{ $t('nominatedPharmacySearchResults.searchAgain') }}</h2>
+        <h2>{{ $t('nominatedPharmacy.searchResults.searchAgain') }}</h2>
       </div>
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="showErrors" message-type="error">
           <message-text data-purpose="error-heading">
-            {{ $t('nominated_pharmacy.search.errorMessageHeader') }}
+            {{ $t('nominatedPharmacy.search.errorMessageHeader') }}
           </message-text>
           <message-list data-purpose="empty-search-error">
-            <li id="empty-search-error">{{ $t('nominated_pharmacy.search.emptySearchError') }}</li>
+            <li id="empty-search-error">{{ $t('nominatedPharmacy.search.emptySearchError') }}</li>
           </message-list>
         </message-dialog>
       </div>
@@ -23,16 +23,16 @@
         <form @submit.prevent="searchFormSubmitted">
           <error-group :show-error="showErrors">
             <error-message v-if="showInvalidSearchError">
-              {{ $t('nominated_pharmacy.search.emptySearchError') }}
+              {{ $t('nominatedPharmacy.search.emptySearchError') }}
             </error-message>
             <label id="pharmacy-search-label"
                    class="nhsuk-label"
                    for="searchTextInput">
-              {{ $t('nominated_pharmacy.search.searchInputLabel') }}
+              {{ $t('nominatedPharmacy.search.searchInputLabel') }}
             </label>
             <span id="pharmacy-search-hint"
                   class="nhsuk-hint">
-              {{ $t('nominated_pharmacy.search.searchInputHint') }}
+              {{ $t('nominatedPharmacy.search.searchInputHint') }}
             </span>
             <generic-text-input id="searchTextInput"
                                 v-model="searchQuery"
@@ -44,7 +44,7 @@
           </error-group>
           <generic-button id="search-button"
                           :button-classes="['nhsuk-button']">
-            {{ $t('nominated_pharmacy.search.searchButton') }}
+            {{ $t('nominatedPharmacy.search.searchButton') }}
           </generic-button>
           <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
                                  :text="$t('generic.backButton.text')">
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     generateNoResultsMessage() {
-      return this.$t('nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
+      return this.$t('nominatedPharmacy.searchResults.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
     },
     async searchClicked() {
       this.showInvalidSearchError = false;
@@ -151,8 +151,8 @@ export default {
       if (pharmacySearchResponse.noResultsFound) {
         this.foundNoResultsMessage = this.generateNoResultsMessage();
         const formatArgs = { searchQuery: this.searchQuery };
-        EventBus.$emit(UPDATE_HEADER, this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header', formatArgs), true);
-        EventBus.$emit(UPDATE_TITLE, this.$t('nominatedPharmacySearchResults.errors.noResultsFound.title', formatArgs), true);
+        EventBus.$emit(UPDATE_HEADER, this.$t('nominatedPharmacy.searchResults.errors.noResultsFound.header', formatArgs), true);
+        EventBus.$emit(UPDATE_TITLE, this.$t('nominatedPharmacy.searchResults.errors.noResultsFound.title', formatArgs), true);
         window.scrollTo(0, 0);
       } else {
         redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);

@@ -1,10 +1,9 @@
 import * as dependency from '@/lib/utils';
+import i18n from '@/plugins/i18n';
 import NominatedPharmacyCheck from '@/pages/nominated-pharmacy/check';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import { PRESCRIPTION_REPEAT_COURSES_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy not found', () => {
   let $store;
@@ -28,7 +27,17 @@ describe('nominated pharmacy not found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t, $router });
+  const mountPage = () => mount(
+    NominatedPharmacyCheck,
+    {
+      $store,
+      $style,
+      $router,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('no nominated pharmacy warning', () => {
     let noNominatedPharmacyWarning;
@@ -66,9 +75,8 @@ describe('nominated pharmacy not found', () => {
       expect(continueButton.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacyNotFound.continueButton" for text', () => {
-      expect(continueButton.text())
-        .toEqual('translate_nominatedPharmacyNotFound.continueButton');
+    it('will display continue without nominating text', () => {
+      expect(continueButton.text()).toEqual('Continue without nominating');
     });
 
     it('will navigate to the repeat prescriptions page on click', async () => {
@@ -94,9 +102,8 @@ describe('nominated pharmacy not found', () => {
       expect(backLink.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacyNotFound.backButton" for text', () => {
-      expect(backLink.text())
-        .toEqual('translate_nominatedPharmacyNotFound.backButton');
+    it('will display back text', () => {
+      expect(backLink.text()).toEqual('Back');
     });
 
     it('will navigate back to prescriptions page', async () => {
@@ -125,7 +132,16 @@ describe('back button present on mobile app', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
+  const mountPage = () => mount(
+    NominatedPharmacyCheck,
+    {
+      $store,
+      $style,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   beforeEach(() => {
     $store = createStore({
@@ -146,9 +162,8 @@ describe('back button present on mobile app', () => {
     expect(backButton.exists()).toBe(true);
   });
 
-  it('will use "nominatedPharmacyNotFound.backButton" for text', () => {
-    expect(backButton.text())
-      .toEqual('translate_nominatedPharmacyNotFound.backButton');
+  it('will display back text', () => {
+    expect(backButton.text()).toEqual('Back');
   });
 
   it('will navigate back to prescriptions page', async () => {
@@ -180,7 +195,16 @@ describe('community pharmacy is nominated', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
+  const mountPage = () => mount(
+    NominatedPharmacyCheck,
+    {
+      $store,
+      $style,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('continue to repeat prescriptions', () => {
     let continueButton;
@@ -201,9 +225,8 @@ describe('community pharmacy is nominated', () => {
       expect(continueButton.exists()).toBe(true);
     });
 
-    it('will use "nominated_pharmacy.continueButton" for text', () => {
-      expect(continueButton.text())
-        .toEqual('translate_nominated_pharmacy.continueButton');
+    it('will display continue text', () => {
+      expect(continueButton.text()).toEqual('Continue');
     });
 
     it('will navigate to the repeat prescriptions page on click', async () => {

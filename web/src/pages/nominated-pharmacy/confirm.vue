@@ -2,7 +2,7 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <p id="confirm-help-text">{{ $t('nominated_pharmacy.confirm.confirmHelpText') }}</p>
+        <p id="confirm-help-text">{{ $t('nominatedPharmacy.confirm.confirmHelpText') }}</p>
         <div v-if="isOnlineOnlySelected" class="nhsuk-u-padding-bottom-3">
           <online-only-pharmacy-detail :pharmacy="nominatedPharmacy"/>
         </div>
@@ -15,7 +15,7 @@
         <generic-button id="confirm-button"
                         :button-classes="['nhsuk-button']"
                         @click.stop.prevent="submitNominatedPharmacy">
-          {{ $t('nominated_pharmacy.confirm.confirmButton') }}
+          {{ $t('nominatedPharmacy.confirm.confirmButton') }}
         </generic-button>
         <analytics-tracked-tag :text="$t('generic.backButton.text')">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"

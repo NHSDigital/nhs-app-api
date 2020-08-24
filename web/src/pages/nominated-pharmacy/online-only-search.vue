@@ -20,7 +20,7 @@
           {{ noResultsFoundMessage }}
         </p>
         <h2 id="noResultsFoundHeader" class="nhsuk-u-margin-bottom-3">
-          {{ $t('nominatedPharmacyOnlineOnlySearch.searchAgainMessage') }}
+          {{ $t('nominatedPharmacy.onlineOnlySearch.searchAgainMessage') }}
         </h2>
       </div>
     </div>
@@ -29,10 +29,10 @@
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="showErrors" id="error-message" message-type="error">
           <message-text data-purpose="error-heading">
-            {{ $t('nominatedPharmacyOnlineOnlySearch.errorMessageHeader') }}
+            {{ $t('nominatedPharmacy.onlineOnlySearch.errorMessageHeader') }}
           </message-text>
           <message-list data-purpose="reason-error">
-            <li>{{ $t('nominatedPharmacyOnlineOnlySearch.errorMessageText') }}</li>
+            <li>{{ $t('nominatedPharmacy.onlineOnlySearch.errorMessageText') }}</li>
           </message-list>
         </message-dialog>
       </div>
@@ -43,7 +43,7 @@
         <form @submit.prevent="searchButtonClicked">
           <error-group :show-error="showErrors">
             <error-message v-if="showErrorMessage" id="invalid-search-term-error">
-              {{ $t('nominatedPharmacyOnlineOnlySearch.errorMessageText') }}
+              {{ $t('nominatedPharmacy.onlineOnlySearch.errorMessageText') }}
             </error-message>
             <generic-text-input id="searchTextInput"
                                 v-model="searchQuery"
@@ -53,7 +53,7 @@
           </error-group>
           <generic-button id="search-button"
                           :button-classes="['nhsuk-button']">
-            {{ $t('nominatedPharmacyOnlineOnlySearch.searchButton') }}
+            {{ $t('nominatedPharmacy.onlineOnlySearch.searchButton') }}
           </generic-button>
         </form>
       </div>
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     generateNoResultsMessage() {
-      return this.$t('nominatedPharmacyOnlineOnlySearch.noResultsHelpText')
+      return this.$t('nominatedPharmacy.onlineOnlySearch.noResultsHelpText')
         .replace('{searchQuery}', this.processQuery(this.searchQuery));
     },
     backButtonClicked() {

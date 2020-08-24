@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import { createStore, mount } from '../../helpers';
@@ -24,6 +25,9 @@ const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => moun
     },
   },
   $store,
+  mountOpts: {
+    i18n,
+  },
 });
 
 const createPharmacyDetailComponentWhereDisplayChangeMyNominatedPharmacyButtonIsTrue =
@@ -49,6 +53,9 @@ const createPharmacyDetailComponentWhereDisplayChangeMyNominatedPharmacyButtonIs
       },
     },
     $store,
+    mountOpts: {
+      i18n,
+    },
   });
 
 const createPharmacyDetailComponentForP1InternetPharmacy = ({ $store }) => mount(PharmacyDetail, {
@@ -73,6 +80,9 @@ const createPharmacyDetailComponentForP1InternetPharmacy = ({ $store }) => mount
     },
   },
   $store,
+  mountOpts: {
+    i18n,
+  },
 });
 
 const createPharmacyDetailComponentForP3 = ({ $store }) => mount(PharmacyDetail, {
@@ -92,6 +102,9 @@ const createPharmacyDetailComponentForP3 = ({ $store }) => mount(PharmacyDetail,
     },
   },
   $store,
+  mountOpts: {
+    i18n,
+  },
 });
 
 describe('pharmacy detail', () => {
@@ -146,7 +159,7 @@ describe('pharmacy detail', () => {
 
       it('will display nominated pharmacy instruction', () => {
         expect(instruction.exists()).toEqual(true);
-        expect(instruction.text()).toEqual('translate_nominated_pharmacy.confirm.line1');
+        expect(instruction.text()).toEqual('If you order prescriptions using the NHS App, this pharmacy is where they will be sent.');
       });
     });
 
@@ -261,7 +274,7 @@ describe('pharmacy detail', () => {
 
       it('will display dispensing practice instruction', () => {
         expect(instruction.exists()).toEqual(true);
-        expect(instruction.text()).toEqual('translate_nominated_pharmacy.confirm.line1');
+        expect(instruction.text()).toEqual('If you order prescriptions using the NHS App, this pharmacy is where they will be sent.');
       });
     });
 

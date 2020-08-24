@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+import i18n from '@/plugins/i18n';
 import NominatedPharmacySearchResults from '@/pages/nominated-pharmacy/results';
 import * as dependency from '@/lib/utils';
 import { createLocalVue } from '@vue/test-utils';
@@ -9,9 +9,7 @@ import {
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
 } from '@/router/paths';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $tMock = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy search results', () => {
   let $store;
@@ -19,7 +17,6 @@ describe('nominated pharmacy search results', () => {
   let wrapper;
   let localVue;
   let pharmacySearchResults;
-  let $tcMock;
   let distanceInformationMessage;
 
   const createState = (state = {
@@ -41,13 +38,9 @@ describe('nominated pharmacy search results', () => {
     localVue,
     $store,
     $style,
-    $t: (key) => {
-      if (key === 'nominatedPharmacySearchResults.distanceAway') {
-        return '{distance} miles away';
-      }
-      return $tMock(key);
+    mountOpts: {
+      i18n,
     },
-    $tc: $tcMock,
   });
 
   beforeEach(() => {
@@ -58,7 +51,6 @@ describe('nominated pharmacy search results', () => {
       state: createState(),
     });
     $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
-    $tcMock = jest.fn();
   });
 
   it('will exist', () => {
@@ -164,7 +156,7 @@ describe('nominated pharmacy search results', () => {
     expect(dependency.redirectTo).not.toHaveBeenCalled();
     expect(pharmacySearchResults.exists()).toBe(true);
     expect(beMoreSpecificMessage.exists()).toBe(true);
-    expect($tcMock).toHaveBeenCalledWith('nominatedPharmacySearchResults.resultSummary.beMoreSpecific', null, { max: 2 });
+    expect(beMoreSpecificMessage.text()).toEqual('We can only show 2 results for your search. To improve these results, be as specific as possible with the name of the online-only pharmacy.');
   });
 
   it('will go back to the prescriptions page when no chosen type is found', () => {
@@ -285,13 +277,13 @@ describe('nominated pharmacy search results', () => {
     expect(pharmacyMenuItem.exists()).toBe(true);
     expect(addressComponent.exists()).toBe(true);
     expect(pharmacyMenuItem.text()).toContain('drug store');
-    expect(wrapper.find('#pharmacy-address-line-1').text()).toEqual(pharmacyDetail.addressLine1);
-    expect(wrapper.find('#pharmacy-address-line-2').text()).toEqual(pharmacyDetail.addressLine2);
-    expect(wrapper.find('#pharmacy-address-line-3').text()).toEqual(pharmacyDetail.addressLine3);
-    expect(wrapper.find('#pharmacy-city').text()).toEqual(pharmacyDetail.city);
-    expect(wrapper.find('#pharmacy-county').text()).toEqual(pharmacyDetail.county);
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
-    expect(wrapper.find('#pharmacy-distance-away').text()).toEqual(`${pharmacyDetail.distance} miles away`);
+    expect(wrapper.find('#pharmacy-address-line-1').text()).toEqual('address 1');
+    expect(wrapper.find('#pharmacy-address-line-2').text()).toEqual('address 2');
+    expect(wrapper.find('#pharmacy-address-line-3').text()).toEqual('address 3');
+    expect(wrapper.find('#pharmacy-city').text()).toEqual('city name');
+    expect(wrapper.find('#pharmacy-county').text()).toEqual('county name');
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('Telephone: 0819283');
+    expect(wrapper.find('#pharmacy-distance-away').text()).toEqual('50 miles away');
     expect(wrapper.find('#pharmacy-url').exists()).toBe(false);
   });
 
@@ -305,7 +297,7 @@ describe('nominated pharmacy search results', () => {
       city: '',
       county: '',
       postcode: '',
-      telephoneNumber: '0819283',
+      telephoneNumber: '4356345',
       distance: '',
       url: 'testurl.com',
     };
@@ -329,8 +321,8 @@ describe('nominated pharmacy search results', () => {
     expect(pharmacyMenuItem.exists()).toBe(true);
     expect(addressComponent.exists()).toBe(true);
     expect(pharmacyMenuItem.text()).toContain('drug store');
-    expect(wrapper.find('#pharmacy-url').text()).toEqual(pharmacyDetail.url);
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+    expect(wrapper.find('#pharmacy-url').text()).toEqual('testurl.com');
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('Telephone: 4356345');
   });
 
   it('will correctly display the url in the search results without the http://', () => {
@@ -343,7 +335,7 @@ describe('nominated pharmacy search results', () => {
       city: '',
       county: '',
       postcode: '',
-      telephoneNumber: '0819283',
+      telephoneNumber: '12345678',
       distance: '',
       url: 'http://www.testurl.com',
     };
@@ -360,7 +352,7 @@ describe('nominated pharmacy search results', () => {
 
     wrapper = mountPage();
     expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('Telephone: 12345678');
   });
 
   it('will correctly display the url in the search results without the https://', () => {
@@ -373,7 +365,7 @@ describe('nominated pharmacy search results', () => {
       city: '',
       county: '',
       postcode: '',
-      telephoneNumber: '0819283',
+      telephoneNumber: '62934453',
       distance: '',
       url: 'https://www.testurl.com',
     };
@@ -390,6 +382,6 @@ describe('nominated pharmacy search results', () => {
 
     wrapper = mountPage();
     expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual('Telephone: 62934453');
   });
 });

@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import NominatedPharmacyChooseType from '@/pages/nominated-pharmacy/choose-type';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
@@ -33,7 +34,16 @@ describe('nominated pharmacy choose type page', () => {
     state = createState();
     $store = createStore({ state, getters });
     dependency.redirectTo = jest.fn();
-    wrapper = mount(NominatedPharmacyChooseType, { $router, $store });
+    wrapper = mount(
+      NominatedPharmacyChooseType,
+      {
+        $router,
+        $store,
+        mountOpts: {
+          i18n,
+        },
+      },
+    );
     continueButton = wrapper.find('#continue-button');
   });
 
@@ -46,8 +56,8 @@ describe('nominated pharmacy choose type page', () => {
       expect(continueButton.exists()).toBe(true);
     });
 
-    it('will use "nominated_pharmacy.chooseType.buttonText" for text', () => {
-      expect(continueButton.text()).toEqual('translate_nominated_pharmacy.chooseType.buttonText');
+    it('will display continue text', () => {
+      expect(continueButton.text()).toEqual('Continue');
     });
 
     it('will redirect to the nominated pharmacy search page', () => {
@@ -92,9 +102,8 @@ describe('nominated pharmacy choose type page', () => {
       expect(backLink.exists()).toBe(true);
     });
 
-    it('will use "nominated_pharmacy.chooseType.backLinkText" for text', () => {
-      expect(backLink.text())
-        .toEqual('translate_nominated_pharmacy.chooseType.backLinkText');
+    it('will display back text', () => {
+      expect(backLink.text()).toEqual('Back');
     });
 
     it('will go to the interrupt page when clicked', () => {

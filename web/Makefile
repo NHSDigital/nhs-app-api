@@ -14,6 +14,9 @@ dev-run:
 dev-audit:
 	run/dev_audit.sh
 
+dev-bash:
+	run/dev_bash.sh
+
 .PHONY: $(ALL_SCRIPTS) build test dev-init dev-run dev-audit
 $(ALL_SCRIPTS):
 	$@

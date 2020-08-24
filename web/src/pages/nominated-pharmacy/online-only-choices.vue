@@ -4,10 +4,10 @@
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="showErrors" id="error-message" message-type="error">
           <message-text data-purpose="error-heading">
-            {{ $t('nominatedPharmacyOnlineOnlyChoices.errorMessageHeader') }}
+            {{ $t('nominatedPharmacy.onlineOnlyChoices.errorMessageHeader') }}
           </message-text>
           <message-list data-purpose="reason-error">
-            <li>{{ $t('nominatedPharmacyOnlineOnlyChoices.errorMessageText') }}</li>
+            <li>{{ $t('nominatedPharmacy.onlineOnlyChoices.errorMessageText') }}</li>
           </message-list>
         </message-dialog>
         <radio-group v-model="onlineOnlyChoice"
@@ -15,12 +15,12 @@
                      :radios="radioButtons"
                      :show-error="showErrors"
                      :current-value="currentChoice"
-                     :error-message="$t('nominatedPharmacyOnlineOnlyChoices.errorMessageText')"
+                     :error-message="$t('nominatedPharmacy.onlineOnlyChoices.errorMessageText')"
                      @select="selected"/>
         <generic-button id="continue-button"
                         class="nhsuk-button nhsuk-u-padding-top-2"
                         @click.prevent="continueClicked">
-          {{ $t('nominatedPharmacyOnlineOnlyChoices.continueButton') }}
+          {{ $t('nominatedPharmacy.onlineOnlyChoices.continueButton') }}
         </generic-button>
       </div>
     </div>
@@ -76,11 +76,11 @@ export default {
       onlineOnlyChoice: this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'],
       radioButtons: [
         {
-          label: this.$t('nominatedPharmacyOnlineOnlyChoices.yesLabel'),
+          label: this.$t('nominatedPharmacy.onlineOnlyChoices.yesLabel'),
           value: true,
         },
         {
-          label: this.$t('nominatedPharmacyOnlineOnlyChoices.noLabel'),
+          label: this.$t('nominatedPharmacy.onlineOnlyChoices.noLabel'),
           value: false,
         },
       ],

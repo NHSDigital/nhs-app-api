@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import * as dependency from '@/lib/utils';
+import i18n from '@/plugins/i18n';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
-import { createStore, mount, create$T } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
-const $tMock = create$T();
 const $style = {};
 
 const createState = () => ({
@@ -26,11 +25,8 @@ const mountPage = ({ $http, $state = createState(), $store }) =>
       $http,
       $store: ($store || createStore({ $http, $state })),
       $style,
-      $t: (key) => {
-        if (key === 'nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults') {
-          return 'We could not find any results for "{searchQuery}". Make sure you enter a valid English postcode.';
-        }
-        return $tMock(key);
+      mountOpts: {
+        i18n,
       },
     },
   );

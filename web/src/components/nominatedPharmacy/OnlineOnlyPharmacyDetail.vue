@@ -13,7 +13,7 @@
       </p>
       <p v-if="pharmacy.telephoneNumber"
          id="online-only-phone-number" class="nhsuk-u-margin-bottom-1">
-        {{ $t('nominated_pharmacy.confirm.telephoneLabel') +
+        {{ $t('nominatedPharmacy.confirm.telephoneLabel') +
           pharmacy.telephoneNumber }}</p>
     </div>
   </div>
@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     instructionText() {
-      return this.$t('nominated_pharmacy.confirm.line1');
+      return this.$t('nominatedPharmacy.confirm.line1');
     },
     displayUrl() {
       return displayedURL(this.pharmacy.url);

@@ -2,18 +2,18 @@
   <div :class="$style.info" data-purpose="info">
     <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
       <message-text id="warning-text">
-        {{ $t('nominatedPharmacyNotFound.warningText') }}
+        {{ $t('nominatedPharmacy.notFound.warningText') }}
       </message-text>
     </message-dialog>
     <p id="instruction">
-      {{ $t('nominatedPharmacyNotFound.line') }}
+      {{ $t('nominatedPharmacy.notFound.line') }}
     </p>
     <a id="link-to-nominate-pharmacy"
        :class="[$style.checkFeaturesLink, $style['link']]"
        :href="nominatedPharmacyInterruptPath"
        tag="a"
        @click.prevent="goToAddOrChangeNominatedPharmacy">
-      {{ $t('nominatedPharmacyNotFound.nominatedPharmacyLink') }}
+      {{ $t('nominatedPharmacy.notFound.nominatedPharmacyLink') }}
     </a>
   </div>
 </template>

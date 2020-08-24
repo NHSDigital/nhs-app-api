@@ -1,11 +1,10 @@
+import i18n from '@/plugins/i18n';
 import * as dependency from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('confirm nominated pharmacy', () => {
   let $store;
@@ -45,7 +44,15 @@ describe('confirm nominated pharmacy', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(ConfirmNominatedPharmacy, { $store, $t });
+  const mountPage = () => mount(
+    ConfirmNominatedPharmacy,
+    {
+      $store,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('nominated pharmacy details when isHighStreetSelected is true', () => {
     let pharmacyOpeningTimes;
@@ -143,9 +150,8 @@ describe('confirm nominated pharmacy', () => {
       expect(classes).toContain('nhsuk-button');
     });
 
-    it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
-      expect(confirmButton.text())
-        .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
+    it('will displau cnnfirm text', () => {
+      expect(confirmButton.text()).toEqual('Confirm');
     });
 
     it('will submit nominated pharmacy on click and call to redirect when pharmacy is being nominated for the first time', async () => {
@@ -188,7 +194,15 @@ describe('confirm nominated pharmacy', () => {
       },
     }) => state;
 
-    const mountPageForApp = () => mount(ConfirmNominatedPharmacy, { $store, $t });
+    const mountPageForApp = () => mount(
+      ConfirmNominatedPharmacy,
+      {
+        $store,
+        mountOpts: {
+          i18n,
+        },
+      },
+    );
 
     beforeEach(() => {
       $store = createStore({
@@ -208,9 +222,8 @@ describe('confirm nominated pharmacy', () => {
       expect(classes).toContain('nhsuk-button');
     });
 
-    it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
-      expect(confirmButton.text())
-        .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
+    it('will display confirm text', () => {
+      expect(confirmButton.text()).toEqual('Confirm');
     });
   });
 
@@ -227,9 +240,8 @@ describe('confirm nominated pharmacy', () => {
       expect(backLink.exists()).toBe(true);
     });
 
-    it('will use "generic.backButton.text" for text', () => {
-      expect(backLink.text())
-        .toEqual('translate_generic.backButton.text');
+    it('will display back text', () => {
+      expect(backLink.text()).toEqual('Back');
     });
 
     it('will redirect to the search results page on click', async () => {

@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import * as dependency from '@/lib/utils';
 import { PRESCRIPTIONS_VIEW_ORDERS_PATH } from '@/router/paths';
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
@@ -5,14 +6,12 @@ import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyP
 import NominatedPharmacyChangeSuccess from '@/pages/nominated-pharmacy/change-success';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $emit: jest.fn() },
 }));
-
-const $t = create$T();
 
 describe('confirm nominated pharmacy', () => {
   let $store;
@@ -48,7 +47,15 @@ describe('confirm nominated pharmacy', () => {
   }) => state;
 
 
-  const mountPage = () => mount(NominatedPharmacyChangeSuccess, { $store, $t });
+  const mountPage = () => mount(
+    NominatedPharmacyChangeSuccess,
+    {
+      $store,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('nominated pharmacy change success details for high street pharmacy', () => {
     let pharmacyChangeSuccessDetails;
@@ -73,7 +80,8 @@ describe('confirm nominated pharmacy', () => {
       wrapper = mountPage();
       await wrapper.vm.$nextTick();
       pharmacyChangeSuccessDetails = wrapper.find(PharmacyChangeSuccessDetails);
-      expect($t).toHaveBeenCalledWith('nominated_pharmacy.changeSuccess.header');
+      const header = wrapper.find('div.nhsuk-grid-column-full > p:first-child');
+      expect(header.text()).toBe('Your nominated pharmacy is:');
     });
   });
 
@@ -109,14 +117,13 @@ describe('confirm nominated pharmacy', () => {
       expect(postalWarning.exists()).toBe(true);
     });
 
-    it('will translate the correct locale variables for text', async () => {
+    it('will display the correct text', () => {
       const pharmacyUrl = 'www.testurl.com';
       $store.state.nominatedPharmacy.pharmacy.url = pharmacyUrl;
-      expect(whatHappensNextWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.whatHappensNext');
+      expect(whatHappensNextWarning.text()).toBe('What happens next');
       expect(wrapper.find('#pharmacy-url').text()).toEqual(pharmacyUrl);
-      expect(registrationWarningWithUrl.text()).toContain('translate_nominated_pharmacy.changeSuccess.registrationWarning');
-      expect(registrationWarningWithUrl.text()).toContain(pharmacyUrl);
-      expect(postalWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.postalWarning');
+      expect(registrationWarningWithUrl.text()).toMatch(/You may need to register with Boots separately at\s+www\.testurl\.com\./);
+      expect(postalWarning.text()).toBe('Your prescriptions will be sent to Boots. Once they’ve checked and prepared your prescriptions, Boots will send them to you in the post.');
     });
   });
 
@@ -146,10 +153,10 @@ describe('confirm nominated pharmacy', () => {
       expect(postalWarning.exists()).toBe(true);
     });
 
-    it('will translate the correct locale variables for text', async () => {
-      expect(whatHappensNextWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.whatHappensNext');
-      expect(registrationWarningWithNoUrl.text()).toBe('translate_nominated_pharmacy.changeSuccess.registrationWarningWithNoUrl');
-      expect(postalWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.postalWarning');
+    it('will display the correct text', () => {
+      expect(whatHappensNextWarning.text()).toBe('What happens next');
+      expect(registrationWarningWithNoUrl.text()).toBe('You may need to register with Boots separately.');
+      expect(postalWarning.text()).toBe('Your prescriptions will be sent to Boots. Once they’ve checked and prepared your prescriptions, Boots will send them to you in the post.');
     });
   });
 
@@ -170,9 +177,8 @@ describe('confirm nominated pharmacy', () => {
       expect(goToPrescriptionsLink.exists()).toBe(true);
     });
 
-    it('will use "nominated_pharmacy.changeSuccess.linkLabel" for text', () => {
-      expect(goToPrescriptionsLink.text())
-        .toEqual('translate_nominated_pharmacy.changeSuccess.linkLabel');
+    it('will display go to perscriptions text', () => {
+      expect(goToPrescriptionsLink.text()).toEqual('Go to your prescription orders');
     });
 
     it('will redirect to prescriptions page when clicked', async () => {
@@ -186,21 +192,18 @@ describe('confirm nominated pharmacy', () => {
   describe('mounted', () => {
     beforeEach(() => {
       EventBus.$emit.mockClear();
-      $t.mockClear();
       $store = createStore({ state: createState() });
       mountPage();
     });
 
     it('will emit UPDATE_HEADER with localised change success header as event', () => {
-      expect($t).toHaveBeenCalledWith('pageHeaders.nominatedPharmacyChangeSuccess', { name: 'Boots' });
       expect(EventBus.$emit)
-        .toHaveBeenCalledWith(UPDATE_HEADER, 'translate_pageHeaders.nominatedPharmacyChangeSuccess', true);
+        .toHaveBeenCalledWith(UPDATE_HEADER, 'You have nominated a pharmacy', true);
     });
 
     it('will emit UPDATE_TITLE with localised change success title as event', () => {
-      expect($t).toHaveBeenCalledWith('pageTitles.nominatedPharmacyChangeSuccess', { name: 'Boots' });
       expect(EventBus.$emit)
-        .toHaveBeenCalledWith(UPDATE_TITLE, 'translate_pageTitles.nominatedPharmacyChangeSuccess', true);
+        .toHaveBeenCalledWith(UPDATE_TITLE, 'You have nominated a pharmacy', true);
     });
   });
 });

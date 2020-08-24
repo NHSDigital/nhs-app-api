@@ -190,24 +190,24 @@ export const NOMINATED_PHARMACY_SEARCH_RESULTS = {
       const pharmacyTypeChoice = store.state.nominatedPharmacy.chosenType;
       if (pharmacyTypeChoice === PharmacyTypeChoice.ONLINE_PHARMACY) {
         if (store.state.nominatedPharmacy.onlineOnlyKnownOption === true) {
-          return i18n.t('nominatedPharmacySearchResults.online.search.header',
+          return i18n.t('nominatedPharmacy.searchResults.online.search.header',
             { searchQuery: store.state.nominatedPharmacy.searchQuery });
         }
-        return i18n.t('nominatedPharmacySearchResults.online.random.header');
+        return i18n.t('nominatedPharmacy.searchResults.online.random.header');
       }
-      return i18n.t('nominatedPharmacySearchResults.highStreet.header',
+      return i18n.t('nominatedPharmacy.searchResults.highStreet.header',
         { searchQuery: store.state.nominatedPharmacy.searchQuery });
     },
     titleKey: (store, i18n) => {
       const pharmacyTypeChoice = store.state.nominatedPharmacy.chosenType;
       if (pharmacyTypeChoice === PharmacyTypeChoice.ONLINE_PHARMACY) {
         if (store.state.nominatedPharmacy.onlineOnlyKnownOption === true) {
-          return i18n.t('nominatedPharmacySearchResults.online.search.title',
+          return i18n.t('nominatedPharmacy.searchResults.online.search.title',
             { searchQuery: store.state.nominatedPharmacy.searchQuery });
         }
-        return i18n.t('nominatedPharmacySearchResults.online.random.title');
+        return i18n.t('nominatedPharmacy.searchResults.online.random.title');
       }
-      return i18n.t('nominatedPharmacySearchResults.highStreet.title',
+      return i18n.t('nominatedPharmacy.searchResults.highStreet.title',
         { searchQuery: store.state.nominatedPharmacy.searchQuery });
     },
     crumb: breadcrumbs.NOMINATED_PHARMACY_SEARCH_RESULTS_CRUMB,

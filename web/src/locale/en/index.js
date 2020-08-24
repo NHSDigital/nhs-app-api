@@ -1,7 +1,8 @@
 import components from './components';
-import loginSettings from './loginSettings';
-import thirdPartyProviders from './third-party-providers';
 import gpSessionErrors from './gpSessionErrors';
+import loginSettings from './loginSettings';
+import nominatedPharmacy from './nominatedPharmacy';
+import thirdPartyProviders from './third-party-providers';
 
 export default {
   language: 'en-GB',
@@ -326,67 +327,6 @@ export default {
       summaryBody: 'Select a medication',
       inline: 'Select a medication',
     },
-  },
-  nominatedPharmacySearchResults: {
-    highStreet: {
-      header: 'High street pharmacies near "{searchQuery}"',
-      title: 'High street pharmacies near "{searchQuery}"',
-    },
-    online: {
-      random: {
-        header: 'Choose an online-only pharmacy',
-        title: 'Choose an online-only pharmacy',
-        information: 'This is a selection of online-only pharmacies.',
-      },
-      search: {
-        header: 'You searched "{searchQuery}"',
-        title: 'You searched "{searchQuery}"',
-      },
-    },
-    resultSummary: {
-      distanceInformation: 'Distances given are in a straight line but travel routes may be longer.',
-      beMoreSpecific: 'We can only show {max} results for your search. To improve these results, be as specific as possible with the name of the online-only pharmacy.',
-    },
-    backButton: 'Search again',
-    distanceAway: '{distance} miles away',
-    telephoneLabel: 'Telephone: ',
-    searchAgain: 'Search again',
-    errors: {
-      noResultsFound: {
-        header: 'No results found for "{searchQuery}"',
-        title: 'No results found for "{searchQuery}"',
-        foundNoResults: 'We could not find any results for "{searchQuery}". Make sure you enter a valid English postcode.',
-      },
-    },
-  },
-  nominatedPharmacyNotFound: {
-    warningText: 'This means you\'ll collect a paper prescription from your GP.',
-    line: 'If you nominate a pharmacy, your prescription will be sent there.',
-    nominatedPharmacyLink: 'Nominate a pharmacy',
-    continueButton: 'Continue without nominating',
-    backButton: 'Back',
-    noPharmacyButton: 'You\'ve not nominated a pharmacy',
-  },
-  nominatedPharmacyOnlineOnlyChoices: {
-    continueButton: 'Continue',
-    yesLabel: 'Yes, I know the name of the online-only pharmacy I want',
-    noLabel: 'No',
-    errorMessageHeader: 'There\'s a problem',
-    errorMessageText: 'Select yes if you know the name of your online-only pharmacy',
-  },
-  nominatedPharmacyOnlineOnlySearch: {
-    inputLabelText: 'What is the name of the online-only pharmacy?',
-    searchButton: 'Search',
-    errorMessageHeader: 'There\'s a problem',
-    errorMessageText: 'Enter the name of the online-only pharmacy',
-    noResultsHelpText: 'We could not find any results for "{searchQuery}". Make sure you enter the pharmacy name correctly.',
-    searchAgainMessage: 'Search again',
-  },
-  nominatedPharmacyCannotChange: {
-    line1: 'This is because your nominated pharmacy forms part of your GP surgery.',
-    howToHeader: 'How to change your nominated pharmacy',
-    line2: 'To nominate a new pharmacy, you need to contact your GP surgery directly.',
-    backButton: 'Back',
   },
   noConnection: {
     header: 'Internet connection error',
@@ -929,90 +869,6 @@ export default {
       proxyMessage: 'You have ordered a prescription on behalf of {name}. The order status will be updated once it has been reviewed by {givenName}\'s GP.',
       message: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
       back: 'Go to your prescription orders',
-    },
-  },
-  nominated_pharmacy: {
-    telephoneLabel: 'Telephone: ',
-    changePharmacyLink: 'Change your nominated pharmacy',
-    openingTimes: 'Opening times',
-    continueButton: 'Continue',
-    closed: 'Closed',
-    nominatedPharmacyInstruction: 'If you order repeat medication using the NHS App, this pharmacy is where they will be sent.',
-    dispensingPracticeInstruction: 'If you order repeat medication using the NHS App, this is where they will be sent.',
-    confirm: {
-      confirmButton: 'Confirm',
-      confirmHelpText: 'This is the pharmacy where your prescriptions will be sent in future.',
-      pharmacyChanged: 'You changed your nominated pharmacy.',
-      pharmacyChosen: 'You\'ve chosen your nominated pharmacy.',
-      line1: 'If you order prescriptions using the NHS App, this pharmacy is where they will be sent.',
-      telephoneLabel: 'Telephone: ',
-      errors: {
-        pageHeader: 'Error updating nomination',
-        pageTitle: 'Error updating nomination',
-        header: 'There\'s been a problem updating your pharmacy nomination',
-        message: 'Go back and try again. If the problem continues and you need to nominate a pharmacy now, contact your GP surgery directly.',
-        retryButtonText: 'Back to prescriptions',
-      },
-    },
-    changeSuccess: {
-      header: 'Your nominated pharmacy is: ',
-      highStreetPrescription: 'Your prescriptions will be sent to {pharmacyName} from now on.',
-      highStreetPrescriptionCollectionMessage: 'Collect your prescriptions from {pharmacyName} when they are ready to collect.',
-      whatHappensNext: 'What happens next',
-      registrationWarning: 'You may need to register with {pharmacyName} separately at ',
-      registrationWarningWithNoUrl: 'You may need to register with {pharmacyName} separately.',
-      fullStop: '.',
-      postalWarning: 'Your prescriptions will be sent to {pharmacyName}. Once they’ve checked and prepared your prescriptions, {pharmacyNameRepeated} will send them to you in the post.',
-      telephoneLabel: 'Telephone: ',
-      linkLabel: 'Go to your prescription orders',
-    },
-    chooseType: {
-      highStreet: 'High street pharmacies',
-      highStreetHint: 'You can collect your prescriptions in person at a high street pharmacy local to you. They may also deliver. You\'ll be able to nominate a high street pharmacy in the NHS App.',
-      online: 'Online-only pharmacies',
-      onlineHint: 'These send your prescriptions to you in the post. It\'s not possible to nominate an online-only pharmacy in the NHS App. You\'ll need to register with the pharmacy directly instead.',
-      buttonText: 'Continue',
-      errorMessage: 'Choose a type of pharmacy',
-      errorHeading: 'There is a problem',
-      backLinkText: 'Back',
-    },
-    internetPharmacy: 'This is an internet pharmacy.',
-    warning: {
-      changeDispensingPractice: {
-        line1: 'You cannot change your dispensing practice with the NHS App.',
-        line2: 'To nominate a new dispensing practice or pharmacy, contact your GP surgery directly.',
-      },
-    },
-    search: {
-      pageTitle: 'Change your nominated pharmacy',
-      searchInputLabel: 'Enter a postcode',
-      searchInputHint: 'For example, LS1',
-      searchButton: 'Search',
-      link1: 'See all internet pharmacies',
-      link2: 'See all dispensing appliance contractors',
-      errorMessageHeader: 'There\'s a problem',
-      emptySearchError: 'Enter a valid English postcode',
-      warning: {
-        paragraph1: 'The new pharmacy you choose is where your repeat prescription will be sent in future. Any outstanding repeat prescriptions may still arrive at your current nominated pharmacy.',
-        paragraph2: 'Your new nominated pharmacy can help to check this for you.',
-      },
-      errors: {
-        pageHeader: 'Service currently unavailable',
-        pageTitle: 'Service currently unavailable',
-        header: 'This service is not available right now',
-        message: 'Try again in a few moments',
-        retryButtonText: 'Back to prescriptions',
-      },
-    },
-    interrupt: {
-      nominatedPharmacyFoundLine1: 'The new pharmacy you choose is where your prescriptions will be sent in future.',
-      nominatedPharmacyFoundLine2: 'Your new pharmacy can help to check on any outstanding prescriptions for you.',
-      continueButton: 'Continue',
-    },
-    dspInterrupt: {
-      paragraph: 'To nominate an online-only pharmacy, you must register with the pharmacy through their website or contact them.',
-      visitOnlineListText: 'View a list of online-only pharmacies',
-      returnToPrescriptionsText: 'Go back to your prescriptions',
     },
   },
   health_records: {
@@ -2725,7 +2581,8 @@ export default {
     sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
   components,
-  loginSettings,
-  thirdPartyProviders,
   gpSessionErrors,
+  loginSettings,
+  nominatedPharmacy,
+  thirdPartyProviders,
 };

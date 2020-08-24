@@ -17,10 +17,10 @@
                         message-type="warning"
                         :icon-text="$t('messageIconText.important')">
           <message-text id="warning-text-1" :class="$style.warningText">
-            {{ $t('nominated_pharmacy.warning.changeDispensingPractice.line1') }}
+            {{ $t('nominatedPharmacy.warning.changeDispensingPractice.line1') }}
           </message-text>
           <message-text id="warning-text-2" :class="$style.warningText">
-            {{ $t('nominated_pharmacy.warning.changeDispensingPractice.line2') }}
+            {{ $t('nominatedPharmacy.warning.changeDispensingPractice.line2') }}
           </message-text>
         </message-dialog>
       </div>

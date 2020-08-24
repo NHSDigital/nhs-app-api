@@ -18,19 +18,19 @@
                                displayChangeMyNominatedPharmacyButton"
                              id="button-to-change-pharmacy"
                              :click-func="goToNominatedPharmacyInterruptPage"
-                             :text="$t('nominated_pharmacy.changePharmacyLink')">
+                             :text="$t('nominatedPharmacy.changePharmacyLink')">
         <generic-button class="nhsuk-button">
-          {{ $t('nominated_pharmacy.changePharmacyLink') }}
+          {{ $t('nominatedPharmacy.changePharmacyLink') }}
         </generic-button>
       </analytics-tracked-tag>
     </div>
     <p v-if="showChangeNominatedPharmacyLink && !displayChangeMyNominatedPharmacyButton">
       <analytics-tracked-tag id="link-to-change-pharmacy"
-                             :text="$t('nominated_pharmacy.changePharmacyLink')"
+                             :text="$t('nominatedPharmacy.changePharmacyLink')"
                              :click-func="goToNominatedPharmacyInterruptPage"
                              tag="a" :href="nominatedPharmacyInterrupt"
                              style="vertical-align: baseline; display: inline;">
-        {{ $t('nominated_pharmacy.changePharmacyLink') }}
+        {{ $t('nominatedPharmacy.changePharmacyLink') }}
       </analytics-tracked-tag>
     </p>
   </div>
@@ -101,7 +101,7 @@ export default {
       return this.pharmacy.pharmacySubType === PharmacySubType.CommunityPharmacy;
     },
     instructionText() {
-      return this.$t('nominated_pharmacy.confirm.line1');
+      return this.$t('nominatedPharmacy.confirm.line1');
     },
   },
   methods: {

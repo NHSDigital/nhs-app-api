@@ -2,7 +2,7 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <p>{{ $t('nominated_pharmacy.changeSuccess.header') }}</p>
+        <p>{{ $t('nominatedPharmacy.changeSuccess.header') }}</p>
         <div v-if="pharmacy !== null">
           <div v-if="isHighStreetSelected">
             <pharmacy-change-success-details id="pharmacy-summary"
@@ -13,9 +13,9 @@
                                          :pharmacy="pharmacy"/>
 
             <h2 id="what-happens-next">
-              {{ $t('nominated_pharmacy.changeSuccess.whatHappensNext') }}</h2>
+              {{ $t('nominatedPharmacy.changeSuccess.whatHappensNext') }}</h2>
             <p v-if="pharmacy.url" id="registrationWarningWithUrl">
-              {{ $t('nominated_pharmacy.changeSuccess.registrationWarning',
+              {{ $t('nominatedPharmacy.changeSuccess.registrationWarning',
                     {'pharmacyName': pharmacy.pharmacyName}) }}
               <analytics-tracked-tag v-if="pharmacy.url"
                                      id="pharmacy-url"
@@ -26,9 +26,9 @@
                 {{ displayUrl }}</analytics-tracked-tag>.
             </p>
             <p v-else id="registrationWarningWithNoUrl">
-              {{ $t('nominated_pharmacy.changeSuccess.registrationWarningWithNoUrl',
+              {{ $t('nominatedPharmacy.changeSuccess.registrationWarningWithNoUrl',
                     {'pharmacyName': pharmacy.pharmacyName}) }}</p>
-            <p id="postal-warning">{{ $t('nominated_pharmacy.changeSuccess.postalWarning',
+            <p id="postal-warning">{{ $t('nominatedPharmacy.changeSuccess.postalWarning',
                                          {'pharmacyName': pharmacy.pharmacyName,
                                           'pharmacyNameRepeated': pharmacy.pharmacyName}) }}</p>
           </div>
@@ -41,7 +41,7 @@
         <desktopGenericBackLink
           id="to-prescriptions-link"
           :path="prescriptionsOrdersPath"
-          :button-text="'nominated_pharmacy.changeSuccess.linkLabel'"
+          :button-text="'nominatedPharmacy.changeSuccess.linkLabel'"
           @clickAndPrevent="prescriptionsLinkClicked"/>
       </div>
     </div>

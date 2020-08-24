@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import PharmacyAddressComponent from '@/components/nominatedPharmacy/PharmacyAddressComponent';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import { createStore, mount } from '../../helpers';
@@ -19,6 +20,9 @@ const createPharmacyAddressComponent = ({ $store }) => mount(PharmacyAddressComp
     },
   },
   $store,
+  mountOpts: {
+    i18n,
+  },
 });
 
 
@@ -40,6 +44,9 @@ const createPharmacyAddressComponentForOnline = ({ $store }) => mount(PharmacyAd
     },
   },
   $store,
+  mountOpts: {
+    i18n,
+  },
 });
 
 const createPharmacyAddressComponentForOnlineWithHttps =
@@ -61,6 +68,9 @@ const createPharmacyAddressComponentForOnlineWithHttps =
       },
     },
     $store,
+    mountOpts: {
+      i18n,
+    },
   });
 
 describe('pharmacy address component', () => {
@@ -124,10 +134,8 @@ describe('pharmacy address component', () => {
         expect(city.text()).toEqual('city');
         expect(county.text()).toEqual('county');
         expect(postcode.text()).toEqual('postcode');
-        expect(telephoneNumber.text())
-          .toEqual('translate_nominated_pharmacy.telephoneLabel666668');
-        expect(distanceAway.text())
-          .toEqual('translate_nominatedPharmacySearchResults.distanceAway');
+        expect(telephoneNumber.text()).toEqual('Telephone: 666668');
+        expect(distanceAway.text()).toEqual('50 miles away');
       });
     });
   });
@@ -176,8 +184,7 @@ describe('pharmacy address component', () => {
       });
 
       it('will have the correct values', () => {
-        expect(telephoneNumber.text())
-          .toEqual('translate_nominated_pharmacy.telephoneLabel666668');
+        expect(telephoneNumber.text()).toEqual('Telephone: 666668');
         expect(url.text()).toEqual('www.testurl.com');
       });
     });

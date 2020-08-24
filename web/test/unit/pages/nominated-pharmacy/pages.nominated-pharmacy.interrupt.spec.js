@@ -1,10 +1,9 @@
+import i18n from '@/plugins/i18n';
 import NominatedPharmacyInterrupt from '@/pages/nominated-pharmacy/interrupt';
 import { NOMINATED_PHARMACY_PATH, NOMINATED_PHARMACY_CHECK_PATH, PRESCRIPTIONS_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy not found', () => {
   let $store;
@@ -25,7 +24,16 @@ describe('nominated pharmacy not found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyInterrupt, { $store, $t, $router });
+  const mountPage = () => mount(
+    NominatedPharmacyInterrupt,
+    {
+      $store,
+      $router,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('interrupt page', () => {
     beforeEach(() => {
@@ -42,9 +50,8 @@ describe('nominated pharmacy not found', () => {
         expect(continueButton.exists()).toBe(true);
       });
 
-      it('will use "nominated_pharmacy.interrupt.continueButton" for text', () => {
-        expect(continueButton.text())
-          .toEqual('translate_nominated_pharmacy.interrupt.continueButton');
+      it('will display continue text', () => {
+        expect(continueButton.text()).toEqual('Continue');
       });
     });
   });
@@ -94,11 +101,11 @@ describe('nominated pharmacy not found', () => {
         expect(backLink.exists()).toBe(true);
       });
 
-      it('will use the correct locale data for the p tags ', () => {
+      it('will use the correct text for the p tags ', () => {
         expect(nominatedPharmacyFoundWarningLine1.text())
-          .toEqual('translate_nominated_pharmacy.interrupt.nominatedPharmacyFoundLine1');
+          .toEqual('The new pharmacy you choose is where your prescriptions will be sent in future.');
         expect(nominatedPharmacyFoundWarningLine2.text())
-          .toEqual('translate_nominated_pharmacy.interrupt.nominatedPharmacyFoundLine2');
+          .toEqual('Your new pharmacy can help to check on any outstanding prescriptions for you.');
       });
     });
 

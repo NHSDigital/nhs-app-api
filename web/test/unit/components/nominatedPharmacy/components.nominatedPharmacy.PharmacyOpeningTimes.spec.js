@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount } from '../../helpers';
@@ -33,6 +34,9 @@ describe('pharmacy summary', () => {
             times: ['8am to 1pm', '2pm to 6pm'],
           }],
       },
+      mountOpts: {
+        i18n,
+      },
     });
   });
 
@@ -51,7 +55,7 @@ describe('pharmacy summary', () => {
       expect(openingTimeRows.length).toBe(3);
 
       const sunday = openingTimeRows.at(0);
-      expect(sunday.text()).toContain('Sunday translate_nominated_pharmacy.closed');
+      expect(sunday.text()).toContain('Sunday Closed');
 
       const monday = openingTimeRows.at(1);
       expect(monday.text()).toContain('Monday');

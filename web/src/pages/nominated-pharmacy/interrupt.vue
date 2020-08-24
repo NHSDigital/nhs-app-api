@@ -4,14 +4,14 @@
       <div class="nhsuk-grid-column-full">
         <div v-if="!hasNoNominatedPharmacy" id="nominated-pharmacy-prescriptions-warning">
           <p id="prescriptions-warning-line-one">
-            {{ $t('nominated_pharmacy.interrupt.nominatedPharmacyFoundLine1') }}</p>
+            {{ $t('nominatedPharmacy.interrupt.nominatedPharmacyFoundLine1') }}</p>
           <p id="prescriptions-warning-line-two">
-            {{ $t('nominated_pharmacy.interrupt.nominatedPharmacyFoundLine2') }}</p>
+            {{ $t('nominatedPharmacy.interrupt.nominatedPharmacyFoundLine2') }}</p>
         </div>
         <generic-button id="continue-button"
                         :button-classes="['nhsuk-button', 'nhsuk-button--primary']"
                         @click.stop.prevent="continueButtonClicked">
-          {{ $t('nominated_pharmacy.interrupt.continueButton') }}
+          {{ $t('nominatedPharmacy.interrupt.continueButton') }}
         </generic-button>
       </div>
     </div>

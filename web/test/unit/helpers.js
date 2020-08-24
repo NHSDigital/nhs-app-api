@@ -121,21 +121,25 @@ export const mount = (component, {
   stubs = [],
   methods = {},
   slots = {},
+  mountOpts = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const mountFn = shallow ? vueShallowMount : vueMount;
 
-  return mountFn(component, {
-    localVue,
-    data,
-    propsData,
-    mocks: {
-      $cookies,
-      $route,
-      $router,
-      $store: store,
-      $style,
-      $env,
+  let mocksObj = {
+    $cookies,
+    $route,
+    $router,
+    $store: store,
+    $style,
+    $env,
+    showTemplate: () => true,
+    ...mocks,
+  };
+
+  if (mountOpts.i18n === undefined) {
+    mocksObj = {
+      ...mocksObj,
       $t,
       $tc,
       $te,
@@ -144,13 +148,21 @@ export const mount = (component, {
         tc: create$T(),
         te: create$Te(),
       },
-      showTemplate: () => true,
-      ...mocks,
-    },
+    };
+  }
+
+  const options = {
+    localVue,
+    data,
+    propsData,
+    mocks: mocksObj,
     stubs,
     methods,
     slots,
-  });
+    ...mountOpts,
+  };
+
+  return mountFn(component, options);
 };
 
 export const shallowMount = (component, options = {}) =>

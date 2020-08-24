@@ -5,10 +5,10 @@
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="showErrors" message-type="error">
           <message-text id="errorHeading" data-purpose="error-heading">
-            {{ $t('nominated_pharmacy.chooseType.errorHeading') }}
+            {{ $t('nominatedPharmacy.chooseType.errorHeading') }}
           </message-text>
           <message-list data-purpose="reason-error">
-            <li>{{ $t('nominated_pharmacy.chooseType.errorMessage') }}</li>
+            <li>{{ $t('nominatedPharmacy.chooseType.errorMessage') }}</li>
           </message-list>
         </message-dialog>
       </div>
@@ -21,7 +21,7 @@
                      :radios="radioButtons"
                      :show-error="showErrors"
                      :current-value="currentChoice"
-                     :error-message="$t('nominated_pharmacy.chooseType.errorMessage')"
+                     :error-message="$t('nominatedPharmacy.chooseType.errorMessage')"
                      @select="selected"/>
       </div>
     </div>
@@ -31,7 +31,7 @@
         <generic-button id="continue-button"
                         :class="['nhsuk-button']"
                         @click.prevent="continueClicked">
-          {{ $t('nominated_pharmacy.chooseType.buttonText') }}
+          {{ $t('nominatedPharmacy.chooseType.buttonText') }}
         </generic-button>
       </div>
     </div>
@@ -42,7 +42,7 @@
                                :text="$t('generic.backButton.text')">
           <desktopGenericBackLink id="back-link"
                                   :path="interruptPath"
-                                  :button-text="'nominated_pharmacy.chooseType.backLinkText'"
+                                  :button-text="'nominatedPharmacy.chooseType.backLinkText'"
                                   @clickAndPrevent="backLinkClicked"/>
         </analytics-tracked-tag>
       </div>
@@ -87,13 +87,13 @@ export default {
       hasTriedToContinue: false,
       radioButtons: [
         {
-          hint: this.$t('nominated_pharmacy.chooseType.highStreetHint'),
-          label: this.$t('nominated_pharmacy.chooseType.highStreet'),
+          hint: this.$t('nominatedPharmacy.chooseType.highStreetHint'),
+          label: this.$t('nominatedPharmacy.chooseType.highStreet'),
           value: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
         },
         {
-          hint: this.$t('nominated_pharmacy.chooseType.onlineHint'),
-          label: this.$t('nominated_pharmacy.chooseType.online'),
+          hint: this.$t('nominatedPharmacy.chooseType.onlineHint'),
+          label: this.$t('nominatedPharmacy.chooseType.online'),
           value: PharmacyTypeChoice.ONLINE_PHARMACY,
         },
       ],

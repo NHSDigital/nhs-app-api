@@ -4,10 +4,10 @@
       <p id="pharmacyName" class="nhsuk-u-margin-bottom-0"> {{ pharmacy.pharmacyName }} </p>
     </div>
     <pharmacy-address-component :pharmacy="pharmacy"/>
-    <h2>{{ $t('nominated_pharmacy.changeSuccess.whatHappensNext') }}</h2>
-    <p>{{ $t('nominated_pharmacy.changeSuccess.highStreetPrescription').
+    <h2>{{ $t('nominatedPharmacy.changeSuccess.whatHappensNext') }}</h2>
+    <p>{{ $t('nominatedPharmacy.changeSuccess.highStreetPrescription').
       replace('{pharmacyName}', pharmacy.pharmacyName) }}</p>
-    <p>{{ $t('nominated_pharmacy.changeSuccess.highStreetPrescriptionCollectionMessage').
+    <p>{{ $t('nominatedPharmacy.changeSuccess.highStreetPrescriptionCollectionMessage').
       replace('{pharmacyName}', pharmacy.pharmacyName) }}</p>
   </div>
 </template>

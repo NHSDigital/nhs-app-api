@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import NominatedPharmacyOnlineOnlyChoices from '@/pages/nominated-pharmacy/online-only-choices';
 import RadioGroup from '@/components/RadioGroup';
 import {
@@ -6,9 +7,7 @@ import {
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH,
 } from '@/router/paths';
 import * as dependency from '@/lib/utils';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy online only choices page', () => {
   let $store;
@@ -35,7 +34,17 @@ describe('nominated pharmacy online only choices page', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyOnlineOnlyChoices, { $store, $http, $t, $router });
+  const mountPage = () => mount(
+    NominatedPharmacyOnlineOnlyChoices,
+    {
+      $store,
+      $http,
+      $router,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   describe('online only choices page', () => {
     beforeEach(() => {
@@ -73,9 +82,8 @@ describe('nominated pharmacy online only choices page', () => {
         expect(continueButton.exists()).toBe(true);
       });
 
-      it('will use "nominated_pharmacy.interrupt.continueButton" for text', () => {
-        expect(continueButton.text())
-          .toEqual('translate_nominatedPharmacyOnlineOnlyChoices.continueButton');
+      it('will display continue text', () => {
+        expect(continueButton.text()).toEqual('Continue');
       });
 
       it('will use redirect to online only search page when yes is selected and the continue button is clicked', () => {
@@ -115,9 +123,8 @@ describe('nominated pharmacy online only choices page', () => {
         expect(backLink.exists()).toBe(true);
       });
 
-      it('will use "nominated_pharmacy.interrupt.continueButton" for text', () => {
-        expect(backLink.text())
-          .toEqual('translate_generic.backButton.text');
+      it('will display back text', () => {
+        expect(backLink.text()).toEqual('Back');
       });
 
       it('it will go back to the dsp interrupt page', () => {

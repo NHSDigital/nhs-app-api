@@ -1,9 +1,8 @@
 import * as dependency from '@/lib/utils';
+import i18n from '@/plugins/i18n';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import { NOMINATED_PHARMACY_INTERRUPT_PATH } from '@/router/paths';
-import { create$T, createStore, createRouter, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, createRouter, mount } from '../../helpers';
 
 describe('nominated pharmacy not found', () => {
   let $store;
@@ -20,7 +19,18 @@ describe('nominated pharmacy not found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NoNominatedPharmacyWarning, { $store, $style, $t, $router });
+  const mountPage = () =>
+    mount(
+      NoNominatedPharmacyWarning,
+      {
+        $store,
+        $style,
+        $router,
+        mountOpts: {
+          i18n,
+        },
+      },
+    );
 
   describe('warning', () => {
     let warningText;
@@ -37,9 +47,9 @@ describe('nominated pharmacy not found', () => {
       expect(warningText.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacyNotFound.warningText" for text', () => {
+    it('will display the warning text', () => {
       expect(warningText.text())
-        .toEqual('translate_nominatedPharmacyNotFound.warningText');
+        .toEqual('This means you\'ll collect a paper prescription from your GP.');
     });
   });
 
@@ -56,9 +66,9 @@ describe('nominated pharmacy not found', () => {
       expect(instruction.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacyNotFound.line" for text', () => {
+    it('will display the instruction text', () => {
       expect(instruction.text())
-        .toEqual('translate_nominatedPharmacyNotFound.line');
+        .toEqual('If you nominate a pharmacy, your prescription will be sent there.');
     });
   });
 
@@ -80,9 +90,8 @@ describe('nominated pharmacy not found', () => {
       expect(link.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacyNotFound.nominatedPharmacyLink" for text', () => {
-      expect(link.text())
-        .toEqual('translate_nominatedPharmacyNotFound.nominatedPharmacyLink');
+    it('will display the nominated pharmacy link text', () => {
+      expect(link.text()).toEqual('Nominate a pharmacy');
     });
 
     it('will redirect to interrupt nominated pharmacy page', async () => {

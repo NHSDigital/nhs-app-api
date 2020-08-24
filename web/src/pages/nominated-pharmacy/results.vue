@@ -3,13 +3,13 @@
     <div class="nhsuk-grid-column-full">
       <div>
         <p v-if="isHighStreetSearch" id="distance-information">
-          {{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}
+          {{ $t('nominatedPharmacy.searchResults.resultSummary.distanceInformation') }}
         </p>
         <p v-else-if="!isOnlineWithSearch" id="random-results-information">
-          {{ $t('nominatedPharmacySearchResults.online.random.information') }}
+          {{ $t('nominatedPharmacy.searchResults.online.random.information') }}
         </p>
         <p v-if="showTooManyResults" id="too-many-results">
-          {{ $tc('nominatedPharmacySearchResults.resultSummary.beMoreSpecific',
+          {{ $tc('nominatedPharmacy.searchResults.resultSummary.beMoreSpecific',
                  null, { max: pharmacies.length }) }}
         </p>
         <menu-item-list id="searchResults">
@@ -30,10 +30,10 @@
           </menu-item>
         </menu-item-list>
       </div>
-      <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')">
+      <analytics-tracked-tag :text="$t('nominatedPharmacy.searchResults.backButton')">
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="previousPagePath"
-                                :button-text="'nominatedPharmacySearchResults.backButton'"
+                                :button-text="'nominatedPharmacy.searchResults.backButton'"
                                 @clickAndPrevent="backButtonClicked"/>
       </analytics-tracked-tag>
     </div>
@@ -121,10 +121,10 @@ export default {
         pharmacy.county, pharmacy.postcode].filter(Boolean).join(', ');
     },
     formatDistance(distance) {
-      return this.$t('nominatedPharmacySearchResults.distanceAway').replace('{distance}', distance);
+      return this.$t('nominatedPharmacy.searchResults.distanceAway').replace('{distance}', distance);
     },
     formatTelephone(number) {
-      return this.$t('nominatedPharmacySearchResults.telephoneLabel') + number;
+      return this.$t('nominatedPharmacy.searchResults.telephoneLabel') + number;
     },
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);

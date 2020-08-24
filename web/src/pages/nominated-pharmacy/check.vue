@@ -24,7 +24,7 @@
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             id="back-link"
                             :path="prescriptionsPath"
-                            :button-text="'nominatedPharmacyNotFound.backButton'"
+                            :button-text="'nominatedPharmacy.notFound.backButton'"
                             @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
@@ -56,8 +56,8 @@ export default {
   computed: {
     getContinueButtonText() {
       return this.hasNoNominatedPharmacy ?
-        this.$t('nominatedPharmacyNotFound.continueButton') :
-        this.$t('nominated_pharmacy.continueButton');
+        this.$t('nominatedPharmacy.notFound.continueButton') :
+        this.$t('nominatedPharmacy.continueButton');
     },
     showChangePharmacyLink() {
       return (this.pharmacy.pharmacyType !== PharmacyType.P3);
