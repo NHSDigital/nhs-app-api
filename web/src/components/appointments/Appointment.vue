@@ -44,7 +44,8 @@
 
     <span v-if="showAddToCalendar()" :class="$style.appointmentGroup">
       <hr class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1" aria-hidden="true">
-      <desktopGenericBackLink :path="appointmentAddToCalendarPath"
+      <desktopGenericBackLink id="add-event-to-calendar-link"
+                              :path="appointmentAddToCalendarPath"
                               :button-text="'appointments.index.addToCalendarText'"
                               clazz="nhsuk-body-s nhsuk-u-margin-bottom-0"
                               @clickAndPrevent="onAddToCalendar"/>
@@ -119,6 +120,8 @@ export default {
       isAddToCalendarEnabled: this.$store.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED,
       appointmentAddToCalendarPath: APPOINTMENT_ADD_TO_CALENDAR_PATH,
       appointmentCancellingPath: APPOINTMENT_CANCELLING_PATH,
+      nativeAppVersionSupportsAddingEventsToCalendar:
+        window.nativeApp && window.nativeApp.addEventToCalendar,
     };
   },
   methods: {
@@ -137,7 +140,11 @@ export default {
       redirectTo(this, this.appointmentAddToCalendarPath);
     },
     showAddToCalendar() {
-      return this.showAddToCalendarLink && this.isAddToCalendarEnabled && this.isNativeApp;
+      return this.showAddToCalendarLink
+             && this.isAddToCalendarEnabled
+             && this.isNativeApp
+             // the following check can be removed after 1.37 is no longer supported
+             && this.nativeAppVersionSupportsAddingEventsToCalendar;
     },
     showPhoneNumber() {
       return (this.appointment || {}).channel === channel.Telephone;
