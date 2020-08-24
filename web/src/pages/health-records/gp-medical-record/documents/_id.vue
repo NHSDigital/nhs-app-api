@@ -1,6 +1,6 @@
 <template>
-  <div v-if="showTemplate" class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+  <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full" data-purpose="page-content">
       <div :class="[$style.content,
                     'pull-content',
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
@@ -53,6 +53,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import get from 'lodash/fp/get';
 import MenuItem from '@/components/MenuItem';
@@ -92,6 +93,7 @@ export default {
       isValidFile: null,
       isViewable: null,
       isDownloadable: null,
+      loading: true,
     };
   },
   computed: {
@@ -152,6 +154,7 @@ export default {
     this.isValidFile = isValidFile;
     this.isViewable = isViewable;
     this.isDownloadable = isDownloadable;
+    this.loading = false;
   },
   methods: {
     navigateToView() {
