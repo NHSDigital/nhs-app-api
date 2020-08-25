@@ -73,6 +73,7 @@ cidHostname: auth.ext.signin.nhs.uk
 cidProtocol: https
 cidClientID: nhs-online
 cidFidoHostname: uaf.ext.signin.nhs.uk
+cidSettingsHostName: settings.ext.signin.nhs.uk
 cidP5VectorOfTrustEnabled: true
 cidIPTrust:   # Cloudfront IPs
   - "52.124.128.0/17"
@@ -733,6 +734,18 @@ knownservices_config: {
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
+    "cid-dev-settings": {
+      "url": "https://settings.dev.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
     "cid-dev-account": {
       "url": "https://account.dev.signin.nhs.uk",
       "subServices": null,
@@ -805,6 +818,18 @@ knownservices_config: {
           "validateSession": false
         }
       ]
+    },
+    "cid-sandpit-settings": {
+      "url": "https://settings.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
     },
     "cid-sandpit-account": {
       "url": "https://account.sandpit.signin.nhs.uk",

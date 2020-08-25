@@ -64,7 +64,7 @@ describe('Account.index', () => {
       wrapper = mountIndex(store, env);
 
       expect(wrapper.find('[data-purpose=setting-section]').exists())
-        .toBe(false);
+        .toBe(true);
 
       expect(wrapper.find('[data-purpose=logout-button]').exists())
         .toBe(false);

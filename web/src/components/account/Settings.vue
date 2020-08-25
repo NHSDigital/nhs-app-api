@@ -6,6 +6,12 @@
                :text="$t(getBiometricLinkText)"
                :aria-label="$t(getBiometricLinkText)"
                :click-func="goToLoginOptions"/>
+    <menu-item id="btn_nhsLogin"
+               :header-tag="headerTag"
+               target="_blank"
+               :text="$t('myAccount.accountSettings.nhsLogin')"
+               :aria-label="$t('myAccount.accountSettings.nhsLogin')"
+               :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
@@ -43,9 +49,9 @@ export default {
     },
   },
   data() {
-    const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
     return {
-      biometricType,
+      cidSettingsUrl: this.$store.$env.CID_SETTINGS_URL,
+      isNativeApp: this.$store.state.device.isNativeApp,
     };
   },
   computed: {
@@ -72,6 +78,25 @@ export default {
     },
     showNotificationsClicked() {
       redirectTo(this, ACCOUNT_NOTIFICATIONS_PATH);
+    },
+    async goToNHSSettings() {
+      const { token } = await this.$store.app.$http
+        .postV1PatientAssertedLoginIdentity({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: window.location.hostname,
+          },
+        });
+      const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
+
+      if (this.isNativeApp) {
+        if (NativeCallbacks.supportsNativeWebIntegration()) {
+          NativeCallbacks.openWebIntegration(settingsUrl);
+        } else {
+          window.location = settingsUrl;
+        }
+      } else {
+        window.open(settingsUrl, '_blank', 'noopener,noreferrer');
+      }
     },
   },
 };

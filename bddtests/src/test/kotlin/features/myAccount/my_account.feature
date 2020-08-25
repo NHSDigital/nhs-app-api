@@ -17,13 +17,23 @@ Feature: View My Account Page
     Then the Account page is displayed
     And I see the current app version
 
-  Scenario: A patient can see the linked accounts and cookies link
+  Scenario: A patient can see the linked accounts and cookies link and the nhs login link
     Given I am a EMIS patient
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
     And the Linked Profiles link is displayed
     And the Cookies link is displayed
+    And the NHS login link is displayed
+
+  Scenario: A patient can navigate to the nhs login settings page to update their account details
+    Given I am a EMIS patient
+    And I am logged in
+    And I click the settings icon
+    Then the Account page is displayed
+    And the NHS login link is displayed
+    When I click the NHS login link on the settings page
+    Then the nhs login account settings page has opened in a new tab
 
   Scenario: A patient can navigate to the Terms of use page
     Given I am a EMIS patient

@@ -14,8 +14,7 @@
                  :text="$t('myAccount.cookiesLink')"
                  :click-func="goToUrl"
                  :click-param="cookiesPath"/>
-      <settings v-if="(showBiometrics || showNotifications)"
-                data-purpose="setting-section"
+      <settings data-purpose="setting-section"
                 :show-notifications="showNotifications"
                 :show-biometrics="showBiometrics"/>
     </menu-item-list>

@@ -44,6 +44,7 @@ class MyAccountPage : HybridPageObject() {
     val touchIDLink = link("Touch ID")
     val fingerprintLink = link("Fingerprint")
     val notificationsLink = link("Notifications")
+    val nhsLoginLink = link("NHS login")
 
     fun assertDisplayed() {
         aboutUs.assertLinksPresent(true)
@@ -85,6 +86,10 @@ class MyAccountPage : HybridPageObject() {
 
     fun assertCookiesLinkIsPresent() {
         cookieLink.assertIsVisible()
+    }
+
+    fun assertNHSLoginLinkIsPresent() {
+        nhsLoginLink.assertIsVisible()
     }
 }
 

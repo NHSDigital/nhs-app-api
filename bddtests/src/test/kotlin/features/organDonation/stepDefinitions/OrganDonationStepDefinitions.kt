@@ -19,8 +19,6 @@ import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
 import java.net.URL
 
-private const val NEW_TAB_WAIT_TIME = 1000L
-
 open class OrganDonationStepDefinitions {
 
     @Steps
@@ -168,8 +166,7 @@ open class OrganDonationStepDefinitions {
     }
 
     private fun aNewTabOpens(url: String) {
-        Thread.sleep(NEW_TAB_WAIT_TIME)
-        browser.changeTab(URL(url))
+        browser.changeTab(URL(url), true)
         browser.shouldHaveUrl(url)
     }
 

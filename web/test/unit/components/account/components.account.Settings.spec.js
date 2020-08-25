@@ -50,15 +50,25 @@ describe('Settings', () => {
   describe('biometrics, notifications and linked profiles enabled', () => {
     let notificationsLink;
     let biometricsLink;
+    let nhsLoginLink;
 
     beforeEach(() => {
       wrapper = mountSettings();
       notificationsLink = wrapper.find('#btn_notificationOptions');
       biometricsLink = wrapper.find('#btn_passwordOptions');
+      nhsLoginLink = wrapper.find('#btn_nhsLogin');
     });
 
     it('can see Biometrics', () => {
       expect(biometricsLink.exists()).toBe(true);
+    });
+
+    it('can see NHS Login', () => {
+      expect(nhsLoginLink.exists()).toBe(true);
+    });
+
+    it('NHS login has the correct text', () => {
+      expect(nhsLoginLink.text()).toBe('translate_myAccount.accountSettings.nhsLogin');
     });
 
     it('can see Notifications', () => {

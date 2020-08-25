@@ -21,6 +21,7 @@ import java.net.URL
 import java.time.Duration
 import java.util.*
 
+private const val NEW_TAB_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
 private const val TAB_COUNT_VARIABLE = "TabCount"
@@ -131,12 +132,16 @@ open class BrowserSteps {
     }
 
     @Step
-    fun changeTab(url: URL) {
+    fun changeTab(url: URL, waitForTab: Boolean = false) {
+        if (waitForTab) {
+            Thread.sleep(NEW_TAB_WAIT_TIME)
+        }
+
         val driver = loginPage.driver
 
         val allWindows: MutableList<String> = mutableListOf()
 
-        for (window in loginPage.driver.windowHandles) {
+        for (window in driver.windowHandles) {
             driver.switchTo().window(window)
             allWindows.add(0, driver.currentUrl)
             val currentTabUrl = URL(driver.currentUrl)

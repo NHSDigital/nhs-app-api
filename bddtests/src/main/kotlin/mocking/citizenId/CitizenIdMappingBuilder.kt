@@ -12,6 +12,7 @@ import mocking.citizenId.login.UserInfoRequestBuilder
 import mocking.citizenId.models.TokenRefreshRequest
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.notifications.ConfigurationRequestBuilder
+import mocking.citizenId.settings.AccountSettingsRequestBuilder
 import models.Patient
 
 open class CitizenIdMappingBuilder(method: String ="GET", relativePath:String="")
@@ -44,4 +45,6 @@ open class CitizenIdMappingBuilder(method: String ="GET", relativePath:String=""
     fun signingKeyRequest() = SigningKeysRequestBuilder()
 
     fun configurationRequest() = ConfigurationRequestBuilder()
+
+    fun accountSettingsRequest() = AccountSettingsRequestBuilder()
 }

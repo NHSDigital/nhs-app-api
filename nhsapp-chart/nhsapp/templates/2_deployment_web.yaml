@@ -80,9 +80,13 @@ spec:
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CID_AUTH_ENDPOINT_URL
           value: "https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/citizenid/authorize"
+        - name: CID_SETTINGS_URL
+          value: "https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/citizenid/settings"
           {{- else }}
         - name: CID_AUTH_ENDPOINT_URL
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}/authorize"
+        - name: CID_SETTINGS_URL
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidSettingsHostName }}"
           {{- end }}
         - name: CID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"

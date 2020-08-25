@@ -10,6 +10,7 @@ class Config private constructor() {
     var cidBackendUrl: String
     var wiremockUrl: String
 
+    var cidSettingsUrl: String
     var cidClientId: String
     var cidRedirectUri: String
     var cidNativeRedirectUri: String
@@ -81,6 +82,9 @@ class Config private constructor() {
         browserstackDeviceOSversion = envOrNull("BROWSERSTACK_OS_VERSION")
         isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
+        cidSettingsUrl = envOrDefault(
+                "CID_SETTINGS_URL",
+                "http://settings.nhslogin.stubs.local.bitraft.io:8080/citizenid/settings")
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
         cidJwtIssuer = envOrDefault(
                 "CITIZEN_ID_JWT_ISSUER",

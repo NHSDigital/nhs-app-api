@@ -123,6 +123,10 @@ class CitizenIdSessionCreateJourney {
                     .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }
 
+        mockingClient.forCitizenId.mock {
+            accountSettingsRequest().respondWithSettingsPage(patient)
+        }
+
         patient.refreshToken?.let {
             mockingClient.forCitizenId.mock {
                 refreshTokenRequest(SessionConstants.RefreshToken)

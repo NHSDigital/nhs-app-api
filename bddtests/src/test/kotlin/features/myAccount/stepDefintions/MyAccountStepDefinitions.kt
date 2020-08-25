@@ -39,6 +39,11 @@ class MyAccountStepDefinitions {
         myAccount.assertCookiesLinkIsPresent()
     }
 
+    @Then("^the NHS login link is displayed$")
+    fun theNHSLoginLinkIsDisplayed() {
+        myAccount.assertNHSLoginLinkIsPresent()
+    }
+
     @Then("^the Linked Profiles link is not displayed$")
     fun theLinkedProfilesLinkIsNotDisplayed() {
         myAccount.assertLinkedProfilesLinkIsNotPresent()
@@ -70,6 +75,7 @@ class MyAccountStepDefinitions {
             "Login options" -> myAccount.loginAndPasswordOptionsLink.click()
             "Touch ID" -> myAccount.touchIDLink.click()
             "Fingerprint" -> myAccount.fingerprintLink.click()
+            "NHS login" -> myAccount.nhsLoginLink.click()
         }
     }
 

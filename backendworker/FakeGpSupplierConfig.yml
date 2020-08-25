@@ -329,6 +329,18 @@ defaultUsers:
       dateOfBirth: "1925-11-02T00:00:00"
       sex: Male
 
+    # This user is for testing NHS Login Settings integration / account deletion and therefore has no corresponding account created with PKB
+    # It is used to test NHS login behaviour when redirected from a third party for SSO.
+
+    9661034540:
+      userId: 32da4e6d-8e98-45a5-b247-55fd5d9e8384
+      emailAddress: nhso2018+conrad.povall-cid@gmail.com
+      odsCode: F00001
+      givenName: Conrad
+      familyName: Povall
+      dateOfBirth: "1981-07-23T00:00:00"
+      sex: Male
+
   substrakt:
     9990555095:
       userId: e43cd1fe-7d42-4d5e-a092-224a9ae5a9fc

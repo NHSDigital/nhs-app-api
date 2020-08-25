@@ -53,3 +53,4 @@ services:
         aliases:
           - auth.nhslogin.stubs.local.bitraft.io
           - uaf.nhslogin.stubs.local.bitraft.io
+          - settings.nhslogin.stubs.local.bitraft.io

@@ -318,6 +318,7 @@ export default {
       header: 'Account settings',
       linkedProfilesOptions: 'Linked profiles',
       passwordOptions: 'Login and password options',
+      nhsLogin: 'NHS login',
       notificationOptions: 'Notifications',
     },
     aboutUsHeading: 'About the NHS App',
