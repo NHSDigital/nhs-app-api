@@ -1,0 +1,53 @@
+export default {
+  demographics: {
+    checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
+    checkboxLink: 'NHS App privacy policy',
+  },
+  orchestrator: {
+    backButton: 'Back',
+    backToHomeButton: 'Back to home',
+    continueButton: 'Continue',
+    endMyConsultationButton: 'End my consultation',
+  },
+  question: {
+    optionalLabel: 'optional',
+  },
+  unavailable: {
+    thisServiceIsNormallyAvailable: 'This service is normally available during your GP surgery\'s opening hours.',
+    coronavirusIfYouThinkYouMightHave: 'If you think you might have coronavirus',
+    coronavirusStayAtHome: 'Stay at home and avoid close contact with other people.',
+    coronavirusUseOneOneOneLink: 'Use the 111 coronavirus service to see if you need medical help',
+  },
+  validationErrors: {
+    thereIsAProblem: 'There\'s a problem',
+    message: {
+      attachment: 'Select a file',
+      boolean: 'Select an option',
+      choice: 'Select an option',
+      date: 'Enter a real date and include a day, month and year',
+      dateEmpty: 'Enter a date',
+      dateTime: 'Enter the full date and time',
+      dateTimeEmpty: 'Enter a date and time',
+      decimal: 'Enter a number',
+      default: 'Answer all required questions',
+      image: 'Select the area on the image',
+      integer: 'Enter a number',
+      multiple_choiceAllRequired: 'All options are required',
+      multiple_choiceAtLeastOneRequired: 'Select one or more options',
+      multiple_choiceOnlyOneOption: 'Select the option',
+      overMaxValueNumber: 'Enter {value} or less',
+      quantity: 'Enter a number',
+      quantityUnit: 'Select an option',
+      string: 'Answer the question',
+      stringTooLong: 'Answer must be {value} characters or less',
+      text: 'Answer the question',
+      textTooLong: 'Answer must be {value} characters or less',
+      time: 'Enter a valid time',
+      underMinValueNumber: 'Enter {value} or more',
+    },
+  },
+  warning: {
+    text: 'This service is provided by an online consultation service provider, {providerName}, on behalf of your GP surgery.',
+    link: 'Find out more about online consultation services.',
+  },
+};

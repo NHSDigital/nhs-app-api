@@ -4,12 +4,12 @@
                     message-type="warning"
                     :icon-text="$t('messageIconText.important')">
       <message-text>
-        {{ $t('onlineConsultations.warning.warningText',
+        {{ $t('onlineConsultations.warning.text',
               { providerName: providerName }) }}
         <span><a id="online_consultations_help_link"
                  :href="onlineConsultationsUrl"
                  target="_blank" rel="noopener noreferrer">
-          {{ $t('onlineConsultations.warning.warningLink') }}</a>
+          {{ $t('onlineConsultations.warning.link') }}</a>
         </span>
       </message-text>
     </message-dialog>

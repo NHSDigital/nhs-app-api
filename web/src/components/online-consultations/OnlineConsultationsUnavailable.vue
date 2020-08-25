@@ -1,20 +1,20 @@
 <template>
   <div data-purpose="olc-unavailable">
     <p data-purpose="info">
-      {{ $t('onlineConsultations.unavailable.paragraph') }}
+      {{ $t('onlineConsultations.unavailable.thisServiceIsNormallyAvailable') }}
     </p>
     <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-0" data-purpose="coronavirus-heading">
-      {{ $t('onlineConsultations.unavailable.coronavirusHeading') }}
+      {{ $t('onlineConsultations.unavailable.coronavirusIfYouThinkYouMightHave') }}
     </h2>
     <p data-purpose="coronavirus-info">
-      {{ $t('onlineConsultations.unavailable.coronavirusParagraph') }}
+      {{ $t('onlineConsultations.unavailable.coronavirusStayAtHome') }}
     </p>
     <p>
       <a href="https://111.nhs.uk/service/COVID-19/"
          data-purpose="coronavirus-link"
          target="_blank"
          rel="noopener noreferrer">
-        {{ $t('onlineConsultations.unavailable.coronavirusLink') }}
+        {{ $t('onlineConsultations.unavailable.coronavirusUseOneOneOneLink') }}
       </a>
     </p>
     <desktopGenericBackLink v-if="!isNativeApp"

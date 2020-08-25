@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import QuestionMultipleChoice from '@/components/online-consultations/QuestionMultipleChoice';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import CheckboxGroup from '@/components/CheckboxGroup';
@@ -22,6 +23,9 @@ const mountQuestion = ({ propsData = {}, methods = {} } = {}) =>
       options: initialOptions,
       methods,
       ...propsData,
+    },
+    mountOpts: {
+      i18n,
     },
   });
 

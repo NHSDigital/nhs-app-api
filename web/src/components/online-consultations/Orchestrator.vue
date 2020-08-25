@@ -6,7 +6,7 @@
                       message-type="error"
                       role="alert">
         <message-text>
-          {{ $t('onlineConsultations.validationErrors.header') }}
+          {{ $t('onlineConsultations.validationErrors.thereIsAProblem') }}
         </message-text>
         <message-list>
           <li>{{ validationErrorMessage }}</li>

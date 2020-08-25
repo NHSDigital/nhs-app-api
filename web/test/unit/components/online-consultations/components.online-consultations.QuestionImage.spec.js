@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import QuestionImage from '@/components/online-consultations/QuestionImage';
 import GenericImageInput from '@/components/widgets/GenericImageInput';
 import { mount } from '../../helpers';
@@ -22,6 +23,9 @@ const mountQuestion = ({ propsData = {}, methods = {} } = {}) =>
       ...propsData,
     },
     methods,
+    mountOpts: {
+      i18n,
+    },
   });
 
 describe('QuestionImage.vue', () => {

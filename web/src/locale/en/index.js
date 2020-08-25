@@ -2,6 +2,7 @@ import components from './components';
 import gpSessionErrors from './gpSessionErrors';
 import loginSettings from './loginSettings';
 import nominatedPharmacy from './nominatedPharmacy';
+import onlineConsultations from './onlineConsultations';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 
@@ -351,63 +352,6 @@ export default {
       text: 'If your mobile device supports fingerprint or face recognition, you can use it to log in to the NHS App instead of a password and security code.',
       settingsButton: 'Open settings',
       dismissLink: 'Dismiss',
-    },
-  },
-  onlineConsultations: {
-    unavailable: {
-      paragraph: 'This service is normally available during your GP surgery\'s opening hours.',
-      coronavirusHeading: 'If you think you might have coronavirus',
-      coronavirusParagraph: 'Stay at home and avoid close contact with other people.',
-      coronavirusLink: 'Use the 111 coronavirus service to see if you need medical help',
-    },
-    demographics: {
-      checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
-      checkboxLink: 'NHS App privacy policy',
-    },
-    warning: {
-      warningText: 'This service is provided by an online consultation service provider, {providerName}, on behalf of your GP surgery.',
-      warningLink: 'Find out more about online consultation services.',
-    },
-    validationErrors: {
-      header: 'There\'s a problem',
-      message: {
-        attachment: 'Select a file',
-        boolean: 'Select an option',
-        choice: 'Select an option',
-        date: 'Enter a real date and include a day, month and year',
-        dateEmpty: 'Enter a date',
-        dateTime: 'Enter the full date and time',
-        dateTimeEmpty: 'Enter a date and time',
-        decimal: 'Enter a number',
-        image: 'Select the area on the image',
-        integer: 'Enter a number',
-        multiple_choiceOnlyOneOption: 'Select the option',
-        multiple_choiceAtLeastOneRequired: 'Select one or more options',
-        multiple_choiceAllRequired: 'All options are required',
-        quantity: 'Enter a number',
-        quantityUnit: 'Select an option',
-        quantityTooHigh: 'Enter {value} or less',
-        quantityTooLow: 'Enter {value} or more',
-        string: 'Answer the question',
-        stringTooLong: 'Answer must be {value} characters or less',
-        text: 'Answer the question',
-        textTooLong: 'Answer must be {value} characters or less',
-        time: 'Enter a valid time',
-        // eslint-disable-next-line no-template-curly-in-string
-        overMaxValueNumber: 'Enter {value} or less',
-        // eslint-disable-next-line no-template-curly-in-string
-        underMinValueNumber: 'Enter {value} or more',
-        default: 'Answer all required questions',
-      },
-    },
-    question: {
-      optionalLabel: 'optional',
-    },
-    orchestrator: {
-      continueButton: 'Continue',
-      endMyConsultationButton: 'End my consultation',
-      backToHomeButton: 'Back to home',
-      backButton: 'Back',
     },
   },
   appointments: {
@@ -2545,6 +2489,7 @@ export default {
   gpSessionErrors,
   loginSettings,
   nominatedPharmacy,
+  onlineConsultations,
   termsAndConditions,
   thirdPartyProviders,
 };

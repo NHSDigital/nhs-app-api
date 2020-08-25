@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import each from 'jest-each';
 import ConditionList from '@/components/online-consultations/ConditionList';
 import MenuItem from '@/components/MenuItem';
@@ -27,13 +28,16 @@ describe('condition list', () => {
       const conditionList = mount(ConditionList, {
         $store: $store(),
         propsData: { serviceDefinitions: [] },
+        mountOpts: {
+          i18n,
+        },
       });
 
       // Act
       const paragraph = conditionList.find('#conditionInfo>p');
 
       // Assert
-      expect(paragraph.text()).toEqual('translate_appointments.gp_advice.conditions.paragraph');
+      expect(paragraph.text()).toEqual('To ensure we ask you relevant questions, choose your condition.');
     });
 
     each([
@@ -49,6 +53,9 @@ describe('condition list', () => {
           items: [{ title: 'Hayfever', id: 'HFV' }],
         }] },
         methods: { onConditionClicked },
+        mountOpts: {
+          i18n,
+        },
       });
 
       // Act
@@ -57,7 +64,7 @@ describe('condition list', () => {
 
       // Assert
       expect(generalAdviceLink.exists()).toBe(true);
-      expect(generalAdviceLink.text()).toEqual('translate_appointments.gp_advice.conditions.link');
+      expect(generalAdviceLink.text()).toEqual('I cannot find my condition');
       expect(onConditionClicked).toHaveBeenCalledWith('NHS_ADVICE');
     });
 
@@ -75,6 +82,9 @@ describe('condition list', () => {
             { title: 'COPD', id: 'CPD' },
           ],
         }] },
+        mountOpts: {
+          i18n,
+        },
       });
 
       // Act
@@ -99,6 +109,9 @@ describe('condition list', () => {
         methods: {
           endMyConsultationClicked,
         },
+        mountOpts: {
+          i18n,
+        },
       });
 
       // Act
@@ -106,7 +119,7 @@ describe('condition list', () => {
       endMyConsultationButton.trigger('click.prevent');
 
       // Assert
-      expect(endMyConsultationButton.element.innerHTML.trim()).toEqual('translate_onlineConsultations.orchestrator.endMyConsultationButton');
+      expect(endMyConsultationButton.element.innerHTML.trim()).toEqual('End my consultation');
       expect(endMyConsultationClicked).toHaveBeenCalled();
     });
   });
@@ -119,6 +132,9 @@ describe('condition list', () => {
         const conditionList = mount(ConditionList, {
           $store: store,
           propsData: { serviceDefinitions: [] },
+          mountOpts: {
+            i18n,
+          },
         });
 
         // Act
@@ -140,6 +156,9 @@ describe('condition list', () => {
         const conditionList = mount(ConditionList, {
           $store: $store(),
           propsData: { serviceDefinitions: [] },
+          mountOpts: {
+            i18n,
+          },
         });
 
         // Act

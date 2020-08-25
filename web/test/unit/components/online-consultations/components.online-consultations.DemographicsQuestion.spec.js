@@ -1,5 +1,6 @@
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
 import GenericButton from '@/components/widgets/GenericButton';
+import i18n from '@/plugins/i18n';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
 import each from 'jest-each';
@@ -36,6 +37,9 @@ const mountComponent = ({
     slots,
     methods,
     $router: createRouter(),
+    mountOpts: {
+      i18n,
+    },
   })
 );
 
@@ -129,8 +133,8 @@ describe('demographics question', () => {
       const warning = component.find('#demographicsWarning');
       const warningHelpLink = warning.find('a');
       // Assert
-      expect(warning.text()).toContain('translate_onlineConsultations.warning.warningText');
-      expect(warningHelpLink.text()).toEqual('translate_onlineConsultations.warning.warningLink');
+      expect(warning.text()).toContain('This service is provided by an online consultation service provider, Stubs, on behalf of your GP surgery.');
+      expect(warningHelpLink.text()).toEqual('Find out more about online consultation services.');
       expect(warningHelpLink.attributes().href).toEqual(ONLINE_CONSULTATIONS_PRIVACY_URL);
     });
     it('have a slot for question text, and place in the Question component', () => {
@@ -174,7 +178,7 @@ describe('demographics question', () => {
       continueButton.trigger('click');
 
       // Assert
-      expect(continueButton.text()).toEqual('translate_onlineConsultations.orchestrator.continueButton');
+      expect(continueButton.text()).toEqual('Continue');
       expect(demographicsContinueClicked).toHaveBeenCalledTimes(1);
     });
   });

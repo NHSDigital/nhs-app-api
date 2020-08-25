@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import Orchestrator from '@/components/online-consultations/Orchestrator';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
 import each from 'jest-each';
@@ -56,6 +57,9 @@ const mountOrchestrator = ({ stubbed = true, methods = {} } = {}) => {
       errorDialog: 'errorDialog',
       button: 'button',
     },
+    mountOpts: {
+      i18n,
+    },
   });
 };
 
@@ -73,10 +77,9 @@ describe('orchestrator', () => {
       describe('validation error dialog', () => {
         it('will display validationErrorMessage when isValidationError is true', () => {
           // Arrange
-          const validationHeader = 'onlineConsultations.validationErrors.header';
-          const validationErrorMessage = 'test.validation.error.message';
-          const expectedValidationHeader = `translate_${validationHeader}`;
-          const expectedValidationErrorMessage = `translate_${validationErrorMessage}`;
+          const validationErrorMessage = 'onlineConsultations.validationErrors.message.attachment';
+          const expectedValidationHeader = 'There\'s a problem';
+          const expectedValidationErrorMessage = 'Select a file';
 
           store.state.onlineConsultations.validationError = true;
           store.state.onlineConsultations.validationErrorMessage = validationErrorMessage;
@@ -141,7 +144,7 @@ describe('orchestrator', () => {
           expect(isLegend).toEqual(question.isLegend);
           expect(name).toEqual(question.name);
           expect(required).toEqual(question.required);
-          expect(errorText).toEqual(['translate_test.validation.error.message']);
+          expect(errorText).toEqual(['Select a file']);
         });
 
         describe('attachment', () => {
@@ -376,7 +379,7 @@ describe('orchestrator', () => {
           // Assert
           const continueButton = orchestrator.find('generic-button-stub');
           expect(continueButton.exists()).toBe(true);
-          expect(continueButton.text()).toEqual('translate_onlineConsultations.orchestrator.continueButton');
+          expect(continueButton.text()).toEqual('Continue');
         });
 
         describe('when clicked', () => {
@@ -421,7 +424,7 @@ describe('orchestrator', () => {
           // Assert
           const backButton = orchestrator.find('#endMyConsultationButton');
           expect(backButton.exists()).toBe(true);
-          expect(backButton.text()).toEqual('translate_onlineConsultations.orchestrator.endMyConsultationButton');
+          expect(backButton.text()).toEqual('End my consultation');
         });
       });
     });
