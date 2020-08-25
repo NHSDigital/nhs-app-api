@@ -37,6 +37,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+        <!-- Disable firebase_analytics -->
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
         <!--Setup file provider to handle downloaded documents -->
         <!--Ignoring warning from network_security_config as it just for debugging purpose and won't affect
         actual functionality of older version (the feature is not supported below android 6 and it won't work and we don't need it anyway in production) -->
