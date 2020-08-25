@@ -146,19 +146,48 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
         private async Task<GetUserProfileResult> GetUserProfileFromCitizenId(string accessToken, string subject, string refreshToken = null)
         {
-            var userInfo = await _citizenIdClient.GetUserInfo(accessToken);
+            var userInfoResponse = await _citizenIdClient.GetUserInfo(accessToken);
 
-            if (!userInfo.HasSuccessStatusCode)
+            var validatedUserInfoResponse = ValidateUserInfoResponse(userInfoResponse);
+            if (validatedUserInfoResponse.Failed(out var userInfoResponseFailure))
             {
-                LogError(userInfo, "Failed to retrieve User Profile.");
-                return new GetUserProfileResult
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    UserProfile = Option.None<UserProfile>()
-                };
+                return userInfoResponseFailure;
             }
 
-            if (!subject.Equals(userInfo.Body.Subject, StringComparison.Ordinal))
+            var validatedUserInfo = ValidateUserInfo(validatedUserInfoResponse, subject);
+            if (validatedUserInfo.Failed(out var validatedUserInfoFailure))
+            {
+                return validatedUserInfoFailure;
+            }
+
+            var userProfile = new UserProfile(validatedUserInfo, accessToken, refreshToken);
+
+            return new GetUserProfileResult
+            {
+                StatusCode = HttpStatusCode.OK,
+                UserProfile = Option.Some(userProfile)
+            };
+        }
+
+        private ProcessResult<UserInfo, GetUserProfileResult> ValidateUserInfoResponse(
+            CitizenIdApiObjectResponse<UserInfo> userInfoResponse)
+        {
+            if (userInfoResponse.HasSuccessStatusCode)
+            {
+                return userInfoResponse.Body;
+            }
+
+            LogError(userInfoResponse, "Failed to retrieve User Profile.");
+            return new GetUserProfileResult
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                UserProfile = Option.None<UserProfile>()
+            };
+        }
+
+        private ProcessResult<UserInfo, GetUserProfileResult> ValidateUserInfo(UserInfo userInfo, string subject)
+        {
+            if (!subject.Equals(userInfo.Subject, StringComparison.Ordinal))
             {
                 _logger.LogError("Value of subject claim differed between Token and UserInfo responses");
                 return new GetUserProfileResult
@@ -168,13 +197,12 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 };
             }
 
-            var userProfile = new UserProfile(userInfo.Body, accessToken, refreshToken);
-
-            return new GetUserProfileResult
+            if (string.IsNullOrWhiteSpace(userInfo.GivenName))
             {
-                StatusCode = HttpStatusCode.OK,
-                UserProfile = Option.Some(userProfile)
-            };
+                _logger.LogWarning("NHS login user info contained unpopulated given name");
+            }
+
+            return userInfo;
         }
 
         private void LogError<T>(CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
