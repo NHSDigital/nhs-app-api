@@ -44,7 +44,7 @@
     <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="getBackPath"
-                            :button-text="'rp03.backButton'"
+                            :button-text="'generic.backButton.text'"
                             @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>

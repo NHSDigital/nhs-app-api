@@ -4,17 +4,17 @@
       <div class="nhsuk-grid-column-full">
         <div v-if="isProxying">
           <p>
-            {{ $tc('prescriptions.orderSuccess.proxyMessage', null, { name, givenName }) }}
+            {{ $t('prescriptions.orderSuccess.youHaveOrderedOnBehalfOf', { name, givenName }) }}
           </p>
           <switch-profile-button />
         </div>
         <div v-else>
           <p>
-            {{ $tc('rp05.confirmationMessage') }}
+            {{ $t('prescriptions.orderSuccess.theOrderStatusWillBeUpdated') }}
           </p>
           <desktopGenericBackLink
             :path="backPath"
-            :button-text="'prescriptions.orderSuccess.back'"
+            :button-text="'prescriptions.orderSuccess.goToYourPrescriptionOrders'"
             @clickAndPrevent="backButtonClicked"/>
         </div>
       </div>

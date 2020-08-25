@@ -1,0 +1,75 @@
+export default {
+  confirmDetails: {
+    changeThisPrescription: 'Change this prescription',
+    checkYourDetails: 'Check your prescription details before ordering',
+    confirmAndOrder: 'Confirm and order prescription',
+    specialRequestsNone: 'None',
+    specialRequestsRelating: 'Special requests relating to this order',
+    yourDispensingPractice: 'Your dispensing practice',
+    yourNominatedPharmacy: 'Your nominated pharmacy',
+  },
+  historic: {
+    orderedBy: 'Ordered by ',
+    status: {
+      rejected: {
+        header: 'Rejected',
+        description: 'Rejected, contact your GP',
+      },
+      requested: {
+        header: 'Requested',
+        description: 'Requested, waiting for GP approval',
+      },
+      approved: {
+        header: 'Approved',
+        description: 'Approved by your GP',
+      },
+    },
+    theStatusIs: 'The status of this prescription is ',
+  },
+  orderSuccess: {
+    goToYourPrescriptionOrders: 'Go to your prescription orders',
+    theOrderStatusWillBeUpdated: 'The order status will be updated once it’s been reviewed by your GP.​',
+    youHaveOrderedOnBehalfOf: 'You have ordered a prescription on behalf of {name}. The order status will be updated once it has been reviewed by {givenName}\'s GP.',
+  },
+  partialSuccess: {
+    goToYourPrescriptionOrders: 'Go to your prescription orders',
+    ifYouNeedToOrderNow: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, visit 111.nhs.uk or call 111.',
+    medicationNotOrdered: 'Medication not ordered',
+    medicationOrdered: 'Medication ordered successfully',
+    theOrderStatusWillBeUpdated: 'The order status will be updated once it\'s been reviewed by your GP.',
+  },
+  repeatCourses: {
+    errors: {
+      thereIsAProblem: 'There\'s a problem',
+      enterSpecialRequests: 'Enter any special requests relating to this order',
+      selectAtLeastOne: 'Select at least one medicine',
+    },
+    currentlyAvailableRepeatPrescriptions: 'Medications currently available for repeat prescription',
+    currentlyAvailableToOrder: 'Medication currently available to order',
+    youDoNotHaveAny: 'You don\'t have any medication available to order right now',
+    ifYouHaveThatAreNotShown: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
+    changePharmacy: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
+    specialRequestsOptional: 'Special requests relating to this order (optional)',
+    specialRequestsMandatory: 'Special requests relating to this order',
+    thisTextMayNotBeSeen: 'This text may not be seen by your GP. For important requests, contact your GP surgery.',
+    specialRequestCharacterLimit: 'Limit is 1000 characters (about 150 words)',
+    continue: 'Continue',
+  },
+  viewOrders: {
+    nominatedPharmacy: {
+      yoursIs: 'Your nominated pharmacy is:',
+      none: 'You do not have a nominated pharmacy.',
+      link: {
+        change: 'Change',
+        yourPharmacy: 'Your nominated pharmacy',
+        noPharmacy: 'How you get your prescriptions',
+      },
+    },
+    noPrescriptions: {
+      youDoNotHaveAny: 'You don\'t currently have any repeat prescriptions ordered',
+      onceYouHavePlacedAnOrder: 'Once you\'ve placed an order here, you\'ll be able to view your repeat prescription status and history.',
+      ifYouHaveAnExistingOrder: 'If you have an existing order that is not shown here, contact your GP surgery or pharmacy for more information.',
+    },
+    orders: 'Orders',
+  },
+};

@@ -4,19 +4,19 @@
       <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
         <div v-if="nominatedPharmacyName" id="nominated-pharmacy">
           <p id="pharmacy-description" class="nhsuk-u-margin-bottom-2">
-            {{ $t('rp01.nominatedPharmacy') }} </p>
+            {{ $t('prescriptions.viewOrders.nominatedPharmacy.yoursIs') }} </p>
           <p id="pharmacy-name" class="nhsuk-u-margin-bottom-2"> {{ nominatedPharmacyName }}</p>
         </div>
         <p v-else id="no-nominated-pharmacy" class="nhsuk-u-margin-bottom-2">
-          {{ $t('rp01.noNominatedPharmacy') }}
+          {{ $t('prescriptions.viewOrders.nominatedPharmacy.none') }}
         </p>
         <p> <a id="change-link" href="#" @click="onNominatedPharmacyDetailClicked">
-          {{ $t('rp01.changePharmacyLink') }} </a></p>
+          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.change') }} </a></p>
         <span v-if="nominatedPharmacyName" class="nhsuk-u-visually-hidden">
-          {{ $t('rp01.hiddenText.nominatedPharmacy') }}
+          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.yourPharmacy') }}
         </span>
         <span v-else class="nhsuk-u-visually-hidden">
-          {{ $t('rp01.hiddenText.noNominatedPharmacy') }}
+          {{ $t('prescriptions.viewOrders.nominatedPharmacy.link.noPharmacy') }}
         </span>
       </div>
     </sjr-if>
@@ -24,18 +24,18 @@
          id="show-no-prescription"
          data-purpose="no-prescriptions-error"
          class="nhsuk-u-padding-bottom-6">
-      <h2>{{ $t('rp01.empty.subHeader') }}</h2>
+      <h2>{{ $t('prescriptions.viewOrders.noPrescriptions.youDoNotHaveAny') }}</h2>
       <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('rp01.empty.line1') }}
+        {{ $t('prescriptions.viewOrders.noPrescriptions.onceYouHavePlacedAnOrder') }}
       </p>
       <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('rp01.empty.line2') }}
+        {{ $t('prescriptions.viewOrders.noPrescriptions.ifYouHaveAnExistingOrder') }}
       </p>
     </div>
 
     <div v-if="showPrescriptions" data-purpose="prescriptions">
       <div class="nhsuk-u-margin-bottom-0" :class="$style['nhs-app-panel-heading']">
-        <h2 class="nhsuk-heading-l">{{ $t('rp02.ordersTitle') }}</h2>
+        <h2 class="nhsuk-heading-l">{{ $t('prescriptions.viewOrders.orders') }}</h2>
       </div>
       <div v-for="(prescriptionCourse, index) in prescriptionCoursesToDisplay"
            :key="index" :class="$style['list-menu']" data-label="historic-prescription">

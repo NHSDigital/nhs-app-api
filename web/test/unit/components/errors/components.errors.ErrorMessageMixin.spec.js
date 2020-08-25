@@ -1,15 +1,9 @@
 // ApiError is used as it includes the ErrorMessageMixin and a mixin cannot be mounted directly
 import ApiError from '@/components/errors/ApiError';
+import i18n from '@/plugins/i18n';
 import { initialState as initialDevice } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrors } from '@/store/modules/errors/mutation-types';
-import has from 'lodash/fp/has';
-import get from 'lodash/fp/get';
-import locale from '@/locale';
 import { createStore, mount } from '../../helpers';
-
-const engLocale = locale.en;
-const $te = key => has(key, engLocale);
-const $t = key => get(key, engLocale);
 
 const createState = () => ({
   device: initialDevice(),
@@ -37,7 +31,7 @@ describe('error message mixin', () => {
       state,
     });
 
-    return mount(ApiError, { $store, $te, $t });
+    return mount(ApiError, { $store, mountOpts: { i18n } });
   };
 
   describe('computed', () => {
@@ -66,7 +60,7 @@ describe('error message mixin', () => {
         expect(wrapper.vm.getComponentErrorCodeKey('any')).toEqual('');
       });
 
-      it('will be value of `[component].errors.[statusCode].[errorCode].[type] if it exists', () => {
+      it('will be value of `apiErrors.components.[component].[statusCode].[errorCode].[type] if it exists', () => {
         const apiError = {
           status: 401,
           error: 'forbidden',
@@ -75,7 +69,7 @@ describe('error message mixin', () => {
         wrapper = mountErrorMessageMixin({ apiError, hasApiError: true, routePath: '/mypath' });
         wrapper.vm.getText = jest.fn().mockReturnValue('something');
         wrapper.vm.getComponentErrorCodeKey('typeName');
-        expect(wrapper.vm.getText).toHaveBeenCalledWith('mypath.errors.401.forbidden.typeName');
+        expect(wrapper.vm.getText).toHaveBeenCalledWith('apiErrors.components.mypath.401.forbidden.typeName');
       });
     });
 
@@ -96,7 +90,7 @@ describe('error message mixin', () => {
 
       it('will return the value if the key exists in the locale file', () => {
         wrapper = mountErrorMessageMixin();
-        expect(wrapper.vm.getText('errors.pageHeader')).toEqual('Server error');
+        expect(wrapper.vm.getText('apiErrors.pageHeader')).toEqual('Server error');
       });
     });
   });

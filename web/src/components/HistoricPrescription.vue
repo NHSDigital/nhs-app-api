@@ -4,7 +4,7 @@
     <div v-if="prescriptionCourse.orderDate != null">
       <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">
         <span data-label="order-date">{{ prescriptionCourse.orderDate | fullDate }}</span>
-        <span class="nhsuk-u-visually-hidden"> {{ $t('rp02.statusHelpText') }}</span>
+        <span class="nhsuk-u-visually-hidden">{{ $t('prescriptions.historic.theStatusIs') }}</span>
         <span id="status-text" data-label="status-text"
               :class="[$style['nhsuk-tag'], getStatusStyle(),
                        $style['nhsuk-tag--no-border'],
@@ -44,9 +44,9 @@
          class="nhsuk-u-margin-bottom-1 nhsuk-body-s"
          :class="$style['nhs-app-prescription__instructions']"
          :aria-label="ariaLabelCaption(
-           'rp02.proxyOrderedByDisplayPrefix',
+           'prescriptions.historic.orderedBy',
            prescriptionCourse.orderedBy)">
-        {{ $t('rp02.proxyOrderedByDisplayPrefix') + prescriptionCourse.orderedBy }}
+        {{ $t('prescriptions.historic.orderedBy') + prescriptionCourse.orderedBy }}
       </p>
       <p data-label="status-description" :class="$style['nhs-app-prescription__instructions']"
          class="nhsuk-u-margin-bottom-0 nhsuk-body-s" :aria-label="getStatusDescription()">
@@ -71,18 +71,18 @@ export default {
     this.statusStyling = {
       [MedicationCourseStatus.Rejected]: {
         style: 'nhsuk-tag--red',
-        text: this.$t('rp02.statusRejected.subHeader'),
-        description: this.$t('rp02.statusRejected.description'),
+        text: this.$t('prescriptions.historic.status.rejected.header'),
+        description: this.$t('prescriptions.historic.status.rejected.description'),
       },
       [MedicationCourseStatus.Requested]: {
         style: 'nhsuk-tag--orange',
-        text: this.$t('rp02.statusRequested.subHeader'),
-        description: this.$t('rp02.statusRequested.description'),
+        text: this.$t('prescriptions.historic.status.requested.header'),
+        description: this.$t('prescriptions.historic.status.requested.description'),
       },
       [MedicationCourseStatus.Approved]: {
         style: 'nhsuk-tag--green',
-        text: this.$t('rp02.statusApproved.subHeader'),
-        description: this.$t('rp02.statusApproved.description'),
+        text: this.$t('prescriptions.historic.status.approved.header'),
+        description: this.$t('prescriptions.historic.status.approved.description'),
       },
     };
   },

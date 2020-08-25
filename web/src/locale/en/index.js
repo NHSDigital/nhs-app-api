@@ -1,8 +1,10 @@
+import apiErrors from './apiErrors';
 import components from './components';
 import gpSessionErrors from './gpSessionErrors';
 import loginSettings from './loginSettings';
 import nominatedPharmacy from './nominatedPharmacy';
 import onlineConsultations from './onlineConsultations';
+import prescriptions from './prescriptions';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 
@@ -10,16 +12,9 @@ export default {
   language: 'en-GB',
   appTitle: 'NHS App',
   errors: {
-    pageHeader: 'Server error',
-    header: 'We\'re experiencing technical difficulties',
-    reportAProblemLink: 'Report a problem',
     referenceCode: 'Reference: {reference}',
+    reportAProblemLink: 'Report a problem',
     tryAgainNow: 'Try again now.',
-    subheader: '',
-    message: {
-      text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-      label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-    },
     404: {
       pageTitle: 'Page not found',
       header: 'Page not found',
@@ -28,13 +23,6 @@ export default {
         text: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
         label: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call one one one.',
       },
-    },
-    502: {
-      pageTitle: 'Service currently unavailable',
-      pageHeader: 'Service currently unavailable',
-      header: 'This service is not available right now',
-      retryButtonText: 'Try again',
-      message: 'Try again in a few moments.',
     },
   },
   messageIconText: {
@@ -242,92 +230,6 @@ export default {
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
       },
-    },
-  },
-  rp01: {
-    pageTitle: 'TBC',
-    empty: {
-      subHeader: 'You don\'t currently have any repeat prescriptions ordered',
-      line1: 'Once you\'ve placed an order here, you\'ll be able to view your repeat prescription status and history.',
-      line2: 'If you have an existing order that is not shown here, contact your GP surgery or pharmacy for more information.',
-    },
-    hiddenText: {
-      nominatedPharmacy: 'Your nominated pharmacy',
-      noNominatedPharmacy: 'How you get your prescriptions',
-    },
-    changePharmacyLink: 'Change',
-    orderPrescriptionButton: 'Order a repeat prescription',
-    nominatedPharmacy: 'Your nominated pharmacy is:',
-    noNominatedPharmacy: 'You do not have a nominated pharmacy.',
-    dispensingPractice: 'My dispensing practice',
-    glossary: {
-      headerText: 'You may see medical abbreviations that you are not familiar with.',
-      linkText: 'Help with abbreviations',
-    },
-  },
-  rp02: {
-    pageTitle: 'TBC',
-    orderDate: 'Ordered',
-    proxyOrderedByDisplayPrefix: 'Ordered by ',
-    statusHelpText: 'The status of this prescription is ',
-    ordersTitle: 'Orders',
-    status: 'Status',
-    statusRejected: {
-      subHeader: 'Rejected',
-      description: 'Rejected, contact your GP',
-    },
-    statusRequested: {
-      subHeader: 'Requested',
-      description: 'Requested, waiting for GP approval',
-    },
-    statusApproved: {
-      subHeader: 'Approved',
-      description: 'Approved by your GP',
-    },
-  },
-  rp06: {
-    pageTitle: 'TBC',
-    empty: {
-      subHeader: 'You don\'t have any medication available to order right now',
-      body: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
-    },
-    backButton: 'Back',
-  },
-  rp03: {
-    pageTitle: 'TBC',
-    subHeader: 'Medication currently available to order',
-    noMedicinesSelected: 'Select at least one medicine',
-    medicationCourse: {
-      line1: 'Medications currently available for repeat prescription',
-      paragraph1: '',
-    },
-    specialRequestRequired: 'Enter any special requests relating to this order',
-    specialRequestsLabelOptional: 'Special requests relating to this order (optional)',
-    specialRequestsLabelMandatory: 'Special requests relating to this order',
-    maxSpecialRequest: 'Limit is 1000 characters (about 150 words)',
-    changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
-    noSpecialRequestDefaultText: 'None',
-    continueButton: 'Continue',
-    backButton: 'Back',
-    disclaimer: 'This text may not be seen by your GP. For important requests, contact your GP surgery.',
-  },
-  rp04: {
-    pageTitle: 'TBC',
-    subHeader: 'Check your prescription details before ordering',
-    specialRequestsLabel: 'Special requests relating to this order',
-    nominatedPharmacyHeader: 'Your nominated pharmacy',
-    dispensingPracticeHeader: 'Your dispensing practice',
-    confirmButton: 'Confirm and order prescription',
-    backButton: 'Change this prescription',
-  },
-  rp05: {
-    confirmationMessage: 'The order status will be updated once it’s been reviewed by your GP.​',
-  },
-  rp12: {
-    reasonMissing: {
-      summarySubHeader: 'There\'s a problem',
-      summaryBody: 'Select a medication',
-      inline: 'Select a medication',
     },
   },
   noConnection: {
@@ -661,119 +563,6 @@ export default {
           suffix: ' if you have any problems.',
         },
       ],
-    },
-  },
-  prescriptions: {
-    errors: {
-      pageTitle: 'Prescription data error',
-      pageHeader: 'Prescription data error',
-      header: 'There\'s been a problem getting your prescription information',
-      subheader: '',
-      message: {
-        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-      },
-      retryButtonText: '',
-    },
-    view_orders: {
-      errors: {
-        pageTitle: 'Prescription data error',
-        pageHeader: 'Prescription data error',
-        header: 'There\'s been a problem getting your prescription information',
-        subheader: '',
-        message: {
-          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-        retryButtonText: '',
-        504: {
-          pageTitle: 'Prescription data error',
-          pageHeader: 'Prescription data error',
-          header: 'There\'s been a problem getting your prescription information',
-          subheader: '',
-          message: {
-            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-          },
-          retryButtonText: 'Try again',
-        },
-        403: {
-          pageTitle: 'Repeat prescriptions unavailable',
-          pageHeader: 'Repeat prescriptions unavailable',
-          header: 'You are not currently able to order repeat prescriptions online',
-          subheader: '',
-          message: {
-            text: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call 111.',
-            label: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call one one one.',
-          },
-        },
-      },
-    },
-    repeat_courses: {
-      errors: {
-        pageTitle: 'Prescription data error',
-        pageHeader: 'Prescription data error',
-        header: 'There\'s been a problem getting your prescription information',
-        subheader: '',
-        message: {
-          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-        retryButtonText: '',
-        504: {
-          pageTitle: 'Prescription data error',
-          pageHeader: 'Prescription data error',
-          header: 'There\'s been a problem getting your prescription information',
-          subheader: '',
-          message: {
-            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-          },
-          retryButtonText: 'Try again',
-        },
-        403: {
-          pageTitle: 'Repeat prescriptions unavailable',
-          pageHeader: 'Repeat prescriptions unavailable',
-          header: 'You are not currently able to order repeat prescriptions online',
-          subheader: '',
-          message: {
-            text: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call 111.',
-            label: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call one one one.',
-          },
-        },
-      },
-    },
-    confirm_prescription_details: {
-      errors: {
-        pageTitle: 'Prescription order error',
-        pageHeader: 'Error sending order',
-        header: 'There\'s been a problem sending your order',
-        subheader: '',
-        message: {
-          text: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        retryButtonText: 'Go to your prescriptions',
-        466: {
-          pageTitle: 'Error submitting request',
-          pageHeader: 'Error submitting request',
-          header: 'We cannot complete this order',
-          subheader: 'You previously ordered at least one of these medications in the last 30 days.',
-          message: 'If you need more medication sooner, contact your GP.',
-        },
-      },
-    },
-    partialSuccess: {
-      medicationNotOrdered: 'Medication not ordered',
-      needMedicationNow: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, visit 111.nhs.uk or call 111.',
-      medicationOrdered: 'Medication ordered successfully',
-      orderStatusUpdate: 'The order status will be updated once it\'s been reviewed by your GP.',
-      backButton: 'Go to your prescription orders',
-    },
-    orderSuccess: {
-      proxyMessage: 'You have ordered a prescription on behalf of {name}. The order status will be updated once it has been reviewed by {givenName}\'s GP.',
-      message: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
-      back: 'Go to your prescription orders',
     },
   },
   health_records: {
@@ -2485,11 +2274,17 @@ export default {
     sentAtTimeTodayFormat: '[Sent today at ]{timeFormat}',
     sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
+  glossary: {
+    headerText: 'You may see medical abbreviations that you are not familiar with.',
+    linkText: 'Help with abbreviations',
+  },
+  apiErrors,
   components,
   gpSessionErrors,
   loginSettings,
   nominatedPharmacy,
   onlineConsultations,
+  prescriptions,
   termsAndConditions,
   thirdPartyProviders,
 };

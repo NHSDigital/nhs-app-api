@@ -8,9 +8,8 @@
             <h2 class="nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-0">
               {{ $t('prescriptions.partialSuccess.medicationNotOrdered') }}
             </h2>
-            <p class="nhsuk-u-padding-top-0
-            nhsuk-u-margin-bottom-3
-            nhsuk-u-padding-bottom-0">{{ $t('prescriptions.partialSuccess.needMedicationNow') }}</p>
+            <p class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3 nhsuk-u-padding-bottom-0">
+              {{ $t('prescriptions.partialSuccess.ifYouNeedToOrderNow') }}</p>
             <div class="nhsuk-do-dont-list
                         nhsuk-u-margin-top-3
                         nhsuk-u-margin-bottom-3
@@ -34,7 +33,7 @@
             <p class="nhsuk-u-padding-top-0
             nhsuk-u-margin-bottom-3
             nhsuk-u-padding-bottom-0">
-              {{ $t('prescriptions.partialSuccess.orderStatusUpdate') }}
+              {{ $t('prescriptions.partialSuccess.theOrderStatusWillBeUpdated') }}
             </p>
             <div class="nhsuk-do-dont-list
                         nhsuk-u-margin-top-3
@@ -54,7 +53,7 @@
           <div class="nhsuk-u-margin-top-3">
             <p>
               <a id="back_to_prescriptions_link" href="#" @click="backToPrescriptionsClicked">
-                {{ $t('prescriptions.partialSuccess.backButton') }}
+                {{ $t('prescriptions.partialSuccess.goToYourPrescriptionOrders') }}
               </a>
             </p>
           </div>

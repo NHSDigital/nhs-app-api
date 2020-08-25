@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>{{ $t('rp01.glossary.headerText') }}</p>
-    <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
+    <p>{{ $t('glossary.headerText') }}</p>
+    <nhs-arrow-banner :banner-text="$t('glossary.linkText')"
                       :click-action="glossaryLinkURL"
                       :is-analytics-tracked="true"/>
   </div>

@@ -4,28 +4,33 @@
       <div class="nhsuk-grid-column-full">
         <message-dialog v-if="error" message-type="error" role="alert">
           <message-text>
-            {{ $t('rp12.reasonMissing.summarySubHeader') }}
+            {{ $t('prescriptions.repeatCourses.errors.thereIsAProblem') }}
           </message-text>
           <message-list class="nhsuk-u-margin-bottom-3">
-            <li v-if="!courseSelectionValid">{{ $t('rp03.noMedicinesSelected') }}</li>
-            <li v-if="!specialRequestValid">{{ $t('rp03.specialRequestRequired') }}</li>
+            <li v-if="!courseSelectionValid">
+              {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}</li>
+            <li v-if="!specialRequestValid">
+              {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}</li>
           </message-list>
         </message-dialog>
 
         <div v-if="showRepeatCourses">
-          <p class="nhsuk-u-padding-bottom-3">{{ $t('rp03.medicationCourse.line1') }}</p>
+          <p class="nhsuk-u-padding-bottom-3">
+            {{ $t('prescriptions.repeatCourses.currentlyAvailableRepeatPrescriptions') }}</p>
           <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
             <div>
               <div :class="selectMedicationErrorStyle">
                 <error-message v-if="error && !courseSelectionValid" id="error-type">
-                  {{ $t('rp03.noMedicinesSelected') }}
+                  {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
                 </error-message>
                 <CardGroup role="list" class="nhsuk-grid-row">
                   <CardGroupItem class="nhsuk-grid-column-full">
                     <Card>
                       <fieldset class="nhsuk-fieldset">
                         <legend class="nhsuk-fieldset__legend"
-                                role="heading">{{ $t('rp03.subHeader') }}</legend>
+                                role="heading">
+                          {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}
+                        </legend>
                         <repeat-prescription v-model="selected"/>
                       </fieldset>
                     </Card>
@@ -38,20 +43,21 @@
                  :class="mandatoryReasonErrorStyle">
               <div>
                 <p>
-                  {{ $t('rp03.changePharmacyText') }}
+                  {{ $t('prescriptions.repeatCourses.changePharmacy') }}
                 </p>
               </div>
               <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
                      class="nhsuk-body-m">
-                <strong>{{ $t('rp03.specialRequestsLabelOptional') }}</strong>
+                <strong>{{ $t('prescriptions.repeatCourses.specialRequestsOptional') }}</strong>
               </label>
               <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
                      class="nhsuk-body-m">
-                <strong>{{ $t('rp03.specialRequestsLabelMandatory') }} </strong>
+                <strong>{{ $t('prescriptions.repeatCourses.specialRequestsMandatory') }} </strong>
               </label>
-              <p id="disclaimer" class="nhsuk-body-m">{{ $t('rp03.disclaimer') }}</p>
+              <p id="disclaimer" class="nhsuk-body-m">
+                {{ $t('prescriptions.repeatCourses.thisTextMayNotBeSeen') }}</p>
               <error-message v-if="showMandatoryReasonError" id="error-type">
-                {{ $t('rp03.specialRequestRequired') }}
+                {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
               </error-message>
               <generic-text-area id="specialRequest"
                                  v-model="specialRequest"
@@ -62,25 +68,25 @@
                                  name="nojs.repeatPrescriptionCourses.specialRequest"
                                  maxlength="1000"/>
               <p id="maxSpecialRequest" class="nhsuk-u-padding-bottom-4">
-                {{ $t('rp03.maxSpecialRequest') }}</p>
+                {{ $t('prescriptions.repeatCourses.specialRequestCharacterLimit') }}</p>
             </div>
             <generic-button id="btn_order_prescription"
                             :button-classes="['nhsuk-button']"
                             @click.prevent="validate">
-              {{ $t('rp03.continueButton') }}
+              {{ $t('prescriptions.repeatCourses.continue') }}
             </generic-button>
           </no-js-form>
         </div>
 
         <div v-if="showNoRepeatCourses">
-          <h3>{{ $t('rp06.empty.subHeader') }}</h3>
+          <h3>{{ $t('prescriptions.repeatCourses.youDoNotHaveAny') }}</h3>
           <p>
-            {{ $t('rp06.empty.body') }}
+            {{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}
           </p>
         </div>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="getBackPath"
-                                :button-text="'rp03.backButton'"
+                                :button-text="'generic.backButton.text'"
                                 @clickAndPrevent="backButtonClicked"/>
       </div>
     </div>
@@ -189,10 +195,10 @@ export default {
       const errors = [];
 
       if (validated && !this.courseSelectionValid) {
-        errors.push(this.$t('rp03.noMedicinesSelected'));
+        errors.push(this.$t('prescriptions.repeatCourses.errors.selectAtLeastOne'));
       }
       if (validated && !this.specialRequestValid) {
-        errors.push(this.$t('rp03.noMedicinesSelected'));
+        errors.push(this.$t('prescriptions.repeatCourses.errors.enterSpecialRequests'));
       }
 
       if (validated && errors.length > 0) {

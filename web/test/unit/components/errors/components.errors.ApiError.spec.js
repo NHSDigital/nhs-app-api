@@ -1,14 +1,14 @@
-
-import Vue from 'vue';
-import each from 'jest-each';
 import ApiError from '@/components/errors/ApiError';
+import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import ReportAProblem from '@/components/errors/ReportAProblem';
+import Vue from 'vue';
 import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { createStore, locale, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -83,6 +83,9 @@ describe('api errors', () => {
   const mountApiError = () => mount(ApiError, {
     $store,
     $style,
+    mountOpts: {
+      i18n,
+    },
   });
 
   describe('updated', () => {
@@ -112,8 +115,8 @@ describe('api errors', () => {
       getters['errors/showApiError'] = true;
 
       expect(EventBus.$emit).toHaveBeenCalledTimes(2);
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'translate_prescriptions.view_orders.errors.504.pageHeader', true, true);
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'translate_prescriptions.view_orders.errors.504.pageTitle', true);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'Prescription data error', true, true);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'Prescription data error', true);
     });
   });
 
@@ -143,7 +146,7 @@ describe('api errors', () => {
         });
 
         it('will have text', () => {
-          expect(additionalInfo.text()).toBe('translate_account.notifications.errors.500.10002.additionalInfo');
+          expect(additionalInfo.text()).toBe('Go to your device settings and check notifications are turned on, then try again.');
         });
 
         it('will not have label', () => {
@@ -177,7 +180,7 @@ describe('api errors', () => {
         });
 
         it('will have text', () => {
-          expect(message.text()).toBe('translate_organ_donation.errors.500.message');
+          expect(message.text()).toBe('You can contact NHS Blood and Transplant to get help with this.');
         });
 
         it('will not have label', () => {
@@ -186,8 +189,8 @@ describe('api errors', () => {
       });
 
       describe('path has message text and label', () => {
-        const messageText = locale.prescriptions.errors.message.text;
-        const messageLabel = locale.prescriptions.errors.message.label;
+        const messageText = 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.';
+        const messageLabel = 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.';
 
         beforeEach(() => {
           state = createState({ isNativeApp: true, path: '/prescriptions', status: 500 });
@@ -235,15 +238,15 @@ describe('api errors', () => {
         });
 
         it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.header');
+          expect(wrapper.find(MessageDialog).text()).toContain('We cannot complete this order');
         });
 
         it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.subheader');
+          expect(wrapper.find(MessageDialog).text()).toContain('You previously ordered at least one of these medications in the last 30 days');
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.message');
+          expect(wrapper.find(MessageDialog).text()).toContain('If you need more medication sooner, contact your GP.');
         });
       });
 
@@ -275,15 +278,15 @@ describe('api errors', () => {
         });
 
         it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.header');
+          expect(wrapper.find(MessageDialog).text()).toContain('We cannot complete this order');
         });
 
         it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.subheader');
+          expect(wrapper.find(MessageDialog).text()).toContain('You previously ordered at least one of these medications in the last 30 days');
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.message');
+          expect(wrapper.find(MessageDialog).text()).toContain('If you need more medication sooner, contact your GP.');
         });
       });
     });
@@ -304,7 +307,7 @@ describe('api errors', () => {
       describe('retry text', () => {
         describe('is native app', () => {
           beforeEach(() => {
-            state = createState({ isNativeApp: true, path: '/prescriptions', status: 504 });
+            state = createState({ isNativeApp: true, path: '/prescriptions/view-orders', status: 504 });
             $store = createStore({ getters, state });
             wrapper = mountApiError();
           });
@@ -349,7 +352,7 @@ describe('api errors', () => {
 
             it('will have the retry text', () => {
               expect(wrapper.find('[data-purpose="retry-or-back-button"').text())
-                .toEqual('translate_prescriptions.view_orders.errors.504.retryButtonText');
+                .toEqual('Try again');
             });
 
             it('will call setFocus method on update', () => {
@@ -406,7 +409,7 @@ describe('api errors', () => {
       });
 
       it('will have an h2 set to the subheader', () => {
-        expect(wrapper.find('h2').text()).toEqual('translate_errors.404.subheader');
+        expect(wrapper.find('h2').text()).toEqual('If you entered a web address, check it was correct.');
       });
     });
   });
@@ -442,7 +445,7 @@ describe('api errors', () => {
         wrapper = mountApiError();
 
         const x = wrapper.vm.getComponentErrorCodeKey('retryButtonText');
-        expect(x).toEqual('translate_account.notifications.errors.500.10001.retryButtonText');
+        expect(x).toEqual('Try again');
       });
     });
 
@@ -463,7 +466,7 @@ describe('api errors', () => {
 
       it('will return the value if the key exists in the locale file', () => {
         wrapper = mountApiError();
-        expect(wrapper.vm.getText('errors.pageHeader')).toEqual('translate_errors.pageHeader');
+        expect(wrapper.vm.getText('apiErrors.pageHeader')).toEqual('Server error');
       });
     });
   });

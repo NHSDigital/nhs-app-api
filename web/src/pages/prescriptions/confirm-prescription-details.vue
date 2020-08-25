@@ -2,7 +2,7 @@
   <div v-if="showTemplate">
     <div data-purpose="info">
       <p class="nhsuk-body nhsuk-u-padding-bottom-3">
-        {{ $t('rp04.subHeader') }}
+        {{ $t('prescriptions.confirmDetails.checkYourDetails') }}
       </p>
     </div>
     <CardGroup role="list" class="nhsuk-grid-row">
@@ -17,12 +17,13 @@
           </div>
           <hr>
           <div v-if="specialRequestNecessity !== 'NotAllowed'">
-            <strong class="nhsuk-u-margin-bottom-0">{{ $t('rp04.specialRequestsLabel') }}</strong>
+            <strong class="nhsuk-u-margin-bottom-0">
+              {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong>
             <p v-if="specialRequest"
                id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
             </p>
             <p v-else id="specialRequestText">
-              {{ $t('rp03.noSpecialRequestDefaultText') }}
+              {{ $t('prescriptions.confirmDetails.specialRequestsNone') }}
             </p>
           </div>
           <sjr-if journey="nominatedPharmacy">
@@ -42,14 +43,14 @@
                         class="nhsuk-button"
                         click-delay="medium"
                         @click="onConfirmButtonClicked">
-          {{ $t('rp04.confirmButton') }}
+          {{ $t('prescriptions.confirmDetails.confirmAndOrder') }}
         </generic-button>
       </no-js-form>
     </div>
     <div class="nhsuk-body-m">
       <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="prescriptionRepeatCoursesPath"
-                              :button-text="'rp04.backButton'"
+                              :button-text="'prescriptions.confirmDetails.changeThisPrescription'"
                               @clickAndPrevent="backToPrescriptionsClicked"/>
     </div>
   </div>
@@ -116,9 +117,9 @@ export default {
     },
     pharmacyHeader() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
-        return this.$t('rp04.dispensingPracticeHeader');
+        return this.$t('prescriptions.confirmDetails.yourDispensingPractice');
       }
-      return this.$t('rp04.nominatedPharmacyHeader');
+      return this.$t('prescriptions.confirmDetails.yourNominatedPharmacy');
     },
   },
   created() {

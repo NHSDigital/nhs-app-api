@@ -222,24 +222,50 @@ export default {
     }
   },
   methods: {
+    /*
+      Looks up the appropriate error messages in the locale based on a heirarchy of component and
+      status/error code.
+      The lookup goes from most specific to least specific:
+        * component + status/error code
+        * component
+        * status code
+        * default
+
+      The following path are used:
+       * apiErrors.components.[component].[code]
+       * apiErrors.components.[component]
+       * [component].errors.[code] (depreciated)
+       * [component].errors (depreciated)
+       * apiErrors.[code]
+       * apiErrors
+
+      The `type` argument refers to the property search for under these paths for specific text to
+      be displayed on the error page, e.g. header or message.text
+    */
     getComponentErrorCodeKey(type) {
       if (this.hasApiError) {
-        return (this.errorCode && this.getText(`${this.component}.errors.${this.statusCode}.${this.errorCode}.${type}`))
-          || (this.errorCode && this.getText(`${this.component}.errors.${this.errorCode}.${type}`))
-          || this.getText(`${this.component}.errors.${this.statusCode}.${type}`);
+        return this.getPrefixedErrorCodeKey(`apiErrors.components.${this.component}`, type) ||
+          this.getPrefixedErrorCodeKey(`${this.component}.errors`, type);
       }
 
       return '';
     },
+    getPrefixedErrorCodeKey(prefix, type) {
+      return (this.errorCode && this.getText(`${prefix}.${this.statusCode}.${this.errorCode}.${type}`)) ||
+        (this.errorCode && this.getText(`${prefix}.${this.errorCode}.${type}`)) ||
+        this.getText(`${prefix}.${this.statusCode}.${type}`);
+    },
     getComponentKey(type) {
-      return this.getText(`${this.component}.errors.${type}`);
+      return this.getText(`apiErrors.components.${this.component}.${type}`) ||
+        this.getText(`${this.component}.errors.${type}`);
     },
     getMessage(type) {
       if (this.showError) {
-        return this.getComponentErrorCodeKey(type)
-          || this.getText(`${this.component}.errors.${type}`)
-          || this.getText(`errors.${this.statusCode}.${type}`)
-          || this.getText(`errors.${type}`);
+        return this.getComponentErrorCodeKey(type) ||
+          this.getText(`apiErrors.components.${this.component}.${type}`) ||
+          this.getText(`${this.component}.errors.${type}`) ||
+          this.getText(`apiErrors.${this.statusCode}.${type}`) ||
+          this.getText(`apiErrors.${type}`);
       }
 
       return '';
