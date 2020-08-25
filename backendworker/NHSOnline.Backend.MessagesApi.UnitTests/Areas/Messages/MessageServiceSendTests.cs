@@ -54,7 +54,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             {
                 Version = 1,
                 Body = "Body",
-                Sender = "Sender"
+                Sender = "Sender",
+                CommunicationId = "CommunicationId"
             };
 
             _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
@@ -79,6 +80,48 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             savedUserMessage.Version.Should().Be(request.Version);
             savedUserMessage.Body.Should().BeEquivalentTo(request.Body);
             savedUserMessage.SentTime.Should().BeCloseTo(DateTime.UtcNow, precision: 60);
+            savedUserMessage.CommunicationId.Should().BeEquivalentTo(request.CommunicationId);
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [DataRow("   ")]
+        public async Task Send_SuppliedCommunicationIdIsNullOrWhiteSpace_PersistedCommunicationIdIsNull(string suppliedCommunicationId)
+        {
+            // Arrange
+            UserMessage savedUserMessage = null;
+
+            var returnedUserMessage = new UserMessage
+            {
+                Id = ObjectId.GenerateNewId(),
+            };
+
+            var request = new AddMessageRequest
+            {
+                Version = 1,
+                Body = "Body",
+                Sender = "Sender",
+                CommunicationId = suppliedCommunicationId
+            };
+
+            _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
+                .Callback<UserMessage>(u => savedUserMessage = u)
+                .ReturnsAsync(new RepositoryCreateResult<UserMessage>.Created(returnedUserMessage));
+
+            _mockMessagesValidationService.Setup(x =>
+                    x.IsMessageRequestValid(request, _nhsLoginId))
+                .Returns(true);
+
+            // Act
+            var result = await _systemUnderTest.Send(request, _nhsLoginId);
+
+            // Assert
+            savedUserMessage.CommunicationId.Should().BeNull();
+
+            result.Should().BeAssignableTo<MessageResult.Success>()
+                .Subject.Response.MessageId.Should().Be(returnedUserMessage.Id.ToString());
         }
 
         [TestMethod]

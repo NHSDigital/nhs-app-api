@@ -51,7 +51,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     Sender = addMessageRequest.Sender,
                     Version = addMessageRequest.Version,
                     Body = addMessageRequest.Body,
-                    SentTime = DateTime.UtcNow
+                    SentTime = DateTime.UtcNow,
+                    CommunicationId = string.IsNullOrWhiteSpace(addMessageRequest.CommunicationId) ? null : addMessageRequest.CommunicationId
                 };
 
                 var result = await _messageRepository.Create(userMessage);

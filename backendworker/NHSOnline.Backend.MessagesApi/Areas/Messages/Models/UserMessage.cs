@@ -28,5 +28,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         [BsonElement]
         public DateTime SentTime { get; set; }
+
+        [BsonElement]
+        public string CommunicationId { get; set; }
     }
 }

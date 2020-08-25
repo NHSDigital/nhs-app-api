@@ -62,8 +62,15 @@ Feature: Messages Backend
     When I get my messages without a summary flag and without a target sender
     Then I receive an "Bad Request" error
 
-  Scenario: An api user can post messages
+  Scenario: An api user can post messages with Communication ID specified
     Given I am an api user wishing to post a message
+    When I post a message to the api
+    Then I receive a "Created" success code
+    And I receive the message id
+    And the message is available in the database
+
+  Scenario: An api user can post messages without Communication ID specified
+    Given I am an api user wishing to post a message without a communication ID
     When I post a message to the api
     Then I receive a "Created" success code
     And I receive the message id

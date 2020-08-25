@@ -116,6 +116,10 @@ paths:
       responses:
         "201":
           description: Successful operation. Message is created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddMessageResponse"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -140,6 +144,9 @@ components:
   schemas:
     AddMessageRequest:
       type: object
+      required:
+        - sender
+        - body
       properties:
         sender:
           type: string
@@ -147,10 +154,20 @@ components:
           type: integer
         body:
           type: string
+        communicationId:
+          type: string
       example:
         sender: b1f99cf0-278d-49ca-a325-0a1504799488
-        version: 1
+        version: 0
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        communicationId: 1c92e18e-6221-4bfd-8d30-d535e16dacd1
+    AddMessageResponse:
+      type: object
+      properties:
+        messageId:
+          type: string
+      example:
+        id: 51020e00-8b87-4bcd-a0ff-d862184275fa
     MessageResponse:
       type: object
       properties:
@@ -171,7 +188,7 @@ components:
       example:
         id: 9fbd0bea-5a63-4fd4-b4be-4bcd9c063227
         sender: b1f99cf0-278d-49ca-a325-0a1504799488
-        version: 1
+        version: 0
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         sendTime: 2019-09-17T02:15:12.35Z
         read: true
