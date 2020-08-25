@@ -4,69 +4,67 @@
       <message-dialog :class="$style.customErrorBox"
                       message-type="error"
                       role="alert">
-        <message-text>
-          {{ $t('updatedTermsAndConditions.errorMsgHeader') }}
-        </message-text>
+        <message-text>{{ $t('termsAndConditions.errors.youCannotContinue.header') }}</message-text>
         <message-list>
-          <li> {{ $t('updatedTermsAndConditions.errorMsgText') }} </li>
+          <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
         </message-list>
       </message-dialog>
     </div>
     <div id="text_body" :class="$style.info">
-      <p> {{ $t('updatedTermsAndConditions.body1') }}
+      <p> {{ $t('termsAndConditions.updated.weveMadeSomeChanges') }}
         <span>
           <!-- opening and closing tag must be on one line to
           avoid the inline-block white space issue
           -->
           <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('updatedTermsAndConditions.link1') }}</a>
+            {{ $t('termsAndConditions.links.termsOfUse') }}</a>
         </span>,
         <span>
           <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('updatedTermsAndConditions.link2') }}</a>
+            {{ $t('termsAndConditions.links.privacyPolicy') }}</a>
         </span>
         and
         <span>
           <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('updatedTermsAndConditions.link3') }}</a>
+            {{ $t('termsAndConditions.links.cookiesPolicy') }}</a>
         </span>.
       </p>
-      <p> {{ $t('updatedTermsAndConditions.body2') }} </p>
+      <p> {{ $t('termsAndConditions.updated.ifYouDoNotAgree') }} </p>
     </div>
     <div :class="getErrorState()">
       <error-message v-if="hasTriedToContinue && !areTermsAccepted"
                      id="error_txt"
                      role="alert"
                      :class="$style.validationText">
-        {{ $t('termsAndConditions.checkBoxError') }}
+        {{ $t('termsAndConditions.updated.acceptConditionsCheckBox.youCannotUseWithoutAgreeing') }}
       </error-message>
       <generic-checkbox :value="termsAcceptedValue"
                         checkbox-id="termsAndConditions-agree_checkbox"
                         @input="termsSelectionChanged">
         <span :class="$style.termsAndConditionsCaption">
-          {{ $t('updatedTermsAndConditions.checkBoxText1') }}
+          {{ $t('termsAndConditions.updated.acceptConditionsCheckBox.understandAndAgree') }}
           <span>
             <!-- opening and closing tag must be on one line
             to avoid the inline-block white space issue -->
             <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link1') }}</a>
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.termsOfUse') }}</a>
           </span>
           and
           <span>
             <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link2') }}</a>
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.privacyPolicy') }}</a>
           </span>.
-          {{ $t('updatedTermsAndConditions.checkBoxText2') }}
+          {{ $t('termsAndConditions.updated.acceptConditionsCheckBox.acceptCookies') }}
           <span>
             <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link3') }}</a>
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.cookiesPolicy') }}</a>
           </span>.
         </span>
       </generic-checkbox>
     </div>
     <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
                     @click="onConfirmButtonClicked">
-      {{ $t('updatedTermsAndConditions.btnAccept') }}
+      {{ $t('termsAndConditions.updated.btnAccept') }}
     </generic-button>
   </div>
 </template>

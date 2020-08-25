@@ -32,7 +32,7 @@ import proofLevel from '@/lib/proofLevel';
 
 const getTermsConditionTitle = (store, i18n) => (
   i18n.t(store.state.termsAndConditions.updatedConsentRequired
-    ? 'updatedTermsAndConditions.title'
+    ? 'termsAndConditions.updated.title'
     : 'pageHeaders.termsAndConditions')
 );
 

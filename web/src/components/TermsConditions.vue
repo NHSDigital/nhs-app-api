@@ -3,44 +3,44 @@
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <message-dialog :class="$style.customErrorBox" message-type="error"
                       role="alert">
-        <message-text> {{ $t('termsAndConditions.errorMsgHeader') }} </message-text>
+        <message-text>{{ $t('termsAndConditions.errors.youCannotContinue.header') }}</message-text>
         <message-list>
-          <li> {{ $t('termsAndConditions.errorMsgText') }}</li>
+          <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
         </message-list>
       </message-dialog>
     </div>
     <div id="text_body" :class="$style.info">
-      <p> {{ $t('termsAndConditions.body1') }}
+      <p>{{ $t('termsAndConditions.initial.youMustAgreeTo') }}
         <span>
           <!-- inline links achieved through span to ensure font boosting is possible -->
           <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('termsAndConditions.link1') }}</a>
+            {{ $t('termsAndConditions.links.termsOfUse') }}</a>
         </span>,
         <span>
           <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('termsAndConditions.link2') }}</a>
+            {{ $t('termsAndConditions.links.privacyPolicy') }}</a>
         </span>
         and
         <span>
           <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('termsAndConditions.link3') }}</a>
+            {{ $t('termsAndConditions.links.cookiesPolicy') }}</a>
         </span>.
-        {{ $t('termsAndConditions.body2') }} </p>
-      <p> {{ $t('termsAndConditions.body3') }} </p>
-      <p><strong> {{ $t('termsAndConditions.listTitle') }} </strong></p>
+        {{ $t('termsAndConditions.initial.youShouldReadCarefully') }} </p>
+      <p>{{ $t('termsAndConditions.initial.ifYouDoNotAgree') }}</p>
+      <p><strong> {{ $t('termsAndConditions.initial.keyPoints.title') }} </strong></p>
       <ul>
-        <li v-for="listItem of $t('termsAndConditions.listItems')" :key="listItem">
+        <li v-for="listItem of $t('termsAndConditions.initial.keyPoints.items')" :key="listItem">
           {{ listItem }}
         </li>
       </ul>
-      <h2>{{ $t('termsAndConditions.cookiesTitle') }}</h2>
+      <h2>{{ $t('termsAndConditions.initial.manageCookies.title') }}</h2>
       <p>
-        {{ $t('termsAndConditions.cookiesText1') }}
+        {{ $t('termsAndConditions.initial.manageCookies.prefix') }}
         <span>
           <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
-            {{ $t('termsAndConditions.link4') }}</a>
+            {{ $t('termsAndConditions.initial.manageCookies.link') }}</a>
         </span>
-        {{ $t('termsAndConditions.cookiesText2') }}
+        {{ $t('termsAndConditions.initial.manageCookies.suffix') }}
       </p>
     </div>
     <div :class="getErrorState()">
@@ -48,13 +48,13 @@
                      id="error_txt"
                      role="alert"
                      :class="$style.validationText">
-        {{ $t('termsAndConditions.checkBoxError') }}
+        {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.youCannotUseWithoutAgreeing') }}
       </error-message>
       <generic-checkbox :value="termsAcceptedValue"
                         checkbox-id="termsAndConditions-agree_checkbox"
                         @onCheckedChanged="termsSelectionChanged">
         <span :class="$style.termsAndConditionsCaption">
-          {{ $t('termsAndConditions.checkBoxText1') }}
+          {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.understandAndAccept') }}
 
           <span>
             <!-- opening and closing tag must be on one line to
@@ -62,17 +62,17 @@
             prevents font boosting - accessibility issue
             -->
             <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.link1') }}</a>
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.termsOfUse') }}</a>
           </span>
           and
           <span>
             <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.link2') }}</a>.
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.privacyPolicy') }}</a>.
           </span>
-          {{ $t('termsAndConditions.checkBoxText2') }}
+          {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.acceptCookies') }}
           <span>
             <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.link3') }}</a>.
+               @click="stopProp($event)">{{ $t('termsAndConditions.links.cookiesPolicy') }}</a>.
           </span>
         </span>
       </generic-checkbox>
@@ -80,11 +80,11 @@
     <generic-checkbox :value="analyticsAcceptedValue"
                       checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox"
                       @onCheckedChanged="analyticsSelectionChanged">
-      {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
+      {{ $t('termsAndConditions.initial.analyticsCookieCheckBox.text') }}
     </generic-checkbox>
     <generic-button id="btn_accept" :button-classes="['nhsuk-button']"
                     @click="onConfirmButtonClicked">
-      {{ $t('termsAndConditions.btnAccept') }}
+      {{ $t('termsAndConditions.initial.btnAccept') }}
     </generic-button>
   </div>
 </template>

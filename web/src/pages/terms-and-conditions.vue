@@ -28,8 +28,8 @@ export default {
   computed: {
     pageHeader() {
       return this.isUpdatedConsentRequired
-        ? 'updatedTermsAndConditions.title'
-        : 'termsAndConditions.title';
+        ? 'termsAndConditions.updated.title'
+        : 'termsAndConditions.initial.title';
     },
     isUpdatedConsentRequired() {
       return this.areAccepted && this.updatedConsentRequired;

@@ -2,6 +2,7 @@ import components from './components';
 import gpSessionErrors from './gpSessionErrors';
 import loginSettings from './loginSettings';
 import nominatedPharmacy from './nominatedPharmacy';
+import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 
 export default {
@@ -351,46 +352,6 @@ export default {
       settingsButton: 'Open settings',
       dismissLink: 'Dismiss',
     },
-  },
-  termsAndConditions: {
-    title: 'Accept conditions of use',
-    errorMsgHeader: 'There\'s a problem',
-    errorMsgText: 'You cannot continue without agreeing',
-    body1: 'To use the NHS App you must agree to our',
-    body2: 'You should read these carefully before using the app.',
-    link1: 'terms of use',
-    link2: 'privacy policy',
-    link3: 'cookies policy',
-    link4: 'manage your cookies',
-    listTitle: 'Key points: ',
-    listItems: [
-      'The NHS App is intended to provide you with information and services to help you manage certain medical conditions or treatments - it is not a substitute for seeking medical advice from a GP or other healthcare professional. Always follow any medical advice given by your GP or other healthcare professional',
-      'Information available through the NHS App comes from third parties, so we cannot be responsible for its content or relevance to you. In particular, the settings used by your GP surgery may affect what medical record information you can access',
-      'The NHS App gives you access to a range of NHS services that may have their own terms and privacy policies. You should read these so that you understand your rights and how your data is used',
-    ],
-    body3: 'If you do not agree, you won\'t be able to access or use the NHS App.',
-    cookiesTitle: 'Cookies',
-    cookiesText1: 'The NHS App puts small files (known as cookies) on your device. These are used to make the app work and improve your experience. You can ',
-    cookiesText2: ' to opt out of using some of them.',
-    checkBoxError: 'You cannot use the NHS App without agreeing',
-    checkBoxText1: 'I understand and accept the',
-    checkBoxText2: 'I accept the use of \'strictly necessary\' cookies as detailed in the',
-    analyticsCookieCheckBoxText: 'I accept the use of optional analytic cookies used to improve the performance of the NHS App.',
-    btnAccept: 'Continue',
-  },
-  updatedTermsAndConditions: {
-    title: 'Updated conditions of use',
-    errorMsgHeader: 'There\'s a problem',
-    errorMsgText: 'You cannot continue without agreeing',
-    body1: 'We\'ve made some important changes to our conditions of use. To continue using the NHS App, you need to agree to our updated',
-    body2: 'If you don\'t agree, you won\'t be able to continue accessing or using the NHS App.',
-    link1: 'terms of use',
-    link2: 'privacy policy',
-    link3: 'cookies policy',
-    checkBoxError: 'You cannot use the NHS App without agreeing',
-    checkBoxText1: 'I understand and agree to the updated',
-    checkBoxText2: 'I agree to the use of \'strictly necessary\' cookies as described in the updated',
-    btnAccept: 'Continue',
   },
   onlineConsultations: {
     unavailable: {
@@ -2584,5 +2545,6 @@ export default {
   gpSessionErrors,
   loginSettings,
   nominatedPharmacy,
+  termsAndConditions,
   thirdPartyProviders,
 };

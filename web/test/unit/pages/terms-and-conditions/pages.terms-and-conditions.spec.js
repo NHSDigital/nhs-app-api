@@ -31,7 +31,7 @@ describe('Terms and Conditions', () => {
 
       it('will only emit UPDATE_HEADER with the default title', () => {
         expect(EventBus.$emit).toHaveBeenCalledTimes(1);
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'termsAndConditions.title');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'termsAndConditions.initial.title');
       });
     });
 
@@ -42,7 +42,7 @@ describe('Terms and Conditions', () => {
 
       it('will only emit UPDATE_HEADER with the default title', () => {
         expect(EventBus.$emit).toHaveBeenCalledTimes(1);
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'updatedTermsAndConditions.title');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'termsAndConditions.updated.title');
       });
     });
   });
