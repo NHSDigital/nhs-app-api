@@ -12,7 +12,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 
         public void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
-            if (e.OldElement == null)
+            if (e.OldElement == null && _renderer.Control.Settings != null)
             {
                 _renderer.Control.Settings.UserAgentString += " nhsapp-android/1.0.0";
             }

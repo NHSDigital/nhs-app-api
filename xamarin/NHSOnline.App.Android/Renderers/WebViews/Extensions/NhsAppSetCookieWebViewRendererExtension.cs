@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Android.Webkit;
@@ -24,7 +25,8 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
 
         private static Task SetCookie(Cookie cookie)
         {
-            CookieManager.Instance.SetCookie(cookie.Domain, cookie.ToString());
+            var cookieManager = CookieManager.Instance ?? throw new InvalidOperationException("CookieManager.Instance was null");
+            cookieManager.SetCookie(cookie.Domain, cookie.ToString());
             return Task.CompletedTask;
         }
     }

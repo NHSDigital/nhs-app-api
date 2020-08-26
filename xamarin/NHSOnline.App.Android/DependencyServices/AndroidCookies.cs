@@ -1,3 +1,4 @@
+using System;
 using Android.Webkit;
 using NHSOnline.App.DependencyServices;
 using NHSOnline.App.Droid.DependencyServices;
@@ -10,7 +11,7 @@ namespace NHSOnline.App.Droid.DependencyServices
     {
         public void Clear()
         {
-            var cookieManager = CookieManager.Instance;
+            var cookieManager = CookieManager.Instance ?? throw new InvalidOperationException("CookieManager.Instance was null");
             cookieManager.RemoveAllCookie();
         }
     }
