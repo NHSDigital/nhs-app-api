@@ -2,7 +2,7 @@
   <h1 :key="titleKey" aria-live="polite" :class="cssClass">
     <span v-if="caption"
           :key="caption"
-          class="nhsuk-caption-l nhsuk-caption--top"
+          :class="[captionSizeCss, 'nhsuk-caption--top']"
           data-purpose="header-caption">
       {{ caption }}
     </span>
@@ -10,6 +10,8 @@
   </h1>
 </template>
 <script>
+import CaptionSize from '@/lib/caption-size';
+
 export default {
   name: 'PageTitle',
   props: {
@@ -24,6 +26,18 @@ export default {
     caption: {
       type: String,
       default: undefined,
+    },
+    captionSize: {
+      type: String,
+      default: undefined,
+    },
+  },
+  computed: {
+    captionSizeCss() {
+      if (this.captionSize) {
+        return this.captionSize;
+      }
+      return CaptionSize.Large;
     },
   },
 };

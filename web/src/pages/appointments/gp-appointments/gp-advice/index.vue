@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate && available !== undefined" class="nhsuk-grid-row">
+  <div v-if="showTemplate && available !== undefined" class="nhsuk-grid-row econsult-content">
     <div class="nhsuk-grid-column-full">
       <online-consultations-unavailable v-if="!available"/>
       <message-dialog v-else-if="isError" role="alert">

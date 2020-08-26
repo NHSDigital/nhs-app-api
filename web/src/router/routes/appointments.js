@@ -13,6 +13,7 @@ import GpAtHandPage from '@/pages/appointments/gp-at-hand';
 import HospitalAppointmentsPage from '@/pages/appointments/hospital-appointments';
 import InformaticaPage from '@/pages/appointments/informatica';
 import UpliftAppointmentsPage from '@/pages/uplift/appointments';
+import CaptionSize from '@/lib/caption-size';
 
 import breadcrumbs from '@/breadcrumbs/appointments';
 import {
@@ -310,7 +311,8 @@ export const ADMIN_HELP = {
   name: APPOINTMENT_ADMIN_HELP_NAME,
   component: AdminHelpPage,
   meta: {
-    headerKey: 'pageHeaders.appointmentAdminHelp',
+    captionKey: 'pageHeaders.appointmentAdminHelp',
+    captionSize: CaptionSize.Medium,
     titleKey: 'pageTitles.appointmentAdminHelp',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
@@ -326,7 +328,8 @@ export const GP_ADVICE = {
   name: APPOINTMENT_GP_ADVICE_NAME,
   component: GpAdvicePage,
   meta: {
-    headerKey: 'pageHeaders.appointmentGpAdvice',
+    captionKey: 'pageHeaders.appointmentGpAdvice',
+    captionSize: CaptionSize.Medium,
     titleKey: 'pageTitles.appointmentGpAdvice',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,

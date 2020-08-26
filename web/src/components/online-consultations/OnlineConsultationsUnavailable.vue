@@ -20,7 +20,7 @@
     <desktopGenericBackLink v-if="!isNativeApp"
                             data-purpose="back-link"
                             :path="backLink"
-                            :button-text="$t('onlineConsultations.orchestrator.backButton')"
+                            :button-text="'onlineConsultations.orchestrator.backButton'"
                             @clickAndPrevent="backClicked"/>
   </div>
 </template>

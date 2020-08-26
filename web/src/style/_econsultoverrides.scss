@@ -1,0 +1,155 @@
+@import '~nhsuk-frontend/packages/core/styles/typography';
+
+@mixin paragraphHeaderStyle {
+  @extend %nhsuk-heading-l;
+}
+
+.econsult-content {
+  .nhsuk-fieldset__legend {
+    &.question {
+      @include paragraphHeaderStyle;
+
+      &.required p {
+        font-weight: 500;
+        margin-bottom: 16px;
+      }
+    }
+
+    b {
+      font-weight: 400;
+      font-weight: 400;
+      font-size: 16px;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #425563;
+      display: block;
+    }
+  }
+  
+  .nhsuk-label.question {
+    @include paragraphHeaderStyle;
+
+    p, li {
+      font-weight: 500;
+    }
+  }
+
+  .optionalLabel.marginBottom, .question.required {
+    margin-bottom: 8px !important;
+    margin-top: -10px;
+  }
+
+  label.nhsuk-label.nhsuk-date-input__label {
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .question .nhsuk-hint:first-of-type {
+    margin-top: 8px !important;
+  }
+  
+  .nhsuk-warning-callout {
+    margin-bottom: 12px;
+    margin-top: 12px;
+
+    b {
+      font-size: 20px;
+      font-size: 1.25rem;
+      line-height: 1.4;
+      color: #212b32;
+      font-weight: 600;
+    }
+  }
+
+  .nhsuk-list li, .nhsuk-list p {
+    font-weight: 500;
+  }
+  
+  textarea  {
+    margin-bottom: 0;
+  }
+  
+  .messageBox {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.5;
+    display: block;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  
+  br {
+    display: none;
+  }
+
+  #PRE_STD_AD_SELFONLY p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #GLO_PRE_DISCLAIMERS_NHS_2 p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #conditionInfo p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #PRE_STD_AD_SELFONLY_NHS p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #PRE_STD_ALL_SELFONLY_NHS p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  .conditionCategory {
+    & > h2 {
+      @include nhsuk-typography-responsive(24);
+      margin-bottom: 0;
+      padding-bottom: 5px;
+    }
+  }
+
+  #PRE_STD_AD_SELFONLY_NHS p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #ADM_NON_CLIN_DISCLAIMER_NHSAPP p:first-child {
+    @include paragraphHeaderStyle;
+  }
+
+  #PRE_STD_AD_EMERGENCY {
+    margin-top: -5px;
+  }
+
+  #result-container {
+    margin-top: -25px;
+
+    .nhsuk-care-card {
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+  }
+
+  #questionnaire-container {
+    .nhsuk-care-card {
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .nhsuk-warning-callout {
+    ul.nhsuk-list--bullet {
+      padding-left: 0;
+    }
+
+    & > *:first-child {
+      padding-top: 15px;
+    }
+  } 
+}

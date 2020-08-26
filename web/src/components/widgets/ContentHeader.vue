@@ -36,8 +36,10 @@
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
           <div id="page-title-container" class="nhsuk-grid-column-two-thirds">
-            <page-title v-if="(showContentHeader || overrideShowContentHeader) && !isHeaderEmpty"
+            <page-title v-if="(showContentHeader || overrideShowContentHeader)
+                          && hasHeaderOrCaption"
                         :caption="caption"
+                        :caption-size="captionSize"
                         :title-key="`${header}${caption}`">
               {{ header }}
             </page-title>
@@ -87,6 +89,7 @@ export default {
     return {
       header: '',
       caption: '',
+      captionSize: '',
       overrideShowContentHeader: false,
     };
   },
@@ -97,8 +100,8 @@ export default {
     isNative() {
       return this.$store.state.device.isNativeApp;
     },
-    isHeaderEmpty() {
-      return isEmpty(this.header);
+    hasHeaderOrCaption() {
+      return !isEmpty(this.header) || !isEmpty(this.caption);
     },
     showCoronaVirusBanner() {
       return !this.isProxying && this.$route.name === INDEX_NAME;

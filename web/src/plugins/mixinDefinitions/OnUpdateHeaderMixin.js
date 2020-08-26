@@ -16,6 +16,7 @@ export default {
       if (isString(newHeader)) {
         this.setHeaderProp('header', newHeader, localised, overrideShowContentHeader);
         this.caption = undefined;
+        this.captionSize = undefined;
         this.overrideShowContentHeader = overrideShowContentHeader;
         return;
       }
@@ -24,10 +25,12 @@ export default {
         return;
       }
 
-      const { headerKey: header, captionKey: caption } = newHeader;
+      const { headerKey: header, captionKey: caption, captionSize } = newHeader;
 
       this.setHeaderProp('header', header, localised);
       this.setHeaderProp('caption', caption, localised);
+      this.captionSize = captionSize;
+
       this.overrideShowContentHeader = overrideShowContentHeader;
     },
     setHeaderProp(headerProp, value, localised) {

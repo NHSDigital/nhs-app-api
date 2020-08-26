@@ -78,7 +78,7 @@
                             id="desktopBackLink"
                             data-purpose="back-to-home-button"
                             :path="indexPath"
-                            :button-text="$t('onlineConsultations.orchestrator.backButton')"
+                            :button-text="'onlineConsultations.orchestrator.backButton'"
                             @clickAndPrevent="backClicked"/>
     <generic-button v-else-if="!showBackButton"
                     id="endMyConsultationButton"
@@ -336,8 +336,6 @@ export default {
 
 <style module lang="scss" scoped>
   .container {
-    margin-top: 1em;
-
     .button {
       min-width: 16.875em;
       padding-left: 2em;
