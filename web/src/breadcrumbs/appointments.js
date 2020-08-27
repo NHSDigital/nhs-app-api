@@ -63,6 +63,7 @@ const CANCELLING_CRUMB = {
 
 const CANCELLING_SUCCESS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
+  nativeDisabled: true,
 };
 
 const ADMIN_HELP_CRUMB = {

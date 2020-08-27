@@ -22,10 +22,12 @@ export const PRESCRIPTION_CONFIRM_COURSES_CRUMB = {
 
 export const PRESCRIPTION_ORDER_SUCCESS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, PRESCRIPTIONS_CRUMB],
+  nativeDisabled: true,
 };
 
 export const PRESCRIPTION_REPEAT_PARTIAL_SUCCESS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, PRESCRIPTIONS_CRUMB],
+  nativeDisabled: true,
 };
 
 export const PRESCRIPTIONS_GP_AT_HAND_CRUMB = {
