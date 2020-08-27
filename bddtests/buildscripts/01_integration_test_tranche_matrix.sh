@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-TRANCHES=(SMOKE_TESTS LONG_RUNNING APPOINTMENTS APPOINTMENTS_BOOK ORGAN_DONATION PRESCRIPTION MY_RECORD ACCESSIBILITY ONLINE_CONSULTATIONS OTHERS)
+TRANCHES=(SMOKE_TESTS LONG_RUNNING APPOINTMENTS APPOINTMENTS_BOOK ORGAN_DONATION PRESCRIPTION MY_RECORD ACCESSIBILITY OTHERS)
 
 TRANCHE_SMOKE_TESTS='"Smoke_Tests": {"tests.name": "Smoke Tests", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "smoketest"}'
 TRANCHE_LONG_RUNNING='"Long_Running": {"tests.name": "Long Running", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "long-running"}'
@@ -10,7 +10,6 @@ TRANCHE_ORGAN_DONATION='"Organ_Donation": {"tests.name": "Organ Donation", "test
 TRANCHE_PRESCRIPTION='"Prescription": {"tests.name": "Prescription", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "prescription"}'
 TRANCHE_MY_RECORD='"My_Record": {"tests.name": "My Record", "tests.script": "03_integration_test_run_tranche.sh", "tranche.tag": "my-record"}'
 TRANCHE_ACCESSIBILITY='"Accessibility": {"tests.name": "Accessibility", "tests.script": "03_integration_test_run_accessibility.sh"}'
-TRANCHE_ONLINE_CONSULTATIONS='"Online_Consultations": {"tests.name": "Online Consultations", "tests.script": "03_integration_test_run_onlineconsultations.sh"}'
 TRANCHE_OTHERS='"Others": {"tests.name": "Others", "tests.script": "03_integration_test_run_others.sh"}'
 
 if [ -n "$SYSTEM_PULLREQUEST_PULLREQUESTID" ]; then
@@ -23,7 +22,6 @@ else
   INT_TESTS_RUN_PRESCRIPTION=${INT_TESTS_RUN_PRESCRIPTION:-True}
   INT_TESTS_RUN_MY_RECORD=${INT_TESTS_RUN_MY_RECORD:-True}
   INT_TESTS_RUN_ACCESSIBILITY=${INT_TESTS_RUN_ACCESSIBILITY:-True}
-  INT_TESTS_RUN_ONLINE_CONSULTATIONS=${INT_TESTS_RUN_ONLINE_CONSULTATIONS:-True}
   INT_TESTS_RUN_OTHERS=${INT_TESTS_RUN_OTHERS:-True}
 fi
 

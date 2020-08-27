@@ -19,12 +19,6 @@ run-accessibility: run-deps	## Run the accessibility integration tests
 	./buildscripts/02_integration_test_code_analysis.sh
 	./buildscripts/03_integration_test_run_accessibility.sh
 
-$(eval $(call expand_run_options_docker_images,run-onlineconsultations))
-$(call expand_run_options_docker_image,run-onlineconsultations,STUBS)
-run-onlineconsultations: run-deps	## Run the online consultations integration tests
-	./buildscripts/02_integration_test_code_analysis.sh
-	./buildscripts/03_integration_test_run_onlineconsultations.sh
-
 $(eval $(call expand_run_options_docker_images,run-others))
 $(call expand_run_options_docker_image,run-others,STUBS)
 run-others: run-deps	## Run the other integration tests

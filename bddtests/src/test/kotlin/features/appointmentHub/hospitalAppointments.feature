@@ -1,3 +1,4 @@
+@appointments
 @appointmentsHub
 Feature: Hospital Appointments
 

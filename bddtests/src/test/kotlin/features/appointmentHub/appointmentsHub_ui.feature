@@ -1,3 +1,4 @@
+@appointments
 @appointmentsHub
 Feature: Appointments Hub Frontend
   Users can see the Appointments Hub page and use the third party silver partner links
