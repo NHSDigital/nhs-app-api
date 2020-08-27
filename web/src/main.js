@@ -18,7 +18,7 @@ import '@/style/_nhsukfrontend.scss';
 
 const defineErrorHandling = () => {
   const globalErrorLogHandler = (message) => {
-    store.dispatch('modules/log/onError', message);
+    store.dispatch('log/onError', message);
   };
 
   const vueErrorLogHandler = (err) => {
@@ -26,7 +26,7 @@ const defineErrorHandling = () => {
     if (err && err.stack) {
       errorMessage = err.stack;
     }
-    store.dispatch('modules/log/onError', errorMessage);
+    store.dispatch('log/onError', errorMessage);
 
     throw err;
   };
