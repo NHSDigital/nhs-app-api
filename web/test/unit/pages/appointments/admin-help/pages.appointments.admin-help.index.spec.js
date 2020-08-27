@@ -1,5 +1,6 @@
-import each from 'jest-each';
 import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help/index';
+import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import { redirectTo } from '@/lib/utils';
 import { INDEX_PATH, APPOINTMENTS_PATH } from '@/router/paths';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
@@ -68,6 +69,9 @@ describe('Admin Help page', () => {
         'pageLeaveWarning/shouldShowLeavingModal': shouldShowLeavingModal,
       },
       $router: createRouter(),
+      mountOpts: {
+        i18n,
+      },
     });
   };
 
@@ -117,13 +121,13 @@ describe('Admin Help page', () => {
 
       it('will emit UPDATE_HEADER passing unavailable header and caption', () => {
         expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, {
-          headerKey: 'appointments.admin_help.unavailable.header',
-          captionKey: 'appointments.admin_help.unavailable.headerCaption',
+          headerKey: 'appointments.adminHelp.onlineConsultationsUnavailable',
+          captionKey: 'appointments.adminHelp.additionalGpServices',
         });
       });
 
       it('will emit UPDATE_TITLE passing unavailable header', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'appointments.admin_help.unavailable.header');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'appointments.adminHelp.onlineConsultationsUnavailable');
       });
 
       it('will not set the journey info in the store', () => {
@@ -266,8 +270,8 @@ describe('Admin Help page', () => {
 
         expect(errorHeading.exists()).toBe(true);
         expect(errorReason.exists()).toBe(true);
-        expect(errorHeading.text()).toBe('translate_appointments.admin_help.errors.header');
-        expect(errorReason.text()).toBe('translate_appointments.admin_help.errors.message.text');
+        expect(errorHeading.text()).toBe('Sorry, we\'re experiencing technical difficulties');
+        expect(errorReason.text()).toBe('If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
       });
     });
     describe('demographicsQuestion', () => {
@@ -301,9 +305,9 @@ describe('Admin Help page', () => {
 
         const demographicsQuestionParagraphs = page.find('div.demographicsQuestion').findAll('p').wrappers;
 
-        expect(demographicsQuestionParagraphs[0].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p1');
-        expect(demographicsQuestionParagraphs[1].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p2');
-        expect(demographicsQuestionParagraphs[2].text()).toEqual('translate_appointments.admin_help.demographicsQuestion.p3');
+        expect(demographicsQuestionParagraphs[0].text()).toEqual('Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.');
+        expect(demographicsQuestionParagraphs[1].text()).toEqual('It takes around 5 minutes to answer a few questions.');
+        expect(demographicsQuestionParagraphs[2].text()).toEqual('To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.');
       });
     });
     describe('orchestrator', () => {

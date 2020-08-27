@@ -1,6 +1,7 @@
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
-import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import BookingGuidancePage from '@/pages/appointments/gp-appointments/booking-guidance';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import i18n from '@/plugins/i18n';
 import { GP_APPOINTMENTS_PATH, APPOINTMENT_BOOKING_PATH, SYMPTOMS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import { createStore, mount, createRouter } from '../../helpers';
@@ -40,6 +41,9 @@ describe('booking guidance', () => {
       $style,
       stubs: {
         'page-title': '<div></div>',
+      },
+      mountOpts: {
+        i18n,
       },
     });
   };
@@ -81,12 +85,12 @@ describe('booking guidance', () => {
 
     expect(wrapper.find(AppointmentGuidanceMenu).exists()).toBe(false);
 
-    expect(content.text()).toContain('translate_appointments.guidance.li1.header');
-    expect(content.text()).toContain('translate_appointments.guidance.li1.text');
-    expect(content.text()).toContain('translate_appointments.guidance.li2.header');
-    expect(content.text()).toContain('translate_appointments.guidance.li2.text');
-    expect(content.text()).toContain('translate_appointments.guidance.li3.header');
-    expect(content.text()).toContain('translate_appointments.guidance.li3.text');
+    expect(content.text()).toContain('Self care');
+    expect(content.text()).toContain('Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines');
+    expect(content.text()).toContain('Check your symptoms');
+    expect(content.text()).toContain('Using trusted NHS online information​');
+    expect(content.text()).toContain('Get advice from a pharmacist');
+    expect(content.text()).toContain('They\'re highly skilled healthcare professionals who can offer valuable advice');
   });
 
   it('will include the check symptoms button if online consultations env var is false', () => {

@@ -5,11 +5,11 @@
       <message-dialog v-else-if="isError" role="alert">
         <message-text data-purpose="error-heading"
                       :is-header="true">
-          {{ $t('appointments.gp_advice.errors.header') }}
+          {{ $t('appointments.gpAdvice.weAreExperiencingTechnicalDifficulties') }}
         </message-text>
         <message-text data-purpose="reason-error"
-                      :aria-label="$t('appointments.gp_advice.errors.message.label')">
-          {{ $t('appointments.gp_advice.errors.message.text') }}
+                      :aria-label="$t('appointments.gpAdvice.ifTheProblemPersistsOneOneOne')">
+          {{ $t('appointments.gpAdvice.ifTheProblemPersists111') }}
         </message-text>
       </message-dialog>
       <template v-else>
@@ -17,8 +17,8 @@
                                :provider="provider"
                                :provider-name="providerName"
                                :service-definition-id="serviceDefinitionId">
-          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p1') }}</p>
-          <p>{{ $t('appointments.gp_advice.demographicsQuestion.p2') }}</p>
+          <p>{{ $t('appointments.gpAdvice.itTakesAroundFiveMinute') }}</p>
+          <p>{{ $t('appointments.gpAdvice.toSaveYouTypingIn') }}</p>
         </demographics-question>
 
         <condition-list v-else-if="conditionsList" :service-definitions="conditionsList"/>
@@ -113,10 +113,10 @@ export default {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
 
       EventBus.$emit(UPDATE_HEADER, {
-        headerKey: 'appointments.gp_advice.unavailable.header',
-        captionKey: 'appointments.gp_advice.unavailable.headerCaption',
+        headerKey: 'appointments.gpAdvice.onlineConsultationsUnavailable',
+        captionKey: 'appointments.gpAdvice.askYouGpForAdvice',
       });
-      EventBus.$emit(UPDATE_TITLE, 'appointments.gp_advice.unavailable.header');
+      EventBus.$emit(UPDATE_TITLE, 'appointments.gpAdvice.onlineConsultationsUnavailable');
 
       this.available = false;
       return;

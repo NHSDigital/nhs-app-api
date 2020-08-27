@@ -2,42 +2,42 @@
   <div v-if="showTemplate">
     <div v-if="error">
       <error-container v-if="error.status===400" :id="generateErrorId()">
-        <error-title title="appointments.error.title.problem"
-                     header="appointments.error.header.problem" />
-        <error-paragraph from="appointments.error.400.message" />
+        <error-title title="appointments.error.thereIsAProblemAppointments"
+                     header="appointments.error.thereIsAProblem" />
+        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===403" :id="generateErrorId()">
-        <error-title title="appointments.cancelling.error.403.title"
-                     header="appointments.cancelling.error.403.header"/>
-        <error-paragraph from="appointments.cancelling.error.403.message" />
+        <error-title title="appointments.error.thereIsAProblemWithTheServiceAppointments"
+                     header="appointments.error.contactYouSurgeryToCancel"/>
+        <error-paragraph from="appointments.error.youCannotCancelRightNow" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===409" :id="generateErrorId()">
-        <error-title title="appointments.cancelling.error.409.title"/>
-        <error-paragraph from="appointments.cancelling.error.409.message" />
+        <error-title title="appointments.error.youCannotCancelThisAppointment"/>
+        <error-paragraph from="appointments.error.theAppointmentMayBeCancelledOrInThePast" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===461" :id="generateErrorId()">
-        <error-title title="appointments.cancelling.error.461.title"/>
-        <error-paragraph from="appointments.cancelling.error.461.message" />
+        <error-title title="appointments.error.contactYouSurgeryToCancel"/>
+        <error-paragraph from="appointments.error.itIsTooLateToCancel" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===500 || error.status===502 || error.status===504"
                        :id="generateErrorId()">
-        <error-title title="appointments.error.title.problem"
-                     header="appointments.error.header.problem" />
-        <error-paragraph from="appointments.error.message.goBackAndTryContact"
+        <error-title title="appointments.error.thereIsAProblemAppointments"
+                     header="appointments.error.thereIsAProblem" />
+        <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
         <error-link from="generic.contactUsButton.text"
                     :action="contactUsUrl"
                     target="_blank"/>
@@ -52,15 +52,16 @@
         <div class="nhsuk-grid-column-full">
           <message-dialog v-if="showError" message-type="error" role="alert">
             <message-text data-purpose="error-heading">
-              {{ $t('appointments.cancelling.noReasonDialogError') }}
+              {{ $t('appointments.cancel.thereIsAProblem') }}
             </message-text>
             <message-list data-purpose="reason-error">
-              <li>{{ $t('appointments.cancelling.noReasonError') }}</li>
+              <li>{{ $t('appointments.cancel.selectAReason') }}</li>
             </message-list>
           </message-dialog>
 
           <div data-purpose="info">
-            <p class="nhsuk-u-padding-bottom-3">{{ $t('appointments.cancelling.info') }}</p>
+            <p class="nhsuk-u-padding-bottom-3">
+              {{ $t('appointments.cancel.checkDetailsBeforeCancelling') }}</p>
           </div>
         </div>
       </div>
@@ -71,7 +72,7 @@
             <appointment v-if="appointment" :appointment="appointment"
                          :show-cancellation-link="false"
                          data-purpose="appointment-info"
-                         :telephone-message="$t('appointments.index.upcoming.telephoneMessage')"
+                         :telephone-message="$t('appointments.upcoming.weWillCallYouOn')"
                          date-time-header="h2" />
           </Card>
         </CardGroupItem>
@@ -81,18 +82,18 @@
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-full">
             <label for="txt_reason" class="nhsuk-body-m nhsuk-u-margin-bottom-2">
-              <strong>{{ $t('appointments.cancelling.form_label') }}</strong>
+              <strong>{{ $t('appointments.cancel.reasonForCancelling') }}</strong>
             </label>
 
             <error-message v-if="showError" id="error-label" :class="$style.form">
-              {{ $t('appointments.cancelling.noReasonError') }}
+              {{ $t('appointments.cancel.selectAReason') }}
             </error-message>
 
             <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
                              :class="[$style.reason, showError && $style.errorBorder]"
                              select-id="txt_reason" select-name="reason">
               <option disabled="" selected="" value="">
-                {{ $t('appointments.cancelling.dropdownDefaultOption') }}
+                {{ $t('appointments.cancel.selectReason') }}
               </option>
               <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
                 {{ reason.displayName }}
@@ -108,13 +109,13 @@
                           :button-classes="['nhsuk-button']"
                           click-delay="medium"
                           @click.stop.prevent="onCancelButtonClicked($event)">
-            {{ $t('appointments.cancelling.cancelButtonText') }}
+            {{ $t('appointments.cancel.cancelAppointment') }}
           </generic-button>
 
           <desktopGenericBackLink
             v-if="!$store.state.device.isNativeApp"
             :path="appointmentsPath"
-            :button-text="'appointments.cancelling.backButtonText'"
+            :button-text="'generic.backButton.text'"
             @clickAndPrevent="onBackButtonClicked"/>
         </div>
       </div>

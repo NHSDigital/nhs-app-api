@@ -12,48 +12,52 @@
       </p>
     </template>
     <template v-slot:items>
-      <menu-item id="btn_corona"
-                 header-tag="h2"
-                 :href="coronaCheckerUrl"
-                 :description="$t('sy01.corona.body')"
-                 target="_blank"
-                 :text="$t('sy01.corona.subheader')"
-                 :aria-label="ariaLabelCaption(
-                   'sy01.corona.subheader',
-                   'sy01.corona.body')"/>
-      <menu-item v-if="isCdssAdvice"
-                 id="btn_gpAdvice"
-                 data-purpose="text_link"
-                 header-tag="h2"
-                 :href="gpAdviceConditionsPath"
-                 :text="$t('appointments.guidance.menuItem3.header')"
-                 :description="$t('appointments.guidance.menuItem3.text')"
-                 :click-func="navigate"
-                 :click-param="gpAdviceConditionsPath"
-                 :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem3.header',
-                   'appointments.guidance.menuItem3.text')"/>
-      <menu-item v-if="isCdssAdmin"
-                 id="btn_gpHelpNoAppointment"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="adminHelpPath"
-                 :text="$t('appointments.guidance.menuItem2.header')"
-                 :description="$t('appointments.guidance.menuItem2.text')"
-                 :click-func="navigate"
-                 :click-param="adminHelpPath"
-                 :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem2.header',
-                   'appointments.guidance.menuItem2.text')"/>
-      <menu-item id="btn_111"
-                 header-tag="h2"
-                 :href="symptomsCheckerUrl"
-                 :description="$t('sy01.111.body')"
-                 target="_blank"
-                 :text="$t('sy01.111.subheader')"
-                 :aria-label="ariaLabelCaption(
-                   'sy01.111.subheaderAriaLabel',
-                   'sy01.111.body')"/>
+      <menu-item
+        id="btn_corona"
+        header-tag="h2"
+        :href="coronaCheckerUrl"
+        :description="$t('sy01.corona.body')"
+        target="_blank"
+        :text="$t('sy01.corona.subheader')"
+        :aria-label="ariaLabelCaption(
+          'sy01.corona.subheader',
+          'sy01.corona.body')"/>
+      <menu-item
+        v-if="isCdssAdvice"
+        id="btn_gpAdvice"
+        data-purpose="text_link"
+        header-tag="h2"
+        :href="gpAdviceConditionsPath"
+        :text="$t('appointments.guidance.askGp.forAdvice')"
+        :description="$t('appointments.guidance.askGp.consultThroughOnlineForm')"
+        :click-func="navigate"
+        :click-param="gpAdviceConditionsPath"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.askGp.forAdvice',
+          'appointments.guidance.askGp.consultThroughOnlineForm')"/>
+      <menu-item
+        v-if="isCdssAdmin"
+        id="btn_gpHelpNoAppointment"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="adminHelpPath"
+        :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
+        :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
+        :click-func="navigate"
+        :click-param="adminHelpPath"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.additionalGpServices.header',
+          'appointments.guidance.additionalGpServices.text')"/>
+      <menu-item
+        id="btn_111"
+        header-tag="h2"
+        :href="symptomsCheckerUrl"
+        target="_blank"
+        :text="$t('appointments.guidance.OneOneOne.use111Online')"
+        :description="$t('appointments.guidance.OneOneOne.checkIfYouNeedUrgentHelp')"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.OneOneOne.useOneOneOneOnline',
+          'appointments.guidance.OneOneOne.checkIfYouNeedUrgentHelp')"/>
     </template>
   </gp-session-error>
 </template>

@@ -2,17 +2,17 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <h2 id="guidance_sub_header">
-        {{ $t('appointments.informatica.header') }}
+        {{ $t('appointments.informatica.bookingIsNotCurrentlyAvailable') }}
       </h2>
       <div :class="$style.info" data-purpose="info">
-        <p>{{ $t('appointments.informatica.description') }}</p>
+        <p>{{ $t('appointments.informatica.yourSurgeryUsesAppointmentsOnline') }}</p>
         <p>
-          {{ $t('appointments.informatica.link.prefix') }}
+          {{ $t('appointments.informatica.ifYouHaveAUsernameAndPassword') }}
           <analytics-tracked-tag
             :href="informaticaUrl"
-            :text="$t('appointments.informatica.link.text')"
+            :text="$t('appointments.informatica.logInToAppointmentsOnline')"
             tag="a" target="_blank">
-            {{ $t('appointments.informatica.link.text') }}
+            {{ $t('appointments.informatica.logInToAppointmentsOnline') }}
           </analytics-tracked-tag>.
         </p>
       </div>

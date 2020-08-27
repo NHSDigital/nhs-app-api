@@ -1,12 +1,13 @@
-import each from 'jest-each';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
+import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import {
   SYMPTOMS_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
   APPOINTMENT_GP_ADVICE_PATH,
   APPOINTMENT_BOOKING_GUIDANCE_PATH,
 } from '@/router/paths';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import { redirectTo } from '@/lib/utils';
 import { createStore, mount, createRouter } from '../../helpers';
 
@@ -42,7 +43,7 @@ describe('Appointment guidance menu', () => {
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
       },
     });
-    return mount(AppointmentGuidanceMenu, { $store, $router });
+    return mount(AppointmentGuidanceMenu, { $store, $router, mountOpts: { i18n } });
   };
 
   beforeEach(() => {
@@ -71,22 +72,22 @@ describe('Appointment guidance menu', () => {
       expect(tagArray.length).toBe(3);
 
       const symptomsButtonHeader = tagArray.at(0).find('a span h2');
-      expect(symptomsButtonHeader.text()).toContain('translate_appointments.guidance.menuItem1.header');
+      expect(symptomsButtonHeader.text()).toContain('Get help with symptoms');
 
       const symptomsButtonText = tagArray.at(0).find('a span p');
-      expect(symptomsButtonText.text()).toContain('translate_appointments.guidance.menuItem1.text');
+      expect(symptomsButtonText.text()).toContain('Find information about specific conditions');
 
       const requestGPAdviceButtonHeader = tagArray.at(1).find('a span h2');
-      expect(requestGPAdviceButtonHeader.text()).toContain('translate_appointments.guidance.menuItem2.header');
+      expect(requestGPAdviceButtonHeader.text()).toContain('Additional GP services');
 
       const requestGPAdviceButtonText = tagArray.at(1).find('a span p');
-      expect(requestGPAdviceButtonText.text()).toContain('translate_appointments.guidance.menuItem2.text');
+      expect(requestGPAdviceButtonText.text()).toContain('Get sick notes and GP letters or ask about recent tests');
 
       const requestGPHelpButtonHeader = tagArray.at(2).find('a span h2');
-      expect(requestGPHelpButtonHeader.text()).toContain('translate_appointments.guidance.menuItem3.header');
+      expect(requestGPHelpButtonHeader.text()).toContain('Ask your GP for advice');
 
       const requestGPHelpButtonText = tagArray.at(2).find('a span p');
-      expect(requestGPHelpButtonText.text()).toContain('translate_appointments.guidance.menuItem3.text');
+      expect(requestGPHelpButtonText.text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
     });
   });
 

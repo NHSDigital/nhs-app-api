@@ -1,7 +1,8 @@
-import * as dependency from '@/lib/utils';
 import AddToCalendarInterrupt from '@/pages/appointments/gp-appointments/add-to-calendar-interrupt';
-import { APPOINTMENTS_PATH } from '@/router/paths';
+import i18n from '@/plugins/i18n';
 import NativeApp from '@/services/native-app';
+import * as dependency from '@/lib/utils';
+import { APPOINTMENTS_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
@@ -16,7 +17,15 @@ describe('add-to-calendar-interrupt.vue', () => {
   let para;
   let addToCalendarButton;
 
-  const createAddToCalendarInterruptPage = () => mount(AddToCalendarInterrupt, { $store });
+  const createAddToCalendarInterruptPage = () => mount(
+    AddToCalendarInterrupt,
+    {
+      $store,
+      mountOpts: {
+        i18n,
+      },
+    },
+  );
 
   beforeEach(() => {
     $store = createStore({
@@ -54,7 +63,7 @@ describe('add-to-calendar-interrupt.vue', () => {
       heading = wrapper.find('.nhsuk-heading-xl');
 
       expect(heading.exists()).toBe(true);
-      expect(heading.text()).toContain('translate_appointments.addToCalendar.paragraph1');
+      expect(heading.text()).toContain('If this appointment changes, you\'ll have to update your calendar yourself');
     });
   });
 
@@ -64,7 +73,7 @@ describe('add-to-calendar-interrupt.vue', () => {
       para = wrapper.find('p');
 
       expect(para.exists()).toBe(true);
-      expect(para.text()).toContain('translate_appointments.addToCalendar.paragraph2');
+      expect(para.text()).toBe('Your calendar will not update automatically if the appointment is changed or cancelled.');
     });
   });
 

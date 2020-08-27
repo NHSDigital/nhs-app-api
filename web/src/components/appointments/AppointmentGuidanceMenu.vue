@@ -1,39 +1,42 @@
 <template>
   <div v-if="showTemplate" data-purpose="">
     <menu-item-list data-sid="navigation-list-menu">
-      <menu-item id="btn_symptoms"
-                 header-tag="h2"
-                 :href="symptomsPath"
-                 :text="$t('appointments.guidance.menuItem1.header')"
-                 :description="$t('appointments.guidance.menuItem1.text')"
-                 :click-func="goToSymptoms"
-                 :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem1.header',
-                   'appointments.guidance.menuItem1.text')"/>
+      <menu-item
+        id="btn_symptoms"
+        header-tag="h2"
+        :href="symptomsPath"
+        :text="$t('appointments.guidance.helpWithSymptoms.getHelpWithSymptoms')"
+        :description="$t('appointments.guidance.helpWithSymptoms.findInformationAboutConditions')"
+        :click-func="goToSymptoms"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.helpWithSymptoms.getHelpWithSymptoms',
+          'appointments.guidance.helpWithSymptoms.findInformationAboutConditions')"/>
 
-      <menu-item v-if="isCdssAdmin"
-                 id="btn_gpHelpNoAppointment"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="adminHelpPath"
-                 :text="$t('appointments.guidance.menuItem2.header')"
-                 :description="$t('appointments.guidance.menuItem2.text')"
-                 :click-func="goToAdminHelp"
-                 :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem2.header',
-                   'appointments.guidance.menuItem2.text')"/>
+      <menu-item
+        v-if="isCdssAdmin"
+        id="btn_gpHelpNoAppointment"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="adminHelpPath"
+        :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
+        :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
+        :click-func="goToAdminHelp"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.additionalGpServices.additionalGpServices',
+          'appointments.guidance.additionalGpServices.getSickNotesAndLetters')"/>
 
-      <menu-item v-if="isCdssAdvice"
-                 id="btn_gpAdvice"
-                 data-purpose="text_link"
-                 header-tag="h2"
-                 :href="gpAdviceConditionsPath"
-                 :text="$t('appointments.guidance.menuItem3.header')"
-                 :description="$t('appointments.guidance.menuItem3.text')"
-                 :click-func="goToGpAdvice"
-                 :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem3.header',
-                   'appointments.guidance.menuItem3.text')"/>
+      <menu-item
+        v-if="isCdssAdvice"
+        id="btn_gpAdvice"
+        data-purpose="text_link"
+        header-tag="h2"
+        :href="gpAdviceConditionsPath"
+        :text="$t('appointments.guidance.askGp.forAdvice')"
+        :description="$t('appointments.guidance.askGp.consultThroughOnlineForm')"
+        :click-func="goToGpAdvice"
+        :aria-label="ariaLabelCaption(
+          'appointments.guidance.askGp.forAdvice',
+          'appointments.guidance.askGp.consultThroughOnlineForm')"/>
     </menu-item-list>
   </div>
 </template>

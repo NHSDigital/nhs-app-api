@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <div v-if="isProxying">
           <p>
-            {{ $tc('appointments.bookingSuccess.proxyMessage', null, { name }) }}
+            {{ $tc('appointments.book.youHaveBookedFor', null, { name }) }}
           </p>
           <switch-profile-button id="switchProfileButton"/>
         </div>
@@ -25,7 +25,7 @@
           <desktopGenericBackLink
             id="genericBackLink"
             :path="backPath"
-            :button-text="'appointments.bookingSuccess.back'"
+            :button-text="'appointments.book.goToYourAppointments'"
             @clickAndPrevent="backButtonClicked"/>
         </div>
       </div>

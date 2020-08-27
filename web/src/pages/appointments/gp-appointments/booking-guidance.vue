@@ -7,21 +7,24 @@
 
       <sjr-if journey="onlineConsultations" :disabled="true">
         <div id="info" data-purpose="info">
-          <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
-          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li1.text') }}</p>
-          <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
-          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li2.text') }}</p>
-          <strong>3. {{ $t('appointments.guidance.li3.header') }}</strong>
-          <p class="nhsuk-u-padding-bottom-4">{{ $t('appointments.guidance.li3.text') }}</p>
+          <strong>1. {{ $t('appointments.guidance.selfCare.selfCare') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">
+            {{ $t('appointments.guidance.selfCare.minorProblems') }}</p>
+          <strong>2. {{ $t('appointments.guidance.checkYourSymptoms.checkYourSymptoms') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">
+            {{ $t('appointments.guidance.checkYourSymptoms.usingNhsOnline') }}</p>
+          <strong>3. {{ $t('appointments.guidance.pharmacist.getAdviceFrom') }}</strong>
+          <p class="nhsuk-u-padding-bottom-4">
+            {{ $t('appointments.guidance.pharmacist.theyAre') }}</p>
         </div>
-        <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
+        <analytics-tracked-tag :text="$t('appointments.guidance.checkYourSymptoms.checkSymptoms')"
                                :destination="symptomsPath"
                                data-purpose="generic-button">
           <generic-button id="btn_check_symptoms"
                           :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                           tabindex="0"
                           @click="onCheckSymptomClicked">
-            {{ $t('appointments.guidance.symptomButtonText') }}
+            {{ $t('appointments.guidance.checkYourSymptoms.checkSymptoms') }}
           </generic-button>
         </analytics-tracked-tag>
       </sjr-if>
@@ -31,12 +34,12 @@
         :button-classes="['nhsuk-button']"
         tabindex="0"
         @click="onBookButtonClicked">
-        {{ $t('appointments.guidance.bookButtonText') }}
+        {{ $t('appointments.bookAnAppointment') }}
       </generic-button>
 
       <sjr-if v-if="!$store.state.device.isNativeApp" journey="onlineConsultations">
         <desktopGenericBackLink :path="indexPath"
-                                button-text="appointments.guidance.backDesktopLinkText"
+                                button-text="generic.backButton.text"
                                 @clickAndPrevent="onBackButtonClicked"/>
       </sjr-if>
     </div>

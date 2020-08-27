@@ -1,4 +1,8 @@
 export default {
+  conditions: {
+    chooseYourCondition: 'To ensure we ask you relevant questions, choose your condition.',
+    iCannotFindMyCondition: 'I cannot find my condition',
+  },
   demographics: {
     checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
     checkboxLink: 'NHS App privacy policy',

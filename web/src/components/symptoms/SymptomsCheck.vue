@@ -7,9 +7,9 @@
                  :click-func="navigateToWebIntegration"
                  :click-param="coronaCheckerUrl"
                  :href="coronaCheckerUrl"
-                 :description="$t('sy01.corona.body')"
                  target="_blank"
                  :text="$t('sy01.corona.subheader')"
+                 :description="$t('sy01.corona.body')"
                  :aria-label="ariaLabelCaption(
                    'sy01.corona.subheader',
                    'sy01.corona.body')"/>
@@ -21,8 +21,8 @@
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
-                 :description="$t('sy01.conditionsTreatments.body')"
                  :text="$t('sy01.conditionsTreatments.subheader')"
+                 :description="$t('sy01.conditionsTreatments.body')"
                  :aria-label="ariaLabelCaption(
                    'sy01.conditionsTreatments.subheader',
                    'sy01.conditionsTreatments.body')"/>
@@ -32,9 +32,9 @@
                  :click-func="navigateToWebIntegration"
                  :click-param="symptomsCheckerUrl"
                  :href="symptomsCheckerUrl"
-                 :description="$t('sy01.111.body')"
                  target="_blank"
                  :text="$t('sy01.111.subheader')"
+                 :description="$t('sy01.111.body')"
                  :aria-label="ariaLabelCaption(
                    'sy01.111.subheaderAriaLabel',
                    'sy01.111.body')"/>
@@ -43,13 +43,13 @@
                  id="btn_gpAdvice"
                  header-tag="h2"
                  data-purpose="text_link"
-                 :description="$t('appointments.guidance.menuItem3.text')"
                  :click-func="navigate"
                  :href="gpAdviceConditionsPath"
-                 :text="$t('appointments.guidance.menuItem3.header')"
+                 :text="$t('sy01.askGp.forAdvice')"
+                 :description="$t('sy01.askGp.consultThroughOnlineForm')"
                  :aria-label="ariaLabelCaption(
-                   'appointments.guidance.menuItem3.header',
-                   'appointments.guidance.menuItem3.text')"/>
+                   'sy01.askGp.forAdvice',
+                   'sy01.askGp.consultThroughOnlineForm')"/>
     </menu-item-list>
   </div>
 </template>

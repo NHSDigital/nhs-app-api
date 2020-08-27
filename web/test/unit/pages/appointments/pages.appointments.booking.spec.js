@@ -1,5 +1,6 @@
-import each from 'jest-each';
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
+import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../helpers';
 
 describe('booking.vue', () => {
@@ -49,6 +50,9 @@ describe('booking.vue', () => {
       stubs: {
         'page-title': '<div></div>',
       },
+      mountOpts: {
+        i18n,
+      },
     });
   };
 
@@ -57,7 +61,7 @@ describe('booking.vue', () => {
       createBookingPage();
 
       expect(wrapper.find('.warning').exists()).toBeTruthy();
-      expect(wrapper.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
+      expect(wrapper.find('.warning p').text()).toContain('No appointments available');
     });
   });
 
@@ -73,8 +77,8 @@ describe('booking.vue', () => {
       wrapper.vm.filterSlots();
 
       expect(wrapper.find('.warning').exists()).toBeTruthy();
-      expect(wrapper.findAll('.warning p').at(0).text()).toContain('appointments.booking.adjustSearch.line1');
-      expect(wrapper.findAll('.warning p').at(1).text()).toContain('appointments.booking.adjustSearch.line2');
+      expect(wrapper.findAll('.warning p').at(0).text()).toBe('Try to filter appointments by a different period or select "No preference" for the practice member. If you cannot find the appointment you need, call your GP surgery.');
+      expect(wrapper.findAll('.warning p').at(1).text()).toBe('If it\'s urgent and you do not know what to do, call 111 to get help near you.');
     });
   });
 

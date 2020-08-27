@@ -5,13 +5,13 @@
                        :id="generateErrorId()"
                        override-style="plain"
                        aria-live="polite">
-        <error-title title="appointments.error.title.unavailable"/>
-        <error-paragraph from="appointments.error.403.line1" />
-        <error-paragraph from="appointments.error.403.line2" />
-        <error-header from="appointments.error.403.coronaHeader" />
-        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-title title="appointments.error.appointmentBookingUnavailable"/>
+        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
+        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
+        <error-header from="appointments.error.coronavirus.mightHave" />
+        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
         <error-link :class="$style['inline-link']"
-                    from="appointments.error.403.coronaServiceLink"
+                    from="appointments.error.coronavirus.useOneOneOne"
                     :action="coronaServiceUrl"
                     data-purpose="corona-service"
                     target="_blank"/>
@@ -19,10 +19,10 @@
 
       <error-container v-else-if="error.status===502 || error.status===500"
                        :id="generateErrorId()">
-        <error-title title="appointments.error.title.problemLoading"/>
-        <error-paragraph from="appointments.error.message.goBackAndTryContact"
+        <error-title title="appointments.error.thereIsAProblemLoading"/>
+        <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
         <error-link from="generic.contactUsButton.text"
                     :action="contactUsUrl"
                     target="_blank"/>
@@ -32,10 +32,10 @@
       </error-container>
 
       <error-container v-else-if="error.status===504" :id="generateErrorId()">
-        <error-title title="appointments.error.title.problemLoading"/>
-        <error-paragraph from="appointments.error.message.tryAgainNow"
+        <error-title title="appointments.error.thereIsAProblemLoading"/>
+        <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                          :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
         <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
         <error-link from="generic.contactUsButton.text"
                     :action="contactUsUrl"
@@ -59,13 +59,13 @@
         <div class="nhsuk-grid-column-full">
           <message-dialog v-if="noAvailableAppointments" message-type="warning">
             <message-text :is-header="true">
-              {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
+              {{ $t('appointments.book.noAppointmentsAvailable') }}
             </message-text>
             <message-text>
-              {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
+              {{ $t('appointments.book.thereAreCurrentlyNoAppointments') }}
             </message-text>
             <message-text>
-              {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
+              {{ $t('appointments.book.ifItIsUrgent') }}
             </message-text>
           </message-dialog>
 
@@ -79,13 +79,13 @@
 
           <div ref="noMatching" tabindex="-1">
             <message-dialog v-if="showNoMatchingWarning"
-                            :icon-text="$t('appointments.booking.adjustSearch.title')"
+                            :icon-text="$t('appointments.book.noAppointmentsAvailable')"
                             message-type="warning">
               <message-text>
-                {{ $t('appointments.booking.adjustSearch.line1') }}
+                {{ $t('appointments.book.tryToFilterAppointments') }}
               </message-text>
               <message-text>
-                {{ $t('appointments.booking.adjustSearch.line2') }}
+                {{ $t('appointments.book.ifItIsUrgent') }}
               </message-text>
             </message-dialog>
           </div>
@@ -246,12 +246,12 @@ export default {
       if (this.showNoMatchingWarning) {
         VueScrollTo.scrollTo(this.$refs.noMatching, 500, { easing: VueScrollTo['ease-in'] });
         const errors = [];
-        errors.push(this.$t('appointments.booking.adjustSearch.title'));
+        errors.push(this.$t('appointments.book.noAppointmentsAvailable'));
         this.$store.app.$analytics.logicError(errors);
       }
 
       const screenReaderMessage = this.$tc(
-        'appointments.booking.availableAppointmentsScreenReaderMessage',
+        'appointments.book.countAppointmentsAvailable',
         this.numberOfAvailableAppointments,
         { appointmentsCount: this.numberOfAvailableAppointments },
       );

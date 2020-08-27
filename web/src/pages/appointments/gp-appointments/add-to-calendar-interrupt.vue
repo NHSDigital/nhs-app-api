@@ -6,13 +6,13 @@
           <span class="nhsuk-caption-m nhsuk-caption-–top">
             {{ formatDate(appointment.startTime) }} at {{ formatTime(appointment.startTime) }}
           </span>
-          {{ $t('appointments.addToCalendar.paragraph1') }}
+          {{ $t('appointments.appointment.addToCalendar.ifThisAppointmentChanges') }}
         </h1>
 
-        <p>{{ $t('appointments.addToCalendar.paragraph2') }}</p>
+        <p>{{ $t('appointments.appointment.addToCalendar.yourCalendarWillNoUpdate') }}</p>
 
         <primary-button id="addToCalendarButton" @click.stop.prevent="onAddToCalendar">
-          {{ $t('appointments.index.addToCalendarText') }}
+          {{ $t('appointments.appointment.addToCalendar.addToCalendarText') }}
         </primary-button>
       </div>
     </div>

@@ -8,21 +8,21 @@
                        message-type="error"
                        override-style="plain"
                        aria-live="off">
-        <error-title title="appointments.error.title.unavailable" />
-        <error-paragraph from="appointments.error.403.line1" />
-        <error-paragraph from="appointments.error.403.line2" />
-        <error-header from="appointments.error.403.coronaHeader" />
-        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-title title="appointments.error.appointmentBookingUnavailable" />
+        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
+        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
+        <error-header from="appointments.error.coronavirus.mightHave" />
+        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
         <error-link :class="$style['inline-link']"
-                    from="appointments.error.403.coronaServiceLink"
+                    from="appointments.error.coronavirus.useOneOneOne"
                     :action="coronaServiceUrl"
                     data-purpose="corona-service"
                     target="_blank"/>
       </error-container>
       <error-container v-else-if="error.status===400" :id="generateErrorId()">
-        <error-title title="appointments.error.title.problem"
-                     header="appointments.error.header.problem" />
-        <error-paragraph from="appointments.error.400.message" />
+        <error-title title="appointments.error.thereIsAProblemAppointments"
+                     header="appointments.error.thereIsAProblem" />
+        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
         <error-link from="generic.backButton.text"
                     :action="backUrl"
                     :desktop-only="true"/>
@@ -37,9 +37,9 @@
                     :desktop-only="true"/>
       </error-container>
       <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
-        <error-title title="appointments.error.title.problemLoading"/>
+        <error-title title="appointments.error.thereIsAProblemLoading"/>
         <error-paragraph from="errors.tryAgainNow"/>
-        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
         <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
         <report-a-problem :reference="error.serviceDeskReference"/>
         <error-link from="generic.backButton.text"
@@ -47,10 +47,10 @@
                     :desktop-only="true"/>
       </error-container>
       <error-container v-else-if="error.status===504" :id="generateErrorId()">
-        <error-title title="appointments.error.title.problemLoading"/>
-        <error-paragraph from="appointments.error.message.tryAgainNow"
+        <error-title title="appointments.error.thereIsAProblemLoading"/>
+        <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                          :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
         <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
         <error-link from="generic.contactUsButton.text"
                     :action="contactUsUrl"
@@ -66,24 +66,27 @@
                                             'nhsuk-u-margin-bottom-3',
                                             'nhsuk-u-margin-top-3']"
                           @click="onBookButtonClicked">
-            {{ $t('appointments.guidance.bookButtonText') }}
+            {{ $t('appointments.bookAnAppointment') }}
           </generic-button>
 
           <div v-if="showNoUpcomingAppointments"
                class="nhsuk-u-margin-bottom-3"
                data-purpose="upcoming-info">
-            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.empty.header') }}</h2>
-            <p class="nhsuk-u-margin-top-0">{{ $t('appointments.index.empty.text1') }}</p>
+            <h2 class="nhsuk-u-margin-bottom-0">{{
+              $t('appointments.upcoming.upcomingAppointments')
+            }}</h2>
+            <p class="nhsuk-u-margin-top-0">
+              {{ $t('appointments.upcoming.none.ifYouHaveAnAppointment') }}</p>
           </div>
           <upcoming-appointments v-if="showUpcomingAppointments"
                                  :appointments="upcomingAppointments"
                                  :cancellation-disabled="cancellationDisabled"/>
 
           <div v-if="showNoPastAppointments" data-purpose="past-info">
-            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.index.emptyPast.header') }}</h2>
+            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.past.pastAppointments') }}</h2>
             <div>
               <p class="nhsuk-u-padding-bottom-3">
-                {{ $t('appointments.index.emptyPast.text1') }}
+                {{ $t('appointments.past.none.youHaveNoRecentPastAppointments') }}
               </p>
             </div>
           </div>

@@ -5,11 +5,11 @@
       <message-dialog v-else-if="isError" role="alert">
         <message-text data-purpose="error-heading"
                       :is-header="true">
-          {{ $t('appointments.admin_help.errors.header') }}
+          {{ $t('appointments.adminHelp.weAreExperiencingTechnicalDifficulties') }}
         </message-text>
         <message-text data-purpose="reason-error"
-                      :aria-label="$t('appointments.admin_help.errors.message.label')">
-          {{ $t('appointments.admin_help.errors.message.text') }}
+                      :aria-label="$t('appointments.adminHelp.ifTheProblemPersistsOneOneOne')">
+          {{ $t('appointments.adminHelp.ifTheProblemPersists111') }}
         </message-text>
       </message-dialog>
       <template v-else>
@@ -17,9 +17,9 @@
                                :provider="provider"
                                :provider-name="providerName"
                                :service-definition-id="serviceDefinitionId">
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p1') }}</p>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p2') }}</p>
-          <p>{{ $t('appointments.admin_help.demographicsQuestion.p3') }}</p>
+          <p>{{ $t('appointments.adminHelp.useThisServiceToContactYourSurgery') }}</p>
+          <p>{{ $t('appointments.adminHelp.itTakesAroundFiveMinutes') }}</p>
+          <p>{{ $t('appointments.adminHelp.toSaveYouTypeingIn') }}</p>
         </demographics-question>
         <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
       </template>
@@ -78,10 +78,10 @@ export default {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
 
       EventBus.$emit(UPDATE_HEADER, {
-        headerKey: 'appointments.admin_help.unavailable.header',
-        captionKey: 'appointments.admin_help.unavailable.headerCaption',
+        headerKey: 'appointments.adminHelp.onlineConsultationsUnavailable',
+        captionKey: 'appointments.adminHelp.additionalGpServices',
       });
-      EventBus.$emit(UPDATE_TITLE, 'appointments.admin_help.unavailable.header');
+      EventBus.$emit(UPDATE_TITLE, 'appointments.adminHelp.onlineConsultationsUnavailable');
 
       this.available = false;
       return;

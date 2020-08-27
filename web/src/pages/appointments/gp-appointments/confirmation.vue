@@ -5,28 +5,28 @@
                        :id="generateErrorId"
                        override-style="plain"
                        aria-live="polite">
-        <error-title title="appointments.error.title.unavailable"/>
-        <error-paragraph from="appointments.error.403.line1" />
-        <error-paragraph from="appointments.error.403.line2" />
-        <error-header from="appointments.error.403.coronaHeader" />
-        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-title title="appointments.error.appointmentBookingUnavailable"/>
+        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
+        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
+        <error-header from="appointments.error.coronavirus.mightHave" />
+        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
         <error-link :class="$style['inline-link']"
-                    from="appointments.error.403.coronaServiceLink"
+                    from="appointments.error.coronavirus.useOneOneOne"
                     :action="coronaServiceUrl"
                     data-purpose="corona-service"
                     target="_blank"/>
       </error-container>
       <error-container v-else-if="error.status===400" :id="generateErrorId">
-        <error-title title="appointments.error.title.problem"
-                     header="appointments.error.header.problem" />
-        <error-paragraph from="appointments.error.400.message" />
+        <error-title title="appointments.error.thereIsAProblemAppointments"
+                     header="appointments.error.thereIsAProblem" />
+        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===409" :id="generateErrorId">
-        <error-title title="appointments.confirmation.error.409.title"/>
-        <error-paragraph from="appointments.confirmation.error.409.message" />
+        <error-title title="appointments.confirmation.error.theAppointmentIsNoLongerAvailable"/>
+        <error-paragraph from="appointments.confirmation.error.pleaseChooseADifferentAppointment" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true"/>
@@ -34,22 +34,22 @@
       <error-container v-else-if="error.status===460"
                        :id="generateErrorId"
                        override-style="plain">
-        <error-title title="appointments.confirmation.error.460.title"/>
-        <error-paragraph from="appointments.confirmation.error.460.line1" />
-        <error-paragraph from="appointments.confirmation.error.460.line2" />
-        <error-paragraph from="appointments.confirmation.error.460.line3" />
-        <error-paragraph from="appointments.confirmation.error.460.line4" />
+        <error-title title="appointments.confirmation.error.youHaveReachedYourAppoinmentLimit"/>
+        <error-paragraph from="appointments.confirmation.error.youCannotBookAnyMore" />
+        <error-paragraph from="appointments.confirmation.error.contactYourSurgeryIfYouNeedToBook" />
+        <error-paragraph from="appointments.confirmation.error.youCanGoBack" />
+        <error-paragraph from="appointments.confirmation.error.forUrgentMedicalAdvice" />
         <error-link from="generic.backButton.text"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===500 || error.status===502 || error.status===504"
                        :id="generateErrorId">
-        <error-title title="appointments.error.title.problem"
-                     header="appointments.error.header.problem" />
-        <error-paragraph from="appointments.error.message.goBackAndTryContact"
+        <error-title title="appointments.error.thereIsAProblemAppointments"
+                     header="appointments.error.thereIsAProblem" />
+        <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.message.ifItContinuesBookOrCancel"/>
+        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
         <error-link from="generic.contactUsButton.text"
                     :action="contactUsUrl"
                     target="_blank"/>
@@ -63,14 +63,14 @@
         <div class="nhsuk-grid-column-full">
           <message-dialog message-type="error" role="alert">
             <message-text data-purpose="error-heading">
-              {{ $t('appointments.confirmation.errorDialog') }}
+              {{ $t('appointments.confirmation.error.thereIsAProblem') }}
             </message-text>
             <message-list>
               <li v-if="showTelephoneError" data-purpose="telephone-error">
-                {{ $t('appointments.confirmation.noPhoneNumberError') }}
+                {{ $t('appointments.confirmation.error.enterATelephoneNumber') }}
               </li>
               <li v-if="showReasonError" data-purpose="reason-error">
-                {{ $t('appointments.confirmation.noReasonError') }}
+                {{ $t('appointments.confirmation.error.enterAReason') }}
               </li>
             </message-list>
           </message-dialog>
@@ -79,7 +79,7 @@
       <div class="nhsuk-grid-row" data-purpose="info">
         <div class="nhsuk-grid-column-full">
           <p class="nhsuk-u-padding-bottom-2">
-            {{ $t('appointments.confirmation.info') }}
+            {{ $t('appointments.confirmation.checkYourDetails') }}
           </p>
         </div>
       </div>
@@ -98,11 +98,11 @@
           <div role="form" data-purpose="phone-number" :class="telephoneErrorStyle">
             <fieldset class="nhsuk-fieldset nhsuk-form-group--error">
               <legend id="telephone-input-label" class="nhsuk-fieldset__legend">
-                <strong>{{ $t('appointments.confirmation.telephoneNumberLabel') }}</strong>
+                <strong>{{ $t('appointments.confirmation.chooseAPhoneNumber') }}</strong>
               </legend>
               <error-message v-if="showTelephoneError"
                              id="telephone-error-label">
-                {{ $t('appointments.confirmation.noPhoneNumberError') }}
+                {{ $t('appointments.confirmation.error.enterATelephoneNumber') }}
               </error-message>
               <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
                    :key="index" class="nhsuk-radios__item">
@@ -128,12 +128,12 @@
                 <label :for="'otherPhoneNumberRadioInput'"
                        class="nhsuk-label nhsuk-radios__label"
                        @keypress.enter.stop="selected" @click.stop="selected">
-                  {{ $t('appointments.confirmation.useOtherPhoneNumberLabel') }}
+                  {{ $t('appointments.confirmation.useOtherPhoneNumber') }}
                 </label>
               </div>
               <div v-if="showPhoneNumberTextBox">
                 <p id="telephone-number-desc" class="nhsuk-u-padding-bottom-2">
-                  {{ $t('appointments.confirmation.telephoneNumberDescription') }}
+                  {{ $t('appointments.confirmation.thisNumberWillOnlyBeUsed') }}
                 </p>
                 <generic-text-input id="telephoneNumberText"
                                     ref="telephone"
@@ -157,20 +157,20 @@
             <label id="booking-reason-label" class="nhsuk-fieldset__legend"
                    for="reasonText">
               <strong>
-                {{ $t('appointments.confirmation.headerLabel') }}
+                {{ $t('appointments.confirmation.giveAReason.giveAReason') }}
                 {{ bookingReasonOptional ?
-                  $t('appointments.confirmation.headerLabelSuffix') : '' }}
+                  $t('appointments.confirmation.giveAReason.optionalSuffix') : '' }}
               </strong>
             </label>
             <p id="max-reason-desc">
-              {{ $t('appointments.confirmation.reasonDesc.line1') }}
+              {{ $t('appointments.confirmation.giveAReason.textMustBeShorterThan') }}
             </p>
             <p>
-              {{ $t('appointments.confirmation.reasonDesc.line2') }}
-              {{ $t('appointments.confirmation.reasonDesc.line3') }}
+              {{ $t('appointments.confirmation.giveAReason.textMayNotBeRead') }}
+              {{ $t('appointments.confirmation.giveAReason.ifItIsUrgent') }}
             </p>
             <error-message v-if="showReasonError" id="reason-error-label">
-              {{ $t('appointments.confirmation.noReasonError') }}
+              {{ $t('appointments.confirmation.error.enterAReason') }}
             </error-message>
             <generic-text-area id="reasonText"
                                ref="reason"
@@ -190,7 +190,7 @@
                           :button-classes="['nhsuk-button']"
                           click-delay="medium"
                           @click.prevent="onConfirmButtonClicked">
-            {{ $t('appointments.confirmation.confirmButtonText') }}
+            {{ $t('appointments.confirmation.confirmAndBook') }}
           </generic-button>
         </div>
       </div>
@@ -198,7 +198,7 @@
       <div v-if="!$store.state.device.isNativeApp" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
           <desktop-generic-back-link :path="appointmentBookingPath"
-                                     :button-text="'appointments.confirmation.backButtonText'"
+                                     :button-text="'generic.backButton.text'"
                                      @clickAndPrevent="onCancelButtonClicked"/>
         </div>
       </div>
@@ -286,8 +286,8 @@ export default {
     },
     confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation
-        ? 'appointments.index.successAndCancellationDisabledText'
-        : 'appointments.index.successText';
+        ? 'appointments.confirmation.yourAppointmentHasBeenBookedViewHere'
+        : 'appointments.confirmation.yourAppointmentHasBeenBookedViewOrCancelHere';
     },
     defaultClasses() {
       return this.showError ? undefined : undefined;

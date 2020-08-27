@@ -1,7 +1,7 @@
 <template>
   <span>
     <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0">
-      {{ $t('appointments.index.past.header') }}
+      {{ $t('appointments.past.pastAppointments') }}
     </h2>
     <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">
       <CardGroupItem v-for="appointment in chunk"
@@ -10,7 +10,7 @@
           <appointment :appointment="appointment"
                        :cancellation-disabled="true"
                        :show-cancellation-link="false"
-                       :telephone-message="$t('appointments.index.past.telephoneMessage')"
+                       :telephone-message="$t('appointments.past.thePhoneNumberYouGave')"
                        data-purpose="past-appointments"
                        role="listitem"/>
         </Card>

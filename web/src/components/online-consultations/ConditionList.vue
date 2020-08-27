@@ -1,12 +1,12 @@
 <template>
   <div :class="!isNativeApp && $style.desktopWeb">
     <div id="conditionInfo" data-purpose="info">
-      <p>{{ $t('appointments.gp_advice.conditions.paragraph') }}</p>
+      <p>{{ $t('onlineConsultations.conditions.chooseYourCondition') }}</p>
       <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">
         <a id="cannotFindConditionLink"
            role="link"
            @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-          {{ $t('appointments.gp_advice.conditions.link') }}</a>
+          {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}</a>
       </p>
     </div>
     <div v-for="serviceDefinition in serviceDefinitions"
@@ -28,7 +28,7 @@
       <a id="cannotFindConditionLink"
          role="link"
          @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-        {{ $t('appointments.gp_advice.conditions.link') }}
+        {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}
       </a>
     </p>
     <generic-button id="endMyConsultationButton"

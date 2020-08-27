@@ -1,12 +1,12 @@
 <template>
   <div :class="[$style.form, $style['nhsuk-body']]">
     <label class="nhsuk-label" for="type">
-      {{ $t('appointments.booking.filters.type.label') }}
+      {{ $t('appointments.book.typeOfAppointment') }}
     </label>
     <div class="nhsuk-u-padding-bottom-3">
       <collapsible-dialog v-if="guidanceMsg" >
         <template slot="header">
-          {{ $t('appointments.booking.gpMessage.header') }}
+          {{ $t('appointments.book.whichTypeDoINeed') }}
         </template>
         <p class="nhsuk-u-margin-0">{{ guidanceMsg }}</p>
       </collapsible-dialog>
@@ -25,7 +25,7 @@
     </select-dropdown>
 
     <label class="nhsuk-label" for="location">
-      {{ $t('appointments.booking.filters.location.label') }}
+      {{ $t('appointments.book.location') }}
     </label>
     <select-dropdown v-model="location" select-id="location" select-name="location">
       <option v-for="option in options.locations"
@@ -37,7 +37,7 @@
     </select-dropdown>
 
     <label class="nhsuk-label" for="clinician">
-      {{ $t('appointments.booking.filters.clinician.label') }}
+      {{ $t('appointments.book.practiceMember') }}
     </label>
     <select-dropdown
       v-model="clinician"
@@ -50,14 +50,14 @@
     </select-dropdown>
 
     <label class="nhsuk-label" for="time-period">
-      {{ $t('appointments.booking.filters.date.label') }}
+      {{ $t('appointments.book.filterAvailableAppointments') }}
     </label>
     <select-dropdown v-model="date" select-id="time-period" select-name="time-period">
       <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
-    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.booking.filters.date.header') }}</h2>
+    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.book.availableAppointments') }}</h2>
   </div>
 </template>
 

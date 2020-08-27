@@ -1,5 +1,6 @@
-import SymptomsCheck from '@/components/symptoms/SymptomsCheck';
+import i18n from '@/plugins/i18n';
 import MenuItem from '@/components/MenuItem';
+import SymptomsCheck from '@/components/symptoms/SymptomsCheck';
 import * as dependency from '@/lib/utils';
 import { APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
 import { createStore, mount, createRouter, createEvent } from '../../helpers';
@@ -35,7 +36,7 @@ describe('GP Guidence button tests', () => {
         'session/isProofLevel9': isProofLevel9,
       },
     });
-    return mount(SymptomsCheck, { $store, $router });
+    return mount(SymptomsCheck, { $store, $router, mountOpts: { i18n } });
   };
 
   describe('Visability Tests', () => {
@@ -53,25 +54,28 @@ describe('GP Guidence button tests', () => {
       expect(tagArray.length).toBe(4);
 
       const coronaCheckerButtonHeader = tagArray.at(0).find('li a span h2');
-      expect(coronaCheckerButtonHeader.text()).toContain('translate_sy01.corona.subheader');
+      expect(coronaCheckerButtonHeader.text()).toContain('Get advice about coronavirus');
+
+      const coronaCheckerButtonText = tagArray.at(0).find('li a span p');
+      expect(coronaCheckerButtonText.text()).toContain('Find out what to do if you think you have coronavirus');
 
       const conditionsCheckerButtonHeader = tagArray.at(1).find('li a span h2');
-      expect(conditionsCheckerButtonHeader.text()).toContain('translate_sy01.conditionsTreatments.subheader');
+      expect(conditionsCheckerButtonHeader.text()).toContain('Search conditions and treatments');
 
       const conditionsCheckerButtonText = tagArray.at(1).find('li a span p');
-      expect(conditionsCheckerButtonText.text()).toContain('translate_sy01.conditionsTreatments.body');
+      expect(conditionsCheckerButtonText.text()).toContain('Find trusted NHS information on hundreds of conditions');
 
       const symptomsCheckerButtonHeader = tagArray.at(2).find('li a span h2');
-      expect(symptomsCheckerButtonHeader.text()).toContain('translate_sy01.111.subheader');
+      expect(symptomsCheckerButtonHeader.text()).toContain('Use NHS 111 online');
 
       const symptomsCheckerButtonText = tagArray.at(2).find('li a span p');
-      expect(symptomsCheckerButtonText.text()).toContain('translate_sy01.111.body');
+      expect(symptomsCheckerButtonText.text()).toContain('Check if you need urgent help and find out what to do next');
 
       const adviceButtonHeader = tagArray.at(3).find('li a span h2');
-      expect(adviceButtonHeader.text()).toContain('translate_appointments.guidance.menuItem3.header');
+      expect(adviceButtonHeader.text()).toContain('Ask your GP for advice');
 
       const adviceButtonText = tagArray.at(3).find('li a span p');
-      expect(adviceButtonText.text()).toContain('translate_appointments.guidance.menuItem3.text');
+      expect(adviceButtonText.text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
     });
 
     it('Hides the GP advice button if logged in but practice doesnt offer it', async () => {

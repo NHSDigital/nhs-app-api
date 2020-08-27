@@ -1,4 +1,5 @@
 import apiErrors from './apiErrors';
+import appointments from './appointments';
 import components from './components';
 import gpSessionErrors from './gpSessionErrors';
 import loginSettings from './loginSettings';
@@ -254,284 +255,6 @@ export default {
       text: 'If your mobile device supports fingerprint or face recognition, you can use it to log in to the NHS App instead of a password and security code.',
       settingsButton: 'Open settings',
       dismissLink: 'Dismiss',
-    },
-  },
-  appointments: {
-    index: {
-      successText: 'Your appointment has been booked. You can view details or cancel it here.',
-      successAndCancellationDisabledText: 'Your appointment has been booked. You can view details here.',
-      bookButtonText: 'Book an appointment',
-      cancelButtonText: 'Cancel this appointment',
-      cancellationDisabledText: 'To cancel this appointment, contact your GP surgery.',
-      locationLabel: 'Location',
-      appointmentTypeLabel: 'Appointment type',
-      addToCalendarText: 'Add to calendar',
-      empty: {
-        header: 'Upcoming appointments',
-        text1: 'If you have an upcoming appointment that is not shown here, contact your GP surgery for more information.',
-      },
-      emptyPast: {
-        header: 'Past appointments',
-        text1: 'You have no recent past appointments. To find out about older appointments, contact your GP surgery.',
-      },
-      upcoming: {
-        header: 'Upcoming appointments',
-        info: 'Click in the appointment if you need to cancel it',
-        telephoneMessage: 'We will call you on ',
-      },
-      past: {
-        header: 'Past appointments',
-        telephoneMessage: 'The phone number you gave us was ',
-      },
-    },
-    guidance: {
-      li1: {
-        header: 'Self care​',
-        text: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
-      },
-      li2: {
-        header: 'Check your symptoms​',
-        text: 'Using trusted NHS online information​',
-      },
-      li3: {
-        header: 'Get advice from a pharmacist​',
-        text: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
-      },
-      menuItem1: {
-        header: 'Get help with symptoms',
-        text: 'Find information about specific conditions',
-      },
-      menuItem2: {
-        header: 'Additional GP services',
-        text: 'Get sick notes and GP letters or ask about recent tests',
-      },
-      menuItem3: {
-        header: 'Ask your GP for advice',
-        text: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
-      },
-      symptomButtonText: 'Check symptoms',
-      bookButtonText: 'Book an appointment',
-      backDesktopLinkText: 'Back',
-      backButtonText: 'Back',
-    },
-    noSlotErrorMessage: {
-      summary: 'There are no appointments available at the moment',
-      info: 'If you need an appointment, please contact your GP.',
-    },
-    error: {
-      title: {
-        problem: 'Sorry, there is a problem - Appointments',
-        problemLoading: 'Sorry, there is a problem with loading GP appointments',
-        unavailable: 'GP appointment booking unavailable',
-      },
-      header: {
-        problem: 'Sorry, there is a problem',
-      },
-      message: {
-        goBackAndTryContact: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        ifItContinues: {
-          text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-        tryAgainNow: 'Try again now. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        ifItContinuesBookOrCancel: {
-          text: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-      },
-      400: {
-        message: {
-          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      403: {
-        line1: 'You are not currently able to book or view GP appointments with the NHS App.',
-        line2: {
-          text: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-        coronaHeader: 'If you think you might have coronavirus',
-        coronaText: 'Stay at home and avoid close contact with other people.',
-        coronaServiceLink: {
-          text: 'Use the 111 coronavirus service to see if you need medical help',
-          label: 'Use the one one one coronavirus service to see if you need medical help',
-        },
-      },
-    },
-    cancelling: {
-      info: 'Check your appointment details before cancelling',
-      form_label: 'Reason for cancelling',
-      backButtonText: 'Back',
-      cancelButtonText: 'Cancel appointment',
-      noReasonDialogError: 'There\'s a problem',
-      noReasonError: 'Select a reason for cancelling',
-      dropdownDefaultOption: 'Select reason',
-      successText: 'Your appointment has been cancelled.',
-      error: {
-        403: {
-          title: 'Sorry, there is a problem with the service - Appointments',
-          header: 'Contact your GP surgery to cancel',
-          message: 'You cannot cancel appointments online right now. Call your GP surgery as soon as possible to let them know you need to cancel.',
-        },
-        409: {
-          title: 'Sorry, you cannot cancel this appointment',
-          message: 'This may be because the appointment is already cancelled or it occurs in the past.',
-        },
-        461: {
-          title: 'Contact your GP surgery to cancel',
-          message: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
-        },
-      },
-    },
-    booking: {
-      desktopBackButtonText: 'Back',
-      backButtonText: 'Back to your appointments',
-      nojs: {
-        findButton: 'Find available appointments',
-      },
-      availableAppointmentsScreenReaderMessage: '0 appointments available | 1 appointment available | {appointmentsCount} appointments available',
-      gpMessage: {
-        header: 'Which type of appointment do I need?',
-      },
-      noAppointmentsAvailable: {
-        title: 'No appointments available',
-        line1: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',
-        line2: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
-      },
-      adjustSearch: {
-        title: 'No appointments available',
-        line1: 'Try to filter appointments by a different period or select "No preference" for the practice member. If you cannot find the appointment you need, call your GP surgery.',
-        line2: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
-      },
-      filters: {
-        type: {
-          label: 'Type of appointment',
-          default_option: 'Select type',
-        },
-        location: {
-          label: 'Location',
-          default_option: 'Select location',
-        },
-        clinician: {
-          label: 'Practice member (optional)',
-          default_option: 'No preference',
-        },
-        date: {
-          header: 'Available appointments',
-          label: 'Filter available appointments',
-          options: {
-            today: 'Today',
-            tomorrow: 'Tomorrow',
-            this_week: 'This week',
-            next_week: 'Next week',
-            next_eight_weeks: 'Next 8 weeks',
-            all: 'Next 16 weeks',
-          },
-        },
-      },
-    },
-    confirmation: {
-      telephoneNumberLabel: 'Choose a phone number for this appointment',
-      telephoneNumberDescription: 'This number will only be used for this appointment. It will not be saved.',
-      headerLabel: 'Give a reason for this appointment',
-      headerLabelSuffix: ' (optional)',
-      useOtherPhoneNumberLabel: 'Use other phone number',
-      reasonDesc: {
-        line1: 'Text must be shorter than 150 characters (about 25 words).',
-        line2: 'This text may not be read by your GP or practice member until the day of your appointment.',
-        line3: 'If it\'s urgent, contact your GP surgery before booking.',
-      },
-      confirmButtonText: 'Confirm and book appointment',
-      changeButtonText: 'Change this appointment',
-      backButtonText: 'Back',
-      errorDialog: 'There\'s a problem',
-      noReasonError: 'Enter a reason for this appointment',
-      noPhoneNumberError: 'Enter a telephone number',
-      conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
-      info: 'Check your appointment details before booking.',
-      error: {
-        409: {
-          title: 'Sorry, the GP appointment is no longer available',
-          message: 'Please choose a different appointment.',
-        },
-        460: {
-          title: 'Sorry, you have reached your GP appointment limit',
-          line1: 'You cannot book any more appointments right now.',
-          line2: 'Contact your GP surgery if you still need to book an appointment.',
-          line3: 'You can go back to see what you have already booked and cancel any appointments that you may no longer need.',
-          line4: {
-            text: 'For urgent medical advice, go to 111.nhs.uk or call 111.',
-            label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
-          },
-        },
-      },
-    },
-    bookingSuccess: {
-      proxyMessage: 'You have booked an appointment for {name}.',
-      message: 'Your GP appointment has been booked',
-      back: 'Go to your appointments',
-    },
-    addToCalendar: {
-      paragraph1: 'If this appointment changes, you\'ll have to update your calendar yourself',
-      paragraph2: 'Your calendar will not update automatically if the appointment is changed or cancelled.',
-    },
-    cancellingSuccess: {
-      proxyMessage: 'You have cancelled {name}\'s appointment.',
-      message: 'Your GP appointment has been cancelled',
-    },
-    informatica: {
-      header: 'Appointment booking is not currently available directly through the NHS App',
-      description: 'Your GP surgery uses Appointments Online to book appointments, and you’ll need a username and password from your GP surgery.',
-      link: {
-        prefix: 'If you have a username and password, ',
-        text: 'log in to Appointments Online',
-      },
-    },
-    gp_advice: {
-      unavailable: {
-        headerCaption: 'Ask your GP for advice',
-        header: 'Online consultations are currently unavailable',
-      },
-      demographicsQuestion: {
-        p1: 'It takes around 5 minutes to answer a few questions about your condition.',
-        p2: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
-      },
-      errors: {
-        pageTitle: 'Server error',
-        pageHeader: 'Server error',
-        header: 'Sorry, we\'re experiencing technical difficulties',
-        subheader: 'Please try again later.',
-        message: {
-          text: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-      },
-      conditions: {
-        paragraph: 'To ensure we ask you relevant questions, choose your condition.',
-        link: 'I cannot find my condition',
-      },
-    },
-    admin_help: {
-      unavailable: {
-        headerCaption: 'Additional GP services',
-        header: 'Online consultations are currently unavailable',
-      },
-      demographicsQuestion: {
-        p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
-        p2: 'It takes around 5 minutes to answer a few questions.',
-        p3: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
-      },
-      errors: {
-        pageTitle: 'Server error',
-        pageHeader: 'Server error',
-        header: 'Sorry, we\'re experiencing technical difficulties',
-        subheader: 'Please try again later.',
-        message: {
-          text: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-      },
     },
   },
   gp_at_hand: {
@@ -984,6 +707,7 @@ export default {
       },
     },
     createMessage: {
+      thereIsAProblem: 'There\'s a problem',
       messageLabelText: 'Message',
       messageTextError: 'Enter a message',
       messageHintText: 'Text must be shorter than 450 characters (about 75 words).',
@@ -2027,6 +1751,10 @@ export default {
       subheaderAriaLabel: 'Use NHS one one one online',
       body: 'Check if you need urgent help and find out what to do next',
     },
+    askGp: {
+      forAdvice: 'Ask your GP for advice',
+      consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
+    },
   },
   appointmentHubPage: {
     pageHeader: 'Appointments',
@@ -2279,6 +2007,7 @@ export default {
     linkText: 'Help with abbreviations',
   },
   apiErrors,
+  appointments,
   components,
   gpSessionErrors,
   loginSettings,

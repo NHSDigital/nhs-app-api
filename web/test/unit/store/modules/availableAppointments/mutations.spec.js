@@ -294,12 +294,12 @@ describe('mutations', () => {
 
     describe('filtersOptions', () => {
       const additionalSixteenWeeksSlotsEnabledOptions = [
-        { value: 'next_eight_weeks', name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
-        { value: 'all', name: 'appointments.booking.filters.date.options.all', translate: true },
+        { value: 'next_eight_weeks', name: 'appointments.book.next_eight_weeks', translate: true },
+        { value: 'all', name: 'appointments.book.all', translate: true },
       ];
 
       const additionalSixteenWeeksSlotsDisabledOptions = [
-        { value: 'all', name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+        { value: 'all', name: 'appointments.book.next_eight_weeks', translate: true },
       ];
 
       it.each([
@@ -332,23 +332,23 @@ describe('mutations', () => {
 
         const expectedFiltersOptions = {
           types: [
-            { value: '', name: 'appointments.booking.filters.type.default_option', translate: true },
+            { value: '', name: 'appointments.book.selectType', translate: true },
             { value: 'Baby immunisations', name: 'Baby immunisations', translate: false },
           ],
           locations: [
-            { value: '', name: 'appointments.booking.filters.location.default_option', translate: true },
+            { value: '', name: 'appointments.book.selectLocation', translate: true },
             { value: 'Leeds', name: 'Leeds', translate: false },
           ],
           clinicians: [
-            { value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true },
+            { value: '', name: 'appointments.book.noPreference', translate: true },
             { value: 'Dr House', name: 'Dr House', translate: false },
             { value: 'Dr Who', name: 'Dr Who', translate: false },
           ],
           dates: [
-            { value: 'today', name: 'appointments.booking.filters.date.options.today', translate: true },
-            { value: 'tomorrow', name: 'appointments.booking.filters.date.options.tomorrow', translate: true },
-            { value: 'this_week', name: 'appointments.booking.filters.date.options.this_week', translate: true },
-            { value: 'next_week', name: 'appointments.booking.filters.date.options.next_week', translate: true },
+            { value: 'today', name: 'appointments.book.today', translate: true },
+            { value: 'tomorrow', name: 'appointments.book.tomorrow', translate: true },
+            { value: 'this_week', name: 'appointments.book.this_week', translate: true },
+            { value: 'next_week', name: 'appointments.book.next_week', translate: true },
             ...dateOptions,
           ],
         };

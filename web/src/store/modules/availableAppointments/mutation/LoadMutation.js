@@ -41,31 +41,31 @@ export default class LoadMutation {
     }
 
     const dates = [
-      { value: DateFilterValues.TODAY, name: 'appointments.booking.filters.date.options.today', translate: true },
-      { value: DateFilterValues.TOMORROW, name: 'appointments.booking.filters.date.options.tomorrow', translate: true },
-      { value: DateFilterValues.THIS_WEEK, name: 'appointments.booking.filters.date.options.this_week', translate: true },
-      { value: DateFilterValues.NEXT_WEEK, name: 'appointments.booking.filters.date.options.next_week', translate: true },
+      { value: DateFilterValues.TODAY, name: 'appointments.book.today', translate: true },
+      { value: DateFilterValues.TOMORROW, name: 'appointments.book.tomorrow', translate: true },
+      { value: DateFilterValues.THIS_WEEK, name: 'appointments.book.this_week', translate: true },
+      { value: DateFilterValues.NEXT_WEEK, name: 'appointments.book.next_week', translate: true },
     ];
 
     if (sixteenWeeksSlotsEnabled) {
       dates.push(
-        { value: DateFilterValues.NEXT_EIGHT_WEEKS, name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
-        { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.all', translate: true },
+        { value: DateFilterValues.NEXT_EIGHT_WEEKS, name: 'appointments.book.next_eight_weeks', translate: true },
+        { value: DateFilterValues.ALL, name: 'appointments.book.all', translate: true },
       );
     } else {
       dates.push(
-        { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.next_eight_weeks', translate: true },
+        { value: DateFilterValues.ALL, name: 'appointments.book.next_eight_weeks', translate: true },
       );
     }
 
     types.sort(namedObjectComparator);
-    types.unshift({ value: '', name: 'appointments.booking.filters.type.default_option', translate: true });
+    types.unshift({ value: '', name: 'appointments.book.selectType', translate: true });
 
     locations.sort(namedObjectComparator);
-    locations.unshift({ value: '', name: 'appointments.booking.filters.location.default_option', translate: true });
+    locations.unshift({ value: '', name: 'appointments.book.selectLocation', translate: true });
 
     clinicians.sort(namedObjectComparator);
-    clinicians.unshift({ value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true });
+    clinicians.unshift({ value: '', name: 'appointments.book.noPreference', translate: true });
 
     return {
       slots: data.slots,

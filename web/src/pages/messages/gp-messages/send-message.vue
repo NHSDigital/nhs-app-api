@@ -5,7 +5,7 @@
         <div class="nhsuk-grid-column-full">
           <message-dialog id="errorDialog" message-type="error" role="alert">
             <message-text data-purpose="error-heading">
-              {{ $t('appointments.confirmation.errorDialog') }}
+              {{ $t('gp_messages.createMessage.thereIsAProblem') }}
             </message-text>
             <message-list>
               <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
@@ -75,7 +75,7 @@
     </div>
     <desktopGenericBackLink v-if="!this.$store.state.device.isNativeApp"
                             :path="backPath"
-                            button-text="appointments.guidance.backDesktopLinkText"
+                            button-text="generic.backButton.text"
                             @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
