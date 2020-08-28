@@ -1,10 +1,5 @@
 const env = require('./src/config/env.json');
 
-// TODO: productionSourceMap do we want this true in production???
-let VERSION_TAG = process.env.APP_VERSION_TAG;
-if (VERSION_TAG) {
-  VERSION_TAG = process.env.APP_VERSION_TAG.replace(/\./g, '-');
-}
 module.exports = {
   devServer: {
     before: (app) => {
@@ -13,8 +8,8 @@ module.exports = {
     disableHostCheck: process.env.NODE_ENV !== 'production',
     port: env.PORT,
   },
-  assetsDir: VERSION_TAG,
-  productionSourceMap: true,
+  // assetsDir: VERSION_TAG, this is used locally but ignored in ADO - not sure why moved to package.json
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   chainWebpack: (config) => {
     // GraphQL Loader
     config.module

@@ -74,6 +74,10 @@ ARG APP_VERSION_TAG
 
 RUN echo 'VUE_APP_COMMIT_ID='$COMMIT_ID >> /app/.env
 
+RUN if [ -n "$APP_VERSION_TAG" ] ; then \
+        sed -i "s/dev_web_npm/$APP_VERSION_TAG/" package.json; \
+    fi
+
 RUN npm run build
 
 # production stage
@@ -98,9 +102,7 @@ USER www-data
 EXPOSE $PORT
 CMD sudo update-ca-certificates; \
     sh /app/build/env.sh ./app/config.json; \
-    cat ./app/config.json; \
     envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf; \
-    cat /etc/nginx/nginx.conf; \
     nginx;
 
 # 1. trust wildcard cert (mounted in helm)to allow communication between pods
