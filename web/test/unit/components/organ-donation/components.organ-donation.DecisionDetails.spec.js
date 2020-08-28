@@ -1,8 +1,6 @@
-import isEmpty from 'lodash/fp/isEmpty';
-import mapKeys from 'lodash/fp/mapKeys';
-import mapValues from 'lodash/fp/mapValues';
-import pickBy from 'lodash/fp/pickBy';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import i18n from '@/plugins/i18n';
+import mapValues from 'lodash/fp/mapValues';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { mount } from '../../helpers';
 
@@ -13,7 +11,7 @@ const mountDecisionInfo = ({
   choices = {},
   isSomeOrgans = false,
 } = {}) =>
-  mount(DecisionDetails, { $style, propsData: { choices, isSomeOrgans } });
+  mount(DecisionDetails, { $style, propsData: { choices, isSomeOrgans }, mountOpts: { i18n } });
 
 describe('DecisionDetails', () => {
   let wrapper;
@@ -29,14 +27,13 @@ describe('DecisionDetails', () => {
   it('will have a decision details header', () => {
     const header = wrapper.find('#decision-details-header');
     expect(header.exists()).toBe(true);
-    expect(header.text())
-      .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.subheader');
+    expect(header.text()).toEqual('Decision details');
   });
 
   it('will have decision details text', () => {
     const text = wrapper.find('#decision-details-text');
     expect(text.exists()).toBe(true);
-    expect(text.text()).toEqual('translate_organDonation.reviewYourDecision.decisionDetails.allOrgansText');
+    expect(text.text()).toEqual('I want to donate all my organs and tissue.');
   });
 
   it('will have a choices property', () => {
@@ -59,7 +56,7 @@ describe('DecisionDetails', () => {
 
     it('will display the decision details text for all organs', () => {
       expect(wrapper.find('#decision-details-text').text())
-        .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.allOrgansText');
+        .toEqual('I want to donate all my organs and tissue.');
     });
 
     it('will not display chosen items', () => {
@@ -87,7 +84,7 @@ describe('DecisionDetails', () => {
 
       it('will display the decision details text for all organs', () => {
         expect(wrapper.find('#decision-details-text').text())
-          .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.someOrgansText');
+          .toEqual('I want to donate some organs and tissue.');
       });
 
       it('will show the heading for "You have chosen to donate', () => {
@@ -116,7 +113,7 @@ describe('DecisionDetails', () => {
 
       it('will display the decision details text for all organs', () => {
         expect(wrapper.find('#decision-details-text').text())
-          .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.someOrgansText');
+          .toEqual('I want to donate some organs and tissue.');
       });
 
       it('will show the heading for "You have chosen to donate', () => {
@@ -132,41 +129,31 @@ describe('DecisionDetails', () => {
       });
 
       it('will have the correct text for the chosen header', () => {
-        expect(chosenHeader.text())
-          .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.chosenHeader');
+        expect(chosenHeader.text()).toEqual('You have chosen to donate:');
       });
 
       it('will have the correct text for the not chosen header', () => {
-        expect(notChosenHeader.text())
-          .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.notChosenHeader');
+        expect(notChosenHeader.text()).toEqual('You have chosen not to donate:');
       });
 
       it('will have a list containing the chosen organs', () => {
         const list = wrapper.find('#chosen > ul');
         expect(list.exists()).toEqual(true);
 
-        const text = list.text();
-        const chosen = pickBy(val => val === 'Yes')(choices);
-        expect(isEmpty(chosen)).toEqual(false);
-
-        mapKeys((value) => {
-          expect(text)
-            .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
-        })(chosen);
+        expect(list.text()).toContain('Heart');
+        expect(list.text()).toContain('Kidney');
       });
 
       it('will have a list containing the non-chosen organs', () => {
         const list = wrapper.find('#notChosen > ul');
         expect(list.exists()).toEqual(true);
 
-        const text = list.text();
-        const chosen = pickBy(val => val === 'No')(choices);
-        expect(isEmpty(chosen)).toEqual(false);
-
-        mapKeys((value) => {
-          expect(text)
-            .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
-        })(chosen);
+        expect(list.text()).toContain('Lungs');
+        expect(list.text()).toContain('Liver');
+        expect(list.text()).toContain('Corneas');
+        expect(list.text()).toContain('Pancreas');
+        expect(list.text()).toContain('Tissue');
+        expect(list.text()).toContain('Small bowel');
       });
     });
 
@@ -184,7 +171,7 @@ describe('DecisionDetails', () => {
 
       it('will display the decision details text for all organs', () => {
         expect(wrapper.find('#decision-details-text').text())
-          .toEqual('translate_organDonation.reviewYourDecision.decisionDetails.someOrgansText');
+          .toEqual('I want to donate some organs and tissue.');
       });
 
       it('will show the heading for "You have chosen to donate', () => {
@@ -203,42 +190,26 @@ describe('DecisionDetails', () => {
         const list = wrapper.find('#chosen > ul');
         expect(list.exists()).toEqual(true);
 
-        const text = list.text();
-        const chosen = pickBy(val => val === 'Yes')(choices);
-        expect(isEmpty(chosen)).toEqual(false);
-
-        mapKeys((value) => {
-          expect(text)
-            .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
-        })(chosen);
+        expect(list.text()).toContain('Heart');
+        expect(list.text()).toContain('Kidney');
       });
 
       it('will have a list containing the non-chosen organs', () => {
         const list = wrapper.find('#notChosen > ul');
         expect(list.exists()).toEqual(true);
 
-        const text = list.text();
-        const chosen = pickBy(val => val === 'No')(choices);
-        expect(isEmpty(chosen)).toEqual(false);
-
-        mapKeys((value) => {
-          expect(text)
-            .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
-        })(chosen);
+        expect(list.text()).toContain('Lungs');
+        expect(list.text()).toContain('Liver');
+        expect(list.text()).toContain('Corneas');
+        expect(list.text()).toContain('Pancreas');
+        expect(list.text()).toContain('Small bowel');
       });
 
       it('will have a list containing the non-stated organs', () => {
         const list = wrapper.find('#notStated > ul');
         expect(list.exists()).toEqual(true);
 
-        const text = list.text();
-        const notStated = pickBy(val => val === 'NotStated')(choices);
-        expect(isEmpty(notStated)).toEqual(false);
-
-        mapKeys((value) => {
-          expect(text)
-            .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
-        })(notStated);
+        expect(list.text()).toBe('Tissue');
       });
     });
   });

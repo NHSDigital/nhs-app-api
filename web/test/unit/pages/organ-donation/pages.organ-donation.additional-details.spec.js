@@ -1,6 +1,7 @@
-import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
 import BackButton from '@/components/BackButton';
+import find from 'lodash/fp/find';
+import i18n from '@/plugins/i18n';
 import {
   ORGAN_DONATION_PATH,
   ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
@@ -25,7 +26,7 @@ describe('additional-details', () => {
 
   const mountWrapper = () => {
     const store = $store || createStore({ state });
-    return mount(AdditionalDetails, { $router, $store: store });
+    return mount(AdditionalDetails, { $router, $store: store, mountOpts: { i18n } });
   };
 
   beforeEach(() => {
@@ -48,7 +49,7 @@ describe('additional-details', () => {
     });
 
     it('will translate the additional details subheader', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.additionalDetails.subheader');
+      expect(wrapper.text()).toContain('Additional details');
     });
 
     describe('dropdowns', () => {
@@ -97,7 +98,7 @@ describe('additional-details', () => {
         it('will have a placeholder option', () => {
           const option = findOptionById('')(elements);
           expect(option).not.toBeUndefined();
-          expect(option.text).toEqual('translate_organDonation.additionalDetails.ethnicity.placeholder');
+          expect(option.text).toEqual('Please select');
         });
       });
 
@@ -128,7 +129,7 @@ describe('additional-details', () => {
         it('will have a placeholder option', () => {
           const option = findOptionById('')(elements);
           expect(option).not.toBeUndefined();
-          expect(option.text).toEqual('translate_organDonation.additionalDetails.religion.placeholder');
+          expect(option.text).toEqual('Please select');
         });
       });
     });

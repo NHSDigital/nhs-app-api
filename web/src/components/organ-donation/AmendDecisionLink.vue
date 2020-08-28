@@ -3,7 +3,7 @@
     <a id="amendDecisionLink"
        href="#"
        @click.stop.prevent="amendDecision">
-      {{ $t('organDonation.links.amendDecisionText') }}
+      {{ $t('organDonation.iWantToChangeMyDecision') }}
     </a>
   </li>
 </template>

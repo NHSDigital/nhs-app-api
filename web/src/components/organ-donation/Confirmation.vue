@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2>{{ $t('organDonation.reviewYourDecision.confirmation.subheader') }}</h2>
+    <h2>{{ $t('organDonation.confirmation.confirmation') }}</h2>
     <error-group :show-error="showAccuracyError">
       <error-message v-if="showAccuracyError" id="accuracy-checkbox-error">
-        {{ $t('organDonation.reviewYourDecision.confirmation.errors.accuracy') }}
+        {{ $t('organDonation.confirmation.checkYourInformation') }}
       </error-message>
       <generic-checkbox v-model="isAccuracyAccepted"
                         value="accuracy-checkbox"
@@ -11,12 +11,12 @@
                         :required="true"
                         checkbox-id="accuracy-checkbox"
                         @input="selectedValueChanged('accuracy-checkbox')">
-        {{ $t('organDonation.reviewYourDecision.confirmation.accuracyText') }}
+        {{ $t('organDonation.confirmation.iConfirmTheInformation') }}
       </generic-checkbox>
     </error-group>
     <error-group :show-error="showPrivacyError">
       <error-message v-if="showPrivacyError" id="privacy-checkbox-error">
-        {{ $t('organDonation.reviewYourDecision.confirmation.errors.privacy') }}
+        {{ $t('organDonation.confirmation.readThePrivacyStatementAndConfirmConstent') }}
       </error-message>
       <generic-checkbox v-model="isPrivacyAccepted"
                         value="privacy-checkbox"
@@ -24,10 +24,10 @@
                         :required="true"
                         checkbox-id="privacy-checkbox"
                         @input="selectedValueChanged('privacy-checkbox')">
-        {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
+        {{ $t('organDonation.confirmation.iHaveReadThe') }}
         <a :href="privacyUrl" target="_blank" rel="noopener noreferrer">
-          {{ $t('organDonation.reviewYourDecision.confirmation.privacyLinkText') }}</a>
-        {{ $t('organDonation.reviewYourDecision.confirmation.privacyText2') }}
+          {{ $t('organDonation.confirmation.privacyStatement') }}</a>
+        {{ $t('organDonation.confirmation.andGiveConsent') }}
       </generic-checkbox>
     </error-group>
   </div>

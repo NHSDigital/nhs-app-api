@@ -3,8 +3,8 @@
              header-tag="h3"
              :href="alreadyRegisteredUrl"
              target="_blank"
-             :text="$t('organDonation.links.alreadyRegisteredText')"
-             :aria-label="$t('organDonation.links.alreadyRegisteredText')"/>
+             :text="$t('organDonation.thinkYouHaveRegisteredAlready')"
+             :aria-label="$t('organDonation.thinkYouHaveRegisteredAlready')"/>
 </template>
 
 <script>

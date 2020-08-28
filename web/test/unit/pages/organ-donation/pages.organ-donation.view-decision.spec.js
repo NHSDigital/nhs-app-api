@@ -1,8 +1,9 @@
-import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
+import i18n from '@/plugins/i18n';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
+import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import ViewDecision from '@/pages/organ-donation/view-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
@@ -28,7 +29,7 @@ describe('view decision', () => {
 
   const mountWrapper = () => {
     const store = $store || createStore({ state });
-    return mount(ViewDecision, { $store: store, $style });
+    return mount(ViewDecision, { $store: store, $style, mountOpts: { i18n } });
   };
 
   describe('not conflicted', () => {
@@ -69,18 +70,15 @@ describe('view decision', () => {
     });
 
     it('will show the success message text', () => {
-      expect(wrapper.text())
-        .toContain('translate_organDonation.viewDecision.successMessageText');
+      expect(wrapper.text()).toContain('Your decision has been recorded');
     });
 
     it('will not show the Decision submitted dialog text', () => {
-      expect(wrapper.text())
-        .not.toContain('translate_organDonation.viewDecision.decisionSubmitted.dialogText');
+      expect(wrapper.text()).not.toContain('Decision submitted');
     });
 
     it('will not show the Decision submitted message text', () => {
-      expect(wrapper.text())
-        .not.toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
+      expect(wrapper.text()).not.toContain('We have successfully received your organ donation decision.');
     });
 
     it('will show other things to do', () => {
@@ -149,18 +147,15 @@ describe('view decision', () => {
     });
 
     it('will show the Decision submitted dialog text', () => {
-      expect(wrapper.text())
-        .toContain('translate_organDonation.viewDecision.decisionSubmitted.dialogText');
+      expect(wrapper.text()).toContain('Decision submitted');
     });
 
     it('will show the Decision submitted message text', () => {
-      expect(wrapper.text())
-        .toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
+      expect(wrapper.text()).toContain('We have successfully received your organ donation decision.');
     });
 
     it('will not show the success message text', () => {
-      expect(wrapper.text())
-        .not.toContain('translate_organDonation.viewDecision.successMessageText');
+      expect(wrapper.text()).not.toContain('Your decision has been recorded');
     });
 
     it('will not show your decision', () => {

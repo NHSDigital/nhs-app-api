@@ -37,8 +37,8 @@ export default {
         ? ORGAN_DONATION_ADDITIONAL_DETAILS_PATH
         : ORGAN_DONATION_YOUR_CHOICE_PATH,
       style: isOptOut ? this.$style['no-button'] : this.$style['yes-button'],
-      headerKey: isOptOut ? 'organDonation.register.noButton.header' : 'organDonation.register.yesButton.header',
-      subHeaderKey: isOptOut ? 'organDonation.register.noButton.subheader' : 'organDonation.register.yesButton.subheader',
+      headerKey: isOptOut ? 'organDonation.button.iDoNotWantToDonate.header' : 'organDonation.button.iDoWantToDonate.header',
+      subHeaderKey: isOptOut ? 'organDonation.button.iDoNotWantToDonate.subheader' : 'organDonation.button.iDoWantToDonate.subheader',
       icon: isOptOut ? NoIcon : YesIcon,
       headerId: `${isOptOut ? 'no' : 'yes'}-header-id`,
     };

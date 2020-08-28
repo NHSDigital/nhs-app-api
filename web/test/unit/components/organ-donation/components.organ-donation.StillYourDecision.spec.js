@@ -1,4 +1,5 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
+import i18n from '@/plugins/i18n';
 import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import { mount } from '../../helpers';
@@ -17,7 +18,7 @@ describe('organ donation still your decision', () => {
     showReaffirm,
   });
 
-  const mountStillYourDecision = () => mount(StillYourDecision, { propsData });
+  const mountStillYourDecision = () => mount(StillYourDecision, { propsData, mountOpts: { i18n } });
 
   describe('amend', () => {
     it('will render the AmendDecision link when `showAmend` is true', () => {
@@ -40,11 +41,11 @@ describe('organ donation still your decision', () => {
     });
 
     it('will display the organ donation subheader', () => {
-      expect(wrapper.find('h3').text()).toEqual('translate_organDonation.stillYourDecision.subheader');
+      expect(wrapper.find('h3').text()).toEqual('Is this still your decision?');
     });
 
     it('will display the organ donation paragraph', () => {
-      expect(wrapper.find('p').text()).toEqual('translate_organDonation.stillYourDecision.text');
+      expect(wrapper.find('p').text()).toEqual('Keeping your registration up to date will help your family, should organ donation be possible.');
     });
   });
 

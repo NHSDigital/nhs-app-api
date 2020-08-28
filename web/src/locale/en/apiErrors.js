@@ -1,3 +1,4 @@
+import organDonation from './apiErrorsOrganDonation';
 import prescriptions from './apiErrorsPrescriptions';
 
 export default {
@@ -28,6 +29,7 @@ export default {
     message: 'Try again in a few moments.',
   },
   components: {
+    organ_donation: organDonation,
     prescriptions,
   },
 };

@@ -3,6 +3,7 @@ import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
+import i18n from '@/plugins/i18n';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OrganDonation from '@/pages/organ-donation';
@@ -33,6 +34,7 @@ const createState =
 
     state.organDonation.registration.decision = decision;
     state.organDonation.originalRegistration.decision = originalDecision;
+    state.organDonation.originalRegistration.faithDeclaration = 'Yes';
 
     if (originalChoices) {
       state.organDonation.originalRegistration.decisionDetails.choices = originalChoices;
@@ -119,7 +121,15 @@ describe('organ donation index page', () => {
   let $style;
   let wrapper;
 
-  const mountOrganDonation = $route => mount(OrganDonation, { $route, $store, $style });
+  const mountOrganDonation = $route => mount(
+    OrganDonation,
+    {
+      $route,
+      $store,
+      $style,
+      mountOpts: { i18n },
+    },
+  );
 
   describe('created', () => {
     beforeEach(() => {
@@ -267,7 +277,7 @@ describe('organ donation index page', () => {
 
     describe('appointed representative section', () => {
       it('will translate the phone label', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.registered.appointedRep.phoneLabel');
+        expect(wrapper.text()).toContain('To check, or change, your appointed representative call the organ donation line:');
       });
     });
 
@@ -308,12 +318,12 @@ describe('organ donation index page', () => {
 
     it('will show the Decision found dialog text', () => {
       expect(wrapper.text())
-        .toContain('translate_organDonation.viewDecision.conflictedState.dialogText');
+        .toContain('Decision found');
     });
 
     it('will show the Decision found message text', () => {
       expect(wrapper.text())
-        .toContain('translate_organDonation.viewDecision.conflictedState.messageText');
+        .toContain('Your registration is currently being processed.');
     });
 
     describe('component existence', () => {

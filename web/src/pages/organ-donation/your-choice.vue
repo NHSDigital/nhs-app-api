@@ -3,26 +3,26 @@
     <div class="nhsuk-grid-column-full">
       <message-dialog v-if="showErrors" message-type="error">
         <message-text data-purpose="error-heading">
-          {{ $t('organDonation.yourChoice.errorMessageHeader') }}
+          {{ $t('organDonation.thereIsAProblem') }}
         </message-text>
         <message-list data-purpose="reason-error">
-          <li>{{ $t('organDonation.yourChoice.errorMessageText') }}</li>
+          <li>{{ $t('organDonation.yourChoice.chooseToDonate') }}</li>
         </message-list>
       </message-dialog>
       <div>
-        <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
-        <p>{{ $t('organDonation.yourChoice.description') }}</p>
+        <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
+        <p>{{ $t('organDonation.yourChoice.youCanDonateSomeOrAll') }}</p>
       </div>
       <radio-group v-model="selectedValue"
                    :current-value="currentChoice"
                    :radios="radioButtons"
                    :show-error="showErrors"
-                   :error-message="$t('organDonation.yourChoice.errorMessageText')"
+                   :error-message="$t('organDonation.yourChoice.chooseToDonate')"
                    @select="selected"/>
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
-        {{ $t('organDonation.yourChoice.continueButtonText') }}
+        {{ $t('generic.continueButton.text') }}
       </generic-button>
       <back-button v-if="!$store.state.device.isNativeApp" :before="beforeBack" />
     </div>
@@ -60,13 +60,13 @@ export default {
       hasTriedToContinue: false,
       radioButtons: [
         {
-          hint: this.$t('organDonation.yourChoice.choices.all.description'),
-          label: this.$t('organDonation.yourChoice.choices.all.title'),
+          hint: this.$t('organDonation.yourChoice.helpUpToNinePeople'),
+          label: this.$t('organDonation.yourChoice.allMyOrgansAndTissue'),
           value: true,
         },
         {
-          hint: this.$t('organDonation.yourChoice.choices.some.description'),
-          label: this.$t('organDonation.yourChoice.choices.some.title'),
+          hint: this.$t('organDonation.yourChoice.chooseWhichOrgansAndTissue'),
+          label: this.$t('organDonation.yourChoice.someOrgansAndTissue'),
           value: false,
         },
       ],

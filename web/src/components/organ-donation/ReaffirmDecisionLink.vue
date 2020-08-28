@@ -2,7 +2,7 @@
   <li>
     <a id="reaffirmDecisionLink" href="#"
        @click.stop.prevent="setReaffirmDecision">
-      {{ $t('organDonation.links.reaffirmDecisionText') }}
+      {{ $t('organDonation.thisIsStillMyDecision') }}
     </a>
   </li>
 </template>

@@ -1,4 +1,5 @@
 import AppointedRepIcon from '@/components/icons/organ-donation/AppointedRepIcon';
+import i18n from '@/plugins/i18n';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import YourDecision from '@/components/organ-donation/YourDecision';
@@ -25,6 +26,7 @@ const mountYourDecision = ({
       'optout-label': 'optout-label',
       'withdraw-label': 'withdraw-label',
     },
+    mountOpts: { i18n },
   });
 
 describe('your decision', () => {
@@ -37,20 +39,19 @@ describe('your decision', () => {
 
     it('will translate the header using the default header key', () => {
       expect(wrapper.text())
-        .toContain('translate_organDonation.reviewYourDecision.yourDecision.subheader');
+        .toContain('Your decision');
     });
   });
 
   describe('custom header key', () => {
     beforeEach(() => {
       wrapper = mountYourDecision({
-        headerKey: 'fruity',
+        headerKey: 'organDonation.button.iDoNotWantToDonate.header',
       });
     });
 
     it('will translate the header using the specified header key', () => {
-      expect(wrapper.text())
-        .toContain('translate_fruity');
+      expect(wrapper.text()).toContain('NO');
     });
   });
 
@@ -75,7 +76,7 @@ describe('your decision', () => {
       });
 
       it('will display the withdraw decision text', () => {
-        expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.withdrawDecisionText');
+        expect(label.text()).toBe('Withdraw my decision from the register');
       });
     });
   });
@@ -103,7 +104,7 @@ describe('your decision', () => {
         });
 
         it('will display the appointed representative decision text', () => {
-          expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.appointedrepDecisionText');
+          expect(label.text()).toBe('I have appointed a representative');
         });
       });
     });
@@ -130,7 +131,7 @@ describe('your decision', () => {
         });
 
         it('will display the opt in to all decision text', () => {
-          expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.optinDecisionText');
+          expect(label.text()).toBe('Yes I want to donate my organs');
         });
       });
     });
@@ -157,7 +158,7 @@ describe('your decision', () => {
         });
 
         it('will display the opt in to some decision text', () => {
-          expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.optinSomeDecisionText');
+          expect(label.text()).toBe('Yes I want to donate my organs');
         });
       });
     });
@@ -184,7 +185,7 @@ describe('your decision', () => {
         });
 
         it('will display the opt out decision text', () => {
-          expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.optoutDecisionText');
+          expect(label.text()).toBe('No I do not want to donate my organs');
         });
       });
     });

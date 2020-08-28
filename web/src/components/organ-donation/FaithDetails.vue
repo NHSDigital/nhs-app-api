@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.reviewYourDecision.faith.subheader') }}</h3>
+    <h3>{{ $t('organDonation.faith.faithSlashBeliefsDetails') }}</h3>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.faith.description') }}
+      {{ $t('organDonation.faith.iWouldLikeStaffToSpeakToMyFamilyAboutFaithSlashBeliefs') }}
     </h4>
-    <p>{{ $t(`organDonation.reviewYourDecision.faith.declaration.${declaration}`) }}</p>
+    <p>{{ $t(decision) }}</p>
   </div>
 </template>
 <script>
@@ -14,6 +14,18 @@ export default {
     declaration: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    decision() {
+      switch (this.declaration) {
+        case 'Yes':
+          return 'organDonation.faith.yesThisIsApplicable';
+        case 'No':
+          return 'organDonation.faith.noThisIsNotApplicable';
+        default:
+          return 'organDonation.faith.preferNotToSay';
+      }
     },
   },
 };

@@ -1,5 +1,6 @@
 /* eslint-disable object-curly-newline */
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
+import i18n from '@/plugins/i18n';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import {
   initialState,
@@ -17,10 +18,11 @@ describe('organ choice component', () => {
   const mountOrganChoice = () => mount(OrganChoice, {
     $store,
     propsData: {
-      title: 'organDonation.someOrgans.choices.heartTitle',
+      title: 'organDonation.organs.heart',
       organName: 'heart',
       showErrors: false,
     },
+    mountOpts: { i18n },
   });
 
   beforeEach(() => {
@@ -48,7 +50,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.heartTitle');
+        expect(wrapper.text()).toContain('Heart');
       });
     });
 
@@ -78,7 +80,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.heartTitle');
+        expect(wrapper.text()).toContain('Heart');
       });
     });
 

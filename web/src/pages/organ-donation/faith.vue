@@ -3,37 +3,37 @@
     <div class="nhsuk-grid-column-full">
       <message-dialog v-if="showError" message-type="error">
         <message-text data-purpose="error-heading">
-          {{ $t('organDonation.faith.errorMsgHeader') }}
+          {{ $t('organDonation.thereIsAProblem') }}
         </message-text>
         <message-list data-purpose="reason-error">
-          <li>{{ $t('organDonation.faith.errorMsgText') }}</li>
+          <li>{{ $t('organDonation.faith.respondToFaithBeliefDeclaration') }}</li>
         </message-list>
       </message-dialog>
-      <h2>{{ $t('organDonation.faith.subheader') }}</h2>
-      <p>{{ $t('organDonation.faith.body.paragraph1') }}</p>
+      <h2>{{ $t('organDonation.faith.faithSlashBeliefs') }}</h2>
+      <p>{{ $t('organDonation.faith.askFamilyWhenYouDie') }}</p>
       <collapsible-dialog>
         <template slot="header">
-          {{ $t('organDonation.faith.endOfLifeWishes.header') }}
+          {{ $t('organDonation.faith.endOfLifeWishes.examplesOfEndOfLifeWishes') }}
         </template>
         <ul class="nhsuk-list">
-          <li v-for="(listItem, index) of $t('organDonation.faith.endOfLifeWishes.listItems')"
+          <li v-for="(listItem, index) of $t('organDonation.faith.endOfLifeWishes.examples')"
               :key="index">
             {{ listItem }}
           </li>
         </ul>
       </collapsible-dialog>
-      <p>{{ $t('organDonation.faith.body.paragraph2') }}</p>
-      <p><strong>{{ $t('organDonation.faith.choices.header') }}</strong></p>
+      <p>{{ $t('organDonation.faith.recordWhetherToAskFamilyWhenYouDie') }}</p>
+      <p><strong>{{ $t('organDonation.faith.iWouldLikeStaffToSpeakToMyFamily') }}</strong></p>
       <radio-group v-model="selectedValue"
                    :radios="choices"
                    :current-value="currentChoice"
                    :show-error="showError"
-                   :error-message="$t('organDonation.faith.inlineErrorMessage')"
+                   :error-message="$t('organDonation.faith.chooseYesNoOrPreferNot')"
                    @select="radioButtonSelected"/>
       <generic-button id="continue-to-additional-details"
                       :class="['nhsuk-button']"
                       @click.stop.prevent="continueClicked">
-        {{ $t('organDonation.faith.continueButtonText') }}
+        {{ $t('generic.continueButton.text') }}
       </generic-button>
       <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>
@@ -68,9 +68,9 @@ export default {
   data() {
     return {
       choices: [
-        { value: YES, label: this.$t('organDonation.faith.choices.yes.title') },
-        { value: NO, label: this.$t('organDonation.faith.choices.no.title') },
-        { value: NOT_STATED, label: this.$t('organDonation.faith.choices.preferNotToSay.title') },
+        { value: YES, label: this.$t('organDonation.faith.yesThisIsApplicable') },
+        { value: NO, label: this.$t('organDonation.faith.noThisIsNotApplicable') },
+        { value: NOT_STATED, label: this.$t('organDonation.faith.preferNotToSay') },
       ],
       hasTriedToContinue: false,
       selectedValue: undefined,

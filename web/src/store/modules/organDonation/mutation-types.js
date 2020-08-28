@@ -63,7 +63,7 @@ const createRegistration = () => ({
       smallBowel: 'NotStated',
     },
   },
-  faithDeclaration: '',
+  faithDeclaration: 'NotStated',
   state: STATE_NOT_FOUND,
 });
 

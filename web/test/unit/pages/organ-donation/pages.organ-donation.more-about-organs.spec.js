@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import MoreAboutOrgans from '@/pages/organ-donation/more-about-organs';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { createStore, locale, mount } from '../../helpers';
@@ -15,6 +16,7 @@ describe('organ donation more about organs', () => {
 
   const mountMoreAboutOrgans = () => mount(MoreAboutOrgans, {
     $store,
+    mountOpts: { i18n },
   });
 
   beforeEach(() => {
@@ -23,7 +25,7 @@ describe('organ donation more about organs', () => {
   });
 
   it('will show the header text', () => {
-    expect(wrapper.find('h2').text()).toEqual('translate_organDonation.moreAboutOrgans.header');
+    expect(wrapper.find('h2').text()).toEqual('About organs and tissue');
   });
 
   describe('content items', () => {

@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import {
   ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
@@ -18,6 +19,7 @@ const mountReaffirmDecision = ({ $router, $store, isSomeOrgans = false } = {}) =
     propsData: {
       isSomeOrgans,
     },
+    mountOpts: { i18n },
   });
 
 describe('reaffirm decision', () => {
@@ -44,7 +46,7 @@ describe('reaffirm decision', () => {
     });
 
     it('will have the correct link text', () => {
-      expect(link.text()).toEqual('translate_organDonation.links.reaffirmDecisionText');
+      expect(link.text()).toEqual('This is still my decision');
     });
 
     describe('click', () => {

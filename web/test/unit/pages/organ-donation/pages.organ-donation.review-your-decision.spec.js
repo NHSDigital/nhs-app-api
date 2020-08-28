@@ -1,6 +1,7 @@
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import ContactDetails from '@/components/organ-donation/ContactDetails';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import i18n from '@/plugins/i18n';
 import PersonalDetails from '@/components/organ-donation/PersonalDetails';
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
@@ -11,6 +12,9 @@ import {
   STATE_OK,
 } from '@/store/modules/organDonation/mutation-types';
 import { createScrollTo, createStore, initFilters, mount } from '../../helpers';
+
+const WithdrawHeader = 'What this means';
+const WithdrawBody = 'We will no longer know your decision about organ donation. Therefore, it will be considered that you have agreed to be an organ donor unless you are in an excluded group.';
 
 const createState = ({
   all = false,
@@ -50,7 +54,7 @@ describe('review your decision', () => {
 
   const mountPage = ({ state, getters }) => {
     $store = createStore({ state, getters });
-    return mount(ReviewYourDecision, { $store });
+    return mount(ReviewYourDecision, { $store, mountOpts: { i18n } });
   };
 
   beforeEach(() => {
@@ -75,11 +79,11 @@ describe('review your decision', () => {
   });
 
   it('will not show withdraw header text', () => {
-    expect(wrapper.text()).not.toContain('translate_organDonation.reviewYourDecision.withdraw.subheader');
+    expect(wrapper.text()).not.toContain(WithdrawHeader);
   });
 
   it('will not show withdraw body text', () => {
-    expect(wrapper.text()).not.toContain('translate_organDonation.reviewYourDecision.withdraw.body');
+    expect(wrapper.text()).not.toContain(WithdrawBody);
   });
 
   describe('is withdrawing', () => {
@@ -100,11 +104,11 @@ describe('review your decision', () => {
     });
 
     it('will show withdraw header text', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.withdraw.subheader');
+      expect(wrapper.text()).toContain(WithdrawHeader);
     });
 
     it('will show withdraw body text', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.withdraw.body');
+      expect(wrapper.text()).toContain(WithdrawBody);
     });
   });
 
@@ -128,7 +132,7 @@ describe('review your decision', () => {
     });
 
     it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {
-      expect(submitButton.text()).toBe('translate_organDonation.reviewYourDecision.submitButton');
+      expect(submitButton.text()).toBe('Submit my decision');
     });
 
     it('will not be disabled', () => {
@@ -158,8 +162,8 @@ describe('review your decision', () => {
         it('will show a message for each validation error', () => {
           expect(wrapper.vm.validationErrors.length).toBe(2);
           expect(wrapper.findAll('#errors li').length).toBe(wrapper.vm.validationErrors.length);
-          expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.confirmation.errors.accuracy');
-          expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.confirmation.errors.privacy');
+          expect(wrapper.text()).toContain('Check your information. Confirm if it is accurate.');
+          expect(wrapper.text()).toContain('Read the privacy statement. Confirm if you give your consent.');
         });
 
         it('will scroll to the top', () => {
@@ -191,8 +195,8 @@ describe('review your decision', () => {
           expect(wrapper.find('#errors').exists()).toBe(true);
         });
 
-        it('will add "organDonation.reviewYourDecision.confirmation.errors.accuracy" to the validation errors', () => {
-          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+        it('will add "organDonation.reviewYourDecision.checkInformationAndConfirm" to the validation errors', () => {
+          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.checkInformationAndConfirm');
         });
 
         it('will scroll to the top', () => {
@@ -224,8 +228,8 @@ describe('review your decision', () => {
           expect(wrapper.find('#errors').exists()).toBe(true);
         });
 
-        it('will add "organDonation.reviewYourDecision.confirmation.errors.privacy" to the validation errors', () => {
-          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.confirmation.errors.privacy');
+        it('will add "organDonation.reviewYourDecision.readPrivacyStatmentAndConsent" to the validation errors', () => {
+          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent');
         });
 
         it('will scroll to the top', () => {
@@ -272,7 +276,7 @@ describe('review your decision', () => {
 
       it('will show the opt-in decision text', () => {
         expect(wrapper.find(YourDecision).text())
-          .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinDecisionText');
+          .toContain('Yes I want to donate my organs');
       });
 
       it('will show the decision details', () => {
@@ -292,7 +296,7 @@ describe('review your decision', () => {
 
       it('will show the opt-in some decision text', () => {
         expect(wrapper.find(YourDecision).text())
-          .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinSomeDecisionText');
+          .toContain('Yes I want to donate my organs');
       });
 
       it('will show the decision details', () => {

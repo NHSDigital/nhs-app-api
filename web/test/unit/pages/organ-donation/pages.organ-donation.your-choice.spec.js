@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
 import { ORGAN_DONATION_FAITH_PATH } from '@/router/paths';
@@ -31,6 +32,7 @@ describe('organ donation your choice page', () => {
   const mountWrapper = () => mount(YourChoice, {
     $router,
     $store,
+    mountOpts: { i18n },
   });
 
   beforeEach(() => {
@@ -55,6 +57,7 @@ describe('organ donation your choice page', () => {
         wrapper = mount(YourChoice, {
           $router,
           $store,
+          mountOpts: { i18n },
         });
         continueButton = wrapper.find('#continue-button');
       });
@@ -64,8 +67,7 @@ describe('organ donation your choice page', () => {
       });
 
       it('will display the continue button text for your choice', () => {
-        const key = 'organDonation.yourChoice.continueButtonText';
-        expect(continueButton.text()).toBe(`translate_${key}`);
+        expect(continueButton.text()).toBe('Continue');
       });
 
       it('will be a button with nhsuk-button style', () => {

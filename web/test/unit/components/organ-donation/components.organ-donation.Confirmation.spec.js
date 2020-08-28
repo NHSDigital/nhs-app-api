@@ -1,4 +1,5 @@
 import Confirmation from '@/components/organ-donation/Confirmation';
+import i18n from '@/plugins/i18n';
 import {
   ORGAN_DONATION_PRIVACY_URL,
 } from '@/router/externalLinks';
@@ -13,6 +14,7 @@ describe('confirmation', () => {
     propsData: {
       submitAttempted,
     },
+    mountOpts: { i18n },
   });
 
   beforeEach(() => {
@@ -92,7 +94,6 @@ describe('confirmation', () => {
   });
 
   describe('inline errors', () => {
-    const errorMessage = 'translate_organDonation.reviewYourDecision.confirmation.errors.';
     const showOrNot = bool => (bool ? 'show' : 'not show');
 
     const assertInlineMessage = ({ accuracy = false, privacy = false }, wrapperFn) => {
@@ -100,7 +101,7 @@ describe('confirmation', () => {
         const span = wrapperFn().find('#accuracy-checkbox-error span');
         expect(span.exists()).toBe(accuracy);
         if (accuracy) {
-          expect(span.text()).toBe(`${errorMessage}accuracy`);
+          expect(span.text()).toBe('Check your information. Confirm if it is accurate.');
         }
       });
 
@@ -108,7 +109,7 @@ describe('confirmation', () => {
         const span = wrapperFn().find('#privacy-checkbox-error span');
         expect(span.exists()).toBe(privacy);
         if (privacy) {
-          expect(span.text()).toBe(`${errorMessage}privacy`);
+          expect(span.text()).toBe('Read the privacy statement. Confirm if you give your consent.');
         }
       });
     };

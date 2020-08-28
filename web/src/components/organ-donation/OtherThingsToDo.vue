@@ -1,24 +1,24 @@
 <template>
   <div>
-    <h2>{{ $t('organDonation.otherThings.subheader') }}</h2>
+    <h2>{{ $t('organDonation.otherThings.otherThingsYouCanDo') }}</h2>
     <menu-item-list>
       <menu-item v-if="canWithdraw"
                  id="btn_withdraw"
                  header-tag="h3"
                  href="#"
-                 :description="$t('organDonation.otherThings.withdraw.body')"
-                 :text="$t('organDonation.otherThings.withdraw.subheader')"
+                 :description="$t('organDonation.otherThings.youCanWithdrawAtAnyTime')"
+                 :text="$t('organDonation.otherThings.withdrawYourDecision')"
                  :click-func="withdrawDecision"
-                 :aria-label="`${$t('organDonation.otherThings.withdraw.subheader')}.
-                               ${$t('organDonation.otherThings.withdraw.body')}`"/>
+                 :aria-label="`${$t('organDonation.otherThings.withdrawYourDecision')}.
+                               ${$t('organDonation.otherThings.youCanWithdrawAtAnyTime')}`"/>
       <menu-item id="btn_blood"
                  header-tag="h3"
                  :href="bloodDonationUrl"
                  target="_blank"
-                 :description="$t('organDonation.otherThings.bloodDonation.body')"
-                 :text="$t('organDonation.otherThings.bloodDonation.subheader')"
-                 :aria-label="`${$t('organDonation.otherThings.bloodDonation.subheader')}.
-                               ${$t('organDonation.otherThings.bloodDonation.body')}`"/>
+                 :description="$t('organDonation.otherThings.youCouldSaveLivesByGivingBlood')"
+                 :text="$t('organDonation.otherThings.registerToBeABloodDonor')"
+                 :aria-label="`${$t('organDonation.otherThings.registerToBeABloodDonor')}.
+                               ${$t('organDonation.otherThings.youCouldSaveLivesByGivingBlood')}`"/>
     </menu-item-list>
   </div>
 </template>

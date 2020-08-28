@@ -1,9 +1,9 @@
-import FaithDetails from '@/components/organ-donation/FaithDetails';
+import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import i18n from '@/plugins/i18n';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { createStore, mount } from '../../helpers';
 
-describe('faith details', () => {
+describe('faith details registered', () => {
   let wrapper;
   let $store;
 
@@ -19,13 +19,13 @@ describe('faith details', () => {
     let declarationText;
 
     beforeEach(() => {
-      wrapper = mount(FaithDetails, {
+      wrapper = mount(FaithDetailsRegistered, {
         $store,
         propsData: { declaration: 'Yes' },
         mountOpts: { i18n },
       });
 
-      declarationText = wrapper.find('div');
+      declarationText = wrapper.find('p');
     });
 
     it('will exist', () => {
@@ -33,7 +33,7 @@ describe('faith details', () => {
     });
 
     it('will show the Yes text', () => {
-      expect(declarationText.text()).toContain('Yes - this is applicable to me');
+      expect(declarationText.text()).toContain('When I die, I would like NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.');
     });
   });
 
@@ -41,13 +41,13 @@ describe('faith details', () => {
     let declarationText;
 
     beforeEach(() => {
-      wrapper = mount(FaithDetails, {
+      wrapper = mount(FaithDetailsRegistered, {
         $store,
         propsData: { declaration: 'No' },
         mountOpts: { i18n },
       });
 
-      declarationText = wrapper.find('div');
+      declarationText = wrapper.find('p');
     });
 
     it('will exist', () => {
@@ -55,7 +55,7 @@ describe('faith details', () => {
     });
 
     it('will show the No text', () => {
-      expect(declarationText.text()).toContain('No - this is not applicable to me');
+      expect(declarationText.text()).toContain('When I die, I do not want NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.');
     });
   });
 
@@ -63,13 +63,13 @@ describe('faith details', () => {
     let declarationText;
 
     beforeEach(() => {
-      wrapper = mount(FaithDetails, {
+      wrapper = mount(FaithDetailsRegistered, {
         $store,
         propsData: { declaration: 'NotStated' },
         mountOpts: { i18n },
       });
 
-      declarationText = wrapper.find('div');
+      declarationText = wrapper.find('p');
     });
 
     it('will exist', () => {
@@ -77,7 +77,7 @@ describe('faith details', () => {
     });
 
     it('will show the NotStated text', () => {
-      expect(declarationText.text()).toContain('Prefer not to say');
+      expect(declarationText.text()).toContain('I prefer not to say whether I want NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.');
     });
   });
 });

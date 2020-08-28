@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.stillYourDecision.subheader') }}</h3>
-    <p>{{ $t('organDonation.stillYourDecision.text') }}</p>
+    <h3>{{ $t('organDonation.stillYourDecision.isThisStillYourDecision') }}</h3>
+    <p>{{ $t('organDonation.stillYourDecision.keepingUpToDateWillHelp') }}</p>
     <ul class="nhsuk-list">
       <reaffirm-decision-link v-if="showReaffirm"
                               :is-some-organs="isSomeOrgans"/>

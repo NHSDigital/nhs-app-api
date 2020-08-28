@@ -4,46 +4,43 @@
       <div>
         <message-dialog v-if="showErrors" id="errors" message-type="error" role="alert">
           <message-text data-purpose="error-heading">
-            {{ $t('organDonation.withdrawReason.errorMessageHeader') }}
+            {{ $t('organDonation.thereIsAProblem') }}
           </message-text>
           <message-list data-purpose="reason-error">
-            <li>{{ $t('organDonation.withdrawReason.errorMessageText') }}</li>
+            <li>{{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}</li>
           </message-list>
         </message-dialog>
         <div :class="[$style.form]">
-          <h2>{{ $t('organDonation.withdrawReason.subheader') }}</h2>
-          <p v-for="(item, index) in $t('organDonation.withdrawReason.explanations')"
-             :key="index">
-            {{ item }}
-          </p>
+          <h2>{{ $t('organDonation.withdrawReason.withdrawYourPreviousDecision') }}</h2>
+          <p>{{ $t('organDonation.withdrawReason.differentToOptingOut') }}</p>
+          <p>{{ $t('organDonation.withdrawReason.youAreConsideredToBeAnOrganDonorUnless') }}</p>
           <ul>
-            <li v-for="(item, index) of $t('organDonation.withdrawReason.exclusions')" :key="index">
-              {{ item }}
-            </li>
+            <li>{{ $t('organDonation.withdrawReason.youHaveRecordedADscisionNotToDonate') }}</li>
+            <li>{{ $t('organDonation.withdrawReason.youAreInAnExcludedGroup') }}</li>
           </ul>
           <p>
-            {{ $t('organDonation.withdrawReason.moreAboutLawText') }}
+            {{ $t('organDonation.withdrawReason.findOutMoreAboutThe') }}
             <analytics-tracked-tag id="law-change"
                                    :href="lawChangeUrl"
-                                   :text="$t('organDonation.withdrawReason.moreAboutLawLinkText')"
+                                   :text="$t('organDonation.withdrawReason.lawAndExcludedGroups')"
                                    class="inline"
                                    tag="a"
                                    target="_blank">
-              {{ $t('organDonation.withdrawReason.moreAboutLawLinkText') }}</analytics-tracked-tag>.
+              {{ $t('organDonation.withdrawReason.lawAndExcludedGroups') }}</analytics-tracked-tag>.
           </p>
           <p>
-            {{ $t('organDonation.withdrawReason.amendBeforeLink') }}
+            {{ $t('organDonation.withdrawReason.ifYouDoNotWantTheWayToTellUsIs') }}
             <a id="update" href="#" class="inline" @click.stop.prevent="amendDecision">
-              {{ $t('organDonation.withdrawReason.amendLink') }}</a>.
-            {{ $t('organDonation.withdrawReason.amendAfterLink') }}
+              {{ $t('organDonation.withdrawReason.updateYourDecision') }}</a>.
+            {{ $t('organDonation.withdrawReason.youCanChangeYouDecisionAtAnyTime') }}
           </p>
-          <p>{{ $t('organDonation.withdrawReason.familyText') }}</p>
+          <p>{{ $t('organDonation.withdrawReason.makeSureYourFamilyKnow') }}</p>
           <error-group :show-error="showErrors">
             <label for="reason">
-              {{ $t('organDonation.withdrawReason.reason.label') }}
+              {{ $t('organDonation.withdrawReason.reasonForWithdrawing') }}
             </label>
             <error-message v-if="showErrors">
-              {{ $t('organDonation.withdrawReason.errorMessageText') }}
+              {{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}
             </error-message>
             <select-dropdown v-model="reasonId"
                              :required="true"
@@ -60,7 +57,7 @@
           <generic-button id="continue-button"
                           :class="['nhsuk-button']"
                           @click.stop.prevent="continueClicked">
-            {{ $t('organDonation.withdrawReason.continueButton') }}
+            {{ $t('generic.continueButton.text') }}
           </generic-button>
           <generic-button v-if="!$store.state.device.isNativeApp"
                           id="back-button"
@@ -117,7 +114,7 @@ export default {
   computed: {
     reasons() {
       return [
-        { id: '', displayName: this.$t('organDonation.withdrawReason.reason.placeholder') },
+        { id: '', displayName: this.$t('organDonation.withdrawReason.selectReason') },
         ...get('organDonation.referenceData.withdrawReasons')(this.$store.state),
       ];
     },

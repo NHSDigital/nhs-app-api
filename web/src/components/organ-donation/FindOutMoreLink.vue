@@ -3,8 +3,8 @@
              header-tag="h3"
              :href="findOutMoreUrl"
              target="_blank"
-             :text="$t('organDonation.links.findOutMoreText')"
-             :aria-label="$t('organDonation.links.findOutMoreText')"/>
+             :text="$t('organDonation.findOutMoreAbout')"
+             :aria-label="$t('organDonation.findOutMoreAbout')"/>
 </template>
 
 <script>

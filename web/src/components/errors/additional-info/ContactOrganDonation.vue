@@ -1,7 +1,7 @@
 <template>
   <div class="contact-organ-donation" data-purpose="msg-contactdetails">
     <message-text :is-header="true">
-      {{ $t('organ_donation.errors.contact.email') }}
+      {{ $t('organDonation.contactOrganDonation.email') }}
     </message-text>
     <message-text>
       <a href="mailto:NHSApp.Enquiries@nhsbt.nhs.uk">NHSApp.Enquiries@nhsbt.nhs.uk</a>

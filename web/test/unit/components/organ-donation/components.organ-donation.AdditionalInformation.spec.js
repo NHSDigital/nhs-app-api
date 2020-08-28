@@ -1,4 +1,5 @@
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
+import i18n from '@/plugins/i18n';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -20,6 +21,7 @@ describe('Additional information', () => {
         religions,
       },
     },
+    mountOpts: { i18n },
   });
 
   const ethnicitiesRefData = [
@@ -61,7 +63,7 @@ describe('Additional information', () => {
     });
 
     it('will show the text', () => {
-      expect(subheaderText.text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.subheader');
+      expect(subheaderText.text()).toContain('Additional information');
     });
   });
 
@@ -77,8 +79,8 @@ describe('Additional information', () => {
     });
 
     it('will show the text', () => {
-      expect(detailheaders.at(0).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.ethnicityheader');
-      expect(detailheaders.at(1).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.religionheader');
+      expect(detailheaders.at(0).text()).toContain('Ethnicity');
+      expect(detailheaders.at(1).text()).toContain('Religion');
     });
   });
 
@@ -94,9 +96,9 @@ describe('Additional information', () => {
     });
 
     it('will show the text', () => {
-      expect(text.at(0).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.noDecision');
-      expect(text.at(1).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.noDecision');
-      expect(text.at(2).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.text');
+      expect(text.at(0).text()).toContain('You did not answer');
+      expect(text.at(1).text()).toContain('You did not answer');
+      expect(text.at(2).text()).toContain('This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.');
     });
   });
 
@@ -120,7 +122,7 @@ describe('Additional information', () => {
     it('will show the text', () => {
       expect(text.at(0).text()).toContain('Asian or Asian British');
       expect(text.at(1).text()).toContain('No religion');
-      expect(text.at(2).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.text');
+      expect(text.at(2).text()).toContain('This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.');
     });
   });
 
@@ -143,8 +145,8 @@ describe('Additional information', () => {
 
     it('will show the text', () => {
       expect(text.at(0).text()).toContain('Asian or Asian British');
-      expect(text.at(1).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.noDecision');
-      expect(text.at(2).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.text');
+      expect(text.at(1).text()).toContain('You did not answer');
+      expect(text.at(2).text()).toContain('This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.');
     });
   });
 
@@ -166,9 +168,9 @@ describe('Additional information', () => {
     });
 
     it('will show the text', () => {
-      expect(text.at(0).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.noDecision');
+      expect(text.at(0).text()).toContain('You did not answer');
       expect(text.at(1).text()).toContain('Christian');
-      expect(text.at(2).text()).toContain('translate_organDonation.reviewYourDecision.additionalInformation.text');
+      expect(text.at(2).text()).toContain('This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.');
     });
   });
 });

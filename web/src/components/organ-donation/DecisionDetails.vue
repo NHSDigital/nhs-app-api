@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 id="decision-details-header">
-      {{ $t('organDonation.reviewYourDecision.decisionDetails.subheader') }}
+      {{ $t('organDonation.decisionDetails.decisionDetails') }}
     </h3>
     <p id="decision-details-text">
       {{ $t(decisionDetailsTextKey) }}
@@ -9,31 +9,31 @@
     <div v-if="isSomeOrgans">
       <div id="chosen">
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-          {{ $t('organDonation.reviewYourDecision.decisionDetails.chosenHeader') }}
+          {{ $t('organDonation.decisionDetails.youHaveChosenToDonate') }}
         </h4>
         <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in chosen" :key="choice">
-            {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
+            {{ $t(`organDonation.organs.${choice}`) }}
           </li>
         </ul>
       </div>
       <div v-if="hasNotChosen" id="notChosen">
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-          {{ $t('organDonation.reviewYourDecision.decisionDetails.notChosenHeader') }}
+          {{ $t('organDonation.decisionDetails.youHaveChosenNotToDonate') }}
         </h4>
         <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in notChosen" :key="choice">
-            {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
+            {{ $t(`organDonation.organs.${choice}`) }}
           </li>
         </ul>
       </div>
       <div v-if="hasNotStated" id="notStated">
         <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-          {{ $t('organDonation.reviewYourDecision.decisionDetails.notStatedHeader') }}
+          {{ $t('organDonation.decisionDetails.weDoNotHaveADecisionFor') }}
         </h4>
         <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in notStated" :key="choice">
-            {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
+            {{ $t(`organDonation.organs.${choice}`) }}
           </li>
         </ul>
       </div>
@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      decisionDetailsTextKey: `organDonation.reviewYourDecision.decisionDetails.${this.isSomeOrgans ? 'someOrgansText' : 'allOrgansText'}`,
+      decisionDetailsTextKey: `organDonation.decisionDetails.${this.isSomeOrgans ? 'donateSomeOfMyOrgans' : 'donateAllOfMyOrgans'}`,
     };
   },
   computed: {

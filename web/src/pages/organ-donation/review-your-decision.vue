@@ -3,13 +3,13 @@
     <div class="nhsuk-grid-column-full">
       <message-dialog v-if="showErrors" id="errors">
         <message-text data-purpose="error-heading">
-          {{ $t('organDonation.reviewYourDecision.errorMsgHeader') }}
+          {{ $t('organDonation.thereIsAProblem') }}
         </message-text>
         <message-list data-purpose="reason-error">
           <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
         </message-list>
       </message-dialog>
-      <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
+      <h2>{{ $t('organDonation.reviewYourDecision.aboutYou') }}</h2>
       <personal-details
         :name="$store.state.organDonation.registration.nameFull"
         :date-of-birth="$store.state.organDonation.registration.dateOfBirth"
@@ -40,7 +40,7 @@
                       :disabled="isDisabled"
                       click-delay="medium"
                       @click="clickSubmit">
-        {{ $t('organDonation.reviewYourDecision.submitButton') }}
+        {{ $t('organDonation.reviewYourDecision.submitMyDecision') }}
       </generic-button>
       <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>
@@ -104,11 +104,11 @@ export default {
     validationErrors() {
       const errors = [];
       if (!this.isAccuracyAccepted) {
-        errors.push('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+        errors.push('organDonation.reviewYourDecision.checkInformationAndConfirm');
       }
 
       if (!this.isPrivacyAccepted) {
-        errors.push('organDonation.reviewYourDecision.confirmation.errors.privacy');
+        errors.push('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent');
       }
       return errors;
     },

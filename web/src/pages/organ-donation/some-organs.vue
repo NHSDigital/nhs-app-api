@@ -4,36 +4,38 @@
       <div ref="validationMessage" tabindex="-1">
         <message-dialog v-if="showErrors" message-type="error">
           <message-text data-purpose="error-heading">
-            {{ $t('organDonation.someOrgans.errorMsgHeader') }}
+            {{ $t('organDonation.thereIsAProblem') }}
           </message-text>
           <message-list data-purpose="reason-error">
             <li v-if="!areAllSelected">
-              {{ $t('organDonation.someOrgans.allSelectedValidationText') }}
+              {{ $t('organDonation.someOrgans.chooseYesOrNoForEachOrgan') }}
             </li>
             <li v-if="areAllSelected && !hasYesSelection">
-              {{ $t('organDonation.someOrgans.yesRequiredValidationText') }}
+              {{ $t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan') }}
             </li>
           </message-list>
         </message-dialog>
       </div>
       <div>
-        <h2>{{ $t('organDonation.someOrgans.subheader') }}</h2>
-        <nhs-arrow-banner :banner-text="$t('organDonation.someOrgans.moreAboutOrgansLinkText')"
-                          :open-new-window="false"
-                          :click-action="moreAboutOrgansClicked" />
+        <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
+        <nhs-arrow-banner
+          :banner-text="$t('organDonation.someOrgans.findOutMoreAboutOrgansAndTissue')"
+          :open-new-window="false"
+          :click-action="moreAboutOrgansClicked" />
       </div>
       <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
       <div>
-        <p><strong>{{ $t('organDonation.someOrgans.choices.subheader') }}</strong></p>
+        <p><strong>
+          {{ $t('organDonation.someOrgans.pleaseSelectWhichYouWouldLikeToDonate') }}</strong></p>
       </div>
       <organ-choice v-for="choice in choices" :key="choice"
-                    :title="`organDonation.someOrgans.choices.${choice}Title`"
+                    :title="`organDonation.organs.${choice}`"
                     :organ-name="choice"
                     :show-errors="showInlineErrors"/>
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
-        {{ $t('organDonation.someOrgans.continueButtonText') }}
+        {{ $t('generic.continueButton.text') }}
       </generic-button>
       <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>

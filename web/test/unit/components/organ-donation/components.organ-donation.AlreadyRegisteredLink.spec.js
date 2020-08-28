@@ -1,4 +1,5 @@
 import AreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
+import i18n from '@/plugins/i18n';
 import { ORGAN_DONATION_ALREADY_REGISTERED_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
@@ -6,7 +7,13 @@ describe('already registered link', () => {
   let wrapper;
   let $store;
 
-  const mountAlreadyRegisteredLink = () => mount(AreadyRegisteredLink, { $store });
+  const mountAlreadyRegisteredLink = () => mount(
+    AreadyRegisteredLink,
+    {
+      $store,
+      mountOpts: { i18n },
+    },
+  );
 
   beforeEach(() => {
     $store = createStore();
@@ -14,7 +21,7 @@ describe('already registered link', () => {
   });
 
   it('will display text from organDonation.links.alreadyRegisteredText', () => {
-    expect(wrapper.text()).toEqual('translate_organDonation.links.alreadyRegisteredText');
+    expect(wrapper.text()).toEqual('Think you have registered already?');
   });
 
   describe('link', () => {

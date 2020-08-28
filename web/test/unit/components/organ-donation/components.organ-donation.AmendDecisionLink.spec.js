@@ -1,4 +1,5 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
+import i18n from '@/plugins/i18n';
 import * as dependency from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
 
@@ -7,7 +8,14 @@ describe('amend decision link', () => {
   let $store;
   let $style;
 
-  const mountAmendDecision = () => mount(AmendDecisionLink, { $store, $style });
+  const mountAmendDecision = () => mount(
+    AmendDecisionLink,
+    {
+      $store,
+      $style,
+      mountOpts: { i18n },
+    },
+  );
 
   beforeEach(() => {
     dependency.redirectTo = jest.fn();
@@ -26,7 +34,7 @@ describe('amend decision link', () => {
     });
 
     it('will display text from organDonation.links.amendDecisionText', () => {
-      expect(link.text()).toEqual('translate_organDonation.links.amendDecisionText');
+      expect(link.text()).toEqual('I want to change my decision');
     });
 
     it('will dispatch the "organDonation/amendDecision" action when clicked', () => {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.reviewYourDecision.withdraw.subheader') }}</h3>
+    <h3>{{ $t('organDonation.withdraw.whatThisMeans') }}</h3>
     <p>
-      {{ $t('organDonation.reviewYourDecision.withdraw.body') }}
+      {{ $t('organDonation.withdraw.weWillNoLongerKnowYourDecision') }}
     </p>
   </div>
 </template>

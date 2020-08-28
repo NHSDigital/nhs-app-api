@@ -7,7 +7,7 @@
                :header="$t(title)"
                :current-value="currentChoice"
                :show-error="showError"
-               :error-message="$t(inlineErrorMessage)"
+               :error-message="inlineErrorMessage"
                @select="selected"/>
 </template>
 <script>
@@ -36,10 +36,10 @@ export default {
   data() {
     return {
       choices: [
-        { label: this.$t('organDonation.someOrgans.choices.yes'), value: YES },
-        { label: this.$t('organDonation.someOrgans.choices.no'), value: NO },
+        { label: this.$t('organDonation.someOrgans.yes'), value: YES },
+        { label: this.$t('organDonation.someOrgans.no'), value: NO },
       ],
-      inlineErrorMessage: this.$t('organDonation.someOrgans.inlineErrorMessage') + this.$t(this.title).toLowerCase(),
+      inlineErrorMessage: this.$t('organDonation.someOrgans.chooseYesOrNoFor') + this.$t(this.title).toLowerCase(),
       selectedValue: this.currentChoice,
     };
   },

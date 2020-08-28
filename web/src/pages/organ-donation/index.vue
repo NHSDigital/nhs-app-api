@@ -3,25 +3,25 @@
     <div class="nhsuk-grid-column-full">
       <div v-if="isConflicted || hasExistingDecision">
         <div v-if="isConflicted">
-          <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
+          <message-dialog :icon-text="$t('organDonation.index.decisionFound')"
                           message-id="success-dialog" message-type="success">
             <message-text>
-              {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
+              {{ $t('organDonation.index.yourRegistrationIsBeingProcessed') }}</message-text>
           </message-dialog>
-          <h2>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</h2>
+          <h2>{{ $t('organDonation.index.weAreProcessingYourRegistration') }}</h2>
           <p>
-            {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
+            {{ $t('organDonation.index.pleaseCheckBackInTwoDays') }}</p>
         </div>
         <div v-else>
           <decision-info :decision="decision"
                          :decision-details="decisionDetails"
-                         header-key="organDonation.registered.yourDecision.subheader"/>
+                         header-key="organDonation.index.yourDecision" />
           <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
           <still-your-decision :is-some-organs="isSomeOrgans"
                                :show-amend="true"
                                :show-reaffirm="!hasAppointedRep"/>
           <div v-if="hasAppointedRep">
-            <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
+            <p>{{ $t('organDonation.index.callTheOrganDonationLine') }}</p>
             <span aria-label="zero three zero zero one two three two three two three">
               0300 123 2323
             </span>
@@ -37,14 +37,14 @@
         </menu-item-list>
         <div class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">{{ $t('components.insetText.heading') }}</span>
-          <p>{{ $t('organDonation.register.inset.text') }}
+          <p>{{ $t('organDonation.index.ifYouHaveNotRegisteredYourDecision') }}
             <analytics-tracked-tag id="law-change"
                                    :href="lawChangeUrl"
-                                   :text="$t('organDonation.withdrawReason.moreAboutLawLinkText')"
+                                   :text="$t('organDonation.index.changesToTheLawMayAffectYou')"
                                    class="inline"
                                    tag="a"
                                    target="_blank">
-              {{ $t('organDonation.register.inset.linkText') }}</analytics-tracked-tag>.
+              {{ $t('organDonation.index.changesToTheLawMayAffectYou') }}</analytics-tracked-tag>.
           </p>
         </div>
         <make-decision/>

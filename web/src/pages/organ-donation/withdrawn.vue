@@ -1,29 +1,30 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog :icon-text="$t('organDonation.withdrawn.dialogText')"
+      <message-dialog :icon-text="$t('organDonation.withdrawn.decisionWithdrawn')"
                       message-id="success-dialog" message-type="success">
-        <message-text v-for="(item, index) in $t('organDonation.withdrawn.messageTextItems')"
-                      :key="index">
+        <message-text
+          v-for="(item, index) in $t('organDonation.withdrawn.youNoLongerHaveADecisionRecorded')"
+          :key="index">
           {{ item }}
         </message-text>
         <message-text>
-          <analytics-tracked-tag :href="lawChangeUrl"
-                                 :text="$t('organDonation.withdrawn.messageLink')"
-                                 class="inline"
-                                 tag="a"
-                                 target="_blank">
-            {{ $t('organDonation.withdrawn.messageLink') }}</analytics-tracked-tag>
+          <analytics-tracked-tag
+            :href="lawChangeUrl"
+            :text="$t('organDonation.withdrawn.moreInformationAboutLawChanges')"
+            class="inline"
+            tag="a"
+            target="_blank">
+            {{ $t('organDonation.withdrawn.moreInformationAboutLawChanges') }}
+          </analytics-tracked-tag>
         </message-text>
         <message-text>
-          {{ $t('organDonation.withdrawn.recordNewDecisionReminder') }}
+          {{ $t('organDonation.withdrawn.youCanRecordADecisionAtAnyTime') }}
         </message-text>
       </message-dialog>
       <div>
-        <h2>{{ $t('organDonation.withdrawn.whatNext.header') }}</h2>
-        <p v-for="(item, index) in $t('organDonation.withdrawn.whatNext.bodyItems')" :key="index">
-          {{ item }}
-        </p>
+        <h2>{{ $t('organDonation.withdrawn.whatToDoNext') }}</h2>
+        <p>{{ $t('organDonation.withdrawn.letYourFamilyKnow') }}</p>
       </div>
       <other-things-to-do :can-withdraw="false"/>
     </div>

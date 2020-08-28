@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline */
+import i18n from '@/plugins/i18n';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import {
@@ -31,6 +31,7 @@ describe('organ donation button', () => {
       wrapper = mount(OrganDonationButton, {
         $store,
         propsData: { decision: DECISION_OPT_OUT },
+        mountOpts: { i18n },
       });
     });
 
@@ -40,12 +41,8 @@ describe('organ donation button', () => {
     });
 
     describe('text translations', () => {
-      it('will display the no button header', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.noButton.header');
-      });
-
-      it('will display the no button subheader', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.noButton.subheader');
+      it('will display the no button', () => {
+        expect(wrapper.text()).toBe('NO I do not want to donate my organs');
       });
     });
 
@@ -63,6 +60,7 @@ describe('organ donation button', () => {
       wrapper = mount(OrganDonationButton, {
         $store,
         propsData: { decision: DECISION_OPT_IN },
+        mountOpts: { i18n },
       });
     });
 
@@ -72,12 +70,8 @@ describe('organ donation button', () => {
     });
 
     describe('text translations', () => {
-      it('will display the yes button header', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.yesButton.header');
-      });
-
-      it('will display the yes button subheader', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.yesButton.subheader');
+      it('will display the yes button', () => {
+        expect(wrapper.text()).toBe('YES I want to donate all or some of my organs');
       });
     });
 
@@ -94,8 +88,8 @@ describe('organ donation button', () => {
         const stateData = wrapper.vm;
         expect(stateData.nextRoute).toEqual(ORGAN_DONATION_YOUR_CHOICE_PATH);
         expect(stateData.style).toEqual(wrapper.vm.$style['yes-button']);
-        expect(stateData.headerKey).toEqual('organDonation.register.yesButton.header');
-        expect(stateData.subHeaderKey).toEqual('organDonation.register.yesButton.subheader');
+        expect(stateData.headerKey).toEqual('organDonation.button.iDoWantToDonate.header');
+        expect(stateData.subHeaderKey).toEqual('organDonation.button.iDoWantToDonate.subheader');
         expect(stateData.icon).toEqual(YesIcon);
       });
     });

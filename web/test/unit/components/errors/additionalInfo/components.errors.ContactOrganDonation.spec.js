@@ -1,4 +1,5 @@
 import ContactOrganDonation from '@/components/errors/additional-info/ContactOrganDonation';
+import i18n from '@/plugins/i18n';
 import { mount } from '../../../helpers';
 
 const mountWrapper = () => mount(ContactOrganDonation, {
@@ -7,6 +8,7 @@ const mountWrapper = () => mount(ContactOrganDonation, {
       source: 'web',
     },
   },
+  mountOpts: { i18n },
 });
 
 describe('ContactOrganDonation', () => {
@@ -18,7 +20,7 @@ describe('ContactOrganDonation', () => {
 
   describe('text translations', () => {
     it('will display the email label', () => {
-      expect(wrapper.text()).toContain('translate_organ_donation.errors.contact.email');
+      expect(wrapper.text()).toContain('Email');
     });
 
     it('will display the NHSApp Enquiries email', () => {

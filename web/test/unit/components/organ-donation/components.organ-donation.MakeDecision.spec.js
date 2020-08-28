@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import { DECISION_OPT_IN, DECISION_OPT_OUT, initialState } from '@/store/modules/organDonation/mutation-types';
@@ -17,7 +18,7 @@ describe('make decision', () => {
 
   const mountWrapper = () => {
     const store = $store || createStore({ state });
-    return mount(MakeDecision, { $store: store });
+    return mount(MakeDecision, { $store: store, mountOpts: { i18n } });
   };
 
   beforeEach(() => {
@@ -33,7 +34,7 @@ describe('make decision', () => {
       });
 
       it('will translate the register subheader', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.subheaderRegister');
+        expect(wrapper.text()).toContain('Register your decision');
       });
     });
 
@@ -44,7 +45,7 @@ describe('make decision', () => {
       });
 
       it('will translate the amend subheader', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.register.subheaderAmend');
+        expect(wrapper.text()).toContain('Change your decision');
       });
     });
   });

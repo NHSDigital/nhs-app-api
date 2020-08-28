@@ -12,7 +12,7 @@
         <p>{{ $t('appointments.appointment.addToCalendar.yourCalendarWillNoUpdate') }}</p>
 
         <primary-button id="addToCalendarButton" @click.stop.prevent="onAddToCalendar">
-          {{ $t('appointments.appointment.addToCalendar.addToCalendarText') }}
+          {{ $t('appointments.appointment.addToCalendar.addToCalendar') }}
         </primary-button>
       </div>
     </div>

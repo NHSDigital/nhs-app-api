@@ -1,18 +1,19 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div v-if="isConflicted">
-      <message-dialog :icon-text="$t('organDonation.viewDecision.decisionSubmitted.dialogText')"
+      <message-dialog :icon-text="$t('organDonation.viewDecision.decisionSubmitted')"
                       message-id="success-dialog" message-type="success">
         <message-text>
-          {{ $t('organDonation.viewDecision.decisionSubmitted.messageText') }}</message-text>
+          {{ $t('organDonation.viewDecision.weHaveReceivedYourDecision') }}</message-text>
       </message-dialog>
-      <h2>{{ $t('organDonation.viewDecision.decisionSubmitted.registrationHeader') }}</h2>
+      <h2>{{ $t('organDonation.viewDecision.whatHappensNext') }}</h2>
       <p :class="$style.messageText">
-        {{ $t('organDonation.viewDecision.decisionSubmitted.registrationText') }}</p>
+        {{ $t('organDonation.viewDecision.weWillProcessYourRegistration') }}</p>
     </div>
     <div v-else>
       <message-dialog message-id="success-dialog" message-type="success">
-        <message-text>{{ $t('organDonation.viewDecision.successMessageText') }}</message-text>
+        <message-text>
+          {{ $t('organDonation.viewDecision.yourDecisionHasBeenRecorded') }}</message-text>
       </message-dialog>
 
       <decision-info :decision-details="$store.state.organDonation.registration.decisionDetails"

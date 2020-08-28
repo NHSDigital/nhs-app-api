@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.reviewYourDecision.contactDetails.subheader') }}</h3>
-    <p>{{ $t('organDonation.reviewYourDecision.contactDetails.text') }}</p>
+    <h3>{{ $t('organDonation.contactDetails.contactDetails') }}</h3>
+    <p>{{ $t('organDonation.contactDetails.onlyContactAboutOrganDonation') }}</p>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.contactDetails.addressheader') }}
+      {{ $t('organDonation.contactDetails.postalAddress') }}
     </h4>
     <p>{{ address }}</p>
     <p>
-      {{ $t('organDonation.reviewYourDecision.contactDetails.changeDetailsText') }}
+      {{ $t('organDonation.contactDetails.contactSurgeryToAmendPostalAddress') }}
     </p>
   </div>
 </template>

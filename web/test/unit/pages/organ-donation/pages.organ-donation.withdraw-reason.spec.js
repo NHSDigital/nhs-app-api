@@ -1,5 +1,6 @@
-import find from 'lodash/fp/find';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import find from 'lodash/fp/find';
+import i18n from '@/plugins/i18n';
 import Withdraw from '@/pages/organ-donation/withdraw-reason';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import {
@@ -8,7 +9,6 @@ import {
   ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import locale from '@/locale/en/index';
 import {
   ORGAN_DONATION_LAW_CHANGE_URL,
 } from '@/router/externalLinks';
@@ -64,6 +64,7 @@ describe('organ donation withdraw reason page', () => {
     return mount(Withdraw, {
       $router,
       $store,
+      mountOpts: { i18n },
     });
   };
 
@@ -110,18 +111,19 @@ describe('organ donation withdraw reason page', () => {
 
     describe('reason', () => {
       it('will show decision header text', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.subheader');
+        expect(wrapper.text()).toContain('Withdraw your previous organ donation decision');
       });
 
       it('will translate the body text', () => {
-        const { explanations, exclusions } = locale.organDonation.withdrawReason;
-        explanations.forEach(item => expect(wrapper.text()).toContain(item));
-        exclusions.forEach(item => expect(wrapper.text()).toContain(item));
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.moreAboutLawText');
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendBeforeLink');
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendLink');
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendAfterLink');
-        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.familyText');
+        expect(wrapper.text()).toContain('Withdrawing from the NHS Organ Donor Register is different from recording a decision not to donate (opting out). If you withdraw, we will not know your decision.');
+        expect(wrapper.text()).toContain('In line with changes to the law around organ donation, you are considered to have agreed to be an organ donor, unless:');
+        expect(wrapper.text()).toContain('you have recorded a decision not to donate');
+        expect(wrapper.text()).toContain('you are in an excluded group');
+        expect(wrapper.text()).toContain('Find out more about the ');
+        expect(wrapper.text()).toContain('If you do not want to be an organ donor, the best way to tell us is to ');
+        expect(wrapper.text()).toContain('update your decision');
+        expect(wrapper.text()).toContain(' You can change your decision at any time.');
+        expect(wrapper.text()).toContain('Whatever you decide, please make sure your family know your decision.');
       });
 
       describe('dropdown', () => {
@@ -151,7 +153,7 @@ describe('organ donation withdraw reason page', () => {
         it('will have a placeholder option', () => {
           const option = findOptionById('')(elements);
           expect(option).not.toBeUndefined();
-          expect(option.text).toBe('translate_organDonation.withdrawReason.reason.placeholder');
+          expect(option.text).toBe('Select reason');
         });
       });
     });
@@ -168,7 +170,7 @@ describe('organ donation withdraw reason page', () => {
       });
 
       it('will display text', () => {
-        expect(updateLink.text()).toEqual('translate_organDonation.withdrawReason.amendLink');
+        expect(updateLink.text()).toEqual('update your decision');
       });
 
       it('will dispatch the "organDonation/amendDecision" action when clicked', () => {
@@ -281,7 +283,7 @@ describe('organ donation withdraw reason page', () => {
       });
 
       it('will translate the generic back button text', () => {
-        expect(backButton.text()).toEqual('translate_generic.backButton.text');
+        expect(backButton.text()).toEqual('Back');
       });
 
       describe('click', () => {

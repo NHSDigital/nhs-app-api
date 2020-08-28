@@ -1,24 +1,24 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.reviewYourDecision.personalDetails.subheader') }}</h3>
+    <h3>{{ $t('organDonation.personalDetails.personalDetails') }}</h3>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.personalDetails.nameheader') }}
+      {{ $t('organDonation.personalDetails.name') }}
     </h4>
     <p>{{ name }}</p>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.personalDetails.dateofbirthheader') }}
+      {{ $t('organDonation.personalDetails.dateOfBirth') }}
     </h4>
     <p>{{ dateOfBirth | longDate }}</p>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.personalDetails.genderheader') }}
+      {{ $t('organDonation.personalDetails.gender') }}
     </h4>
     <p>{{ gender }}</p>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.personalDetails.nhsnumberheader') }}
+      {{ $t('organDonation.personalDetails.nhsNumber') }}
     </h4>
     <p>{{ nhsNumber }}</p>
     <p>
-      {{ $t('organDonation.reviewYourDecision.personalDetails.description') }}
+      {{ $t('organDonation.personalDetails.contactSurgeryToAmmend') }}
     </p>
   </div>
 </template>

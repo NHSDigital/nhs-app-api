@@ -1,6 +1,6 @@
 <template>
   <p id="faithAndBeliefs" >
-    {{ $t(`organDonation.registered.faithAndBeliefs.${declaration}`) }}
+    {{ $t(`organDonation.faith.registered.${declaration}`) }}
   </p>
 </template>
 <script>

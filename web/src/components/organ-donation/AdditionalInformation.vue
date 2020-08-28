@@ -1,22 +1,22 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.reviewYourDecision.additionalInformation.subheader') }}</h3>
+    <h3>{{ $t('organDonation.additionalDetails.additionalInformation') }}</h3>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.additionalInformation.ethnicityheader') }}
+      {{ $t('organDonation.additionalDetails.ethnicity') }}
     </h4>
     <p v-if="!ethnicityId">
-      {{ $t('organDonation.reviewYourDecision.additionalInformation.noDecision') }}
+      {{ $t('organDonation.additionalDetails.youDidNotAnswer') }}
     </p>
     <p v-else>{{ ethnicity }}</p>
     <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
-      {{ $t('organDonation.reviewYourDecision.additionalInformation.religionheader') }}
+      {{ $t('organDonation.additionalDetails.religion') }}
     </h4>
     <p v-if="!religionId">
-      {{ $t('organDonation.reviewYourDecision.additionalInformation.noDecision') }}
+      {{ $t('organDonation.additionalDetails.youDidNotAnswer') }}
     </p>
     <p v-else>{{ religion }}</p>
     <p>
-      {{ $t('organDonation.reviewYourDecision.additionalInformation.text') }}
+      {{ $t('organDonation.additionalDetails.optionalInformationIsOnlyUsedBy') }}
     </p>
   </div>
 </template>

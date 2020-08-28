@@ -2,6 +2,7 @@ import BackButton from '@/components/BackButton';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
+import i18n from '@/plugins/i18n';
 import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import {
   ORGAN_DONATION_FAITH_PATH,
@@ -90,6 +91,7 @@ describe('organ donation some organs page', () => {
       $router,
       $store,
       $style,
+      mountOpts: { i18n },
     });
   };
 
@@ -101,11 +103,11 @@ describe('organ donation some organs page', () => {
   });
 
   it('will translate the some organs subheader', () => {
-    expect(wrapper.text()).toContain('translate_organDonation.someOrgans.subheader');
+    expect(wrapper.text()).toContain('Your choice');
   });
 
   it('will translate the some organs description', () => {
-    expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.subheader');
+    expect(wrapper.text()).toContain('Please select which organs and tissue you would like to donate:');
   });
 
   describe('more about organs', () => {
@@ -119,8 +121,8 @@ describe('organ donation some organs page', () => {
       expect(moreAboutOrgans.exists()).toBe(true);
     });
 
-    it('will display text from organDonation.someOrgans.moreAboutOrgansLinkText', () => {
-      expect(moreAboutOrgans.text()).toEqual('translate_organDonation.someOrgans.moreAboutOrgansLinkText');
+    it('will display find out more text', () => {
+      expect(moreAboutOrgans.text()).toEqual('Find out more about organs and tissue');
     });
 
     describe('click', () => {
@@ -175,8 +177,7 @@ describe('organ donation some organs page', () => {
       });
 
       it('will display the continue button text for some organs', () => {
-        const key = 'organDonation.someOrgans.continueButtonText';
-        expect(continueButton.text()).toEqual(`translate_${key}`);
+        expect(continueButton.text()).toEqual('Continue');
       });
 
       it('will be a button with nhsuk-button style', () => {

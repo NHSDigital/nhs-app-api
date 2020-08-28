@@ -1,4 +1,5 @@
 import ContactDetails from '@/components/organ-donation/ContactDetails';
+import i18n from '@/plugins/i18n';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { createStore, mount } from '../../helpers';
 
@@ -16,6 +17,7 @@ describe('contact details', () => {
     wrapper = mount(ContactDetails, {
       $store,
       propsData: { address: 'address' },
+      mountOpts: { i18n },
     });
   });
 
@@ -31,7 +33,7 @@ describe('contact details', () => {
     });
 
     it('will show the text', () => {
-      expect(subheaderText.text()).toContain('translate_organDonation.reviewYourDecision.contactDetails.subheader');
+      expect(subheaderText.text()).toContain('Contact details');
     });
   });
 
@@ -47,7 +49,7 @@ describe('contact details', () => {
     });
 
     it('will show the text', () => {
-      expect(addressHeader.text()).toContain('translate_organDonation.reviewYourDecision.contactDetails.addressheader');
+      expect(addressHeader.text()).toContain('Postal address');
     });
   });
 
@@ -63,9 +65,9 @@ describe('contact details', () => {
     });
 
     it('will show the text', () => {
-      expect(text.at(0).text()).toContain('translate_organDonation.reviewYourDecision.contactDetails.text');
+      expect(text.at(0).text()).toContain('We will only contact you about your organ donation registration.');
       expect(text.at(1).text()).toContain('address');
-      expect(text.at(2).text()).toContain('translate_organDonation.reviewYourDecision.contactDetails.changeDetailsText');
+      expect(text.at(2).text()).toContain('Contact your GP surgery to amend your postal address.');
     });
   });
 });

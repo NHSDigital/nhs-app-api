@@ -1,5 +1,6 @@
 import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
+import i18n from '@/plugins/i18n';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
@@ -37,6 +38,7 @@ describe('organ donation faith page', () => {
     wrapper = mount(Faith, {
       $router,
       $store,
+      mountOpts: { i18n },
     });
   });
 
@@ -67,7 +69,7 @@ describe('organ donation faith page', () => {
       });
 
       it('will display the continue button text for the faith', () => {
-        expect(continueButton.text()).toEqual('translate_organDonation.faith.continueButtonText');
+        expect(continueButton.text()).toEqual('Continue');
       });
 
       it('will be a button with nhsuk-button style', () => {

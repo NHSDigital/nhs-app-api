@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       headerText: this.$store.state.organDonation.isAmending
-        ? this.$t('organDonation.register.subheaderAmend')
-        : this.$t('organDonation.register.subheaderRegister'),
+        ? this.$t('organDonation.changeYourDecision')
+        : this.$t('organDonation.registerYourDecision'),
       noDecision: DECISION_OPT_OUT,
       yesDecision: DECISION_OPT_IN,
     };

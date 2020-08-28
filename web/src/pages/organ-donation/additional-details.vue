@@ -1,10 +1,10 @@
 <template>
   <div id="mainDiv" :class="[$style.form]" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h2>{{ $t('organDonation.additionalDetails.subheader') }}</h2>
-      <p>{{ $t('organDonation.additionalDetails.description') }}</p>
+      <h2>{{ $t('organDonation.additionalDetails.additionalDetails') }}</h2>
+      <p>{{ $t('organDonation.additionalDetails.optionalInformationIsOnlyUsedBy') }}</p>
       <label for="ethnicity" class="nhsuk-label">
-        {{ $t('organDonation.additionalDetails.ethnicity.label') }}
+        {{ $t('organDonation.additionalDetails.ethnicityOptional') }}
       </label>
       <select-dropdown v-model="ethnicityId"
                        :required="false"
@@ -19,7 +19,7 @@
         </option>
       </select-dropdown>
       <label for="religion" class="nhsuk-label">
-        {{ $t('organDonation.additionalDetails.religion.label') }}
+        {{ $t('organDonation.additionalDetails.religionOptional') }}
       </label>
       <select-dropdown v-model="religionId"
                        :required="false"
@@ -36,7 +36,7 @@
       <generic-button id="continue-button"
                       :class="['nhsuk-button']"
                       @click.prevent="continueClicked">
-        {{ $t('organDonation.additionalDetails.continueButton') }}
+        {{ $t('generic.continueButton.text') }}
       </generic-button>
       <back-button v-if="!$store.state.device.isNativeApp" />
     </div>
@@ -73,13 +73,13 @@ export default {
   computed: {
     ethnicities() {
       return [
-        { id: '', displayName: this.$t('organDonation.additionalDetails.ethnicity.placeholder') },
+        { id: '', displayName: this.$t('organDonation.additionalDetails.pleaseSelect') },
         ...get('$store.state.organDonation.referenceData.ethnicities')(this),
       ];
     },
     religions() {
       return [
-        { id: '', displayName: this.$t('organDonation.additionalDetails.religion.placeholder') },
+        { id: '', displayName: this.$t('organDonation.additionalDetails.pleaseSelect') },
         ...get('$store.state.organDonation.referenceData.religions')(this),
       ];
     },

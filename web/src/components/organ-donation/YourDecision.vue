@@ -41,7 +41,7 @@ export default {
     },
     headerKey: {
       type: String,
-      default: 'organDonation.reviewYourDecision.yourDecision.subheader',
+      default: 'organDonation.yourDecision.yourDecision',
     },
     isWithdrawing: {
       type: Boolean,
@@ -76,7 +76,7 @@ export default {
     }
 
     return {
-      decisionTextKey: `organDonation.reviewYourDecision.yourDecision.${key}${organsKey}DecisionText`,
+      decisionTextKey: `organDonation.yourDecision.decisionText.${key}${organsKey}`,
       icon,
       style: this.$style[`${key}-label`],
     };
