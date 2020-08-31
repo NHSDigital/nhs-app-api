@@ -17,6 +17,7 @@ import net.thucydides.core.annotations.Steps
 import org.joda.time.DateTime
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
+import worker.models.patient.Im1ConnectionToken
 
 class AuthenticationErrorStepDefinitions {
 
@@ -41,8 +42,15 @@ class AuthenticationErrorStepDefinitions {
     @Given("^I am logged in as a (.*) user created before Im1 Cache Keys existed$")
     fun iAmLoggedInWithoutIm1CacheKey(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(im1ConnectionToken = null)
+        val patient = Patient.getDefault(supplier).copy(im1ConnectionToken = Im1ConnectionToken(null, null))
         setupAndLogIn(patient, supplier)
+    }
+
+    @Given("^I am logged in as a (.*) user without an Im1 connection token$")
+    fun iAmLoggedInWithoutIm1Token(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
+        setupAndLogIn(patient, supplier, hasNullToken = true)
     }
 
     @Given("^I attempt to log in as a (.*) user without an NHS Number$")
@@ -100,10 +108,10 @@ class AuthenticationErrorStepDefinitions {
         setupAndLogIn(patient, supplier)
     }
 
-    private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
+    private fun setupAndLogIn(patient: Patient, gpSystem: Supplier, hasNullToken: Boolean = false) {
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney().createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient, hasNullToken = hasNullToken)
         SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
         DemographicsFactory

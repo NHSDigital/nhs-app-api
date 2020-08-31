@@ -16,10 +16,12 @@ class UserInfoRequestBuilder(
                 .andHeader("Authorization", "Bearer $accessToken", "contains")
     }
 
-    fun respondWithSuccess(patient: Patient): Mapping {
+    fun respondWithSuccess(patient: Patient, nullToken: Boolean = false): Mapping {
 
         val im1ConnectionToken = if (patient.im1ConnectionToken == null) {
             patient.connectionToken
+        } else if (nullToken) {
+            null
         } else {
             GsonFactory.asPascal.toJson(patient.im1ConnectionToken)
         }

@@ -92,6 +92,15 @@ namespace NHSOnline.Backend.PfsApi.Session
 
         private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)
         {
+
+            _logger.LogInformation("DeleteConnectionTokenFromCache");
+
+            if (im1ConnectionToken is null)
+            {
+                _logger.LogInformation("Im1 connection token is null.");
+                return;
+            }
+
             if (Guid.TryParse(im1ConnectionToken, out _))
             {
                 return;

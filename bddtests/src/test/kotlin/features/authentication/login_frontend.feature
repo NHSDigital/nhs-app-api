@@ -123,6 +123,15 @@ Feature: Login frontend
       | TPP       |
       | VISION    |
 
+  Scenario Outline: A <GP System> user can still log in without an Im1 connection token
+    Given I am logged in as a <GP System> user without an Im1 connection token
+    Then I see a welcome message for the <GP System> patient with no title
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
   @pending
   @nativesmoketest
   Scenario: Any user sees the current app version on the login page

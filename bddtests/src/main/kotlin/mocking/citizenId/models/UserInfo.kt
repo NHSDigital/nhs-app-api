@@ -16,7 +16,7 @@ data class UserInfo (
         var NhsNumber: String,
 
         @SerializedName("im1_token")
-        var Im1ConnectionToken: String,
+        var Im1ConnectionToken: String?,
 
         @SerializedName("sub")
         var Subject: String,

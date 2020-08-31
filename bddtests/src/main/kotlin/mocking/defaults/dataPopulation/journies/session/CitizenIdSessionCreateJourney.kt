@@ -19,11 +19,11 @@ class CitizenIdSessionCreateJourney {
 
     private val mockingClient = MockingClient.instance
 
-    fun createFor(patient: Patient, alternativeUser:Boolean = false) {
+    fun createFor(patient: Patient, alternativeUser:Boolean = false, hasNullToken: Boolean = false) {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
             val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
             mockingClient.forCitizenId.mock {
-                userInfoRequest(accessToken).respondWithSuccess(patient)
+                userInfoRequest(accessToken).respondWithSuccess(patient, hasNullToken)
             }
             GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.set(true)
         }
