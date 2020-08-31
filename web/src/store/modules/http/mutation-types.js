@@ -1,4 +1,5 @@
 export const IS_LOADING = 'IS_LOADING';
+export const IS_LOADING_EXTERNAL_SITE = 'IS_LOADING_EXTERNAL_SITE';
 export const LOADING_COMPLETE = 'LOADING_COMPLETE';
 export const ADD_CANCEL_REQUEST_HANDLER = 'ADD_CANCEL_REQUEST_HANDLER';
 export const CANCEL_REQUESTS = 'CANCEL_REQUESTS';
@@ -7,4 +8,5 @@ export const INIT_HTTP = 'INIT_HTTP';
 export const initialState = () => ({
   loadingUrls: [],
   cancelRequestHandlers: [],
+  isLoadingExternalSite: false,
 });

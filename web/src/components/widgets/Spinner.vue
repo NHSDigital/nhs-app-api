@@ -12,7 +12,8 @@ export default {
     isVisible() {
       return !this.$store.state.spinner.prevent &&
         (this.$store.getters['http/isLoading']
-        || this.$store.state.onlineConsultations.isLoadingFile);
+        || this.$store.state.onlineConsultations.isLoadingFile
+        || this.$store.state.http.isLoadingExternalSite);
     },
   },
 };

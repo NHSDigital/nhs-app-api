@@ -1,4 +1,8 @@
-import { IS_LOADING, LOADING_COMPLETE } from '@/store/modules/http/mutation-types';
+import {
+  IS_LOADING,
+  IS_LOADING_EXTERNAL_SITE,
+  LOADING_COMPLETE,
+} from '@/store/modules/http/mutation-types';
 import actions from '@/store/modules/http/actions';
 
 describe('actions', () => {
@@ -33,6 +37,17 @@ describe('actions', () => {
     it('will dispatch the session/updateLastCalledAt action', () => {
       actions.isLoading(mutation, url);
       expect(actions.dispatch).toHaveBeenCalledWith('session/updateLastCalledAt');
+    });
+  });
+
+  describe('isLoadingExternalSite', () => {
+    it('will have an loading external site function', () => {
+      expect(actions.isLoadingExternalSite).toBeInstanceOf(Function);
+    });
+
+    it('will commit the IS_LOADING_EXTERNAL_SITE mutation', () => {
+      actions.isLoadingExternalSite(mutation);
+      expect(mutation.commit).toHaveBeenCalledWith(IS_LOADING_EXTERNAL_SITE);
     });
   });
 

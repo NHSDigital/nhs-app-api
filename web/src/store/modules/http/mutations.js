@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import {
   IS_LOADING,
+  IS_LOADING_EXTERNAL_SITE,
   LOADING_COMPLETE,
   ADD_CANCEL_REQUEST_HANDLER,
   CANCEL_REQUESTS,
@@ -15,6 +16,9 @@ export default {
   },
   [IS_LOADING](state, url) {
     state.loadingUrls.push(url);
+  },
+  [IS_LOADING_EXTERNAL_SITE](state) {
+    state.isLoadingExternalSite = true;
   },
   [ADD_CANCEL_REQUEST_HANDLER](state, handler) {
     state.cancelRequestHandlers.push(handler);

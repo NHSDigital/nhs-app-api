@@ -9,9 +9,22 @@ describe('Proof level uplift banner', () => {
   let $http;
   let response;
   let wrapper;
+  let $store;
 
-  const mountProofLevelUpliftBanner = () => mount(ProofLevelUpliftBanner, {
-    $store: {
+  const mountProofLevelUpliftBanner = ({ store }) => mount(ProofLevelUpliftBanner, {
+    $store: store,
+  });
+
+  beforeEach(() => {
+    response = {};
+    $http = {
+      postV1PatientAssertedLoginIdentity: jest.fn(() => Promise.resolve(response)),
+    };
+    AuthorisationService.mockImplementation(() => ({
+      generateUpliftUrl: jest.fn(() => ({ upliftUrl: 'www.foo.com' })),
+    }));
+    $store = {
+      dispatch: jest.fn(),
       $env: {
         NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
         CID_REDIRECT_URI: 'mock cid redirect uri',
@@ -24,18 +37,8 @@ describe('Proof level uplift banner', () => {
           isNativeApp: false,
         },
       },
-    },
-  });
-
-  beforeEach(() => {
-    response = {};
-    $http = {
-      postV1PatientAssertedLoginIdentity: jest.fn(() => Promise.resolve(response)),
     };
-    AuthorisationService.mockImplementation(() => ({
-      generateUpliftUrl: jest.fn(() => ({ upliftUrl: 'www.foo.com' })),
-    }));
-    wrapper = mountProofLevelUpliftBanner();
+    wrapper = mountProofLevelUpliftBanner({ store: $store });
   });
 
   describe('uplift button', () => {
@@ -70,6 +73,7 @@ describe('Proof level uplift banner', () => {
       });
 
       it('will redirect to external uplift journey', () => {
+        expect($store.dispatch).toBeCalledWith('http/isLoadingExternalSite');
         expect(window.location).toBe(`${wrapper.vm.upliftUrl}&asserted_login_identity=${response.token}`);
       });
     });

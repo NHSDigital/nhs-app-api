@@ -43,6 +43,7 @@ export default {
           },
         })
         .then(({ token }) => {
+          this.$store.dispatch('http/isLoadingExternalSite');
           window.location = `${this.upliftUrl}&asserted_login_identity=${token}`;
         });
     },
