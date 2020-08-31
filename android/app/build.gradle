@@ -210,6 +210,11 @@ android {
             applicationIdSuffix ".onboardingsandpit"
             manifestPlaceholders = [appName: "NHS App Onboarding Sandpit"]
         }
+        onboardingaos {
+            initWith debug
+            applicationIdSuffix ".onboardingaos"
+            manifestPlaceholders = [appName: "NHS App Onboarding Aos"]
+        }
     }
     testOptions {
         unitTests {

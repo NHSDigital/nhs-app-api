@@ -701,6 +701,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397558493129:android:07b0ba5af0dd82d9078218",
+        "android_client_info": {
+          "package_name": "com.nhs.online.nhsonline.onboardingaos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDgxMP0UX8aF9XTdqzQMP5prSjQcikyOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397558493129-lgqnuum7b7knbr926u23gdgeba65uvvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

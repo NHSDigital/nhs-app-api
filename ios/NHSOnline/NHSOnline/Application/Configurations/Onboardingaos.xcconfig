@@ -1,0 +1,5 @@
+#include "Defaults.xcconfig"
+#include "Pods/Target Support Files/Pods-NHSOnline/Pods-NHSOnline.onboardingaos.xcconfig"
+
+HOME_URL = www-onboardingaos.nhsapp.service.nhs.uk/
+BASE_API_URL = api-onboardingaos.nhsapp.service.nhs.uk/

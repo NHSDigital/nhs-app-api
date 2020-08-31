@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS App Onboarding Aos</string>
+    <string name="baseHost">www-onboardingaos.dev.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-onboardingaos.nhsapp.service.nhs.uk/</string>
+    <string name="baseApiURL">https://api-onboardingaos.nhsapp.service.nhs.uk/</string>
+    <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
+    <string name="ersUrl">pat.rc.refer.nhs.uk</string>
+    <string name="ersUrlScheme">https</string>
+    <string name="ersUrlPath">/nhslogin</string>
+</resources>
