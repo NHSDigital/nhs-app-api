@@ -2,10 +2,10 @@
   <div v-if="showTemplate" id="mainDiv" class="pull-content">
     <message-dialog message-type="warning">
       <message-text :is-header="true">
-        {{ $t('myRecord.noRecordAccess.warningHeader') }}
+        {{ $t('myRecord.youDoNotHaveAccessToYourRecord') }}
       </message-text>
       <message-text>
-        {{ $t('myRecord.noRecordAccess.warningBody') }}
+        {{ $t('myRecord.contactSurgeryForMoreInformation') }}
       </message-text>
     </message-dialog>
   </div>

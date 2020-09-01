@@ -6,9 +6,9 @@
                    header-tag="h2"
                    data-purpose="acute-medicines"
                    :href="acuteMedicinesPath"
-                   :text="$t('my_record.medicines.acuteMedicines.sectionHeader')"
+                   :text="$t('myRecord.gpMedicalRecord.acuteMedicines')"
                    :aria-label="
-                     getAriaLabel($t('my_record.medicines.acuteMedicines.sectionHeader'),
+                     getAriaLabel($t('myRecord.gpMedicalRecord.acuteMedicines'),
                                   acuteMedicinesCount)"
                    :click-func="goToUrl"
                    :click-param="acuteMedicinesPath"
@@ -18,9 +18,9 @@
                    data-purpose="current-medicines"
                    header-tag="h2"
                    :href="currentMedicinesPath"
-                   :text="$t('my_record.medicines.currentMedicines.sectionHeader')"
+                   :text="$t('myRecord.gpMedicalRecord.repeatMedicinesCurrent')"
                    :aria-label="
-                     getAriaLabel($t('my_record.medicines.currentMedicines.sectionHeader'),
+                     getAriaLabel($t('myRecord.gpMedicalRecord.repeatMedicinesCurrent'),
                                   currentMedicinesCount)"
                    :click-func="goToUrl"
                    :click-param="currentMedicinesPath"
@@ -30,7 +30,7 @@
                    data-purpose="discontinued-medicines"
                    header-tag="h2"
                    :href="discontinuedMedicinesPath"
-                   :text="$t('my_record.medicines.discontinuedMedicines.sectionHeader')"
+                   :text="$t('myRecord.gpMedicalRecord.repeatMedicinesDiscontinued')"
                    :click-func="goToUrl"
                    :click-param="discontinuedMedicinesPath"/>
       </menu-item-list>

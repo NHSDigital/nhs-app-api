@@ -4,9 +4,9 @@
                data-purpose="immunisations"
                header-tag="h2"
                :href="immunisationsPath"
-               :text="$t('my_record.immunisations.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.immunisations')"
                :aria-label="
-                 getAriaLabel($t('my_record.immunisations.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.immunisations'),
                               record.immunisations.data.length)"
                :click-func="goToUrl"
                :click-param="immunisationsPath"
@@ -16,9 +16,9 @@
                data-purpose="healthConditions"
                header-tag="h2"
                :href="healthConditionsPath"
-               :text="$t('my_record.healthConditions.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.healthConditions')"
                :aria-label="
-                 getAriaLabel($t('my_record.healthConditions.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.healthConditions'),
                               record.problems.data.length)"
                :click-func="goToUrl"
                :click-param="healthConditionsPath"
@@ -28,9 +28,9 @@
                data-purpose="test-results"
                header-tag="h2"
                :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.testResults')"
                :aria-label="
-                 getAriaLabel($t('my_record.testResults.sectionHeader.default'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.testResults'),
                               record.testResults.data.length)"
                :click-func="goToUrl"
                :click-param="testResultsPath"
@@ -40,9 +40,9 @@
                data-purpose="medicalHistory"
                header-tag="h2"
                :href="medicalHistoryPath"
-               :text="$t('my_record.medicalHistory.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.medicalHistory')"
                :aria-label="
-                 getAriaLabel($t('my_record.medicalHistory.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.medicalHistory'),
                               record.medicalHistories.data.length)"
                :click-func="goToUrl"
                :click-param="medicalHistoryPath"
@@ -52,9 +52,9 @@
                data-purpose="recalls"
                header-tag="h2"
                :href="recallsPath"
-               :text="$t('my_record.recalls.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.recalls')"
                :aria-label="
-                 getAriaLabel($t('my_record.recalls.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.recalls'),
                               record.recalls.data.length)"
                :click-func="goToUrl"
                :click-param="recallsPath"
@@ -64,9 +64,9 @@
                data-purpose="encounters"
                header-tag="h2"
                :href="encountersPath"
-               :text="$t('my_record.encounters.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.encounters')"
                :aria-label="
-                 getAriaLabel($t('my_record.encounters.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.encounters'),
                               record.encounters.data.length)"
                :click-func="goToUrl"
                :click-param="encountersPath"
@@ -76,9 +76,9 @@
                data-purpose="referrals"
                header-tag="h2"
                :href="referralsPath"
-               :text="$t('my_record.referrals.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.referrals')"
                :aria-label="
-                 getAriaLabel($t('my_record.referrals.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.referrals'),
                               record.referrals.data.length)"
                :click-func="goToUrl"
                :click-param="referralsPath"

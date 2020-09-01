@@ -11,7 +11,7 @@
       </h2>
       <p class="nhsuk-label nhsuk-u-margin-top-0
                   nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelDOB') }}
+        {{ $t('myRecord.dateOfBirth') }}
       </p>
       <p data-sid="user-date-of-birth"
          :class="[$style['user-info'],
@@ -21,7 +21,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelNHS') }}
+        {{ $t('myRecord.nhsNumber') }}
       </p>
       <p data-sid="user-nhs-number"
          :class="[$style['user-info'],
@@ -30,7 +30,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelAddress') }}
+        {{ $t('myRecord.address') }}
       </p>
       <p data-sid="user-address"
          :class="[$style['user-info'],
@@ -68,7 +68,7 @@
       </menu-item-list>
       <template v-if="!hasDetailedRecordAccess">
         <p>
-          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
+          {{ $t('myRecord.thisIsASummaryToViewMoreContactSurgery') }}
         </p>
       </template>
       <glossary/>
@@ -81,10 +81,10 @@
         <div v-else id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
           <p><strong style="margin-top: 0.5em;">
             {{ $t( supplier === 'MICROTEST' ?
-              'my_record.noRecordsOrNoAccess.warningHeader' :
-              'my_record.noRecordAccess.warningHeader') }}
+              'myRecord.thisInfoIsNotAvailabeInTheApp' :
+              'myRecord.youDoNotHaveAccessToYourRecord') }}
           </strong></p>
-          <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
+          <p>{{ $t('myRecord.contactSurgeryForMoreInformation') }} </p>
         </div>
       </div>
     </div>

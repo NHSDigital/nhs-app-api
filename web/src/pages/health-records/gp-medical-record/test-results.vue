@@ -25,7 +25,7 @@
               </p>
               <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-header">
-                {{ $t('my_record.noStartDate') }}
+                {{ $t('myRecord.unknownDate') }}
               </p>
               <p v-if="supplier === 'TPP'"
                  class="nhsuk-u-margin-bottom-0">
@@ -45,7 +45,7 @@
               <div v-if="testResult.associatedTexts.length > 0"
                    class="nhsuk-body nhsuk-u-margin-bottom-2">
                 <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
-                  {{ $t('my_record.testResults.commentHeader') }}
+                  {{ $t('myRecord.gpMedicalRecord.comment') }}
                 </p>
                 <p v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
                    :key="`associatedText-${associatedTextItemIndex}`"

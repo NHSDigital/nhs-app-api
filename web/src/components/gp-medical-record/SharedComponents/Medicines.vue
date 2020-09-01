@@ -21,7 +21,7 @@
             </p>
             <p v-else
                class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-              {{ $t('my_record.noStartDate') }}
+              {{ $t('myRecord.unknownDate') }}
             </p>
             <div v-for="(lineItem, lineIndex) in item.lineItems"
                  :key="`line-${lineIndex}`">

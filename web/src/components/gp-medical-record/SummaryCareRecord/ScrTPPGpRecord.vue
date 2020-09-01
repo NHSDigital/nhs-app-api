@@ -4,9 +4,9 @@
                data-purpose="allergies-and-reactions"
                header-tag="h2"
                :href="allergiesAndReactionsPath"
-               :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
+               :text="$t('myRecord.summaryCareRecord.allergiesAndAdverseReactions')"
                :aria-label="
-                 getAriaLabel($t('my_record.allergiesAndAdverseReactions.sectionHeader'),
+                 getAriaLabel($t('myRecord.summaryCareRecord.allergiesAndAdverseReactions'),
                               record.allergies.data.length)"
                :click-func="goToUrl"
                :click-param="allergiesAndReactionsPath"
@@ -16,9 +16,9 @@
                data-purpose="medicines"
                header-tag="h2"
                :href="medicinesPath"
-               :text="$t('my_record.medicines.sectionHeader')"
+               :text="$t('myRecord.summaryCareRecord.medicines')"
                :aria-label="
-                 getAriaLabel($t('my_record.medicines.sectionHeader'),
+                 getAriaLabel($t('myRecord.summaryCareRecord.medicines'),
                               medicinesCount)"
                :click-func="goToUrl"
                :click-param="medicinesPath"

@@ -4,9 +4,9 @@
                data-purpose="test-results"
                header-tag="h2"
                :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.tpp')"
+               :text="$t('myRecord.detailedCodedRecord.testResultsPastSixMonths')"
                :aria-label="
-                 getAriaLabel($t('my_record.testResults.sectionHeader.tpp'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.testResultsPastSixMonths'),
                               record.testResults.data.length)"
                :click-func="goToUrl"
                :click-param="testResultsPath"
@@ -16,9 +16,9 @@
                data-purpose="events"
                header-tag="h2"
                :href="eventsPath"
-               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.consultationsAndEvents')"
                :aria-label="
-                 getAriaLabel($t('my_record.consultationsAndEvents.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.consultationsAndEvents'),
                               record.tppDcrEvents.data.length)"
                :click-func="goToUrl"
                :click-param="eventsPath"
@@ -29,9 +29,9 @@
                  data-purpose="documents"
                  :href="documentsPath"
                  header-tag="h2"
-                 :text="$t('my_record.documents.sectionHeader')"
+                 :text="$t('myRecord.detailedCodedRecord.documents')"
                  :aria-label="
-                   getAriaLabel($t('my_record.documents.sectionHeader'),
+                   getAriaLabel($t('myRecord.detailedCodedRecord.documents'),
                                 record.documents.data.length)"
                  :click-func="goToUrl"
                  :click-param="documentsPath"

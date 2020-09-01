@@ -19,7 +19,7 @@
                                :service-definition-id="serviceDefinitionId">
           <p>{{ $t('appointments.adminHelp.useThisServiceToContactYourSurgery') }}</p>
           <p>{{ $t('appointments.adminHelp.itTakesAroundFiveMinutes') }}</p>
-          <p>{{ $t('appointments.adminHelp.toSaveYouTypeingIn') }}</p>
+          <p>{{ $t('appointments.adminHelp.toSaveYouTypingIn') }}</p>
         </demographics-question>
         <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
       </template>

@@ -21,18 +21,18 @@
               {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
             </p>
             <p v-else class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-              {{ $t('my_record.noStartDate') }}
+              {{ $t('myRecord.unknownDate') }}
             </p>
             <p class="nhsuk-body nhsuk-u-margin-bottom-2">
               {{ item.term }}
             </p>
             <p v-if="item.nextDate != null"
                class="nhsuk-body nhsuk-u-margin-bottom-2">
-              {{ $t('my_record.immunisations.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
+              {{ $t('myRecord.gpMedicalRecord.nextDate') }}{{ getNextDateFormatted(item.nextDate) }}
             </p>
             <p v-if="item.status != null"
                class="nhsuk-body nhsuk-u-margin-bottom-2">
-              {{ $t('my_record.immunisations.status') }}{{ item.status }}
+              {{ $t('myRecord.gpMedicalRecord.status') }}{{ item.status }}
             </p>
           </div>
         </Card>

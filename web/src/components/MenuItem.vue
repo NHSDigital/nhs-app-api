@@ -114,7 +114,7 @@ export default {
       if (this.hasUnreadMessages) {
         return `${this.text}.${this.$t('messagesHub.unreadMessages')}`;
       }
-      return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('my_record.records')})` : this.text;
+      return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('myRecord.records')})` : this.text;
     },
 
   },

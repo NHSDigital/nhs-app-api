@@ -4,9 +4,9 @@
                data-purpose="immunisations"
                header-tag="h2"
                :href="immunisationsPath"
-               :text="$t('my_record.immunisations.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.immunisations')"
                :aria-label="
-                 getAriaLabel($t('my_record.immunisations.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.immunisations'),
                               record.immunisations.data.length)"
                :click-func="goToUrl"
                :click-param="immunisationsPath"
@@ -16,9 +16,9 @@
                data-purpose="healthConditions"
                header-tag="h2"
                :href="healthConditionsPath"
-               :text="$t('my_record.healthConditions.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.healthConditions')"
                :aria-label="
-                 getAriaLabel($t('my_record.healthConditions.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.healthConditions'),
                               record.problems.data.length)"
                :click-func="goToUrl"
                :click-param="healthConditionsPath"
@@ -28,7 +28,7 @@
                data-purpose="test-results"
                header-tag="h2"
                :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.testResults')"
                :click-func="goToUrl"
                :click-param="testResultsPath"/>
 
@@ -36,7 +36,7 @@
                data-purpose="diagnosis"
                header-tag="h2"
                :href="diagnosisPath"
-               :text="$t('my_record.diagnosis.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.diagnosis')"
                :click-func="goToUrl"
                :click-param="diagnosisPath" />
 
@@ -44,7 +44,7 @@
                data-purpose="examinations"
                header-tag="h2"
                :href="examinationsPath"
-               :text="$t('my_record.examinations.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.examinations')"
                :click-func="goToUrl"
                :click-param="examinationsPath" />
 
@@ -52,7 +52,7 @@
                data-purpose="procedures"
                header-tag="h2"
                :href="proceduresPath"
-               :text="$t('my_record.procedures.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.procedures')"
                :click-func="goToUrl"
                :click-param="proceduresPath" />
   </div>

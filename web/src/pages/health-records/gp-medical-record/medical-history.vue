@@ -19,7 +19,7 @@
                 v-if="history.startDate && history.startDate.value"
                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-4"
               >{{ history.startDate.value | datePart(history.startDate.datePart) }}</span>
-              <span v-else>{{ $t('my_record.noStartDate') }}</span>
+              <span v-else>{{ $t('myRecord.unknownDate') }}</span>
 
               <p> {{ history.rubric }} </p>
               <p> {{ history.description }} </p>

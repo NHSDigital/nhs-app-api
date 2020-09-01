@@ -4,7 +4,7 @@
     <p data-purpose="record-item-header"
        class="nhsuk-label nhsuk-u-margin-top-0
                 nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-      {{ $t('my_record.patientInfo.fieldLabelName') }}</p>
+      {{ $t('myRecord.name') }}</p>
     <p v-if="proxyPatientDetails" data-purpose="record-item-detail" data-hj-suppress
        class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-0">
       {{ proxyPatientDetails.fullName }}</p>
@@ -12,7 +12,7 @@
     <p data-purpose="record-item-header"
        class="nhsuk-label nhsuk-u-margin-top-0
                 nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-      {{ $t('my_record.patientInfo.fieldLabelAge') }}</p>
+      {{ $t('myRecord.age') }}</p>
     <p v-if="proxyPatientDetails" data-purpose="record-item-detail"
        class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-0">
       {{ getDisplayedAgeText(proxyPatientDetails) }}</p>

@@ -4,9 +4,9 @@
                data-purpose="immunisations"
                header-tag="h2"
                :href="immunisationsPath"
-               :text="$t('my_record.immunisations.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.immunisations')"
                :aria-label="
-                 getAriaLabel($t('my_record.immunisations.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.immunisations'),
                               record.immunisations.data.length)"
                :click-func="goToUrl"
                :click-param="immunisationsPath"
@@ -16,9 +16,9 @@
                data-purpose="healthConditions"
                header-tag="h2"
                :href="healthConditionsPath"
-               :text="$t('my_record.healthConditions.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.healthConditions')"
                :aria-label="
-                 getAriaLabel($t('my_record.healthConditions.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.healthConditions'),
                               record.problems.data.length)"
                :click-func="goToUrl"
                :click-param="healthConditionsPath"
@@ -28,9 +28,9 @@
                data-purpose="test-results"
                header-tag="h2"
                :href="testResultsPath"
-               :text="$t('my_record.testResults.sectionHeader.default')"
+               :text="$t('myRecord.detailedCodedRecord.testResults')"
                :aria-label="
-                 getAriaLabel($t('my_record.testResults.sectionHeader.default'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.testResults'),
                               record.testResults.data.length)"
                :click-func="goToUrl"
                :click-param="testResultsPath"
@@ -40,9 +40,9 @@
                data-purpose="consultations"
                header-tag="h2"
                :href="consultationsPath"
-               :text="$t('my_record.consultationsAndEvents.sectionHeader')"
+               :text="$t('myRecord.detailedCodedRecord.consultationsAndEvents')"
                :aria-label="
-                 getAriaLabel($t('my_record.consultationsAndEvents.sectionHeader'),
+                 getAriaLabel($t('myRecord.detailedCodedRecord.consultationsAndEvents'),
                               record.consultations.data.length)"
                :click-func="goToUrl"
                :click-param="consultationsPath"
@@ -52,9 +52,9 @@
                  data-purpose="documents"
                  :href="documentsPath"
                  header-tag="h2"
-                 :text="$t('my_record.documents.sectionHeader')"
+                 :text="$t('myRecord.detailedCodedRecord.documents')"
                  :aria-label="
-                   getAriaLabel($t('my_record.documents.sectionHeader'),
+                   getAriaLabel($t('myRecord.detailedCodedRecord.documents'),
                                 record.documents.data.length)"
                  :click-func="goToUrl"
                  :click-param="documentsPath"

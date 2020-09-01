@@ -20,7 +20,7 @@
                 data-purpose="record-item-header">
                 {{ recall.recordDate.value | datePart(recall.recordDate.datePart) }}</p>
               <p v-else class="nhsuk-u-margin-bottom-0"
-                 data-purpose="record-item-header">{{ $t('my_record.noStartDate') }}</p>
+                 data-purpose="record-item-header">{{ $t('myRecord.unknownDate') }}</p>
 
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail"> {{ recall.name }} </p>
@@ -28,13 +28,13 @@
                  data-purpose="record-item-detail"> {{ recall.description }} </p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.recalls.result') }}{{ recall.result }} </p>
+                {{ $t('myRecord.gpMedicalRecord.result') }}{{ recall.result }} </p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.recalls.nextDate') }}{{ recall.nextDate }} </p>
+                {{ $t('myRecord.gpMedicalRecord.nextDate') }}{{ recall.nextDate }} </p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.recalls.status') }}{{ recall.status }} </p>
+                {{ $t('myRecord.gpMedicalRecord.status') }}{{ recall.status }} </p>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>

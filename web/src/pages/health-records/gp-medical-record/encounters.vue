@@ -23,16 +23,16 @@
             </p>
             <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
                data-purpose="record-item-header">
-              {{ $t('my_record.noStartDate') }}
+              {{ $t('myRecord.unknownDate') }}
             </p>
             <p class="nhsuk-u-margin-bottom-0"
                data-purpose="record-item-detail"> {{ encounter.description }} </p>
             <p class="nhsuk-u-margin-bottom-0"
                data-purpose="record-item-detail">
-              {{ $t('my_record.encounters.value') }}{{ encounter.value }} </p>
+              {{ $t('myRecord.gpMedicalRecord.value') }}{{ encounter.value }} </p>
             <p class=" nhsuk-u-margin-bottom-0"
                data-purpose="record-item-detail">
-              {{ $t('my_record.encounters.unit') }}{{ encounter.unit }} </p>
+              {{ $t('myRecord.gpMedicalRecord.units') }}{{ encounter.unit }} </p>
           </div>
         </Card>
       </MedicalRecordCardGroupItem>

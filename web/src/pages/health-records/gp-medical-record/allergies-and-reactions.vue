@@ -20,7 +20,7 @@
                 {{ allergy.date.value | datePart(allergy.date.datePart) }}</p>
               <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-header">
-                {{ $t('my_record.noStartDate') }}</p>
+                {{ $t('myRecord.unknownDate') }}</p>
               <p data-purpose="record-item-detail">{{ allergy.name }}</p>
               <p v-if="allergy.drug" data-purpose="record-item-detail">{{ allergy.drug }}</p>
               <p v-if="allergy.reaction" data-purpose="record-item-detail">

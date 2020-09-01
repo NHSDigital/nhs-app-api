@@ -138,15 +138,15 @@ export default {
       if (date && date.value) {
         dateString = datePart(date.value, 'YearMonthDay');
       } else {
-        dateString = this.$t('my_record.noStartDate');
+        dateString = this.$t('myRecord.unknownDate');
       }
 
       if (!isBlankString(title)) {
-        return `${title} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
+        return `${title} ${this.$t('myRecord.gpMedicalRecord.addedOnDate', { date: dateString })}`;
       }
 
       if (!isBlankString(type)) {
-        return `${type} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
+        return `${type} ${this.$t('myRecord.gpMedicalRecord.addedOnDate', { date: dateString })}`;
       }
 
       return dateString;

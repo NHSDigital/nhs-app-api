@@ -20,7 +20,7 @@
                 class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"
               >{{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}</p>
               <p v-else class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
-                {{ $t('my_record.noStartDate') }}</p>
+                {{ $t('myRecord.unknownDate') }}</p>
 
               <div v-for="(lineItem, lineItemIndex)
                      in problem.lineItems"

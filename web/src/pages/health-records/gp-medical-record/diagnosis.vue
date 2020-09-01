@@ -20,7 +20,6 @@
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
-      :button-text="'my_record.diagnosisDetails.backButton'"
       @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>

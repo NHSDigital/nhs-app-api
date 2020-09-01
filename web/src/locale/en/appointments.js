@@ -6,7 +6,7 @@ export default {
     ifTheProblemPersistsOneOneOne: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
     itTakesAroundFiveMinutes: 'It takes around 5 minutes to answer a few questions.',
     onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
-    toSaveYouTypeingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
+    toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
     useThisServiceToContactYourSurgery: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
     weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
   },
@@ -131,7 +131,7 @@ export default {
     ifTheProblemPersistsOneOneOne: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
     itTakesAroundFiveMinute: 'It takes around 5 minutes to answer a few questions about your condition.',
     onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
-    toSaveYouTypeingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
+    toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
     weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
   },
   guidance: {

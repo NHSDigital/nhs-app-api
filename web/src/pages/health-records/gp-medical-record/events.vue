@@ -19,7 +19,7 @@
                 {{ event.date | datePart }}</p>
               <p v-else clss="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-header">
-                {{ $t('my_record.noStartDate') }}</p>
+                {{ $t('myRecord.unknownDate') }}</p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
                 {{ event.locationAndDoneBy }}

@@ -1,10 +1,11 @@
-import each from 'jest-each';
 import DocumentInformation from '@/pages/health-records/gp-medical-record/documents/_id';
-import { DOCUMENT_DETAIL_NAME } from '@/router/names';
+import each from 'jest-each';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
+import i18n from '@/plugins/i18n';
 import * as dependancy from '@/services/event-bus';
 import * as utilsDependancy from '@/lib/utils';
-import { mount, createRouter, createStore, create$T } from '../../../helpers';
+import { DOCUMENT_DETAIL_NAME } from '@/router/names';
+import { mount, createRouter, createStore } from '../../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 
@@ -14,7 +15,6 @@ const $route = {
     id: 1,
   },
 };
-const $t = create$T();
 
 const newStore = ({
   document,
@@ -38,7 +38,7 @@ const newStore = ({
 let page;
 
 const mountPage = async ({ $store = newStore() } = {}) => {
-  page = mount(DocumentInformation, { $store, $router, $route, $t });
+  page = mount(DocumentInformation, { $store, $router, $route, mountOpts: { i18n } });
   await page.vm.$nextTick();
 };
 
@@ -65,7 +65,7 @@ describe('document view', () => {
 
       // Act
       const documentInfo = page.find('#documentInfo p');
-      const dateString = 'translate_my_record.documents.documentPageSubtext Unknown Date';
+      const dateString = 'Document added on Unknown Date';
 
       // Assert
       expect(documentInfo.exists()).toBe(true);
@@ -87,7 +87,7 @@ describe('document view', () => {
       await mountPage({ $store: newStore({ document }) });
 
       const documentInfo = page.find('#documentInfo p');
-      const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
+      const dateString = 'Document added on 8 August 2019';
 
       // Assert
       expect(documentInfo.exists()).toBe(true);
@@ -232,11 +232,11 @@ describe('document view', () => {
 
       // Assert
       if (isValidFile && isViewable) {
-        expect(viewItem.text()).toEqual('translate_my_record.documents.actions.view');
+        expect(viewItem.text()).toEqual('View');
       }
 
       if (isValidFile && isDownloadable) {
-        expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
+        expect(downloadItem.text()).toEqual('Download');
       }
       expect(viewItem.exists()).toBe(isValidFile && isViewable);
       expect(downloadItem.exists()).toBe(isValidFile && isDownloadable);
@@ -263,7 +263,7 @@ describe('document view', () => {
 
       // Assert
       expect(documentInfo.exists()).toBe(true);
-      expect(documentInfo.text()).toEqual('translate_my_record.documents.documentUnavailableSubtext');
+      expect(documentInfo.text()).toEqual('To access it, contact your GP surgery directly.');
     });
 
     each([{
@@ -348,8 +348,8 @@ describe('document view', () => {
       await mountPage({ $store });
 
       // Assert
-      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_HEADER, 'translate_my_record.documents.documentTypeUnavailableHeader', true);
-      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_TITLE, 'translate_my_record.documents.documentTypeUnavailablePageTitle', true);
+      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_HEADER, 'The letter added on 8 August 2019 is not available through the NHS App', true);
+      expect(dependancy.EventBus.$emit).toHaveBeenCalledWith(dependancy.UPDATE_TITLE, 'The letter added on 8 August 2019 is not available', true);
     });
 
     it('will set the header and page title to the document term', async () => {
@@ -407,7 +407,7 @@ describe('document view', () => {
       // Act
       await mountPage({ $store });
 
-      const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
+      const dateString = 'Document added on 8 August 2019';
 
       // Assert
       expect(dependancy.EventBus.$emit)
@@ -431,7 +431,7 @@ describe('document view', () => {
       // Act
       await mountPage({ $store });
 
-      const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
+      const dateString = 'Letter added on 8 August 2019';
 
       // Assert
       expect(dependancy.EventBus.$emit)

@@ -4,29 +4,29 @@
        :class="[!$store.state.device.isNativeApp && $style.desktopWeb]">
     <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
       <message-text :class="$style.warningText">
-        {{ $t('my_record.personalRecordText.warningText.wt1') }}
+        {{ $t('myRecord.warning.yourRecordMayContainSensitiveInformation') }}
       </message-text>
       <message-text :class="$style.warningText">
-        {{ $t('my_record.personalRecordText.warningText.wt2') }}
+        {{ $t('myRecord.warning.youHaveALegalRightToAccess') }}
       </message-text>
     </message-dialog>
     <div :class="$style.info" data-purpose="info">
-      <p>{{ $t('my_record.personalRecordText.body') }}</p>
-      <p>{{ $t('my_record.personalRecordText.bulletPointHeader') }}</p>
+      <p>{{ $t('myRecord.warning.yourRecordShowsPersonalData') }}</p>
+      <p>{{ $t('myRecord.warning.youMayAlsoSee') }}</p>
       <ul>
-        <li>{{ $t('my_record.personalRecordText.bulletPoints.bp1') }}</li>
-        <li>{{ $t('my_record.personalRecordText.bulletPoints.bp2') }}</li>
+        <li>{{ $t('myRecord.warning.yourMedicalHistory') }}</li>
+        <li>{{ $t('myRecord.warning.testResultsYouMayNotHaveDiscussedWithYourDoctor') }}</li>
       </ul>
     </div>
     <generic-button class="nhsuk-button"
                     @click.prevent="onContinueButtonClicked">
-      {{ $t('my_record.personalRecordText.agreeButtonText') }}
+      {{ $t('generic.continueButton.text') }}
     </generic-button>
 
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="indexPath"
-      :button-text="'my_record.personalRecordText.backButtonText'"
+      :button-text="'myRecord.warning.backToHome'"
       @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>

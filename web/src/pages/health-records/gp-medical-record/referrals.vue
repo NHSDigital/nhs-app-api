@@ -21,17 +21,17 @@
                 data-purpose="record-item-header">
                 {{ referral.recordDate.value | datePart(referral.recordDate.datePart) }}</p>
               <p v-else class="nhsuk-u-margin-bottom-0"
-                 data-purpose="record-item-header">{{ $t('my_record.noStartDate') }}</p>
+                 data-purpose="record-item-header">{{ $t('myRecord.unknownDate') }}</p>
 
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.referrals.description') }}{{ referral.description }} </p>
+                {{ $t('myRecord.gpMedicalRecord.reason') }}{{ referral.description }} </p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.referrals.speciality') }}{{ referral.speciality }} </p>
+                {{ $t('myRecord.gpMedicalRecord.speciality') }}{{ referral.speciality }} </p>
               <p class="nhsuk-u-margin-bottom-0"
                  data-purpose="record-item-detail">
-                {{ $t('my_record.referrals.ubrn') }}{{ referral.ubrn }} </p>
+                {{ $t('myRecord.gpMedicalRecord.ubrn') }}{{ referral.ubrn }} </p>
             </div>
           </Card>
         </MedicalRecordCardGroupItem>

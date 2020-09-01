@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import DocumentsPage from '@/pages/health-records/gp-medical-record/documents/index';
+import i18n from '@/plugins/i18n';
 import { createStore, shallowMount } from '../../../helpers';
 
 let page;
@@ -47,6 +48,7 @@ const mountPage = ({ documentData = [createDocument()] } = {}) => {
 
   page = shallowMount(DocumentsPage, {
     $store,
+    mountOpts: { i18n },
   });
 };
 
@@ -81,7 +83,7 @@ describe('gp-medical-record documents', () => {
         mountPage({ documentData: [document] });
 
         const documentItem = page.find('menu-item-stub[id="1"]');
-        const titleString = 'Document term translate_my_record.documents.documentMenuItemTitle';
+        const titleString = 'Document term added on 8 August 2019';
         const description = '(PDF, 10B)';
         expect(documentItem.vm.id).toEqual(document.documentIdentifier);
         expect(documentItem.vm.text).toEqual(titleString);

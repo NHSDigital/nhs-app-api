@@ -7,11 +7,11 @@
 
         <div id="documentInfo" class="nhsuk-u-margin-bottom-1" data-purpose="info">
           <p v-if="term && isValidFile">{{ dateString }}</p>
-          <p v-if="!isValidFile">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
+          <p v-if="!isValidFile">{{ $t('myRecord.gpMedicalRecord.toAccessContactSurgery') }}</p>
         </div>
 
         <div v-if="hasComments" class="nhsuk-u-padding-bottom-3">
-          <strong>{{ $t('my_record.documents.commentsHeader') }}</strong>
+          <strong>{{ $t('myRecord.gpMedicalRecord.comments') }}</strong>
           <span v-for="(comment, index) in retrieveComments"
                 :id="'documentComment' + index"
                 :key="'Comment'+index"
@@ -25,20 +25,20 @@
             <menu-item v-if="isViewable"
                        id="btn_viewDocument"
                        header-tag="h2"
-                       :text="$t('my_record.documents.actions.view')"
-                       :aria-label="$t('my_record.documents.actions.view')"
+                       :text="$t('myRecord.gpMedicalRecord.view')"
+                       :aria-label="$t('myRecord.gpMedicalRecord.view')"
                        :click-func="navigateToView"/>
 
             <menu-item v-if="isDownloadable"
                        id="btn_downloadDocument"
                        header-tag="h2"
                        :click-func="startDownload"
-                       :text="$t('my_record.documents.actions.download')"
-                       :aria-label="$t('my_record.documents.actions.download')"/>
+                       :text="$t('myRecord.gpMedicalRecord.download')"
+                       :aria-label="$t('myRecord.gpMedicalRecord.download')"/>
           </menu-item-list>
 
           <p id="downloadWarning">
-            {{ $t('my_record.documents.downloadWarning') }}
+            {{ $t('myRecord.gpMedicalRecord.whenYouDownloadYouBecomeResponsible') }}
           </p>
 
           <p>
@@ -133,9 +133,9 @@ export default {
     let dateString;
 
     if (!isBlankString(documentType)) {
-      dateString = `${documentType} ${this.$t('my_record.documents.docTypePageSubtext')} ${datePartString}`;
+      dateString = `${documentType} ${this.$t('myRecord.gpMedicalRecord.addedOn')} ${datePartString}`;
     } else {
-      dateString = `${this.$t('my_record.documents.documentPageSubtext')} ${datePartString}`;
+      dateString = `${this.$t('myRecord.gpMedicalRecord.documentAddedOn')} ${datePartString}`;
     }
 
     this.updateHeaderText(
@@ -212,12 +212,12 @@ export default {
 
       if (!isBlankString(documentType)) {
         formatArgs = { date: datePartString, type: documentType.toLowerCase() };
-        headerKey = 'my_record.documents.documentTypeUnavailableHeader';
-        titleKey = 'my_record.documents.documentTypeUnavailablePageTitle';
+        headerKey = 'myRecord.gpMedicalRecord.typeAddedOnDateIsNotAvailableThroughTheApp';
+        titleKey = 'myRecord.gpMedicalRecord.typeAddedOnDateIsNotAvailable';
       } else {
         formatArgs = { date: datePartString };
-        headerKey = 'my_record.documents.documentUnavailableHeader';
-        titleKey = 'my_record.documents.documentUnavailablePageTitle';
+        headerKey = 'myRecord.gpMedicalRecord.documentAddedOnDateIsNotAvailableThroughTheApp';
+        titleKey = 'myRecord.gpMedicalRecord.documentAddedOnDateIsNotAvailable';
       }
       EventBus.$emit(UPDATE_HEADER, this.$t(headerKey, formatArgs), true);
       EventBus.$emit(UPDATE_TITLE, this.$t(titleKey, formatArgs), true);

@@ -1,13 +1,13 @@
 <template>
   <div :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
     <p v-if="hasErrored" class="nhsuk-u-padding-3 nhsuk-u-margin-0">
-      {{ $t('my_record.genericErrorMessage') }}
+      {{ $t('myRecord.anErrorHasOccurredRetrievingData') }}
     </p>
     <p v-else-if="hasUndeterminedAccess" class="nhsuk-u-padding-3 nhsuk-u-margin-0">
-      {{ $t('my_record.noRecordsOrNoAccess.warningHeader') }}
+      {{ $t('myRecord.thisInfoIsNotAvailabeInTheApp') }}
     </p>
     <p v-else class="nhsuk-u-padding-3 nhsuk-u-margin-0">
-      {{ $t('my_record.genericNoDataMessage') }}
+      {{ $t('myRecord.noInformationRecorded') }}
     </p>
   </div>
 </template>
