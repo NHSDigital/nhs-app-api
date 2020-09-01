@@ -26,7 +26,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute"
+        tools:replace="android:name,android:theme,android:allowBackup,label,android:icon">
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
@@ -53,6 +54,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
+            tools:replace="android:name,android:theme,label,android:icon"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

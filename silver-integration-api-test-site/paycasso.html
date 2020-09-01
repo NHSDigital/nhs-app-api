@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NHS App - Silver Integration JS API test site</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/main.css">
+    <link rel="stylesheet" href="https://service-manual.nhs.uk/css/design-example-overrides.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </head>
+  <body>
+    <h1>Paycasso SDK</h1>
+
+    <div class="nhsuk-back-link">
+      <a class="nhsuk-back-link__link" href="../index.html">
+        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+        </svg>
+        Back</a>
+    </div>
+
+    <fieldset>
+      <label for="subject">Insert token</label><br>
+      <input type="text" id="token" name="token"><br><br>
+
+      <label for="subject">Insert paycasso url<br>
+      <small>(optional)</small><br>
+      <input type="text" id="paycassoUrl" name="token"><br><br>
+    
+      <label for="type">Choose type</label><br>
+      <select name="type" id="type">
+        <option selected value="Passport">Passport</option>
+        <option value="DriversLicence">Drivers Licence</option>
+        <option value="PhotoId">Photo Id</option>
+      </select><br><br>
+
+      <label for="nfc">NFC Enabled?</label><br>
+      <small>(only applicable to passport)</small><br>
+      <select name="nfc" id="nfc">
+        <option selected value="n">No</option>
+        <option value="y">Yes</option>
+      </select><br><br>
+
+      <label for="transactionType">Transaction type</label><br>
+      <select name="transactionType" id="transactionType">
+        <option selected value="DocuSure">DocuSure (Document validation only)</option>
+        <option value="VeriSure">VeriSure (Document and Face validation)</option>
+        <option value="InstaSure">InstaSure (Face validation only)</option>
+      </select><br><br>
+
+      <input class="nhsuk-button" id="testPaycasso" type="button" value="Start" onclick="startPaycasso()"/><br><br>
+      <label for="response">Response</label><br>
+      <textarea style="width:100%;" id="response" name="response" rows="10"></textarea>
+    </fieldset>
+
+    <script>      
+      function startPaycasso() {
+        const token = document.getElementById("token").value;
+        const type = document.getElementById("type").value;
+        const paycassoUrl = document.getElementById("paycassoUrl").value ||
+          "https://api-london-prod.paycasso.com";
+        const nfcValue = document.getElementById("nfc").value
+        const transactionType = document.getElementById("transactionType").value
+
+        let request = {
+          "credentials": {
+          "hostUrl": paycassoUrl,
+          "token": token
+          },
+          "externalReferences": {
+            "consumerReference":"thenhsapp",
+            "transactionReference":"thenhsapp",
+            "appUserId":"externalAppUserId",
+            "deviceId":"externalDeviceId",
+            "hasNfcJourney": (nfcValue == 'y') ? true : false,
+            transactionType
+          },
+          "transactionDetails":{
+            "documentType":type
+          }
+        }
+
+        window.authentication = {}
+        window.authentication.paycassoOnSuccess = response => document.getElementById("response").value = JSON.stringify(JSON.parse(response), null, 2);
+        window.authentication.paycassoOnFailure = response => document.getElementById("response").value = JSON.stringify(JSON.parse(response), null, 2);
+
+        if(!window.nativeNhsLogin) {
+          alert("This is only supported on native.")
+          return;
+        }
+
+        window.nativeNhsLogin.startPaycasso(JSON.stringify(request));
+      }
+    </script>
+  </body>
+</html>

@@ -168,7 +168,7 @@ class WebAppInterfacePrivate(
     @JavascriptInterface
     fun addEventToCalendar(calendarData: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering addEventToCalendar")
-        var addToCalendarData = addToCalendarHelper.parseCalendarData(calendarData, JavaScriptInteractionMode.NhsApp)
+        val addToCalendarData = addToCalendarHelper.parseCalendarData(calendarData, JavaScriptInteractionMode.NhsApp)
         runAction { addToCalendarHelper.addToCalendar(addToCalendarData) }
     }
 

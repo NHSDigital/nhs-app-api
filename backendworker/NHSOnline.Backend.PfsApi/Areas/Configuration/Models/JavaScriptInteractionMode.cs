@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
     {
         None,
         NhsApp,
+        NhsLogin,
         SilverThirdParty
     }
 }

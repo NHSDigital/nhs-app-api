@@ -229,7 +229,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
@@ -247,6 +246,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.squareup.moshi:moshi:1.9.2'
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.2'
+
+    implementation 'com.paycasso.sdk:paycasso:2020.8.10'
+    implementation 'com.paycasso.sdk:paycasso-view:2020.8.10'
+    implementation 'com.paycasso.sdk:paycasso-opencv:2020.8.10'
+    implementation 'com.paycasso.sdk:paycasso-tensorflow:2020.8.10'
+    implementation 'com.paycasso.sdk:paycasso-jj2000:2020.8.10'
+
 
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
     kapt 'android.arch.lifecycle:compiler:1.1.1'

@@ -1,16 +1,23 @@
 package com.nhs.online.nhsonline.web
 
 import android.app.Activity
+import android.util.JsonReader
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.URLUtil
 import android.webkit.WebView
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
+import com.nhs.online.nhsonline.data.PaycassoData
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.registration.PaycassoCallbackResponse
+import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.SettingsService
@@ -33,6 +40,8 @@ import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import com.nhs.online.nhsonline.webinterfaces.WebAppInterfaceNhsLogin
+import com.squareup.moshi.Json
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
@@ -41,6 +50,7 @@ import java.io.File
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP_PRIVATE = "nativeApp"
 private const val NATIVE_APP_THIRDPARTY = "nhsappNative"
+private const val NATIVE_APP_LOGIN = "nativeNhsLogin"
 
 
 class NhsWeb(
@@ -50,6 +60,7 @@ class NhsWeb(
         private val notificationsService: NotificationsService,
         appWebInterface: AppWebInterface,
         private val knownServices: KnownServices,
+        private val paycassoService: PaycassoService,
         private val loggingService: ILoggingService
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
@@ -94,8 +105,10 @@ class NhsWeb(
 
         val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this, uiInteractor, settingsService, addToCalendarHandler)
         val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, addToCalendarHandler)
+        val webAppInterfaceNhsLogin = WebAppInterfaceNhsLogin(activity, this)
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
+        webView.addJavascriptInterface(webAppInterfaceNhsLogin, NATIVE_APP_LOGIN)
 
         webView.webViewClient = webInterceptor
         webView.webChromeClient = chromeClient
@@ -355,5 +368,30 @@ class NhsWeb(
     fun goToPage(page: String) {
         val pageUrl = urlHelper.createRedirectToPageUrl(page)
         urlLoader.loadUrl(url = pageUrl.toString(), requiresFullPageLoad = true)
+    }
+
+    val onFailure: (PaycassoCallbackResponse) -> Unit = {
+            response ->
+        run {
+            val responseString = Gson().toJson(response);
+            webView.evaluateJavascript(
+                "window.authentication.paycassoOnFailure('${responseString}')", null)
+        }
+    }
+
+    private val onSuccess: (PaycassoCallbackResponse) -> Unit = {
+            response ->
+        run {
+            val responseString = Gson().toJson(response);
+            webView.evaluateJavascript(
+                "window.authentication.paycassoOnSuccess('${responseString}')", null)
+        }
+    }
+
+
+    fun startPaycasso(paycassoData: PaycassoData) {
+        paycassoService.start(paycassoData,
+            onSuccess,
+            onFailure)
     }
 }

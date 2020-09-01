@@ -35,6 +35,8 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.registration.PaycassoFlowFactory
+import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.ConfigurationService
 import com.nhs.online.nhsonline.services.logging.LoggingService
 import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
@@ -83,6 +85,8 @@ class MainActivity :
     private lateinit var urlHelper: UrlHelper
     private lateinit var appPersistData: PersistData
     private lateinit var intentHandlers: IntentHandlers
+    private lateinit var paycassoService: PaycassoService
+    private lateinit var paycassoFlowFactory: PaycassoFlowFactory
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -122,6 +126,9 @@ class MainActivity :
         configureWebView()
         appWebInterface = AppWebInterface(webview)
         downloadHelper = FileDownloadHelper(this)
+        paycassoFlowFactory = PaycassoFlowFactory()
+        paycassoService = PaycassoService(
+            paycassoFlowFactory.getFlow(this))
 
         val notificationManager = NotificationManagerCompat(this)
         notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
@@ -164,7 +171,8 @@ class MainActivity :
 
     private fun initialiseNhsWeb() {
         val loggingService = LoggingService(this, VolleyQueueProvider())
-        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, loggingService)
+        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface,
+            knownServices, paycassoService, loggingService)
 
         menuBar.nhsWeb = nhsWeb
 
@@ -615,7 +623,7 @@ class MainActivity :
         setupToolbar(R.id.symptoms_toolbar, true)?.apply {
             when (headerIcon) {
                 HeaderIcon.Back -> setHomeAsUpIndicator(R.drawable.back_arrow)
-                HeaderIcon.Close -> setHomeAsUpIndicator(R.drawable.ic_close)
+                HeaderIcon.Close -> setHomeAsUpIndicator(R.drawable.ic_nhsapp_close)
             }
         }
     }

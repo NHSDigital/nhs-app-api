@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 enum class JavaScriptInteractionMode {
     None,
     NhsApp,
+    NhsLogin,
     SilverThirdParty,
     Unknown
 }

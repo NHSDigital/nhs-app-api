@@ -110,4 +110,5 @@ components:
       enum:
         - None
         - NhsApp
+        - NhsLogin
         - SilverThirdParty

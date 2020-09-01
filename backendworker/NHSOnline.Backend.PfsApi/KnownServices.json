@@ -150,7 +150,7 @@
     "cid-account": {
       "url": "https://account.ext.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -162,7 +162,7 @@
     "cid-auth": {
       "url": "https://auth.ext.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -174,7 +174,7 @@
     "cid-uaf": {
       "url": "https://uaf.ext.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -186,7 +186,7 @@
     "cid-access": {
       "url": "https://access.ext.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -198,7 +198,7 @@
     "cid-dev-account": {
       "url": "https://account.dev.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -210,7 +210,7 @@
     "cid-dev-auth": {
       "url": "https://auth.dev.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -222,7 +222,7 @@
     "cid-dev-uaf": {
       "url": "https://uaf.dev.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -234,7 +234,7 @@
     "cid-dev-access": {
       "url": "https://access.dev.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -245,7 +245,7 @@
     },
     "cid-signin": {
       "url": "https://signin.nhs.uk",
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -257,7 +257,7 @@
         {
           "path": "/#/account/consent-to-use-login",
           "queryString": null,
-          "javaScriptInteractionMode": "None",
+          "javaScriptInteractionMode": "NhsLogin",
           "menuTab": "None",
           "viewMode": "WebView",
           "integrationLevel": "Gold",
@@ -271,7 +271,7 @@
     "cid-sandpit-account": {
       "url": "https://account.sandpit.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -283,7 +283,7 @@
     "cid-sandpit-auth": {
       "url": "https://auth.sandpit.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -295,7 +295,7 @@
     "cid-sandpit-uaf": {
       "url": "https://uaf.sandpit.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -307,7 +307,7 @@
     "cid-sandpit-access": {
       "url": "https://access.sandpit.signin.nhs.uk",
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -547,6 +547,18 @@
           "path": "/app-tab.html",
           "queryString": null,
           "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/paycasso.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsLogin",
           "menuTab": "None",
           "viewMode": "AppTab",
           "integrationLevel": "SilverWithWebNavigation",

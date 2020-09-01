@@ -1,15 +1,15 @@
 package com.nhs.online.nhsonline
 
-import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
+import android.support.multidex.MultiDexApplication
 import android.webkit.WebView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import java.util.Locale
 
 @Suppress("unused") // This is referenced by the AndroidManifest.xml
-class Application : Application() {
+class Application : MultiDexApplication() {
 
 
     override fun onCreate() {

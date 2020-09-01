@@ -61,7 +61,7 @@ class NhsWebTest {
         tempCacheDir = mock()
         tempAppWebViewDir = mock()
 
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, mock())
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, mock(), mock())
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         ReflectionHelpers.setField(nhsWeb, "cacheDir", tempCacheDir)
