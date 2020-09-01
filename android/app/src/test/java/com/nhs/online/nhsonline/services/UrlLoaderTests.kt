@@ -32,7 +32,7 @@ class UrlLoaderTests {
 
         appWebInterfaceMock = mock()
 
-        this.urlLoader = UrlLoader(webViewMock, baseUrl, appWebInterfaceMock)
+        urlLoader = UrlLoader(webViewMock, baseUrl, appWebInterfaceMock)
     }
 
     @Test
@@ -61,5 +61,26 @@ class UrlLoaderTests {
         val result = urlLoader.produceValidUrl(prescriptionsAppPageUrl)
 
         assertEquals(result, prescriptionsAppPageUrl)
+    }
+
+    @Test
+    fun loadUrl_whenRequiresFullPageReload_callsWebViewLoadUrlWithUrl() {
+        urlLoader.loadUrl(prescriptionsAppPageUrl, true)
+
+        verify(webViewMock).loadUrl(prescriptionsAppPageUrl)
+    }
+
+    @Test
+    fun loadUrl_whenNavigatingFromANonNhsAppUrl_callsWebViewLoadUrlWithUrl() {
+        urlLoader.loadUrl(reloadUrl, false)
+
+        verify(webViewMock).loadUrl(reloadUrl)
+    }
+
+    @Test
+    fun loadUrl_whenNavigatingFromNhsAppUrlToAnotherNhsAppUrl_passesPathToAppWebInterfaceGoTo() {
+        urlLoader.loadUrl(prescriptionsAppPageUrl, false)
+
+        verify(appWebInterfaceMock).goTo("/$prescriptionsPath")
     }
 }

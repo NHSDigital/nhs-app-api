@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline.web
 
 import android.app.Activity
 import android.content.res.Resources
+import android.net.Network
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -9,7 +10,7 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.UrlLoader
@@ -19,6 +20,8 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,6 +46,8 @@ class NhsWebTest {
     private lateinit var webSettings: WebSettings
     private lateinit var tempAppWebViewDir: File
     private lateinit var tempCacheDir: File
+    private lateinit var network: Network
+    private lateinit var connectionStateMonitor: ConnectionStateMonitor
 
     @Before
     fun setUp() {
@@ -60,14 +65,21 @@ class NhsWebTest {
 
         tempCacheDir = mock()
         tempAppWebViewDir = mock()
+        network = mock()
+        connectionStateMonitor = ConnectionStateMonitor(ResourceMockingClass().mockConnectionStateMonitorContext())
+        connectionStateMonitor.onAvailable(network)
 
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, mock(), mock())
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(),
+                knownServicesMock, mock(), mock(), connectionStateMonitor)
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         ReflectionHelpers.setField(nhsWeb, "cacheDir", tempCacheDir)
         ReflectionHelpers.setField(nhsWeb, "appWebViewDir", tempAppWebViewDir)
+    }
 
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
+    @After
+    fun tearDown() {
+        connectionStateMonitor.onLost(network)
     }
 
     @Test
@@ -99,11 +111,10 @@ class NhsWebTest {
     @Test
     fun loadUrl_WithNoConnection_Calls_ShowUnavailabilityError() {
         val url = "http://unit-test.com"
+        connectionStateMonitor.onLost(network)
 
         whenever(spyActivity.getString(R.string.baseHost)).thenReturn(URL(url).host)
         whenever(webViewMock.url).thenReturn(url)
-
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
 
         nhsWeb.loadUrl(url)
         verify(interactorMock).showUnavailabilityError(any())

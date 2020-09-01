@@ -17,6 +17,7 @@ import org.mockito.Mockito
 open class ResourceMockingClass {
 
     fun mockContext(): Context {
+        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn "https://www.baseurl.com/"
             on { getString(R.string.baseScheme) } doReturn "https"
@@ -72,29 +73,24 @@ open class ResourceMockingClass {
         }
 
         return mock {
+            on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
             on { getString(anyInt()) } doAnswer { i -> resourceMock.getString(i.arguments.first() as Int) }
             on { resources } doReturn resourceMock
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
         }
     }
 
+    fun mockConnectionStateMonitorContext(): Context {
+        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+
+        return mock {
+            on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+        }
+    }
+
     // Returns a context which appears to not have a internet connection
     fun mockDisconnectedContext(): Context {
         val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
-        val networkInfo = Mockito.mock(NetworkInfo::class.java)
-        val network = Mockito.mock(Network::class.java)
-        val capabilities = Mockito.mock(NetworkCapabilities::class.java)
-
-        //api < 23
-        Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
-        Mockito.`when`(networkInfo.isConnected).thenReturn(false)
-
-        //api >= 23
-        Mockito.`when`(connectivityManager.activeNetwork).thenReturn(network)
-        Mockito.`when`(connectivityManager.getNetworkCapabilities(network)).thenReturn(capabilities)
-        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)).thenReturn(false)
-        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)).thenReturn(false)
-        Mockito.`when`(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)).thenReturn(false)
 
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
@@ -139,20 +135,6 @@ open class ResourceMockingClass {
             on { resources } doReturn resourceMock
         }
 
-    }
-
-    fun mockNullConnectionContext(): Context {
-        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
-
-        //api < 23
-        Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(null)
-
-        //api >= 23
-        Mockito.`when`(connectivityManager.activeNetwork).thenReturn(null)
-
-        return mock {
-            on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
-        }
     }
 
     // Returns an activity which does returns permission granted when fine location permission

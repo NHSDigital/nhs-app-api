@@ -7,15 +7,13 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
-import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
-import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
 import com.nhs.online.nhsonline.web.NhsWeb
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.retryButton
 import org.junit.Assert
-import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.Assert.assertFalse
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,22 +34,24 @@ class MainActivityTest {
     fun setUp() {
         mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
         spyActivity = spy(mainActivity)
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
 
     @Test
-    fun onResume_nullWebViewUrl_noException_resetUrlToLogin() {
-        mainActivity.webview.loadUrl(null)
-        mainActivity.configurationResponse.callSuccessful = true
+    fun onResume_whenConfigurationResponseCallUnsuccessful_callsNhsWebReloadLoginUrl() {
+        spyActivity.configurationResponse.callSuccessful = true
+
+        val nhsWebMock: NhsWeb = mock()
+
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("nhsWeb"),
+                nhsWebMock)
 
         try {
-            mainActivity.onResume()
+            spyActivity.onResume()
         } catch (e: Exception) {
             assert(false)
         }
-        val loginUrl =
-            getStringById(R.string.baseURL) + getStringById(R.string.loginPath)
-        Assert.assertEquals(mainActivity.webview.url, loginUrl)
+        verify(nhsWebMock).reloadLoginUrl()
     }
 
     @Test

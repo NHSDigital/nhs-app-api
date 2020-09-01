@@ -2,19 +2,21 @@ package com.nhs.online.nhsonline.services
 
 import android.app.Activity
 import android.content.Context
+import android.net.Network
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.IntegrationLevel
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -34,6 +36,8 @@ class ConfigurationServiceTest {
     private lateinit var configurationService: ConfigurationService
     private lateinit var errorMessageHandler: ErrorMessageHandler
     private lateinit var resourceMockingClass: ResourceMockingClass
+    private lateinit var connectionStateMonitor: ConnectionStateMonitor
+    private lateinit var network: Network
 
     @Before
     fun setUp() {
@@ -43,14 +47,22 @@ class ConfigurationServiceTest {
         httpClientMock = mock()
         uiIInteractor = mock()
         activity = mock()
-        configurationService = ConfigurationService(activity, "configurationUrlMock", uiIInteractor, errorMessageHandler, httpClientMock)
-        MockConnectionStateMonitor().mockNetworkCallback(context)
+        network = mock()
+        connectionStateMonitor = ConnectionStateMonitor(context)
+        connectionStateMonitor.onAvailable(network)
+        configurationService = ConfigurationService(activity, "configurationUrlMock",
+                uiIInteractor, errorMessageHandler, httpClientMock, connectionStateMonitor)
+    }
+
+    @After
+    fun tearDown() {
+        connectionStateMonitor.onLost(network)
     }
 
     @Test
     fun getConfigurationResponse_WhenThereIsNoConnection_ItShowsNoConnectionErrorAndReturnsNull() {
+        connectionStateMonitor.onLost(network)
         whenever(httpClientMock.readText(any(), any())).thenAnswer { throw IOException() }
-        MockConnectionStateMonitor().mockNetworkCallback(resourceMockingClass.mockDisconnectedContext())
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
@@ -63,8 +75,8 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenThereIsAConnectionTimeout_ItShowsNoConnectionErrorAndReturnsNull() {
+        connectionStateMonitor.onLost(network)
         whenever(httpClientMock.readText(any(), any())).thenAnswer { throw SocketTimeoutException() }
-        MockConnectionStateMonitor().mockNetworkCallback(resourceMockingClass.mockDisconnectedContext())
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()

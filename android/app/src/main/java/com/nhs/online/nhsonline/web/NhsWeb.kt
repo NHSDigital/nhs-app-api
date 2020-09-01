@@ -1,21 +1,18 @@
 package com.nhs.online.nhsonline.web
 
 import android.app.Activity
-import android.util.JsonReader
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.URLUtil
 import android.webkit.WebView
 import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.data.PaycassoData
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.registration.PaycassoCallbackResponse
 import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.logging.ILoggingService
@@ -41,7 +38,6 @@ import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterfaceNhsLogin
-import com.squareup.moshi.Json
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
@@ -61,7 +57,8 @@ class NhsWeb(
         appWebInterface: AppWebInterface,
         private val knownServices: KnownServices,
         private val paycassoService: PaycassoService,
-        private val loggingService: ILoggingService
+        private val loggingService: ILoggingService,
+        private val connectionStateMonitor: ConnectionStateMonitor
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
     private val urlLoader = UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
@@ -98,8 +95,8 @@ class NhsWeb(
         schemeHandlers.registerHandler(MailToSchemeHandler(activity))
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
-        val webInterceptor =
-                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, loggingService)
+        val webInterceptor = WebClientInterceptor(uiInteractor, this,
+                activity, knownServices, schemeHandlers, loggingService, connectionStateMonitor)
 
         val addToCalendarHandler = AddToCalendarHandler(activity, loggingService)
 
@@ -132,7 +129,7 @@ class NhsWeb(
             return
         }
 
-        if (!isConnectedToNetwork) {
+        if (!connectionStateMonitor.isConnectedToNetwork) {
             showNoConnectionError()
             return
         }

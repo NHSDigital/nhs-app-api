@@ -10,7 +10,7 @@ import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.AddToCalendarData
 import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler
-import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
@@ -72,8 +72,7 @@ class WebAppInterfacePrivateTest {
             on { parseCalendarData(any(), any()) }.thenReturn(addToCalendarData)
         }
         webAppInterfacePrivate = WebAppInterfacePrivate(contextMock, nhsWebMock, contextMock, settingsService, addToCalendarHandlerMock)
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
-
+        ConnectionStateMonitor(ResourceMockingClass().mockConnectedContext()).onAvailable(mock())
     }
 
     @Test

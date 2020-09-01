@@ -11,7 +11,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
@@ -31,7 +31,8 @@ class WebClientInterceptor(
         private val context: Context,
         private val knownServices: KnownServices,
         private val schemeHandlers: SchemeHandlers,
-        private val loggingService: ILoggingService
+        private val loggingService: ILoggingService,
+        private val connectionStateMonitor: ConnectionStateMonitor
 ) : WebViewClient() {
 
     private val errorMessageHandler = ErrorMessageHandler(context.resources)
@@ -95,7 +96,7 @@ class WebClientInterceptor(
         nhsWeb.reloadUrl = sanitizedUrl
         cancelTrackingWebRequestResponse()
 
-        if (!isConnectedToNetwork) {
+        if (!connectionStateMonitor.isConnectedToNetwork) {
             Log.d(TAG, "Entering onPageStarted > no internet")
 
             stopLoadingWebviewAndShowNoConnectionError(view)
@@ -121,7 +122,7 @@ class WebClientInterceptor(
     override fun onLoadResource(view: WebView?, url: String?) {
         Log.d(TAG, "Entering onLoadResource > url $url")
 
-        if (!isConnectedToNetwork) {
+        if (!connectionStateMonitor.isConnectedToNetwork) {
             Log.d(TAG, "Entering onLoadResource > isConnectedToInternet")
             if (!noConnectionHandled) {
                 Log.d(TAG, "Entering onLoadResource > isConnectedToInternet > noConnectionHandled false")
@@ -171,9 +172,16 @@ class WebClientInterceptor(
             loggingService.logError("Failed HTTP Call from webview. url:${request?.url} AndroidError:${error?.errorCode}")
         }
 
-        if (isNHSAppDomain(request?.url?.host) &&
-                canHandleUnavailability(view) &&
-                shouldHandleUnavailability(view?.url)) {
+        if (isNhsDigitalAnalyticsHost(request?.url?.host)) {
+            if (!connectionStateMonitor.isConnectedToNetwork) {
+                stopLoadingWebviewAndShowNoConnectionError(view)
+            }
+            return
+        }
+
+        if ((isNHSAppDomain(request?.url?.host)) &&
+            canHandleUnavailability(view) &&
+            shouldHandleUnavailability(view?.url)) {
 
             cancelTrackingWebRequestResponse()
             if (error != null) {
@@ -300,6 +308,10 @@ class WebClientInterceptor(
         return value == context.getString(R.string.baseHost)
     }
 
+    private fun isNhsDigitalAnalyticsHost(value: String?): Boolean {
+        return value == context.getString(R.string.nhsDigitalAnalyticsHost)
+    }
+
     private fun isNHSAppPage(view: WebView?): Boolean {
         val url = URL(view?.url)
         return isNHSAppDomain(url.host)
@@ -341,7 +353,7 @@ class WebClientInterceptor(
         Log.d(TAG, "Entering handleUnavailability > failingUrl $failingUrl")
 
         shouldShowErrorPage = true
-        val errorMessage = when (isConnectedToNetwork) {
+        val errorMessage = when (connectionStateMonitor.isConnectedToNetwork) {
             true -> {
                 errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
             }

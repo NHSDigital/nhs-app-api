@@ -34,7 +34,6 @@ import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
-import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.registration.PaycassoFlowFactory
 import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.ConfigurationService
@@ -140,7 +139,8 @@ class MainActivity :
                 resources.getString(R.string.baseApiURL) + resources.getString(R.string.configurationApiPath),
                 this,
                 ErrorMessageHandler(this.resources),
-                HttpClient()
+                HttpClient(),
+                connectionStateMonitor
         )
         configServiceManager = ConfigurationServiceManager(this, configService)
         configurationResponse = configServiceManager.getConfigurationResponse()
@@ -171,7 +171,7 @@ class MainActivity :
     private fun initialiseNhsWeb() {
         val loggingService = LoggingService(this, VolleyQueueProvider())
         nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface,
-            knownServices, paycassoService, loggingService)
+            knownServices, paycassoService, loggingService, connectionStateMonitor)
 
         menuBar.nhsWeb = nhsWeb
 
@@ -206,7 +206,7 @@ class MainActivity :
     private fun onErrorRetryButton() {
         logger.info("${this::class.java.simpleName}: Entering OnErrorRetryButton")
 
-        if (!isConnectedToNetwork) {
+        if (!connectionStateMonitor.isConnectedToNetwork) {
             logger.info(
                     "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
             return

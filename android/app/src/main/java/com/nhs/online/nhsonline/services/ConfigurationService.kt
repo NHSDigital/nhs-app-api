@@ -6,7 +6,7 @@ import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionModeAdapter
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTabAdapter
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewModeAdapter
@@ -23,7 +23,8 @@ class ConfigurationService(
         private val configurationUrl: String,
         private val uiInteractor: IInteractor,
         private val errorMessageHandler: ErrorMessageHandler,
-        private val httpClient: HttpClient
+        private val httpClient: HttpClient,
+        private val connectionStateMonitor: ConnectionStateMonitor
 ) : Callable<Configuration?> {
     val timeoutMilliseconds: Int = 5000
 
@@ -53,7 +54,7 @@ class ConfigurationService(
     }
 
     private fun handleError() {
-        val errorMessage = when (isConnectedToNetwork) {
+        val errorMessage = when (connectionStateMonitor.isConnectedToNetwork) {
             true -> errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
             false -> errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
         }
