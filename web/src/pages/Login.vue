@@ -4,12 +4,12 @@
       <div>
         <h2 v-if="isUsingNativeApp" id="native-header"
             class="nhsuk-u-margin-bottom-2 nhsuk-u-padding-left-0 nhsuk-u-padding-right-0">
-          {{ $t('login.desc') }}
+          {{ $t('login.toAccessYourNhsServices') }}
         </h2>
         <generic-button id="viewInstructionsButton"
                         :button-classes="getButtonClasses"
                         @click="onContinueClicked">
-          {{ $t('loginButton.login') }}
+          {{ $t('login.continueWithNhsLogin') }}
         </generic-button>
       </div>
       <div v-if="isUsingNativeApp"

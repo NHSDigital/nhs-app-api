@@ -23,109 +23,121 @@
                          : ''">
                     <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
                         nhsuk-u-margin-bottom-0">
-                      {{ $t('auth_return.error.title.loginFailed') }} </h1>
+                      {{ $t('login.authReturn.loginFailed') }} </h1>
                     <error-container v-if="statusCode===464">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-header from="auth_return.error.464.wales.header" />
-                      <error-paragraph from="auth_return.error.464.wales.line1" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-header from="login.authReturn.ifYourSurgeryIsInWales" />
+                      <error-paragraph from="login.authReturn.notAvailableInWales" />
                       <error-paragraph-with-links
-                        from="auth_return.error.464.wales.line2.content" />
-                      <error-header from="auth_return.error.464.england.header" />
-                      <error-paragraph from="auth_return.error.464.england.line1" />
-                      <error-paragraph-with-links
-                        from="auth_return.error.464.england.line2.content"/>
-                      <error-paragraph-with-links from="auth_return.error.464.england.line3.content"
+                        from="login.authReturn.ifYouNeedInWales" />
+                      <error-header from="login.authReturn.ifYourSurgeryIsInEngland" />
+                      <error-paragraph
+                        from="login.authReturn.weCannotConnectToSurgeryOrMatchYourNhsNumber" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeedInEngland"/>
+                      <error-paragraph-with-links from="login.authReturn.ifYouStillNeedHelp"
                                                   :query-param="contactUsParam"/>
-                      <error-header from="auth_return.error.464.ni_scotland.header" />
-                      <error-paragraph from="auth_return.error.464.ni_scotland.line1" />
-                      <error-paragraph from="auth_return.error.464.ni_scotland.line2" />
+                      <error-header
+                        from="login.authReturn.ifYourSurgeryIsInNorthernIrelandOrScotland" />
+                      <error-paragraph
+                        from="login.authReturn.notAvailableInNorthernIrelandOrScotland" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouNeedInNorthernIrelandOrScotland" />
                       <p id="errorCode" class="nhsuk-u-font-size-16">
-                        {{ $t('auth_return.error.464.reference') }}
+                        {{ $t('login.authReturn.reference') }}
                         {{ serviceDeskReference }}
                       </p>
                     </error-container>
                     <error-container v-else-if="statusCode===465">
-                      <error-title title="auth_return.error.465.title"/>
-                      <error-paragraph from="auth_return.error.465.message" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph
+                        from="login.authReturn.dueToLegalRestrictionsUntilYouAreThirteen" />
                     </error-container>
                     <error-container v-else-if="statusCode===400">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.400.line1" />
-                      <error-paragraph from="auth_return.error.400.line2"
-                                       :variable="serviceDeskReference"/>
-                      <error-paragraph from="auth_return.error.400.contactUs" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
+                        :variable="serviceDeskReference"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===403">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.403.line1" />
-                      <error-paragraph from="auth_return.error.403.line2" />
-                      <error-paragraph from="auth_return.error.403.line3"
-                                       :variable="serviceDeskReference"/>
-                      <error-paragraph from="auth_return.error.403.line4" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph
+                        from="login.authReturn.weCannotGetYourDetailsFromYourGpSurgery" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
+                        :variable="serviceDeskReference"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===500">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.500.line1" />
-                      <error-paragraph from="auth_return.error.500.line3" />
-                      <error-paragraph from="auth_return.error.500.line4"
-                                       :variable="serviceDeskReference"/>
-                      <error-paragraph from="auth_return.error.500.line5" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
+                        :variable="serviceDeskReference"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===502">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.502.listTitle" />
-                      <error-unordered-list from="auth_return.error.502.uList" />
-                      <error-paragraph from="auth_return.error.502.line3" />
-                      <error-paragraph from="auth_return.error.502.line4"
-                                       :variable="serviceDeskReference"/>
-                      <error-paragraph from="auth_return.error.502.message" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
+                      <error-unordered-list
+                        from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
+                        :variable="serviceDeskReference"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else-if="statusCode===504">
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.504.listTitle" />
-                      <error-unordered-list from="auth_return.error.504.uList" />
-                      <error-paragraph from="auth_return.error.504.line3" />
-                      <error-paragraph from="auth_return.error.504.line4"
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.thisCanBeOneOfTwoProblems" />
+                      <error-unordered-list
+                        from="login.authReturn.weCannotGetYourLoginDetailsOrConnectToYourSurgery" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph from="login.authReturn.ifYouKeepSeeingThisQuoteCode"
                                        :variable="serviceDeskReference" />
-                      <error-paragraph from="auth_return.error.504.message" />
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                     <error-container v-else>
-                      <error-title title="auth_return.error.title.loginFailed"/>
-                      <error-paragraph from="auth_return.error.default.line1" />
-                      <error-paragraph from="auth_return.error.default.line2" />
-                      <error-paragraph from="auth_return.error.default.line3"
-                                       :variable="serviceDeskReference"/>
-                      <error-paragraph from="auth_return.error.default.line4" />
+                      <error-title title="login.authReturn.loginFailed"/>
+                      <error-paragraph from="login.authReturn.weCannotLoginYouIn" />
+                      <error-paragraph from="login.authReturn.goBackAndTryAgain" />
+                      <error-paragraph
+                        from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
+                        :variable="serviceDeskReference"/>
+                      <error-paragraph from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUsButton.text"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
-                      <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                      <error-link from="login.authReturn.backToHome" :action="loginUrl"/>
                     </error-container>
                   </div>
                 </div>
@@ -204,7 +216,7 @@ export default {
   },
   computed: {
     title() {
-      return this.showError && this.$t('auth_return.error.title.loginFailed');
+      return this.showError && this.$t('login.authReturn.loginFailed');
     },
     contactUsParam() {
       return {

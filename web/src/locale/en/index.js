@@ -2,6 +2,7 @@ import apiErrors from './apiErrors';
 import appointments from './appointments';
 import components from './components';
 import gpSessionErrors from './gpSessionErrors';
+import login from './login';
 import loginSettings from './loginSettings';
 import nominatedPharmacy from './nominatedPharmacy';
 import onlineConsultations from './onlineConsultations';
@@ -86,154 +87,6 @@ export default {
     table: {
       errors: {
         noData: 'Error loading table data',
-      },
-    },
-  },
-  auth_return: {
-    error: {
-      title: {
-        loginFailed: 'Login failed',
-      },
-      backButtonText: 'Back to home',
-      default: {
-        line1: 'We cannot log you in to the NHS App.',
-        line2: 'Go back to the home screen and try logging in again.',
-        line3: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        line4: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      400: {
-        line1: 'Go back to the home screen and try logging in again.',
-        line2: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        contactUs: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      403: {
-        line1: 'We cannot get your details from your GP surgery.',
-        line2: 'Go back to the home screen and try logging in again.',
-        line3: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        line4: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      464: {
-        wales: {
-          header: 'If your GP surgery is in Wales',
-          line1: 'The NHS App is not available in Wales because health services are managed separately from England.',
-          line2: {
-            content: [
-              {
-                text: 'If you need an appointment or prescription, go to ',
-                linkUrl: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
-                linkText: 'My Health Online',
-              },
-              {
-                text: ' or contact your GP surgery directly. For urgent medical advice, go to ',
-                linkUrl: 'https://111.wales.nhs.uk',
-                linkText: '111.wales.nhs.uk',
-              },
-              {
-                text: ' or call 111.',
-              },
-            ],
-          },
-        },
-        england: {
-          header: 'If your GP surgery is in England ',
-          line1: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
-          line2: {
-            content: [
-              {
-                text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',
-                linkUrl: 'https://111.nhs.uk',
-                linkText: '111.nhs.uk',
-              },
-              {
-                text: ' or call 111.',
-              },
-            ],
-          },
-          line3: {
-            content: [
-              {
-                text: 'If you still need help to access the app, ',
-                linkText: 'contact us',
-              },
-            ],
-          },
-        },
-        ni_scotland: {
-          header: 'If your GP surgery is in Northern Ireland or Scotland ',
-          line1: 'The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.',
-          line2: {
-            text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call one one one.',
-          },
-        },
-        reference: 'Reference: ',
-      },
-      465: {
-        title: 'Login failed',
-        message: {
-          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-      },
-      500: {
-        line1: 'We cannot log you in to the NHS App.',
-        line3: 'Go back to the home screen and try logging in again.',
-        line4: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        line5: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      502: {
-        listTitle: 'This can be one of two problems:',
-        uList: {
-          item1: {
-            id: '1',
-            text: 'we cannot get your NHS login details',
-            label: 'we cannot get your NHS login details',
-          },
-          item2: {
-            id: '2',
-            text: 'we cannot connect to your GP surgery',
-            label: 'we cannot connect to your GP surgery',
-          },
-        },
-        line3: 'Go back to the home screen and try logging in again.',
-        line4: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        message: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
-      },
-      504: {
-        listTitle: 'This can be one of two problems:',
-        uList: {
-          item1: {
-            id: '1',
-            text: 'we cannot get your NHS login details',
-            label: 'we cannot get your NHS login details',
-          },
-          item2: {
-            text: 'we cannot connect to your GP surgery',
-            id: '2',
-            label: 'we cannot connect to your GP surgery',
-          },
-        },
-        line3: 'Go back to the home screen and try logging in again.',
-        line4: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-        message: {
-          text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-        },
       },
     },
   },
@@ -884,12 +737,6 @@ export default {
       gpSurgery: 'GP surgery',
     },
   },
-  loginButton: {
-    login: 'Continue with NHS login',
-  },
-  loginLink: {
-    login: 'Login',
-  },
   preRegistrationInformation: {
     buttonText: 'Continue',
   },
@@ -1314,9 +1161,6 @@ export default {
     howAreYouFeeling: 'How are you feeling today?',
     checker: 'Check symptoms',
   },
-  login: {
-    desc: 'To access your NHS services',
-  },
   loginBiometricError: {
     paragraph1: 'Go back to the homepage and try logging in again.',
     paragraph2: 'If you keep seeing this message, go back to the homepage and log in using your email, password and security code.',
@@ -1651,6 +1495,7 @@ export default {
   appointments,
   components,
   gpSessionErrors,
+  login,
   loginSettings,
   nominatedPharmacy,
   onlineConsultations,

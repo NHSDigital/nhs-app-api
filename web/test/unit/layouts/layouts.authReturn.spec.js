@@ -1,4 +1,5 @@
 import AuthReturnLayout from '@/layouts/authReturn';
+import i18n from '@/plugins/i18n';
 import { AUTH_RETURN_PATH } from '@/router/paths';
 import { mount, createStore } from '../helpers';
 
@@ -43,6 +44,7 @@ describe('authReturn layout', () => {
         },
       },
     }),
+    mountOpts: { i18n },
   });
 
   beforeEach(() => {
@@ -191,7 +193,7 @@ describe('authReturn layout', () => {
     it('will set language from locale', () => {
       wrapper = mountAuthReturnLayout({ shallow: true });
       const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
-      expect(head.htmlAttrs.lang).toBe('translate_language');
+      expect(head.htmlAttrs.lang).toBe('en-GB');
     });
 
     it('will have no scripts defined', () => {
@@ -210,7 +212,7 @@ describe('authReturn layout', () => {
       it('will set title to loginFailed if showError is true', () => {
         wrapper = mountAuthReturnLayout({ shallow: true });
         const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
-        expect(head.title).toBe('translate_auth_return.error.title.loginFailed');
+        expect(head.title).toBe('Login failed');
       });
     });
   });
