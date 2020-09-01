@@ -5,43 +5,43 @@
         <div class="nhsuk-grid-column-full">
           <message-dialog id="errorDialog" message-type="error" role="alert">
             <message-text data-purpose="error-heading">
-              {{ $t('gp_messages.createMessage.thereIsAProblem') }}
+              {{ $t('messages.thereIsAProblem') }}
             </message-text>
             <message-list>
               <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
-                {{ $t('gp_messages.createMessage.subjectTextError') }}
+                {{ $t('messages.enterASubject') }}
               </li>
               <li v-if="messageTextError" data-purpose="message-error">
-                {{ $t('gp_messages.createMessage.messageTextError') }}
+                {{ $t('messages.enterAMessage') }}
               </li>
             </message-list>
           </message-dialog>
         </div>
       </div>
       <p id="subHeader" class="nhsuk-hint" :aria-label="$t('im03.info.paragraph2.ariaLabel')">
-        {{ $t('gp_messages.createMessage.subHeader') }}
+        {{ $t('messages.forAdviceNowContactSurgery') }}
         <a style="display:inline; vertical-align: baseline" href="https://111.nhs.uk">
-          {{ $t('gp_messages.createMessage.nhs111Link') }}</a>
-        {{ $t('gp_messages.createMessage.or') }}
+          {{ $t('messages.nhs111Link') }}</a>
+        {{ $t('messages.or') }}
         <a style="display:inline; vertical-align: baseline" href="tel:111">
-          {{ $t('gp_messages.createMessage.call111Link') }}.
+          {{ $t('messages.call111Link') }}.
         </a>
       </p>
       <sjr-if journey="sendMessageSubject">
         <div :class="['nhsuk-u-padding-top-1', getErrorClass]">
           <label id="subjectTextLabel" for="subjectText" class="nhsuk-label">
             <strong>
-              {{ $t('gp_messages.createMessage.subjectLabelText') }}
+              {{ $t('messages.subject') }}
             </strong>
             <div class="nhsuk-u-padding-top-2 nhsuk-hint">
-              {{ $t('gp_messages.createMessage.subjectHintText') }}
+              {{ $t('messages.textMustBeShorterThan64Characters') }}
             </div>
           </label>
           <generic-text-input id="subjectText"
                               v-model="subjectText"
                               maxlength="64"
                               :error-text="
-                                $t('gp_messages.createMessage.subjectTextError')"
+                                $t('messages.enterASubject')"
                               :error="subjectError"
                               :required="true"/>
         </div>
@@ -49,10 +49,10 @@
       <div :class="['nhsuk-u-padding-top-4', getErrorClass]">
         <label id="messageTextLabel" for="messageText" class="nhsuk-label">
           <strong>
-            {{ $t('gp_messages.createMessage.messageLabelText') }}
+            {{ $t('messages.message') }}
           </strong>
           <div class="nhsuk-u-padding-top-2 nhsuk-hint">
-            {{ $t('gp_messages.createMessage.messageHintText') }}
+            {{ $t('messages.textMustBeShorterThan450Characters') }}
           </div>
         </label>
         <generic-text-area id="messageText"
@@ -61,7 +61,7 @@
                            :rows="5"
                            :error="messageTextError"
                            :error-text="
-                             $t('gp_messages.createMessage.messageTextError')"
+                             $t('messages.enterAMessage')"
                            :required="true"/>
       </div>
     </div>
@@ -70,7 +70,7 @@
                       :button-classes="['nhsuk-button']"
                       click-delay="medium"
                       @click.prevent="onSendMessageButtonClicked">
-        {{ $t('gp_messages.createMessage.sendButtonText') }}
+        {{ $t('messages.sendMessage') }}
       </generic-button>
     </div>
     <desktopGenericBackLink v-if="!this.$store.state.device.isNativeApp"

@@ -2,12 +2,12 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <p id="downloadInformation" class="nhsuk-u-margin-top-3">
-        {{ $t('gp_messages.downloadAttachment.downloadWarning') }}
+        {{ $t('messages.whenYouDownloadYouBecomeResponsible') }}
       </p>
       <generic-button id="downloadButton"
                       :button-classes="['nhsuk-button', 'nhsuk-u-margin-top-3']"
                       @click="downloadButtonClicked">
-        {{ $t('gp_messages.downloadAttachment.buttonText') }}
+        {{ $t('messages.downloadFile') }}
       </generic-button>
       <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="gpMessagePath"

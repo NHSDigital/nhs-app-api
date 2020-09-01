@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate && loaded" id="mainDiv">
-    <h2>{{ $t('app_messaging.index.subHeader') }}</h2>
+    <h2>{{ $t('messages.yourMessages') }}</h2>
     <ul v-if="hasSenderMessages" id="inboxMessages" :class="$style['nhs-app-message']">
       <li v-for="(senderMessage, index) in senderMessages"
           :key="index"
@@ -24,12 +24,12 @@
       </li>
     </ul>
 
-    <span v-else id="noMessages">{{ $t('app_messaging.index.noMessages') }}</span>
+    <span v-else id="noMessages">{{ $t('messages.youHaveNoMessages') }}</span>
 
     <desktopGenericBackLink v-if="!isNativeApp"
                             data-purpose="back-link"
                             :path="backLink"
-                            :button-text="$t('messagesHub.appMessaging.backLink')"
+                            :button-text="'messagesHub.appMessaging.backLink'"
                             @clickAndPrevent="backClicked"/>
 
   </div>
@@ -89,12 +89,12 @@ export default {
       redirectTo(this, this.generateMessageUrl(senderMessage.unreadCount));
     },
     messageLabel(senderMessage, message) {
-      let label = this.$t('app_messaging.index.hidden.intro')
+      let label = this.$t('messages.messagesFromSenderLastSentOnDate')
         .replace('{sender}', senderMessage.sender)
         .replace('{date}', formatDate(message.sentTime, 'DD MMMM YYYY'));
 
       if (this.unreadCount > 0) {
-        label += this.$t('app_messaging.index.hidden.unread')
+        label += this.$t('messages.youHaveCountUnreadMessagePlural')
           .replace('{count}', senderMessage.unreadCount)
           .replace('{plural}', senderMessage.unreadCount > 1 ? 's' : '');
       }

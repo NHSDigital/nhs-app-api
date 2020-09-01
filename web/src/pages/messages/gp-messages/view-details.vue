@@ -26,22 +26,22 @@
       <div aria-hidden="true" class="nhsuk-u-margin-bottom-3 nhsuk-reply-info-divider"/>
       <div class="nhsuk-u-padding-left-3 nhsuk-u-margin-bottom-3">
         <span class="nhsuk-heading-xs nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
-          {{ $t('gp_messages.view_details.replyInformation.header') }}
+          {{ $t('messages.youCannotReplyToThis') }}
         </span>
         <span class="nhsuk-label nhsuk-u-margin-top-0
               nhsuk-u-padding-bottom-0">
-          {{ $t('gp_messages.view_details.replyInformation.subText') }}
+          {{ $t('messages.toDiscussFurther') }}
         </span>
       </div>
       <menu-item-list id="messageDetailsOptionsList" class="nhsuk-u-margin-bottom-3">
         <menu-item id="newMessage"
-                   :text="$t('gp_messages.view_details.sendMessageMenuItemText')"
+                   :text="$t('messages.sendNewMessage')"
                    :click-func="sendNewMessageClicked"
                    header-tag="h2"
                    href="#"/>
         <menu-item v-if="deleteEnabled"
                    id="deleteMessage"
-                   :text="$t('gp_messages.view_details.deleteMenuItemText')"
+                   :text="$t('messages.deleteConversation')"
                    :click-func="deleteClicked"
                    header-tag="h2"
                    href="#"/>
@@ -52,7 +52,6 @@
         <desktopGenericBackLink
           v-if="!$store.state.device.isNativeApp"
           :path="messagesPath"
-          :button-text="'gp_messages.view_details.backButtonText.text'"
           @clickAndPrevent="backButtonClicked"/>
       </div>
     </div>
@@ -109,8 +108,8 @@ export default {
     },
     getUnreadText() {
       return this.$store.state.gpMessages.unreadIndex > 0
-        ? this.$t('gp_messages.view_details.unreadMessages')
-        : this.$t('gp_messages.view_details.unreadMessage');
+        ? this.$t('messages.unreadMessages')
+        : this.$t('messages.unreadMessage');
     },
   },
   async created() {

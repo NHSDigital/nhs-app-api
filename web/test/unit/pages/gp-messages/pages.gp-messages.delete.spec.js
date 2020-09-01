@@ -1,4 +1,5 @@
 import Delete from '@/pages/messages/gp-messages/delete';
+import i18n from '@/plugins/i18n';
 import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../../helpers';
 
@@ -39,6 +40,7 @@ describe('patient messaging delete', () => {
     });
     wrapper = mount(Delete, {
       $store: store,
+      mountOpts: { i18n },
     });
   };
 
@@ -98,7 +100,7 @@ describe('patient messaging delete', () => {
     });
 
     it('will return the correct delete button text reference', () => {
-      expect(wrapper.vm.buttonText).toBe('gp_messages.delete.backButtonText.text');
+      expect(wrapper.text()).toContain('Delete conversation');
     });
   });
 

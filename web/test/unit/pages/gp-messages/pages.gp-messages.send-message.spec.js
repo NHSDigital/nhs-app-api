@@ -1,13 +1,13 @@
+import i18n from '@/plugins/i18n';
 import SendMessage from '@/pages/messages/gp-messages/send-message';
 import { redirectTo } from '@/lib/utils';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
 describe('patient messaging messages', () => {
   let wrapper;
   let store;
-  let $t;
 
   const mountPage = ({
     toggle = true,
@@ -29,11 +29,10 @@ describe('patient messaging messages', () => {
       },
       $env: { GP_MESSAGES_ENABLED: toggle },
     });
-    $t = create$T();
 
     wrapper = mount(SendMessage, {
       $store: store,
-      $t,
+      mountOpts: { i18n },
     });
   };
 
@@ -58,8 +57,8 @@ describe('patient messaging messages', () => {
       expect(subHeader.exists()).toBe(true);
 
       const links = subHeader.findAll('a');
-      expect(links.at(0).text()).toBe('translate_gp_messages.createMessage.nhs111Link');
-      expect(links.at(1).text()).toBe('translate_gp_messages.createMessage.call111Link.');
+      expect(links.at(0).text()).toBe('111.nhs.uk');
+      expect(links.at(1).text()).toBe('call 111.');
     });
 
     it('will show validation errors if the input is invalid', () => {

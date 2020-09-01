@@ -2,19 +2,19 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <p id="deleteContentPara1" class="nhsuk-u-font-size-19 nhsuk-u-margin-top-3"
-         :aria-label="$t('gp_messages.delete.firstParagraph')">
-        {{ $t('gp_messages.delete.firstParagraph') }}
+         :aria-label="$t('messages.deletingYourConversationWillRemoveIt')">
+        {{ $t('messages.deletingYourConversationWillRemoveIt') }}
       </p>
       <p id="deleteContentPara2" class="nhsuk-u-font-size-19"
-         :aria-label="$t('gp_messages.delete.secondParagraph')">
-        {{ $t('gp_messages.delete.secondParagraph') }}
+         :aria-label="$t('messages.yourConversationWillStillBeSaved')">
+        {{ $t('messages.yourConversationWillStillBeSaved') }}
       </p>
       <generic-button id="deleteButton"
                       :class="[$style['nhsuk-button'],
                                'nhsuk-u-margin-top-2',
                                'nhsuk-u-padding-2']"
                       @click="deleteButtonClicked">
-        {{ $t('gp_messages.delete.deleteButtonText') }}
+        {{ $t('messages.deleteConversation') }}
       </generic-button>
       <desktop-generic-back-link :path="messageDetailsPath"
                                  :button-text="buttonText"
@@ -52,7 +52,7 @@ export default {
       return this.$store.state.gpMessages.selectedMessageId;
     },
     buttonText() {
-      return 'gp_messages.delete.backButtonText.text';
+      return 'messages.cancel';
     },
   },
   beforeRouteEnter(_, from, next) {

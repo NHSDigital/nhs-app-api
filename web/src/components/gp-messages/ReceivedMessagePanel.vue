@@ -15,19 +15,19 @@
         <strong>
           <span :class="['nhsuk-u-font-size-16','nhsuk-u-margin-bottom-0',
                          'nhsuk-u-padding-top-0', $style.attachmentText]">
-            {{ $t('gp_messages.view_details.attachment') }}
+            {{ $t('messages.attachment') }}
           </span>
         </strong>
         <div>
           <desktopGenericBackLink id="viewLink"
                                   :class="[$style['attachmentLink'], 'nhsuk-u-margin-right-2']"
                                   :path="viewAttachmentPath"
-                                  button-text="gp_messages.view_details.view"
+                                  button-text="messages.view"
                                   @clickAndPrevent="viewClicked"/>
           <desktopGenericBackLink id="downloadLink"
                                   :class="$style['attachmentLink']"
                                   :path="downloadAttachmentPath"
-                                  button-text="gp_messages.view_details.download"
+                                  button-text="messages.download"
                                   @clickAndPrevent="downloadClicked"/>
         </div>
       </div>

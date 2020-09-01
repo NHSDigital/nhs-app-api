@@ -4,7 +4,6 @@
       <desktopGenericBackLink
         id="messagesLink"
         :path="messagesPath"
-        button-text="gp_messages.deleteSuccess.back"
         @clickAndPrevent="goToMessagesClicked"/>
     </div>
   </div>

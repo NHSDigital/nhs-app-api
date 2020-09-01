@@ -1,24 +1,21 @@
+import i18n from '@/plugins/i18n';
 import MessagesSenderError from '@/components/errors/additional-info/MessagesSenderError';
-import { create$T, mount } from '../../../helpers';
+import { mount } from '../../../helpers';
 
-const $tMock = create$T();
-
-const mountWrapper = () => mount(MessagesSenderError, {
-  state: {
-    device: {
-      source: 'web',
+const mountWrapper = () => mount(
+  MessagesSenderError,
+  {
+    state: {
+      device: {
+        source: 'web',
+      },
+      messaging: {
+        selectedSender: 'senderOne',
+      },
     },
-    messaging: {
-      selectedSender: 'senderOne',
-    },
+    mountOpts: { i18n },
   },
-  $t: (key) => {
-    if (key === 'messages.app_messaging.app_message.errorText') {
-      return 'If the problem continues and you need this information now, contact {senderName} directly.';
-    }
-    return $tMock(key);
-  },
-});
+);
 
 describe('MessagesSenderError', () => {
   let wrapper;

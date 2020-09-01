@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
           <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
-            {{ $t('app_messaging.messages.titlePrefix') }}
+            {{ $t('messages.messagesFrom') }}
           </span>
           {{ sender }}
         </page-title>
@@ -17,7 +17,7 @@
 
     <template v-if="hasUnreadMessages">
       <scroll-to-anchor id="unreadMessages" />
-      <page-divider :text="$t('app_messaging.messages.unreadMessages')" />
+      <page-divider :text="$t('messages.unreadMessages')" />
 
       <ul id="unreadSection" :class="$style['message-panel__list']">
         <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
@@ -27,7 +27,6 @@
     <desktopGenericBackLink v-if="!isNativeApp"
                             data-purpose="back-link"
                             :path="backLink"
-                            :button-text="$t('app_messaging.messages.backLink')"
                             @clickAndPrevent="backClicked"/>
 
   </div>

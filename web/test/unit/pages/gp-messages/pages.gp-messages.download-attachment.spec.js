@@ -1,4 +1,5 @@
 import DownloadAttachment from '@/pages/messages/gp-messages/download-attachment';
+import i18n from '@/plugins/i18n';
 import { redirectTo } from '@/lib/utils';
 import { mount, createStore } from '../../helpers';
 
@@ -45,6 +46,7 @@ describe('gp messages urgency page', () => {
       $store: store,
       $router: router,
       $route: route,
+      mountOpts: { i18n },
     });
   };
 
@@ -64,7 +66,7 @@ describe('gp messages urgency page', () => {
     it('will show information before download', () => {
       mountPage();
       const downloadInformation = wrapper.find('#downloadInformation');
-      expect(downloadInformation.text()).toEqual('translate_gp_messages.downloadAttachment.downloadWarning');
+      expect(downloadInformation.text()).toEqual('When you download this file, you become responsible for keeping it confidential.');
       expect(downloadInformation.exists()).toBe(true);
     });
   });

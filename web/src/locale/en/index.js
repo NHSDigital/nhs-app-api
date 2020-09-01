@@ -4,6 +4,7 @@ import components from './components';
 import gpSessionErrors from './gpSessionErrors';
 import login from './login';
 import loginSettings from './loginSettings';
+import messages from './messages';
 import myRecord from './myRecord';
 import nominatedPharmacy from './nominatedPharmacy';
 import onlineConsultations from './onlineConsultations';
@@ -206,152 +207,6 @@ export default {
   },
   im04: {
     info: 'This is who your GP surgery lets you message. Your message may be read by any member of staff.',
-  },
-  gp_messages: {
-    toAccessContactSurgery: 'To access it, contact your GP surgery directly.',
-    view_details: {
-      you: 'You',
-      unreadMessages: 'Unread messages',
-      unreadMessage: 'Unread message',
-      deleteMenuItemText: 'Delete conversation',
-      replyInformation: {
-        header: 'You cannot reply to this message',
-        subText: 'To discuss this message further, send a new message or phone your GP surgery.',
-      },
-      sendMessageMenuItemText: 'Send a new message',
-      view: 'View',
-      download: 'Download',
-      attachment: 'Attachment',
-      backButtonText: {
-        text: 'Back',
-      },
-    },
-    createMessage: {
-      thereIsAProblem: 'There\'s a problem',
-      messageLabelText: 'Message',
-      messageTextError: 'Enter a message',
-      messageHintText: 'Text must be shorter than 450 characters (about 75 words).',
-      subjectLabelText: 'Subject',
-      subjectTextError: 'Enter a subject',
-      subjectHintText: 'Text must be shorter than 64 characters (about 10 words).',
-      subHeader: 'For advice now, contact your GP surgery directly, go to ',
-      nhs111Link: '111.nhs.uk',
-      or: 'or',
-      call111Link: 'call 111',
-      sendButtonText: 'Send message',
-    },
-    downloadAttachment: {
-      buttonText: 'Download file',
-      downloadWarning: 'When you download this file, you become responsible for keeping it confidential.',
-    },
-    delete: {
-      firstParagraph: 'Deleting your conversation will remove it from your list of messages.',
-      secondParagraph: 'Your conversation will still be saved in your GP health record.',
-      deleteButtonText: 'Delete conversation',
-      backButtonText: {
-        text: 'Cancel',
-      },
-    },
-    deleteSuccess: {
-      back: 'Go to your messages',
-    },
-  },
-  messages: {
-    gp_messages: {
-      errors: {
-        400: {
-          pageTitle: 'Messages error',
-          pageHeader: 'Messages error',
-          header: 'There is a problem getting your messages',
-          message: 'Try again now.',
-          retryButtonText: 'Try again',
-        },
-        403: {
-          pageTitle: 'Messaging unavailable',
-          pageHeader: 'Messaging unavailable',
-          header: 'You are not currently able to use messaging.',
-          subheader: '',
-          message: {
-            text: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
-            label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-          },
-        },
-      },
-      view_details: {
-        errors: {
-          400: {
-            pageTitle: 'Message error',
-            pageHeader: 'Message error',
-            header: 'There is a problem getting your message',
-            message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
-            retryButtonText: 'Try again',
-          },
-        },
-      },
-      delete: {
-        errors: {
-          400: {
-            pageTitle: 'Error deleting conversation',
-            pageHeader: 'Error deleting conversation',
-            header: 'Sorry, we could not delete your conversation',
-            message: 'Try again now.',
-            retryButtonText: 'Try again',
-          },
-        },
-      },
-    },
-    app_messaging: {
-      errors: {
-        500: {
-          pageTitle: 'Messages error',
-          pageHeader: 'Messages error',
-          header: 'There is a problem getting your messages',
-          message: 'Try again now.',
-          retryButtonText: 'Try again',
-        },
-        502: {
-          pageTitle: 'Messages error',
-          pageHeader: 'Messages error',
-          header: 'There is a problem getting your messages',
-          message: 'Try again now.',
-          retryButtonText: 'Try again',
-        },
-      },
-      app_message: {
-        errorText: 'If the problem continues and you need this information now, contact {senderName} directly.',
-        errors: {
-          500: {
-            pageTitle: 'Messages error',
-            pageHeader: 'Messages error',
-            header: 'There is a problem getting your messages',
-            message: 'Try again now.',
-            retryButtonText: 'Try again',
-          },
-          502: {
-            pageTitle: 'Messages error',
-            pageHeader: 'Messages error',
-            header: 'There is a problem getting your messages',
-            message: 'Try again now.',
-            retryButtonText: 'Try again',
-          },
-        },
-      },
-    },
-  },
-  app_messaging: {
-    index: {
-      subHeader: 'Your messages',
-      hidden: {
-        intro: 'Messages from: {sender}. The last message was sent on {date}. ',
-        unread: 'You have {count} unread message{plural}. ',
-      },
-      noMessages: 'You have no messages',
-    },
-    messages: {
-      titlePrefix: 'Messages from:',
-      unreadMessages: 'Unread messages',
-      backLink: 'Back',
-    },
   },
   user_research: {
     contactYou: 'We would like to contact you about taking part in user research to improve the NHS App and connected services.',
@@ -1160,6 +1015,7 @@ export default {
   gpSessionErrors,
   login,
   loginSettings,
+  messages,
   myRecord,
   nominatedPharmacy,
   onlineConsultations,

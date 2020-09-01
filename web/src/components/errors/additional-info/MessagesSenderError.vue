@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     errorText() {
-      return this.$t('messages.app_messaging.app_message.errorText').replace('{senderName}', this.$store.state.messaging.selectedSender);
+      return this.$t('messages.ifTheProblemContinuesContantSenderNameDirectly').replace('{senderName}', this.$store.state.messaging.selectedSender);
     },
   },
 };

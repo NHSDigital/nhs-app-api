@@ -1,6 +1,7 @@
+import i18n from '@/plugins/i18n';
 import ReceivedMessagePanel from '@/components/gp-messages/ReceivedMessagePanel';
 import { formatInboxMessageTime, redirectTo } from '@/lib/utils';
-import { createStore, createRouter, create$T, shallowMount } from '../../helpers';
+import { createStore, createRouter, shallowMount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
@@ -33,22 +34,25 @@ describe('Received Message Panel', () => {
       idPrefix: 'initial',
       messageContent: 'This is a test',
     };
-    wrapper = shallowMount(ReceivedMessagePanel, {
-      propsData,
-      $store: store,
-      $router,
-      $t: create$T(),
-    });
+    wrapper = shallowMount(
+      ReceivedMessagePanel,
+      {
+        propsData,
+        $store: store,
+        $router,
+        mountOpts: { i18n },
+      },
+    );
   });
 
   it('will show the view and download links', () => {
-    const downloadLink = wrapper.find('desktopgenericbacklink-stub[id="downloadLink"]');
-    const viewLink = wrapper.find('desktopgenericbacklink-stub[id="viewLink"]');
+    const downloadLink = wrapper.find('#downloadLink');
+    const viewLink = wrapper.find('#viewLink');
 
-    expect(downloadLink.vm.buttonText).toEqual('gp_messages.view_details.download');
-    expect(viewLink.vm.buttonText).toEqual('gp_messages.view_details.view');
     expect(downloadLink.exists()).toBe(true);
+    expect(downloadLink.vm.buttonText).toEqual('messages.download');
     expect(viewLink.exists()).toBe(true);
+    expect(viewLink.vm.buttonText).toEqual('messages.view');
   });
 
   it('will navigate to the view attachment when clicked', async () => {

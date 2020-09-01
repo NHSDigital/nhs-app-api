@@ -40,7 +40,6 @@
           v-if="!$store.state.device.isNativeApp"
           id="desktopBackLink"
           :path="messagesPath"
-          :button-text="'gp_messages.view_details.backButtonText.text'"
           @clickAndPrevent="backLinkClicked"/>
       </template>
     </div>

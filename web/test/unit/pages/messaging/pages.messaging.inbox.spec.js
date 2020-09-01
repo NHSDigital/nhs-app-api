@@ -1,8 +1,9 @@
+import i18n from '@/plugins/i18n';
 import Index from '@/pages/messages/app-messaging/index';
 import { initialState } from '@/store/modules/messaging/mutation-types';
 import { MESSAGES_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 dependency.redirectTo = jest.fn();
 
@@ -10,9 +11,9 @@ describe('messaging index', () => {
   const messageItemClass = 'nhs-app-message__item';
   const messageItemUnreadClass = 'nhs-app-message__item--unread';
   const messageSectionClass = 'nhs-app-message';
+  const noMessagesSelector = '#noMessages';
   let $store;
   let wrapper;
-  let $t;
 
   const mountIndex = () => mount(Index, {
     $store,
@@ -21,7 +22,7 @@ describe('messaging index', () => {
       [messageItemUnreadClass]: messageItemUnreadClass,
       [messageSectionClass]: messageSectionClass,
     },
-    $t,
+    mountOpts: { i18n },
   });
 
   const createSummaryMessage = ({ body, sender, unreadCount = 0, sentTime = '2019-09-14T02:15:12.356Z' }) => {
@@ -45,7 +46,6 @@ describe('messaging index', () => {
         },
       },
     });
-    $t = create$T();
   });
 
   describe('fetch', () => {
@@ -68,8 +68,10 @@ describe('messaging index', () => {
       expect(wrapper.find(`.${messageSectionClass}`).exists()).toBe(false);
     });
 
-    it('will translate the no message text', () => {
-      expect($t).toHaveBeenCalledWith('app_messaging.index.noMessages');
+    it('will display the no messages text', () => {
+      const noMessages = wrapper.find(noMessagesSelector);
+      expect(noMessages.exists()).toBe(true);
+      expect(noMessages.text()).toBe('You have no messages');
     });
   });
 
@@ -99,8 +101,9 @@ describe('messaging index', () => {
       expect(messages.at(3).text()).toContain('unread summary message 4');
     });
 
-    it('will not translate the no message text', () => {
-      expect($t).not.toHaveBeenCalledWith('app_messaging.index.noMessages');
+    it('will not display the no messages text', () => {
+      const noMessages = wrapper.find(noMessagesSelector);
+      expect(noMessages.exists()).toBe(false);
     });
 
     describe('unread messages', () => {

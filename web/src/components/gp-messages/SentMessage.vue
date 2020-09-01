@@ -5,7 +5,7 @@
       <div :class="$style['nhsuk-panel-sender-container']">
         <div :class="$style['nhsuk-panel-sender']">
           <span class="nhsuk-u-font-size-16">
-            {{ $t('gp_messages.view_details.you') }}
+            {{ $t('messages.you') }}
           </span>
         </div>
         <div :id="sentPrefixIdentifier+`MessageSentPanel`+sentIndex"

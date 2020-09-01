@@ -2,7 +2,7 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <p v-if="!isViewable">{{ $t('gp_messages.toAccessContactSurgery') }}</p>
+      <p v-if="!isViewable">{{ $t('messages.toAccessContactSurgery') }}</p>
       <div v-else>
         <div id="document" class="attachmentContainer nhsuk-u-margin-top-5" v-html="attachment"/>
         <glossary/>
