@@ -2,6 +2,7 @@
   <div v-if="showTemplate">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <message-dialog :class="$style.customErrorBox"
+                      :focusable="true"
                       message-type="error"
                       role="alert">
         <message-text>{{ $t('termsAndConditions.errors.youCannotContinue.header') }}</message-text>

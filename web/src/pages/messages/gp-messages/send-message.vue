@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-row nhsuk-grid-column-full">
       <div v-if="showError" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <message-dialog id="errorDialog" message-type="error" role="alert">
+          <message-dialog id="errorDialog" message-type="error" role="alert" :focusable="true">
             <message-text data-purpose="error-heading">
               {{ $t('messages.thereIsAProblem') }}
             </message-text>

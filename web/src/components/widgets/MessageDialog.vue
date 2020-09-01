@@ -1,11 +1,11 @@
 <template>
-  <div data-purpose="error-container"
+  <div id="message-dialog" data-purpose="error-container"
        :class="[mType,
                 ...extraClasses,
                 'nhsuk-width-container--full',
                 {[$style.desktopWeb] : !$store.state.device.isNativeApp},
                 plainStyle]">
-    <h2 v-if="showIcon" :class="[nhsHeaderStyle, $style.icon]">
+    <h2 v-if="showIcon" :class="['nhsuk-heading-m', $style.icon]">
       {{ iText }}
     </h2>
     <div :id="messageId" :class="$style['msg-content']"
@@ -20,6 +20,10 @@
 export default {
   name: 'MessageDialog',
   props: {
+    focusable: {
+      type: Boolean,
+      default: false,
+    },
     iconText: {
       type: String,
       default: undefined,
@@ -43,19 +47,9 @@ export default {
       validator: value => ['none', 'plain'].indexOf(value) !== -1,
     },
   },
-  data() {
-    return {
-      defaultIconTexts: {
-        success: this.$t('generic.success'),
-        warning: this.$t('generic.warning'),
-        error: this.$t('generic.error'),
-        message: this.$t('generic.message'),
-      },
-    };
-  },
   computed: {
     iText() {
-      return this.iconText ? this.iconText : this.defaultIconTexts[this.messageType];
+      return this.iconText ? this.iconText : this.$t(`generic.${this.messageType}`);
     },
     mType() {
       return this.showIcon ? [this.$style.msg, this.$style[this.messageType]] : [];
@@ -63,11 +57,26 @@ export default {
     plainStyle() {
       return this.overrideStyle === 'plain' ? this.$style.plain : '';
     },
-    nhsHeaderStyle() {
-      return 'nhsuk-heading-m';
-    },
     showIcon() {
       return this.overrideStyle !== 'plain';
+    },
+  },
+  mounted() {
+    if (this.focusable) {
+      this.setScreenReaderFocus();
+    }
+  },
+  methods: {
+    setScreenReaderFocus() {
+      const element = document.getElementById('message-dialog');
+
+      if (!element) {
+        return;
+      }
+
+      element.setAttribute('tabindex', '-1');
+      element.blur();
+      element.focus();
     },
   },
 };

@@ -2,7 +2,10 @@
   <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="messageRecipients && messageRecipients.length > 0">
-        <message-dialog v-if="isError" message-type="error" role="alert">
+        <message-dialog v-if="isError"
+                        message-type="error"
+                        role="alert"
+                        :focusable="true">
           <message-text>
             {{ $t('messages.thereIsAProblem') }}
           </message-text>

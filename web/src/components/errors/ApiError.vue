@@ -1,7 +1,10 @@
 <template>
   <div v-if="showError" :class="!isNativeApp && $style.desktopWeb">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
-      <message-dialog :override-style="overrideStyle" message-type="error" :aria-live="ariaLive">
+      <message-dialog :override-style="overrideStyle"
+                      message-type="error"
+                      :focusable="true"
+                      :aria-live="ariaLive">
         <message-text :is-header="true"
                       :unindent="isPlainNativeError"
                       :override-style="overrideStyle"

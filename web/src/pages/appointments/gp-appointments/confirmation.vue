@@ -61,7 +61,9 @@
     <div v-else>
       <div v-if="showError" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <message-dialog message-type="error" role="alert">
+          <message-dialog message-type="error"
+                          :focusable="true"
+                          role="alert">
             <message-text data-purpose="error-heading">
               {{ $t('appointments.confirmation.error.thereIsAProblem') }}
             </message-text>

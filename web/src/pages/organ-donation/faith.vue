@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="showError" message-type="error">
+      <message-dialog v-if="showError" message-type="error" :focusable="true">
         <message-text data-purpose="error-heading">
           {{ $t('organDonation.thereIsAProblem') }}
         </message-text>

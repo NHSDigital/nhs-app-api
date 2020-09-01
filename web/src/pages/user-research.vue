@@ -1,7 +1,11 @@
 <template>
   <terms-and-conditions-layout>
     <div v-if="showTemplate">
-      <message-dialog v-if="showError" message-type="error" role="alert" tabindex="-1">
+      <message-dialog v-if="showError"
+                      :focusable="true"
+                      message-type="error"
+                      role="alert"
+                      tabindex="-1">
         <message-text data-purpose="error-heading">
           {{ $t('userResearch.thereIsAProblem') }}
         </message-text>

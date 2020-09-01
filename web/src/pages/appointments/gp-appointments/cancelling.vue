@@ -50,7 +50,8 @@
     <div v-else class="pull-content">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <message-dialog v-if="showError" message-type="error" role="alert">
+          <message-dialog v-if="showError" :focusable="true"
+                          message-type="error" role="alert">
             <message-text data-purpose="error-heading">
               {{ $t('appointments.cancel.thereIsAProblem') }}
             </message-text>

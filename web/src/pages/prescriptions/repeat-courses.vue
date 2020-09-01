@@ -2,7 +2,10 @@
   <div v-if="showTemplate && !gpSessionApiError">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="error" message-type="error" role="alert">
+        <message-dialog v-if="error"
+                        message-type="error"
+                        :focusable="true"
+                        role="alert">
           <message-text>
             {{ $t('prescriptions.repeatCourses.errors.thereIsAProblem') }}
           </message-text>

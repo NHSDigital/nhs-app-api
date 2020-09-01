@@ -2,7 +2,10 @@
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div>
-        <message-dialog v-if="showErrors" id="errors" message-type="error" role="alert">
+        <message-dialog v-if="showErrors" id="errors"
+                        message-type="error"
+                        role="alert"
+                        :focusable="true">
           <message-text data-purpose="error-heading">
             {{ $t('organDonation.thereIsAProblem') }}
           </message-text>

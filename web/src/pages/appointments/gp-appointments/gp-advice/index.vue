@@ -2,7 +2,7 @@
   <div v-if="showTemplate && available !== undefined" class="nhsuk-grid-row econsult-content">
     <div class="nhsuk-grid-column-full">
       <online-consultations-unavailable v-if="!available"/>
-      <message-dialog v-else-if="isError" role="alert">
+      <message-dialog v-else-if="isError" role="alert" :focusable="true">
         <message-text data-purpose="error-heading"
                       :is-header="true">
           {{ $t('appointments.gpAdvice.weAreExperiencingTechnicalDifficulties') }}
