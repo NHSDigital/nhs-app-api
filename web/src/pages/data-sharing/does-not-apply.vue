@@ -3,27 +3,27 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-caption-m nhsuk-caption--bottom">
-          {{ $t('ds01.mainHeader') }}
+          {{ $t('dataSharing.chooseIfDataFromYourHealthRecordsIsShared') }}
         </p>
 
         <contents/>
 
-        <p>{{ $t('ds01.pages.p3.intro.paragraph') }}</p>
+        <p>{{ $t('dataSharing.ifYouChooseToStopYourDataMightBeUsed') }}</p>
 
-        <h2>{{ $t('ds01.pages.p3.requiredByLaw.title') }}</h2>
-        <p>{{ $t('ds01.pages.p3.requiredByLaw.paragraph') }}</p>
+        <h2>{{ $t('dataSharing.whenRequiredByLaw') }}</h2>
+        <p>{{ $t('dataSharing.ifThereIsALegalRequirement') }}</p>
 
-        <h2>{{ $t('ds01.pages.p3.givenConsent.title') }}</h2>
-        <p>{{ $t('ds01.pages.p3.givenConsent.paragraph') }}</p>
+        <h2>{{ $t('dataSharing.whenYouHaveGivenConsent') }}</h2>
+        <p>{{ $t('dataSharing.ifYouHaveGivenYourConsent') }}</p>
 
-        <h2>{{ $t('ds01.pages.p3.publicInterest.title') }}</h2>
-        <p>{{ $t('ds01.pages.p3.publicInterest.paragraph') }}</p>
+        <h2>{{ $t('dataSharing.whenThereIsOverridingPublicInterest') }}</h2>
+        <p>{{ $t('dataSharing.inAnEmergencyOrWhenSafetyOfOthersIsImportant') }}</p>
 
-        <h2>{{ $t('ds01.pages.p3.informationRemoved.title') }}</h2>
-        <p>{{ $t('ds01.pages.p3.informationRemoved.paragraph') }}</p>
+        <h2>{{ $t('dataSharing.whenInformationThatCanIdentifyIsRemoved') }}</h2>
+        <p>{{ $t('dataSharing.informationMightBeUsedIfIdentifyingInformationIsRemoved') }}</p>
 
-        <h2>{{ $t('ds01.pages.p3.specificExclusion.title') }}</h2>
-        <p>{{ $t('ds01.pages.p3.specificExclusion.paragraph') }}</p>
+        <h2>{{ $t('dataSharing.whenThereIsASpecificExclusion') }}</h2>
+        <p>{{ $t('dataSharing.yourConfidentalInformationCanStillBeUsed') }}</p>
 
         <pagination :previous-link="whereUsedPath"
                     previous-title="How confidential patient information is used"

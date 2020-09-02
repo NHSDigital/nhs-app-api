@@ -3,28 +3,28 @@
     <contents-list-item id="contents-overview"
                         :href="overviewPath"
                         :route-name="overviewName"
-                        :text="$t('ds01.titles.p1')"
+                        :text="$t('dataSharing.overview')"
                         :click-param="overviewPath"
                         :click-func="goToUrl"/>
 
     <contents-list-item id="contents-confidentialPatientInfo"
                         :href="whereUsedPath"
                         :route-name="whereUsedName"
-                        :text="$t('ds01.titles.p2')"
+                        :text="$t('dataSharing.howConfidentialPatientInformationIsUsed')"
                         :click-param="whereUsedPath"
                         :click-func="goToUrl"/>
 
     <contents-list-item id="contents-choiceDoesNotApply"
                         :href="doesNotApplyPath"
                         :route-name="doesNotApplyName"
-                        :text="$t('ds01.titles.p3')"
+                        :text="$t('dataSharing.whenYourChoiceDoesNotApply')"
                         :click-param="doesNotApplyPath"
                         :click-func="goToUrl"/>
 
     <contents-list-item id="contents-makeChoice"
                         :href="makeYourChoicePath"
                         :route-name="makeYourChoiceName"
-                        :text="$t('ds01.titles.p4')"
+                        :text="$t('dataSharing.makeYourChoice')"
                         :click-param="makeYourChoicePath"
                         :click-func="goToUrl"/>
   </contents-list>

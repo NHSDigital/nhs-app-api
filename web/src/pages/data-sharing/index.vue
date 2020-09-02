@@ -5,61 +5,58 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-caption-m nhsuk-caption--bottom">
-          {{ $t('ds01.mainHeader') }}
+          {{ $t('dataSharing.chooseIfDataFromYourHealthRecordsIsShared') }}
         </p>
 
         <contents/>
 
-        <p>{{ $t('ds01.pages.p1.intro.paragraph1') }}</p>
-        <p>{{ $t('ds01.pages.p1.intro.paragraph2') }}</p>
+        <p>{{ $t('dataSharing.yourHealthRecordsContainConfidentialInformation') }}</p>
+        <p>{{ $t('dataSharing.yourChoiceWillOnlyApplyInEngland') }}</p>
 
-        <inset-text :paragraphs="$t('ds01.pages.ndop.paragraphs')"/>
+        <inset-text :paragraphs="$t('dataSharing.youAreChoosingForHealthAndCareSystemNotNhspApp')"/>
 
-        <h2>{{ $t('ds01.pages.p1.confidential.title') }}</h2>
-        <p>{{ $t('ds01.pages.p1.confidential.paragraph1') }}</p>
-        <p>{{ $t('ds01.pages.p1.confidential.paragraph2') }}</p>
+        <h2>{{ $t('dataSharing.whatIsConfidentialInformation') }}</h2>
+        <p>{{ $t('dataSharing.confidentialInformationIsWhenTwoTypes') }}</p>
+        <p>{{ $t('dataSharing.theTwoTypesOfInformationAre') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p1.confidential.listItems')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.somethingThatCanIdentifyYou') }}</li>
+          <li>{{ $t('dataSharing.somethingAboutYourHealthCareOrTreatment') }}</li>
         </ul>
-        <p>{{ $t('ds01.pages.p1.confidential.paragraph3') }}</p>
-        <p>{{ $t('ds01.pages.p1.confidential.paragraph4') }}</p>
+        <p>{{ $t('dataSharing.forExampleYourNameAndMedicine') }}</p>
+        <p>{{ $t('dataSharing.identifiableInformationOnItsOnIsNotConfidential') }}</p>
 
         <h2>
-          {{ $t('ds01.pages.p1.patientInformation.title') }}
+          {{ $t('dataSharing.howWeUseConfidentialInformation') }}
         </h2>
         <h3>
-          {{ $t('ds01.pages.p1.patientInformation.yourIndividualCareSubtitle') }}
+          {{ $t('dataSharing.yourIndividualCare') }}
         </h3>
         <p>
-          {{ $t('ds01.pages.p1.patientInformation.yourIndividualCareParagraph') }}
+          {{ $t('dataSharing.healthAndCareStaffMayUseInformationToHelpWithCare') }}
         </p>
 
         <h3>
-          {{ $t('ds01.pages.p1.patientInformation.researchAndPlanningSubtitle') }}
+          {{ $t('dataSharing.researchAndPlanning') }}
         </h3>
-        <p>{{ $t('ds01.pages.p1.patientInformation.researchAndPlanningParagraph') }}</p>
+        <p>{{ $t('dataSharing.confidentialInformationMightBeUsedTo') }}</p>
         <ul>
-          <li v-for="listItem of
-            $t('ds01.pages.p1.patientInformation.researchAndPlanningListItems')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.planAndImporveHealthAndCareServices') }}</li>
+          <li>{{ $t('dataSharing.researchAndDevelopCuresForSeriousIllnesses') }}</li>
         </ul>
 
-        <h2>{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
-        <p>{{ $t('ds01.pages.p1.yourChoice.paragraph1') }}</p>
-        <p>{{ $t('ds01.pages.p1.yourChoice.paragraph2') }}</p>
-        <p>{{ $t('ds01.pages.p1.yourChoice.paragraph3') }}</p>
+        <h2>{{ $t('dataSharing.yourChoice') }}</h2>
+        <p>{{ $t('dataSharing.youCanStopInformationUsedForResearchAndPlanning') }}</p>
+        <p>{{ $t('dataSharing.ifYouAreHappyYouDoNotNeedToDoAnything') }}</p>
+        <p>{{ $t('dataSharing.choiceWillNotImpactYourCare') }}</p>
 
-        <h2>{{ $t('ds01.pages.p1.moreOptions.title') }}</h2>
+        <h2>{{ $t('dataSharing.moreOptions') }}</h2>
         <p>
           <analytics-tracked-tag
             :href="yourDataMattersUrl"
-            :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"
+            :text="$t('dataSharing.visitTheNhsWebsite')"
             class="inline"
             tag="a"
-            target="_blank">{{ $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') }}</analytics-tracked-tag>{{ $t('ds01.pages.p1.moreOptions.paragraph.part2') }}
+            target="_blank">{{ $t('dataSharing.visitTheNhsWebsite') }}</analytics-tracked-tag>{{ $t('dataSharing.forMoreInfomationOrToReadPrivacyNotice') }}
         </p>
 
         <pagination :next-link="whereUsedPath"

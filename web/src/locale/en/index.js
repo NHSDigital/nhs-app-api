@@ -1,6 +1,7 @@
 import apiErrors from './apiErrors';
 import appointments from './appointments';
 import components from './components';
+import dataSharing from './dataSharing';
 import gpSessionErrors from './gpSessionErrors';
 import login from './login';
 import loginSettings from './loginSettings';
@@ -789,149 +790,6 @@ export default {
       backLink: 'Back',
     },
   },
-  ds01: {
-    header: 'Find out why your data matters',
-    mainHeader: 'Choose if data from your health records is shared for research and planning',
-    titles: {
-      p1: 'Overview',
-      p2: 'How confidential patient information is used',
-      p3: 'When your choice does not apply',
-      p4: 'Make your choice',
-    },
-    subtitle: 'Manage your data choice',
-    startNowButton: 'Start now',
-    nextButton: 'Next',
-    previousButton: 'Previous',
-    pages: {
-      p1: {
-        intro: {
-          paragraph1: 'Your health records contain a type of data called confidential patient information. This data can be used to help with research and planning. You can choose to stop your confidential patient information being used for research and planning.',
-          paragraph2: 'Your choice will only apply to the health and care system in England. This does not apply to health or care services accessed in Scotland, Wales or Northern Ireland.',
-        },
-        confidential: {
-          title: 'What is confidential patient information',
-          paragraph1: 'Confidential patient information is when 2 types of information from your health records are joined together.',
-          paragraph2: 'The 2 types of information are:',
-          listItems: [
-            'something that can identify you',
-            'something about your health care or treatment',
-          ],
-          paragraph3: 'For example, your name joined with what medicine you take.',
-          paragraph4: 'Identifiable information on its own is used by health and care services to contact patients and this is not confidential patient information.',
-        },
-        patientInformation: {
-          title: 'How we use your confidential patient information',
-          yourIndividualCareSubtitle: 'Your individual care',
-          yourIndividualCareParagraph: 'Health and care staff may use your confidential patient information to help with your treatment and care. For example, when you visit your GP, they may look at your records for important information about your health.',
-          researchAndPlanningSubtitle: 'Research and planning',
-          researchAndPlanningParagraph: 'Confidential patient information might also be used to:',
-          researchAndPlanningListItems: [
-            'plan and improve health and care services',
-            'research and develop cures for serious illnesses',
-          ],
-        },
-        yourChoice: {
-          title: 'Your choice',
-          paragraph1: 'You can stop your confidential patient information being used for research and planning.',
-          paragraph2: 'If you’re happy with your confidential patient information being used for research and planning you do not need to do anything.',
-          paragraph3: 'Any choice you make will not impact your individual care.',
-        },
-        moreOptions: {
-          title: 'More options',
-          paragraph: {
-            nhsWebsiteLink: 'Visit the NHS website',
-            part2: ' for more information or to read our privacy notice. You can also find out how to make a choice for someone else. For example, if you’re a parent or guardian of a child under the age of 13.',
-          },
-        },
-      },
-      p2: {
-        intro: {
-          paragraph1: 'The NHS collects confidential patient information from:',
-          listItems1: [
-            'all NHS organisations, trusts and local authorities',
-            'private organisations, such as private hospitals providing NHS funded care',
-          ],
-          paragraph2: 'Research bodies and organisations can request access to this information. This includes:',
-          listItems2: [
-            'university researchers',
-            'hospital researchers',
-            'medical royal colleges',
-            'pharmaceutical companies researching new treatments',
-          ],
-        },
-        thoseWhoCant: {
-          title: 'Who cannot use confidential patient information',
-          paragraph1: 'Access to confidential patient information will not be given for:',
-          listItems: [
-            'marketing purposes',
-            'insurance purposes',
-          ],
-          paragraph2: '(unless you request this)',
-        },
-        dataProtection: {
-          title: 'How confidential patient information is protected',
-          paragraph1: 'Your confidential patient information is looked after in accordance with good practice and the law.',
-          paragraph2: 'Every organisation that provides health and care services will take every step to:',
-          listItems: [
-            'keep data secure',
-            'use data that cannot identify you whenever possible',
-            'use data to benefit health and care',
-            'not use data for marketing or insurance purposes (unless you request this)',
-            'make it clear why and how data is being used',
-          ],
-          paragraph3: 'All NHS organisations must provide information on the type of data they collect and how it\'s used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
-        },
-      },
-      p3: {
-        intro: {
-          paragraph: 'If you choose to stop your confidential patient information being used for research and planning, your data might still be used in some situations.',
-        },
-        requiredByLaw: {
-          title: 'When required by law',
-          paragraph: 'If there’s a legal requirement to provide it, such as a court order.',
-        },
-        givenConsent: {
-          title: 'When you have given consent',
-          paragraph: 'If you have given your consent, such as for a medical research study.',
-        },
-        publicInterest: {
-          title: 'When there is an overriding public interest',
-          paragraph: 'In an emergency or in a situation when the safety of others is most important. For example, to help manage contagious diseases like meningitis and stop them spreading.',
-        },
-        informationRemoved: {
-          title: 'When information that can identify you is removed',
-          paragraph: 'Information about your health care or treatment might still be used in research and planning if the information that can identify you is removed first.',
-        },
-        specificExclusion: {
-          title: 'When there is a specific exclusion',
-          paragraph: 'Your confidential patient information can still be used in a small number of situations. For example, for official national statistics like a population census.',
-        },
-      },
-      p4: {
-        paragraph1: 'Use this service to:',
-        listItems1: [
-          'choose if your confidential patient information is used for research and planning',
-          'change or check your current choice',
-        ],
-        paragraph2: {
-          text: 'If you want to make a choice for someone else, find out how to on the ',
-          nhsWebsiteLink: 'NHS website',
-        },
-        paragraph3: 'Your choice will be applied by:',
-        listItems2: [
-          'NHS Digital and Public Health England',
-          'all other health and care organisations by March 2020',
-        ],
-        paragraph4: 'Any choice you make will not impact your individual care.',
-      },
-      ndop: {
-        paragraphs: [
-          'You\'re choosing if data from your health records is used across the health and care system in England.',
-          'You\'re not choosing if the NHS App uses your data.',
-        ],
-      },
-    },
-  },
   web: {
     home: {
       title: 'Access your NHS services',
@@ -1012,6 +870,7 @@ export default {
   apiErrors,
   appointments,
   components,
+  dataSharing,
   gpSessionErrors,
   login,
   loginSettings,

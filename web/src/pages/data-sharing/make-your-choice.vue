@@ -3,38 +3,36 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-caption-m nhsuk-caption--bottom">
-          {{ $t('ds01.mainHeader') }}
+          {{ $t('dataSharing.chooseIfDataFromYourHealthRecordsIsShared') }}
         </p>
 
         <contents/>
 
-        <p>{{ $t('ds01.pages.p4.paragraph1') }}</p>
+        <p>{{ $t('dataSharing.useThisServiceTo') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p4.listItems1')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.chooseIfYourInformationIsUsed') }}</li>
+          <li>{{ $t('dataSharing.changeOrCheckYourChoice') }}</li>
         </ul>
 
         <p>
-          {{ $t('ds01.pages.p4.paragraph2.text') }}
+          {{ $t('dataSharing.ifYouWantToChooseForSomeoneElseFindOutHowOnThe') }}
           <analytics-tracked-tag :href="otherWaysToMakeChoiceUrl"
-                                 :text="$t('ds01.pages.p4.paragraph2.nhsWebsiteLink')"
+                                 :text="$t('dataSharing.nhsWebsite')"
                                  class="inline"
                                  tag="a"
                                  target="_blank">
-            {{ $t('ds01.pages.p4.paragraph2.nhsWebsiteLink') }}</analytics-tracked-tag>.
+            {{ $t('dataSharing.nhsWebsite') }}</analytics-tracked-tag>.
         </p>
 
-        <p>{{ $t('ds01.pages.p4.paragraph3') }}</p>
+        <p>{{ $t('dataSharing.yourChoiceWillBeAppliedBy') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p4.listItems2')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.nhsDigitalAndPublicHealthEngland') }}</li>
+          <li>{{ $t('dataSharing.allOtherHealthAndCareOrganisations') }}</li>
         </ul>
 
-        <p>{{ $t('ds01.pages.p4.paragraph4') }}</p>
+        <p>{{ $t('dataSharing.choiceWillNotImpactYourCare') }}</p>
 
-        <inset-text :paragraphs="$t('ds01.pages.ndop.paragraphs')"/>
+        <inset-text :paragraphs="$t('dataSharing.youAreChoosingForHealthAndCareSystemNotNhspApp')"/>
 
         <form id="ndop-token-form"
               ref="ndopTokenForm"
@@ -45,10 +43,10 @@
           <input v-model="ndopToken" type="hidden" name="token">
           <analytics-tracked-tag id="startNowButton"
                                  data-purpose="startNowButton"
-                                 :text="$t('ds01.startNowButton')"
+                                 :text="$t('dataSharing.startNow')"
                                  class="nhsuk-u-margin-padding-0">
             <generic-button :class="['nhsuk-button']" @click.prevent="startNow">
-              {{ $t('ds01.startNowButton') }}
+              {{ $t('dataSharing.startNow') }}
             </generic-button>
           </analytics-tracked-tag>
         </form>

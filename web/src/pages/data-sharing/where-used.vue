@@ -3,43 +3,44 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-caption-m nhsuk-caption--bottom">
-          {{ $t('ds01.mainHeader') }}
+          {{ $t('dataSharing.chooseIfDataFromYourHealthRecordsIsShared') }}
         </p>
 
         <contents/>
 
-        <p>{{ $t('ds01.pages.p2.intro.paragraph1') }}</p>
+        <p>{{ $t('dataSharing.theNhsCollectsInformationFrom') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p2.intro.listItems1')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.allNhsOrgsTrustsAndLocalAuthorities') }}</li>
+          <li>{{ $t('dataSharing.privateOrganisations') }}</li>
         </ul>
 
-        <p>{{ $t('ds01.pages.p2.intro.paragraph2') }}</p>
+        <p>{{ $t('dataSharing.researchBodiesAndOrgsCanRequestIncluding') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p2.intro.listItems2')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.universityResearchers') }}</li>
+          <li>{{ $t('dataSharing.hospitalResearchers') }}</li>
+          <li>{{ $t('dataSharing.medicalRoyalColleges') }}</li>
+          <li>{{ $t('dataSharing.pharmaceuticalCompanies') }}</li>
         </ul>
 
-        <h2>{{ $t('ds01.pages.p2.thoseWhoCant.title') }}</h2>
-        <p>{{ $t('ds01.pages.p2.thoseWhoCant.paragraph1') }}</p>
+        <h2>{{ $t('dataSharing.whoCannotUseConfidentialInformation') }}</h2>
+        <p>{{ $t('dataSharing.accessWillNotBeGivenFor') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p2.thoseWhoCant.listItems')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.marketingPurposes') }}</li>
+          <li>{{ $t('dataSharing.insurancePurposes') }}</li>
         </ul>
-        <p>{{ $t('ds01.pages.p2.thoseWhoCant.paragraph2') }}</p>
+        <p>{{ $t('dataSharing.unlessYouRequestThis') }}</p>
 
-        <h2>{{ $t('ds01.pages.p2.dataProtection.title') }}</h2>
-        <p>{{ $t('ds01.pages.p2.dataProtection.paragraph1') }}</p>
-        <p>{{ $t('ds01.pages.p2.dataProtection.paragraph2') }}</p>
+        <h2>{{ $t('dataSharing.howConfidentialInformationIsProtected') }}</h2>
+        <p>{{ $t('dataSharing.yourInformationIsLookedAfter') }}</p>
+        <p>{{ $t('dataSharing.everyOrganisationWillTakeEveryStepTo') }}</p>
         <ul>
-          <li v-for="listItem of $t('ds01.pages.p2.dataProtection.listItems')" :key="listItem">
-            {{ listItem }}
-          </li>
+          <li>{{ $t('dataSharing.keeyDataSecure') }}</li>
+          <li>{{ $t('dataSharing.useDataThatCannotIdentifyYouWhenPossible') }}</li>
+          <li>{{ $t('dataSharing.useDataToBenefitHealthAndCare') }}</li>
+          <li>{{ $t('dataSharing.notUseDataForMarketingOrInsurance') }}</li>
+          <li>{{ $t('dataSharing.makeItClearWhyAndHowDataIsBeingUsed') }}</li>
         </ul>
-        <p>{{ $t('ds01.pages.p2.dataProtection.paragraph3') }}</p>
+        <p>{{ $t('dataSharing.allNhsOrganisationMustProvideInformation') }}</p>
 
         <pagination :previous-link="overviewPath"
                     previous-title="Overview"
