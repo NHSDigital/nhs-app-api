@@ -470,25 +470,6 @@ export default {
       },
     },
   },
-  sc04: {
-    organDonation: {
-      subheader: 'Manage your organ donation decision',
-      body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register',
-    },
-    dataSharing: {
-      subheader: 'Find out why your data matters',
-      body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning',
-    },
-    requestGpHelp: {
-      subheader: 'Additional GP services',
-      body: 'Get sick notes and GP letters or ask about recent tests',
-    },
-    messages: {
-      subheader: 'Messages',
-      body: 'Send or view messages from your GP surgery and other health services',
-      unreadMessages: 'You have unread messages',
-    },
-  },
   webHeader: {
     title: '{pageTitle} - NHS App',
     nhsLogoAriaLabel: 'NHS App online homepage',
@@ -528,16 +509,6 @@ export default {
     messages: 'View your messages',
     appMessages: 'View health information and updates',
     unreadMessages: 'You have unread messages',
-  },
-  gpPrescriptionsHub: {
-    menuOptions: {
-      orderRepeat: 'Order a repeat prescription',
-      viewOrders: 'View your orders',
-      nominatePharmacy: 'Nominate a pharmacy',
-      yourNominatedPharmacy: 'Your nominated pharmacy',
-      viewOrdersHelpText: 'See repeat prescriptions you have ordered',
-      nominatePharmacyHelpText: 'Choose a pharmacy for your prescriptions to be sent to',
-    },
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',
@@ -621,36 +592,6 @@ export default {
     askGp: {
       forAdvice: 'Ask your GP for advice',
       consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
-    },
-  },
-  appointmentHubPage: {
-    pageHeader: 'Appointments',
-    gpSurgeryAppointments: {
-      subheader: 'GP surgery appointments',
-      body: 'View and manage appointments at your surgery',
-    },
-    hospitalAppointments: {
-      subheader: 'Hospital and other appointments',
-      body: 'View and manage appointments, like your referral appointments',
-    },
-  },
-  healthRecordHubPage: {
-    gpMedicalRecord: {
-      subheader: 'GP health record',
-      body: 'View allergies, medicines, test results and more in your GP health record',
-    },
-  },
-  messagesHub: {
-    noMessages: 'You have no messages.',
-    unreadMessages: 'You have unread messages.',
-    im1Messaging: {
-      subheader: 'GP surgery messages',
-      body: 'Send or view messages from your GP surgery',
-    },
-    appMessaging: {
-      subheader: 'Health information and updates',
-      body: 'View messages from health services and the NHS App',
-      backLink: 'Back',
     },
   },
   web: {

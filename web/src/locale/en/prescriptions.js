@@ -26,6 +26,14 @@ export default {
     },
     theStatusIs: 'The status of this prescription is ',
   },
+  hub: {
+    orderARepeatPrescription: 'Order a repeat prescription',
+    viewYourOrders: 'View your orders',
+    seeRepeatPrescriptionsYouHaveOrdered: 'See repeat prescriptions you have ordered',
+    nominateAPharmacy: 'Nominate a pharmacy',
+    yourNominatedPharmacy: 'Your nominated pharmacy',
+    chooseAPharmacyForYourPrescriptions: 'Choose a pharmacy for your prescriptions to be sent to',
+  },
   orderSuccess: {
     goToYourPrescriptionOrders: 'Go to your prescription orders',
     theOrderStatusWillBeUpdated: 'The order status will be updated once it’s been reviewed by your GP.​',

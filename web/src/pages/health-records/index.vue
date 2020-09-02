@@ -8,11 +8,11 @@
                      data-purpose="text_link"
                      :href="gpMedicalRecordPath"
                      :click-func="redirectToMedicalRecord"
-                     :description="$t('healthRecordHubPage.gpMedicalRecord.body')"
-                     :text="$t('healthRecordHubPage.gpMedicalRecord.subheader')"
+                     :text="$t('myRecord.hub.gpHealthRecord')"
+                     :description="$t('myRecord.hub.viewAllergiesMedicinesAndMore')"
                      :aria-label="ariaLabelCaption(
-                       'healthRecordHubPage.gpMedicalRecord.subheader',
-                       'healthRecordHubPage.gpMedicalRecord.body')" />
+                       'myRecord.hub.gpHealthRecord',
+                       'myRecord.hub.viewAllergiesMedicinesAndMore')" />
           <third-party-jump-off-button v-if="showPkbTestResults && !isProxying"
                                        id="btn_pkb_test_results"
                                        provider-id="pkb"

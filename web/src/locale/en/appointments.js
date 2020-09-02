@@ -166,6 +166,12 @@ export default {
       minorProblems: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
     },
   },
+  hub: {
+    gpSurgeryAppointments: 'GP surgery appointments',
+    hospitalAndOtherAppointments: 'Hospital and other appointments',
+    viewAndManageAppointmentsAtYourSurgery: 'View and manage appointments at your surgery',
+    viewAndManageAppointmentsLikeReferrals: 'View and manage appointments, like your referral appointments',
+  },
   informatica: {
     bookingIsNotCurrentlyAvailable: 'Appointment booking is not currently available directly through the NHS App',
     ifYouHaveAUsernameAndPassword: 'If you have a username and password, ',

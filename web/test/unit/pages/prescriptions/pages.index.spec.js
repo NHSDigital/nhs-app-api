@@ -1,4 +1,5 @@
 import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import PrescriptionsPage from '@/pages/prescriptions/index';
 import * as dependency from '@/lib/utils';
 import { PRESCRIPTIONS_VIEW_ORDERS_PATH, NOMINATED_PHARMACY_INTERRUPT_PATH, NOMINATED_PHARMACY_PATH } from '@/router/paths';
@@ -42,6 +43,9 @@ const createStore = ({
 const mountPage = ($store) => {
   const page = mount(PrescriptionsPage, {
     $store,
+    mountOpts: {
+      i18n,
+    },
   });
   return page;
 };
@@ -90,7 +94,7 @@ describe('prescriptions hub index page', () => {
     $store = createStore({ pharmacyName: 'boots', sjrEnabled: true });
     wrapper = mountPage($store);
     repeatPrescriptionsButton = wrapper.find('#repeat-prescription-button');
-    expect(repeatPrescriptionsButton.text()).toEqual('translate_gpPrescriptionsHub.menuOptions.orderRepeat');
+    expect(repeatPrescriptionsButton.text()).toEqual('Order a repeat prescription');
     expect(repeatPrescriptionsButton.exists()).toBe(true);
   });
 
@@ -105,7 +109,7 @@ describe('prescriptions hub index page', () => {
 
     it('will display the correct nominated pharmacy information and panel title', async () => {
       expect(nominatedPharmacyPanel.exists()).toBe(true);
-      expect(nominatedPharmacyPanel.find('h2').text()).toEqual('translate_gpPrescriptionsHub.menuOptions.yourNominatedPharmacy');
+      expect(nominatedPharmacyPanel.find('h2').text()).toEqual('Your nominated pharmacy');
       expect(nominatedPharmacyPanel.find('p').text()).toEqual('Boots');
     });
 
@@ -127,8 +131,8 @@ describe('prescriptions hub index page', () => {
 
     it('will display the nominated pharmacy help text and correct panel title', async () => {
       expect(nominatedPharmacyPanel.exists()).toBe(true);
-      expect(nominatedPharmacyPanel.find('h2').text()).toEqual('translate_gpPrescriptionsHub.menuOptions.nominatePharmacy');
-      expect(nominatedPharmacyPanel.find('p').text()).toEqual('translate_gpPrescriptionsHub.menuOptions.nominatePharmacyHelpText');
+      expect(nominatedPharmacyPanel.find('h2').text()).toEqual('Nominate a pharmacy');
+      expect(nominatedPharmacyPanel.find('p').text()).toEqual('Choose a pharmacy for your prescriptions to be sent to');
     });
 
     it('will redirect to the correct page when panel is clicked', async () => {
@@ -160,8 +164,8 @@ describe('prescriptions hub index page', () => {
     });
 
     it('will have the correct title and description', async () => {
-      expect(viewOrdersLink.find('h2').text()).toEqual('translate_gpPrescriptionsHub.menuOptions.viewOrders');
-      expect(viewOrdersLink.find('p').text()).toEqual('translate_gpPrescriptionsHub.menuOptions.viewOrdersHelpText');
+      expect(viewOrdersLink.find('h2').text()).toEqual('View your orders');
+      expect(viewOrdersLink.find('p').text()).toEqual('See repeat prescriptions you have ordered');
     });
 
     it('will go the view orders page when clicked', async () => {

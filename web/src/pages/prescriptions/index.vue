@@ -7,18 +7,18 @@
             id="repeat-prescription-button"
             :button-classes="['nhsuk-button']"
             @click.stop.prevent="onOrderRepeatPrescriptionClicked">
-            {{ $t('gpPrescriptionsHub.menuOptions.orderRepeat') }}
+            {{ $t('prescriptions.hub.orderARepeatPrescription') }}
           </generic-button>
         </no-js-form>
         <menu-item-list>
           <menu-item
             id="view-orders"
-            :text="$t('gpPrescriptionsHub.menuOptions.viewOrders')"
+            :text="$t('prescriptions.hub.viewYourOrders')"
             :href="viewOrdersPath"
             :aria-label="ariaLabelCaption
-              ($t('gpPrescriptionsHub.menuOptions.viewOrders'),
-               $t('gpPrescriptionsHub.menuOptions.viewOrdersHelpText'))"
-            :description="$t('gpPrescriptionsHub.menuOptions.viewOrdersHelpText')"
+              ($t('prescriptions.hub.viewYourOrders'),
+               $t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered'))"
+            :description="$t('prescriptions.hub.seeRepeatPrescriptionsYouHaveOrdered')"
             :click-func="onViewOrdersClicked"
             :header-tag="'h2'"
           />
@@ -95,13 +95,13 @@ export default {
     },
     nominatedPharmacyText() {
       if (this.nominatedPharmacyName === undefined) {
-        return this.$t('gpPrescriptionsHub.menuOptions.nominatePharmacy');
+        return this.$t('prescriptions.hub.nominateAPharmacy');
       }
-      return this.$t('gpPrescriptionsHub.menuOptions.yourNominatedPharmacy');
+      return this.$t('prescriptions.hub.yourNominatedPharmacy');
     },
     nominatedPharmacyDescription() {
       if (this.nominatedPharmacyName === undefined) {
-        return this.$t('gpPrescriptionsHub.menuOptions.nominatePharmacyHelpText');
+        return this.$t('prescriptions.hub.chooseAPharmacyForYourPrescriptions');
       }
       return this.nominatedPharmacyName;
     },

@@ -8,9 +8,9 @@
                    header-tag="h2"
                    :href="im1MessagingPath"
                    :has-unread-messages="hasUnreadGPMessages"
-                   :text="$t('messagesHub.im1Messaging.subheader')"
-                   :description="$t('messagesHub.im1Messaging.body')"
-                   :aria-label="ariaLabel('im1Messaging')"
+                   :text="$t('messages.hub.gpSurgeryMessages')"
+                   :description="$t('messages.hub.sendOrViewMessagesFromYourSurgery')"
+                   :aria-label="ariaLabelGpMessages()"
                    :click-func="navigateToGpMessages"/>
         <third-party-jump-off-button v-if="pkbEnabled"
                                      id="btn_pkb_messages_and_consultations"
@@ -31,13 +31,13 @@
                    data-purpose="text_link"
                    :href="appMessagingPath"
                    :has-unread-messages="hasUnreadAppMessages"
-                   :text="$t('messagesHub.appMessaging.subheader')"
-                   :description="$t('messagesHub.appMessaging.body')"
+                   :text="$t('messages.hub.healthInformationAndUpdates')"
+                   :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
                    :click-func="navigateToAppMessages"
-                   :aria-label="ariaLabel('appMessaging')"/>
+                   :aria-label="ariaLabelAppMessages()"/>
       </menu-item-list>
       <p v-else data-purpose="no-messages-available">
-        {{ $t('messagesHub.noMessages') }}
+        {{ $t('messages.youHaveNoMessages') }}
       </p>
     </div>
   </div>
@@ -144,14 +144,23 @@ export default {
       }
       redirectTo(this, this.appMessagingPath);
     },
-    ariaLabel(type) {
-      const { hasUnreadGPMessages, hasUnreadAppMessages } = this;
-      return (hasUnreadGPMessages || hasUnreadAppMessages) ?
-        `${this.$t(`messagesHub.${type}.subheader`)}
-          ${this.$t(`messagesHub.${type}.body`)}.
-          ${this.$t('messagesHub.unreadMessages')}`
-        : `${this.$t(`messagesHub.${type}.subheader`)}
-          ${this.$t(`messagesHub.${type}.body`)}.`;
+    ariaLabelGpMessages() {
+      const { hasUnreadGPMessages } = this;
+      return (hasUnreadGPMessages) ?
+        `${this.$t('messages.hub.gpSurgeryMessages')}
+          ${this.$t('messages.hub.sendOrViewMessagesFromYourSurgery')}.
+          ${this.$t('messages.youHaveUnreadMessages')}`
+        : `${this.$t('messages.hub.gpSurgeryMessages')}
+          ${this.$t('messages.hub.sendOrViewMessagesFromYourSurgery')}.`;
+    },
+    ariaLabelAppMessages() {
+      const { hasUnreadAppMessages } = this;
+      return (hasUnreadAppMessages) ?
+        `${this.$t('messages.hub.healthInformationAndUpdates')}
+          ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.
+          ${this.$t('messages.youHaveUnreadMessages')}`
+        : `${this.$t('messages.hub.healthInformationAndUpdates')}
+          ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.`;
     },
   },
 };

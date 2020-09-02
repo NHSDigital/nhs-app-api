@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import PrescriptionsPage from '@/pages/prescriptions/index';
 import { create$T, createRouter, createStore, mount } from '../../helpers';
 
@@ -46,6 +47,9 @@ describe('prescriptions page', () => {
       stubs: {
         'page-title': '<div></div>',
       },
+      mountOpts: {
+        i18n,
+      },
     });
     button = wrapper.find('#repeat-prescription-button');
   });
@@ -56,7 +60,7 @@ describe('prescriptions page', () => {
     });
 
     it('will have the correct text', () => {
-      expect(button.text()).toEqual('translate_gpPrescriptionsHub.menuOptions.orderRepeat');
+      expect(button.text()).toEqual('Order a repeat prescription');
     });
   });
 });

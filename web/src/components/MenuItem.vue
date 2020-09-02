@@ -112,7 +112,7 @@ export default {
     },
     ariaText() {
       if (this.hasUnreadMessages) {
-        return `${this.text}.${this.$t('messagesHub.unreadMessages')}`;
+        return `${this.text}.${this.$t('messages.youHaveUnreadMessages')}`;
       }
       return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('myRecord.records')})` : this.text;
     },

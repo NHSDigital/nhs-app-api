@@ -8,22 +8,22 @@
                      data-purpose="text_link"
                      :href="gpAppointmentsPath"
                      :click-func="redirectToGpAppointments"
-                     :description="$t('appointmentHubPage.gpSurgeryAppointments.body')"
-                     :text="$t('appointmentHubPage.gpSurgeryAppointments.subheader')"
+                     :text="$t('appointments.hub.gpSurgeryAppointments')"
+                     :description="$t('appointments.hub.viewAndManageAppointmentsAtYourSurgery')"
                      :aria-label="ariaLabelCaption(
-                       'appointmentHubPage.gpSurgeryAppointments.subheader',
-                       'appointmentHubPage.gpSurgeryAppointments.body')"/>
+                       'appointments.hub.gpSurgeryAppointments',
+                       'appointments.hub.viewAndManageAppointmentsAtYourSurgery')"/>
           <menu-item v-if="showHospitalAppointments"
                      id="btn_hospital"
                      header-tag="h2"
                      data-purpose="text_link"
                      :href="hospitalAppointmentsPath"
                      :click-func="redirectToHospitalAppointments"
-                     :description="$t('appointmentHubPage.hospitalAppointments.body')"
-                     :text="$t('appointmentHubPage.hospitalAppointments.subheader')"
+                     :text="$t('appointments.hub.hospitalAndOtherAppointments')"
+                     :description="$t('appointments.hub.viewAndManageAppointmentsLikeReferrals')"
                      :aria-label="ariaLabelCaption(
-                       'appointmentHubPage.hospitalAppointments.subheader',
-                       'appointmentHubPage.hospitalAppointments.body')"/>
+                       'appointments.hub.hospitalAndOtherAppointments',
+                       'appointments.hub.viewAndManageAppointmentsLikeReferrals')"/>
         </menu-item-list>
       </div>
     </div>

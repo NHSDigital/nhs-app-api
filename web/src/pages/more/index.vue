@@ -1,38 +1,41 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
-      <menu-item v-if="onlyAppMessagesEnabled"
-                 id="btn_appMessaging"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="appMessagingPath"
-                 :has-unread-messages="hasUnreadMessages"
-                 :text="$t('messagesHub.appMessaging.subheader')"
-                 :description="$t('messagesHub.appMessaging.body')"
-                 :click-func="navigateToAppMessages"
-                 :aria-label="ariaLabel"/>
+      <menu-item
+        v-if="onlyAppMessagesEnabled"
+        id="btn_appMessaging"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="appMessagingPath"
+        :has-unread-messages="hasUnreadMessages"
+        :text="$t('messages.hub.healthInformationAndUpdates')"
+        :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
+        :click-func="navigateToAppMessages"
+        :aria-label="ariaLabel"/>
 
-      <menu-item v-else
-                 id="btn_messages"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="messagesPath"
-                 :text="$t('sc04.messages.subheader')"
-                 :description="$t('sc04.messages.body')"
-                 :has-unread-messages="hasUnreadMessages"
-                 :click-func="navigateToMessages"
-                 :aria-label="ariaLabel"/>
+      <menu-item
+        v-else
+        id="btn_messages"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="messagesPath"
+        :text="$t('messages.messages')"
+        :description="$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')"
+        :has-unread-messages="hasUnreadMessages"
+        :click-func="navigateToMessages"
+        :aria-label="ariaLabel"/>
 
-      <menu-item v-if="adminHelpEnabled"
-                 id="btn_gp_help"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="adminHelpPath"
-                 :text="$t('sc04.requestGpHelp.subheader')"
-                 :description="$t('sc04.requestGpHelp.body')"
-                 :click-func="navigateToAdminHelp"
-                 :aria-label="$t('sc04.requestGpHelp.subheader') |
-                   join($t('sc04.requestGpHelp.body') ,'. ')"/>
+      <menu-item
+        v-if="adminHelpEnabled"
+        id="btn_gp_help"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="adminHelpPath"
+        :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
+        :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
+        :click-func="navigateToAdminHelp"
+        :aria-label="$t('appointments.guidance.additionalGpServices.additionalGpServices') |
+          join($t('appointments.guidance.additionalGpServices.getSickNotesAndLetters') ,'. ')"/>
 
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
@@ -51,15 +54,16 @@
         provider-id="pkb"
         :provider-configuration="thirdPartyProvider.pkb.sharedLinksCie" />
 
-      <menu-item id="btn_data_sharing"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :href="dataSharingPath"
-                 :text="$t('sc04.dataSharing.subheader')"
-                 :description="$t('sc04.dataSharing.body')"
-                 :click-func="navigateToDataSharing"
-                 :aria-label="$t('sc04.dataSharing.subheader') |
-                   join($t('sc04.dataSharing.body') ,'. ')"/>
+      <menu-item
+        id="btn_data_sharing"
+        header-tag="h2"
+        data-purpose="text_link"
+        :href="dataSharingPath"
+        :text="$t('dataSharing.findOutWhyYourDataMatters')"
+        :description="$t('dataSharing.findOutHowTheNhsUsesYourInfomrationAndChoose')"
+        :click-func="navigateToDataSharing"
+        :aria-label="$t('dataSharing.findOutWhyYourDataMatters') |
+          join($t('dataSharing.findOutHowTheNhsUsesYourInfomrationAndChoose') ,'. ')"/>
     </menu-item-list>
   </div>
 </template>
@@ -149,16 +153,20 @@ export default {
           || this.isProxying || !this.isProofLevel9);
     },
     ariaLabel() {
-      let i18nLabel = 'sc04.messages';
       if (this.onlyAppMessagesEnabled) {
-        i18nLabel = 'messagesHub.appMessaging';
+        return (this.hasUnreadMessages) ?
+          `${this.$t('messages.hub.healthInformationAndUpdates')}
+            ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.
+            ${this.$t('messages.youHaveUnreadMessages')}`
+          : `${this.$t('messages.hub.healthInformationAndUpdates')}
+            ${this.$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')}.`;
       }
       return (this.hasUnreadMessages) ?
-        `${this.$t(`${i18nLabel}.subheader`)}
-          ${this.$t(`${i18nLabel}.body`)}.
-          ${this.$t('sc04.messages.unreadMessages')}`
-        : `${this.$t(`${i18nLabel}.subheader`)}
-          ${this.$t(`${i18nLabel}.body`)}.`;
+        `${this.$t('messages.messages')}
+          ${this.$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')}.
+          ${this.$t('messages.youHaveUnreadMessages')}`
+        : `${this.$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')}
+          ${this.$t('messages.body')}.`;
     },
   },
   async mounted() {

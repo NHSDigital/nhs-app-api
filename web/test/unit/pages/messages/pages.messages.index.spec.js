@@ -1,4 +1,5 @@
 import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import Messages from '@/pages/messages/';
 import { redirectTo } from '@/lib/utils';
 import { GP_MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
@@ -43,7 +44,7 @@ const mountPage = ({
       'session/isProofLevel9': isProofLevel9,
     },
   });
-  wrapper = mount(Messages, { $store, $router });
+  wrapper = mount(Messages, { $store, $router, mountOpts: { i18n } });
 };
 
 describe('messages page', () => {
@@ -63,7 +64,7 @@ describe('messages page', () => {
 
     expect(im1MessagingLink.exists()).toBe(false);
     expect(noMessagesText.exists()).toBe(true);
-    expect(noMessagesText.text()).toEqual('translate_messagesHub.noMessages');
+    expect(noMessagesText.text()).toEqual('You have no messages.');
   });
 
   describe('im1 messaging services', () => {
@@ -103,8 +104,8 @@ describe('messages page', () => {
         expect(im1MessagingLink.exists()).toBe(true);
         expect(im1MessagingLinkSubHeader.exists()).toBe(true);
         expect(im1MessagingLinkBody.exists()).toBe(true);
-        expect(im1MessagingLinkSubHeader.text()).toEqual('translate_messagesHub.im1Messaging.subheader');
-        expect(im1MessagingLinkBody.text()).toEqual('translate_messagesHub.im1Messaging.body');
+        expect(im1MessagingLinkSubHeader.text()).toEqual('GP surgery messages');
+        expect(im1MessagingLinkBody.text()).toEqual('Send or view messages from your GP surgery');
       });
     });
   });

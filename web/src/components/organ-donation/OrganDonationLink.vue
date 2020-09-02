@@ -1,13 +1,14 @@
 <template>
   <menu-item :id="id"
              :href="organDonationUrl"
-             :text="$t('sc04.organDonation.subheader')"
+             :text="$t('organDonation.manageYourOrganDonationDecision')"
              :description="linkDescription"
              :header-tag="headerTag"
              :click-func="onClickOrganDonation"
              :prevent-default="useIntegratedOrganDonation"
              :target="organDonationTarget"
-             :aria-label="$t('sc04.organDonation.subheader') | join(linkDescription ,'. ')"/>
+             :aria-label="$t('organDonation.helpSaveThousandsOfLivesBySigningUpToOrganDonation') |
+               join(linkDescription, '. ')"/>
 </template>
 
 <script>
@@ -55,7 +56,7 @@ export default {
   computed: {
     linkDescription() {
       if (this.displayDescription) {
-        return this.$t('sc04.organDonation.body');
+        return this.$t('organDonation.helpSaveThousandsOfLivesBySigningUpToOrganDonation');
       }
       return '';
     },

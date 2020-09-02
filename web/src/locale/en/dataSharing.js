@@ -11,6 +11,7 @@ export default {
   confidentialInformationMightBeUsedTo: 'Confidential patient information might also be used to:',
   everyOrganisationWillTakeEveryStepTo: 'Every organisation that provides health and care services will take every step to:',
   findOutWhyYourDataMatters: 'Find out why your data matters',
+  findOutHowTheNhsUsesYourInfomrationAndChoose: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning',
   forExampleYourNameAndMedicine: 'For example, your name joined with what medicine you take.',
   forMoreInfomationOrToReadPrivacyNotice: ' for more information or to read our privacy notice. You can also find out how to make a choice for someone else. For example, if you’re a parent or guardian of a child under the age of 13.',
   healthAndCareStaffMayUseInformationToHelpWithCare: 'Health and care staff may use your confidential patient information to help with your treatment and care. For example, when you visit your GP, they may look at your records for important information about your health.',

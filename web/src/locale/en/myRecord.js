@@ -55,6 +55,10 @@ export default {
     view: 'View',
     whenYouDownloadYouBecomeResponsible: 'When you download this document, you become responsible for keeping it confidential.',
   },
+  hub: {
+    gpHealthRecord: 'GP health record',
+    viewAllergiesMedicinesAndMore: 'View allergies, medicines, test results and more in your GP health record',
+  },
   summaryCareRecord: {
     allergiesAndAdverseReactions: 'Allergies and adverse reactions',
     medicines: 'Medicines',

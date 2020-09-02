@@ -29,7 +29,6 @@
     <desktopGenericBackLink v-if="!isNativeApp"
                             data-purpose="back-link"
                             :path="backLink"
-                            :button-text="'messagesHub.appMessaging.backLink'"
                             @clickAndPrevent="backClicked"/>
 
   </div>
