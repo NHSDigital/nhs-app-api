@@ -71,7 +71,7 @@ describe('messaging index', () => {
     it('will display the no messages text', () => {
       const noMessages = wrapper.find(noMessagesSelector);
       expect(noMessages.exists()).toBe(true);
-      expect(noMessages.text()).toBe('You have no messages');
+      expect(noMessages.text()).toBe('You have no messages.');
     });
   });
 

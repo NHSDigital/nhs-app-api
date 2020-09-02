@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import UrgencyPage from '@/pages/messages/gp-messages/urgency/index';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
@@ -34,6 +35,9 @@ describe('gp messages urgency page', () => {
     });
     wrapper = mount(UrgencyPage, {
       $store: store,
+      mountOpts: {
+        i18n,
+      },
     });
   };
 
@@ -56,11 +60,11 @@ describe('gp messages urgency page', () => {
       });
 
       it('will emit UPDATE_HEADER with no recipients as event', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'im02.noRecipients');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'messages.youCannotSendMessages');
       });
 
       it('will emit UPDATE_TITLE with no recipients as event', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'im02.noRecipients');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'messages.youCannotSendMessages');
       });
     });
 
@@ -102,8 +106,8 @@ describe('gp messages urgency page', () => {
       const errorContent = wrapper.find('[data-purpose="error-container"] [data-purpose="error"]');
       const validationError = errorContent.find('ul li');
       expect(errorContent.exists()).toBe(true);
-      expect(errorContent.text()).toContain('translate_im02.noOptionSelectedErrorHeader');
-      expect(validationError.text()).toEqual('translate_im02.noOptionSelectedErrorText');
+      expect(errorContent.text()).toContain('There\'s a problem');
+      expect(validationError.text()).toEqual('You need to select yes or no');
     });
 
     it('will redirect to /gp-messages/contact-your-gp when the answer is yes', async () => {

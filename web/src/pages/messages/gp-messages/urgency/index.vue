@@ -4,11 +4,11 @@
       <div v-if="messageRecipients && messageRecipients.length > 0">
         <message-dialog v-if="isError" message-type="error" role="alert">
           <message-text>
-            {{ $t('im02.noOptionSelectedErrorHeader') }}
+            {{ $t('messages.thereIsAProblem') }}
           </message-text>
           <message-list>
             <li>
-              {{ $t('im02.noOptionSelectedErrorText') }}
+              {{ $t('messages.youNeedToSelectYesOrNo') }}
             </li>
           </message-list>
         </message-dialog>
@@ -16,7 +16,7 @@
           <question-choice id="messagingUrgency"
                            v-model="answer"
                            :error="isError"
-                           :error-text="[$t('im02.noOptionSelectedErrorText')]"
+                           :error-text="[$t('messages.youNeedToSelectYesOrNo')]"
                            :options="questionOptions"
                            :required="true"
                            :legend="$t('pageTitles.gpMessagesUrgency')"
@@ -26,17 +26,19 @@
         <generic-button id="continueButton"
                         :button-classes="['nhsuk-button']"
                         @click="continueButtonClicked">
-          {{ $t('im02.continueButtonText') }}
+          {{ $t('generic.continue') }}
         </generic-button>
       </div>
       <div v-else id="noRecipients">
-        <p id="subHeader" class="nhsuk-hint" :aria-label="$t('im02.ariaLabel')">
-          {{ $t('im02.noRecipientsMessage') }}
+        <p id="subHeader"
+           class="nhsuk-hint"
+           :aria-label="$t('messages.contactSurgeryForMoreInformationOrGoToOneOneOne')">
+          {{ $t('messages.contactSurgeryForMoreInformationOr') }}
           <a style="display:inline" href="https://111.nhs.uk">
-            {{ $t('im02.nhs111Link') }}</a>
-          {{ $t('im02.or') }}
+            {{ $t('messages.nhs111Link') }}</a>
+          {{ $t('messages.or') }}
           <a style="display:inline" href="tel:111">
-            {{ $t('im02.call111Link') }}.
+            {{ $t('messages.call111Link') }}.
           </a>
         </p>
       </div>
@@ -83,10 +85,10 @@ export default {
       loading: true,
       questionOptions: [{
         code: YES,
-        label: this.$t('im02.isUrgentChoiceLabel'),
+        label: this.$t('messages.iNeedAdviceNow'),
       }, {
         code: NO,
-        label: this.$t('im02.isNotUrgentChoiceLabel'),
+        label: this.$t('messages.myMessageIsNotUrgent'),
       }],
       messagingPath: GP_MESSAGES_PATH,
     };
@@ -110,8 +112,8 @@ export default {
     const { messageRecipients } = this.$store.state.gpMessages;
 
     if (!messageRecipients || isEmptyArray(messageRecipients)) {
-      EventBus.$emit(UPDATE_HEADER, 'im02.noRecipients');
-      EventBus.$emit(UPDATE_TITLE, 'im02.noRecipients');
+      EventBus.$emit(UPDATE_HEADER, 'messages.youCannotSendMessages');
+      EventBus.$emit(UPDATE_TITLE, 'messages.youCannotSendMessages');
     }
 
     this.loading = false;

@@ -87,67 +87,6 @@ export default {
       ],
     },
   },
-  im01: {
-    viewFullMessage: 'View full message',
-    sendMessageButtonText: 'Send a message',
-    subheader: 'Your messages',
-    noMessages: 'You have no messages.',
-    lastMessageRecieved: 'Last message received at {date}',
-    summary: {
-      hiddenWithSubject: 'Conversation with {recipient}. Subject: {subject}. The last message in this conversation was sent on {date}.',
-      hiddenWithoutSubject: 'Conversation with {recipient}. The last message in this conversation was sent on {date}. View full message.',
-    },
-  },
-  im02: {
-    isUrgentChoiceLabel: 'Yes, I need advice now',
-    isNotUrgentChoiceLabel: 'No, my message is not urgent',
-    noOptionSelectedErrorHeader: 'There\'s a problem',
-    noOptionSelectedErrorText: 'You need to select yes or no',
-    continueButtonText: 'Continue',
-    noRecipients: 'You cannot currently send messages',
-    noRecipientsMessage: 'Contact your GP surgery for more information. For urgent medical advice, go to ',
-    or: 'or',
-    nhs111Link: '111.nhs.uk',
-    call111Link: 'call 111',
-    ariaLabel: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-  },
-  im03: {
-    info: {
-      paragraph1: 'Messaging is for non-urgent advice.',
-      paragraph2: {
-        part1: 'For advice now, contact your GP surgery directly, go to ',
-        part2: '111.nhs.uk',
-        part3: ' or ',
-        part4: 'call 111',
-        ariaLabel: 'For advice now, contact your GP surgery directly, go to 111.nhs.uk or call one one one.',
-      },
-    },
-    careCard: {
-      heading: 'Call 999 now if you have:',
-      symptoms: [{
-        title: 'signs of a heart attack',
-        description: 'pain like a very tight band, heavy weight or squeezing in the centre of your chest',
-      }, {
-        title: 'signs of a stroke',
-        description: 'face drooping on one side, cannot hold both arms up, difficulty speaking',
-      }, {
-        title: 'severe difficulty breathing',
-        description: 'gasping, not being able to get words out, choking or lips turning blue',
-      }, {
-        title: 'heavy bleeding',
-        description: 'that will not stop',
-      }, {
-        title: 'severe injuries',
-        description: 'or deep cuts after a serious accident',
-      }, {
-        title: 'seizure (fit)',
-        description: 'someone is shaking or jerking because of a fit, or is unconscious (cannot be woken up)',
-      }],
-    },
-  },
-  im04: {
-    info: 'This is who your GP surgery lets you message. Your message may be read by any member of staff.',
-  },
   user_research: {
     contactYou: 'We would like to contact you about taking part in user research to improve the NHS App and connected services.',
     whatIsInvolved: {

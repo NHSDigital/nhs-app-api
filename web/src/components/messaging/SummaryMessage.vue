@@ -26,7 +26,7 @@
     <span v-if="!hasSubject"
           :class="['nhsuk-u-font-size-16','nhsuk-u-margin-bottom-0',
                    'nhsuk-u-padding-top-0', $style.viewFullMessageText]">
-      <strong>{{ this.$t('im01.viewFullMessage') }}</strong>
+      <strong>{{ this.$t('messages.viewFullMessage') }}</strong>
     </span>
   </a>
 </template>

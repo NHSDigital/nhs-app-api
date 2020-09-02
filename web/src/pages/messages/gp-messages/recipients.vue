@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <p id="infoRecipients">{{ $t('im04.info') }}</p>
+      <p id="infoRecipients">{{ $t('messages.thisIsWhoYourSurgeryLetsYouMessage') }}</p>
       <menu-item-list id="recipientsMenuList" class="nhsuk-u-margin-bottom-3">
         <menu-item v-for="(recipient, index) in messageRecipients"
                    :id="`recipient-${recipient.recipientIdentifier}-${index}`"

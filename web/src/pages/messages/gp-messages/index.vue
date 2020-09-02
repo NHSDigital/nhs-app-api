@@ -4,20 +4,20 @@
     <div class="nhsuk-grid-column-full">
       <menu-item-list class="nhsuk-u-margin-bottom-3">
         <menu-item id="sendMessageButton"
-                   :text="$t('im01.sendMessageButtonText')"
+                   :text="$t('messages.sendAMessage')"
                    :click-func="sendMessage"
                    header-tag="h2"
                    href="#"/>
       </menu-item-list>
 
-      <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
+      <p v-if="hasNoSummaries">{{ $t('messages.youHaveNoMessages') }}</p>
 
       <template v-else>
         <menu-item-list-header id="messages_list_header"
                                header-tag="h2"
-                               :text="$t('im01.subheader')"/>
+                               :text="$t('messages.yourMessages')"/>
 
-        <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
+        <p v-if="hasNoSummaries">{{ $t('messages.youHaveNoMessages') }}</p>
 
         <ul id="gpInboxMessages" :class="$style['nhs-app-message']">
           <li v-for="(summary, index) in summaries"
@@ -131,12 +131,12 @@ export default {
       const { subject, recipient, lastMessageDateTime } = summary;
 
       return (this.hasSubject) ?
-        this.$t('im01.summary.hiddenWithSubject', {
+        this.$t('messages.conversationWithRecipientSubjectLastMessageOnDate', {
           recipient,
           subject,
           date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
         }) :
-        this.$t('im01.summary.hiddenWithoutSubject', {
+        this.$t('messages.conversationWithRecipientLastMessageOnDate', {
           recipient,
           date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
         });

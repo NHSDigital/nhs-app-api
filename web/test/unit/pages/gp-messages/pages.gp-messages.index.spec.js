@@ -1,10 +1,11 @@
+import i18n from '@/plugins/i18n';
+import last from 'lodash/fp/last';
 import Page from '@/pages/messages/gp-messages/index';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { formatDate } from '@/plugins/filters';
 import { isEmptyArray, redirectTo } from '@/lib/utils';
-import last from 'lodash/fp/last';
 import { INDEX_PATH } from '@/router/paths';
-import { createStore, create$T, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 jest.mock('@/plugins/filters');
@@ -16,7 +17,6 @@ describe('practice patient messaging inbox', () => {
   const messageItemClass = 'nhs-app-message__item';
   let wrapper;
   let store;
-  let $t;
 
   const summaries = [{
     messageId: 'message-1',
@@ -74,13 +74,14 @@ describe('practice patient messaging inbox', () => {
         'serviceJourneyRules/sendMessageSubjectEnabled': hasSubject,
       },
     });
-    $t = create$T();
 
     wrapper = mount(Page, {
       $store: store,
-      $t,
       $style: {
         [messageItemClass]: messageItemClass,
+      },
+      mountOpts: {
+        i18n,
       },
     });
   };
@@ -131,8 +132,7 @@ describe('practice patient messaging inbox', () => {
       const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
 
       // Assert
-      expect($t).toHaveBeenCalledWith('im01.summary.hiddenWithSubject', { recipient: 'Dr NHS Online', subject: 'This is the message subject', date: 'mock formatted date' });
-      expect(messageLabel).toEqual('translate_im01.summary.hiddenWithSubject');
+      expect(messageLabel).toEqual('Conversation with Dr NHS Online. Subject: This is the message subject. The last message in this conversation was sent on mock formatted date.');
     });
 
     it('will return a descriptive sentence without the subject about that message', () => {
@@ -147,8 +147,7 @@ describe('practice patient messaging inbox', () => {
       const messageLabel = wrapper.vm.getMessageLabel(summariesNoSubject[0]);
 
       // Assert
-      expect($t).toHaveBeenCalledWith('im01.summary.hiddenWithoutSubject', { recipient: 'Dr NHS Online', date: 'mock formatted date' });
-      expect(messageLabel).toEqual('translate_im01.summary.hiddenWithoutSubject');
+      expect(messageLabel).toEqual('Conversation with Dr NHS Online. The last message in this conversation was sent on mock formatted date. View full message.');
     });
   });
 
@@ -166,7 +165,7 @@ describe('practice patient messaging inbox', () => {
       mountPage({ messageSummaries: [] });
 
       // Assert
-      expect(wrapper.find('p').text()).toEqual('translate_im01.noMessages');
+      expect(wrapper.find('p').text()).toEqual('You have no messages.');
     });
   });
 
@@ -186,7 +185,7 @@ describe('practice patient messaging inbox', () => {
       expect(summaryMessage.vm.$props.subTitle).toEqual('This is the message subject');
       expect(summaryMessage.vm.$props.dateTime).toEqual('2020-01-01T13:37:00.137Z');
       expect(summaryMessage.vm.$props.dateFormat).toBeUndefined();
-      expect(summaryMessage.vm.$props.ariaLabel).toEqual('translate_im01.summary.hiddenWithSubject');
+      expect(summaryMessage.vm.$props.ariaLabel).toEqual('Conversation with Dr NHS Online. Subject: This is the message subject. The last message in this conversation was sent on mock formatted date.');
       expect(summaryMessage.vm.$props.hasUnreadMessages).toBe(true);
     });
   });

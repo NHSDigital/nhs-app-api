@@ -18,7 +18,9 @@
           </message-dialog>
         </div>
       </div>
-      <p id="subHeader" class="nhsuk-hint" :aria-label="$t('im03.info.paragraph2.ariaLabel')">
+      <p id="subHeader"
+         class="nhsuk-hint"
+         :aria-label="$t('messages.forAdviceNowContactSurgeryOrOneOneOne')">
         {{ $t('messages.forAdviceNowContactSurgery') }}
         <a style="display:inline; vertical-align: baseline" href="https://111.nhs.uk">
           {{ $t('messages.nhs111Link') }}</a>
