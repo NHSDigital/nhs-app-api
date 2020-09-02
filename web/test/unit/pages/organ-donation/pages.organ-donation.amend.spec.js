@@ -1,5 +1,6 @@
 import Amend from '@/pages/organ-donation/amend';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
+import i18n from '@/plugins/i18n';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { INDEX_PATH, ORGAN_DONATION_PATH } from '@/router/paths';
@@ -37,6 +38,9 @@ describe('organ donation amend page', () => {
     return mount(Amend, {
       $router,
       $store,
+      mountOpts: {
+        i18n,
+      },
     });
   };
 
@@ -107,7 +111,7 @@ describe('organ donation amend page', () => {
       });
 
       it('will translate the generic back button text', () => {
-        expect(backButton.text()).toEqual('translate_generic.backButton.text');
+        expect(backButton.text()).toEqual('Back');
       });
 
       describe('click', () => {

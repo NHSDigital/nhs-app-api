@@ -57,13 +57,13 @@
           <generic-button id="continue-button"
                           :class="['nhsuk-button']"
                           @click.stop.prevent="continueClicked">
-            {{ $t('generic.continueButton.text') }}
+            {{ $t('generic.continue') }}
           </generic-button>
           <generic-button v-if="!$store.state.device.isNativeApp"
                           id="back-button"
                           :class="['nhsuk-button', 'nhsuk-button--secondary']"
                           @click.stop.prevent="goBack" >
-            {{ $t('generic.backButton.text') }}
+            {{ $t('generic.back') }}
           </generic-button>
         </div>
       </div>

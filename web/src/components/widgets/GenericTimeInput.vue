@@ -1,7 +1,7 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
       {{ errorText }}
     </span>
     <div class="inline">
@@ -9,7 +9,7 @@
         <label id="hourInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-hour`">
-          {{ $t('generic.questions.time.labels.hour') }}
+          {{ $t('generic.hour') }}
         </label>
         <input :id="`${id}-hour`"
                ref="hourInput"
@@ -28,7 +28,7 @@
         <label id="minuteInputLabel"
                class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-minute`">
-          {{ $t('generic.questions.time.labels.minute') }}
+          {{ $t('generic.minute') }}
         </label>
         <input :id="`${id}-minute`"
                ref="minuteInput"

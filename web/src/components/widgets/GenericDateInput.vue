@@ -1,14 +1,14 @@
 <template>
   <div>
     <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
       {{ errorText }}
     </span>
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-day`">
-          {{ $t('generic.questions.date.labels.day') }}
+          {{ $t('generic.day') }}
         </label>
         <input :id="`${id}-day`"
                ref="day"
@@ -24,7 +24,7 @@
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-month`">
-          {{ $t('generic.questions.date.labels.month') }}
+          {{ $t('generic.month') }}
         </label>
         <input :id="`${id}-month`"
                ref="month"
@@ -40,7 +40,7 @@
       <div class="nhsuk-form-group">
         <label class="nhsuk-label nhsuk-date-input__label"
                :for="`${id}-year`">
-          {{ $t('generic.questions.date.labels.year') }}
+          {{ $t('generic.year') }}
         </label>
         <input :id="`${id}-year`"
                ref="year"

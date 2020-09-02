@@ -46,10 +46,10 @@ export default {
   data() {
     return {
       defaultIconTexts: {
-        success: this.$t('messageIconText.success'),
-        warning: this.$t('messageIconText.warning'),
-        error: this.$t('messageIconText.error'),
-        message: this.$t('messageIconText.message'),
+        success: this.$t('generic.success'),
+        warning: this.$t('generic.warning'),
+        error: this.$t('generic.error'),
+        message: this.$t('generic.message'),
       },
     };
   },

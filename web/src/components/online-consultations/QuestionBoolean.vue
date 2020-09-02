@@ -3,20 +3,20 @@
     <div v-if="error && errorText">
       <span v-for="singleError in errorText"
             :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
-        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
         {{ singleError }}
       </span>
     </div>
     <generic-radio-button :key="`${name}-true`"
                           :selected-value="selectedValue"
-                          :label="$t('generic.questions.boolean.labels.true')"
+                          :label="$t('generic.yes')"
                           :name="name"
                           :value="'true'"
                           :required="required"
                           @select="selected"/>
     <generic-radio-button :key="`${name}-false`"
                           :selected-value="selectedValue"
-                          :label="$t('generic.questions.boolean.labels.false')"
+                          :label="$t('generic.no')"
                           :name="name"
                           :value="'false'"
                           :required="required"

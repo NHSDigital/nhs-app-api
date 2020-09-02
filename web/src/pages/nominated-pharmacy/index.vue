@@ -15,7 +15,7 @@
         <message-dialog v-if="!isP1Pharmacy"
                         id="warning-dialog-dispensing-practice"
                         message-type="warning"
-                        :icon-text="$t('messageIconText.important')">
+                        :icon-text="$t('generic.important')">
           <message-text id="warning-text-1" :class="$style.warningText">
             {{ $t('nominatedPharmacy.warning.changeDispensingPractice.line1') }}
           </message-text>
@@ -28,9 +28,9 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
-                               :text="$t('generic.backButton.text')">
+                               :text="$t('generic.back')">
           <p>
-            <a href="#" @click="backButtonClicked"> {{ $t('generic.backButton.text') }} </a>
+            <a href="#" @click="backButtonClicked"> {{ $t('generic.back') }} </a>
           </p>
         </analytics-tracked-tag>
       </div>

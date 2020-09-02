@@ -5,7 +5,7 @@
         <error-title title="appointments.error.thereIsAProblemAppointments"
                      header="appointments.error.thereIsAProblem" />
         <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
@@ -13,21 +13,21 @@
         <error-title title="appointments.error.thereIsAProblemWithTheServiceAppointments"
                      header="appointments.error.contactYouSurgeryToCancel"/>
         <error-paragraph from="appointments.error.youCannotCancelRightNow" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===409" :id="generateErrorId()">
         <error-title title="appointments.error.youCannotCancelThisAppointment"/>
         <error-paragraph from="appointments.error.theAppointmentMayBeCancelledOrInThePast" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===461" :id="generateErrorId()">
         <error-title title="appointments.error.contactYouSurgeryToCancel"/>
         <error-paragraph from="appointments.error.itIsTooLateToCancel" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
@@ -38,10 +38,10 @@
         <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-link from="generic.contactUsButton.text"
+        <error-link from="generic.contactUs"
                     :action="contactUsUrl"
                     target="_blank"/>
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true"/>
       </error-container>
@@ -115,7 +115,7 @@
           <desktopGenericBackLink
             v-if="!$store.state.device.isNativeApp"
             :path="appointmentsPath"
-            :button-text="'generic.backButton.text'"
+            :button-text="'generic.back'"
             @clickAndPrevent="onBackButtonClicked"/>
         </div>
       </div>

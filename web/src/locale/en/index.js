@@ -2,6 +2,7 @@ import apiErrors from './apiErrors';
 import appointments from './appointments';
 import components from './components';
 import dataSharing from './dataSharing';
+import generic from './generic';
 import gpSessionErrors from './gpSessionErrors';
 import login from './login';
 import loginSettings from './loginSettings';
@@ -28,68 +29,6 @@ export default {
       message: {
         text: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
         label: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call one one one.',
-      },
-    },
-  },
-  messageIconText: {
-    success: 'Success',
-    warning: 'Warning',
-    error: 'Error',
-    message: 'Message',
-    important: 'Important',
-  },
-  generic: {
-    questions: {
-      attachment: {
-        label: 'File',
-      },
-      boolean: {
-        labels: {
-          true: 'Yes',
-          false: 'No',
-        },
-      },
-      quantity: {
-        initialUnitDropdownValue: 'Select unit',
-        labels: {
-          unit: 'Unit',
-          quantity: 'Quantity',
-        },
-      },
-      date: {
-        labels: {
-          day: 'Day',
-          month: 'Month',
-          year: 'Year',
-        },
-      },
-      time: {
-        labels: {
-          hour: 'Hour',
-          minute: 'Minute',
-        },
-      },
-    },
-    backButton: {
-      text: 'Back',
-    },
-    contactUsButton: {
-      text: 'Contact us',
-    },
-    continueButton: {
-      text: 'Continue',
-    },
-    tryAgainButton: {
-      text: 'Try again',
-    },
-    input: {
-      errors: {
-        messagePrefix: 'Error: ',
-      },
-    },
-    table: {
-      errors: {
-        noData: 'Error loading table data',
       },
     },
   },
@@ -240,12 +179,6 @@ export default {
       text: 'Select yes or no',
     },
   },
-  common: {
-    or: 'OR',
-  },
-  homeHeader: {
-    welcome: 'Welcome!',
-  },
   homeLoggedIn: {
     welcome: 'Welcome',
     description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
@@ -255,12 +188,6 @@ export default {
       age: 'Age',
       gpSurgery: 'GP surgery',
     },
-  },
-  preRegistrationInformation: {
-    buttonText: 'Continue',
-  },
-  signOutButton: {
-    signOut: 'Log out',
   },
   externalServiceWarning: {
     warningText: 'Your GP surgery provides this service',
@@ -636,9 +563,6 @@ export default {
       buttonText: 'Menu',
     },
   },
-  skipLink: {
-    linkText: 'Skip to main content',
-  },
   webFooter: {
     hiddenHeaderText: 'Support links',
     copyrightText: 'Crown copyright',
@@ -855,14 +779,6 @@ export default {
     header: 'Coronavirus (COVID-19)',
     text: 'Get information about coronavirus on NHS.UK',
   },
-  messageDateTimeFormats: {
-    midday: 'midday',
-    midnight: 'midnight',
-    yesterday: 'Yesterday',
-    sentDateAndTimeFormat: '[Sent ]{dateFormat}[ at ]{timeFormat}',
-    sentAtTimeTodayFormat: '[Sent today at ]{timeFormat}',
-    sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
-  },
   glossary: {
     headerText: 'You may see medical abbreviations that you are not familiar with.',
     linkText: 'Help with abbreviations',
@@ -871,6 +787,7 @@ export default {
   appointments,
   components,
   dataSharing,
+  generic,
   gpSessionErrors,
   login,
   loginSettings,

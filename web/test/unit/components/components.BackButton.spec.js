@@ -1,10 +1,20 @@
 import BackButton from '@/components/BackButton';
+import i18n from '@/plugins/i18n';
 import { redirectTo } from '@/lib/utils';
 import { createRouter, mount } from '../helpers';
 
 jest.mock('@/lib/utils');
 
-const mountBackButton = ({ $router, propsData = {} }) => mount(BackButton, { $router, propsData });
+const mountBackButton = ({ $router, propsData = {} }) => mount(
+  BackButton,
+  {
+    $router,
+    propsData,
+    mountOpts: {
+      i18n,
+    },
+  },
+);
 
 describe('Back Button', () => {
   let $router;
@@ -21,7 +31,7 @@ describe('Back Button', () => {
     });
 
     it('will display the default text', () => {
-      expect(wrapper.text()).toEqual('translate_generic.backButton.text');
+      expect(wrapper.text()).toEqual('Back');
     });
 
     it('will go to the previous page when clicked', () => {

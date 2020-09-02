@@ -1,7 +1,7 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
       {{ errorText }}
     </span>
     <img :id="id"

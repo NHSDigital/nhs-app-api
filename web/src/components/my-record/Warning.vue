@@ -2,7 +2,7 @@
   <div v-if="showTemplate"
        id="mainDiv"
        :class="[!$store.state.device.isNativeApp && $style.desktopWeb]">
-    <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
+    <message-dialog message-type="warning" :icon-text="$t('generic.important')">
       <message-text :class="$style.warningText">
         {{ $t('myRecord.warning.yourRecordMayContainSensitiveInformation') }}
       </message-text>
@@ -20,7 +20,7 @@
     </div>
     <generic-button class="nhsuk-button"
                     @click.prevent="onContinueButtonClicked">
-      {{ $t('generic.continueButton.text') }}
+      {{ $t('generic.continue') }}
     </generic-button>
 
     <desktopGenericBackLink

@@ -1,12 +1,11 @@
+import i18n from '@/plugins/i18n';
 import NominatedPharmacyOnlineOnlySearch from '@/pages/nominated-pharmacy/online-only-search';
 import * as dependency from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
   NOMINATED_PHARMACY_SEARCH_RESULTS_PATH,
 } from '@/router/paths';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 // Skipping as the online-only-search page currently always redirects to prescriptions.
 describe.skip('nominated pharmacy online only search page', () => {
@@ -40,7 +39,7 @@ describe.skip('nominated pharmacy online only search page', () => {
     const $http = createHttp();
 
     const mountPage = () => mount(NominatedPharmacyOnlineOnlySearch,
-      { $store, $t, $router, $http });
+      { $store, $router, $http, mountOpts: { i18n } });
 
     beforeEach(() => {
       $store = createStore({
@@ -70,8 +69,7 @@ describe.skip('nominated pharmacy online only search page', () => {
 
       it('back link', async () => {
         expect(backLink.exists()).toBe(true);
-        expect(backLink.text())
-          .toEqual('translate_generic.backButton.text');
+        expect(backLink.text()).toEqual('Back');
       });
 
       it('error message hidden', async () => {
@@ -156,7 +154,7 @@ describe.skip('nominated pharmacy online only search page', () => {
     });
     const $http = createHttpWithResults();
     const mountPageWithResults = () => mount(NominatedPharmacyOnlineOnlySearch,
-      { $store, $t, $router, $http });
+      { $store, $router, $http, mountOpts: { i18n } });
 
     beforeEach(() => {
       $store = createStore({

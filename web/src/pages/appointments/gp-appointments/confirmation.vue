@@ -20,14 +20,14 @@
         <error-title title="appointments.error.thereIsAProblemAppointments"
                      header="appointments.error.thereIsAProblem" />
         <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
       <error-container v-else-if="error.status===409" :id="generateErrorId">
         <error-title title="appointments.confirmation.error.theAppointmentIsNoLongerAvailable"/>
         <error-paragraph from="appointments.confirmation.error.pleaseChooseADifferentAppointment" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true"/>
       </error-container>
@@ -39,7 +39,7 @@
         <error-paragraph from="appointments.confirmation.error.contactYourSurgeryIfYouNeedToBook" />
         <error-paragraph from="appointments.confirmation.error.youCanGoBack" />
         <error-paragraph from="appointments.confirmation.error.forUrgentMedicalAdvice" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>
@@ -50,10 +50,10 @@
         <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-link from="generic.contactUsButton.text"
+        <error-link from="generic.contactUs"
                     :action="contactUsUrl"
                     target="_blank"/>
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true"/>
       </error-container>
@@ -198,7 +198,7 @@
       <div v-if="!$store.state.device.isNativeApp" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
           <desktop-generic-back-link :path="appointmentBookingPath"
-                                     :button-text="'generic.backButton.text'"
+                                     :button-text="'generic.back'"
                                      @clickAndPrevent="onCancelButtonClicked"/>
         </div>
       </div>

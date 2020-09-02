@@ -39,7 +39,7 @@
 
       <sjr-if v-if="!$store.state.device.isNativeApp" journey="onlineConsultations">
         <desktopGenericBackLink :path="indexPath"
-                                button-text="generic.backButton.text"
+                                button-text="generic.back"
                                 @clickAndPrevent="onBackButtonClicked"/>
       </sjr-if>
     </div>

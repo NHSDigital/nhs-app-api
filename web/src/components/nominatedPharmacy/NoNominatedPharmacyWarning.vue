@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.info" data-purpose="info">
-    <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
+    <message-dialog message-type="warning" :icon-text="$t('generic.important')">
       <message-text id="warning-text">
         {{ $t('nominatedPharmacy.notFound.warningText') }}
       </message-text>

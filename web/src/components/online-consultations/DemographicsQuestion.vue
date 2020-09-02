@@ -2,7 +2,7 @@
   <div>
     <message-dialog id="demographicsWarning"
                     message-type="warning"
-                    :icon-text="$t('messageIconText.important')">
+                    :icon-text="$t('generic.important')">
       <message-text>
         {{ $t('onlineConsultations.warning.text',
               { providerName: providerName }) }}

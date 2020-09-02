@@ -23,10 +23,10 @@
         <error-paragraph from="appointments.error.tryAgainOrContactUs"
                          :variable="error.serviceDeskReference"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-link from="generic.contactUsButton.text"
+        <error-link from="generic.contactUs"
                     :action="contactUsUrl"
                     target="_blank"/>
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true"/>
       </error-container>
@@ -36,11 +36,11 @@
         <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                          :variable="error.serviceDeskReference"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
-        <error-link from="generic.contactUsButton.text"
+        <error-button from="generic.tryAgain" @click="$router.go()" />
+        <error-link from="generic.contactUs"
                     :action="contactUsUrl"
                     target="_blank" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="appointmentsPath"
                     :desktop-only="true" />
       </error-container>

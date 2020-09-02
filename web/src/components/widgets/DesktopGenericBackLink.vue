@@ -22,7 +22,7 @@ export default {
     },
     buttonText: {
       type: String,
-      default: 'generic.backButton.text',
+      default: 'generic.back',
     },
     target: {
       type: String,

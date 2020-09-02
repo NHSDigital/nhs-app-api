@@ -3,7 +3,7 @@
     <div>
       <pre-registration-information :should-show-header="false"/>
       <other-services/>
-      <login-button button-text="preRegistrationInformation.buttonText"/>
+      <login-button button-text="generic.continue"/>
     </div>
   </nhs-uk-app-layout>
 </template>

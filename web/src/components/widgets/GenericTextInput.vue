@@ -1,7 +1,7 @@
 <template>
   <div>
     <span v-if="error" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
       {{ errorText }}
     </span>
     <input :id="id"

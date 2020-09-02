@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import Index from '@/pages/account/index';
 import { createStore, mount } from '../../helpers';
 
@@ -11,6 +12,9 @@ describe('Account.index', () => {
       'welcome-section': '<div></div>',
       settings: '<div data-purpose="setting-section"></div>',
       // 'analytics-tracked-tag': '<a></a>',
+    },
+    mountOpts: {
+      i18n,
     },
   });
 
@@ -48,7 +52,7 @@ describe('Account.index', () => {
         .toBe(true);
 
       expect(wrapper.find('[data-purpose=logout-button]').text())
-        .toBe('translate_signOutButton.signOut');
+        .toBe('Log out');
     });
 
     it('should not be visible in desktop view', () => {

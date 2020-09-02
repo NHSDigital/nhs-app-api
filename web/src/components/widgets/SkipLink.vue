@@ -2,7 +2,7 @@
   <div>
     <a v-if="!$store.state.device.isNativeApp"
        :class="$style['nhsuk-skip-link']" href="#maincontent"
-       @click.prevent="setFocus()">{{ $t('skipLink.linkText') }}</a>
+       @click.prevent="setFocus()">{{ $t('generic.skipToMainContent') }}</a>
   </div>
 </template>
 

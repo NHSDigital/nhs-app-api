@@ -3,7 +3,7 @@
        :class="[this.$style.msg, {[this.$style.plain]: isPlain}, 'nhsuk-width-container--full']"
        :aria-live="ariaLive">
     <h2 v-if="!isPlain" :class="['nhsuk-heading-m', $style.icon]">
-      {{ $t('messageIconText.error') }}
+      {{ $t('generic.error') }}
     </h2>
     <div :class="$style['msg-content']" data-purpose="error">
       <slot/>

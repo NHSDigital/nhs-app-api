@@ -86,7 +86,7 @@
         </div>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="getBackPath"
-                                :button-text="'generic.backButton.text'"
+                                :button-text="'generic.back'"
                                 @clickAndPrevent="backButtonClicked"/>
       </div>
     </div>
@@ -99,8 +99,8 @@
       <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
       <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
       <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
-      <error-link from="generic.backButton.text"
+      <error-button from="generic.tryAgain" @click="tryAgain" />
+      <error-link from="generic.back"
                   :action="getBackPath"
                   :desktop-only="true"/>
     </error-container>

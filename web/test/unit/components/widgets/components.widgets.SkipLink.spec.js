@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import SkipLink from '@/components/widgets/SkipLink';
 import { createStore, mount } from '../../helpers';
 
@@ -15,7 +16,7 @@ describe('SkipLink.vue', () => {
       },
     });
 
-    return mount(SkipLink, { $store, $router, methods });
+    return mount(SkipLink, { $store, $router, methods, mountOpts: { i18n } });
   };
   describe('Skip link is present and usable in desktop', () => {
     const setFocus = jest.fn();
@@ -35,8 +36,8 @@ describe('SkipLink.vue', () => {
         .toBe(true);
     });
 
-    it('will display text from skipLink.linkText', () => {
-      expect(link.text()).toEqual('translate_skipLink.linkText');
+    it('will display skip to main content text', () => {
+      expect(link.text()).toEqual('Skip to main content');
     });
 
     it('clicking the link calls the correct function', () => {

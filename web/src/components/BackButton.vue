@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     buttonText() {
-      return this.text || this.$t('generic.backButton.text');
+      return this.text || this.$t('generic.back');
     },
   },
   methods: {

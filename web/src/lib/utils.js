@@ -62,9 +62,9 @@ const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
 
     if (minutes === 0) {
       if (hours === 12) {
-        localeValue = $t('messageDateTimeFormats.midday');
+        localeValue = $t('generic.midday');
       } else if (hours === 0) {
-        localeValue = $t('messageDateTimeFormats.midnight');
+        localeValue = $t('generic.midnight');
       }
     }
 
@@ -83,7 +83,7 @@ export const formatInboxMessageTime = (inboxMessageTime, $t) => {
 
   const formatConfig = {
     sameDay: get12HourTimeFormat(inboxMessageMoment, $t, true),
-    lastDay: `[${$t('messageDateTimeFormats.yesterday')}]`,
+    lastDay: `[${$t('generic.yesterday')}]`,
     lastWeek: 'dddd',
     sameElse: 'D MMMM YYYY',
   };
@@ -100,10 +100,10 @@ export const formatIndividualMessageTime = (messageTime, $t) => {
   };
 
   const formatConfig = {
-    sameDay: $t('messageDateTimeFormats.sentAtTimeTodayFormat', localeParams),
-    lastDay: $t('messageDateTimeFormats.sentAtTimeYesterdayFormat', localeParams),
-    lastWeek: $t('messageDateTimeFormats.sentDateAndTimeFormat', localeParams),
-    sameElse: $t('messageDateTimeFormats.sentDateAndTimeFormat', localeParams),
+    sameDay: $t('generic.sentTodayAtTimeFormat', localeParams),
+    lastDay: $t('generic.sentYesterdayAtTimeFormat', localeParams),
+    lastWeek: $t('generic.sentDateFormatAtTimeFormat', localeParams),
+    sameElse: $t('generic.sentDateFormatAtTimeFormat', localeParams),
   };
 
   return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);

@@ -11,7 +11,7 @@
     <menu-item-list>
       <slot name="items"/>
     </menu-item-list>
-    <error-link from="generic.backButton.text"
+    <error-link from="generic.back"
                 :action="backUrl"
                 data-purpose="error"
                 :desktop-only="true"/>

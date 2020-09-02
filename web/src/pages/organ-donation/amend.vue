@@ -9,7 +9,7 @@
                       id="back-button"
                       :class="['nhsuk-button', 'nhsuk-button--secondary']"
                       @click="goBack" >
-        {{ $t('generic.backButton.text') }}
+        {{ $t('generic.back') }}
       </generic-button>
     </div>
   </div>

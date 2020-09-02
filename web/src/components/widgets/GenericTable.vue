@@ -24,7 +24,7 @@
       <tr class="nhsuk-table__row">
         <td class="nhsuk-table__cell"
             :colspan="headings ? headings.length : 1">
-          {{ $t('generic.table.errors.noData') }}
+          {{ $t('generic.errorLoadingTableData') }}
         </td>
       </tr>
     </tbody>

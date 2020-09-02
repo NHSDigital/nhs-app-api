@@ -3,7 +3,7 @@
     <div v-if="error && errorText">
       <span v-for="singleError in errorText"
             :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
-        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
         {{ singleError }}
       </span>
     </div>
@@ -11,7 +11,7 @@
       <label :id="`${name}-quantity-label`"
              :for="`${name}-quantity`"
              class="nhsuk-label nhsuk-input__label">
-        {{ $t('generic.questions.quantity.labels.quantity') }}
+        {{ $t('generic.quantity') }}
       </label>
       <input :id="`${name}-quantity`"
              v-model="quantity"
@@ -28,7 +28,7 @@
       <label :id="`${name}-select-label`"
              :for="`${name}-unit`"
              class="nhsuk-label nhsuk-input__label">
-        {{ $t('generic.questions.quantity.labels.unit') }}
+        {{ $t('generic.unit') }}
       </label>
       <select-dropdown v-model="unit"
                        :select-id="`${name}-unit`"
@@ -36,7 +36,7 @@
                        :error-border="error"
                        :required="required">
         <option disabled="" selected="" value="">
-          {{ $t('generic.questions.quantity.initialUnitDropdownValue') }}
+          {{ $t('generic.selectUnit') }}
         </option>
         <option v-for="option in options"
                 :key="option.code"

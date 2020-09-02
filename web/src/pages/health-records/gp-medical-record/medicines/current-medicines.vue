@@ -5,7 +5,7 @@
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="getBackPath"
-      :button-text="'generic.backButton.text'"
+      :button-text="'generic.back'"
       @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>

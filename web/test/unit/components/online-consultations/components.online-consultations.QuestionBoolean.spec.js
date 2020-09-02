@@ -1,5 +1,6 @@
-import QuestionBoolean from '@/components/online-consultations/QuestionBoolean';
 import each from 'jest-each';
+import i18n from '@/plugins/i18n';
+import QuestionBoolean from '@/components/online-consultations/QuestionBoolean';
 import { mount } from '../../helpers';
 
 describe('radio buttons', () => {
@@ -14,6 +15,9 @@ describe('radio buttons', () => {
         ...propsData,
       },
       methods,
+      mountOpts: {
+        i18n,
+      },
     });
 
   it('will have radio buttons for the question', () => {
@@ -33,8 +37,7 @@ describe('radio buttons', () => {
       .exists())
       .toEqual(true);
 
-    expect(wrapper.find("[for='name-true']").element.innerHTML)
-      .toEqual('translate_generic.questions.boolean.labels.true');
+    expect(wrapper.find("[for='name-true']").element.innerHTML).toEqual('Yes');
   });
 
   it('will have false radio button with correct label', () => {
@@ -43,8 +46,7 @@ describe('radio buttons', () => {
       .exists())
       .toEqual(true);
 
-    expect(wrapper.find("[for='name-false']").element.innerHTML)
-      .toEqual('translate_generic.questions.boolean.labels.false');
+    expect(wrapper.find("[for='name-false']").element.innerHTML).toEqual('No');
   });
 
   it('will emit true value when true clicked', () => {

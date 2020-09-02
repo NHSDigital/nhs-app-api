@@ -3,7 +3,7 @@
     <div v-if="error && errorText">
       <span v-for="singleError in errorText"
             :id="`${name}error`" :key="singleError" class="nhsuk-error-message">
-        <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+        <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
         {{ singleError }}
       </span>
     </div>

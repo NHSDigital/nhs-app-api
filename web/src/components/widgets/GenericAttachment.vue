@@ -1,13 +1,13 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
-      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.errorPrefix') }}</span>
       {{ errorText }}
     </span>
     <div class="nhsuk-date-input__item">
       <div class="nhsuk-form-group">
         <label class="nhsuk-label" :for="id">
-          {{ $t('generic.questions.attachment.label') }}
+          {{ $t('generic.file') }}
         </label>
         <input :id="id"
                type="file"

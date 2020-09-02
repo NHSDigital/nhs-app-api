@@ -2,7 +2,7 @@
   <div class="content">
     <generic-button id="signout-button"
                     :class="['nhsuk-button', 'nhsuk-button--secondary']" @click="signoutClicked">
-      {{ $t('signOutButton.signOut') }}
+      {{ $t('generic.logOut') }}
     </generic-button>
   </div>
 </template>

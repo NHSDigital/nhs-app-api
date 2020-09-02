@@ -13,7 +13,7 @@
         <p class="nhsuk-u-padding-bottom-3">
           {{ biometricInformation }}
         </p>
-        <message-dialog message-type="warning" :icon-text="$t('messageIconText.important')">
+        <message-dialog message-type="warning" :icon-text="$t('generic.important')">
           <message-text>
             {{ biometricWarningText }}
           </message-text>

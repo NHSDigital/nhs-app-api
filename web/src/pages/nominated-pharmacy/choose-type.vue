@@ -39,7 +39,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
-                               :text="$t('generic.backButton.text')">
+                               :text="$t('generic.back')">
           <desktopGenericBackLink id="back-link"
                                   :path="interruptPath"
                                   :button-text="'nominatedPharmacy.chooseType.backLinkText'"

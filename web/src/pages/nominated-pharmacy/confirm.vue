@@ -17,11 +17,11 @@
                         @click.stop.prevent="submitNominatedPharmacy">
           {{ $t('nominatedPharmacy.confirm.confirmButton') }}
         </generic-button>
-        <analytics-tracked-tag :text="$t('generic.backButton.text')">
+        <analytics-tracked-tag :text="$t('generic.back')">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
                                   :path="nominatedPharmacySearchResultsPath"
-                                  :button-text="'generic.backButton.text'"
+                                  :button-text="'generic.back'"
                                   @clickAndPrevent="cancelButtonClicked"/>
         </analytics-tracked-tag>
       </div>

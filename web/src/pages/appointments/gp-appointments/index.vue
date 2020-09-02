@@ -23,7 +23,7 @@
         <error-title title="appointments.error.thereIsAProblemAppointments"
                      header="appointments.error.thereIsAProblem" />
         <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="backUrl"
                     :desktop-only="true"/>
       </error-container>
@@ -31,8 +31,8 @@
         <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
         <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
         <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
-        <error-button from="generic.tryAgainButton.text" @click="tryAgain" />
-        <error-link from="generic.backButton.text"
+        <error-button from="generic.tryAgain" @click="tryAgain" />
+        <error-link from="generic.back"
                     :action="backUrl"
                     :desktop-only="true"/>
       </error-container>
@@ -40,9 +40,9 @@
         <error-title title="appointments.error.thereIsAProblemLoading"/>
         <error-paragraph from="errors.tryAgainNow"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
+        <error-button from="generic.tryAgain" @click="$router.go()" />
         <report-a-problem :reference="error.serviceDeskReference"/>
-        <error-link from="generic.backButton.text"
+        <error-link from="generic.back"
                     :action="backUrl"
                     :desktop-only="true"/>
       </error-container>
@@ -51,8 +51,8 @@
         <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                          :variable="error.serviceDeskReference"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-button from="generic.tryAgainButton.text" @click="$router.go()" />
-        <error-link from="generic.contactUsButton.text"
+        <error-button from="generic.tryAgain" @click="$router.go()" />
+        <error-link from="generic.contactUs"
                     :action="contactUsUrl"
                     target="_blank"/>
       </error-container>

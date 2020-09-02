@@ -59,7 +59,7 @@
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
@@ -74,7 +74,7 @@
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
@@ -88,7 +88,7 @@
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
@@ -104,7 +104,7 @@
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
@@ -119,7 +119,7 @@
                       <error-paragraph from="login.authReturn.ifYouKeepSeeingThisQuoteCode"
                                        :variable="serviceDeskReference" />
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>
@@ -133,7 +133,7 @@
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
                       <error-paragraph from="login.authReturn.ifYouNeed" />
-                      <error-link from="generic.contactUsButton.text"
+                      <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
                                   :query-param="contactUsParam"/>

@@ -16,7 +16,7 @@
       v-if="!$store.state.device.isNativeApp"
       class="nhsuk-u-margin-top-3"
       :path="backPath"
-      :button-text="'generic.backButton.text'"
+      :button-text="'generic.back'"
       @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>

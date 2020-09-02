@@ -21,13 +21,13 @@
     </menu-item-list>
 
     <template v-if="$store.state.device.isNativeApp">
-      <analytics-tracked-tag :text="$t('signOutButton.signOut')"
+      <analytics-tracked-tag :text="$t('generic.logOut')"
                              data-purpose="button">
         <generic-button id="signout-button"
                         data-purpose="logout-button"
                         class="nhsuk-button nhsuk-button--secondary"
                         @click.prevent="signout">
-          {{ $t('signOutButton.signOut') }}
+          {{ $t('generic.logOut') }}
         </generic-button>
       </analytics-tracked-tag>
     </template>
