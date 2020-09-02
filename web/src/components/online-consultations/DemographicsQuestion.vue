@@ -59,10 +59,6 @@ import {
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
 } from '@/lib/online-consultations/constants/nojsInputNames';
-import {
-  APPOINTMENT_BOOKING_GUIDANCE_PATH,
-  APPOINTMENTS_PATH,
-} from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
@@ -71,6 +67,7 @@ import {
   PRIVACY_POLICY_URL,
   ONLINE_CONSULTATIONS_PRIVACY_URL,
 } from '@/router/externalLinks';
+import last from 'lodash/fp/last';
 
 export default {
   name: 'DemographicsQuestion',
@@ -109,14 +106,8 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
-    bookingGuidancePath() {
-      return APPOINTMENT_BOOKING_GUIDANCE_PATH;
-    },
     backLink() {
-      // TODO: revert to using previouspaths when routing plugin moved
-      // const { previousPaths } = this.$router.history.router;
-      // return previousPaths[previousPaths.length - 1];
-      return APPOINTMENTS_PATH;
+      return last(this.$router.history.router.previousPaths);
     },
   },
   methods: {

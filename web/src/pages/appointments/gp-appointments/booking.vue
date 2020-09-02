@@ -1,49 +1,7 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="error">
-      <error-container v-if="error.status===403"
-                       :id="generateErrorId()"
-                       override-style="plain"
-                       aria-live="polite">
-        <error-title title="appointments.error.appointmentBookingUnavailable"/>
-        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
-        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
-        <error-header from="appointments.error.coronavirus.mightHave" />
-        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
-        <error-link :class="$style['inline-link']"
-                    from="appointments.error.coronavirus.useOneOneOne"
-                    :action="coronaServiceUrl"
-                    data-purpose="corona-service"
-                    target="_blank"/>
-      </error-container>
-
-      <error-container v-else-if="error.status===502 || error.status===500"
-                       :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemLoading"/>
-        <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                         :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-link from="generic.contactUs"
-                    :action="contactUsUrl"
-                    target="_blank"/>
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true"/>
-      </error-container>
-
-      <error-container v-else-if="error.status===504" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemLoading"/>
-        <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
-                         :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-button from="generic.tryAgain" @click="$router.go()" />
-        <error-link from="generic.contactUs"
-                    :action="contactUsUrl"
-                    target="_blank" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
+      <booking-errors :error="error"/>
     </div>
     <div v-else>
       <ul :class="$style['sr-only']" role="list"
@@ -104,14 +62,8 @@
 <script>
 import VueScrollTo from 'vue-scrollto';
 import { get, isEmpty } from 'lodash/fp';
+import BookingErrors from '@/components/errors/pages/appointments/BookingErrors';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorHeader from '@/components/errors/ErrorHeader';
-import ErrorLink from '@/components/errors/ErrorLink';
-import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorTitle from '@/components/errors/ErrorTitle';
 import Filters from '@/components/appointments/booking/Filters';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -148,19 +100,13 @@ const load = async ({ $store }, query) => {
 export default {
   name: 'GpAppointmentsBookingPage',
   components: {
+    BookingErrors,
     DesktopGenericBackLink,
-    ErrorButton,
-    ErrorContainer,
-    ErrorHeader,
-    ErrorLink,
-    ErrorParagraph,
-    ErrorTitle,
     Filters,
     MessageDialog,
     MessageText,
     SlotList,
   },
-  mixins: [ErrorPageMixin],
   data() {
     return {
       appointmentsPath: GP_APPOINTMENTS_PATH,
@@ -232,9 +178,6 @@ export default {
     this.filtered = containsFilter(query);
   },
   methods: {
-    generateErrorId() {
-      return `error-dialog-${this.error.status}`;
-    },
     goBack() {
       redirectTo(this, this.appointmentsPath);
     },

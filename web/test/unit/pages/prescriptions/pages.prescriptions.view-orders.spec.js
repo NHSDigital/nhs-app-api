@@ -313,43 +313,4 @@ describe('prescriptions/view-orders.vue -', () => {
         ]);
     });
   });
-
-  describe('Prescriptions GP Session error', () => {
-    it('will show the try again error if the error status is 599 and hasRetried is false', () => {
-      const error = { status: 599 };
-      const store = createStore({ error });
-
-      const page = createViewOrdersPrescriptionsPage(store);
-      expect(page.find('#error-dialog-599').exists()).toBe(true);
-      expect(page.vm.prescriptionsApiError).toStrictEqual(error);
-      expect(page.vm.hasRetried).toBe(false);
-    });
-
-    it('will show the permanent error when hasRetried is true and the status is 599', () => {
-      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
-      const $store = createStore({ error, hasRetried: true });
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
-      expect(page.vm.prescriptionsApiError).toStrictEqual(error);
-      expect(page.vm.hasRetried).toBe(true);
-    });
-
-
-    it('will return the correct serviceDeskReference', () => {
-      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
-      const $store = createStore({ error, hasRetried: true });
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      expect(page.vm.referenceCode).toBe('xxxxxx');
-    });
-
-    it('will set hasRetried to true on try again', () => {
-      const $store = createStore();
-
-      const page = createViewOrdersPrescriptionsPage($store);
-      page.vm.tryAgain();
-      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
-    });
-  });
 });

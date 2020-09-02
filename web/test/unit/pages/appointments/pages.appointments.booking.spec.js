@@ -1,5 +1,4 @@
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
-import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../helpers';
 
@@ -164,18 +163,6 @@ describe('booking.vue', () => {
       it('will dispatch `availableAppointments/load`', () => {
         expect($store.dispatch).toHaveBeenNthCalledWith(4, 'availableAppointments/load');
       });
-    });
-  });
-
-  describe('errors', () => {
-    each([
-      403,
-      500,
-      502,
-      504,
-    ]).it('will display an error dialog for status code: %s', (status) => {
-      createBookingPage({ error: { status } });
-      expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });
 });

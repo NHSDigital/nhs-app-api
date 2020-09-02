@@ -1,50 +1,8 @@
 <template>
   <div v-if="showTemplate">
+
     <div v-if="error">
-      <error-container v-if="error.status===400" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemAppointments"
-                     header="appointments.error.thereIsAProblem" />
-        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===403" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemWithTheServiceAppointments"
-                     header="appointments.error.contactYouSurgeryToCancel"/>
-        <error-paragraph from="appointments.error.youCannotCancelRightNow" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===409" :id="generateErrorId()">
-        <error-title title="appointments.error.youCannotCancelThisAppointment"/>
-        <error-paragraph from="appointments.error.theAppointmentMayBeCancelledOrInThePast" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===461" :id="generateErrorId()">
-        <error-title title="appointments.error.contactYouSurgeryToCancel"/>
-        <error-paragraph from="appointments.error.itIsTooLateToCancel" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===500 || error.status===502 || error.status===504"
-                       :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemAppointments"
-                     header="appointments.error.thereIsAProblem" />
-        <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                         :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-link from="generic.contactUs"
-                    :action="contactUsUrl"
-                    target="_blank"/>
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true"/>
-      </error-container>
+      <cancel-booking-errors :error="error" />
     </div>
 
     <div v-else class="pull-content">
@@ -126,16 +84,13 @@
 
 <script>
 import Appointment from '@/components/appointments/Appointment';
+import CancelBookingErrors from '@/components/errors/pages/appointments/CancelBookingErrors';
 import Card from '@/components/widgets/card/Card';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorTitle from '@/components/errors/ErrorTitle';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
@@ -151,16 +106,13 @@ import {
 export default {
   name: 'GpAppointmentsCancellingPage',
   components: {
+    CancelBookingErrors,
     Appointment,
     Card,
     CardGroup,
     CardGroupItem,
     DesktopGenericBackLink,
-    ErrorContainer,
-    ErrorLink,
     ErrorMessage,
-    ErrorParagraph,
-    ErrorTitle,
     GenericButton,
     MessageDialog,
     MessageList,
@@ -199,9 +151,6 @@ export default {
     this.$store.dispatch('myAppointments/clearSelectedAppointment');
   },
   methods: {
-    generateErrorId() {
-      return `error-dialog-${this.error.status}`;
-    },
     onBackButtonClicked() {
       redirectTo(this, this.appointmentsPath);
     },

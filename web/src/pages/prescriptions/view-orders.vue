@@ -51,18 +51,9 @@
                                @clickAndPrevent="backLinkClicked"/>
   </div>
   <div v-else-if="prescriptionsApiError && hasLoaded">
-    <prescriptions-gp-session-error v-if="hasRetried"
-                                    id="presciptionsGpSessionError"
-                                    :code="referenceCode"/>
-    <error-container v-else id="error-dialog-599">
-      <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
-      <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-button from="generic.tryAgain" @click="tryAgain" />
-      <error-link from="generic.back"
-                  :action="backUrl"
-                  :desktop-only="true"/>
-    </error-container>
+    <prescription-errors :error="prescriptionsApiError"
+                         :reference-code="referenceCode"
+                         :try-again-route="tryAgainPath"/>
   </div>
 </template>
 
@@ -71,11 +62,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
-import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorLink from '@/components/errors/ErrorLink';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorTitle from '@/components/errors/ErrorTitle';
+import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 import SjrIf from '@/components/SjrIf';
 import isEmpty from 'lodash/fp/isEmpty';
 import orderBy from 'lodash/fp/orderBy';
@@ -89,7 +76,6 @@ import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import sjrIf from '@/lib/sjrIf';
 import showShutterPage from '@/lib/proxy/shutter';
-import PrescriptionsGpSessionError from '@/components/errors/gp-session-errors/PrescriptionsGpSessionError';
 
 const loadData = async (store) => {
   store.dispatch('prescriptions/clear');
@@ -107,8 +93,8 @@ const loadData = async (store) => {
   const { error } = store.state.prescriptions;
 
   if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried(store)) {
-    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.header');
-    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.header');
+    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
+    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
   }
 };
 
@@ -119,12 +105,7 @@ export default {
     HistoricPrescription,
     SjrIf,
     DesktopGenericBackLink,
-    PrescriptionsGpSessionError,
-    ErrorButton,
-    ErrorContainer,
-    ErrorLink,
-    ErrorParagraph,
-    ErrorTitle,
+    PrescriptionErrors,
   },
   data() {
     return {
@@ -134,6 +115,7 @@ export default {
         [MedicationCourseStatus.Approved]: 2,
         [MedicationCourseStatus.Rejected]: 1,
       },
+      tryAgainPath: PRESCRIPTIONS_VIEW_ORDERS_PATH,
     };
   },
   computed: {

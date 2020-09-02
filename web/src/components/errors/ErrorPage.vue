@@ -1,16 +1,10 @@
 <template>
   <div>
-    <error-title v-if="updateHeader" :title="$t(`gpSessionErrors.${area}.header`)" />
+    <error-title v-if="updateHeader" :title="headerLocaleRef" />
     <slot name="content"/>
     <hr>
-    <report-a-problem :reference="code"/>
-    <h2 id="listHeader"
-        class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 nhsuk-u-margin-bottom-0">
-      {{ $t(`gpSessionErrors.${area}.menuListHeader`) }}
-    </h2>
-    <menu-item-list>
-      <slot name="items"/>
-    </menu-item-list>
+    <report-a-problem v-if="hasReferenceCode" :reference="code"/>
+    <slot name="actions"/>
     <error-link from="generic.back"
                 :action="backUrl"
                 data-purpose="error"
@@ -19,17 +13,15 @@
 </template>
 <script>
 import ReportAProblem from '@/components/errors/ReportAProblem';
-import MenuItemList from '@/components/MenuItemList';
-import ErrorTitle from '@/components/errors/ErrorTitle';
 import ErrorLink from '@/components/errors/ErrorLink';
+import ErrorTitle from '@/components/errors/ErrorTitle';
 
 export default {
-  name: 'GpSessionError',
+  name: 'GenericErrorScreen',
   components: {
     ReportAProblem,
-    MenuItemList,
-    ErrorTitle,
     ErrorLink,
+    ErrorTitle,
   },
   props: {
     code: {
@@ -47,6 +39,16 @@ export default {
     backUrl: {
       type: String,
       default: undefined,
+    },
+    headerLocaleRef: {
+      type: String,
+      default: undefined,
+      required: true,
+    },
+  },
+  computed: {
+    hasReferenceCode() {
+      return this.code !== '' && this.code !== undefined;
     },
   },
 };

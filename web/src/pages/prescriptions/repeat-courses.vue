@@ -95,18 +95,9 @@
     </div>
   </div>
   <div v-else-if="gpSessionApiError">
-    <prescriptions-gp-session-error v-if="hasRetried"
-                                    id="presciptionsGpSessionError"
-                                    :code="gpSessionApiError.serviceDeskReference"/>
-    <error-container v-else id="error-dialog-599">
-      <error-title title="gpSessionErrors.prescriptions.tryAgainHeader"/>
-      <error-paragraph from="gpSessionErrors.prescriptions.youAreNotCurrentlyAble"/>
-      <error-paragraph from="gpSessionErrors.temporaryProblem"/>
-      <error-button from="generic.tryAgain" @click="tryAgain" />
-      <error-link from="generic.back"
-                  :action="getBackPath"
-                  :desktop-only="true"/>
-    </error-container>
+    <prescription-errors :error="gpSessionApiError"
+                         :reference-code="gpSessionApiError.serviceDeskReference"
+                         :try-again-route="tryAgainPath"/>
   </div>
 </template>
 
@@ -120,12 +111,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorLink from '@/components/errors/ErrorLink';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorTitle from '@/components/errors/ErrorTitle';
-import PrescriptionsGpSessionError from '@/components/errors/gp-session-errors/PrescriptionsGpSessionError';
+import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 
 import {
   NOMINATED_PHARMACY_CHECK_PATH,
@@ -148,8 +134,8 @@ const loadData = async (store) => {
   const { error } = store.state.repeatPrescriptionCourses;
 
   if (error && error.status === GP_SESSION_ERROR_STATUS && gpSessionErrorHasRetried(store)) {
-    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.header');
-    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.header');
+    EventBus.$emit(UPDATE_HEADER, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
+    EventBus.$emit(UPDATE_TITLE, 'gpSessionErrors.prescriptions.youCanNotOrderOrViewPrescriptions');
   }
 };
 
@@ -168,18 +154,14 @@ export default {
     Card,
     CardGroupItem,
     CardGroup,
-    PrescriptionsGpSessionError,
-    ErrorButton,
-    ErrorContainer,
-    ErrorLink,
-    ErrorParagraph,
-    ErrorTitle,
+    PrescriptionErrors,
   },
   data() {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
       prescriptionChoices: this.$store.state.repeatPrescriptionCourses,
       selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
+      tryAgainPath: PRESCRIPTION_REPEAT_COURSES_PATH,
     };
   },
   computed: {

@@ -42,13 +42,6 @@ class GenericPageStepDefinitions {
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
-    @When("^I click the link called '(.*)' with the COVID-19 service url$")
-    fun iClickANamedLinkWithTheCovidServiceUrl(linkTitle: String) {
-        val url = "http://stubs.local.bitraft.io:8080/external/covid"
-        browser.storeCurrentTabCount()
-        genericPage.assertLinkExists(linkTitle, url, internal = false).click()
-    }
-
     @Then("^I see the error reference code with prefix '(.*)'$")
     fun iSeeTheErrorReferenceCode(prefix: String){
         genericPage.containsText("Reference: $prefix")

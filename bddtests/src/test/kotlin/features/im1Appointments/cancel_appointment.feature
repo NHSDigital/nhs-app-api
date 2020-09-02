@@ -137,9 +137,7 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     And I select "Cancel appointment" button
-    Then I see an appropriate error message when not allowed to cancel
-    When I click the error 'Back' link
-    Then the Your Appointments page is displayed
+    Then I see appropriate error message when appointments are disabled
     Examples:
       | Reason           | GP System |
       | Unable to attend | EMIS      |

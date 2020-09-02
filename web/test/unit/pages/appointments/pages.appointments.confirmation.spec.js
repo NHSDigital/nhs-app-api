@@ -90,7 +90,6 @@ describe('confirmation.vue', () => {
   describe('errors', () => {
     each([
       400,
-      403,
       409,
       460,
       500,

@@ -1,62 +1,7 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="error">
-      <error-container v-if="error.status===403"
-                       :id="generateErrorId"
-                       override-style="plain"
-                       aria-live="polite">
-        <error-title title="appointments.error.appointmentBookingUnavailable"/>
-        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
-        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
-        <error-header from="appointments.error.coronavirus.mightHave" />
-        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
-        <error-link :class="$style['inline-link']"
-                    from="appointments.error.coronavirus.useOneOneOne"
-                    :action="coronaServiceUrl"
-                    data-purpose="corona-service"
-                    target="_blank"/>
-      </error-container>
-      <error-container v-else-if="error.status===400" :id="generateErrorId">
-        <error-title title="appointments.error.thereIsAProblemAppointments"
-                     header="appointments.error.thereIsAProblem" />
-        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===409" :id="generateErrorId">
-        <error-title title="appointments.confirmation.error.theAppointmentIsNoLongerAvailable"/>
-        <error-paragraph from="appointments.confirmation.error.pleaseChooseADifferentAppointment" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true"/>
-      </error-container>
-      <error-container v-else-if="error.status===460"
-                       :id="generateErrorId"
-                       override-style="plain">
-        <error-title title="appointments.confirmation.error.youHaveReachedYourAppoinmentLimit"/>
-        <error-paragraph from="appointments.confirmation.error.youCannotBookAnyMore" />
-        <error-paragraph from="appointments.confirmation.error.contactYourSurgeryIfYouNeedToBook" />
-        <error-paragraph from="appointments.confirmation.error.youCanGoBack" />
-        <error-paragraph from="appointments.confirmation.error.forUrgentMedicalAdvice" />
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true" />
-      </error-container>
-      <error-container v-else-if="error.status===500 || error.status===502 || error.status===504"
-                       :id="generateErrorId">
-        <error-title title="appointments.error.thereIsAProblemAppointments"
-                     header="appointments.error.thereIsAProblem" />
-        <error-paragraph from="appointments.error.tryAgainOrContactUs"
-                         :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-link from="generic.contactUs"
-                    :action="contactUsUrl"
-                    target="_blank"/>
-        <error-link from="generic.back"
-                    :action="appointmentsPath"
-                    :desktop-only="true"/>
-      </error-container>
+      <booking-confirmation-errors :error="error" />
     </div>
     <div v-else>
       <div v-if="showError" class="nhsuk-grid-row">
@@ -213,17 +158,13 @@ import get from 'lodash/fp/get';
 import moment from 'moment';
 
 import AppointmentSlot from '@/components/appointments/Appointment';
+import BookingConfirmationErrors from '@/components/errors/pages/appointments/BookingConfirmationErrors';
 import Card from '@/components/widgets/card/Card';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorHeader from '@/components/errors/ErrorHeader';
-import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorTitle from '@/components/errors/ErrorTitle';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
@@ -244,17 +185,13 @@ import {
 export default {
   name: 'GpAppointmentsConfirmationPage',
   components: {
+    BookingConfirmationErrors,
     AppointmentSlot,
     Card,
     CardGroup,
     CardGroupItem,
     DesktopGenericBackLink,
-    ErrorContainer,
-    ErrorHeader,
-    ErrorLink,
     ErrorMessage,
-    ErrorParagraph,
-    ErrorTitle,
     GenericButton,
     GenericTextArea,
     GenericTextInput,

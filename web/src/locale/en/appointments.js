@@ -94,7 +94,6 @@ export default {
     useThe111CoronavirusService: 'Use the 111 coronavirus service to see if you need medical help',
   },
   error: {
-    appointmentBookingUnavailable: 'GP appointment booking unavailable',
     contactYouSurgeryToCancel: 'Contact your GP surgery to cancel',
     itIsTooLateToCancel: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
     theAppointmentMayBeCancelledOrInThePast: 'This may be because the appointment is already cancelled or it occurs in the past.',
@@ -105,21 +104,7 @@ export default {
     tryAgainNow: 'Try again now.',
     tryAgainNowOrContactUs: 'Try again now. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     tryAgainOrContactUs: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-    youAreNotCurrentlyAbleToBook: 'You are not currently able to book or view GP appointments with the NHS App.',
-    youCannotCancelRightNow: 'You cannot cancel appointments online right now. Call your GP surgery as soon as possible to let them know you need to cancel.',
     youCannotCancelThisAppointment: 'Sorry, you cannot cancel this appointment',
-    contactSurgeryOrOneOneOneForUrgentAdvice: {
-      text: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call 111.',
-      label: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-    },
-    coronavirus: {
-      mightHave: 'If you think you might have coronavirus',
-      stayAtHome: 'Stay at home and avoid close contact with other people.',
-      useOneOneOne: {
-        text: 'Use the 111 coronavirus service to see if you need medical help',
-        label: 'Use the one one one coronavirus service to see if you need medical help',
-      },
-    },
     ifTheProblemContinuesAndYouNeedToBook: {
       text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
       label: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',

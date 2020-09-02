@@ -199,8 +199,6 @@ Feature: View Available Appointment Slots Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate error message when appointments are disabled
-    When I click the link called 'Use the 111 coronavirus service to see if you need medical help' with the COVID-19 service url
-    Then a new tab has been opened by the link
     Examples:
     | GP System |
     | TPP       |

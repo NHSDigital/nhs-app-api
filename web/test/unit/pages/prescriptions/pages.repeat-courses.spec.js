@@ -204,39 +204,5 @@ describe('prescriptions/repeat-courses.vue -', () => {
       // Assert
       expect(page.vm.error).toBe(false);
     });
-
-    it('will show the try again error if the error is a GP session error and has not retried', async () => {
-      const error = { status: 599 };
-      const $store = createStore({ error });
-
-      page = await createRepeatCoursesPage($store);
-
-      expect(page.find('#error-dialog-599').exists()).toBe(true);
-      expect(page.vm.hasRetried).toBe(false);
-    });
-
-    it('will return the correct status code on the 599 error', async () => {
-      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
-      const $store = createStore({ error });
-
-      page = await createRepeatCoursesPage($store);
-      expect(page.vm.gpSessionApiError.serviceDeskReference).toBe('xxxxxx');
-    });
-
-    it('will set hasRetried to true on try again', async () => {
-      const $store = createStore();
-
-      page = await createRepeatCoursesPage($store);
-      page.vm.tryAgain();
-      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
-    });
-
-    it('will show the permanent error when hasRetried is true and the status is 599', async () => {
-      const error = { status: 599, serviceDeskReference: 'xxxxxx' };
-      const $store = createStore({ error, hasRetried: true });
-
-      page = await createRepeatCoursesPage($store);
-      expect(page.find('#presciptionsGpSessionError').exists()).toBe(true);
-    });
   });
 });

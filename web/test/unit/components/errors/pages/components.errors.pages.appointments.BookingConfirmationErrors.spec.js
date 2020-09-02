@@ -1,0 +1,111 @@
+import BookingConfirmationErrors from '@/components/errors/pages/appointments/BookingConfirmationErrors';
+import MenuItem from '@/components/MenuItem';
+import i18n from '@/plugins/i18n';
+import each from 'jest-each';
+import { createStore, mount } from '../../../helpers';
+
+describe('BookingConfirmationErrors', () => {
+  const mountWrapper = ({
+    cdssAdviceEnabled = true,
+    cdssAdminEnabled = true,
+    status = 403,
+  } = {}) => mount(BookingConfirmationErrors, {
+    $store: createStore({
+      $env: {
+        CONTACT_US_URL: 'https://contact.us',
+      },
+      state: {
+        device: {
+          source: 'web',
+        },
+      },
+      getters: {
+        'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
+        'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
+      },
+    }),
+    propsData: {
+      error: {
+        status,
+
+      },
+    },
+    mountOpts: { i18n },
+  });
+
+  describe('Page content', () => {
+    describe('with olc access', () => {
+      const wrapper = mountWrapper();
+      const content = wrapper.findAll('p');
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will display to the user they are not able to access appointments', () => {
+        expect(content.at(0).text()).toEqual('You are not currently able to book and manage GP appointments online.');
+      });
+
+      it('will explain to the user how to get urgent help', () => {
+        expect(content.at(1).text()).toContain('If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice go to ');
+      });
+
+      it('will contain the nhs 111 link text', () => {
+        expect(content.at(1).text()).toContain('111.nhs.uk');
+      });
+
+      it('will contain the nhs 111 number', () => {
+        expect(content.at(1).text()).toContain('or call 111.');
+      });
+
+      it('will have 4 menu items', () => {
+        expect(menuItems.length).toBe(4);
+      });
+
+      it('will have a menu item for gp advice', () => {
+        expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
+      });
+
+      it('will have a menu item for gp admin help', () => {
+        expect(wrapper.find('#btn_gpHelpNoAppointment').exists()).toBe(true);
+      });
+
+      it('will have a menu item for corona virus advice', () => {
+        expect(wrapper.find('#btn_corona').exists()).toBe(true);
+      });
+
+      it('will have a menu item for the nhs 111 service', () => {
+        expect(wrapper.find('#btn_111').exists()).toBe(true);
+      });
+    });
+
+    describe('without cdss admin enabled', () => {
+      const wrapper = mountWrapper({ cdssAdminEnabled: false });
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will not show the admin help menu item if admin help is disabled', () => {
+        expect(wrapper.find('#btn_gpHelpNoAppointment').exists()).toBe(false);
+        expect(menuItems.length).toBe(3);
+      });
+    });
+
+    describe('without cdss advice enabled', () => {
+      const wrapper = mountWrapper({ cdssAdviceEnabled: false });
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will not show the gp advice menu item if admin help is disabled', () => {
+        expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
+        expect(menuItems.length).toBe(3);
+      });
+    });
+
+    each([
+      400,
+      409,
+      460,
+      500,
+      502,
+      504,
+    ]).it('will display an error dialog for status code: %s', (status) => {
+      const wrapper = mountWrapper({ status });
+      expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
+    });
+  });
+});

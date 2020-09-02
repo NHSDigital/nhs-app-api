@@ -20,6 +20,7 @@ import org.junit.Assert
 import pages.ErrorDialogPage
 import pages.appointments.AddToCalendarInterruptPage
 import pages.AppointmentHubPage
+import pages.AppointmentsForbiddenError
 import pages.AppointmentsGpSessionError
 import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
@@ -52,6 +53,8 @@ class YourAppointmentsStepDefinitions {
     lateinit var appointmentHubPage: AppointmentHubPage
     @Steps
     lateinit var appointmentGpSessionError: AppointmentsGpSessionError
+    @Steps
+    lateinit var appointmentForbiddenError: AppointmentsForbiddenError
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -249,15 +252,14 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I see appropriate error message when appointments are disabled$")
     fun iSeeAppropriateErrorMessageWhenAppointmentsAreDisabled() {
-        errorDialogPage
-                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.notAbleToBook)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactForMoreInformation)
-                .assertSubHeader(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusHeader)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusText)
-                .assertLink(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusLink)
 
+        appointmentForbiddenError.assertPageHeader("Sorry, GP appointment booking is unavailable")
+                .assertMenuListHeader("What you can do next")
+                .assertParagraphText("You are not currently able to book and manage GP appointments online.")
+                .assertParagraphText("If the problem continues and you need to book an appointment now, " +
+                        "contact your GP surgery directly. For urgent medical advice go to ")
+        appointmentForbiddenError.assertNHS111Online()
+                .assertCoronaVirusMenuItem()
     }
 
     @Then("^I see appropriate try again error message when there is an error with '(.*)'$")

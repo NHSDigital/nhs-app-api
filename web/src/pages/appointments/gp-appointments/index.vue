@@ -1,61 +1,7 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="error && hasLoaded">
-      <appointments-gp-session-error v-if="hasRetried && error.status===599"
-                                     :code="error.serviceDeskReference"/>
-      <error-container v-if="error.status===403"
-                       :id="generateErrorId()"
-                       message-type="error"
-                       override-style="plain"
-                       aria-live="off">
-        <error-title title="appointments.error.appointmentBookingUnavailable" />
-        <error-paragraph from="appointments.error.youAreNotCurrentlyAbleToBook" />
-        <error-paragraph from="appointments.error.contactSurgeryOrOneOneOneForUrgentAdvice" />
-        <error-header from="appointments.error.coronavirus.mightHave" />
-        <error-paragraph from="appointments.error.coronavirus.stayAtHome" />
-        <error-link :class="$style['inline-link']"
-                    from="appointments.error.coronavirus.useOneOneOne"
-                    :action="coronaServiceUrl"
-                    data-purpose="corona-service"
-                    target="_blank"/>
-      </error-container>
-      <error-container v-else-if="error.status===400" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemAppointments"
-                     header="appointments.error.thereIsAProblem" />
-        <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
-        <error-link from="generic.back"
-                    :action="backUrl"
-                    :desktop-only="true"/>
-      </error-container>
-      <error-container v-else-if="error.status===599 && !hasRetried" :id="generateErrorId()">
-        <error-title title="gpSessionErrors.appointments.temporaryHeader"/>
-        <error-paragraph from="gpSessionErrors.appointments.youCannotBookOnline"/>
-        <error-paragraph from="gpSessionErrors.appointments.temporaryProblem"/>
-        <error-button from="generic.tryAgain" @click="tryAgain" />
-        <error-link from="generic.back"
-                    :action="backUrl"
-                    :desktop-only="true"/>
-      </error-container>
-      <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemLoading"/>
-        <error-paragraph from="appointments.error.tryAgainNow"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
-        <error-button from="generic.tryAgain" @click="$router.go()" />
-        <report-a-problem :reference="error.serviceDeskReference"/>
-        <error-link from="generic.back"
-                    :action="backUrl"
-                    :desktop-only="true"/>
-      </error-container>
-      <error-container v-else-if="error.status===504" :id="generateErrorId()">
-        <error-title title="appointments.error.thereIsAProblemLoading"/>
-        <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
-                         :variable="error.serviceDeskReference"/>
-        <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
-        <error-button from="generic.tryAgain" @click="$router.go()" />
-        <error-link from="generic.contactUs"
-                    :action="contactUsUrl"
-                    target="_blank"/>
-      </error-container>
+      <gp-appointment-errors :error="error"/>
     </div>
     <div v-else-if="hasLoaded">
       <div class="nhsuk-grid-row">
@@ -102,16 +48,9 @@
 import isEmpty from 'lodash/fp/isEmpty';
 
 import CoronaVirusMessage from '@/components/widgets/CoronaVirusMessage';
-import AppointmentsGpSessionError from '@/components/errors/gp-session-errors/AppointmentsGpSessionError';
-import ErrorButton from '@/components/errors/ErrorButton';
-import ErrorContainer from '@/components/errors/ErrorContainer';
-import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
-import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorHeader from '@/components/errors/ErrorHeader';
-import ErrorTitle from '@/components/errors/ErrorTitle';
-import ReportAProblem from '@/components/errors/ReportAProblem';
 import GenericButton from '@/components/widgets/GenericButton';
+import GpAppointmentErrors from '@/components/errors/pages/appointments/GpAppointmentErrors';
 import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 
@@ -119,9 +58,8 @@ import showShutterPage from '@/lib/proxy/shutter';
 import {
   APPOINTMENTS_PATH,
   APPOINTMENT_BOOKING_GUIDANCE_PATH,
-  GP_APPOINTMENTS_PATH,
 } from '@/router/paths';
-import { redirectTo, gpSessionErrorHasRetried } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 
 const loadData = async (store) => {
   store.dispatch('myAppointments/clear');
@@ -131,18 +69,11 @@ const loadData = async (store) => {
 export default {
   name: 'GpAppointmentsIndexPage',
   components: {
+    GpAppointmentErrors,
     CoronaVirusMessage,
-    ErrorButton,
-    ErrorContainer,
-    ErrorLink,
-    ErrorHeader,
-    ErrorParagraph,
-    ErrorTitle,
     GenericButton,
     PastAppointments,
     UpcomingAppointments,
-    ReportAProblem,
-    AppointmentsGpSessionError,
   },
   mixins: [ErrorPageMixin],
   data() {
@@ -162,10 +93,6 @@ export default {
     },
     hasLoaded() {
       return this.$store.state.myAppointments.hasLoaded;
-    },
-
-    hasRetried() {
-      return gpSessionErrorHasRetried(this.$store);
     },
     hasApiError() {
       return this.$store.getters['errors/showApiError'];
@@ -223,16 +150,6 @@ export default {
     this.$store.dispatch('myAppointments/clearAppointments');
   },
   methods: {
-    generateErrorId() {
-      return `error-dialog-${this.error.status}`;
-    },
-    tryAgain() {
-      if (this.$store.state.device.isNativeApp) {
-        sessionStorage.setItem('hasRetried', true);
-      }
-      this.$store.dispatch('session/setRetry', true);
-      redirectTo(this, GP_APPOINTMENTS_PATH, { hr: true }, true);
-    },
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidanceUrl, true);
       redirectTo(this, this.guidanceUrl);

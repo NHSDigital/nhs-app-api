@@ -95,17 +95,6 @@ class CancelAppointmentStepDefinitions {
         }
     }
 
-    @Then("^I see an appropriate error message when not allowed to cancel$")
-    fun iSeeAnAppropriateErrorMessageWhenNotAllowedToCancel() {
-        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.serviceProblemTitle
-        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactGpToCancelHeader
-        val message = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelRightNow
-
-        errorDialogPage.assertParagraphText(message)
-                .assertPageHeader(pageHeader)
-                .assertPageTitle(pageTitle)
-    }
-
     @Then("^I see an appropriate error message when it is already cancelled$")
     fun iSeeAnAppropriateErrorMessageWhenItIsAlreadyCancelled() {
         val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
