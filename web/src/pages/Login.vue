@@ -63,7 +63,7 @@ export default {
       window.onbeforeunload = null;
 
       if (this.$store.state.device.isNativeApp) {
-        NativeCallbacks.dismissAllDialogues();
+        NativeCallbacks.dismissPageLeaveWarningDialogue();
       }
     }
   },

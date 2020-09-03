@@ -77,10 +77,10 @@ describe('login page', () => {
   });
 
   describe('created lifecycle hook', () => {
-    let dismissAllDialoguesSpy;
+    let dismissPageLeaveWarningDialogue;
 
     beforeEach(() => {
-      dismissAllDialoguesSpy = jest.spyOn(NativeApp, 'dismissAllDialogues').mockImplementation(() => true);
+      dismissPageLeaveWarningDialogue = jest.spyOn(NativeApp, 'dismissPageLeaveWarningDialogue').mockImplementation(() => true);
 
       wrapper = mountPage({ instructionsViewed: false });
     });
@@ -103,7 +103,7 @@ describe('login page', () => {
     });
 
     it('will call native app leave warning reset', () => {
-      expect(dismissAllDialoguesSpy).toHaveBeenCalled();
+      expect(dismissPageLeaveWarningDialogue).toHaveBeenCalled();
     });
   });
 
