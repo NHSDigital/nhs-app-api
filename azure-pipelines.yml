@@ -8,6 +8,7 @@ parameters:
     values:
       - browserstack
       - onboardingsandpit
+      - onboardingaos
       - previewRelease
       - scratch1
       - scratch2
@@ -38,6 +39,7 @@ parameters:
     values:
       - BrowserStack
       - Onboardingsandpit
+      - Onboardingaos
       - Preview
       - Scratch1
       - Scratch2
