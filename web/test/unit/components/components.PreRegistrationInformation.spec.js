@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import PreRegistrationInformation from '@/components/PreRegistrationInformation';
 import { mount } from '../helpers';
 
@@ -5,6 +6,9 @@ describe('Pre registration information', () => {
   const createWrapper = (shouldShowHeader = true) => mount(PreRegistrationInformation, {
     propsData: {
       shouldShowHeader,
+    },
+    mountOpts: {
+      i18n,
     },
   });
 
@@ -20,7 +24,7 @@ describe('Pre registration information', () => {
       });
 
       it('will have the expected text to translate', async () => {
-        expect(wrapper.find('h2').text()).toEqual('translate_web.home.beforeYouStartTitle');
+        expect(wrapper.find('h2').text()).toEqual('Before you start');
       });
     });
 

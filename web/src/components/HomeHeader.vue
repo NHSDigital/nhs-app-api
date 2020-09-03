@@ -9,13 +9,13 @@
       <nhs-logo/>
       <div :class="$style.spacer" />
       <div :class="$style.symptomBanner">
-        <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
+        <h2>{{ $t('login.howAreYouFeelingToday') }}</h2>
         <generic-button id="btn_home_symptoms"
                         :button-classes="['nhsuk-body', 'nhsuk-button',
                                           $store.state.device.isNativeApp
                                             ?'button':'', 'white']"
                         @click.prevent="checkSymptomsButtonClicked()">
-          {{ $t('symptomBanner.checker') }}
+          {{ $t('login.checkSymptoms') }}
         </generic-button>
       </div>
     </header>

@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import Modal from '@/components/modal/Modal';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { mount } from '../../helpers';
@@ -24,6 +25,9 @@ describe('Modal.vue', () => {
     mount(Modal, {
       $store,
       propsData,
+      mountOpts: {
+        i18n,
+      },
     });
 
 
@@ -156,7 +160,7 @@ describe('Modal.vue', () => {
     });
 
     expect(wrapper.find('p').text())
-      .toEqual('translate_web.sessionExpiry.warningDurationInformation');
+      .toEqual('For security reasons, you\'ll be logged out in 1 minute.');
   });
 
   it('will not render modal internal content', () => {

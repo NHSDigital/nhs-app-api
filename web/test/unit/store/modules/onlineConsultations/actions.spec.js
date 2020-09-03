@@ -1,4 +1,7 @@
 import actions from '@/store/modules/onlineConsultations/actions';
+import each from 'jest-each';
+import getParameters from '@/lib/online-consultations/mappers/parameters';
+import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 import {
   CLEAR,
   SET_STATUS,
@@ -12,11 +15,8 @@ import {
   SET_CONDITIONS_LIST,
   SET_IS_AVAILABLE,
 } from '@/store/modules/onlineConsultations/mutation-types';
-import getParameters from '@/lib/online-consultations/mappers/parameters';
 import { getDataRequirements, getSessionId, getQuestionnaire, getQuestionnaireId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
 import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
-import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
-import each from 'jest-each';
 
 jest.mock('@/lib/online-consultations/mappers/parameters');
 jest.mock('@/lib/online-consultations/mappers/response');

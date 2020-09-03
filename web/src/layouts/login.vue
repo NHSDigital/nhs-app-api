@@ -22,19 +22,21 @@
              class="nhsuk-width-container">
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
-              <h1 id="title" class="nhsuk-u-margin-top-4">{{ $t('web.home.title') }}</h1>
+              <h1
+                id="title"
+                class="nhsuk-u-margin-top-4">{{ $t('login.accessYourNhsServices') }}</h1>
             </div>
           </div>
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-two-thirds nhsuk-u-margin-bottom-0">
               <p v-if="!isNativeApp" id="desktopSpecificInformation">
-                {{ $t('web.home.desktopInformation') }}</p>
-              <p class="nhsuk-u-margin-bottom-4">{{ $t('web.home.bulletListDescription') }}</p>
+                {{ $t('login.useNhsAppOnlineToAccessServices') }}</p>
+              <p class="nhsuk-u-margin-bottom-4">{{ $t('login.useThisServiceTo') }}</p>
               <ul>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.one') }}</li>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.two') }}</li>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('web.home.bullets.three') }}</li>
-                <li>{{ $t('web.home.bullets.four') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.checkSymptomsAndGetAdvice') }}</li>
+                <li>{{ $t('login.viewYourMedicalRecord') }}</li>
               </ul>
             </div>
             <div class="nhsuk-grid-column-one-third"

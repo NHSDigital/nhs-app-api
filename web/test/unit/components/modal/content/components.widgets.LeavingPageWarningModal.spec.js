@@ -1,5 +1,6 @@
-import { INDEX_PATH } from '@/router/paths';
+import i18n from '@/plugins/i18n';
 import LeavingPageWarningModal from '@/components/modal/content/LeavingPageWarningModal';
+import { INDEX_PATH } from '@/router/paths';
 import { mount } from '../../../helpers';
 
 jest.mock('@/lib/utils', () =>
@@ -18,6 +19,9 @@ describe('LeavingPageWarningModal.vue', () => {
     mount(LeavingPageWarningModal, {
       $store,
       propsData,
+      mountOpts: {
+        i18n,
+      },
     });
 
   describe('render modal', () => {
@@ -33,16 +37,16 @@ describe('LeavingPageWarningModal.vue', () => {
       });
 
       expect(wrapper.find("h2[data-sid='pageLeaveWarningHeader']").text())
-        .toEqual('translate_web.pageLeavingWarning.header');
+        .toEqual('Leave this page?');
 
       expect(wrapper.find("p[data-sid='pageLeaveWarningText']").text())
-        .toEqual('translate_web.pageLeavingWarning.warning');
+        .toEqual('If you have entered any information, it will not be saved.');
 
       expect(wrapper.find("button[id='modalStayOnPage']").text())
-        .toEqual('translate_web.pageLeavingWarning.stayButtonText');
+        .toEqual('Stay on this page');
 
       expect(wrapper.find("a[id='modalLeavePage']").text())
-        .toEqual('translate_web.pageLeavingWarning.leaveButtonText');
+        .toEqual('Leave this page');
     });
   });
 

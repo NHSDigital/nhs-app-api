@@ -3,21 +3,21 @@
     <div class="nhsuk-grid-column-two-thirds">
       <div id="before-you-start" class="nhsuk-u-margin-top-1">
         <h2 v-if="shouldShowHeader" class="nhsuk-u-margin-bottom-3">
-          {{ $t('web.home.beforeYouStartTitle') }}</h2>
-        <p>{{ $t('web.home.beforeYouStartBulletListDescription') }}</p>
+          {{ $t('login.beforeYouStart') }}</h2>
+        <p>{{ $t('login.toUseThisServiceYouMustBe') }}</p>
         <ul>
           <li class="nhsuk-u-margin-bottom-3">
-            {{ $t('web.home.beforeYouStartBullets.one') }}
+            {{ $t('login.registeredWithSurgeryInEngland') }}
           </li>
           <li class="nhsuk-u-margin-bottom-3">
-            {{ $t('web.home.beforeYouStartBullets.two') }}
+            {{ $t('login.aged13AndOver') }}
           </li>
         </ul>
         <collapsible-details id="age-info">
           <template slot="header">
-            {{ $t('web.home.aged13To15InformationTitle') }}
+            {{ $t('login.whatToDoIfYouAre13To15') }}
           </template>
-          <p>{{ $t('web.home.aged13To15Description') }}</p>
+          <p>{{ $t('login.youWillNeedToContactSurgeryToRequestAccess') }}</p>
         </collapsible-details>
       </div>
     </div>

@@ -3,47 +3,46 @@
     <div v-if="showTemplate">
       <message-dialog v-if="showError" message-type="error" role="alert" tabindex="-1">
         <message-text data-purpose="error-heading">
-          {{ $t('user_research.errorMessage.header') }}
+          {{ $t('userResearch.thereIsAProblem') }}
         </message-text>
         <message-list data-purpose="reason-error">
           <li>
-            {{ $t('user_research.errorMessage.text') }}
+            {{ $t('userResearch.selectYesOrNo') }}
           </li>
         </message-list>
       </message-dialog>
-      <p>{{ $t('user_research.contactYou') }}</p>
+      <p>{{ $t('userResearch.weWouldLikeToContactYouAboutUserResearch') }}</p>
       <collapsible-details>
         <template slot="header">
-          {{ $t('user_research.whatIsInvolved.header') }}
+          {{ $t('userResearch.whatIsInvolved') }}
         </template>
-        <p>{{ $t('user_research.whatIsInvolved.addYou') }}</p>
-        <p>{{ $t('user_research.whatIsInvolved.signUp.label') }}</p>
+        <p>{{ $t('userResearch.weWillAddYouToOurPanel') }}</p>
+        <p>{{ $t('userResearch.youMightBeAskedTo') }}</p>
         <ul>
-          <li v-for="(benefit, index) in $t('user_research.whatIsInvolved.signUp.benefits')"
-              :key="index">
-            {{ benefit }}
-          </li>
+          <li>{{ $t('userResearch.tryOutNewFeatures') }}</li>
+          <li>{{ $t('userResearch.answerMoreQuestionsByEmail') }}</li>
+          <li>{{ $t('userResearch.talkToOurResearchers') }}</li>
         </ul>
-        <p>{{ $t('user_research.whatIsInvolved.signUp.isOptional') }}</p>
+        <p>{{ $t('userResearch.youCanSayNoAndLeaveAtAnyTime') }}</p>
       </collapsible-details>
       <p>
-        {{ $t('user_research.whatIsInvolved.restriction.prefix')
+        {{ $t('userResearch.yourInformationWillOnlyBeUsedForThePanel')
         }}<a class="inline"
              :href="privacyPolicyUrl"
              target="_blank"
              rel="noopener noreferrer">{{
-               $t('user_research.whatIsInvolved.restriction.linkText') }}</a>{{
-          $t('user_research.whatIsInvolved.restriction.suffix') }}
+               $t('userResearch.readOurPrivacyPolicy') }}</a>{{
+          $t('userResearch.toFindOutHowWeUseAndProtectYourData') }}
       </p>
-      <radio-group :header="$t('user_research.question.label')"
+      <radio-group :header="$t('userResearch.canWeContactYouToTakePart')"
                    header-size="m"
                    class="nhsuk-u-margin-bottom-4"
                    :show-error="showError"
-                   :error-message="$t('user_research.errorMessage.text')"
+                   :error-message="$t('userResearch.selectYesOrNo')"
                    :radios="choices"
                    @select="onSelection"/>
       <primary-button @click.stop.prevent="onContinue">
-        {{ $t('user_research.continue') }}
+        {{ $t('generic.continue') }}
       </primary-button>
     </div>
   </terms-and-conditions-layout>
@@ -78,8 +77,8 @@ export default {
   data() {
     return {
       choices: [
-        { label: this.$t('user_research.question.yes'), value: 'optIn' },
-        { label: this.$t('user_research.question.no'), value: 'optOut' },
+        { label: this.$t('userResearch.yesYouCanContactMe'), value: 'optIn' },
+        { label: this.$t('userResearch.noDoNotContactMe'), value: 'optOut' },
       ],
       hasTriedToContinue: false,
       privacyPolicyUrl: PRIVACY_POLICY_URL,

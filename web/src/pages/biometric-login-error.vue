@@ -4,10 +4,10 @@
       <div class="nhsuk-grid-column-full">
         <div class="nhsuk-u-padding-top-4">
           <p data-sid="biometricLoginErrorParagraphOne">
-            {{ $t('loginBiometricError.paragraph1') }}
+            {{ $t('login.biometrics.goBackToTheHomepage') }}
           </p>
           <p data-sid="biometricLoginErrorParagraphTwo">
-            {{ $t('loginBiometricError.paragraph2') }}
+            {{ $t('login.biometrics.ifYouKeepSeeingThisLoginWithEmailAndPassword') }}
           </p>
         </div>
       </div>

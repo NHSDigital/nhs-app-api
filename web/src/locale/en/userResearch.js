@@ -1,0 +1,18 @@
+export default {
+  answerMoreQuestionsByEmail: 'answer more questions by email',
+  canWeContactYouToTakePart: 'Can we contact you to take part in NHS App user research?',
+  noDoNotContactMe: 'No, do not contact me',
+  readOurPrivacyPolicy: 'Read our privacy policy',
+  selectYesOrNo: 'Select yes or no',
+  talkToOurResearchers: 'talk to our researchers about your experience of using the app',
+  thereIsAProblem: 'There is a problem',
+  toFindOutHowWeUseAndProtectYourData: ' to find out how we use and protect your data.',
+  tryOutNewFeatures: 'try out new features',
+  weWillAddYouToOurPanel: 'We\'ll add you to our user research panel and email you a short survey to fill in about you and your health. Your answers will help make sure you get invited to user research that\'s relevant to you.',
+  weWouldLikeToContactYouAboutUserResearch: 'We would like to contact you about taking part in user research to improve the NHS App and connected services.',
+  whatIsInvolved: 'What\'s involved?',
+  yesYouCanContactMe: 'Yes, you can contact me about taking part in user research',
+  youCanSayNoAndLeaveAtAnyTime: 'You can always say no to an invite and you can leave the user research panel at any time.',
+  youMightBeAskedTo: 'Once you\'re signed up, you might be asked to:',
+  yourInformationWillOnlyBeUsedForThePanel: 'Your information will only be used to contact you about the NHS App user research panel. It will not be shared with anyone else and you can unsubscribe at any time. ',
+};

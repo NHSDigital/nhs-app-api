@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 import { mount } from '../../../helpers';
 
@@ -11,6 +12,9 @@ describe('SessionExpiryModal.vue', () => {
     mount(SessionExpiryModal, {
       $store,
       propsData,
+      mountOpts: {
+        i18n,
+      },
     });
 
   describe('render modal', () => {
@@ -25,13 +29,13 @@ describe('SessionExpiryModal.vue', () => {
       });
 
       expect(wrapper.find("p[data-sid='warningDurationInformation']").text())
-        .toEqual('translate_web.sessionExpiry.warningDurationInformation');
+        .toEqual('For security reasons, you\'ll be logged out in 5 minutes.');
 
       expect(wrapper.find("button[id='modalExtendSession']").text())
-        .toEqual('translate_web.sessionExpiry.warningGetMoreTime');
+        .toEqual('Stay logged in');
 
       expect(wrapper.find("a[id='modalExtendLogout']").text())
-        .toEqual('translate_web.sessionExpiry.warningLogOut');
+        .toEqual('Log out');
     });
   });
 

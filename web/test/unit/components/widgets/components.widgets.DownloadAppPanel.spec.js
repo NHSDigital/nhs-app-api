@@ -1,5 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import DownloadAppPanel from '@/components/widgets/DownloadAppPanel';
+import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../helpers';
 
 let wrapper;
@@ -16,7 +16,7 @@ mount(DownloadAppPanel, {
 
 describe('download app panel', () => {
   beforeEach(() => {
-    wrapper = mount(DownloadAppPanel);
+    wrapper = mount(DownloadAppPanel, { mountOpts: { i18n } });
   });
 
   it('will have the correct content', () => {
@@ -26,11 +26,11 @@ describe('download app panel', () => {
   });
 
   it('the title will contain the correct text', () => {
-    expect(wrapper.find('[data-id="panel-title"]').text()).toBe('translate_web.home.appStorePanel.title');
+    expect(wrapper.find('[data-id="panel-title"]').text()).toBe('Get the NHS App on your smartphone or tablet');
   });
 
   it('the images will contain alt tags', () => {
-    expect(wrapper.find('[data-id="apple-store-icon"]').find('img').attributes('alt')).toEqual('translate_web.home.appStorePanel.appStoreLabel');
-    expect(wrapper.find('[data-id="play-store-icon"]').find('img').attributes('alt')).toEqual('translate_web.home.appStorePanel.googlePlayLabel');
+    expect(wrapper.find('[data-id="apple-store-icon"]').find('img').attributes('alt')).toEqual('Download on the App Store');
+    expect(wrapper.find('[data-id="play-store-icon"]').find('img').attributes('alt')).toEqual('Get it on Google Play');
   });
 });

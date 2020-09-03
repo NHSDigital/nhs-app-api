@@ -14,6 +14,7 @@ import organDonation from './organDonation';
 import prescriptions from './prescriptions';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
+import userResearch from './userResearch';
 
 export default {
   language: 'en-GB',
@@ -85,37 +86,6 @@ export default {
           suffix: ' if you have any problems.',
         },
       ],
-    },
-  },
-  user_research: {
-    contactYou: 'We would like to contact you about taking part in user research to improve the NHS App and connected services.',
-    whatIsInvolved: {
-      header: 'What\'s involved?',
-      addYou: 'We\'ll add you to our user research panel and email you a short survey to fill in about you and your health. Your answers will help make sure you get invited to user research that\'s relevant to you.',
-      signUp: {
-        label: 'Once you\'re signed up, you might be asked to:',
-        benefits: [
-          'try out new features',
-          'answer more questions by email',
-          'talk to our researchers about your experience of using the app',
-        ],
-        isOptional: 'You can always say no to an invite and you can leave the user research panel at any time.',
-      },
-      restriction: {
-        prefix: 'Your information will only be used to contact you about the NHS App user research panel. It will not be shared with anyone else and you can unsubscribe at any time. ',
-        linkText: 'Read our privacy policy',
-        suffix: ' to find out how we use and protect your data.',
-      },
-    },
-    question: {
-      label: 'Can we contact you to take part in NHS App user research?',
-      yes: 'Yes, you can contact me about taking part in user research',
-      no: 'No, do not contact me',
-    },
-    continue: 'Continue',
-    errorMessage: {
-      header: 'There is a problem',
-      text: 'Select yes or no',
     },
   },
   homeLoggedIn: {
@@ -510,14 +480,6 @@ export default {
     appMessages: 'View health information and updates',
     unreadMessages: 'You have unread messages',
   },
-  symptomBanner: {
-    howAreYouFeeling: 'How are you feeling today?',
-    checker: 'Check symptoms',
-  },
-  loginBiometricError: {
-    paragraph1: 'Go back to the homepage and try logging in again.',
-    paragraph2: 'If you keep seeing this message, go back to the homepage and log in using your email, password and security code.',
-  },
   surveyBar: {
     barText: 'Help us make this service better.',
     linkText: ' Complete our quick survey.',
@@ -595,39 +557,6 @@ export default {
     },
   },
   web: {
-    home: {
-      title: 'Access your NHS services',
-      desktopInformation: 'Use NHS App online to access services on your desktop or laptop computer, through your web browser.  You do not need to install anything to get started.',
-      bulletListDescription: 'Use this service to:',
-      bullets: {
-        one: 'book and manage appointments at your GP surgery',
-        two: 'order repeat prescriptions',
-        three: 'check symptoms and get instant advice',
-        four: 'view your medical record securely',
-      },
-      checkSymptoms: {
-        title: 'How are you feeling right now?',
-      },
-      beforeYouStartTitle: 'Before you start',
-      beforeYouStartBulletListDescription: 'To use this service you must be:',
-      beforeYouStartBullets: {
-        one: 'registered with a GP surgery in England',
-        two: 'aged 13 and over',
-      },
-      aged13To15InformationTitle: 'What to do if you\'re aged 13 to 15',
-      aged13To15Description: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
-      otherServicesTitle: 'Other services you can use without logging in:',
-      otherServicesBullets: {
-        one: 'Check if you have coronavirus symptoms',
-        two: 'Search conditions and treatments',
-        three: 'Use NHS 111 online to check if you need urgent help',
-      },
-      appStorePanel: {
-        title: 'Get the NHS App on your smartphone or tablet',
-        appStoreLabel: 'Download on the App Store',
-        googlePlayLabel: 'Get it on Google Play',
-      },
-    },
     sessionExpiry: {
       warningDurationInformation:
         'For security reasons, you\'ll be logged out in 1 minute. ' +
@@ -679,4 +608,5 @@ export default {
   prescriptions,
   termsAndConditions,
   thirdPartyProviders,
+  userResearch,
 };
