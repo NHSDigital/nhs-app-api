@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
             // Arrange
             var userDevice = new UserDevice();
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.Found(new []{ userDevice }));
 
             // Act
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(),-1))
+                    x.Find(It.IsAny<Expression<Func<UserDevice, bool>>>(), It.IsAny<string>(),null))
                 .ReturnsAsync(new RepositoryFindResult<UserDevice>.NotFound());
 
             // Act

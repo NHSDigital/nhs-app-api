@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             var record = new TermsAndConditionsRecord();
 
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>(), 1))
                 .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.Found(new []{record}));
 
             // Act
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<TermsAndConditionsRecord, bool>>>(), It.IsAny<string>(), 1))
                 .ReturnsAsync(new RepositoryFindResult<TermsAndConditionsRecord>.NotFound());
 
             // Act

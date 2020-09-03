@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     .IsValid();
 
                 return await _repository.Find(d => d.NhsLoginId == nhsLoginId,
-                    RecordName);
+                    RecordName, 1);
             }
             finally
             {

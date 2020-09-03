@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.Repository
         private readonly ILogger _logger;
         private readonly string _databaseName;
         private readonly string _collectionName;
+        private const int DefaultListSize = 4;
 
         public MongoRepository(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration,
             ILogger<MongoRepository<TConfig, TRecord>> logger)
@@ -100,11 +101,11 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
-        public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName, int maxRecords = -1)
+        public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName, int? maxRecords = null)
         {
             try
             {
-                var cursor = await FindRecords(filter, recordName);
+                var cursor = await FindRecords(filter, recordName, maxRecords);
 
                 if (!await cursor.MoveNextAsync() || !cursor.Current.Any())
                 {
@@ -118,7 +119,12 @@ namespace NHSOnline.Backend.Repository
                 _logger.LogInformation($"Mongo Find {recordName} Successful. " +
                                        $"One or more records found");
 
-                var records = EnumerateResults(cursor, maxRecords).ToList();
+                var records = new List<TRecord>(maxRecords ?? DefaultListSize);
+                await foreach (var record in EnumerateResults(cursor))
+                {
+                    records.Add(record);
+                }
+
                 return new RepositoryFindResult<TRecord>.Found(records);
             }
             catch (MongoException exception)
@@ -148,7 +154,6 @@ namespace NHSOnline.Backend.Repository
                     return new RepositoryDeleteResult<TRecord>.NotFound();
                 }
 
-
                 _logger.LogError(
                     $"Mongo Failure. Delete {recordName}. " +
                     $"IsAcknowledged: {result.IsAcknowledged}");
@@ -162,24 +167,17 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
-        private IEnumerable<TRecord> EnumerateResults(IAsyncCursor<TRecord> records, int maxRecords)
+        private async IAsyncEnumerable<TRecord> EnumerateResults(IAsyncCursor<TRecord> records)
         {
             using (records)
             {
-                var recordCount = 0;
                 do
                 {
                     foreach (var record in records.Current)
                     {
-                        recordCount++;
-                        if (maxRecords != -1 && maxRecords < recordCount)
-                        {
-                            yield break;
-                        }
-
                         yield return record;
                     }
-                } while (records.MoveNext());
+                } while (await records.MoveNextAsync());
             }
         }
 
@@ -210,11 +208,11 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
-        private async Task<IAsyncCursor<TRecord>> FindRecords(Expression<Func<TRecord, bool>> filter, string recordName)
+        private async Task<IAsyncCursor<TRecord>> FindRecords(Expression<Func<TRecord, bool>> filter, string recordName, int? maxRecords)
         {
             using (_logger.WithTimer($"Mongo Find {recordName}."))
             {
-                return await GetCollection().FindAsync(filter);
+                return await GetCollection().FindAsync(filter, new FindOptions<TRecord> { Limit = maxRecords });
             }
         }
 

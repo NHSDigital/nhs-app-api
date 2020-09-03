@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -61,25 +62,48 @@ namespace NHSOnline.Backend.Repository.UnitTests
         }
 
         [TestMethod]
-        public async Task Find_WhenMaxRecordsIsPassed_ReturnsFoundWithSpecifiedNumberOfRecords()
+        public async Task Find_WhenMaxRecordsIsPassed_CallsMongoWithFindOptionsLimitSetToMaxRecords()
         {
             // Arrange
-            var record1 = new TestRepositoryRecord();
-            var record2 = new TestRepositoryRecord();
-            var record3 = new TestRepositoryRecord();
-            var record4 = new TestRepositoryRecord();
-            var record5 = new TestRepositoryRecord();
-            IEnumerable<TestRepositoryRecord>[] values = { new[] { record1, record2 }, new[] { record3, record4, record5 } };
+            var maxRecords = 3;
+            FindOptions<TestRepositoryRecord, TestRepositoryRecord> findOptionsUsed = null;
+            IEnumerable<TestRepositoryRecord>[] values = { Enumerable.Empty<TestRepositoryRecord>() };
             using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
-            SetupFind().ReturnsAsync(cursorMock);
+            SetupFind()
+                .Callback<
+                    FilterDefinition<TestRepositoryRecord>,
+                    FindOptions<TestRepositoryRecord, TestRepositoryRecord>,
+                    CancellationToken>( (filter, options, cancellationToken) => findOptionsUsed = options)
+                .ReturnsAsync(cursorMock);
 
             // Act
-            var result = await _systemUnderTest.Find(_ => true, "recordName", 3);
+            await _systemUnderTest.Find(_ => true, "recordName", maxRecords);
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeOfType<RepositoryFindResult<TestRepositoryRecord>.Found>()
-                .Subject.Records.Should().BeEquivalentTo(record1, record2, record3);
+            findOptionsUsed.Limit.Should().Be(maxRecords);
+        }
+
+        [TestMethod]
+        public async Task Find_WhenMaxRecordsIsNotPassed_CallsMongoWithFindOptionsLimitSetToNull()
+        {
+            // Arrange
+            FindOptions<TestRepositoryRecord, TestRepositoryRecord> findOptionsUsed = null;
+            IEnumerable<TestRepositoryRecord>[] values = { Enumerable.Empty<TestRepositoryRecord>() };
+            using var cursorMock = new MockAsyncCursor<TestRepositoryRecord>(values);
+            SetupFind()
+                .Callback<
+                    FilterDefinition<TestRepositoryRecord>,
+                    FindOptions<TestRepositoryRecord, TestRepositoryRecord>,
+                    CancellationToken>( (filter, options, cancellationToken) => findOptionsUsed = options)
+                .ReturnsAsync(cursorMock);
+
+            // Act
+            await _systemUnderTest.Find(_ => true, "recordName");
+
+            // Assert
+            _mongoCollectionMock.VerifyAll();
+            findOptionsUsed.Limit.Should().BeNull();
         }
 
         [TestMethod]

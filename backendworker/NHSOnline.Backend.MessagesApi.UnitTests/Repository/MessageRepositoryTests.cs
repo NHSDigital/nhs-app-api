@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             // Arrange
             var messages = new List<UserMessage> { new UserMessage(), new UserMessage() };
             _mockRepository.Setup(x =>
-                    x.Find( It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find( It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(messages));
 
             // Act
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
 
             // Act
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             var userMessage = new UserMessage();
             var nhsLoginId = "value";
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(new []{userMessage}));
 
             // Act
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
 
             // Act
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             // Arrange
             var messages = new List<UserMessage> { new UserMessage(), new UserMessage() };
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.Found(messages));
 
             // Act
@@ -251,7 +251,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         {
             // Arrange
             _mockRepository.Setup(x =>
-                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), -1))
+                    x.Find(It.IsAny<Expression<Func<UserMessage, bool>>>(), It.IsAny<string>(), null))
                 .ReturnsAsync(new RepositoryFindResult<UserMessage>.NotFound());
 
             // Act
