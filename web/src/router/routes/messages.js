@@ -58,8 +58,8 @@ export const MESSAGES = {
   name: MESSAGES_NAME,
   component: MessagesPage,
   meta: {
-    headerKey: 'pageHeaders.messages',
-    titleKey: 'pageTitles.messages',
+    headerKey: 'navigation.pages.headers.messages',
+    titleKey: 'navigation.pages.titles.messages',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MESSAGES_CRUMB,
     helpUrl: messagingHelpUrl,
@@ -71,8 +71,8 @@ export const GP_MESSAGES = {
   name: GP_MESSAGES_NAME,
   component: GpMessagesPage,
   meta: {
-    headerKey: 'pageHeaders.gpMessages',
-    titleKey: 'pageTitles.gpMessages',
+    headerKey: 'navigation.pages.headers.gpMessages',
+    titleKey: 'navigation.pages.titles.gpMessages',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_CRUMB,
@@ -87,8 +87,8 @@ export const GP_MESSAGES_URGENCY = {
   name: GP_MESSAGES_URGENCY_NAME,
   component: GpMessagesUrgencyPage,
   meta: {
-    headerKey: 'pageHeaders.gpMessagesUrgency',
-    titleKey: 'pageTitles.gpMessagesUrgency',
+    headerKey: 'navigation.pages.headers.gpMessagesUrgency',
+    titleKey: 'navigation.pages.titles.gpMessagesUrgency',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CRUMB,
@@ -103,8 +103,8 @@ export const GP_MESSAGES_URGENCY_CONTACT_YOUR_GP = {
   name: GP_MESSAGES_URGENCY_CONTACT_GP_NAME,
   component: GpMessagesUrgencyContactYourGpPage,
   meta: {
-    headerKey: 'pageHeaders.gpMessagesUrgencyContactYourGp',
-    titleKey: 'pageTitles.gpMessagesUrgencyContactYourGp',
+    headerKey: 'navigation.pages.headers.gpMessagesUrgencyContactYourGp',
+    titleKey: 'navigation.pages.titles.gpMessagesUrgencyContactYourGp',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CONTACT_YOUR_GP_CRUMB,
@@ -119,8 +119,8 @@ export const GP_MESSAGES_RECIPIENTS = {
   name: GP_MESSAGES_RECIPIENTS_NAME,
   component: GpMessagesRecipientsPage,
   meta: {
-    headerKey: 'pageHeaders.gpMessagesRecipients',
-    titleKey: 'pageTitles.gpMessagesRecipients',
+    headerKey: 'navigation.pages.headers.gpMessagesRecipients',
+    titleKey: 'navigation.pages.titles.gpMessagesRecipients',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_RECIPIENTS_CRUMB,
@@ -137,11 +137,11 @@ export const GP_MESSAGES_SEND_MESSAGE = {
   meta: {
     headerKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageTitles.gpMessagesCreateMessage', { name });
+      return i18n.t('navigation.pages.titles.gpMessagesCreateMessage', { name });
     },
     titleKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageTitles.gpMessagesCreateMessage', { name });
+      return i18n.t('navigation.pages.titles.gpMessagesCreateMessage', { name });
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
@@ -159,11 +159,11 @@ export const GP_MESSAGES_VIEW_DETAILS = {
   meta: {
     headerKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageHeaders.gpMessagesViewMessage', { name });
+      return i18n.t('navigation.pages.headers.gpMessagesViewMessage', { name });
     },
     titleKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageTitles.gpMessagesViewMessage', { name });
+      return i18n.t('navigation.pages.titles.gpMessagesViewMessage', { name });
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
@@ -179,8 +179,8 @@ export const GP_MESSAGES_DOWNLOAD_ATTACHMENT = {
   name: GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME,
   component: GpMessagesDownloadAttachmentPage,
   meta: {
-    headerKey: 'pageHeaders.gpMessagesDownloadAttachment',
-    titleKey: 'pageTitles.gpMessagesDownloadAttachment',
+    headerKey: 'navigation.pages.headers.gpMessagesDownloadAttachment',
+    titleKey: 'navigation.pages.titles.gpMessagesDownloadAttachment',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_DOWNLOAD_ATTACHMENT_CRUMB,
@@ -195,7 +195,7 @@ export const GP_MESSAGES_VIEW_ATTACHMENT = {
   name: GP_MESSAGES_VIEW_ATTACHMENT_NAME,
   component: GpMessagesViewAttachmentPage,
   meta: {
-    titleKey: 'pageTitles.gpMessagesViewAttachment',
+    titleKey: 'navigation.pages.titles.gpMessagesViewAttachment',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
     crumb: breadcrumbs.GP_MESSAGES_VIEW_ATTACHMENT_CRUMB,
@@ -212,11 +212,11 @@ export const GP_MESSAGES_DELETE = {
   meta: {
     headerKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageHeaders.gpMessagesDeleteMessage', { name });
+      return i18n.t('navigation.pages.headers.gpMessagesDeleteMessage', { name });
     },
     titleKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageTitles.gpMessagesDeleteMessage', { name });
+      return i18n.t('navigation.pages.titles.gpMessagesDeleteMessage', { name });
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
@@ -237,11 +237,11 @@ export const GP_MESSAGES_DELETE_SUCCESS = {
   meta: {
     headerKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageHeaders.gpMessagesDeleteMessageSuccess', { name });
+      return i18n.t('navigation.pages.headers.gpMessagesDeleteMessageSuccess', { name });
     },
     titleKey: (store, i18n) => {
       const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
-      return i18n.t('pageTitles.gpMessagesDeleteMessageSuccess', { name });
+      return i18n.t('navigation.pages.titles.gpMessagesDeleteMessageSuccess', { name });
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
@@ -260,8 +260,8 @@ export const HEALTH_INFORMATION_UPDATES = {
   name: HEALTH_INFORMATION_UPDATES_NAME,
   component: AppMessagingPage,
   meta: {
-    headerKey: 'pageHeaders.healthAndInformationUpdates',
-    titleKey: 'pageTitles.healthAndInformationUpdates',
+    headerKey: 'navigation.pages.headers.healthAndInformationUpdates',
+    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_CRUMB,
     helpUrl: messagingHelpUrl,
     proofLevel: proofLevel.P5,
@@ -275,7 +275,7 @@ export const HEALTH_INFORMATION_UPDATES_MESSAGES = {
   name: HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
   component: AppMessagingMessagePage,
   meta: {
-    titleKey: 'pageTitles.healthAndInformationUpdates',
+    titleKey: 'navigation.pages.titles.healthAndInformationUpdates',
     crumb: breadcrumbs.HEALTH_INFORMATION_UPDATES_MESSAGES_CRUMB,
     helpUrl: messagingHelpUrl,
     proofLevel: proofLevel.P5,

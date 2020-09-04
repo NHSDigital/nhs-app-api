@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import NhsHeaderLogo from '@/components/widgets/NhsHeaderLogo';
 import { RouterLinkStub } from '@vue/test-utils';
 import { createStore, mount } from '../../helpers';
@@ -16,7 +17,15 @@ describe('NhsHeaderLogo.vue', () => {
       },
     });
 
-    return mount(NhsHeaderLogo, { $store, $router, stubs: { 'router-link': RouterLinkStub } });
+    return mount(
+      NhsHeaderLogo,
+      {
+        $store,
+        $router,
+        stubs: { 'router-link': RouterLinkStub },
+        mountOpts: { i18n },
+      },
+    );
   };
 
   describe('on desktop', () => {
@@ -33,8 +42,8 @@ describe('NhsHeaderLogo.vue', () => {
         .toBe(true);
     });
 
-    it('will display text from webHeader.logoText', () => {
-      expect(span.text()).toEqual('translate_webHeader.logoText');
+    it('will display NHS App online text', () => {
+      expect(span.text()).toEqual('NHS App online');
     });
 
     it('will have the service header design for the logo', () => {

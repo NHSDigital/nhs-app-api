@@ -81,11 +81,11 @@ describe('gp messages view attachment page', () => {
       });
 
       it('will emit UPDATE_HEADER with attachment unavailable as event when not viewable', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'pageHeaders.gpMessagesAttachmentUnavailable');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'navigation.pages.headers.gpMessagesAttachmentUnavailable');
       });
 
       it('will emit UPDATE_TITLE with attachment unavailable as event when not viewable', () => {
-        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'pageTitles.gpMessagesAttachmentUnavailable');
+        expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'navigation.pages.titles.gpMessagesAttachmentUnavailable');
       });
     });
 

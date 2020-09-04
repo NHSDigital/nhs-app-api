@@ -45,8 +45,8 @@ export const UPLIFT_PRESCRIPTIONS = {
   path: UPLIFT_PRESCRIPTIONS_PATH,
   component: UpliftPrescriptionsPage,
   meta: {
-    headerKey: 'pageHeaders.prescriptions',
-    titleKey: 'pageTitles.prescriptions',
+    headerKey: 'navigation.pages.headers.prescriptions',
+    titleKey: 'navigation.pages.titles.prescriptions',
     crumb: breadcrumbs.UPLIFT_PRESCRIPTIONS_CRUMB,
     i18nKey: 'prescriptions',
     proofLevel: proofLevel.P5,
@@ -60,8 +60,8 @@ export const PRESCRIPTIONS = {
   name: PRESCRIPTIONS_NAME,
   component: PrescriptionIndexPage,
   meta: {
-    headerKey: 'pageHeaders.prescriptions',
-    titleKey: 'pageTitles.prescriptions',
+    headerKey: 'navigation.pages.headers.prescriptions',
+    titleKey: 'navigation.pages.titles.prescriptions',
     crumb: breadcrumbs.PRESCRIPTIONS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
@@ -77,8 +77,8 @@ export const VIEW_ORDERS = {
   name: PRESCRIPTIONS_VIEW_ORDERS_NAME,
   component: ViewPrescriptionOrdersPage,
   meta: {
-    headerKey: 'pageHeaders.viewPrescriptionsOrder',
-    titleKey: 'pageTitles.viewPrescriptionsOrder',
+    headerKey: 'navigation.pages.headers.viewPrescriptionsOrder',
+    titleKey: 'navigation.pages.titles.viewPrescriptionsOrder',
     crumb: breadcrumbs.PRESCRIPTIONS_VIEW_ORDERS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
@@ -94,8 +94,8 @@ export const REPEAT_COURSES = {
   name: PRESCRIPTION_REPEAT_COURSES_NAME,
   component: RepeatCoursesPage,
   meta: {
-    headerKey: 'pageHeaders.repeatPrescriptionCourses',
-    titleKey: 'pageTitles.repeatPrescriptionCourses',
+    headerKey: 'navigation.pages.headers.repeatPrescriptionCourses',
+    titleKey: 'navigation.pages.titles.repeatPrescriptionCourses',
     crumb: breadcrumbs.PRESCRIPTION_REPEAT_COURSES_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
@@ -110,8 +110,8 @@ export const CONFIRM_DETAILS = {
   name: PRESCRIPTION_CONFIRM_COURSES_NAME,
   component: ConfirmPrescriptionDetailsPage,
   meta: {
-    headerKey: 'pageHeaders.confirmPrescription',
-    titleKey: 'pageTitles.confirmPrescription',
+    headerKey: 'navigation.pages.headers.confirmPrescription',
+    titleKey: 'navigation.pages.titles.confirmPrescription',
     crumb: breadcrumbs.PRESCRIPTION_CONFIRM_COURSES_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
@@ -129,14 +129,14 @@ export const ORDER_SUCCESS = {
     headerKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
       return store.getters['session/isProxying']
-        ? i18n.t('pageHeaders.prescriptionProxyOrderSuccess', { name: givenName })
-        : i18n.t('pageHeaders.prescriptionOrderSuccess');
+        ? i18n.t('navigation.pages.headers.prescriptionProxyOrderSuccess', { name: givenName })
+        : i18n.t('navigation.pages.headers.prescriptionOrderSuccess');
     },
     titleKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
       return store.getters['session/isProxying']
-        ? i18n.t('pageTitles.prescriptionProxyOrderSuccess', { name: givenName })
-        : i18n.t('pageTitles.prescriptionOrderSuccess');
+        ? i18n.t('navigation.pages.titles.prescriptionProxyOrderSuccess', { name: givenName })
+        : i18n.t('navigation.pages.titles.prescriptionOrderSuccess');
     },
     crumb: breadcrumbs.PRESCRIPTION_ORDER_SUCCESS_CRUMB,
     proofLevel: proofLevel.P9,
@@ -157,8 +157,8 @@ export const REPEAT_PARTIAL_SUCCESS = {
   name: PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_NAME,
   component: PrescriptionPartialOrderSuccessPage,
   meta: {
-    headerKey: 'pageHeaders.repeatPrescriptionsPartialSuccess',
-    titleKey: 'pageTitles.repeatPrescriptionsPartialSuccess',
+    headerKey: 'navigation.pages.headers.repeatPrescriptionsPartialSuccess',
+    titleKey: 'navigation.pages.titles.repeatPrescriptionsPartialSuccess',
     crumb: breadcrumbs.PRESCRIPTION_REPEAT_PARTIAL_SUCCESS_CRUMB,
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
@@ -178,8 +178,8 @@ export const PRESCRIPTIONS_GP_AT_HAND = {
   name: PRESCRIPTIONS_GP_AT_HAND_NAME,
   component: PrescriptionsGpAtHand,
   meta: {
-    headerKey: 'pageHeaders.serviceUnavailable',
-    titleKey: 'pageTitles.serviceUnavailable',
+    headerKey: 'navigation.pages.headers.serviceUnavailable',
+    titleKey: 'navigation.pages.titles.serviceUnavailable',
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     crumb: breadcrumbs.PRESCRIPTIONS_GP_AT_HAND_CRUMB,
     proofLevel: proofLevel.P9,

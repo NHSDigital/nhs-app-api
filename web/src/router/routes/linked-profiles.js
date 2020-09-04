@@ -44,8 +44,8 @@ export const LINKED_PROFILES = {
   name: LINKED_PROFILES_NAME,
   component: LinkedProfilesPage,
   meta: {
-    headerKey: 'pageHeaders.linkedProfiles',
-    titleKey: 'pageTitles.linkedProfiles',
+    headerKey: 'navigation.pages.headers.linkedProfiles',
+    titleKey: 'navigation.pages.titles.linkedProfiles',
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
@@ -60,11 +60,11 @@ export const LINKED_PROFILES_SUMMARY = {
   meta: {
     headerKey: (store, i18n) => {
       const linkedAccount = store.getters['linkedAccounts/getSelectedLinkedAccount'];
-      return i18n.t('pageHeaders.linkedProfilesSummary', { fullName: linkedAccount.fullName });
+      return i18n.t('navigation.pages.headers.linkedProfilesSummary', { fullName: linkedAccount.fullName });
     },
     titleKey: (store, i18n) => {
       const linkedAccount = store.getters['linkedAccounts/getSelectedLinkedAccount'];
-      return i18n.t('pageTitles.linkedProfilesSummary', { fullName: linkedAccount.fullName });
+      return i18n.t('navigation.pages.titles.linkedProfilesSummary', { fullName: linkedAccount.fullName });
     },
     crumb: breadcrumbs.LINKED_PROFILES_SUMMARY_CRUMB,
     proofLevel: proofLevel.P5,
@@ -159,8 +159,8 @@ export const SWITCH_PROFILE = {
   path: SWITCH_PROFILE_NAME,
   component: SwitchProfilePage,
   meta: {
-    headerKey: 'pageHeaders.switchProfile',
-    titleKey: 'pageTitles.switchProfile',
+    headerKey: 'navigation.pages.headers.switchProfile',
+    titleKey: 'navigation.pages.titles.switchProfile',
     crumb: breadcrumbs.SWITCH_PROFILE_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,

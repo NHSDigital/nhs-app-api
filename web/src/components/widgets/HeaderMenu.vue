@@ -22,7 +22,7 @@
            data-sid="symptoms-menu-item"
            data-purpose="symptomsPageLink"
            @click.prevent="setMenuitemState(symptomsPath)">
-          {{ $t('navigationMenu.symptomsLabel') }}
+          {{ $t('navigation.symptoms') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item">
@@ -30,7 +30,7 @@
            data-sid="appointments-menu-item"
            data-purpose="appointmentsPageLink"
            @click.prevent="setMenuitemState(appointmentsPath)">
-          {{ $t('navigationMenu.appointmentsLabel') }}
+          {{ $t('navigation.appointments') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item">
@@ -38,7 +38,7 @@
            data-sid="prescriptions-menu-item"
            data-purpose="prescriptionsPageLink"
            @click.prevent="setMenuitemState(prescriptionsPath)">
-          {{ $t('navigationMenu.prescriptionsLabel') }}
+          {{ $t('navigation.prescriptions') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item">
@@ -46,7 +46,7 @@
            data-sid="myrecord-menu-item"
            data-purpose="myRecordPageLink"
            @click.prevent="setMenuitemState(recordPath)">
-          {{ $t('navigationMenu.myRecordLabel') }}
+          {{ $t('navigation.healthRecord') }}
         </a>
       </li>
       <!-- Hidden as not in scope for mvp, will be needed in future -->
@@ -55,21 +55,21 @@
            data-sid="more-menu-item"
            data-purpose="morePageLink"
            @click.prevent="setMenuitemState(morePath)">
-          {{ $t('navigationMenu.moreLabel') }}
+          {{ $t('navigation.more') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
         <a class="nhsuk-header__navigation-link" :href="accountPath"
            data-sid="account-menu-item"
            @click.prevent="setMenuitemState(accountPath)">
-          {{ $t('navigationMenu.accountLabel') }}
+          {{ $t('navigation.account') }}
         </a>
       </li>
       <li :class="[$style.additionalMenuItem, 'nhsuk-header__navigation-item']">
         <a class="nhsuk-header__navigation-link" :href="logoutPath"
            data-sid="logout-menu-item"
            @click.prevent="setMenuitemState(logoutPath)">
-          {{ $t('navigationMenu.logoutLabel') }}
+          {{ $t('navigation.logout') }}
         </a>
       </li>
     </ul>

@@ -96,7 +96,7 @@ export default {
     title() {
       return this.$t(this.$store.state.termsAndConditions.updatedConsentRequired
         ? 'termsAndConditions.updated.title'
-        : 'pageTitles.termsAndConditions');
+        : 'navigation.pages.titles.termsAndConditions');
     },
   },
   created() {

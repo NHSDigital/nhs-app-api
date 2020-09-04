@@ -3,7 +3,7 @@
     <div id="nhsuk-footer" class="nhsuk-footer">
       <div class="nhsuk-width-container">
         <h2 class="nhsuk-u-visually-hidden">
-          {{ $t('webFooter.hiddenHeaderText') }}
+          {{ $t('navigation.footer.supportLinks') }}
         </h2>
         <ul class="nhsuk-footer__list">
           <li v-for="(link, index) in links" :key="index" class="nhsuk-footer__list-item">
@@ -14,7 +14,7 @@
           </li>
         </ul>
         <p class="nhsuk-footer__copyright">
-          {{ '&copy; '+ $t('webFooter.copyrightText') }}
+          {{ '&copy; '+ $t('navigation.footer.crownCopyright') }}
         </p>
       </div>
     </div>

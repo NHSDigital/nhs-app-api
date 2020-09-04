@@ -12,8 +12,8 @@ export const SYMPTOMS = {
   name: SYMPTOMS_NAME,
   component: SymptomsIndexPage,
   meta: {
-    headerKey: 'pageHeaders.symptoms',
-    titleKey: 'pageTitles.symptoms',
+    headerKey: 'navigation.pages.headers.symptoms',
+    titleKey: 'navigation.pages.titles.symptoms',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.SYMPTOMS_CRUMB,
     helpUrl: baseNhsAppHelpUrl,

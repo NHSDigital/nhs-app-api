@@ -14,7 +14,7 @@ import {
   shallowMount as vueShallowMount,
 } from '@vue/test-utils';
 
-const localVue = createLocalVue();
+export const localVue = createLocalVue();
 localVue.use(Vuex);
 
 export const create$T = (stubbed = true) => jest

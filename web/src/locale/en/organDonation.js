@@ -1,7 +1,9 @@
 export default {
+  appointedRepresentative: 'Appointed Representative',
   changeYourDecision: 'Change your decision',
   findOutMoreAbout: 'Find out more about organ donation',
   helpSaveThousandsOfLivesBySigningUpToOrganDonation: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register',
+  indicatesThatYouHaveAppointedARepresentative: 'Indicates that you have appointed a representative',
   iWantToChangeMyDecision: 'I want to change my decision',
   manageYourOrganDonationDecision: 'Manage your organ donation decision',
   registerYourDecision: 'Register your decision',

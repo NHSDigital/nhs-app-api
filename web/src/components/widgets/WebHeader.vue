@@ -13,9 +13,9 @@
                     class="nhsuk-header__menu-toggle"
                     :class="$style.menuButton"
                     aria-controls="header-navigation"
-                    :aria-label="$t('webHeader.toggleMenu.ariaLabel')"
+                    :aria-label="$t('navigation.header.openMenu')"
                     @click.prevent="toggleMiniMenu"
-                    @keyup.enter="toggleMiniMenu">{{ $t('webHeader.toggleMenu.buttonText') }}
+                    @keyup.enter="toggleMiniMenu">{{ $t('navigation.header.menu') }}
             </button>
           </div>
           <header-links v-if="showLinks" :anchor-links="links"/>
@@ -84,8 +84,8 @@ export default {
     return {
       helpAndSupportURL: HELP_AND_SUPPORT_URL,
       links: [
-        { name: this.$t('webHeader.links.account'), value: accountPath, id: 'account-link' },
-        { name: this.$t('webHeader.links.logout'), value: logoutPath, id: 'account-logout' },
+        { name: this.$t('navigation.header.settings'), value: accountPath, id: 'account-link' },
+        { name: this.$t('navigation.header.logout'), value: logoutPath, id: 'account-logout' },
       ],
       showMenuButton: false,
     };

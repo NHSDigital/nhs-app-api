@@ -12,7 +12,7 @@
                   class="nhsuk-breadcrumb__item">
                 <router-link class="nhsuk-breadcrumb__link"
                              :to="createRouteLink(crumb.name)" tabindex="0" >
-                  {{ $t(`crumbName.${crumb.i18nKey}`) }}
+                  {{ $t(`navigation.crumbName.${crumb.i18nKey}`) }}
                 </router-link>
               </li>
             </ol>
@@ -22,10 +22,10 @@
                            :to="createRouteLink(lastCrumb.name)"
                            tabindex="0"
                            :aria-label="$t(
-                             'crumbName.backTo',
-                             { crumbName: $t(`crumbName.${lastCrumb.i18nKey}`)})">
-                {{ $t('crumbName.backTo',
-                      { crumbName: $t(`crumbName.${lastCrumb.i18nKey}`)}) }}
+                             'navigation.crumbName.backTo',
+                             { crumbName: $t(`navigation.crumbName.${lastCrumb.i18nKey}`)})">
+                {{ $t('navigation.crumbName.backTo',
+                      { crumbName: $t(`navigation.crumbName.${lastCrumb.i18nKey}`)}) }}
               </router-link>
             </p>
           </div>

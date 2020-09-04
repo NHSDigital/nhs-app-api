@@ -24,8 +24,8 @@ export const INDEX = {
   component: IndexPage,
   meta: {
     proofLevel: proofLevel.P5,
-    headerKey: 'pageHeaders.home',
-    titleKey: 'pageTitles.home',
+    headerKey: 'navigation.pages.headers.home',
+    titleKey: 'navigation.pages.titles.home',
     crumb: breadcrumbs.INDEX_CRUMB,
     helpUrl: baseNhsAppHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,

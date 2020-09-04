@@ -1,6 +1,7 @@
-import Index from '@/pages/index';
 import each from 'jest-each';
-import { createStore, mount, createRouter, create$T } from '../helpers';
+import i18n from '@/plugins/i18n';
+import Index from '@/pages/index';
+import { createStore, mount, createRouter } from '../helpers';
 
 describe('index', () => {
   let wrapper;
@@ -68,7 +69,7 @@ describe('index', () => {
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationHealthLinksEnabled),
       },
     });
-    return mount(Index, { $store, $router, $t: create$T(), stubs: ['BiometricBanner'] });
+    return mount(Index, { $store, $router, mountOpts: { i18n }, stubs: ['BiometricBanner'] });
   };
 
   it('will display the navigation items when not proxying', () => {
@@ -146,11 +147,11 @@ describe('index', () => {
     const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
 
     each([
-      [false, false, true, 'translate_navigationMenuList.appMessages'], // app messages only
-      [true, false, true, 'translate_navigationMenuList.messages'], // app messages and im1 messaging
-      [false, true, true, 'translate_navigationMenuList.messages'], // app messages and silver messaging
-      [true, true, true, 'translate_navigationMenuList.messages'], // app messages, im1 messaging, silver messaging
-      [false, true, false, 'translate_navigationMenuList.appMessages'], // app messages and (silver messaging but not P9)
+      [false, false, true, 'View health information and updates'], // app messages only
+      [true, false, true, 'View your messages'], // app messages and im1 messaging
+      [false, true, true, 'View your messages'], // app messages and silver messaging
+      [true, true, true, 'View your messages'], // app messages, im1 messaging, silver messaging
+      [false, true, false, 'View health information and updates'], // app messages and (silver messaging but not P9)
     ]).describe('sjrIm1MessagingEnabled enabled is %s, silverIntegrationMessagesEnabled is %s, isProofLevel9 is %s', (
       sjrIm1MessagingEnabled, silverIntegrationMessagesEnabled,
       isProofLevel9, expectedText,
@@ -180,7 +181,7 @@ describe('index', () => {
           silverIntegrationHealthLinksEnabled: true,
         });
         const healthRecordsHubLink = wrapper.find('#menu-item-health-record-hub');
-        expect(healthRecordsHubLink.text()).toBe('translate_navigationMenuList.healthRecords');
+        expect(healthRecordsHubLink.text()).toBe('View your health records');
       });
     });
 
@@ -190,7 +191,7 @@ describe('index', () => {
           silverIntegrationHealthLinksEnabled: false,
         });
         const healthRecordsHubLink = wrapper.find('#menu-item-myRecord');
-        expect(healthRecordsHubLink.text()).toBe('translate_navigationMenuList.myRecord');
+        expect(healthRecordsHubLink.text()).toBe('View your GP health record');
       });
     });
   });

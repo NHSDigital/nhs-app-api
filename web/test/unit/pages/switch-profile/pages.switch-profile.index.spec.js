@@ -1,15 +1,14 @@
+import i18n from '@/plugins/i18n';
 import SwitchProfile from '@/pages/switch-profile/index';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $emit: jest.fn() },
 }));
-
-const $t = create$T();
 
 describe('switch profile page is there', () => {
   let $store;
@@ -33,7 +32,7 @@ describe('switch profile page is there', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(SwitchProfile, { $store, $t });
+  const mountPage = () => mount(SwitchProfile, { $store, mountOpts: { i18n } });
 
   describe('show switch profile switches', () => {
     let gpPracticeName;
@@ -56,12 +55,12 @@ describe('switch profile page is there', () => {
     });
 
     it('updated header and title is correct', () => {
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'translate_pageHeaders.switchProfile', true);
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'translate_pageTitles.switchProfile', true);
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'You are acting on behalf of ', true);
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'You are acting on behalf of ', true);
     });
 
     it('proxy users age is visible', () => {
-      expect(wrapper.find('[id="proxy-age"]').text()).toEqual('25translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+      expect(wrapper.find('[id="proxy-age"]').text()).toEqual('25 years old');
     });
 
     it('gp practice name is not visible with null value', () => {

@@ -6,7 +6,7 @@
       :href="indexPath"
       :to="indexPath"
       :class="'nhsuk-header__link nhsuk-header__link--service'"
-      :aria-label="$t('webHeader.nhsLogoAriaLabel')"
+      :aria-label="$t('navigation.header.nhsAppOnlineHomepage')"
       @click.stop.prevent="onClick">
       <svg class="nhsuk-logo nhsuk-logo--white"
            xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@
       <span v-if="!$store.state.device.isNativeApp"
             id="logo-text"
             class="nhsuk-header__service-name">
-        {{ $t('webHeader.logoText') }}</span>
+        {{ $t('navigation.header.nhsAppOnline') }}</span>
     </router-link>
   </div>
 </template>

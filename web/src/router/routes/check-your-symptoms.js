@@ -10,8 +10,8 @@ export const CHECKYOURSYMPTOMS = {
   name: CHECKYOURSYMPTOMS_NAME,
   component: CheckYourSymptomsPage,
   meta: {
-    headerKey: 'pageHeaders.symptoms',
-    titleKey: 'pageTitles.symptoms',
+    headerKey: 'navigation.pages.headers.symptoms',
+    titleKey: 'navigation.pages.titles.symptoms',
     crumb: breadcrumbs.CHECKYOURSYMPTOMS_CRUMB,
     isAnonymous: true,
     helpUrl: baseNhsAppHelpUrl,

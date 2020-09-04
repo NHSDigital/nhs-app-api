@@ -1,7 +1,7 @@
 <template>
   <svg :class="$style.appointedRep" viewBox="0 0 35 35" version="1.1">
-    <title>{{ $t('icons.organDonation.appointedRepIcon.title') }}</title>
-    <desc>{{ $t('icons.organDonation.appointedRepIcon.description') }}</desc>
+    <title>{{ $t('organDonation.appointedRepresentative') }}</title>
+    <desc>{{ $t('organDonation.indicatesThatYouHaveAppointedARepresentative') }}</desc>
     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g transform="translate(-23.000000, -168.000000)">
         <g transform="translate(24.000000, 169.000000)">

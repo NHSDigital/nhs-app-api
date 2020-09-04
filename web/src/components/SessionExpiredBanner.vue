@@ -5,7 +5,7 @@
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
           <p data-purpose="session-timeout">
-            {{ $t('icons.sessionExpired.title') }}
+            {{ $t('login.forYourSecurityYouNeedToLogInAgain') }}
           </p>
         </div>
       </div>

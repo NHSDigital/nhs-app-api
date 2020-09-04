@@ -33,7 +33,7 @@ import proofLevel from '@/lib/proofLevel';
 const getTermsConditionTitle = (store, i18n) => (
   i18n.t(store.state.termsAndConditions.updatedConsentRequired
     ? 'termsAndConditions.updated.title'
-    : 'pageHeaders.termsAndConditions')
+    : 'navigation.pages.headers.termsAndConditions')
 );
 
 export const LOGIN = {
@@ -55,8 +55,8 @@ export const LOGIN_BIOMETRIC_ERROR = {
   name: LOGIN_BIOMETRIC_ERROR_NAME,
   component: LoginBiometricErrorPage,
   meta: {
-    headerKey: 'pageTitles.loginBiometricError',
-    titleKey: 'pageTitles.loginBiometricError',
+    headerKey: 'navigation.pages.headers.loginBiometricError',
+    titleKey: 'navigation.pages.titles.loginBiometricError',
     isAnonymous: true,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
@@ -74,8 +74,8 @@ export const PRE_REGISTRATION = {
   name: PRE_REGISTRATION_INFORMATION_NAME,
   component: PreRegistrationInformationPage,
   meta: {
-    headerKey: 'pageHeaders.preRegistrationInformation',
-    titleKey: 'pageTitles.preRegistrationInformation',
+    headerKey: 'navigation.pages.headers.preRegistrationInformation',
+    titleKey: 'navigation.pages.titles.preRegistrationInformation',
     isAnonymous: true,
     middleware: [urlResolution, viewedPreRegInstructions],
     crumb: {},
@@ -127,8 +127,8 @@ export const USER_RESEARCH = {
   name: USER_RESEARCH_NAME,
   component: UserResearchPage,
   meta: {
-    headerKey: 'pageHeaders.userResearch',
-    titleKey: 'pageTitles.userResearch',
+    headerKey: 'navigation.pages.headers.userResearch',
+    titleKey: 'navigation.pages.titles.userResearch',
     proofLevel: proofLevel.P5,
     crumb: {},
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,

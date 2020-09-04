@@ -15,7 +15,7 @@
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
             <strong>
-              {{ $t('externalServiceWarning.warningText') }}
+              {{ $t('navigation.yourGpSurgeryProvidesThisService') }}
             </strong>
           </p>
         </div>

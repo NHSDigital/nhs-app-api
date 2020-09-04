@@ -104,9 +104,9 @@ export default {
   },
   metaInfo() {
     return {
-      title: `${this.$t('pageTitles.login')} screen`,
+      title: this.$t('navigation.pages.titles.login'),
       htmlAttrs: {
-        lang: `${this.$t('language')}`,
+        lang: this.$t('language'),
       },
     };
   },

@@ -5,7 +5,7 @@
         <h1 class="nhsuk-label-wrapper">
           <label class="nhsuk-label nhsuk-label--xl nhsuk-u-margin-top-3
           nhsuk-u-margin-bottom-3" for="searchTextInput">
-            {{ $t('pageHeaders.nominatedPharmacyOnlineOnlySearch') }}
+            {{ $t('navigation.pages.headers.nominatedPharmacyOnlineOnlySearch') }}
           </label>
         </h1>
       </div>
@@ -13,7 +13,7 @@
     <div v-else-if="!showMainPageHeader" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <h1 class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
-          {{ $t('pageHeaders.nominatedPharmacyOnlineOnlySearchNoResults')
+          {{ $t('navigation.pages.headers.nominatedPharmacyOnlineOnlySearchNoResults')
             .replace('{searchQuery}', processedSearchQuery ) }}
         </h1>
         <p id="noResultsFoundText" class="nhsuk-u-margin-bottom-3">

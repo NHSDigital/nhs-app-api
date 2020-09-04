@@ -62,8 +62,8 @@ export default {
     }
 
     if (!this.isViewable) {
-      EventBus.$emit(UPDATE_HEADER, 'pageHeaders.gpMessagesAttachmentUnavailable');
-      EventBus.$emit(UPDATE_TITLE, 'pageTitles.gpMessagesAttachmentUnavailable');
+      EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.gpMessagesAttachmentUnavailable');
+      EventBus.$emit(UPDATE_TITLE, 'navigation.pages.titles.gpMessagesAttachmentUnavailable');
     }
 
     if (this.document) {

@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.nhsoLogo">
     <svg style="height: 3em" viewBox="0 0 112 46" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <title>{{ $t('icons.nhsLogoIcon.title') }}</title>
+      <title>{{ $t('navigation.nhsApp') }}</title>
       <desc/>
       <defs/>
       <g id="nhso_logo" fill="#FFFFFF" fill-rule="nonzero">

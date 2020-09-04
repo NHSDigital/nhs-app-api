@@ -81,8 +81,8 @@ export default {
   retryToggle({ dispatch }) {
     // NHSO-7584
     this.dispatch('errors/clearAllApiErrors');
-    EventBus.$emit(UPDATE_HEADER, 'pageHeaders.notifications');
-    EventBus.$emit(UPDATE_TITLE, 'pageHeaders.notifications');
+    EventBus.$emit(UPDATE_HEADER, 'navigation.pages.headers.notifications');
+    EventBus.$emit(UPDATE_TITLE, 'navigation.pages.headers.notifications');
     dispatch('toggle');
   },
   toggle({ commit }) {

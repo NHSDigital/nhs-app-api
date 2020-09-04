@@ -19,7 +19,7 @@
                            :error-text="[$t('messages.youNeedToSelectYesOrNo')]"
                            :options="questionOptions"
                            :required="true"
-                           :legend="$t('pageTitles.gpMessagesUrgency')"
+                           :legend="$t('navigation.pages.titles.gpMessagesUrgency')"
                            name="messagingUrgency"
                            @validate="onAnswerValidate"/>
         </question>

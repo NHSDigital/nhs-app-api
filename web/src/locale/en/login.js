@@ -8,6 +8,7 @@ export default {
   checkSymptomsAndGetAdvice: 'check symptoms and get instant advice',
   continueWithNhsLogin: 'Continue with NHS login',
   downloadOnTheAppStore: 'Download on the App Store',
+  forYourSecurityYouNeedToLogInAgain: 'For your security, you need to log in again',
   getItOnGooglePlay: 'Get it on Google Play',
   getTheNhsAppOnYourDevice: 'Get the NHS App on your smartphone or tablet',
   howAreYouFeelingToday: 'How are you feeling today?',

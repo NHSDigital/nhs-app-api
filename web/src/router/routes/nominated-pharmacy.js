@@ -47,8 +47,8 @@ export const NOMINATED_PHARMACY_CHANGE_SUCCESS = {
   name: NOMINATED_PHARMACY_CHANGE_SUCCESS_NAME,
   component: NominatedPharmacyChangeSuccessPage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacyChangeSuccess',
-    titleKey: 'pageTitles.nominatedPharmacyChangeSuccess',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyChangeSuccess',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyChangeSuccess',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHANGE_SUCCESS_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -62,8 +62,8 @@ export const NOMINATED_PHARMACY_CHOOSE_TYPE = {
   name: NOMINATED_PHARMACY_CHOOSE_TYPE_NAME,
   component: NominatedPharmacyChooseTypePage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacyChooseType',
-    titleKey: 'pageTitles.nominatedPharmacyChooseType',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyChooseType',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyChooseType',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHOOSE_TYPE_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -77,8 +77,8 @@ export const NOMINATED_PHARMACY_CHECK = {
   name: NOMINATED_PHARMACY_CHECK_NAME,
   component: NominatedPharmacyCheckPage,
   meta: {
-    headerKey: 'pageHeaders.prescriptions',
-    titleKey: 'pageTitles.prescriptions',
+    headerKey: 'navigation.pages.headers.prescriptions',
+    titleKey: 'navigation.pages.titles.prescriptions',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHECK_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -92,8 +92,8 @@ export const NOMINATED_PHARMACY_CONFIRM = {
   name: NOMINATED_PHARMACY_CONFIRM_NAME,
   component: NominatedPharmacyConfirmPage,
   meta: {
-    headerKey: 'pageHeaders.confirmNominatedPharmacy',
-    titleKey: 'pageTitles.confirmNominatedPharmacy',
+    headerKey: 'navigation.pages.headers.confirmNominatedPharmacy',
+    titleKey: 'navigation.pages.titles.confirmNominatedPharmacy',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CONFIRM_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -107,8 +107,8 @@ export const NOMINATED_PHARMACY_DSP_INTERRUPT = {
   name: NOMINATED_PHARMACY_DSP_INTERRUPT_NAME,
   component: NominatedPharmacyDSPInterruptPage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacyDspInterrupt',
-    titleKey: 'pageTitles.nominatedPharmacyDspInterrupt',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyDspInterrupt',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyDspInterrupt',
     crumb: breadcrumbs.NOMINATED_PHARMACY_DSP_INTERRUPT_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -122,8 +122,8 @@ export const NOMINATED_PHARMACY_INDEX = {
   name: NOMINATED_PHARMACY_NAME,
   component: NominatedPharmacyIndexPage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacy',
-    titleKey: 'pageTitles.nominatedPharmacy',
+    headerKey: 'navigation.pages.headers.nominatedPharmacy',
+    titleKey: 'navigation.pages.titles.nominatedPharmacy',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -138,11 +138,11 @@ export const NOMINATED_PHARMACY_INTERRUPT = {
   component: NominatedPharmacyInterruptPage,
   meta: {
     headerKey: (store, i18n) => (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined
-      ? i18n.t('pageHeaders.nominatedPharmacyNotFoundInterrupt')
-      : i18n.t('pageHeaders.nominatedPharmacyFoundInterrupt')),
+      ? i18n.t('navigation.pages.headers.nominatedPharmacyNotFoundInterrupt')
+      : i18n.t('navigation.pages.headers.nominatedPharmacyFoundInterrupt')),
     titleKey: (store, i18n) => (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined
-      ? i18n.t('pageTitles.nominatedPharmacyNotFoundInterrupt')
-      : i18n.t('pageTitles.nominatedPharmacyFoundInterrupt')),
+      ? i18n.t('navigation.pages.titles.nominatedPharmacyNotFoundInterrupt')
+      : i18n.t('navigation.pages.titles.nominatedPharmacyFoundInterrupt')),
     crumb: breadcrumbs.NOMINATED_PHARMACY_INTERRUPT_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -156,8 +156,8 @@ export const NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES = {
   name: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_NAME,
   component: NominatedPharmacyOnlineOnlyChoicesPage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacyOnlineOnlyChoices',
-    titleKey: 'pageTitles.nominatedPharmacyOnlineOnlyChoices',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyOnlineOnlyChoices',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyOnlineOnlyChoices',
     crumb: breadcrumbs.NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -171,8 +171,8 @@ export const NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH = {
   name: NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_NAME,
   component: NominatedPharmacyOnlyOnlySearchPage,
   meta: {
-    headerKey: 'pageHeaders.nominatedPharmacyOnlineOnlySearch',
-    titleKey: 'pageTitles.nominatedPharmacyOnlineOnlySearch',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyOnlineOnlySearch',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyOnlineOnlySearch',
     crumb: breadcrumbs.NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,
@@ -223,8 +223,8 @@ export const NOMINATED_PHARMACY_SEARCH = {
   name: NOMINATED_PHARMACY_SEARCH_NAME,
   component: NominatedPharmacySearchPage,
   meta: {
-    headerKey: 'pageHeaders.searchNominatedPharmacy',
-    titleKey: 'pageTitles.searchNominatedPharmacy',
+    headerKey: 'navigation.pages.headers.searchNominatedPharmacy',
+    titleKey: 'navigation.pages.titles.searchNominatedPharmacy',
     crumb: breadcrumbs.NOMINATED_PHARMACY_SEARCH_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,

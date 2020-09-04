@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import TsAndCsLayout from '@/layouts/termsAndConditions';
 import ContentHeader from '@/components/widgets/ContentHeader';
+import i18n from '@/plugins/i18n';
+import TsAndCsLayout from '@/layouts/termsAndConditions';
 import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
-import { create$T, createStore, shallowMount } from '../helpers';
+import { createStore, shallowMount } from '../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
@@ -15,7 +16,6 @@ const routeMeta = {
 };
 
 const createDefaultPage = ($store, stubs) => (shallowMount(TsAndCsLayout, {
-  $t: create$T(true),
   $store,
   $route: {
     name: 'terms-and-conditions',
@@ -29,6 +29,7 @@ const createDefaultPage = ($store, stubs) => (shallowMount(TsAndCsLayout, {
     },
   },
   stubs,
+  mountOpts: { i18n },
 }));
 
 const createLayoutStore = ({
@@ -114,11 +115,11 @@ describe('termsAndConditions.vue ', () => {
       });
 
       it('will set language from locale', () => {
-        expect(head.htmlAttrs.lang).toBe('translate_language');
+        expect(head.htmlAttrs.lang).toBe('en-GB');
       });
 
       it('will set title to be the ts & cs pageTitle with the app title appended', () => {
-        expect(head.title).toBe('translate_pageTitles.termsAndConditions - translate_appTitle');
+        expect(head.title).toBe('Accept conditions of use - NHS App');
       });
 
       it('will have no scripts defined', () => {

@@ -40,8 +40,8 @@ export default {
   },
   mounted() {
     // TODO: move into route header/title callbacks. don't think there's a need for this here
-    EventBus.$emit(UPDATE_HEADER, this.$t('pageHeaders.switchProfile', this.currentProfile), true);
-    EventBus.$emit(UPDATE_TITLE, this.$t('pageTitles.switchProfile', this.currentProfile), true);
+    EventBus.$emit(UPDATE_HEADER, this.$t('navigation.pages.headers.switchProfile', this.currentProfile), true);
+    EventBus.$emit(UPDATE_TITLE, this.$t('navigation.pages.titles.switchProfile', this.currentProfile), true);
   },
 };
 </script>

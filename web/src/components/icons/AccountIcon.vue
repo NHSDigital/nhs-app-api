@@ -1,7 +1,7 @@
 <template>
   <tab-focused-icon id="accountIcon" :icon-classes="[$style.account]" view-box="0 0 94.77 113">
-    <title>{{ $t('icons.accountIcon.title') }}</title>
-    <desc>{{ $t('icons.accountIcon.desc') }}</desc>
+    <title>{{ $t('navigation.myAccount') }}</title>
+    <desc>{{ $t('navigation.accessMyAccountSettings') }}</desc>
     <!--eslint-disable-next-line -->
     <path :class="$style.a" d="M47.91,60.31h.86c7.81-.12,14.14-2.51,18.8-7.07C77.85,43.18,76.14,25.94,76,24.29,75.28,11.94,68.56,6,63,3.27A33.17,33.17,0,0,0,48.66,0h-.45A33.36,33.36,0,0,0,33.86,3.18c-5.61,2.75-12.44,8.66-13.1,21.11-.19,1.65-1.9,18.89,8.37,29C33.78,57.8,40.1,60.19,47.91,60.31Zm-20-35.44c0-.07,0-.14,0-.19.88-16.61,14.46-18.4,20.27-18.4h.32C55.7,6.42,68,9,68.78,24.68a.55.55,0,0,0,0,.19c0,.16,1.9,15.92-6.59,24.22-3.36,3.29-7.84,4.91-13.74,5h-.26c-5.87,0-10.38-1.67-13.71-5C26,40.84,27.85,25,27.88,24.87Z"></path>
     <!--eslint-disable-next-line -->

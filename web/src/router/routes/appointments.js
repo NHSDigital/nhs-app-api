@@ -64,8 +64,8 @@ export const UPLIFT_APPOINTMENTS = {
   name: UPLIFT_APPOINTMENTS_NAME,
   component: UpliftAppointmentsPage,
   meta: {
-    headerKey: 'pageHeaders.appointments',
-    titleKey: 'pageTitles.appointments',
+    headerKey: 'navigation.pages.headers.appointments',
+    titleKey: 'navigation.pages.titles.appointments',
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.UPLIFT_APPOINTMENTS_CRUMB,
     helpUrl: appointmentsHelpUrl,
@@ -79,8 +79,8 @@ export const APPOINTMENTS = {
   name: APPOINTMENTS_NAME,
   component: AppointmentsIndexPage,
   meta: {
-    headerKey: 'pageHeaders.appointments',
-    titleKey: 'pageTitles.appointments',
+    headerKey: 'navigation.pages.headers.appointments',
+    titleKey: 'navigation.pages.titles.appointments',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.APPOINTMENTS_CRUMB,
@@ -94,8 +94,8 @@ export const GP_APPOINTMENTS = {
   name: GP_APPOINTMENTS_NAME,
   component: GpAppointmentsIndexPage,
   meta: {
-    headerKey: 'pageHeaders.gpAppointments',
-    titleKey: 'pageTitles.gpAppointments',
+    headerKey: 'navigation.pages.headers.gpAppointments',
+    titleKey: 'navigation.pages.titles.gpAppointments',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_APPOINTMENTS_CRUMB,
@@ -115,8 +115,8 @@ export const HOSPITAL_APPOINTMENTS = {
   name: HOSPITAL_APPOINTMENTS_NAME,
   component: HospitalAppointmentsPage,
   meta: {
-    headerKey: 'pageHeaders.hospitalAppointments',
-    titleKey: 'pageTitles.hospitalAppointments',
+    headerKey: 'navigation.pages.headers.hospitalAppointments',
+    titleKey: 'navigation.pages.titles.hospitalAppointments',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.HOSPITAL_APPOINTMENTS_CRUMB,
@@ -131,8 +131,8 @@ export const GP_AT_HAND = {
   name: APPOINTMENT_GP_AT_HAND_NAME,
   component: GpAtHandPage,
   meta: {
-    headerKey: 'pageHeaders.serviceUnavailable',
-    titleKey: 'pageTitles.serviceUnavailable',
+    headerKey: 'navigation.pages.headers.serviceUnavailable',
+    titleKey: 'navigation.pages.titles.serviceUnavailable',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_AT_HAND_CRUMB,
@@ -150,8 +150,8 @@ export const INFORMATICA = {
   name: APPOINTMENT_INFORMATICA_NAME,
   component: InformaticaPage,
   meta: {
-    headerKey: 'pageHeaders.serviceUnavailable',
-    titleKey: 'pageTitles.serviceUnavailable',
+    headerKey: 'navigation.pages.headers.serviceUnavailable',
+    titleKey: 'navigation.pages.titles.serviceUnavailable',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.INFORMATICA_CRUMB,
@@ -169,8 +169,8 @@ export const BOOKING_GUIDANCE = {
   name: APPOINTMENT_BOOKING_GUIDANCE_NAME,
   component: BookingGuidancePage,
   meta: {
-    headerKey: 'pageHeaders.appointmentGuidance',
-    titleKey: 'pageTitles.appointmentGuidance',
+    headerKey: 'navigation.pages.headers.appointmentGuidance',
+    titleKey: 'navigation.pages.titles.appointmentGuidance',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.BOOKING_GUIDANCE_CRUMB,
@@ -188,8 +188,8 @@ export const BOOKING = {
   name: APPOINTMENT_BOOKING_NAME,
   component: BookingPage,
   meta: {
-    headerKey: 'pageHeaders.appointmentBooking',
-    titleKey: 'pageTitles.appointmentBooking',
+    headerKey: 'navigation.pages.headers.appointmentBooking',
+    titleKey: 'navigation.pages.titles.appointmentBooking',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.BOOKING_CRUMB,
@@ -203,8 +203,8 @@ export const CONFIRMATION = {
   name: APPOINTMENT_CONFIRMATIONS_NAME,
   component: ConfirmationPage,
   meta: {
-    headerKey: 'pageHeaders.appointmentConfirmation',
-    titleKey: 'pageTitles.appointmentConfirmation',
+    headerKey: 'navigation.pages.headers.appointmentConfirmation',
+    titleKey: 'navigation.pages.titles.appointmentConfirmation',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.CONFIRMATION_CRUMB,
@@ -221,16 +221,16 @@ export const BOOKING_SUCCESS = {
     headerKey: (store, i18n) => {
       if (store.getters['session/isProxying']) {
         const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-        return i18n.t('pageHeaders.appointmentProxyBookingSuccess', { name: givenName });
+        return i18n.t('navigation.pages.headers.appointmentProxyBookingSuccess', { name: givenName });
       }
-      return i18n.t('pageHeaders.appointmentBookingSuccess');
+      return i18n.t('navigation.pages.headers.appointmentBookingSuccess');
     },
     titleKey: (store, i18n) => {
       if (store.getters['session/isProxying']) {
         const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-        return i18n.t('pageTitles.appointmentProxyBookingSuccess', { name: givenName });
+        return i18n.t('navigation.pages.titles.appointmentProxyBookingSuccess', { name: givenName });
       }
-      return i18n.t('pageTitles.appointmentBookingSuccess');
+      return i18n.t('navigation.pages.titles.appointmentBookingSuccess');
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
@@ -250,7 +250,7 @@ export const ADD_TO_CALENDAR = {
   name: APPOINTMENT_ADD_TO_CALENDAR_NAME,
   component: AddToCalendarInterruptPage,
   meta: {
-    titleKey: 'pageTitles.appointmentAddToCalendar',
+    titleKey: 'navigation.pages.titles.appointmentAddToCalendar',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.ADD_TO_CALENDAR_CRUMB,
@@ -264,8 +264,8 @@ export const CANCELLING = {
   name: APPOINTMENT_CANCELLING_NAME,
   component: CancellingPage,
   meta: {
-    headerKey: 'pageHeaders.appointmentCancelling',
-    titleKey: 'pageTitles.appointmentCancelling',
+    headerKey: 'navigation.pages.headers.appointmentCancelling',
+    titleKey: 'navigation.pages.titles.appointmentCancelling',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.CANCELLING_CRUMB,
@@ -282,16 +282,16 @@ export const CANCELLING_SUCCESS = {
     headerKey: (store, i18n) => {
       if (store.getters['session/isProxying']) {
         const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-        return i18n.t('pageHeaders.appointmentProxyCancellingSuccess', { name: givenName });
+        return i18n.t('navigation.pages.headers.appointmentProxyCancellingSuccess', { name: givenName });
       }
-      return i18n.t('pageHeaders.appointmentCancellingSuccess');
+      return i18n.t('navigation.pages.headers.appointmentCancellingSuccess');
     },
     titleKey: (store, i18n) => {
       if (store.getters['session/isProxying']) {
         const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-        return i18n.t('pageTitles.appointmentProxyCancellingSuccess', { name: givenName });
+        return i18n.t('navigation.pages.titles.appointmentProxyCancellingSuccess', { name: givenName });
       }
-      return i18n.t('pageTitles.appointmentCancellingSuccess');
+      return i18n.t('navigation.pages.titles.appointmentCancellingSuccess');
     },
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
@@ -311,9 +311,9 @@ export const ADMIN_HELP = {
   name: APPOINTMENT_ADMIN_HELP_NAME,
   component: AdminHelpPage,
   meta: {
-    captionKey: 'pageHeaders.appointmentAdminHelp',
+    captionKey: 'navigation.pages.headers.appointmentAdminHelp',
     captionSize: CaptionSize.Medium,
-    titleKey: 'pageTitles.appointmentAdminHelp',
+    titleKey: 'navigation.pages.titles.appointmentAdminHelp',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.ADMIN_HELP_CRUMB,
@@ -328,9 +328,9 @@ export const GP_ADVICE = {
   name: APPOINTMENT_GP_ADVICE_NAME,
   component: GpAdvicePage,
   meta: {
-    captionKey: 'pageHeaders.appointmentGpAdvice',
+    captionKey: 'navigation.pages.headers.appointmentGpAdvice',
     captionSize: CaptionSize.Medium,
-    titleKey: 'pageTitles.appointmentGpAdvice',
+    titleKey: 'navigation.pages.titles.appointmentGpAdvice',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_APPOINTMENTS,
     crumb: breadcrumbs.GP_ADVICE_CRUMB,

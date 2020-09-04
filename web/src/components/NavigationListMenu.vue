@@ -4,8 +4,8 @@
                :header-tag="headerTag"
                data-sid="symptoms-list-item"
                :href="symptomsPath"
-               :text="$t('navigationMenuList.symptoms')"
-               :aria-label="$t('navigationMenuList.symptoms')"
+               :text="$t('navigation.checkYourSymptoms')"
+               :aria-label="$t('navigation.checkYourSymptoms')"
                :click-func="goToUrl"
                :click-param="symptomsPath"/>
 
@@ -14,8 +14,8 @@
                :header-tag="headerTag"
                data-sid="appointments-menu-item"
                :href="appointmentsPath"
-               :text="$t('navigationMenuList.appointments')"
-               :aria-label="$t('navigationMenuList.appointments')"
+               :text="$t('navigation.bookAndManageAppointments')"
+               :aria-label="$t('navigation.bookAndManageAppointments')"
                :click-func="goToUrl"
                :click-param="appointmentsPath"/>
 
@@ -24,8 +24,8 @@
                :header-tag="headerTag"
                data-sid="prescriptions-menu-item"
                :href="prescriptionsPath"
-               :text="$t('navigationMenuList.prescriptions')"
-               :aria-label="$t('navigationMenuList.prescriptions')"
+               :text="$t('navigation.orderARepeatPrescription')"
+               :aria-label="$t('navigation.orderARepeatPrescription')"
                :click-func="goToUrl"
                :click-param="prescriptionsPath"/>
 
@@ -34,8 +34,8 @@
                :header-tag="headerTag"
                data-sid="myrecord-menu-item"
                :href="gpMedicalRecordPath"
-               :text="$t('navigationMenuList.myRecord')"
-               :aria-label="$t('navigationMenuList.myRecord')"
+               :text="$t('navigation.viewYourGpHealthRecord')"
+               :aria-label="$t('navigation.viewYourGpHealthRecord')"
                :click-func="goToUrl"
                :click-param="gpMedicalRecordPath"/>
 
@@ -44,8 +44,8 @@
                :header-tag="headerTag"
                data-sid="health-record-hub-menu-item"
                :href="healthRecordsHubPath"
-               :text="$t('navigationMenuList.healthRecords')"
-               :aria-label="$t('navigationMenuList.healthRecords')"
+               :text="$t('navigation.viewYourHealthRecords')"
+               :aria-label="$t('navigation.viewYourHealthRecords')"
                :click-func="goToUrl"
                :click-param="healthRecordsHubPath"/>
 
@@ -68,8 +68,8 @@
                :header-tag="headerTag"
                data-sid="linkedProfile-menu-item"
                :href="linkedProfilesPath"
-               :text="$t('navigationMenuList.linkedProfiles')"
-               :aria-label="$t('navigationMenuList.linkedProfiles')"
+               :text="$t('navigation.linkedProfiles')"
+               :aria-label="$t('navigation.linkedProfiles')"
                :click-func="goToUrl"
                :click-param="linkedProfilesPath"/>
 
@@ -146,8 +146,8 @@ export default {
     },
     messagesItemText() {
       return (this.linkToAppMessages)
-        ? this.$t('navigationMenuList.appMessages')
-        : this.$t('navigationMenuList.messages');
+        ? this.$t('navigation.viewHealthInformationAndUpdates')
+        : this.$t('navigation.viewYourMessages');
     },
     messagesPath() {
       return (this.linkToAppMessages) ? HEALTH_INFORMATION_UPDATES_PATH : MESSAGES_PATH;
@@ -155,7 +155,7 @@ export default {
     ariaLabel() {
       return (this.hasMessageIndicator) ?
         `${this.messagesItemText}
-          ${this.$t('navigationMenuList.unreadMessages')}` :
+          ${this.$t('navigation.youHaveUnreadMessages')}` :
         this.messagesItemText;
     },
   },

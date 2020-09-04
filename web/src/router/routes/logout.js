@@ -11,8 +11,8 @@ export const LOGOUT = {
   name: LOGOUT_NAME,
   component: LogoutPage,
   meta: {
-    headerKey: 'pageHeaders.logout',
-    titleKey: 'pageTitles.logout',
+    headerKey: 'navigation.pages.headers.logout',
+    titleKey: 'navigation.pages.titles.logout',
     proofLevel: proofLevel.P5,
     crumb: {},
     helpUrl: appLoginHelpUrl,

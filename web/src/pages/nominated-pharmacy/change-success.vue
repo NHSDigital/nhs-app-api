@@ -93,8 +93,8 @@ export default {
     this.pharmacy = this.$store.state.nominatedPharmacy.pharmacy;
 
     const formatArgs = { name: this.pharmacy.pharmacyName };
-    EventBus.$emit(UPDATE_HEADER, this.$t('pageHeaders.nominatedPharmacyChangeSuccess', formatArgs), true);
-    EventBus.$emit(UPDATE_TITLE, this.$t('pageTitles.nominatedPharmacyChangeSuccess', formatArgs), true);
+    EventBus.$emit(UPDATE_HEADER, this.$t('navigation.pages.headers.nominatedPharmacyChangeSuccess', formatArgs), true);
+    EventBus.$emit(UPDATE_TITLE, this.$t('navigation.pages.titles.nominatedPharmacyChangeSuccess', formatArgs), true);
   },
   methods: {
     prescriptionsLinkClicked() {
