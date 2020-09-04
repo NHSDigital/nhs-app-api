@@ -1,0 +1,28 @@
+export default {
+  aboutTheNhsApp: 'About the NHS App',
+  accessibilityStatement: 'Accessibility statement',
+  helpAndSupport: 'Help and support',
+  linkedProfiles: 'Linked profiles',
+  loginAndPasswordOptions: 'Login and password options',
+  nhsLogin: 'NHS login',
+  openSourceLicences: 'Open source licences',
+  privacyPolicy: 'Privacy policy',
+  termsOfUse: 'Terms of use',
+  cookies: {
+    allowOptionalCookies: 'Allow optional analytic cookies',
+    cookies: 'Cookies',
+    cookiesPolicy: 'Cookies policy',
+    iAcceptTheUseOfOptionalCookies: 'I accept the use of optional analytic cookies used to improve the performance of the NHS App',
+    weHavePutSomeOnYourDevice: 'We\'ve put some small files called cookies on your device to make the NHS App work.',
+    weWillNotUseOthersUnlessYouTurnThemOn: 'We will not use any other cookies unless you choose to turn them on.',
+  },
+  notifications: {
+    allowNotifications: 'Allow notifications',
+    iAcceptNotifications: 'I accept the NHS App sending me notifications on this device',
+    ifYouShareReadMoreAboutIn: 'If you share this device with other people, they may be able to see your notifications. Read more about notifications in the ',
+    manageHowNotificationsAreShown: 'Manage how notifications are shown on this device (opens your device settings)',
+    nhsAppPrivacyPolicy: 'NHS App privacy policy',
+    notifications: 'Notifications',
+    youCanChoose: 'You can choose whether to allow notifications on your device.',
+  },
+};

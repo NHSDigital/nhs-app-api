@@ -5,13 +5,13 @@
                  id="'linked-profiles-link'"
                  header-tag="h2"
                  :href="linkedProfilesPath"
-                 :text="$t('myAccount.linkedProfilesLink')"
+                 :text="$t('account.linkedProfiles')"
                  :click-func="goToUrl"
                  :click-param="linkedProfilesPath"/>
       <menu-item id="'cookies'"
                  header-tag="h2"
                  :href="cookiesPath"
-                 :text="$t('myAccount.cookiesLink')"
+                 :text="$t('account.cookies.cookies')"
                  :click-func="goToUrl"
                  :click-param="cookiesPath"/>
       <settings data-purpose="setting-section"

@@ -9,14 +9,14 @@
     <menu-item id="btn_nhsLogin"
                :header-tag="headerTag"
                target="_blank"
-               :text="$t('myAccount.accountSettings.nhsLogin')"
-               :aria-label="$t('myAccount.accountSettings.nhsLogin')"
+               :text="$t('account.nhsLogin')"
+               :aria-label="$t('account.nhsLogin')"
                :click-func="goToNHSSettings"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
-               :text="$t('myAccount.accountSettings.notificationOptions')"
-               :aria-label="$t('myAccount.accountSettings.notificationOptions')"
+               :text="$t('account.notifications.notifications')"
+               :aria-label="$t('account.notifications.notifications')"
                :click-func="showNotificationsClicked"/>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
   computed: {
     getBiometricLinkText() {
       if (!canVersionHandleBiometricsWeb(this)) {
-        return 'myAccount.accountSettings.passwordOptions';
+        return 'account.loginAndPasswordOptions';
       }
 
       if (this.$store.getters['loginSettings/getDeviceBiometricNameString'] !== undefined) {

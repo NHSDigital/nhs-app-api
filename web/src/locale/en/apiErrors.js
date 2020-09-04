@@ -1,3 +1,4 @@
+import account from './apiErrorsAccount';
 import healthRecords from './apiErrorsHealthRecords';
 import messages from './apiErrorsMessages';
 import organDonation from './apiErrorsOrganDonation';
@@ -31,6 +32,7 @@ export default {
     message: 'Try again in a few moments.',
   },
   components: {
+    account,
     health_records: healthRecords,
     organ_donation: organDonation,
     messages,

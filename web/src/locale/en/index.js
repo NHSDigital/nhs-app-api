@@ -1,3 +1,4 @@
+import account from './account';
 import apiErrors from './apiErrors';
 import appointments from './appointments';
 import components from './components';
@@ -99,31 +100,6 @@ export default {
       gpSurgery: 'GP surgery',
     },
   },
-  myAccount: {
-    detailsHeading: 'Details',
-    accountSettings: {
-      header: 'Account settings',
-      linkedProfilesOptions: 'Linked profiles',
-      passwordOptions: 'Login and password options',
-      nhsLogin: 'NHS login',
-      notificationOptions: 'Notifications',
-    },
-    aboutUsHeading: 'About the NHS App',
-    termsAndConditions: 'Terms of use',
-    privacyPolicy: 'Privacy policy',
-    cookiesLink: 'Cookies',
-    cookiesPolicy: 'Cookies policy',
-    linkedProfilesLink: 'Linked profiles',
-    openSourceLicences: 'Open source licences',
-    helpAndSupport: 'Help and support',
-    accessibilityStatement: 'Accessibility statement',
-    cookies: {
-      p1: 'We\'ve put some small files called cookies on your device to make the NHS App work.',
-      p2: 'We will not use any other cookies unless you choose to turn them on.',
-      toggleLabel: 'Allow optional analytic cookies',
-      toggleHint: 'I accept the use of optional analytic cookies used to improve the performance of the NHS App',
-    },
-  },
   linkedProfiles: {
     lossProxyError: 'Sorry, there is a problem with this service. It may not be possible to access services in the app on behalf of other people right now.',
     actingAsOtherUserBannerWarningText: 'Acting on behalf of',
@@ -195,39 +171,6 @@ export default {
     },
     switchToMyProfileButton: 'Switch to my profile',
   },
-  account: {
-    notifications: {
-      youCanChoose: 'You can choose whether to allow notifications on your device.',
-      ifYouShare: {
-        prefix: 'If you share this device with other people, they may be able to see your notifications. Read more about notifications in the ',
-        linkText: 'NHS App privacy policy',
-      },
-      toggleLabel: 'Allow notifications',
-      toggleHint: 'I accept the NHS App sending me notifications on this device',
-      settingsLinkText: 'Manage how notifications are shown on this device (opens your device settings)',
-      errors: {
-        pageTitle: 'Notifications error',
-        pageHeader: 'Notifications error',
-        header: 'Sorry, there is a problem with the service',
-        subheader: '',
-        message: 'Go back to settings and try again.',
-        retryButtonText: 'Back to settings',
-        500: {
-          10001: {
-            header: 'Notifications are turned off on your device',
-            message: 'To turn on notifications, go to your device settings and allow notifications. Then return to the app and try again.',
-            retryButtonText: 'Try again',
-          },
-          10002: {
-            header: 'Sorry, we could not change your notifications choice',
-            message: 'This might be because notifications are turned off in your device settings.',
-            additionalInfo: 'Go to your device settings and check notifications are turned on, then try again.',
-            retryButtonText: 'Try again',
-          },
-        },
-      },
-    },
-  },
   surveyBar: {
     barText: 'Help us make this service better.',
     linkText: ' Complete our quick survey.',
@@ -288,6 +231,7 @@ export default {
     headerText: 'You may see medical abbreviations that you are not familiar with.',
     linkText: 'Help with abbreviations',
   },
+  account,
   apiErrors,
   appointments,
   components,

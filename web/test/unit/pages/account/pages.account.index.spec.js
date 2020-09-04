@@ -1,5 +1,6 @@
-import AccountPage from '@/pages/account/index';
 import AboutUs from '@/components/account/AboutUs';
+import AccountPage from '@/pages/account/index';
+import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
 import { createStore, initFilters, mount } from '../../helpers';
 
@@ -61,7 +62,9 @@ describe('Account Page', () => {
     return mount(AccountPage, {
       $store,
       $state,
-      $style: createStyle() });
+      $style: createStyle(),
+      mountOpts: { i18n },
+    });
   };
 
   describe('on a native app', () => {
@@ -74,8 +77,8 @@ describe('Account Page', () => {
     });
 
     it('will verify that footer links are subset of links in account page', () => {
-      const webFooterWrapper = mount(WebFooter);
-      const aboutUsWrapper = mount(AboutUs);
+      const webFooterWrapper = mount(WebFooter, { mountOpts: { i18n } });
+      const aboutUsWrapper = mount(AboutUs, { mountOpts: { i18n } });
 
       const footerLinkElements = webFooterWrapper.findAll('ul li a');
       const accountLinkElements = aboutUsWrapper.findAll('ul li a');
@@ -88,11 +91,11 @@ describe('Account Page', () => {
     });
 
     it('will have a linked profiles link', () => {
-      expect(wrapper.findAll('li').at(0).text()).toContain('translate_myAccount.linkedProfilesLink');
+      expect(wrapper.findAll('li').at(0).text()).toContain('Linked profiles');
     });
 
     it('will have a cookies link', () => {
-      expect(wrapper.findAll('li').at(1).text()).toContain('translate_myAccount.cookiesLink');
+      expect(wrapper.findAll('li').at(1).text()).toContain('Cookies');
     });
 
     it('will show About the NHS App component', () => {

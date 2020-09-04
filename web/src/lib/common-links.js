@@ -10,23 +10,23 @@ export const accountLinks = () =>
   [
     {
       url: HELP_AND_SUPPORT_URL,
-      localeLabel: 'myAccount.helpAndSupport',
+      localeLabel: 'account.helpAndSupport',
     },
     {
       url: ACCESSIBILITY_STATEMENT_URL,
-      localeLabel: 'myAccount.accessibilityStatement',
+      localeLabel: 'account.accessibilityStatement',
     },
     {
       url: OPEN_SOURCE_LICENCES_URL,
-      localeLabel: 'myAccount.openSourceLicences',
+      localeLabel: 'account.openSourceLicences',
     },
     {
       url: PRIVACY_POLICY_URL,
-      localeLabel: 'myAccount.privacyPolicy',
+      localeLabel: 'account.privacyPolicy',
     },
     {
       url: TERMS_AND_CONDITIONS_URL,
-      localeLabel: 'myAccount.termsAndConditions',
+      localeLabel: 'account.termsOfUse',
     },
   ];
 
@@ -34,19 +34,19 @@ export const footerLinks = () =>
   [
     {
       url: TERMS_AND_CONDITIONS_URL,
-      localeLabel: 'myAccount.termsAndConditions',
+      localeLabel: 'account.termsOfUse',
     },
     {
       url: PRIVACY_POLICY_URL,
-      localeLabel: 'myAccount.privacyPolicy',
+      localeLabel: 'account.privacyPolicy',
     },
     {
       url: HELP_AND_SUPPORT_URL,
-      localeLabel: 'myAccount.helpAndSupport',
+      localeLabel: 'account.helpAndSupport',
     },
     {
       url: ACCESSIBILITY_STATEMENT_URL,
-      localeLabel: 'myAccount.accessibilityStatement',
+      localeLabel: 'account.accessibilityStatement',
     },
   ];
 

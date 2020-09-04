@@ -1,3 +1,4 @@
+import i18n from '@/plugins/i18n';
 import Settings from '@/components/account/Settings';
 import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
@@ -39,7 +40,9 @@ describe('Settings', () => {
       propsData: {
         showBiometrics,
         showNotifications,
-        showLinkedProfiles },
+        showLinkedProfiles,
+      },
+      mountOpts: { i18n },
     });
   };
 
@@ -68,7 +71,7 @@ describe('Settings', () => {
     });
 
     it('NHS login has the correct text', () => {
-      expect(nhsLoginLink.text()).toBe('translate_myAccount.accountSettings.nhsLogin');
+      expect(nhsLoginLink.text()).toBe('NHS login');
     });
 
     it('can see Notifications', () => {
@@ -76,7 +79,7 @@ describe('Settings', () => {
     });
 
     it('notifications has correct text', () => {
-      expect(notificationsLink.text()).toEqual('translate_myAccount.accountSettings.notificationOptions');
+      expect(notificationsLink.text()).toEqual('Notifications');
     });
 
     it('the notifications link will direct to notifications page', () => {

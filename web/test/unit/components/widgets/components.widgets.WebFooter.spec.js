@@ -1,5 +1,5 @@
+import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
-import en from '@/locale/en/index';
 import {
   TERMS_AND_CONDITIONS_URL,
   PRIVACY_POLICY_URL,
@@ -12,36 +12,22 @@ describe('WebFooter.vue', () => {
   let wrapper;
 
   const urlAndTexts = {
-    'myAccount.termsAndConditions': { url: TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
-    'myAccount.privacyPolicy': { url: PRIVACY_POLICY_URL, text: 'Privacy policy' },
-    'myAccount.helpAndSupport': { url: HELP_AND_SUPPORT_URL, text: 'Help and support' },
-    'myAccount.accessibilityStatement': { url: ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
-  };
-
-  const $tKey = translated => translated.replace('translate_', '');
-  const toEnglish = (key) => {
-    const expandedKeys = key.split('.');
-    let value = en;
-    expandedKeys.forEach((k) => {
-      value = value[k];
-    });
-    return value;
+    'Terms of use': { url: TERMS_AND_CONDITIONS_URL, text: 'Terms of use' },
+    'Privacy policy': { url: PRIVACY_POLICY_URL, text: 'Privacy policy' },
+    'Help and support': { url: HELP_AND_SUPPORT_URL, text: 'Help and support' },
+    'Accessibility statement': { url: ACCESSIBILITY_STATEMENT_URL, text: 'Accessibility statement' },
   };
 
   const retrieveUrlAndText = (w) => {
     const linkText = w.element.innerHTML.trim();
-    expect(linkText.includes('translate_')).toBeTruthy();
-    const translateKey = $tKey(linkText);
-    expect(translateKey).toBeDefined();
-    const urlAndText = urlAndTexts[translateKey];
+    const urlAndText = urlAndTexts[linkText];
     expect(urlAndText).toBeDefined();
     return urlAndText;
   };
 
   beforeEach(() => {
-    wrapper = mount(WebFooter);
+    wrapper = mount(WebFooter, { mountOpts: { i18n } });
   });
-
 
   it('will verify that links in footer are correctly generated', () => {
     const linkElements = wrapper.findAll('ul li a');
@@ -59,11 +45,8 @@ describe('WebFooter.vue', () => {
     expect(linkElements.length).toBeGreaterThan(0);
     linkElements.wrappers.forEach((w) => {
       const linkText = w.element.innerHTML.trim();
-      const translateKey = $tKey(linkText);
-      const actualLinkText = toEnglish(translateKey);
-
       const urlAndText = retrieveUrlAndText(w);
-      expect(actualLinkText).toEqual(urlAndText.text);
+      expect(linkText).toEqual(urlAndText.text);
     });
   });
 

@@ -3,23 +3,23 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p>{{ $t('account.notifications.youCanChoose') }}</p>
-        <p>{{ $t('account.notifications.ifYouShare.prefix') }}<analytics-tracked-tag
+        <p>{{ $t('account.notifications.ifYouShareReadMoreAboutIn') }}<analytics-tracked-tag
           :href="privacyPolicyURL"
-          :text="$t('account.notifications.ifYouShare.linkText')"
+          :text="$t('account.notifications.nhsAppPrivacyPolicy')"
           class="inline"
           tag="a"
           target="_blank">{{
-            $t('account.notifications.ifYouShare.linkText')
+            $t('account.notifications.nhsAppPrivacyPolicy')
           }}</analytics-tracked-tag>.
         </p>
         <labelled-toggle v-model="registered"
                          checkbox-id="allow_notifications"
                          :is-waiting="isWaiting"
-                         :label="$t('account.notifications.toggleLabel')"
-                         :hint-text="$t('account.notifications.toggleHint')"/>
+                         :label="$t('account.notifications.allowNotifications')"
+                         :hint-text="$t('account.notifications.iAcceptNotifications')"/>
         <p>
           <a id="app-settings" href="#" @click.prevent.stop="openAppSettings">
-            {{ $t('account.notifications.settingsLinkText') }}
+            {{ $t('account.notifications.manageHowNotificationsAreShown') }}
           </a>
         </p>
       </div>
