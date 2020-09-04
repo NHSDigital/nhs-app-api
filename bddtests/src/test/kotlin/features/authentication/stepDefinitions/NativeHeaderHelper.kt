@@ -11,9 +11,9 @@ open class NativeHeaderHelper {
          webHeaderCheck("Appointments", webHeader)
       }
 
-      fun followSymptomsHeaderLink(webHeader: WebHeader) {
-         webHeader.clickSymptomsPageLink()
-         webHeaderCheck("Symptoms", webHeader)
+      fun followAdviceHeaderLink(webHeader: WebHeader) {
+         webHeader.clickAdvicePageLink()
+         webHeaderCheck("Advice", webHeader)
       }
 
       fun followPrescriptionsHeaderLink(webHeader: WebHeader) {

@@ -4,13 +4,13 @@ Feature: Guidance prior to booking an appointment
   Users are given guidance before booking a new appointment.
 
   @smoketest
-  Scenario: A user is presented with guidance when booking an appointment and can proceed to check their symptoms
+  Scenario: A user is presented with guidance when booking an appointment and can proceed to get health advice
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     And I am on the Appointment Guidance page
-    When I select Appointment Guidance Page Check symptoms button
-    Then the Symptoms page is displayed
-    And the Symptoms page header and navigation menu are correct
+    When I select Appointment Guidance Page Get health advice button
+    Then the Advice page is displayed
+    And the Advice page header and navigation menu are correct
 
   Scenario: A user with upcoming appointments is presented with guidance
     Given I have upcoming appointments before cutoff time for EMIS
@@ -32,6 +32,6 @@ Feature: Guidance prior to booking an appointment
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I click through to the online consultations Appointment Guidance page
-    And I select the Appointment Guidance Check symptoms menu item
-    Then the Symptoms page is displayed
-    And the Symptoms page header and navigation menu are correct
+    And I select the Appointment Guidance Get health advice menu item
+    Then the Advice page is displayed
+    And the Advice page header and navigation menu are correct

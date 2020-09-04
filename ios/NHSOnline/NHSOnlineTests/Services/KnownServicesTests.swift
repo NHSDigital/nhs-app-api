@@ -25,7 +25,7 @@ class KnownServicesTests: XCTestCase {
         testSubServices.append(SubService.init(path: "/path/valid-subpath/*/extended-path", queryString: nil, javaScriptInteractionMode: .Unknown,
         menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testRootServices.append(RootService.init(url: "https://test.com", javaScriptInteractionMode: .NhsApp, 
-                menuTab: .Symptoms, integrationLevel: .Bronze, validateSession: false, subServices: testSubServices))
+                menuTab: .Advice, integrationLevel: .Bronze, validateSession: false, subServices: testSubServices))
 
         testKnownServices = KnownServices.init(testRootServices)
     }

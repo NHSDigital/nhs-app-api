@@ -66,7 +66,7 @@
             android:layout_height="match_parent"
             android:layout_margin="0dp"
             android:nextFocusUp="@id/homeLogoIcon"
-            android:nextFocusDown="@id/symptoms"
+            android:nextFocusDown="@id/advice"
             android:visibility="visible" />
 
 

@@ -355,7 +355,7 @@ class MainActivityTest {
     fun selectingRetryButton_clearsSelectedMenuItem() {
         // arrange
         mainActivity.configurationResponse.callSuccessful = true
-        mainActivity.menuBar.switchActiveMenuItemTo(R.id.symptoms)
+        mainActivity.menuBar.switchActiveMenuItemTo(R.id.advice)
 
         // act
         mainActivity.retryButton.callOnClick()

@@ -1,13 +1,13 @@
 export default {
   yourGpSurgeryProvidesThisService: 'Your GP surgery provides this service',
-  symptoms: 'Symptoms',
+  advice: 'Advice',
   appointments: 'Appointments',
   prescriptions: 'Prescriptions',
   healthRecord: 'Health record',
   more: 'More',
   account: 'Settings',
   logout: 'Log out',
-  checkYourSymptoms: 'Check your symptoms',
+  getHealthAdvice: 'Get health advice',
   bookAndManageAppointments: 'Book and manage appointments',
   orderARepeatPrescription: 'Order a repeat prescription',
   viewYourGpHealthRecord: 'View your GP health record',
@@ -60,6 +60,7 @@ export default {
   pages: {
     headers: {
       acuteMedicines: 'Acute (short-term) medicines',
+      advice: 'Advice',
       allergiesAndReactions: 'Allergies and adverse reactions',
       appointmentAdminHelp: 'Additional GP services',
       appointmentBooking: 'Book a GP appointment',
@@ -140,7 +141,6 @@ export default {
       serviceUnavailable: 'Service unavailable',
       settings: 'Settings',
       switchProfile: 'You are acting on behalf of {fullName}',
-      symptoms: 'Symptoms',
       termsAndConditions: 'Accept conditions of use',
       testResult: 'Test result',
       testResults: 'Test results',
@@ -149,6 +149,7 @@ export default {
     },
     titles: {
       acuteMedicines: 'Acute (short-term) medicines - Your GP health record',
+      advice: 'Advice',
       allergiesAndReactions: 'Allergies and adverse reactions - Your GP health record',
       appointmentAddToCalendar: 'Add appointment to calendar',
       appointmentAdminHelp: 'Additional GP services',
@@ -232,7 +233,6 @@ export default {
       serviceUnavailable: 'Service unavailable',
       settings: 'Settings',
       switchProfile: 'You are acting on behalf of {fullName}',
-      symptoms: 'Symptoms',
       termsAndConditions: 'Accept conditions of use',
       testResult: 'Test result - Your GP health record',
       testResults: 'Test results - Your GP health record',

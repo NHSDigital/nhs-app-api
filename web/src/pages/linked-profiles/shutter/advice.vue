@@ -2,7 +2,7 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <shutter feature="symptoms" class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
+        <shutter feature="advice" class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
       </div>
     </div>
   </div>

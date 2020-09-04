@@ -28,7 +28,7 @@ import {
   LOGIN_PATH,
   BEGINLOGIN_PATH,
   GP_MESSAGES_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
   MESSAGES_PATH,
   GP_MESSAGES_VIEW_MESSAGE_PATH,
   GP_MESSAGES_URGENCY_PATH,
@@ -233,9 +233,9 @@ export default {
       },
     },
     {
-      route: SYMPTOMS_PATH,
+      route: ADVICE_PATH,
       redirectUrl: {
-        default: SYMPTOMS_PATH,
+        default: ADVICE_PATH,
       },
     },
     {

@@ -1,15 +1,15 @@
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 
-const SYMPTOMS_CRUMB = {
+const ADVICE_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
   nativeDisabled: true,
 };
 
-const CHECKYOURSYMPTOMS_CRUMB = {
+const GET_HEALTH_ADVICE_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
 };
 
 export default {
-  SYMPTOMS_CRUMB,
-  CHECKYOURSYMPTOMS_CRUMB,
+  ADVICE_CRUMB,
+  GET_HEALTH_ADVICE_CRUMB,
 };

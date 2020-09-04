@@ -33,7 +33,7 @@ import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
 import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
 import pages.linkedProfiles.shutterPages.SettingsShutterPage
-import pages.linkedProfiles.shutterPages.SymptomsShutterPage
+import pages.linkedProfiles.shutterPages.AdviceShutterPage
 import pages.navigation.WebHeader
 import pages.text
 import utils.GlobalSerenityHelpers
@@ -60,7 +60,7 @@ class LinkedProfilesStepDefinitions {
     private lateinit var prescriptionsShutterPage: PrescriptionsShutterPage
     private lateinit var appointmentsShutterPage: AppointmentsShutterPage
     private lateinit var settingsShutterPage: SettingsShutterPage
-    private lateinit var symptomsShutterPage: SymptomsShutterPage
+    private lateinit var adviceShutterPage: AdviceShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
     private lateinit var webHeader: WebHeader
 
@@ -288,15 +288,15 @@ class LinkedProfilesStepDefinitions {
                 bannerText.contains(expectedProfile.profile.formattedFullName()))
     }
 
-    @Then("^the symptoms shutter page is displayed$")
-    fun theSymptomsShutterPageIsDisplayed() {
-        symptomsShutterPage.isLoaded()
+    @Then("^the advice shutter page is displayed$")
+    fun theAdviceShutterPageIsDisplayed() {
+        adviceShutterPage.isLoaded()
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         val gpSystem = SerenityHelpers.getGpSupplier()
         if (gpSystem === Supplier.TPP) {
-            symptomsShutterPage.assertText(selectedProfile.profile.formattedFullName())
+            adviceShutterPage.assertText(selectedProfile.profile.formattedFullName())
         } else {
-            symptomsShutterPage.assertText(selectedProfile.profile.name.firstName)
+            adviceShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
     }
 

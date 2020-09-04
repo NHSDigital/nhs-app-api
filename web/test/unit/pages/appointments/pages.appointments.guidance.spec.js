@@ -2,7 +2,7 @@ import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidan
 import BookingGuidancePage from '@/pages/appointments/gp-appointments/booking-guidance';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import i18n from '@/plugins/i18n';
-import { GP_APPOINTMENTS_PATH, APPOINTMENT_BOOKING_PATH, SYMPTOMS_PATH } from '@/router/paths';
+import { GP_APPOINTMENTS_PATH, APPOINTMENT_BOOKING_PATH, ADVICE_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import { createStore, mount, createRouter } from '../../helpers';
 
@@ -87,27 +87,27 @@ describe('booking guidance', () => {
 
     expect(content.text()).toContain('Self care');
     expect(content.text()).toContain('Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines');
-    expect(content.text()).toContain('Check your symptoms');
+    expect(content.text()).toContain('Get health advice');
     expect(content.text()).toContain('Using trusted NHS online information​');
     expect(content.text()).toContain('Get advice from a pharmacist');
     expect(content.text()).toContain('They\'re highly skilled healthcare professionals who can offer valuable advice');
   });
 
-  it('will include the check symptoms button if online consultations env var is false', () => {
+  it('will include the get advice button if online consultations env var is false', () => {
     wrapper = mountAs();
-    expect(wrapper.find('#btn_check_symptoms').exists()).toBe(true);
+    expect(wrapper.find('#btn_get_advice').exists()).toBe(true);
   });
 
-  it('will not include the check symptoms button if online consultations env var is true', () => {
+  it('will not include the get advice button if online consultations env var is true', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
-    expect(wrapper.find('#btn_check_symptoms').exists()).toBe(false);
+    expect(wrapper.find('#btn_get_advice').exists()).toBe(false);
   });
 
-  it('will go to the check symptoms page when check symptoms button clicked', () => {
+  it('will go to the advice page when get advice button clicked', () => {
     wrapper = mountAs();
-    wrapper.find('#btn_check_symptoms').trigger('click');
+    wrapper.find('#btn_get_advice').trigger('click');
 
-    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, SYMPTOMS_PATH);
+    expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, ADVICE_PATH);
   });
 });
 

@@ -2,15 +2,15 @@
   <div v-if="showTemplate" data-purpose="">
     <menu-item-list data-sid="navigation-list-menu">
       <menu-item
-        id="btn_symptoms"
+        id="btn_advice"
         header-tag="h2"
-        :href="symptomsPath"
-        :text="$t('appointments.guidance.helpWithSymptoms.getHelpWithSymptoms')"
-        :description="$t('appointments.guidance.helpWithSymptoms.findInformationAboutConditions')"
-        :click-func="goToSymptoms"
+        :href="advicePath"
+        :text="$t('appointments.guidance.healthAdvice.getHealthAdvice')"
+        :description="$t('appointments.guidance.healthAdvice.findInformationAboutConditions')"
+        :click-func="goToAdvice"
         :aria-label="ariaLabelCaption(
-          'appointments.guidance.helpWithSymptoms.getHelpWithSymptoms',
-          'appointments.guidance.helpWithSymptoms.findInformationAboutConditions')"/>
+          'appointments.guidance.healthAdvice.getHealthAdvice',
+          'appointments.guidance.healthAdvice.findInformationAboutConditions')"/>
 
       <menu-item
         v-if="isCdssAdmin"
@@ -50,7 +50,7 @@ import {
   APPOINTMENT_BOOKING_GUIDANCE_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
   APPOINTMENT_GP_ADVICE_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
 } from '@/router/paths';
 
 export default {
@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      symptomsPath: SYMPTOMS_PATH,
+      advicePath: ADVICE_PATH,
       adminHelpPath: APPOINTMENT_ADMIN_HELP_PATH,
       gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_PATH,
     };
@@ -83,8 +83,8 @@ export default {
       this.$store.dispatch('navigation/setNewMenuItem', 1);
       this.$store.dispatch('navigation/setBackLinkOverride', APPOINTMENT_BOOKING_GUIDANCE_PATH);
     },
-    goToSymptoms() {
-      redirectTo(this, this.symptomsPath);
+    goToAdvice() {
+      redirectTo(this, this.advicePath);
     },
     goToAdminHelp() {
       this.setOlcNavigationContext();

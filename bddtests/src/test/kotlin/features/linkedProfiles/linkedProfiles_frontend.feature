@@ -106,8 +106,8 @@ Feature: Login with proxy access
     Then I see the home page
     When I click the settings icon
     Then the settings shutter page is displayed
-    When I navigate to Symptoms
-    Then the symptoms shutter page is displayed
+    When I navigate to Advice
+    Then the advice shutter page is displayed
     When I navigate to Prescriptions
     And I click the View Orders link
     Then the prescriptions shutter page is displayed
@@ -289,8 +289,8 @@ Feature: Login with proxy access
     Then I see the home page
     When I click the settings icon
     Then the settings shutter page is displayed
-    When I navigate to Symptoms
-    Then the symptoms shutter page is displayed
+    When I navigate to Advice
+    Then the advice shutter page is displayed
     When I navigate to Prescriptions
     And the Prescriptions Hub page is displayed
     And I click the Order a repeat prescription button

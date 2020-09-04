@@ -9,6 +9,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case Prescriptions = 2
         case MyRecord = 3
         case More = 4
+        case Advice = 5
     }
     
     init(controller: HomeViewController) {
@@ -27,7 +28,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     func setMenuBarItem(menuTab: MenuTab){
         var index: Int
         switch menuTab {
-            case .Symptoms:
+            case .Advice, .Symptoms:
                 index = 0
             case .Appointments:
                 index = 1
@@ -53,7 +54,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         let currentlySelectedItem = Menu(rawValue: didSelect.tag)!
         
         if(viewController.selectedTab == didSelect.tag) {
-            if(currentlySelectedItem != .More && currentlySelectedItem != .Symptoms && currentlySelectedItem != .Appointments && currentlySelectedItem != .Prescriptions) {
+            if(currentlySelectedItem != .More && currentlySelectedItem != .Advice && currentlySelectedItem != .Symptoms && currentlySelectedItem !=
+                .Appointments && currentlySelectedItem != .Prescriptions) {
                 return
             }
         }
@@ -61,7 +63,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         viewController.selectedTab = didSelect.tag
 
         var _: String
-        if(currentlySelectedItem != .Symptoms && previouslySelectedItem != .More && currentlySelectedItem != .Appointments && currentlySelectedItem != .Prescriptions) {
+        if(currentlySelectedItem != .Advice && currentlySelectedItem != .Symptoms && previouslySelectedItem != .More && currentlySelectedItem !=
+            .Appointments && currentlySelectedItem != .Prescriptions) {
             viewController.applicationState.block()
         }
         processTabBarSelection(selectedTag: didSelect.tag)
@@ -72,8 +75,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         var selectedURL: String
         
         switch selectedItem {
-        case .Symptoms:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
+        case .Advice, .Symptoms:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AdviceUrlPath)
             break
         case .Appointments:
             selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)

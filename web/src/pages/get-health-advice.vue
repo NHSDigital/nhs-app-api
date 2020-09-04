@@ -4,7 +4,7 @@
       <header-slim v-if="$store.state.device.isNativeApp">
         {{ $t('symptomsChecker.symptoms') }}</header-slim>
       <div>
-        <symptoms-check/>
+        <advice-check/>
       </div>
     </div>
   </nhsuk-layout>
@@ -14,14 +14,14 @@
 import NhsukLayout from '@/layouts/nhsuk-layout';
 import NativeCallbacks from '@/services/native-app';
 import HeaderSlim from '@/components/HeaderSlim';
-import symptomsCheck from '@/components/symptoms/SymptomsCheck';
+import adviceCheck from '@/components/advice/AdviceCheck';
 
 export default {
-  name: 'CheckYourSymptomsPage',
+  name: 'GetHealthAdvicePage',
   components: {
     NhsukLayout,
     HeaderSlim,
-    symptomsCheck,
+    adviceCheck,
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {

@@ -1,13 +1,13 @@
 <template>
   <menu-item-list data-sid="navigation-list-menu">
-    <menu-item id="menu-item-symptoms"
+    <menu-item id="menu-item-advice"
                :header-tag="headerTag"
-               data-sid="symptoms-list-item"
-               :href="symptomsPath"
-               :text="$t('navigation.checkYourSymptoms')"
-               :aria-label="$t('navigation.checkYourSymptoms')"
+               data-sid="advice-list-item"
+               :href="advicePath"
+               :text="$t('navigation.getHealthAdvice')"
+               :aria-label="$t('navigation.getHealthAdvice')"
                :click-func="goToUrl"
-               :click-param="symptomsPath"/>
+               :click-param="advicePath"/>
 
     <menu-item v-if="isProofLevel9"
                id="menu-item-appointments"
@@ -87,7 +87,7 @@ import {
   GP_MEDICAL_RECORD_PATH,
   HEALTH_RECORDS_PATH,
   PRESCRIPTIONS_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
   LINKED_PROFILES_PATH,
   INDEX_PATH,
   HEALTH_INFORMATION_UPDATES_PATH,
@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       organDonationUrl: ORGAN_DONATION_URL,
-      symptomsPath: SYMPTOMS_PATH,
+      advicePath: ADVICE_PATH,
       appointmentsPath: APPOINTMENTS_PATH,
       prescriptionsPath: PRESCRIPTIONS_PATH,
       gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,

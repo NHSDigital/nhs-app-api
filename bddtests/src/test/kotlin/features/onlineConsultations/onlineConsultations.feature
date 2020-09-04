@@ -79,7 +79,7 @@ Scenario: A user can go through the online consultations gp advice journey and i
     Given I am an EMIS patient whose GP system is unavailable
     And I have access to online consultations gp advice journey and it is not an emergency with no GP session
     And I am logged in
-    And I navigate to Symptoms
+    And I navigate to Advice
     And I click Ask your GP for Advice
     And I accept demographics and terms and conditions question
     And I click on a condition

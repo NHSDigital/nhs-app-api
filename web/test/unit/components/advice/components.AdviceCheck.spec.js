@@ -1,6 +1,6 @@
 import i18n from '@/plugins/i18n';
 import MenuItem from '@/components/MenuItem';
-import SymptomsCheck from '@/components/symptoms/SymptomsCheck';
+import AdviceCheck from '@/components/advice/AdviceCheck';
 import * as dependency from '@/lib/utils';
 import { APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
 import { createStore, mount, createRouter, createEvent } from '../../helpers';
@@ -36,7 +36,7 @@ describe('GP Guidence button tests', () => {
         'session/isProofLevel9': isProofLevel9,
       },
     });
-    return mount(SymptomsCheck, { $store, $router, mountOpts: { i18n } });
+    return mount(AdviceCheck, { $store, $router, mountOpts: { i18n } });
   };
 
   describe('Visability Tests', () => {
@@ -65,11 +65,11 @@ describe('GP Guidence button tests', () => {
       const conditionsCheckerButtonText = tagArray.at(1).find('li a span p');
       expect(conditionsCheckerButtonText.text()).toContain('Find trusted NHS information on hundreds of conditions');
 
-      const symptomsCheckerButtonHeader = tagArray.at(2).find('li a span h2');
-      expect(symptomsCheckerButtonHeader.text()).toContain('Use NHS 111 online');
+      const adviceCheckerButtonHeader = tagArray.at(2).find('li a span h2');
+      expect(adviceCheckerButtonHeader.text()).toContain('Use NHS 111 online');
 
-      const symptomsCheckerButtonText = tagArray.at(2).find('li a span p');
-      expect(symptomsCheckerButtonText.text()).toContain('Check if you need urgent help and find out what to do next');
+      const adviceCheckerButtonText = tagArray.at(2).find('li a span p');
+      expect(adviceCheckerButtonText.text()).toContain('Check if you need urgent help and find out what to do next');
 
       const adviceButtonHeader = tagArray.at(3).find('li a span h2');
       expect(adviceButtonHeader.text()).toContain('Ask your GP for advice');

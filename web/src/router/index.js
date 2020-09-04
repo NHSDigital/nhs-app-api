@@ -3,10 +3,10 @@ import VueRouter from 'vue-router';
 
 import generalRoutes from '@/router/routes/general';
 import loginRoutes from '@/router/routes/login';
-import checkYourSymptomsRoutes from '@/router/routes/check-your-symptoms';
+import getHealthAdviceRoutes from '@/router/routes/get-health-advice';
 import appointmentsRoutes from '@/router/routes/appointments';
 import prescriptionRoutes from '@/router/routes/prescriptions';
-import symptomsRoutes from '@/router/routes/symptoms';
+import adviceRoutes from '@/router/routes/advice';
 import accountRoutes from '@/router/routes/account';
 import moreRoutes from '@/router/routes/more';
 import nominatedPharmacyRoutes from '@/router/routes/nominated-pharmacy';
@@ -70,14 +70,14 @@ Vue.use(VueRouter);
 
 export const allRoutes = [
   ...loginRoutes,
-  ...checkYourSymptomsRoutes,
+  ...getHealthAdviceRoutes,
   {
     name: '',
     path: INDEX_PATH,
     component: NhsukLayout,
     children: [
       ...logoutRoute,
-      ...symptomsRoutes,
+      ...adviceRoutes,
       ...moreRoutes,
       ...appointmentsRoutes,
       ...messagesRoutes,

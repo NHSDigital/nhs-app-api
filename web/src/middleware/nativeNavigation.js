@@ -1,5 +1,5 @@
 export const CLEAR_SELECTED_MENU_ITEM = 'CLEAR_SELECTED_MENU_ITEM';
-export const SYMPTOMS_MENU_ITEM = 0;
+export const ADVICE_MENU_ITEM = 0;
 export const APPOINTMENTS_MENU_ITEM = 1;
 export const PRESCRIPTIONS_MENU_ITEM = 2;
 export const YOUR_RECORD_MENU_ITEM = 3;

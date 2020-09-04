@@ -16,7 +16,7 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.AppointmentHubPage
-import pages.CheckMySymptomsPage
+import pages.HealthAdvicePage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
 import pages.assertSingleElementPresent
@@ -45,7 +45,7 @@ class HomePageStepDefinitions {
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
-    private lateinit var checkMySymptomsPage: CheckMySymptomsPage
+    private lateinit var healthAdvicePage: HealthAdvicePage
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -149,7 +149,7 @@ class HomePageStepDefinitions {
         val linkElement = homeSteps.homePage.assertLinkIsVisible(linkText)
 
         when (linkText) {
-            NavigationLinkText.SYMPTOMS.linkText -> followSymptomLink(linkElement)
+            NavigationLinkText.ADVICE.linkText -> followHealthAdviceLink(linkElement)
             NavigationLinkText.APPOINTMENTS.linkText -> followAppointmentsLink(linkElement)
             NavigationLinkText.PRESCRIPTIONS.linkText -> followPrescriptionLink(linkElement)
             NavigationLinkText.MEDICAL_RECORD.linkText -> followMedicalRecordLink(linkElement)
@@ -171,10 +171,10 @@ class HomePageStepDefinitions {
         homeSteps.homePage.assertHasPublicHealthNotifications(publicHealthNotifications)
     }
 
-    private fun followSymptomLink(linkElement: HybridPageElement) {
+    private fun followHealthAdviceLink(linkElement: HybridPageElement) {
         linkElement.click()
-        checkMySymptomsPage.assertPageDisplayed()
-        navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
+        healthAdvicePage.assertPageDisplayed()
+        navBar.isHighlighted(NavBarNative.NavBarType.ADVICE)
     }
 
     private fun followAppointmentsLink(linkElement: HybridPageElement) {

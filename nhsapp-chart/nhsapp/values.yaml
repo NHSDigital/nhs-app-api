@@ -947,7 +947,7 @@ knownservices_config: {
           "validateSession": true
         },
         {
-          "path": "/check-your-symptoms",
+          "path": "/get-health-advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
@@ -1127,7 +1127,7 @@ knownservices_config: {
           "validateSession": true
         },
         {
-          "path": "/patient/symptoms",
+          "path": "/patient/advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
@@ -1139,7 +1139,7 @@ knownservices_config: {
           "validateSession": true
         },
         {
-          "path": "/patient/*/symptoms",
+          "path": "/patient/*/advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",

@@ -47,7 +47,7 @@ Feature: Cookie Banner
       | /prescriptions                              |
       | /prescriptions/repeat-courses               |
       | /prescriptions/confirm-prescription-details |
-      | /symptoms                                   |
+      | /advice                                     |
       | /terms-and-conditions                       |
 
   Scenario: Unacknowledged Cookie Banner reappears when logged out of the web, when Javascript enabled

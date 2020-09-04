@@ -35,7 +35,7 @@
               <ul>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.bookAndManageAppointments') }}</li>
                 <li class="nhsuk-u-margin-bottom-3">{{ $t('login.orderRepeatPrescriptions') }}</li>
-                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.checkSymptomsAndGetAdvice') }}</li>
+                <li class="nhsuk-u-margin-bottom-3">{{ $t('login.getHealthInfoAndAdvice') }}</li>
                 <li>{{ $t('login.viewYourMedicalRecord') }}</li>
               </ul>
             </div>
@@ -82,7 +82,7 @@ import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import DownloadAppPanel from '@/components/widgets/DownloadAppPanel';
-import { CHECKYOURSYMPTOMS_PATH } from '@/router/paths';
+import { GET_HEALTH_ADVICE_PATH } from '@/router/paths';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import PreRegistrationInformation from '@/components/PreRegistrationInformation';
 import OtherServices from '../components/OtherServices';
@@ -115,7 +115,7 @@ export default {
       currentHelpUrl: this.$route.meta.helpUrl,
       isNativeApp: this.$store.state.device.isNativeApp,
       symptomButtonId: 'btn_home_symptoms',
-      symptomsUrl: CHECKYOURSYMPTOMS_PATH,
+      symptomsUrl: GET_HEALTH_ADVICE_PATH,
     };
   },
   computed: {

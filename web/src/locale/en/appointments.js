@@ -150,17 +150,16 @@ export default {
       forAdvice: 'Ask your GP for advice',
       consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
     },
-    checkYourSymptoms: {
-      checkYourSymptoms: 'Check your symptoms​',
+    getHealthAdvice: {
+      getHealthAdvice: 'Get health advice​',
       usingNhsOnline: 'Using trusted NHS online information​',
-      checkSymptoms: 'Check symptoms',
     },
     corona: {
       getAdviceAboutCoronavirus: 'Get advice about coronavirus',
       findOutWhatToDoIfYouHaveCoronavirus: 'Find out what to do if you think you have coronavirus',
     },
-    helpWithSymptoms: {
-      getHelpWithSymptoms: 'Get help with symptoms',
+    healthAdvice: {
+      getHealthAdvice: 'Get health advice',
       findInformationAboutConditions: 'Find information about specific conditions',
     },
     OneOneOne: {

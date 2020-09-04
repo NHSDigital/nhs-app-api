@@ -12,7 +12,9 @@ export const AUTH_RETURN_PATH = '/auth-return';
 export const TERMSANDCONDITIONS_PATH = '/terms-and-conditions';
 export const LOGOUT_PATH = 'logout';
 export const MORE_PATH = 'more';
+export const ADVICE_PATH = 'advice';
 export const SYMPTOMS_PATH = 'symptoms';
+export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
 export const ACCOUNT_PATH = 'account';
 export const ACCOUNT_COOKIES_PATH = 'account/cookies';
@@ -110,7 +112,7 @@ export const PRESCRIPTIONS_ORDER_SUCCESS_PATH = 'prescriptions/order-success';
 export const LINKED_PROFILES_PATH = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_PATH = 'linked-profiles/summary';
 export const LINKED_PROFILES_SHUTTER_MORE_PATH = 'linked-profiles/shutter/more';
-export const LINKED_PROFILES_SHUTTER_SYMPTOMS_PATH = 'linked-profiles/shutter/symptoms';
+export const LINKED_PROFILES_SHUTTER_ADVICE_PATH = 'linked-profiles/shutter/advice';
 export const LINKED_PROFILES_SHUTTER_SETTINGS_PATH = 'linked-profiles/shutter/settings';
 export const LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH = 'linked-profiles/shutter/appointments';
 export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_PATH = 'linked-profiles/shutter/prescriptions';
@@ -131,7 +133,8 @@ export default {
   TERMSANDCONDITIONS_PATH,
   LOGOUT_PATH,
   MORE_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
+  GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,
   ACCOUNT_PATH,
   ACCOUNT_COOKIES_PATH,
@@ -231,7 +234,7 @@ export default {
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS_PATH,
+  LINKED_PROFILES_SHUTTER_ADVICE_PATH,
   LINKED_PROFILES_SHUTTER_SETTINGS_PATH,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_PATH,

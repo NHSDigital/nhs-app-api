@@ -13,7 +13,7 @@ class MockConfigurationService {
 
     func getConfigurationResponse(completion: @escaping (Configuration?) -> ()) {
         mockRootServices.append(RootService.init(url: "https://test.com", javaScriptInteractionMode: .NhsApp,
-                menuTab: .Symptoms,  integrationLevel: .Bronze, validateSession: false, subServices: nil))
+                menuTab: .Advice,  integrationLevel: .Bronze, validateSession: false, subServices: nil))
 
         let response = Configuration(fidoServerUrl: "", minimumSupportediOSVersion: "", knownServices: mockRootServices, nhsLoginLoggedInPaths: [String]())
         completion(response)

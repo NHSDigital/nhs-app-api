@@ -9,7 +9,9 @@ export const AUTH_RETURN_NAME = 'auth-return';
 export const TERMSANDCONDITIONS_NAME = 'terms-and-conditions';
 export const LOGOUT_NAME = 'logout';
 export const MORE_NAME = 'more';
+export const ADVICE_NAME = 'advice';
 export const SYMPTOMS_NAME = 'symptoms';
+export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
 export const ACCOUNT_NAME = 'account';
 export const ACCOUNT_COOKIES_NAME = 'account-cookies';
@@ -109,7 +111,7 @@ export const PRESCRIPTIONS_ORDER_SUCCESS_NAME = 'prescriptions-order-success';
 export const LINKED_PROFILES_NAME = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_NAME = 'linked-profiles-summary';
 export const LINKED_PROFILES_SHUTTER_MORE_NAME = 'linked-profiles-shutter-more';
-export const LINKED_PROFILES_SHUTTER_SYMPTOMS_NAME = 'linked-profiles-shutter-symptoms';
+export const LINKED_PROFILES_SHUTTER_ADVICE_NAME = 'linked-profiles-shutter-advice';
 export const LINKED_PROFILES_SHUTTER_SETTINGS_NAME = 'linked-profiles-shutter-settings';
 export const LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME = 'linked-profiles-shutter-appointments';
 export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_NAME = 'linked-profiles-shutter-prescriptions';
@@ -131,7 +133,8 @@ const names = [
   TERMSANDCONDITIONS_NAME,
   LOGOUT_NAME,
   MORE_NAME,
-  SYMPTOMS_NAME,
+  ADVICE_NAME,
+  GET_HEALTH_ADVICE_NAME,
   CHECKYOURSYMPTOMS_NAME,
   ACCOUNT_NAME,
   ACCOUNT_COOKIES_NAME,
@@ -232,7 +235,7 @@ const names = [
   LINKED_PROFILES_NAME,
   LINKED_PROFILES_SUMMARY_NAME,
   LINKED_PROFILES_SHUTTER_MORE_NAME,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS_NAME,
+  LINKED_PROFILES_SHUTTER_ADVICE_NAME,
   LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_NAME,
@@ -258,8 +261,8 @@ export const findByRedirectEnum = (name) => {
       return PRESCRIPTIONS_NAME;
     case AppPage.HEALTH_RECORDS:
       return HEALTH_RECORDS_NAME;
-    case AppPage.SYMPTOMS:
-      return SYMPTOMS_NAME;
+    case AppPage.ADVICE:
+      return ADVICE_NAME;
     case AppPage.MESSAGES:
       return MESSAGES_NAME;
     default:

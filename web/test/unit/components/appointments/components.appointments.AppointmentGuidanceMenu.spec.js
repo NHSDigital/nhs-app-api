@@ -3,7 +3,7 @@ import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidan
 import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import {
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
   APPOINTMENT_GP_ADVICE_PATH,
   APPOINTMENT_BOOKING_GUIDANCE_PATH,
@@ -71,11 +71,11 @@ describe('Appointment guidance menu', () => {
       const tagArray = wrapper.findAll(AnalyticsTrackedTag);
       expect(tagArray.length).toBe(3);
 
-      const symptomsButtonHeader = tagArray.at(0).find('a span h2');
-      expect(symptomsButtonHeader.text()).toContain('Get help with symptoms');
+      const adviceButtonHeader = tagArray.at(0).find('a span h2');
+      expect(adviceButtonHeader.text()).toContain('Get health advice');
 
-      const symptomsButtonText = tagArray.at(0).find('a span p');
-      expect(symptomsButtonText.text()).toContain('Find information about specific conditions');
+      const adviceButtonText = tagArray.at(0).find('a span p');
+      expect(adviceButtonText.text()).toContain('Find information about specific conditions');
 
       const requestGPAdviceButtonHeader = tagArray.at(1).find('a span h2');
       expect(requestGPAdviceButtonHeader.text()).toContain('Additional GP services');
@@ -103,7 +103,7 @@ describe('Appointment guidance menu', () => {
     });
 
     each([
-      ['symptoms', 'goToSymptoms', '#btn_symptoms'],
+      ['advice', 'goToAdvice', '#btn_advice'],
       ['admin help', 'goToAdminHelp', '#btn_gpHelpNoAppointment'],
       ['gp advice', 'goToGpAdvice', '#btn_gpAdvice'],
     ]).it('will set %s clickFunc to %s', (_, clickFunc, id) => {
@@ -111,7 +111,7 @@ describe('Appointment guidance menu', () => {
     });
 
     each([
-      [SYMPTOMS_PATH, 'goToSymptoms'],
+      [ADVICE_PATH, 'goToAdvice'],
       [APPOINTMENT_ADMIN_HELP_PATH, 'goToAdminHelp'],
       [APPOINTMENT_GP_ADVICE_PATH, 'goToGpAdvice'],
     ]).it('will redirect to %s when %s called', (path, method) => {

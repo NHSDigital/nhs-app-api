@@ -10,16 +10,16 @@ class AppointmentGuidanceStepDefinitions {
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
 
-    @When("^I select Appointment Guidance Page Check symptoms button$")
+    @When("^I select Appointment Guidance Page Get health advice button$")
     @Throws(Exception::class)
-    fun whenISelectAppointmentGuidancePageCheckSymptomsButton() {
-        appointmentGuidanceSteps.appointmentGuidancePage.menuCheckSymptomsButton.click()
+    fun whenISelectAppointmentGuidancePageGetHealthAdviceButton() {
+        appointmentGuidanceSteps.appointmentGuidancePage.menuHealthAdviceButton.click()
     }
 
-    @When("^I select the Appointment Guidance Check symptoms menu item$")
+    @When("^I select the Appointment Guidance Get health advice menu item$")
     @Throws(Exception::class)
-    fun whenISelectAppointmentGuidancePageCheckSymptomsMenuItem() {
-        appointmentGuidanceSteps.appointmentGuidancePage.menuCheckSymptomsButton.click()
+    fun whenISelectAppointmentGuidancePageHealthAdviceMenuItem() {
+        appointmentGuidanceSteps.appointmentGuidancePage.menuHealthAdviceButton.click()
     }
 
     @When("^I am given guidance as to my options with OLC enabled before booking$")

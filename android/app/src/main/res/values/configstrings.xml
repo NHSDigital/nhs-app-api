@@ -17,7 +17,7 @@
     <string name="loginBiometricsError">biometric-login-error</string>
     <string name="myRecordPath">my-record</string>
     <string name="healthRecordsPath">health-records</string>
-    <string name="symptomsPath">symptoms</string>
+    <string name="advicePath">advice</string>
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
     <string name="myAccountPath">account</string>

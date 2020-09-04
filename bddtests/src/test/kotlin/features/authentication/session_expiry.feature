@@ -22,7 +22,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: On session expiry, a user on a non secure screen is signed out on navigating back to a secure screen
     Given I am a EMIS patient
     And I am logged in
-    And I navigate to Symptoms
+    And I navigate to Advice
     When I am idle long enough for the session to expire
     And I navigate to Appointments
     Then I see the login page with the session expiry notification
@@ -32,7 +32,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: On session expiry, a user of the native app, on a non secure screen, is signed out on navigating back to a secure screen and sending a request
     Given I am a EMIS patient
     And I am logged in
-    And I navigate to Symptoms
+    And I navigate to Advice
     When I am idle long enough for the session to expire
     And I navigate to Appointments
     Then I see the login page with the session expiry notification
@@ -120,7 +120,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    When I navigate to Symptoms
+    When I navigate to Advice
     And I click Use NHS 111 online
     And I am idle long enough for the session expiry dialog box to appear
     And I navigate to Appointments
@@ -136,7 +136,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    When I navigate to Symptoms
+    When I navigate to Advice
     And I click Use NHS 111 online
     And I am idle long enough for the session expiry dialog box to appear
     And I am idle for a short time
@@ -153,7 +153,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    When I navigate to Symptoms
+    When I navigate to Advice
     And I click Use NHS 111 online
     And I am idle long enough for the session expiry dialog box to appear
     And I am idle for a short time
@@ -170,7 +170,7 @@ Feature: Session Expiry and Extend Frontend
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    When I navigate to Symptoms
+    When I navigate to Advice
     And I click Use NHS 111 online
     And I am idle long enough for the session to expire
     And I am idle for a short time

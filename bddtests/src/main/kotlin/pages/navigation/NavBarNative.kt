@@ -16,11 +16,11 @@ open class NavBarNative : NativePageObject() {
                           val androidLocator: String?,
                           val iOSAccessID: String?,
                           val nativeOnly: Boolean = false) {
-        SYMPTOMS(
-                "symptoms-menu-item",
-                "symptoms-menu-item",
-                "id/symptoms",
-                "Symptoms"),
+        ADVICE(
+                "advice-menu-item",
+                "advice-menu-item",
+                "id/advice",
+                "Advice"),
         APPOINTMENTS(
                 "appointments-menu-item",
                 "appointments-menu-item",
@@ -108,7 +108,7 @@ open class NavBarNative : NativePageObject() {
         var highlightedCount = 0
         if (onMobile()) {
             val navBar = arrayListOf(
-                    NavBarType.SYMPTOMS,
+                    NavBarType.ADVICE,
                     NavBarType.APPOINTMENTS,
                     NavBarType.PRESCRIPTIONS,
                     NavBarType.MORE,

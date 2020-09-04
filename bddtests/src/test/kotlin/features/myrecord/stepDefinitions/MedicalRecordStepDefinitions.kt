@@ -138,7 +138,7 @@ open class MedicalRecordStepDefinitions {
 
     @When("^I navigate away from the medical record page$")
     fun iNavigateAwayFromTheMedicalRecordPage() {
-        nav.select(NavBarNative.NavBarType.SYMPTOMS)
+        nav.select(NavBarNative.NavBarType.ADVICE)
     }
 
     @Then("^I see header text is Your GP health record$")
@@ -154,7 +154,7 @@ open class MedicalRecordStepDefinitions {
     @Then("^No navigation menu bar item will be selected$")
     fun thenNoNavigationMenuBarItemWillBeSelected() {
         if(headerNative.onMobile()) {
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
+            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.ADVICE))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))

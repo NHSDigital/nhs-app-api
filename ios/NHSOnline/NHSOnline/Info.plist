@@ -198,8 +198,8 @@
 	<integer>20</integer>
 	<key>SessionUrlPath</key>
 	<string>$(SESSION_URL_PATH)</string>
-	<key>SymptomsUrlPath</key>
-	<string>$(SYMPTOMS_URL_PATH)</string>
+	<key>AdviceUrlPath</key>
+	<string>$(ADVICE_URL_PATH)</string>
 	<key>TermsAndConditionsURL</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
 	<key>TermsAndConditionsURLOld</key>

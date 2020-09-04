@@ -1,4 +1,4 @@
-package features.symptomsChecker.stepDefinitions
+package features.healthAdvice.stepDefinitions
 
 import constants.Supplier
 import io.cucumber.java.en.Given
@@ -12,7 +12,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
-import pages.CheckMySymptomsPage
+import pages.HealthAdvicePage
 import pages.assertIsVisible
 import pages.externalSites.AdviceAboutCoronavirusPage
 import pages.externalSites.HealthAToZPage
@@ -20,14 +20,14 @@ import pages.externalSites.OneOneOneOnlinePage
 import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 
-open class SymptomsCheckerStepDefinitions {
+open class HealthAdviceStepDefinitions {
 
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
     private lateinit var navBar: NavigationSteps
 
-    private lateinit var checkMySymptomsPage: CheckMySymptomsPage
+    private lateinit var healthAdvicePage: HealthAdvicePage
     private lateinit var adviceAboutCoronavirusPage: AdviceAboutCoronavirusPage
     private lateinit var healthAToZPage: HealthAToZPage
     private lateinit var oneOneOneOnlinePage: OneOneOneOnlinePage
@@ -68,37 +68,37 @@ open class SymptomsCheckerStepDefinitions {
     @When("^I click Search Conditions and Treatments$")
     fun clickSearchConditionsAndTreatments() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.searchConditionsAndTreatments.click()
+        healthAdvicePage.searchConditionsAndTreatments.click()
     }
 
     @When("^I click Use NHS 111 online$")
     fun clickUserNhsOneOneOneOnline() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.useNhsOneOneOneOnline.click()
+        healthAdvicePage.useNhsOneOneOneOnline.click()
     }
 
     @When("^I click Advice About Coronavirus$")
     fun clickAdviceAboutCoronavirus() {
         browser.storeCurrentTabCount()
-        checkMySymptomsPage.adviceAboutCoronavirus.click()
+        healthAdvicePage.adviceAboutCoronavirus.click()
     }
 
     @When("^I click Ask your GP for Advice$")
     fun clickAskYourGpForAdvice() {
-        checkMySymptomsPage.askYourGpForAdvice.click()
+        healthAdvicePage.askYourGpForAdvice.click()
     }
 
-    @Then("^the Symptoms page is displayed")
-    fun checkMySymptomsPageIsDisplayed() {
-        checkMySymptomsPage.searchConditionsAndTreatments.assertIsVisible()
-        checkMySymptomsPage.useNhsOneOneOneOnline.assertIsVisible()
-        checkMySymptomsPage.adviceAboutCoronavirus.assertIsVisible()
+    @Then("^the Advice page is displayed")
+    fun getHealthAdvicePageIsDisplayed() {
+        healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
+        healthAdvicePage.useNhsOneOneOneOnline.assertIsVisible()
+        healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
     }
 
-    @Then("^the Symptoms page header and navigation menu are correct$")
-    fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
-        navBar.headerNative.assertIsVisible("Symptoms")
-        navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
+    @Then("^the Advice page header and navigation menu are correct$")
+    fun checkAdvicePageHeaderAndNavigationMenuAreCorrect() {
+        navBar.headerNative.assertIsVisible("Advice")
+        navBar.assertSelectedTab(NavBarNative.NavBarType.ADVICE)
     }
 
     @Then("^the advice about coronavirus page has been opened in a new tab$")

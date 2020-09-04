@@ -18,11 +18,11 @@
     </p>
     <ul class="nhsuk-header__navigation-list">
       <li class="nhsuk-header__navigation-item nhsuk-header__navigation-item--for-mobile">
-        <a class="nhsuk-header__navigation-link" :href="symptomsPath"
-           data-sid="symptoms-menu-item"
-           data-purpose="symptomsPageLink"
-           @click.prevent="setMenuitemState(symptomsPath)">
-          {{ $t('navigation.symptoms') }}
+        <a class="nhsuk-header__navigation-link" :href="advicePath"
+           data-sid="advice-menu-item"
+           data-purpose="advicePageLink"
+           @click.prevent="setMenuitemState(advicePath)">
+          {{ $t('navigation.advice') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item">
@@ -80,7 +80,7 @@
 import {
   APPOINTMENTS_PATH,
   MORE_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
   PRESCRIPTIONS_PATH,
   HEALTH_RECORDS_PATH,
   ACCOUNT_PATH,
@@ -98,7 +98,7 @@ export default {
   },
   data() {
     return {
-      symptomsPath: SYMPTOMS_PATH,
+      advicePath: ADVICE_PATH,
       appointmentsPath: APPOINTMENTS_PATH,
       prescriptionsPath: PRESCRIPTIONS_PATH,
       recordPath: HEALTH_RECORDS_PATH,

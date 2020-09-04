@@ -4,6 +4,6 @@ export const AppPage = {
   APPOINTMENTS: 'appointments',
   PRESCRIPTIONS: 'prescriptions',
   HEALTH_RECORDS: 'healthRecords',
-  SYMPTOMS: 'symptoms',
+  ADVICE: 'advice',
   MESSAGES: 'messages',
 };

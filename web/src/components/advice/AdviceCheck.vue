@@ -59,7 +59,7 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import NativeApp from '@/services/native-app';
 import sjrIf from '@/lib/sjrIf';
-import { SYMPTOMS_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
+import { ADVICE_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
 import { APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
 import {
@@ -67,7 +67,7 @@ import {
 } from '@/router/externalLinks';
 
 export default {
-  name: 'SymptomsCheck',
+  name: 'AdviceCheck',
   components: {
     MenuItemList,
     MenuItem,
@@ -80,7 +80,7 @@ export default {
     return {
       symptomsCheckerUrl,
       conditionsCheckerUrl: this.$store.$env.CONDITIONS_CHECKER_URL,
-      symptomsPath: SYMPTOMS_PATH,
+      advicePath: ADVICE_PATH,
       coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
       gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_NAME,
     };
@@ -99,9 +99,9 @@ export default {
   methods: {
     navigate(event) {
       if (event.currentTarget.pathname === this.gpAdviceConditionsPath) {
-        this.$store.dispatch('onlineConsultations/setPreviousRoute', this.symptomsPath);
-        this.$store.dispatch('navigation/setBackLinkOverride', this.symptomsPath);
-        this.$store.dispatch('navigation/setRouteCrumb', 'symptomsCrumb');
+        this.$store.dispatch('onlineConsultations/setPreviousRoute', this.advicePath);
+        this.$store.dispatch('navigation/setBackLinkOverride', this.advicePath);
+        this.$store.dispatch('navigation/setRouteCrumb', 'adviceCrumb');
         this.$store.dispatch('navigation/setNewMenuItem', 0);
       }
       redirectTo(this, APPOINTMENT_GP_ADVICE_PATH);

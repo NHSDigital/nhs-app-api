@@ -327,8 +327,8 @@ class MainActivity :
         val path: String
 
         when (menuBarItem.id) {
-            R.id.symptoms -> {
-                path = resources.getString(R.string.symptomsPath)
+            R.id.advice -> {
+                path = resources.getString(R.string.advicePath)
             }
             R.id.myRecord -> {
                 path = resources.getString(R.string.healthRecordsPath)
@@ -560,7 +560,8 @@ class MainActivity :
 
     override fun setMenuBarItem(index: Int) {
         when (index) {
-            MenuTab.Symptoms.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
+            MenuTab.Advice.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.advice)
+            MenuTab.Symptoms.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.advice)
             MenuTab.Appointments.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.appointments)
             MenuTab.Prescriptions.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.myRecord)

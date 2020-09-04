@@ -80,8 +80,8 @@ describe('Navigation Links ', () => {
       expect(wrapper.find('#menu-item-prescriptions').exists()).toBe(true);
     });
 
-    it('will show symptoms link', () => {
-      expect(wrapper.find('#menu-item-symptoms').exists()).toBe(true);
+    it('will show advice link', () => {
+      expect(wrapper.find('#menu-item-advice').exists()).toBe(true);
     });
   });
 
@@ -98,8 +98,8 @@ describe('Navigation Links ', () => {
       expect(wrapper.find('#menu-item-prescriptions').exists()).toBe(false);
     });
 
-    it('will show symptoms link', () => {
-      expect(wrapper.find('#menu-item-symptoms').exists()).toBe(true);
+    it('will show advice link', () => {
+      expect(wrapper.find('#menu-item-advice').exists()).toBe(true);
     });
   });
 

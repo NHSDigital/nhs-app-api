@@ -43,7 +43,7 @@
                                     <tabBar hidden="YES" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
                                         <rect key="frame" x="0.0" y="1" width="375" height="49"/>
                                         <items>
-                                            <tabBarItem title="Symptoms" image="SymptomsIcon" selectedImage="SymptomsActiveIcon" id="BOa-Jr-RcV"/>
+                                            <tabBarItem title="Advice" image="AdviceIcon" selectedImage="AdviceActiveIcon" id="BOa-Jr-RcV"/>
                                             <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
                                             <tabBarItem tag="2" title="Prescriptions" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="7Db-Tb-Oqe"/>
                                             <tabBarItem tag="3" title="My record" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>

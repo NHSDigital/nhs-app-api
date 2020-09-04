@@ -73,7 +73,7 @@ const ADMIN_HELP_CRUMB = {
 
 const GP_ADVICE_CRUMB = {
   defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB],
-  symptomsCrumb: [INDEX_CRUMB],
+  adviceCrumb: [INDEX_CRUMB],
 };
 
 export default {

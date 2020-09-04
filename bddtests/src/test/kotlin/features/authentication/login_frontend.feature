@@ -12,7 +12,7 @@ Feature: Login frontend
     And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
-    And I can see and follow the Check your symptoms link
+    And I can see and follow the Get health advice link
     When I click the home icon
     Then I see the home page
     And I can see and follow the Book and manage appointments link
@@ -39,7 +39,7 @@ Feature: Login frontend
     And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
-    And I can see and follow the Check your symptoms link
+    And I can see and follow the Get health advice link
     When I click the home icon
     Then I see the home page
     And I can see and follow the Book and manage appointments link
@@ -83,7 +83,7 @@ Feature: Login frontend
     And I can't see the Order a repeat prescription link on the homepage
     And I can't see the View your GP medical record link on the homepage
     And I can't see the Manage your organ donation decision link on the homepage
-    And I can see and follow the Check your symptoms link
+    And I can see and follow the Get health advice link
 
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient

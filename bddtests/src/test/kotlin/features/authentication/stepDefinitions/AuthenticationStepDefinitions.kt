@@ -187,7 +187,7 @@ class AuthenticationStepDefinitions {
     @Then("^I can cycle through the header links$")
     fun iLCycleTheHeaderLinks() {
         val linksToFollow = arrayListOf(
-                { NativeHeaderHelper.followSymptomsHeaderLink(webHeader) },
+                { NativeHeaderHelper.followAdviceHeaderLink(webHeader) },
                 { NativeHeaderHelper.followAppointmentHeaderLink(webHeader) },
                 { NativeHeaderHelper.followPrescriptionsHeaderLink(webHeader) },
                 { NativeHeaderHelper.followMedicalRecordHeaderLink(webHeader) },
@@ -206,7 +206,7 @@ class AuthenticationStepDefinitions {
                 {followAppointmentNativeNavBarLink()},
                 {followPrescriptionsNativeNavBarLink()},
                 {followMyRecordNativeNavBarLink()},
-                {followSymptomsNativeNavBarLink()}
+                {followAdviceNativeNavBarLink()}
         )
 
         linksToFollow.forEachIndexed { index, link ->
@@ -233,9 +233,9 @@ class AuthenticationStepDefinitions {
         breadcrumbs.assertVisible()
     }
 
-    private fun followSymptomsNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.SYMPTOMS)
-        webHeader.isPageTitleCorrect("Symptoms")
+    private fun followAdviceNativeNavBarLink() {
+        nav.select(NavBarNative.NavBarType.ADVICE)
+        webHeader.isPageTitleCorrect("Advice")
         breadcrumbs.assertVisible()
     }
 

@@ -2,11 +2,16 @@ import each from 'jest-each';
 import proofLevel from '@/lib/proofLevel';
 import { allRoutes } from '@/router';
 import values from 'lodash/fp/values';
-import { MY_RECORD_NAME, NOT_FOUND_NAME } from '@/router/names';
+import {
+  MY_RECORD_NAME,
+  NOT_FOUND_NAME,
+  SYMPTOMS_NAME,
+  CHECKYOURSYMPTOMS_NAME,
+} from '@/router/names';
 
 // '' is the base route name for /patient/:patientId routes
-// MY_RECORD and NOT_FOUND are redirect routes
-const excludedRouteNames = ['', MY_RECORD_NAME, NOT_FOUND_NAME];
+// MY_RECORD, SYMPTOMS, CHECKYOURSYMPTOMS and NOT_FOUND are redirect routes
+const excludedRouteNames = ['', MY_RECORD_NAME, NOT_FOUND_NAME, SYMPTOMS_NAME, CHECKYOURSYMPTOMS_NAME];
 const filteredRoutes = allRoutes.reduce((agg, route) => {
   agg.push(route);
   if (route.children) {

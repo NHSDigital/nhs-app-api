@@ -3,7 +3,7 @@ import Foundation
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, PreRegistrationInstructionsPath, BiometricLoginErrorPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl, LoggerApiPath
-        case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath, HealthRecordsUrlPath
+        case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, AdviceUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath, HealthRecordsUrlPath
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrl
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
@@ -33,7 +33,7 @@ struct Config: Decodable {
     let AppontmentsGpAtHandUrlPath: String
     let InformaticaUrlPath: String
     let AdminHelpUrlPath: String
-    let SymptomsUrlPath: String
+    let AdviceUrlPath: String
     let OrganDonationUrlPath: String
     let PrescriptionsUrlPath: String
     let PrescriptionsGpAtHandUrlPath: String

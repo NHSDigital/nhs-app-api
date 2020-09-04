@@ -1,6 +1,6 @@
 import NhsukLayout from '@/components/layout/NhsUkLayout';
 import NativeCallbacks from '@/services/native-app';
-import { SYMPTOMS } from '@/router/routes/symptoms';
+import { ADVICE } from '@/router/routes/advice';
 import { INDEX } from '@/router/routes/general';
 import { LOGIN } from '@/router/routes/login';
 import { MORE } from '@/router/routes/more';
@@ -116,7 +116,7 @@ describe('NhsUkLayout', () => {
 
     describe.each([
       [LOGIN.name, LOGIN],
-      [SYMPTOMS.name, SYMPTOMS],
+      [ADVICE.name, ADVICE],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
       [HEALTH_RECORDS.name, HEALTH_RECORDS],
@@ -184,7 +184,7 @@ describe('NhsUkLayout', () => {
       [BOOKING.name, BOOKING],
       [CONFIRMATION.name, CONFIRMATION],
       [REPEAT_COURSES.name, REPEAT_COURSES],
-      [SYMPTOMS.name, SYMPTOMS],
+      [ADVICE.name, ADVICE],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
       [MORE.name, MORE],
@@ -216,7 +216,7 @@ describe('NhsUkLayout', () => {
       [BOOKING.name, BOOKING],
       [CONFIRMATION.name, CONFIRMATION],
       [REPEAT_COURSES.name, REPEAT_COURSES],
-      [SYMPTOMS.name, SYMPTOMS],
+      [ADVICE.name, ADVICE],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
       [MORE.name, MORE],

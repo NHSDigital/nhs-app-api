@@ -1,7 +1,7 @@
 import LinkedProfilesPage from '@/pages/linked-profiles/index';
 import LinkedProfilesSummaryPage from '@/pages/linked-profiles/summary';
 import LinkedProfilesMoreShutterPage from '@/pages/linked-profiles/shutter/more';
-import LinkedProfilesSymptomsShutterPage from '@/pages/linked-profiles/shutter/symptoms';
+import LinkedProfilesAdviceShutterPage from '@/pages/linked-profiles/shutter/advice';
 import LinkedProfilesSettingsShutterPage from '@/pages/linked-profiles/shutter/settings';
 import LinkedProfilesAppointmentsShutterPage from '@/pages/linked-profiles/shutter/appointments';
 import LinkedProfilesPrescriptionsShutterPage from '@/pages/linked-profiles/shutter/prescriptions';
@@ -14,7 +14,7 @@ import {
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS_PATH,
+  LINKED_PROFILES_SHUTTER_ADVICE_PATH,
   LINKED_PROFILES_SHUTTER_SETTINGS_PATH,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_PATH,
@@ -24,7 +24,7 @@ import {
   LINKED_PROFILES_NAME,
   LINKED_PROFILES_SUMMARY_NAME,
   LINKED_PROFILES_SHUTTER_MORE_NAME,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS_NAME,
+  LINKED_PROFILES_SHUTTER_ADVICE_NAME,
   LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_NAME,
@@ -32,7 +32,7 @@ import {
 } from '@/router/names';
 import {
   MORE_MENU_ITEM,
-  SYMPTOMS_MENU_ITEM,
+  ADVICE_MENU_ITEM,
   CLEAR_SELECTED_MENU_ITEM,
   APPOINTMENTS_MENU_ITEM,
   PRESCRIPTIONS_MENU_ITEM,
@@ -100,17 +100,17 @@ export const LINKED_PROFILES_SHUTTER_SETTINGS = {
   },
 };
 
-export const LINKED_PROFILES_SHUTTER_SYMPTOMS = {
-  path: LINKED_PROFILES_SHUTTER_SYMPTOMS_PATH,
-  name: LINKED_PROFILES_SHUTTER_SYMPTOMS_NAME,
-  component: LinkedProfilesSymptomsShutterPage,
+export const LINKED_PROFILES_SHUTTER_ADVICE = {
+  path: LINKED_PROFILES_SHUTTER_ADVICE_PATH,
+  name: LINKED_PROFILES_SHUTTER_ADVICE_NAME,
+  component: LinkedProfilesAdviceShutterPage,
   meta: {
-    headerKey: 'profiles.shutter.symptoms.header',
-    titleKey: 'profiles.shutter.symptoms.header',
-    crumb: breadcrumbs.LINKED_PROFILES_SYMPTOMS_SHUTTER_CRUMB,
+    headerKey: 'profiles.shutter.advice.header',
+    titleKey: 'profiles.shutter.advice.header',
+    crumb: breadcrumbs.LINKED_PROFILES_ADVICE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
-    nativeNavigation: SYMPTOMS_MENU_ITEM,
+    nativeNavigation: ADVICE_MENU_ITEM,
   },
 };
 
@@ -172,7 +172,7 @@ export default [
   LINKED_PROFILES_SUMMARY,
   LINKED_PROFILES_SHUTTER_MORE,
   LINKED_PROFILES_SHUTTER_SETTINGS,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS,
+  LINKED_PROFILES_SHUTTER_ADVICE,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
   SWITCH_PROFILE,

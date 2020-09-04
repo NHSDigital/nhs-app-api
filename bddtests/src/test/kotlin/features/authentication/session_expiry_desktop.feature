@@ -6,7 +6,7 @@ Feature: Session Expiry and Extend for Desktop
    Notes on the terminology for the following tests:
    * A 'secure screen' is a page that is within the Desktop app, e.g. Appointments Booking Page
    * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,
-   e.g. Health A-Z (accessed from the symptoms page)
+   e.g. Health A-Z (accessed from the health advice page)
 
   Scenario: Before session expiry, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given there are EMIS appointments available to book with a reason

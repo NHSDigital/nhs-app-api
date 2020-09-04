@@ -21,7 +21,7 @@ enum class PatientDetail(val label: String) {
 }
 
 enum class NavigationLinkText (val linkText: String) {
-    SYMPTOMS("Check your symptoms"),
+    ADVICE("Get health advice"),
     APPOINTMENTS("Book and manage appointments"),
     PRESCRIPTIONS("Order a repeat prescription"),
     MEDICAL_RECORD("View your GP health record"),

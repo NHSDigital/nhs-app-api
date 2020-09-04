@@ -10,21 +10,21 @@
           <strong>1. {{ $t('appointments.guidance.selfCare.selfCare') }}</strong>
           <p class="nhsuk-u-padding-bottom-4">
             {{ $t('appointments.guidance.selfCare.minorProblems') }}</p>
-          <strong>2. {{ $t('appointments.guidance.checkYourSymptoms.checkYourSymptoms') }}</strong>
+          <strong>2. {{ $t('appointments.guidance.getHealthAdvice.getHealthAdvice') }}</strong>
           <p class="nhsuk-u-padding-bottom-4">
-            {{ $t('appointments.guidance.checkYourSymptoms.usingNhsOnline') }}</p>
+            {{ $t('appointments.guidance.getHealthAdvice.usingNhsOnline') }}</p>
           <strong>3. {{ $t('appointments.guidance.pharmacist.getAdviceFrom') }}</strong>
           <p class="nhsuk-u-padding-bottom-4">
             {{ $t('appointments.guidance.pharmacist.theyAre') }}</p>
         </div>
-        <analytics-tracked-tag :text="$t('appointments.guidance.checkYourSymptoms.checkSymptoms')"
-                               :destination="symptomsPath"
+        <analytics-tracked-tag :text="$t('appointments.guidance.getHealthAdvice.getHealthAdvice')"
+                               :destination="advicePath"
                                data-purpose="generic-button">
-          <generic-button id="btn_check_symptoms"
+          <generic-button id="btn_get_advice"
                           :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
                           tabindex="0"
-                          @click="onCheckSymptomClicked">
-            {{ $t('appointments.guidance.checkYourSymptoms.checkSymptoms') }}
+                          @click="onGetHealthAdviceClicked">
+            {{ $t('appointments.guidance.getHealthAdvice.getHealthAdvice') }}
           </generic-button>
         </analytics-tracked-tag>
       </sjr-if>
@@ -54,7 +54,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import SjrIf from '@/components/SjrIf';
 import {
   INDEX_PATH,
-  SYMPTOMS_PATH,
+  ADVICE_PATH,
   APPOINTMENT_BOOKING_PATH,
   GP_APPOINTMENTS_PATH,
 } from '@/router/paths';
@@ -72,15 +72,15 @@ export default {
   data() {
     return {
       indexPath: INDEX_PATH,
-      symptomsPath: SYMPTOMS_PATH,
+      advicePath: ADVICE_PATH,
     };
   },
   methods: {
     onBookButtonClicked() {
       redirectTo(this, APPOINTMENT_BOOKING_PATH);
     },
-    onCheckSymptomClicked() {
-      redirectTo(this, this.symptomsPath);
+    onGetHealthAdviceClicked() {
+      redirectTo(this, this.advicePath);
     },
     onBackButtonClicked() {
       redirectTo(this, GP_APPOINTMENTS_PATH);

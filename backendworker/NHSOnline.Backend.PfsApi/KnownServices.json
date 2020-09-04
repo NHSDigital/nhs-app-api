@@ -364,7 +364,7 @@
           "validateSession": true
         },
         {
-          "path": "/check-your-symptoms",
+          "path": "/get-health-advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
@@ -544,7 +544,7 @@
           "validateSession": true
         },
         {
-          "path": "/patient/symptoms",
+          "path": "/patient/advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
@@ -556,7 +556,7 @@
           "validateSession": true
         },
         {
-          "path": "/patient/*/symptoms",
+          "path": "/patient/*/advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",

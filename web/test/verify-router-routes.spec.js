@@ -5,12 +5,14 @@ import isEmpty from 'lodash/fp/isEmpty';
 import keys from 'lodash/fp/keys';
 import map from 'lodash/fp/map';
 import glob from 'glob';
-import { MY_RECORD_NAME } from '@/router/names';
+import { MY_RECORD_NAME, SYMPTOMS_NAME, CHECKYOURSYMPTOMS_NAME } from '@/router/names';
 import { allRoutes } from '@/router';
 
-// MY_RECORD is used as a redirect so will have no meta
+// MY_RECORD, SYMPTOMS and CHECKYOURSYMPTOMS are used as a redirect so will have no meta
 const excludedRouteNames = [
   MY_RECORD_NAME,
+  SYMPTOMS_NAME,
+  CHECKYOURSYMPTOMS_NAME,
 ];
 
 const importRoute = (path) => {

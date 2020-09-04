@@ -38,7 +38,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
 
             on { getString(R.string.loginPath) } doReturn "login"
-            on { getString(R.string.symptomsPath) } doReturn "/symptoms"
+            on { getString(R.string.advicePath) } doReturn "/advice"
             on { getString(R.string.appointmentsPath) } doReturn "/appointments"
             on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
             on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"

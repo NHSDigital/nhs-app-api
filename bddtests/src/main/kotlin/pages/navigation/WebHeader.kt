@@ -6,7 +6,7 @@ import pages.HybridPageObject
 open class WebHeader : HybridPageObject() {
 
     var pageHeaders: Map<String, String> = mapOf(
-            Pair("Symptoms", "Symptoms"),
+            Pair("Advice", "Advice"),
             Pair("Appointments", "Your appointments"),
             Pair("Prescriptions", "Prescriptions"),
             Pair("Your medical record", "Your medical record"),
@@ -15,8 +15,8 @@ open class WebHeader : HybridPageObject() {
             Pair("Home", "Home")
     )
 
-    val symptomsPageLink = HybridPageElement(
-            webDesktopLocator = "//a[@data-purpose='symptomsPageLink']",
+    val advicePageLink = HybridPageElement(
+            webDesktopLocator = "//a[@data-purpose='advicePageLink']",
             page = this
     )
 
@@ -72,8 +72,8 @@ open class WebHeader : HybridPageObject() {
         )
     }
 
-    fun clickSymptomsPageLink() {
-        symptomsPageLink.click()
+    fun clickAdvicePageLink() {
+        advicePageLink.click()
     }
 
     fun clickAppointmentsPageLink() {

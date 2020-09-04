@@ -21,7 +21,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions                              |
       | /prescriptions/repeat-courses               |
       | /prescriptions/confirm-prescription-details |
-      | /symptoms                                   |
+      | /advice                                     |
       | /terms-and-conditions                       |
 
   Scenario: User has just logged out and attempts to navigate to a restricted url
@@ -45,7 +45,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions                              |
       | /prescriptions/repeat-courses               |
       | /prescriptions/confirm-prescription-details |
-      | /symptoms                                   |
+      | /advice                                     |
       | /terms-and-conditions                       |
 
   @tech-debt  @NHSO-3580
@@ -69,7 +69,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions                              |
       | /prescriptions/repeat-courses               |
       | /prescriptions/confirm-prescription-details |
-      | /symptoms                                   |
+      | /advice                                     |
       | /terms-and-conditions                       |
 
   Scenario: User browses to url when logged in
@@ -88,7 +88,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions                                 | /prescriptions                                 |
       | /prescriptions/repeat-courses                  | /prescriptions/repeat-courses                  |
       | /prescriptions/confirm-prescription-details    | /prescriptions                                 |
-      | /symptoms                                      | /symptoms                                      |
+      | /advice                                        | /advice                                        |
       | /terms-and-conditions                          |                                                |
       | /logout                                        | /login                                         |
 
@@ -116,7 +116,7 @@ Feature: Authorisation occurs during each URL visit
       | /health-records/gp-medical-record           | /health-records/gp-medical-record |
       | /prescriptions                              | /prescriptions                    |
       | /prescriptions/confirm-prescription-details | /prescriptions                    |
-      | /symptoms                                   | /symptoms                         |
+      | /advice                                     | /advice                           |
       | /terms-and-conditions                       |                                   |
       | /logout                                     | /login                            |
       | /redirector                                 |                                   |

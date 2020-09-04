@@ -11,8 +11,8 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     private val mainXPath = "//*[@id='appointment-guidance-menu']"
 
-    private val checkSymptomsTitle = "Get help with symptoms"
-    private val checkSymptomsDescription = "Find information about specific conditions"
+    private val healthAdviceTitle = "Get health advice"
+    private val healthAdviceDescription = "Find information about specific conditions"
 
     private val gpAdminTitle = "Additional GP services"
     private val gpAdminDescription = "Get sick notes and GP letters or ask about recent tests"
@@ -25,13 +25,13 @@ class AppointmentGuidancePage : HybridPageObject() {
             linkBlockTitle = "More",
             containerXPath = mainXPath,
             linkStyling = "h2")
-            .addLink(checkSymptomsTitle, checkSymptomsDescription)
+            .addLink(healthAdviceTitle, healthAdviceDescription)
             .addLink(gpAdminTitle, gpAdminDescription)
             .addLink(gpAdviceTitle, gpAdviceDescription)
 
     private val menuLinks by lazy { LinksElement(this, menuContent) }
 
-    val menuCheckSymptomsButton by lazy { menuLinks.link(checkSymptomsTitle) }
+    val menuHealthAdviceButton by lazy { menuLinks.link(healthAdviceTitle) }
 
     val gpAdminMenuItem by lazy { menuLinks.link(gpAdminTitle) }
 
@@ -44,7 +44,7 @@ class AppointmentGuidancePage : HybridPageObject() {
     )
 
     fun checkGuidanceBodyForOnlineConsultations() {
-        menuCheckSymptomsButton.assertSingleElementPresent()
+        menuHealthAdviceButton.assertSingleElementPresent()
         gpAdminMenuItem.assertSingleElementPresent()
         gpAdviceMenuItem.assertSingleElementPresent()
     }

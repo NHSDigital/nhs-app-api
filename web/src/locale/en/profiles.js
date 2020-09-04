@@ -44,10 +44,10 @@ export default {
       header: 'Settings',
       switch: 'Switch to your profile to access your settings.',
     },
-    symptoms: {
-      header: 'Symptoms',
-      summary: 'It\'s not possible to check your symptoms while acting on {name}\'s behalf.',
-      switch: 'Switch to your profile to check your symptoms.',
+    advice: {
+      header: 'Advice',
+      summary: 'It\'s not possible to get health information and advice while acting on {name}\'s behalf.',
+      switch: 'Switch to your profile to get advice.',
     },
   },
 };

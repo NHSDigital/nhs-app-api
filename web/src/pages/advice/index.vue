@@ -1,16 +1,15 @@
 <template>
   <div class="pull-content">
-    <symptoms-check/>
+    <advice-check/>
   </div>
 </template>
 
 <script>
-import symptomsCheck from '@/components/symptoms/SymptomsCheck';
+import adviceCheck from '@/components/advice/AdviceCheck';
 
 export default {
-  layout: 'nhsuk-layout',
   components: {
-    symptomsCheck,
+    adviceCheck,
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
