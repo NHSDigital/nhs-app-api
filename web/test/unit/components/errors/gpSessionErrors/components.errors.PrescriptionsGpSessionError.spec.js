@@ -1,6 +1,6 @@
 import PrescriptionsGpSessionError from '@/components/errors/gp-session-errors/PrescriptionsGpSessionError';
 import MenuItem from '@/components/MenuItem';
-import { mount, create$T } from '../../../helpers';
+import { mount } from '../../../helpers';
 
 describe('PrescriptionsGPSessionError', () => {
   let content;
@@ -18,7 +18,6 @@ describe('PrescriptionsGPSessionError', () => {
       },
       dispatch: jest.fn(),
     },
-    $t: create$T(),
   });
 
   beforeEach(() => {
@@ -26,7 +25,7 @@ describe('PrescriptionsGPSessionError', () => {
     content = wrapper.findAll('p');
   });
   it('will contain the correct paragraph content', () => {
-    expect(content.at(0).text()).toContain('translate_gpSessionErrors.prescriptions.ifTheProblemContinues');
+    expect(content.at(0).text()).toContain('If the problem continues and you need to get a prescription now, contact your GP surgery directly. For urgent medical advice, go to');
   });
 
   it('will contain the correct emergency prescriptions menuItem', () => {
@@ -36,7 +35,7 @@ describe('PrescriptionsGPSessionError', () => {
   });
 
   it('will contain the 111 link and call 111 content', () => {
-    expect(content.at(0).text()).toContain('translate_gpSessionErrors.nhs111Link');
-    expect(content.at(0).text()).toContain('translate_gpSessionErrors.orCall');
+    expect(content.at(0).text()).toContain('111.nhs.uk');
+    expect(content.at(0).text()).toContain('or call 111.');
   });
 });

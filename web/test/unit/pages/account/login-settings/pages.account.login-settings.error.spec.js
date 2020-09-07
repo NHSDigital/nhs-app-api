@@ -49,10 +49,10 @@ describe('login settings page', () => {
   describe('biometric error screen', () => {
     describe('cannot find biometrics', () => {
       each([
-        ['have information showing Face ID could not be found', 'face'],
-        ['have information showing Touch ID could not be found', 'touch'],
-        ['have information showing Fingerprint could not be found', 'fingerprint'],
-      ]).it('will %s', (_, biometricType) => {
+        ['have information showing Face ID could not be found', 'face', 'Check that you have added a face scan in your device\'s Face ID settings.'],
+        ['have information showing Touch ID could not be found', 'touch', 'Check that you have added a fingerprint in your device\'s Touch ID settings.'],
+        ['have information showing Fingerprint could not be found', 'fingerPrint', 'Check that you have added a fingerprint in your device\'s security settings.'],
+      ]).it('will %s', (_, biometricType, text) => {
         mountPage(
           {
             errorCode: biometricErrorCodes.CannotFindBiometrics,
@@ -60,8 +60,7 @@ describe('login settings page', () => {
             biometricLocaleReference: biometricType,
           },
         );
-        expect(wrapper.findAll('p').at(0).text())
-          .toContain(`translate_loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${biometricType}`);
+        expect(wrapper.findAll('p').at(0).text()).toContain(text);
       });
     });
 
@@ -72,10 +71,8 @@ describe('login settings page', () => {
 
       it('will have information showing biometric registration could not be changed', () => {
         const paragraphs = wrapper.findAll('p');
-        expect(paragraphs.at(0).text())
-          .toContain('translate_loginSettings.biometrics.errors.cannotChangeBiometricSettings.paragraph1');
-        expect(paragraphs.at(1).text())
-          .toContain('translate_loginSettings.biometrics.errors.cannotChangeBiometricSettings.paragraph2');
+        expect(paragraphs.at(0).text()).toContain('Go back and try again.');
+        expect(paragraphs.at(1).text()).toContain('If you keep seeing this message, return to your settings later.');
       });
     });
 

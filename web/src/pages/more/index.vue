@@ -165,8 +165,8 @@ export default {
         `${this.$t('messages.messages')}
           ${this.$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')}.
           ${this.$t('messages.youHaveUnreadMessages')}`
-        : `${this.$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')}
-          ${this.$t('messages.body')}.`;
+        : `${this.$t('messages.messages')}
+          ${this.$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')}.`;
     },
   },
   async mounted() {

@@ -1,6 +1,6 @@
 import Message from '@/pages/messages/gp-messages/view-details';
 import { redirectTo } from '@/lib/utils';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
@@ -10,7 +10,6 @@ jest.mock('@/lib/utils', () => ({
 describe('gp message details', () => {
   let wrapper;
   let store;
-  let $t;
 
   const messageDetailsNoReplies = [{
     messageId: '1',
@@ -224,12 +223,8 @@ describe('gp message details', () => {
         'serviceJourneyRules/updateStatusGpMessagesEnabled': updateEnabled,
       },
     });
-    $t = create$T();
 
-    wrapper = mount(Message, {
-      $store: store,
-      $t,
-    });
+    wrapper = mount(Message, { $store: store });
   };
 
   beforeEach(() => {

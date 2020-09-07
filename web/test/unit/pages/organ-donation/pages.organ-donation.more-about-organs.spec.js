@@ -1,7 +1,8 @@
 import i18n from '@/plugins/i18n';
 import MoreAboutOrgans from '@/pages/organ-donation/more-about-organs';
+import _locale from '@/locale/en';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { createStore, locale, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 const createState = () => ({
   organDonation: initialState(),
@@ -38,12 +39,12 @@ describe('organ donation more about organs', () => {
     });
 
     it('will add each content item with a subheader', () => {
-      const items = locale.organDonation.moreAboutOrgans.contentItems;
+      const items = _locale.organDonation.moreAboutOrgans.contentItems;
       items.forEach((item, index) => expect(subheaders.at(index).text()).toBe(item.subheader));
     });
 
     it('will add each content item with a body', () => {
-      const items = locale.organDonation.moreAboutOrgans.contentItems;
+      const items = _locale.organDonation.moreAboutOrgans.contentItems;
       items.forEach((item, index) => expect(bodies.at(index).text()).toBe(item.body));
     });
   });

@@ -1,21 +1,10 @@
 import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
-import { APPOINTMENT_BOOKING_GUIDANCE_NAME, INDEX_NAME } from '@/router/names';
+import { INDEX_NAME } from '@/router/names';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
-import { APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB } from '@/breadcrumbs/appointments';
+import { APPOINTMENTS_CRUMB } from '@/breadcrumbs/appointments';
 import { RouterLinkStub } from '@vue/test-utils';
 import * as dependancy from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
-
-const INDEX = {
-  path: '/',
-  meta: { crumb: {} },
-  name: INDEX_NAME,
-};
-
-const BOOKING_GUIDANCE = {
-  name: APPOINTMENT_BOOKING_GUIDANCE_NAME,
-  meta: { crumb: { defaultCrumb: [INDEX_CRUMB, APPOINTMENTS_CRUMB, GP_APPOINTMENTS_CRUMB] } },
-};
 
 describe('BreadCrumbTrail.vue', () => {
   let $router;
@@ -25,7 +14,7 @@ describe('BreadCrumbTrail.vue', () => {
   const createBreadCrumbTrail = ({
     isNativeApp = false,
     routeName = 'some-route',
-    routesProp = [INDEX_CRUMB],
+    crumbs = [INDEX_CRUMB],
     csrfToken = 'some token',
     backLinkOverride = undefined,
   } = {}) => {
@@ -41,7 +30,7 @@ describe('BreadCrumbTrail.vue', () => {
     return mount(BreadCrumbTrail, {
       $store,
       methods: { goToUrl },
-      propsData: { crumbs: routesProp },
+      propsData: { crumbs },
       $style: { native: 'native' },
       $route: { name: routeName },
       $router,
@@ -63,7 +52,7 @@ describe('BreadCrumbTrail.vue', () => {
   });
 
   it('will not render a breadcrumb as there are no items to display.', () => {
-    const wrapper = createBreadCrumbTrail({ routesProp: [] });
+    const wrapper = createBreadCrumbTrail({ crumbs: [] });
 
     expect(wrapper.find("nav[to='Breadcrumb']")
       .exists()).toEqual(false);
@@ -77,19 +66,19 @@ describe('BreadCrumbTrail.vue', () => {
 
     expect(dependancy.createRouteByNameObject)
       .toHaveBeenCalledWith({ name: INDEX_NAME, params: {}, store: $store });
-    expect(wrapper.find(RouterLinkStub).props().to).toBe(`{ name: ${INDEX_NAME} }`);
+    expect(wrapper.find(RouterLinkStub).props().to).toBe('{ name: index }');
   });
 
   it('will return a multiple breadcrumbs item to display.', () => {
-    const wrapper = createBreadCrumbTrail({ routesProp: [INDEX, BOOKING_GUIDANCE] });
+    const wrapper = createBreadCrumbTrail({ crumbs: [INDEX_CRUMB, APPOINTMENTS_CRUMB] });
 
     expect(wrapper.find("nav[aria-label='Breadcrumb']")
       .exists()).toEqual(true);
 
     const links = wrapper.findAll(RouterLinkStub);
 
-    expect(links.at(0).props().to).toBe(`{ name: ${INDEX_NAME} }`);
-    expect(links.at(1).props().to).toBe(`{ name: ${APPOINTMENT_BOOKING_GUIDANCE_NAME} }`);
+    expect(links.at(0).props().to).toBe('{ name: index }');
+    expect(links.at(1).props().to).toBe('{ name: appointments }');
   });
 
   describe('native', () => {

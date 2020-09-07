@@ -1,35 +1,40 @@
 /* eslint-disable no-underscore-dangle */
 import NhsukLayout from '@/layouts/nhsuk-layout';
-import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
-import { create$T } from '../helpers';
+import VueMeta from 'vue-meta';
+import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { createStore, localVue, shallowMount } from '../helpers';
+
+localVue.use(VueMeta);
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
-const createContext = ({
+const mount = ({
   analyticsCookieAccepted = false,
   analyticsScriptUrl = 'NOT_SET',
   isAnonymousRoute = true,
   durationSeconds = undefined,
   nativeVersion = '',
   source = 'web',
-} = {}) => ({
-  $t: create$T(),
-  $route: { meta: { isAnonymous: isAnonymousRoute } },
-  $store: {
-    $cookies: { get: cookie => (cookie === 'nhso.session' ? { durationSeconds } : {}) },
-    $env: { ANALYTICS_SCRIPT_URL: analyticsScriptUrl },
-    state: {
-      device: { source },
-      appVersion: { nativeVersion, webVersion: '1.2.3' },
-      termsAndConditions: { analyticsCookieAccepted },
-    },
+} = {}) => shallowMount(
+  NhsukLayout,
+  {
+    $route: { meta: { isAnonymous: isAnonymousRoute } },
+    $store: createStore({
+      $cookies: { get: cookie => (cookie === 'nhso.session' ? { durationSeconds } : {}) },
+      $env: { ANALYTICS_SCRIPT_URL: analyticsScriptUrl },
+      state: {
+        device: { source },
+        appVersion: { nativeVersion, webVersion: '1.2.3' },
+        termsAndConditions: { analyticsCookieAccepted },
+      },
+    }),
+    stubs: ['router-view'],
   },
-  title: 'Test Title',
-});
+);
 
 describe('nhsuk layout', () => {
   describe('metaInfo', () => {
@@ -37,23 +42,25 @@ describe('nhsuk layout', () => {
 
     describe('web, analytics not accepted, durationSeconds not in session cookie', () => {
       beforeEach(() => {
-        head = NhsukLayout.metaInfo.call(createContext());
+        const wrapper = mount();
+        wrapper.setData({ title: 'Test Title' });
+        head = wrapper.vm.$meta().refresh().metaInfo;
       });
 
       it('will set language from locale', () => {
-        expect(head.htmlAttrs.lang).toBe('translate_language');
+        expect(head.htmlAttrs.lang).toBe('en-GB');
       });
 
       it('will set title to be the component title', () => {
-        expect(head.title).toBe('Test Title');
+        expect(head.title).toBe('Test Title - NHS App');
       });
 
       it('will include the appTitle in the titleTempalte', () => {
-        expect(head.titleTemplate).toBe('%s - translate_appTitle');
+        expect(head.titleTemplate).toBe('%s - NHS App');
       });
 
       it('will have no scripts defined', () => {
-        expect(head.script).toBeUndefined();
+        expect(head.script.length).toBe(0);
       });
 
       it('will have a meta entry for the web version', () => {
@@ -71,11 +78,12 @@ describe('nhsuk layout', () => {
 
     describe('analytics accepted, url set, and is not anonymous route', () => {
       beforeEach(() => {
-        head = NhsukLayout.metaInfo.call(createContext({
+        const wrapper = mount({
           analyticsCookieAccepted: true,
           analyticsScriptUrl: 'analytics-script-url',
           isAnonymousRoute: false,
-        }));
+        });
+        head = wrapper.vm.$meta().refresh().metaInfo;
       });
 
       it('will add the analytics script', () => {
@@ -98,17 +106,19 @@ describe('nhsuk layout', () => {
       }],
     ])('%s', (_, options) => {
       beforeEach(() => {
-        head = NhsukLayout.metaInfo.call(createContext(options));
+        const wrapper = mount(options);
+        head = wrapper.vm.$meta().refresh().metaInfo;
       });
 
       it('will have no script tags', () => {
-        expect(head.script).toBeUndefined();
+        expect(head.script.length).toBe(0);
       });
     });
 
     describe('durationSeconds set on session cookie', () => {
       beforeEach(() => {
-        head = NhsukLayout.metaInfo.call(createContext({ durationSeconds: '12300' }));
+        const wrapper = mount({ durationSeconds: '12300' });
+        head = wrapper.vm.$meta().refresh().metaInfo;
       });
 
       it('will have a noscript to redirect to /account/signout after durationSeconds', () => {
@@ -121,7 +131,8 @@ describe('nhsuk layout', () => {
 
     describe('on native', () => {
       beforeEach(() => {
-        head = NhsukLayout.metaInfo.call(createContext({ nativeVersion: '1.3.4', source: 'testiOS' }));
+        const wrapper = mount({ nativeVersion: '1.3.4', source: 'testiOS' });
+        head = wrapper.vm.$meta().refresh().metaInfo;
       });
 
       it('will add nativeVersion to platform meta', () => {

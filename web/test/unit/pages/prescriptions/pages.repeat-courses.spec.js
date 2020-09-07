@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import Vuex from 'vuex';
-import Vue from 'vue';
-import { createLocalVue } from '@vue/test-utils';
-import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
-import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 import Necessity from '@/lib/necessity';
-import { create$T, shallowMount } from '../../helpers';
+import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { createLocalVue } from '@vue/test-utils';
+import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
+import { shallowMount } from '../../helpers';
 
 const createMockMixinPlugin = () => Vue.mixin({
   computed: {
@@ -95,7 +95,6 @@ const createRepeatCoursesPage = async ($store) => {
       $http,
       $route,
       $store,
-      $t: create$T(),
       $style: {
         msg: 'mock msg',
       },

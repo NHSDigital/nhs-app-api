@@ -27,7 +27,7 @@ export default {
   props: {
     buttonText: {
       type: String,
-      default: 'loginButton.login',
+      default: 'login.continueWithNhsLogin',
     },
   },
   data() {

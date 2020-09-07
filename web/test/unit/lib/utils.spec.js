@@ -1,4 +1,7 @@
+import _locale from '@/locale/en';
 import each from 'jest-each';
+import get from 'lodash/fp/get';
+import isString from 'lodash/fp/isString';
 import mockdate from 'mockdate';
 import moment from 'moment';
 import {
@@ -20,7 +23,6 @@ import {
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import { create$T } from '../helpers';
 
 jest.mock('@/services/native-app');
 jest.mock('@/services/event-bus', () => ({
@@ -47,6 +49,21 @@ const trueValues = [
   true,
   'true',
 ];
+
+const create$T = () => jest
+  .fn()
+  .mockImplementation((key, formatParams) => {
+    let value = get(key)(_locale);
+    if (isString(value) || value === undefined) {
+      if (formatParams) {
+        Object.keys(formatParams).forEach((formatParam) => {
+          value = value.replace(`{${formatParam}}`, formatParams[formatParam]);
+        });
+      }
+    }
+
+    return value;
+  });
 
 describe('util library', () => {
   let loggedIn = false;
@@ -490,7 +507,7 @@ describe('util library', () => {
   });
 
   describe('message date time formatters', () => {
-    const $t = create$T(false);
+    const $t = create$T();
 
     beforeEach(() => {
       mockdate.set('2020-01-28T13:11:00.000Z');
@@ -554,7 +571,7 @@ describe('util library', () => {
     });
 
     describe('getThirdPartyLocaleText', () => {
-      const $te = create$T(false);
+      const $te = create$T();
       each([{
         textType: 'headerText',
         redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',

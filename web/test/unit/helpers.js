@@ -1,12 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
+import i18n from '@/plugins/i18n';
+import merge from 'lodash/fp/merge';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import '@/plugins/directives';
-import _locale from '@/locale/en';
-import get from 'lodash/fp/get';
-import has from 'lodash/fp/has';
-import isString from 'lodash/fp/isString';
-import merge from 'lodash/fp/merge';
 import { formatDate } from '@/plugins/filters';
 import {
   createLocalVue,
@@ -16,28 +13,6 @@ import {
 
 export const localVue = createLocalVue();
 localVue.use(Vuex);
-
-export const create$T = (stubbed = true) => jest
-  .fn()
-  .mockImplementation((key, formatParams) => {
-    let value = get(key)(_locale);
-    if (isString(value) || value === undefined) {
-      if (stubbed) {
-        return `translate_${key}`;
-      }
-      if (formatParams) {
-        Object.keys(formatParams).forEach((formatParam) => {
-          value = value.replace(`{${formatParam}}`, formatParams[formatParam]);
-        });
-      }
-    }
-
-    return value;
-  });
-
-export const create$Te = () => jest
-  .fn()
-  .mockImplementation(key => has(key)(_locale));
 
 export const mockCookies = () => ({
   get: jest.fn(),
@@ -66,11 +41,6 @@ export const createStore = ({
   getters = {},
   context = {},
   state = {},
-  i18n = {
-    t: create$T(),
-    tc: create$T(),
-    te: create$Te(),
-  },
   router = {},
 } = {}) => ({
   app: {
@@ -101,8 +71,6 @@ export const initFilters = () => [
 
 Vue.filter('formatDate', formatDate);
 
-export const locale = _locale;
-
 export const mount = (component, {
   $cookies,
   $env = {},
@@ -110,9 +78,6 @@ export const mount = (component, {
   $router = [],
   $store,
   $style = {},
-  $t = create$T(),
-  $tc = create$T(),
-  $te = create$Te(),
   data = () => ({}),
   mocks,
   propsData = {},
@@ -121,12 +86,11 @@ export const mount = (component, {
   stubs = [],
   methods = {},
   slots = {},
-  mountOpts = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const mountFn = shallow ? vueShallowMount : vueMount;
 
-  let mocksObj = {
+  const mocksObj = {
     $cookies,
     $route,
     $router,
@@ -137,20 +101,6 @@ export const mount = (component, {
     ...mocks,
   };
 
-  if (mountOpts.i18n === undefined) {
-    mocksObj = {
-      ...mocksObj,
-      $t,
-      $tc,
-      $te,
-      $i18n: {
-        t: create$T(),
-        tc: create$T(),
-        te: create$Te(),
-      },
-    };
-  }
-
   const options = {
     localVue,
     data,
@@ -159,7 +109,7 @@ export const mount = (component, {
     stubs,
     methods,
     slots,
-    ...mountOpts,
+    i18n,
   };
 
   return mountFn(component, options);

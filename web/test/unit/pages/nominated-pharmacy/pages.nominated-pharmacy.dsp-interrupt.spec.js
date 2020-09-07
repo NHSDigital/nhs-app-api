@@ -1,13 +1,10 @@
 import DspInterrupt from '@/pages/nominated-pharmacy/dsp-interrupt';
-import i18n from '@/plugins/i18n';
 import { PRESCRIPTIONS_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_DSP_URL,
 } from '@/router/externalLinks';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy not found', () => {
   let $store;
@@ -26,11 +23,7 @@ describe('nominated pharmacy not found', () => {
     DspInterrupt,
     {
       $store,
-      $t,
       $router,
-      mountOpts: {
-        i18n,
-      },
     },
   );
 

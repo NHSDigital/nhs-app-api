@@ -28,10 +28,10 @@ describe('Appointment GP session error', () => {
     const content = wrapper.findAll('p');
     const menuItems = wrapper.findAll(MenuItem);
 
-    expect(content.at(0).text()).toEqual('translate_gpSessionErrors.appointments.youCannotBookOnline');
-    expect(content.at(1).text()).toContain('translate_gpSessionErrors.appointments.ifTheProblemContinues');
-    expect(content.at(1).text()).toContain('translate_gpSessionErrors.nhs111Link');
-    expect(content.at(1).text()).toContain('translate_gpSessionErrors.orCall');
+    expect(content.at(0).text()).toEqual('You are not currently able to book and manage GP appointments online.');
+    expect(content.at(1).text()).toContain('If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice go to');
+    expect(content.at(1).text()).toContain('111.nhs.uk');
+    expect(content.at(1).text()).toContain('or call 111.');
 
     expect(menuItems.length).toBe(4);
     expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);

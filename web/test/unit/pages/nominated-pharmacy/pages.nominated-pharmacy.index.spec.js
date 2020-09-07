@@ -1,9 +1,7 @@
 import NominatedPharmacyIndex from '@/pages/nominated-pharmacy/index';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('nominated pharmacy found', () => {
   let $store;
@@ -26,7 +24,7 @@ describe('nominated pharmacy found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyIndex, { $store, $style, $t });
+  const mountPage = () => mount(NominatedPharmacyIndex, { $store, $style });
 
   describe('show P1 pharmacy details', () => {
     let pharmacyDetails;

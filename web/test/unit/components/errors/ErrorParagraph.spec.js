@@ -1,12 +1,12 @@
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import { locale, mount } from '../../helpers';
+import { mount } from '../../helpers';
 
-const mountWrapper = ({ $t, from, variable }) => mount(ErrorParagraph, {
-  $t,
+const mountWrapper = ({ mocks = {}, from, variable }) => mount(ErrorParagraph, {
   propsData: {
     from,
     variable,
   },
+  mocks,
 });
 
 describe('ErrorParagraph', () => {
@@ -15,7 +15,7 @@ describe('ErrorParagraph', () => {
   describe('from', () => {
     describe('translates to text', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ from: 'foo.text' });
+        wrapper = mountWrapper({ from: 'appTitle' });
       });
 
       describe('paragraph', () => {
@@ -34,20 +34,14 @@ describe('ErrorParagraph', () => {
         });
 
         it('will translate `from`', () => {
-          expect(paragraph.text()).toBe('translate_foo.text');
+          expect(paragraph.text()).toBe('NHS App');
         });
       });
     });
 
     describe('translates to object', () => {
       beforeEach(() => {
-        locale.foo = {
-          object: {
-            text: 'foo text',
-            label: 'foo label',
-          },
-        };
-        wrapper = mountWrapper({ from: 'foo.object' });
+        wrapper = mountWrapper({ from: 'login.authReturn.ifYouNeed' });
       });
 
       describe('paragraph', () => {
@@ -62,11 +56,11 @@ describe('ErrorParagraph', () => {
         });
 
         it('will have arial label', () => {
-          expect(paragraph.attributes('aria-label')).toBe('foo label');
+          expect(paragraph.attributes('aria-label')).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.');
         });
 
         it('will display `from` text', () => {
-          expect(paragraph.text()).toBe('foo text');
+          expect(paragraph.text()).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.');
         });
       });
     });
@@ -90,7 +84,7 @@ describe('ErrorParagraph', () => {
               return undefined;
           }
         });
-        wrapper = mountWrapper({ $t, from, variable });
+        wrapper = mountWrapper({ mocks: { $t }, from, variable });
       });
 
       it('will not display paragraph', () => {

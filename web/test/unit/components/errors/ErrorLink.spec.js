@@ -1,5 +1,5 @@
 import ErrorLink from '@/components/errors/ErrorLink';
-import { locale, mount } from '../../helpers';
+import { mount } from '../../helpers';
 
 describe('ErrorLink', () => {
   let wrapper;
@@ -38,7 +38,7 @@ describe('ErrorLink', () => {
   describe('from', () => {
     describe('translates to text', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ from: 'foo.text' });
+        wrapper = mountWrapper({ from: 'appTitle' });
       });
 
       describe('link', () => {
@@ -57,20 +57,14 @@ describe('ErrorLink', () => {
         });
 
         it('will translate `from`', () => {
-          expect(link.text()).toBe('translate_foo.text');
+          expect(link.text()).toBe('NHS App');
         });
       });
     });
 
     describe('translates to object', () => {
       beforeEach(() => {
-        locale.foo = {
-          object: {
-            text: 'foo text',
-            label: 'foo label',
-          },
-        };
-        wrapper = mountWrapper({ from: 'foo.object' });
+        wrapper = mountWrapper({ from: 'login.authReturn.ifYouNeed' });
       });
 
       describe('link', () => {
@@ -85,11 +79,11 @@ describe('ErrorLink', () => {
         });
 
         it('will have aria label', () => {
-          expect(link.attributes('aria-label')).toBe('translate_foo.object.label');
+          expect(link.attributes('aria-label')).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.');
         });
 
         it('will display `from` text', () => {
-          expect(link.text()).toBe('translate_foo.object.text');
+          expect(link.text()).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.');
         });
       });
     });
@@ -105,7 +99,7 @@ describe('ErrorLink', () => {
 
       describe('is native', () => {
         beforeEach(() => {
-          wrapper = mountWrapper({ desktopOnly, from: 'foo', isNativeApp: true });
+          wrapper = mountWrapper({ desktopOnly, from: 'appTitle', isNativeApp: true });
         });
 
         it('will not display link', () => {
@@ -115,7 +109,7 @@ describe('ErrorLink', () => {
 
       describe('is not native', () => {
         beforeEach(() => {
-          wrapper = mountWrapper({ desktopOnly, from: 'foo', isNativeApp: false });
+          wrapper = mountWrapper({ desktopOnly, from: 'appTitle', isNativeApp: false });
         });
 
         it('will display link', () => {
@@ -126,7 +120,7 @@ describe('ErrorLink', () => {
 
     describe('is false', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ desktopOnly: false, from: 'foo', isNativeApp: true });
+        wrapper = mountWrapper({ desktopOnly: false, from: 'appTitle', isNativeApp: true });
       });
 
       it('will always display link', () => {
@@ -139,7 +133,7 @@ describe('ErrorLink', () => {
     describe('on link click with `_blank` target', () => {
       beforeEach(() => {
         global.open = jest.fn();
-        wrapper = mountWrapper({ action: '/example', from: 'foo', target: '_blank' });
+        wrapper = mountWrapper({ action: '/example', from: 'appTitle', target: '_blank' });
         wrapper.find('a').trigger('click');
       });
 
@@ -155,7 +149,7 @@ describe('ErrorLink', () => {
     describe('on link click with any other target', () => {
       beforeEach(() => {
         global.open = jest.fn();
-        wrapper = mountWrapper({ action: '/example', from: 'foo', target: 'foo' });
+        wrapper = mountWrapper({ action: '/example', from: 'appTitle', target: 'foo' });
         wrapper.find('a').trigger('click');
       });
 
@@ -171,7 +165,7 @@ describe('ErrorLink', () => {
 
   describe('with query parameter', () => {
     beforeEach(() => {
-      wrapper = mountWrapper({ action: '/example', from: 'foo', queryParam: { param: 'param', value: 'value' } });
+      wrapper = mountWrapper({ action: '/example', from: 'appTitle', queryParam: { param: 'param', value: 'value' } });
     });
 
     describe('on link click', () => {

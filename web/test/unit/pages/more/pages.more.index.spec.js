@@ -3,9 +3,7 @@ import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH, DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
-import {
-  YOUR_NHS_DATA_MATTERS_URL,
-} from '@/router/externalLinks';
+import { YOUR_NHS_DATA_MATTERS_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
 describe('more', () => {

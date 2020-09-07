@@ -7,10 +7,12 @@ const mountWrapper = ({ $t, from, queryParam }) => mount(ErrorParagraphWithLinks
   $env: {
     CONTACT_US_URL,
   },
-  $t,
   propsData: {
     from,
     queryParam,
+  },
+  mocks: {
+    $t,
   },
 });
 

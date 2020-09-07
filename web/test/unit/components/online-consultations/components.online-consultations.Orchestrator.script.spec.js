@@ -122,8 +122,8 @@ describe('orchestrator', () => {
     describe('validationErrorMessage', () => {
       it('will get i18n key from store', () => {
         // Arrange
-        const validationErrorMessage = 'test.error.message';
-        const expectedValidationErrorMessage = 'translate_test.error.message';
+        const validationErrorMessage = 'onlineConsultations.validationErrors.message.attachment';
+        const expectedValidationErrorMessage = 'Select a file';
         store.state.onlineConsultations.validationErrorMessage = validationErrorMessage;
 
         // Act

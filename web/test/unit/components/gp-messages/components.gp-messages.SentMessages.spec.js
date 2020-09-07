@@ -1,5 +1,5 @@
 import SentMessage from '@/components/gp-messages/SentMessage';
-import { mount, createStore, create$T } from '../../helpers';
+import { mount, createStore } from '../../helpers';
 
 const createPropsData = () => ({
   message: {
@@ -48,7 +48,6 @@ describe('Sent Message', () => {
       wrapper = mount(SentMessage, {
         $store: $store(),
         propsData: createPropsData(),
-        $t: create$T(false),
       });
     });
 

@@ -80,12 +80,12 @@ describe('OnUpdateHeaderMixin', () => {
       describe('and is not localised', () => {
         beforeEach(() => {
           wrapper = mountOnUpdateHeaderMixin();
-          value = 'unlocalised.locale.key';
+          value = 'appTitle';
           wrapper.vm.setHeaderProp('anotherHeaderProp', value);
         });
 
         it('will set the headerProp data prop to translated value', () => {
-          expect(wrapper.vm.anotherHeaderProp).toEqual('translate_unlocalised.locale.key');
+          expect(wrapper.vm.anotherHeaderProp).toEqual('NHS App');
         });
       });
     });

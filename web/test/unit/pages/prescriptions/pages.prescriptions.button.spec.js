@@ -1,8 +1,6 @@
 import i18n from '@/plugins/i18n';
 import PrescriptionsPage from '@/pages/prescriptions/index';
-import { create$T, createRouter, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createRouter, createStore, mount } from '../../helpers';
 
 describe('prescriptions page', () => {
   let $store;
@@ -42,7 +40,6 @@ describe('prescriptions page', () => {
     wrapper = mount(PrescriptionsPage, {
       $router,
       $store,
-      $t,
       $style,
       stubs: {
         'page-title': '<div></div>',

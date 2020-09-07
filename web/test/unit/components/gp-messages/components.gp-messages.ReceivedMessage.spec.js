@@ -1,5 +1,5 @@
 import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
-import { mount, createStore, create$T } from '../../helpers';
+import { mount, createStore } from '../../helpers';
 
 const $store = () => (
   createStore({
@@ -52,7 +52,6 @@ describe('Received Message', () => {
       wrapper = mount(ReceivedMessage, {
         propsData,
         $store: $store(),
-        $t: create$T(false),
       });
     });
 

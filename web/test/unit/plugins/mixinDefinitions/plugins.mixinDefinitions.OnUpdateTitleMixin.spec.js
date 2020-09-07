@@ -79,12 +79,12 @@ describe('OnUpdateTitleMixin', () => {
       describe('and is not localised', () => {
         beforeEach(() => {
           wrapper = mountOnUpdateTitleMixin();
-          title = 'unlocalised.locale.key';
+          title = 'appTitle';
           wrapper.vm.setTitle(title);
         });
 
         it('will set the title data prop to translated title', () => {
-          expect(wrapper.vm.title).toEqual('translate_unlocalised.locale.key');
+          expect(wrapper.vm.title).toEqual('NHS App');
         });
       });
     });

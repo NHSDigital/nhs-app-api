@@ -12,7 +12,7 @@ describe('decision info', () => {
   const createPropsData = ({ decision, isWithdrawing = false }) => ({
     decision,
     decisionDetails: { decisionDetails: 'decisionDetails' },
-    headerKey: 'headerKey',
+    headerKey: 'appTitle',
     isWithdrawing,
   });
 

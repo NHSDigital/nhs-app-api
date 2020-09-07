@@ -26,7 +26,7 @@ describe('login settings page', () => {
       getters: {
         'loginSettings/biometricState': biometricsRegistrationStatus,
         'loginSettings/getBiometricToggleText': `loginSettings.biometrics.toggleLabel.${biometricType}`,
-        'loginSettings/getDeviceBiometricNameString': biometricType,
+        'loginSettings/getDeviceBiometricNameString': `loginSettings.biometrics.biometricType.${biometricType}`,
       },
     });
     wrapper = mount(loginSettings,
@@ -44,13 +44,13 @@ describe('login settings page', () => {
       });
 
       it('will have information showing biometric type could not be found', () => {
-        expect(wrapper.findAll('p').at(0).text()).toContain('translate_loginSettings.biometrics.noBiometricType.information.paragraph1');
+        expect(wrapper.findAll('p').at(0).text()).toContain('We cannot find any fingerprint or face recognition settings on your device.');
       });
     });
 
     describe('biometric type defined as FaceID', () => {
       it('will have information showing biometric type could be found', () => {
-        expect(wrapper.findAll('p').at(0).text()).toContain('translate_loginSettings.biometrics.noBiometricType.information.paragraph1');
+        expect(wrapper.findAll('p').at(0).text()).toContain('We cannot find any fingerprint or face recognition settings on your device.');
       });
 
       describe('biometric registration disabled', () => {
@@ -96,7 +96,7 @@ describe('login settings page', () => {
         it('will show the correct biometric type',
           () => {
             const label = wrapper.find('strong');
-            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.face');
+            expect(label.element.textContent).toEqual('Log in with Face ID');
           });
       });
       describe('biometric type is fingerPrint', () => {
@@ -107,7 +107,7 @@ describe('login settings page', () => {
         it('will show the correct biometric type',
           () => {
             const label = wrapper.find('strong');
-            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.fingerPrint');
+            expect(label.element.textContent).toEqual('Log in with fingerprint');
           });
       });
       describe('biometric type is touch', () => {
@@ -118,7 +118,7 @@ describe('login settings page', () => {
         it('will show the correct biometric type',
           () => {
             const label = wrapper.find('strong');
-            expect(label.element.textContent).toEqual('translate_loginSettings.biometrics.toggleLabel.touch');
+            expect(label.element.textContent).toEqual('Log in with Touch ID');
           });
       });
     });

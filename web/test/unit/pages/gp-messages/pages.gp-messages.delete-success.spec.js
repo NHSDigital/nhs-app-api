@@ -1,7 +1,7 @@
 import DeleteSuccess from '@/pages/messages/gp-messages/delete-success';
 import { redirectTo } from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
@@ -11,7 +11,6 @@ jest.mock('@/lib/utils', () => ({
 describe('patient messaging delete success', () => {
   let wrapper;
   let store;
-  let $t;
 
   const mountPage = ({
     deleteEnabled = true,
@@ -27,12 +26,8 @@ describe('patient messaging delete success', () => {
         'serviceJourneyRules/deleteGpMessagesEnabled': deleteEnabled,
       },
     });
-    $t = create$T();
 
-    wrapper = mount(DeleteSuccess, {
-      $store: store,
-      $t,
-    });
+    wrapper = mount(DeleteSuccess, { $store: store });
   };
 
   beforeEach(() => {
