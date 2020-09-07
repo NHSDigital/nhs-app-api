@@ -16,6 +16,7 @@ import com.paycasso.sdk.api.flow.view.configuration.enums.DocumentConfigurationS
 import com.paycasso.sdk.api.flow.view.configuration.enums.EChipScreenType
 import com.paycasso.sdk.api.flow.view.configuration.enums.PreviewConfigurationSide
 import com.paycasso.view.*
+import com.paycasso.view.nhs.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -80,7 +81,7 @@ class PaycassoServiceTests {
         expectedFlowRequest.documentConfigurationList = documentConfigurations
         expectedFlowRequest.externalDeviceId = paycassoData.externalReferences.deviceId
         expectedFlowRequest.externalAppUserId = paycassoData.externalReferences.appUserId
-        expectedFlowRequest.transactionType = TransactionData.TransactionRequest.TransactionType.DocuSure
+        expectedFlowRequest.transactionType = TransactionType.DOCUSURE
         expectedFlowRequest.externalTransactionReference = paycassoData.externalReferences.transactionReference
         expectedFlowRequest.externalConsumerReference = paycassoData.externalReferences.consumerReference
 
@@ -95,11 +96,11 @@ class PaycassoServiceTests {
         // Setting up views
         val expectedDocumentPreviewViewFrontConfiguration = DocumentPreviewViewConfiguration()
         expectedDocumentPreviewViewFrontConfiguration.previewSide = PreviewConfigurationSide.FRONT
-        expectedDocumentPreviewViewFrontConfiguration.screen = DocumentPreviewViewFragment()
+        expectedDocumentPreviewViewFrontConfiguration.screen = NhsDocumentPreviewViewFragment()
 
         val expectedDocumentViewConfiguration = DocumentViewConfiguration()
         expectedDocumentViewConfiguration.documentSide = DocumentConfigurationSide.FRONT
-        expectedDocumentViewConfiguration.screen = FirstFrontTransitionFragment()
+        expectedDocumentViewConfiguration.screen = NhsPassportTransitionFragment()
 
         val expectedDocumentPreviewConfigurationList = arrayListOf(
             expectedDocumentPreviewViewFrontConfiguration
@@ -120,28 +121,28 @@ class PaycassoServiceTests {
         faceViewConfiguration.screen = FaceTransitionFragment()
 
         val finishViewConfiguration = FinishViewConfiguration()
-        finishViewConfiguration.screen = FinishTransitionFragment()
+        finishViewConfiguration.screen = NhsFinishTransitionFragment()
 
         val eChipViewConfigurations = HashMap<EChipScreenType, EChipViewConfiguration>()
         val configuration1 = EChipViewConfiguration()
         configuration1.setScreenType(EChipScreenType.NO_NFC)
-        configuration1.setScreen(EChipNoNfcFragment())
+        configuration1.setScreen(NhsEChipNoNfcFragment())
 
         val configuration2 = EChipViewConfiguration()
         configuration2.setScreenType(EChipScreenType.ERROR)
-        configuration2.setScreen(EChipErrorFragment())
+        configuration2.setScreen(NhsEChipErrorFragment())
 
         val configuration4 = EChipViewConfiguration()
         configuration4.setScreenType(EChipScreenType.HINT)
-        configuration4.setScreen(EChipHintFragment())
+        configuration4.setScreen(NhsEChipHintFragment())
 
         val configuration5 = EChipViewConfiguration()
         configuration5.setScreenType(EChipScreenType.PROCESSING)
-        configuration5.setScreen(EChipProcessingFragment())
+        configuration5.setScreen(NhsEChipProcessingFragment())
 
         val configuration6 = EChipViewConfiguration()
         configuration6.setScreenType(EChipScreenType.MRZ_READING)
-        configuration6.setScreen(EChipMrzReadingFragment())
+        configuration6.setScreen(NhsEChipMrzReadingFragment())
 
         eChipViewConfigurations[EChipScreenType.NO_NFC] = configuration1
         eChipViewConfigurations[EChipScreenType.ERROR] = configuration2
@@ -190,17 +191,17 @@ class PaycassoServiceTests {
         Assert.assertTrue(flowConfigurationArgumentCaptor.firstValue.displayDocumentPreview)
 
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.finishViewConfiguration.screen
-                is FinishTransitionFragment)
+                is NhsFinishTransitionFragment)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.faceViewConfiguration.screen
                 is FaceTransitionFragment)
         Assert.assertEquals(viewConfigurationArgumentCaptor.firstValue.
             documentViewConfigurations[0]!![0].documentSide, DocumentConfigurationSide.FRONT)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.
-            documentViewConfigurations[0]!![0].screen is FirstFrontTransitionFragment)
+            documentViewConfigurations[0]!![0].screen is NhsPassportTransitionFragment)
         Assert.assertEquals(viewConfigurationArgumentCaptor.firstValue.
             documentPreviewViewConfigurations[0]!![0].previewSide, PreviewConfigurationSide.FRONT)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.
-            documentPreviewViewConfigurations[0]!![0].screen is DocumentPreviewViewFragment)
+            documentPreviewViewConfigurations[0]!![0].screen is NhsDocumentPreviewViewFragment)
     }
     
     @Test

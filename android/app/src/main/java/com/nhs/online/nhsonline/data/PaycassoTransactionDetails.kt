@@ -45,7 +45,7 @@ enum class PaycassoDocumentType(
         BarcodeLocation.NO,
         FaceLocation.FRONT,
         DocumentShape.ID,
-        false,
+        true,
         false,
         true,
         "PhotoId")

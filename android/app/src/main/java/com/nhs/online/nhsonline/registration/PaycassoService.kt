@@ -8,6 +8,7 @@ import com.nhs.online.nhsonline.data.PaycassoExternalReferences
 import com.nhs.online.nhsonline.interfaces.IPaycassoFlow
 import com.paycasso.sdk.api.flow.builders.BasePaycassoFlowRequestBuilder
 import com.paycasso.sdk.api.flow.builders.CredentialsBuilder
+import com.paycasso.sdk.api.flow.enums.TransactionType
 import com.paycasso.sdk.api.flow.model.*
 import com.paycasso.sdk.api.flow.view.ViewConfiguration
 import com.paycasso.sdk.exceptions.ConfigurationViewBuilderException
@@ -91,7 +92,7 @@ class PaycassoService(
             .externalTransactionReference(externalReferences.transactionReference)
             .externalAppUserId(externalReferences.appUserId)
             .externalDeviceId(externalReferences.deviceId)
-            .transactionType(DocuSure)
+            .transactionType(TransactionType.DOCUSURE)
             .documentConfigurationList(listDocumentConfigurations)
     }
 
