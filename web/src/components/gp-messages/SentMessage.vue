@@ -99,6 +99,11 @@ export default {
       text-align: left;
       width: fit-content;
       float: right;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      -ms-word-break: break-all;
+      word-break: break-all;
+      word-break: break-word;
     }
   }
 
