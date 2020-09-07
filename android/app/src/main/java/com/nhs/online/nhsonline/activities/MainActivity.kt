@@ -126,9 +126,8 @@ class MainActivity :
         configureWebView()
         appWebInterface = AppWebInterface(webview)
         downloadHelper = FileDownloadHelper(this)
-        paycassoFlowFactory = PaycassoFlowFactory()
-        paycassoService = PaycassoService(
-            paycassoFlowFactory.getFlow(this))
+        paycassoFlowFactory = PaycassoFlowFactory(logger)
+        paycassoService = PaycassoService(paycassoFlowFactory.getFlow(this))
 
         val notificationManager = NotificationManagerCompat(this)
         notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
