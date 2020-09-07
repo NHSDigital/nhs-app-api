@@ -38,8 +38,8 @@ export default {
     commit(SET_CONNECTION_PROBLEM, hasConnectionProblem);
 
     if (hasConnectionProblem) {
-      EventBus.$emit(UPDATE_HEADER, 'noConnection.header');
-      EventBus.$emit(UPDATE_TITLE, 'noConnection.header');
+      EventBus.$emit(UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      EventBus.$emit(UPDATE_TITLE, 'generic.errors.internetConnectionError');
     }
   },
 };

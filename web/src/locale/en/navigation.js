@@ -37,16 +37,25 @@ export default {
     prescriptions: 'Prescriptions',
   },
   header: {
+    cookiesPolicy: 'cookies policy',
+    logout: 'Log out',
     menu: 'Menu',
     nhsAppOnline: 'NHS App online',
     nhsAppOnlineHomepage: 'NHS App online homepage',
     openMenu: 'Open menu',
     settings: 'Settings',
-    logout: 'Log out',
+    weHavePutCookiesOnYourDevice: 'We\'ve put some small files called cookies on your device. These are the strictly necessary cookies needed to make the NHS App work.',
+    weWillNotUseAnyOtherCookiesUnlessYouTurnThemOn: 'We will not use any other cookies unless you choose to turn them on, as described in our ',
   },
   footer: {
     supportLinks: 'Support links',
     crownCopyright: 'Crown copyright',
+  },
+  leavePage: {
+    leaveThisPageQuestion: 'Leave this page?',
+    ifYouEnteredInformationItWillNotBeSaved: 'If you have entered any information, it will not be saved.',
+    stayOnThisPage: 'Stay on this page',
+    leaveThisPage: 'Leave this page',
   },
   pages: {
     headers: {

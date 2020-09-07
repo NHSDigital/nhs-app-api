@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>{{ $t('glossary.headerText') }}</p>
-    <nhs-arrow-banner :banner-text="$t('glossary.linkText')"
+    <p>{{ $t('glossary.youMaySeeAbbreviationsYouAreNotFamilarWith') }}</p>
+    <nhs-arrow-banner :banner-text="$t('glossary.helpWithAbbreviations')"
                       :click-action="glossaryLinkURL"
                       :is-analytics-tracked="true"/>
   </div>

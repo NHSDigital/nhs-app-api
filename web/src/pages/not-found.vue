@@ -2,14 +2,15 @@
   <div :id="$style.serverError" class="pull-content">
     <message-dialog :override-style="overrideStyle" message-type="error">
       <message-text :is-header="true" :override-style="overrideStyle" data-purpose="msg-header">
-        {{ $t('errors.404.header') }}
+        {{ $t('generic.errors.pageNotFound') }}
       </message-text>
       <message-text data-purpose="msg-subheader">
-        {{ $t('errors.404.subheader') }}
+        {{ $t('generic.errors.ifYouEnteredCheckItWasCorrect') }}
       </message-text>
-      <message-text :is-before-footer="true" :aria-label="$t('errors.404.message.label')"
+      <message-text :is-before-footer="true"
+                    :aria-label="$t('generic.errors.youCanGoDirectlyToOrOneOneOne')"
                     data-purpose="msg-text">
-        {{ $t('errors.404.message.text') }}
+        {{ $t('generic.errors.youCanGoDirectlyToOr111') }}
       </message-text>
     </message-dialog>
   </div>

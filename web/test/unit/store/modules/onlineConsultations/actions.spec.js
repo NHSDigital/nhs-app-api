@@ -2,6 +2,7 @@ import actions from '@/store/modules/onlineConsultations/actions';
 import each from 'jest-each';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
 import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
+import i18n from '@/plugins/i18n';
 import {
   CLEAR,
   SET_STATUS,
@@ -40,7 +41,7 @@ const store = {
       getV2CdssServiceDefinitionByProviderIsValid: jest.fn(),
     },
     $options: {
-      i18n: { t: jest.fn(p => `translate_${p}`) },
+      i18n,
     },
   },
   dispatch: jest.fn(),
@@ -762,7 +763,7 @@ describe('online consultations store actions', () => {
               preventDefault: jest.fn(),
             });
 
-            expect(returnValue).toBe('translate_web.pageLeavingWarning.warning');
+            expect(returnValue).toBe('If you have entered any information, it will not be saved.');
           });
         });
       });

@@ -1,13 +1,15 @@
 <template>
   <div>
     <div :class="$style.modalBody">
-      <h2 data-sid="pageLeaveWarningHeader"> {{ $t('web.pageLeavingWarning.header') }} </h2>
-      <p data-sid="pageLeaveWarningText"> {{ $t('web.pageLeavingWarning.warning') }} </p>
+      <h2 data-sid="pageLeaveWarningHeader">
+        {{ $t('navigation.leavePage.leaveThisPageQuestion') }} </h2>
+      <p data-sid="pageLeaveWarningText">
+        {{ $t('navigation.leavePage.ifYouEnteredInformationItWillNotBeSaved') }} </p>
     </div>
     <generic-button id="modalStayOnPage"
                     :button-classes="['nhsuk-button', $style['nhsuk-button-full-width']]"
                     @click.prevent="stayOnPage">
-      {{ $t('web.pageLeavingWarning.stayButtonText') }}
+      {{ $t('navigation.leavePage.stayOnThisPage') }}
     </generic-button>
 
     <div :class="$style.leavePanel">
@@ -16,7 +18,7 @@
          :href="redirectPath"
          data-purpose="leavePage"
          @click.prevent="leavePage">
-        {{ $t('web.pageLeavingWarning.leaveButtonText') }}
+        {{ $t('navigation.leavePage.leaveThisPage') }}
       </a>
     </div>
 

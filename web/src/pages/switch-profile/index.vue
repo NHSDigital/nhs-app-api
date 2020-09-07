@@ -3,12 +3,12 @@
     <div class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-u-margin-bottom-0">
-          <strong>{{ $t('switchProfile.informationHeaders.age') }}:</strong>
+          <strong>{{ $t('profiles.age') }}:</strong>
           <span id="proxy-age"> {{ getDisplayedAgeText(currentProfile) }}</span>
         </p>
 
         <p v-if="currentProfile.gpPracticeName" class="nhsuk-u-margin-bottom-0">
-          <strong>{{ $t('switchProfile.informationHeaders.gpPractice') }}:</strong>
+          <strong>{{ $t('profiles.gpSurgery') }}:</strong>
           <span id="proxy-gp-practice"> {{ currentProfile.gpPracticeName }}</span>
         </p>
       </div>

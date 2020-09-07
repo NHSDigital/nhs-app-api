@@ -1,4 +1,5 @@
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
+import i18n from '@/plugins/i18n';
 import { createStore, mount } from '../../helpers';
 
 describe('calculate age in years and months mixin', () => {
@@ -56,7 +57,7 @@ describe('calculate age in years and months mixin', () => {
       template: '<div></div>',
       mixins: [CalculateAgeInMonthsAndYears],
     };
-    wrapper = mount(component, { $store });
+    wrapper = mount(component, { $store, mountOpts: { i18n } });
   });
 
   it('mixin returns the correct label for the age of the user less than one month old', () => {
@@ -64,7 +65,7 @@ describe('calculate age in years and months mixin', () => {
     result = wrapper.vm.getDisplayedAgeText($store.state.linkedAccounts.items[0]);
 
     // assert
-    expect(result).toBe('translate_linkedProfiles.ageLabels.lessThanOneMonth');
+    expect(result).toBe('Less than 1 month old');
   });
 
   it('mixin returns the correct label for the age of the user one month old', () => {
@@ -72,7 +73,7 @@ describe('calculate age in years and months mixin', () => {
     result = wrapper.vm.getDisplayedAgeText($store.state.linkedAccounts.items[1]);
 
     // assert
-    expect(result).toBe('1translate_linkedProfiles.ageLabels.oneMonth');
+    expect(result).toBe('1 month old');
   });
 
   it('mixin returns the correct label for the age of the user more than one month old but less than one year', () => {
@@ -80,7 +81,7 @@ describe('calculate age in years and months mixin', () => {
     result = wrapper.vm.getDisplayedAgeText($store.state.linkedAccounts.items[2]);
 
     // assert
-    expect(result).toBe('8translate_linkedProfiles.ageLabels.greaterThanOneMonthLessThan1Year');
+    expect(result).toBe('8 months old');
   });
 
   it('mixin returns the correct label for the age of the user that is one year old', () => {
@@ -88,7 +89,7 @@ describe('calculate age in years and months mixin', () => {
     result = wrapper.vm.getDisplayedAgeText($store.state.linkedAccounts.items[3]);
 
     // assert
-    expect(result).toBe('1translate_linkedProfiles.ageLabels.oneYear');
+    expect(result).toBe('1 year old');
   });
 
   it('mixin returns the correct label for the age of the user that is more than 1 years old', () => {
@@ -96,7 +97,7 @@ describe('calculate age in years and months mixin', () => {
     result = wrapper.vm.getDisplayedAgeText($store.state.linkedAccounts.items[4]);
 
     // assert
-    expect(result).toBe('20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+    expect(result).toBe('20 years old');
   });
 
   it('mixin returns the correct label for the age of the user that is invalid', () => {

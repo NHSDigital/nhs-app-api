@@ -3,7 +3,7 @@
        data-sid="welcome-info-proxy">
     <p class="nhsuk-u-margin-bottom-0">
       <strong>
-        {{ $t('homeProxyMode.informationHeaders.age') }}:
+        {{ $t('home.age') }}:
       </strong>
       <span data-sid="proxy-user-age">
         {{ proxyAge }}
@@ -13,7 +13,7 @@
 
     <p>
       <strong>
-        {{ $t('homeProxyMode.informationHeaders.gpSurgery') }}:
+        {{ $t('home.gpSurgery') }}:
       </strong>
       <span data-sid="proxy-user-surgery">
         {{ proxyDetails.gpPracticeName }}

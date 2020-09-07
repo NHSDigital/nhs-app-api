@@ -77,8 +77,8 @@ export const LINKED_PROFILES_SHUTTER_MORE = {
   name: LINKED_PROFILES_SHUTTER_MORE_NAME,
   component: LinkedProfilesMoreShutterPage,
   meta: {
-    headerKey: 'linkedProfiles.shutter.more.header',
-    titleKey: 'linkedProfiles.shutter.more.header',
+    headerKey: 'profiles.shutter.more.header',
+    titleKey: 'profiles.shutter.more.header',
     crumb: breadcrumbs.LINKED_PROFILES_MORE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
@@ -91,8 +91,8 @@ export const LINKED_PROFILES_SHUTTER_SETTINGS = {
   name: LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
   component: LinkedProfilesSettingsShutterPage,
   meta: {
-    headerKey: 'linkedProfiles.shutter.settings.header',
-    titleKey: 'linkedProfiles.shutter.settings.header',
+    headerKey: 'profiles.shutter.settings.header',
+    titleKey: 'profiles.shutter.settings.header',
     crumb: breadcrumbs.LINKED_PROFILES_SETTINGS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
@@ -105,8 +105,8 @@ export const LINKED_PROFILES_SHUTTER_SYMPTOMS = {
   name: LINKED_PROFILES_SHUTTER_SYMPTOMS_NAME,
   component: LinkedProfilesSymptomsShutterPage,
   meta: {
-    headerKey: 'linkedProfiles.shutter.symptoms.header',
-    titleKey: 'linkedProfiles.shutter.symptoms.header',
+    headerKey: 'profiles.shutter.symptoms.header',
+    titleKey: 'profiles.shutter.symptoms.header',
     crumb: breadcrumbs.LINKED_PROFILES_SYMPTOMS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
@@ -121,11 +121,11 @@ export const LINKED_PROFILES_SHUTTER_APPOINTMENTS = {
   meta: {
     headerKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-      return i18n.t('linkedProfiles.shutter.appointments.header', { name: givenName });
+      return i18n.t('profiles.shutter.appointments.header', { name: givenName });
     },
     titleKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-      return i18n.t('linkedProfiles.shutter.appointments.header', { name: givenName });
+      return i18n.t('profiles.shutter.appointments.header', { name: givenName });
     },
     crumb: breadcrumbs.LINKED_PROFILES_APPOINTMENTS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
@@ -141,11 +141,11 @@ export const LINKED_PROFILES_SHUTTER_PRESCRIPTIONS = {
   meta: {
     headerKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-      return i18n.t('linkedProfiles.shutter.prescriptions.header', { name: givenName });
+      return i18n.t('profiles.shutter.prescriptions.header', { name: givenName });
     },
     titleKey: (store, i18n) => {
       const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
-      return i18n.t('linkedProfiles.shutter.prescriptions.header', { name: givenName });
+      return i18n.t('profiles.shutter.prescriptions.header', { name: givenName });
     },
     crumb: breadcrumbs.LINKED_PROFILES_PRESCRIPTIONS_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,

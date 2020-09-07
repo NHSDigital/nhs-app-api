@@ -2,20 +2,20 @@
   <message-dialog
     message-id="corona-virus-warning"
     message-type="warning"
-    :icon-text="$t('coronaVirus.title')">
+    :icon-text="$t('appointments.coronavirus.coronavirus')">
     <message-text>
-      {{ $t('coronaVirus.paragraphText1') }}
+      {{ $t('appointments.coronavirus.doNotBookIfYouThinkYouMightHave') }}
     </message-text>
     <message-text>
-      {{ $t('coronaVirus.paragraphText2') }}
+      {{ $t('appointments.coronavirus.stayAtHomeAndAvoidCloseContact') }}
     </message-text>
     <message-text>
       <analytics-tracked-tag
         href="https://111.nhs.uk/PWCorona/35fa201f-99cb-4327-b2a5-fda8fb673bf6/COVID-19/about"
-        :text="$t('coronaVirus.linkText1')"
+        :text="$t('appointments.coronavirus.useThe111CoronavirusService')"
         tag="a"
         target="_blank">
-        {{ $t('coronaVirus.linkText1') }}
+        {{ $t('appointments.coronavirus.useThe111CoronavirusService') }}
       </analytics-tracked-tag>
     </message-text>
   </message-dialog>

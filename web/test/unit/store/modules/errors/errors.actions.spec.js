@@ -57,8 +57,8 @@ describe('errors actions', () => {
       // assert
       expect(app.commit).toHaveBeenCalledWith(SET_CONNECTION_PROBLEM, true);
       expect(EventBus.$emit).toHaveBeenCalledTimes(2);
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'noConnection.header');
-      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'noConnection.header');
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'generic.errors.internetConnectionError');
     });
 
     it('will call commit but will not update the header when connection error is false', () => {

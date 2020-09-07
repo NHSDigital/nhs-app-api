@@ -7,8 +7,8 @@ import prescriptions from './apiErrorsPrescriptions';
 export default {
   pageHeader: 'Server error',
   header: 'We\'re experiencing technical difficulties',
-  reportAProblemLink: 'Report a problem',
-  referenceCode: 'Reference: {reference}',
+  reportAProblem: 'Report a problem',
+  referenceReference: 'Reference: {reference}',
   tryAgainNow: 'Try again now.',
   subheader: '',
   message: {

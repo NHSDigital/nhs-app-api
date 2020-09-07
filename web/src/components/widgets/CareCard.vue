@@ -44,7 +44,16 @@ export default {
       return urgencyClasses[this.urgency];
     },
     headingPrefix() {
-      return this.$t(`careCard.headingPrefix.${this.urgency}`);
+      switch (this.urgency) {
+        case 'nonUrgent':
+          return this.$t('generic.nonUrgentAdvice');
+        case 'urgent':
+          return this.$t('generic.urgentAdvice');
+        case 'immediate':
+          return this.$t('generic.immediateAdvice');
+        default:
+          return this.urgency;
+      }
     },
   },
 };

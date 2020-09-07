@@ -86,6 +86,12 @@ export default {
     thereIsAProblem: 'There\'s a problem',
     youHaveCancelledNamesAppointment: 'You have cancelled {name}\'s appointment.',
   },
+  coronavirus: {
+    coronavirus: 'Coronavirus',
+    doNotBookIfYouThinkYouMightHave: 'Do not book a GP appointment if you think you might have coronavirus.',
+    stayAtHomeAndAvoidCloseContact: 'Stay at home and avoid close contact with other people.',
+    useThe111CoronavirusService: 'Use the 111 coronavirus service to see if you need medical help',
+  },
   error: {
     appointmentBookingUnavailable: 'GP appointment booking unavailable',
     contactYouSurgeryToCancel: 'Contact your GP surgery to cancel',
@@ -95,6 +101,7 @@ export default {
     thereIsAProblemAppointments: 'Sorry, there is a problem - Appointments',
     thereIsAProblemLoading: 'Sorry, there is a problem with loading GP appointments',
     thereIsAProblemWithTheServiceAppointments: 'Sorry, there is a problem with the service - Appointments',
+    tryAgainNow: 'Try again now.',
     tryAgainNowOrContactUs: 'Try again now. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     tryAgainOrContactUs: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     youAreNotCurrentlyAbleToBook: 'You are not currently able to book or view GP appointments with the NHS App.',
@@ -147,6 +154,10 @@ export default {
       checkYourSymptoms: 'Check your symptoms​',
       usingNhsOnline: 'Using trusted NHS online information​',
       checkSymptoms: 'Check symptoms',
+    },
+    corona: {
+      getAdviceAboutCoronavirus: 'Get advice about coronavirus',
+      findOutWhatToDoIfYouHaveCoronavirus: 'Find out what to do if you think you have coronavirus',
     },
     helpWithSymptoms: {
       getHelpWithSymptoms: 'Get help with symptoms',

@@ -53,7 +53,8 @@ const initialiseLeaveWarnings = (store) => {
     return;
   }
 
-  const browserString = store.app.$options.i18n.t('web.pageLeavingWarning.warning');
+  const browserString
+    = store.app.$options.i18n.t('navigation.leavePage.ifYouEnteredInformationItWillNotBeSaved');
 
   window.onbeforeunload = function handleBeforeUnload(event) {
     event.preventDefault();

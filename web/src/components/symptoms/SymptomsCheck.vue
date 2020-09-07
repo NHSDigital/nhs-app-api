@@ -8,11 +8,11 @@
                  :click-param="coronaCheckerUrl"
                  :href="coronaCheckerUrl"
                  target="_blank"
-                 :text="$t('sy01.corona.subheader')"
-                 :description="$t('sy01.corona.body')"
+                 :text="$t('symptomsChecker.getAdviceAboutCoronavirus')"
+                 :description="$t('symptomsChecker.findOutWhatToDoIfYouHaveCoronavirus')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.corona.subheader',
-                   'sy01.corona.body')"/>
+                   'symptomsChecker.getAdviceAboutCoronavirus',
+                   'symptomsChecker.findOutWhatToDoIfYouHaveCoronavirus')"/>
 
       <menu-item id="btn_choices"
                  header-tag="h2"
@@ -21,11 +21,11 @@
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
-                 :text="$t('sy01.conditionsTreatments.subheader')"
-                 :description="$t('sy01.conditionsTreatments.body')"
+                 :text="$t('symptomsChecker.searchConditionsAndTreatments')"
+                 :description="$t('symptomsChecker.findTrustedNhsInformation')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.conditionsTreatments.subheader',
-                   'sy01.conditionsTreatments.body')"/>
+                   'symptomsChecker.searchConditionsAndTreatments',
+                   'symptomsChecker.findTrustedNhsInformation')"/>
 
       <menu-item id="btn_111"
                  header-tag="h2"
@@ -33,11 +33,11 @@
                  :click-param="symptomsCheckerUrl"
                  :href="symptomsCheckerUrl"
                  target="_blank"
-                 :text="$t('sy01.111.subheader')"
-                 :description="$t('sy01.111.body')"
+                 :text="$t('symptomsChecker.useNhs111Online')"
+                 :description="$t('symptomsChecker.checkIfYouNeedUrgentHelp')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.111.subheaderAriaLabel',
-                   'sy01.111.body')"/>
+                   'symptomsChecker.useNhsOneOneOneOnline',
+                   'symptomsChecker.checkIfYouNeedUrgentHelp')"/>
 
       <menu-item v-if="loggedIn && isCdssAdvice && isProofLevel9"
                  id="btn_gpAdvice"
@@ -45,11 +45,11 @@
                  data-purpose="text_link"
                  :click-func="navigate"
                  :href="gpAdviceConditionsPath"
-                 :text="$t('sy01.askGp.forAdvice')"
-                 :description="$t('sy01.askGp.consultThroughOnlineForm')"
+                 :text="$t('symptomsChecker.askYourGpForAdvice')"
+                 :description="$t('symptomsChecker.consultThroughOnlineForm')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.askGp.forAdvice',
-                   'sy01.askGp.consultThroughOnlineForm')"/>
+                   'symptomsChecker.askYourGpForAdvice',
+                   'symptomsChecker.consultThroughOnlineForm')"/>
     </menu-item-list>
   </div>
 </template>

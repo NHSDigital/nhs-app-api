@@ -2,14 +2,14 @@
   <yellow-banner id="corona-virus-banner" :should-be-floating="shouldBeFloating">
     <analytics-tracked-tag
       :class="$style['banner']"
-      :text="$t('coronaVirusBanner.header')"
+      :text="$t('layout.coronavirus.coronavirusCovid19')"
       href="https://www.nhs.uk/conditions/coronavirus-covid-19/"
       tag="a"
       target="_blank">
       <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
                 nhsuk-u-margin-bottom-0 nhsuk-body-s">
-        <strong>{{ $t('coronaVirusBanner.header') }}</strong>
-        {{ $t('coronaVirusBanner.text') }}
+        <strong>{{ $t('layout.coronavirus.coronavirusCovid19') }}</strong>
+        {{ $t('layout.coronavirus.getInformationAboutCoronvirus') }}
       </p>
     </analytics-tracked-tag>
   </yellow-banner>

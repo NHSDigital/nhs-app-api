@@ -2,14 +2,14 @@
   <div>
     <div :class="$style.modalBody">
       <p data-sid="warningDurationInformation" :class="$style.warningHeader">
-        {{ $tc('web.sessionExpiry.warningDurationInformation',
+        {{ $tc('generic.errors.forSecurityReasonsYouWillBeLoggedOutInMinutes',
                sessionExpiryInMinutes, {time: sessionExpiryInMinutes}) }}
       </p>
     </div>
     <generic-button id="modalExtendSession"
                     :button-classes="['nhsuk-button', $style['nhsuk-button-full-width']]"
                     @click.prevent="extendSession">
-      {{ $t('web.sessionExpiry.warningGetMoreTime') }}
+      {{ $t('generic.errors.stayLoggedIn') }}
     </generic-button>
 
     <div :class="$style.logoutPanel">
@@ -18,7 +18,7 @@
          :href="logoutPath"
          data-purpose="logout"
          @click.prevent="logout">
-        {{ $t('web.sessionExpiry.warningLogOut') }}
+        {{ $t('generic.logOut') }}
       </a>
     </div>
 

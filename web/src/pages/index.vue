@@ -60,7 +60,7 @@ export default {
       return this.$store.getters['session/currentProfile'];
     },
     greetingMessage() {
-      const message = this.$t('homeLoggedIn.welcome');
+      const message = this.$t('home.welcome');
       if (this.isProxying) {
         const { fullName } = this.currentProfile;
         return `${message}, ${fullName}`;

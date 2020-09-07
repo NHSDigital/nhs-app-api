@@ -30,7 +30,7 @@
       id="btn-switch-profile"
       :button-classes="['nhsuk-button', 'nhsuk-u-margin-top-3']"
       @click.stop.prevent="switchProfileButtonClicked">
-      {{ $t('linkedProfiles.switchToMyProfileButton') }}
+      {{ $t('profiles.switchToMyProfile') }}
     </generic-button>
   </div>
 </template>
@@ -72,40 +72,40 @@ export default {
   mounted() {
     const featureName = this.feature;
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.subHeader`)) {
-      this.subHeader = this.$t(`linkedProfiles.shutter.${featureName}.subHeader`)
+    if (this.$te(`profiles.shutter.${featureName}.subHeader`)) {
+      this.subHeader = this.$t(`profiles.shutter.${featureName}.subHeader`)
         .replace('{name}', this.givenName);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.summary`)) {
-      this.summaryText = this.$t(`linkedProfiles.shutter.${featureName}.summary`)
+    if (this.$te(`profiles.shutter.${featureName}.summary`)) {
+      this.summaryText = this.$t(`profiles.shutter.${featureName}.summary`)
         .replace('{name}', this.givenName);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.summaryLabel`)) {
-      this.summaryLabelText = this.$t(`linkedProfiles.shutter.${featureName}.summaryLabel`)
+    if (this.$te(`profiles.shutter.${featureName}.summaryLabel`)) {
+      this.summaryLabelText = this.$t(`profiles.shutter.${featureName}.summaryLabel`)
         .replace('{name}', this.givenName);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.switch`)) {
-      this.switchText = this.$t(`linkedProfiles.shutter.${featureName}.switch`);
+    if (this.$te(`profiles.shutter.${featureName}.switch`)) {
+      this.switchText = this.$t(`profiles.shutter.${featureName}.switch`);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.header`)) {
-      this.coronaVirusHeaderText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.header`)
+    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.header`)) {
+      this.coronaVirusHeaderText = this.$t(`profiles.shutter.${featureName}.coronaVirus.header`)
         .replace('{name}', this.givenName);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.body`)) {
-      this.coronaVirusBodyText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.body`);
+    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.body`)) {
+      this.coronaVirusBodyText = this.$t(`profiles.shutter.${featureName}.coronaVirus.body`);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.link`)) {
-      this.coronaVirusLinkText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.link`);
+    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.link`)) {
+      this.coronaVirusLinkText = this.$t(`profiles.shutter.${featureName}.coronaVirus.link`);
     }
 
-    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.linkLabel`)) {
-      this.coronaVirusLinkLabelText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.linkLabel`);
+    if (this.$te(`profiles.shutter.${featureName}.coronaVirus.linkLabel`)) {
+      this.coronaVirusLinkLabelText = this.$t(`profiles.shutter.${featureName}.coronaVirus.linkLabel`);
     }
   },
   methods: {

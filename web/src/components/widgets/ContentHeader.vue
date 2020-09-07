@@ -27,7 +27,7 @@
            @keypress.enter="proxyBannerClicked">
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
-            {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
+            {{ $t('profiles.actingOnBehalfOf') }}
             <strong>{{ actingAsPersonName }}</strong>
           </p>
         </a>

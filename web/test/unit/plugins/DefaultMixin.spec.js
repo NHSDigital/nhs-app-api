@@ -100,7 +100,7 @@ describe('mixins', () => {
               noJs: {
                 flashMessage: {
                   show: true,
-                  key: 'linkedProfiles.lossProxyError',
+                  key: 'profiles.itMayNotBePossibleToProxyRightNow',
                   type: 'error',
                 },
               },

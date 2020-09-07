@@ -2,7 +2,7 @@
   <generic-button id="switch-profile-button"
                   :button-classes="['nhsuk-button', 'nhsuk-button--primary']"
                   @click.stop.prevent="switchProfileButtonClicked">
-    {{ $t('switchProfile.switchToMyProfileButton') }}
+    {{ $t('profiles.switchToMyProfile') }}
   </generic-button>
 </template>
 

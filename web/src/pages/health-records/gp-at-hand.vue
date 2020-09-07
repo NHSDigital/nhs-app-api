@@ -2,8 +2,8 @@
   <div v-if="showTemplate">
 
     <gp-at-hand-content
-      :header-tag="'gp_at_hand.myRecord.headerTag'"
-      :content-tag="'gp_at_hand.myRecord.contentTag'" />
+      :header-tag="'gpAtHand.myRecord.headerTag'"
+      :content-tag="'gpAtHand.myRecord.contentTag'" />
 
   </div>
 </template>

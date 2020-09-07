@@ -6,9 +6,9 @@
     </div>
     <div :class="[$style.surveyContent, !open ? $style.closed : undefined]"
          data-purpose="content">
-      <p data-purpose="info" >{{ $t('surveyBar.barText') }}
+      <p data-purpose="info" >{{ $t('layout.survey.helpUsMakeThisServiceBetter') }}
         <a :href="hotJarLinkUrl" data-purpose="link" target="_blank" rel="noopener noreferrer">
-          {{ $t('surveyBar.linkText') }}</a>
+          {{ $t('layout.survey.completeOurQuickSurvey') }}</a>
       </p>
     </div>
   </div>

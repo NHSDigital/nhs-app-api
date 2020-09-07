@@ -1,6 +1,6 @@
-import each from 'jest-each';
 import CareCard from '@/components/widgets/CareCard';
-
+import each from 'jest-each';
+import i18n from '@/plugins/i18n';
 import { mount } from '../../helpers';
 
 let wrapper;
@@ -11,6 +11,9 @@ const mountComponent = ({ slot = '', urgency = undefined } = {}) => {
     propsData: {
       heading: 'Test Care Card Heading',
       urgency,
+    },
+    mountOpts: {
+      i18n,
     },
   });
 };
@@ -73,13 +76,16 @@ describe('Care card', () => {
       const heading = wrapper.find('.nhsuk-care-card__heading.nhsuk-heading-m');
       expect(heading.exists()).toBe(true);
     });
-    each(['urgent', 'nonUrgent', 'immediate'])
-      .it('will contain an appropriate prefix for accessibility', (urgency) => {
-        mountComponent({ urgency });
-        const prefixSpan = wrapper
-          .find('.nhsuk-care-card__heading.nhsuk-heading-m')
-          .element.firstChild.firstChild;
-        expect(prefixSpan.innerHTML).toEqual(`translate_careCard.headingPrefix.${urgency}`);
-      });
+    each([
+      { urgency: 'urgent', prefix: 'Urgent advice:' },
+      { urgency: 'nonUrgent', prefix: 'Non-urgent advice:' },
+      { urgency: 'immediate', prefix: 'Immediate advice:' },
+    ]).it('will contain an appropriate prefix for accessibility', ({ urgency, prefix }) => {
+      mountComponent({ urgency });
+      const prefixSpan = wrapper
+        .find('.nhsuk-care-card__heading.nhsuk-heading-m')
+        .element.firstChild.firstChild;
+      expect(prefixSpan.innerHTML).toEqual(prefix);
+    });
   });
 });

@@ -1,10 +1,9 @@
+import i18n from '@/plugins/i18n';
 import LinkedProfileIndex from '@/pages/linked-profiles/index';
 import { LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
-import { create$T, createStore, mount } from '../../helpers';
-
-const $t = create$T();
+import { createStore, mount } from '../../helpers';
 
 describe('linked profile is there', () => {
   let $store;
@@ -32,7 +31,7 @@ describe('linked profile is there', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(LinkedProfileIndex, { $store, $t });
+  const mountPage = () => mount(LinkedProfileIndex, { $store, mountOpts: { i18n } });
 
   describe('show linked profile links', () => {
     let linkedProfileMenuItem;
@@ -54,18 +53,18 @@ describe('linked profile is there', () => {
     it('first linked user name and age is visible', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-0');
       expect(linkedProfileMenuItem.exists()).toBe(true);
-      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 0. 20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 0. 20 years old');
       expect(linkedProfileMenuItem.text()).toContain('user 0');
-      expect(wrapper.find('#linked-account-age-0').text()).toEqual('20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+      expect(wrapper.find('#linked-account-age-0').text()).toEqual('20 years old');
     });
 
     it('second linked user name and dob is visible', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-1');
 
       expect(linkedProfileMenuItem.exists()).toBe(true);
-      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 1. 42translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 1. 42 years old');
       expect(linkedProfileMenuItem.text()).toContain('user 1');
-      expect(wrapper.find('#linked-account-age-1').text()).toEqual('42translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
+      expect(wrapper.find('#linked-account-age-1').text()).toEqual('42 years old');
     });
 
     it('should navigate when specific linked profile is clicked', () => {

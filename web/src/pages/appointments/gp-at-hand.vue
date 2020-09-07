@@ -1,8 +1,8 @@
 <template>
   <div v-if="showTemplate">
     <gp-at-hand-content
-      header-tag="gp_at_hand.appointments.headerTag"
-      content-tag="gp_at_hand.appointments.contentTag"/>
+      header-tag="gpAtHand.appointments.headerTag"
+      content-tag="gpAtHand.appointments.contentTag"/>
   </div>
 </template>
 

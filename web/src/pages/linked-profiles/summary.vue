@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <div v-if="showSummaryDetails" class="nhsuk-do-dont-list nhsuk-u-margin-top-3">
           <h2 :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
-            {{ $t('linkedProfiles.featuresOnBehalfOf.text')
+            {{ $t('profiles.servicesYouCanAccessForName')
               .replace('{fullName}', linkedAccount.fullName ) }}
           </h2>
           <ul v-for="item in featuresOnBehalfOf"
@@ -18,7 +18,7 @@
           </ul>
         </div>
         <p v-else :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
-          {{ $t('linkedProfiles.featuresNoSummary')
+          {{ $t('profiles.toAccessServicesForNameYouNeedToUseTheirProfile')
             .replace('{fullName}', linkedAccount.fullName ) }}
         </p>
         <generic-button id="btn-switch-profile"
@@ -53,15 +53,15 @@ export default {
     featuresOnBehalfOf() {
       return [{
         id: 'book-an-appointment',
-        text: 'linkedProfiles.featuresOnBehalfOf.bookAnAppointment',
+        text: 'profiles.bookAGpAppointment',
         canDo: this.linkedAccount.canBookAppointment,
       }, {
         id: 'order-repeat-prescription',
-        text: 'linkedProfiles.featuresOnBehalfOf.orderRepeatPrescription',
+        text: 'profiles.orderARepeatPrescription',
         canDo: this.linkedAccount.canOrderRepeatPrescription,
       }, {
         id: 'view-medical-record',
-        text: 'linkedProfiles.featuresOnBehalfOf.viewMedicalRecord',
+        text: 'profiles.viewTheirGpHealthRecord',
         canDo: this.linkedAccount.canViewMedicalRecord,
       }];
     },
@@ -70,8 +70,8 @@ export default {
     },
     switchButtonText() {
       return this.displayPersonalisedButton
-        ? this.$t('linkedProfiles.switchProfileButton', { givenName: this.linkedAccount.givenName })
-        : this.$t('linkedProfiles.switchProfileButtonWithoutName');
+        ? this.$t('profiles.switchToNamesProfile', { givenName: this.linkedAccount.givenName })
+        : this.$t('profiles.switchToThisProfile');
     },
     showSummaryDetails() {
       return this.linkedAccount.showSummary;

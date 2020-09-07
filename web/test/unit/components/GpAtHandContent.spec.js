@@ -1,7 +1,6 @@
 import GpAtHandContent from '@/components/GpAtHandContent';
-import { create$T, createStore, mount } from '../helpers';
-
-const $tMock = create$T();
+import i18n from '@/plugins/i18n';
+import { createStore, mount } from '../helpers';
 
 describe('GpAtHandContent.vue', () => {
   let $store;
@@ -21,25 +20,16 @@ describe('GpAtHandContent.vue', () => {
     desktopWeb: 'desktopWeb',
   };
   const propsData = {
-    contentTag: 'gp_at_hand.appointments.contentTag',
-    headerTag: 'gp_at_hand.appointments.headerTag',
+    contentTag: 'gpAtHand.appointments.contentTag',
+    headerTag: 'gpAtHand.appointments.headerTag',
   };
 
   const mountPage = () => mount(GpAtHandContent, {
     propsData,
     $store,
     $style,
-    $t: (key) => {
-      if (key === 'gp_at_hand.content.header') {
-        return 'Sorry, you cannot {headerTag} through the NHS App';
-      }
-      if (key === 'gp_at_hand.appointments.headerTag') {
-        return 'book GP appointments';
-      }
-      if (key === 'gp_at_hand.appointments.contentTag') {
-        return 'book appointments';
-      }
-      return $tMock(key);
+    mountOpts: {
+      i18n,
     },
   });
 

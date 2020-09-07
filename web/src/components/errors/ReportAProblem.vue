@@ -1,11 +1,11 @@
 <template>
   <div class="nhsuk-u-margin-bottom-3 nhsuk-u-font-size-16">
     <error-link class="nhsuk-u-margin-bottom-0 nhsuk-u-font-size-16"
-                from="errors.reportAProblemLink"
+                from="apiErrors.reportAProblem"
                 :action="contactUsUrl"
                 target="_blank"
                 :query-param="referenceParam"/>
-    {{ this.$t('errors.referenceCode', { reference }) }}
+    {{ this.$t('apiErrors.referenceReference', { reference }) }}
   </div>
 </template>
 <script>

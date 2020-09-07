@@ -51,8 +51,8 @@ export const NOT_FOUND = {
   name: NOT_FOUND_NAME,
   component: NotFoundPage,
   meta: {
-    headerKey: 'errors.404.header',
-    titleKey: 'errors.404.pageTitle',
+    headerKey: 'generic.errors.pageNotFound',
+    titleKey: 'generic.errors.pageNotFound',
     crumb: {},
     helpUrl: baseNhsAppHelpUrl,
   },

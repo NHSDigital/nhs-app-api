@@ -38,7 +38,7 @@
       </error-container>
       <error-container v-else-if="error.status===500 || error.status===502" :id="generateErrorId()">
         <error-title title="appointments.error.thereIsAProblemLoading"/>
-        <error-paragraph from="errors.tryAgainNow"/>
+        <error-paragraph from="appointments.error.tryAgainNow"/>
         <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
         <error-button from="generic.tryAgain" @click="$router.go()" />
         <report-a-problem :reference="error.serviceDeskReference"/>

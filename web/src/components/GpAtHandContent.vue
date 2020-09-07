@@ -4,7 +4,7 @@
       {{ headerText }}
     </h2>
     <div data-purpose="info" :class="$style.info">
-      <p v-for="(content, index) in $t('gp_at_hand.content.paragraphs')"
+      <p v-for="(content, index) in $t('gpAtHand.content.paragraphs')"
          :key="index">
         {{ replaceContentTag(content.prefix) }}
         <analytics-tracked-tag
@@ -44,7 +44,7 @@ export default {
     },
     headerText() {
       const headerTagText = this.$t(this.headerTag);
-      return this.$t('gp_at_hand.content.header').replace('{headerTag}', headerTagText);
+      return this.$t('gpAtHand.content.header').replace('{headerTag}', headerTagText);
     },
   },
   methods: {

@@ -1,12 +1,11 @@
+import i18n from '@/plugins/i18n';
 import LinkedProfileSummary from '@/pages/linked-profiles/summary';
 import { INDEX_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
 import '@/plugins/filters';
 import * as dependency from '@/lib/utils';
-import { create$T, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 dependency.redirectTo = jest.fn();
-
-const $t = create$T();
 
 describe('linked profile is there', () => {
   let $store;
@@ -34,7 +33,7 @@ describe('linked profile is there', () => {
       },
     }, customState);
 
-  const mountPage = () => mount(LinkedProfileSummary, { $store, $t, $state });
+  const mountPage = () => mount(LinkedProfileSummary, { $store, $state, mountOpts: { i18n } });
 
   const createPageWrapper = async () => {
     wrapper = mountPage();
@@ -161,7 +160,7 @@ describe('linked profile is there', () => {
       await createPageWrapper();
       const button = wrapper.find('#btn-switch-profile');
       expect(button.exists()).toEqual(true);
-      expect(button.text()).toEqual('translate_linkedProfiles.switchProfileButtonWithoutName');
+      expect(button.text()).toEqual('Switch to this profile');
     });
 
     it('will display displayPersonalisedButton when displayPersonalizedContent is true', async () => {
@@ -172,6 +171,7 @@ describe('linked profile is there', () => {
             selectedLinkedAccount: {
               displayPersonalizedContent: true,
               showSummary: true,
+              givenName: 'Bob',
             },
           },
         }),
@@ -180,7 +180,7 @@ describe('linked profile is there', () => {
       wrapper = await mountPage();
       const button = wrapper.find('#btn-switch-profile');
       expect(button.exists()).toEqual(true);
-      expect(button.text()).toEqual('translate_linkedProfiles.switchProfileButton');
+      expect(button.text()).toEqual('Switch to Bob\'s profile');
     });
   });
 });

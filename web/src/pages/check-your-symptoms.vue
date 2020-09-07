@@ -1,7 +1,8 @@
 <template>
   <nhsuk-layout>
     <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
-      <header-slim v-if="$store.state.device.isNativeApp"> {{ $t('sy01.pageHeader') }}</header-slim>
+      <header-slim v-if="$store.state.device.isNativeApp">
+        {{ $t('symptomsChecker.symptoms') }}</header-slim>
       <div>
         <symptoms-check/>
       </div>

@@ -2,18 +2,20 @@
   <div v-if="showError"
        :class="[!isNativeApp && $style.desktopWeb, 'pull-content']">
     <message-dialog message-type="error">
-      <message-text>{{ this.$t('noConnection.subheader') }}</message-text>
-      <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
+      <message-text>
+        {{ $t('generic.errors.thereIsAProblemWithYourInternetConnection') }}</message-text>
+      <message-text
+        :aria-label="$t('generic.errors.checkYourConnectionAndTryAgainOneOneOne')">
+        {{ $t('generic.errors.checkYourConnectionAndTryAgain111') }}</message-text>
     </message-dialog>
     <generic-button :class="['nhsuk-button']"
                     @click.stop.prevent="onRetryButtonClicked">
-      {{ $t('noConnection.retryButtonText') }}
+      {{ $t('generic.tryAgain') }}
     </generic-button>
   </div>
 </template>
 
 <script>
-import isObject from 'lodash/fp/isObject';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -27,28 +29,12 @@ export default {
     MessageDialog,
     MessageText,
   },
-  props: {
-    withTitle: {
-      type: Boolean,
-      required: false,
-      default: () => false,
-    },
-  },
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
     };
   },
   computed: {
-    message() {
-      return this.$t('noConnection.message');
-    },
-    messageLabel() {
-      return isObject(this.message) ? this.message.label : undefined;
-    },
-    messageText() {
-      return isObject(this.message) ? this.message.text : this.message;
-    },
     showError() {
       return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
     },

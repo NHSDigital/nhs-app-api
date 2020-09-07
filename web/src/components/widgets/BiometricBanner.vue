@@ -3,12 +3,12 @@
     <message-dialog :extra-classes="[$style['flash-message']]"
                     message-id="success-dialog"
                     message-type="message"
-                    :icon-text="$t('biometricBanner.header')">
+                    :icon-text="$t('home.loginOptions')">
       <message-text>
-        {{ $t('biometricBanner.message.text') }}
+        {{ $t('home.ifYourDeviceSupports') }}
       </message-text>
       <message-text>
-        <analytics-tracked-tag :text="$t('biometricBanner.message.settingsButton')">
+        <analytics-tracked-tag :text="$t('home.openSettings')">
           <generic-button
             id="btn_goToSettings"
             :button-classes="['nhsuk-button',
@@ -16,15 +16,15 @@
                               $style['nhsuk-button-full-width']]"
             tabindex="0"
             @click="goToLoginOptions">
-            {{ $t('biometricBanner.message.settingsButton') }}
+            {{ $t('home.openSettings') }}
           </generic-button>
         </analytics-tracked-tag>
         <p :class="['nhsuk-u-margin-bottom-0', $style['center']]">
           <analytics-tracked-tag id="btn_biometricBannerDismiss"
-                                 :text="$t('biometricBanner.message.dismissLink')"
+                                 :text="$t('home.dismiss')"
                                  tag="a"
                                  :click-func="dismissBiometricsBannerClicked">
-            {{ $t('biometricBanner.message.dismissLink') }}
+            {{ $t('home.dismiss') }}
           </analytics-tracked-tag>
         </p>
       </message-text>

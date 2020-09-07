@@ -16,12 +16,12 @@
         id="btn_corona"
         header-tag="h2"
         :href="coronaCheckerUrl"
-        :description="$t('sy01.corona.body')"
+        :text="$t('appointments.guidance.corona.getAdviceAboutCoronavirus')"
+        :description="$t('appointments.guidance.corona.findOutWhatToDoIfYouHaveCoronavirus')"
         target="_blank"
-        :text="$t('sy01.corona.subheader')"
         :aria-label="ariaLabelCaption(
-          'sy01.corona.subheader',
-          'sy01.corona.body')"/>
+          'appointments.guidance.corona.getAdviceAboutCoronavirus',
+          'appointments.guidance.corona.findOutWhatToDoIfYouHaveCoronavirus')"/>
       <menu-item
         v-if="isCdssAdvice"
         id="btn_gpAdvice"
@@ -46,8 +46,8 @@
         :click-func="navigate"
         :click-param="adminHelpPath"
         :aria-label="ariaLabelCaption(
-          'appointments.guidance.additionalGpServices.header',
-          'appointments.guidance.additionalGpServices.text')"/>
+          'appointments.guidance.additionalGpServices.additionalGpServices',
+          'appointments.guidance.additionalGpServices.getSickNotesAndLetters')"/>
       <menu-item
         id="btn_111"
         header-tag="h2"

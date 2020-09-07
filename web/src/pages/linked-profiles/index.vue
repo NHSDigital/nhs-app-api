@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-u-margin-bottom-3">
-          {{ $t('linkedProfiles.linkedInformation') }}
+          {{ $t('profiles.youCanAccessForTheFollowingPeople') }}
         </p>
         <menu-item-list>
           <menu-item

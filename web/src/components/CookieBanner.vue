@@ -8,13 +8,13 @@
               <generic-button id="btn_closeCookieBanner" aria-label="Close"
                               @click.prevent="onCookieBannerClicked"/>
             </div>
-            <p>{{ $t('cookieBanner.caption.line1') }}</p>
+            <p>{{ $t('navigation.header.weHavePutCookiesOnYourDevice') }}</p>
             <p>
-              {{ $t('cookieBanner.caption.line2') }}
+              {{ $t('navigation.header.weWillNotUseAnyOtherCookiesUnlessYouTurnThemOn') }}
               <a :href="cookieBannerUrl"
                  target="_blank"
                  rel="noopener noreferrer">
-                {{ $t('cookieBanner.caption.linkText') }}</a>.
+                {{ $t('navigation.header.cookiesPolicy') }}</a>.
             </p>
           </div>
         </div>
