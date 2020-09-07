@@ -24,4 +24,4 @@ spec:
   tls:
     - hosts:
         - users-{{ .Values.global.environment | replace "." "-" }}.private.{{ .Values.zone }}.{{ .Values.domain }}
-      secretName: {{ .Values.zone }}-{{ .Values.domain | replace "." "-" }}
+      secretName: private-{{ .Values.zone }}-{{ .Values.domain | replace "." "-" }}
