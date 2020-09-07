@@ -127,10 +127,9 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Then("the warning message on the Redirector page explains the service is from Patients Know Best$")
     fun assertWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This is a connected service",
-                "Your GP surgery or hospital has chosen this personal health record " +
-                        "service provided by Patients Know Best.",
-                "Find out more about personal health record services.")
+                "This service is provided by Patients Know Best",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
     }
 
     @Then("^the link to PKB View Appointments is not available on the Appointments page$")

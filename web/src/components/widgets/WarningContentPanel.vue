@@ -1,7 +1,13 @@
 <template>
   <div class="warning-content-panel">
     <div class="warning-content-panel__content">
-      <h2><slot name="header"/></h2>
+      <p class="nhsuk-body-m nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-0"
+         data-purpose="warning-pre-header">
+        <slot name="preHeader"/>
+      </p>
+      <h1 class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
+        <slot name="header"/>
+      </h1>
       <slot/>
     </div>
   </div>

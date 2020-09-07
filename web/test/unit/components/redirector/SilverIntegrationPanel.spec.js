@@ -30,10 +30,9 @@ describe('Silver Integration warning panel', () => {
   });
 
   describe('mounted', () => {
-    it('will emit UPDATE_HEADER and UPDATE_TITLE on EventBus with third party feature name', async () => {
+    it('will emit UPDATE_TITLE on EventBus with third party feature name', async () => {
       await wrapper.vm.$nextTick();
-
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'View appointments', true);
+      expect(EventBus.$emit).not.toHaveBeenCalledWith(UPDATE_HEADER);
       expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'View appointments', true);
     });
   });

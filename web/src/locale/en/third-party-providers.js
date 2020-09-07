@@ -1,9 +1,9 @@
 export default {
   warningConjunctions: {
-    heading2: 'This is a connected service',
-    paragraph: '{{ servicePurchaser }} has chosen this {{ serviceType }} provided by',
+    heading: 'This service is provided by {providerName}',
+    paragraph: '{{ servicePurchaser }} has chosen this {{ serviceType }} provider.',
     button: 'Continue',
-    linkText: 'Find out more about {{ serviceTypePlural }}.',
+    linkText: 'Find out more about {{ serviceTypePlural }}',
   },
   ers: {
     serviceId: 'ers',

@@ -7,7 +7,9 @@ open class RedirectorPage : HybridPageObject() {
 
     fun title(title: String): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "//h1[contains(text(),\"$title\")]",
+                webDesktopLocator = "//p" +
+                "[@data-purpose='warning-pre-header']" +
+                "[contains(text(),\"$title\")]",
                 androidLocator = null,
                 page = this,
                 helpfulName = title

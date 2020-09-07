@@ -28,7 +28,7 @@ Feature: Patients Know Best Appointments
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fdiary%252FlistAppointments.action'
     Then I am redirected to the redirector page with the header 'View appointments'
-    When I click the link called 'Find out more about personal health record services.' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
+    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
   Scenario: A user navigates to an external partner site and will see a warning page

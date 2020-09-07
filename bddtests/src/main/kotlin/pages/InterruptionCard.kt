@@ -35,9 +35,10 @@ class InterruptionCard(private val path: String,private val page: HybridPageObje
             )
             element!!.actOnTheElement {
                 header =
-                        it.findElement<WebElement>(By.xpath("//h2")).text
+                        it.findElement<WebElement>(By.xpath("//h1")).text
                 body =
-                        it.findElement<WebElement>(By.xpath("//p")).text
+                        it.findElement<WebElement>(
+                                By.xpath("//p[@data-purpose='silver-integration-info']")).text
                 findOutMoreLink =
                         it.findElement(By.xpath("//p/a"))
             }

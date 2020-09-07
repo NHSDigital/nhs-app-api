@@ -1,11 +1,15 @@
 <template>
   <warning-content-panel data-purpose="silver-integration-warning">
+    <template slot="preHeader">
+      {{ getWarningMessage('featureName') }}
+    </template>
     <template slot="header">
-      {{ $t('thirdPartyProviders.warningConjunctions.heading2') }}
+      {{ $t('thirdPartyProviders.warningConjunctions.heading', { providerName: providerName() }) }}
     </template>
     <template>
-      <p class="nhsuk-body-m">{{ paragraphText() }}
-        <strong>{{ providerName() }}</strong>.
+      <p class="nhsuk-body-m"
+         data-purpose="silver-integration-info">
+        {{ paragraphText() }}
       </p>
 
       <a :href="redirectPath"
@@ -28,7 +32,7 @@
 <script>
 import WarningContentPanel from '@/components/widgets/WarningContentPanel';
 import { getPathAndQuery, getThirdPartyLocaleText } from '@/lib/utils';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'SilverIntegrationPanel',
@@ -56,8 +60,6 @@ export default {
   },
   async mounted() {
     const featureName = this.getWarningMessage('featureName');
-
-    EventBus.$emit(UPDATE_HEADER, featureName, true);
     EventBus.$emit(UPDATE_TITLE, featureName, true);
   },
   methods: {

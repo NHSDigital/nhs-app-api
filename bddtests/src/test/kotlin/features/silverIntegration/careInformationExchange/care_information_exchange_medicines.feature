@@ -36,5 +36,5 @@ Feature: Care Information Exchange Medicines
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FmanageMedications.action%253Ftab%253Dtreatments%26brand=cie'
     Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
-    When I click the link called 'Find out more about personal health record services.' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
+    When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link

@@ -122,10 +122,9 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     @Then("the warning message on the Redirector page explains the service is from Care Information Exchange$")
     fun assertWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This is a connected service",
-                "Your GP surgery or hospital has chosen this personal health record " +
-                        "service provided by Care Information Exchange (Patients Know Best).",
-                "Find out more about personal health record services.")
+                "This service is provided by Care Information Exchange (Patients Know Best)",
+                "Your GP surgery or hospital has chosen this personal health record service provider.",
+                "Find out more about personal health record services")
     }
 
     @Then("^the link to CIE View Appointments is not available on the Appointments page$")
