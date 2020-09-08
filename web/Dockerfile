@@ -75,7 +75,8 @@ ARG APP_VERSION_TAG
 RUN echo 'VUE_APP_COMMIT_ID='$COMMIT_ID >> /app/.env
 
 RUN if [ -n "$APP_VERSION_TAG" ] ; then \
-        sed -i "s/dev_web_npm/$APP_VERSION_TAG/" package.json; \
+        dashedVersion=$(echo $APP_VERSION_TAG | sed 's/\./\-/g'); \
+        sed -i "s/dev_web_npm/${dashedVersion}/" package.json; \
     fi
 
 RUN npm run build
