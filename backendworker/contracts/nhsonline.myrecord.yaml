@@ -59,7 +59,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/MyRecordSectionResponse"
         "400":
-          $ref: '#/components/responses/BadRequest'
+          description: Bad request. A querystring parameter is not in the expected format.
         "401":
           description: User session has expired.
         "500":
@@ -133,6 +133,9 @@ paths:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
+  responses:
+    BadRequest:
+      description: Bad request. Supplied request is invalid.
   schemas:
     TestResultResponse:
       type: object

@@ -14,7 +14,7 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
     [TestClass]
-    public class AzureNotificationHubServiceExistsTests
+    public class AzureNotificationHubRegistrationServiceExistsTests
     {
         private Mock<IAzureNotificationHubClient> _mockAzureNotificationsHubClient;
         private AzureNotificationHubRegistrationService _systemUnderTest;
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockAzureNotificationsHubClient = new Mock<IAzureNotificationHubClient>();
+            _mockAzureNotificationsHubClient = new Mock<IAzureNotificationHubClient>(MockBehavior.Strict);
 
             _systemUnderTest = new AzureNotificationHubRegistrationService(_mockAzureNotificationsHubClient.Object,
                 new Mock<IInstallationFactory>().Object,

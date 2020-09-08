@@ -76,9 +76,9 @@ describe('notifications actions', () => {
     postSuccess = true;
     commit = jest.fn();
     $http = {
-      deleteV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(deleteSuccess)),
-      getV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
-      postV1ApiUsersDevices: jest.fn().mockImplementation(() => promiseReturn(postSuccess)),
+      deleteV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(deleteSuccess)),
+      getV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
+      postV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(postSuccess)),
     };
     actions.app = {
       get $http() {
@@ -110,8 +110,8 @@ describe('notifications actions', () => {
           await actions.authorised({ commit, state }, deviceResponse);
         });
 
-        it('will call the `getV1ApiUsersDevices` endpoint', () => {
-          expect($http.getV1ApiUsersDevices).toBeCalledWith(
+        it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
+          expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
             { devicePns: deviceResponse.devicePns },
           );
         });
@@ -129,8 +129,8 @@ describe('notifications actions', () => {
           await actions.authorised({ commit, state }, deviceResponse);
         });
 
-        it('will call the `getV1ApiUsersDevices` endpoint', () => {
-          expect($http.getV1ApiUsersDevices).toBeCalledWith(
+        it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
+          expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
             { devicePns: deviceResponse.devicePns },
           );
         });
@@ -154,8 +154,8 @@ describe('notifications actions', () => {
           await actions.authorised({ commit, state }, deviceResponse);
         });
 
-        it('will call the `postV1ApiUsersDevices` endpoint', () => {
-          expect($http.postV1ApiUsersDevices).toBeCalledWith({
+        it('will call the `postV1ApiUsersMeDevices` endpoint', () => {
+          expect($http.postV1ApiUsersMeDevices).toBeCalledWith({
             addDeviceRequest: {
               devicePns: deviceResponse.devicePns,
               deviceType: deviceResponse.deviceType,
@@ -186,8 +186,8 @@ describe('notifications actions', () => {
           await actions.authorised({ commit, state }, deviceResponse);
         });
 
-        it('will call the `deleteV1ApiUsersDevices` endpoint', () => {
-          expect($http.deleteV1ApiUsersDevices).toBeCalledWith(
+        it('will call the `deleteV1ApiUsersMeDevices` endpoint', () => {
+          expect($http.deleteV1ApiUsersMeDevices).toBeCalledWith(
             { devicePns: deviceResponse.devicePns },
           );
         });

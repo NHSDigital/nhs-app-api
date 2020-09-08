@@ -82,6 +82,20 @@ namespace NHSOnline.Backend.UsersApi.Registrations
             }
         }
 
+        public async Task<FindRegistrationsResult> Find(string nhsLoginId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                return await _notificationService.Find(nhsLoginId);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<DeleteRegistrationResult> DeleteRegistration(string devicePns, AccessToken accessToken)
         {
             try

@@ -32,7 +32,6 @@ open class RequestBuilder protected constructor(private var request: HttpRequest
 
         fun put(path: String): RequestBuilderWithBody {
             return RequestBuilderWithBody(HttpPut(path))
-
         }
     }
 

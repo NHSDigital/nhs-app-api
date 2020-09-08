@@ -4,6 +4,7 @@ import net.serenitybdd.core.Serenity
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
+import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
 
 class NotificationsApi {
@@ -35,6 +36,19 @@ class NotificationsApi {
                     .userDevices
                     .delete(pnsTokenToDelete, authToken)
             PushNotificationsSerenityHelpers.DELETE_RESPONSE.set(response)
+        }
+
+        fun getRegistrationIds(nhsloginId: String) {
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .userDevices
+                    .getRegistrations(nhsloginId, true)
+            PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.set(response)
+        }
+
+        fun postNotification(nhsloginId: String, notification: NotificationSendRequest) {
+            Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .userDevices
+                    .postNotification(nhsloginId, notification, true)
         }
     }
 }

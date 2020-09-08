@@ -73,8 +73,12 @@ paths:
     $ref: ./nhsonline.assertedloginidentity.yaml#/paths/~1asserted-login-identity
   /v1/patient/authorization/access-token/refresh:
     $ref: ./nhsonline.authorization.yaml#/paths/~1access-token~1refresh
-  /v1/api/users/devices:
-    $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
+  /v1/api/users/me/devices:
+    $ref: ./nhsonline.users.yaml#/paths/~1users~1me~1devices
+  /v1/api/users/{nhsLoginId}/devices/registrations:
+    $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1registrations
+  /v1/api/users/{nhsLoginId}/devices/notifications:
+    $ref: ./nhsonline.users.yaml#/paths/~1users~1{nhsLoginId}~1devices~1notifications
   /v1/api/users/me/messages:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1me~1messages
   /v1/api/users/me/messages/{messageId}:

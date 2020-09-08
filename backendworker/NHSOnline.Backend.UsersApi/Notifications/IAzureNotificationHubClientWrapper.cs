@@ -13,5 +13,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
         Task<bool> RegistrationExistsAsync(string registrationId);
         Task<IEnumerable<RegistrationDescription>> GetRegistrationsByChannelAsync(string devicePns,
             int installationRecordMaxResults);
+        Task<IEnumerable<RegistrationDescription>> GetRegistrationsByTagAsync(string tag, int maxRecords);
+        Task<NotificationOutcome> SendTemplateNotificationAsync(IDictionary<string, string> properties,
+            string tagExpression);
     }
 }

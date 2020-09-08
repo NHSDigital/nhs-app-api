@@ -111,6 +111,7 @@ class ResponseStatusCodeSteps {
     private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(
             "ok" to HttpStatus.SC_OK,
             "created" to HttpStatus.SC_CREATED,
+            "accepted" to HttpStatus.SC_ACCEPTED,
             "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
             "bad request" to HttpStatus.SC_BAD_REQUEST,
             "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,

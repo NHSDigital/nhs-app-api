@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Azure.NotificationHubs;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 InstallationId = Guid.NewGuid().ToString(),
                 PushChannel = devicePns,
-                Tags = new List<string> { $"{Constants.UsersConstants.NhsLoginIdTagPrefix}{Constants.UsersConstants.TagSeparator}{nhsLoginId}" },
+                Tags = new List<string> { NhsLoginTagGenerator.Generate(nhsLoginId) },
                 Platform = GetNotificationPlatform(deviceType),
                 Templates = GetNotificationTemplates(deviceType, nhsLoginId)
             };

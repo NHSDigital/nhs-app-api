@@ -31,10 +31,11 @@ class NotificationsFactory {
         return patientToUse
     }
 
-    fun setUpAlternativeUser(): Patient {
+    fun setUpAlternativeUser(supplier: Supplier? = null): Patient {
         // Use SJR generated patient, but then change subject and access token based on that,
         // to create a new nhsLoginId and differentiate from the primary patient
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(SerenityHelpers.getGpSupplier(),
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                supplier,
                 SJRJourneyType.NOTIFICATIONS_ENABLED)
         patient.subject = UUID.randomUUID().toString()
         patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()

@@ -1,6 +1,6 @@
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
-    internal class NotificationRegistrationItem
+    public class NotificationRegistrationItem
     {
         public enum RegistrationType
         {

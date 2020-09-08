@@ -20,7 +20,7 @@ using RegistrationResult = NHSOnline.Backend.UsersApi.Notifications.Registration
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
     [TestClass]
-    public class AzureNotificationHubServiceRegisterTests
+    public class AzureNotificationHubRegistrationServiceRegisterTests
     {
         private Mock<IAzureNotificationHubClient> _mockAzureNotificationsHubClient;
         private Mock<IInstallationFactory> _mockInstallationFactory;
@@ -36,10 +36,10 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockAzureNotificationsHubClient = new Mock<IAzureNotificationHubClient>();
+            _mockAzureNotificationsHubClient = new Mock<IAzureNotificationHubClient>(MockBehavior.Strict);
 
             _installation = new Installation();
-            _mockInstallationFactory = new Mock<IInstallationFactory>();
+            _mockInstallationFactory = new Mock<IInstallationFactory>(MockBehavior.Strict);
 
             var mockLogger = new Mock<ILogger<AzureNotificationHubRegistrationService>>();
             var accessTokenString = JwtToken.Generate(new[]

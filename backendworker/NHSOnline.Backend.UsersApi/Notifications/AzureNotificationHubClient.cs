@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs;
+using Notification = NHSOnline.Backend.UsersApi.Notifications.Models.Notification;
 
 namespace NHSOnline.Backend.UsersApi.Notifications
 {
@@ -28,14 +29,14 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task<bool> RegistrationExists(string registrationId) => _hubClientWrapper.RegistrationExistsAsync(registrationId);
 
-        public async Task<List<NotificationRegistrationItem>> FindInstallationIdentifiers(string devicePns)
+        public async Task<ICollection<NotificationRegistrationItem>> FindInstallationIdentifiers(string devicePns)
         {
             var foundRegistrations = await _hubClientWrapper.GetRegistrationsByChannelAsync(devicePns, InstallationRecordMaxResults);
             var existingRegistrations = foundRegistrations as RegistrationDescription[] ?? foundRegistrations.ToArray();
 
             if (existingRegistrations.Length == 0)
             {
-                return new List<NotificationRegistrationItem>();
+                return  Array.Empty<NotificationRegistrationItem>();
             }
 
             var installTags = existingRegistrations.SelectMany(rd => rd.Tags)
@@ -54,7 +55,33 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                     Type = NotificationRegistrationItem.RegistrationType.Registration
                 });
 
-            return installationItems.Union(registrationItems).ToList();
+            return installationItems.Union(registrationItems).ToArray();
+        }
+
+        public async Task<ICollection<string>> FindInstallationIdentifiersByNhsLoginId(string nhsLoginId)
+        {
+            var nhsLoginIdTag = NhsLoginTagGenerator.Generate(nhsLoginId);
+            var foundRegistrations = await _hubClientWrapper.GetRegistrationsByTagAsync(nhsLoginIdTag, InstallationRecordMaxResults);
+            var existingRegistrations = foundRegistrations as RegistrationDescription[] ?? foundRegistrations.ToArray();
+
+            if (existingRegistrations.Length == 0)
+            {
+                return Array.Empty<string>();
+            }
+
+            var installTags = existingRegistrations.SelectMany(rd => rd.Tags)
+                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase));
+
+            return installTags
+                .Select(t => t.Substring(InstallationTagName.Length + 1, InstallationIdGuidLength))
+                .Distinct()
+                .ToArray();
+        }
+
+        public async Task SendNotification(string nhsLoginId, Notification notification)
+        {
+            var nhsLoginIdTag = NhsLoginTagGenerator.Generate(nhsLoginId);
+            await _hubClientWrapper.SendTemplateNotificationAsync(notification.ToDictionary(), nhsLoginIdTag);
         }
     }
 }

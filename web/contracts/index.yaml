@@ -84,6 +84,7 @@
                             enum: 
                               - "None"
                               - "NhsApp"
+                              - "NhsLogin"
                               - "SilverThirdParty"
                           menuTab: 
                             type: "string"
@@ -94,11 +95,15 @@
                               - "Prescriptions"
                               - "MyRecord"
                               - "More"
-                          viewMode: 
+                          integrationLevel: 
                             type: "string"
                             enum: 
-                              - "AppTab"
-                              - "WebView"
+                              - "Gold"
+                              - "GoldOverlay"
+                              - "GoldWithNoHeaders"
+                              - "SilverWithoutWebNavigation"
+                              - "SilverWithWebNavigation"
+                              - "Bronze"
                           showSpinner: 
                             type: "boolean"
                           showThirdPartyWarning: 
@@ -121,6 +126,7 @@
                                   enum: 
                                     - "None"
                                     - "NhsApp"
+                                    - "NhsLogin"
                                     - "SilverThirdParty"
                                 menuTab: 
                                   type: "string"
@@ -131,11 +137,15 @@
                                     - "Prescriptions"
                                     - "MyRecord"
                                     - "More"
-                                viewMode: 
+                                integrationLevel: 
                                   type: "string"
                                   enum: 
-                                    - "AppTab"
-                                    - "WebView"
+                                    - "Gold"
+                                    - "GoldOverlay"
+                                    - "GoldWithNoHeaders"
+                                    - "SilverWithoutWebNavigation"
+                                    - "SilverWithWebNavigation"
+                                    - "Bronze"
                                 showSpinner: 
                                   type: "boolean"
                                 showThirdPartyWarning: 
@@ -1717,7 +1727,7 @@
               enum: 
                 - "TestResults"
                 - "Diagnosis"
-                - "Examinations,"
+                - "Examinations"
                 - "Procedures"
         responses: 
           200: 
@@ -1733,6 +1743,8 @@
                     sectionName: 
                       type: "string"
                       description: "Name of section requested"
+          400: 
+            description: "Bad request. A querystring parameter is not in the expected format."
           401: 
             description: "User session has expired."
           500: 
@@ -5084,7 +5096,7 @@
             description: "Could not refresh token. There is a problem with an upstream request."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/api/users/devices: 
+    /v1/api/users/me/devices: 
       get: 
         security: 
           - 
@@ -5203,6 +5215,79 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/{nhsLoginId}/devices/registrations: 
+      get: 
+        tags: 
+          - "registrations"
+        summary: "Retreive device registrations"
+        description: "Retrieves a list of device registrations pertaining to the user."
+        parameters: 
+          - 
+            in: "path"
+            name: "nhsLoginId"
+            required: true
+            description: "Unique identifier of a user"
+            schema: 
+              type: "string"
+        responses: 
+          200: 
+            description: "Successful operation. Device registrations found."
+            content: 
+              application/json: 
+                schema: 
+                  type: "array"
+                  description: "Array of registrations"
+                  items: 
+                    type: "string"
+          404: 
+            description: "Registration is not found"
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
+    /v1/api/users/{nhsLoginId}/devices/notifications: 
+      post: 
+        tags: 
+          - "notifications"
+        summary: "Sends a notification"
+        description: "Sends a notification to the specified user"
+        parameters: 
+          - 
+            in: "path"
+            name: "nhsLoginId"
+            required: true
+            description: "Unique identifier of a user"
+            schema: 
+              type: "string"
+        requestBody: 
+          x-name: "NotificationSendRequest"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "title"
+                  - "body"
+                properties: 
+                  title: 
+                    type: "string"
+                  subTitle: 
+                    type: "string"
+                  body: 
+                    type: "string"
+                  url: 
+                    type: "string"
+          description: "Details of the notification to be sent"
+          required: true
+          responses: 
+            202: 
+              description: "Successfully sent"
+            400: 
+              description: "Bad request. Supplied request is invalid."
+            500: 
+              description: "An unexpected error occurred processing the request."
+            502: 
+              description: "An unexpected error occurred processing the request."
     /v1/api/users/me/messages: 
       get: 
         security: 
@@ -5273,7 +5358,7 @@
                           example: 
                             id: "9fbd0bea-5a63-4fd4-b4be-4bcd9c063227"
                             sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
-                            version: 1
+                            version: 0
                             body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                             sendTime: "2019-09-17T02:15:12.350Z"
                             read: true
@@ -5378,6 +5463,9 @@
             application/json: 
               schema: 
                 type: "object"
+                required: 
+                  - "sender"
+                  - "body"
                 properties: 
                   sender: 
                     type: "string"
@@ -5385,15 +5473,27 @@
                     type: "integer"
                   body: 
                     type: "string"
+                  communicationId: 
+                    type: "string"
                 example: 
                   sender: "b1f99cf0-278d-49ca-a325-0a1504799488"
-                  version: 1
+                  version: 0
                   body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                  communicationId: "1c92e18e-6221-4bfd-8d30-d535e16dacd1"
           description: "Details of the message to be created"
           required: true
         responses: 
           201: 
             description: "Successful operation. Message is created."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    messageId: 
+                      type: "string"
+                  example: 
+                    id: "51020e00-8b87-4bcd-a0ff-d862184275fa"
           400: 
             description: "Bad request. Supplied request is invalid."
           401: 

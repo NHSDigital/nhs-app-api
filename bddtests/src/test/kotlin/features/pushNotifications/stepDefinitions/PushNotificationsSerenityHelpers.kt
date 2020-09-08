@@ -9,5 +9,6 @@ enum class PushNotificationsSerenityHelpers : ISerenityHelperEnums {
     EXPECTED_NHS_LOGIN_ID,
     EXPECTED_PNS,
     GET_RESPONSE,
-    REGISTER_RESPONSE
+    REGISTER_RESPONSE,
+    GET_REGISTRATIONS_RESPONSE
 }

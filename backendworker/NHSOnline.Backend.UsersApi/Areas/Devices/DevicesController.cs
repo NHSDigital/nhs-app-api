@@ -1,11 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -14,7 +12,7 @@ using NHSOnline.Backend.UsersApi.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    [Route("api/users/devices")]
+    [Route("api/users/me/devices")]
     public class DevicesController : Controller
     {
         private readonly IAccessTokenProvider _accessTokenProvider;

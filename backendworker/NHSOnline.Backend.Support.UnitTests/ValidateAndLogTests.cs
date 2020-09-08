@@ -54,5 +54,45 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             validator.IsValid().Should().BeFalse();
         }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        public void IsUriOrNull_NullOrWhitespaceUriString_ReturnsTrue(string uriString)
+        {
+            // Act
+            var result = new ValidateAndLog(_logger.Object).IsUriOrNull(uriString, "Test").IsValid();
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow("http://www.absolute-url.com")]
+        [DataRow("http://www.absolute-url.com/path/to/more")]
+        [DataRow("/relative/path")]
+        [DataRow("//www.example.com")]
+        [DataRow("nhsapp://www.example.com")]
+        public void IsUriOrNull_ValidUriString_ReturnsTrue(string uriString)
+        {
+            // Act
+            var result = new ValidateAndLog(_logger.Object).IsUriOrNull(uriString, "Test").IsValid();
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow("http://www.example.com<>")]
+        [DataRow("Not a url")]
+        public void IsUriOrNull_InvalidUriString_ReturnsFalse(string uriString)
+        {
+            // Act
+            var result = new ValidateAndLog(_logger.Object).IsUriOrNull(uriString, "Test").IsValid();
+
+            // Assert
+            result.Should().BeFalse();
+        }
     }
 }

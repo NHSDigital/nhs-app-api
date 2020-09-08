@@ -15,6 +15,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             services.AddTransient<IInstallationFactory, InstallationFactory>();
             services.AddTransient<INotificationRegistrationService, AzureNotificationHubRegistrationService>();
             services.AddTransient<IMigrationService, MigrationService>();
+            services.AddTransient<INotificationService, NotificationService>();
 
             base.ConfigureServices(services, configuration);
         }

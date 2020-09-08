@@ -10,6 +10,7 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
+import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
 
 class PushNotificationsStepDefinitionsBackend {
@@ -56,7 +57,7 @@ class PushNotificationsStepDefinitionsBackend {
         val factory = NotificationsFactory()
         factory.setUpDeviceValues()
         val user1 = factory.setUpUser()
-        val user2 = factory.setUpAlternativeUser()
+        val user2 = factory.setUpAlternativeUser(SerenityHelpers.getGpSupplier())
         factory.setUpDeletionAfterTest(PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail(), user2.accessToken)
         factory.setUpExistingRegistration(user1)
         factory.setUpExistingRegistration(user2)
@@ -68,6 +69,29 @@ class PushNotificationsStepDefinitionsBackend {
         factory.setUpUser()
         factory.setUpDeviceValues()
         factory.setUpExistingRegistration()
+    }
+
+    @Given("^I am an api user wishing to get a list of RegistrationIds that are linked to a given Nhs Login Id$")
+    fun iAmAnApiUserWishingToGetAListOfRegistrationsForPushNotifications() {
+        val factory = NotificationsFactory()
+        val patient = factory.setUpAlternativeUser()
+        SerenityHelpers.setPatient(patient)
+        factory.setUpDeviceValues()
+        factory.setUpExistingRegistration()
+    }
+
+    @Given("^I am an api user wishing to get a list of RegistrationIds for a Nhs Login Id that has no registrations$")
+    fun iAmAnApiUserWishingToGetAListOfRegistrationIdsForANhsLoginIdThatHasNoRegistrations() {
+        val factory = NotificationsFactory()
+        val patient = factory.setUpAlternativeUser()
+        SerenityHelpers.setPatient(patient)
+    }
+
+    @Given("^I am an api user wishing to send a notification to a given Nhs Login Id$")
+    fun iAmAnApiUserWishingToSendANotificationToAGivenNhsLoginId() {
+        val factory = NotificationsFactory()
+        val patient = factory.setUpAlternativeUser()
+        SerenityHelpers.setPatient(patient)
     }
 
     @When("^I register the device for push notifications$")
@@ -203,6 +227,32 @@ class PushNotificationsStepDefinitionsBackend {
         Assert.assertArrayEquals("Registered device PNS Tokens",
                 expectedPns.toTypedArray(),
                 registeredPnsTokens.toTypedArray())
+    }
+
+    @Then("^I get registrations based on an Nhs Login Id$")
+    fun iGetRegistrationsBasedOnAnNhsLoginId() {
+        val nhsLoginId = SerenityHelpers.getPatient().subject
+        NotificationsApi.getRegistrationIds(nhsLoginId)
+    }
+
+    @Then("^I send the notification$")
+    fun iSendTheNotification() {
+        val nhsLoginId = SerenityHelpers.getPatient().subject
+        val notification = NotificationSendRequest("title", "subtitle", "body", "http://www.example.com")
+        NotificationsApi.postNotification(nhsLoginId, notification)
+    }
+
+    @Then("^I send a malformed notification$")
+    fun iSendAMalformedNotification() {
+        val nhsLoginId = SerenityHelpers.getPatient().subject
+        val notification = NotificationSendRequest("title", "subtitle", null, "http://www.example.com")
+        NotificationsApi.postNotification(nhsLoginId, notification)
+    }
+
+    @Then("^I receive a list of NhsLoginIds from devices registrations endpoint$")
+    fun iReceiveAListOfNhsLoginIdsFromUserInfoEndpoint() {
+        val response = PushNotificationsSerenityHelpers.GET_REGISTRATIONS_RESPONSE.getOrFail<Array<String>?>()
+        Assert.assertEquals("Registrations found", 1, response?.size)
     }
 
     private fun assertSingleRecordInDeviceRepository() {

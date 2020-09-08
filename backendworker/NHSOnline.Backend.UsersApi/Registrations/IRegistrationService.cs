@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.UsersApi.Registrations
     {
         Task<RegisterDeviceResult> CreateRegistration(RegisterDeviceRequest request, AccessToken accessToken);
         Task<RegistrationExistsResult> GetRegistration(string devicePns, AccessToken accessToken);
+        Task<FindRegistrationsResult> Find(string nhsLoginId);
         Task<DeleteRegistrationResult> DeleteRegistration(string devicePns, AccessToken accessToken);
     }
 }

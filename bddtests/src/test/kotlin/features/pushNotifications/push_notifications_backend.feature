@@ -25,7 +25,7 @@ Feature: Push Notifications Backend
     Given I am an api user wishing to register their device for push notifications
     And I have logged in and have a valid session cookie
     When I register the device for push notifications without a pns token
-    Then I receive an "Bad Request" error
+    Then I receive a "Bad Request" error
 
   Scenario: An api user can register two different devices for push notifications
     Given I am an api user who has registered their device for notifications, and I have another device to register
@@ -62,7 +62,7 @@ Feature: Push Notifications Backend
     Given I am an api user who has registered their device for push notifications
     And I have logged in and have a valid session cookie
     When I get the registration for push notifications without a pns token
-    Then I receive an "Bad Request" error
+    Then I receive a "Bad Request" error
 
   Scenario: An api user getting their notifications registration where azure record has been removed will receive a 404
     # This scenario handles multiple users registering on the same device.
@@ -72,7 +72,7 @@ Feature: Push Notifications Backend
     Given I am an api user whose notification registration in azure has been overridden by another user
     And I have logged in and have a valid session cookie
     When I get the registration for push notifications
-    Then I receive a "Not Found" success code
+    Then I receive a "Not Found" response
     And my registration is not in the device repository, but the superseding registration exists
 
   Scenario: An api user can delete their registration for push notifications
@@ -97,10 +97,31 @@ Feature: Push Notifications Backend
     Given I am an api user who has not registered their device for push notifications
     And I have logged in and have a valid session cookie
     When I delete the registration for push notifications with an unregistered device pns token
-    Then I receive a "Not Found" success code
+    Then I receive a "Not Found" response
 
   Scenario: An api user deleting their registration for notifications without a pns token will receive a 400
     Given I am an api user who has registered their device for push notifications
     And I have logged in and have a valid session cookie
     When I delete the registration for push notifications without a pns token
-    Then I receive an "Bad Request" error
+    Then I receive a "Bad Request" error
+
+  Scenario: An api user can retrieve a list of RegistrationIds that are linked to a given Nhs Login Id
+    Given I am an api user wishing to get a list of RegistrationIds that are linked to a given Nhs Login Id
+    And I get registrations based on an Nhs Login Id
+    Then I receive an "OK" success code
+    And I receive a list of NhsLoginIds from devices registrations endpoint
+
+  Scenario: An api user getting RegistrationIds from the registrations endpoint with no registrations will receive a 404
+    Given I am an api user wishing to get a list of RegistrationIds for a Nhs Login Id that has no registrations
+    And I get registrations based on an Nhs Login Id
+    Then I receive an "Not Found" response
+
+  Scenario: An api user can send a notification
+    Given I am an api user wishing to send a notification to a given Nhs Login Id
+    And I send the notification
+    Then I receive an "Accepted" success code
+
+  Scenario: An api user sending a malformed notification will receive a 400
+    Given I am an api user wishing to send a notification to a given Nhs Login Id
+    And I send a malformed notification
+    Then I receive a "Bad Request" error

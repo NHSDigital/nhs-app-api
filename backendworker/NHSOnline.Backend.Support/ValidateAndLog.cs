@@ -63,6 +63,16 @@ namespace NHSOnline.Backend.Support
             return this;
         }
 
+        public ValidateAndLog IsUriOrNull(string value, string name, ValidationOptions options = ValidationOptions.None)
+        {
+            if (!string.IsNullOrWhiteSpace(value) && !Uri.IsWellFormedUriString(value, UriKind.RelativeOrAbsolute))
+            {
+                HandleError(name, "Invalid Uri supplied", options);
+            }
+
+            return this;
+        }
+
         public ValidateAndLog IsValidOdsCode(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (string.IsNullOrWhiteSpace(value))

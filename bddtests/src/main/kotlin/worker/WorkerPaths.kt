@@ -19,7 +19,7 @@ object WorkerPaths {
     const val patientConfiguration = "/v1/patient/configuration"
     const val organDonationConnection = "/v1/patient/organdonation"
     const val serviceJourneyRules = "/v1/patient/journey-configuration"
-    const val userDevices = "/v1/api/users/devices"
+    const val userDevices = "/v1/api/users/$userPlaceholder/devices"
     const val userMessages = "/v1/api/users/$userPlaceholder/messages"
     const val userMeInfo = "/v1/api/users/me/info"
     const val userMeUserResearch= "/v1/api/users/me/info/userResearch"

@@ -4,7 +4,7 @@ info:
   title: NHS App Users-API 
   description: NHS App Users-API - endpoints pertaining to Users, all require an Authorisation-Bearer Token to be included in the header.
 paths:
-  /users/devices:
+  /users/me/devices:
     get:
       security:
         - nhsLoginBearerAuth: []
@@ -104,6 +104,62 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /users/{nhsLoginId}/devices/notifications:
+    post:
+      tags:
+        - notifications
+      summary: Sends a notification
+      description: Sends a notification to the specified user
+      parameters:
+        - in: path
+          name: nhsLoginId
+          required: true
+          description: Unique identifier of a user
+          schema:
+            type: string
+      requestBody:
+        x-name: NotificationSendRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationSendRequest"
+        description: Details of the notification to be sent
+        required: true
+        responses:
+          "202":
+            description: Successfully sent
+          "400":
+            $ref: '#/components/responses/BadRequest'
+          "500":
+            $ref: '#/components/responses/UnexpectedError'
+          "502":
+            $ref: '#/components/responses/UnexpectedError'
+  /users/{nhsLoginId}/devices/registrations:
+    get:
+      tags:
+        - registrations
+      summary: Retreive device registrations
+      description: Retrieves a list of device registrations pertaining to the user.
+      parameters:
+        - in: path
+          name: nhsLoginId
+          required: true
+          description: Unique identifier of a user
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation. Device registrations found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationsResponse'
+        "404":
+          description: Registration is not found
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
 components:
   securitySchemes:
     nhsLoginBearerAuth:            
@@ -143,3 +199,22 @@ components:
       example:
         deviceId: 2f2c28c8-3de9-4ffc-9d0b-23533363d7d3
         deviceType: android
+    RegistrationsResponse:
+      type: array
+      description: Array of registrations
+      items:
+        type: string
+    NotificationSendRequest:
+      type: object
+      required:
+        - title
+        - body
+      properties:
+        title:
+          type: string
+        subTitle:
+          type: string
+        body:
+          type: string
+        url:
+          type: string

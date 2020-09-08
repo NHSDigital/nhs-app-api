@@ -36,8 +36,8 @@ export default {
     if (trigger === toggle) {
       const registering = !state.registered;
       const promise = registering
-        ? this.app.$http.postV1ApiUsersDevices({ addDeviceRequest: { devicePns, deviceType } })
-        : this.app.$http.deleteV1ApiUsersDevices({ devicePns });
+        ? this.app.$http.postV1ApiUsersMeDevices({ addDeviceRequest: { devicePns, deviceType } })
+        : this.app.$http.deleteV1ApiUsersMeDevices({ devicePns });
 
       return promise.then(() => commit(SET_REGISTRATION, registering))
         // NHSO-7584
@@ -50,7 +50,7 @@ export default {
         .finally(() => commit(SET_WAITING, false));
     }
 
-    return this.app.$http.getV1ApiUsersDevices({ devicePns })
+    return this.app.$http.getV1ApiUsersMeDevices({ devicePns })
       .then(() => commit(SET_REGISTRATION, true))
       .catch(() => commit(SET_REGISTRATION, false))
       .finally(() => resolveLoading(authorisationStatus.authorised));

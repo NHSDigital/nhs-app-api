@@ -134,7 +134,7 @@ dotnet_diagnostic.CA1054.severity = error
 dotnet_diagnostic.CA1055.severity = error
 
 # CA1056: URI properties should not be strings
-dotnet_diagnostic.CA1056.severity = error
+dotnet_diagnostic.CA1056.severity = warning
 
 # CA1057: String URI overloads call System.Uri overloads
 dotnet_diagnostic.CA1057.severity = error
