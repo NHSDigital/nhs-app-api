@@ -1,0 +1,20 @@
+graph TD
+  Start --> jsm
+  jsm(JS Method Called) --> psc
+  psc(Paycasso Service Called) --> jus
+  jus(Journey UI Shown) --> uct
+  uct{User Selects Cancel?} -- yes --> ofc
+  uct -- no --> edj
+  edj{Error During Journey?} -- yes --> ofc
+  edj -- no --> osc
+  ofc(On Failure Called) --> juc
+  osc(On Success Called) --> juc
+  juc(Journey UI Closed)
+
+graph TD
+  nhsl("NHS Login #40;Client#41;") -.-> jsapi
+  jsapi(JavaScript API) --> app
+  app(NHS App) -.-> pc
+    pc(Paycasso) --> ps
+      ps(SDK) -.-> papi(REST API)
+    pc --> vl(View Library)
