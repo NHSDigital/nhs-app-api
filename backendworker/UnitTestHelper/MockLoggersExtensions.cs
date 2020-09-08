@@ -12,7 +12,7 @@ namespace UnitTestHelper
         public static IServiceCollection AddMockLoggers(this IServiceCollection service)
             => service.AddSingleton(typeof(ILogger<>), typeof(MockLoggerWrapper<>));
 
-        public static Mock<ILogger<TCategoryName>> MockLogger<TCategoryName>(this IServiceProvider serviceProvider)
+        public static Mock<ILogger> MockLogger<TCategoryName>(this IServiceProvider serviceProvider)
         {
             var mockLoggerWrapper =
                 serviceProvider.GetRequiredService<ILogger<TCategoryName>>() as MockLoggerWrapper<TCategoryName>
@@ -26,9 +26,9 @@ namespace UnitTestHelper
 
         private sealed class MockLoggerWrapper<TCategoryName> : ILogger<TCategoryName>
         {
-            internal Mock<ILogger<TCategoryName>> Mock { get; } = new Mock<ILogger<TCategoryName>>();
+            internal Mock<ILogger> Mock { get; } = new Mock<ILogger>();
 
-            private ILogger<TCategoryName> LoggerImplementation => Mock.Object;
+            private ILogger LoggerImplementation => Mock.Object;
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
                 => LoggerImplementation.Log(logLevel, eventId, state, exception, formatter);

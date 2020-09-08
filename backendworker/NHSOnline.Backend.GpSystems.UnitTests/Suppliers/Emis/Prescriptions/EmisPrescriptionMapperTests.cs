@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,7 +14,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
     [TestClass]
     public class EmisPrescriptionMapperTests
     {
-        private IFixture _fixture;
         private IEmisPrescriptionMapper _mapper;
         private ILogger<EmisPrescriptionMapper> _logger;
         
@@ -25,10 +22,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         public void TestInitialize()
         {
             _logger = Mock.Of<ILogger<EmisPrescriptionMapper>>();
-            _mapper = new EmisPrescriptionMapper(_logger);
-
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
+            _mapper = new EmisPrescriptionMapper(_logger);;
         }
 
         [TestMethod]
@@ -66,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     new PrescriptionRequest
                     {
-                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        DateRequested = new DateTimeOffset(2020, 01, 01, 12, 12, 12, TimeSpan.Zero),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
                             new RequestedMedicationCourse
@@ -84,12 +78,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         CanBeRequested = true,
                         Constituents = new List<string>
                         {
-                            _fixture.Create<string>()
+                            "Con"
                         },
-                        Dosage = _fixture.Create<string>(),
+                        Dosage = "Dose",
                         MedicationCourseGuid = Guid.NewGuid().ToString(),
-                        QuantityRepresentation = _fixture.Create<string>(),
-                        Name = _fixture.Create<string>(),
+                        QuantityRepresentation = "Quant",
+                        Name = "Bob",
                         PrescriptionType = PrescriptionType.Automatic,
                     }
                 }
@@ -144,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     new PrescriptionRequest
                     {
-                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        DateRequested = new DateTimeOffset(2020, 01, 01, 12, 12, 12, TimeSpan.Zero),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
                             // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
@@ -168,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     new PrescriptionRequest
                     {
                         // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
-                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        DateRequested = new DateTimeOffset(2020, 01, 02, 12, 12, 12, TimeSpan.Zero),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
                             new RequestedMedicationCourse
@@ -280,7 +274,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         RequestedByDisplayName = "MainUserForename MainUserSurname",
                         RequestedByForenames = "MainUserForename MainUserMiddleName",
                         RequestedBySurname = "MainUserSurname",
-                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        DateRequested = new DateTimeOffset(2020, 01, 01, 12, 12, 12, TimeSpan.Zero),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
                             // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
@@ -307,7 +301,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         RequestedByForenames = "MainUserForename MainUserMiddleName",
                         RequestedBySurname = "MainUserSurname",
                         // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
-                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        DateRequested = new DateTimeOffset(2020, 01, 02, 12, 12, 12, TimeSpan.Zero),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
                             new RequestedMedicationCourse
@@ -438,7 +432,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         public void MapCoursesGetResponseToCourseListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
-            var item = new CoursesGetResponse()
+            var item = new CoursesGetResponse
             {
                 Courses = new List<MedicationCourse>
                 {
@@ -447,12 +441,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         CanBeRequested = true,
                         Constituents = new List<string>
                         {
-                            _fixture.Create<string>()
+                            "con"
                         },
-                        Dosage = _fixture.Create<string>(),
+                        Dosage = "doe",
                         MedicationCourseGuid = Guid.NewGuid().ToString(),
-                        QuantityRepresentation = _fixture.Create<string>(),
-                        Name = _fixture.Create<string>(),
+                        QuantityRepresentation = "rep",
+                        Name = "Joe",
                         PrescriptionType = PrescriptionType.Automatic,
                     }
                 }

@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
@@ -39,6 +38,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
+
+            services.AddNhsAppHealthCheckService();
 
             services.AddSingleton(Configuration);
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
@@ -74,7 +75,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseEndpoints(b => b.MapControllers());
+            app.UseEndpoints(b =>
+            {
+                b.MapHealthCheckEndpoints();
+                b.MapControllers();
+            });
         }
     }
 }

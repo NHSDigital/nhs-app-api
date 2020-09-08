@@ -25,6 +25,7 @@ using NHSOnline.Backend.CidApi.DependencyInjection;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.CidApi.Filters;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
@@ -81,6 +82,8 @@ namespace NHSOnline.Backend.CidApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
+
+            services.AddNhsAppHealthCheckService();
 
             services.AddSingleton(Configuration);
 

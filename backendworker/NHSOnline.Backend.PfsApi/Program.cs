@@ -1,4 +1,5 @@
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi
             return new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
                 .AddJsonFile($"{knownServicesConfigPath}", optional: false, reloadOnChange: false)
                 .AddFakeGpConfigurationFile()
                 .Build();

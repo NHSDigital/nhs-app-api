@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -48,6 +49,8 @@ namespace NHSOnline.Backend.UsersApi
             services
                 .AddControllers(ConfigureMvcOptions)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
+            services.AddNhsAppHealthCheckService();
 
             SetupApiKeys(services);
 
@@ -130,7 +133,11 @@ namespace NHSOnline.Backend.UsersApi
                 LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseEndpoints(b => b.MapControllers());
+            app.UseEndpoints(b =>
+            {
+                b.MapHealthCheckEndpoints();
+                b.MapControllers();
+            });
         }
 
         private void ConfigureAuth(IServiceCollection services)

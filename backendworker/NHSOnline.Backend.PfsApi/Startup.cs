@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -9,17 +8,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Session;
-using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
@@ -28,11 +26,10 @@ using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.DependencyInjection;
-using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
-using Wkhtmltopdf.NetCore;
+using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -98,26 +95,10 @@ namespace NHSOnline.Backend.PfsApi
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
 
-            services.AddWkhtmltopdf();
-
-            services.AddSingleton(Configuration);
-            services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
-            services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
-            services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
-            services.AddTransient<IIm1CacheService, Im1CacheService>();
-            services.AddTransient<IGpSessionManager, GpSessionManager>();
-            services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
-            services.AddTransient<IGpSystemResolver, GpSystemResolver>();
-            services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
-            services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddTransient(typeof(HttpTimeoutHandler<>));
-            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
+            services.AddNhsAppHealthCheckService();
 
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
-            NominatedPharmacyStartup.RegisterServices(services);
-
-            services.AddHostedService<SpinePdsConfigurationBackgroundService>();
         }
 
         private void ConfigureServiceCookies(CookieAuthenticationOptions options)

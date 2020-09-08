@@ -24,8 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
         private TppLogMessagingService _systemUnderTest;
 
-        private Mock<ILogger<TppLogMessagingService>> TppMessagingLoggerServiceLogger =>
-            _serviceProvider.MockLogger<TppLogMessagingService>();
+        private Mock<ILogger> TppMessagingLoggerServiceLogger => _serviceProvider.MockLogger<TppLogMessagingService>();
 
         private Mock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>> _mockListServiceAccesses;
 

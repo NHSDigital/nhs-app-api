@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -49,6 +50,8 @@ namespace NHSOnline.Backend.LoggerApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
+
+            services.AddNhsAppHealthCheckService();
 
             services.AddSingleton(Configuration);
 
@@ -98,7 +101,11 @@ namespace NHSOnline.Backend.LoggerApi
                 LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseEndpoints(c => c.MapControllers());
+            app.UseEndpoints(c =>
+            {
+                c.MapHealthCheckEndpoints();
+                c.MapControllers();
+            });
         }
     }
 }

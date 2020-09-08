@@ -37,6 +37,22 @@ namespace UnitTestHelper
                 times);
         }
 
+        public static void VerifyLogger(
+            this Mock<ILogger> mockLogger,
+            LogLevel logLevel,
+            string message,
+            Times times)
+        {
+            mockLogger.Verify(
+                x => x.Log(
+                    logLevel,
+                    It.IsAny<EventId>(),
+                    ItIsLogMessage(message),
+                    It.IsAny<Exception>(),
+                    ItIsAnyFormatter),
+                times);
+        }
+
         public static void VerifyLogger<T>(
             this Mock<ILogger<T>> mockLogger,
             LogLevel logLevel,

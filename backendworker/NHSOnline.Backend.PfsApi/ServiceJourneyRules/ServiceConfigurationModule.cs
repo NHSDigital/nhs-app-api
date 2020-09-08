@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.ServiceJourneyRules.Common;
 using NHSOnline.Backend.Support.Http;
 
@@ -18,6 +19,8 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             services.AddHttpClient<ServiceJourneyRulesHttpClient>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<ServiceJourneyRulesHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<ServiceJourneyRulesHttpRequestIdentifier>>();
+
+            services.AddNhsAppHealthCheck<ServiceJourneyRulesHttpClient>("SJR");
             
             base.ConfigureServices(services, configuration);
         }
