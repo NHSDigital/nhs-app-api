@@ -54,7 +54,7 @@ class BrowserstackAndroidDriver : DriverSource {
                     Config.instance.browserstackDeviceName ?: DEFAULT_DEVICE_NAME)
             caps.setCapability(
                     "os_version",
-                    Config.instance.browserstackDeviceOSversion ?: DEFAULT_OS_VERSION)
+                    Config.instance.browserstackDeviceOSVersion ?: DEFAULT_OS_VERSION)
 
             caps.setCapabilityIfNotNull("browserstack.localIdentifier", Config.instance.browserstackLocalIdentifier)
             caps.setCapabilityIfNotNull("browserstack.networkProfile", Config.instance.browserstackNetworkProfile)

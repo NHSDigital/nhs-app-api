@@ -27,4 +27,5 @@ object WorkerPaths {
     const val configuration = "/v1/configuration"
     const val configurationV2 = "/v2/configuration"
     const val clientLogger = "/v1/api/log"
+    const val healthReady = "/health/ready"
 }

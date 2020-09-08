@@ -12,7 +12,7 @@ import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
 
-class WorkerClient(config:Config = Config.instance) {
+class WorkerClient(val config:Config = Config.instance) {
     private val _client: HttpClient
     private val gsonBuilder: GsonBuilder = GsonBuilder()
     private var gson: Gson
@@ -37,6 +37,12 @@ class WorkerClient(config:Config = Config.instance) {
     val userInfo = WorkerClientUserInfo(config, workerClientSender, gson)
     val configuration = WorkerClientConfiguration(config, workerClientSender, gson)
     val clientLogger = WorkerClientLogger(config, workerClientSender, gson)
+
+    val sjrHealth = WorkerClientHealth(config.sjrBackendUrl, workerClientSender, gson)
+    val usersHealth = WorkerClientHealth(config.usersBackendUrl, workerClientSender, gson)
+    val userInfoHealth = WorkerClientHealth(config.userInfoBackendUrl, workerClientSender, gson)
+    val messagesHealth = WorkerClientHealth(config.messagesBackendUrl, workerClientSender, gson)
+    val logHealth = WorkerClientHealth(config.logBackendUrl, workerClientSender, gson)
 
     companion object {
 

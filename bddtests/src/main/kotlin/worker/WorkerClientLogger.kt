@@ -14,3 +14,4 @@ class WorkerClientLogger(val config: Config, val sender: WorkerClientSender, val
         return httpPost.send(sender)
     }
 }
+

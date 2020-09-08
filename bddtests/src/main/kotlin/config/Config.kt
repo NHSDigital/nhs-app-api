@@ -5,41 +5,46 @@ private const val MONGODB_DEFAULT_PORT: Long = 27017L
 
 class Config private constructor() {
 
-    var url: String
+    val url: String
     var apiBackendUrl: String
     var cidBackendUrl: String
-    var wiremockUrl: String
+    val sjrBackendUrl: String
+    val usersBackendUrl: String
+    val userInfoBackendUrl: String
+    val messagesBackendUrl: String
+    val logBackendUrl: String
+    val wiremockUrl: String
 
-    var cidSettingsUrl: String
-    var cidClientId: String
-    var cidRedirectUri: String
-    var cidNativeRedirectUri: String
+    val cidSettingsUrl: String
+    val cidClientId: String
+    val cidRedirectUri: String
+    val cidNativeRedirectUri: String
     val cidJwtIssuer: String
-    var emisApplicationId: String
-    var emisVersion: String
-    var organDonation: String
-    var updatedOrganDonation: String
-    var symptomChecker: String
-    var dataPreferencesPath: String
-    var dataPreferencesUrl: String
+    val emisApplicationId: String
+    val emisVersion: String
+    val organDonation: String
+    val updatedOrganDonation: String
+    val symptomChecker: String
+    val dataPreferencesPath: String
+    val dataPreferencesUrl: String
 
-    var browserstackUrl: String
-    var browserstackLocalIdentifier: String?
-    var browserstackBrowserResolution: String
-    var browserstackTimezone: String
-    var browserstackAppVersion: String?
-    var browserstackNetworkProfile: String?
-    var browserstackDeviceName: String?
-    var browserstackDeviceOSversion: String?
-    var browserstackBuild: String
-    var isNativeAppTestRun: Boolean
-    var autoLogin: String
-    var appPath: String
-    var appiumServer: String
-    var sessionExpiryMinutes: Long
+    val browserstackUrl: String
+    val browserstackLocalIdentifier: String?
+    val browserstackBrowserResolution: String
+    val browserstackTimezone: String
+    val browserstackAppVersion: String?
+    val browserstackNetworkProfile: String?
+    val browserstackDeviceName: String?
+    val browserstackDeviceOSVersion: String?
+    val browserstackBuild: String
+    val isNativeAppTestRun: Boolean
+    val autoLogin: String
+    val appPath: String
+    val appiumServer: String
+    val sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: Boolean
     val gpLookupApiKey: String
-    var isDockerised: Boolean
+    val isDockerised: Boolean
 
     val sessionMongoDbHost: String
     val sessionMongoDbPort: Long
@@ -60,8 +65,13 @@ class Config private constructor() {
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
-        cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         apiBackendUrl = envOrDefault("apiBackendUrl", "http://api.local.bitraft.io:8089")
+        cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
+        sjrBackendUrl = envOrDefault("sjrBackendUrl", "http://servicejourneyrulesapi.local.bitraft.io:8086")
+        usersBackendUrl = envOrDefault("usersBackendUrl", "http://users.local.bitraft.io:8083")
+        userInfoBackendUrl = envOrDefault("userInfoBackendUrl", "http://userinfo.local.bitraft.io:8091")
+        messagesBackendUrl = envOrDefault("messagesBackendUrl", "http://messages.local.bitraft.io:8085")
+        logBackendUrl = envOrDefault("logBackendUrl", "http://log.local.bitraft.io:8090")
         isDockerised = envOrDefault("DOCKER",false)
 
         val browserstackUsername = envOrDefault("BROWSERSTACK_USERNAME", "NOT_PROVIDED")
@@ -79,7 +89,7 @@ class Config private constructor() {
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
         browserstackDeviceName = envOrNull("BROWSERSTACK_DEVICE_NAME")
-        browserstackDeviceOSversion = envOrNull("BROWSERSTACK_OS_VERSION")
+        browserstackDeviceOSVersion = envOrNull("BROWSERSTACK_OS_VERSION")
         isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
         cidSettingsUrl = envOrDefault(
