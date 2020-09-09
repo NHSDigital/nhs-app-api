@@ -27,6 +27,7 @@
 * [Known Services](Functionality-Documentation/known-services.md)
 * [Silver Integration Jump-Off Creation](Functionality-Documentation/silver-integration-jump-off-creation.md)
 * [Fake GP Supplier](Functionality-Documentation/fake-gp-supplier.md)
+* [Adding New Public Health Notifications](Functionality-Documentation/new-public-health-notifications.md)
 
 ## How-tos
 

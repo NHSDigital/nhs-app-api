@@ -13,7 +13,7 @@ import NhsUkLayout from '@/components/layout/NhsUkLayout';
 import { INTERSTITIAL_REDIRECTOR_PATH } from '@/router/paths';
 import { REDIRECT_PARAMETER } from '@/router/names';
 import { isBlankString } from '@/lib/utils';
-import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 
 export default {
@@ -94,6 +94,7 @@ export default {
   },
   mounted() {
     EventBus.$emit(UPDATE_HEADER, this.$route.meta);
+    EventBus.$emit(UPDATE_TITLE, this.$route.meta);
   },
 };
 </script>

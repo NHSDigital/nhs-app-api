@@ -11,9 +11,6 @@ export default {
   beforeDestroy() {
     EventBus.$off(UPDATE_TITLE, this.onUpdateTitle);
   },
-  mounted() {
-    this.onUpdateTitle(this.$route.meta);
-  },
   methods: {
     onUpdateTitle(newTitle = {}, localised = false) {
       if (isString(newTitle)) {

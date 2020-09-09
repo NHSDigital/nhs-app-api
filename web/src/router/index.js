@@ -88,7 +88,8 @@ export const allRoutes = [
       ...linkedProfilesRoutes,
       ...organDonationRoutes,
       // Route matching happens in order, generalRoutes should
-      // be last, as it catches all un-matched.
+      // be last so to not match before all other routes have been checked,
+      // as it contains a catch-all NOT_FOUND route
       ...generalRoutes,
     ],
   },

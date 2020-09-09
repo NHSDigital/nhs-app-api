@@ -33,15 +33,6 @@ describe('OnUpdateTitleMixin', () => {
       OnUpdateTitleMixin.beforeDestroy();
       expect(EventBus.$off).toHaveBeenCalledWith(UPDATE_TITLE, OnUpdateTitleMixin.onUpdateTitle);
     });
-
-    it('will call onUpdateTitle passing $route.meta in mounted', () => {
-      const onUpdateTitle = jest.fn();
-      const meta = { titleKey: 'aubergine' };
-
-      mountOnUpdateTitleMixin({ methods: { onUpdateTitle }, $route: { meta } });
-
-      expect(onUpdateTitle).toHaveBeenCalledWith(meta);
-    });
   });
 
   describe('setTitle method', () => {

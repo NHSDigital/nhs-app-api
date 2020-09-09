@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
+import each from 'jest-each';
 import NhsukLayout from '@/layouts/nhsuk-layout';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import VueMeta from 'vue-meta';
-import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, localVue, shallowMount } from '../helpers';
 
 localVue.use(VueMeta);
@@ -12,6 +13,8 @@ jest.mock('@/services/event-bus', () => ({
   EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
+let routeMeta;
+
 const mount = ({
   analyticsCookieAccepted = false,
   analyticsScriptUrl = 'NOT_SET',
@@ -19,10 +22,10 @@ const mount = ({
   durationSeconds = undefined,
   nativeVersion = '',
   source = 'web',
-} = {}) => shallowMount(
-  NhsukLayout,
-  {
-    $route: { meta: { isAnonymous: isAnonymousRoute } },
+} = {}) => {
+  routeMeta = { crumb: 'nhsuk-layout-crumb', isAnonymous: isAnonymousRoute };
+  return shallowMount(NhsukLayout, {
+    $route: { meta: routeMeta },
     $store: createStore({
       $cookies: { get: cookie => (cookie === 'nhso.session' ? { durationSeconds } : {}) },
       $env: { ANALYTICS_SCRIPT_URL: analyticsScriptUrl },
@@ -33,8 +36,8 @@ const mount = ({
       },
     }),
     stubs: ['router-view'],
-  },
-);
+  });
+};
 
 describe('nhsuk layout', () => {
   describe('metaInfo', () => {
@@ -141,10 +144,11 @@ describe('nhsuk layout', () => {
     });
   });
 
-  describe('on update title', () => {
+  describe('on update header and title', () => {
     beforeEach(() => {
       EventBus.$on.mockClear();
       EventBus.$off.mockClear();
+      EventBus.$emit.mockClear();
     });
 
     it('will emit UPDATE_HEADER with to.meta in beforeRouteUpdate', () => {
@@ -163,6 +167,12 @@ describe('nhsuk layout', () => {
       NhsukLayout.beforeRouteUpdate.call({ onUpdateTitle }, { meta }, undefined, jest.fn());
 
       expect(onUpdateTitle).toHaveBeenCalledWith(meta);
+    });
+
+    each([UPDATE_HEADER, UPDATE_TITLE]).it('will emit %s with $route.meta when mounted', (event) => {
+      mount();
+
+      expect(EventBus.$emit).toHaveBeenCalledWith(event, routeMeta);
     });
   });
 

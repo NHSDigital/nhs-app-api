@@ -14,7 +14,7 @@ export default {
   methods: {
     onUpdateHeader(newHeader = {}, localised = false, overrideShowContentHeader = false) {
       if (isString(newHeader)) {
-        this.setHeaderProp('header', newHeader, localised, overrideShowContentHeader);
+        this.setHeaderProp('header', newHeader, localised);
         this.caption = undefined;
         this.captionSize = undefined;
         this.overrideShowContentHeader = overrideShowContentHeader;

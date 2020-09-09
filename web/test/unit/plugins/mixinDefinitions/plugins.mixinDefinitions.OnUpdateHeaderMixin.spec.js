@@ -120,7 +120,7 @@ describe('OnUpdateHeaderMixin', () => {
       });
 
       it('will call setHeaderProp passing header, newHeader value, and localised parameter', () => {
-        expect(setHeaderProp).toHaveBeenCalledWith('header', 'carrots', false, false);
+        expect(setHeaderProp).toHaveBeenCalledWith('header', 'carrots', false);
       });
 
       it('will set caption data prop to undefined', () => {
