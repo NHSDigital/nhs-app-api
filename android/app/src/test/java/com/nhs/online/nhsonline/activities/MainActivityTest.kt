@@ -1,9 +1,9 @@
 package com.nhs.online.nhsonline.activities
 
 import android.app.onResume
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.TextView
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface

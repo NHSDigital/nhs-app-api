@@ -2,8 +2,8 @@ package com.nhs.online.nhsonline.biometrics
 
 import android.content.res.Resources
 import android.os.Build
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import com.nhaarman.mockito_kotlin.*
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM

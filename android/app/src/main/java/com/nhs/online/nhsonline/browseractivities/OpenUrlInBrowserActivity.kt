@@ -5,9 +5,9 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.graphics.Color
 import android.net.Uri
-import android.support.customtabs.CustomTabsIntent
-import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
-import android.support.v4.content.ContextCompat
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
+import androidx.core.content.ContextCompat
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.data.ErrorMessage

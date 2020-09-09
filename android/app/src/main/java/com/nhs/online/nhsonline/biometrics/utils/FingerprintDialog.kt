@@ -2,7 +2,7 @@ package com.nhs.online.nhsonline.biometrics.utils
 
 import android.annotation.TargetApi
 import android.os.Build
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import android.util.Log
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.FingerprintAuthProcessor
@@ -12,9 +12,9 @@ import com.nhs.online.nhsonline.biometrics.createFingerprintAuthenticationDialog
 private val TAG = FingerprintDialog::class.java.simpleName
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintDialog(
-    private val activity: FragmentActivity,
-    private val biometricState: BiometricState,
-    private val signingHelper: SigningHelper
+        private val activity: FragmentActivity,
+        private val biometricState: BiometricState,
+        private val signingHelper: SigningHelper
 ) {
     private var fingerprintAuthFragment: FingerprintAuthenticationDialogFragment? = null
 

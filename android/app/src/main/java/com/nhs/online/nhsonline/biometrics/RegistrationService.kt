@@ -3,8 +3,8 @@ package com.nhs.online.nhsonline.biometrics
 import android.annotation.TargetApi
 import android.app.Activity
 import android.os.Build
-import android.support.v4.app.FragmentActivity
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
 import com.nhs.online.fidoclient.constants.ATTESTATION_STATUS
 import com.nhs.online.fidoclient.constants.ATTESTATION_STATUS_VALID
@@ -32,16 +32,16 @@ private const val KEY_ID_PREFIX = "nhs-app-key"
 
 @TargetApi(Build.VERSION_CODES.M)
 class RegistrationService(
-    private val activity: FragmentActivity,
-    private val biometricAsyncHandler: BiometricAsyncHandler,
-    private val biometricCleanupHelper: BiometricCleanupHelper,
-    private val fidoKeystore: FidoKeystoreAndroidM,
-    private val fingerprintDialog: FingerprintDialog,
-    private val fingerprintSystemChecker: FingerprintSystemChecker,
-    private val preferencesService: FingerprintSharedPreferences,
-    private val biometricState: BiometricState,
-    private val appWebInterface: AppWebInterface,
-    val assertionFactory: (publicKey: PublicKey, signature: Signature, keyId: String) ->
+        private val activity: FragmentActivity,
+        private val biometricAsyncHandler: BiometricAsyncHandler,
+        private val biometricCleanupHelper: BiometricCleanupHelper,
+        private val fidoKeystore: FidoKeystoreAndroidM,
+        private val fingerprintDialog: FingerprintDialog,
+        private val fingerprintSystemChecker: FingerprintSystemChecker,
+        private val preferencesService: FingerprintSharedPreferences,
+        private val biometricState: BiometricState,
+        private val appWebInterface: AppWebInterface,
+        val assertionFactory: (publicKey: PublicKey, signature: Signature, keyId: String) ->
         RegAssertionBuilder = {p,s,k -> RegAssertionBuilder(p, s, k) }
     ) {
     fun startFidoRegistration(accessToken: String) {

@@ -3,7 +3,7 @@ package com.nhs.online.nhsonline.navigation
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.web.NhsWeb

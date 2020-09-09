@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Assert.assertEquals
 import org.junit.Before

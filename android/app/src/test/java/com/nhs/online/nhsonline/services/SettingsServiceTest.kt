@@ -3,7 +3,7 @@ package com.nhs.online.nhsonline.services
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

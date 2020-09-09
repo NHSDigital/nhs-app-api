@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.AddToCalendarData

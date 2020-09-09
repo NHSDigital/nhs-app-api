@@ -8,10 +8,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
+import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
@@ -503,16 +503,19 @@ class MainActivity :
 
     private fun showErrorScreen(errorMessage: ErrorMessage) {
         try {
-            if (errorMessage.header.isEmpty()) {
-                errorHeader.visibility = GONE
-            }
-            errorHeader.text = errorMessage.header
-            errorTextView.setServiceError(errorMessage.title, errorMessage.message)
-            errorTextView.contentDescription = errorMessage.title + ". " +
-                    errorMessage.accessibleMessage
+            if (errorHeader !== null && errorTextView !== null) {
+                if (errorMessage.header.isEmpty()) {
+                    errorHeader.visibility = GONE
+                }
+                errorHeader.text = errorMessage.header
 
-            appDialogs.dismissVersionUpgradeDialog()
-            showErrorScreen()
+                errorTextView.setServiceError(errorMessage.title, errorMessage.message)
+                errorTextView.contentDescription = errorMessage.title + ". " +
+                        errorMessage.accessibleMessage
+
+                appDialogs.dismissVersionUpgradeDialog()
+                showErrorScreen()
+            }
         } catch (e: Exception) {
             logger.log(Level.WARNING, "${this::class.java.simpleName}: Unable to show error page $e")
         }

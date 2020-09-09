@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.interfaces
 
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.nhs.online.nhsonline.activities.HeaderIcon
 import com.nhs.online.nhsonline.data.ErrorMessage
 

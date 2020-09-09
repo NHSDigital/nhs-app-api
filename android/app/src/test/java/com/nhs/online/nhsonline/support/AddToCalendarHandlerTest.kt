@@ -2,8 +2,9 @@ package com.nhs.online.nhsonline.support
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.provider.CalendarContract
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.data.AddToCalendarData
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.logging.ILoggingService
@@ -12,6 +13,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 private val CAL_SUBJECT = "my subject"
 private val CAL_BODY= "my body"
@@ -49,18 +51,18 @@ class AddToCalendarHandlerTest {
         verify(mockContext).startActivity(intentCaptor.capture())
         verify(mockLogger).logInfo(any())
 
-        assertEquals("my subject", intentCaptor.firstValue.extras[CalendarContract.Events.TITLE])
-        assertEquals("my body", intentCaptor.firstValue.extras[CalendarContract.Events.DESCRIPTION])
-        assertEquals("my location", intentCaptor.firstValue.extras[CalendarContract.Events.EVENT_LOCATION])
-        assertEquals(12345678L * 1000, intentCaptor.firstValue.extras[CalendarContract.EXTRA_EVENT_BEGIN_TIME])
-        assertEquals(12345679L * 1000, intentCaptor.firstValue.extras[CalendarContract.EXTRA_EVENT_END_TIME])
-        assertEquals(CalendarContract.Events.AVAILABILITY_BUSY, intentCaptor.firstValue.extras[CalendarContract.Events.AVAILABILITY])
+        assertEquals("my subject", intentCaptor.firstValue.extras?.get(CalendarContract.Events.TITLE))
+        assertEquals("my body", intentCaptor.firstValue.extras?.get(CalendarContract.Events.DESCRIPTION))
+        assertEquals("my location", intentCaptor.firstValue.extras?.get(CalendarContract.Events.EVENT_LOCATION))
+        assertEquals(12345678L * 1000, intentCaptor.firstValue.extras?.get(CalendarContract.EXTRA_EVENT_BEGIN_TIME))
+        assertEquals(12345679L * 1000, intentCaptor.firstValue.extras?.get(CalendarContract.EXTRA_EVENT_END_TIME))
+        assertEquals(CalendarContract.Events.AVAILABILITY_BUSY, intentCaptor.firstValue.extras?.get(CalendarContract.Events.AVAILABILITY))
     }
 
     @Test
     fun onAddToCalendar_javaScriptInteractionMode_WithBlankFields() {
         val stringifiedData = buildStringifiedCalendarData(subject = "", body = "", location = "")
-        var addToCalendarData = addToCalendarHandler.parseCalendarData(stringifiedData, JavaScriptInteractionMode.SilverThirdParty)
+        val addToCalendarData = addToCalendarHandler.parseCalendarData(stringifiedData, JavaScriptInteractionMode.SilverThirdParty)
 
         assertEquals("", addToCalendarData.subject)
         assertEquals("", addToCalendarData.body)

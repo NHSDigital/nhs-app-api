@@ -1,9 +1,9 @@
 package com.nhs.online.nhsonline.webinterfaces
 
 import android.util.Log
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.*
 import com.nhs.online.nhsonline.registration.PaycassoCallbackResponse

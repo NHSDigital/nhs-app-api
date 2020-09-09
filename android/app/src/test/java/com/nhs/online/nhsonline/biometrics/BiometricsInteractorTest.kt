@@ -1,7 +1,7 @@
 package com.nhs.online.nhsonline.biometrics
 
 import android.content.res.Resources
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.support.LifeCycleObserverContext

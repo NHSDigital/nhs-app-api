@@ -1,7 +1,7 @@
 package com.nhs.online.nhsonline.support
 
 import android.app.Activity
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.widget.TextView

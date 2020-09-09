@@ -3,8 +3,8 @@ package com.nhs.online.nhsonline.biometrics
 import android.annotation.TargetApi
 import android.app.Activity
 import android.os.Build
-import android.support.v4.app.FragmentActivity
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
 import com.nhs.online.fidoclient.constants.UAF_AUTH_RESPONSE_FIELD
 import com.nhs.online.fidoclient.utils.fidoHelpers
@@ -24,16 +24,16 @@ private val TAG = AuthenticationService::class.java.simpleName
 
 @TargetApi(Build.VERSION_CODES.M)
 class AuthenticationService(
-    private val activity: FragmentActivity,
-    private val biometricAsyncHandler: BiometricAsyncHandler,
-    private val biometricsInteractor: BiometricsInteractor,
-    private val biometricState: BiometricState,
-    private val biometricCleanupHelper: BiometricCleanupHelper,
-    private val fingerprintDialog: FingerprintDialog,
-    private val fingerprintSystemChecker: FingerprintSystemChecker,
-    private val preferencesService: FingerprintSharedPreferences,
-    private val uafAuthenticator: Authentication,
-    private val appWebInterface: AppWebInterface
+        private val activity: FragmentActivity,
+        private val biometricAsyncHandler: BiometricAsyncHandler,
+        private val biometricsInteractor: BiometricsInteractor,
+        private val biometricState: BiometricState,
+        private val biometricCleanupHelper: BiometricCleanupHelper,
+        private val fingerprintDialog: FingerprintDialog,
+        private val fingerprintSystemChecker: FingerprintSystemChecker,
+        private val preferencesService: FingerprintSharedPreferences,
+        private val uafAuthenticator: Authentication,
+        private val appWebInterface: AppWebInterface
 ) {
     var isFingerprintLoginStarted = false
 

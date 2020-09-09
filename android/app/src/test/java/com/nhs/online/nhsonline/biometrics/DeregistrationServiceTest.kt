@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.biometrics
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.biometrics.utils.BiometricConstants
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintCookieService
 import com.nhs.online.nhsonline.biometrics.utils.FingerprintSharedPreferences

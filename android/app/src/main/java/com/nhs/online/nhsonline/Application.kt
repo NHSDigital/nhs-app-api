@@ -3,7 +3,7 @@ package com.nhs.online.nhsonline
 import android.content.pm.ApplicationInfo
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import android.webkit.WebView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import java.util.Locale

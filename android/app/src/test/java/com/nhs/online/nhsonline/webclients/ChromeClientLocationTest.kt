@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.webkit.GeolocationPermissions
 import android.webkit.WebView
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Before
 import org.junit.Test

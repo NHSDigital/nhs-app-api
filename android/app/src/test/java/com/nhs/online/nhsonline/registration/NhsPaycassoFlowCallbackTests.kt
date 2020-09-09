@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.registration
 
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.paycasso.sdk.api.flow.model.DocuSureFlowResponse
 import com.paycasso.sdk.api.flow.model.FlowFailureResponse

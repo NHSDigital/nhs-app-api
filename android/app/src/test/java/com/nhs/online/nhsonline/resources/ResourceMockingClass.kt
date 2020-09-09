@@ -6,10 +6,8 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.content.res.Resources
 import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito
@@ -77,6 +75,8 @@ open class ResourceMockingClass {
             on { getString(anyInt()) } doAnswer { i -> resourceMock.getString(i.arguments.first() as Int) }
             on { resources } doReturn resourceMock
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
+            on { getString(R.string.baseScheme) } doReturn "https"
+            on { getString(R.string.appScheme) } doReturn "nhsapp"
         }
     }
 
@@ -102,6 +102,8 @@ open class ResourceMockingClass {
 
         return mock {
             on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+            on { getString(R.string.appScheme) } doReturn "nhsapp"
+            on { getString(R.string.baseScheme) } doReturn "https"
             on { resources } doReturn mockResource
         }
     }
@@ -132,6 +134,8 @@ open class ResourceMockingClass {
 
         return mock {
             on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+            on { getString(R.string.appScheme) } doReturn "nhsapp"
+            on { getString(R.string.baseScheme) } doReturn "https"
             on { resources } doReturn resourceMock
         }
 

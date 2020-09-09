@@ -2,10 +2,10 @@ package com.nhs.online.nhsonline.support
 
 import android.app.Activity
 import android.app.Dialog
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -221,7 +221,7 @@ class AppDialogsTest {
 
     private fun extractAlertDialogTitle(alertDialog: AlertDialog): String? {
         val titleTextView: TextView? =
-                alertDialog.findViewById(android.support.v7.appcompat.R.id.alertTitle)
+                alertDialog.findViewById(androidx.appcompat.R.id.alertTitle)
         Assert.assertNotNull(titleTextView)
         return titleTextView?.text.toString()
     }

@@ -6,7 +6,7 @@ import android.net.Network
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor

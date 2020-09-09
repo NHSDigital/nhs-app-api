@@ -17,7 +17,7 @@ class IntentHandlers {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering handleIntent")
 
         if (intent?.action == Intent.ACTION_VIEW) {
-            handlers[intent.action]?.handle(intent, isAppClosed, nhsWeb)
+            handlers[Intent.ACTION_VIEW]?.handle(intent, isAppClosed, nhsWeb)
             return
         }
 

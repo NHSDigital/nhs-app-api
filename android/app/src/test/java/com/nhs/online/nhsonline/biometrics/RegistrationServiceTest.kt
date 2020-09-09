@@ -3,9 +3,9 @@ package com.nhs.online.nhsonline.biometrics
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.support.v4.app.FragmentActivity
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import com.nhaarman.mockito_kotlin.*
+import androidx.fragment.app.FragmentActivity
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface

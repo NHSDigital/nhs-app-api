@@ -3,9 +3,9 @@ package com.nhs.online.nhsonline.services
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.iid.InstanceIdResult
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.nhs.online.nhsonline.clients.FirebaseClient
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface

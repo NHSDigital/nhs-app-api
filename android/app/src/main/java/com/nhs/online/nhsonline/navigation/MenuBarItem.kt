@@ -2,9 +2,9 @@ package com.nhs.online.nhsonline.navigation
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.TextViewCompat
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity

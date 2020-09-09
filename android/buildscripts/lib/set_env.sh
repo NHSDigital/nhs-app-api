@@ -31,7 +31,5 @@ DOCKER_ARGS+=(-w "${DOCKER_ROOT}data/repo/android")
 
 DOCKER_ARGS+=(-e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle")
 
-GRADLE_ARGS=("-Dorg.gradle.jvmargs='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'")
-
 export DOCKER_ARGS
 export GRADLE_ARGS

@@ -3,8 +3,8 @@ package com.nhs.online.nhsonline.biometrics
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.support.v4.app.FragmentActivity
-import com.nhaarman.mockito_kotlin.*
+import androidx.fragment.app.FragmentActivity
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.nhsonline.biometrics.utils.BiometricMockTestData.getSignature

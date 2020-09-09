@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
+set -x
 
 docker run \
   "${DOCKER_ARGS[@]}" \
-  nhsapp.azurecr.io/nhsonline-android-build:jdk8-android_sdk_latest-1.0 \
+  nhsapp.azurecr.io/nhsonline-android-build:jdk11-gradle6-android_sdk_latest-1.0 \
   bash -c "\
     if [ -f 'local.properties' ]; then \
       rm -f 'local.properties'; \

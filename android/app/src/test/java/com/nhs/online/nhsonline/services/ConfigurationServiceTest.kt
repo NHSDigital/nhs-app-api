@@ -3,7 +3,7 @@ package com.nhs.online.nhsonline.services
 import android.app.Activity
 import android.content.Context
 import android.net.Network
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorMessageHandler

@@ -1,7 +1,7 @@
 package com.nhs.online.nhsonline.registration
 
 import android.util.Log
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.data.*
 import com.nhs.online.nhsonline.interfaces.IPaycassoFlow
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface

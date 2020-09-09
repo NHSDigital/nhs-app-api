@@ -1,8 +1,8 @@
 package com.nhs.online.nhsonline.biometrics.utils
 
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import org.junit.Assert

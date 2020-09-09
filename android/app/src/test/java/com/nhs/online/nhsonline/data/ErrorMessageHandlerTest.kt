@@ -2,7 +2,7 @@ package com.nhs.online.nhsonline.data
 
 import android.content.Context
 import android.content.res.Resources
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Before

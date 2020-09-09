@@ -2,8 +2,8 @@ package com.nhs.online.nhsonline.biometrics.utils
 
 import android.app.Activity
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.annotation.RequiresApi
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.support.AlertHelper

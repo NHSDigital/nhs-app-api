@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.webinterfaces
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.AddToCalendarData
 import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler

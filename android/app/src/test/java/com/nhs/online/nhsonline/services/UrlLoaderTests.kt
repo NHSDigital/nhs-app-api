@@ -1,8 +1,8 @@
 package com.nhs.online.nhsonline.services
 
 import android.webkit.WebView
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import org.junit.Assert.assertEquals
 import org.junit.Before

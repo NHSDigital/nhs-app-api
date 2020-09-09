@@ -1,6 +1,6 @@
 package com.nhs.online.nhsonline.support
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
