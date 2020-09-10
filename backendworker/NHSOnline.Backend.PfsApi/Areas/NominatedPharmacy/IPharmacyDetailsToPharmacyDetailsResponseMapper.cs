@@ -1,7 +1,7 @@
-﻿using NHSOnline.Backend.PfsApi.GpSearch.Models;
+﻿using System.Collections.Generic;
 using GeoCoordinatePortable;
-using System.Collections.Generic;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 
-
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     public class UpdateNominatedPharmacyResponseAuditingVisitor : IUpdateNominatedPharmacyResponseVisitor<Task>
@@ -76,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 await _auditor.Audit(AuditType, 
                     $"Nominated pharmacy update of ods code from { result.OldOdsCode } to { result.NewOdsCode } " +
-                    $"was accepted  but call to get nominated pharmacy still returns the old ods code.");
+                    "was accepted  but call to get nominated pharmacy still returns the old ods code.");
             }
             catch (Exception e)
             {

@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to post user info with exception: {e}");
+                _logger.LogError(e, "Failed to post user info with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError(e,"Failed to get info with exception");
+                _logger.LogError(e, "Failed to get info with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get user info with exception: {e}");
+                _logger.LogError(e, "Failed to get user info with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to patch info with exception: {e}");
+                _logger.LogError(e, "Failed to patch info with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

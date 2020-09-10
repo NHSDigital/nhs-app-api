@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Device Registration failed with exception: {e}");
+                _logger.LogError(e, "User Device Registration failed with exception");
                 return new RegisterDeviceResult.InternalServerError();
             }
             finally
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Device find failed with exception: {e}");
+                _logger.LogError(e, "User Device find failed with exception");
                 return new SearchDeviceResult.InternalServerError();
             }
             finally
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Device find failed with exception: {e}");
+                _logger.LogError(e, "User Device find failed with exception");
                 return new SearchDeviceResult.InternalServerError();
             }
             finally
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Device deletion failed with exception: {e}");
+                _logger.LogError(e, "User Device deletion failed with exception");
                 return new DeleteDeviceResult.InternalServerError();
             }
             finally
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Device update failed with exception: {e}");
+                _logger.LogError(e, "User Device update failed with exception");
                 return new UpdateDeviceResult.InternalServerError();
             }
             finally

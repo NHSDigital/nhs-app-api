@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support.Settings;
 using Novell.Directory.Ldap;
-using Task = System.Threading.Tasks.Task;
 
 namespace NHSOnline.Backend.PfsApi.SpineSearch
 {

@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Info Posting has failed with exception: {e}");
+                _logger.LogError(e, "Info Posting has failed with exception");
                 return new PostInfoResult.InternalServerError();
             }
             finally
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Info Get has failed with exception: {e}");
+                _logger.LogError(e, "Info Get has failed with exception");
                 return new GetInfoResult.InternalServerError();
             }
             finally
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
             catch (Exception e)
             {
-                _logger.LogError($"Info Get has failed with exception: {e}");
+                _logger.LogError(e, "Info Get has failed with exception");
                 return new GetInfoResult.InternalServerError();
             }
             finally

@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to clear down P9 GP User Session", ex);
+                _logger.LogError(ex, "Failed to clear down P9 GP User Session");
             }
             finally
             {

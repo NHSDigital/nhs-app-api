@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;

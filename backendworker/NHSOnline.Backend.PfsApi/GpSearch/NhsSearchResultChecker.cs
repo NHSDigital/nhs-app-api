@@ -16,8 +16,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             _logger = logger;
         }
         
-        public GpSearchResult CheckOdsCodeSearchResult(
-            GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> nhsSearchResponse,
+        public GpSearchResult CheckOdsCodeSearchResult(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> nhsSearchResponse,
             string odsCode)
         {
             if (!nhsSearchResponse.HasSuccessResponse)
@@ -59,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             {
                 _logger.LogError(
                     $"Search for Nhs Pharmacy by Latitude and Longitude Failed for postcode {postcode}," +
-                    $" no response body found");
+                    " no response body found");
                 return new PharmacySearchResponse(pharmacySearchResponse.StatusCode);
             }
 

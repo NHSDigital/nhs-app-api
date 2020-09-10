@@ -1,13 +1,13 @@
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
-using NHSOnline.Backend.Support.ResponseParsers;
 using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Envelope;
+using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
+using NHSOnline.Backend.Support.ResponseParsers;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients

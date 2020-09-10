@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
             if (result is LinkedAccountsResult.Success success && success.HasAnyProxyInfoBeenUpdatedInSession)
             {
-                _logger.LogInformation($"Updating user session to store Nhs Numbers for linked accounts");
+                _logger.LogInformation("Updating user session to store Nhs Numbers for linked accounts");
                 await _sessionCacheService.UpdateUserSession(userSession);
             }
 

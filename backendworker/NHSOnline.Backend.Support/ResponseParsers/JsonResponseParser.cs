@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Support.ResponseParsers
     public class JsonResponseParser : BaseResponseParser, IJsonResponseParser
     {
         private readonly Dictionary<string, string> _patternAndRedactors =
-            new Dictionary<string, string>()
+            new Dictionary<string, string>
             {
                 { @"(Could not convert [a-z|A-Z]* to [a-z|A-Z]*):([\s\S]+)*", "$1" },
                 { @"(Error converting value {null} to type [\s\S]+).Path([\s\S]+)*", "$1" },

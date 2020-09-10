@@ -1,14 +1,15 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
@@ -120,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             var body = JsonConvert.SerializeObject(model, _serializerSettings);
             request.Content = new StringContent(body);
             request.Content.Headers.ContentType =
-                MediaTypeHeaderValue.Parse(System.Net.Mime.MediaTypeNames.Application.Json);
+                MediaTypeHeaderValue.Parse(MediaTypeNames.Application.Json);
             return request;
         }
 

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
 
 namespace NHSOnline.Backend.Support.Middleware
 {
@@ -29,7 +30,7 @@ namespace NHSOnline.Backend.Support.Middleware
                 throw new ArgumentNullException(nameof (options));
             }
 
-            return app.UseMiddleware<LogRequestHeaderMiddleware>((object) Microsoft.Extensions.Options.Options.Create(options));
+            return app.UseMiddleware<LogRequestHeaderMiddleware>((object) Options.Create(options));
         }
     }
 }

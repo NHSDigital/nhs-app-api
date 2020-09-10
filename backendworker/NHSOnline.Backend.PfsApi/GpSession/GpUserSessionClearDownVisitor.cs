@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 

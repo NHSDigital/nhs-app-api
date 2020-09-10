@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
-            _logger.LogInformation($"Calling prescription service to get prescriptions");
+            _logger.LogInformation("Calling prescription service to get prescriptions");
 
             var gpLinkedAccountModel = new GpLinkedAccountModel(
                 userSession, patientId
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 userSession, patientId
             );
 
-            _logger.LogInformation($"Calling prescription service to order prescriptions");
+            _logger.LogInformation("Calling prescription service to order prescriptions");
             return await prescriptionService.OrderPrescription(gpLinkedAccountModel, repeatPrescriptionRequest);
         }
 

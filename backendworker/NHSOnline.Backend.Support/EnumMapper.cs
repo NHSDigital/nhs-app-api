@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Support
             }
             
             _logger.LogWarning($"Unable to map {typeof(TEnum).FullName} value: {source}.  Default mapping used");
-            return default(TEnum);
+            return default;
         }
         
         public string From(TEnum source)
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Support
             }
             
             _logger.LogWarning($"Unable to map {typeof(string).FullName} value: {source}.  Default mapping used");
-            return default(string);
+            return default;
         }
     }
 }

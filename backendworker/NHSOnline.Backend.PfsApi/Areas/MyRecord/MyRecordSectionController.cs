@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Failed to get section");
+                _logger.LogError(e, "Failed to get section");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private IVisionPatientRecordService GetVisionRecordService()
         {
             _logger.LogInformation(
-                $"Fetching PatientRecordService for Vision");
+                "Fetching PatientRecordService for Vision");
             return _gpSystemFactory
                 .CreateGpSystem(Supplier.Vision)
                 .GetPatientRecordService() as IVisionPatientRecordService;

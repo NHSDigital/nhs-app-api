@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Message Posting has failed with exception: {e}");
+                _logger.LogError(e, "Message Posting has failed with exception");
                 return new MessageResult.InternalServerError();
             }
             finally
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Sender Messages Get has failed with exception: {e}");
+                _logger.LogError(e, "Sender Messages Get has failed with exception");
                 return new MessagesResult.InternalServerError();
             }
             finally
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Summary Messages Get has failed with exception: {e}");
+                _logger.LogError(e, "Summary Messages Get has failed with exception");
                 return new MessagesResult.InternalServerError();
             }
             finally
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Message Get has failed with exception: {e}");
+                _logger.LogError(e, "Message Get has failed with exception");
                 return new MessagePatchResult.InternalServerError();
             }
             finally

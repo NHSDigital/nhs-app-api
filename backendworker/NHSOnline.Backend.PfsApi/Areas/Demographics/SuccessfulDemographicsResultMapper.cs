@@ -1,5 +1,5 @@
-using NHSOnline.Backend.GpSystems.Demographics.Models;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Demographics.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics

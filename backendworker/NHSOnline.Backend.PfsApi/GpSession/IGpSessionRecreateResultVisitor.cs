@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc.Filters;
-
 namespace NHSOnline.Backend.PfsApi.GpSession
 {
     public interface IGpSessionRecreateResultVisitor<T>

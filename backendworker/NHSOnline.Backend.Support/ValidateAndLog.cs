@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace NHSOnline.Backend.Support
 {
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Support
         {
             None = 0,
             ThrowError = 1,
-        };
+        }
 
         public ValidateAndLog(ILogger logger)
         {

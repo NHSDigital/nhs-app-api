@@ -9,13 +9,13 @@ namespace NHSOnline.Backend.Support.Sanitization
     {
         private readonly HashSet<string> _blackList = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "script" },
-            { "iframe" },
-            { "form" },
-            { "object" },
-            { "embed" },
-            { "link" },
-            { "meta" }
+            "script",
+            "iframe",
+            "form",
+            "object",
+            "embed",
+            "link",
+            "meta"
         };
 
         public string SanitizeHtml(string html)
@@ -132,11 +132,9 @@ namespace NHSOnline.Backend.Support.Sanitization
                 node.ParentNode.RemoveChild(node);
                 return true;
             }
-            else
-            {
-                SanitizeUrlsInStyleNode(node);
-                return false;
-            }
+
+            SanitizeUrlsInStyleNode(node);
+            return false;
         }
 
         private static void SanitizeUrlsInStyleNode(HtmlNode node)

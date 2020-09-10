@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Security.Cryptography;
 
 namespace NHSOnline.Backend.Support.Hasher
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

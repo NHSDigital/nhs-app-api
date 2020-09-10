@@ -36,10 +36,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
             CitizenIdUserSession cidUserSession)
         {
             _logger.LogEnter();
-            
+
             var getNominatedPharmacyResult = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber, cidUserSession);
             var result = getNominatedPharmacyResult.GetNominatedPharmacyResponse;
-            
+
             if (NominatedPharmacyGetHasError(result, out StatusCodeResult errorResult))
             {
                 return new UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure(errorResult);
@@ -58,9 +58,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             var updateNominatedPharmacyResult = await _nominatedPharmacyService.UpdateNominatedPharmacy(nominatedPharmacyUpdate);
 
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(updateNominatedPharmacyResult.HttpStatusCode))
+            if (!updateNominatedPharmacyResult.HttpStatusCode.IsSuccessStatusCode())
             {
-                _logger.LogError($"Error updating nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }"); 
+                _logger.LogError($"Error updating nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }");
                 return new UpdateNominatedPharmacyResponse.BadGateway(result.PharmacyOdsCode, updatedOdsCode);
             }
 
@@ -75,8 +75,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
             // Retrieve nominated pharmacy again to confirm it's been updated.
             var confirmNominatedPharmacyUpdatedResult = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber, cidUserSession);
             var confirmUpdateResponse = confirmNominatedPharmacyUpdatedResult.GetNominatedPharmacyResponse;
-            
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
+
+            if (!result.HttpStatusCode.IsSuccessStatusCode())
             {
                 _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
                 return new UpdateNominatedPharmacyResponse.InternalServerError(result.HttpStatusCode);
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             if (!string.Equals(updatedOdsCode, confirmUpdateResponse.PharmacyOdsCode, StringComparison.Ordinal))
             {
                 _logger.LogError($"Nominated pharmacy update of ods code from { result.PharmacyOdsCode } to { updatedOdsCode } was accepted  " +
-                                 $"but call to get nominated pharmacy still returns the old ods code.");
+                                 "but call to get nominated pharmacy still returns the old ods code.");
 
                 return new UpdateNominatedPharmacyResponse.UpdatedButStillOldCode(result.PharmacyOdsCode, updatedOdsCode);
             }
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         private bool NominatedPharmacyGetHasError(GetNominatedPharmacyResponse response, out StatusCodeResult errorResult)
         {
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(response.HttpStatusCode))
+            if (!response.HttpStatusCode.IsSuccessStatusCode())
             {
                 _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { response.HttpStatusCode }");
                 errorResult = new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 errorResult = new StatusCodeResult((int)HttpStatusCode.BadGateway);
                 return true;
             }
-            
+
             if (!response.HaveAllChecksPassed)
             {
                 _logger.LogError("Invalid pharmacy type, combination or family name / dob mismatch");

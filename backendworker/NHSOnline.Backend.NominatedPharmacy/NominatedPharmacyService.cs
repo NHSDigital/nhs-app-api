@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while trying to get the patient's nominated pharmacy");
+                _logger.LogError(ex, "An error occurred while trying to get the patient's nominated pharmacy");
                 return new GetNominatedPharmacyResult.InternalServerError();
             }
             finally
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         {
             return pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
         }
-        
+
         private static string GetObjectId(PharmacyCheck pharmacyCheck)
         {
             return pharmacyCheck.PatientCareProvisionEvent?.Id?.Extension;
@@ -277,14 +277,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new UpdateNominatedPharmacyResult(result.StatusCode);
                 }
 
-                _logger.LogInformation($"Successfully completed request to update patient's nominated pharmacy. " +
+                _logger.LogInformation("Successfully completed request to update patient's nominated pharmacy. " +
                                        $"Spine ConversationId: { result.Response?.Header?.MessageHeader?.ConversationId }");
 
                 return new UpdateNominatedPharmacyResult(result.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while trying to update the patient's nominated pharmacy");
+                _logger.LogError(ex, "An error occurred while trying to update the patient's nominated pharmacy");
                 return new UpdateNominatedPharmacyResult(HttpStatusCode.InternalServerError);
             }
             finally
@@ -356,7 +356,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 _logger.LogInformation("Patient does not have a nominated pharmacy set");
                 return new PharmacyCheck { IsValid = true, PatientCareProvisionEvent = null };
             }
-            else if (patientCareSections.Count > pharmacyThreshold)
+
+            if (patientCareSections.Count > pharmacyThreshold)
             {
                 StringBuilder logBuilder = new StringBuilder("Patient has multiple pharmacy types, ");
 

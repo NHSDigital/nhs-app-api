@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Support.AspNet
             context.Response.OnStarting(() =>
             {
                 context.Response.GetTypedHeaders().CacheControl = 
-                    new CacheControlHeaderValue()
+                    new CacheControlHeaderValue
                     {
                         NoCache = true,
                         NoStore = true,

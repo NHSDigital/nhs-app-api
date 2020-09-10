@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
-using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Filters
 {

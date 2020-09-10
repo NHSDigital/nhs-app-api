@@ -3,13 +3,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
+using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 using NHSOnline.Backend.Support.Session;
-using Address = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Address;
-using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
+using Address = NHSOnline.Backend.PfsApi.OrganDonation.Models.Address;
+using Name = NHSOnline.Backend.PfsApi.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
@@ -53,9 +53,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                     OrganDonationReferenceDataResponseMapper>();
 
             services
-                .AddSingleton<IMapper<string, Models.Address, Address>, OrganDonationAddressMapper>();
+                .AddSingleton<IMapper<string, Address, ApiModels.Address>, OrganDonationAddressMapper>();
 
-            services.AddSingleton<IMapper<Models.Name, Name>, OrganDonationNameMapper>();
+            services.AddSingleton<IMapper<Name, ApiModels.Name>, OrganDonationNameMapper>();
             services.AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>,
                 RegistrationRequestMapper>();
 

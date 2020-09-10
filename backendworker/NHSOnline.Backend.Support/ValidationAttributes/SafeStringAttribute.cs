@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Support.ValidationAttributes
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class SafeStringAttribute : ValidationAttribute
     {
         public SafeStringAttribute()

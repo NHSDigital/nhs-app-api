@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Repository;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions

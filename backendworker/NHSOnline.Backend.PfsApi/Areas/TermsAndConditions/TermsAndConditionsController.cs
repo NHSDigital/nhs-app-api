@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
@@ -87,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             if (!model.AnalyticsCookieAccepted)
             {
                 _logger.LogInformation(
-                    $"Recording user did not accept optional analytics cookies." +
+                    "Recording user did not accept optional analytics cookies." +
                     $" {nameof(userSession.OdsCode)}: {userSession.OdsCode}");
             }
 

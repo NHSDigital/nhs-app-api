@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;

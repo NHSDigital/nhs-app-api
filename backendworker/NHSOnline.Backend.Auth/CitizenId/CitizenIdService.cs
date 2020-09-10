@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unexpected error refreshing access token", ex);
+                _logger.LogError(ex, "Unexpected error refreshing access token");
                 return new RefreshAccessTokenResult.InternalServerError();
             }
             finally

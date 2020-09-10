@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
-using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
-using Address = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Address;
+using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
+using Address = NHSOnline.Backend.PfsApi.OrganDonation.Models.Address;
+using Name = NHSOnline.Backend.PfsApi.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
@@ -14,8 +14,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
     {
         private readonly IEnumMapper<string, FaithDeclaration> _faithDeclarationMapper;
         private readonly IEnumMapper<string, Decision> _decisionMapper;
-        private readonly IMapper<Models.Name, Name> _nameMapper;
-        private readonly IMapper<string, Models.Address, Address> _addressMapper;
+        private readonly IMapper<Name, ApiModels.Name> _nameMapper;
+        private readonly IMapper<string, Address, ApiModels.Address> _addressMapper;
         private readonly IOrganDonationIdentifierMapper _identifierMapper;
         private readonly IOrganDonationDonationWishesMapper _donationWishesMapper;
         private readonly IOrganDonationGenderMapper _genderMapper;
@@ -24,8 +24,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
         public RegistrationRequestMapper(
             IEnumMapper<string, FaithDeclaration> faithDeclarationMapper,
             IEnumMapper<string, Decision> decisionMapper,
-            IMapper<Models.Name, Name> nameMapper,
-            IMapper<string, Models.Address, Address> addressMapper,
+            IMapper<Name, ApiModels.Name> nameMapper,
+            IMapper<string, Address, ApiModels.Address> addressMapper,
             IOrganDonationIdentifierMapper identifierMapper,
             IOrganDonationDonationWishesMapper donationWishesMapper,
             IOrganDonationGenderMapper genderMapper,

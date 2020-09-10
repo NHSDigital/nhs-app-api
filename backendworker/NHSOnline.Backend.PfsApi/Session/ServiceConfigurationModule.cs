@@ -6,9 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session;
-using NHSOnline.Backend.PfsApi.Filters;
-using NHSOnline.Backend.PfsApi.GpSession;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Session

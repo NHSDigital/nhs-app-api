@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to post User Research with exception: {e}");
+                _logger.LogError(e, "Failed to post User Research with exception");
                 return new PostUserResearchResult.InternalServerError();
             }
         }
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserResearch
             }
             catch (Exception e)
             {
-                _logger.LogError($"User Research post has failed with exception: {e}");
+                _logger.LogError(e, "User Research post has failed with exception");
                 return new PostUserResearchResult.InternalServerError();
             }
             finally

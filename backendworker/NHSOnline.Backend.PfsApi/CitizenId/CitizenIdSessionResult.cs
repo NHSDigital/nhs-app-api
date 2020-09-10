@@ -1,6 +1,6 @@
-using NHSOnline.Backend.Support;
 using System;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.CitizenId
 {

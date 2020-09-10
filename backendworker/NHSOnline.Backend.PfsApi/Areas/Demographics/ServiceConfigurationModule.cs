@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.GpSystems.Demographics.Models;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Demographics.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics

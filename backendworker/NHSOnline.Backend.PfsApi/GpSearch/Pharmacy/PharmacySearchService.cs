@@ -1,18 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Globalization;
-using Microsoft.Extensions.Logging;
 using GeoCoordinatePortable;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using System.Collections.Generic;
-using NHSOnline.Backend.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error processing online pharmacy search");
+                _logger.LogError(e, "Error processing online pharmacy search");
                 return new PharmacySearchResult.InternalServerError();
             }
             finally
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error processing online pharmacy search");
+                _logger.LogError(e, "Error processing online pharmacy search");
                 return new PharmacySearchResult.InternalServerError();
             }
             finally
@@ -233,8 +233,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
                 if (!postcodeSearchResult.HasSuccessResponse)
                 {
-                    _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude " +
-                                     $"on Nhs Search Service, Status code: " +
+                    _logger.LogError("Unsuccessful request searching for Postcode Latitude and Longitude " +
+                                     "on Nhs Search Service, Status code: " +
                                      $"{(int) postcodeSearchResult.StatusCode}");
 
                     return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);

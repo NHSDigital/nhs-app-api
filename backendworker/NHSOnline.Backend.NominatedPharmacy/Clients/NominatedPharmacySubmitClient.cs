@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
-using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
-using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients
 {
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An unexpected error occurred when updating nominated pharmacy");
+                _logger.LogError(ex, "An unexpected error occurred when updating nominated pharmacy");
                 throw;
             }
         }

@@ -4,7 +4,7 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Support.Cipher
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

@@ -55,27 +55,27 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
             catch (AggregateException ex) when (ex.InnerExceptions.Any(x => x is HttpRequestException || x is MessagingException))
             {
-                _logger.LogError("Failed to register installation with Azure, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.BadGateway();
             }
             catch (AggregateException ex)
             {
-                _logger.LogError("Failed to register installation with Azure, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.InternalServerError();
             }
             catch (MessagingException ex)
             {
-                _logger.LogError("Failed to register installation with Azure, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.BadGateway();
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError("Failed to register installation with Azure, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.BadGateway();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to register installation with Azure, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to register installation with Azure, an unexpected exception has been thrown");
                 return new RegistrationResult.InternalServerError();
             }
             finally
@@ -98,17 +98,17 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             }
             catch (MessagingException ex)
             {
-                _logger.LogError("Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
                 return new RegistrationExistsResult.BadGateway();
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError("Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
                 return new RegistrationExistsResult.BadGateway();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to check if installation exists on Azure notification hubs, an unexpected exception has been thrown");
                 return new RegistrationExistsResult.InternalServerError();
             }
             finally
@@ -126,19 +126,19 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
                 return new DeleteRegistrationResult.Success();
             }
-            catch (MessagingException ex )
+            catch (MessagingException ex)
             {
-                _logger.LogError("Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown");
                 return new DeleteRegistrationResult.BadGateway();
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError("Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown");
                 return new DeleteRegistrationResult.BadGateway();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown", ex);
+                _logger.LogError(ex, "Failed to delete installation on Azure notification hubs, an unexpected exception has been thrown");
                 return new DeleteRegistrationResult.InternalServerError();
             }
             finally

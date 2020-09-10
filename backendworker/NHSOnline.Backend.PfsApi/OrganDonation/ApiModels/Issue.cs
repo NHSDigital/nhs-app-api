@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-﻿namespace NHSOnline.Backend.PfsApi.OrganDonation.ApiModels
+
+namespace NHSOnline.Backend.PfsApi.OrganDonation.ApiModels
 {
     public class Issue
     {

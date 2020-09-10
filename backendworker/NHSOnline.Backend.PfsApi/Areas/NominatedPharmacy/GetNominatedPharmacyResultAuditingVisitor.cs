@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Successfully retrieved nominated pharmacy");
+                await _auditor.Audit(AuditType, "Successfully retrieved nominated pharmacy");
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Personal Details checks failed on the retrieved Nominated Pharmacy");
+                await _auditor.Audit(AuditType, "Personal Details checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Pharmacy checks failed on the retrieved Nominated Pharmacy");
+                await _auditor.Audit(AuditType, "Pharmacy checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
             {
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             try
             {
                 _logger.LogError("Error retrieving nominated pharmacy");
-                await _auditor.Audit(AuditType, $"Failed to retrieve nominated pharmacy");
+                await _auditor.Audit(AuditType, "Failed to retrieve nominated pharmacy");
             }
             catch (Exception e)
             {
@@ -72,10 +72,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                _logger.LogInformation($"The sent nhsNumber has been superseded - " +
+                _logger.LogInformation("The sent nhsNumber has been superseded - " +
                     $"old NhsNumber={result.SentNhsNumber}, new NhsNumber={result.ReturnedNhsNumber}");
                 
-                await _auditor.Audit(AuditType, $"The sent nhsNumber has been superseded - " +
+                await _auditor.Audit(AuditType, "The sent nhsNumber has been superseded - " +
                     $"old NhsNumber={result.SentNhsNumber}, new NhsNumber={result.ReturnedNhsNumber}");
             }
             catch (Exception e)
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {   
             try
             {
-                await _auditor.Audit(AuditType, $"Account is marked as confidential");
+                await _auditor.Audit(AuditType, "Account is marked as confidential");
             }
             catch (Exception e)
             {
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {      
             try
             {
-                await _auditor.Audit(AuditType, $"An error occurred while trying to get the patient's nominated pharmacy");
+                await _auditor.Audit(AuditType, "An error occurred while trying to get the patient's nominated pharmacy");
             }
             catch (Exception e)
             {
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             try
             {
                 await _auditor.Audit(AuditType, $"GP practice with ods code { result.OdsCode } " +
-                                                $"not enabled for electronic prescription service");
+                                                "not enabled for electronic prescription service");
             }
             catch (Exception e)
             {
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error retrieving pharmacy using pharmacy OdsCde " +
+                await _auditor.Audit(AuditType, "Error retrieving pharmacy using pharmacy OdsCde " +
                                                 $"{result.OdsCode} with status code {result.StatusCode}");
             }
             catch (Exception e)

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.Support.Certificate
         }
 
         public bool ServerCertificateValidationHandler(object sender, X509Certificate certificate,
-            X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+            X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             {
                 // Overriding the default server certificate validation from:
@@ -47,13 +48,13 @@ namespace NHSOnline.Backend.Support.Certificate
 
                 var success = false;
 
-                if (sslPolicyErrors != System.Net.Security.SslPolicyErrors.None)
+                if (sslPolicyErrors != SslPolicyErrors.None)
                 {
                     LogCertInfo("ServerCertificateValidationHandler", certificate, true);
                     var inDevelopment = "Development".Equals(_configuration["ASPNETCORE_ENVIRONMENT"],
                         StringComparison.OrdinalIgnoreCase);
 
-                    if (inDevelopment && sslPolicyErrors == System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch)
+                    if (inDevelopment && sslPolicyErrors == SslPolicyErrors.RemoteCertificateNameMismatch)
                     {
                         _logger.LogError($"SSL policy errors={sslPolicyErrors.ToString()}, ignoring");
                         success = true;
@@ -63,7 +64,7 @@ namespace NHSOnline.Backend.Support.Certificate
 
                         foreach (var item in chain.ChainStatus)
                         {
-                            _logger.LogError($"Certificate validation was not successful. " +
+                            _logger.LogError("Certificate validation was not successful. " +
                                              $"SSL policy errors={sslPolicyErrors.ToString()}, Status={item.Status}, StatusInformation={item.StatusInformation}");
                         }
                     }

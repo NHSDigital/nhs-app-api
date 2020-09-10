@@ -1,8 +1,8 @@
 ﻿using System;
-using NHSOnline.Backend.GpSystems.Appointments;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {

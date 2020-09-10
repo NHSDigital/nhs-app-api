@@ -1,24 +1,23 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
-using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
-using NHSOnline.Backend.PfsApi.GpSession;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
@@ -191,7 +190,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while trying to update the patient's nominated pharmacy");
+                _logger.LogError(ex, "An error occurred while trying to update the patient's nominated pharmacy");
                 return new UpdateNominatedPharmacyResponse.InternalServerError(HttpStatusCode.InternalServerError);
             }
         }
@@ -237,7 +236,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             var pharmacyDetailResponse =
                 await _pharmacyService.GetPharmacyDetail(result.GetNominatedPharmacyResponse.PharmacyOdsCode);
 
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
+            if (!pharmacyDetailResponse.StatusCode.IsSuccessStatusCode())
             {
                 return new GetNominatedPharmacyResult.PharmacyDetailFailure(
                     result.GetNominatedPharmacyResponse.PharmacyOdsCode, pharmacyDetailResponse.StatusCode);

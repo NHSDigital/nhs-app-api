@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 Author1 = new NominatedPharmacyTypes.Author1
                 {
                     TypeCode = "AUT",
-                    AgentSystemSDS = new NominatedPharmacyTypes.AgentSystemSDS()
+                    AgentSystemSDS = new NominatedPharmacyTypes.AgentSystemSDS
                     {
                         ClassCode = "AGNT",
                         AgentSystemSDSInner = new NominatedPharmacyTypes.AgentSystemSDSInner
@@ -185,8 +185,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                                                         {
                                                             TypeCode = "PRF",
                                                             AssignedOrganization =
-                                                                new UpdateNominatedPharmacyTypes.
-                                                                    AssignedOrganization
+                                                                new UpdateNominatedPharmacyTypes.AssignedOrganization
                                                                     {
                                                                         ClassCode = "ASSIGNED",
                                                                         Id = new NominatedPharmacyTypes.Id

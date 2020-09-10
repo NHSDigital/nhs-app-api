@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Temporal;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments

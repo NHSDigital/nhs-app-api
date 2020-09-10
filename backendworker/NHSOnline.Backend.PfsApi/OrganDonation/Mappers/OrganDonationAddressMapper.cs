@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
+using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationAddressMapper : IMapper<string, Models.Address, Address>
+    internal class OrganDonationAddressMapper : IMapper<string, Address, ApiModels.Address>
     {
         private const char Delimiter = ',';
         private static readonly Regex PostCodeRegex =
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             _logger = logger;
         }
 
-        public Address Map(string firstSource, Models.Address secondSource)
+        public ApiModels.Address Map(string firstSource, Address secondSource)
         {
             if (string.IsNullOrWhiteSpace(firstSource) && secondSource == null)
             {
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             return Map(secondSource) ?? Map(firstSource);
         }
 
-        private Address Map(Models.Address address)
+        private ApiModels.Address Map(Address address)
         {
             if (address == null)
             {
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             return MapPartsToAddress(parts, address.PostCode, address.Town, address.County);
         }
 
-        private Address Map(string fullAddress)
+        private ApiModels.Address Map(string fullAddress)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(fullAddress, nameof(fullAddress), ValidateAndLog.ValidationOptions.ThrowError)
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             return SplitAddressLineAndMap(line, postCode);
         }
 
-        private Address SplitAddressLineAndMap(string line, string postCode)
+        private ApiModels.Address SplitAddressLineAndMap(string line, string postCode)
         {
             var parts = line.Split(Delimiter, StringSplitOptions.RemoveEmptyEntries)
                 .Where(l => !string.IsNullOrWhiteSpace(l))
@@ -85,9 +85,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             }
         }
 
-        private Address MapPartsToAddress(List<string> parts, string postCode, string city = null, string district = null)
+        private ApiModels.Address MapPartsToAddress(List<string> parts, string postCode, string city = null, string district = null)
         {
-            return new Address
+            return new ApiModels.Address
             {
                 Line = parts.Count > 2
                     ? new List<string>

@@ -8,10 +8,10 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.Session;
-using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 {
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
                 string odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, patientId);
 
-                _logger.LogInformation($"Fetching Service Journey Rules for linked account");
+                _logger.LogInformation("Fetching Service Journey Rules for linked account");
 
                 var result = await _serviceJourneyRulesService.GetServiceJourneyRulesForLinkedAccount(odsCode);
 

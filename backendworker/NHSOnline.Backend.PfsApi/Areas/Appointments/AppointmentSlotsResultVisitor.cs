@@ -1,10 +1,9 @@
 ﻿﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Session;
+ using Microsoft.AspNetCore.Mvc;
+ using NHSOnline.Backend.GpSystems.Appointments;
+ using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.Areas.Appointments
+ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentSlotsResultVisitor : ResultVisitorBase, IAppointmentSlotsResultVisitor<IActionResult>
     {

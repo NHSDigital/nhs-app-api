@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to post message with exception: {e}");
+                _logger.LogError(e, "Failed to post message with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get messages with exception: {e}");
+                _logger.LogError(e, "Failed to get messages with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to update message with exception: {e}");
+                _logger.LogError(e, "Failed to update message with exception");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

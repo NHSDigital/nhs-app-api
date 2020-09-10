@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
                 DoLdapSearch(
                     ldapConnection,
-                    $"(&(nhsIDCode=YEA)(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pdsquery:QUPA_IN000008UK02))",
+                    "(&(nhsIDCode=YEA)(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pdsquery:QUPA_IN000008UK02))",
                     new Dictionary<string, Action<NhsAppSpinePdsTraceProperties, string>>(StringComparer.InvariantCultureIgnoreCase)
                     {
                         { "uniqueIdentifier", (config, value) => config.ToAsid = value },
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
                 DoLdapSearch(
                     ldapConnection,
-                    $"(&(nhsIDCode=YEA)(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
+                    "(&(nhsIDCode=YEA)(objectClass=nhsAs)(nhsAsSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
                     new Dictionary<string, Action<NhsAppSpinePdsUpdateProperties, string>>(StringComparer.InvariantCultureIgnoreCase)
                     {
                         { "uniqueIdentifier", (config, value) => config.ToAsid = value },
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
                 DoLdapSearch(
                     ldapConnection,
-                    $"(&(nhsIDCode=YEA)(objectClass=nhsMHS)(nhsMHSSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
+                    "(&(nhsIDCode=YEA)(objectClass=nhsMHS)(nhsMHSSvcIA=urn:nhs:names:services:pds:PRPA_IN000203UK03))",
                     new Dictionary<string, Action<NhsAppSpinePdsUpdateProperties, string>>(StringComparer.InvariantCultureIgnoreCase)
                     {
                         { "nhsMhsCPAId", (config, value) => config.CpaId = value },

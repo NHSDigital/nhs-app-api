@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.GpSearch.Models;
-using GeoCoordinatePortable;
-using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
 using System.Collections.Generic;
+using System.Linq;
+using GeoCoordinatePortable;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
 using OpeningTime = NHSOnline.Backend.NominatedPharmacy.Models.OpeningTime;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy

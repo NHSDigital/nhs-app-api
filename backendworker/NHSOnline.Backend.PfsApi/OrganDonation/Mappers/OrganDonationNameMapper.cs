@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using NHSOnline.Backend.Support;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
+using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationNameMapper : IMapper<Models.Name, Name>
+    internal class OrganDonationNameMapper : IMapper<Name, ApiModels.Name>
     {
         private readonly ILogger<OrganDonationNameMapper> _logger;
         private readonly IDictionary<string,string> _titlesMap;
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             _titlesMap = dataMaps.TitleDataMap;
         }
 
-        public Name Map(Models.Name source)
+        public ApiModels.Name Map(Name source)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(source, nameof(source), ValidateAndLog.ValidationOptions.ThrowError)
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 
             var prefix = MapPrefix(source.Title);
 
-            return new Name
+            return new ApiModels.Name
                 {
                     Given = MapGiven(prefix, source),
                     Family = source.Surname,
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 };
         }
 
-        private static List<string> MapGiven(List<string> prefix, Models.Name source)
+        private static List<string> MapGiven(List<string> prefix, Name source)
         {
             var givenName = source.GivenName;
             if (prefix == null && !string.IsNullOrWhiteSpace(source.Title))

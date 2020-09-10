@@ -1,25 +1,26 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Support.Logging
 {
     public static class LoggingExtensions
     {
-        public static void LogEnter<T>(this ILogger<T> logger, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
+        public static void LogEnter<T>(this ILogger<T> logger, [CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Entering {methodName}");
         }
 
-        public static void LogExit<T>(this ILogger<T> logger, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
+        public static void LogExit<T>(this ILogger<T> logger, [CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Exiting {methodName}");
         }
 
-        public static void LogExitWith<T>(this ILogger<T> logger, string message, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
+        public static void LogExitWith<T>(this ILogger<T> logger, string message, [CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Exiting {methodName} with {message}");
         }

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.Support.Temporal
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

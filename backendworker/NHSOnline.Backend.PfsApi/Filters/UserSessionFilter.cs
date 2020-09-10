@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Filters
 {

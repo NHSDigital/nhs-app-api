@@ -1,5 +1,4 @@
 using System;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Configuration;
 using NHSOnline.Backend.Support.Settings;
 

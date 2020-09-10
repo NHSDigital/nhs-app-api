@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
     {
         private readonly ILogger<UserInfoService> _logger;
         private readonly IUserInfoClient _userInfoClient;
-        
+
         public UserInfoService(
             ILogger<UserInfoService> logger,
             IUserInfoClient userInfoClient)
@@ -35,12 +35,12 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError($"User Info API failed with exception, {e}");
+                _logger.LogError(e, "User Info API failed with exception");
                 return new UserInfoResult.BadGateway();
-            } 
+            }
             catch (Exception e)
             {
-                _logger.LogError($"User Info API failed with exception: {e}");
+                _logger.LogError(e, "User Info API failed with exception");
                 return new UserInfoResult.InternalServerError();
             }
             finally

@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"Retrieving user device registration failed with exception: {e}");
+                    _logger.LogError(e, "Retrieving user device registration failed with exception");
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
             }
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"Registration Deletion failed with exception: {e}");
+                    _logger.LogError(e, "Registration Deletion failed with exception");
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
             }
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"Registration Creation failed with exception: {e}");
+                    _logger.LogError(e, "Registration Creation failed with exception");
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
             }
