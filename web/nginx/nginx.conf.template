@@ -15,9 +15,23 @@ http {
   access_log  /var/log/nginx/access.log  main;
   sendfile        on;
   keepalive_timeout  65;
+
+  # Expires map
+  map $sent_http_content_type $expires {
+      default                    off;
+      text/html                  epoch;
+      text/css                   24h;
+      application/javascript     24h;
+      ~image/                    24h;
+  }
+
   server {
     listen       ${PORT};
     server_name  localhost;
+    location /js/v1/nhsapp.js {
+      expires      epoch;
+      root         /app;
+    }
     location /config.json {
       root        /app;
       ## override content-type ##
@@ -33,5 +47,6 @@ http {
     location = /50x.html {
       root   /usr/share/nginx/html;
     }
+    expires $expires;
   }
 }
