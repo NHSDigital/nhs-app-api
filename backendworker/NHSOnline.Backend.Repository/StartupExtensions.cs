@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NHSOnline.Backend.Support.Configuration;
@@ -14,6 +15,9 @@ namespace NHSOnline.Backend.Repository
             services.AddSingleton<TConfiguration>();
             services.AddTransient<IValidatable>(sp => sp.GetRequiredService<TConfiguration>());
             services.AddTransient<IRepository<TRecord>, MongoRepository<TConfiguration, TRecord>>();
+            services
+                .AddHealthChecks()
+                .AddCheck<ApiMongoClientHealthCheck<TConfiguration>>(typeof(TConfiguration).Name, timeout: TimeSpan.FromSeconds(1));
             services.TryAddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
         }
     }
