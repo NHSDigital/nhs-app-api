@@ -8,6 +8,11 @@
         <span data-purpose="appointment-day-heading">
           {{ formatDate(daySlots[0]) }}
         </span>
+        <p class="nhsuk-u-margin-bottom-0">
+          <span id="appointmentCount" :class="$style['subHeader']">
+            {{ availableAppointmentCount(daySlots[1].length) }}
+          </span>
+        </p>
       </template>
       <ul :class="[$style['selector-list'], 'nhsuk-u-padding-left-0']">
         <time-slot v-for="slot in daySlots[1]"
@@ -55,6 +60,12 @@ export default {
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;
     },
+    availableAppointmentCount(slotCount) {
+      return this.$tc(
+        'appointments.book.numberOfAppointmentsAvailable',
+        slotCount, { appointmentsCount: slotCount },
+      );
+    },
   },
 };
 </script>
@@ -62,4 +73,10 @@ export default {
 <style module lang="scss" scoped>
 @import "../../../style/selectors";
 @import "../../../style/errorvalidation";
+@import '~nhsuk-frontend/packages/core/settings/colours';
+  .subHeader {
+    text-decoration: none;
+    color: $color_nhsuk-black;
+    display: inline-block;
+  }
 </style>

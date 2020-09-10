@@ -36,6 +36,7 @@ export default {
     practiceMember: 'Practice member (optional)',
     selectLocation: 'Select location',
     selectType: 'Select type',
+    numberOfAppointmentsAvailable: '1 available appointment | {appointmentsCount} available appointments',
     thereAreCurrentlyNoAppointments: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',
     this_week: 'This week',
     today: 'Today',
