@@ -147,6 +147,7 @@ export default {
       if (NativeApp.supportsNativeWebIntegration()) {
         NativeApp.openWebIntegration(url);
       } else {
+        this.$store.dispatch('http/isLoadingExternalSite');
         window.location = url;
       }
     },
