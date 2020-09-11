@@ -39,6 +39,8 @@ if [ "$DOCKER_REGISTRY" != "local" ]; then
   done
 fi
 
+echo "IP Address: $(curl https://ifconfig.co/)"
+
 for IMAGE in "${IMAGE_NAMES[@]}"
 do
   echo
