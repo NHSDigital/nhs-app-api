@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.UserInfo
@@ -17,6 +18,8 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
             services.AddHttpClient<UserInfoHttpClient>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<UserInfoHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<UserInfoHttpRequestIdentifier>>();
+
+            services.AddNhsAppHealthCheck<UserInfoHttpClient>("UserInfo");
 
             base.ConfigureServices(services, configuration);
         }

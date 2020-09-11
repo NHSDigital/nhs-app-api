@@ -1,8 +1,9 @@
 using System.Net.Http;
+using NHSOnline.Backend.HealthChecks;
 
 namespace NHSOnline.Backend.PfsApi.UserInfo
 {
-    public class UserInfoHttpClient
+    public class UserInfoHttpClient: INhsAppHealthCheckClient
     {
         public HttpClient Client { get; }
         
