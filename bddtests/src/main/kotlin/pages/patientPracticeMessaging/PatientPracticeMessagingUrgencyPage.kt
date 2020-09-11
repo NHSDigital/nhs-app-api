@@ -3,7 +3,6 @@ package pages.patientPracticeMessaging
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.avoidChromeWebDriverServiceCrash
 import pages.navigation.WebHeader
 import pages.sharedElements.RadioButtons
 import pages.text
@@ -34,8 +33,6 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
     }
 
     fun assertNoRecipientsHeader() {
-        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
         Assert.assertEquals(
                 "Header should contain text 'You currently cannot send messages'",
                 "You cannot currently send messages",

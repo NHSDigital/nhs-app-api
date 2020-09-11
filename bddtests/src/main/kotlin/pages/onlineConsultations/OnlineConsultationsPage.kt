@@ -5,7 +5,6 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
-import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.DropdownElement
 import pages.typeTextIntoTextArea
 import pages.value
@@ -30,8 +29,6 @@ class OnlineConsultationsPage: HybridPageObject() {
     }
 
     fun iSeeAdviceOnWhatToDoNext(){
-        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
         HybridPageElement(
                 webDesktopLocator = "//span/span",
                 page = this)

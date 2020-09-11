@@ -5,7 +5,6 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
-import pages.avoidChromeWebDriverServiceCrash
 
 const val RACE_CONDITION_WAIT: Long = 60
 
@@ -55,8 +54,6 @@ open class OrganDonationBasePage: HybridPageObject() {
     }
 
     protected fun assertPageFullyLoaded() {
-        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
         title.waitForElement()
     }
 

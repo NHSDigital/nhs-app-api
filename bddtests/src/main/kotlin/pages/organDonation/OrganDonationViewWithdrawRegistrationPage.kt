@@ -2,15 +2,12 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.assertIsVisible
-import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.BannerObject
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationViewWithdrawRegistrationPage: OrganDonationBasePage()  {
     override fun assertDisplayed() {
-        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
         title.assertIsVisible()
     }
     override val titleText = "What to do next"

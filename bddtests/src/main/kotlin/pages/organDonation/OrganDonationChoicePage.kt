@@ -3,7 +3,6 @@ package pages.organDonation
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
 import pages.sharedElements.expectedPage.ParsedPage
@@ -38,8 +37,6 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
     }
 
     fun assertDisplayed(amend : Boolean) {
-        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
         val title = if (amend) amendTitle else registerTitle
         val expected = if (amend) createAmendExpectedPage(title) else createRegistrationExpectedPage(title)
         val page = ParsedPage.parse(this, "//div[div/h2[normalize-space(text())='${title}']]")
