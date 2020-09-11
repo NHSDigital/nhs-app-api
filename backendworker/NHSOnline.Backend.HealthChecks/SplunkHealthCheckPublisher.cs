@@ -16,19 +16,33 @@ namespace NHSOnline.Backend.HealthChecks
 
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            PublishReportStatus(report);
-
-            if (report.Status != HealthStatus.Healthy)
+            switch (report.Status)
             {
-                PublishReportEntries(report);
+                case HealthStatus.Healthy:
+                    PublishHealthyReport(report);
+                    break;
+
+                default:
+                    PublishNotHealthyReport(report);
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        private void PublishReportStatus(HealthReport report)
+        private void PublishHealthyReport(HealthReport report)
+        {
+            _logger.Log(
+                DetermineLogLevel(report.Status),
+                "HealthStatus={HealthStatus} HealthChecks={HealthChecks}",
+                report.Status,
+                string.Join(";", report.Entries.Keys));
+        }
+
+        private void PublishNotHealthyReport(HealthReport report)
         {
             _logger.Log(DetermineLogLevel(report.Status), "HealthStatus={HealthStatus}", report.Status);
+            PublishReportEntries(report);
         }
 
         private void PublishReportEntries(HealthReport report)
