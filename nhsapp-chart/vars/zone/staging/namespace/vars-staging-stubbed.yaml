@@ -1,0 +1,41 @@
+---
+registry: nhsapp.azurecr.io
+cidHostname: auth.nhsapp.signin.nhs.uk
+cidFidoHostname: uaf.nhsapp.signin.nhs.uk
+cosmosDBName: stubbed
+
+spineLdapLookupEnabled: false
+tppSupportsLinkedAccounts: true
+
+organDonationHostname: nhsbt-apim-staging.azure-api.net
+organDonationPath: odr/v1/
+
+patientPracticeMessagingEnabled: true
+environmentPerftest: true
+environmentStubbed:
+  cidStubbed: true
+  emisStubbed: true
+  tppStubbed: true
+  visionStubbed: false
+  tsandcsStubbed: false
+  deployWiremock: true
+  organDonationStubbed: true
+  microtestStubbed: true
+  cdssStubbed: true
+  spineStubbed: true
+
+emisCertEnabled: true
+emisPort: 444
+emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
+
+web:
+  image_tag: latest
+  publicURL: www-stubbed.staging.nhsapp.service.nhs.uk
+
+api:
+  image_tag: latest
+  publicURL: api-stubbed.staging.nhsapp.service.nhs.uk
+
+cid:
+  image_tag: latest
+...

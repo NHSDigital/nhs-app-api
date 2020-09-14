@@ -239,8 +239,8 @@ data:
                 set $backend_n3_upstream "{{ $.Values.n3Protocol }}://n3";
                 proxy_pass $backend_n3_upstream;
                 proxy_set_header Connection "";
-                proxy_ssl_certificate /etc/nginx/ssl_n3/spine.crt;
-                proxy_ssl_certificate_key /etc/nginx/ssl_n3/spine.key;
+                proxy_ssl_certificate /tmp/spineCrt;
+                proxy_ssl_certificate_key /tmp/spineKey;
             }
         }
 {{- end }}

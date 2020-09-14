@@ -35,6 +35,12 @@ spec:
                   - {{ $.Values.messages.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: session-key
         secret:
           secretName: session-key-{{ .Chart.AppVersion }}
@@ -78,14 +84,21 @@ spec:
         - name: VERSION_TAG
           value: "{{ $.Values.messages.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
-          value: "/secrets/session-key/session.key"
+          value: "/mnt/secrets-store/sessionKey"
         - name: CORS_AUTHORITY
           value: "https://*.{{ $.Values.domain }}"
         - name: MONGO_CONNECTION_STRING
+        {{- if eq .Values.region "uks" }}
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
+              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
+              key: secret
+        {{- else }}
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
+              key: secret
+        {{- end }}
         - name: MESSAGES_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
@@ -121,11 +134,8 @@ spec:
               name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
         volumeMounts:
-        - name: nhslogin-key
-          mountPath: "/secrets/nhslogin-key"
-          readOnly: true
-        - name: session-key
-          mountPath: "/secrets/session-key"
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
           readOnly: true
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca

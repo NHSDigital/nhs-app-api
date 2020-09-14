@@ -73,8 +73,8 @@ data:
                 proxy_set_header Host {{ $.Values.microtestHostname }};
                 proxy_ssl_name {{ $.Values.microtestHostname }};
                 proxy_set_header Connection "";
-                proxy_ssl_certificate /etc/nginx/ssl_microtest/microtest.crt;
-                proxy_ssl_certificate_key /etc/nginx/ssl_microtest/microtest.key;
+                proxy_ssl_certificate /tmp/microtestCrt;
+                proxy_ssl_certificate_key /tmp/microtestKey;
             }
         }
 

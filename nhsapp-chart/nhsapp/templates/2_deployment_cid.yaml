@@ -35,29 +35,12 @@ spec:
                   - {{ $.Values.cid.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
-      {{- if ($.Values.emisCertEnabled) }}
-      - name: emiscert
-        secret:
-          secretName: emiscert-{{ .Chart.AppVersion }}
-      {{- end }}
-      - name: tpp-cert
-        secret:
-          secretName: tpp-cert-{{ .Chart.AppVersion }}
-       {{- if (not $.Values.environmentStubbed.visionStubbed) }}
-      - name: vision-client-cert-pfx
-        secret:
-          secretName: vision-client-cert-pfx-{{ .Chart.AppVersion }}
-      {{- else if ($.Values.environmentStubbed.visionStubbed) }}
-      - name: vision-client-cert-pfx
-        secret:
-          secretName: vision-client-cert-pfx-stubbed-{{ .Chart.AppVersion }}
-      {{- end }}
-      - name: session-key
-        secret:
-          secretName: session-key-{{ .Chart.AppVersion }}
-      - name: ndop-cert
-        secret:
-          secretName: ndop-cert-{{ .Chart.AppVersion }}
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
@@ -117,7 +100,7 @@ spec:
           value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
         {{- end }}
         - name: EMIS_CERT_PATH
-          value: "/secrets/emiscert/emis.pfx"
+          value: "/mnt/secrets-store/emisPfx"
         - name: EMIS_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
@@ -142,10 +125,10 @@ spec:
         - name: TPP_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
-              name: tpp-{{ .Chart.AppVersion }}
+              name: tpp-cert-password-{{ .Chart.AppVersion }}
               key: password
         - name: TPP_CERT_PATH
-          value: "/secrets/tpp-cert/tpp.pfx"
+          value: "/mnt/secrets-store/tppPfx"
         - name: TPP_APPLICATION_PROVIDER_ID
           value: "{{ $.Values.tppProviderID }}"
         - name: TPP_API_VERSION
@@ -178,10 +161,9 @@ spec:
         - name: VISION_APPLICATION_PROVIDER_ID
           value: nhson001
         - name: VISION_CERT_PATH
-          value: "/secrets/vision-client-cert-pfx/visionclientcert.pfx"
+          value: "/mnt/secrets-store/visionClientCert"
         - name: VISION_USERNAME
           value: "{{ $.Values.visionUsername }}"
-
         - name: VISION_PFS_PATH
           value: "{{ $.Values.visionPfsPath }}"
         - name: VISION_LINKAGE_PATH
@@ -199,7 +181,7 @@ spec:
         - name: ODS_REMAP_MAP
           value: "{{ $.Values.odsRemapMap }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
-          value: "/secrets/session-key/session.key"
+          value: "/mnt/secrets-store/sessionKey"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_JWT_ISSUER
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
@@ -208,7 +190,7 @@ spec:
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
         - name: NDOP_CERT_PATH
-          value: "/secrets/ndop-cert/ndop.pfx"
+          value: "/mnt/secrets-store/ndopPfx"
         - name: NDOP_CERT_PASSPHRASE
           valueFrom:
             secretKeyRef:
@@ -225,10 +207,17 @@ spec:
         - name: ConfigurationSettings__CookieDomain
           value: .{{ $.Values.domain }}
         - name: MONGO_CONNECTION_STRING
+        {{- if eq .Values.region "uks" }}
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
+              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
+              key: secret
+        {{- else }}
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
+              key: secret
+        {{- end }}
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: AUDIT_MONGO_DATABASE_NAME
@@ -259,25 +248,9 @@ spec:
               key: password
       {{- end }}
         volumeMounts:
-    {{- if ($.Values.emisCertEnabled) }}
-        - name: emiscert
-          mountPath: "/secrets/emiscert"
-          readOnly: true
-    {{- end }}
-    {{- if (not $.Values.environmentStubbed.tppStubbed) }}
-        - name: tpp-cert
-          mountPath: "/secrets/tpp-cert"
-          readOnly: true
-    {{- end }}
-        - name: vision-client-cert-pfx
-          mountPath: "/secrets/vision-client-cert-pfx"
-          readOnly: true
-        - name: ndop-cert
-          mountPath: "/secrets/ndop-cert"
-          readOnly: true
-        - name: session-key
-          mountPath: "/secrets/session-key"
-          readOnly: true
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true    
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca
           readOnly: true

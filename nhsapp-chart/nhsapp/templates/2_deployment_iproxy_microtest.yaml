@@ -36,13 +36,19 @@ spec:
                   - {{ $.Values.iproxy_microtest.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
       - name: iproxy-config
         configMap:
           name: iproxy-microtest-config-{{ .Chart.AppVersion }}
-      - name: microtest-crt
+      - name: microtest-cert
         secret:
           secretName: microtest-cert-{{ .Chart.AppVersion }}
       containers:
@@ -53,6 +59,8 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
+        command: ["/bin/sh"]
+        args: ["-c", "cat /mnt/secrets-store/microtestCrt | base64 -d > /tmp/microtestCrt && cat /mnt/secrets-store/microtestKey | base64 -d > /tmp/microtestKey && nginx -g 'daemon off;'"]    
         ports:
         - containerPort: {{ $.Values.iproxy_microtest.containerPort }}
         resources:
@@ -74,12 +82,15 @@ spec:
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
         volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
         - name: wildcard-namespace-cert
           mountPath: /etc/nginx/ssl
         - name: iproxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: microtest-crt
+        - name: microtest-cert
           mountPath: /etc/nginx/ssl_microtest
         livenessProbe:
           httpGet:

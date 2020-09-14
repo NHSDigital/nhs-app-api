@@ -35,21 +35,24 @@ spec:
                   - {{ $.Values.iproxy.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
       - name: iproxy-config
         configMap:
           name: iproxy-config-{{ .Chart.AppVersion }}
-      {{- if $.Values.iproxy.n3enabled }}
-      - name: n3-crt
-        secret:
-          secretName: n3-cert-{{ .Chart.AppVersion }}
-      {{- end }}
       containers:
       - name: iproxy
         image: {{ $.Values.registry }}/{{ $.Values.iproxy.image }}:{{ $.Values.iproxy.image_tag }}
         imagePullPolicy: {{ $.Values.iproxy.imagePullPolicy }}
+        command: ["/bin/sh"]
+        args: ["-c", "cat /mnt/secrets-store/spineCrt | base64 -d > /tmp/spineCrt && cat /mnt/secrets-store/spineKey | base64 -d > /tmp/spineKey && nginx -g 'daemon off;'"]
         ports:
         - containerPort: {{ $.Values.iproxy.containerPort }}
         resources:
@@ -64,15 +67,14 @@ spec:
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
         volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
         - name: wildcard-namespace-cert
           mountPath: /etc/nginx/ssl
         - name: iproxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        {{- if $.Values.iproxy.n3enabled }}
-        - name: n3-crt
-          mountPath: /etc/nginx/ssl_n3
-        {{- end }}
         livenessProbe:
           httpGet:
             path: /healthz

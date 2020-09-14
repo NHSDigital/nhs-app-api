@@ -1,0 +1,6 @@
+---
+registry: nhsapp.azurecr.io
+registry_ro_user_name: 3cb6bf61-d0b2-4965-9dad-53e90a022977
+registry_ro_user_password: QmfsA1elMPBeHJiZ6fcR9t0VrwUglH4CwbyAGDvae7Y=
+
+SPLUNK_URL: "https://51.104.216.240:8088/services/collector/event/1.0"

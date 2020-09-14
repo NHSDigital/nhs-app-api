@@ -1,0 +1,31 @@
+---
+registry: nhsapp.azurecr.io
+cidHostname: auth.ext.signin.nhs.uk
+cidFidoHostname: uaf.ext.signin.nhs.uk
+cosmosDBName: demo
+
+emisPort: 443
+emisCertEnabled: false
+
+ndopClaimIssuer: https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
+ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
+
+organDonationHostname: nhsbt-apim-dev01.azure-api.net
+organDonationPath: uat3/odr/v1/
+
+web:
+  image_tag: latest
+  publicURL: www-demo.nhsapp.service.nhs.uk
+  minReplicas: 2
+  maxReplicas: 2
+
+api:
+  image_tag: latest
+  publicURL: api-demo.nhsapp.service.nhs.uk
+  minReplicas: 2
+  maxReplicas: 2
+
+cid:
+  image_tag: latest
+  minReplicas: 2
+  maxReplicas: 2

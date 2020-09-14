@@ -1,0 +1,9 @@
+---
+environmentStubbed:
+  cidStubbed: true
+  emisStubbed: true
+  tsandcsStubbed: true
+  deployWiremock: true
+  cdssStubbed: true
+
+networkPolicyEnabled: false

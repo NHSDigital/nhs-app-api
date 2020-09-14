@@ -1,0 +1,554 @@
+---
+cluster: productionuks1
+domain: nhsapp.service.nhs.uk
+zone: production
+registry: nhsapprelease.azurecr.io
+cosmosDBName: production
+AZURE_SUBSCRIPTION_NAME: live
+
+keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
+keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
+
+SPLUNK_URL: "https://51.145.12.117:8088/services/collector/event/1.0"
+
+addAppointmentToCalendarEnabled: false
+
+cidHostname: auth.login.nhs.uk
+cidFidoHostname: uaf.login.nhs.uk
+
+nhsSearchHostname: api.nhs.uk
+
+visionHostname: vs002.inps.co.uk
+visionIPTrust: "185.45.163.86/32"
+visionUsername: "pfs:kain01"
+
+emisIPTrust: "185.13.72.155/32"
+emisHostname: "pim.emishealth.com"
+emisCertEnabled: true
+emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
+
+fakeGpSystemEnabled: false
+
+tppHostname: systmonline.tpp-uk.com
+tppIPTrust: "62.253.26.135/32"
+tppProviderID: 9b369fd64a6a6d23
+tppSupportsLinkedAccounts: true
+
+userResearchEnabled: false
+
+microtestHostname: nhsapp.microtest.co.uk
+
+econsultEnabled: true
+eConsult:
+  hostname: nhsapp.econsult.health
+
+nominatedpharmacyEnabled: true
+
+sixteenWeeksSlotsEnabled: true
+
+spineLdapLookupEnabled: true
+spineLdapCIDR: "155.231.48.0/24"
+spineLdapHost: "ldap.national.ncrs.nhs.uk"
+
+spinePdsEnabled: true
+spinePdsCIDR: "155.231.48.0/24"
+spinePdsHost: "pds-sync.national.ncrs.nhs.uk"
+spinePdsPath: "syncservice-pds/pds"
+epsODSCheckOverride: ""
+
+organDonationIPTrust: "52.178.159.140/32"
+organDonationProtocol: https
+organDonationHostname: api.nhsbt.nhs.uk
+organDonationPort: 443
+organDonationPath: odr/v1/
+organDonationClientId: ODR-26-NHSAP
+organDonationDataExpirySeconds: 86400
+
+patientPracticeMessagingEnabled: false
+
+qualtricsBaseUrl: "https://nhsdigital.eu.qualtrics.com/API/v3/"
+qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"
+qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
+
+web:
+  publicURL: www.nhsapp.service.nhs.uk
+  hyphenatedHostname: false
+  minAvailable: 6
+  minReplicas: 8
+  maxReplicas: 32
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "1"
+  cpuLimit: "1.25"
+  analyticsEnvironment: "production"
+  analyticsURL: "//assets.adobedtm.com/launch-EN1b745c3f3db648ea9f254bf5795fa1fa.min.js"
+  dataPreferencesUrl: https://app.your-data-matters.service.nhs.uk/createsession
+  organDonationThrottlingUrl: https://www.organdonation.nhs.uk/?campaign=2896&utm_source=nhs_app&utm_medium=referral&utm_campaign=partner&utm_content=app_link_web&utm_term=allaudiences
+  bloodDonationUrl: https://www.blood.co.uk/?utm_source=nhs_app&utm_medium=referral&utm_campaign=partner&utm_content=prompt_endoftransaction&utm_term=allaudiences
+  hotjarSiteId: "1010097"
+  imagePullPolicy: IfNotPresent
+
+api:
+  publicURL: api.nhsapp.service.nhs.uk
+  hyphenatedHostname: false
+  minAvailable: 2
+  minReplicas: 3
+  maxReplicas: 100
+  memoryRequest: "512Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "200m"
+  cpuLimit: "4"
+  imagePullPolicy: IfNotPresent
+
+cid:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "100m"
+  cpuLimit: "4"
+  imagePullPolicy: IfNotPresent
+
+sjr:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "150Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "100m"
+  cpuLimit: "700m"
+  imagePullPolicy: IfNotPresent
+
+sjrconfig:
+  loadFiles: true
+  imagePullPolicy: IfNotPresent
+  image: nhsonline-service-journey-prod-config
+
+iproxy:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 5
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  imagePullPolicy: IfNotPresent
+
+messagesEnabled: true
+
+users:
+  notificationHubPath: nhsapp-production
+  notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+messages:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+info:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+metrics:
+  memoryRequest: "12Mi"
+  memoryLimit: "120Mi"
+  cpuRequest: "3m"
+  cpuLimit: "30m"
+
+logger:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+
+# NIET_LOAD_END_FLAG
+# Please keep knownservices_config variable below NIET_LOAD_END_FLAG
+knownservices_config: {
+  "services": {
+    "111": {
+      "url": "https://111.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/isolation-note",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "111-service": {
+      "url": "https://111.service.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "nhs-uk": {
+      "url": "https://www.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "integrationLevel": "Bronze",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/conditions",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/conditions/coronavirus-covid-19",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "ndop": {
+      "url": "https://app.your-data-matters.service.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "hotjar": {
+      "url": "https://in.hotjar.com",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "integrationLevel": "Bronze",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/s",
+          "queryString": "siteId=859152&amp;surveyId=95785",
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "cid-settings": {
+      "url": "https://settings.login.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-account": {
+      "url": "https://account.login.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-auth": {
+      "url": "https://auth.login.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-uaf": {
+      "url": "https://uaf.login.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-access": {
+      "url": "https://access.login.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-signin": {
+      "url": "https://signin.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/#/account/consent-to-use-login",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "nhs-web-app": {
+      "url": "https://WebAppBaseUrl",
+      "javaScriptInteractionMode": "NhsApp",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/account",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/appointments",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Appointments",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/check-your-symptoms",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Symptoms",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldOverlay",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/more",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/my-record",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/health-records/gp-medical-record/documents/detail/*",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldWithNoHeaders",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/organ-donation",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/pre-registration-information",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithoutWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/prescriptions",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Prescriptions",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/symptoms",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Symptoms",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        }
+      ]
+    },
+    "ers": {
+      "url": "https://refer.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "pkb": {
+      "url": "https://my.patientsknowbest.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "pkb-alt": {
+      "url": "http://my.patientsknowbest.com:443",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    }
+  }
+}

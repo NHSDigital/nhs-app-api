@@ -1,0 +1,9 @@
+---
+cluster: productionuks1
+zone: production
+REGION: uksouth
+
+redcentricIP: 10.204.142.134
+
+spine_response:
+  internalIP: 10.40.10.10

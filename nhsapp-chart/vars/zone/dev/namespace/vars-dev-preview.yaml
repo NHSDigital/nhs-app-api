@@ -1,0 +1,9 @@
+---
+cosmosDBName: preview
+networkPolicyEnabled: true
+odsRemapEnabled: true
+odsRemapMap: "G85075:X00100;G85672:X00100"
+
+users:
+  notificationHubPath: nhsapp-preview
+  notificationHubConnectionString: Endpoint=sb://nhsapp-preview.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=

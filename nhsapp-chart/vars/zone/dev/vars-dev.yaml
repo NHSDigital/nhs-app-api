@@ -1,0 +1,46 @@
+---
+domain: nonlive.nhsapp.service.nhs.uk
+AZURE_SUBSCRIPTION_NAME: nonlive
+cosmosDBName: scratch
+zone: dev
+
+keyvaultSubscriptionID: 4bbd6a1f-80a5-485b-a0bb-32c5b6e35c09
+keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
+
+addAppointmentToCalendarEnabled: true
+emisCertEnabled: true
+fakeGpSystemEnabled: true
+nominatedpharmacyEnabled: true
+econsultEnabled: true
+messagesEnabled: true
+tppSupportsLinkedAccounts: true
+sixteenWeeksSlotsEnabled: true
+
+spineLdapLookupEnabled: false
+spineLdapCIDR: "10.239.67.128/25"
+spineLdapHost: "ldap.vn03.national.ncrs.nhs.uk"
+
+spinePdsEnabled: true
+spinePdsCIDR: "10.239.14.29/32"
+spinePdsHost: "msg.dev.spine2.ncrs.nhs.uk"
+spinePdsPath: "sync-service"
+
+iproxy_microtest:
+  deployMicrotest: true
+
+iproxy:
+  n3enabled: true
+
+ndopClaimIssuer: https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
+ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
+contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
+nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
+
+users:
+  notificationHubPath: nhsapp-nonlive
+  notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  mongoDatabaseUserDeviceCollection: devices
+
+qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
+qualtricsDirectoryId: "POOL_21oowrmextjSJqb"
+qualtricsMailingListId: "CG_1EbtS4U7wKHRWdU"

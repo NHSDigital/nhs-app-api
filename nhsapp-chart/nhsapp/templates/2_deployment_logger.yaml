@@ -35,6 +35,12 @@ spec:
                   - {{ $.Values.logger.role }}
               topologyKey: kubernetes.io/hostname
       volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: session-key
         secret:
           secretName: session-key-{{ .Chart.AppVersion }}
@@ -71,13 +77,10 @@ spec:
         - name: VERSION_TAG
           value: "{{ $.Values.logger.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
-          value: "/secrets/session-key/session.key"
+          value: "/mnt/secrets-store/sessionKey"
         - name: CORS_AUTHORITY
           value: "https://*.{{ $.Values.domain }}"
         volumeMounts:
-        - name: session-key
-          mountPath: "/secrets/session-key"
-          readOnly: true
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca
           readOnly: true
@@ -106,6 +109,9 @@ spec:
             memory: {{ $.Values.sidecar_proxy.memoryLimit }}
             cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
         volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
         - name: wildcard-namespace-cert
           mountPath: /etc/nginx/ssl
         - name: sidecar-proxy-config

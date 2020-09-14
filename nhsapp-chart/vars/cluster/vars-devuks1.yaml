@@ -1,0 +1,9 @@
+---
+cluster: devuks1
+zone: dev
+REGION: uksouth
+
+redcentricIP: 10.204.142.131
+
+spine_response:
+  internalIP: 10.20.10.10

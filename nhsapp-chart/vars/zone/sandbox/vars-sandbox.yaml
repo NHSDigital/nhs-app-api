@@ -1,0 +1,22 @@
+---
+cluster: sandboxuks1
+zone: sandbox
+domain: nonlive.nhsapp.service.nhs.uk
+AZURE_SUBSCRIPTION_NAME: nonlive
+cosmosDBName: ops
+
+addAppointmentToCalendarEnabled: false
+emisCertEnabled: true
+fakeGpSystemEnabled: true
+econsultEnabled: true
+sixteenWeeksSlotsEnabled: true
+
+iproxy_microtest:
+  deployMicrotest: false
+
+users:
+  notificationHubPath: nhsapp-nonlive
+  notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+  mongoDatabaseUserDeviceCollection: devices
+
+nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net

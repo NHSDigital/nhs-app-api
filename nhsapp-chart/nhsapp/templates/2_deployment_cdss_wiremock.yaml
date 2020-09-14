@@ -60,18 +60,22 @@ spec:
         - name: VERSION_TAG
           value: "{{ $.Values.cdsswiremock.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
-          value: "/secrets/session-key/session.key"
+          value: "/mnt/secrets-store/sessionKey"
         - name: MONGO_CONNECTION_STRING
+        {{- if eq .Values.region "uks" }}
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
+              name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
+              key: secret
+        {{- else }}
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
+              key: secret
+        {{- end }}
         - name: SESSION_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}
         volumeMounts:
-        - name: session-key
-          mountPath: "/secrets/session-key"
-          readOnly: true
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca
           readOnly: true

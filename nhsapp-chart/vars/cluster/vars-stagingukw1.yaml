@@ -1,0 +1,9 @@
+---
+cluster: stagingukw1
+zone: staging
+REGION: ukwest
+
+redcentricIP: 10.204.142.133
+
+spine_response:
+  internalIP: 10.130.10.10

@@ -1,0 +1,16 @@
+---
+cosmosDBName: onboardingsandpit
+odsRemapEnabled: true
+odsRemapMap: "G85075:X00100;G85672:X00100"
+cidHostname: auth.sandpit.signin.nhs.uk
+cidFidoHostname: uaf.sandpit.signin.nhs.uk
+akamaiEnv: nhsapp.service.nhs.uk
+
+users:
+  notificationHubPath: nhsapp-onboardingsandpit
+
+web:
+  publicURL: www-onboardingsandpit.nhsapp.service.nhs.uk
+
+api:
+  publicURL: api-onboardingsandpit.nhsapp.service.nhs.uk

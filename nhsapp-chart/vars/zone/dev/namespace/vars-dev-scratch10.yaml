@@ -1,0 +1,5 @@
+---
+networkPolicyEnabled: true
+
+users:
+    notificationHubPath: nhsapp-nonlive-scratch10

@@ -138,27 +138,4 @@ spec:
     ports:
     - protocol: TCP
       port: 443
----
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: allow-internal-dns-ingress-to-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
-  namespace: {{ $.Values.global.environment }}
-  labels:
-    version: {{ .Chart.AppVersion | quote }}
-spec:
-  podSelector:
-    matchLabels:
-      role: {{ $.Values.info.role }}
-      version: {{ .Chart.AppVersion | quote }}
-  policyTypes:
-  - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: nginx-ingress-internal
-    ports:
-    - protocol: TCP
-      port: {{ $.Values.sidecar_proxy.containerPort }}
 {{- end }}
