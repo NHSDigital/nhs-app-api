@@ -370,18 +370,20 @@ class NhsWeb(
     val onFailure: (PaycassoCallbackResponse) -> Unit = {
             response ->
         run {
-            val responseString = Gson().toJson(response);
+            val responseString = Gson().toJson(response)
+
             webView.evaluateJavascript(
-                "window.authentication.paycassoOnFailure('${responseString}')", null)
+                "window.authentication.paycassoOnFailure(${responseString})", null)
         }
     }
 
     private val onSuccess: (PaycassoCallbackResponse) -> Unit = {
             response ->
         run {
-            val responseString = Gson().toJson(response);
+            val responseString = Gson().toJson(response)
+
             webView.evaluateJavascript(
-                "window.authentication.paycassoOnSuccess('${responseString}')", null)
+                "window.authentication.paycassoOnSuccess(${responseString})", null)
         }
     }
 

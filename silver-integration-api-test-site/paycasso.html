@@ -59,14 +59,13 @@
 
     <script>      
       function startPaycasso() {
-        const token = document.getElementById("token").value;
-        const type = document.getElementById("type").value;
-        const paycassoUrl = document.getElementById("paycassoUrl").value ||
-          "https://api-london-prod.paycasso.com";
+        const token = document.getElementById("token").value
+        const type = document.getElementById("type").value
+        const paycassoUrl = document.getElementById("paycassoUrl").value || "https://api-london-prod.paycasso.com"
         const nfcValue = document.getElementById("nfc").value
         const transactionType = document.getElementById("transactionType").value
 
-        let request = {
+        const request = {
           credentials: {
             hostUrl: paycassoUrl,
             token: token
@@ -84,16 +83,17 @@
           }
         }
 
-        window.authentication = {}
-        window.authentication.paycassoOnSuccess = response => document.getElementById("response").value = JSON.stringify(JSON.parse(response), null, 2);
-        window.authentication.paycassoOnFailure = response => document.getElementById("response").value = JSON.stringify(JSON.parse(response), null, 2);
-
         if(!window.nativeNhsLogin) {
           alert("This is only supported on native.")
-          return;
+          return
         }
 
-        window.nativeNhsLogin.startPaycasso(JSON.stringify(request));
+        window.authentication = {
+          paycassoOnSuccess: response => document.getElementById("response").value = JSON.stringify(response, null, 2),
+          paycassoOnFailure: response => document.getElementById("response").value = JSON.stringify(response, null, 2)
+        }
+
+        window.nativeNhsLogin.startPaycasso(JSON.stringify(request))
       }
     </script>
   </body>

@@ -1,5 +1,6 @@
-import XCTest
+import SwiftyJSON
 import WebKit
+import XCTest
 
 @testable import NHSOnline
 
@@ -138,7 +139,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/authorised\',     {\n        devicePns:\'pns\',\n        deviceType:\'ios\',\n        trigger:\'Test\'\n    \n    });"    )
+        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/authorised\',     {\n        devicePns: \'pns\',\n        deviceType: \'ios\',\n        trigger: \'Test\'\n    \n    });")
     }
     
     func test_whenStayOnPageIsTriggered_thenStayOnPageIsDispatched(){
@@ -167,8 +168,7 @@ class AppWebInterfacesTests: XCTestCase {
     
     func test_whenPaycassoSuccessCallbackIsTriggered_thenExpectedMessageIsDispatched(){
         let expectation = self.expectation(description: "dispatched to main queue")
-        let expectedString = "window.authentication.paycassoOnSuccess(`{\n    \"isFaceMatched\": false,\n    \"transactionId\": \"test\",\n    \"transactionType\": \"DocuSureResponse\"\n}`);"
-        
+
         appWebInterface!.paycassoSuccessCallback(isFaceMatched: false, transactionId: "test", transactionType: "DocuSureResponse")
         
         DispatchQueue.main.async{
@@ -176,13 +176,21 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == expectedString)
+        
+        assertPaycassoResponse(
+            expectedDict: [
+                "isFaceMatched": false,
+                "transactionId": "test",
+                "transactionType": "DocuSureResponse"
+            ],
+            expectedMethodCall: "window.authentication.paycassoOnSuccess",
+            actualJsString: mockWKWebView?.attemptedJSString
+        )
     }
     
     func test_whenPaycassoResponseFailureCallbackCallbackIsTriggered_thenExpectedMessageIsDispatched(){
         let expectation = self.expectation(description: "dispatched to main queue")
-        let expectedString = "window.authentication.paycassoOnFailure(`{\n    \"isFaceMatched\": false,\n    \"error\": {\n        \"errorCode\": 100,\n        \"errorMessage\": \"Test\"\n    }\n}`);"
-        
+
         appWebInterface!.paycassoResponseFailureCallback(isFaceMatched: false, errorCode: 100, errorMessage: "Test")
         
         DispatchQueue.main.async{
@@ -190,20 +198,75 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == expectedString)
+        
+        assertPaycassoResponse(
+            expectedDict: [
+                "isFaceMatched": false,
+                "error": [
+                    "errorCode": 100,
+                    "errorMessage": "Test"
+                ]
+            ],
+            expectedMethodCall: "window.authentication.paycassoOnFailure",
+            actualJsString: mockWKWebView?.attemptedJSString
+        )
     }
     
     func test_whenPaycassoCustomFailureCallbackCallbackIsTriggered_thenExpectedMessageIsDispatched(){
         let expectation = self.expectation(description: "dispatched to main queue")
-        let expectedString = "window.authentication.paycassoOnFailure(`{\n    \"isFaceMatched\": false,\n    \"error\": {\n        \"errorMessage\": \"Test\"\n    }\n}`);"
-        
+
         appWebInterface!.paycassoCustomFailureCallback(isFaceMatched: false, errorMessage: "Test")
         
         DispatchQueue.main.async{
             expectation.fulfill()
         }
+
         wait(for: [expectation], timeout: 10.0)
+
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == expectedString)
+        
+        assertPaycassoResponse(
+            expectedDict: [
+                "isFaceMatched": false,
+                "error": [
+                    "errorMessage": "Test"
+                ]
+            ],
+            expectedMethodCall: "window.authentication.paycassoOnFailure",
+            actualJsString: mockWKWebView?.attemptedJSString
+        )
+    }
+    
+    private func assertPaycassoResponse(expectedDict: [String: Any?], expectedMethodCall: String, actualJsString: String?) {
+        let attemptedJsString = actualJsString!
+        
+        assert(attemptedJsString.starts(with: "\(expectedMethodCall)("))
+            
+        let jsonParam = attemptedJsString.replacingOccurrences(of: "\(expectedMethodCall)(", with: "")
+            .replacingOccurrences(of: ");", with: "")
+        
+        if let dataFromString = jsonParam.data(using: .utf8, allowLossyConversion: false) {
+            assertJsonDict(
+                expectedDict: expectedDict,
+                actualJsonDict: try! JSON(data: dataFromString)
+            )
+        }
+    }
+    
+    private func assertJsonDict(expectedDict: [String: Any?], actualJsonDict: JSON) {
+        for (key, val) in expectedDict {
+            if let objVal = val as? [String: Any?] {
+                assertJsonDict(expectedDict: objVal, actualJsonDict: actualJsonDict[key])
+            }
+            else if let intVal = val as? Int {
+                assert(actualJsonDict[key].int! as Int == intVal)
+            }
+            else if let boolVal = val as? Bool {
+                assert(actualJsonDict[key].bool! as Bool == boolVal)
+            }
+            else if let strVal = val as? String {
+                assert(actualJsonDict[key].string! as String == strVal)
+            }
+        }
     }
 }

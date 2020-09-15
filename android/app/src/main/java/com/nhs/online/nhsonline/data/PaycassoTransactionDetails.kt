@@ -15,6 +15,7 @@ data class PaycassoTransactionDetails (
     val documentType: PaycassoDocumentType
 )
 
+@JsonClass(generateAdapter = false)
 enum class PaycassoDocumentType(
     val mrzLocation: MrzLocation,
     val barcodeLocation: BarcodeLocation,

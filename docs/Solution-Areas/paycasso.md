@@ -64,8 +64,8 @@ Starts a Paycasso journey using the given configuration.
 
 This method requires you to define two callback methods inside the window object. The `window.authentication` object must be defined with two members: 
 
-1. `paycassoOnSuccess`: Function which is called when the journey succeeds, it should accept one parameter - a JSON string containing a `Paycasso Response` object (see [Data Models](#data-models))
-1. `paycassoOnFailure`: Function which is called when the journey fail, it should accept one parameter - a JSON string containing a `Paycasso Error` object (see [Data Models](#data-models))
+1. `paycassoOnSuccess`: Function which is called when the journey succeeds, it should accept one parameter -a `Paycasso Response` object (see [Data Models](#data-models))
+1. `paycassoOnFailure`: Function which is called when the journey fail, it should accept one parameter - a `Paycasso Error` object (see [Data Models](#data-models))
 
 **Example:**
 
@@ -75,14 +75,10 @@ let config = {
 }
 
 window.authentication = {
-  paycassoOnSuccess: responseJson => {
-    const response = JSON.parse(response)
-
+  paycassoOnSuccess: response => {
     // do something with response
   },
-  paycassoOnFailure: errorJson => {
-    const error = JSON.parse(errorJson)
-
+  paycassoOnFailure: error => {
     // do something with error
   }
 }

@@ -1,3 +1,4 @@
+import SwiftyJSON
 import WebKit
 
 class AppWebInterface {
@@ -55,9 +56,9 @@ class AppWebInterface {
     func notificationsAuthorised(devicePns: String, trigger: String) {
         let response = """
             {
-                devicePns:'\(devicePns)',
-                deviceType:'ios',
-                trigger:'\(trigger)'
+                devicePns: '\(devicePns)',
+                deviceType: 'ios',
+                trigger: '\(trigger)'
             
             }
         """
@@ -65,41 +66,42 @@ class AppWebInterface {
     }
     
     func paycassoResponseFailureCallback(isFaceMatched: Bool, errorCode: Int, errorMessage: String) {
-        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: """
-            `{
-                "isFaceMatched": \(isFaceMatched),
-                "error": {
-                    "errorCode": \(errorCode),
-                    "errorMessage": "\(errorMessage)"
-                }
-            }`
-            """
-        )
+        let responseJson = dictToJson(dict: [
+            "isFaceMatched": isFaceMatched,
+            "error": [
+                "errorCode": errorCode,
+                "errorMessage": errorMessage
+            ] as [String: Any?]
+        ])
+
+        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: responseJson)
     }
     
     func paycassoCustomFailureCallback(isFaceMatched: Bool, errorMessage: String) {
-        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: """
-            `{
-                "isFaceMatched": \(isFaceMatched),
-                "error": {
-                    "errorMessage": "\(errorMessage)"
-                }
-            }`
-            """
-        )
+        let responseJson = dictToJson(dict: [
+            "isFaceMatched": isFaceMatched,
+            "error": [
+                "errorMessage": errorMessage
+            ] as [String: Any?]
+        ])
+
+        dispatchNHSLoginEvent(functionName: "paycassoOnFailure", functionArg: responseJson)
     }
     
     func paycassoSuccessCallback(isFaceMatched: Bool, transactionId: String, transactionType: String) {
-        dispatchNHSLoginEvent(functionName: "paycassoOnSuccess", functionArg: """
-            `{
-                "isFaceMatched": \(isFaceMatched),
-                "transactionId": "\(String(describing: transactionId))",
-                "transactionType": "\(String(describing: transactionType))"
-            }`
-            """
-        )
+        let responseJson = dictToJson(dict: [
+            "isFaceMatched": isFaceMatched,
+            "transactionId": transactionId,
+            "transactionType": transactionType
+        ])
+
+        dispatchNHSLoginEvent(functionName: "paycassoOnSuccess", functionArg: responseJson)
     }
     
+    private func dictToJson(dict: [String: Any?]) -> String {
+        return JSON(dict).rawString()!
+    }
+
     func stayOnPage() {
         dispatchEvent(event: "pageLeaveWarning/stayOnPage")
     }
