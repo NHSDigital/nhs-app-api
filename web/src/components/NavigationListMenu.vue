@@ -1,5 +1,14 @@
 <template>
   <menu-item-list data-sid="navigation-list-menu">
+    <menu-item id="btn_messages"
+               :header-tag="headerTag"
+               data-purpose="messages-menu-item"
+               :href="messagesPath"
+               :has-unread-messages="hasMessageIndicator"
+               :text="messagesItemText"
+               :aria-label="ariaLabel"
+               :click-func="navigateToMessages"/>
+
     <menu-item id="menu-item-advice"
                :header-tag="headerTag"
                data-sid="advice-list-item"
@@ -48,15 +57,6 @@
                :aria-label="$t('navigation.viewYourHealthRecords')"
                :click-func="goToUrl"
                :click-param="healthRecordsHubPath"/>
-
-    <menu-item id="btn_messages"
-               :header-tag="headerTag"
-               data-purpose="messages-menu-item"
-               :href="messagesPath"
-               :has-unread-messages="hasMessageIndicator"
-               :text="messagesItemText"
-               :aria-label="ariaLabel"
-               :click-func="navigateToMessages"/>
 
     <organ-donation-link v-if="isProofLevel9"
                          id="organ-donation-link"
