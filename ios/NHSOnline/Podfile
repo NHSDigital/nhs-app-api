@@ -12,6 +12,7 @@ if ENV['PAYCASSO'].present?
     pod 'paycasso-view-framework', '~> 2020.8.26'
     pod 'SwiftyJSON', '~> 4.0.0'
     pod 'iProov', '~> 7.3.0'
+    pod 'DeviceKit', '3.2'
   end
 else
   target 'NHSOnline' do
@@ -19,6 +20,7 @@ else
     pod 'FidoClientIOS'
     pod 'SwiftyJSON', '~> 4.0.0'
     pod 'iProov', '~> 7.3.0'
+    pod 'DeviceKit', '~> 3.2'
     target 'NHSOnlineTests' do
       inherit! :search_paths
       # Pods for testing

@@ -38,6 +38,12 @@
 "AppUpdateRequiredCloseButtonText" = "Close";
 "AppUpdateRequiredGoToUpdateButtonText" = "Click here to update";
 
+/*App update for paycasso*/
+"AppUpdateIOS11RequiredTitle" = "The NHS App requires iOS 11.0 or later";
+"AppUpdateIOS11RequiredMessage" = "To continue using the NHS App, you'll need to update your software version.";
+"AppUpdateIOS11RequiredSettingsButton" = "Go to settings";
+"AppUpdateIOS11RequiredCancelButtonText" = "Cancel";
+
 /*Alert strings*/
 "sessionExpiryWarningMessage" = "For security reasons, we'll log you out of the NHS App in 1 minute.";
 "sessionExpiryWarningStayLoggedIn" = "Stay logged in";

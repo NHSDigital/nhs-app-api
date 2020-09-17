@@ -1,4 +1,5 @@
 import Foundation
+import DeviceKit
 import UIKit
 import WebKit
 
@@ -75,6 +76,18 @@ class LifecycleHandlers: NSObject {
             self.homeViewController.delayedBiometricsStart(0.5)
         }
     }
+    
+    func appUpdateAlertForIOS11() {
+        let alert = UIAlertController(title: UIDevice().systemVersion, message: Device.current.description, preferredStyle: .alert)
+        
+        let cancelButton = UIAlertAction(title: NSLocalizedString("AppUpdateIOS11RequiredCancelButtonText", comment: ""), style: .cancel) { (action) -> Void in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
+        alert.addAction(cancelButton)
+
+        self.homeViewController.present(alert, animated: true, completion: nil)
+    }
 
     func displayAppVersionOutOfDate() {
         let appUpdateRequiredTitle = NSLocalizedString("AppUpdateRequiredTitle", comment: "")
@@ -115,6 +128,7 @@ class LifecycleHandlers: NSObject {
 
     @objc func didBecomeActive() {
         performAppVersionCheck()
+        appUpdateAlertForIOS11()
     }
 
     @objc func didEnterBackground() {
