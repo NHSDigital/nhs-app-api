@@ -364,6 +364,18 @@
           "validateSession": true
         },
         {
+          "path": "/biometric-login-error",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithoutWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
           "path": "/get-health-advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
