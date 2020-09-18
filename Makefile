@@ -4,6 +4,7 @@ define AdditionalHelp
 @echo
 @echo '* TAG: Set the default tag for all images, e.g. set TAG=develop to run the images pushed by the develop CI build. Defaults to latest local build.'
 @echo '* WEB, PFSAPI, CIDAPI, SJRCONFIG, SJRAPI, USERSAPI, USERINFOAPI, LOGAPI, MESSAGESAPI: Override the tag used for specific containers.'
+@echo '* LOGINENV: Override the login environment. Valid values are dev, ext (default), sandpit and stubbed.'
 @echo '    Set to "host" to route all traffic for that container to the host machine so the process can be run and debugged on the host'
 endef
 

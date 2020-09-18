@@ -576,7 +576,7 @@
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "Gold",
-      "showSpinner": false,
+      "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
@@ -647,7 +647,7 @@
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": false,
+      "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -659,7 +659,7 @@
           "menuTab": "None",
           "viewMode": "WebView",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -671,7 +671,7 @@
           "menuTab": "None",
           "viewMode": "WebView",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -683,7 +683,7 @@
           "menuTab": "None",
           "viewMode": "AppTab",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -695,7 +695,7 @@
           "menuTab": "None",
           "viewMode": "AppTab",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
