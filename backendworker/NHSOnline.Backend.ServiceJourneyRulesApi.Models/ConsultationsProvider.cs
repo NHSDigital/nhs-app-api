@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum ConsultationsProvider
     {
         pkb,
-        pkbCie
+        pkbCie,
+        engage,
     }
 }

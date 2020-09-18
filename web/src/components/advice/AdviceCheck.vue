@@ -50,6 +50,11 @@
                  :aria-label="ariaLabelCaption(
                    'symptomsChecker.askYourGpForAdvice',
                    'symptomsChecker.consultThroughOnlineForm')"/>
+
+      <third-party-jump-off-button v-if="showEngageMedicalAdvice && isProofLevel9"
+                                   id="btn_engage_medical_advice"
+                                   provider-id="engage"
+                                   :provider-configuration="thirdPartyProvider.engage.medical" />
     </menu-item-list>
   </div>
 </template>
@@ -62,15 +67,16 @@ import sjrIf from '@/lib/sjrIf';
 import { ADVICE_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
 import { APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
 import { redirectTo } from '@/lib/utils';
-import {
-  SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS,
-} from '@/router/externalLinks';
+import { SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS } from '@/router/externalLinks';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'AdviceCheck',
   components: {
     MenuItemList,
     MenuItem,
+    ThirdPartyJumpOffButton,
   },
   data() {
     let symptomsCheckerUrl = this.$store.$env.SYMPTOM_CHECKER_URL;
@@ -83,6 +89,15 @@ export default {
       advicePath: ADVICE_PATH,
       coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
       gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_NAME,
+      showEngageMedicalAdvice: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'consultations',
+        },
+      }),
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
   computed: {

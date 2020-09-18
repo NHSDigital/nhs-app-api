@@ -28,7 +28,9 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB,
-                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB))
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MEDICAL_ADVICE_NONE
+                        ))
                 .add(Supplier.EMIS, "A22222",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_INFORMATICA,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
@@ -61,7 +63,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_ENABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_ENABLED,
-                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_ENABLED))
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_ENABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_MEDICAL_ADVICE_ENGAGE))
                 .add(Supplier.VISION, "A80003",
                         EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1))
                 .add(Supplier.MICROTEST, "A80004",

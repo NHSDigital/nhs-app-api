@@ -13,6 +13,7 @@ import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndCondi
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.HealthAdvicePage
+import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.externalSites.AdviceAboutCoronavirusPage
 import pages.externalSites.HealthAToZPage
@@ -117,5 +118,10 @@ open class HealthAdviceStepDefinitions {
     fun theOneOneOneOnlinePageHasBeenOpenedInANewTab() {
         browser.changeTab(oneOneOneOnlinePage.url)
         oneOneOneOnlinePage.assertTitleVisible()
+    }
+
+    @Then("^the link to Engage Medical Advice is not available on the Advice page$")
+    fun theLinkToEngageMedicalAdviceIsNotAvailableOnTheAdvicePage() {
+        healthAdvicePage.engageMedicalAdvice.assertElementNotPresent()
     }
 }

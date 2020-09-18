@@ -1,12 +1,6 @@
-#
-#
-#   Sandpit users in ODS code F00006 are used by Engage.
-#   DO NOT enable any third-party silver integrations other than Engage for this ODS code.
-#
-#
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "F00006"
+  odsCode: "A80001"
 journeys:
   silverIntegrations:
     carePlans: []

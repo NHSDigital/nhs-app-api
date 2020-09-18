@@ -7,7 +7,7 @@ export default {
   },
   engage: {
     serviceId: 'engage',
-    providerName: 'Engage',
+    providerName: 'Engage Health Systems Limited',
     jumpOffs: [
       {
         id: 'admin',
@@ -20,7 +20,7 @@ export default {
           featureName: 'Additional GP services',
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
-          serviceTypePlural: 'online consultation  services',
+          serviceTypePlural: 'online consultation services',
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
         },
       },
@@ -28,14 +28,14 @@ export default {
         id: 'medical',
         path: '/?sso_route=medical',
         jumpOffContent: {
-          headerText: 'Ask a health professional for advice',
-          descriptionText: 'Answer questions online and get a reply from your GP surgery',
+          headerText: 'Ask your GP for advice',
+          descriptionText: 'Answer questions online and get a response from your GP surgery',
         },
         thirdPartyWarning: {
-          featureName: 'Ask a health professional for advice',
+          featureName: 'Ask your GP for advice',
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
-          serviceTypePlural: 'online consultation  services',
+          serviceTypePlural: 'online consultation services',
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
         },
       },
@@ -50,7 +50,7 @@ export default {
           featureName: 'Messages',
           servicePurchaser: 'Your GP surgery',
           serviceType: 'online consultation service',
-          serviceTypePlural: 'online consultation  services',
+          serviceTypePlural: 'online consultation services',
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
         },
       },

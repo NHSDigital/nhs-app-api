@@ -26,6 +26,12 @@ open class HealthAdvicePage : HybridPageObject() {
             page = this
     )
 
+    val engageMedicalAdvice = HybridPageElement(
+            webDesktopLocator = "//h2[contains(text(),'Ask your GP for advice')]",
+            androidLocator = null,
+            page = this
+    )
+
     fun assertPageDisplayed(){
         searchConditionsAndTreatments.assertSingleElementPresent()
         useNhsOneOneOneOnline.assertSingleElementPresent()
