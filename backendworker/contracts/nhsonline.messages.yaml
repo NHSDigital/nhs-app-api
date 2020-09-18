@@ -156,11 +156,14 @@ components:
           type: string
         communicationId:
           type: string
+        transmissionId:
+          type: string
       example:
         sender: b1f99cf0-278d-49ca-a325-0a1504799488
         version: 0
         body: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         communicationId: 1c92e18e-6221-4bfd-8d30-d535e16dacd1
+        transmissionId: 2c92e18e-6221-4bfd-8d30-d535e16dacd2
     AddMessageResponse:
       type: object
       properties:

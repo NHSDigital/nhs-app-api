@@ -15,20 +15,21 @@ class MessagesPostStepDefinitionsBackend {
 
     @Given("^I am an api user wishing to post a message$")
     fun iAmAApiUserWishingToPostAMessage() {
-        iAmAnApiUserWishingToPostAMessage("Communication One")
+        iAmAnApiUserWishingToPostAMessage("Communication One", "Transmission One")
     }
 
-    @Given("^I am an api user wishing to post a message without a communication ID$")
-    fun iAmAApiUserWishingToPostAMessageWithouACommunicationId() {
-        iAmAnApiUserWishingToPostAMessage(null);
+    @Given("^I am an api user wishing to post a message without a communication ID or Transmission ID$")
+    fun iAmAApiUserWishingToPostAMessageWithoutACommunicationIdOrTransmissionId() {
+        iAmAnApiUserWishingToPostAMessage()
     }
 
-    private fun iAmAnApiUserWishingToPostAMessage(communicationId: String? = null) {
+    private fun iAmAnApiUserWishingToPostAMessage(communicationId: String? = null, transmissionId: String? = null) {
         MongoDBConnection.MessagesCollection.clearCache()
         val message = MessageRequest(
                 sender = "Sender One",
                 body = "Message One",
                 communicationId = communicationId,
+                transmissionId = transmissionId,
                 version = 1)
         val nhsLoginId = "0123456789ABCDEF"
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)

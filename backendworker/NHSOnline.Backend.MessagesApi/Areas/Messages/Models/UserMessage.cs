@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         [BsonElement]
         public string Sender { get; set; }
-        
+
         [BsonElement]
         public int Version { get; set; }
 
@@ -31,5 +31,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 
         [BsonElement]
         public string CommunicationId { get; set; }
+
+        [BsonElement]
+        public string TransmissionId { get; set; }
     }
 }

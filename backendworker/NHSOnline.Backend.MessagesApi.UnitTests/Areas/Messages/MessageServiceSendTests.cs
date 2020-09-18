@@ -55,7 +55,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 Version = 1,
                 Body = "Body",
                 Sender = "Sender",
-                CommunicationId = "CommunicationId"
+                CommunicationId = "CommunicationId",
+                TransmissionId = "TransmissionId"
             };
 
             _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
@@ -103,7 +104,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 Version = 1,
                 Body = "Body",
                 Sender = "Sender",
-                CommunicationId = suppliedCommunicationId
+                CommunicationId = suppliedCommunicationId,
+                TransmissionId = "TransmissionId"
             };
 
             _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
@@ -119,6 +121,48 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             // Assert
             savedUserMessage.CommunicationId.Should().BeNull();
+
+            result.Should().BeAssignableTo<MessageResult.Success>()
+                .Subject.Response.MessageId.Should().Be(returnedUserMessage.Id.ToString());
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [DataRow("   ")]
+        public async Task Send_SuppliedTransmissionIdIsNullOrWhiteSpace_PersistedTransmissionIdIsNull(string suppliedTransmissionId)
+        {
+            // Arrange
+            UserMessage savedUserMessage = null;
+
+            var returnedUserMessage = new UserMessage
+            {
+                Id = ObjectId.GenerateNewId(),
+            };
+
+            var request = new AddMessageRequest
+            {
+                Version = 1,
+                Body = "Body",
+                Sender = "Sender",
+                CommunicationId = "CommunicationId",
+                TransmissionId = suppliedTransmissionId
+            };
+
+            _mockMessageRepository.Setup(x => x.Create(It.IsAny<UserMessage>()))
+                .Callback<UserMessage>(u => savedUserMessage = u)
+                .ReturnsAsync(new RepositoryCreateResult<UserMessage>.Created(returnedUserMessage));
+
+            _mockMessagesValidationService.Setup(x =>
+                    x.IsMessageRequestValid(request, _nhsLoginId))
+                .Returns(true);
+
+            // Act
+            var result = await _systemUnderTest.Send(request, _nhsLoginId);
+
+            // Assert
+            savedUserMessage.TransmissionId.Should().BeNull();
 
             result.Should().BeAssignableTo<MessageResult.Success>()
                 .Subject.Response.MessageId.Should().Be(returnedUserMessage.Id.ToString());
