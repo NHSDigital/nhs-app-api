@@ -18,17 +18,24 @@ import {
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
-import {
-  ORGAN_DONATION_LAW_CHANGE_URL,
-} from '@/router/externalLinks';
+import { redirectTo } from '@/lib/utils';
+import { INDEX_PATH } from '@/router/paths';
+import { ORGAN_DONATION_LAW_CHANGE_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
+jest.mock('@/lib/utils');
+
 const createState =
-  ({ decision = DECISION_UNKNOWN, originalDecision = decision, originalChoices } = {}) => {
+  ({
+    decision = DECISION_UNKNOWN,
+    isNativeApp = true,
+    originalDecision = decision,
+    originalChoices,
+  } = {}) => {
     const state = {
       organDonation: initialState(),
       device: {
-        isNativeApp: true,
+        isNativeApp,
       },
     };
 
@@ -132,45 +139,63 @@ describe('organ donation index page', () => {
   );
 
   describe('created', () => {
-    beforeEach(() => {
-      $store = createPageStore({ state: createState() });
-      wrapper = mountOrganDonation();
+    describe('native app', () => {
+      beforeEach(() => {
+        $store = createPageStore({ state: createState({ isNativeApp: true }) });
+        wrapper = mountOrganDonation();
+      });
+
+      it('will dispatch the "organDonation/getReferenceData" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/getReferenceData');
+      });
+
+      it('will dispatch the "organDonation/getRegistration" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/getRegistration');
+      });
+
+      it('will set hasLoaded to true', () => {
+        expect(wrapper.vm.hasLoaded).toBe(true);
+      });
+
+      it('will dispatch the "organDonation/amendCancel" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/amendCancel');
+      });
+
+      it('will dispatch the "organDonation/withdrawCancel" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/withdrawCancel');
+      });
+
+      it('will dispatch the "organDonation/setAdditionalDetails" action with empty values', () => {
+        const value = { ethnicityId: '', religionId: '' };
+        expect($store.dispatch).toBeCalledWith('organDonation/setAdditionalDetails', value);
+      });
+
+      it('will dispatch the "organDonation/resetAcceptanceChecks" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/resetAcceptanceChecks');
+      });
+
+      it('will dispatch the "organDonation/reaffirmCancel" action', () => {
+        expect($store.dispatch).toBeCalledWith('organDonation/reaffirmCancel');
+      });
     });
 
-    it('will dispatch the "organDonation/amendCancel" action', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
-    });
+    describe('not native app', () => {
+      beforeEach(() => {
+        $store = createPageStore({ state: createState({ isNativeApp: false }) });
+        wrapper = mountOrganDonation();
+      });
 
-    it('will dispatch the "organDonation/withdrawCancel" action', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/withdrawCancel');
-    });
+      it('will redirect to the index page', () => {
+        expect(redirectTo).toBeCalledWith(wrapper.vm, INDEX_PATH);
+      });
 
-    it('will dispatch the "organDonation/setAdditionalDetails" action with empty values', () => {
-      const value = { ethnicityId: '', religionId: '' };
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAdditionalDetails', value);
-    });
+      it('will not dispatch any action', () => {
+        expect($store.dispatch).not.toBeCalled();
+      });
 
-    it('will dispatch the "organDonation/resetAcceptanceChecks" action', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/resetAcceptanceChecks');
-    });
-
-    it('will dispatch the "organDonation/reaffirmCancel" action', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/reaffirmCancel');
-    });
-  });
-
-  describe('mount', () => {
-    beforeEach(() => {
-      $store = createPageStore({ state: createState() });
-      wrapper = mountOrganDonation();
-    });
-
-    it('will request reference data from the api', async () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/getReferenceData');
-    });
-
-    it('will dispatch the "organDonation/getRegistration" action', async () => {
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/getRegistration');
+      it('will not set hasLoaded to true', () => {
+        expect(wrapper.vm.hasLoaded).toBe(false);
+      });
     });
   });
 

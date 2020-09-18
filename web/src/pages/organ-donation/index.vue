@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
+  <div v-if="showTemplate && hasLoaded" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="isConflicted || hasExistingDecision">
         <div v-if="isConflicted">
@@ -105,6 +105,7 @@ export default {
   },
   data() {
     return {
+      hasLoaded: false,
       lawChangeUrl: ORGAN_DONATION_LAW_CHANGE_URL,
     };
   },
@@ -148,19 +149,23 @@ export default {
       load(this.$store);
     },
   },
-  async mounted() {
+  async created() {
     if (!isNativeApp({ route: this.$route, store: this.$store })) {
       redirectTo(this, INDEX_PATH);
-    } else {
-      await load(this.$store);
+      return;
     }
-  },
-  created() {
-    this.$store.dispatch('organDonation/amendCancel');
-    this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
-    this.$store.dispatch('organDonation/resetAcceptanceChecks');
-    this.$store.dispatch('organDonation/reaffirmCancel');
-    this.$store.dispatch('organDonation/withdrawCancel');
+
+    try {
+      await load(this.$store);
+    } finally {
+      this.hasLoaded = true;
+
+      this.$store.dispatch('organDonation/amendCancel');
+      this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
+      this.$store.dispatch('organDonation/resetAcceptanceChecks');
+      this.$store.dispatch('organDonation/reaffirmCancel');
+      this.$store.dispatch('organDonation/withdrawCancel');
+    }
   },
 };
 </script>
