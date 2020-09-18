@@ -69,6 +69,9 @@ class NhsWeb(
     private val settingsService = SettingsService(activity)
     private val cacheDir = File(activity.filesDir.parent + "/cache")
     private val appWebViewDir = File(activity.filesDir.parent + "/app_webview")
+    private val authRedirectPath = readResourceString(R.string.authRedirectPath)
+    private val fidoAuthQueryKey = readResourceString(R.string.fidoAuthQueryKey)
+
     var headerStrategy: IHeaderStrategy = LoggedOutHeaderStrategy(uiInteractor)
 
     var applicationState =
@@ -134,11 +137,12 @@ class NhsWeb(
             return
         }
 
-        val url = if (!appPersistData.getPersistedLink().isNullOrBlank()) {
-            loadPersistedLink()!!
+        val url: String = if (shouldLoadPersistedLink(path)) {
+            getPersistedLink()
         } else {
             urlLoader.produceValidUrl(path)
         }
+        appPersistData.clearPersistedLink()
 
         reloadUrl = url
 
@@ -150,13 +154,18 @@ class NhsWeb(
         urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
-    private fun loadPersistedLink(): String? {
+    private fun shouldLoadPersistedLink(path: String): Boolean {
+        return !path.contains(fidoAuthQueryKey) &&
+        !path.contains(authRedirectPath) &&
+        !appPersistData.getPersistedLink().isNullOrBlank()
+    }
+
+    private fun getPersistedLink(): String {
         val url = appPersistData.getPersistedLink().toString()
-        if (!url.isNullOrBlank() && URLUtil.isValidUrl(url)) {
-            appPersistData.storePersistedLink("")
+        if (URLUtil.isValidUrl(url)) {
             return url
         }
-        return null
+        return readResourceString(R.string.baseURL)
     }
 
     fun setReloadPath(path: String) {

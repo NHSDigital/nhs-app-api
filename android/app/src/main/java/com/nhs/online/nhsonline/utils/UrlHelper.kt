@@ -54,7 +54,7 @@ class UrlHelper(val context: Context) {
 
     fun createRedirectToUrl(url: String?): URL? {
         val urlWithScheme = ensureUrlWithScheme(url)
-        if (urlWithScheme.toString() == context.getString(R.string.baseURL)) {
+        if (isSameHostAndSchemeAsHomeUrl(urlWithScheme.toString())) {
             return urlWithScheme
         }
         return URL(redirector.plus("?redirect_to=").plus(urlWithScheme.toString()))

@@ -14,4 +14,5 @@ class PersistData(context: Context) : AppSharedPref(context) {
 
     fun storePersistedLink(persistedLink: String) = storeString(PERSISTED_LINK, persistedLink)
 
+    fun clearPersistedLink() = storeString(PERSISTED_LINK, "")
 }

@@ -9,4 +9,6 @@
     <string name="ersUrl">pat.rc.refer.nhs.uk</string>
     <string name="ersUrlScheme">https</string>
     <string name="ersUrlPath">/nhslogin</string>
+    <!-- loading web is particularly slow but only when running locally with npm -->
+    <integer name="webClientRequestTimeoutMillis">60000</integer>
 </resources>

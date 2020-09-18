@@ -21,7 +21,6 @@ import org.junit.Assert.assertTrue
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -184,6 +183,99 @@ class NhsWebTest {
         // assert
         verify(interactorMock).displayBiometricLoginErrorOccurrence()
         verify(urlLoader).loadUrl(baseUrl, false)
+    }
+
+    @Test
+    fun loadUrl_whenCalledWithUrlContainingFidoAuthQuery_willClearPersistedLink_andLoadUrlContainingFidoAuthQuery() {
+        val url = "http://unit-test.com?fidoAuthResponse=123abcdef123"
+
+        persistData.storePersistedLink("https://unit-test.com/persisted-link")
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn "http://unit-test.com/"
+            on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+        whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
+
+        nhsWeb.loadUrl(url)
+
+        verify(urlLoader).loadUrl(url, true)
+    }
+
+    @Test
+    fun loadUrl_whenCalledWithUrlContainingAuthRedirectPath_willClearPersistedLink_andLoadUrlContainingAuthRedirectPath() {
+        val url = "http://unit-test.com/auth-return?code=123abcdef123"
+
+        persistData.storePersistedLink("https://unit-test.com/persisted-link")
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn "http://unit-test.com/"
+            on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+        whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
+
+        nhsWeb.loadUrl(url)
+
+        verify(urlLoader).loadUrl(url, true)
+    }
+
+    @Test
+    fun loadUrl_whenCalledWithUrl_withNoPersistedLink_willLoadUrl() {
+        val url = "http://unit-test.com/another-url"
+
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn "http://unit-test.com/"
+            on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+        whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
+
+        nhsWeb.loadUrl(url)
+
+        verify(urlLoader).loadUrl(url, true)
+    }
+
+    @Test
+    fun loadUrl_whenCalledWithUrl_withNoAuthRedirectPathOrFidoAuthResponseQuery_withPersistedLink_willLoadPersistedLink() {
+        val persistedLink = "https://unit-test.com/persisted-link"
+
+        persistData.storePersistedLink(persistedLink)
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn "http://unit-test.com/"
+            on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        nhsWeb.loadUrl("http://unit-test.com/another-url")
+
+        verify(urlLoader).loadUrl(persistedLink, true)
+    }
+
+    @Test
+    fun loadUrl_whenCalledWithUrl_withInvalidPersistedLink_willLoadBaseUrl() {
+        val persistedLink = "/something-test.com/invalid-persisted-link"
+        val baseURL = "http://unit-test.com/"
+
+        persistData.storePersistedLink(persistedLink)
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn baseURL
+            on { getString(R.string.loginPath) } doReturn "login"
+            on { getString(R.string.fidoAuthQueryKey) } doReturn "fidoAuthResponse"
+            on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
+        }
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        nhsWeb.loadUrl("http://unit-test.com/another-url")
+
+        verify(urlLoader).loadUrl(baseURL, true)
     }
 
     @Test

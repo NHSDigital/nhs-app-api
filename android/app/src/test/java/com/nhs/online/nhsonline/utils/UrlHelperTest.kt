@@ -125,6 +125,14 @@ class UrlHelperTest {
     }
 
     @Test
+    fun createRedirectToUrl_FullInternalAppUrl_ReturnsFullInternalAppUrl() {
+        val url = "https://www.baseurl.com/appointments"
+        val result = urlHelper.createRedirectToUrl(url)
+
+        assertEquals(URL(url), result)
+    }
+
+    @Test
     fun createRedirectToPageUrl_Page_ReturnsRedirectToPageUrl() {
         val page = "foo"
         val result = urlHelper.createRedirectToPageUrl(page)
