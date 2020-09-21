@@ -1,4 +1,5 @@
 export default {
+  and: 'and',
   back: 'Back',
   contactUs: 'Contact us',
   continue: 'Continue',

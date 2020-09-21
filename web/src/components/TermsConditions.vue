@@ -22,7 +22,7 @@
           <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer">
             {{ $t('termsAndConditions.links.privacyPolicy') }}</a>
         </span>
-        and
+        {{ $t('generic.and' ) }}
         <span>
           <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
             {{ $t('termsAndConditions.links.cookiesPolicy') }}</a>
@@ -52,32 +52,36 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.youCannotUseWithoutAgreeing') }}
       </error-message>
-      <generic-checkbox :value="termsAcceptedValue"
-                        checkbox-id="termsAndConditions-agree_checkbox"
-                        @onCheckedChanged="termsSelectionChanged">
-        <span :class="$style.termsAndConditionsCaption">
-          {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.understandAndAccept') }}
+      <fieldset class="nhsuk-fieldset">
+        <legend>
+          <generic-checkbox :value="termsAcceptedValue"
+                            checkbox-id="termsAndConditions-agree_checkbox"
+                            @onCheckedChanged="termsSelectionChanged">
+            <span :class="$style.termsAndConditionsCaption">
+              {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.understandAndAccept') }}
 
-          <span>
-            <!-- opening and closing tag must be on one line to
-            avoid the inline-block white space issue - inline block
-            prevents font boosting - accessibility issue
-            -->
-            <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.links.termsOfUse') }}</a>
-          </span>
-          and
-          <span>
-            <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.links.privacyPolicy') }}</a>.
-          </span>
-          {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.acceptCookies') }}
-          <span>
-            <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
-               @click="stopProp($event)">{{ $t('termsAndConditions.links.cookiesPolicy') }}</a>.
-          </span>
-        </span>
-      </generic-checkbox>
+              <span>
+                <!-- opening and closing tag must be on one line to
+                avoid the inline-block white space issue - inline block
+                prevents font boosting - accessibility issue
+                -->
+                <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
+                   @click="stopProp($event)">{{ $t('termsAndConditions.links.termsOfUse') }}</a>
+              </span>
+              {{ $t('generic.and') }}
+              <span>
+                <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
+                   @click="stopProp($event)">{{ $t('termsAndConditions.links.privacyPolicy') }}</a>.
+              </span>
+              {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.acceptCookies') }}
+              <span>
+                <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
+                   @click="stopProp($event)">{{ $t('termsAndConditions.links.cookiesPolicy') }}</a>.
+              </span>
+            </span>
+          </generic-checkbox>
+        </legend>
+      </fieldset>
     </div>
     <generic-checkbox :value="analyticsAcceptedValue"
                       checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox"
