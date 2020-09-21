@@ -20,7 +20,6 @@ class FileDownloadHelper(
     var fileMimeType: String = ""
     var base64Data: String = ""
 
-
     fun convertBase64StringToFileAndStoreIt() {
         val base64 = base64Data.substring(base64Data.indexOf(","))
         val dataAsBytes = Base64.decode(base64, Base64.DEFAULT)

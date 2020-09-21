@@ -42,7 +42,7 @@ class WebAppInterfaceThirdPartyTest {
 
 
         doNothing().whenever(nhsWebMock).loadWelcomePage()
-        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock, addToCalendarHandlerMock )
+        webAppInterfaceThirdParty = WebAppInterfaceThirdParty(contextMock, nhsWebMock, contextMock, addToCalendarHandlerMock)
     }
 
     @Test
@@ -85,6 +85,26 @@ class WebAppInterfaceThirdPartyTest {
         setUp(mode = JavaScriptInteractionMode.None)
 
         webAppInterfaceThirdParty.addEventToCalendar("stringifiedData")
+        verifyNoMoreInteractions(contextMock)
+    }
+
+
+    @Test
+    fun ondownloadFromBytes_javaScriptInteractionMode_IsSilverThirdParty() {
+        setUp(mode = JavaScriptInteractionMode.SilverThirdParty)
+
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfaceThirdParty.downloadFromBytes("data", "filename", "mimeType")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).downloadFromBytes("data", "filename", "mimeType", JavaScriptInteractionMode.SilverThirdParty)
+    }
+
+    @Test
+    fun onDownloadFromBytes_javaScriptInteractionMode_IsNone() {
+        setUp(mode = JavaScriptInteractionMode.None)
+
+        webAppInterfaceThirdParty.downloadFromBytes("data", "filename", "mimeType")
         verifyNoMoreInteractions(contextMock)
     }
 }

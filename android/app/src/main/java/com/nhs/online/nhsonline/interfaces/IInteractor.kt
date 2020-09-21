@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.interfaces
 import androidx.fragment.app.FragmentActivity
 import com.nhs.online.nhsonline.activities.HeaderIcon
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 
 interface IInteractor {
 
@@ -50,7 +51,7 @@ interface IInteractor {
 
     fun hideHeaderAndMenu()
 
-    fun startDownload(base64Data: String, fileName: String, mimeType: String)
+    fun downloadFromBytes(base64Data: String, fileName: String, mimeType: String, source: JavaScriptInteractionMode = JavaScriptInteractionMode.Unknown)
 
     fun announcePageTitle(title: String?)
 
