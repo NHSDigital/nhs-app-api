@@ -374,7 +374,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func setRetryUrl(path: String) {
         if (!path.isEmpty) {
             var suffix = path
-            suffix.remove(at: suffix.startIndex)
+            if (suffix.starts(with: "/")) {
+                suffix.remove(at: suffix.startIndex)
+            }
+            
             failedUrl = URL(string: config().HomeUrl + suffix)
         }
     }

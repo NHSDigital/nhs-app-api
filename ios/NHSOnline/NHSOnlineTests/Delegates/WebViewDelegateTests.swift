@@ -151,6 +151,28 @@ class WebViewDelegateTests: XCTestCase {
         assert(homeViewController?.goToPageCalled == false)
     }
     
+    func test_SetRetryUrl_WhenUrlPrefixedWithForwardSlash_PrefixIsRemoved() {
+        // Arrange
+        let path = "/test-url"
+        
+        // Act
+        webViewDelegate?.setRetryUrl(path: path)
+        
+        // Assert
+        assert(webViewDelegate?.failedUrl!.absoluteString == "https://local.bitraft.io/test-url")
+    }
+    
+    func test_SetRetryUrl_WhenUrlNotPrefixedWithForwardSlash_IsUsedWithoutManipulating() {
+        // Arrange
+        let url = "test-url"
+        
+        // Act
+        webViewDelegate?.setRetryUrl(path: url)
+        
+        // Assert
+        assert(webViewDelegate?.failedUrl!.absoluteString == "https://local.bitraft.io/test-url")
+    }
+
     func test_addEventToCalendar_deserializesJsonAndCallsViewControllerWithCorrectData_SilverThirdParty() {
         addEventToCalendar_deserializesJsonAndCallsViewControllerWithCorrectData(javascriptInteractionMode: JavaScriptInteractionMode.SilverThirdParty)
     }
