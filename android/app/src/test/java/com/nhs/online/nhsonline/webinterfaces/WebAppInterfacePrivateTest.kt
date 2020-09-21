@@ -286,7 +286,7 @@ class WebAppInterfacePrivateTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
 
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).startDownload("base64", "file", "mime")
+        verify(contextMock).downloadFromBytes("base64", "file", "mime", JavaScriptInteractionMode.NhsApp)
     }
 
     @Test

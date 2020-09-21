@@ -663,16 +663,26 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: errorViewController?.errorTextView)
     }
     
+    func logDownloadError(messageBody: String, source: JavaScriptInteractionMode) {
+        let splitMessage = messageBody.components(separatedBy: "|split|")
+        let fileName = splitMessage[1]
+        let mimeType = splitMessage[2]
+    
+        let failureMessage = "Failed to download \(fileName) with mime-type of \(mimeType) from \(buildLoggingMessageSource(source: source))";
+        self.webViewDelegate?.loggingService.logError(message: failureMessage)
+    }
+    
     func showDataDownloadAlert(alertType: DataDownloadAlertType) {
         let alert = dataDownloadAlertHandler?.getDownloadAlert(type: alertType)
         alert?.show()
     }
     
-    func downloadFile(messageBody: String) {
+    func downloadFile(messageBody: String, source: JavaScriptInteractionMode) {
         switch fileDownloader!.getDownloader().downloadFile(data: messageBody, view: self.view, documentInteractionController: documentInteractionController) {
         case .NOT_SUPPORTED:
             self.showDataDownloadAlert(alertType: .OSNotSupported)
         case .ERROR:
+            self.logDownloadError(messageBody: messageBody, source: source)
             self.showDownloadError()
         case .SUCCESS: break
         }

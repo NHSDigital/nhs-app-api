@@ -125,6 +125,7 @@ class NhsWeb(
         val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(
                 activity,
                 this,
+                uiInteractor,
                 addToCalendarHandler)
 
         val webAppInterfaceNhsLogin = WebAppInterfaceNhsLogin(activity, this)

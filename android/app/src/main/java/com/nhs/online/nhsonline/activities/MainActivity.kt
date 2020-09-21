@@ -6,7 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build.*
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -44,6 +45,7 @@ import com.nhs.online.nhsonline.services.ConfigurationService
 import com.nhs.online.nhsonline.services.IProovService
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.logging.LoggingService
@@ -58,8 +60,8 @@ import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
 import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.utils.UrlHelper
-import com.nhs.online.nhsonline.web.UserAgentBuilder.buildUserAgentString
 import com.nhs.online.nhsonline.web.NhsWeb
+import com.nhs.online.nhsonline.web.UserAgentBuilder.buildUserAgentString
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
@@ -85,10 +87,10 @@ class MainActivity :
     private lateinit var biometricsInteractor: BiometricsInteractor
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
     private var nhsWeb: NhsWeb? = null
-    lateinit var appDialogs: AppDialogs
+    private lateinit var appDialogs: AppDialogs
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
-    lateinit var activityViewSwitcher: MainActivityViewSwitcher
+    private lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private lateinit var downloadHelper: FileDownloadHelper
     private lateinit var notificationsService: NotificationsService
     private lateinit var iProovService: IProovService
@@ -394,8 +396,8 @@ class MainActivity :
         nhsWeb?.loadUrl(path)
     }
 
-    override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
-        if (downloadHelper.setFileAndCheckForPermission(Base64File(fileName, mimeType, base64Data))) {
+    override fun downloadFromBytes(base64Data: String, fileName: String, mimeType: String, source: JavaScriptInteractionMode) {
+        if (downloadHelper.setFileAndCheckForPermission(Base64File(fileName, mimeType, base64Data, source))) {
             downloadFile()
         }
     }
@@ -405,7 +407,7 @@ class MainActivity :
         if (downloadHelper.tryDownload()) {
             loggingService.logInfo("File name ${file?.fileName} with mime-type ${file?.fileMimeType} downloaded successfully from ${file?.source}")
         } else {
-            loggingService.logError("Failed to download ${file?.fileName} with mime-type of ${file?.fileMimeType}, and media type of ${file?.dataMediaType} from ${file?.source}");
+            loggingService.logError("Failed to download ${file?.fileName} with mime-type of ${file?.fileMimeType}, and media type of ${file?.dataMediaType} from ${file?.source}")
             showDownloadDocumentFailureError()
         }
         downloadHelper.clearFile()
@@ -413,10 +415,10 @@ class MainActivity :
 
     private fun handleDownloadPermissionResult(grantResults: IntArray) {
         if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-            Log.d(com.nhs.online.nhsonline.activities.TAG, "Permissions granted for storage")
+            Log.d(TAG, "Permissions granted for storage")
             downloadFile()
         } else {
-            Log.d(com.nhs.online.nhsonline.activities.TAG, "Permission not granted")
+            Log.d(TAG, "Permission not granted")
         }
     }
 

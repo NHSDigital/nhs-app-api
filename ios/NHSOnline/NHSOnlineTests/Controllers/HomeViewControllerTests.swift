@@ -14,6 +14,8 @@ class HomeViewControllerTests: XCTestCase {
     var laContextMock: LocalAuthenticationMocks?
     var fileDownloadHelperMock: FileDownloadHelperMock?
     var dataDownloadAlertStringHandlerMock: DataDownloadAlertStringHandlerMock?
+    var documentInteractionControllerMock: DocumentInteractionsControllerMocks?
+    var loggingServiceMock: LoggingServiceMocks?
 
     let app = XCUIApplication.self
 
@@ -31,6 +33,7 @@ class HomeViewControllerTests: XCTestCase {
         _ = vcHome.view
         
         appWebInterface = AppWebInterfaceMocks(webView: testWebview)
+        vcHome?.appWebInterface = appWebInterface
         
         fidoClient =  FidoClientMocks()
         
@@ -44,15 +47,18 @@ class HomeViewControllerTests: XCTestCase {
         
         mockProgressSpinner = ProgressSpinnerViewMocks()
         vcHome?.progressSpinner = mockProgressSpinner
-                
-        vcHome?.appWebInterface = appWebInterface
         
         fileDownloadHelperMock = FileDownloadHelperMock()
         vcHome?.fileDownloader = fileDownloadHelperMock
         
         dataDownloadAlertStringHandlerMock = DataDownloadAlertStringHandlerMock()
-        
         vcHome?.dataDownloadAlertHandler = dataDownloadAlertStringHandlerMock
+        
+        documentInteractionControllerMock = DocumentInteractionsControllerMocks()
+        vcHome?.documentInteractionController = documentInteractionControllerMock!
+        
+        loggingServiceMock = LoggingServiceMocks()
+        vcHome?.webViewDelegate?.loggingService = loggingServiceMock!
     }
 
     func test_hasCidUrlSuffix_nilUrl_Returns_False() {
@@ -204,12 +210,30 @@ class HomeViewControllerTests: XCTestCase {
     func test_downloadFile_error() {
         fileDownloadHelperMock?.setDownloadFileResponse(outcome: DownloadOutcome.ERROR)
         
-        vcHome.downloadFile(messageBody:"test message")
+        vcHome.downloadFile(messageBody:"base64|split|filename|split|mimetype", source: JavaScriptInteractionMode.NhsApp)
         let child = vcHome?.children[0]
         let length = vcHome?.children.count ?? 0
 
-        XCTAssert( length > 0, "DownloadFile Error Test No Child View Added" )
-        XCTAssert( child as? PageUnavailabilityViewController != nil, "DownloadFile Error Test Child is wrong Type")
+        assert( length > 0, "DownloadFile Error Test No Child View Added" )
+        assert( child as? PageUnavailabilityViewController != nil, "DownloadFile Error Test Child is wrong Type")
+    }
+    
+    func test_downloadFile_nhsAppSource_error() {
+        fileDownloadHelperMock?.setDownloadFileResponse(outcome: DownloadOutcome.ERROR)
+        
+        vcHome.downloadFile(messageBody:"base64|split|filename|split|mimetype", source: JavaScriptInteractionMode.NhsApp)
+        
+        assert(loggingServiceMock?.calledLogError == true)
+        assert(loggingServiceMock?.errorMessage == "Failed to download filename with mime-type of mimetype from the NhsApp")
+    }
+    
+    func test_downloadFile_silverThirdPartySource_error() {
+        fileDownloadHelperMock?.setDownloadFileResponse(outcome: DownloadOutcome.ERROR)
+        
+        vcHome.downloadFile(messageBody:"base64|split|filename|split|mimetype", source: JavaScriptInteractionMode.SilverThirdParty)
+        
+        assert(loggingServiceMock?.calledLogError == true)
+        assert(loggingServiceMock?.errorMessage == "Failed to download filename with mime-type of mimetype from a third party")
     }
     
     func test_downloadFile_notSupported() {
@@ -217,12 +241,11 @@ class HomeViewControllerTests: XCTestCase {
         XCTAssert(dataDownloadAlertStringHandlerMock?.getDownloadAlertWasCalled == false)
         
         fileDownloadHelperMock?.setDownloadFileResponse(outcome: DownloadOutcome.NOT_SUPPORTED)
-        vcHome.downloadFile(messageBody:"test message")
+        vcHome.downloadFile(messageBody:"test message", source: JavaScriptInteractionMode.NhsApp)
         
         XCTAssert(dataDownloadAlertStringHandlerMock?.getDownloadAlertWasCalled == true)
     }
-
-
+    
     func test_showWebViewContainer_isBlockedisFalse() {
         vcHome.showWebViewContainer()
         assert(self.mockApplicationState.isBlocked == false)
