@@ -15,17 +15,20 @@
 
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <message-dialog v-if="noAvailableAppointments" message-type="warning">
-            <message-text :is-header="true">
-              {{ $t('appointments.book.noAppointmentsAvailable') }}
-            </message-text>
-            <message-text>
-              {{ $t('appointments.book.thereAreCurrentlyNoAppointments') }}
-            </message-text>
-            <message-text>
-              {{ $t('appointments.book.ifItIsUrgent') }}
-            </message-text>
-          </message-dialog>
+          <div v-if="noAvailableAppointments" data-purpose="no-appointments-warning">
+            <p>{{ $t('appointments.book.youWillNeedToContactGpSurgery') }}</p>
+            <p :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')">
+              {{ $t('appointments.book.forUrgentMedicalAdvice.text') }}
+            </p>
+            <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
+            <p>{{ $t('appointments.book.stayAtHome') }}</p>
+            <p>
+              <a href="https://111.nhs.uk/COVID-19"
+                 rel="noopener noreferrer"
+                 :aria-label="$t('appointments.book.useThe111CoronavirusService.label')">
+                {{ $t('appointments.book.useThe111CoronavirusService.text') }}</a>
+            </p>
+          </div>
 
           <filters
             v-if="availableAppointments"
@@ -33,19 +36,20 @@
             :options="filtersOptions"
             :guidance-msg="bookingGuidanceMsg"/>
 
+          <h2 v-if="showAvailableSlotsTitle" class="nhsuk-u-margin-bottom-0">
+            {{ $t('appointments.book.availableAppointments') }}
+          </h2>
           <slot-list ref="slot_list" :available-slots="availableSlots" />
 
           <div ref="noMatching" tabindex="-1">
-            <message-dialog v-if="showNoMatchingWarning"
-                            :icon-text="$t('appointments.book.noAppointmentsAvailable')"
-                            message-type="warning">
-              <message-text>
-                {{ $t('appointments.book.tryToFilterAppointments') }}
-              </message-text>
-              <message-text>
-                {{ $t('appointments.book.ifItIsUrgent') }}
-              </message-text>
-            </message-dialog>
+            <div v-if="showNoMatchingWarning" data-purpose="no-appointments-matching-filter">
+              <h2>{{ $t('appointments.book.noAppointmentsAvailableForYourSearch') }}</h2>
+              <p>{{ $t('appointments.book.tryToFilterAppointments') }}</p>
+              <p>{{ $t('appointments.book.ifYouCannotFindAppointment') }}</p>
+              <p :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')">
+                {{ $t('appointments.book.forUrgentMedicalAdvice.text') }}
+              </p>
+            </div>
           </div>
 
           <desktop-generic-back-link
@@ -65,9 +69,8 @@ import { get, isEmpty } from 'lodash/fp';
 import BookingErrors from '@/components/errors/pages/appointments/BookingErrors';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Filters from '@/components/appointments/booking/Filters';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
 import SlotList from '@/components/appointments/booking/SlotList';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 import {
   GP_APPOINTMENTS_PATH,
@@ -103,8 +106,6 @@ export default {
     BookingErrors,
     DesktopGenericBackLink,
     Filters,
-    MessageDialog,
-    MessageText,
     SlotList,
   },
   data() {
@@ -160,6 +161,12 @@ export default {
              get('selectedOptions.type')(this) &&
              isEmpty(this.availableSlots));
     },
+    showAvailableSlotsTitle() {
+      return this.filtered &&
+             get('selectedOptions.location')(this) &&
+             get('selectedOptions.type')(this) &&
+             !isEmpty(this.availableSlots);
+    },
     slots() {
       return get('state.availableAppointments.slots')(this.$store);
     },
@@ -176,6 +183,11 @@ export default {
     await load({ $store: this.$store }, query);
 
     this.filtered = containsFilter(query);
+
+    if (!this.error && this.noAvailableAppointments) {
+      EventBus.$emit(UPDATE_HEADER, 'appointments.book.noAppointmentsAvailable');
+      EventBus.$emit(UPDATE_TITLE, 'appointments.book.noAppointmentsAvailable');
+    }
   },
   methods: {
     goBack() {

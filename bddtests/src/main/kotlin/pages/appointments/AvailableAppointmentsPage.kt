@@ -1,10 +1,12 @@
 package pages.appointments
 
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert
+import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
-import pages.sharedElements.BannerObject
 import pages.sharedElements.DropdownElement
 import pages.sharedElements.ExpandElement
 import pages.withoutRetrying
@@ -22,6 +24,19 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             containsTextXpathSubstring
     )
     private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "", "")
+
+    private val noAppointmentsWarningTitle = HybridPageElement(
+            webDesktopLocator = "//h1[contains(text(), 'No appointments available to book online at this time')]",
+            page = this
+    )
+    private val noAppointmentsWarningContent = HybridPageElement(
+            webDesktopLocator = "//*[@data-purpose='no-appointments-warning']",
+            page = this
+    )
+    private val noAppointmentsForFilterWarningContent = HybridPageElement(
+            webDesktopLocator = "//*[@data-purpose='no-appointments-matching-filter']",
+            page = this
+    )
 
     override val titleText: String = "Book an appointment"
 
@@ -51,8 +66,55 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             this
     )
 
-    fun warning(title: String? = null): BannerObject {
-        return BannerObject.warning(this, title = title)
+    fun assertNoAppointmentSlotsAvailableWarningIsVisible() {
+        noAppointmentsWarningTitle.assertSingleElementPresent().assertIsVisible()
+        noAppointmentsWarningContent.assertSingleElementPresent().assertIsVisible()
+        noAppointmentsWarningContent.actOnTheElement {
+
+            val bannerTitle = it.findElement<WebElement>(By.xpath("./h2[1]")).text
+            Assert.assertEquals("Expected h2 title", "If you think you might have coronavirus", bannerTitle)
+
+            val actualText = it.findElements<WebElement>(By.tagName("p"))
+                    .map { element -> element.text }
+
+            val expectedText = arrayListOf("You'll need to contact your GP surgery to book an appointment.",
+                    "For urgent medical advice, go to 111.nhs.uk or call 111.",
+                    "Stay at home and avoid close contact with other people.",
+                    "Use the 111 coronavirus service to see if you need medical help.")
+
+            val message = "Expected text. " +
+                    "Expected: ${expectedText.joinToString()}. " +
+                    "Actual: ${actualText.joinToString()}."
+            Assert.assertEquals(message, expectedText.count(), actualText.count())
+            Assert.assertTrue(message, expectedText.containsAll(actualText))
+        }
+    }
+
+    fun assertNoAppointmentSlotsAvailableForCurrentFilterWarningIsVisible() {
+        noAppointmentsForFilterWarningContent.assertSingleElementPresent().assertIsVisible()
+
+        noAppointmentsForFilterWarningContent.actOnTheElement {
+
+            val bannerTitle = it.findElement<WebElement>(By.xpath("./h2[1]")).text
+            Assert.assertEquals(
+                    "Expected h2 title",
+                    "No appointments available for your search", bannerTitle)
+
+            val actualText = it.findElements<WebElement>(By.tagName("p"))
+                    .map { element -> element.text }
+
+            val expectedText = arrayListOf(
+                    "You can choose different filter options, or select \"No preference\" for the practice member, " +
+                            "to show any available appointments.",
+                    "If you cannot find the appointment you need, contact your GP surgery.",
+                    "For urgent medical advice, go to 111.nhs.uk or call 111.")
+
+            val message = "Expected text. " +
+                    "Expected: ${expectedText.joinToString()}. " +
+                    "Actual: ${actualText.joinToString()}."
+            Assert.assertEquals(message, expectedText.count(), actualText.count())
+            Assert.assertTrue(message, expectedText.containsAll(actualText))
+        }
     }
 
     fun timeSlotForDateTimeSession(date: String, time: String, sessionName: String?): HybridPageElement {

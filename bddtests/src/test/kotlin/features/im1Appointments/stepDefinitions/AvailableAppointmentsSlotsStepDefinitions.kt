@@ -241,21 +241,13 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^a message is displayed indicating there are no slots available$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotAvailable() {
-        availableAppointments.availableAppointmentsPage.warning().assertVisible(
-                arrayListOf("No appointments available",
-                        "There are currently no appointments available to book online right now. " +
-                                "If you need to book one now, call your GP surgery.",
-                        "If it's urgent and you do not know what to do, call 111 to get help near you."))
+        availableAppointments.availableAppointmentsPage.assertNoAppointmentSlotsAvailableWarningIsVisible()
     }
 
     @Then("^a message is displayed indicating there are no slots for selected criteria$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotsForSelectedCriteria() {
-        availableAppointments.availableAppointmentsPage.warning("No appointments available").assertVisible(
-                arrayListOf(
-                        "Try to filter appointments by a different period or " +
-                                "select \"No preference\" for the practice member. " +
-                                "If you cannot find the appointment you need, call your GP surgery.",
-                        "If it's urgent and you do not know what to do, call 111 to get help near you."))
+        availableAppointments.availableAppointmentsPage
+                .assertNoAppointmentSlotsAvailableForCurrentFilterWarningIsVisible()
     }
 
     @Then("^I only see results for days that have available slots$")

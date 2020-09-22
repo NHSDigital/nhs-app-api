@@ -57,7 +57,6 @@
         {{ displayName(option) }}
       </option>
     </select-dropdown>
-    <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.book.availableAppointments') }}</h2>
   </div>
 </template>
 
