@@ -15,6 +15,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public IList<ConsultationsProvider> Consultations { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IList<ConsultationsAdminProvider> ConsultationsAdmin { get; set; }
+
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<HealthTrackersProvider> HealthTrackers { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
@@ -38,6 +41,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             {
                 CarePlans = CarePlans?.ToList(),
                 Consultations = Consultations?.ToList(),
+                ConsultationsAdmin = ConsultationsAdmin?.ToList(),
                 HealthTrackers = HealthTrackers?.ToList(),
                 Libraries = Libraries?.ToList(),
                 Medicines = Medicines?.ToList(),
@@ -61,6 +65,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             {
                 Consultations ??= new List<ConsultationsProvider>();
                 Consultations = Consultations.Union(other.Consultations).ToList();
+            }
+
+            if (other?.ConsultationsAdmin != null)
+            {
+                ConsultationsAdmin ??= new List<ConsultationsAdminProvider>();
+                ConsultationsAdmin = ConsultationsAdmin.Union(other.ConsultationsAdmin).ToList();
             }
 
             if (other?.HealthTrackers != null)

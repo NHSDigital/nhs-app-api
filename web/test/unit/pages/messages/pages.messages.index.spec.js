@@ -143,18 +143,18 @@ describe('messages page', () => {
     ]).describe('%s messaging enabled is %s, proxy is %s', (
       provider, context, isProxying, isProofLevel9, expectedResult,
     ) => {
-      switch (provider) {
-        case 'cie':
-          linkElement = '#btn_pkb_cie_messages_and_consultations';
-          break;
-        case 'pkb':
-          linkElement = '#btn_pkb_messages_and_consultations';
-          break;
-        default:
-          break;
-      }
-
       beforeEach(() => {
+        switch (provider) {
+          case 'cie':
+            linkElement = '#btn_pkb_cie_messages_and_consultations';
+            break;
+          case 'pkb':
+            linkElement = '#btn_pkb_messages_and_consultations';
+            break;
+          default:
+            break;
+        }
+
         mountPage({ context, isProxying, isProofLevel9 });
       });
 

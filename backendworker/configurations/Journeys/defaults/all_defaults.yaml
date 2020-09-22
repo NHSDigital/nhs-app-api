@@ -20,6 +20,7 @@ journeys:
   silverIntegrations:
     carePlans: []
     consultations: []
+    consultationsAdmin: []
     healthTrackers: []
     libraries: []
     medicines: []

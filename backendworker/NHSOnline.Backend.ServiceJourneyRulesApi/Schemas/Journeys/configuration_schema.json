@@ -153,6 +153,13 @@
             "enum": [ "pkb", "pkbCie", "engage" ]
           }
         },
+        "consultationsAdmin": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "engage" ]
+          }
+        },
         "healthTrackers": {
           "type":"array",
           "items": {

@@ -6,6 +6,8 @@ journeys:
     carePlans: []
     consultations:
       - engage
+    consultationsAdmin:
+      - engage
     healthTrackers: []
     libraries: []
     medicines: []

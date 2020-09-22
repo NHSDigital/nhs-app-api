@@ -20,12 +20,22 @@ class EngageStepDefinitions : HybridPageObject() {
 
     @Given("^I am a user who can view Medical Advice from Engage$")
     fun iAmAUserWhoCanViewMedicalAdviceFromEngage() {
-        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MEDICAL_ADVICE_ENGAGE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ENGAGE)
     }
 
     @Given("^I am a user who cannot view Medical Advice from Engage$")
     fun iAmAUserWhoCannotViewMedicalAdviceFromEngage(){
-        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MEDICAL_ADVICE_NONE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE)
+    }
+
+    @Given("^I am a user who can view Admin from Engage$")
+    fun iAmAUserWhoCanViewAdminFromEngage() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_ENGAGE)
+    }
+
+    @Given("^I am a user who cannot view Admin from Engage$")
+    fun iAmAUserWhoCannotViewAdminFromEngage(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_NONE)
     }
 
     @Then("^the link to Engage Medical Advice is available on the Advice page$")

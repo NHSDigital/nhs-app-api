@@ -14,7 +14,7 @@ export default {
         path: '/?sso_route=admin',
         jumpOffContent: {
           headerText: 'Additional GP services',
-          descriptionText: 'Get sick notes and GP letters or ask about recent tests',
+          descriptionText: 'Get sick notes and GP letters or ask your GP surgery about something else',
         },
         thirdPartyWarning: {
           featureName: 'Additional GP services',

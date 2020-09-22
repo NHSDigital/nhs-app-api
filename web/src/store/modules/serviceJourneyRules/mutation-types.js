@@ -27,6 +27,7 @@ export const initialState = () => ({
     silverIntegrations: {
       carePlans: [],
       consultations: [],
+      consultationsAdmin: [],
       healthTrackers: [],
       libraries: [],
       medicines: [],

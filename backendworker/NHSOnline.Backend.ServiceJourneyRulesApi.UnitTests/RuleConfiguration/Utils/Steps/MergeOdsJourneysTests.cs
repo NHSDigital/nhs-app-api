@@ -68,6 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
+                        .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
@@ -116,6 +117,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SilverIntegrations(x => x
                         .CarePlans(CarePlansProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb)
+                        .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .HealthTrackers(HealthTrackersProvider.pkb)
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)
@@ -153,6 +155,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
+                        .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
                         .TestResults(TestResultsProvider.pkb))
                     .DocumentsEnabled(false)
@@ -172,6 +175,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SilverIntegrations(x => x
                         .CarePlans(CarePlansProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb)
+                        .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .HealthTrackers(HealthTrackersProvider.pkb)
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)

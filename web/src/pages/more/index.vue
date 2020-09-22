@@ -37,6 +37,12 @@
         :aria-label="$t('appointments.guidance.additionalGpServices.additionalGpServices') |
           join($t('appointments.guidance.additionalGpServices.getSickNotesAndLetters') ,'. ')"/>
 
+      <third-party-jump-off-button
+        v-if="showEngageAdmin"
+        id="btn_engage_admin"
+        provider-id="engage"
+        :provider-configuration="thirdPartyProvider.engage.admin" />
+
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
                            :display-description="true"
@@ -117,6 +123,16 @@ export default {
         ? DATA_SHARING_OVERVIEW_PATH
         : YOUR_NHS_DATA_MATTERS_URL;
     },
+    hasEngageAdmin() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'consultationsAdmin',
+        },
+      });
+    },
     hasPkbSharedLinks() {
       return sjrIf({
         $store: this.$store,
@@ -136,6 +152,9 @@ export default {
           serviceType: 'libraries',
         },
       });
+    },
+    showEngageAdmin() {
+      return this.hasEngageAdmin && !this.isProxying;
     },
     showPkbSharedLinks() {
       return this.hasPkbSharedLinks && !this.isProxying;

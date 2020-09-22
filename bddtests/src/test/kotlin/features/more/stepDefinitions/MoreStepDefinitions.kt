@@ -26,6 +26,11 @@ class MoreStepDefinitions {
     lateinit var webHeader: WebHeader
     lateinit var morePage: MorePage
 
+    @When("^I click the Engage Admin link on the More page$")
+    fun iClickTheEngageAdminLinkOnTheMorePage() {
+        morePage.btnEngageAdmin.click()
+    }
+
     @When("^I click the Messages link on the More page")
     fun iClickTheMessagesLinkOnTheMorePage() {
         morePage.btnMessages.click()
@@ -74,6 +79,11 @@ class MoreStepDefinitions {
         webHeader.getPageTitle().waitForElement().withText("More")
     }
 
+    @Then("^the link to Engage Admin is not available on the More page$")
+    fun theLinkToEngageAdminIsNotAvailableOnTheMorePage() {
+        morePage.btnEngageAdmin.assertElementNotPresent()
+    }
+
     @Then("^the link to Shared links is available on the More page$")
     fun theLinkToSharedLinksIsAvailableOnTheMorePage() {
         morePage.btnSharedLinks.assertSingleElementPresent()
@@ -106,7 +116,7 @@ class MoreStepDefinitions {
     @Then("^I see and can follow links including online consultation links within the more page body$")
     fun iSeeAndCanFollowLinksIncludingOnlineConsultationsWithinTheMorePageBody() {
         val linksToFollow = arrayListOf(
-                { followRequestGPHelpLink() },
+                { followOlcAdminHelpLink() },
                 { followDataSharingLink() },
                 { followOrganDonationLink() }
         )
@@ -142,8 +152,8 @@ class MoreStepDefinitions {
         }
     }
 
-    private fun followRequestGPHelpLink() {
-        morePage.btnRequestGpHelp.assertSingleElementPresent()
+    private fun followOlcAdminHelpLink() {
+        morePage.btnOlcAdminHelp.assertSingleElementPresent()
     }
 
     private fun navigateBackToMorePage() {

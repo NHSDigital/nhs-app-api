@@ -94,27 +94,27 @@ describe('healthRecords', () => {
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, integrationEnabled, isProxying, expectedResult,
     ) => {
-      switch (provider + linkType.replace(' ', '')) {
-        case 'pkbTestResults':
-          linkElement = '#btn_pkb_test_results';
-          break;
-        case 'pkbCarePlans':
-          linkElement = '#btn_pkb_care_plans';
-          break;
-        case 'cieCarePlans':
-          linkElement = '#btn_pkb_cie_care_plans';
-          break;
-        case 'pkbHealthTrackers':
-          linkElement = '#btn_pkb_health_trackers';
-          break;
-        case 'cieHealthTrackers':
-          linkElement = '#btn_pkb_cie_health_trackers';
-          break;
-        default:
-          break;
-      }
-
       beforeEach(() => {
+        switch (provider + linkType.replace(/ /g, '')) {
+          case 'pkbTestResults':
+            linkElement = '#btn_pkb_test_results';
+            break;
+          case 'pkbCarePlans':
+            linkElement = '#btn_pkb_care_plans';
+            break;
+          case 'cieCarePlans':
+            linkElement = '#btn_pkb_cie_care_plans';
+            break;
+          case 'pkbHealthTrackers':
+            linkElement = '#btn_pkb_health_trackers';
+            break;
+          case 'cieHealthTrackers':
+            linkElement = '#btn_pkb_cie_health_trackers';
+            break;
+          default:
+            break;
+        }
+
         wrapper = mountAs({ integrationEnabled, isProxying });
       });
 

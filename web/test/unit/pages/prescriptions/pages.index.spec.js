@@ -186,18 +186,18 @@ describe('prescriptions hub index page', () => {
     ]).describe('%s medicines enabled is %s, proxy is %s', (
       provider, context, isProxying, expectedResult,
     ) => {
-      switch (provider) {
-        case 'cie':
-          linkElement = '#btn_pkb_cie_medicines';
-          break;
-        case 'pkb':
-          linkElement = '#btn_pkb_medicines';
-          break;
-        default:
-          break;
-      }
-
       beforeEach(() => {
+        switch (provider) {
+          case 'cie':
+            linkElement = '#btn_pkb_cie_medicines';
+            break;
+          case 'pkb':
+            linkElement = '#btn_pkb_medicines';
+            break;
+          default:
+            break;
+        }
+
         $store = createStore({ context, isProxying });
         wrapper = mountPage($store);
       });

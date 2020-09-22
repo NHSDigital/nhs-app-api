@@ -20,8 +20,7 @@ describe('hospital appointments hub', () => {
           knownServices: [{
             id: 'ers',
             url: 'www.url.com',
-          },
-          {
+          }, {
             id: 'pkb',
             url: 'www.url.com',
           }],
@@ -47,7 +46,7 @@ describe('hospital appointments hub', () => {
     each([
       ['ers', 'Manage Your Referral', true, false, true],
       ['ers', 'Manage Your Referral', true, true, false],
-      ['ers', 'manage Your Referral', false, false, false],
+      ['ers', 'Manage Your Referral', false, false, false],
       ['pkb', 'Appointments', true, false, true],
       ['pkb', 'Appointments', true, true, false],
       ['pkb', 'Appointments', false, false, false],
@@ -57,21 +56,21 @@ describe('hospital appointments hub', () => {
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, context, isProxy, expectedResult,
     ) => {
-      switch (provider + linkType.replace(' ', '')) {
-        case 'ersManageYourReferral':
-          linkElement = '#btn_manage_your_referral';
-          break;
-        case 'cieAppointments':
-          linkElement = '#btn_pkb_cie_appointments';
-          break;
-        case 'pkbAppointments':
-          linkElement = '#btn_pkb_appointments';
-          break;
-        default:
-          break;
-      }
-
       beforeEach(() => {
+        switch (provider + linkType.replace(/ /g, '')) {
+          case 'ersManageYourReferral':
+            linkElement = '#btn_manage_your_referral';
+            break;
+          case 'cieAppointments':
+            linkElement = '#btn_pkb_cie_appointments';
+            break;
+          case 'pkbAppointments':
+            linkElement = '#btn_pkb_appointments';
+            break;
+          default:
+            break;
+        }
+
         wrapper = mountAs({ context, isProxy });
       });
 

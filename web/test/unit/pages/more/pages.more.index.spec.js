@@ -34,6 +34,9 @@ describe('more', () => {
           knownServices: [{
             id: 'pkb',
             url: 'www.url.com',
+          }, {
+            id: 'engage',
+            url: 'www.url.com',
           }],
         },
       },
@@ -190,29 +193,35 @@ describe('more', () => {
     });
   });
 
-  describe('view third-party shared links link', () => {
+  describe('view third-party links', () => {
     each([
-      ['pkb', true, false, true],
-      ['pkb', true, true, false],
-      ['pkb', false, false, false],
-      ['cie', true, false, true],
-      ['cie', true, true, false],
-      ['cie', false, false, false],
-    ]).describe('%s secondary shared links enabled is %s, proxy is %s', (
-      provider, context, isProxying, expectedResult,
+      ['engage', 'admin', true, false, true],
+      ['engage', 'admin', true, true, false],
+      ['engage', 'admin', false, false, false],
+      ['pkb', 'secondary shared links', true, false, true],
+      ['pkb', 'secondary shared links', true, true, false],
+      ['pkb', 'secondary shared links', false, false, false],
+      ['cie', 'secondary shared links', true, false, true],
+      ['cie', 'secondary shared links', true, true, false],
+      ['cie', 'secondary shared links', false, false, false],
+    ]).describe('%s %s enabled is %s, proxy is %s', (
+      provider, _, context, isProxying, expectedResult,
     ) => {
-      switch (provider) {
-        case 'cie':
-          linkElement = '#btn_pkb_cie_shared_links';
-          break;
-        case 'pkb':
-          linkElement = '#btn_pkb_shared_links';
-          break;
-        default:
-          break;
-      }
-
       beforeEach(() => {
+        switch (provider) {
+          case 'engage':
+            linkElement = '#btn_engage_admin';
+            break;
+          case 'cie':
+            linkElement = '#btn_pkb_cie_shared_links';
+            break;
+          case 'pkb':
+            linkElement = '#btn_pkb_shared_links';
+            break;
+          default:
+            break;
+        }
+
         wrapper = mountAs({ context, isProxying });
       });
 

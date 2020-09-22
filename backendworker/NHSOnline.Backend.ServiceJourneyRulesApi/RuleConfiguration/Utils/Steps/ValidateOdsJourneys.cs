@@ -96,6 +96,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     "journeys.SilverIntegrations.CarePlans")
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,
                     "journeys.SilverIntegrations.Consultations")
+                .Add(journeys => journeys.SilverIntegrations?.ConsultationsAdmin != null,
+                    "journeys.SilverIntegrations.ConsultationsAdmin")
                 .Add(journeys => journeys.SilverIntegrations?.HealthTrackers != null,
                     "journeys.SilverIntegrations.HealthTrackers")
                 .Add(journeys => journeys.SilverIntegrations?.Libraries != null,

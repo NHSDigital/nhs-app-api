@@ -12,9 +12,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             _silverIntegrations.CarePlans = providers.ToList();
             return this;
         }
+
         public SilverIntegrationsBuilder Consultations(params ConsultationsProvider[] providers)
         {
             _silverIntegrations.Consultations = providers.ToList();
+            return this;
+        }
+
+        public SilverIntegrationsBuilder ConsultationsAdmin(params ConsultationsAdminProvider[] providers)
+        {
+            _silverIntegrations.ConsultationsAdmin = providers.ToList();
             return this;
         }
 
