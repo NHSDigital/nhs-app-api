@@ -3,6 +3,7 @@ import { INDEX_NAME } from '@/router/names';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
 import { APPOINTMENTS_CRUMB } from '@/breadcrumbs/appointments';
 import { RouterLinkStub } from '@vue/test-utils';
+import { INDEX_PATH } from '@/router/paths';
 import * as dependancy from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
 
@@ -130,7 +131,7 @@ describe('BreadCrumbTrail.vue', () => {
       backLink.trigger('click');
 
       expect(wrapper.vm.$route.name).toBe('switch-profile');
-      expect(goToUrl).toHaveBeenCalledWith('/patient/:patientId?/');
+      expect(goToUrl).toHaveBeenCalledWith(INDEX_PATH);
     });
 
     it('back link will exist and have the correct attributes', () => {

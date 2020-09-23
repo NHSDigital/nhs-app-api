@@ -42,4 +42,56 @@ describe('router', () => {
       expect(resetPageFocus).toHaveBeenCalledWith(store);
     });
   });
+
+  describe('patientId url parameter', () => {
+    beforeEach(() => {
+      store.state = {
+        auth: {
+          config: {
+            some: 'value',
+          },
+        },
+        session: {
+          user: {
+            some: 'value',
+          },
+        },
+        serviceJourneyRules: {
+          isLoaded: true,
+        },
+        linkedAccounts: {
+          config: {
+            hasLoaded: true,
+          },
+        },
+        termsAndConditions: {
+          areAccepted: true,
+          updatedConsentRequired: false,
+        },
+        knownServices: {
+          isLoaded: true,
+        },
+      };
+      store.getters = {
+        'session/isLoggedIn': () => true,
+        'session/shouldUplift': () => true,
+      };
+    });
+    describe.each([
+      ['no guid', '/'],
+      ['all letters', '/aPath/'],
+      ['all numbers', '/12354/'],
+    ])('for %s in url', (_, value) => {
+      it('it will not populate patientId param', async () => {
+        await router.push({ path: `/patient${value}appointments/gp-appointments` });
+        expect(router.currentRoute.params.patientId).toBeUndefined();
+      });
+    });
+
+    it('it will populate if guid exists in url', async () => {
+      const GUID = '81e6fdab-ffb0-4cbe-8135-9775bbbe063f';
+      await router.push({ path: `/patient/${GUID}/appointments/hospital-appointments` });
+      expect(router.currentRoute.params.patientId).toBe(GUID);
+    });
+  });
 });

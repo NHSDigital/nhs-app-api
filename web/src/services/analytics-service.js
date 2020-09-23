@@ -1,19 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 import isEmpty from 'lodash/fp/isEmpty';
 import moment from 'moment';
-import { PATIENT_ID_REGEX } from '@/router/index';
-
-import { APPOINTMENTS_PATH, TERMSANDCONDITIONS_PATH } from '@/router/paths';
+import { PATIENT_ID_REGEX_PATTERN, APPOINTMENTS_PATH, TERMSANDCONDITIONS_PATH } from '@/router/paths';
 
 const APP_ID = 'nhs:app';
 const pageNamePrefix = `${APP_ID}`;
+const patientIdRegex = new RegExp(`^${PATIENT_ID_REGEX_PATTERN}$`, 'i');
 
 const getFields = (path) => {
   let fields = path.split('/').slice(1);
   if (fields.length > 0 && fields[0] === 'patient') {
     fields = fields.slice(1); // remove patient
   }
-  if (fields.length > 0 && fields[0].match(PATIENT_ID_REGEX)) {
+  if (fields.length > 0 && fields[0].match(patientIdRegex)) {
     fields = fields.slice(1); // remove patient guid
   }
   return fields;

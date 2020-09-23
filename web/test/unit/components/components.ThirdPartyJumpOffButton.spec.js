@@ -1,5 +1,6 @@
 /* eslint-disable object-curly-newline */
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import { EMPTY_PATH } from '@/router/paths';
 import { createStore, mount } from '../helpers';
 
 const EXPECTED_URI = '/redirector?redirect_to=http%3A%2F%2Ffoo.com%2FnhsRedirectPath';
@@ -63,7 +64,7 @@ describe('ThirdParty Jumpoff Button', () => {
       });
 
       it('will begin with a / to enable proper navigation on desktop', () => {
-        expect(link.attributes().href.startsWith('/')).toBe(true);
+        expect(link.attributes().href.startsWith(EMPTY_PATH)).toBe(true);
       });
 
       it('will have no target set', () => {

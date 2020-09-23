@@ -1,7 +1,8 @@
 import { TERMSANDCONDITIONS_NAME } from '@/router/names';
 
+export const PATIENT_ID_REGEX_PATTERN = '[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}';
 export const EMPTY_PATH = '/';
-export const INDEX_PATH_PARAM = ':patientId?';
+export const INDEX_PATH_PARAM = `:patientId(${PATIENT_ID_REGEX_PATTERN})?`;
 export const INDEX_PATH = `/patient/${INDEX_PATH_PARAM}/`;
 export const NOT_FOUND_PATH = '*';
 export const LOGIN_PATH = '/login';
