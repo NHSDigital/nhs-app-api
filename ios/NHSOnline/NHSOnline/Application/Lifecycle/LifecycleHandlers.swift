@@ -78,10 +78,6 @@ class LifecycleHandlers: NSObject {
         }
     }
 
-    func appUpdateAlertForIOS11() {
-        Logger.logInfo(message: "Device info -> iOS Version: %@ | Description: %@", UIDevice().systemVersion, Device.current.description)
-    }
-
     func displayAppVersionOutOfDate() {
         let appUpdateRequiredTitle = NSLocalizedString("AppUpdateRequiredTitle", comment: "")
         let appUpdateRequiredMessage = NSLocalizedString("AppUpdateRequiredMessage", comment: "")
@@ -121,7 +117,6 @@ class LifecycleHandlers: NSObject {
 
     @objc func didBecomeActive() {
         performAppVersionCheck()
-        appUpdateAlertForIOS11()
     }
 
     @objc func didEnterBackground() {

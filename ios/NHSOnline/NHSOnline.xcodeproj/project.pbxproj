@@ -25,10 +25,8 @@
 		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
 		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
 		2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2485C4DA246DA4730014F1C5 /* Onboardingsandpit.xcconfig */; };
-		2485C4DF246DA56E0014F1C5 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		2485C4E4246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2485C4E3246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig */; };
 		24A6A46924FD5BB1007EE11C /* Onboardingaos.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 24A6A46824FD5BB1007EE11C /* Onboardingaos.xcconfig */; };
-		24A6A46E24FD5CF8007EE11C /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		25F95F48F13451857BB4BDD4 /* Pods_NHSOnline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2A4275F80C8B18B3B5AFC23 /* Pods_NHSOnline.framework */; };
 		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
 		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
@@ -55,6 +53,12 @@
 		4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0F219C319A00C95F51 /* ConfigurationService.swift */; };
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
 		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
+		4AB36C712514F7E300204E08 /* DeviceInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C6E2514F7E300204E08 /* DeviceInfoProtocol.swift */; };
+		4AB36C722514F7E300204E08 /* DeviceInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C6F2514F7E300204E08 /* DeviceInfoService.swift */; };
+		4AB36C732514F7E300204E08 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C702514F7E300204E08 /* DeviceService.swift */; };
+		4AB36C752514F7FA00204E08 /* MockDeviceInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */; };
+		4AB36C772514F80500204E08 /* DeviceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C762514F80500204E08 /* DeviceServiceTests.swift */; };
+		4AB36C792515092400204E08 /* UIViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C782515092400204E08 /* UIViewControllerMock.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		640585EA249237EA009784D5 /* UserContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640585E9249237EA009784D5 /* UserContent.swift */; };
 		64070BC9249D15FF00A7D3ED /* LoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64070BC8249D15FF00A7D3ED /* LoggingService.swift */; };
@@ -198,7 +202,6 @@
 		F91E29D924F67447001BDD21 /* ViewMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C8D1CE9594F361298C57 /* ViewMode.swift */; };
 		F91E29DA24F67447001BDD21 /* ConfigurationServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381CC2349A20B18DF372019 /* ConfigurationServiceProtocol.swift */; };
 		F91E29DE24F67447001BDD21 /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
-		F91E29DF24F67447001BDD21 /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		F91E29E024F67447001BDD21 /* WebEventsNHSLogin.js in Resources */ = {isa = PBXBuildFile; fileRef = F999E9CE24EAC39A00709DA9 /* WebEventsNHSLogin.js */; };
 		F91E29E124F67447001BDD21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */; };
 		F91E29E224F67447001BDD21 /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = F057336B20A72F040059032D /* HeaderBar.xib */; };
@@ -354,6 +357,12 @@
 		4793CF0F219C319A00C95F51 /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		47D88A4521998CBD004771B5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsStringsHandler.swift; sourceTree = "<group>"; };
+		4AB36C6E2514F7E300204E08 /* DeviceInfoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfoProtocol.swift; sourceTree = "<group>"; };
+		4AB36C6F2514F7E300204E08 /* DeviceInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfoService.swift; sourceTree = "<group>"; };
+		4AB36C702514F7E300204E08 /* DeviceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
+		4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDeviceInfoProtocol.swift; sourceTree = "<group>"; };
+		4AB36C762514F80500204E08 /* DeviceServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceServiceTests.swift; sourceTree = "<group>"; };
+		4AB36C782515092400204E08 /* UIViewControllerMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerMock.swift; sourceTree = "<group>"; };
 		4F5D0A748506E0402D6372A7 /* Pods-NHSOnline.onboardingaos.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.onboardingaos.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.onboardingaos.xcconfig"; sourceTree = "<group>"; };
 		505C248E6BA905656E7B0DAD /* Pods-NHSOnlineTests.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch9.xcconfig"; sourceTree = "<group>"; };
 		509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.development.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.development.xcconfig"; sourceTree = "<group>"; };
@@ -707,6 +716,7 @@
 		2EA7BDA32418FCAD00CFEDC8 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				4AB36C782515092400204E08 /* UIViewControllerMock.swift */,
 				F975F4A6248142FA00D3957F /* Core */,
 				F975F49F24813C5500D3957F /* HybridApplicationInteractions */,
 				F975F49724810BEA00D3957F /* AdditionalServices */,
@@ -1003,6 +1013,9 @@
 		C276D5542076557400F3B1E5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4AB36C6E2514F7E300204E08 /* DeviceInfoProtocol.swift */,
+				4AB36C6F2514F7E300204E08 /* DeviceInfoService.swift */,
+				4AB36C702514F7E300204E08 /* DeviceService.swift */,
 				14D4D21821E8D711008A65E0 /* BiometricService.swift */,
 				4793CF0F219C319A00C95F51 /* ConfigurationService.swift */,
 				F381CC2349A20B18DF372019 /* ConfigurationServiceProtocol.swift */,
@@ -1156,6 +1169,7 @@
 		F381C3AFAB024BF56A9DAA6E /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4AB36C762514F80500204E08 /* DeviceServiceTests.swift */,
 				F381C32BC0511A0BF493AFD7 /* KnownServicesTests.swift */,
 				F975F4952481082E00D3957F /* BiometricServiceTests.swift */,
 			);
@@ -1307,6 +1321,7 @@
 		F9BAFC49247FC30900BF1CAE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */,
 				F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */,
 				2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */,
 				2EA7BDA42418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift */,
@@ -1552,12 +1567,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */,
-				2485C4DF246DA56E0014F1C5 /* BuildFile in Resources */,
 				F999E9CF24EAC39A00709DA9 /* WebEventsNHSLogin.js in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
-				24A6A46E24FD5CF8007EE11C /* BuildFile in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
@@ -1583,7 +1596,6 @@
 				F9D169D824FE9144004725E3 /* Pods-NHSOnlinePaycasso.onboardingsandpit.xcconfig in Resources */,
 				F9D169D724FE90A9004725E3 /* OnboardingsandpitPaycasso.xcconfig in Resources */,
 				F91E29DE24F67447001BDD21 /* nativeAppAssets in Resources */,
-				F91E29DF24F67447001BDD21 /* BuildFile in Resources */,
 				F91E29E024F67447001BDD21 /* WebEventsNHSLogin.js in Resources */,
 				F91E29E124F67447001BDD21 /* LaunchScreen.storyboard in Resources */,
 				F91E29E224F67447001BDD21 /* HeaderBar.xib in Resources */,
@@ -1651,6 +1663,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NHSOnline/Pods-NHSOnline-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BCryptSwift/BCryptSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FidoClientIOS/FidoClientIOS.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
@@ -1661,6 +1674,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BCryptSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FidoClientIOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
@@ -1701,6 +1715,7 @@
 				64070BCB24A0E2FF00A7D3ED /* LogLevel.swift in Sources */,
 				F959D50624F91ECF001F923A /* PCSVeriSureFlowResponseStub.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
+				4AB36C712514F7E300204E08 /* DeviceInfoProtocol.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
 				3E60CCBA2317C222000AFA17 /* Logger.swift in Sources */,
@@ -1740,6 +1755,8 @@
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				F9EBD656237C3D3C006FFA8C /* DataDownloadAlert.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
+				4AB36C732514F7E300204E08 /* DeviceService.swift in Sources */,
+				4AB36C722514F7E300204E08 /* DeviceInfoService.swift in Sources */,
 				2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */,
@@ -1785,9 +1802,12 @@
 				F975F49E2481224F00D3957F /* FidoClientMocks.swift in Sources */,
 				F98EB0BF2486AAE100BD06A8 /* WebViewDelegateMocks.swift in Sources */,
 				F975F4A124813C6B00D3957F /* AppWebInterfaceMocks.swift in Sources */,
+				4AB36C772514F80500204E08 /* DeviceServiceTests.swift in Sources */,
 				64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */,
 				F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */,
+				4AB36C752514F7FA00204E08 /* MockDeviceInfoProtocol.swift in Sources */,
 				2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */,
+				4AB36C792515092400204E08 /* UIViewControllerMock.swift in Sources */,
 				F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */,
 				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,
 				3E27D222248FC32F000C57E8 /* WKScriptMessageMock.swift in Sources */,

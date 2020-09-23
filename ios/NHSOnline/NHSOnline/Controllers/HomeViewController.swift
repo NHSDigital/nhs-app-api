@@ -4,6 +4,7 @@ import SafariServices
 import LocalAuthentication
 import UIKit
 import WebKit
+import DeviceKit
 import FidoClientIOS
 import EventKit
 import EventKitUI
@@ -50,6 +51,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     var knownServicesProvider: KnownServicesProtocol?
     var configurationServiceProvider: ConfigurationServiceProtocol?
     var laContext: LAContext = LAContext()
+    var deviceService: DeviceService?
     public var selectedTab: Int?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,6 +125,9 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
                                             appWebInterface: appWebInterface!,
                                             fidoClient: fidoClient,
                                             laContext: laContext)
+        let deviceInfoService = DeviceInfoService()
+        deviceService = DeviceService(viewController: self,
+                                      deviceInfoProtocol: deviceInfoService)
         paycassoService = PaycassoService(homeViewController: self, appWebInterface: appWebInterface!, loggingService: LoggingService())
         
 
@@ -321,7 +326,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
             }
         })
     }
-    
+
     private func setHeaderVisibility(visible: Bool) {
         let contraintPriority: UILayoutPriority
         if visible {
@@ -543,6 +548,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     }
     
     func displayExtendSessionDialogue(){
+        self.dismissIOSVersionUpdateWarningDialog()
         if (!isPresented) {
             extendSessionOverdue = true;
             return
@@ -801,6 +807,10 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
 
     func dismissPageLeaveWarningDialogue() {
         NotificationCenter.default.post(name: CustomNotifications.dismissLeavingPageAlert, object: nil)
+    }
+    
+    func dismissIOSVersionUpdateWarningDialog() {
+        NotificationCenter.default.post(name: CustomNotifications.dismissIOSVersionUpdateAlert, object: nil)
     }
 
     private func addCalendarEvent(eventStore: EKEventStore, calendarData: CalendarData) {
