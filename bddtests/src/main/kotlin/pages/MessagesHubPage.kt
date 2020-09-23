@@ -26,9 +26,9 @@ class MessagesHubPage: HybridPageObject() {
         getElementByLocator("//*[@id='$menuItemId']").assertElementNotPresent()
     }
 
-    private val unreadGPIndicator = getElementByLocator("//*[@id='btn_im1_messaging_unreadIndicator']")
+    private val unreadGPIndicator = getElementByLocator("//*[@id='btn_im1_messaging_discIndicator']")
 
-    private val unreadAppIndicator = getElementByLocator("//*[@id='btn_appMessaging_unreadIndicator']")
+    private val unreadAppIndicator = getElementByLocator("//*[@id='btn_appMessaging_discIndicator']")
 
     private val pageTitle = getElementByLocator("//h1[contains(text(),\"Messages\")]",
                                                 "Messages Hub title")

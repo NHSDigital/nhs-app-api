@@ -5,7 +5,7 @@ class LinksContent(override val linkBlockTitle: String,
                    override val linkStyling: String = "h2")
     : ILinksContent {
 
-    private val sections = "$containerXPath//a/span/div/h2"
+    private val sections = "$containerXPath//a/div/h2"
     override val links = arrayListOf<LinkContent>()
     override val hasDescriptionBody: Boolean = false
 

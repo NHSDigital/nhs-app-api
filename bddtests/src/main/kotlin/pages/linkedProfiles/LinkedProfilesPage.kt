@@ -15,7 +15,7 @@ open class LinkedProfilesPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     private var linkedAccountsXpath = "//li[@data-sid='linked-account']"
-    private var nameInsideLinkedProfileXpath: String = ".//span//h2"
+    private var nameInsideLinkedProfileXpath: String = ".//h2"
     private var ageInsideLinkedProfileXpath = ".//p[@data-sid='age-months']"
 
     fun isLoaded() {

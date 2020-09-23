@@ -1,5 +1,5 @@
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
+import MenuItem from '@/components/MenuItem';
 import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import {
@@ -50,8 +50,10 @@ describe('Appointment guidance menu', () => {
     redirectTo.mockClear();
   });
 
-  describe('Main Content', () => {
+  describe('Appointment Guidance Menu', () => {
     let wrapper;
+    let tagArray;
+    let menuItemElement;
     beforeEach(async () => {
       const mockRules = {
         appointments: {
@@ -65,29 +67,55 @@ describe('Appointment guidance menu', () => {
         },
       };
       wrapper = createWrapper(mockRules);
+      tagArray = wrapper.findAll(MenuItem);
     });
 
-    it('will contain the correct content ', async () => {
-      const tagArray = wrapper.findAll(AnalyticsTrackedTag);
-      expect(tagArray.length).toBe(3);
+    describe('Menu item content', () => {
+      it('will contain the correct number of items ', () => {
+        expect(tagArray.length).toBe(3);
+      });
 
-      const adviceButtonHeader = tagArray.at(0).find('a span h2');
-      expect(adviceButtonHeader.text()).toContain('Get health advice');
+      describe('Get health advice', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(0);
+        });
 
-      const adviceButtonText = tagArray.at(0).find('a span p');
-      expect(adviceButtonText.text()).toContain('Find information about specific conditions');
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Get health advice');
+        });
 
-      const requestGPAdviceButtonHeader = tagArray.at(1).find('a span h2');
-      expect(requestGPAdviceButtonHeader.text()).toContain('Additional GP services');
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Find information about specific conditions');
+        });
+      });
 
-      const requestGPAdviceButtonText = tagArray.at(1).find('a span p');
-      expect(requestGPAdviceButtonText.text()).toContain('Get sick notes and GP letters or ask about recent tests');
+      describe('Additional GP services', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(1);
+        });
 
-      const requestGPHelpButtonHeader = tagArray.at(2).find('a span h2');
-      expect(requestGPHelpButtonHeader.text()).toContain('Ask your GP for advice');
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Additional GP services');
+        });
 
-      const requestGPHelpButtonText = tagArray.at(2).find('a span p');
-      expect(requestGPHelpButtonText.text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Get sick notes and GP letters or ask about recent tests');
+        });
+      });
+
+      describe('Ask your GP for advice', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(2);
+        });
+
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Ask your GP for advice');
+        });
+
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
+        });
+      });
     });
   });
 

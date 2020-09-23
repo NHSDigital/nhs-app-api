@@ -6,33 +6,30 @@
                            :aria-label="ariaLabel || text"
                            :tag="tag"
                            :target="target"
-                           :class="[$style['no-decoration'], $style.listMenuItemLink]"
+                           :class="$style.listMenuItemLink"
                            :click-param="clickParam"
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
-      <span :class="[$style.listMenuItemContainer, showCount ? $style['countWidth'] : '']">
-        <div :class="$style['internalWrapper']">
-          <component :is="headerTag"
-                     :class="['nhsuk-heading-s']"
-                     :aria-label="ariaText">{{ text }}</component>
-          <div v-if="showCount"
-               id="count"
-               :class="['nhsuk-u-font-weight-regular',
-                        $style['count']]"
-               aria-hidden="true">{{ count }}</div>
-          <p v-if="description"
-             :id="descriptionId"
-             :data-sid="descriptionDataSid"
-             class="nhsuk-u-margin-bottom-3">{{ description }}</p>
-          <div v-if="hasUnreadMessages"
-               :id="id+`_unreadIndicator`"
-               :class="[$style['nhs-app-message__meta'], $style['count']]">
-            <span id="unreadIndicator"
-                  :class="$style['nhs-app-message__count']"/>
-          </div>
+      <div :class="[$style.listMenuItemContainer, showMeta ? $style['withMeta'] : '']">
+        <component :is="headerTag"
+                   :class="['nhsuk-heading-s']"
+                   :aria-label="ariaText">{{ text }}</component>
+
+        <p v-if="description"
+           :id="descriptionId"
+           :data-sid="descriptionDataSid">{{ description }}</p>
+
+        <div v-if="showMeta" :class="$style['listMenuItem__meta']">
+          <span v-if="showCount"
+                :id="`${id}_countIndicator`"
+                :class="$style['listMenuItem__count']"
+                aria-hidden="true">{{ count }}</span>
+          <span v-if="showIndicator"
+                :id="`${id}_discIndicator`"
+                :class="$style['listMenuItem__disc']"/>
         </div>
         <slot/>
-      </span>
+      </div>
     </analytics-tracked-tag>
   </li>
 </template>
@@ -97,7 +94,7 @@ export default {
       type: [String, Object],
       default: undefined,
     },
-    hasUnreadMessages: {
+    showIndicator: {
       type: Boolean,
       default: false,
     },
@@ -110,8 +107,11 @@ export default {
     showCount() {
       return this.count !== undefined;
     },
+    showMeta() {
+      return this.showCount || this.showIndicator;
+    },
     ariaText() {
-      if (this.hasUnreadMessages) {
+      if (this.showIndicator) {
         return `${this.text}.${this.$t('messages.youHaveUnreadMessages')}`;
       }
       return this.showCount ? `${`${this.text} (${this.count} `}${this.$t('myRecord.records')})` : this.text;
@@ -122,11 +122,15 @@ export default {
 </script>
 <style module lang="scss" scoped>
   @import '../style/arrow';
+  @import '~nhsuk-frontend/packages/core/settings/breakpoints';
   @import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '~nhsuk-frontend/packages/core/settings/globals';
   @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
   @import '~nhsuk-frontend/packages/core/settings/typography';
+  @import '~nhsuk-frontend/packages/core/tools/functions';
+  @import '~nhsuk-frontend/packages/core/tools/ifff';
+  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
   @import '~nhsuk-frontend/packages/core/tools/typography';
 
   @mixin outlineStyle {
@@ -134,48 +138,100 @@ export default {
     outline-offset: -6px;
   }
 
-  .nhs-app-message__meta{
-    flex-shrink: 0;
-    margin-left: nhsuk-spacing(3);
-    vertical-align: middle;
-    margin-top: nhsuk-spacing(1);
-    .nhs-app-message__count {
-      @include nhsuk-responsive-padding(1, "left");
-      @include nhsuk-responsive-padding(1, "right");
-      @include nhsuk-typography-responsive(14);
-      font-weight: $nhsuk-font-bold;
-      background-color: $color_nhsuk-yellow;
-      border-radius: nhsuk-spacing(3);
-      color: $nhsuk-text-color;
-      border: 1px solid #B58F1C;
-      display: inline-block;
-      min-width: nhsuk-spacing(4);
-      min-height: nhsuk-spacing(4);
-      text-align: center;
+  .listMenuItem {
+    @include nhsuk-responsive-margin(1, "bottom");
+
+    .listMenuItemLink {
+      @include icon-arrow-left-white-background;
+      @include nhsuk-responsive-padding(3);
+      display: block;
+      box-sizing: border-box;
+      margin-left: 0;
+      border-top: 1px $color_nhsuk-grey-4 solid;
+      border-bottom: 1px $color_nhsuk-grey-4 solid;
+      padding: nhsuk-spacing(3);
+      text-decoration: none;
+
       @include govuk-media-query($until: tablet) {
-        padding-top: 1px;
-        padding-bottom: 1px;
+        @include nhsuk-responsive-padding(2, "top");
+        @include nhsuk-responsive-padding(2, "bottom");
       }
-    }
-  }
 
-  .listMenuItemLink {
-    @include icon-arrow-left-white-background;
-    display: block;
-    box-sizing: border-box;
-    margin-left: 0;
+      &:hover {
+        @include outlineStyle;
+        box-shadow: 0 0 0 4px $nhsuk-link-hover-background-color inset;
+      }
+      &:focus {
+        @include outlineStyle;
+        box-shadow: 0 0 0 4px $nhsuk-link-focus-background-color inset;
+      }
 
-    border-top: 1px $color_nhsuk-grey-4 solid;
-    border-bottom: 1px $color_nhsuk-grey-4 solid;
+      .listMenuItemContainer {
+        @include nhsuk-responsive-padding(5, "right");
+        position: relative;
 
-    &:hover {
-      @include outlineStyle;
-      box-shadow: 0 0 0 4px $nhsuk-link-hover-background-color inset;
-    }
+        &.withMeta{
+          @include nhsuk-responsive-padding(8, "right");
+        }
 
-    &:focus {
-      @include outlineStyle;
-      box-shadow: 0 0 0 4px $nhsuk-link-focus-background-color inset;
+        h2, h3, p {
+          @include nhsuk-responsive-padding(1, "top");
+          @include nhsuk-responsive-padding(0, "right");
+          @include nhsuk-responsive-padding(1, "bottom");
+          @include nhsuk-responsive-padding(0, "left");
+          margin: 0!important;
+        }
+
+        p {
+          color: $nhsuk-text-color;
+        }
+
+        .listMenuItem__meta{
+          position: absolute;
+          right: nhsuk-spacing(4);
+          top: 0;
+          height: 100%;
+          min-width: nhsuk-spacing(4);
+
+          .listMenuItem__count {
+            color: $nhsuk-text-color;
+            display: inline-block;
+            min-width: nhsuk-spacing(5);
+            min-height: nhsuk-spacing(4);
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            margin-top: -11px;
+            line-height: nhsuk-spacing(4);
+            right: nhsuk-spacing(2);
+            @include govuk-media-query($until: tablet) {
+              right: 0;
+            }
+          }
+
+          .listMenuItem__disc {
+            @include nhsuk-responsive-padding(1, "left");
+            @include nhsuk-responsive-padding(1, "right");
+            @include nhsuk-typography-responsive(14);
+            font-weight: $nhsuk-font-bold;
+            background-color: $color_nhsuk-yellow;
+            border-radius: nhsuk-spacing(3);
+            color: $nhsuk-text-color;
+            border: 1px solid #B58F1C;
+            display: inline-block;
+            min-width: nhsuk-spacing(4);
+            min-height: nhsuk-spacing(4);
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            margin-top: -12px;
+            @include govuk-media-query($until: tablet) {
+              padding-top: 1px;
+              padding-bottom: 1px;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -187,72 +243,5 @@ export default {
     font-weight: bold;
     border-left: none;
     border-right: none;
-  }
-
-  .no-decoration {
-    text-decoration: none;
-  }
-
-  .listMenuItem {
-    display: block;
-    margin-bottom: 5px;
-
-    .listMenuItemContainer {
-      padding: 0.2em 0.5em;
-      display: block;
-      cursor: pointer;
-
-      h2, p {
-        padding-left:10px;
-        width: 98%;
-        display: inline-block;
-      }
-
-      h2 {
-        margin: 0;
-      }
-
-      h2, h3, p {
-        padding-left:10px;
-        width: 90%;
-      }
-
-      h2, h3 {
-         margin: 0;
-       }
-
-      p {
-        color: $nhsuk-text-color;
-      }
-    }
-  }
-
-  // Please be careful when changing the below 2 classes these are needed
-  // to keep the medical record count in alignment!!!
-  .internalWrapper {
-    display: block;
-    padding-right: 28px;
-    width: 100%;
-    position: relative;
-  }
-
-  .count {
-    color: $nhsuk-text-color;
-    font-weight: normal;
-    position: absolute;
-    display: inline-block;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  @media screen and (device-aspect-ratio: 2/3) {
-    .count {
-      display: none;
-    }
-  }
-
-  @media screen and (device-aspect-ratio: 40/71) {
-    .count {
-      display: none;
-    }
   }
 </style>

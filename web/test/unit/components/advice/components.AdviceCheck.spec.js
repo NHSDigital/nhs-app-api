@@ -10,7 +10,7 @@ const createHttp = (rules = undefined) => ({
 });
 dependency.redirectTo = jest.fn();
 
-describe('GP Guidence button tests', () => {
+describe('Advice Check Menu', () => {
   let $store;
   let $router;
 
@@ -49,47 +49,91 @@ describe('GP Guidence button tests', () => {
 
   describe('Visability Tests', () => {
     let wrapper;
+    let tagArray;
+    let menuItemElement;
     beforeEach(() => {
       wrapper = createWrapper({
         loggedIn: {
           provider: 'eConsult',
         },
       }, true, true);
+      tagArray = wrapper.findAll(MenuItem);
     });
 
-    it('will contain the correct content ', async () => {
-      const tagArray = wrapper.findAll(MenuItem);
-      expect(tagArray.length).toBe(5);
+    describe('Menu items', () => {
+      it('will contain the correct number of items ', () => {
+        expect(tagArray.length).toBe(5);
+      });
 
-      const coronaCheckerButtonHeader = tagArray.at(0).find('li a span h2');
-      expect(coronaCheckerButtonHeader.text()).toContain('Get advice about coronavirus');
+      describe('Coronavirus', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(0);
+        });
 
-      const coronaCheckerButtonText = tagArray.at(0).find('li a span p');
-      expect(coronaCheckerButtonText.text()).toContain('Find out what to do if you think you have coronavirus');
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Get advice about coronavirus');
+        });
 
-      const conditionsCheckerButtonHeader = tagArray.at(1).find('li a span h2');
-      expect(conditionsCheckerButtonHeader.text()).toContain('Search conditions and treatments');
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Find out what to do if you think you have coronavirus');
+        });
+      });
 
-      const conditionsCheckerButtonText = tagArray.at(1).find('li a span p');
-      expect(conditionsCheckerButtonText.text()).toContain('Find trusted NHS information on hundreds of conditions');
+      describe('Conditions and treatments', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(1);
+        });
 
-      const adviceCheckerButtonHeader = tagArray.at(2).find('li a span h2');
-      expect(adviceCheckerButtonHeader.text()).toContain('Use NHS 111 online');
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Search conditions and treatments');
+        });
 
-      const adviceCheckerButtonText = tagArray.at(2).find('li a span p');
-      expect(adviceCheckerButtonText.text()).toContain('Check if you need urgent help and find out what to do next');
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Find trusted NHS information on hundreds of conditions');
+        });
+      });
 
-      const adviceButtonHeader = tagArray.at(3).find('li a span h2');
-      expect(adviceButtonHeader.text()).toContain('Ask your GP for advice');
+      describe('NHS 111 online', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(2);
+        });
 
-      const adviceButtonText = tagArray.at(3).find('li a span p');
-      expect(adviceButtonText.text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Use NHS 111 online');
+        });
 
-      const engageAdviceButtonHeader = tagArray.at(4).find('li a span h2');
-      expect(engageAdviceButtonHeader.text()).toContain('Ask your GP for advice');
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Check if you need urgent help and find out what to do next');
+        });
+      });
 
-      const engageAdviceButtonText = tagArray.at(4).find('li a span p');
-      expect(engageAdviceButtonText.text()).toContain('Answer questions online and get a response from your GP surgery');
+      describe('CDSS GP advice', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(3);
+        });
+
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Ask your GP for advice');
+        });
+
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Consult your GP through an online form. Your GP surgery will reply by phone or email');
+        });
+      });
+
+      describe('Engage GP advice', () => {
+        beforeEach(() => {
+          menuItemElement = tagArray.at(4);
+        });
+
+        it('will contain the correct header content', async () => {
+          expect(menuItemElement.find('h2').text()).toContain('Ask your GP for advice');
+        });
+
+        it('will contain the correct paragraph content', async () => {
+          expect(menuItemElement.find('p').text()).toContain('Answer questions online and get a response from your GP surgery');
+        });
+      });
     });
 
     it('Hides the GP advice button if logged in but practice doesnt offer it', async () => {
@@ -215,4 +259,3 @@ describe('GP Guidence button tests', () => {
     });
   });
 });
-

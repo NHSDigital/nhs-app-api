@@ -9,7 +9,7 @@ import pages.assertIsVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject() {
 
-    private val listMenuPath = "//ul[@data-purpose='settings-menu']//li//a/span/div/h2"
+    private val listMenuPath = "//ul[@data-purpose='settings-menu']//li//a/div/h2"
 
     val signOutButton = HybridPageElement(
             webDesktopLocator = "//a[@id='account-logout']",

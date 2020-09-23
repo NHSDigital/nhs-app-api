@@ -117,7 +117,7 @@ describe('messages page', () => {
     ]).it('will %s', async (_, hasUnread, indicatorShown) => {
       mountPage({ hasUnreadGPMessages: hasUnread });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_im1_messaging_unreadIndicator').exists()).toBe(indicatorShown);
+      expect(wrapper.find('#btn_im1_messaging_discIndicator').exists()).toBe(indicatorShown);
     });
 
     each([
@@ -126,7 +126,7 @@ describe('messages page', () => {
     ]).it('will %s', async (_, hasUnread, indicatorShown) => {
       mountPage({ hasUnreadAppMessages: hasUnread });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_appMessaging_unreadIndicator').exists()).toBe(indicatorShown);
+      expect(wrapper.find('#btn_appMessaging_discIndicator').exists()).toBe(indicatorShown);
     });
   });
 

@@ -39,21 +39,21 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
 
     private fun getPharmacyResultAddress(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//span//p[@id='pharmacy-address-line-1']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-address-line-1']",
                 androidLocator = null,
                 page = this)
     }
 
     private fun getPharmacyResultTelephoneNumber(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//span//p[@id='pharmacy-telephone-number']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-telephone-number']",
                 androidLocator = null,
                 page = this)
     }
 
     private fun getPharmacyResultWebsite(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$basePharmacyResultItemPath//span//p[@id='pharmacy-url']",
+                webDesktopLocator = "$basePharmacyResultItemPath//p[@id='pharmacy-url']",
                 androidLocator = null,
                 page = this)
     }

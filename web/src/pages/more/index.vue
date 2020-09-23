@@ -7,7 +7,7 @@
         header-tag="h2"
         data-purpose="text_link"
         :href="appMessagingPath"
-        :has-unread-messages="hasUnreadMessages"
+        :show-indicator="hasUnreadMessages"
         :text="$t('messages.hub.healthInformationAndUpdates')"
         :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
         :click-func="navigateToAppMessages"
@@ -21,7 +21,7 @@
         :href="messagesPath"
         :text="$t('messages.messages')"
         :description="$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')"
-        :has-unread-messages="hasUnreadMessages"
+        :show-indicator="hasUnreadMessages"
         :click-func="navigateToMessages"
         :aria-label="ariaLabel"/>
 

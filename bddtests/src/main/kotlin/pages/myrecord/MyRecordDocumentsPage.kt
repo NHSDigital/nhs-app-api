@@ -23,14 +23,14 @@ class MyRecordDocumentsPage : HybridPageObject() {
 
     private fun getDocumentDateAndType(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath//span//p",
+                webDesktopLocator = "$baseDocumentItemPath//p",
                 androidLocator = null,
                 page = this)
     }
 
     private fun getDocumentTerm(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath//span//h2",
+                webDesktopLocator = "$baseDocumentItemPath//h2",
                 androidLocator = null,
                 page = this)
     }

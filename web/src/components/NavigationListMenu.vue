@@ -4,7 +4,7 @@
                :header-tag="headerTag"
                data-purpose="messages-menu-item"
                :href="messagesPath"
-               :has-unread-messages="hasMessageIndicator"
+               :show-indicator="hasMessageIndicator"
                :text="messagesItemText"
                :aria-label="ariaLabel"
                :click-func="navigateToMessages"/>

@@ -53,7 +53,7 @@ open class MorePage : HybridPageObject() {
     val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
 
     private val unreadIndicator = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_messages_unreadIndicator']",
+            webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
             androidLocator = null,
             page = this)
 

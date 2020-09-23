@@ -5,7 +5,7 @@ class LinksWithDescriptionsContent(override val linkBlockTitle: String,
                                    override val linkStyling: String)
     : ILinksContent {
 
-    private val sections = "$containerXPath//ul/li//a/span"
+    private val sections = "$containerXPath//ul/li//a"
     override val links = arrayListOf<LinkContent>()
     override val hasDescriptionBody: Boolean = true
 

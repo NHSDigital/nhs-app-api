@@ -140,7 +140,7 @@ describe('index', () => {
     async (_, hasUnreadGpMessages, hasUnreadAppMessages, showIndicator) => {
       wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages });
       await wrapper.vm.$nextTick();
-      expect(wrapper.find('#btn_messages_unreadIndicator').exists()).toBe(showIndicator);
+      expect(wrapper.find('#btn_messages_discIndicator').exists()).toBe(showIndicator);
     });
 
   describe('messaging link', () => {

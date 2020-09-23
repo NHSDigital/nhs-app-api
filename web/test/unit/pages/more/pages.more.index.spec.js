@@ -233,7 +233,7 @@ describe('more', () => {
 
   describe('unread messages indicator', () => {
     const getUnreadIndicator = wrapperObj =>
-      wrapperObj.find('#btn_messages_unreadIndicator');
+      wrapperObj.find('#btn_messages_discIndicator');
 
     describe('has unread indicators', () => {
       beforeEach(async () => {

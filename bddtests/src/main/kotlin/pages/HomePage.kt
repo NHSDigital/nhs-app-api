@@ -30,7 +30,7 @@ class HomePage : HybridPageObject() {
     ).withText("Dismiss", false)
 
     private val unreadIndicator = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_messages_unreadIndicator']",
+            webDesktopLocator = "//*[@id='btn_messages_discIndicator']",
             androidLocator = null,
             page = this,
             helpfulName = "Unread Indicator")
@@ -60,7 +60,7 @@ class HomePage : HybridPageObject() {
             helpfulName = "Survey Link"
     )
 
-    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/div/h2"
+    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/div/h2"
 
     val banner = HybridPageElement(
             webDesktopLocator = "//*[@id='warning-banner']",
