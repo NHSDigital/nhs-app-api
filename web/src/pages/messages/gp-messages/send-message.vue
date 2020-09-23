@@ -35,7 +35,7 @@
             <strong>
               {{ $t('messages.subject') }}
             </strong>
-            <div class="nhsuk-u-padding-top-2 nhsuk-hint">
+            <div id="text-must-be-shorter-than" class="nhsuk-u-padding-top-2 nhsuk-hint">
               {{ $t('messages.textMustBeShorterThan64Characters') }}
             </div>
           </label>
@@ -44,6 +44,7 @@
                               maxlength="64"
                               :error-text="
                                 $t('messages.enterASubject')"
+                              aria-describedby="text-must-be-shorter-than-64"
                               :error="subjectError"
                               :required="true"/>
         </div>
@@ -53,7 +54,7 @@
           <strong>
             {{ $t('messages.message') }}
           </strong>
-          <div class="nhsuk-u-padding-top-2 nhsuk-hint">
+          <div id="text-must-be-shorter-than-450" class="nhsuk-u-padding-top-2 nhsuk-hint">
             {{ $t('messages.textMustBeShorterThan450Characters') }}
           </div>
         </label>
@@ -62,6 +63,7 @@
                            maxlength="450"
                            :rows="5"
                            :error="messageTextError"
+                           aria-describedby="text-must-be-shorter-than-450"
                            :error-text="
                              $t('messages.enterAMessage')"
                            :required="true"/>

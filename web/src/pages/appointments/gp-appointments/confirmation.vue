@@ -125,6 +125,7 @@
                                :a-labelled-by="reasonBoxAriaLabelledBy"
                                :text-area-classes="defaultClasses"
                                :required="!bookingReasonOptional"
+                               aria-describedby="max-reason-desc"
                                :error.sync="showReasonError"
                                name="bookingReason"
                                maxlength="150"/>
