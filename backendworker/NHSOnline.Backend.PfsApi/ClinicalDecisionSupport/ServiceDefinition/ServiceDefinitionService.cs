@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
                     userSession.OdsCode,
-                    GetSessionIdFromParameters(parameters));
+                    _fhirParameterHelpers.GetSessionIdFromParameters(parameters));
             }
             finally
             {
@@ -206,43 +206,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             finally
             {
                 _logger.LogExit();
-            }
-        }
-
-        private ServiceDefinitionResult GetDemographicsErrorResult(DemographicsResult myRecord)
-        {
-            switch (myRecord)
-            {
-                case DemographicsResult.BadGateway _:
-                    _logger.LogError("GP systems demographics call was unsuccessful");
-                    return new ServiceDefinitionResult.DemographicsBadGateway();
-                case DemographicsResult.Forbidden _:
-                    _logger.LogError("GP systems demographics forbidden");
-                    return new ServiceDefinitionResult.DemographicsForbidden();
-                case DemographicsResult.InternalServerError _:
-                    _logger.LogError("GP systems demographics threw an internal server error");
-                    return new ServiceDefinitionResult.DemographicsInternalServerError();
-                default:
-                    _logger.LogError("GP systems demographics record not successfully retrieved");
-                    return new ServiceDefinitionResult.DemographicsRetrievalFailed();
-            }
-        }
-
-        private string GetSessionIdFromParameters(Parameters parameters)
-        {
-            try
-            {
-                return parameters?.Parameter?
-                    .Where(p => "sessionId".Equals(p?.Name, StringComparison.Ordinal))
-                    .Select(p => p?.Value)
-                    .Cast<FhirString>()
-                    .Select(p => p?.Value)
-                    .FirstOrDefault();
-            }
-            catch (InvalidCastException e)
-            {
-                _logger.LogError(e, $"Parameter sessionId was not of expected type: {nameof(FhirString)}");
-                return null;
             }
         }
     }

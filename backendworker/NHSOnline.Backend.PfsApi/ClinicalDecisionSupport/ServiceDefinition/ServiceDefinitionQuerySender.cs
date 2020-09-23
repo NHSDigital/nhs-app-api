@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly ILogger _logger;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
+        private readonly IFhirParameterHelpers _fhirParameterHelpers;
 
         private readonly FhirJsonParser _parser;
         private readonly FhirJsonSerializer _serializer;
@@ -30,12 +31,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             ILogger<ServiceDefinitionQuerySender> logger,
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
+            IFhirParameterHelpers fhirParameterHelpers,
             IEvaluateServiceDefinitionQuery evaluateServiceDefinitionQuery,
             IServiceDefinitionIsValidQuery serviceDefinitionIsValidQuery)
         {
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
             _fhirSanitizationHelper = fhirSanitizationHelper;
+            _fhirParameterHelpers = fhirParameterHelpers;
 
             _serializer = new FhirJsonSerializer();
             _parser = new FhirJsonParser();
@@ -172,6 +175,19 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 _logger.LogError(e, "Failed to parse guidance response");
 
                 return new ServiceDefinitionResult.BadGateway();
+            }
+
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                var responseSessionId = _fhirParameterHelpers.GetSessionIdFromParameters(guidanceResponse.Contained?
+                    .Where(c => c.ResourceType == ResourceType.Parameters)
+                    .Cast<Parameters>()
+                    .FirstOrDefault());
+
+                if (!string.IsNullOrEmpty(responseSessionId))
+                {
+                    _logger.LogInformation($"Starting online consultation for {serviceDefinitionDescription}. ODSCode: {odsCode}");
+                }
             }
 
             _fhirSanitizationHelper.SanitizeGuidanceResponse(guidanceResponse, _htmlSanitizer);

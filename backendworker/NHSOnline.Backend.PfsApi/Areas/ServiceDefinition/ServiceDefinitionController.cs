@@ -46,8 +46,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 {
                     var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
 
-                    _logger.LogInformation($"Starting online consultation for {description}. ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
-
                     return (await _service.GetServiceDefinition(provider, metaData.Id, description, userSession))
                         .Accept(new ServiceDefinitionResultVisitor());
                 }
@@ -145,42 +143,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             {
                 _logger.LogExit();
             }
-        }
-
-        private async Task<IActionResult> GetServiceDefinition(string provider, string serviceDefinitionId, ServiceDefinitionType type, P9UserSession userSession)
-        {
-            var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[type];
-
-            _logger.LogInformation($"Starting online consultation for {description}. " +
-                                   $"ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
-
-            return (await _service.GetServiceDefinition(provider, serviceDefinitionId, description, userSession))
-                .Accept(new ServiceDefinitionResultVisitor());
-        }
-
-        private async Task<IActionResult> EvaluateServiceDefinition(
-            string provider,
-            string serviceDefinitionId,
-            ServiceDefinitionType type,
-            P9UserSession userSession,
-            Parameters parameters,
-            bool demographicsConsentGiven)
-        {
-            var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[type];
-
-            _logger.LogInformation($"Evaluating for {description}. " +
-                                   $"ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
-
-            return (await _service.EvaluateServiceDefinition(
-                    provider,
-                    serviceDefinitionId,
-                    description,
-                    parameters,
-                    "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
-                        StringComparison.Ordinal),
-                    demographicsConsentGiven,
-                    userSession))
-                .Accept(new ServiceDefinitionResultVisitor());
         }
     }
 }

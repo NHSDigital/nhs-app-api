@@ -41,7 +41,6 @@
          private Mock<ILogger<ServiceDefinitionQuerySender>> _mockSenderLogger;
          private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
          private Mock<IAuditor> _mockAuditor;
-         private P9UserSession _userSession;
          private Mock<IGpSystem> _mockGpSystem;
          private Mock<IGpSystemFactory> _mockGpSystemFactory;
          private Mock<IDemographicsService> _mockDemographicsService;
@@ -50,16 +49,21 @@
          private Mock<IServiceDefinitionIsValidQuery> _mockServiceDefinitionIsValidQuery;
          private Mock<IGuidCreator> _mockGuidCreator;
 
+         private CitizenIdUserSession _cidUserSession;
+         private P9UserSession _userSession;
+
+         private const string OdsCode = "A29928";
          private const string Provider = "stubs";
          private const string ProviderName = "OLC Stubs";
          private const string ServiceDefinitionId = "testId";
          private const string ServiceDefinitionDescription = "test admin help";
+         private const string SessionId = "9102fb79-bc0e-465d-b2de-2a724ec876dc";
 
          private const string GuidanceResponseJsonContent = "{ \"resourceType\" : \"Bundle\", \"status\": \"success\" }";
          private const string BundleJsonContent = "{ \"resourceType\" : \"Bundle\", \"type\": \"searchset\", \"total\": 3 }";
          private const string ParamString =
-             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"9102fb79-bc0e-465d-b2de-2a724ec876dc\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
-         private const string SessionEndGuidanceResponse = "{ \"resourceType\": \"GuidanceResponse\", \"contained\": [ { \"resourceType\": \"Parameters\", \"id\": \"outputParams\", \"parameter\": [ { \"name\": \"sessionId\", \"valueString\": \"test\" } ] }, { \"resourceType\": \"OperationOutcome\", \"id\": \"outcome1\", \"issue\": [ { \"severity\": \"error\", \"code\": \"not-found\", \"details\": { \"coding\": [ { \"system\": \"https://test\", \"code\": \"SESSION_ENDED\", \"display\": \"sessionId test has already ended\" } ] } } ] } ], \"module\": { \"reference\": \"https://test/ServiceDefinition/GEC_ADM\" }, \"status\": \"failure\", \"occurrenceDateTime\": \"2019-12-02T13:38:09.403\", \"evaluationMessage\": [ { \"reference\": \"#outcome1\" } ], \"outputParameters\": { \"reference\": \"#outputParams\" } }";
+             "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"" + SessionId + "\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
+         private const string SessionEndGuidanceResponse = "{ \"resourceType\": \"GuidanceResponse\", \"contained\": [ { \"resourceType\": \"Parameters\", \"id\": \"outputParams\", \"parameter\": [ { \"name\": \"sessionId\", \"valueString\": \"" + SessionId + "\" } ] }, { \"resourceType\": \"OperationOutcome\", \"id\": \"outcome1\", \"issue\": [ { \"severity\": \"error\", \"code\": \"not-found\", \"details\": { \"coding\": [ { \"system\": \"https://test\", \"code\": \"SESSION_ENDED\", \"display\": \"sessionId test has already ended\" } ] } } ] } ], \"module\": { \"reference\": \"https://test/ServiceDefinition/GEC_ADM\" }, \"status\": \"failure\", \"occurrenceDateTime\": \"2019-12-02T13:38:09.403\", \"evaluationMessage\": [ { \"reference\": \"#outcome1\" } ], \"outputParameters\": { \"reference\": \"#outputParams\" } }";
          private const string IsValidResponseFormat ="{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"{{name}}\",\"{{fhirType}}\":{{value}}}]}";
          private const string InvalidIsValidResponse ="{invalid: format}";
 
@@ -88,7 +92,8 @@
 
              _demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-             _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1ConnectionToken");
+             _cidUserSession = new CitizenIdUserSession { OdsCode = OdsCode };
+             _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, new EmisUserSession(), "im1ConnectionToken");
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
              _mockDemographicsService = new Mock<IDemographicsService>();
@@ -129,6 +134,7 @@
                      _mockSenderLogger.Object,
                      _mockHtmlSanitizer.Object,
                      _mockFhirSanitizationHelper.Object,
+                     _mockFhirParameterHelpers.Object,
                      _mockEvaluateServiceDefinitionQuery.Object,
                      _mockServiceDefinitionIsValidQuery.Object));
          }
@@ -160,15 +166,7 @@
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
              MockHttpResponseMessage(HttpStatusCode.BadRequest);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
@@ -183,15 +181,7 @@
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
              MockHttpResponseMessage(HttpStatusCode.OK);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
@@ -209,15 +199,7 @@
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
              MockHttpResponseMessage(HttpStatusCode.OK, content);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
@@ -234,15 +216,7 @@
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
              MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
@@ -251,6 +225,46 @@
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
              _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                  It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinition_WhenResponseHasSessionId_ThenStartingConsultationIsLogged()
+         {
+             // Arrange
+             MockCreateInitialServiceDefinitionEvaluateParameters();
+             MockHttpResponseMessage(HttpStatusCode.OK, SessionEndGuidanceResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(It.IsAny<Parameters>()))
+                 .Returns(SessionId);
+
+             // Act
+             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(
+                 LogLevel.Information,
+                 $"Starting online consultation for {ServiceDefinitionDescription}. ODSCode: {OdsCode}",
+                 Times.Once());
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinition_WhenResponseHasNoSessionId_ThenStartingConsultationIsNotLogged()
+         {
+             // Arrange
+             MockCreateInitialServiceDefinitionEvaluateParameters();
+             MockHttpResponseMessage(HttpStatusCode.OK, SessionEndGuidanceResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             // Act
+             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(
+                 LogLevel.Information,
+                 $"Starting online consultation for {ServiceDefinitionDescription}. ODSCode: {OdsCode}",
+                 Times.Never());
          }
 
          [TestMethod]
@@ -299,15 +313,7 @@
          {
              // Arrange
              MockHttpResponseMessage(HttpStatusCode.BadRequest);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
@@ -321,15 +327,7 @@
          {
              // Arrange
              MockHttpResponseMessage(HttpStatusCode.OK);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
@@ -346,15 +344,7 @@
          {
              // Arrange
              MockHttpResponseMessage(HttpStatusCode.OK, content);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
@@ -370,15 +360,7 @@
          {
              // Arrange
              MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
-
-             _mockEvaluateServiceDefinitionQuery
-                 .Setup(a => a.EvaluateServiceDefinition(
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<string>(),
-                     It.IsAny<bool>(),
-                     null))
-                 .ReturnsAsync(_httpResponse);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
              var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
@@ -387,6 +369,47 @@
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
              _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
                  It.IsAny<GuidanceResponse>(), It.IsAny<IHtmlSanitizer>()), Times.Once);
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenRequestHasNoSessionIdAndResponseHasSessionId_ThenStartingConsultationIsLogged()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             var requestParameters = new Parameters();
+
+             _mockFhirParameterHelpers
+                 .Setup(h => h.GetSessionIdFromParameters(
+                     It.Is<Parameters>(p => p != requestParameters)))
+                 .Returns(SessionId);
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, requestParameters, false, false, _userSession);
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(
+                 LogLevel.Information,
+                 $"Starting online consultation for {ServiceDefinitionDescription}. ODSCode: {OdsCode}",
+                 Times.Once());
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinition_WhenRequestHasNoSessionIdAndResponseHasNoSessionId_ThenStartingConsultationIsNotLogged()
+         {
+             // Arrange
+             MockHttpResponseMessage(HttpStatusCode.OK, GuidanceResponseJsonContent);
+             MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
+
+             // Act
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+
+             // Assert
+             _mockSenderLogger.VerifyLogger(
+                 LogLevel.Information,
+                 $"Starting online consultation for {ServiceDefinitionDescription}. ODSCode: {OdsCode}",
+                 Times.Never());
          }
 
          [TestMethod]
@@ -401,7 +424,7 @@
                      It.IsAny<string>(),
                      It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
                      It.IsAny<bool>(),
-                     "9102fb79-bc0e-465d-b2de-2a724ec876dc"))
+                     SessionId))
                  .ReturnsAsync(_httpResponse);
 
              var olcDemographics = new OlcDemographics
@@ -441,10 +464,9 @@
                  }
              });
 
-             var fhirParser = new FhirJsonParser();
-             var paramsParsed = fhirParser.Parse(ParamString);
+             var bodyParameters = (Parameters) new FhirJsonParser().Parse(ParamString);
 
-             var bodyParameters = (Parameters) paramsParsed;
+             _mockFhirParameterHelpers.Setup(h => h.GetSessionIdFromParameters(bodyParameters)).Returns(SessionId);
 
              // Act
              var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, bodyParameters, false, true ,_userSession);
@@ -682,7 +704,7 @@
          private void MockCreateInitialServiceDefinitionEvaluateParameters()
          {
              _mockFhirParameterHelpers
-                 .Setup(h => h.CreateInitialServiceDefinitionEvaluateParameters(_userSession.GpUserSession.OdsCode))
+                 .Setup(h => h.CreateInitialServiceDefinitionEvaluateParameters(_userSession.OdsCode))
                  .Returns(new NhsAppFhir.Parameters());
          }
 
@@ -692,7 +714,7 @@
 
              _serviceDefinitionIsValidParameters = _serializer.SerializeToString(parameters);
              _mockFhirParameterHelpers
-                 .Setup(h => h.CreateServiceDefinitionIsValidParameters(_userSession.GpUserSession.OdsCode, _requestId.ToString()))
+                 .Setup(h => h.CreateServiceDefinitionIsValidParameters(_userSession.OdsCode, _requestId.ToString()))
                  .Returns(parameters);
          }
 
@@ -705,6 +727,18 @@
                      ? null
                      : new StringContent(content, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
              };
+         }
+
+         private void MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId()
+         {
+             _mockEvaluateServiceDefinitionQuery
+                 .Setup(a => a.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<string>(),
+                     It.IsAny<bool>(),
+                     null))
+                 .ReturnsAsync(_httpResponse);
          }
 
          private static string GetIsValidResponseContent(

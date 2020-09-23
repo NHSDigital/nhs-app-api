@@ -67,29 +67,6 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinition_WhenCalled_ThenStartingConsultationWithUnknownDescriptionIsLogged()
-         {
-             // Arrange
-             MockServiceGetServiceDefinition(new ServiceDefinitionResult.Success("this is a v2 service definition"),
-                 _userSession, description: ServiceDefinitionDescriptionV2);
-             var serviceDefinitionMetaData = new ServiceDefinitionMetaData
-             {
-                 Id = ServiceDefinitionId,
-                 Type = ServiceDefinitionTypeEnum.AdminHelp
-             };
-
-             // Act
-             await _systemUnderTest.GetServiceDefinition(serviceDefinitionMetaData,
-                 Provider, _userSession);
-
-             // Assert
-             _mockLogger.VerifyLogger(
-                 LogLevel.Information,
-                 $"Starting online consultation for {ServiceDefinitionDescriptionV2}. ODSCode: {_userSession.GpUserSession.OdsCode}",
-                 Times.Once());
-         }
-
-         [TestMethod]
          public async Task GetServiceDefinition_WhenServiceGetServiceDefinitionReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
          {
              // Arrange

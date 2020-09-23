@@ -123,6 +123,24 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             };
         }
 
+        public string GetSessionIdFromParameters(Parameters parameters)
+        {
+            try
+            {
+                return parameters?.Parameter?
+                    .Where(p => "sessionId".Equals(p?.Name, StringComparison.Ordinal))
+                    .Select(p => p?.Value)
+                    .Cast<FhirString>()
+                    .Select(p => p?.Value)
+                    .FirstOrDefault();
+            }
+            catch (InvalidCastException e)
+            {
+                _logger.LogError(e, $"Parameter sessionId was not of expected type: {nameof(FhirString)}");
+                return null;
+            }
+        }
+
         public Parameters CreateServiceDefinitionIsValidParameters(string odsCode, string requestId)
         {
             return new Parameters
