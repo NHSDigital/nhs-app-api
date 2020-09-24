@@ -13,6 +13,8 @@ export default {
   getTheNhsAppOnYourDevice: 'Get the NHS App on your smartphone or tablet',
   howAreYouFeelingToday: 'How are you feeling today?',
   orderRepeatPrescriptions: 'order repeat prescriptions',
+  notTheNhsCovidApp: 'This is not the NHS COVID-19 app',
+  toDownloadTheNhsCovidApp: 'To download the NHS COVID-19 contact tracing app, go to ',
   otherServicesYouCanUse: 'Other services you can use without logging in:',
   registeredWithSurgeryInEngland: 'registered with a GP surgery in England',
   searchConditionsAndTreatments: 'Search conditions and treatments',

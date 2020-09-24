@@ -2,7 +2,6 @@
   <nhs-uk-app-layout>
     <div>
       <pre-registration-information :should-show-header="false"/>
-      <other-services/>
       <login-button button-text="generic.continue"/>
     </div>
   </nhs-uk-app-layout>
@@ -10,7 +9,6 @@
 
 <script>
 import PreRegistrationInformation from '@/components/PreRegistrationInformation';
-import OtherServices from '@/components/OtherServices';
 import LoginButton from '@/components/widgets/LoginButton';
 import NativeCallbacks from '@/services/native-app';
 import NhsUkAppLayout from '@/layouts/nhsuk-layout';
@@ -19,7 +17,6 @@ export default {
   name: 'PreRegistrationInformationPage',
   components: {
     PreRegistrationInformation,
-    OtherServices,
     LoginButton,
     NhsUkAppLayout,
   },

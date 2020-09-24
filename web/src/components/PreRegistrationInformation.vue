@@ -3,7 +3,15 @@
     <div class="nhsuk-grid-column-two-thirds">
       <div id="before-you-start" class="nhsuk-u-margin-top-1">
         <h2 v-if="shouldShowHeader" class="nhsuk-u-margin-bottom-3">
-          {{ $t('login.beforeYouStart') }}</h2>
+          {{ $t('login.beforeYouStart') }}
+        </h2>
+        <div class="nhsuk-warning-callout">
+          <h3 class="nhsuk-warning-callout__label">{{ $t('login.notTheNhsCovidApp') }}</h3>
+          <p>
+            {{ $t('login.toDownloadTheNhsCovidApp') }}
+            <a href="https://covid19.nhs.uk" target="_blank" rel="noopener noreferrer">covid19.nhs.uk</a>.
+          </p>
+        </div>
         <p>{{ $t('login.toUseThisServiceYouMustBe') }}</p>
         <ul>
           <li class="nhsuk-u-margin-bottom-3">
