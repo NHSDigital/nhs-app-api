@@ -1,3 +1,4 @@
+using System;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Repository;
 
@@ -17,12 +18,12 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.NoChange result)
         {
-            return new MessagePatchResult.Updated();
+            return new MessagePatchResult.NoChange();
         }
 
         public MessagePatchResult Visit(RepositoryUpdateResult<UserMessage>.Updated result)
         {
-            return new MessagePatchResult.Updated();
+            throw new NotImplementedException();
         }
     }
 }

@@ -25,22 +25,29 @@ namespace NHSOnline.Backend.Metrics
 
         public Task TermsAndConditionsInitialConsent() => LogMetric();
 
-        public Task MessageRead() => LogMetric();
+        public Task MessageRead(MessageReadData data) => LogMetric(data);
 
         public Task NotificationsEnabled() => LogMetric();
 
         public Task NotificationsDisabled() => LogMetric();
 
-        private Task LogMetric([CallerMemberName] string action = "")
+        private Task LogMetric(IMetricData metricData = null, [CallerMemberName] string action = "")
         {
-            var metricLog = string.Join(" ", MetricData(action).Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            var allMetricData = DefaultMetricData(action);
+
+            if (metricData != null)
+            {
+                allMetricData = allMetricData.Concat(metricData.ToKeyValuePairs());
+            }
+
+            var metricLog = string.Join(" ", allMetricData.Select(kvp => $"{kvp.Key}={kvp.Value}"));
 
             Console.Out.WriteLine(metricLog);
 
             return Task.CompletedTask;
         }
 
-        private IEnumerable<KeyValuePair<string, string>> MetricData(string action)
+        private IEnumerable<KeyValuePair<string, string>> DefaultMetricData(string action)
         {
             var timestamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fff", CultureInfo.InvariantCulture);
             yield return new KeyValuePair<string, string>("Timestamp", timestamp);

@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 return Task.CompletedTask;
             }
 
-            public Task MessageRead()
+            public Task MessageRead(MessageReadData metricData)
             {
                 return Task.CompletedTask;
             }

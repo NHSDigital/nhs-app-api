@@ -15,9 +15,19 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             _metricLogger = metricLogger;
         }
 
+        public async Task<IActionResult> Visit(MessagePatchResult.NoChange result)
+        {
+            return await Task.FromResult(new NoContentResult());
+        }
+
         public async Task<IActionResult> Visit(MessagePatchResult.Updated result)
         {
-            await _metricLogger.MessageRead();
+            await _metricLogger.MessageRead(
+                new MessageReadData(
+                    result.Id,
+                    result.CommunicationId,
+                    result.TransmissionId)
+                );
             return new NoContentResult();
         }
 

@@ -100,6 +100,25 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             AssertSingleLine(consoleOut.ToString()).Split(" ").Should().Contain($"Action={action}");
         }
 
+        [TestMethod]
+        public async Task MessageRead_LogsMessageReadData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var messageReadData = new MessageReadData("messageId_1234", "communicationId_5678", "transmissionId_4567");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.MessageRead(messageReadData);
+
+            // Assert
+            var splitConsoleMessage = AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("MessageId=messageId_1234");
+            splitConsoleMessage.Should().Contain("CommunicationId=communicationId_5678");
+            splitConsoleMessage.Should().Contain("TransmissionId=transmissionId_4567");
+        }
+
         private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
@@ -110,7 +129,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             return metricLogger;
         }
 
-        private string AssertSingleLine(string consoleOut)
+        private static string AssertSingleLine(string consoleOut)
         {
             return consoleOut
                 .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
@@ -128,6 +147,12 @@ namespace NHSOnline.Backend.Metrics.UnitTests
                 yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
                 yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
                 yield return new object[]{ Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
+
+                var messageReadData = new MessageReadData("messageId", "communicationId", "transmissionId");
+                yield return new object[]{ Method(metricLogger => metricLogger.MessageRead(messageReadData)), "MessageRead" };
+
+                yield return new object[]{ Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };
+                yield return new object[]{ Method(metricLogger => metricLogger.NotificationsDisabled()), "NotificationsDisabled" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }

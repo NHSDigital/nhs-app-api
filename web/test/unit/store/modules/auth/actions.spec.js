@@ -171,7 +171,59 @@ describe('actions', () => {
       expiryDate = new Date(decodedJwt.exp * 1000);
     });
 
-    describe('Token will expire in 30 seconds', () => {
+    describe('Token will expire in 30 seconds, called two times', () => {
+      let firstResult;
+      let secondResult;
+      let promise;
+
+      beforeEach(() => {
+        let resolveFunction;
+        promise = new Promise((resolve) => {
+          resolveFunction = resolve;
+        });
+
+        actions.app.$http.postV1PatientAuthorizationAccessTokenRefresh = jest.fn(() =>
+          promise);
+
+        mockdate.set(expiryDate.setSeconds(expiryDate.getSeconds() - 29));
+        actions.ensureAccessToken().then((tokenResponse) => {
+          firstResult = tokenResponse;
+        });
+
+        actions.ensureAccessToken().then((tokenResponse) => {
+          secondResult = tokenResponse;
+        });
+
+        resolveFunction({ token: refreshedToken });
+      });
+
+      it('will only call postV1PatientAuthorizationAccessTokenRefresh once', () => {
+        expect(actions.app.$http.postV1PatientAuthorizationAccessTokenRefresh).toBeCalledTimes(1);
+      });
+
+      it('will return the same token from both calls', () => {
+        expect(firstResult).toBe(secondResult);
+      });
+
+      describe('can be called after a refreshed token has expired', () => {
+        let result;
+
+        beforeEach(async () => {
+          promise = Promise.resolve({ token: 'second refresh token' });
+          result = await actions.ensureAccessToken();
+        });
+
+        it('will call postV1PatientAuthorizationAccessTokenRefresh again', () => {
+          expect(actions.app.$http.postV1PatientAuthorizationAccessTokenRefresh).toBeCalledTimes(2);
+        });
+
+        it('will return a refreshed token', () => {
+          expect(result).toBe('second refresh token');
+        });
+      });
+    });
+
+    describe('Token will expire in 30 seconds, called once', () => {
       let result;
 
       beforeEach(async () => {
@@ -179,7 +231,7 @@ describe('actions', () => {
         result = await actions.ensureAccessToken();
       });
 
-      it('will refresh the token', () => {
+      it('will call postV1PatientAuthorizationAccessTokenRefresh', () => {
         expect(actions.app.$http.postV1PatientAuthorizationAccessTokenRefresh).toBeCalled();
       });
 

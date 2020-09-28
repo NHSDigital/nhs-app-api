@@ -46,19 +46,43 @@ const logoutCleanUp = ({ self }) => {
   removeSessionCookies(self);
 };
 
+let refreshing;
+
 export default {
   async ensureAccessToken() {
     const cookieValue = this.$cookies.get('nhso.session');
     const decodedToken = jwt(cookieValue.accessToken);
     if (decodedToken.exp * 1000 < Date.now() + thirtySeconds) {
-      const { token } = await this.app.$http.postV1PatientAuthorizationAccessTokenRefresh();
-      cookieValue.accessToken = token;
-      setCookie({
-        key: 'nhso.session',
-        value: cookieValue,
-        cookies: this.$cookies,
-        secure: this.$env.SECURE_COOKIES,
-      });
+      if (refreshing) {
+        cookieValue.accessToken = await refreshing;
+      } else {
+        let resolveRefreshing;
+        let rejectRefreshing;
+
+        refreshing = new Promise((resolve, reject) => {
+          resolveRefreshing = resolve;
+          rejectRefreshing = reject;
+        });
+
+        try {
+          const { token } = await this.app.$http.postV1PatientAuthorizationAccessTokenRefresh();
+          cookieValue.accessToken = token;
+
+          setCookie({
+            key: 'nhso.session',
+            value: cookieValue,
+            cookies: this.$cookies,
+            secure: this.$env.SECURE_COOKIES,
+          });
+
+          resolveRefreshing(token);
+        } catch (e) {
+          rejectRefreshing();
+          throw e;
+        } finally {
+          refreshing = null;
+        }
+      }
     }
     return cookieValue.accessToken;
   },
@@ -83,7 +107,6 @@ export default {
           returnResponse: true,
         });
 
-
       const {
         name,
         odsCode,
@@ -94,7 +117,6 @@ export default {
         accessToken,
         proofLevel,
       } = response.data;
-
 
       this.dispatch('session/hideExpiryMessage');
       this.dispatch('session/setInfo', {

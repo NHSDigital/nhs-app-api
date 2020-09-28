@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
+using NHSOnline.Backend.Repository;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -132,12 +134,26 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     return repositoryUpdatesFailure;
                 }
 
+                var findResult = await _messageRepository.FindMessage(accessToken.Subject, messageId);
+                if (!(findResult is RepositoryFindResult<UserMessage>.Found foundResult))
+                {
+                    _logger.LogWarning("Message Patch failed to find message in repository");
+                    return findResult.Accept(new RepositoryFindMessagePatchResultVisitor());
+                }
+
                 var updateResult = await _messageRepository.UpdateOne(accessToken.Subject, messageId, repositoryUpdates);
-                return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
+                if (!(updateResult is RepositoryUpdateResult<UserMessage>.Updated))
+                {
+                    _logger.LogWarning("Message Patch did not update message in repository");
+                    return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
+                }
+
+                var record = foundResult.Records.First();
+                return new MessagePatchResult.Updated(record.Id.ToString(), record.CommunicationId, record.TransmissionId);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Message Get has failed with exception");
+                _logger.LogError(e, "Message Patch has failed with exception");
                 return new MessagePatchResult.InternalServerError();
             }
             finally
