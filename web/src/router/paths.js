@@ -15,7 +15,6 @@ export const TERMSANDCONDITIONS_PATH = '/terms-and-conditions';
 export const LOGOUT_PATH = 'logout';
 export const MORE_PATH = 'more';
 export const ADVICE_PATH = 'advice';
-export const SYMPTOMS_PATH = 'symptoms';
 export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
 export const ACCOUNT_PATH = 'account';

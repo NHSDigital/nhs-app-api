@@ -307,7 +307,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     
     func setupAppVersion() {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let updateNativeVersionJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)');"
+        let updateNativeVersionJavascriptCommand = "var result = window.nativeAppCallbacks.appVersionUpdateNativeVersion('\(versionNumber)');"
         
         executeJavascript(scriptToExecute: updateNativeVersionJavascriptCommand)
     }

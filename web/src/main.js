@@ -8,6 +8,7 @@ import store from '@/store';
 import i18n from '@/plugins/i18n';
 import ApiPlugin from '@/plugins/api';
 import RouterExtensions from '@/plugins/routing';
+import NativeAppCallbacksPlugin from '@/plugins/native-app-callbacks';
 import DefaultMixin from '@/plugins/mixinDefinitions/DefaultMixin';
 import '@/plugins/filters';
 import '@/plugins/directives';
@@ -40,6 +41,7 @@ const defineErrorHandling = () => {
   Vue.use(ApiPlugin);
   Vue.use(VueMeta);
   Vue.use(RouterExtensions, { router });
+  Vue.use(NativeAppCallbacksPlugin);
   Vue.config.productionTip = false;
   store.$env = (await Axios.get('/config.json')).data;
   store.$cookies = Vue.$cookies;

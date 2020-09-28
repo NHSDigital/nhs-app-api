@@ -11,7 +11,6 @@ export const TERMSANDCONDITIONS_NAME = 'terms-and-conditions';
 export const LOGOUT_NAME = 'logout';
 export const MORE_NAME = 'more';
 export const ADVICE_NAME = 'advice';
-export const SYMPTOMS_NAME = 'symptoms';
 export const GET_HEALTH_ADVICE_NAME = 'get-health-advice';
 export const CHECKYOURSYMPTOMS_NAME = 'check-your-symptoms';
 export const ACCOUNT_NAME = 'account';

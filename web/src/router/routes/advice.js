@@ -1,6 +1,6 @@
 import AdviceIndexPage from '@/pages/advice';
-import { ADVICE_PATH, SYMPTOMS_PATH } from '@/router/paths';
-import { ADVICE_NAME, SYMPTOMS_NAME } from '@/router/names';
+import { ADVICE_PATH } from '@/router/paths';
+import { ADVICE_NAME } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_ADVICE } from '@/router/routes/linked-profiles';
 import { baseNhsAppHelpUrl } from '@/router/externalLinks';
 import { ADVICE_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -26,13 +26,6 @@ export const ADVICE = {
   },
 };
 
-export const SYMPTOMS = {
-  path: SYMPTOMS_PATH,
-  name: SYMPTOMS_NAME,
-  redirect: ADVICE.path,
-};
-
 export default [
   ADVICE,
-  SYMPTOMS,
 ];

@@ -22,13 +22,13 @@ class AppWebInterfaceTest {
     @Test
     fun goToTest() {
         appWebInterface.goTo("testpath")
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('navigation/goTo', 'testpath')", null)
+        verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.navigationGoTo('testpath')", null)
     }
 
     @Test
     fun logoutTest() {
         appWebInterface.logout()
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('auth/logout')",
+        verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.authLogout()",
                 null)
     }
 
@@ -36,7 +36,7 @@ class AppWebInterfaceTest {
     fun extendSessionTest() {
         val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.extendSession()
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('session/extend')",
+        verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.sessionExtend()",
                 null)
     }
 
@@ -44,7 +44,7 @@ class AppWebInterfaceTest {
     fun notificationsAuthorised() {
         appWebInterface.notificationsAuthorised("1234", "load")
         verify(webviewMock).evaluateJavascript(
-            """window.${'$'}nuxt.${'$'}store.dispatch('notifications/authorised', 
+            """window.nativeAppCallbacks.notificationsAuthorised(
             {
                 devicePns: '1234',
                 deviceType: 'android',
@@ -57,7 +57,7 @@ class AppWebInterfaceTest {
     @Test
     fun notificationsUnauthorised() {
         appWebInterface.notificationsUnauthorised()
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/unauthorised')",
+        verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.notificationsUnauthorised()",
                 null)
     }
 
@@ -65,7 +65,7 @@ class AppWebInterfaceTest {
     fun biometricCompletion() {
         appWebInterface.biometricCompletion("Register", "Success", "")
         verify(webviewMock).evaluateJavascript(
-                """window.${'$'}nuxt.${'$'}store.dispatch('loginSettings/biometricCompletion', 
+                """window.nativeAppCallbacks.loginSettingsBiometricCompletion(
             {
                 action: 'Register',
                 outcome: 'Success',
@@ -79,7 +79,7 @@ class AppWebInterfaceTest {
     fun biometricSpec() {
         appWebInterface.biometricSpec("FaceID", false)
         verify(webviewMock).evaluateJavascript(
-                """window.${'$'}nuxt.${'$'}store.dispatch('loginSettings/biometricSpec', 
+                """window.nativeAppCallbacks.loginSettingsBiometricSpec(
             {
                 biometricTypeReference: 'FaceID',
                 enabled: false
@@ -92,7 +92,7 @@ class AppWebInterfaceTest {
     fun biometricLoginFailure() {
         appWebInterface.biometricLoginFailure()
         verify(webviewMock).evaluateJavascript(
-                "window.\$nuxt.\$store.dispatch('login/handleBiometricLoginFailure')",
+                "window.nativeAppCallbacks.loginHandleBiometricLoginFailure()",
                 null)
     }
 
@@ -100,7 +100,7 @@ class AppWebInterfaceTest {
     fun stayOnPage() {
         appWebInterface.stayOnPage()
         verify(webviewMock).evaluateJavascript(
-                "window.\$nuxt.\$store.dispatch('pageLeaveWarning/stayOnPage')",
+                "window.nativeAppCallbacks.pageLeaveWarningStayOnPage()",
                 null)
     }
 
@@ -108,7 +108,7 @@ class AppWebInterfaceTest {
     fun leavePage() {
         appWebInterface.leavePage()
         verify(webviewMock).evaluateJavascript(
-                "window.\$nuxt.\$store.dispatch('pageLeaveWarning/leavePage')",
+                "window.nativeAppCallbacks.pageLeaveWarningLeavePage()",
                 null)
     }
 }

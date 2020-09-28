@@ -23,7 +23,7 @@ class AppWebInterface(private val webView: WebView) {
                 errorCode: '$errorCode'
             }
         """
-        loadDispatchEvent("loginSettings/biometricCompletion", response)
+        dispatchNativeAppCallback("loginSettingsBiometricCompletion", response)
     }
 
     fun biometricSpec(biometricTypeReference: String, enabled: Boolean) {
@@ -33,27 +33,27 @@ class AppWebInterface(private val webView: WebView) {
                 enabled: $enabled
             }
         """
-        loadDispatchEvent("loginSettings/biometricSpec", response)
+        dispatchNativeAppCallback("loginSettingsBiometricSpec", response)
     }
 
     fun biometricLoginFailure() {
-        loadDispatchEvent("login/handleBiometricLoginFailure")
+        dispatchNativeAppCallback("loginHandleBiometricLoginFailure")
     }
 
     fun leavePage() {
-        loadDispatchEvent("pageLeaveWarning/leavePage")
+        dispatchNativeAppCallback("pageLeaveWarningLeavePage")
     }
 
     fun logout() {
-        loadDispatchEvent("auth/logout")
+        dispatchNativeAppCallback("authLogout")
     }
 
     fun extendSession() {
-        loadDispatchEvent("session/extend")
+        dispatchNativeAppCallback("sessionExtend")
     }
 
     fun getNotificationsStatus(status: String) {
-        loadDispatchEvent("notifications/settingsStatus", "'$status'")
+        dispatchNativeAppCallback("notificationsSettingsStatus", "'$status'")
     }
 
     fun notificationsAuthorised(devicePns: String, trigger: String) {
@@ -64,24 +64,25 @@ class AppWebInterface(private val webView: WebView) {
                 trigger: '$trigger'
             }
         """
-        loadDispatchEvent("notifications/authorised", response)
+        dispatchNativeAppCallback("notificationsAuthorised", response)
     }
 
     fun notificationsUnauthorised() {
-        loadDispatchEvent("notifications/unauthorised")
+        dispatchNativeAppCallback("notificationsUnauthorised")
     }
 
     fun stayOnPage() {
-        loadDispatchEvent("pageLeaveWarning/stayOnPage")
+        dispatchNativeAppCallback("pageLeaveWarningStayOnPage")
     }
 
     fun goTo(path: String) {
-        loadDispatchEvent("navigation/goTo", "'$path'")
+        dispatchNativeAppCallback("navigationGoTo", "'$path'")
     }
 
-    private fun loadDispatchEvent(event: String, args: String = "") {
-        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event'" +
-                "${ if (args != "") ", $args" else "" })")
+    private fun dispatchNativeAppCallback(function: String, args: String = "") {
+        evaluateWebviewJavascript(
+                "window.nativeAppCallbacks.${function}(" +
+                "${ if (args != "") "$args" else "" })")
     }
 
     private fun evaluateWebviewJavascript(javascriptText: String) {

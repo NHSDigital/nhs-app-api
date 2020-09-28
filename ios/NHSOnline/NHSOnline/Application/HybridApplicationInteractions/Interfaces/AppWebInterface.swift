@@ -16,7 +16,7 @@ class AppWebInterface {
             errorCode: '\(errorCode)'
         }
         """
-        dispatchEvent(event: "loginSettings/biometricCompletion", args: response)
+        dispatchNativeAppCallback(function: "loginSettingsBiometricCompletion", args: response)
     }
     
     func biometricSpec(biometricTypeReference: String, enabled: Bool) {
@@ -26,31 +26,31 @@ class AppWebInterface {
             enabled: \(enabled)
         }
         """
-        dispatchEvent(event: "loginSettings/biometricSpec", args: response)
+        dispatchNativeAppCallback(function: "loginSettingsBiometricSpec", args: response)
     }
     
     func biometricLoginFailure() {
-        dispatchEvent(event: "login/handleBiometricLoginFailure")
+        dispatchNativeAppCallback(function: "loginHandleBiometricLoginFailure")
     }
     
     func getNotificationsStatus(status: String) {
-        dispatchEvent(event: "notifications/settingsStatus", args: "'\(status)'")
+        dispatchNativeAppCallback(function: "notificationsSettingsStatus", args: "'\(status)'")
     }
     
     func extendSession() {
-        dispatchEvent(event: "session/extend")
+        dispatchNativeAppCallback(function: "sessionExtend")
     }
     
     func leavePage() {
-        dispatchEvent(event: "pageLeaveWarning/leavePage")
+        dispatchNativeAppCallback(function: "pageLeaveWarningLeavePage")
     }
     
     func logout() {
-        dispatchEvent(event: "auth/logout")
+        dispatchNativeAppCallback(function: "authLogout")
     }
     
     func notificationsUnauthorised() {
-        dispatchEvent(event: "notifications/unauthorised")
+        dispatchNativeAppCallback(function: "notificationsUnauthorised")
     }
     
     func notificationsAuthorised(devicePns: String, trigger: String) {
@@ -62,7 +62,11 @@ class AppWebInterface {
             
             }
         """
-        dispatchEvent(event: "notifications/authorised", args: response)
+        dispatchNativeAppCallback(function: "notificationsAuthorised", args: response)
+    }
+    
+    func stayOnPage() {
+        dispatchNativeAppCallback(function: "pageLeaveWarningStayOnPage")
     }
     
     func paycassoResponseFailureCallback(isFaceMatched: Bool, errorCode: Int, errorMessage: String) {
@@ -101,19 +105,15 @@ class AppWebInterface {
     private func dictToJson(dict: [String: Any?]) -> String {
         return JSON(dict).rawString()!
     }
-
-    func stayOnPage() {
-        dispatchEvent(event: "pageLeaveWarning/stayOnPage")
-    }
     
-    private func dispatchEvent(event: String, args: String = "") {
-        var eventArgs = "'\(event)'"
+    private func dispatchNativeAppCallback(function: String, args: String = "") {
+        var eventArgs = ""
         
         if !args.isEmpty {
-            eventArgs += ", \(args)"
+            eventArgs += "\(args)"
         }
         
-        let eventString = "window.$nuxt.$store.dispatch(\(eventArgs));"
+        let eventString = "window.nativeAppCallbacks.\(function)(\(eventArgs));"
         evaluateWebviewJavascript(javascriptText: eventString)
     }
     

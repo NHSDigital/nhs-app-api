@@ -1,7 +1,6 @@
 enum MenuTab: String, Codable {
    case None
    case Advice
-   case Symptoms
    case Appointments
    case Prescriptions
    case MyRecord

@@ -112,7 +112,7 @@ class WebViewController: UIViewController, WKUIDelegate {
                 }
             }
         }
-        webView.evaluateJavaScript("window.$nuxt.$store.dispatch('navigation/goTo', '\(spaPath)') && undefined;", 
+        webView.evaluateJavaScript("window.nativeAppCallbacks.navigationGoTo('\(spaPath)') && undefined;", 
                 completionHandler: completionHandler)
         webViewDelegate?.viewController.showWebViewContainer()
     }

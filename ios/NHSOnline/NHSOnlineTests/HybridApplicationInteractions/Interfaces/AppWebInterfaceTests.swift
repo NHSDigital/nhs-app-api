@@ -31,7 +31,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'loginSettings/biometricCompletion\', {\n    action: \'Register\',\n    outcome: \'Success\',\n    errorCode: \'\'\n});")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.loginSettingsBiometricCompletion({\n    action: \'Register\',\n    outcome: \'Success\',\n    errorCode: \'\'\n});")
     }
     
     func test_whenBiometricSpecIsTriggered_AndTypeIsFaceID_thenBiometricSpecIsDispatchedWithFace(){
@@ -43,7 +43,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'loginSettings/biometricSpec\', {\n    biometricTypeReference: \'face\',\n    enabled: false\n});")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.loginSettingsBiometricSpec({\n    biometricTypeReference: \'face\',\n    enabled: false\n});")
     }
     
     func test_whenBiometricSpecIsTriggered_AndTypeIsTouchID_thenBiometricSpecIsDispatchedWithTouch(){
@@ -55,7 +55,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'loginSettings/biometricSpec\', {\n    biometricTypeReference: \'touch\',\n    enabled: false\n});" )
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.loginSettingsBiometricSpec({\n    biometricTypeReference: \'touch\',\n    enabled: false\n});" )
     }
     
     func test_whenBiometricLoginFailureIsTriggered_thenHandleBiometricLoginFailureIsDispatched(){
@@ -67,7 +67,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'login/handleBiometricLoginFailure\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.loginHandleBiometricLoginFailure();")
     }
     
     func test_whenGetNotificationsStatusIsTriggered_AndStatusIsEnabled_thenSettingsStatusIsDispatchedWithEnabled(){
@@ -79,7 +79,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/settingsStatus\', \'Enabled\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'Enabled\');")
     }
     
     func test_whenGetNotificationsStatusIsTriggered_AndStatusIsDisabled_thenSettingsStatusIsDispatchedWithDisabled(){
@@ -91,7 +91,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/settingsStatus\', \'Disabled\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'Disabled\');")
     }
     
     func test_whenExtendSessionIsTriggered_thenSessionExtendIsDispatched(){
@@ -103,7 +103,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'session/extend\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.sessionExtend();")
     }
     
     func test_whenLogoutIsTriggered_thenLogoutIsDispatched(){
@@ -115,7 +115,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'auth/logout\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.authLogout();")
     }
     
     func test_whenNotificationsUnauthorisedIsTriggered_thenNotificationsUnauthorisedIsDispatched(){
@@ -127,7 +127,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/unauthorised\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsUnauthorised();")
     }
     
     func test_whenNotificationsAuthorisedIsTriggered_AndDevicePnsAndTriggerArePassed_thenNotificationsAuthorisedIsDispatched(){
@@ -139,7 +139,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'notifications/authorised\',     {\n        devicePns: \'pns\',\n        deviceType: \'ios\',\n        trigger: \'Test\'\n    \n    });")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsAuthorised(    {\n        devicePns: \'pns\',\n        deviceType: \'ios\',\n        trigger: \'Test\'\n    \n    });")
     }
     
     func test_whenStayOnPageIsTriggered_thenStayOnPageIsDispatched(){
@@ -151,7 +151,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'pageLeaveWarning/stayOnPage\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.pageLeaveWarningStayOnPage();")
     }
     
     func test_whenLeavePageIsTriggered_thenLeavePageIsDispatched(){
@@ -163,7 +163,7 @@ class AppWebInterfacesTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.$nuxt.$store.dispatch(\'pageLeaveWarning/leavePage\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.pageLeaveWarningLeavePage();")
     }
     
     func test_whenPaycassoSuccessCallbackIsTriggered_thenExpectedMessageIsDispatched(){

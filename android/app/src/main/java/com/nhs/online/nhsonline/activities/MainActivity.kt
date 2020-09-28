@@ -582,7 +582,6 @@ class MainActivity :
     override fun setMenuBarItem(index: Int) {
         when (index) {
             MenuTab.Advice.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.advice)
-            MenuTab.Symptoms.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.advice)
             MenuTab.Appointments.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.appointments)
             MenuTab.Prescriptions.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
