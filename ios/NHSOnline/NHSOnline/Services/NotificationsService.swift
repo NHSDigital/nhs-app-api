@@ -35,19 +35,30 @@ class NotificationsService {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 var status: AuthorisationStatus;
-
-                switch settings.authorizationStatus {
-                case .notDetermined:
-                    status = AuthorisationStatus.notDetermined
+                
+                status = AuthorisationStatus.notDetermined
+                
+                if (settings.authorizationStatus == .notDetermined) {
                     Logger.logInfo(message: "Authorisation request has not been made yet")
-                case .denied:
-                    status = AuthorisationStatus.denied
-                    Logger.logInfo(message: "Allow notifications is disabled")
-                case .authorized,
-                     .provisional:
+                }
+                
+                if (settings.authorizationStatus == .denied) {
+                    Logger.logInfo(message: "Authorisation request has not been made yet")
+                }
+                
+                if (settings.authorizationStatus == .authorized) {
                     status = AuthorisationStatus.authorised
                     Logger.logInfo(message: "Allow notifications is enabled")
                 }
+                
+                if #available(iOS 12.0, *) {
+                    if (settings.authorizationStatus == .provisional) {
+                        status = AuthorisationStatus.authorised
+                        Logger.logInfo(message: "Allow notifications is enabled")
+                    }
+                }
+                
+                // when everyone is on xcode 12 and azure fixes app problem with xcode 12, here we can add the check for status .ephemeral
 
                 self.appWebInterface.getNotificationsStatus(status: status.rawValue)
             }

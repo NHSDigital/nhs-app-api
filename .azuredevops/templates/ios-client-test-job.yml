@@ -10,7 +10,7 @@ jobs:
       - task: Xcode@5
         displayName: 'Build and Run Unit Tests'
         inputs:
-          xcodeDeveloperDir: /Applications/Xcode_10.1.app
+          xcodeDeveloperDir: /Applications/Xcode_11.7.app
           xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
           sdk: iphonesimulator
           scheme: NHSOnline
@@ -18,7 +18,7 @@ jobs:
           actions: test
           signingOption: auto
           destinationPlatformOption: iOS
-          destinationSimulators: 'iPhone 8'
+          destinationSimulators: 'iPhone 11'
           publishJUnitResults: false
 
       - template: check-for-output-steps.yml
