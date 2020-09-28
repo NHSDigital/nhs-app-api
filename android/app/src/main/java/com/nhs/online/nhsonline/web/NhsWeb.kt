@@ -1,13 +1,13 @@
 package com.nhs.online.nhsonline.web
 
 import android.app.Activity
+import android.net.Uri
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.URLUtil
 import android.webkit.WebView
 import com.google.gson.Gson
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.data.PaycassoData
@@ -60,7 +60,6 @@ class NhsWeb(
         private val loggingService: ILoggingService,
         private val connectionStateMonitor: ConnectionStateMonitor
 ) {
-    private val openBrowserActivity = OpenUrlInBrowserActivity()
     private val urlLoader = UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
     private val urlHelper = UrlHelper(activity)
     private val chromeClient = ChromeClientLocationHandler(activity)
@@ -71,6 +70,7 @@ class NhsWeb(
     private val appWebViewDir = File(activity.filesDir.parent + "/app_webview")
     private val authRedirectPath = readResourceString(R.string.authRedirectPath)
     private val fidoAuthQueryKey = readResourceString(R.string.fidoAuthQueryKey)
+    private val nhs111Host = Uri.parse(readResourceString(R.string.nhs111URL)).host.toString()
 
     var headerStrategy: IHeaderStrategy = LoggedOutHeaderStrategy(uiInteractor)
 
@@ -137,10 +137,10 @@ class NhsWeb(
             return
         }
 
-        val url: String = if (shouldLoadPersistedLink(path)) {
-            getPersistedLink()
-        } else {
+        val url: String = if (shouldIgnorePersistedLink(path)) {
             urlLoader.produceValidUrl(path)
+        } else {
+            getPersistedLink()
         }
         appPersistData.clearPersistedLink()
 
@@ -154,10 +154,11 @@ class NhsWeb(
         urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
-    private fun shouldLoadPersistedLink(path: String): Boolean {
-        return !path.contains(fidoAuthQueryKey) &&
-        !path.contains(authRedirectPath) &&
-        !appPersistData.getPersistedLink().isNullOrBlank()
+    private fun shouldIgnorePersistedLink(path: String): Boolean {
+        return path.contains(fidoAuthQueryKey) ||
+                path.contains(authRedirectPath) ||
+                path.contains(nhs111Host) ||
+                appPersistData.getPersistedLink().isNullOrBlank()
     }
 
     private fun getPersistedLink(): String {
@@ -280,7 +281,7 @@ class NhsWeb(
             return false
         }
 
-        openBrowserActivity.start(activity, url, uiInteractor)
+        uiInteractor.openUrlInBrowserActivity(url)
         return true
     }
 

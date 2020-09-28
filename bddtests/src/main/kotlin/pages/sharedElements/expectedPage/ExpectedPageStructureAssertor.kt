@@ -70,6 +70,7 @@ class ExpectedPageStructureAssertor {
                 .filter { element -> tagsToAssert.contains(element.tag) && element.content.isNotEmpty() }.toList()
     }
 
+    //NOTE - this wont find elements within elements, e.g <p>goto<a href="google.com>google</a><p>
     private fun pathToElementContainer(element: ExpectedPageStructureElement): String {
         return "//div[${element.tag}[normalize-space(text())=\"${element.content}\"]]"
     }

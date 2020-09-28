@@ -4,7 +4,7 @@ export default {
   header: 'There\'s been a problem getting your prescription information',
   subheader: '',
   message: {
-    text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+    text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
     label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
   },
   retryButtonText: '',
@@ -14,7 +14,7 @@ export default {
     header: 'There\'s been a problem getting your prescription information',
     subheader: '',
     message: {
-      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     retryButtonText: '',
@@ -24,7 +24,7 @@ export default {
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
       message: {
-        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
         label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       retryButtonText: 'Try again',
@@ -35,7 +35,7 @@ export default {
       header: 'You are not currently able to order repeat prescriptions online',
       subheader: '',
       message: {
-        text: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call 111.',
+        text: 'Contact your GP surgery for more information. For urgent medical help, go to {111link} or call 111.',
         label: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call one one one.',
       },
     },
@@ -46,7 +46,7 @@ export default {
     header: 'There\'s been a problem getting your prescription information',
     subheader: '',
     message: {
-      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     retryButtonText: '',
@@ -56,7 +56,7 @@ export default {
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
       message: {
-        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
         label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       retryButtonText: 'Try again',
@@ -67,7 +67,7 @@ export default {
       header: 'You are not currently able to order repeat prescriptions online',
       subheader: '',
       message: {
-        text: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call 111.',
+        text: 'Contact your GP surgery for more information. For urgent medical help, go to {111link} or call 111.',
         label: 'Contact your GP surgery for more information. For urgent medical help, go to 111.nhs.uk or call one one one.',
       },
     },
@@ -78,8 +78,8 @@ export default {
     header: 'There\'s been a problem sending your order',
     subheader: '',
     message: {
-      text: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-      label: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      text: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
+      label: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     retryButtonText: 'Go to your prescriptions',
     466: {

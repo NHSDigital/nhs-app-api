@@ -24,72 +24,11 @@
     <string name="home_header">Home</string>
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="data_sharing_connection_error">Sharing health data unavailable</string>
-    <string name="connection_error_header">Internet connection error</string>
-    <string name="connection_error_title">There is a problem with your internet connection</string>
-    <string name="connection_error_message">
-        \nCheck your connection and try again. If the problem continues and you
-        need to book an appointment or get a prescription now, contact your GP
-        surgery directly. For urgent medical advice, call 111.
-    </string>
-    <string name="server_error_title">We\'re experiencing technical difficulties</string>
-    <string name="server_error_message">
-        \nTry again later. If the problem continues and you need to book an
-        appointment or get a prescription now, contact your GP surgery directly.
-        For urgent medical advice, call 111.
-    </string>
 
-    <string name="accessible_server_error_message">
-        \nTry again later. If the problem continues and you need to book an
-        appointment or get a prescription now, contact your GP surgery directly.
-        For urgent medical advice, call one. one. one..
-    </string>
-
-    <string name="Accessible_connection_error_message">
-        Check your connection and try again.
-        \n\nIf the problem continues and you need to book an appointment or get a prescription now,
-        contact your GP surgery directly. For urgent medical advice, call one one one.
-    </string>
-    <string name="accessible_apiUnavailableErrorMessage">
-    You currently cannot use this service. If the problem continues and you need to book an appointment or
-        get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.
-    </string>
     <!--Start Content texts for the biometric authentication-->
     <string name="biometric_information_breadcrumb">
         <u><b>Back</b></u>
     </string>
-    <string name="biometric_information_message1">
-        Log in using your fingerprint
-    </string>
-    <string name="biometric_information_message2">
-        Do this instead of using a password and security code.
-    </string>
-    <string name="biometric_toggle_text">Fingerprint ID</string>
-    <string name="biometric_warning_header">Important</string>
-    <string name="biometric_warning_message">
-        All Fingerprint IDs registered on this device will be able to open your NHS account.
-    </string>
-    <string name="biometric_registration_header">Error</string>
-    <string name="biometric_registration_failure_message">
-        Something went wrong when registering for Fingerprint ID.
-    </string>
-    <string name="biometric_device_failure_message">
-        Something went wrong when registering your fingerprint. \n\nYour device may not be compatible with the fingerprint authentication service. \n\n You may need to log in using your username and password instead.
-    </string>
-    <string name="service_unavailable">Service unavailable</string>
-    <string name="apiUnavailableErrorMessage">You currently cannot use this service. \n\nIf the problem continues and you need to book an
-        appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.
-    </string>
-    <string name="browser_unavailable">There\'s been a problem loading this page</string>
-    <string name="browser_unavailable_message">
-        This could be because your device’s settings are preventing us from opening this page.\n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.
-        For urgent medical advice, call 111.</string>
-    <string name="accessible_browser_unavailable_message">
-        This could be because your device’s settings are preventing us from opening this page.\n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly.
-        For urgent medical advice, call 111.</string>
-    <string name="download_failure_title">Sorry, something went wrong</string>
-    <string name="download_failure_message">
-        We could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.</string>
-    <string name="accessible_download_failure_message">We could not download this file.\n\nIf the problem continues and you need to view this document now, contact your GP surgery and request it from them directly.</string>
 
     <string name="retryButtonText">Try again</string>
     <string name="errorIconText">Error</string>

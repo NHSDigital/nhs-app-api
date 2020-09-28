@@ -17,6 +17,11 @@ class ErrorTextView: UITextView {
         }
         
         self.attributedText = attributedServiceError
+        self.linkTextAttributes = [
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.blue,
+            NSAttributedStringKey.underlineColor.rawValue: UIColor.blue,
+            NSAttributedStringKey.underlineStyle.rawValue: NSUnderlineStyle.styleSingle.rawValue
+        ]
         resizeErrorTextView()
     }
     
@@ -46,6 +51,18 @@ class ErrorTextView: UITextView {
         }
         
         let textAttribute = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17), NSAttributedStringKey.paragraphStyle : NSMutableParagraphStyle()]
-        return NSMutableAttributedString(string: "\(newLines)\(text)", attributes: textAttribute)
+        
+        let attributedText = NSMutableAttributedString(string: "\(newLines)\(text)", attributes: textAttribute)
+        
+        configureLinksInText(attributedText: attributedText)
+        return attributedText
+    }
+    
+    private func configureLinksInText(attributedText: NSMutableAttributedString) {
+        
+        for (textToFind, urlString) in config().ErrorTextViewUrls {
+            let linkRange = attributedText.mutableString.range(of: textToFind)
+            attributedText.addAttribute(NSAttributedString.Key.link, value: urlString, range: linkRange)
+        }
     }
 }

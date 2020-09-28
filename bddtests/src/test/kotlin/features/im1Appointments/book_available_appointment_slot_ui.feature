@@ -111,6 +111,8 @@ Feature: Book Appointments Frontend
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | EMIS      |

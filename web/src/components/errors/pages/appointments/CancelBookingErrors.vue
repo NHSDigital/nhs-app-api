@@ -3,7 +3,9 @@
     <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="generateErrorId()">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
-      <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
+      <contact-111
+        :text="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.text')"
+        :aria-label="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.label')"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true" />
@@ -14,12 +16,7 @@
                 :back-url="backUrl">
       <template v-slot:content>
         <p>{{ $t('forbiddenErrors.appointments.youCannotBookOnline') }}</p>
-        <p>{{ $t('forbiddenErrors.appointments.ifTheProblemContinues') }}
-          <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-             style="display:inline">
-            {{ $t('forbiddenErrors.nhs111Link') }}</a>
-          {{ $t('forbiddenErrors.orCall') }}
-        </p>
+        <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
@@ -61,7 +58,9 @@
                    header="appointments.error.thereIsAProblem" />
       <error-paragraph from="appointments.error.tryAgainOrContactUs"
                        :variable="error.serviceDeskReference"/>
-      <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
       <error-link from="generic.contactUs"
                   :action="contactUsUrl"
                   target="_blank"/>
@@ -73,6 +72,7 @@
 </template>
 
 <script>
+import Contact111 from '@/components/widgets/Contact111';
 import CoronaVirusMenuItem from '@/components/menuItems/CoronaVirusMenuItem';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
@@ -97,6 +97,7 @@ import sjrIf from '@/lib/sjrIf';
 export default {
   name: 'CancelBookingErrors',
   components: {
+    Contact111,
     CoronaVirusMenuItem,
     ErrorContainer,
     ErrorLink,

@@ -1,5 +1,7 @@
 package pages
 
+import org.junit.Assert
+
 class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
@@ -10,15 +12,15 @@ class ServiceUnavailablePage : HybridPageObject() {
     )
 
     private val content = HybridPageElement(
-            webDesktopLocator = "//div/p",
+            webDesktopLocator = "//p[@data-purpose='msg-text']",
             androidLocator = null,
             page = this,
             helpfulName = "error message"
     )
 
     fun assertIsPresent(titleText: String, message: String) {
-        assert(titleText.equals(titleText))
+        assert(titleText.equals(header.textValue))
         header.assertIsVisible()
-        content.withText(message, false).assertSingleElementPresent()
+        Assert.assertEquals(message, content.text)
     }
 }

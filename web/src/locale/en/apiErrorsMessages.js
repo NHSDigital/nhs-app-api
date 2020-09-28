@@ -13,7 +13,7 @@ export default {
       header: 'You are not currently able to use messaging.',
       subheader: '',
       message: {
-        text: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'Contact your GP surgery for more information. For urgent medical advice, go to {111link} or call 111.',
         label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
     },

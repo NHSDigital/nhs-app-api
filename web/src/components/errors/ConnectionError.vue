@@ -6,7 +6,13 @@
         {{ $t('generic.errors.thereIsAProblemWithYourInternetConnection') }}</message-text>
       <message-text
         :aria-label="$t('generic.errors.checkYourConnectionAndTryAgainOneOneOne')">
-        {{ $t('generic.errors.checkYourConnectionAndTryAgain111') }}</message-text>
+        {{ $t('generic.errors.checkYourConnectionAndTryAgain111') }}
+        <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
+           style="display:inline">
+          {{ $t('generic.nhs111Link') }}
+        </a>
+        {{ $t('generic.orCall') }}
+      </message-text>
     </message-dialog>
     <generic-button :class="['nhsuk-button']"
                     @click.stop.prevent="onRetryButtonClicked">

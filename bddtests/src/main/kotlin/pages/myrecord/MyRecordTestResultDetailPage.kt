@@ -13,7 +13,7 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
     val serverErrorHeader = "There's been a problem getting details of your test results"
     val serverErrorMessage = "If the problem continues and you need this " +
             "information now, contact your GP surgery directly. " +
-            "For urgent medical advice, call 111."
+            "For urgent medical advice, go to 111.nhs.uk or call 111."
 
     val back = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='main-back-button']",

@@ -5,12 +5,7 @@
                 :back-url="appointmentsPath">
       <template v-slot:content>
         <p>{{ $t('forbiddenErrors.appointments.youCannotBookOnline') }}</p>
-        <p>{{ $t('forbiddenErrors.appointments.ifTheProblemContinues') }}
-          <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-             style="display:inline">
-            {{ $t('forbiddenErrors.nhs111Link') }}</a>
-          {{ $t('forbiddenErrors.orCall') }}
-        </p>
+        <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
@@ -32,7 +27,9 @@
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainOrContactUs"
                        :variable="error.serviceDeskReference"/>
-      <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
       <error-link from="generic.contactUs"
                   :action="contactUsUrl"
                   target="_blank"/>
@@ -47,7 +44,9 @@
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                        :variable="error.serviceDeskReference"/>
-      <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
       <error-button from="generic.tryAgain" @click="$router.go()" />
       <error-link from="generic.contactUs"
                   :action="contactUsUrl"
@@ -60,6 +59,7 @@
 </template>
 
 <script>
+import Contact111 from '@/components/widgets/Contact111';
 import CoronaVirusMenuItem from '@/components/menuItems/CoronaVirusMenuItem';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
@@ -85,6 +85,7 @@ import sjrIf from '@/lib/sjrIf';
 export default {
   name: 'BookingErrors',
   components: {
+    Contact111,
     CoronaVirusMenuItem,
     ErrorButton,
     ErrorContainer,

@@ -29,7 +29,7 @@ export default {
     goToYourAppointments: 'Go to your appointments',
     ifYouCannotFindAppointment: 'If you cannot find the appointment you need, contact your GP surgery.',
     forUrgentMedicalAdvice: {
-      text: 'For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'For urgent medical advice, go to',
       label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     location: 'Location',
@@ -70,7 +70,7 @@ export default {
       enterAReason: 'Enter a reason for this appointment',
       enterATelephoneNumber: 'Enter a telephone number',
       forUrgentMedicalAdvice: {
-        text: 'For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'For urgent medical advice, go to',
         label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       pleaseChooseADifferentAppointment: 'Please choose a different appointment.',
@@ -117,16 +117,16 @@ export default {
     tryAgainOrContactUs: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     youCannotCancelThisAppointment: 'Sorry, you cannot cancel this appointment',
     ifTheProblemContinuesAndYouNeedToBook: {
-      text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to',
       label: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     ifTheProblemContinuesAndYouNeedToBookOrCancel: {
-      text: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to ',
       label: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     tryAgainOrContactSurgeryOrOneOneOne: {
-      text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-      label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+      text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to',
+      label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
   },
   gpAdvice: {

@@ -13,6 +13,7 @@ class MyRecordDocumentPage : HybridPageObject() {
 
     val serverErrorPageHeader = "Server error"
     val serverErrorHeader = "We're experiencing technical difficulties"
-    val serverErrorMessage = "Try again later. If the problem continues and you need to book an appointment or get a" +
-            " prescription now, contact your GP surgery directly. For urgent medical advice, call 111."
+    val serverErrorMessage = "Try again later. If the problem continues and you need to book an appointment or get " +
+            "a prescription now, contact your GP surgery directly. " +
+            "For urgent medical advice, go to 111.nhs.uk or call 111."
 }

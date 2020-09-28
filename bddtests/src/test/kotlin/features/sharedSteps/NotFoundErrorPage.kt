@@ -9,7 +9,8 @@ class NotFoundErrorPage: ErrorPage() {
     private val errorHeader = "Page not found"
     private val subHeader = "If you entered a web address, check it was correct."
     private val text = "You can go directly to book an appointment or order a repeat prescription, or " +
-            "use the menu buttons to find the service you need. For urgent medical advice, call 111."
+            "use the menu buttons to find the service you need. " +
+            "For urgent medical advice, go to 111.nhs.uk or call 111."
 
 
     private val title by lazy {

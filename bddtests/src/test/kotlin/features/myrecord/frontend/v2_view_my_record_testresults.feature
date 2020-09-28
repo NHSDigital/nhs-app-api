@@ -104,6 +104,8 @@ Feature: Test Results Frontend - Medical Record v2
     And I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     Then I see the appropriate error message for retrieving test result detail
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
 
   Scenario: A TPP user can navigate to an individual test result - Medical Record v2
     Given I am a TPP user setup to use medical record version 2

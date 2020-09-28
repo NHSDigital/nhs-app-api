@@ -8,7 +8,7 @@ struct Config: Decodable {
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrl
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricAuthResponseParam, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
-        case MenuTimeoutSeconds, LinkPropertyName, DeepLinkAppClosed
+        case MenuTimeoutSeconds, LinkPropertyName, DeepLinkAppClosed, ErrorTextViewUrls
     }
     
     let HomeUrl: String
@@ -87,6 +87,8 @@ struct Config: Decodable {
     let ApiCallTimeoutSeconds: Int
     let LinkPropertyName: String
     let DeepLinkAppClosed: String
+    
+    let ErrorTextViewUrls: Dictionary<String, String>
 }
 
 private var instance: Config! = nil

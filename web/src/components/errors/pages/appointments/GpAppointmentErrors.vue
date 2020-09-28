@@ -3,7 +3,9 @@
     <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
-      <error-paragraph from="appointments.error.tryAgainOrContactSurgeryOrOneOneOne" />
+      <contact-111
+        :text="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.text')"
+        :aria-label="$t('appointments.error.tryAgainOrContactSurgeryOrOneOneOne.label')"/>
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
@@ -14,12 +16,7 @@
                 :back-url="backUrl">
       <template v-slot:content>
         <p>{{ $t('forbiddenErrors.appointments.youCannotBookOnline') }}</p>
-        <p>{{ $t('forbiddenErrors.appointments.ifTheProblemContinues') }}
-          <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-             style="display:inline">
-            {{ $t('forbiddenErrors.nhs111Link') }}</a>
-          {{ $t('forbiddenErrors.orCall') }}
-        </p>
+        <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
@@ -40,7 +37,9 @@
       :id="errorId">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNow"/>
-      <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBook"/>
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBook.label')"/>
       <error-button from="generic.tryAgain" @click="$router.go()" />
       <report-a-problem :reference="error.serviceDeskReference"/>
       <error-link from="generic.back"
@@ -53,7 +52,9 @@
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
                        :variable="error.serviceDeskReference"/>
-      <error-paragraph from="appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel"/>
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
       <error-button from="generic.tryAgain" @click="$router.go()" />
       <error-link from="generic.contactUs"
                   :action="contactUsUrl"
@@ -78,12 +79,7 @@
                 :back-url="backUrl">
       <template v-slot:content>
         <p>{{ $t('gpSessionErrors.appointments.youCannotBookOnline') }}</p>
-        <p>{{ $t('gpSessionErrors.appointments.ifTheProblemContinues') }}
-          <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-             style="display:inline">
-            {{ $t('gpSessionErrors.nhs111Link') }}</a>
-          {{ $t('gpSessionErrors.orCall') }}
-        </p>
+        <contact-111 :text="$t('gpSessionErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
@@ -102,7 +98,7 @@
 </template>
 
 <script>
-
+import Contact111 from '@/components/widgets/Contact111';
 import CoronaVirusMenuItem from '@/components/menuItems/CoronaVirusMenuItem';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
@@ -130,6 +126,7 @@ import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustom
 export default {
   name: 'GpAppointmentErrors',
   components: {
+    Contact111,
     CoronaVirusMenuItem,
     ErrorButton,
     ErrorContainer,

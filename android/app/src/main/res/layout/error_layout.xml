@@ -59,6 +59,7 @@
                         style="@style/default_warning_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColorLink="@color/colorPrimary"
                         android:minHeight="@dimen/_40sdp" />
 
                 </LinearLayout>

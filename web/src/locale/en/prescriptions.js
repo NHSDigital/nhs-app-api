@@ -41,7 +41,8 @@ export default {
   },
   partialSuccess: {
     goToYourPrescriptionOrders: 'Go to your prescription orders',
-    ifYouNeedToOrderNow: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, visit 111.nhs.uk or call 111.',
+    ifYouNeedToOrderNow: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, go to',
+    ifYouNeedToOrderNowLabel: 'If you need to order this medication now, contact your GP surgery directly.  For urgent medical advice, goto 111.nhs.uk or call one one one.',
     medicationNotOrdered: 'Medication not ordered',
     medicationOrdered: 'Medication ordered successfully',
     theOrderStatusWillBeUpdated: 'The order status will be updated once it\'s been reviewed by your GP.',

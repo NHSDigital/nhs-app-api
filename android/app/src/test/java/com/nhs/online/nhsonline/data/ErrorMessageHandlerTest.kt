@@ -28,8 +28,8 @@ class ErrorMessageHandlerTest : ResourceMockingClass() {
     fun getErrorMessage_WhenNoConnectionErrorType_returnNoConnectionErrorMessage() {
         val errorMessage = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
 
-        assertEquals(contextMock.resources.getString(R.string.service_unavailable), errorMessage.title)
-        assertEquals(contextMock.resources.getString(R.string.apiUnavailableErrorMessage), errorMessage.message)
-        assertEquals(contextMock.resources.getString(R.string.accessible_apiUnavailableErrorMessage), errorMessage.accessibleMessage)
+        assertEquals(contextMock.resources.getString(R.string.service_unavailable_error_title), errorMessage.title)
+        assertEquals(contextMock.resources.getString(R.string.service_unavailable_error_message), errorMessage.message)
+        assertEquals(contextMock.resources.getString(R.string.accessible_service_unavailable_error_message), errorMessage.accessibleMessage)
     }
 }

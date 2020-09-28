@@ -3,12 +3,17 @@ package com.nhs.online.nhsonline.support
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.view.View
 import android.widget.TextView
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhs.online.nhsonline.R
-import org.junit.Assert
+import com.nhs.online.nhsonline.text.style.ClickableLink
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,9 +33,9 @@ class ExtensionsKtTest {
     @Test
     fun textviewExtensionSetServiceErrorWithHeader_SetsTextviewTextToHeaderText() {
         val textView = createTextView()
-        val header = context.resources.getString(R.string.service_unavailable)
+        val header = context.resources.getString(R.string.service_unavailable_error_title)
         textView.setServiceError(header)
-        Assert.assertEquals(header, textView.text.toString())
+        assertEquals(header, textView.text.toString())
 
     }
 
@@ -40,7 +45,52 @@ class ExtensionsKtTest {
         val header = context.resources.getString(R.string.connection_error_title)
         val info = context.resources.getString(R.string.connection_error_message)
         textView.setServiceError(header, info)
-        Assert.assertTrue(textView.text.contains(info))
+        assertTrue(textView.text.contains(info))
+    }
+
+    @Test
+    fun textviewExtensionMakeLinks_setsClickableLinkSpanOnTextView_atLocationOfEachMatchingPair() {
+        val nhs111Url = "111.nhs.uk"
+        val call111 = "call 111"
+        val text = "If you need urgent help, go to $nhs111Url or $call111."
+        val nhs111UrlListener: View.OnClickListener = mock()
+        val call111Listener: View.OnClickListener = mock()
+
+        val textView = createTextView()
+        textView.text = text
+
+        textView.makeLinks(Pair(nhs111Url, nhs111UrlListener), Pair(call111, call111Listener))
+
+        val nhs111Span = (textView.text as SpannableString).getSpans(31, 41, ClickableLink::class.java)[0]
+        val call111Span = (textView.text as SpannableString).getSpans(45, 53, ClickableLink::class.java)[0]
+
+        nhs111Span.onClick(textView)
+        call111Span.onClick(textView)
+
+        verify(nhs111UrlListener).onClick(textView)
+        verify(call111Listener).onClick(textView)
+    }
+
+    @Test
+    fun textviewExtensionMakeLinks_whenCalledWithNoLinks_doesNothing() {
+        val text = "If you need urgent help, go to 111.nhs.uk or call 111."
+        val textView = createTextView()
+        textView.text = text
+
+        textView.makeLinks()
+
+        assertEquals(text, textView.text)
+    }
+
+    @Test
+    fun textviewExtensionMakeLinks_whenTextHasNoMatchingLinks_doesNothing() {
+        val text = "If you need urgent help, go to 111.nhs.uk or call 111."
+        val textView = createTextView()
+        textView.text = text
+
+        textView.makeLinks(Pair("text that doesn't match", mock()))
+
+        assertEquals(text, textView.text)
     }
 
     private fun createTextView(): TextView {
@@ -51,25 +101,25 @@ class ExtensionsKtTest {
     @Test
     fun spannableStringBuilderAppendText_StartsFromNewLine() {
         val builder = serviceUnavailableSpannableStringBuilder()
-        Assert.assertTrue(builder.startsWith("\n"))
+        assertTrue(builder.startsWith("\n"))
     }
 
     @Test
     fun spannableStringBuilderExtensionAppendTextWithNonNegativeSpecifiedBeforeNewLineValue_IsSameAsAdditionEmptyNewLines() {
         val builder = serviceUnavailableSpannableStringBuilder(5)
-        Assert.assertEquals(5, countOccurrences("\n", builder))
+        assertEquals(5, countOccurrences("\n", builder))
     }
 
     @Test
     fun spannableStringBuilderExtensionAppendTextWithNegativeBeforeNewLineValue_DoesAddAnyNewEmptyLines() {
         val builder = serviceUnavailableSpannableStringBuilder(-5)
-        Assert.assertEquals(0, countOccurrences("\n", builder))
+        assertEquals(0, countOccurrences("\n", builder))
     }
 
     private fun serviceUnavailableSpannableStringBuilder(
         lines: Int = 1
     ): SpannableStringBuilder {
-        val serviceUnavailable = context.resources.getString(R.string.service_unavailable)
+        val serviceUnavailable = context.resources.getString(R.string.service_unavailable_error_title)
         val builder = SpannableStringBuilder()
         builder.appendText(serviceUnavailable, lines)
         return builder
@@ -78,14 +128,14 @@ class ExtensionsKtTest {
     @Test
     fun intExtensionToStringNewLines_generatesZeroNewEmptyLinesWhenIntValueIsZeroOrLess() {
         for (zeroOrNegativeNum in 0 downTo -10) {
-            Assert.assertEquals(0, countOccurrences("\n", zeroOrNegativeNum.toStringNewLines()))
+            assertEquals(0, countOccurrences("\n", zeroOrNegativeNum.toStringNewLines()))
         }
     }
 
     @Test
     fun intExtensionToStringLines_generatesSameNewEmptyLinesAsIntValue() {
         for (positiveNum in 1..10) {
-            Assert.assertEquals(positiveNum, countOccurrences("\n", positiveNum.toStringNewLines()))
+            assertEquals(positiveNum, countOccurrences("\n", positiveNum.toStringNewLines()))
         }
     }
 
@@ -103,7 +153,7 @@ class ExtensionsKtTest {
 
     private fun mockContext(): Context {
         val mockedResource: Resources = mock {
-            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.service_unavailable_error_title) } doReturn "Service unavailable"
             on { getString(R.string.connection_error_title) } doReturn "There's a problem with your internet connection"
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again. If the problem continues and you need to " +
                     "book an appointment or get a prescription now, contact your GP surgery directly." +

@@ -4,9 +4,15 @@
        class="nhsuk-u-margin-bottom-3">
       <strong>{{ subHeader }}</strong>
     </p>
-    <p v-if="summaryText"
-       id="shutter-summary-text"
-       :aria-label="summaryLabelText">{{ summaryText }}</p>
+    <p v-if="summaryText" id="shutter-summary-text"
+       :aria-label="summaryLabelText">
+      {{ summaryText }}
+      <template v-if="postSummaryLinks">
+        <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
+           style="display:inline">{{ oneOneOneLinkText }}</a>
+        {{ orCallText }}
+      </template>
+    </p>
     <h2 v-if="coronaVirusHeaderText">{{ coronaVirusHeaderText }}</h2>
     <p v-if="coronaVirusBodyText">{{ coronaVirusBodyText }}</p>
     <p v-if="coronaVirusLinkText">
@@ -67,6 +73,9 @@ export default {
       summaryText: '',
       summaryLabelText: undefined,
       switchText: '',
+      oneOneOneLinkText: '',
+      orCallText: '',
+      postSummaryLinks: false,
     };
   },
   mounted() {
@@ -106,6 +115,12 @@ export default {
 
     if (this.$te(`profiles.shutter.${featureName}.coronaVirus.linkLabel`)) {
       this.coronaVirusLinkLabelText = this.$t(`profiles.shutter.${featureName}.coronaVirus.linkLabel`);
+    }
+
+    if (this.$te(`profiles.shutter.${featureName}.postSummaryLinks`)) {
+      this.postSummaryLinks = true;
+      this.oneOneOneLinkText = this.$t(`profiles.shutter.${featureName}.postSummaryLinks.nhs111Link`);
+      this.orCallText = this.$t(`profiles.shutter.${featureName}.postSummaryLinks.call111`);
     }
   },
   methods: {

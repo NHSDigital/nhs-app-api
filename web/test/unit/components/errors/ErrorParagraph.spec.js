@@ -41,7 +41,7 @@ describe('ErrorParagraph', () => {
 
     describe('translates to object', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ from: 'login.authReturn.ifYouNeed' });
+        wrapper = mountWrapper({ from: 'login.authReturn.ifYouNeedInNorthernIrelandOrScotland' });
       });
 
       describe('paragraph', () => {
@@ -56,11 +56,11 @@ describe('ErrorParagraph', () => {
         });
 
         it('will have arial label', () => {
-          expect(paragraph.attributes('aria-label')).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.');
+          expect(paragraph.attributes('aria-label')).toBe('If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call one one one.');
         });
 
         it('will display `from` text', () => {
-          expect(paragraph.text()).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.');
+          expect(paragraph.text()).toBe('If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111.');
         });
       });
     });

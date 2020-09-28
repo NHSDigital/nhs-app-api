@@ -12,7 +12,7 @@ export default {
   tryAgainNow: 'Try again now.',
   subheader: '',
   message: {
-    text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
     label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
   },
   404: {

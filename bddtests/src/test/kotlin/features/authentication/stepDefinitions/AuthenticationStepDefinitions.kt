@@ -242,7 +242,7 @@ class AuthenticationStepDefinitions {
     @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
     fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
         serviceUnavailablePage.assertIsPresent("Login failed",
-                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
+                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
                         "You can still contact your GP surgery to access your NHS services. " +
                         "For urgent medical advice, go to 111.nhs.uk or call 111.")
     }

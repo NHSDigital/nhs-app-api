@@ -77,7 +77,7 @@ describe('authReturn layout', () => {
         let link;
 
         beforeEach(() => {
-          link = container.findAll('a').at(1);
+          link = container.findAll('a').at(2);
         });
 
         it('will exist', () => {
@@ -94,7 +94,7 @@ describe('authReturn layout', () => {
         let contactUsLink;
 
         beforeEach(() => {
-          contactUsLink = wrapper.find('a');
+          contactUsLink = wrapper.findAll('a').at(1);
         });
 
         it('will exist', () => {
@@ -103,6 +103,22 @@ describe('authReturn layout', () => {
 
         it('url will have error code', () => {
           expect(contactUsLink.attributes('href')).toBe(`${CONTACT_US_URL}?errorcode=${serviceDeskReference}`);
+        });
+      });
+
+      describe('111 website link', () => {
+        let nhs111WebsiteLink;
+
+        beforeEach(() => {
+          nhs111WebsiteLink = wrapper.findAll('a').at(0);
+        });
+
+        it('will exist', () => {
+          expect(nhs111WebsiteLink.exists()).toBe(true);
+        });
+
+        it('url will have error code', () => {
+          expect(nhs111WebsiteLink.attributes('href')).toBe(NHS_111_URL);
         });
       });
     });
@@ -183,8 +199,13 @@ describe('authReturn layout', () => {
         expect(container.exists()).toBe(true);
       });
 
-      it('will not have any links', () => {
-        expect(container.find('a').exists()).toBe(false);
+      it('will have one link', () => {
+        expect(container.findAll('a').length).toBe(1);
+      });
+
+      it('will link to the 111 website', () => {
+        const nhs111Link = wrapper.findAll('a').at(0);
+        expect(nhs111Link.attributes('href')).toBe(NHS_111_URL);
       });
     });
   });

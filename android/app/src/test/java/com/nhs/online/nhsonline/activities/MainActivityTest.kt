@@ -1,19 +1,27 @@
 package com.nhs.online.nhsonline.activities
 
 import android.app.onResume
+import android.text.SpannableString
 import androidx.appcompat.app.AlertDialog
 import android.widget.TextView
 import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
+import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorType
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.support.AppDialogs
+import com.nhs.online.nhsonline.text.style.ClickableLink
 import com.nhs.online.nhsonline.web.NhsWeb
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.retryButton
-import org.junit.Assert
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,6 +37,7 @@ class MainActivityTest {
 
     private lateinit var mainActivity: MainActivity
     private lateinit var spyActivity: MainActivity
+    private lateinit var connectionStateMonitorMock: ConnectionStateMonitor
 
     @Before
     fun setUp() {
@@ -89,12 +98,12 @@ class MainActivityTest {
         }
 
         val logoutAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
-        Assert.assertNotNull(logoutAlertDialog)
-        Assert.assertTrue(logoutAlertDialog.isShowing)
+        assertNotNull(logoutAlertDialog)
+        assertTrue(logoutAlertDialog.isShowing)
 
         val messageTextView = logoutAlertDialog.findViewById<TextView>(android.R.id.message)
-        Assert.assertNotNull(messageTextView)
-        messageTextView?.apply { Assert.assertEquals("Are you sure you want to log out?", text) }
+        assertNotNull(messageTextView)
+        messageTextView?.apply { assertEquals("Are you sure you want to log out?", text) }
     }
 
     @Test
@@ -197,18 +206,18 @@ class MainActivityTest {
         }
 
         val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
-        Assert.assertNotNull(updateAlertDialog)
-        Assert.assertTrue(updateAlertDialog.isShowing)
+        assertNotNull(updateAlertDialog)
+        assertTrue(updateAlertDialog.isShowing)
 
         val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
-        Assert.assertNotNull(messageTextView)
-        messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
+        assertNotNull(messageTextView)
+        messageTextView?.apply { assertTrue(text.contains("Click here to update")) }
 
         val dialogUrls = messageTextView?.urls
         val updateUrl = dialogUrls?.firstOrNull()?.url
 
         messageTextView.apply {
-            Assert.assertEquals("market://details?id=com.nhs.online.nhsonline",
+            assertEquals("market://details?id=com.nhs.online.nhsonline",
                 updateUrl)
         }
     }
@@ -228,7 +237,7 @@ class MainActivityTest {
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(biometricsInterfaceMock).showBiometricLoginIfEnabled()
     }
 
@@ -347,7 +356,7 @@ class MainActivityTest {
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(biometricsInterfaceMock).showBiometricLoginIfEnabled()
     }
 
@@ -364,5 +373,94 @@ class MainActivityTest {
         assertFalse(mainActivity.menuBar.isSelected)
     }
 
+    @Test
+    fun showUnavailabilityError_nhs111LinkClickListener_whenConfigurationResponseSuccessfulAndConnectedToNetwork_loadsNhs111Url() {
+        val message = "If you need urgent help, go to 111.nhs.uk or call 111."
+        spyActivity.configurationResponse.callSuccessful = true
+        setNetworkState(true, spyActivity)
+
+        val nhsWebMock: NhsWeb = mock()
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("nhsWeb"),
+                nhsWebMock)
+
+        spyActivity.showUnavailabilityError(ErrorMessage(mock {
+            on { getString(R.string.server_error_title) } doReturn ""
+            on { getString(R.string.server_error_message) } doReturn message
+            on { getString(R.string.accessible_server_error_message) } doReturn message
+        }, ErrorType.ServiceUnavailable))
+
+        val errorTextView = spyActivity.findViewById<TextView>(R.id.errorTextView)
+        val nhs111Span = (errorTextView.text as SpannableString).getSpans(31, 41, ClickableLink::class.java)[0]
+        nhs111Span.onClick(errorTextView)
+
+        verify(nhsWebMock).loadUrl(getStringById(R.string.nhs111URL))
+    }
+
+    @Test
+    fun showUnavailabilityError_nhs111LinkClickListener_whenConfigurationResponseUnsuccessfulAndConnectedToNetwork_startsActivityWithIntentWithViewActionAndNhs111Uri() {
+        val message = "If you need urgent help, go to 111.nhs.uk or call 111."
+        spyActivity.configurationResponse.callSuccessful = false
+        setNetworkState(true, spyActivity)
+
+        spyActivity.showUnavailabilityError(ErrorMessage(mock {
+            on { getString(R.string.server_error_title) } doReturn ""
+            on { getString(R.string.server_error_message) } doReturn message
+            on { getString(R.string.accessible_server_error_message) } doReturn message
+        }, ErrorType.ServiceUnavailable))
+
+        val errorTextView = spyActivity.findViewById<TextView>(R.id.errorTextView)
+        val nhs111Span = (errorTextView.text as SpannableString).getSpans(31, 41, ClickableLink::class.java)[0]
+        nhs111Span.onClick(errorTextView)
+
+        val openBrowserUrlCaptor = argumentCaptor<String>()
+        verify(spyActivity).openUrlInBrowserActivity(openBrowserUrlCaptor.capture())
+
+        assertEquals(getStringById(R.string.nhs111URL), openBrowserUrlCaptor.firstValue)
+    }
+
+    @Test
+    fun showUnavailabilityError_nhs111LinkClickListener_whenConfigurationResponseSuccessfulAndNotConnectedToNetwork_startsActivityWithIntentWithViewActionAndNhs111Uri() {
+        val message = "If you need urgent help, go to 111.nhs.uk or call 111."
+        spyActivity.configurationResponse.callSuccessful = true
+        setNetworkState(false, spyActivity)
+
+        spyActivity.showUnavailabilityError(ErrorMessage(mock {
+            on { getString(R.string.server_error_title) } doReturn ""
+            on { getString(R.string.server_error_message) } doReturn message
+            on { getString(R.string.accessible_server_error_message) } doReturn message
+        }, ErrorType.ServiceUnavailable))
+
+        val errorTextView = spyActivity.findViewById<TextView>(R.id.errorTextView)
+        val nhs111Span = (errorTextView.text as SpannableString).getSpans(31, 41, ClickableLink::class.java)[0]
+        nhs111Span.onClick(errorTextView)
+
+        val openBrowserUrlCaptor = argumentCaptor<String>()
+        verify(spyActivity).openUrlInBrowserActivity(openBrowserUrlCaptor.capture())
+
+        assertEquals(getStringById(R.string.nhs111URL), openBrowserUrlCaptor.firstValue)
+    }
+
+    @Test
+    fun openUrlInBrowserActivity_startsOpenUrlInBrowserActivityWithGivenUrl() {
+        val url = getStringById(R.string.nhs111URL)
+        val openUrlInBrowserActivityMock: OpenUrlInBrowserActivity = mock()
+        ReflectionHelpers.setField(spyActivity, "openBrowserActivity", openUrlInBrowserActivityMock)
+
+        spyActivity.openUrlInBrowserActivity(url)
+
+        verify(openUrlInBrowserActivityMock).start(spyActivity, url, spyActivity)
+    }
+
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)
+
+    private fun setNetworkState(isConnected: Boolean, activity: MainActivity) {
+        connectionStateMonitorMock = mock {
+            on { isConnectedToNetwork } doReturn isConnected
+        }
+
+        FieldSetter.setField(activity,
+                activity::class.java.getDeclaredField("connectionStateMonitor"),
+                connectionStateMonitorMock)
+    }
 }

@@ -49,7 +49,7 @@
                     </error-container>
                     <error-container v-else-if="statusCode===465">
                       <error-title title="login.authReturn.loginFailed"/>
-                      <error-paragraph
+                      <error-paragraph-with-links
                         from="login.authReturn.dueToLegalRestrictionsUntilYouAreThirteen" />
                     </error-container>
                     <error-container v-else-if="statusCode===400">
@@ -58,7 +58,7 @@
                       <error-paragraph
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
@@ -73,7 +73,7 @@
                       <error-paragraph
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
@@ -87,7 +87,7 @@
                       <error-paragraph
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
@@ -103,7 +103,7 @@
                       <error-paragraph
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
@@ -118,7 +118,7 @@
                       <error-paragraph from="login.authReturn.goBackAndTryAgain" />
                       <error-paragraph from="login.authReturn.ifYouKeepSeeingThisQuoteCode"
                                        :variable="serviceDeskReference" />
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"
@@ -132,7 +132,7 @@
                       <error-paragraph
                         from="login.authReturn.ifYouKeepSeeingThisQuoteCodeToHelpUs"
                         :variable="serviceDeskReference"/>
-                      <error-paragraph from="login.authReturn.ifYouNeed" />
+                      <error-paragraph-with-links from="login.authReturn.ifYouNeed" />
                       <error-link from="generic.contactUs"
                                   :action="contactUsUrl"
                                   target="_blank"

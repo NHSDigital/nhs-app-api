@@ -21,18 +21,18 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     val unavailableTitle = "GP appointment booking unavailable"
     val tryAgainNow = "Try again now."
     val goBackAndTryAgainProblem = "Go back and try again. If the problem continues and you need to book or cancel " +
-            "an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk " +
+            "an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk " +
             "or call 111."
     val goBackAndTryAgainWithoutErrorCode = "Go back and try again. If the problem continues and you need to book or " +
             "cancel an appointment now, contact your GP surgery directly. " +
-            "For urgent medical advice, visit 111.nhs.uk or call 111."
+            "For urgent medical advice, go to 111.nhs.uk or call 111."
     val ifItContinues = "If the problem continues and you need to book an appointment now, contact your GP surgery " +
             "directly. For urgent medical advice, go to 111.nhs.uk or call 111."
     val ifItContinuesBookOrCancel = "If the problem continues and you need to book or cancel an appointment now, " +
             "contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
     val notAbleToBook = "You are not currently able to book or view GP appointments with the NHS App."
     val contactForMoreInformation = "Contact your GP surgery for more information. For urgent medical advice, " +
-            "visit 111.nhs.uk or call 111."
+            "go to 111.nhs.uk or call 111."
     val coronaVirusHeader = "If you think you might have coronavirus"
     val coronaVirusText = "Stay at home and avoid close contact with other people."
     val coronaVirusLink ="Use the 111 coronavirus service to see if you need medical help"

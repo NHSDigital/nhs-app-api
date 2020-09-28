@@ -61,7 +61,9 @@ describe('ConnectionError.vue', () => {
     expect(paragraphs.at(0).text()).toBe('There is a problem with your internet connection');
 
     const messageElement = paragraphs.at(1);
-    expect(messageElement.text()).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
-    expect(messageElement.attributes()['aria-label']).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.');
+    expect(messageElement.text()).toContain('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to');
+    expect(messageElement.text()).toContain('111.nhs.uk');
+    expect(messageElement.text()).toContain('or call 111.');
+    expect(messageElement.attributes()['aria-label']).toBe('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.');
   });
 });

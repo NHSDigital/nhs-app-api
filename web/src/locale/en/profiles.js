@@ -20,7 +20,11 @@ export default {
     },
     appointments: {
       header: 'You do not have access to {name}\'s GP appointments',
-      summary: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      summary: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to',
+      postSummaryLinks: {
+        nhs111Link: '111.nhs.uk',
+        call111: 'or call 111.',
+      },
       summaryLabel: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to one one one.nhs.uk or call one one one.',
       coronaVirus: {
         header: 'If you think {name} might have coronavirus',

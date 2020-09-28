@@ -219,6 +219,8 @@ Feature: Documents Frontend - Medical Record v2
     Then I see the document information page with actions
     When I click the View action link on the document information page
     Then I see the appropriate error message for a document server error
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
 
   Scenario: An EMIS user has a document result with an unknown date
     Given I am a EMIS user setup to use medical record version 2

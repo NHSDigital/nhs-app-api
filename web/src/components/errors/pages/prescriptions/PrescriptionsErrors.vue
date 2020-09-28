@@ -7,12 +7,7 @@
                 :back-url="backUrl"
                 :update-header="false">
       <template v-slot:content>
-        <p>{{ $t('gpSessionErrors.prescriptions.ifTheProblemContinues') }}
-          <a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer"
-             style="display:inline">
-            {{ $t('gpSessionErrors.nhs111Link') }}</a>
-          {{ $t('gpSessionErrors.orCall') }}
-        </p>
+        <contact-111 :text="$t('gpSessionErrors.prescriptions.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
         <error-screen-alternative-actions
@@ -39,6 +34,7 @@
 </template>
 
 <script>
+import Contact111 from '@/components/widgets/Contact111';
 import EmergencyPrescriptionMenuItem from '@/components/menuItems/EmergencyPrescriptionMenuItem';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
@@ -55,6 +51,7 @@ import {
 export default {
   name: 'PrescriptionErrors',
   components: {
+    Contact111,
     EmergencyPrescriptionMenuItem,
     ErrorButton,
     ErrorContainer,

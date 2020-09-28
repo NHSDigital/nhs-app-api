@@ -24,6 +24,7 @@
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
     <string name="nhsLoginSuffix">https://signin.nhs.uk</string>
+    <string name="nhs111URL">https://111.nhs.uk</string>
     <string name="redirectorPath">redirector</string>
     <string name="loggerApiPath">v1/api/log</string>
     <integer name="webClientRequestTimeoutMillis">20000</integer>
@@ -41,6 +42,7 @@
     <string name="secureFlag">enabled</string>
     <string-array name="nativeReloadOnBackUrls">
         <item>@string/nhsLoginSuffix</item>
+        <item>@string/nhs111URL</item>
     </string-array>
     <string name="versionRegex">^([\\d]+)[.](\\d+)([.](\\d+))?$</string>
     <string name="nhsDigitalAnalyticsHost">nhsdigital.d3.sc.omtrdc.net</string>

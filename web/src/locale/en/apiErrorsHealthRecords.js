@@ -4,7 +4,7 @@ export default {
     header: 'There\'s been a problem getting your GP medical record information',
     subheader: '',
     message: {
-      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+      text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
       label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
     retryButtonText: '',
@@ -13,7 +13,7 @@ export default {
       header: 'There\'s been a problem getting your GP medical record information',
       subheader: '',
       message: {
-        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
         label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       retryButtonText: '',
@@ -23,20 +23,20 @@ export default {
       header: 'There\'s been a problem getting your GP medical record information',
       subheader: '',
       message: {
-        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
         label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
       retryButtonText: 'Try again',
     },
-    testResults: {
+    test_results: {
       502: {
         pageTitle: 'Test result details data error',
         pageHeader: 'Test result details data error',
         header: 'There\'s been a problem getting details of your test results',
         subheader: '',
         message: {
-          text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
+          label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
         },
         retryButtonText: '',
       },
@@ -45,7 +45,7 @@ export default {
         header: 'There\'s been a problem getting your GP medical record information',
         subheader: '',
         message: {
-          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
           label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
         },
         retryButtonText: 'Try again',
@@ -58,8 +58,8 @@ export default {
         header: 'There\'s been a problem getting details of your test results',
         subheader: '',
         message: {
-          text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to {111link} or call 111.',
+          label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
         },
         retryButtonText: '',
       },

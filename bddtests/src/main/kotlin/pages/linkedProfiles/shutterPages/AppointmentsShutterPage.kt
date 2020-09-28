@@ -4,6 +4,8 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.navigation.HeaderNative
 import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
+import pages.sharedElements.expectedPage.ParsedPage
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/shutter/appointments")
 class AppointmentsShutterPage : HybridPageObject() {
@@ -16,7 +18,7 @@ class AppointmentsShutterPage : HybridPageObject() {
     }
 
     fun assertText(patientName: String) {
-        ExpectedPageStructure()
+        val expected = ExpectedPageStructure()
                 .paragraph("Contact $patientName's GP surgery for more information. " +
                         "For urgent medical advice, go to 111.nhs.uk or call 111.")
                 .h2("If you think $patientName might have coronavirus")
@@ -24,6 +26,8 @@ class AppointmentsShutterPage : HybridPageObject() {
                 .paragraph("Use the 111 coronavirus service to find out what to do")
                 .paragraph("Switch to your profile to book appointments for yourself.")
                 .button("Switch to my profile")
-                .assert(this)
+
+        val parsedPage = ParsedPage.parse(this,"//div[p[@id=\"shutter-summary-text\"]]")
+        ExpectedPageStructureAssertor().assert(parsedPage, expected.build())
     }
 }

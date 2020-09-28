@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div v-if="showError" :class="!isNativeApp && $style.desktopWeb">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
@@ -19,9 +20,8 @@
         <message-text :is-before-footer="true"
                       :unindent="isPlainNativeError"
                       :aria-label="messageLabel"
-                      data-purpose="msg-text">
-          {{ messageText }}
-        </message-text>
+                      data-purpose="msg-text"
+                      v-html="messageText"/>
         <message-text v-if="additionalInfo"
                       :unindent="isPlainNativeError"
                       :aria-label="additionalInfoLabel"
@@ -61,7 +61,7 @@
       <header-slim :show-in-native="true" :show-in-desktop="false">{{ header }}</header-slim>
       <div :class="$style['information-error']">
         <h2>{{ subheader }}</h2>
-        <p :aria-label="messageLabel">{{ messageText }}</p>
+        <p :aria-label="messageLabel" v-html="messageText"/>
       </div>
     </div>
   </div>
@@ -159,7 +159,7 @@ export default {
       return isObject(this.message) ? this.message.label : undefined;
     },
     messageText() {
-      return isObject(this.message) ? this.message.text : this.message;
+      return (isObject(this.message) ? this.message.text : this.message).replace(/{111link}/g, this.get111HyperLink);
     },
     additionalInfo() {
       return this.getMessage('additionalInfo');
@@ -297,6 +297,9 @@ export default {
         messages: [message],
       };
       this.$store.dispatch('analytics/trackError', errorMessage);
+    },
+    get111HyperLink() {
+      return '<a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer" style="display:inline">111.nhs.uk</a>';
     },
   },
 };

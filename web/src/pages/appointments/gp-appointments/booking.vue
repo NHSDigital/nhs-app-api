@@ -17,9 +17,9 @@
         <div class="nhsuk-grid-column-full">
           <div v-if="noAvailableAppointments" data-purpose="no-appointments-warning">
             <p>{{ $t('appointments.book.youWillNeedToContactGpSurgery') }}</p>
-            <p :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')">
-              {{ $t('appointments.book.forUrgentMedicalAdvice.text') }}
-            </p>
+            <contact-111
+              :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
+              :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
             <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
             <p>{{ $t('appointments.book.stayAtHome') }}</p>
             <p>
@@ -46,9 +46,9 @@
               <h2>{{ $t('appointments.book.noAppointmentsAvailableForYourSearch') }}</h2>
               <p>{{ $t('appointments.book.tryToFilterAppointments') }}</p>
               <p>{{ $t('appointments.book.ifYouCannotFindAppointment') }}</p>
-              <p :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')">
-                {{ $t('appointments.book.forUrgentMedicalAdvice.text') }}
-              </p>
+              <contact-111
+                :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
+                :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
             </div>
           </div>
 
@@ -67,6 +67,7 @@
 import VueScrollTo from 'vue-scrollto';
 import { get, isEmpty } from 'lodash/fp';
 import BookingErrors from '@/components/errors/pages/appointments/BookingErrors';
+import Contact111 from '@/components/widgets/Contact111';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
@@ -104,6 +105,7 @@ export default {
   name: 'GpAppointmentsBookingPage',
   components: {
     BookingErrors,
+    Contact111,
     DesktopGenericBackLink,
     Filters,
     SlotList,

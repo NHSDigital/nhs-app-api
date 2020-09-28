@@ -104,6 +104,8 @@ Feature: View prescriptions error cases
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | VISION    |
@@ -122,6 +124,8 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | EMIS      |
@@ -140,6 +144,8 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | TPP       |
@@ -158,6 +164,8 @@ Feature: View prescriptions error cases
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | TPP       |

@@ -27,10 +27,10 @@ open class ResourceMockingClass {
                     "\n\nIf the problem continues and you need to book an appointment or get a prescription now, " +
                     "contact your GP surgery directly. For urgent medical advice, call 111."
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
-            on { getString(R.string.Accessible_connection_error_message) } doReturn "Please check your connection and try again.\n" +
+            on { getString(R.string.accessible_connection_error_message) } doReturn "Please check your connection and try again.\n" +
                     "        \\n\\nIf the problem persists and you need to book an appointment or get a prescription now,\n" +
                     "        contact your GP surgery directly. For immediate medical advice, call one. one. one.."
-            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.service_unavailable_error_title) } doReturn "Service unavailable"
             on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
@@ -59,10 +59,10 @@ open class ResourceMockingClass {
             on { getString(R.string.home_header) } doReturn "Home"
             on { getString(R.string.nhs_login_header) } doReturn "Log in to the NHS App"
             on { getString(R.string.nhs_login_accessibility_label) } doReturn "Log in using Patient ID"
-            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.service_unavailable_error_title) } doReturn "Service unavailable"
             on { getString(R.string.nhsLoginSuffix) } doReturn "https://ext.signin.nhs.uk"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
-            on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
+            on { getString(R.string.browser_unavailable_title) } doReturn "Browser is disabled"
             on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
             on { getString(R.string.fido_auth_response) } doReturn "fidoAuthResponse"
             on { getString(R.string.login_auth_code_path) } doReturn "/authcode"
@@ -94,7 +94,7 @@ open class ResourceMockingClass {
 
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
-            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.service_unavailable_error_title) } doReturn "Service unavailable"
             on { getString(R.string.connection_error_title) } doReturn "There\\'s an issue with your internet connection"
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
             on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
@@ -117,12 +117,12 @@ open class ResourceMockingClass {
         Mockito.`when`(networkInfo.isConnected).thenReturn(true)
 
         val resourceMock: Resources = mock {
-            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.apiUnavailableErrorMessage) } doReturn "You currently cannot " +
+            on { getString(R.string.service_unavailable_error_title) } doReturn "Service unavailable"
+            on { getString(R.string.service_unavailable_error_message) } doReturn "You currently cannot " +
                     "use this service. \\n\\nIf the problem continues and you need to book an\n " +
                     "appointment or get a prescription now, contact your GP surgery directly. For " +
                     "urgent medical advice, call 111."
-            on { getString(R.string.accessible_apiUnavailableErrorMessage) } doReturn "You currently " +
+            on { getString(R.string.accessible_service_unavailable_error_message) } doReturn "You currently " +
                     "cannot use this service. If the problem continues and you need to book an " +
                     "appointment or get a prescription now, contact your GP surgery directly. For " +
                     "urgent medical advice, call one one one."

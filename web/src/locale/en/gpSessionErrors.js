@@ -1,6 +1,4 @@
 export default {
-  nhs111Link: '111.nhs.uk',
-  orCall: 'or call 111.',
   temporaryProblem: 'This may be a temporary problem.',
   appointments: {
     whatYouCanDoNext: 'What you can do next',

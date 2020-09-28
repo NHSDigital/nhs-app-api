@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Internet Connection Error -->
+    <string name="connection_error_header">Internet connection error</string>
+    <string name="connection_error_title">There is a problem with your internet connection</string>
+    <string name="connection_error_message">
+        \nCheck your connection and try again.
+        \n\nIf the problem continues and you need to book an appointment or get a prescription now,
+        contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.
+    </string>
+    <string name="accessible_connection_error_message">
+        Check your connection and try again. If the problem continues and you need to book an appointment
+        or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to
+        one one one dot nhs dot uk or call one one one.
+    </string>
+
+    <!-- Server Error -->
+    <string name="server_error_title">We\'re experiencing technical difficulties</string>
+    <string name="server_error_message">
+        \nTry again later. If the problem continues and you need to book an appointment or get a prescription
+        now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.
+    </string>
+    <string name="accessible_server_error_message">
+        Try again later. If the problem continues and you need to book an appointment or get a prescription
+        now, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs
+        dot uk or call one one one.
+    </string>
+
+    <!-- Service Unavailable -->
+    <string name="service_unavailable_error_title">Service unavailable</string>
+    <string name="service_unavailable_error_message">
+        \nYou currently cannot use this service.
+        \n\nIf the problem continues and you need to book an appointment or get a prescription now,
+        contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.
+    </string>
+    <string name="accessible_service_unavailable_error_message">
+        You currently cannot use this service. If the problem continues and you need to book an appointment
+        or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to
+        one one one dot nhs dot uk or call one one one.
+    </string>
+
+    <!-- Browser Unavailable -->
+    <string name="browser_unavailable_title">There\'s been a problem loading this page</string>
+    <string name="browser_unavailable_message">
+        \nThis could be because your device’s settings are preventing us from opening this page. If
+        the problem continues and you need to book an appointment or get a prescription now, contact
+        your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.
+    </string>
+    <string name="accessible_browser_unavailable_message">
+        This could be because your device’s settings are preventing us from opening this page.\n\nIf
+        the problem continues and you need to book an appointment or get a prescription now, contact
+        your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk or call
+        one one one.
+    </string>
+
+    <!-- Document Download Failure -->
+    <string name="download_failure_header">Sorry, something went wrong</string>
+    <string name="download_failure_message">
+        We could not download this file.
+        \n\nIf the problem continues and you need to view this document now, contact your GP surgery
+        and request it from them directly.
+    </string>
+</resources>

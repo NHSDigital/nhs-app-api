@@ -16,6 +16,8 @@ Feature: Login error messages
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
     Given I attempt to log in as a <GP System> user without a date of birth
     Then I see an error message informing me I cannot log in as I am under the minimum age
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | TPP       |
@@ -29,6 +31,8 @@ Feature: Login error messages
   Scenario: Cannot log in as a TPP user with an age under 13
     Given I attempt to log in as a TPP user with an age under 13
     Then I see an error message informing me I cannot log in as I am under the minimum age
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
 
     #464
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number

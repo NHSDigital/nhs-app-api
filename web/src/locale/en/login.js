@@ -42,14 +42,26 @@ export default {
     weCannotConnectToSurgeryOrMatchYourNhsNumber: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
     weCannotGetYourDetailsFromYourGpSurgery: 'We cannot get your details from your GP surgery.',
     weCannotLoginYouIn: 'We cannot log you in to the NHS App.',
-    dueToLegalRestrictionsUntilYouAreThirteen: {
-      text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call 111.',
-      label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-    },
-    ifYouNeed: {
-      text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-      label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
-    },
+    dueToLegalRestrictionsUntilYouAreThirteen: [
+      {
+        text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to ',
+        linkUrl: 'https://111.nhs.uk',
+        linkText: '111.nhs.uk',
+      },
+      {
+        text: ' or call 111.',
+      },
+    ],
+    ifYouNeed: [
+      {
+        text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to',
+        linkUrl: 'https://111.nhs.uk',
+        linkText: '111.nhs.uk',
+      },
+      {
+        text: ' or call 111.',
+      },
+    ],
     ifYouNeedInEngland: [
       {
         text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',

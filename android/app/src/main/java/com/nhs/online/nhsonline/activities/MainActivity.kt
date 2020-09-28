@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
@@ -26,6 +28,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.biometrics.utils.BiometricConstants
+import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.clients.FirebaseClient
 import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -70,6 +73,7 @@ class MainActivity :
         AppCompatActivity(),
         LifeCycleObserverContext {
     private val logger = Logger.getLogger(TAG)
+    private val openBrowserActivity = OpenUrlInBrowserActivity()
     private lateinit var biometricsInterface: BiometricsInterface
     private lateinit var biometricsInteractor: BiometricsInteractor
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
@@ -86,6 +90,7 @@ class MainActivity :
     private lateinit var intentHandlers: IntentHandlers
     private lateinit var paycassoService: PaycassoService
     private lateinit var paycassoFlowFactory: PaycassoFlowFactory
+    private lateinit var nhs111Uri: Uri
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -115,6 +120,8 @@ class MainActivity :
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.logged_in_header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+
+        nhs111Uri = Uri.parse(getString(R.string.nhs111URL))
 
         activityViewSwitcher = MainActivityViewSwitcher(this)
         appDialogs = AppDialogs(this)
@@ -510,6 +517,13 @@ class MainActivity :
                 errorHeader.text = errorMessage.header
 
                 errorTextView.setServiceError(errorMessage.title, errorMessage.message)
+                errorTextView.makeLinks(Pair(nhs111Uri.host.toString(), View.OnClickListener {
+                    if (canOpenUrlInWebView()) {
+                        nhsWeb?.loadUrl(nhs111Uri.toString())
+                    } else {
+                        openUrlInBrowserActivity(nhs111Uri.toString())
+                    }
+                }))
                 errorTextView.contentDescription = errorMessage.title + ". " +
                         errorMessage.accessibleMessage
 
@@ -519,6 +533,10 @@ class MainActivity :
         } catch (e: Exception) {
             logger.log(Level.WARNING, "${this::class.java.simpleName}: Unable to show error page $e")
         }
+    }
+
+    private fun canOpenUrlInWebView(): Boolean {
+        return nhsWeb != null && configurationResponse.callSuccessful && connectionStateMonitor.isConnectedToNetwork
     }
 
     private fun showErrorScreen() {
@@ -760,5 +778,9 @@ class MainActivity :
 
     override fun dismissPageLeaveWarningDialogue() {
         appDialogs.dismissShowLeavingWarningDialog()
+    }
+
+    override fun openUrlInBrowserActivity(url: String) {
+        openBrowserActivity.start(this, url, this)
     }
 }

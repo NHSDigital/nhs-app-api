@@ -81,4 +81,6 @@ interface IInteractor {
     fun dismissAllDialogues()
 
     fun dismissPageLeaveWarningDialogue()
+
+    fun openUrlInBrowserActivity(url: String)
 }

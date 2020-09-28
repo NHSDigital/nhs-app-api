@@ -93,6 +93,11 @@
 	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>DataSharingUrl</key>
 	<string>https://$(DATA_SHARING_URL)</string>
+	<key>ErrorTextViewUrls</key>
+	<dict>
+		<key>111.nhs.uk</key>
+		<string>https://111.nhs.uk</string>
+	</dict>
 	<key>FidoLoginErrorPath</key>
 	<string>error=server_data_expired</string>
 	<key>HealthRecordsUrlPath</key>

@@ -125,6 +125,8 @@ Feature: Messages
     Then the Messages page is displayed
     When I click on the '/appointments/sausages' link in the message
     Then the Page not found error is displayed
+    When I click the error '111.nhs.uk' link with a url of 'https://111.nhs.uk'
+    Then a new tab has been opened by the link
 
   Scenario: A user with no messages can navigate to the messages inbox, but sees no messages
     Given I am using the native app user agent
