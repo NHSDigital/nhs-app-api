@@ -81,19 +81,6 @@ class LifecycleHandlers: NSObject {
             self.homeViewController.delayedBiometricsStart(0.5)
         }
     }
-    
-    func showUpdateDialog() {
-        let title = NSLocalizedString("AppUpdateRequiredIOSVersionTitle", comment: "")
-        let message = NSLocalizedString("AppUpdateIOSVersionRequiredMessage", comment: "")
-        let buttonText = NSLocalizedString("AppUpdateIOSVersionRequiredOKButtonText", comment: "")
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: buttonText, style: .cancel, handler: { action in
-            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
-        }))
-        
-        alert.show()
-    }
 
     func displayAppVersionOutOfDate() {
         let appUpdateRequiredTitle = NSLocalizedString("AppUpdateRequiredTitle", comment: "")

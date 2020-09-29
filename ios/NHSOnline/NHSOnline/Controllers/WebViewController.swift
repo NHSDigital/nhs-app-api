@@ -185,7 +185,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             let compatibilityService = viewController!.compatibilityService!
             compatibilityService.check(isCheckEnabled: config().CompatibilityCheckEnabled)
 
-            if (compatibilityService.hasShownIncompatibleScreen || compatibilityService.hasShownUpdateDialog) {
+            if (compatibilityService.hasShownCompatibilityScreen) {
                 return
             }
         }

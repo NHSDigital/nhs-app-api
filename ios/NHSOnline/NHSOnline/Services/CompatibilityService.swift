@@ -2,8 +2,7 @@ import UIKit
 
 class CompatibilityService {
     let viewController: HomeViewController
-    var hasShownIncompatibleScreen = false
-    var hasShownUpdateDialog = false
+    var hasShownCompatibilityScreen = false
     
     
     init(viewController: HomeViewController) {
@@ -22,13 +21,7 @@ class CompatibilityService {
             return
         }
         
-        if (!deviceCompatibility.canUpdate) {
-            self.viewController.loadIncompatibleScreen()
-            self.hasShownIncompatibleScreen = true
-        } else {
-            // This will be changed to load the compatible shutter screen
-            self.viewController.lifecycleHandlers?.showUpdateDialog()
-            self.hasShownUpdateDialog = true
-        }
+        self.viewController.loadCompatibilityScreen(isCompatible: deviceCompatibility.canUpdate)
+        self.hasShownCompatibilityScreen = true
     }
 }

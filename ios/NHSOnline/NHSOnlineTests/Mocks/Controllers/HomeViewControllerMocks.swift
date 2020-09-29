@@ -9,6 +9,8 @@ class HomeViewControllerMocks: HomeViewController {
      var goToPageCalled = false
      var goToPageValue = ""
      var capturedCalendarData: CalendarData?
+     var loadedCompatibilityPageWithCompatible = false
+     var loadedCompatibilityPageWithIncompatible = false
      
      override func showWebViewContainer() {
          showWebViewContainerCalled = true
@@ -45,5 +47,14 @@ class HomeViewControllerMocks: HomeViewController {
 
     override func addEventToCalendar(calendarData: CalendarData) {
         capturedCalendarData = calendarData
+    }
+    
+    override func loadCompatibilityScreen(isCompatible: Bool) {
+        if (isCompatible) {
+            loadedCompatibilityPageWithCompatible = true
+            return
+        }
+        
+        loadedCompatibilityPageWithIncompatible = true
     }
 }

@@ -102,12 +102,4 @@ export default {
     goBackToTheHomepage: 'Go back to the homepage and try logging in again.',
     ifYouKeepSeeingThisLoginWithEmailAndPassword: 'If you keep seeing this message, go back to the homepage and log in using your email, password and security code.',
   },
-  compatibility: {
-    itRequiresIOS11: 'It requires iOS 11.0 or later, which is not compatible with this device.',
-    ifYouHaveAlreadyRegistered: 'If you have already registered for the app and proved who you are, you can access ',
-    ifYouHaveNotRegistered: 'If you have not registered for the app and proved who you are, you’ll need to do this using another compatible smartphone or tablet.',
-    browserLink: 'NHS App services from the browser',
-    onYourDesktop: ' on your desktop or laptop computer.',
-    notCompatibleHeader: 'The NHS App is not compatible with this device',
-  },
 };

@@ -16,7 +16,7 @@ class CompatibilityServiceTests: XCTestCase {
         
     }
     
-    func test_versionLessThanRequiredIOSVersionButCompatibleShowsAlert() {
+    func test_versionLessThanRequiredIOSVersionButCompatibleShowsCompatibilityPage() {
         let deviceService = createDeviceService(version: 10,
                             identifier: "iPhone10,1",
                             description: Device.iPhone8)
@@ -24,8 +24,9 @@ class CompatibilityServiceTests: XCTestCase {
         
         compatibilityService!.check(isCheckEnabled: true)
         
-        XCTAssertTrue(compatibilityService!.hasShownUpdateDialog)
-        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
+        XCTAssertTrue(compatibilityService!.hasShownCompatibilityScreen)
+        XCTAssertTrue(viewControllerMock!.loadedCompatibilityPageWithCompatible)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithIncompatible)
     }
     
     func test_versionLessThanRequiredVersionIncompatibleDevice() {
@@ -36,8 +37,9 @@ class CompatibilityServiceTests: XCTestCase {
         
         compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
-        XCTAssertTrue(compatibilityService!.hasShownIncompatibleScreen)
+        XCTAssertTrue(compatibilityService!.hasShownCompatibilityScreen)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithCompatible)
+        XCTAssertTrue(viewControllerMock!.loadedCompatibilityPageWithIncompatible)
     }
     
     
@@ -49,8 +51,9 @@ class CompatibilityServiceTests: XCTestCase {
         
         compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
-        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
+        XCTAssertFalse(compatibilityService!.hasShownCompatibilityScreen)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithCompatible)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithIncompatible)
     }
     
     func test_versionIsGreaterThanRequiredIOSVersion() {
@@ -61,8 +64,9 @@ class CompatibilityServiceTests: XCTestCase {
         
         compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
-        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
+        XCTAssertFalse(compatibilityService!.hasShownCompatibilityScreen)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithCompatible)
+        XCTAssertFalse(viewControllerMock!.loadedCompatibilityPageWithIncompatible)
     }
     
     override func tearDown() {

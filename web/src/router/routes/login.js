@@ -39,6 +39,12 @@ const getTermsConditionTitle = (store, i18n) => (
     : 'navigation.pages.headers.termsAndConditions')
 );
 
+const getCompatibilityTitle = (store, i18n) => (
+  i18n.t(store.state.compatibility.isIncompatible
+    ? 'compatibility.incompatible.notCompatibleHeader'
+    : 'compatibility.compatible.compatibleHeader')
+);
+
 export const LOGIN = {
   path: LOGIN_PATH,
   name: LOGIN_NAME,
@@ -145,8 +151,8 @@ export const IOS_COMPATIBILITY = {
   component: IOSCompatibility,
   meta: {
     isAnonymous: true,
-    headerKey: 'login.compatibility.notCompatibleHeader',
-    titleKey: 'login.compatibility.notCompatibleHeader',
+    headerKey: getCompatibilityTitle,
+    titleKey: getCompatibilityTitle,
     crumb: {},
     helpUrl: baseNhsAppHelpUrl,
   },

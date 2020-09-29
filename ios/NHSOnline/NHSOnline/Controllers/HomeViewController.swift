@@ -137,7 +137,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
             switch self.configurationServiceProvider!.getConfigurationResponse() {
             case .success(_):
                 self.compatibilityService!.check(isCheckEnabled: config().CompatibilityCheckEnabled)
-                if (self.compatibilityService!.hasShownIncompatibleScreen || self.compatibilityService!.hasShownUpdateDialog) {
+                if (self.compatibilityService!.hasShownCompatibilityScreen) {
                     return
                 }
 
@@ -158,7 +158,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         }
     }
     
-   func loadIncompatibleScreen() {
+    func loadCompatibilityScreen(isCompatible: Bool) {
        let url = URL(string: config().CompatibilityScreenUrl,
                      relativeTo: URL(string: config().HomeUrl))?.absoluteString
     
@@ -168,7 +168,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         }
     
         var urlComponents = URLComponents(string: url!)!
-        urlComponents.queryItems = [URLQueryItem(name: "incompatible", value: "true")]
+    
+        urlComponents.queryItems = [URLQueryItem(name: "incompatible", value: "\(!isCompatible)")]
 
         self.webViewController?.loadPage(url:urlComponents.url!.absoluteString, getKnownServices: false)
         LoggingService().logError(message: "iOS Compatibility Check Failure: Device is incompatible and cannot be upgraded")

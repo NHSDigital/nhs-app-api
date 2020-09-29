@@ -1,12 +1,26 @@
 <template>
   <no-return-flow-layout>
-    <div v-if="this.$route.query.incompatible">
-      <p>{{ this.$t('login.compatibility.itRequiresIOS11') }}</p>
-      <p>{{ this.$t('login.compatibility.ifYouHaveAlreadyRegistered') }}
+    <div v-if="isIncompatible">
+      <p>{{ this.$t('compatibility.incompatible.itRequiresIOS11') }}</p>
+      <p>{{ this.$t('compatibility.ifYouHaveAlreadyRegistered') }}
         <a style="display:inline" href="https://www.nhsapp.service.nhs.uk" target="_blank"
-           rel="noopener noreferrer">{{ this.$t('login.compatibility.browserLink') }}</a>
-        {{ this.$t('login.compatibility.onYourDesktop') }}</p>
-      <p> {{ this.$t('login.compatibility.ifYouHaveNotRegistered') }} </p>
+           rel="noopener noreferrer">{{ this.$t('compatibility.browserLink') }}
+        </a>
+        {{ this.$t('compatibility.onYourDesktop') }}</p>
+      <p> {{ this.$t('compatibility.incompatible.ifYouHaveNotRegistered') }} </p>
+    </div>
+    <div v-else>
+      <p>{{ this.$t('compatibility.compatible.youNeedToUpdateYourSoftware') }}</p>
+      <p>{{ this.$t('compatibility.ifYouHaveAlreadyRegistered') }}
+        <a style="display:inline" href="https://www.nhsapp.service.nhs.uk" target="_blank"
+           rel="noopener noreferrer">{{ this.$t('compatibility.browserLink') }}
+        </a>
+        {{ this.$t('compatibility.onYourDesktop') }}</p>
+      <p> {{ this.$t('compatibility.compatible.ifYouHaveNotRegistered') }} </p>
+      <ol class="nhsuk-u-margin-3">
+        <li>{{ this.$t('compatibility.compatible.updateYourSoftwareOption') }}</li>
+        <li>{{ this.$t('compatibility.compatible.registerInTheAppOption') }}</li>
+      </ol>
     </div>
   </no-return-flow-layout>
 </template>
@@ -20,6 +34,14 @@ export default {
   name: 'IOSCompatibility',
   components: {
     NoReturnFlowLayout,
+  },
+  data() {
+    return {
+      isIncompatible: this.$route.query.incompatible === 'true',
+    };
+  },
+  created() {
+    this.$store.dispatch('compatibility/updateCompatibility', this.isIncompatible);
   },
   mounted() {
     const { source } = this.$store.state.device;
