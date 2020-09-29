@@ -1,7 +1,7 @@
 import each from 'jest-each';
 import ContentHeader from '@/components/widgets/ContentHeader';
 import PageTitle from '@/components/widgets/PageTitle';
-import { LINKED_PROFILES_NAME } from '@/router/names';
+import { LINKED_PROFILES_NAME, APPOINTMENT_ADMIN_HELP_NAME } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import { createStore, mount } from '../../helpers';
 
@@ -70,20 +70,20 @@ describe('ContentHeader.vue', () => {
       expect(wrapper.vm.currentBreadCrumbs()).toBeUndefined();
     });
 
-    it('showYellowBanner will return undefined', () => {
+    it('showWarningBanner will return undefined', () => {
       wrapper = mountAs();
-      expect(wrapper.vm.showYellowBanner).toBeUndefined();
+      expect(wrapper.vm.showWarningBanner).toBeUndefined();
     });
 
     describe('when no warning banner for route', () => {
-      it('will not show yellow banner when not proxying', () => {
+      it('will not show the warning banner when not proxying', () => {
         getter['session/isProxying'] = false;
         wrapper = mountAs();
 
-        expect(wrapper.vm.showYellowBanner).toEqual(false);
+        expect(wrapper.vm.showWarningBanner).toEqual(false);
       });
 
-      it('will show yellow banner when proxying', () => {
+      it('will show the warning banner when proxying', () => {
         getter['session/isProxying'] = true;
         wrapper = mountAs({
           linkedAccountsState: {
@@ -97,7 +97,7 @@ describe('ContentHeader.vue', () => {
 
         // assert
         expect(wrapper.vm.isProxying).toBe(true);
-        expect(wrapper.vm.showYellowBanner).toBe(true);
+        expect(wrapper.vm.showWarningBanner).toBe(true);
         expect(warning.exists()).toBe(true);
       });
     });
@@ -226,14 +226,14 @@ describe('ContentHeader.vue', () => {
       // assert
       expect(wrapper.vm.demographicsQuestionAnswered).toBe(false);
       expect(wrapper.vm.isProxying).toBe(true);
-      expect(wrapper.vm.showYellowBanner).toEqual(true);
+      expect(wrapper.vm.showWarningBanner).toEqual(true);
       expect(warning.exists()).toBe(true);
     });
 
     each([
       'appointments-gp-appointments-admin-help',
       'appointments-gp-appointments-gp-advice',
-    ]).it('showYellowBanner will return true when demographics answered', (routeName) => {
+    ]).it('showWarningBanner will return true when demographics answered', (routeName) => {
       getter['session/isProxying'] = false;
       wrapper = mountAs({
         demographicsQuestionAnswered: true,
@@ -245,11 +245,11 @@ describe('ContentHeader.vue', () => {
           },
         },
       });
-      expect(wrapper.vm.showYellowBanner).toEqual(true);
+      expect(wrapper.vm.showWarningBanner).toEqual(true);
     });
 
     each(['appointments-gp-appointments-admin-help', 'appointments-gp-appointments-gp-advice'])
-      .it('showYellowBanner will return false when demographics not answered', (routeName) => {
+      .it('showWarningBanner will return false when demographics not answered', (routeName) => {
         getter['session/isProxying'] = false;
         wrapper = mountAs({
           demographicsQuestionAnswered: false,
@@ -261,7 +261,27 @@ describe('ContentHeader.vue', () => {
             },
           },
         });
-        expect(wrapper.vm.showYellowBanner).toEqual(false);
+        expect(wrapper.vm.showWarningBanner).toEqual(false);
+      });
+
+    each([
+      [false, APPOINTMENT_ADMIN_HELP_NAME, false, 'yellow'],
+      [true, APPOINTMENT_ADMIN_HELP_NAME, false, 'yellow'],
+      [true, APPOINTMENT_ADMIN_HELP_NAME, true, 'silver'],
+    ]).it('will return the correct style for the warning banner',
+      (demographicsQuestionAnswered, name, warningBanner, expectedColor) => {
+        getter['session/isProxying'] = false;
+        wrapper = mountAs({
+          demographicsQuestionAnswered,
+          route: {
+            name,
+            meta: {
+              crumb: {},
+              warningBanner,
+            },
+          },
+        });
+        expect(wrapper.vm.externalServiceBannerStyle).toEqual(expectedColor);
       });
   });
 

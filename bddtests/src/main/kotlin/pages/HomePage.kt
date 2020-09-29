@@ -63,8 +63,8 @@ class HomePage : HybridPageObject() {
     private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/div/h2"
 
     val banner = HybridPageElement(
-            webDesktopLocator = "//*[@id='yellow-banner']",
-            webMobileLocator = "//*[@id='yellow-banner']",
+            webDesktopLocator = "//*[@id='warning-banner']",
+            webMobileLocator = "//*[@id='warning-banner']",
             page = this
     )
 

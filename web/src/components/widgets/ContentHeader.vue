@@ -3,14 +3,13 @@
     <div :class="$style[isNative ? 'fix-breadcrumb' : '']">
       <bread-crumb-trail v-if="isBreadCrumbVisible" id="bread-crumb"
                          :crumbs="currentBreadCrumbs()"/>
-      <yellow-banner v-if="showYellowBanner || showCoronaVirusBanner"
-                     id="yellow-banner-line"
-                     :class="$style['bannerLine']"/>
     </div>
     <div :class="[$style[isNative && isBreadCrumbVisible ? 'native-padding' : '']]">
       <corona-virus-banner v-if="showCoronaVirusBanner"/>
-      <yellow-banner v-if="showYellowBanner" id="yellow-banner"
-                     :class="[isNative ? $style['bannerLine-padding'] : $style['']]">
+      <warning-banner v-if="showWarningBanner" id="warning-banner"
+                      :color="externalServiceBannerStyle"
+                      :has-border="showExternalServiceWarning"
+                      :class="[isNative ? $style['bannerLine-padding'] : $style['']]">
         <div v-if="showExternalServiceWarning" id="external-service-warning">
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
@@ -31,7 +30,7 @@
             <strong>{{ actingAsPersonName }}</strong>
           </p>
         </a>
-      </yellow-banner>
+      </warning-banner>
 
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
@@ -63,13 +62,13 @@ import {
   APPOINTMENT_GP_ADVICE_NAME,
 } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
-import YellowBanner from './YellowBanner';
+import WarningBanner from './WarningBanner';
 import CoronaVirusBanner from './CoronaVirusBanner';
 
 export default {
   name: 'ContentHeader',
   components: {
-    YellowBanner,
+    WarningBanner,
     BreadCrumbTrail,
     PageTitle,
     CoronaVirusBanner,
@@ -113,9 +112,12 @@ export default {
       return this.showBreadCrumb &&
         !isEmpty(this.currentBreadCrumbs());
     },
-    showYellowBanner() {
+    showWarningBanner() {
       return this.showExternalServiceWarning ||
         (this.isProxying && this.$route.name !== SWITCH_PROFILE_NAME);
+    },
+    externalServiceBannerStyle() {
+      return (this.showExternalServiceWarning) ? 'silver' : 'yellow';
     },
     showExternalServiceWarning() {
       const warningBanner = get('$route.meta.warningBanner', this);

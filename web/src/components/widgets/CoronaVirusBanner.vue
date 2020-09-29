@@ -1,5 +1,5 @@
 <template>
-  <yellow-banner id="corona-virus-banner" :should-be-floating="shouldBeFloating">
+  <warning-banner id="corona-virus-banner" :should-be-floating="shouldBeFloating">
     <analytics-tracked-tag
       :class="$style['banner']"
       :text="$t('layout.coronavirus.coronavirusCovid19')"
@@ -12,17 +12,17 @@
         {{ $t('layout.coronavirus.getInformationAboutCoronvirus') }}
       </p>
     </analytics-tracked-tag>
-  </yellow-banner>
+  </warning-banner>
 </template>
 
 <script>
-import YellowBanner from '@/components/widgets/YellowBanner';
+import WarningBanner from '@/components/widgets/WarningBanner';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   name: 'CoronaVirusBanner',
   components: {
-    YellowBanner,
+    WarningBanner,
     AnalyticsTrackedTag,
   },
   props: {
