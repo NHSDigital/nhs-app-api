@@ -253,9 +253,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.goToPage.rawValue:
                 viewController.handleGoToPage(page: message.body as! String)
                 break;
-            case UserContent.downloadFromBytes.rawValue:
-                viewController.downloadFile(messageBody: String(describing: message.body), source: knownService.javaScriptInteractionMode)
-                break;
             default:
                 break;
             }
@@ -334,8 +331,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.setMenuBarItem.rawValue:
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
-            case UserContent.downloadFromBytes.rawValue:
-                viewController.downloadFile(messageBody: String(describing: message.body), source: knownService.javaScriptInteractionMode)
+            case UserContent.startDownload.rawValue:
+                viewController.downloadFile(messageBody: String(describing: message.body))
                 break
             case UserContent.updateHeaderText.rawValue:
                 if (!Reachability.isConnectedToNetwork()) {

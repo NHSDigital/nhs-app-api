@@ -638,17 +638,12 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
     }
     
-    func logDownloadError(fileName: String, mimeType: String, source: JavaScriptInteractionMode) {
-        let failureMessage = "Failed to download \(fileName) with mime-type of \(mimeType) from \(buildLoggingMessageSource(source: source))";
-        self.webViewDelegate?.loggingService.logError(message: failureMessage)
-    }
-    
     func showDataDownloadAlert(alertType: DataDownloadAlertType) {
         let alert = DataDownloadAlertHandler().getDownloadAlert(type: alertType)
         alert.show()
     }
     
-    func downloadFile(messageBody: String, source: JavaScriptInteractionMode) {
+    func downloadFile(messageBody: String) {
          if #available(iOS 10.0, *) {
              let splitMessage = messageBody.components(separatedBy: "|split|")
              let base64Data = splitMessage[0]
@@ -659,13 +654,14 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
              let convertedData = Data(base64Encoded: String(describing: dataWithoutStart), options: .ignoreUnknownCharacters)
 
              if (mimeType.containsAnyOf(["image"])){
-                 let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+                 
+                 let tmpURL = FileManager.default.temporaryDirectory
+                     .appendingPathComponent(fileName)
                  do {
                      try convertedData!.write(to: tmpURL)
                  } catch {
-                    self.logDownloadError(fileName: fileName, mimeType: mimeType, source: source)
-                    self.showDownloadError()
-                    return
+                     self.showDownloadError()
+                     return
                  }
                  self.documentInteractionController.url = tmpURL
                  self.documentInteractionController.uti = "public.image, public.content"
@@ -696,9 +692,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
                  do {
                      try convertedData!.write(to: tmpURL)
                  } catch {
-                    self.logDownloadError(fileName: fileName, mimeType: mimeType, source: source)
-                    self.showDownloadError()
-                    return
+                     self.showDownloadError()
+                     return
                  }
                      
                  self.documentInteractionController.url = tmpURL
@@ -718,15 +713,14 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
                          animated: true
                      )
                  } else {
-                     self.documentInteractionController.presentOpenInMenu(
-                         from: self.view.frame,
-                         in: self.view,
-                         animated: true
-                     )
+                 self.documentInteractionController.presentOpenInMenu(
+                     from: self.view.frame,
+                     in: self.view,
+                     animated: true
+                 )
                  }
              }
-            let successMsg = "File name \(fileName) with mime-type \(mimeType) downloaded successfully from \(buildLoggingMessageSource(source:source))";
-            self.webViewDelegate?.loggingService.logInfo(message: successMsg)
+             
          } else {
              self.showDataDownloadAlert(alertType: .OSNotSupported)
              return

@@ -42,9 +42,6 @@ window.nhsapp = {
       });
       window.nhsappNative.addEventToCalendar(calendarEvent);
     },
-    downloadFromBytes(base64Data, fileName, mimeType) {
-      window.nhsappNative.downloadFromBytes(base64Data, fileName, mimeType);
-    },
   },
 };
 

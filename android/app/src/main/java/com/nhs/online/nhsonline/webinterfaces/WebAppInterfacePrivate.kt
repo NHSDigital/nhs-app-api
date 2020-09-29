@@ -144,7 +144,7 @@ class WebAppInterfacePrivate(
     @JavascriptInterface
     fun startDownload(base64Data: String, fileName: String, mimeType: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
-        runAction{ uiInteractor.downloadFromBytes(base64Data, fileName, mimeType, JavaScriptInteractionMode.NhsApp) }
+        runAction{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
     }
 
     @JavascriptInterface

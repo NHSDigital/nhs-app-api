@@ -41,9 +41,7 @@ import com.nhs.online.nhsonline.services.logging.LoggingService
 import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
-import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
-import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.support.intentHandlers.DefaultIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
@@ -88,7 +86,6 @@ class MainActivity :
     private lateinit var intentHandlers: IntentHandlers
     private lateinit var paycassoService: PaycassoService
     private lateinit var paycassoFlowFactory: PaycassoFlowFactory
-    private lateinit var loggingService: ILoggingService
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -127,10 +124,7 @@ class MainActivity :
 
         configureWebView()
         appWebInterface = AppWebInterface(webview)
-
-        loggingService = LoggingService(this, VolleyQueueProvider())
         downloadHelper = FileDownloadHelper(this)
-
         paycassoFlowFactory = PaycassoFlowFactory(logger)
         paycassoService = PaycassoService(paycassoFlowFactory.getFlow(this))
 
@@ -175,6 +169,7 @@ class MainActivity :
     }
 
     private fun initialiseNhsWeb() {
+        val loggingService = LoggingService(this, VolleyQueueProvider())
         nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface,
             knownServices, paycassoService, loggingService, connectionStateMonitor)
 
@@ -355,7 +350,7 @@ class MainActivity :
         nhsWeb?.loadUrl(path)
     }
 
-    override fun downloadFromBytes(base64Data: String, fileName: String, mimeType: String, source: JavaScriptInteractionMode) {
+    override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
 
         downloadHelper.fileName = fileName
         downloadHelper.fileMimeType = mimeType
@@ -366,9 +361,7 @@ class MainActivity :
         if (downloadHelper.isStoragePermissionGranted()) {
             try {
                 downloadHelper.convertBase64StringToFileAndStoreIt()
-                loggingService.logInfo("File name ${fileName} with mime-type ${mimeType} downloaded successfully from ${source}");
             } catch (e: Exception) {
-                loggingService.logError("Failed to download ${fileName} with mime-type of ${mimeType} from ${source}");
                 Log.e(TAG, "Download document resulted in error: ", e)
                 showDownloadDocumentFailureError()
             }
@@ -747,7 +740,7 @@ class MainActivity :
         if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             Log.d(TAG, "Permissions granted for storage")
 
-            downloadFromBytes(downloadHelper.base64Data, downloadHelper.fileName, downloadHelper.fileMimeType)
+            startDownload(downloadHelper.base64Data, downloadHelper.fileName, downloadHelper.fileMimeType)
         } else {
             Log.d(TAG, "Permission not granted")
         }
