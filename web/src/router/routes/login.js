@@ -4,6 +4,7 @@ import PreRegistrationInformationPage from '@/pages/pre-registration-information
 import AuthReturnPage from '@/pages/auth-return/index';
 import TermsAndConditionsPage from '@/pages/terms-and-conditions';
 import UserResearchPage from '@/pages/user-research';
+import IOSCompatibility from '@/pages/ios-compatibility';
 
 import {
   LOGIN_PATH,
@@ -12,6 +13,7 @@ import {
   AUTH_RETURN_PATH,
   TERMSANDCONDITIONS_PATH,
   BEGINLOGIN_PATH,
+  IOS_COMPATIBILITY_PATH,
   USER_RESEARCH_PATH,
 } from '@/router/paths';
 import {
@@ -21,6 +23,7 @@ import {
   AUTH_RETURN_NAME,
   TERMSANDCONDITIONS_NAME,
   BEGINLOGIN_NAME,
+  IOS_COMPATIBILITY_NAME,
   USER_RESEARCH_NAME,
 } from '@/router/names';
 
@@ -136,12 +139,26 @@ export const USER_RESEARCH = {
   },
 };
 
+export const IOS_COMPATIBILITY = {
+  path: IOS_COMPATIBILITY_PATH,
+  name: IOS_COMPATIBILITY_NAME,
+  component: IOSCompatibility,
+  meta: {
+    isAnonymous: true,
+    headerKey: 'login.compatibility.notCompatibleHeader',
+    titleKey: 'login.compatibility.notCompatibleHeader',
+    crumb: {},
+    helpUrl: baseNhsAppHelpUrl,
+  },
+};
+
 export default [
   LOGIN,
   LOGIN_BIOMETRIC_ERROR,
   PRE_REGISTRATION,
   BEGIN_LOGIN,
   AUTH_RETURN,
+  IOS_COMPATIBILITY,
   TERMS_AND_CONDITIONS,
   USER_RESEARCH,
 ];

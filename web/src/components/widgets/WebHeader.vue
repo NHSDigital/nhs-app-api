@@ -5,7 +5,8 @@
     <header class="nhsuk-header" role="banner">
       <div class="nhsuk-width-container nhsuk-header__container">
         <div class="nhsuk-header__logo nhsuk-header__logo--only">
-          <NhsHeaderLogo id="nhs-header-logo" :index-path="indexPath"/>
+          <NhsHeaderLogo id="nhs-header-logo" :index-path="indexPath"
+                         :is-logo-link="isLogoLink"/>
         </div>
         <div id="web-content-header" class="nhsuk-header__content">
           <div v-if="showMenu" class="nhsuk-header__menu">
@@ -66,6 +67,10 @@ export default {
       default: true,
     },
     showMenu: {
+      type: Boolean,
+      default: true,
+    },
+    isLogoLink: {
       type: Boolean,
       default: true,
     },

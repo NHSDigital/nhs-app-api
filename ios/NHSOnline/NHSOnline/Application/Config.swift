@@ -2,7 +2,7 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, PreRegistrationInstructionsPath, BiometricLoginErrorPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl, LoggerApiPath
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CompatibilityScreenUrl, CompatibilityCheckEnabled, CheckSymptomsUrlPath, PreRegistrationInstructionsPath, BiometricLoginErrorPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl, LoggerApiPath
         case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, AdviceUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath, HealthRecordsUrlPath
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrl
@@ -14,6 +14,8 @@ struct Config: Decodable {
     let HomeUrl: String
     let Nhs111Url: String
     let Nhs111LocationUrl: String
+    let CompatibilityScreenUrl: String
+    let CompatibilityCheckEnabled: Bool
     let CheckSymptomsUrlPath: String
     let PreRegistrationInstructionsPath: String
     let BiometricLoginErrorPath: String

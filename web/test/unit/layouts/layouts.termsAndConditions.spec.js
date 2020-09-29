@@ -2,6 +2,8 @@
 import ContentHeader from '@/components/widgets/ContentHeader';
 import i18n from '@/plugins/i18n';
 import TsAndCsLayout from '@/layouts/termsAndConditions';
+import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
+import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
 import { createStore, shallowMount } from '../helpers';
 
@@ -111,6 +113,7 @@ describe('termsAndConditions.vue ', () => {
     describe('web, analytics not accepted, durationSeconds not in session cookie', () => {
       beforeEach(() => {
         const layout = createDefaultPage(createLayoutStore());
+        layout.setData({ title: 'Accept conditions of use' });
         head = layout.vm.$options.metaInfo.call(layout.vm);
       });
 
@@ -170,6 +173,12 @@ describe('termsAndConditions.vue ', () => {
           innerHTML: '<meta http-equiv="refresh" content="12300;URL=\'/account/signout\'">',
           body: false,
         });
+      });
+    });
+
+    describe('mixins', () => {
+      it('will include the OnUpdateTitleMixin', () => {
+        expect(TsAndCsLayout.mixins).toEqual([ResetSpinnerMixin, OnUpdateTitleMixin]);
       });
     });
   });

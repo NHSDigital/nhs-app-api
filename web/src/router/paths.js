@@ -8,6 +8,7 @@ export const LOGIN_PATH = '/login';
 export const LOGIN_BIOMETRIC_ERROR_PATH = '/biometric-login-error';
 export const PRE_REGISTRATION_INFORMATION_PATH = '/pre-registration-information';
 export const BEGINLOGIN_PATH = '/begin-login';
+export const IOS_COMPATIBILITY_PATH = '/ios-compatibility';
 export const AUTH_RETURN_PATH = '/auth-return';
 export const TERMSANDCONDITIONS_PATH = '/terms-and-conditions';
 export const LOGOUT_PATH = 'logout';
@@ -188,6 +189,7 @@ export default {
   RECALLS_PATH,
   REFERRALS_PATH,
   HEALTH_CONDITIONS_PATH,
+  IOS_COMPATIBILITY_PATH,
   NOMINATED_PHARMACY_PATH,
   NOMINATED_PHARMACY_SEARCH_PATH,
   NOMINATED_PHARMACY_CONFIRM_PATH,

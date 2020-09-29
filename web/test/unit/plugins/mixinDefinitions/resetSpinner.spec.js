@@ -1,4 +1,4 @@
-import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
+import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import { createStore, mount } from '../../helpers';
 
 describe('ResetSpinner', () => {

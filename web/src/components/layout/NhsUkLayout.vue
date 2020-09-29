@@ -57,7 +57,7 @@ import HotJar from '@/components/widgets/HotJar';
 import Modal from '@/components/modal/Modal';
 import NativeCallbacks from '@/services/native-app';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
-import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinner';
+import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';

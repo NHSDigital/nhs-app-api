@@ -5,6 +5,7 @@ export const NOT_FOUND_NAME = 'not-found';
 export const LOGIN_NAME = 'login';
 export const PRE_REGISTRATION_INFORMATION_NAME = 'pre-registration-information';
 export const BEGINLOGIN_NAME = 'begin-login';
+export const IOS_COMPATIBILITY_NAME = 'ios-compatiblity';
 export const AUTH_RETURN_NAME = 'auth-return';
 export const TERMSANDCONDITIONS_NAME = 'terms-and-conditions';
 export const LOGOUT_NAME = 'logout';
@@ -141,6 +142,7 @@ const names = [
   ACCOUNT_NOTIFICATIONS_NAME,
   LOGIN_SETTINGS_NAME,
   LOGIN_SETTINGS_ERROR_NAME,
+  IOS_COMPATIBILITY_NAME,
   INTERSTITIAL_REDIRECTOR_NAME,
   LOGIN_BIOMETRIC_ERROR_NAME,
   APPOINTMENTS_NAME,

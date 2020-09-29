@@ -134,7 +134,10 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         DispatchQueue.main.async {
             switch self.configurationServiceProvider!.getConfigurationResponse() {
             case .success(_):
-                let urlToLoad = UrlHelper.checkForUrlOverride(url: config().HomeUrl)
+                var urlToLoad = UrlHelper.checkForUrlOverride(url: config().HomeUrl)
+                if (config().CompatibilityCheckEnabled) {
+                 urlToLoad = self.checkCompatibilityAndLoadURL()
+                }
                 self.webViewController?.loadPage(url: urlToLoad)
                 return
             default:
@@ -143,13 +146,27 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
             }
         }
     }
-
+    
     func apiCallFailure() {
         guard isOffline() else {
             apiConfigCallError = true
             let error = ErrorMessage(.APICallFailure)
             return showNativeViewContainer(errorMessage: error)
         }
+    }
+    
+    func checkCompatibilityAndLoadURL() -> String {
+        let url = URL(string: config().CompatibilityScreenUrl,
+                      relativeTo: URL(string: config().HomeUrl))?.absoluteString
+        
+        if (url != nil) {
+            var urlComponents = URLComponents(string: url!)
+            urlComponents?.queryItems = [URLQueryItem(name: "incompatible", value: "true")]
+            
+            return urlComponents!.url!.absoluteString
+        }
+        
+        return UrlHelper.checkForUrlOverride(url: config().HomeUrl)
     }
     
     func delayedBiometricsStart(_ timer: Double) {
@@ -431,7 +448,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     func createHomeUrlSubRequestWithPath(urlPathToAppend: String) -> String {
         let homeUrl = URL(string: config().HomeUrl)
         let url = URL(string: urlPathToAppend, relativeTo: homeUrl)?.absoluteString
-        
+
         return url!
     }
     

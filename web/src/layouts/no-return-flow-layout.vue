@@ -5,7 +5,8 @@
     <div>
       <web-header :show-menu="false"
                   :show-links="false"
-                  :show-header-buttons="false"/>
+                  :show-header-buttons="false"
+                  :logo-link="false"/>
     </div>
     <content-header id="content-header"
                     :show-bread-crumb="false"
@@ -26,9 +27,6 @@
         </div>
       </div>
     </main>
-    <div v-if="shouldShowFooter">
-      <web-footer/>
-    </div>
   </div>
 </template>
 
@@ -43,7 +41,6 @@ import NativeVersionSetup from '@/services/nativeVersionSetup';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import Spinner from '@/components/widgets/Spinner';
-import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import { FOCUS_NHSAPP_ROOT, UPDATE_HEADER, EventBus } from '@/services/event-bus';
 
@@ -54,7 +51,6 @@ export default {
     ContentHeader,
     FlashMessage,
     Spinner,
-    WebFooter,
     WebHeader,
   },
   mixins: [ResetSpinnerMixin, OnUpdateTitleMixin],
@@ -102,15 +98,8 @@ export default {
     currentHelpUrl() {
       return this.$route.meta.helpUrl;
     },
-    shouldShowFooter() {
-      return !this.$store.state.device.isNativeApp;
-    },
   },
   created() {
-    if (process.browser) {
-      this.$store.dispatch('session/updateLastCalledAt');
-    }
-
     const appVersion = this.$store.$env.VERSION_TAG;
     if (appVersion) {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
@@ -122,12 +111,8 @@ export default {
   mounted() {
     EventBus.$emit(UPDATE_HEADER, this.$route.meta);
     NativeVersionSetup(this.$store);
-    window.validateSession =
-      window.validateSession || (() => this.$store.dispatch('session/validate'));
     this.configureWebContext(this.currentHelpUrl);
-    if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.dismissProgressBar();
-    }
+    NativeCallbacks.dismissProgressBar();
   },
   beforeDestroy() {
     EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
