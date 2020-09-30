@@ -34,7 +34,7 @@
       <Enabled>true</Enabled>
     </SSLInfo>
     <LoadBalancer>
-      <Server name="nhs-app" />
+      <Server name="nhs-app"/>
     </LoadBalancer>
   </HTTPTargetConnection>
 </TargetEndpoint>
