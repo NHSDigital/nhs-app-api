@@ -33,6 +33,9 @@ const mountPage = ({
         knownServices: [{
           id: 'pkb',
           url: 'www.url.com',
+        }, {
+          id: 'engage',
+          url: 'www.url.com',
         }],
       },
     },
@@ -140,6 +143,10 @@ describe('messages page', () => {
       ['cie', true, false, false, false],
       ['cie', true, true, true, false],
       ['cie', false, false, true, false],
+      ['engage', true, false, true, true],
+      ['engage', true, false, false, false],
+      ['engage', true, true, true, false],
+      ['engage', false, false, true, false],
     ]).describe('%s messaging enabled is %s, proxy is %s', (
       provider, context, isProxying, isProofLevel9, expectedResult,
     ) => {
@@ -150,6 +157,9 @@ describe('messages page', () => {
             break;
           case 'pkb':
             linkElement = '#btn_pkb_messages_and_consultations';
+            break;
+          case 'engage':
+            linkElement = '#btn_engage_messages';
             break;
           default:
             break;

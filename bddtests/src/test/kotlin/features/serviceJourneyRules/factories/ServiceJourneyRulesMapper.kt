@@ -66,7 +66,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_ENABLED,
                                 SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_ENABLED,
                                 SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ENGAGE,
-                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_ENGAGE))
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_ADMIN_ENGAGE,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ENGAGE))
                 .add(Supplier.VISION, "A80003",
                         EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1))
                 .add(Supplier.MICROTEST, "A80004",

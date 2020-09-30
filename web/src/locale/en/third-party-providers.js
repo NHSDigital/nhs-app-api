@@ -43,7 +43,7 @@ export default {
         id: 'messages',
         path: '/?sso_route=messages',
         jumpOffContent: {
-          headerText: 'Online Consultations',
+          headerText: 'Online consultations',
           descriptionText: 'View your online consultations and any responses from your GP surgery',
         },
         thirdPartyWarning: {

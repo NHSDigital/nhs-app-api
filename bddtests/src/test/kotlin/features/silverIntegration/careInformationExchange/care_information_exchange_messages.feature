@@ -9,7 +9,7 @@ Feature: Care Information Exchange Messages
     And I am logged in
     And I navigate to the Messages hub page
     Then the Messages Hub page is displayed
-    And the link to Messages and consultations is not available on the Messages Hub page
+    And the link to CIE Messages and consultations is not available on the Messages Hub page
 
   Scenario: A user navigates to CIE messages and sees the warning message
     Given I am using the native app user agent

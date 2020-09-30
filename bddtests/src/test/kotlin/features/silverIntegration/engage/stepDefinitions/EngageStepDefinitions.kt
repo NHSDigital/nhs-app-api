@@ -56,6 +56,21 @@ class EngageStepDefinitions : HybridPageObject() {
                 "Find out more about online consultation services")
     }
 
+    @Given("^I am a user who can view Messages and Online Consultations from Engage$")
+    fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromEngage(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ENGAGE)
+    }
+
+    @Given("^I am a user with proof level 5 who can view Messages and Online Consultations from Engage$")
+    fun iAmAUserWithProofLevel5WhoCanViewMessagesAndOnlineConsultationsFromEngage(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_ENGAGE, IdentityProofingLevel.P5)
+    }
+
+    @Given("^I am a user who cannot view Messages and Online Consultations from Engage$")
+    fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromEngage() {
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+    }
+
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null, configuration, proofLevel)
         val supplier = SerenityHelpers.getGpSupplier()

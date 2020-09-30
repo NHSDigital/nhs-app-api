@@ -17,6 +17,11 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_pkb_cie_messages_and_consultations")
     }
 
+    @When("^I click the Engage Messages link on the Messages Hub page$")
+    fun clickOnEngageMessagesConsultations() {
+        messagesHubPage.clickOnMenuItem("btn_engage_messages")
+    }
+
     @When("^I click on the patient practice Messages link on the Messages Hub page$")
     fun clickOnPatientPracticeMessages() {
         messagesHubPage.clickOnMenuItem("btn_im1_messaging")
@@ -30,6 +35,16 @@ class MessagesHubStepDefinitions {
     @Then("^the link to Messages and consultations is not available on the Messages Hub page")
     fun theMessagesConsultationsLinkIsNotDisplayed() {
         messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_messages_and_consultations")
+    }
+
+    @Then("^the link to CIE Messages and consultations is not available on the Messages Hub page")
+    fun theMessagesConsultationsLinkForCIDIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_cie_messages_and_consultations")
+    }
+
+    @When("^the link to Engage Messages and consultations is not available on the Messages Hub page$")
+    fun theMessagesConsultationsLinkForEngageIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_engage_messages")
     }
 
     @Then("^the Messages Hub page is displayed$")
