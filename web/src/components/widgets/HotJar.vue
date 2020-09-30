@@ -1,10 +1,8 @@
-<template>
-  <div/>
-</template>
 <script>
 export default {
   name: 'HotJar',
-  head() {
+  metaInfo() {
+    const head = {};
     if (this.$store.$env.HOTJAR_SITE_ID && this.$store.$env.HOTJAR_SITE_ID !== 'NOT_SET') {
       /* eslint-disable prefer-template */
       const hotJar = '(function (h, o, t, j, a, r) {' +
@@ -15,16 +13,18 @@ export default {
                    'r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;' +
                    'a.appendChild(r);' +
                    '}(window, document, \'https://static.hotjar.com/c/hotjar-\', \'.js?sv=\'));';
-      return {
-        __dangerouslyDisableSanitizers: ['script'],
-        script: [{
-          innerHTML: hotJar,
-        }],
-      };
+
+      head.script = [{
+        innerHTML: hotJar,
+      }];
     }
-    return {
-      script: [],
-    };
+
+    return head;
+  },
+  render() {
+    // Not functional.
+    // Each component must have a template or implement render().
+    return '';
   },
 };
 </script>
