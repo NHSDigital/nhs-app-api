@@ -1,0 +1,4 @@
+<APIProxy name="nhsa">
+  <!-- This is the root of the application -->
+  <Description>Proxy to NHS App endpoints.</Description>
+</APIProxy>

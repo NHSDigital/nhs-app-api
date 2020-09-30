@@ -1,0 +1,7 @@
+variables:
+  service_name: nhs-app
+  short_service_name: nhsa
+  service_base_path: nhsapp
+  product_display_name: NHS App
+  product_description: This is the NHS App service, where patents access their medical records and GP services
+  spec_file: nhs-app.json
