@@ -11,11 +11,6 @@ namespace NHSOnline.Backend.UsersApi.Registrations
             throw new System.NotImplementedException();
         }
 
-        public DeleteRegistrationResult Visit(SearchDeviceResult.FoundMany result)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public DeleteRegistrationResult Visit(SearchDeviceResult.NotFound result)
         {
             return new DeleteRegistrationResult.NotFound();

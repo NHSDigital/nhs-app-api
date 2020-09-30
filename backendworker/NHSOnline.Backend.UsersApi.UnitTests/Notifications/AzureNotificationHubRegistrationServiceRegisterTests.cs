@@ -29,7 +29,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         private Installation _installation;
         private const string DevicePns = "DevicePns";
         private const string InstallationId = "InstallId";
-        private const string RegistrationId = "RegistrationId";
         private const string NhsLoginId = "Nhsloginid";
         private readonly DeviceType _deviceType = DeviceType.Android;
 
@@ -68,7 +67,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(DevicePns))
-                .ReturnsAsync(new List<NotificationRegistrationItem>());
+                .ReturnsAsync(new List<string>());
 
             _mockInstallationFactory.Setup(x => x.Create(DevicePns, _deviceType, _accessToken.Subject))
                 .Returns(_installation);
@@ -95,7 +94,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DevicePns = DevicePns,
                 DeviceType = _deviceType
             };
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
 
             var expectedResponse = new RegistrationResult.Success(
                 new NotificationRegistrationResult
@@ -108,11 +106,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .Returns(Task.CompletedTask);
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .Returns(Task.CompletedTask);
 
             _mockAzureNotificationsHubClient
@@ -135,7 +131,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Arrange
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(DevicePns))
-                .ReturnsAsync(new List<NotificationRegistrationItem>());
+                .ReturnsAsync(new List<string>());
 
             _mockInstallationFactory
                 .Setup(x => x.Create(DevicePns, _deviceType, NhsLoginId))
@@ -161,15 +157,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DeviceType = _deviceType
             };
 
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
-
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .ThrowsAsync(new HttpRequestException());
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .ThrowsAsync(new HttpRequestException());
 
             // Act
@@ -190,15 +182,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DevicePns = DevicePns,
                 DeviceType = _deviceType
             };
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .ThrowsAsync(new DivideByZeroException());
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .ThrowsAsync(new DivideByZeroException());
 
             // Act
@@ -219,18 +208,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DevicePns = DevicePns,
                 DeviceType = _deviceType
             };
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
 
             _mockInstallationFactory.Setup(x => x.Create(DevicePns, _deviceType, _accessToken.Subject))
                 .Returns(_installation);
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .Returns(Task.CompletedTask);
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .Returns(Task.CompletedTask);
 
             _mockAzureNotificationsHubClient
@@ -257,18 +243,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DevicePns = DevicePns,
                 DeviceType = _deviceType
             };
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
 
             _mockInstallationFactory.Setup(x => x.Create(DevicePns, _deviceType, _accessToken.Subject))
                 .Returns(_installation);
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .Returns(Task.CompletedTask);
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .Returns(Task.CompletedTask);
 
             _mockAzureNotificationsHubClient
@@ -302,18 +285,15 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                 DevicePns = DevicePns,
                 DeviceType = _deviceType
             };
-            var notificationRegistrationItems = GenerateNotificationRegistrationItems();
 
             _mockInstallationFactory.Setup(x => x.Create(DevicePns, _deviceType, _accessToken.Subject))
                 .Returns(_installation);
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiers(registerDeviceRequest.DevicePns))
-                .ReturnsAsync(notificationRegistrationItems);
+                .ReturnsAsync(new List<string>{ InstallationId });
 
             _mockAzureNotificationsHubClient.Setup(x => x.DeleteInstallation(InstallationId))
-                .Returns(Task.CompletedTask);
-            _mockAzureNotificationsHubClient.Setup(x => x.DeleteRegistration(RegistrationId))
                 .Returns(Task.CompletedTask);
 
             _mockAzureNotificationsHubClient
@@ -333,24 +313,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockAzureNotificationsHubClient.VerifyAll();
 
             result.Should().BeOfType<RegistrationResult.BadGateway>();
-        }
-
-        private List<NotificationRegistrationItem> GenerateNotificationRegistrationItems()
-        {
-            return  new List<NotificationRegistrationItem>
-            {
-                { new NotificationRegistrationItem
-                {
-                    Id = InstallationId,
-                    Type = NotificationRegistrationItem.RegistrationType.Installation
-                }},
-                { new NotificationRegistrationItem
-                {
-                    Id = RegistrationId,
-                    Type = NotificationRegistrationItem.RegistrationType.Registration
-                }}
-
-            };
         }
     }
 }

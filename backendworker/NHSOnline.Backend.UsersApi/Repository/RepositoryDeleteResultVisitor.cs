@@ -4,16 +4,9 @@ namespace NHSOnline.Backend.UsersApi.Repository
 {
     internal class RepositoryDeleteResultVisitor : IRepositoryDeleteResultVisitor<UserDevice, DeleteDeviceResult>
     {
-        private readonly string _deviceId;
-
-        public RepositoryDeleteResultVisitor(string deviceId)
-        {
-            _deviceId = deviceId;
-        }
-
         public DeleteDeviceResult Visit(RepositoryDeleteResult<UserDevice>.NotFound result)
         {
-            return new DeleteDeviceResult.Success(_deviceId);
+            return new DeleteDeviceResult.Success();
         }
 
         public DeleteDeviceResult Visit(RepositoryDeleteResult<UserDevice>.RepositoryError result)
@@ -23,7 +16,7 @@ namespace NHSOnline.Backend.UsersApi.Repository
 
         public DeleteDeviceResult Visit(RepositoryDeleteResult<UserDevice>.Deleted result)
         {
-            return new DeleteDeviceResult.Success(_deviceId);
+            return new DeleteDeviceResult.Success();
         }
     }
 }

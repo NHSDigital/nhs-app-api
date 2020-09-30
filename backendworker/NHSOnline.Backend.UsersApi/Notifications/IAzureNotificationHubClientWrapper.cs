@@ -8,9 +8,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
     {
         Task CreateOrUpdateInstallationAsync(Installation installation);
         Task DeleteInstallationAsync(string installationId);
-        Task DeleteRegistrationAsync(string registrationId);
         Task<bool> InstallationExistsAsync(string installationId);
-        Task<bool> RegistrationExistsAsync(string registrationId);
         Task<IEnumerable<RegistrationDescription>> GetRegistrationsByChannelAsync(string devicePns,
             int installationRecordMaxResults);
         Task<IEnumerable<RegistrationDescription>> GetRegistrationsByTagAsync(string tag, int maxRecords);

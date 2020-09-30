@@ -4,13 +4,6 @@ namespace NHSOnline.Backend.UsersApi.Repository
     {
         public class Success : DeleteDeviceResult
         {
-            public string DeviceId { get; }
-
-            public Success(string deviceId)
-            {
-                DeviceId = deviceId;
-            }
-            
             public override T Accept<T>(IDeleteDeviceResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

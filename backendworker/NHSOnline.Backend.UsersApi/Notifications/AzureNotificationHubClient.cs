@@ -23,39 +23,23 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
         public Task DeleteInstallation(string installationId) => _hubClientWrapper.DeleteInstallationAsync(installationId);
 
-        public Task DeleteRegistration(string registrationId) => _hubClientWrapper.DeleteRegistrationAsync(registrationId);
-
         public Task<bool> InstallationExists(string installationId) => _hubClientWrapper.InstallationExistsAsync(installationId);
 
-        public Task<bool> RegistrationExists(string registrationId) => _hubClientWrapper.RegistrationExistsAsync(registrationId);
-
-        public async Task<ICollection<NotificationRegistrationItem>> FindInstallationIdentifiers(string devicePns)
+        public async Task<ICollection<string>> FindInstallationIdentifiers(string devicePns)
         {
             var foundRegistrations = await _hubClientWrapper.GetRegistrationsByChannelAsync(devicePns, InstallationRecordMaxResults);
             var existingRegistrations = foundRegistrations as RegistrationDescription[] ?? foundRegistrations.ToArray();
 
             if (existingRegistrations.Length == 0)
             {
-                return  Array.Empty<NotificationRegistrationItem>();
+                return Array.Empty<string>();
             }
 
-            var installTags = existingRegistrations.SelectMany(rd => rd.Tags)
-                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase));
-            var installationRegistrations = existingRegistrations.Where(x => x.Tags.Overlaps(installTags));
-
-            var installationItems = installTags
+            return existingRegistrations.SelectMany(rd => rd.Tags)
+                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase))
                 .Select(t => t.Substring(InstallationTagName.Length + 1, InstallationIdGuidLength))
                 .Distinct()
-                .Select(x => new NotificationRegistrationItem{ Id = x, Type = NotificationRegistrationItem.RegistrationType.Installation});
-
-            var registrationItems = existingRegistrations.Except(installationRegistrations)
-                .Select(x => new NotificationRegistrationItem
-                {
-                    Id = x.RegistrationId,
-                    Type = NotificationRegistrationItem.RegistrationType.Registration
-                });
-
-            return installationItems.Union(registrationItems).ToArray();
+                .ToArray();
         }
 
         public async Task<ICollection<string>> FindInstallationIdentifiersByNhsLoginId(string nhsLoginId)
@@ -69,10 +53,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 return Array.Empty<string>();
             }
 
-            var installTags = existingRegistrations.SelectMany(rd => rd.Tags)
-                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase));
-
-            return installTags
+            return existingRegistrations.SelectMany(rd => rd.Tags)
+                .Where(t => t.StartsWith(InstallationTagName, StringComparison.OrdinalIgnoreCase))
                 .Select(t => t.Substring(InstallationTagName.Length + 1, InstallationIdGuidLength))
                 .Distinct()
                 .ToArray();

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace NHSOnline.Backend.UsersApi.Repository
 {
     public abstract class SearchDeviceResult
@@ -11,21 +9,6 @@ namespace NHSOnline.Backend.UsersApi.Repository
             public Found(UserDevice userDevice)
             {
                 UserDevice = userDevice;
-            }
-
-            public override T Accept<T>(ISearchDeviceResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class FoundMany : SearchDeviceResult
-        {
-            public IEnumerable<UserDevice> UserDevices { get; }
-
-            public FoundMany(IEnumerable<UserDevice> userDevices)
-            {
-                UserDevices = userDevices;
             }
 
             public override T Accept<T>(ISearchDeviceResultVisitor<T> visitor)

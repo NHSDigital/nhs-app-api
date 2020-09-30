@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.UsersApi
             app.UseLogRequestHeader(new LogRequestHeaderOptions
             {
                 HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
-                LogTemplate = "CorrelationId={value}",
+                LogTemplate = "CorrelationId={value}"
             });
 
             app.UseEndpoints(b =>

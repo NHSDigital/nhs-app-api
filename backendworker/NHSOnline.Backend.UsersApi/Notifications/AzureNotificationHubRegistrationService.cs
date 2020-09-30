@@ -36,9 +36,8 @@ namespace NHSOnline.Backend.UsersApi.Notifications
                 _logger.LogInformation($"{existingInstallations.Count} existing registrations found for this pns token");
                 if (existingInstallations.Count > 0)
                 {
-                    var deleteTasks =
-                        existingInstallations.Select(GetDeleteTask)
-                            .ToList();
+                    var deleteTasks = existingInstallations.Select(_azureHubClient.DeleteInstallation)
+                        .ToList();
 
                     await Task.WhenAll(deleteTasks);
                     _logger.LogInformation("Existing registrations deleted");
@@ -90,7 +89,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogEnter();
 
-                if(await GetExistsTask(userDevice.RegistrationId))
+                if(await _azureHubClient.InstallationExists(userDevice.RegistrationId))
                 {
                     return new RegistrationExistsResult.Found();
                 }
@@ -157,7 +156,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             try
             {
                 _logger.LogEnter();
-                await GetDeleteTask(id);
+                await _azureHubClient.DeleteInstallation(id);
 
                 return new DeleteRegistrationResult.Success();
             }
@@ -180,36 +179,6 @@ namespace NHSOnline.Backend.UsersApi.Notifications
             {
                 _logger.LogExit();
             }
-        }
-
-        private Task<bool> GetExistsTask(string id)
-        {
-            return Guid.TryParse(id, out _) switch
-            {
-                true => _azureHubClient.InstallationExists(id),
-                false => _azureHubClient.RegistrationExists(id)
-            };
-        }
-
-        private Task GetDeleteTask(string id)
-        {
-            return Guid.TryParse(id, out _) switch
-            {
-                true => _azureHubClient.DeleteInstallation(id),
-                false => _azureHubClient.DeleteRegistration(id)
-            };
-        }
-
-        private Task GetDeleteTask(NotificationRegistrationItem registrationItem)
-        {
-            return registrationItem.Type switch
-            {
-                NotificationRegistrationItem.RegistrationType.Installation => _azureHubClient.DeleteInstallation(
-                    registrationItem.Id),
-                NotificationRegistrationItem.RegistrationType.Registration => _azureHubClient.DeleteRegistration(
-                    registrationItem.Id),
-                _ => throw new ArgumentOutOfRangeException(nameof(registrationItem))
-            };
         }
     }
 }

@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
-                .ReturnsAsync(new DeleteDeviceResult.Success(DevicePns));
+                .ReturnsAsync(new DeleteDeviceResult.Success());
 
             _mockNotificationService.Setup(x => x.Exists(userDevice))
                 .ReturnsAsync(new RegistrationExistsResult.NotFound());

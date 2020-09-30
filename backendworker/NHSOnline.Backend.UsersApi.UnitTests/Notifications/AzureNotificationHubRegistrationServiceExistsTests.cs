@@ -18,7 +18,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
     {
         private Mock<IAzureNotificationHubClient> _mockAzureNotificationsHubClient;
         private AzureNotificationHubRegistrationService _systemUnderTest;
-        private const string RegistrationId = "1111111111111111111-111111111111111111-1";
         private const string InstallationId = "fe7312a9-43dc-46f6-9727-03b3ddecab12";
 
         [TestInitialize]
@@ -54,28 +53,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task Exists_WhenRegistrationExistsWithRegistrationIdentifier_ReturnsFoundResult()
-        {
-            // Arrange
-            var userDevice = new UserDevice
-            {
-                RegistrationId =  RegistrationId
-            };
-
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.RegistrationExists(userDevice.RegistrationId))
-                .ReturnsAsync(true);
-
-            // Act
-            var result = await _systemUnderTest.Exists(userDevice);
-
-            // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationExistsResult.Found>();
-        }
-
-        [TestMethod]
         public async Task Exists_WhenRegistrationDoesNotExistWithInstallationIdentifier_ReturnsNotFoundResult()
         {
             // Arrange
@@ -95,50 +72,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             _mockAzureNotificationsHubClient.VerifyAll();
 
             result.Should().BeOfType<RegistrationExistsResult.NotFound>();
-        }
-
-        [TestMethod]
-        public async Task Exists_WhenRegistrationDoesNotExistWithRegistrationIdentifier_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var userDevice = new UserDevice
-            {
-                RegistrationId =  RegistrationId
-            };
-
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.RegistrationExists(userDevice.RegistrationId))
-                .ReturnsAsync(false);
-
-            // Act
-            var result = await _systemUnderTest.Exists(userDevice);
-
-            // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationExistsResult.NotFound>();
-        }
-
-        [TestMethod]
-        public async Task Exists_WhenRegistrationExistsThrowsException_ReturnsInternalServerErrorResult()
-        {
-            // Arrange
-            var userDevice = new UserDevice
-            {
-                RegistrationId =  RegistrationId
-            };
-
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.RegistrationExists(userDevice.RegistrationId))
-                .Throws<ArgumentException>();
-
-            // Act
-            var result = await _systemUnderTest.Exists(userDevice);
-
-            // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationExistsResult.InternalServerError>();
         }
 
         [TestMethod]
@@ -198,41 +131,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             result.Should().BeOfType<RegistrationExistsResult.BadGateway>();
         }
 
-        [DataTestMethod]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Moved)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Moved)]
-        public async Task Exists_WhenRegistrationExistsThrowsAMessageException_ReturnsBadGatewayResult
-        (
-            WebExceptionStatus webExceptionStatus,
-            HttpStatusCode statusCode
-        )
-        {
-            // Arrange
-            var userDevice = new UserDevice
-            {
-                RegistrationId =  RegistrationId
-            };
-
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.RegistrationExists(userDevice.RegistrationId))
-                .Throws(
-                    new MessagingException("Message exception",
-                        new WebException("Web exception",
-                            null,
-                            webExceptionStatus,
-                            HttpWebResponseHelper.CreateFromStatusCode(statusCode))));
-
-            // Act
-            var result = await _systemUnderTest.Exists(userDevice);
-
-            // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationExistsResult.BadGateway>();
-        }
-
         [TestMethod]
         public async Task Exists_WhenInstallationExistsThrowsAHttpException_ReturnsBadGatewayResult()
         {
@@ -244,28 +142,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.InstallationExists(userDevice.RegistrationId))
-                .Throws<HttpRequestException>();
-
-            // Act
-            var result = await _systemUnderTest.Exists(userDevice);
-
-            // Assert
-            _mockAzureNotificationsHubClient.VerifyAll();
-
-            result.Should().BeOfType<RegistrationExistsResult.BadGateway>();
-        }
-
-        [TestMethod]
-        public async Task Exists_WhenRegistrationExistsThrowsAHttpException_ReturnsBadGatewayResult()
-        {
-            // Arrange
-            var userDevice = new UserDevice
-            {
-                RegistrationId =  RegistrationId
-            };
-
-            _mockAzureNotificationsHubClient
-                .Setup(x => x.RegistrationExists(userDevice.RegistrationId))
                 .Throws<HttpRequestException>();
 
             // Act

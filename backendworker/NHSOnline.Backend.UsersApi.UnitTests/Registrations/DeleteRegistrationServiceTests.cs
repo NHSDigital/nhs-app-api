@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
         private const string NhsNumber = "NhsNumber";
         private const string NhsLoginId = "NhsLoginId";
         private const string DevicePns = "device PNS";
-        private const string DeviceId = "DeviceId";
         private AccessToken _accessToken;
 
         [TestInitialize]
@@ -48,7 +47,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
-                .ReturnsAsync(new DeleteDeviceResult.Success(DeviceId));
+                .ReturnsAsync(new DeleteDeviceResult.Success());
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
                 .ReturnsAsync(new DeleteRegistrationResult.Success());
@@ -73,7 +72,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Registrations
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, NhsLoginId))
-                .ReturnsAsync(new DeleteDeviceResult.Success(DeviceId));
+                .ReturnsAsync(new DeleteDeviceResult.Success());
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
                 .ReturnsAsync(new DeleteRegistrationResult.NotFound());

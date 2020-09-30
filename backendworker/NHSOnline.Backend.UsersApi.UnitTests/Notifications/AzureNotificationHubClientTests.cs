@@ -28,35 +28,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
-        public async Task FindInstallationIdentifiers_Success()
+        public async Task FindInstallationIdentifiers_WithRegistrations_ReturnsInstallationIdentifiers()
         {
             // Arrange
             var installationIds = new List<string>
                 { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
 
-            var expectedResult = new List<NotificationRegistrationItem>
-            {
-                new NotificationRegistrationItem
-                {
-                    Id = installationIds[0],
-                    Type = NotificationRegistrationItem.RegistrationType.Installation
-                },
-                new NotificationRegistrationItem
-                {
-                    Id = installationIds[1],
-                    Type = NotificationRegistrationItem.RegistrationType.Installation
-                },
-                new NotificationRegistrationItem
-                {
-                    Id = "RegistrationId2",
-                    Type = NotificationRegistrationItem.RegistrationType.Registration
-                },
-                new NotificationRegistrationItem
-                {
-                    Id = "RegistrationId4",
-                    Type = NotificationRegistrationItem.RegistrationType.Registration
-                },
-            };
+            var expectedResult = new List<string>
+                { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
 
             var registrations = new List<RegistrationDescription>
             {
@@ -90,19 +69,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             var installationIds = new List<string>
                 { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
 
-            var expectedResult = new List<NotificationRegistrationItem>
-            {
-                new NotificationRegistrationItem
-                {
-                    Id = installationIds[0],
-                    Type = NotificationRegistrationItem.RegistrationType.Installation
-                },
-                new NotificationRegistrationItem
-                {
-                    Id = installationIds[1],
-                    Type = NotificationRegistrationItem.RegistrationType.Installation
-                },
-            };
+            var expectedResult = new List<string>
+                { "fe7312a9-43dc-46f6-9727-03b3ddecab11", "fe7312a9-43dc-46f6-9727-03b3ddecab12" };
 
             var registrations = new List<RegistrationDescription>
             {
