@@ -1,6 +1,5 @@
 import Foundation
 import os.log
-import DeviceKit
 import UIKit
 import WebKit
 
@@ -8,7 +7,10 @@ class LifecycleHandlers: NSObject {
     var knownServicesProvider: KnownServicesProtocol
     var webViewController: WebViewController?
     var hasCheckedAppVersionSinceAppOpened = false
+    var hasShownIncompatibleScreen = false
+    var hasShownUpdateDialog = false
     var homeViewController: HomeViewController
+    var compatibilityService: CompatibilityService
     var configurationServiceProvider: ConfigurationServiceProtocol
     let validateSessionString: String = "window.validateSession()"
 
@@ -18,6 +20,8 @@ class LifecycleHandlers: NSObject {
         self.webViewController = webViewController
         self.homeViewController = homeViewController
         self.configurationServiceProvider = configurationServiceProvider
+        
+        compatibilityService = CompatibilityService(viewController: homeViewController)
         super.init()
         createLifecycleObservers()
     }
@@ -77,6 +81,19 @@ class LifecycleHandlers: NSObject {
             self.homeViewController.delayedBiometricsStart(0.5)
         }
     }
+    
+    func showUpdateDialog() {
+        let title = NSLocalizedString("AppUpdateRequiredIOSVersionTitle", comment: "")
+        let message = NSLocalizedString("AppUpdateIOSVersionRequiredMessage", comment: "")
+        let buttonText = NSLocalizedString("AppUpdateIOSVersionRequiredOKButtonText", comment: "")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: buttonText, style: .cancel, handler: { action in
+            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+        }))
+        
+        alert.show()
+    }
 
     func displayAppVersionOutOfDate() {
         let appUpdateRequiredTitle = NSLocalizedString("AppUpdateRequiredTitle", comment: "")
@@ -116,7 +133,7 @@ class LifecycleHandlers: NSObject {
     }
 
     @objc func didBecomeActive() {
-        performAppVersionCheck()
+        self.compatibilityService.check(isCheckEnabled: config().CompatibilityCheckEnabled)
     }
 
     @objc func didEnterBackground() {

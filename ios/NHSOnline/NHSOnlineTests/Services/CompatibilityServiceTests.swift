@@ -3,35 +3,41 @@ import Foundation
 import DeviceKit
 @testable import NHSOnline
 
-class DeviceServiceTests: XCTestCase {
-    var viewControllerMock: UIViewControllerMock?
-    var deviceInfoProtocolMock: MockDeviceInfoProtocol?
+class CompatibilityServiceTests: XCTestCase {
+    var viewControllerMock: HomeViewControllerMocks?
+    var deviceServiceMock: DeviceService?
+    var deviceInfoProtocolMock: DeviceInfoProtocol?
+    var compatibilityService: CompatibilityService?
     
     override func setUp() {
         super.setUp()
-        viewControllerMock = UIViewControllerMock()
+        viewControllerMock = HomeViewControllerMocks()
+        compatibilityService = CompatibilityService(viewController: viewControllerMock!)
+        
     }
     
     func test_versionLessThanRequiredIOSVersionButCompatibleShowsAlert() {
         let deviceService = createDeviceService(version: 10,
                             identifier: "iPhone10,1",
                             description: Device.iPhone8)
+        viewControllerMock?.deviceService = deviceService
         
-        let compatibilityCheck = deviceService.performCompatibilityCheck()
+        compatibilityService!.check(isCheckEnabled: true)
         
-        XCTAssertTrue(compatibilityCheck.canUpdate)
-        XCTAssertFalse(compatibilityCheck.correctVersion)
+        XCTAssertTrue(compatibilityService!.hasShownUpdateDialog)
+        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
     }
     
     func test_versionLessThanRequiredVersionIncompatibleDevice() {
         let deviceService = createDeviceService(version: 10,
                             identifier: "iPhone3,1",
                             description: Device.iPhone4)
+        viewControllerMock?.deviceService = deviceService
         
-        let compatibilityCheck = deviceService.performCompatibilityCheck()
+        compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertFalse(compatibilityCheck.canUpdate)
-        XCTAssertFalse(compatibilityCheck.correctVersion)
+        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
+        XCTAssertTrue(compatibilityService!.hasShownIncompatibleScreen)
     }
     
     
@@ -39,22 +45,24 @@ class DeviceServiceTests: XCTestCase {
         let deviceService = createDeviceService(version: 11,
                             identifier: "iPhone10,1",
                             description: Device.iPhone8)
+        viewControllerMock?.deviceService = deviceService
         
-        let compatibilityCheck = deviceService.performCompatibilityCheck()
+        compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertTrue(compatibilityCheck.canUpdate)
-        XCTAssertTrue(compatibilityCheck.correctVersion)
+        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
+        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
     }
     
     func test_versionIsGreaterThanRequiredIOSVersion() {
         let deviceService = createDeviceService(version: 12,
                             identifier: "iPhone10,1",
                             description: Device.iPhone8)
+        viewControllerMock?.deviceService = deviceService
         
-        let compatibilityCheck = deviceService.performCompatibilityCheck()
+        compatibilityService?.check(isCheckEnabled: true)
         
-        XCTAssertTrue(compatibilityCheck.canUpdate)
-        XCTAssertTrue(compatibilityCheck.correctVersion)
+        XCTAssertFalse(compatibilityService!.hasShownIncompatibleScreen)
+        XCTAssertFalse(compatibilityService!.hasShownUpdateDialog)
     }
     
     override func tearDown() {

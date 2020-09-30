@@ -59,6 +59,14 @@
 		4AB36C752514F7FA00204E08 /* MockDeviceInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */; };
 		4AB36C772514F80500204E08 /* DeviceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C762514F80500204E08 /* DeviceServiceTests.swift */; };
 		4AB36C792515092400204E08 /* UIViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C782515092400204E08 /* UIViewControllerMock.swift */; };
+		4AF26120252339F9002123B1 /* CompatibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2611F252339F9002123B1 /* CompatibilityService.swift */; };
+		4AF2612225233B85002123B1 /* CompatibilityStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2612125233B84002123B1 /* CompatibilityStruct.swift */; };
+		4AF2612425233B97002123B1 /* CompatibilityServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2612325233B97002123B1 /* CompatibilityServiceTests.swift */; };
+		4AF2612525236563002123B1 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C702514F7E300204E08 /* DeviceService.swift */; };
+		4AF2612625236566002123B1 /* CompatibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2611F252339F9002123B1 /* CompatibilityService.swift */; };
+		4AF2612725236571002123B1 /* CompatibilityStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF2612125233B84002123B1 /* CompatibilityStruct.swift */; };
+		4AF261282523657D002123B1 /* DeviceInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C6F2514F7E300204E08 /* DeviceInfoService.swift */; };
+		4AF261292523657F002123B1 /* DeviceInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB36C6E2514F7E300204E08 /* DeviceInfoProtocol.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		640585EA249237EA009784D5 /* UserContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640585E9249237EA009784D5 /* UserContent.swift */; };
 		64070BC9249D15FF00A7D3ED /* LoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64070BC8249D15FF00A7D3ED /* LoggingService.swift */; };
@@ -363,6 +371,9 @@
 		4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDeviceInfoProtocol.swift; sourceTree = "<group>"; };
 		4AB36C762514F80500204E08 /* DeviceServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceServiceTests.swift; sourceTree = "<group>"; };
 		4AB36C782515092400204E08 /* UIViewControllerMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerMock.swift; sourceTree = "<group>"; };
+		4AF2611F252339F9002123B1 /* CompatibilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompatibilityService.swift; sourceTree = "<group>"; };
+		4AF2612125233B84002123B1 /* CompatibilityStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompatibilityStruct.swift; sourceTree = "<group>"; };
+		4AF2612325233B97002123B1 /* CompatibilityServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompatibilityServiceTests.swift; sourceTree = "<group>"; };
 		4F5D0A748506E0402D6372A7 /* Pods-NHSOnline.onboardingaos.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.onboardingaos.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.onboardingaos.xcconfig"; sourceTree = "<group>"; };
 		505C248E6BA905656E7B0DAD /* Pods-NHSOnlineTests.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch9.xcconfig"; sourceTree = "<group>"; };
 		509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.development.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.development.xcconfig"; sourceTree = "<group>"; };
@@ -1013,6 +1024,7 @@
 		C276D5542076557400F3B1E5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4AF2611F252339F9002123B1 /* CompatibilityService.swift */,
 				4AB36C6E2514F7E300204E08 /* DeviceInfoProtocol.swift */,
 				4AB36C6F2514F7E300204E08 /* DeviceInfoService.swift */,
 				4AB36C702514F7E300204E08 /* DeviceService.swift */,
@@ -1169,6 +1181,7 @@
 		F381C3AFAB024BF56A9DAA6E /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4AF2612325233B97002123B1 /* CompatibilityServiceTests.swift */,
 				4AB36C762514F80500204E08 /* DeviceServiceTests.swift */,
 				F381C32BC0511A0BF493AFD7 /* KnownServicesTests.swift */,
 				F975F4952481082E00D3957F /* BiometricServiceTests.swift */,
@@ -1250,6 +1263,7 @@
 		F9BAFC2C247FB32300BF1CAE /* AlertHandling */ = {
 			isa = PBXGroup;
 			children = (
+				4AF2612125233B84002123B1 /* CompatibilityStruct.swift */,
 				F9EBD650237C3C38006FFA8C /* DownloadAlertHandling */,
 				131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */,
 			);
@@ -1713,6 +1727,7 @@
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				64070BCB24A0E2FF00A7D3ED /* LogLevel.swift in Sources */,
+				4AF2612225233B85002123B1 /* CompatibilityStruct.swift in Sources */,
 				F959D50624F91ECF001F923A /* PCSVeriSureFlowResponseStub.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4AB36C712514F7E300204E08 /* DeviceInfoProtocol.swift in Sources */,
@@ -1748,6 +1763,7 @@
 				F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */,
 				ED6A4515244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift in Sources */,
 				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
+				4AF26120252339F9002123B1 /* CompatibilityService.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
 				993DCD87249A4837000D87BB /* CalendarData.swift in Sources */,
@@ -1829,6 +1845,7 @@
 				F381CB4C747B08D2BC4ADB45 /* MailToSchemeHandlerTests.swift in Sources */,
 				F381CB161F572192394126D1 /* SchemeHandlersTests.swift in Sources */,
 				3E2244CE24A49A4A00DB989F /* DateTime_ExtensionsTests.swift in Sources */,
+				4AF2612425233B97002123B1 /* CompatibilityServiceTests.swift in Sources */,
 				F975F4962481082E00D3957F /* BiometricServiceTests.swift in Sources */,
 				F94E3477248547D9009CAAC0 /* BiometricServiceMocks.swift in Sources */,
 				F381CE46D03B8D3A42FC7693 /* TelSchemeHandlerTests.swift in Sources */,
@@ -1840,6 +1857,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F91E298824F67447001BDD21 /* BiometricActions.swift in Sources */,
+				4AF2612525236563002123B1 /* DeviceService.swift in Sources */,
 				F91E298924F67447001BDD21 /* SplashScreenView.swift in Sources */,
 				F91E298A24F67447001BDD21 /* NotificationsService.swift in Sources */,
 				F91E298B24F67447001BDD21 /* PaycassoDocumentTypes.swift in Sources */,
@@ -1863,6 +1881,7 @@
 				F91E299D24F67447001BDD21 /* BiometricErrorCodes.swift in Sources */,
 				F91E299E24F67447001BDD21 /* WebAppInterface.swift in Sources */,
 				F91E299F24F67447001BDD21 /* UrlHelper.swift in Sources */,
+				4AF2612625236566002123B1 /* CompatibilityService.swift in Sources */,
 				F91E29A024F67447001BDD21 /* LifecycleHandlers.swift in Sources */,
 				F91E29A124F67447001BDD21 /* HomeViewController.swift in Sources */,
 				F91E29A224F67447001BDD21 /* BiometricAlert.swift in Sources */,
@@ -1876,10 +1895,12 @@
 				F91E29AA24F67447001BDD21 /* Configuration.swift in Sources */,
 				F91E29AB24F67447001BDD21 /* DataDownloadAlertType.swift in Sources */,
 				F91E29AC24F67447001BDD21 /* Policy.swift in Sources */,
+				4AF261292523657F002123B1 /* DeviceInfoProtocol.swift in Sources */,
 				F91E29AD24F67447001BDD21 /* LoggingRequest.swift in Sources */,
 				F91E29AE24F67447001BDD21 /* BaseSchemeHandlers.swift in Sources */,
 				F91E29AF24F67447001BDD21 /* BiometricAlertType.swift in Sources */,
 				F91E29B024F67447001BDD21 /* DataDownloadErrorStrings.swift in Sources */,
+				4AF2612725236571002123B1 /* CompatibilityStruct.swift in Sources */,
 				F91E29B124F67447001BDD21 /* ConfigurationServiceManager.swift in Sources */,
 				F91E29B224F67447001BDD21 /* AAID.swift in Sources */,
 				F91E29B324F67447001BDD21 /* BiometricOutcomes.swift in Sources */,
@@ -1892,6 +1913,7 @@
 				F91E29BA24F67447001BDD21 /* ErrorMessage.swift in Sources */,
 				F96B65CB24F7B67A000F6175 /* PaycassoErrors.swift in Sources */,
 				F91E29BB24F67447001BDD21 /* DataDownloadAlert.swift in Sources */,
+				4AF261282523657D002123B1 /* DeviceInfoService.swift in Sources */,
 				F91E29BC24F67447001BDD21 /* CALayer_Extensions.swift in Sources */,
 				F91E29BD24F67447001BDD21 /* KnownServicesProtocol.swift in Sources */,
 				F91E29BE24F67447001BDD21 /* SchemeHandlers.swift in Sources */,

@@ -52,6 +52,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     var configurationServiceProvider: ConfigurationServiceProtocol?
     var laContext: LAContext = LAContext()
     var deviceService: DeviceService?
+    var compatibilityService: CompatibilityService?
     public var selectedTab: Int?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,17 +129,19 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         let deviceInfoService = DeviceInfoService()
         deviceService = DeviceService(viewController: self,
                                       deviceInfoProtocol: deviceInfoService)
+        compatibilityService = CompatibilityService(viewController: self)
         paycassoService = PaycassoService(homeViewController: self, appWebInterface: appWebInterface!, loggingService: LoggingService())
         
 
         DispatchQueue.main.async {
             switch self.configurationServiceProvider!.getConfigurationResponse() {
             case .success(_):
-                var urlToLoad = UrlHelper.checkForUrlOverride(url: config().HomeUrl)
-                if (config().CompatibilityCheckEnabled) {
-                 urlToLoad = self.checkCompatibilityAndLoadURL()
+                self.compatibilityService!.check(isCheckEnabled: config().CompatibilityCheckEnabled)
+                if (self.compatibilityService!.hasShownIncompatibleScreen || self.compatibilityService!.hasShownUpdateDialog) {
+                    return
                 }
-                self.webViewController?.loadPage(url: urlToLoad)
+
+                self.webViewController?.loadPage(url: UrlHelper.checkForUrlOverride(url: config().HomeUrl))
                 return
             default:
                 self.apiCallFailure()
@@ -155,19 +158,21 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         }
     }
     
-    func checkCompatibilityAndLoadURL() -> String {
-        let url = URL(string: config().CompatibilityScreenUrl,
-                      relativeTo: URL(string: config().HomeUrl))?.absoluteString
-        
-        if (url != nil) {
-            var urlComponents = URLComponents(string: url!)
-            urlComponents?.queryItems = [URLQueryItem(name: "incompatible", value: "true")]
-            
-            return urlComponents!.url!.absoluteString
+   func loadIncompatibleScreen() {
+       let url = URL(string: config().CompatibilityScreenUrl,
+                     relativeTo: URL(string: config().HomeUrl))?.absoluteString
+    
+        if (url == nil) {
+            self.webViewController?.loadPage(url: UrlHelper.checkForUrlOverride(url: config().HomeUrl))
+            return
         }
-        
-        return UrlHelper.checkForUrlOverride(url: config().HomeUrl)
-    }
+    
+        var urlComponents = URLComponents(string: url!)!
+        urlComponents.queryItems = [URLQueryItem(name: "incompatible", value: "true")]
+
+        self.webViewController?.loadPage(url:urlComponents.url!.absoluteString, getKnownServices: false)
+        LoggingService().logError(message: "iOS Compatibility Check Failure: Device is incompatible and cannot be upgraded")
+   }
     
     func delayedBiometricsStart(_ timer: Double) {
         let webView = self.webViewController?.webView
@@ -448,7 +453,6 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     func createHomeUrlSubRequestWithPath(urlPathToAppend: String) -> String {
         let homeUrl = URL(string: config().HomeUrl)
         let url = URL(string: urlPathToAppend, relativeTo: homeUrl)?.absoluteString
-
         return url!
     }
     
@@ -821,13 +825,13 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
             }
         })
     }
-
-    func dismissPageLeaveWarningDialogue() {
-        NotificationCenter.default.post(name: CustomNotifications.dismissLeavingPageAlert, object: nil)
-    }
     
     func dismissIOSVersionUpdateWarningDialog() {
         NotificationCenter.default.post(name: CustomNotifications.dismissIOSVersionUpdateAlert, object: nil)
+    }
+
+    func dismissPageLeaveWarningDialogue() {
+        NotificationCenter.default.post(name: CustomNotifications.dismissLeavingPageAlert, object: nil)
     }
 
     private func addCalendarEvent(eventStore: EKEventStore, calendarData: CalendarData) {
@@ -928,3 +932,4 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         self.present(alert, animated: true)
     }
 }
+

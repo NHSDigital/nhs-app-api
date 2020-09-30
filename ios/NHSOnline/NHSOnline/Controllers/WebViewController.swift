@@ -121,12 +121,21 @@ class WebViewController: UIViewController, WKUIDelegate {
         loadPage(url: url.absoluteString, isConnectedToNetwork: Reachability.isConnectedToNetwork())
     }
     
-    func loadPage(url: String) {
-        loadPage(url: url, isConnectedToNetwork: Reachability.isConnectedToNetwork())
+    func loadPage(url: String, getKnownServices: Bool = true) {
+        loadPage(url: url, isConnectedToNetwork: Reachability.isConnectedToNetwork(), getKnownServices: getKnownServices)
     }
 
-    func loadPage(url: String, isConnectedToNetwork: Bool) {
+    func loadPage(url: String, isConnectedToNetwork: Bool, getKnownServices: Bool = true) {
         self.webViewDelegate?.clearTimer()
+        
+        guard var resolvedUrl = UrlHelper.resolveAppScheme(url: url) else {
+            return
+        }
+        
+        if (!getKnownServices) {
+            webView.loadPage(url: resolvedUrl.absoluteString)
+            return
+        }
         
         var knownServices: KnownServices
         
@@ -135,10 +144,6 @@ class WebViewController: UIViewController, WKUIDelegate {
             knownServices = knownServicesResponse
         default:
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
-            return
-        }
-
-        guard var resolvedUrl = UrlHelper.resolveAppScheme(url: url) else {
             return
         }
 
@@ -175,6 +180,16 @@ class WebViewController: UIViewController, WKUIDelegate {
 
     func reloadWebView() {
         let viewController = webViewDelegate?.viewController
+        
+        if (config().CompatibilityCheckEnabled) {
+            let compatibilityService = viewController!.compatibilityService!
+            compatibilityService.check(isCheckEnabled: config().CompatibilityCheckEnabled)
+
+            if (compatibilityService.hasShownIncompatibleScreen || compatibilityService.hasShownUpdateDialog) {
+                return
+            }
+        }
+        
         viewController!.clearSelectedTab()
         if let failedUrl = webViewDelegate!.failedUrl {
             let urlToReload = UrlHelper.getReloadUrl(url: failedUrl)

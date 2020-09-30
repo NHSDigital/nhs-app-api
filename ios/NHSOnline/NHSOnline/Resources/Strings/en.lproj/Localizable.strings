@@ -40,11 +40,9 @@
 
 /*App update for paycasso*/
 "AppUpdateIOSVersionRequiredMessage" = "We are updating the NHS App soon. It will require iOS 11.0 or later.\n\nTo continue using the NHS App, you'll need to update your software version.";
-"AppUpdateIOSVersionRequiredSettingsButton" = "Go to settings";
-"AppUpdateIOSVersionRequiredCancelButtonText" = "Cancel";
 
 "AppUpdateRequiredIOSVersionTitle" = "You are using an old version of iOS";
-"AppUpdateIOSVersionRequiredNotCompatibleMessage" = "We are updating the NHS App soon. It will require iOS 11.0 or later, which is not compatible with this device.\n\nYou can continue to use the app now. When we update the app, you will still be able to access NHS App services from the browser on your mobile device, or a desktop or laptop computer, at nhs.uk/app.";
+"AppUpdateIOSVersionRequiredNotCompatibleMessage" = "We are updating the NHS App soon. It will require iOS 11.0 or later, which is not compatible with this device.\n\nWhen we update the app, you will still be able to access NHS App services from the browser on your mobile device, or a desktop or laptop computer, at www.nhsapp.service.nhs.uk.";
 "AppUpdateIOSVersionRequiredOKButtonText" = "OK";
 
 /*Alert strings*/

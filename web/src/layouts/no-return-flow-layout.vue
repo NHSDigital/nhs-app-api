@@ -6,7 +6,7 @@
       <web-header :show-menu="false"
                   :show-links="false"
                   :show-header-buttons="false"
-                  :logo-link="false"/>
+                  :is-logo-link="false"/>
     </div>
     <content-header id="content-header"
                     :show-bread-crumb="false"

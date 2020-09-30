@@ -293,7 +293,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 WebViewController.Properties.usingAbsoluteUri = false
                 viewController.webViewController!.headerStrategy = LoggedInHeaderStrategy(controller: viewController)
                 viewController.webViewController!.applyHeaderStrategy()
-                viewController.deviceService?.appUpdateAlertForIOSVersion()
+                viewController.deviceService!.appUpdateAlertForIOSVersion()
                 break
             case UserContent.onLogout.rawValue:
                 WebViewController.Properties.usingAbsoluteUri = true
