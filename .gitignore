@@ -10,3 +10,4 @@ newman/
 
 __pycache__/
 .envrc
+.venv
