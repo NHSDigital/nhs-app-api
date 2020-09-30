@@ -37,5 +37,3 @@ extends:
     apigee_deployments:
       - environment: internal-dev
         make_spec_visible: true
-      - environment: internal-dev-sandbox
-        proxy_path: sandbox
