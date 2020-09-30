@@ -8,6 +8,7 @@ import com.android.volley.Response
 import com.nhs.online.nhsonline.R
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.json.JSONObject
 import org.threeten.bp.LocalDateTime
 import java.util.logging.Level
@@ -22,9 +23,12 @@ class LoggingService(val context: Context, volleyQueueProvider: IVolleyQueueProv
     private val logger = Logger.getLogger(TAG)
 
     init {
-        Moshi.Builder().build().also {
-            loggingRequestAdapter = it.adapter(LoggingRequest::class.java)
-        }
+        Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+            .also {
+                loggingRequestAdapter = it.adapter(LoggingRequest::class.java)
+            }
     }
 
     override fun logError(message: String) {

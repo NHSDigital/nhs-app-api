@@ -10,6 +10,7 @@ import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteracti
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class WebAppInterfaceNhsLogin(
     private val activity: Activity,
@@ -32,6 +33,7 @@ class WebAppInterfaceNhsLogin(
     private val moshiBuilder: JsonAdapter<PaycassoData>
         get() {
             return Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
                 .add(PaycassoDocumentTypeAdapter(nhsWeb.onFailure))
                 .build()
                 .adapter(PaycassoData::class.java)

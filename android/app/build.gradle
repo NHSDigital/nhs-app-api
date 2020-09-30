@@ -255,7 +255,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.squareup.moshi:moshi:1.10.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.9.2'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.10.0'
 
     implementation 'com.paycasso.sdk:paycasso:2020.9.2-11-2'
     implementation 'com.paycasso.sdk:paycasso-view:2020.9.2-11'
@@ -263,8 +263,7 @@ dependencies {
     implementation 'com.paycasso.sdk:paycasso-tensorflow:2020.8.10'
     implementation 'com.paycasso.sdk:paycasso-jj2000:2020.8.10'
 
-
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.10.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
     testImplementation 'junit:junit:4.12'
@@ -295,7 +294,6 @@ tasks.withType(Test) {
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
-
     reports {
         xml.enabled = true
         html.enabled = true

@@ -12,6 +12,7 @@ import com.nhs.online.nhsonline.services.knownservices.enums.MenuTabAdapter
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewModeAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.concurrent.Callable
@@ -32,6 +33,7 @@ class ConfigurationService(
         try {
             val jsonString = httpClient.readText(configurationUrl, timeoutMilliseconds)
             return Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
                     .add(MenuTabAdapter())
                     .add(JavaScriptInteractionModeAdapter())
                     .add(ViewModeAdapter())
