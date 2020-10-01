@@ -2,30 +2,15 @@
   <div v-if="showTemplate && !loading" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div v-if="messageRecipients && messageRecipients.length > 0">
-        <message-dialog v-if="isError"
-                        message-type="error"
-                        role="alert"
-                        :focusable="true">
-          <message-text>
-            {{ $t('messages.thereIsAProblem') }}
-          </message-text>
-          <message-list>
-            <li>
-              {{ $t('messages.youNeedToSelectYesOrNo') }}
-            </li>
-          </message-list>
-        </message-dialog>
-        <question :error="isError" :required="true">
-          <question-choice id="messagingUrgency"
-                           v-model="answer"
-                           :error="isError"
-                           :error-text="[$t('messages.youNeedToSelectYesOrNo')]"
-                           :options="questionOptions"
-                           :required="true"
-                           :legend="$t('navigation.pages.titles.gpMessagesUrgency')"
-                           name="messagingUrgency"
-                           @validate="onAnswerValidate"/>
-        </question>
+        <nhs-uk-radio-group id="messagingUrgency"
+                            v-model="answer"
+                            :error="isError"
+                            :error-text="$t('messages.youNeedToSelectYesOrNo')"
+                            :items="questionOptions"
+                            :required="true"
+                            :heading="$t('navigation.pages.titles.gpMessagesUrgency')"
+                            name="messagingUrgency"
+                            @validate="onAnswerValidate"/>
         <generic-button id="continueButton"
                         :button-classes="['nhsuk-button']"
                         @click="continueButtonClicked">
@@ -55,11 +40,7 @@
 <script>
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageList from '@/components/widgets/MessageList';
-import MessageText from '@/components/widgets/MessageText';
-import Question from '@/components/online-consultations/Question';
-import QuestionChoice from '@/components/online-consultations/QuestionChoice';
+import NhsUkRadioGroup from '@/components/nhsuk-frontend/NhsUkRadioGroup';
 import { redirectTo, isEmptyArray } from '@/lib/utils';
 import {
   GP_MESSAGES_PATH,
@@ -76,21 +57,17 @@ export default {
   components: {
     DesktopGenericBackLink,
     GenericButton,
-    MessageDialog,
-    MessageList,
-    MessageText,
-    Question,
-    QuestionChoice,
+    NhsUkRadioGroup,
   },
   data() {
     return {
       isError: false,
       loading: true,
       questionOptions: [{
-        code: YES,
+        value: YES,
         label: this.$t('messages.iNeedAdviceNow'),
       }, {
-        code: NO,
+        value: NO,
         label: this.$t('messages.myMessageIsNotUrgent'),
       }],
       messagingPath: GP_MESSAGES_PATH,

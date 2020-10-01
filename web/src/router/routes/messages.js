@@ -87,7 +87,6 @@ export const GP_MESSAGES_URGENCY = {
   name: GP_MESSAGES_URGENCY_NAME,
   component: GpMessagesUrgencyPage,
   meta: {
-    headerKey: 'navigation.pages.headers.gpMessagesUrgency',
     titleKey: 'navigation.pages.titles.gpMessagesUrgency',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_MORE,
