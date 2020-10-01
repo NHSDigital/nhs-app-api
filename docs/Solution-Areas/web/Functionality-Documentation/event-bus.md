@@ -2,17 +2,17 @@
 
 The EventBus is simply another instance of Vue that we can import into any component/module, and either send to or receive events from one another without either knowing the other exists
 
-### **Naming an event**
+### Naming an event
 
-All you need to do is define and export it from [`event-bus.js`](../../../../web/src/services/event-bus.js)
+All you need to do is define and export it from **src / services / event-bus.js**
 
 ```js
 export const SEND_MESSAGE = 'send-message';
 ```
 
-### **Emitting an event**
+### Emitting an event
 
-Import the event name and EventBus from [`event-bus.js`](../../../../web/src/services/event-bus.js)
+Import the event name and EventBus from **src / services / event-bus.js**
 
 ```js
 import { SEND_MESSAGE, EventBus } from '@/services/event-bus';
@@ -26,7 +26,7 @@ EventBus.$emit(SEND_MESSAGE, { sender: 'NHS App', message: 'Hello!' });
 EventBus.$emit(SEND_MESSAGE, 'NHS App', 'Hello!');
 ```
 
-### **Receiving an event**
+### Receiving an event
 
 Again import the event name and EventBus as above
 
@@ -49,7 +49,7 @@ beforeMount() {
 },
 ```
 
-> When registering callbacks in a Vue component, be sure to deregister it in `beforeDestroy`
+_When registering callbacks in a Vue component, be sure to deregister it in `beforeDestroy`_
 
 Deregister the callback using the EventBus `$off` method, passing the event name and callback
 

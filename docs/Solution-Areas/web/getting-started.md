@@ -2,7 +2,7 @@
 
 ## Setup
 
-[Host file entries](../../getting-started.md#host-file-entries)
+[Host file entries](/Getting-Started#host-file-entries)
 
 ## Develop in Docker
 

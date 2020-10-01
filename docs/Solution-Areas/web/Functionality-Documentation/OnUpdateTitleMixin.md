@@ -1,6 +1,6 @@
 # OnUpdateTitleMixin
 
-This mixin works very much like the [`OnUpdateHeaderMixin`](on-update-header-mixin.md).
+This mixin works very much like the [OnUpdateHeaderMixin](OnUpdateHeaderMixin).
 
 The differences being:
 
@@ -8,4 +8,4 @@ The differences being:
 - the first payload parameter `newHeader` is `newTitle` with a single expected key - `titleKey` - and is used to set `this.title` on the component
 - `overrideShowContentHeader` is not an expected payload parameter
 
-See the [OnUpdateHeaderMixin examples](on-update-header-mixin.md#example-use-cases) for more information
+See the [OnUpdateHeaderMixin examples](OnUpdateHeaderMixin.md#example-use-cases) for more information

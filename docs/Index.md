@@ -24,10 +24,9 @@
 
 ## Functionality Documentation
 
-* [Known Services](Functionality-Documentation/known-services.md)
-* [Silver Integration Jump-Off Creation](Functionality-Documentation/silver-integration-jump-off-creation.md)
 * [Fake GP Supplier](Functionality-Documentation/fake-gp-supplier.md)
-* [Adding New Public Health Notifications](Functionality-Documentation/new-public-health-notifications.md)
+* [Known Services](Functionality-Documentation/known-services.md)
+* [Silver Integration Jump Off Creations](Functionality-Documentation/silver-integration-jump-off-creation.md)
 
 ## How-tos
 
@@ -36,4 +35,6 @@
 * [Add Local Development Secrets](How-Tos/add-local-development-secrets.md)
 * [Configure Azure DevOps Feeds](How-Tos/configure-azure-dev-ops-feeds.md)
 * [Configure Service Journey Rules](How-Tos/configure-service-journey-rules.md)
+* [Create Cocoapod From Third-Party Framework](How-Tos/create-cocoapod-from-thirdparty-framework.md)
+* [New Public Health Notifications](How-Tos/new-public-health-notifications.md)
 * [Recreate iOS Distribution Certificate](How-Tos/recreate-ios-distribution-certificate.md)

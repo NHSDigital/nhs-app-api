@@ -1,8 +1,8 @@
 # OnUpdateHeaderMixin
 
-These docs will assume an understanding of the [`EventBus`](event-bus.md) as this mixin listens for `UPDATE_HEADER` events emitted via the EventBus.
+These docs will assume an understanding of the [EventBus](event-bus.md) as this mixin listens to it for `UPDATE_HEADER` events.
 
-## **The payload**
+## The payload
 
 The callback takes three parameters for its payload:
 
@@ -12,19 +12,17 @@ The callback takes three parameters for its payload:
 
   All properties are expected to be strings, whilst `headerKey` and `captionKey` can also be callback functions, accepting the Vuex store and Vue-i18n instances to be passed as arguments, with the result being assigned to the relevant component properties.
 
-  The `captionSize` _should_ be one of the values defined in the [caption-size](../../../../web/src/lib/caption-size.js) constants.
+  The `captionSize` _should_ be one of the values defined in the **src / lib / caption-size.js** constants.
 
 - **`localised`**
 
-  A boolean indicating whether the `headerKey` and `captionKey` have already been localised or not.
-
-  _Note: If `localised === true` it is assumed the `headerKey` and `captionKey` values have already been determined and will be handled as such._
+  A boolean indicating whether or not the `headerKey` and `captionKey` have been localised.
 
 - **`overrideShowContentHeader`**
 
   Whether the receiver should definitely show this header. The naming of this somewhat couples it to the current use case in ContentHeader, but essentially indicates this is an important header, so it should be shown.
 
-## **Example use cases**
+## Example use cases
 
 ```js
 // locale

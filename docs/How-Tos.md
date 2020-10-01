@@ -5,4 +5,6 @@
 * [Add Local Development Secrets](How-Tos/add-local-development-secrets.md)
 * [Configure Azure DevOps Feeds](How-Tos/configure-azure-dev-ops-feeds.md)
 * [Configure Service Journey Rules](How-Tos/configure-service-journey-rules.md)
+* [Create Cocoapod From Third-Party Framework](How-Tos/create-cocoapod-from-thirdparty-framework.md)
+* [New Public Health Notifications](How-Tos/new-public-health-notifications.md)
 * [Recreate iOS Distribution Certificate](How-Tos/recreate-ios-distribution-certificate.md)

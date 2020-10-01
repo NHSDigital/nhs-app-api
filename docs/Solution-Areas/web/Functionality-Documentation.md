@@ -1,10 +1,4 @@
-# NHS App - Web
-
-## Getting Started
-
-* [Getting Started](/Solution-Areas/web/getting-started)
-
-## Functionality Documentation
+# Functionality Documentation
 
 * [EnvBuilder](/Solution-Areas/web/Functionality-Documentation/env-builder)
 * [EventBus](/Solution-Areas/web/Functionality-Documentation/event-bus)
@@ -12,8 +6,3 @@
 * [OnUpdateTitleMixin](/Solution-Areas/web/Functionality-Documentation/OnUpdateTitleMixin)
 * [Router](/Solution-Areas/web/Functionality-Documentation/router)
 * [Breadcrumbs](/Solution-Areas/web/Functionality-Documentation/breadcrumbs)
-
-## How-Tos
-
-* [Adding new environment variables](/Solution-Areas/web/How-Tos/new-env-vars)
-* [Running `npm run dev` with non-default env vars](/Solution-Areas/web/How-Tos/non-default-npm-run-dev)
