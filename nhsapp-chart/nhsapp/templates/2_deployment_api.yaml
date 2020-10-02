@@ -308,7 +308,7 @@ spec:
         - name: CONSENT_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}-mongo
         - name: MONGO_CONNECTION_STRING
-        {{- if eq .Values.region "uks" }}
+        {{- if eq .Values.region "uksouth" }}
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
