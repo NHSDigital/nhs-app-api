@@ -9,6 +9,9 @@ namespace NHSOnline.Backend.Support
 {
     public class OdsCodeMassager : IOdsCodeMassager
     {
+        private const string OdsCodeRegex = @"([A-Z]\d{5}|[A-Z]\d[A-Z]\d[A-Z])";
+        private static readonly string OdsCodeMapRegex = $"^{OdsCodeRegex}:{OdsCodeRegex}(;{OdsCodeRegex}:{OdsCodeRegex})*$";
+
         private static readonly IDictionary<string, string> DefaultOdsCodeMap =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -57,9 +60,7 @@ namespace NHSOnline.Backend.Support
 
         private bool TryParseOdsRemapMap(string odsRemapMap, out Dictionary<string, string> odsCodeMap)
         {
-            const string odsCodeMapRegex = "^([A-Z][0-9]{5}:[A-Z][0-9]{5})(;[A-Z][0-9]{5}:[A-Z][0-9]{5})*$";
-
-            if (!Regex.IsMatch(odsRemapMap, odsCodeMapRegex))
+            if (!Regex.IsMatch(odsRemapMap, OdsCodeMapRegex))
             {
                 _logger.LogWarning("Unable to parse environment variable ODS_REMAP_MAP");
                 odsCodeMap = new Dictionary<string, string>();

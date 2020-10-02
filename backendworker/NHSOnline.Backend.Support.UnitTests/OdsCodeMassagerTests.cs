@@ -98,6 +98,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow("A12345:B34567; D98765:E76543", "D98765", "D98765")]    // unexpected whitespace in map
         [DataRow("A12345:B34567;D9765:E76543", "A12345", "A12345")]    // ODS Code too short
         [DataRow("A12345:B34567;99765:E76543", "A12345", "A12345")]    // ODS Code invalid
+        [DataRow("A123456:B34567;D99765:E76543", "A12345", "A12345")]    // ODS Code too long
         [DataRow("A12345:B34567;99765:E76543;", "A12345", "A12345")]    // No trailing semicolon
         public void CheckOdsCode_IsEnabledButMapInvalid_ReturnsDefaultMappings(
             string odsCodeMap, string inputOdsCode, string expectedOutputOdsCode)
@@ -123,6 +124,9 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataRow("A12345:B34567;D98765:E76543", "D98765", "E76543")]    // mapped code is mapped
         [DataRow("A12345:B34567;D98765:E76543", "G85075", "G85075")]    // Non-mapped code is not mapped
         [DataRow("A12345:B34567;D98765:E76543", "A12345", "B34567")]    // mapped code is mapped
+        [DataRow("A1B2C:B3E4F;C9D7F:E7G5H", "A1B2C", "B3E4F")]          // ANANA format codes supported
+        [DataRow("A1B2C:B34567;C9D7F:E76543", "A1B2C", "B34567")]       // Mixture of ANANA and old-format codes supported
+        [DataRow("B34567:A1B2C;D98765:C9D7F", "D98765", "C9D7F")]       // Mixture of ANANA and old-format codes supported
         public void CheckOdsCode_IsEnabledAndValidMapSpecified_UsesSpecifiedMappings(
             string odsCodeMap, string inputOdsCode, string expectedOutputOdsCode)
         {
