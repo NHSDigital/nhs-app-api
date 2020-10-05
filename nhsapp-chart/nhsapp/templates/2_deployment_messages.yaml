@@ -88,7 +88,7 @@ spec:
         - name: CORS_AUTHORITY
           value: "https://*.{{ $.Values.domain }}"
         - name: MONGO_CONNECTION_STRING
-        {{- if eq .Values.region "uks" }}
+        {{- if eq .Values.region "uksouth" }}
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}

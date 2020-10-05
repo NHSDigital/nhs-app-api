@@ -62,7 +62,7 @@ spec:
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/mnt/secrets-store/sessionKey"
         - name: MONGO_CONNECTION_STRING
-        {{- if eq .Values.region "uks" }}
+        {{- if eq .Values.region "uksouth" }}
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-uks-{{ .Chart.AppVersion }}
