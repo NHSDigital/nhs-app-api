@@ -1,0 +1,16 @@
+---
+cosmosDBName: onboardingaos
+odsRemapEnabled: true
+odsRemapMap: "G85075:X00100;G85672:X00100;A21464:A29928"
+cidHostname: auth.aos.signin.nhs.uk
+cidFidoHostname: uaf.aos.signin.nhs.uk
+akamaiEnv: nhsapp.service.nhs.uk
+
+users:
+  notificationHubPath: nhsapp-onboardingaos
+
+web:
+  publicURL: www-onboardingaos.nhsapp.service.nhs.uk
+
+api:
+  publicURL: api-onboardingaos.nhsapp.service.nhs.uk
