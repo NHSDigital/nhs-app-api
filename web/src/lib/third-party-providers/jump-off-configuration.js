@@ -75,6 +75,10 @@ export default {
         type: 'appointments',
         redirectPath: '/appointment',
       },
+      correspondence: {
+        type: 'correspondence',
+        redirectPath: '/correspondence',
+      },
     },
     engage: {
       admin: {

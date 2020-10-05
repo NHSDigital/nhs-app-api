@@ -90,6 +90,21 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'correspondence',
+        path: '/correspondence',
+        jumpOffContent: {
+          headerText: 'GNCR correspondence',
+        //  descriptionText: '<TBC>',
+        },
+        thirdPartyWarning: {
+          featureName: 'TBC - dummy text to support GNCR testing',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
   pkb: {

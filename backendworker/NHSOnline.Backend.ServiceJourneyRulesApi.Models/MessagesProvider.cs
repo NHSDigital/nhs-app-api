@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         engage,
         pkb,
         pkbCie,
-        testSilverThirdPartyProvider
+        testSilverThirdPartyProvider,
+        gncr,
     }
 }
