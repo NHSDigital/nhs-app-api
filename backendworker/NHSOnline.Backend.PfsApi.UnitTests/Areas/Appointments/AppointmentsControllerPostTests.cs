@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -14,6 +16,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
@@ -34,9 +37,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
         private Guid _patientId;
+        private Mock<IAnonymousMetricLogger> _mockMetricLogger;
 
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
+
+        private const string AppointmentSessionName = "Mock Session Name";
+        private const string AppointmentSlotType = "Mock Slot Type";
 
         private string RequestAuditMessage()  =>
             $"Attempting to book appointment with id: { _appointmentBookRequest.SlotId} and startTime: {_appointmentBookRequest.StartTime:O}";
@@ -50,7 +57,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpSession, "im1token");
 
-            _appointmentBookRequest = new AppointmentBookRequest();
+            _appointmentBookRequest = new AppointmentBookRequest()
+            {
+                SessionName = AppointmentSessionName,
+                SlotType = AppointmentSlotType,
+            };
 
             _mockAppointmentsService = new Mock<IAppointmentsService>();
 
@@ -60,6 +71,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Returns(true);
 
             _mockAuditor = new Mock<IAuditor>();
+            _mockMetricLogger = new Mock<IAnonymousMetricLogger>();
 
             _mockAppointmentsService.Setup(x => x.Book(
                     It.Is<GpLinkedAccountModel>(
@@ -90,7 +102,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockAuditor.Object,
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
-                new Mock<IAppointmentTypeTransformingVisitor>().Object);
+                new Mock<IAppointmentTypeTransformingVisitor>().Object,
+                _mockMetricLogger.Object);
         }
 
         [TestMethod]
@@ -101,6 +114,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>();
+        }
+
+        [TestMethod]
+        public async Task Post_MetricLogCreated()
+        {
+            // Arrange
+            AppointmentMetricData appointmentMetricData = null;
+            _mockMetricLogger.Setup(x => x.AppointmentBookResult(It.IsAny<AppointmentMetricData>()))
+                .Returns(Task.CompletedTask)
+                .Callback<AppointmentMetricData>((data)=> appointmentMetricData = data);
+
+            // Act
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+
+            // Assert
+            result.Should().BeAssignableTo<CreatedResult>();
+            appointmentMetricData.ToKeyValuePairs().Should().BeEquivalentTo(new[]
+            {
+                new KeyValuePair<string, string>("SessionName", AppointmentSessionName),
+                new KeyValuePair<string, string>("SlotType", AppointmentSlotType),
+                new KeyValuePair<string, string>("StatusCode", "201")
+            });
         }
 
         [TestMethod]

@@ -1,52 +1,71 @@
-﻿﻿using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+ using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Mvc;
  using NHSOnline.Backend.GpSystems.Appointments;
+ using NHSOnline.Backend.GpSystems.Appointments.Models;
+ using NHSOnline.Backend.Metrics;
  using NHSOnline.Backend.Support;
 
  namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class AppointmentCancelResultVisitor : ResultVisitorBase, IAppointmentCancelResultVisitor<IActionResult>
+    public class AppointmentCancelResultVisitor : ResultVisitorBase, IAppointmentCancelResultVisitor<Task<IActionResult>>
     {
-        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, Supplier supplier)
+        private readonly AppointmentCancelRequest _request;
+        private readonly IAnonymousMetricLogger _metricLogger;
+
+        public AppointmentCancelResultVisitor(
+            AppointmentCancelRequest request,
+            IErrorReferenceGenerator errorReferenceGenerator,
+            Supplier supplier,
+            IAnonymousMetricLogger metricLogger)
             : base(errorReferenceGenerator, supplier)
         {
+            _request = request;
+            _metricLogger = metricLogger;
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
 
-        public IActionResult Visit(AppointmentCancelResult.Success result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.Success result)
         {
+            await _metricLogger.AppointmentCancelResult(new AppointmentMetricData(_request.SessionName, _request.SlotType, StatusCodes.Status204NoContent));
             return new NoContentResult();
         }
 
-        public IActionResult Visit(AppointmentCancelResult.BadRequest result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.BadRequest result)
         {
-            return BuildErrorResult(StatusCodes.Status400BadRequest);
+            return await BuildErrorResultTask(StatusCodes.Status400BadRequest);
         }
 
-        public IActionResult Visit(AppointmentCancelResult.AppointmentNotCancellable result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.AppointmentNotCancellable result)
         {
-            return BuildErrorResult(StatusCodes.Status409Conflict);
+            return await BuildErrorResultTask(StatusCodes.Status409Conflict);
         }
 
-        public IActionResult Visit(AppointmentCancelResult.TooLateToCancel result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.TooLateToCancel result)
         {
-            return BuildErrorResult(Constants.CustomHttpStatusCodes.Status461TooLate);
+            return await BuildErrorResultTask(Constants.CustomHttpStatusCodes.Status461TooLate);
         }
 
-        public IActionResult Visit(AppointmentCancelResult.Forbidden result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.Forbidden result)
         {
-            return BuildErrorResult(StatusCodes.Status403Forbidden);
+            return await BuildErrorResultTask(StatusCodes.Status403Forbidden);
         }
 
-        public IActionResult Visit(AppointmentCancelResult.BadGateway result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.BadGateway result)
         {
-            return BuildErrorResult(StatusCodes.Status502BadGateway);
+            return await BuildErrorResultTask(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(AppointmentCancelResult.InternalServerError result)
+        public async Task<IActionResult> Visit(AppointmentCancelResult.InternalServerError result)
         {
-            return BuildErrorResult(StatusCodes.Status500InternalServerError);
+            return await BuildErrorResultTask(StatusCodes.Status500InternalServerError);
+        }
+
+        private async Task<IActionResult> BuildErrorResultTask(int statusCode)
+        {
+            await _metricLogger.AppointmentCancelResult(new AppointmentMetricData(_request.SessionName, _request.SlotType, statusCode));
+            return BuildErrorResult(statusCode);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -16,7 +15,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
     public sealed class MetricLoggerTests
     {
         [TestMethod]
-        [DynamicData(nameof(MetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
+        [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
         public async Task MetricLog_LogsTimestampFirst(Func<IMetricLogger, Task> logMethod, string _)
         {
             // Arrange
@@ -28,13 +27,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await logMethod(metricLogger);
 
             // Assert
-            AssertSingleLine(consoleOut.ToString())
-                .Split(" ")[0].Should()
-                .MatchRegex(@"^Timestamp=\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\:\d\d\d$");
+            MetricLoggerAssert.AssertTimeStamp(consoleOut.ToString());
         }
 
         [TestMethod]
-        [DynamicData(nameof(MetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
+        [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
         public async Task MetricLog_LogsNhsLoginIdFromContext(Func<IMetricLogger, Task> logMethod, string _)
         {
             // Arrange
@@ -47,11 +44,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await logMethod(metricLogger);
 
             // Assert
-            AssertSingleLine(consoleOut.ToString()).Split(" ").Should().Contain("NhsLoginId=123-456-789");
+            MetricLoggerAssert.AssertContains(consoleOut.ToString(),"NhsLoginId=123-456-789");
         }
 
         [TestMethod]
-        [DynamicData(nameof(MetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
+        [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
         public async Task MetricLog_LogsOdsCodeFromContext(Func<IMetricLogger, Task> logMethod, string _)
         {
             // Arrange
@@ -64,11 +61,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await logMethod(metricLogger);
 
             // Assert
-            AssertSingleLine(consoleOut.ToString()).Split(" ").Should().Contain("OdsCode=A1234B");
+            MetricLoggerAssert.AssertContains(consoleOut.ToString(),"OdsCode=A1234B");
         }
 
         [TestMethod]
-        [DynamicData(nameof(MetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
+        [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
         public async Task MetricLog_LogsProofLevelFromContext(Func<IMetricLogger, Task> logMethod, string _)
         {
             // Arrange
@@ -81,11 +78,11 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await logMethod(metricLogger);
 
             // Assert
-            AssertSingleLine(consoleOut.ToString()).Split(" ").Should().Contain("ProofLevel=P9");
+            MetricLoggerAssert.AssertContains(consoleOut.ToString(),"ProofLevel=P9");
         }
 
         [TestMethod]
-        [DynamicData(nameof(MetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
+        [DynamicData(nameof(DefaultMetricLogMethods), typeof(MetricLoggerTests), DynamicDataDisplayName = nameof(MetricLogMethodsDisplayName))]
         public async Task MetricLog_LogsAction(Func<IMetricLogger, Task> logMethod, string action)
         {
             // Arrange
@@ -97,7 +94,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await logMethod(metricLogger);
 
             // Assert
-            AssertSingleLine(consoleOut.ToString()).Split(" ").Should().Contain($"Action={action}");
+            MetricLoggerAssert.AssertContains(consoleOut.ToString(),$"Action={action}");
         }
 
         [TestMethod]
@@ -113,7 +110,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             await metricLogger.MessageRead(messageReadData);
 
             // Assert
-            var splitConsoleMessage = AssertSingleLine(consoleOut.ToString()).Split(" ");
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
             splitConsoleMessage.Should().Contain("MessageId=messageId_1234");
             splitConsoleMessage.Should().Contain("CommunicationId=communicationId_5678");
             splitConsoleMessage.Should().Contain("TransmissionId=transmissionId_4567");
@@ -129,56 +126,27 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             return metricLogger;
         }
 
-        private static string AssertSingleLine(string consoleOut)
-        {
-            return consoleOut
-                .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
-                .Should()
-                .ContainSingle("a single metric log is expected")
-                .Subject.Trim();
-        }
-
-        private static IEnumerable<object[]> MetricLogMethods
+        private static IEnumerable<object[]> DefaultMetricLogMethods
         {
             get
             {
-                yield return new object[]{ Method(metricLogger => metricLogger.Login()), "Login" };
-                yield return new object[]{ Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
-                yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
-                yield return new object[]{ Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
-                yield return new object[]{ Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
+                yield return new object[] { Method(metricLogger => metricLogger.Login()), "Login" };
+                yield return new object[] { Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
+                yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
+                yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
+                yield return new object[] { Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
 
                 var messageReadData = new MessageReadData("messageId", "communicationId", "transmissionId");
-                yield return new object[]{ Method(metricLogger => metricLogger.MessageRead(messageReadData)), "MessageRead" };
+                yield return new object[] { Method(metricLogger => metricLogger.MessageRead(messageReadData)), "MessageRead" };
 
-                yield return new object[]{ Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };
-                yield return new object[]{ Method(metricLogger => metricLogger.NotificationsDisabled()), "NotificationsDisabled" };
+                yield return new object[] { Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };
+                yield return new object[] { Method(metricLogger => metricLogger.NotificationsDisabled()), "NotificationsDisabled" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }
         }
 
-        public static string MetricLogMethodsDisplayName(MethodInfo methodInfo, object[] data) => $"{methodInfo.Name}({data[1]})";
-
-        internal class CaptureConsoleOut : IDisposable
-        {
-            private readonly StringWriter _consoleOutput = new StringWriter();
-            private readonly TextWriter _originalConsoleOutput;
-
-            public CaptureConsoleOut()
-            {
-                _originalConsoleOutput = Console.Out;
-                Console.SetOut(_consoleOutput);
-            }
-
-            public void Dispose()
-            {
-                Console.SetOut(_originalConsoleOutput);
-                Console.Write(ToString());
-                _consoleOutput.Dispose();
-            }
-
-            public override string ToString() => _consoleOutput.ToString();
-        }
+        public static string MetricLogMethodsDisplayName(MethodInfo methodInfo, object[] data) =>
+            $"{methodInfo.Name}({data[1]})";
     }
 }

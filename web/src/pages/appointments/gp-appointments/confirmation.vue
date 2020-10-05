@@ -307,6 +307,8 @@ export default {
 
       await this.$store.dispatch('availableAppointments/book', {
         SlotId: slot.id,
+        SlotType: slot.type,
+        SessionName: slot.sessionName,
         BookingReason: reason,
         StartTime: slot.startTime,
         EndTime: slot.endTime,

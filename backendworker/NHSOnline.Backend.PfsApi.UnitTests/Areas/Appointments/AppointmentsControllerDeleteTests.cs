@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -15,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
@@ -37,14 +39,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
+        private const string AppointmentSessionName = "Mock Session Name";
+        private const string AppointmentSlotType = "Mock Slot Type";
+
         private string _requestAuditMessage;
+        private Mock<IAnonymousMetricLogger> _mockMetricLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
 
-            _appointmentCancelRequest = new AppointmentCancelRequest();
+            _appointmentCancelRequest = new AppointmentCancelRequest()
+            {
+                SessionName = AppointmentSessionName,
+                SlotType = AppointmentSlotType
+            };
 
             _gpSession = new EmisUserSession();
 
@@ -53,6 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsValidationService = new Mock<IAppointmentsValidationService>();
 
             _mockAuditor = new Mock<IAuditor>();
+            _mockMetricLogger = new Mock<IAnonymousMetricLogger>();
 
             _mockAppointmentsService.Setup(x => x.Cancel(
                 It.Is<GpLinkedAccountModel>(
@@ -86,7 +97,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockAuditor.Object,
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
-                new Mock<IAppointmentTypeTransformingVisitor>().Object);
+                new Mock<IAppointmentTypeTransformingVisitor>().Object,
+                _mockMetricLogger.Object);
 
             _requestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
         }
@@ -99,6 +111,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             // Assert
             result.Should().BeAssignableTo<NoContentResult>();
+        }
+
+        [TestMethod]
+        public async Task Delete_MetricLogCreated()
+        {
+            // Arrange
+            AppointmentMetricData appointmentMetricData = null;
+            _mockMetricLogger.Setup(x => x.AppointmentCancelResult(It.IsAny<AppointmentMetricData>()))
+                .Returns(Task.CompletedTask)
+                .Callback<AppointmentMetricData>((data) => appointmentMetricData = data);
+
+            // Act
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _gpSession);
+
+            // Assert
+            result.Should().BeAssignableTo<NoContentResult>();
+            appointmentMetricData.ToKeyValuePairs().Should().BeEquivalentTo(new[]
+            {
+                new KeyValuePair<string, string>("SessionName", AppointmentSessionName),
+                new KeyValuePair<string, string>("SlotType", AppointmentSlotType),
+                new KeyValuePair<string, string>("StatusCode", "204")
+            });
         }
 
         [TestMethod]

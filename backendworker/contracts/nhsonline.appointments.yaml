@@ -259,6 +259,12 @@ components:
         telephoneNumber:
           type: string
           description: Patient's phone number for telephone appointment.
+        slotType:
+          type: string
+          description: Type of appointment slot, e.g. "Baby Clinics".
+        sessionName:
+          type: string
+          description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
     AppointmentCancelRequest:
       type: object
       required:
@@ -273,6 +279,12 @@ components:
           description: Identifier of the reason for the appointment being cancelled. Array
             of valid cancellation reasons is returned when requesting a user's
             current appointments.
+        slotType:
+          type: string
+          description: Type of appointment slot, e.g. "Baby Clinics".
+        sessionName:
+          type: string
+          description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
     AppointmentsResponse:
       type: object
       properties:

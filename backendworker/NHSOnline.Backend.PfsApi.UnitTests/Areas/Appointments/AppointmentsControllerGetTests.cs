@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
@@ -89,7 +90,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 _mockAuditor.Object,
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
-                _mockAppointmentTypeTransformingVisitor.Object);
+                _mockAppointmentTypeTransformingVisitor.Object,
+                new Mock<IAnonymousMetricLogger>().Object);
 
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.Metrics
@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.Metrics
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IMetricLogger, MetricLogger>();
+            services.AddTransient<IAnonymousMetricLogger, AnonymousMetricLogger>();
         }
     }
 }

@@ -1,53 +1,71 @@
-﻿using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    public class AppointmentBookResultVisitor : ResultVisitorBase, IAppointmentBookResultVisitor<IActionResult>
+    public class AppointmentBookResultVisitor : ResultVisitorBase, IAppointmentBookResultVisitor<Task<IActionResult>>
     {
-        public AppointmentBookResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, Supplier supplier)
+        private readonly AppointmentBookRequest _request;
+        private readonly IAnonymousMetricLogger _metricLogger;
+
+        public AppointmentBookResultVisitor(AppointmentBookRequest request,
+            IErrorReferenceGenerator errorReferenceGenerator,
+            Supplier supplier,
+            IAnonymousMetricLogger metricLogger)
             : base(errorReferenceGenerator, supplier)
         {
+            _request = request;
+            _metricLogger = metricLogger;
         }
 
         protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
 
-        public IActionResult Visit(AppointmentBookResult.Success result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.Success result)
         {
+            await _metricLogger.AppointmentBookResult(new AppointmentMetricData(_request.SessionName, _request.SlotType, StatusCodes.Status201Created));
             return new CreatedResult(string.Empty, null);
         }
 
-        public IActionResult Visit(AppointmentBookResult.Forbidden result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.Forbidden result)
         {
-            return BuildErrorResult(StatusCodes.Status403Forbidden);
+            return await BuildErrorResultTask(StatusCodes.Status403Forbidden);
         }
 
-        public IActionResult Visit(AppointmentBookResult.SlotNotAvailable result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.SlotNotAvailable result)
         {
-            return BuildErrorResult(StatusCodes.Status409Conflict);
+            return await BuildErrorResultTask(StatusCodes.Status409Conflict);
         }
 
-        public IActionResult Visit(AppointmentBookResult.BadGateway result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.BadGateway result)
         {
-            return BuildErrorResult(StatusCodes.Status502BadGateway);
+            return await BuildErrorResultTask(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(AppointmentBookResult.BadRequest result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.BadRequest result)
         {
-            return BuildErrorResult(StatusCodes.Status400BadRequest);
+            return await BuildErrorResultTask(StatusCodes.Status400BadRequest);
         }
 
-        public IActionResult Visit(AppointmentBookResult.AppointmentLimitReached result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.AppointmentLimitReached result)
         {
-            return BuildErrorResult(CustomHttpStatusCodes.Status460LimitReached);
+            return await BuildErrorResultTask(CustomHttpStatusCodes.Status460LimitReached);
         }
 
-        public IActionResult Visit(AppointmentBookResult.InternalServerError result)
+        public async Task<IActionResult> Visit(AppointmentBookResult.InternalServerError result)
         {
-            return BuildErrorResult(StatusCodes.Status500InternalServerError);
+            return await BuildErrorResultTask(StatusCodes.Status500InternalServerError);
+        }
+
+        private async Task<IActionResult> BuildErrorResultTask(int statusCode)
+        {
+            await _metricLogger.AppointmentBookResult(new AppointmentMetricData(_request.SessionName, _request.SlotType, statusCode));
+            return BuildErrorResult(statusCode);
         }
     }
 }

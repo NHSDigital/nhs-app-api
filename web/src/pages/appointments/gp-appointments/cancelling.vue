@@ -158,6 +158,8 @@ export default {
         const data = {
           appointmentId: this.appointment.id,
           cancellationReasonId: this.selectedReason,
+          slotType: this.appointment.type,
+          sessionName: this.appointment.sessionName,
         };
         this.labelledBy = undefined;
 

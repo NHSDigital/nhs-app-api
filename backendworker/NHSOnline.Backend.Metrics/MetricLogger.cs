@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -15,46 +12,36 @@ namespace NHSOnline.Backend.Metrics
 
         public MetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
 
-        public Task Login() => LogMetric();
+        public Task Login() => WriteMetricLog();
 
-        public Task UpliftStarted() => LogMetric();
+        public Task UpliftStarted() => WriteMetricLog();
 
-        public Task UserResearchOptIn() => LogMetric();
+        public Task UserResearchOptIn() => WriteMetricLog();
+        
+        public Task UserResearchOptOut() => WriteMetricLog();
 
-        public Task UserResearchOptOut() => LogMetric();
+        public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
 
-        public Task TermsAndConditionsInitialConsent() => LogMetric();
+        public Task MessageRead(MessageReadData data) => CreateMetricLog().With(data).WriteMetricLog();
 
-        public Task MessageRead(MessageReadData data) => LogMetric(data);
+        public Task NotificationsEnabled() => WriteMetricLog();
 
-        public Task NotificationsEnabled() => LogMetric();
+        public Task NotificationsDisabled() => WriteMetricLog();
 
-        public Task NotificationsDisabled() => LogMetric();
-
-        private Task LogMetric(IMetricData metricData = null, [CallerMemberName] string action = "")
+        private Task WriteMetricLog([CallerMemberName] string action = "")
         {
-            var allMetricData = DefaultMetricData(action);
-
-            if (metricData != null)
-            {
-                allMetricData = allMetricData.Concat(metricData.ToKeyValuePairs());
-            }
-
-            var metricLog = string.Join(" ", allMetricData.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-
-            Console.Out.WriteLine(metricLog);
-
-            return Task.CompletedTask;
+            return CreateMetricLog(action).WriteMetricLog();
         }
 
-        private IEnumerable<KeyValuePair<string, string>> DefaultMetricData(string action)
+        private MetricLogBuilder CreateMetricLog([CallerMemberName] string action = "")
         {
-            var timestamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fff", CultureInfo.InvariantCulture);
-            yield return new KeyValuePair<string, string>("Timestamp", timestamp);
+            return MetricLogBuilder.Create(_metricContext, action).With(IdentifyingMetricData());
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> IdentifyingMetricData()
+        {
             yield return new KeyValuePair<string, string>("NhsLoginId", _metricContext.NhsLoginId);
             yield return new KeyValuePair<string, string>("ProofLevel", _metricContext.ProofLevel.ToString());
-            yield return new KeyValuePair<string, string>("OdsCode", _metricContext.OdsCode);
-            yield return new KeyValuePair<string, string>("Action", action);
         }
     }
 }
