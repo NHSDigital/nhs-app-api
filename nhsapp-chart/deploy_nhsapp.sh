@@ -100,7 +100,7 @@ info "Checking for environment configuration files"
 	info "Cluster override found for $AKS_SHORTNAME, adding config";
 	CUSTOM_VALUES=$CUSTOM_VALUES" -f ../vars/cluster/vars-$AKS_SHORTNAME.yaml";
 }
-[ -e "$../vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ] && {
+[ -e "../vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ] && {
 	info "Namespace override found for $TARGET_ZONE/$TARGET_ENVIRONMENT, adding config";
 	CUSTOM_VALUES=$CUSTOM_VALUES" -f ../vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml";
 }
