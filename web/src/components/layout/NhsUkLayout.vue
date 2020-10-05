@@ -243,7 +243,7 @@ export default {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
     },
     isHotJarSurveyVisible() {
-      return this.isAnalyticsCookieAccepted() && `${this.$store.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
+      return this.isAnalyticsCookieAccepted() && this.$store.$env.HOTJAR_SURVEY_VISIBLE;
     },
     focusNhsAppRoot() {
       this.$refs.nhsAppRoot.focus();

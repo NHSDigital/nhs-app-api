@@ -138,6 +138,8 @@ spec:
           value: "https://111.nhs.uk/service/COVID-19/"
         - name: EMERGENCY_PRESCRIPTIONS_URL
           value: "https://111.nhs.uk/emergency-prescription/"
+        - name: VUE_WINDOW_OBJECT_ENABLED
+          value: "{{ $.Values.webVueGlobalObject }}"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

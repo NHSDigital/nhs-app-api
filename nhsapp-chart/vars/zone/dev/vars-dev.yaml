@@ -16,6 +16,7 @@ econsultEnabled: true
 messagesEnabled: true
 tppSupportsLinkedAccounts: true
 sixteenWeeksSlotsEnabled: true
+webVueGlobalObject: true
 
 spineLdapLookupEnabled: true
 spineLdapCIDR: "10.239.67.128/25"
@@ -45,3 +46,4 @@ users:
 qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"
 qualtricsMailingListId: "CG_27lDgMxvttB7Oxg"
+

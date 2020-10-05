@@ -39,7 +39,7 @@
         ({{ $store.state.appVersion.nativeVersion }})
       </span>
     </p>
-    <p v-if="$store.$env.CE_MARK_ENABLED === 'true'">
+    <p v-if="showCEMark">
       <ce-mark-icon/>
     </p>
 
@@ -59,6 +59,7 @@ import sjrIf from '@/lib/sjrIf';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import GenericButton from '@/components/widgets/GenericButton';
 import { ACCOUNT_COOKIES_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
+import { isTruthy } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -92,6 +93,9 @@ export default {
     },
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    },
+    showCEMark() {
+      return isTruthy(this.$store.$env.CE_MARK_ENABLED);
     },
   },
   mounted() {

@@ -1,35 +1,87 @@
 #!/bin/bash
 
-echo "Generating web config json "
+AddStringConfig() {
+  local env_var=$1
+  if [ -z "$env_var" ] ; then
+    echo "AddStringConfig: no function argument"; exit 1
+  fi
 
-echo '{
-  "PORT": "'"$PORT"'",
-  "URI_FORMAT_API_CLIENT": "'"$URI_FORMAT_API_CLIENT"'",
-  "URI_FORMAT_CID_REDIRECT_WEB": "'"$URI_FORMAT_CID_REDIRECT_WEB"'",
-  "URI_FORMAT_CID_REDIRECT_NATIVE": "'"$URI_FORMAT_CID_REDIRECT_NATIVE"'",
-  "SECURE_COOKIES": "'"$SECURE_COOKIES"'",
-  "CID_CLIENT_ID": "'"$CID_CLIENT_ID"'",
-  "CID_AUTH_ENDPOINT_URL": "'"$CID_AUTH_ENDPOINT_URL"'",
-  "CID_P5_VECTOR_OF_TRUST_ENABLED": "'"$CID_P5_VECTOR_OF_TRUST_ENABLED"'",
-  "CID_SETTINGS_URL": "'"$CID_SETTINGS_URL"'",
-  "BLOOD_DONATION_URL": "'"$BLOOD_DONATION_URL"'",
-  "DATA_PREFERENCES_URL": "'"$DATA_PREFERENCES_URL"'",
-  "ANALYTICS_SCRIPT_URL": "'"$ANALYTICS_SCRIPT_URL"'",
-  "ANALYTICS_ENVIRONMENT": "'"$ANALYTICS_ENVIRONMENT"'",
-  "HOTJAR_SITE_ID": "'"$HOTJAR_SITE_ID"'",
-  "HOTJAR_SURVEY_URL": "'"$HOTJAR_SURVEY_URL"'",
-  "HOTJAR_SURVEY_VISIBLE": "'"$HOTJAR_SURVEY_VISIBLE"'",
-  "CONTACT_US_URL": "'"$CONTACT_US_URL"'",
-  "USER_RESEARCH_ENABLED": "'"$USER_RESEARCH_ENABLED"'",
-  "VERSION_TAG": "'"$VERSION_TAG"'",
-  "COMMIT_ID": "'"$COMMIT_ID"'",
-  "CE_MARK_ENABLED": "'"$CE_MARK_ENABLED"'",
-  "ORGAN_DONATION_INTEGRATION_ENABLED": "'"$ORGAN_DONATION_INTEGRATION_ENABLED"'",
-  "SESSION_EXPIRING_WARNING_SECONDS": "'"$SESSION_EXPIRING_WARNING_SECONDS"'",
-  "SIXTEEN_WEEKS_SLOTS_ENABLED": "'"$SIXTEEN_WEEKS_SLOTS_ENABLED"'",
-  "ADD_APPOINTMENT_TO_CALENDAR_ENABLED": "'"$ADD_APPOINTMENT_TO_CALENDAR_ENABLED"'",
-  "CORONA_SERVICE_URL": "'"$CORONA_SERVICE_URL"'",
-  "CONDITIONS_CHECKER_URL": "'"$CONDITIONS_CHECKER_URL"'",
-  "SYMPTOM_CHECKER_URL": "'"$SYMPTOM_CHECKER_URL"'",
-  "EMERGENCY_PRESCRIPTIONS_URL": "'"$EMERGENCY_PRESCRIPTIONS_URL"'"
-}' >> "${1}"
+  local value=${!env_var}
+  if [ -z "$value" ] ; then
+    echo "AddStringConfig: $env_var has a null value"; exit 1
+  fi
+
+  config=$(echo "$config" | jq --arg key $env_var --arg val $value '. + {($key): $val}')
+}
+
+AddBoolConfig() {
+  local env_var=$1
+  if [ -z "$env_var" ] ; then
+    echo "AddBoolConfig: no function argument"; exit 1
+  fi
+
+  local value=${!env_var}
+  if [ -z "$value" ] ; then
+    echo "AddBoolConfig: $env_var has a null value"; exit 1
+  fi
+
+  if ! [[ $value = true || $value = false ]] ; then
+    echo "error: $env_var=$value is not a boolean, but is being configured to be one" >&2; exit 1
+  fi
+
+  config=$(echo "$config" | jq --arg key $env_var --arg val $value '. + {($key): $val | test("true")}')
+}
+
+AddNumericConfig() {
+  re='^[+-]?[0-9]+([.][0-9]+)?$'
+  local env_var=$1
+  if [ -z "$env_var" ] ; then
+    echo "AddNumericConfig: no function argument"; exit 1
+  fi
+
+  local value=${!env_var}
+  if [ -z "$value" ] ; then
+    echo "AddNumericConfig: $env_var has a null value"; exit 1
+  fi
+
+  if ! [[ $value =~ $re ]] ; then
+    echo "error: $env_var=$value is not a number, but is being configured to be one" >&2; exit 1
+  fi
+  config=$(echo "$config" | jq --arg key $env_var --arg val $value '. + {($key): $val | tonumber}')
+}
+
+config='{}';
+echo "Begin Generating web config json"
+AddNumericConfig PORT;
+AddStringConfig URI_FORMAT_API_CLIENT;
+AddStringConfig URI_FORMAT_CID_REDIRECT_WEB;
+AddStringConfig URI_FORMAT_CID_REDIRECT_NATIVE;
+AddBoolConfig SECURE_COOKIES;
+AddStringConfig CID_CLIENT_ID;
+AddStringConfig CID_AUTH_ENDPOINT_URL;
+AddBoolConfig CID_P5_VECTOR_OF_TRUST_ENABLED;
+AddStringConfig CID_SETTINGS_URL;
+AddStringConfig BLOOD_DONATION_URL;
+AddStringConfig DATA_PREFERENCES_URL;
+AddStringConfig ANALYTICS_SCRIPT_URL;
+AddStringConfig ANALYTICS_ENVIRONMENT;
+AddStringConfig HOTJAR_SITE_ID;
+AddStringConfig HOTJAR_SURVEY_URL;
+AddBoolConfig HOTJAR_SURVEY_VISIBLE;
+AddStringConfig CONTACT_US_URL;
+AddBoolConfig USER_RESEARCH_ENABLED;
+AddStringConfig VERSION_TAG;
+AddStringConfig COMMIT_ID;
+AddBoolConfig CE_MARK_ENABLED;
+#AddBoolConfig ORGAN_DONATION_INTEGRATION_ENABLED;
+AddNumericConfig SESSION_EXPIRING_WARNING_SECONDS;
+AddBoolConfig SIXTEEN_WEEKS_SLOTS_ENABLED;
+AddBoolConfig ADD_APPOINTMENT_TO_CALENDAR_ENABLED;
+AddStringConfig CORONA_SERVICE_URL;
+AddStringConfig CONDITIONS_CHECKER_URL;
+AddStringConfig SYMPTOM_CHECKER_URL;
+AddStringConfig EMERGENCY_PRESCRIPTIONS_URL;
+AddBoolConfig VUE_WINDOW_OBJECT_ENABLED;
+echo "Completed Generating web config json"
+
+echo $config >> "${1}"

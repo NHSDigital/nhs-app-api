@@ -38,7 +38,7 @@ export default {
   computed: {
     sessionExpiryInMinutes() {
       const minutes = Math.floor(
-        parseInt(`${this.$store.$env.SESSION_EXPIRING_WARNING_SECONDS}`, 10) / 60,
+        this.$store.$env.SESSION_EXPIRING_WARNING_SECONDS / 60,
       );
       return minutes < 1 ? 1 : minutes;
     },

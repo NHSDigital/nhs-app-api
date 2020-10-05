@@ -22,11 +22,11 @@ const createAppointmentComponent = (
 
 describe('Appointment.vue', () => {
   each([
-    [true, true, 'true', true, true],
-    [false, true, 'true', true, false],
-    [true, false, 'true', true, false],
-    [true, true, 'false', true, false],
-    [true, true, 'true', false, false],
+    [true, true, true, true, true],
+    [false, true, true, true, false],
+    [true, false, true, true, false],
+    [true, true, false, true, false],
+    [true, true, true, false, false],
   ]).it('will show the add event to calendar link when all conditions are met', (
     showAddToCalendarLinkProp,
     nativeAppFunctionExists,

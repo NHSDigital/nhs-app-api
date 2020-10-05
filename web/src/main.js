@@ -73,8 +73,10 @@ const defineErrorHandling = () => {
 
 
 
-  // TODO: [REMOVE] Added for debugging purposes
-  window.vue = app;
+  // only adds a global reference to the vue instance running locally
+  if (store.$env.VUE_WINDOW_OBJECT_ENABLED) {
+    window.vue = app;
+  }
 
   // global functions for native app callback
   window.appEvent = ({ event, payload }) => store.dispatch(event, payload);

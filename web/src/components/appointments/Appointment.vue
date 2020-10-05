@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       isNativeApp: this.$store.state.device.isNativeApp,
-      isAddToCalendarEnabled: this.$store.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED === 'true',
+      isAddToCalendarEnabled: this.$store.$env.ADD_APPOINTMENT_TO_CALENDAR_ENABLED,
       appointmentAddToCalendarPath: APPOINTMENT_ADD_TO_CALENDAR_PATH,
       appointmentCancellingPath: APPOINTMENT_CANCELLING_PATH,
       nativeAppVersionSupportsAddingEventsToCalendar:

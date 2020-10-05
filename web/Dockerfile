@@ -91,13 +91,14 @@ COPY --chown=www-data:www-data nginx/nginx.conf.template /etc/nginx/nginx.conf.t
 USER root
 
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y sudo ca-certificates && \
+    apt-get install --no-install-recommends -y sudo ca-certificates jq && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
 RUN chown www-data:www-data /etc/nginx/nginx.conf
 RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/www-data && \
-    chmod 400 /etc/sudoers.d/www-data
+    chmod 400 /etc/sudoers.d/www-data && \
+    chmod +x /app/build/env.sh
 
 USER www-data
 
@@ -106,7 +107,7 @@ ENV COMMIT_ID=${COMMIT_ID}
 
 EXPOSE $PORT
 CMD sudo update-ca-certificates; \
-    sh /app/build/env.sh ./app/config.json; \
+    /app/build/env.sh ./app/config.json; \
     envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf; \
     nginx;
 
