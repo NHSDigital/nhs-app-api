@@ -46,6 +46,11 @@ class MoreStepDefinitions {
         morePage.btnSharedLinks.click()
     }
 
+    @When("^I click the cie Shared health links link on the More page")
+    fun iClickTheCieSharedLinksLinkOnTheMorePage() {
+        morePage.btnPkbCieSharedHealthLinks.click()
+    }
+
     @When("^I see the unread indicator on the More page")
     fun iSeeTheUnreadIndicatorOnTheMorePage() {
         morePage.assertUnreadIndicatorVisible()
@@ -89,9 +94,19 @@ class MoreStepDefinitions {
         morePage.btnSharedLinks.assertSingleElementPresent()
     }
 
+    @Then("^the link to cie Shared health links is available on the More page$")
+    fun theLinkToCieSharedHealthLinksIsAvailableOnTheMorePage() {
+        morePage.btnPkbCieSharedHealthLinks.assertSingleElementPresent()
+    }
+
     @Then("^the link to Shared links is not available on the More page$")
     fun theLinkToSharedLinksIsNotAvailableOnTheMorePage() {
         morePage.btnSharedLinks.assertElementNotPresent()
+    }
+
+    @Then("^the link to cie Shared health links is not available on the More page$")
+    fun theLinkToCieSharedHealthLinksIsNotAvailableOnTheMorePage() {
+        morePage.btnPkbCieSharedHealthLinks.assertElementNotPresent()
     }
 
     @Then("^the More page explains that it is not possible to access it while acting on behalf of someone else$")

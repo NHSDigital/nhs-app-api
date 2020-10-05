@@ -34,6 +34,10 @@ open class MorePage : HybridPageObject() {
     private val sharedLinksTitle = "Shared links"
     private val sharedLinksDescription = "View links your doctor or health professional has shared with you"
 
+    private val pkbCieSharedHealthLinksTitle = "Shared health links"
+    private val pkbCieSharedHealthLinksDescription =
+            "View links or documents your health team has shared with you, or add your own"
+
     val content = LinksWithDescriptionsContent(
             linkBlockTitle = "More",
             containerXPath = "//div[@id='mainDiv']",
@@ -51,6 +55,8 @@ open class MorePage : HybridPageObject() {
     val btnOlcAdminHelp by lazy { links.link(olcAdminHelpTitle, olcAdminHelpDescription) }
     val btnEngageAdmin by lazy { links.link(engageAdminTitle, engageAdminDescription) }
     val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
+    val btnPkbCieSharedHealthLinks by lazy {
+        links.link(pkbCieSharedHealthLinksTitle, pkbCieSharedHealthLinksDescription)}
 
     private val unreadIndicator = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_messages_discIndicator']",

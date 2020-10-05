@@ -222,7 +222,7 @@ export default {
         path: '/nhs-login/login?phrPath=/auth/listPlans.action&brand=cie',
         jumpOffContent: {
           headerText: 'Care plans',
-          descriptionText: 'View your personalised care plans',
+          descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
         },
         thirdPartyWarning: {
           brandName: 'Care Information Exchange (Patients Know Best)',
@@ -253,12 +253,12 @@ export default {
         id: 'messagesCie',
         path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=cie',
         jumpOffContent: {
-          headerText: 'Messages and consultations with a doctor or health professional',
-          descriptionText: 'Send or view messages and online consultations with a doctor or health professional',
+          headerText: 'Consultations, events and messages',
+          descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
         },
         thirdPartyWarning: {
           brandName: 'Care Information Exchange (Patients Know Best)',
-          featureName: 'Messages and online consultations',
+          featureName: 'Consultations, events and messages',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -269,12 +269,12 @@ export default {
         id: 'sharedLinksCie',
         path: '/nhs-login/login?phrPath=/library/manageLibrary.action&brand=cie',
         jumpOffContent: {
-          headerText: 'Shared links',
-          descriptionText: 'View links your doctor or health professional has shared with you',
+          headerText: 'Shared health links',
+          descriptionText: 'View links or documents your health team has shared with you, or add your own',
         },
         thirdPartyWarning: {
           brandName: 'Care Information Exchange (Patients Know Best)',
-          featureName: 'Shared links',
+          featureName: 'Shared health links',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
@@ -285,12 +285,12 @@ export default {
         id: 'medicinesCie',
         path: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=cie',
         jumpOffContent: {
-          headerText: 'Hospital and other prescriptions',
-          descriptionText: 'See your current and past prescriptions',
+          headerText: 'Hospital and other medicines',
+          descriptionText: 'View your current and past medicines or add a record of your own',
         },
         thirdPartyWarning: {
           brandName: 'Care Information Exchange (Patients Know Best)',
-          featureName: 'Hospital and other prescriptions',
+          featureName: 'Hospital and other medicines',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
