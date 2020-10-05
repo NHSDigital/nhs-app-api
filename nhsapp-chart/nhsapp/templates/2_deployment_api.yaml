@@ -284,7 +284,7 @@ spec:
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: NHSLOGIN_KEY_PATH
-          value: "/mnt/secrets-store/nhsloginPem"
+          value: "/mnt/secrets-store/nhsloginKey"
         - name: NHSLOGIN_KEY_PASSWORD
           valueFrom:
             secretKeyRef:
