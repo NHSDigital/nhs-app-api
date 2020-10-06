@@ -52,6 +52,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 content = string.Format(
                     CultureInfo.InvariantCulture,
                     Constants.FileConstants.ImageHtmlFormat,
+                    Constants.FileConstants.AltTagDescriptionForTpp,
                     Constants.FileConstants.FileTypes.DocumentMimeTypes[type],
                     requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData);
             }

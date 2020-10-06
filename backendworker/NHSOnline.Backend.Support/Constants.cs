@@ -199,7 +199,10 @@ namespace NHSOnline.Backend.Support
             }
 
             public const string ImageHtmlFormat =
-                "<img src=\"data:{0};base64,{1}\"/>";
+                "<img alt=\"{0}\" src=\"data:{1};base64,{2}\"/>";
+
+            public const string AltTagDescriptionForTpp =
+                "This file has no description, please contact your GP surgery for more information";
         }
 
         public static class TppConstants

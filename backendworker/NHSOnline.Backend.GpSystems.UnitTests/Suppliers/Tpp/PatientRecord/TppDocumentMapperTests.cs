@@ -15,12 +15,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
     {
         private TppDocumentMapper _mapper;
         private Mock<ILogger<ITppDocumentMapper>> _mockLogger;
+        private const string AltDescription = "This file has no description, please contact your GP surgery for more information";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockLogger = new Mock<ILogger<ITppDocumentMapper>>();
-
+            
             _mapper = new TppDocumentMapper(_mockLogger.Object);
         }
 
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 
             var expectedPatientDocument = new PatientDocument
             {
-                Content = $"<img src=\"data:{mimeType};base64,test\"/>",
+                Content = $"<img alt=\"{AltDescription}\" src=\"data:{mimeType};base64,test\"/>",
                 Type = binaryRequestResponse.BinaryData.FileType,
                 HasErrored = false,
                 IsViewable = true,
