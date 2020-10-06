@@ -287,12 +287,38 @@ export const getPathAndQuery = (url) => {
   }
 };
 
+const getThirdPartyJumpOffMatchingFullUri = (thirdPartyLocales, redirectPath) => {
+  const decodedRedirectPath = decodeURIComponent(redirectPath);
+  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
+    if (thirdPartyLocales.jumpOffs[i].path === decodedRedirectPath) {
+      return thirdPartyLocales.jumpOffs[i];
+    }
+  }
+  return null;
+};
+
+const getThirdPartyJumpOffMatchingUriPath = (thirdPartyLocales, redirectPath) => {
+  const decodedRedirectPath = decodeURIComponent(redirectPath);
+  const path = decodedRedirectPath.split('?')[0];
+  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
+    if (thirdPartyLocales.jumpOffs[i].path === path) {
+      return thirdPartyLocales.jumpOffs[i];
+    }
+  }
+  return null;
+};
+
 export const getThirdPartyJumpOff = (thirdPartyLocales, redirectPath) => {
   if (thirdPartyLocales.jumpOffs !== undefined) {
-    for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
-      if (thirdPartyLocales.jumpOffs[i].path === decodeURIComponent(redirectPath)) {
-        return thirdPartyLocales.jumpOffs[i];
-      }
+    const jumpOffMatchingFullUri =
+      getThirdPartyJumpOffMatchingFullUri(thirdPartyLocales, redirectPath);
+    if (jumpOffMatchingFullUri !== null) {
+      return jumpOffMatchingFullUri;
+    }
+    const jumpOffMatchingUriPath =
+      getThirdPartyJumpOffMatchingUriPath(thirdPartyLocales, redirectPath);
+    if (jumpOffMatchingUriPath !== null) {
+      return jumpOffMatchingUriPath;
     }
   }
   return '';

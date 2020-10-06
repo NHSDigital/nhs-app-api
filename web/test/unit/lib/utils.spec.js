@@ -19,6 +19,7 @@ import {
   resetPageFocus,
   getPathWithPatientIdPrefix,
   gpSessionErrorHasRetried,
+  getThirdPartyJumpOff,
 } from '@/lib/utils';
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
@@ -658,6 +659,49 @@ describe('util library', () => {
           expect(gpSessionErrorHasRetried($store)).toBe(false);
         });
       });
+    });
+  });
+
+  describe('getThirdPartyJumpOff', () => {
+    const pkbJumpOffWithQueryString = { path: '/pkb.com/sso?jump=appointments' };
+    const ersJumpOffNoQueryString = { path: '/ers.com/login' };
+    const thirdPartyLocales = {
+      jumpOffs: [pkbJumpOffWithQueryString, ersJumpOffNoQueryString],
+    };
+
+    each([{
+      redirectPath: '/pkb.com/sso?jump=appointment', // query string value too short (missing s)
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/pkb.com/sso?jump=appointments&q=1', // unexpected extra query param
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/pkb.com/sso?q=1', // doesn't have required query param
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/pkb.com/sso', // no match as jump off defines that the url must have the query parms
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/pkb.com/sso?jump=appointments',
+      expectedResultMatch: pkbJumpOffWithQueryString,
+    }, {
+      redirectPath: '/ers.com/login',
+      expectedResultMatch: ersJumpOffNoQueryString,
+    }, {
+      redirectPath: '/ers.com/loginx', // path has extra letter
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/ers.com/logi', // path too short
+      expectedResultMatch: '',
+    }, {
+      redirectPath: '/ers.com/login?source=login',
+      expectedResultMatch: ersJumpOffNoQueryString,
+    }]).it('will correctly match third party jump off points', (data) => {
+      // act
+      const result = getThirdPartyJumpOff(thirdPartyLocales, data.redirectPath);
+
+      // assert
+      expect(result).toBe(data.expectedResultMatch);
     });
   });
 });
