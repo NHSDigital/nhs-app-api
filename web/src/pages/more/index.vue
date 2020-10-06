@@ -65,11 +65,11 @@
         header-tag="h2"
         data-purpose="text_link"
         :href="dataSharingPath"
-        :text="$t('dataSharing.findOutWhyYourDataMatters')"
-        :description="$t('dataSharing.findOutHowTheNhsUsesYourInfomrationAndChoose')"
+        :text="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared')"
+        :description="$t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose')"
         :click-func="navigateToDataSharing"
-        :aria-label="$t('dataSharing.findOutWhyYourDataMatters') |
-          join($t('dataSharing.findOutHowTheNhsUsesYourInfomrationAndChoose') ,'. ')"/>
+        :aria-label="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared') |
+          join($t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose') ,'. ')"/>
     </menu-item-list>
   </div>
 </template>

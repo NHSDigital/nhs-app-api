@@ -73,7 +73,7 @@ Feature: Data Sharing Frontend
     Given I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
     And I retrieve the 'More' page directly
-    When I click the link called 'Find out why your data matters' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    When I click the link called 'Choose if data from your health records is shared for research and planning' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
     Then a new tab has been opened by the link
     When I browse to the pages at the following urls I see the home page
       | /data-sharing                   |

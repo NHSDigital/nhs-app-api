@@ -14,7 +14,7 @@ open class MorePage : HybridPageObject() {
     private val organDonationDescription = "Help save thousands of lives in the UK every year by signing up" +
             " to become a donor on the NHS Organ Donor Register"
 
-    private val dataSharingTitle = "Find out why your data matters"
+    private val dataSharingTitle = "Choose if data from your health records is shared for research and planning"
     private val dataSharingDescription =
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning"

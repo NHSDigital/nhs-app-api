@@ -147,7 +147,8 @@ class MoreStepDefinitions {
         if (headerNative.onMobile()) {
             morePage.btnDataSharing.click()
             morePage.locatorMethods.waitForNativeStepToComplete()
-            webHeader.getPageTitle().withText("Find out why your data matters")
+            webHeader.getPageTitle().withText(
+                    "Choose if data from your health records is shared for research and planning")
             nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
         } else {
             browser.storeCurrentTabCount()
