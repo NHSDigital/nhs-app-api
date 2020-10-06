@@ -40,6 +40,12 @@
 
 -keep @com.squareup.moshi.JsonQualifier interface *
 
+-keep class rx** { *; }
+-keep class a.a.a** { *; }
+-keep class paycasso** { *; }
+-keep class com.paycasso.sdk** { *; }
+-keep class com.paycasso.view** { *; }
+
 # Enum field names are used by the integrated EnumJsonAdapter.
 # values() is synthesized by the Kotlin compiler and is used by EnumJsonAdapter indirectly
 # Annotate enums with @JsonClass(generateAdapter = false) to use them with Moshi.
