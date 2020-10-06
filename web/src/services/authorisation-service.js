@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import querystring from 'querystring';
+import { setCookie } from '@/lib/cookie-manager';
 
 const base64URLEncode = value =>
   value
@@ -50,6 +51,7 @@ class AuthorisationService {
     this.cidClientId = environment.CID_CLIENT_ID;
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT_URL;
     this.cidP5VectorOfTrustEnabled = environment.CID_P5_VECTOR_OF_TRUST_ENABLED;
+    this.secureCookies = environment.SECURE_COOKIES;
   }
 
   generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
@@ -96,9 +98,14 @@ class AuthorisationService {
       vtr: p5VectorOfTrust ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
     };
 
-    cookies.set('nhso.auth', {
-      redirectUri,
-      codeVerifier: verifier,
+    setCookie({
+      key: 'nhso.auth',
+      value: {
+        redirectUri,
+        codeVerifier: verifier,
+      },
+      cookies,
+      secure: this.secureCookies,
     });
 
     let responseUrl;
