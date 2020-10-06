@@ -1,25 +1,32 @@
 package features.onlineConsultations.stepDefinitions
+
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
 import pages.PageLeavingWarning
+import pages.navigation.WebHeader
 import pages.onlineConsultations.OnlineConsultationsPage
 import pages.onlineConsultations.OnlineConsultationsUnavailablePage
 import utils.SerenityHelpers
-
 
 open class OnlineConsultationsStepDefinitions {
 
     private lateinit var onlineConsultationsPage: OnlineConsultationsPage
     private lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
     private lateinit var pageLeaveWarning: PageLeavingWarning
+    private lateinit var webHeader: WebHeader
 
     private val onlineConsultationsFactory = OnlineConsultationsFactory()
 
+    @Given("^I have access to online consultations but they are switched off by the practice$")
+    fun iHaveAccessToOnlineConsultationsButItIsSwitchedOffByThePractice() {
+        onlineConsultationsFactory.setupOnlineConsultationsDataIsNotValid()
+    }
+
     @Given("^I have access to online consultations gp advice journey and it is an emergency$")
-    fun iHaveAccessToOnlineConsultations() {
+    fun iHaveAccessToOnlineConsultationsAndItIsAnEmergency() {
         onlineConsultationsFactory.setupOnlineConsultationsData()
     }
 
@@ -33,9 +40,9 @@ open class OnlineConsultationsStepDefinitions {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency(false)
     }
 
-    @Given("^I have access to online consultations gp advice journey and it is switched off$")
-    fun iHaveAccessToOnlineConsultationsAndItIsSwitchedOff() {
-        onlineConsultationsFactory.setupOnlineConsultationsDataIsNotValid()
+    @Given("^I click on the More link on the header$")
+    fun iClickOnTheMoreLinkOnTheHeader() {
+        webHeader.clickMorePageLink()
     }
 
     @When("^I accept demographics and terms and conditions question$")

@@ -167,8 +167,6 @@ Feature: Login with proxy access
     And I click the GP Appointments link
     And the page title is "Your GP appointments"
     When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
-    When I select the Book an Appointment button on the guidance page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms

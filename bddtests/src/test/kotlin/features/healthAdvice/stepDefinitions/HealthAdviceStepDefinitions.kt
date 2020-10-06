@@ -5,7 +5,6 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -18,15 +17,12 @@ import pages.assertIsVisible
 import pages.externalSites.AdviceAboutCoronavirusPage
 import pages.externalSites.HealthAToZPage
 import pages.externalSites.OneOneOneOnlinePage
-import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 
 open class HealthAdviceStepDefinitions {
 
     @Steps
     private lateinit var browser: BrowserSteps
-    @Steps
-    private lateinit var navBar: NavigationSteps
 
     private lateinit var healthAdvicePage: HealthAdvicePage
     private lateinit var adviceAboutCoronavirusPage: AdviceAboutCoronavirusPage
@@ -94,12 +90,6 @@ open class HealthAdviceStepDefinitions {
         healthAdvicePage.searchConditionsAndTreatments.assertIsVisible()
         healthAdvicePage.useNhsOneOneOneOnline.assertIsVisible()
         healthAdvicePage.adviceAboutCoronavirus.assertIsVisible()
-    }
-
-    @Then("^the Advice page header and navigation menu are correct$")
-    fun checkAdvicePageHeaderAndNavigationMenuAreCorrect() {
-        navBar.headerNative.assertIsVisible("Advice")
-        navBar.assertSelectedTab(NavBarNative.NavBarType.ADVICE)
     }
 
     @Then("^the advice about coronavirus page has been opened in a new tab$")

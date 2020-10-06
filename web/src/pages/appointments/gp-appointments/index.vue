@@ -57,7 +57,7 @@ import UpcomingAppointments from '@/components/appointments/UpcomingAppointments
 import showShutterPage from '@/lib/proxy/shutter';
 import {
   APPOINTMENTS_PATH,
-  APPOINTMENT_BOOKING_GUIDANCE_PATH,
+  APPOINTMENT_BOOKING_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
@@ -81,7 +81,7 @@ export default {
       backUrl: APPOINTMENTS_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       coronaServiceUrl: this.$store.$env.CORONA_SERVICE_URL,
-      guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE_PATH,
+      bookingUrl: APPOINTMENT_BOOKING_PATH,
     };
   },
   computed: {
@@ -151,8 +151,8 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
-      this.$store.app.$analytics.trackButtonClick(this.guidanceUrl, true);
-      redirectTo(this, this.guidanceUrl);
+      this.$store.app.$analytics.trackButtonClick(this.bookingUrl, true);
+      redirectTo(this, this.bookingUrl);
     },
   },
 };

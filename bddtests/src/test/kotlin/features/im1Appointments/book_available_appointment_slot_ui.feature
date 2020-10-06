@@ -12,7 +12,8 @@ Feature: Book Appointments Frontend
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
-    Then I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
+    Then the Available Appointments page is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -88,7 +89,8 @@ Feature: Book Appointments Frontend
     Given there are VISION appointments available to book
     But a booked appointment cannot be cancelled
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
+    And the Available Appointments page is displayed
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms

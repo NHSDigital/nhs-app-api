@@ -38,15 +38,11 @@ Feature: Use the navigation header bar
     When I click the GP Appointments link
     Then the Your Appointments page is displayed
     When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
-    When I select "Book an appointment" button
     Then the Available Appointments page is displayed
     When I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Back' breadcrumb
     Then the Available Appointments page is displayed
-    When I click the 'Back' breadcrumb
-    Then I am on the Appointments Guidance page
     When I click the 'Back' breadcrumb
     Then the Your Appointments page is displayed
     When I click the 'Back' breadcrumb

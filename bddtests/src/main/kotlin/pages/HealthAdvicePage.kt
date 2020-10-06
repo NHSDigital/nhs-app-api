@@ -21,13 +21,13 @@ open class HealthAdvicePage : HybridPageObject() {
     )
 
     val askYourGpForAdvice = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(),'Ask your GP for advice')]",
+            webDesktopLocator = "//*[@id='btn_gpAdvice']//h2[contains(text(),'Ask your GP for advice')]",
             androidLocator = null,
             page = this
     )
 
     val engageMedicalAdvice = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(),'Ask your GP for advice')]",
+            webDesktopLocator = "//*[@id='btn_engage_medical_advice']//h2[contains(text(),'Ask your GP for advice')]",
             androidLocator = null,
             page = this
     )

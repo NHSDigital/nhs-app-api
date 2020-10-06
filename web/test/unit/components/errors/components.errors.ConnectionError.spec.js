@@ -41,7 +41,6 @@ const createConnectionErrorComponent = ({
 
 const testDataSet = [
   '/appointments',
-  '/appointments/booking-guidance',
   '/appointments/booking',
   '/appointments/confirmation',
   '/appointments/cancelling',

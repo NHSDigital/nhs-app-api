@@ -17,7 +17,7 @@ import mocking.onlineConsultations.configurations.evaluate.TermsAndConditionsQue
 import mocking.onlineConsultations.configurations.evaluate.UrgencyQuestionConfiguration
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
 
-open class OnlineConsultationsMappingBuilder(method:String="POST", relativePath :String= "")
+open class OnlineConsultationsMappingBuilder(method: String="POST", relativePath: String= "")
     : MappingBuilder(method, relativePath) {
 
     fun isValidRequest(isValid: Boolean = true) = IsValidServiceDefinitionBuilder(isValid)

@@ -12,17 +12,11 @@ Feature: Display More Menu
     Then I see more button on the nav bar is highlighted
 
   @smoketest
-  Scenario: A logged in user using desktop can navigate to the more screen
+  @onlineconsultations
+  Scenario: A logged in user using desktop can navigate to and follow links on the more screen
     Given I am a EMIS patient
     And I am logged in
+    And I have access to online consultations but they are switched off by the practice
     And I navigate to More
     Then I am on the More Page
     And I see and can follow links within the more page body
-
-  @onlineconsultations
-  Scenario: A logged in user can navigate to the more screen and request GP help if online consultations available
-    Given I am a EMIS patient
-    And I am logged in
-    And I navigate to More
-    Then I am on the More Page
-    And I see and can follow links including online consultation links within the more page body

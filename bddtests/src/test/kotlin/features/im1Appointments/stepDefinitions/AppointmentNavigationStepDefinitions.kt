@@ -1,6 +1,5 @@
 package features.im1Appointments.stepDefinitions
 
-import features.im1Appointments.steps.AppointmentGuidanceSteps
 import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
@@ -14,8 +13,6 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var appointmentsHubPage: AppointmentHubPage
     @Steps
-    lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
-    @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
     @Steps
     lateinit var myAppointmentsUI: YourAppointmentsUISteps
@@ -28,32 +25,13 @@ class AppointmentNavigationStepDefinitions {
         appointmentsHubPage.assertAppointmentsHubIsDisplayed()
         appointmentsHubPage.btnGPAppointmentsLinksWithDescriptionsContent.click()
         myAppointmentsUI.yourAppointmentsPage.
-                locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
-    }
-
-    @Given("^I am on the Appointment Guidance page$")
-    fun iAmOnTheGuidancePage() {
-        iAmOnMyAppointmentsPage()
-        myAppointmentsUI.
-                clickOnBookAppointmentButton()
-        appointmentGuidanceSteps.appointmentGuidancePage.
-                locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
-        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled()
-    }
-
-    @Given("^I click through to the online consultations Appointment Guidance page$")
-    fun iAmOnTheOnlineConsultationsGuidancePage() {
-        myAppointmentsUI.clickOnBookAppointmentButton()
-        appointmentGuidanceSteps.appointmentGuidancePage.
-                locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
-        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
     }
 
     @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        iAmOnTheGuidancePage()
-        appointmentGuidanceSteps.appointmentGuidancePage.bookButton.click()
+        iAmOnMyAppointmentsPage()
+        myAppointmentsUI.clickOnBookAppointmentButton()
         availableAppointments.availableAppointmentsPage.assertPageFullyLoaded()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }

@@ -8,7 +8,6 @@ Feature: Authorisation occurs during each URL visit
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
       | /appointments                               |
-      | /appointments/booking-guidance              |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
@@ -31,7 +30,6 @@ Feature: Authorisation occurs during each URL visit
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
       | /appointments                               |
-      | /appointments/booking-guidance              |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
@@ -55,7 +53,6 @@ Feature: Authorisation occurs during each URL visit
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
       | /appointments                               |
-      | /appointments/booking-guidance              |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
@@ -80,7 +77,6 @@ Feature: Authorisation occurs during each URL visit
     When I browse to the pages at the following urls I see the relevant page
       | /account                                       | /account                                       |
       | /appointments                                  | /appointments                                  |
-      | /appointments/gp-appointments/booking-guidance | /appointments/gp-appointments/booking-guidance |
       | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
       | /                                              |                                                |
       | /my-record                                     | /health-records                                |

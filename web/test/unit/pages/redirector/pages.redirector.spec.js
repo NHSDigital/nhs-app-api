@@ -6,7 +6,7 @@ import {
   APPOINTMENTS_NAME,
 } from '@/router/names';
 import { AppPage } from '@/static/js/v1/src/constants';
-import { APPOINTMENTS_PATH, INDEX_PATH, APPOINTMENT_BOOKING_GUIDANCE_PATH } from '@/router/paths';
+import { GP_MEDICAL_RECORD_PATH, INDEX_PATH } from '@/router/paths';
 import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
 import * as dependency from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
@@ -54,7 +54,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -72,7 +72,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -89,7 +89,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with APPOINTMENTS name', () => {
+    it('will call redirectByName passing redirect param', () => {
       expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
     });
   });
@@ -102,14 +102,14 @@ describe('redirector page', () => {
 
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENT_BOOKING_GUIDANCE_PATH },
+        query: { [REDIRECT_PARAMETER]: GP_MEDICAL_RECORD_PATH },
       };
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with APPOINTMENTS path', () => {
+    it('will redirect to param value', () => {
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_GUIDANCE_PATH);
+        .toHaveBeenCalledWith(wrapper.vm, GP_MEDICAL_RECORD_PATH);
     });
   });
 
@@ -121,13 +121,13 @@ describe('redirector page', () => {
 
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
-        query: { [REDIRECT_PARAMETER]: `${APPOINTMENTS_PATH}xyz` },
+        query: { [REDIRECT_PARAMETER]: `${GP_MEDICAL_RECORD_PATH}xyz` },
       };
 
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -146,7 +146,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -176,7 +176,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
 
@@ -264,7 +264,7 @@ describe('redirector page', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(false);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -282,7 +282,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });
@@ -322,7 +322,7 @@ describe('redirector page', () => {
       expect(wrapper.vm.sessionStorageName).toEqual('agreedThirdPartyWarning_pkb');
     });
 
-    it('will call router push', () => {
+    it('will generate an asserted login identity for the matching service', () => {
       const expectedRequest = {
         assertedLoginIdentityRequest: {
           IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
@@ -354,7 +354,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with APPOINTMENTS name', () => {
+    it('will call redirectByName passing redirect to page param', () => {
       expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
     });
   });
@@ -371,7 +371,7 @@ describe('redirector page', () => {
       wrapper = mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
   });

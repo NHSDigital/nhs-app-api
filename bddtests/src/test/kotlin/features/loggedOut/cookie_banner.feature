@@ -35,7 +35,6 @@ Feature: Cookie Banner
     Then pages will not display the cookie banner
       | /account                                    |
       | /appointments                               |
-      | /appointments/booking-guidance              |
       | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |

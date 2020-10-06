@@ -62,7 +62,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my appointments and my messages with content
       | /account  |
-      | /appointments/gp-appointments/booking-guidance  |
+      | /appointments/gp-appointments/booking  |
     And I am logged in
     When I navigate to the More page
     And I click the App Messages link on the More page
@@ -78,8 +78,8 @@ Feature: Messages
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    When I click on the '/appointments/gp-appointments/booking-guidance' link in the message
-    Then I am on the Appointments Guidance page
+    When I click on the '/appointments/gp-appointments/booking' link in the message
+    Then the Available Appointments page is displayed
     When I click the 'Back' breadcrumb
     Then the Messages page is displayed
 

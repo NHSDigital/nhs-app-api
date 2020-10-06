@@ -10,6 +10,7 @@ import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
+import pages.onlineConsultations.OnlineConsultationsUnavailablePage
 import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 
@@ -25,6 +26,7 @@ class MoreStepDefinitions {
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
     lateinit var morePage: MorePage
+    lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
 
     @When("^I click the Engage Admin link on the More page$")
     fun iClickTheEngageAdminLinkOnTheMorePage() {
@@ -64,6 +66,12 @@ class MoreStepDefinitions {
     @When("^I choose to set my organ donation preferences")
     fun setOrganDonationPreferences() {
         morePage.btnOrganDonation.click()
+    }
+
+    @When("^I click Additional GP services on the more page$")
+    fun iClickAdditionalGpServicesOnTheMorePage() {
+        morePage.btnOlcAdminHelp.assertSingleElementPresent()
+        morePage.btnOlcAdminHelp.click()
     }
 
     @Then("^I am on the More Page$")
@@ -118,22 +126,8 @@ class MoreStepDefinitions {
     fun iSeeAndCanFollowLinksWithinTheMorePageBody() {
         val linksToFollow = arrayListOf(
                 { followDataSharingLink() },
-                { followOrganDonationLink() }
-        )
-
-        linksToFollow.forEachIndexed { index, link ->
-            link.invoke()
-            if (index != linksToFollow.size - 1 && headerNative.onMobile())
-                navigateBackToMorePage()
-        }
-    }
-
-    @Then("^I see and can follow links including online consultation links within the more page body$")
-    fun iSeeAndCanFollowLinksIncludingOnlineConsultationsWithinTheMorePageBody() {
-        val linksToFollow = arrayListOf(
-                { followOlcAdminHelpLink() },
-                { followDataSharingLink() },
-                { followOrganDonationLink() }
+                { followOrganDonationLink() },
+                { followOlcAdminHelpLink() }
         )
 
         linksToFollow.forEachIndexed { index, link ->
@@ -169,7 +163,8 @@ class MoreStepDefinitions {
     }
 
     private fun followOlcAdminHelpLink() {
-        morePage.btnOlcAdminHelp.assertSingleElementPresent()
+        iClickAdditionalGpServicesOnTheMorePage()
+        onlineConsultationsUnavailablePage.assertIsVisible(gpAdvice = false)
     }
 
     private fun navigateBackToMorePage() {

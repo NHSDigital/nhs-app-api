@@ -147,30 +147,10 @@ export default {
       forAdvice: 'Ask your GP for advice',
       consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
     },
-    getHealthAdvice: {
-      getHealthAdvice: 'Get health advice​',
-      usingNhsOnline: 'Using trusted NHS online information​',
-    },
-    corona: {
-      getAdviceAboutCoronavirus: 'Get advice about coronavirus',
-      findOutWhatToDoIfYouHaveCoronavirus: 'Find out what to do if you think you have coronavirus',
-    },
-    healthAdvice: {
-      getHealthAdvice: 'Get health advice',
-      findInformationAboutConditions: 'Find information about specific conditions',
-    },
     OneOneOne: {
       use111Online: 'Use NHS 111 online',
       useOneOneOneOnline: 'Use NHS one one one online',
       checkIfYouNeedUrgentHelp: 'Check if you need urgent help and find out what to do next',
-    },
-    pharmacist: {
-      getAdviceFrom: 'Get advice from a pharmacist​',
-      theyAre: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
-    },
-    selfCare: {
-      selfCare: 'Self care',
-      minorProblems: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
     },
   },
   hub: {

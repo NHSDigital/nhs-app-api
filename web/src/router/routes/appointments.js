@@ -1,7 +1,6 @@
 import AddToCalendarInterruptPage from '@/pages/appointments/gp-appointments/add-to-calendar-interrupt';
 import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help';
 import AppointmentsIndexPage from '@/pages/appointments';
-import BookingGuidancePage from '@/pages/appointments/gp-appointments/booking-guidance';
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
 import BookingSuccessPage from '@/pages/appointments/gp-appointments/booking-success';
 import CancellingPage from '@/pages/appointments/gp-appointments/cancelling';
@@ -23,7 +22,6 @@ import {
   HOSPITAL_APPOINTMENTS_PATH,
   APPOINTMENT_GP_AT_HAND_PATH,
   APPOINTMENT_INFORMATICA_PATH,
-  APPOINTMENT_BOOKING_GUIDANCE_PATH,
   APPOINTMENT_BOOKING_PATH,
   APPOINTMENT_CONFIRMATIONS_PATH,
   APPOINTMENT_BOOKING_SUCCESS_PATH,
@@ -40,7 +38,6 @@ import {
   HOSPITAL_APPOINTMENTS_NAME,
   APPOINTMENT_GP_AT_HAND_NAME,
   APPOINTMENT_INFORMATICA_NAME,
-  APPOINTMENT_BOOKING_GUIDANCE_NAME,
   APPOINTMENT_BOOKING_NAME,
   APPOINTMENT_CONFIRMATIONS_NAME,
   APPOINTMENT_BOOKING_SUCCESS_NAME,
@@ -159,25 +156,6 @@ export const INFORMATICA = {
     sjrRedirectRules: [
       sjrRedirectRules.gpAtHandAppointmentRedirect,
       sjrRedirectRules.im1AppointmentRedirect,
-    ],
-    nativeNavigation: APPOINTMENTS_MENU_ITEM,
-  },
-};
-
-export const BOOKING_GUIDANCE = {
-  path: APPOINTMENT_BOOKING_GUIDANCE_PATH,
-  name: APPOINTMENT_BOOKING_GUIDANCE_NAME,
-  component: BookingGuidancePage,
-  meta: {
-    headerKey: 'navigation.pages.headers.appointmentGuidance',
-    titleKey: 'navigation.pages.titles.appointmentGuidance',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_APPOINTMENTS,
-    crumb: breadcrumbs.BOOKING_GUIDANCE_CRUMB,
-    helpUrl: appointmentsHelpUrl,
-    sjrRedirectRules: [
-      sjrRedirectRules.gpAtHandAppointmentRedirect,
-      sjrRedirectRules.informaticaAppointmentRedirect,
     ],
     nativeNavigation: APPOINTMENTS_MENU_ITEM,
   },
@@ -347,7 +325,6 @@ export default [
   HOSPITAL_APPOINTMENTS,
   GP_AT_HAND,
   INFORMATICA,
-  BOOKING_GUIDANCE,
   BOOKING,
   CONFIRMATION,
   BOOKING_SUCCESS,

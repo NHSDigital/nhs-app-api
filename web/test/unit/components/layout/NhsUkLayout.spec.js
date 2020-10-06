@@ -7,7 +7,6 @@ import { MORE } from '@/router/routes/more';
 import {
   APPOINTMENTS,
   BOOKING,
-  BOOKING_GUIDANCE,
   CONFIRMATION,
 } from '@/router/routes/appointments';
 import {
@@ -40,13 +39,6 @@ const createPage = ($store, route = INDEX) => {
     $store,
     $route: {
       ...route,
-      /* name: route.name,
-      query: '',
-      meta: {
-        crumb: route.crumb,
-      },
-      shouldShowContentHeader: route.shouldShowContentHeader ?
-        route.shouldShowContentHeader : undefined, */
     },
     methods: {
       configureWebContext: helpUrl => helpUrl,
@@ -98,7 +90,6 @@ describe('NhsUkLayout', () => {
   describe('is native', () => {
     const isNative = true;
     describe.each([
-      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
       [BOOKING.name, BOOKING],
       [CONFIRMATION.name, CONFIRMATION],
       [REPEAT_COURSES.name, REPEAT_COURSES],
@@ -180,7 +171,6 @@ describe('NhsUkLayout', () => {
     });
 
     describe.each([
-      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
       [BOOKING.name, BOOKING],
       [CONFIRMATION.name, CONFIRMATION],
       [REPEAT_COURSES.name, REPEAT_COURSES],
@@ -212,7 +202,6 @@ describe('NhsUkLayout', () => {
     });
 
     describe.each([
-      [BOOKING_GUIDANCE.name, BOOKING_GUIDANCE],
       [BOOKING.name, BOOKING],
       [CONFIRMATION.name, CONFIRMATION],
       [REPEAT_COURSES.name, REPEAT_COURSES],
