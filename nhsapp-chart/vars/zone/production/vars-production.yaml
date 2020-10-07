@@ -489,6 +489,18 @@ knownservices_config: {
           "validateSession": true
         },
         {
+          "path": "/biometric-login-error",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithoutWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
           "path": "/prescriptions",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
