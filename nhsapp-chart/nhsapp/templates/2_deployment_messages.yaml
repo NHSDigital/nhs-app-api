@@ -127,7 +127,7 @@ spec:
               name: nhsapp-api-key-{{ .Chart.AppVersion }}
               key: apikey
         - name: NHSLOGIN_KEY_PATH
-          value: "/secrets/nhslogin-key/nhslogin.pem"
+          value: "/mnt/secrets-store/nhsloginKey"
         - name: NHSLOGIN_KEY_PASSWORD
           valueFrom:
             secretKeyRef:

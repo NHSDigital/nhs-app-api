@@ -137,7 +137,7 @@ spec:
         - name: QUALTRICS_MAILING_LIST_ID
           value: "{{ $.Values.qualtricsMailingListId }}"
         - name: NHSLOGIN_KEY_PATH
-          value: "/mnt/secrets-store/nhsloginPem"
+          value: "/mnt/secrets-store/nhsloginKey"
         - name: NHSLOGIN_KEY_PASSWORD
           valueFrom:
             secretKeyRef:
