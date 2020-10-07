@@ -12,11 +12,17 @@ import { redirectTo } from '@/lib/utils';
 import {
   ORGAN_DONATION_LAW_CHANGE_URL,
 } from '@/router/externalLinks';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
   redirectTo: jest.fn(),
+}));
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 const stateReferenceData = {
@@ -70,6 +76,7 @@ describe('organ donation withdraw reason page', () => {
 
   beforeEach(() => {
     redirectTo.mockClear();
+    EventBus.$emit.mockClear();
   });
 
   describe('not native', () => {
@@ -212,11 +219,7 @@ describe('organ donation withdraw reason page', () => {
 
       describe('no reason', () => {
         describe('click', () => {
-          let scrollTo;
-
           beforeEach(() => {
-            scrollTo = jest.fn();
-            global.scrollTo = scrollTo;
             continueButton.trigger('click');
           });
 
@@ -228,8 +231,8 @@ describe('organ donation withdraw reason page', () => {
             expect(wrapper.find(ErrorMessage).exists()).toBe(true);
           });
 
-          it('will scroll to top', () => {
-            expect(scrollTo).toHaveBeenCalledWith(0, 0);
+          it('will set focus on the error component', () => {
+            expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
           });
         });
       });
@@ -260,6 +263,10 @@ describe('organ donation withdraw reason page', () => {
           it('will dispatch "organDonation/setWithdrawReasonId"', () => {
             expect($store.dispatch)
               .toHaveBeenCalledWith('organDonation/setWithdrawReasonId', reasonId);
+          });
+
+          it('will not set focus on the error component', () => {
+            expect(EventBus.$emit).not.toHaveBeenCalledWith(FOCUS_ERROR_ELEMENT);
           });
 
           it('will push ORGAN_DONATION_REVIEW_YOUR_DECISION to the router', () => {

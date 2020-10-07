@@ -63,6 +63,7 @@ import MessageText from '@/components/widgets/MessageText';
 import PersonalDetails from '@/components/organ-donation/PersonalDetails';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   components: {
@@ -125,7 +126,7 @@ export default {
       this.submitAttempted = true;
 
       if (this.showErrors) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

@@ -95,6 +95,7 @@ import { redirectTo } from '@/lib/utils';
 import {
   ORGAN_DONATION_LAW_CHANGE_URL,
 } from '@/router/externalLinks';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   components: {
@@ -141,7 +142,7 @@ export default {
       this.hasTriedToContinue = true;
 
       if (this.showErrors) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

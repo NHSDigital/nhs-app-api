@@ -3,7 +3,13 @@ import i18n from '@/plugins/i18n';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS_PATH, NOMINATED_PHARMACY_CHOOSE_TYPE_PATH } from '@/router/paths';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 const $style = {};
 
@@ -39,6 +45,7 @@ describe('search pharmacies', () => {
   const state = createState({ nominatedPharmacy: {} });
 
   beforeEach(() => {
+    EventBus.$emit.mockClear();
     $http = createHttp();
     $store = createStore({
       $http,
@@ -69,6 +76,7 @@ describe('search pharmacies', () => {
       expect(page.vm.showInvalidSearchError).toBe(true);
       expect($http.getV1PatientPharmacies).not.toHaveBeenCalled();
       expect(page.find('#empty-search-error').exists()).toBe(true);
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
 
     it('displays an error when search query is populated but an invalid postcode', async () => {

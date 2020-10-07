@@ -96,12 +96,9 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-
 import { redirectTo } from '@/lib/utils';
-import {
-  GP_APPOINTMENTS_PATH,
-  APPOINTMENT_CANCELLING_SUCCESS_PATH,
-} from '@/router/paths';
+import { GP_APPOINTMENTS_PATH, APPOINTMENT_CANCELLING_SUCCESS_PATH } from '@/router/paths';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   name: 'GpAppointmentsCancellingPage',
@@ -171,8 +168,8 @@ export default {
         redirectTo(this, APPOINTMENT_CANCELLING_SUCCESS_PATH);
       } else {
         this.submissionError = true;
-        window.scrollTo(0, 0);
         this.labelledBy = 'error-label';
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
       }
     },
   },

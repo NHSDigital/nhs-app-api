@@ -76,7 +76,7 @@ import {
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 // If changing regex, ensure backend regex is updated.
 const postcodeRegex = /^((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))( ?[0-9][A-Za-z]{2})?)$/;
@@ -134,7 +134,7 @@ export default {
       if (!this.validateSearchQueryLength(processedQuery)
           || !this.validateSearchQueryPattern(processedQuery)) {
         this.showInvalidSearchError = true;
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

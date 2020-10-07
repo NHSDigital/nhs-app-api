@@ -4,7 +4,13 @@ import { REDIRECT_PARAMETER, APPOINTMENTS_NAME } from '@/router/names';
 import { INDEX_PATH } from '@/router/paths';
 import { TERMSANDCONDITIONS } from '@/router/routes/login';
 import * as dependency from '@/lib/utils';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 let $router;
 let wrapper;
@@ -34,6 +40,8 @@ const createUpdatedTermsConditionsComponent = ({ state, route = TERMSANDCONDITIO
 
 describe('UpdatedTermsConditions checkbox rendering', () => {
   beforeEach(() => {
+    EventBus.$emit.mockClear();
+
     wrapper = createUpdatedTermsConditionsComponent({
       state: {
         device: {
@@ -170,6 +178,10 @@ describe('UpdatedTermsConditions error state', () => {
 
     it('returns an error when terms are left unchecked', () => {
       expect(wrapper.vm.getErrorState()).toBe('mock validation border');
+    });
+
+    it('will set focus on the error component', () => {
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
   });
 

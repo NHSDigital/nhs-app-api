@@ -3,11 +3,16 @@ import Channel from '@/lib/channel';
 import Confirmation from '@/pages/appointments/gp-appointments/confirmation';
 import Necessity from '@/lib/necessity';
 import { GP_APPOINTMENTS_PATH } from '@/router/paths';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
   redirectTo: jest.fn(),
+}));
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 describe('appointments confirmation page', () => {
@@ -42,6 +47,7 @@ describe('appointments confirmation page', () => {
 
   beforeEach(() => {
     redirectTo.mockClear();
+    EventBus.$emit.mockClear();
   });
 
   describe('mounted', () => {
@@ -112,6 +118,10 @@ describe('appointments confirmation page', () => {
             expect(telephoneText.classes()).toContain('nhsuk-input--error');
           });
 
+          it('will set focus on the error component', () => {
+            expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
+          });
+
           describe('telephone number subsequently inputted', () => {
             beforeEach(() => {
               wrapper.vm.telephoneNumber = '1234';
@@ -141,6 +151,10 @@ describe('appointments confirmation page', () => {
             expect(errorContainer.exists()).toBe(true);
             expect(reasonError.exists()).toBe(true);
             expect(wrapper.vm.showError).toBe(true);
+          });
+
+          it('will set focus on the error component', () => {
+            expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
           });
 
           describe('reason subsequently inputted', () => {

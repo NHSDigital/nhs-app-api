@@ -9,11 +9,17 @@ import {
   ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
   redirectTo: jest.fn(),
+}));
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 const allNoChoices = {
@@ -200,6 +206,10 @@ describe('organ donation some organs page', () => {
 
           it('will not push the organ donation additional details page on the router', () => {
             expect(redirectTo).not.toHaveBeenCalledWith(ORGAN_DONATION_FAITH_PATH);
+          });
+
+          it('will set focus on the error component', () => {
+            expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
           });
 
           it('will show inline errors', () => {

@@ -110,6 +110,7 @@ import {
   PRIVACY_POLICY_URL,
   COOKIES_POLICY_URL,
 } from '@/router/externalLinks';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'TermsConditions',
@@ -142,7 +143,7 @@ export default {
       this.hasTriedToContinue = true;
 
       if (!this.areTermsAccepted) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

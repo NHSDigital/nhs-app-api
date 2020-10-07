@@ -5,7 +5,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { createLocalVue } from '@vue/test-utils';
 import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { shallowMount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 const createMockMixinPlugin = () => Vue.mixin({
   computed: {
@@ -104,6 +110,10 @@ const createRepeatCoursesPage = async ($store) => {
 };
 
 describe('prescriptions/repeat-courses.vue -', () => {
+  beforeEach(() => {
+    EventBus.$emit.mockClear();
+  });
+
   describe('mounted', () => {
     it('will fetch courses', async () => {
       // Arrange
@@ -134,9 +144,11 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
       // Act
       page = await createRepeatCoursesPage($store);
+      await page.vm.validate();
 
       // Assert
       expect(page.vm.error).toBe(true);
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
 
     it('will show an error if the special request is invalid and Mandatory', async () => {
@@ -150,9 +162,11 @@ describe('prescriptions/repeat-courses.vue -', () => {
 
       // Act
       page = await createRepeatCoursesPage($store);
+      await page.vm.validate();
 
       // Assert
       expect(page.vm.error).toBe(true);
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
 
     it('will not show an error if the special request is invalid and not Mandatory', async () => {

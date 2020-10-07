@@ -1,9 +1,14 @@
 import i18n from '@/plugins/i18n';
 import SendMessage from '@/pages/messages/gp-messages/send-message';
 import { redirectTo } from '@/lib/utils';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 describe('patient messaging messages', () => {
   let wrapper;
@@ -38,6 +43,7 @@ describe('patient messaging messages', () => {
 
   beforeEach(() => {
     redirectTo.mockClear();
+    EventBus.$emit.mockClear();
   });
 
   describe('template', () => {
@@ -172,6 +178,7 @@ describe('patient messaging messages', () => {
         subjectText: 'Test subject',
       });
       expect(redirectTo).not.toHaveBeenCalled();
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
   });
 });

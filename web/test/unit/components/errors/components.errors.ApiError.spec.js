@@ -12,7 +12,7 @@ import { createStore, mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
-  EventBus: { $emit: jest.fn() },
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 Vue.mixin({
@@ -97,6 +97,8 @@ describe('api errors', () => {
         status: 504,
       });
       EventBus.$emit.mockClear();
+      EventBus.$on.mockClear();
+      EventBus.$off.mockClear();
     });
 
     it('will not emit to EventBus when updated and no api error shown', () => {
@@ -344,6 +346,8 @@ describe('api errors', () => {
               $store = createStore({ getters, state });
               wrapper = mountApiError();
               EventBus.$emit.mockClear();
+              EventBus.$on.mockClear();
+              EventBus.$off.mockClear();
             });
 
             it('will exist', () => {

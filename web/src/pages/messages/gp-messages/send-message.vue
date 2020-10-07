@@ -100,6 +100,7 @@ import {
   GP_MESSAGES_VIEW_MESSAGE_PATH,
   GP_MESSAGES_RECIPIENTS_PATH,
 } from '@/router/paths';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'GpMessagesSendMessagePage',
@@ -160,7 +161,7 @@ export default {
       }
 
       if (this.showError) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
       const { messageText, subjectText } = this;

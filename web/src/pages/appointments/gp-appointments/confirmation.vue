@@ -182,6 +182,7 @@ import {
   APPOINTMENT_CONFIRMATIONS_PATH,
   APPOINTMENT_BOOKING_SUCCESS_PATH,
 } from '@/router/paths';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   name: 'GpAppointmentsConfirmationPage',
@@ -339,7 +340,7 @@ export default {
       }
 
       if (this.showError) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

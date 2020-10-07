@@ -56,6 +56,7 @@ import { initialState, NOT_STATED, YES } from '@/store/modules/organDonation/mut
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { ORGAN_DONATION_FAITH_PATH, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   scrollToTop: true,
@@ -116,7 +117,7 @@ export default {
         redirectTo(this, ORGAN_DONATION_FAITH_PATH);
         return;
       }
-      window.scrollTo(0, 0);
+      EventBus.$emit(FOCUS_ERROR_ELEMENT);
     },
     moreAboutOrgansClicked() {
       redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);

@@ -119,7 +119,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
-import { EventBus, UPDATE_HEADER, UPDATE_TITLE } from '@/services/event-bus';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
 import CardGroup from '@/components/widgets/card/CardGroup';
@@ -279,7 +279,7 @@ export default {
           submitted: true,
         };
         this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
       }
     },
     tryAgain() {

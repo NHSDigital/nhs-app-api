@@ -11,7 +11,13 @@ import {
   DECISION_OPT_IN,
   STATE_OK,
 } from '@/store/modules/organDonation/mutation-types';
-import { createScrollTo, createStore, initFilters, mount } from '../../helpers';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import { createStore, initFilters, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 const WithdrawHeader = 'What this means';
 const WithdrawBody = 'We will no longer know your decision about organ donation. Therefore, it will be considered that you have agreed to be an organ donor unless you are in an excluded group.';
@@ -50,7 +56,6 @@ const createState = ({
 describe('review your decision', () => {
   let $store;
   let wrapper;
-  let scrollTo;
 
   const mountPage = ({ state, getters }) => {
     $store = createStore({ state, getters });
@@ -58,6 +63,7 @@ describe('review your decision', () => {
   };
 
   beforeEach(() => {
+    EventBus.$emit.mockClear();
     initFilters();
     wrapper = mountPage({ state: createState() });
   });
@@ -147,7 +153,6 @@ describe('review your decision', () => {
 
       describe('click', () => {
         beforeEach(() => {
-          scrollTo = createScrollTo();
           submitButton.trigger('click');
         });
 
@@ -166,8 +171,8 @@ describe('review your decision', () => {
           expect(wrapper.text()).toContain('Read the privacy statement. Confirm if you give your consent.');
         });
 
-        it('will scroll to the top', () => {
-          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        it('will set focus on the error component', () => {
+          expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
         });
 
         it('button will not be disabled', () => {
@@ -183,7 +188,6 @@ describe('review your decision', () => {
 
       describe('click', () => {
         beforeEach(() => {
-          scrollTo = createScrollTo();
           submitButton.trigger('click');
         });
 
@@ -199,8 +203,8 @@ describe('review your decision', () => {
           expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.checkInformationAndConfirm');
         });
 
-        it('will scroll to the top', () => {
-          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        it('will set focus on the error component', () => {
+          expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
         });
 
         it('button will not be disabled', () => {
@@ -216,7 +220,6 @@ describe('review your decision', () => {
 
       describe('click', () => {
         beforeEach(() => {
-          scrollTo = createScrollTo();
           submitButton.trigger('click');
         });
 
@@ -232,8 +235,8 @@ describe('review your decision', () => {
           expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.readPrivacyStatmentAndConsent');
         });
 
-        it('will scroll to the top', () => {
-          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        it('will set focus on the error component', () => {
+          expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
         });
 
         it('button will not be disabled', () => {
@@ -259,6 +262,10 @@ describe('review your decision', () => {
 
       it('it will call organDonation/submitDecision', async () => {
         expect($store.dispatch).toHaveBeenCalledWith('organDonation/submitDecision');
+      });
+
+      it('will not set focus on the error component', () => {
+        expect(EventBus.$emit).not.toHaveBeenCalledWith(FOCUS_ERROR_ELEMENT);
       });
 
       it('button will be disabled', () => {

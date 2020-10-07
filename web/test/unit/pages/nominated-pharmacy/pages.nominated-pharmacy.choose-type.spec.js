@@ -8,7 +8,13 @@ import {
   NOMINATED_PHARMACY_INTERRUPT_PATH,
 } from '@/router/paths';
 import * as dependency from '@/lib/utils';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 describe('nominated pharmacy choose type page', () => {
   let $router;
@@ -30,6 +36,7 @@ describe('nominated pharmacy choose type page', () => {
   });
 
   beforeEach(() => {
+    EventBus.$emit.mockClear();
     getters = { 'nominatedPharmacy/nominatedPharmacyEnabled': true };
     state = createState();
     $store = createStore({ state, getters });
@@ -90,6 +97,7 @@ describe('nominated pharmacy choose type page', () => {
       expect(errorComponent.exists()).toBe(true);
       expect($store.dispatch).not.toHaveBeenCalled();
       expect(dependency.redirectTo).not.toHaveBeenCalled();
+      expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
     });
   });
 

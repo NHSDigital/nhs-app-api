@@ -87,6 +87,7 @@ import {
   PRIVACY_POLICY_URL,
   COOKIES_POLICY_URL,
 } from '@/router/externalLinks';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'UpdatedTermsConditions',
@@ -127,7 +128,7 @@ export default {
           this.conditionalRedirect();
         }
       } else {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
       }
     },
     getErrorState() {

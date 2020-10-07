@@ -53,6 +53,7 @@ import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-type
 import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import { redirectTo } from '@/lib/utils';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   components: {
@@ -105,7 +106,7 @@ export default {
     continueClicked() {
       this.hasTriedToContinue = true;
       if (this.showError) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
       } else {
         redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
       }

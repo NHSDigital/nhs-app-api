@@ -89,6 +89,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import { EventBus, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 
 export default {
   name: 'OnlineOnlySearch',
@@ -174,7 +175,7 @@ export default {
         if (pharmacySearchResult.noResultsFound) {
           this.noResultsFoundMessage = this.generateNoResultsMessage();
           this.showMainPageHeader = false;
-          window.scrollTo(0, 0);
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
         } else {
           redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS_PATH);
         }

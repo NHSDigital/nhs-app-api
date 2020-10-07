@@ -12,7 +12,7 @@ jest.mock('@/lib/utils', () => ({
 }));
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
-  EventBus: { $emit: jest.fn() },
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 describe('Admin Help page', () => {
@@ -83,6 +83,8 @@ describe('Admin Help page', () => {
   describe('created', () => {
     beforeEach(() => {
       EventBus.$emit.mockClear();
+      EventBus.$on.mockClear();
+      EventBus.$off.mockClear();
     });
 
     describe('online consultations available', () => {

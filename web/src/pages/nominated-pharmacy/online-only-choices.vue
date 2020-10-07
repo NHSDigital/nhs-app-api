@@ -56,6 +56,7 @@ import {
   NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
   PRESCRIPTIONS_PATH,
 } from '@/router/paths';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
   layout: 'nhsuk-layout',
@@ -105,7 +106,7 @@ export default {
       this.hasTriedToContinue = true;
 
       if (this.showErrors) {
-        window.scrollTo(0, 0);
+        EventBus.$emit(FOCUS_ERROR_ELEMENT);
         return;
       }
 

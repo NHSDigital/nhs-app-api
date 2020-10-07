@@ -5,11 +5,17 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS_PATH } from '@/router/paths';
-import { createRouter, createScrollTo, createStore, mount } from '../../helpers';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
   redirectTo: jest.fn(),
+}));
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 describe('organ donation faith page', () => {
@@ -32,6 +38,7 @@ describe('organ donation faith page', () => {
 
   beforeEach(() => {
     redirectTo.mockClear();
+    EventBus.$emit.mockClear();
 
     $router = createRouter();
     $store = createStore({ state: createState() });
@@ -79,10 +86,7 @@ describe('organ donation faith page', () => {
 
       describe('with no selected choice', () => {
         describe('when clicked', () => {
-          let scrollTo;
-
           beforeEach(() => {
-            scrollTo = createScrollTo();
             continueButton.trigger('click');
           });
 
@@ -95,8 +99,8 @@ describe('organ donation faith page', () => {
               .not.toHaveBeenCalledWith(wrapper.vm, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
           });
 
-          it('will scroll to the top', () => {
-            expect(scrollTo).toHaveBeenCalledWith(0, 0);
+          it('will set focus on the error component', () => {
+            expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
           });
         });
       });
@@ -107,10 +111,7 @@ describe('organ donation faith page', () => {
         });
 
         describe('when clicked', () => {
-          let scrollTo;
-
           beforeEach(() => {
-            scrollTo = createScrollTo();
             continueButton.trigger('click');
           });
 
@@ -118,8 +119,8 @@ describe('organ donation faith page', () => {
             expect(wrapper.find('.error').exists()).toBe(false);
           });
 
-          it('will not scroll to', () => {
-            expect(scrollTo).not.toHaveBeenCalled();
+          it('will not set focus on the error component', () => {
+            expect(EventBus.$emit).not.toHaveBeenCalledWith(FOCUS_ERROR_ELEMENT);
           });
 
           it('will push the organ donation additional details page on the router', () => {

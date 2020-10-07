@@ -6,7 +6,7 @@ import { mount, createStore } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
-  EventBus: { $emit: jest.fn() },
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
 
 jest.mock('@/lib/utils');
@@ -44,6 +44,8 @@ describe('gp messages urgency page', () => {
   describe('created', () => {
     beforeEach(() => {
       EventBus.$emit.mockClear();
+      EventBus.$on.mockClear();
+      EventBus.$off.mockClear();
       isEmptyArray.mockClear();
     });
 

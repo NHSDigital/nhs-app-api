@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 
 export default {
   name: 'MessageDialog',
@@ -61,22 +62,31 @@ export default {
       return this.overrideStyle !== 'plain';
     },
   },
+  beforeMount() {
+    EventBus.$on(FOCUS_ERROR_ELEMENT, this.scrollToTopAndFocusDialog);
+  },
+  beforeDestroy() {
+    EventBus.$off(FOCUS_ERROR_ELEMENT, this.scrollToTopAndFocusDialog);
+  },
   mounted() {
-    if (this.focusable) {
-      this.setScreenReaderFocus();
-    }
+    this.focusDialog();
   },
   methods: {
-    setScreenReaderFocus() {
-      const element = document.getElementById('message-dialog');
+    scrollToTopAndFocusDialog() {
+      window.scrollTo(0, 0);
+      this.focusDialog();
+    },
+    focusDialog() {
+      if (this.focusable) {
+        const element = document.getElementById('message-dialog');
 
-      if (!element) {
-        return;
+        if (!element) {
+          return;
+        }
+
+        element.setAttribute('tabindex', '-1');
+        element.focus();
       }
-
-      element.setAttribute('tabindex', '-1');
-      element.blur();
-      element.focus();
     },
   },
 };

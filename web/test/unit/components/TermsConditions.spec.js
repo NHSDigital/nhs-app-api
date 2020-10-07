@@ -2,7 +2,13 @@ import TermsConditions from '@/components/TermsConditions';
 import * as LibUtils from '@/lib/utils';
 import { TERMSANDCONDITIONS_NAME, APPOINTMENTS_NAME, REDIRECT_PARAMETER } from '@/router/names';
 import { TERMSANDCONDITIONS_PATH, INDEX_PATH } from '@/router/paths';
+import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../helpers';
+
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
+}));
 
 LibUtils.redirectTo = jest.fn();
 LibUtils.redirectByName = jest.fn();
@@ -37,6 +43,7 @@ const createTermsConditionsComponent = ({ state, query }) => {
 beforeEach(() => {
   LibUtils.redirectTo.mockClear();
   LibUtils.redirectByName.mockClear();
+  EventBus.$emit.mockClear();
 });
 
 describe('TermsConditions checkbox rendering', () => {
@@ -191,5 +198,9 @@ describe('TermsConditions error state', () => {
     wrapper.vm.areTermsAccepted = true;
     wrapper.vm.isAnalyticsCookieAccepted = true;
     expect(wrapper.vm.getErrorState()).toBeNull();
+  });
+
+  it('will set focus on the error component', () => {
+    expect(EventBus.$emit).toBeCalledWith(FOCUS_ERROR_ELEMENT);
   });
 });
