@@ -203,11 +203,6 @@ spec:
         - name: TPP_BASE_URL
           value: "{{ $.Values.tppProtocol }}://{{ $.Values.tppHostname }}:{{ $.Values.tppPort }}/Patient/"
         {{- end }}
-        - name: TPP_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: tpp-cert-password-{{ .Chart.AppVersion }}
-              key: password
         - name: TPP_CERT_PATH
           value: "/mnt/secrets-store/tppPfx"
         - name: TPP_APPLICATION_PROVIDER_ID

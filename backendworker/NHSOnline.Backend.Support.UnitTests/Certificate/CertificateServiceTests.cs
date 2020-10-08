@@ -49,7 +49,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
 
         [DataTestMethod]
         [DataRow("", Passphrase, "Could not add client certificate due to missing certificate path.")]
-        [DataRow(Path, "", "Could not add client certificate due to missing certificate passphrase.")]
         [DataRow("", "", "Could not add client certificate due to missing certificate path.")]
         public void InvalidCertificate_EmptyStringParameters(string path, string passPhase, string error)
         {
@@ -58,7 +57,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
 
         [DataTestMethod]
         [DataRow(null, Passphrase, "Could not add client certificate due to missing certificate path.")]
-        [DataRow(Path, null, "Could not add client certificate due to missing certificate passphrase.")]
         [DataRow(null, null, "Could not add client certificate due to missing certificate path.")]
         // Cannot join empty string and null tests, as test report conflates null and empty
         // parameters into one test. We could miss failing tests if one fails and the other passes.

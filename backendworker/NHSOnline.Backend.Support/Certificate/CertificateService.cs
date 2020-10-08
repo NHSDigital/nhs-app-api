@@ -21,13 +21,17 @@ namespace NHSOnline.Backend.Support.Certificate
 
         public X509Certificate2 GetCertificate(string certificatePath, string certificatePassphrase)
         {
-            if (!CheckValid(certificatePath, certificatePassphrase))
+            if (!CheckValid(certificatePath))
             {
                 return null;
             }
 
             try
             {
+                if (string.IsNullOrWhiteSpace(certificatePassphrase))
+                {
+                    return new X509Certificate2(certificatePath);
+                }
                 return new X509Certificate2(certificatePath, certificatePassphrase);
             }
             catch (Exception ex)
@@ -108,17 +112,12 @@ namespace NHSOnline.Backend.Support.Certificate
             }
         }
 
-        private bool CheckValid(string certificatePath, string certificatePassphrase)
+        private bool CheckValid(string certificatePath)
         {
             var valid = true;
             if (string.IsNullOrEmpty(certificatePath))
             {
                 _logger.LogError("Could not add client certificate due to missing certificate path.");
-                valid = false;
-            }
-            if (string.IsNullOrEmpty(certificatePassphrase))
-            {
-                _logger.LogError("Could not add client certificate due to missing certificate passphrase.");
                 valid = false;
             }
             if (!File.Exists(certificatePath))
