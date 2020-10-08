@@ -1,7 +1,12 @@
 import UserResearch from '@/pages/user-research';
-import { createStore, mount } from '../helpers';
+import * as LibUtils from '@/lib/utils';
+import { NOTIFICATIONS_PATH } from '@/router/paths';
+import { createRouter, createStore, mount } from '../helpers';
 
-const mountUserResearch = ({ methods, $http }) => mount(UserResearch, {
+LibUtils.redirectTo = jest.fn();
+LibUtils.redirectByName = jest.fn();
+
+const mountUserResearch = ({ methods, $http, $router }) => mount(UserResearch, {
   $store: createStore({
     $http,
     state: {
@@ -17,14 +22,17 @@ const mountUserResearch = ({ methods, $http }) => mount(UserResearch, {
   stubs: {
     'terms-and-conditions-layout': '<div><slot/></div>',
   },
+  $router,
 });
 
 describe('user research', () => {
   let wrapper;
   let conditionalRedirect;
   let $http;
+  let $router;
 
   beforeEach(() => {
+    $router = createRouter();
     conditionalRedirect = jest.fn();
     $http = {
       postV1ApiUsersMeInfoUserresearch: jest.fn(() => Promise.resolve()),
@@ -35,6 +43,7 @@ describe('user research', () => {
       methods: {
         conditionalRedirect,
       },
+      $router,
     });
   });
 
@@ -96,7 +105,7 @@ describe('user research', () => {
         });
 
         it('will call conditional redirect', () => {
-          expect(conditionalRedirect).toBeCalled();
+          expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
         });
       });
 
@@ -111,7 +120,7 @@ describe('user research', () => {
         });
 
         it('will still call conditional redirect', () => {
-          expect(conditionalRedirect).toBeCalled();
+          expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
         });
       });
     });

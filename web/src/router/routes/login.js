@@ -5,6 +5,8 @@ import AuthReturnPage from '@/pages/auth-return/index';
 import TermsAndConditionsPage from '@/pages/terms-and-conditions';
 import UserResearchPage from '@/pages/user-research';
 import IOSCompatibility from '@/pages/ios-compatibility';
+import Notifications from '@/pages/notifications/index';
+import NotificationsGenericError from '@/pages/notifications/notifications-generic-error';
 
 import {
   LOGIN_PATH,
@@ -15,6 +17,8 @@ import {
   BEGINLOGIN_PATH,
   IOS_COMPATIBILITY_PATH,
   USER_RESEARCH_PATH,
+  NOTIFICATIONS_PATH,
+  NOTIFICATIONS_GENERIC_FAILURE_PATH,
 } from '@/router/paths';
 import {
   LOGIN_NAME,
@@ -25,9 +29,12 @@ import {
   BEGINLOGIN_NAME,
   IOS_COMPATIBILITY_NAME,
   USER_RESEARCH_NAME,
+  NOTIFICATIONS_NAME,
+  NOTIFICATIONS_GENERIC_FAILURE_NAME,
 } from '@/router/names';
 
 import viewedPreRegInstructions from '@/middleware/viewedPreRegInstructions';
+import notificationsPrompt from '@/middleware/notificationsPrompt';
 import urlResolution from '@/middleware/urlResolution';
 import { CLEAR_SELECTED_MENU_ITEM } from '@/middleware/nativeNavigation';
 import { baseNhsAppHelpUrl, appLoginHelpUrl } from '@/router/externalLinks';
@@ -158,6 +165,34 @@ export const IOS_COMPATIBILITY = {
   },
 };
 
+export const NOTIFICATIONS = {
+  path: NOTIFICATIONS_PATH,
+  name: NOTIFICATIONS_NAME,
+  component: Notifications,
+  meta: {
+    headerKey: 'navigation.pages.headers.notifications',
+    titleKey: 'navigation.pages.headers.notifications',
+    middleware: [urlResolution, notificationsPrompt],
+    proofLevel: proofLevel.P5,
+    crumb: {},
+    helpUrl: baseNhsAppHelpUrl,
+  },
+};
+
+export const NOTIFICATIONS_GENERIC_ERROR = {
+  path: NOTIFICATIONS_GENERIC_FAILURE_PATH,
+  name: NOTIFICATIONS_GENERIC_FAILURE_NAME,
+  component: NotificationsGenericError,
+  meta: {
+    headerKey: 'navigation.pages.headers.notificationsGenericError',
+    titleKey: 'navigation.pages.headers.notificationsGenericError',
+    middleware: [urlResolution, notificationsPrompt],
+    proofLevel: proofLevel.P5,
+    crumb: {},
+    helpUrl: baseNhsAppHelpUrl,
+  },
+};
+
 export default [
   LOGIN,
   LOGIN_BIOMETRIC_ERROR,
@@ -167,4 +202,6 @@ export default [
   IOS_COMPATIBILITY,
   TERMS_AND_CONDITIONS,
   USER_RESEARCH,
+  NOTIFICATIONS,
+  NOTIFICATIONS_GENERIC_ERROR,
 ];

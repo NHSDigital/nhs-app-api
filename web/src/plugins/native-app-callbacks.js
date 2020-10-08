@@ -39,6 +39,9 @@ const NativeAppCallbacksPlugin = {
       appVersionUpdateNativeVersion(versionNumber) {
         store.dispatch('appVersion/updateNativeVersion', versionNumber);
       },
+      deviceNotificationPromptCookieExists(doesCookieExist) {
+        store.dispatch('notifications/deviceCookieExists', doesCookieExist);
+      },
     };
   },
 };

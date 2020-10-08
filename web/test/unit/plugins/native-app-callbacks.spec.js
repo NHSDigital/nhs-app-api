@@ -97,4 +97,12 @@ describe('native-app-callbacks', () => {
       expect(store.dispatch).toHaveBeenCalledWith('appVersion/updateNativeVersion', payload);
     });
   });
+
+  describe('deviceNotificationPromptCookieExists', () => {
+    it('will call store notifications/deviceCookieExists', () => {
+      window.nativeAppCallbacks.deviceNotificationPromptCookieExists(true);
+
+      expect(store.dispatch).toHaveBeenCalledWith('notifications/deviceCookieExists', true);
+    });
+  });
 });

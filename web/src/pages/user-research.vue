@@ -65,6 +65,7 @@ import isUndefined from 'lodash/fp/isUndefined';
 import {
   PRIVACY_POLICY_URL,
 } from '@/router/externalLinks';
+import { NOTIFICATIONS_PATH } from '@/router/paths';
 
 export default {
   name: 'UserResearchPage',
@@ -107,7 +108,7 @@ export default {
         } catch {
           // do nothing
         } finally {
-          this.conditionalRedirect();
+          this.$router.push({ path: NOTIFICATIONS_PATH });
         }
       }
     },

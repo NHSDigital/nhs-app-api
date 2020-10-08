@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     focus() {
-      if (this.$store.state.device.isNativeApp) {
+      if (this.$store.state.device.isNativeApp && this.isLogoLink) {
         this.$refs.homeLogoEl.focus();
       }
     },

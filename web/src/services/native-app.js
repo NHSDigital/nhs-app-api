@@ -1,4 +1,22 @@
 export default {
+  addNotificationCookie(nhsLoginId) {
+    const app = window.nativeApp;
+    if (app && app.addNotificationCookie) {
+      app.addNotificationCookie(nhsLoginId);
+      return true;
+    }
+    return false;
+  },
+
+  checkNotificationCookie(nhsLoginId) {
+    const app = window.nativeApp;
+    if (app && app.checkNotificationCookie) {
+      app.checkNotificationCookie(nhsLoginId);
+      return true;
+    }
+    return false;
+  },
+
   attemptBiometricLogin() {
     const app = window.nativeApp;
     if (app && app.attemptBiometricLogin) {

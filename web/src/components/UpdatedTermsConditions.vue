@@ -88,6 +88,7 @@ import {
   COOKIES_POLICY_URL,
 } from '@/router/externalLinks';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import { NOTIFICATIONS_PATH } from '@/router/paths';
 
 export default {
   name: 'UpdatedTermsConditions',
@@ -125,7 +126,7 @@ export default {
         await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
 
         if (this.$store.state.termsAndConditions.areAccepted) {
-          this.conditionalRedirect();
+          this.$router.push({ path: NOTIFICATIONS_PATH });
         }
       } else {
         EventBus.$emit(FOCUS_ERROR_ELEMENT);

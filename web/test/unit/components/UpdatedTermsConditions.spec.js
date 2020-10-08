@@ -1,10 +1,8 @@
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
-import { APPOINTMENTS } from '@/router/routes/appointments';
-import { REDIRECT_PARAMETER, APPOINTMENTS_NAME } from '@/router/names';
-import { INDEX_PATH } from '@/router/paths';
 import { TERMSANDCONDITIONS } from '@/router/routes/login';
 import * as dependency from '@/lib/utils';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
+import { NOTIFICATIONS_PATH } from '@/router/paths';
 import { createRouter, createStore, mount } from '../helpers';
 
 jest.mock('@/services/event-bus', () => ({
@@ -128,30 +126,7 @@ describe('terms and conditions are accepted', () => {
       });
 
       it('will redirect to INDEX route when the button is pushed', async () => {
-        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
-      });
-    });
-  });
-
-  describe('current route has a redirect query parameter', () => {
-    beforeEach(() => {
-      const redirectRoute = {
-        ...TERMSANDCONDITIONS,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS.name },
-      };
-
-      wrapper = createUpdatedTermsConditionsComponent({ state, route: redirectRoute });
-      wrapper.vm.areTermsAccepted = true;
-      wrapper.vm.isAnalyticsCookieAccepted = true;
-    });
-
-    describe('when the accept button is clicked', () => {
-      beforeEach(() => {
-        wrapper.find('#btn_accept').trigger('click');
-      });
-
-      it('will redirect to redirect parameter route when the button is pushed', async () => {
-        expect(dependency.redirectByName).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS_NAME);
+        expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
       });
     });
   });

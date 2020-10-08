@@ -75,6 +75,8 @@ export const NOMINATED_PHARMACY_CHECK_NAME = 'nominated-pharmacy-check';
 export const NOMINATED_PHARMACY_CHOOSE_TYPE_NAME = 'nominated-pharmacy-choose-type';
 export const NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_NAME = 'nominated-pharmacy-online-only-choices';
 export const NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_NAME = 'nominated-pharmacy-online-only-search';
+export const NOTIFICATIONS_NAME = 'notifications';
+export const NOTIFICATIONS_GENERIC_FAILURE_NAME = 'notifications-failure';
 export const ORGAN_DONATION_NAME = 'organ-donation';
 export const ORGAN_DONATION_ADDITIONAL_DETAILS_NAME = 'organ-donation-additional-details';
 export const ORGAN_DONATION_AMEND_NAME = 'organ-donation-amend';
@@ -197,6 +199,7 @@ const names = [
   NOMINATED_PHARMACY_CHOOSE_TYPE_NAME,
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_NAME,
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_NAME,
+  NOTIFICATIONS_NAME,
   ORGAN_DONATION_NAME,
   ORGAN_DONATION_ADDITIONAL_DETAILS_NAME,
   ORGAN_DONATION_AMEND_NAME,

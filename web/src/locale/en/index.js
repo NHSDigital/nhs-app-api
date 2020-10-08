@@ -18,6 +18,7 @@ import messages from './messages';
 import myRecord from './myRecord';
 import navigation from './navigation';
 import nominatedPharmacy from './nominatedPharmacy';
+import notifications from './notifications';
 import onlineConsultations from './onlineConsultations';
 import organDonation from './organDonation';
 import prescriptions from './prescriptions';
@@ -50,6 +51,7 @@ export default {
   myRecord,
   navigation,
   nominatedPharmacy,
+  notifications,
   onlineConsultations,
   organDonation,
   prescriptions,

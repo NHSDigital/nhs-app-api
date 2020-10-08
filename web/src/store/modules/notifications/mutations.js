@@ -1,4 +1,8 @@
-import { SET_REGISTRATION, SET_WAITING } from './mutation-types';
+import {
+  SET_NOTIFICATION_COOKIE_EXISTS,
+  SET_REGISTRATION,
+  SET_WAITING,
+} from './mutation-types';
 
 export default {
   [SET_REGISTRATION](state, registered) {
@@ -6,5 +10,8 @@ export default {
   },
   [SET_WAITING](state, isWaiting) {
     state.isWaiting = isWaiting;
+  },
+  [SET_NOTIFICATION_COOKIE_EXISTS](state, exists) {
+    state.notificationCookieExists = exists;
   },
 };

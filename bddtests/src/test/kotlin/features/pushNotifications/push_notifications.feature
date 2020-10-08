@@ -4,7 +4,7 @@ Feature: Push Notifications
 
   Scenario: A user can enable push notifications for their device for the first time
     Given I am using the native app user agent
-    And I am a user wishing to enable push notifications for the first time
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I am logged in
     When I navigate to the Account page
     Then the Account Settings are available
@@ -14,6 +14,42 @@ Feature: Push Notifications
     When I change the notifications toggle to on
     Then the notifications toggle is displayed as on
     And the push registration has been added to the repository
+
+  Scenario: A user can enable push notifications during login
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
+    And I log in to the app expecting to see the notifications prompt
+    And I have not got the notifications cookie
+    Then I see the notifications prompt
+    When I accept notifications and continue
+    Then I see the home page
+
+  Scenario: A user who already has the notifications cookie will not see the prompt during login
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
+    And I have got the notifications cookie
+    And I am logged in
+    Then I see the home page
+
+  Scenario: A user can log in without accepting notifications
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
+    And I log in to the app expecting to see the notifications prompt
+    And I have not got the notifications cookie
+    Then I see the notifications prompt
+    When I do not accept notifications and continue
+    Then I see the home page
+
+  Scenario: A user viewing notifications prompt when notifications is denied sees an error
+    Given I am using the native app user agent
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
+    And I log in to the app expecting to see the notifications prompt
+    And I have not got the notifications cookie
+    Then I see the notifications prompt
+    When I accept notifications but I am denied
+    Then I see the notification failure
+    When I continue from the notification failure
+    Then I see the home page
 
   Scenario: A user can enable push notifications for their device
     Given I am using the native app user agent
@@ -30,7 +66,7 @@ Feature: Push Notifications
 
   Scenario: A user can navigate to the push notifications Privacy policy page
     Given I am using the native app user agent
-    And I am a user wishing to enable push notifications for the first time
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I am logged in
     When I navigate to the Account page
     Then the Account Settings are available
@@ -143,7 +179,7 @@ Feature: Push Notifications
 
   Scenario: A user attempting to enable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent
-    And I am a user wishing to enable push notifications for the first time
+    And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page

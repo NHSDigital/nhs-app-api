@@ -1,7 +1,7 @@
 import TermsConditions from '@/components/TermsConditions';
 import * as LibUtils from '@/lib/utils';
-import { TERMSANDCONDITIONS_NAME, APPOINTMENTS_NAME, REDIRECT_PARAMETER } from '@/router/names';
-import { TERMSANDCONDITIONS_PATH, INDEX_PATH } from '@/router/paths';
+import { TERMSANDCONDITIONS_NAME } from '@/router/names';
+import { TERMSANDCONDITIONS_PATH } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../helpers';
 
@@ -101,7 +101,7 @@ describe('TermsConditions acceptance', () => {
       wrapper.vm.isAnalyticsCookieAccepted = true;
     });
 
-    it('progresses when submit button clicked', async () => {
+    it('updates the terms acceptance when submit button is clicked', async () => {
       wrapper.find('#btn_accept').trigger('click');
       expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
         consentRequest: {
@@ -145,31 +145,6 @@ describe('terms and conditions are accepted', () => {
             AnalyticsCookieAccepted: true,
           },
         });
-      });
-
-      it('will redirect to INDEX route', () => {
-        expect(LibUtils.redirectTo).toBeCalledWith(wrapper.vm, INDEX_PATH);
-      });
-    });
-  });
-
-  describe('current route has a redirect query parameter', () => {
-    beforeEach(() => {
-      wrapper = createTermsConditionsComponent({
-        state,
-        query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
-      });
-      wrapper.vm.areTermsAccepted = true;
-      wrapper.vm.isAnalyticsCookieAccepted = true;
-    });
-
-    describe('when the accept button is clicked', () => {
-      beforeEach(() => {
-        wrapper.find('#btn_accept').trigger('click');
-      });
-
-      it('will redirect to redirect parameter route', () => {
-        expect(LibUtils.redirectByName).toBeCalledWith(wrapper.vm, APPOINTMENTS_NAME);
       });
     });
   });

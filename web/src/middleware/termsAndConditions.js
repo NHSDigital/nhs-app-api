@@ -1,6 +1,6 @@
 import get from 'lodash/fp/get';
 import {
-  INDEX_NAME,
+  NOTIFICATIONS_NAME,
   INTERSTITIAL_REDIRECTOR_NAME,
   LOGOUT_NAME,
   REDIRECT_PARAMETER,
@@ -32,7 +32,7 @@ export default async (context) => {
           store,
         }));
       }
-      const name = redirectName ? INTERSTITIAL_REDIRECTOR_NAME : INDEX_NAME;
+      const name = redirectName ? INTERSTITIAL_REDIRECTOR_NAME : NOTIFICATIONS_NAME;
       return next(createRouteByNameObject({ name, query: to.query, params: to.params, store }));
     }
     return next();

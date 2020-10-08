@@ -1,7 +1,13 @@
 import get from 'lodash/fp/get';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
-import { SET_REGISTRATION, SET_WAITING } from './mutation-types';
+import jwt from 'jwt-decode';
+import { NOTIFICATIONS_NAME } from '@/router/names';
+import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
+import {
+  SET_NOTIFICATION_COOKIE_EXISTS,
+  SET_REGISTRATION, SET_WAITING,
+} from './mutation-types';
 
 const load = 'load';
 const toggle = 'toggle';
@@ -22,6 +28,7 @@ const addApiError = ({ dispatch }, errorCode, message) => dispatch('errors/addAp
 });
 
 let resolveLoading;
+let resolveChecking;
 
 export default {
   authorised({ state, commit }, deviceResponse) {
@@ -42,10 +49,14 @@ export default {
       return promise.then(() => commit(SET_REGISTRATION, registering))
         // NHSO-7584
         .catch((error) => {
-          if (get('response.status')(error) === 404) {
-            addApiError(this, 10003, error.message);
+          if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+            this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+          } else {
+            if (get('response.status')(error) === 404) {
+              addApiError(this, 10003, error.message);
+            }
+            throw new Error(error.message);
           }
-          throw new Error(error.message);
         })
         .finally(() => commit(SET_WAITING, false));
     }
@@ -53,7 +64,9 @@ export default {
     return this.app.$http.getV1ApiUsersMeDevices({ devicePns })
       .then(() => commit(SET_REGISTRATION, true))
       .catch(() => commit(SET_REGISTRATION, false))
-      .finally(() => resolveLoading(authorisationStatus.authorised));
+      .finally(() => {
+        resolveLoading(authorisationStatus.authorised);
+      });
   },
   load() {
     const loading = new Promise((resolve) => {
@@ -70,7 +83,12 @@ export default {
         break;
       case authorisationStatus.denied:
         commit(SET_REGISTRATION, false);
-        addApiError(this, 10001);
+        if (this.app.$router.history.pending !== null &&
+          this.app.$router.history.pending.name === NOTIFICATIONS_NAME) {
+          this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+        } else {
+          addApiError(this, 10001);
+        }
         resolveLoading(status);
         break;
       default:
@@ -87,10 +105,37 @@ export default {
   },
   toggle({ commit }) {
     commit(SET_WAITING, true);
+
     NativeApp.requestPnsToken(toggle);
   },
   unauthorised({ commit }) {
     commit(SET_WAITING, false);
-    addApiError(this, 10002);
+    if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+      this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+    } else {
+      addApiError(this, 10002);
+    }
+  },
+  deviceCookieExists({ commit }, exists) {
+    commit(SET_NOTIFICATION_COOKIE_EXISTS, exists);
+    resolveChecking(exists);
+    resolveChecking = undefined;
+  },
+  addNotificationCookie() {
+    const cookieValue = this.$cookies.get('nhso.session');
+    const decodedToken = jwt(cookieValue.accessToken);
+    NativeApp.addNotificationCookie(decodedToken.sub);
+  },
+  checkNotificationCookie() {
+    const cookieValue = this.$cookies.get('nhso.session');
+    const decodedToken = jwt(cookieValue.accessToken);
+
+    const checking = new Promise((resolve) => {
+      resolveChecking = resolve;
+    });
+
+    NativeApp.checkNotificationCookie(decodedToken.sub);
+
+    return checking;
   },
 };

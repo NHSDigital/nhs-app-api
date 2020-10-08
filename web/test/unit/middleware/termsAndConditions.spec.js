@@ -5,10 +5,10 @@ import { LOGOUT } from '@/router/routes/logout';
 import { APPOINTMENTS } from '@/router/routes/appointments';
 import {
   TERMSANDCONDITIONS_NAME,
-  INDEX_NAME,
   APPOINTMENTS_NAME,
   REDIRECT_PARAMETER,
   INTERSTITIAL_REDIRECTOR_NAME,
+  NOTIFICATIONS_NAME,
 } from '@/router/names';
 import { initialState as sessionState } from '@/store/modules/session/mutation-types';
 import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
@@ -102,10 +102,10 @@ describe('middleware/termsAndConditions', () => {
           }));
         });
 
-        it('will redirect to INDEX', async () => {
+        it('will redirect to NOTIFICATIONS', async () => {
           await termsAndConditions(context);
           expect(context.next).toHaveBeenCalledWith({
-            name: INDEX_NAME,
+            name: NOTIFICATIONS_NAME,
             query: {},
           });
         });
@@ -137,9 +137,9 @@ describe('middleware/termsAndConditions', () => {
           await termsAndConditions(context);
         });
 
-        it('will redirect to INDEX', async () => {
+        it('will redirect to NOTIFICATIONS', async () => {
           expect(context.next).toBeCalledWith({
-            name: INDEX_NAME,
+            name: NOTIFICATIONS_NAME,
             query: {},
           });
         });

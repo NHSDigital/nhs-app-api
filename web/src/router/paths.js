@@ -77,6 +77,8 @@ export const NOMINATED_PHARMACY_CHECK_PATH = 'nominated-pharmacy/check';
 export const NOMINATED_PHARMACY_CHOOSE_TYPE_PATH = 'nominated-pharmacy/choose-type';
 export const NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH = 'nominated-pharmacy/online-only-choices';
 export const NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH = 'nominated-pharmacy/online-only-search';
+export const NOTIFICATIONS_PATH = '/notifications';
+export const NOTIFICATIONS_GENERIC_FAILURE_PATH = '/notifications-failure';
 export const ORGAN_DONATION_PATH = 'organ-donation';
 export const ORGAN_DONATION_ADDITIONAL_DETAILS_PATH = 'organ-donation/additional-details';
 export const ORGAN_DONATION_AMEND_PATH = 'organ-donation/amend';
@@ -197,6 +199,7 @@ export default {
   NOMINATED_PHARMACY_CHOOSE_TYPE_PATH,
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES_PATH,
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH_PATH,
+  NOTIFICATIONS_PATH,
   ORGAN_DONATION_PATH,
   ORGAN_DONATION_ADDITIONAL_DETAILS_PATH,
   ORGAN_DONATION_AMEND_PATH,

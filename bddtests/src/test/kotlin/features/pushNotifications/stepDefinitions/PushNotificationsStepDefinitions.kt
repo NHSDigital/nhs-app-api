@@ -1,5 +1,7 @@
 package features.pushNotifications.stepDefinitions
 
+import features.authentication.steps.NotificationFailureSteps
+import features.authentication.steps.NotificationSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -15,10 +17,16 @@ import utils.GlobalSerenityHelpers
 import utils.clearList
 import utils.getOrFail
 
+private const val SLEEP_TIME_FOR_PROMISE: Long = 4000
+
 class PushNotificationsStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
+    @Steps
+    lateinit var notificationPromptSteps: NotificationSteps
+    @Steps
+    lateinit var notificationFailureSteps: NotificationFailureSteps
 
     val errorPage = ErrorPage()
 
@@ -35,7 +43,7 @@ class PushNotificationsStepDefinitions {
         factory.setUpInvalidMongoDeviceRegistration()
     }
 
-    @Given("^I am a user wishing to enable push notifications for the first time$")
+    @Given("^I am a user wishing to enable push notifications for the first time, with my initial state undetermined$")
     fun iAmAUserWishingToEnablePushNotificationsForTheFirstTime() {
         initialSetup(SettingStatus.NotDetermined, true)
     }
@@ -78,6 +86,26 @@ class PushNotificationsStepDefinitions {
     @When("^I enable notifications in the device's settings$")
     fun iEnableNotificationsInTheDeviceSettings() {
         resetScripts(SettingStatus.Authorised, true)
+    }
+
+    @When("^I accept notifications and continue$")
+    fun iAcceptNotificationsAndContinue() {
+        notificationPromptSteps.acceptNotifications()
+    }
+
+    @When("^I accept notifications but I am denied$")
+    fun iAcceptNotifications() {
+        notificationPromptSteps.acceptNotificationsButUnauthorisedReturned()
+    }
+
+    @When("^I continue from the notification failure$")
+    fun iContinueFromTheNotificationFailure() {
+        notificationFailureSteps.continueToHome()
+    }
+
+    @When("^I do not accept notifications and continue$")
+    fun iDontAcceptNotificationsAndContinue() {
+        notificationPromptSteps.dontAcceptNotifications()
     }
 
     @Then("^the Notifications Settings page is displayed$")
@@ -140,6 +168,17 @@ class PushNotificationsStepDefinitions {
                 .assertErrorDetailText("Go to your device settings and check notifications are turned on," +
                         " then try again.")
                 .assertRetryButtonText("Try again")
+    }
+
+    @Then("^I see the notifications prompt$")
+    fun iSeeTheNotificationsPrompt() {
+        Thread.sleep(SLEEP_TIME_FOR_PROMISE)
+        notificationPromptSteps.notificationsPromptPage.assertDisplayed()
+    }
+
+    @Then("^I see the notification failure$")
+    fun iSeeTheNotificationFailure() {
+        notificationFailureSteps.notificationsPromptFailurePage.assertDisplayed()
     }
 
     private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {

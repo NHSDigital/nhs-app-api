@@ -1,4 +1,4 @@
-package pages.account
+package pages.notifications
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -6,10 +6,14 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.sharedElements.ToggleElement
 
-@DefaultUrl("http://web.local.bitraft.io:3000/account/notifications")
-class NotificationsSettingsPage : HybridPageObject() {
+@DefaultUrl("http://web.local.bitraft.io:3000/notifications")
+class NotificationsPromptPage : HybridPageObject() {
 
     val notificationsToggle = ToggleElement(this, "Allow notifications", "allow_notifications")
+    val continueButton = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+            page = this
+    )
     var ifYouShare =
             getElement(
                     "//p[contains(text(), " +
@@ -22,10 +26,6 @@ class NotificationsSettingsPage : HybridPageObject() {
             getElement("//p[contains(text(), 'More information is available in the')]")
     var moreInfoLink =
             getElement("//a[contains(text(), 'NHS App privacy policy')]")
-    var manageNotifications =
-            getElement(
-                    "//a[contains(text(), " +
-                            "'Manage how notifications are shown on this device (opens your device settings)')]")
 
     fun assertDisplayed() {
         title.waitForElement()
@@ -34,16 +34,14 @@ class NotificationsSettingsPage : HybridPageObject() {
         moreInfoParagraph.assertIsVisible()
         moreInfoLink.assertIsVisible()
         notificationsToggle.assertIsVisible()
-        manageNotifications.assertIsVisible()
+        continueButton.assertIsVisible()
     }
 
     private val title by lazy {
         HybridPageElement(
-                "//h1[normalize-space(text())='Manage notifications']",
-                "//h1[normalize-space(text())='Manage notifications']",
-                null,
-                null,
-                this,
+                webDesktopLocator = "//h1[normalize-space(text())='Manage notifications']",
+                page = this,
                 helpfulName = "header")
     }
 }
+

@@ -26,6 +26,7 @@ import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrNull
 import utils.set
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -139,12 +140,40 @@ open class SharedStepDefinitions {
         doLogin(false)
     }
 
+    @Given("^I log in to the app expecting to see the notifications prompt$")
+    fun iLogInToTheAppExpectingTheNotificationsPrompt() {
+        handleLogin()
+    }
+
+    @Then("^I have not got the notifications cookie$")
+    fun iHaveNotGotTheNotificationsCookie(){
+        login.skipNotificationPromptCookie(false)
+        GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.set(true)
+    }
+
+    @Then("^I have got the notifications cookie$")
+    fun iHaveGotTheNotificationsCookie(){
+        GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.set(false)
+    }
+
     @Given("^I am logged in$")
     fun iAmLoggedIn() {
         doLogin(true)
     }
 
     private fun doLogin(waitForLoginPage: Boolean) {
+        handleLogin()
+
+        val shouldShowNotificationPrompt =
+                GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.getOrNull<Boolean>()
+        if (shouldShowNotificationPrompt == null || shouldShowNotificationPrompt == false) {
+            login.skipNotificationPromptCookie(true)
+        }
+
+        home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
+    }
+
+    private fun handleLogin() {
         val patient = SerenityHelpers.getPatient()
         browser.goToApp()
 
@@ -157,7 +186,6 @@ open class SharedStepDefinitions {
         cookieSteps.setInstructionsCookie("true")
 
         login.using(patient)
-        home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
     }
 
     @When("^I login$")

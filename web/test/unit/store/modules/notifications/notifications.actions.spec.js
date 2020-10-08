@@ -1,8 +1,11 @@
 import actions from '@/store/modules/notifications/actions';
 import { SET_REGISTRATION, SET_WAITING } from '@/store/modules/notifications/mutation-types';
+import { ACCOUNT_NOTIFICATIONS_NAME } from '@/router/names';
+import { createRouter } from '../../../helpers';
 
 describe('notifications actions', () => {
   let $http;
+  let $router;
   let commit;
   let deleteSuccess;
   let error;
@@ -80,11 +83,8 @@ describe('notifications actions', () => {
       getV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
       postV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(postSuccess)),
     };
-    actions.app = {
-      get $http() {
-        return $http;
-      },
-    };
+    $router = createRouter(ACCOUNT_NOTIFICATIONS_NAME);
+    actions.app = { $http, $router };
     actions.dispatch = jest.fn();
     global.nativeApp = {
       getNotificationsStatus: jest.fn(),
@@ -173,6 +173,7 @@ describe('notifications actions', () => {
 
         describe('on error', () => {
           beforeEach(() => {
+            actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
             postSuccess = false;
           });
 
@@ -263,6 +264,7 @@ describe('notifications actions', () => {
 
   describe('toggle', () => {
     beforeEach(() => {
+      actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
       actions.toggle({ commit });
     });
 

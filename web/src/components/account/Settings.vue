@@ -15,8 +15,8 @@
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
-               :text="$t('account.notifications.notifications')"
-               :aria-label="$t('account.notifications.notifications')"
+               :text="$t('account.notifications')"
+               :aria-label="$t('account.notifications')"
                :click-func="showNotificationsClicked"/>
 
     <third-party-jump-off-button v-if="showGncrAccountAdmin"
