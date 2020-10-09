@@ -1,11 +1,15 @@
 <template>
   <details class="nhsuk-details">
-    <summary class="nhsuk-details__summary">
+    <summary class="nhsuk-details__summary"
+             aria-controls="nhsuk-details__text"
+             aria-expanded="false">
       <span class="nhsuk-details__summary-text">
         <slot name="header" />
       </span>
     </summary>
-    <div class="nhsuk-details__text">
+    <div id="nhsuk-details__text"
+         class="nhsuk-details__text"
+         aria-hidden="true">
       <slot/>
     </div>
   </details>
