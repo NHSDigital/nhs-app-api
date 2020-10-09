@@ -13,21 +13,18 @@
   <PreFlow>
     <Request>
       <Step>
-        <!-- This will return 404 because /_status doesn't exist for the backend. Either implement _status for your backend
-        or use a service-callout to call health-check endpoint -->
         <Name>VerifyApiKey.XApiKey</Name>
       </Step>
-    </Request>
-    <!--   <Step> -->
-    <!--     <Name>AssignMessage.RenameQuotaVarsFromVerifyAPIKeyPolicyClientId</Name> -->
-    <!--   </Step> -->
-    <!--   <Step> -->
-    <!--     <Name>Quota</Name> -->
-    <!--   </Step> -->
-    <!--   <Step> -->
-    <!--     <Name>SpikeArrest</Name> -->
-    <!--   </Step> -->
-    <!-- </Request> -->
+      <Step>
+        <Name>AssignMessage.RemoveApiKeyHeader</Name>
+      </Step>
+      <Step>
+        <Name>KeyValueMap.GetUpstreamApiKey</Name>
+      </Step>
+      <Step>
+        <Name>AssignMessage.AddUpstreamApiKeyHeader</Name>
+      </Step>
+    </Request>  
   </PreFlow>
   <HTTPTargetConnection>
     <SSLInfo>
