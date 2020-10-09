@@ -6,9 +6,11 @@ import UserNotifications
 class NotificationsService {
     private let appWebInterface: AppWebInterface
     private var trigger: String = ""
+    private let cookieHandler: CookieHandler
 
-    init(appWebInterface: AppWebInterface) {
+    init(appWebInterface: AppWebInterface, cookieHandler: CookieHandler) {
         self.appWebInterface = appWebInterface
+        self.cookieHandler = cookieHandler
     }
 
     func registerForPushNotifications(trigger: String) {
@@ -63,6 +65,22 @@ class NotificationsService {
                 self.appWebInterface.getNotificationsStatus(status: status.rawValue)
             }
         }
+    }
+    
+    func addNotificationCookie(nhsLoginId: String) {
+        let cookieName = cookieHandler.createUniqueCookieKey(name: "notifications-prompt", uniqueIdentifier: nhsLoginId)
+        let cookieExists = cookieHandler.cookieExists(name: cookieName)
+        
+        if (cookieExists) {
+            return
+        }
+        
+        cookieHandler.setCookieFromNameAndValue(key: cookieName, value: "\(nhsLoginId)" as AnyObject)
+    }
+    
+    func checkNotificationCookie(nhsLoginId: String) {
+        let cookieExists = cookieHandler.cookieExists(name: cookieHandler.createUniqueCookieKey(name: "notifications-prompt", uniqueIdentifier: nhsLoginId))
+        self.appWebInterface.checkNotificationCookieExists(exists: cookieExists)
     }
 
     func authorised(deviceToken: Data) {

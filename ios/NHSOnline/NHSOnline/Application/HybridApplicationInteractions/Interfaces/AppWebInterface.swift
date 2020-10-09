@@ -37,6 +37,10 @@ class AppWebInterface {
         dispatchNativeAppCallback(function: "notificationsSettingsStatus", args: "'\(status)'")
     }
     
+    func checkNotificationCookieExists(exists: Bool) {
+        dispatchNativeAppCallback(function: "deviceNotificationPromptCookieExists", args: "\(exists)")
+    }
+    
     func extendSession() {
         dispatchNativeAppCallback(function: "sessionExtend")
     }

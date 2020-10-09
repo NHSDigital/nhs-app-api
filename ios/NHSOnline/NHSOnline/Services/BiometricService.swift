@@ -89,7 +89,7 @@ class BiometricService: BiometricProtocol {
                 return
             }
             
-            CookieHandler().setCookie(key: "HideBiometricBanner", value: "true" as AnyObject)
+            CookieHandler().setCookieFromNameAndValue(key: "HideBiometricBanner", value: "true" as AnyObject)
             storeBiometricState()
             self.appWebInterface.biometricCompletion(
                 action: BiometricActions.register.rawValue,

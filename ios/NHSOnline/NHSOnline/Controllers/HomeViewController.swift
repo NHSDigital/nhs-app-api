@@ -107,7 +107,9 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
 
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
         
-        notificationsService = NotificationsService(appWebInterface: appWebInterface!)
+        let cookieHandler = CookieHandler()
+        
+        notificationsService = NotificationsService(appWebInterface: appWebInterface!, cookieHandler: cookieHandler)
         lifecycleHandlers = LifecycleHandlers(knownServiceProvider: self.knownServicesProvider!,
                 webViewController: webViewController!,
                 homeViewController: self,
@@ -650,6 +652,14 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     
     func getNotificationsStatus() {
         notificationsService?.getNotificationsStatus()
+    }
+    
+    func addNotificationCookie(nhsLoginId: String) {
+        notificationsService?.addNotificationCookie(nhsLoginId: nhsLoginId)
+    }
+    
+    func checkNotificationCookie(nhsLoginId: String) {
+        notificationsService?.checkNotificationCookie(nhsLoginId: nhsLoginId)
     }
     
     func showDownloadError() {

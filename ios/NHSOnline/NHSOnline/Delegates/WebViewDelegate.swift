@@ -273,6 +273,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.getNotificationsStatus.rawValue:
                 viewController.getNotificationsStatus()
                 break;
+            case UserContent.addNotificationCookie.rawValue:
+                let nhsLoginId: String = message.body as! String
+                viewController.addNotificationCookie(nhsLoginId: nhsLoginId)
+                break;
+            case UserContent.checkNotificationCookie.rawValue:
+                let nhsLoginId: String = message.body as! String
+                viewController.checkNotificationCookie(nhsLoginId: nhsLoginId)
+                break;
             case UserContent.attemptBiometricLogin.rawValue:
                 viewController.delayedBiometricsStart(0.3)
                 break
