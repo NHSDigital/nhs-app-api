@@ -36,8 +36,6 @@ patientPracticeMessagingEnabled: false
 ndopClaimIssuer: https://www-preview.dev.nonlive.nhsapp.service.nhs.uk
 ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
 
-userResearchEnabled: false
-
 tppSupportsLinkedAccounts: true
 nominatedpharmacyEnabled: true
 econsultEnabled: true
@@ -145,7 +143,7 @@ metrics:
 
 qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"
-qualtricsMailingListId: "CG_1EbtS4U7wKHRWdU"
+qualtricsMailingListId: "CG_27lDgMxvttB7Oxg"
 
 # NIET_LOAD_END_FLAG
 # Please keep knownservices_config variable below NIET_LOAD_END_FLAG

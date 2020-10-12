@@ -35,8 +35,6 @@ tppIPTrust: "62.253.26.135/32"
 tppProviderID: 9b369fd64a6a6d23
 tppSupportsLinkedAccounts: true
 
-userResearchEnabled: false
-
 microtestHostname: nhsapp.microtest.co.uk
 
 econsultEnabled: true
