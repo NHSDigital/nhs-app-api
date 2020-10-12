@@ -363,11 +363,6 @@ spec:
               key: password
         - name: ORGAN_DONATION_CERT_PATH
           value: "/mnt/secrets-store/organdonationpfx"
-        - name: ORGAN_DONATION_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: organdonation-{{ .Chart.AppVersion }}
-              key: password
         - name: ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS
           value: "{{ $.Values.organDonationDataExpirySeconds }}"
         - name: SPINE_LDAP_LOOKUP_ENABLED
