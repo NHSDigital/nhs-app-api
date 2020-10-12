@@ -42,8 +42,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             services.AddNhsAppHealthCheckService();
 
             services.AddSingleton(Configuration);
-            services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+            services.AddTransient(typeof(HttpTimeoutHandler<>));
+            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
             services.AddSingleton(services);
             services.AddOptions();
 

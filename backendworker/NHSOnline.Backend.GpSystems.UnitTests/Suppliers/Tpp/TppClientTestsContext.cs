@@ -70,8 +70,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             services.AddSingleton(MockHttpHandler);
             services.ReplacePrimaryHttpMessageHandler<TppHttpClient, MockHttpMessageHandler>();
 
-            services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+            services.AddTransient(typeof(HttpTimeoutHandler<>));
+            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             var timeoutConfiguration = new Mock<IHttpTimeoutConfigurationSettings>();
             timeoutConfiguration.Setup(x => x.DefaultHttpTimeoutSeconds).Returns(10);

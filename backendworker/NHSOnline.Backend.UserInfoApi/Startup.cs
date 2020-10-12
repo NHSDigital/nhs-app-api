@@ -56,8 +56,8 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddOptions();
             services.AddCorrelationId();
 
-            services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+            services.AddTransient(typeof(HttpTimeoutHandler<>));
+            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             SetupApiKeys(services);
 
