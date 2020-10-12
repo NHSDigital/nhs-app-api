@@ -2,10 +2,11 @@
 cluster: sandboxuks1
 zone: sandbox
 domain: nonlive.nhsapp.service.nhs.uk
+privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: ops
 
-addAppointmentToCalendarEnabled: false
+addAppointmentToCalendarEnabled: true
 emisCertEnabled: true
 fakeGpSystemEnabled: true
 econsultEnabled: true

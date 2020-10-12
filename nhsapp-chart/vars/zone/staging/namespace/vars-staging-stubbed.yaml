@@ -2,6 +2,7 @@
 registry: nhsapp.azurecr.io
 cidHostname: auth.nhsapp.signin.nhs.uk
 cidFidoHostname: uaf.nhsapp.signin.nhs.uk
+cidSettingsHostName: settings.nhsapp.signin.nhs.uk
 cosmosDBName: stubbed
 
 spineLdapLookupEnabled: false

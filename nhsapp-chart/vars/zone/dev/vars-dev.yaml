@@ -1,5 +1,6 @@
 ---
 domain: nonlive.nhsapp.service.nhs.uk
+privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: scratch
 zone: dev
@@ -16,7 +17,7 @@ messagesEnabled: true
 tppSupportsLinkedAccounts: true
 sixteenWeeksSlotsEnabled: true
 
-spineLdapLookupEnabled: false
+spineLdapLookupEnabled: true
 spineLdapCIDR: "10.239.67.128/25"
 spineLdapHost: "ldap.vn03.national.ncrs.nhs.uk"
 

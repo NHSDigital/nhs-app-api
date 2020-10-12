@@ -17,6 +17,7 @@ addAppointmentToCalendarEnabled: true
 
 cidHostname: auth.ext.signin.nhs.uk
 cidFidoHostname: uaf.ext.signin.nhs.uk
+cidSettingsHostName: settings.ext.signin.nhs.uk
 
 nhsSearchHostname: api.nhs.uk
 
@@ -358,90 +359,6 @@ knownservices_config: {
       "validateSession": false,
       "subServices": [
         {
-          "path": "/account",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "None",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/appointments",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "Appointments",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/check-your-symptoms",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "Symptoms",
-          "viewMode": "WebView",
-          "integrationLevel": "GoldOverlay",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": false
-        },
-        {
-          "path": "/more",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/my-record",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "MyRecord",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/health-records/gp-medical-record/documents/detail/*",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "MyRecord",
-          "viewMode": "WebView",
-          "integrationLevel": "GoldWithNoHeaders",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/organ-donation",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
           "path": "/pre-registration-information",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
@@ -466,7 +383,163 @@ knownservices_config: {
           "validateSession": true
         },
         {
-          "path": "/prescriptions",
+          "path": "/get-health-advice",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Symptoms",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldOverlay",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/patient/account",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/account",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/appointments",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Appointments",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/appointments",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Appointments",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/more",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/more",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/health-records/gp-medical-record/documents/detail/*",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldWithNoHeaders",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/health-records/gp-medical-record/documents/detail/*",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldWithNoHeaders",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/health-records",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/health-records",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/organ-donation",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/organ-donation",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/prescriptions",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Prescriptions",
@@ -478,7 +551,31 @@ knownservices_config: {
           "validateSession": true
         },
         {
-          "path": "/symptoms",
+          "path": "/patient/*/prescriptions",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Prescriptions",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/advice",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Symptoms",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/advice",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
@@ -498,7 +595,7 @@ knownservices_config: {
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "Gold",
-      "showSpinner": false,
+      "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
@@ -533,7 +630,7 @@ knownservices_config: {
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": false,
+      "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -545,7 +642,7 @@ knownservices_config: {
           "menuTab": "None",
           "viewMode": "WebView",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -557,7 +654,7 @@ knownservices_config: {
           "menuTab": "None",
           "viewMode": "WebView",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -569,7 +666,7 @@ knownservices_config: {
           "menuTab": "None",
           "viewMode": "AppTab",
           "integrationLevel": "SilverWithWebNavigation",
-          "showSpinner": false,
+          "showSpinner": true,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -583,7 +680,7 @@ knownservices_config: {
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithWebNavigation",
-      "showSpinner": false,
+      "showSpinner": true,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false

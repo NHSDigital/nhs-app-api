@@ -2,6 +2,7 @@
 registry: nhsapp.azurecr.io
 cidHostname: auth.ext.signin.nhs.uk
 cidFidoHostname: uaf.ext.signin.nhs.uk
+cidSettingsHostName: settings.ext.signin.nhs.uk
 cosmosDBName: demo
 
 emisPort: 443
