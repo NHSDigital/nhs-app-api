@@ -1,4 +1,5 @@
 <ProxyEndpoint name="default">
+    <PreFlow/>
     <Flows>
       <Flow name="OptionsPreFlight">
             <Request/>
@@ -20,7 +21,7 @@
         <Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
       </Flow>
     </Flows>
-    <PreFlow/>
+    <PostFlow/>
     <HTTPProxyConnection>
         <BasePath>{{ SERVICE_BASE_PATH }}</BasePath>
         <VirtualHost>secure</VirtualHost>
