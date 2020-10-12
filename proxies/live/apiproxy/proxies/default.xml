@@ -1,38 +1,46 @@
 <ProxyEndpoint name="default">
-    <PreFlow/>
-    <Flows>
-      <Flow name="OptionsPreFlight">
-            <Request/>
-            <Response>
-                <Step>
-                    <Name>AssignMessage.AddCors</Name>
-                </Step>
-            </Response>
+  <PreFlow/>
+  <Flows>
+    <Flow name="ValidateCorrelationIdHeader">
+      <Request>
+        <Step>
+          <Name>RaiseFault.CheckCorrelationIdHeader</Name>
+          <Condition>(proxy.pathsuffix MatchesPath "/communication") and (request.header.X-Correlation-ID != null) and NOT (request.header.X-Correlation-ID JavaRegex "(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")</Condition>
+        </Step>
+      </Request>
+    </Flow>
+    <Flow name="OptionsPreFlight">
+      <Request/>
+      <Response>
+        <Step>
+          <Name>AssignMessage.AddCors</Name>
+        </Step>
+      </Response>
         <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
-      </Flow>
-      <Flow name="AddPayloadToPing">
-        <Description/>
-        <Request/>
-        <Response>
-          <Step>
-            <Name>AssignMessage.AddPayloadToPing</Name>
-          </Step>
-        </Response>
-        <Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
-      </Flow>
-    </Flows>
-    <PostFlow/>
-    <HTTPProxyConnection>
-        <BasePath>{{ SERVICE_BASE_PATH }}</BasePath>
-        <VirtualHost>secure</VirtualHost>
-    </HTTPProxyConnection>
-    <RouteRule name="NoRoute">
-        <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
-    </RouteRule>
-    <RouteRule name="NoRoutePing">
+    </Flow>
+    <Flow name="AddPayloadToPing">
+      <Description/>
+      <Request/>
+      <Response>
+        <Step>
+          <Name>AssignMessage.AddPayloadToPing</Name>
+        </Step>
+      </Response>
       <Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
-    </RouteRule>
-    <RouteRule name="nhs-app-target">
-        <TargetEndpoint>nhs-app-target</TargetEndpoint>
-    </RouteRule>
+    </Flow>
+  </Flows>
+  <PostFlow/>
+  <HTTPProxyConnection>
+      <BasePath>{{ SERVICE_BASE_PATH }}</BasePath>
+      <VirtualHost>secure</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="NoRoute">
+      <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
+  </RouteRule>
+  <RouteRule name="NoRoutePing">
+    <Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
+  </RouteRule>
+  <RouteRule name="nhs-app-target">
+      <TargetEndpoint>nhs-app-target</TargetEndpoint>
+  </RouteRule>
 </ProxyEndpoint>

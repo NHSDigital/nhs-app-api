@@ -24,7 +24,16 @@
       <Step>
         <Name>AssignMessage.AddUpstreamApiKeyHeader</Name>
       </Step>
-    </Request>  
+      <Step>
+        <Name>AssignMessage.AddHeader.NhsdCorrelationId</Name>
+      </Step>
+      <Step>
+        <Name>AssignMessage.AddHeader.NhsdSupplierAppId</Name>
+      </Step>
+      <Step>
+        <Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
+      </Step>
+    </Request>
   </PreFlow>
   <HTTPTargetConnection>
     <SSLInfo>
