@@ -1,0 +1,8 @@
+<AssignMessage continueOnError="false" enabled="true" name="AssignMessage.RemoveHeader.XCorrelationId">
+  <Remove>
+    <Headers>
+      <Header name="X-Correlation-ID"/>
+    </Headers>
+  </Remove>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>
