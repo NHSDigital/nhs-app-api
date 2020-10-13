@@ -374,13 +374,8 @@ spec:
               key: secret
       {{- if (or ($.Values.spineLdapLookupEnabled) ($.Values.spinePdsEnabled)) }}
         - name: SPINE_CERT_PATH
-          value: "/mnt/secrets-store/spineCert"
-        - name: SPINE_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: spine-certificate-password-{{ .Chart.AppVersion }}
-              key: secret
-    {{- end }}
+          value: "/mnt/secrets-store/spinePfx"
+      {{- end }}
         - name: USERINFO_API_BASE_URL
           value: "https://nhsapp-info-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/v1/api/users/me/info"
       {{- if $.Values.spineLdapLookupEnabled }}
