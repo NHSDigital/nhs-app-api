@@ -161,7 +161,7 @@ spec:
         - name: VISION_APPLICATION_PROVIDER_ID
           value: nhson001
         - name: VISION_CERT_PATH
-          value: "/mnt/secrets-store/visionClientCert"
+          value: "/mnt/secrets-store/visionPfx"
         - name: VISION_USERNAME
           value: "{{ $.Values.visionUsername }}"
         - name: VISION_PFS_PATH
