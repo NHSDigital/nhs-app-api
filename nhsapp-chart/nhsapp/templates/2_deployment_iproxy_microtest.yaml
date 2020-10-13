@@ -59,8 +59,6 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
-        command: ["/bin/sh"]
-        args: ["-c", "cat /mnt/secrets-store/microtestCrt | base64 -d > /tmp/microtestCrt && cat /mnt/secrets-store/microtestKey | base64 -d > /tmp/microtestKey && nginx -g 'daemon off;'"]    
         ports:
         - containerPort: {{ $.Values.iproxy_microtest.containerPort }}
         resources:
@@ -70,17 +68,6 @@ spec:
           limits:
             memory: {{ $.Values.iproxy_microtest.memoryLimit }}
             cpu: {{ $.Values.iproxy_microtest.cpuLimit }}
-        env:
-        - name: MICROTEST_CERT_PATH
-          value: "/etc/nginx/ssl_microtest/microtest.pfx"
-        - name: MICROTEST_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: microtest-{{ .Chart.AppVersion }}
-              key: password
-{{- with $.Values.iproxy_microtest.environmentVariables }}
-{{ toYaml . | trim | indent 8 }}
-{{- end }}
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
