@@ -245,30 +245,9 @@ cosmosdbDevicesKey: cGxhY2Vob2xkZXI=
 dockerRegistrySecret: cGxhY2Vob2xkZXI=
 gpLookupApiKey: cGxhY2Vob2xkZXI=
 organdonation: cGxhY2Vob2xkZXI=
-organdonationCert: cGxhY2Vob2xkZXI=
 organdonationSubscription: cGxhY2Vob2xkZXI=
-microtestPassword: cGxhY2Vob2xkZXI=
-microtestCrt: cGxhY2Vob2xkZXI=
-microtestKey: cGxhY2Vob2xkZXI=
-microtestPfx: cGxhY2Vob2xkZXI=
-microtestClientCrtStubbed: cGxhY2Vob2xkZXI=
-microtestClientCrtPasswordStubbed: cGxhY2Vob2xkZXI=
-ndopCert: cGxhY2Vob2xkZXI=
-ndopCertPassword: cGxhY2Vob2xkZXI=
-nhsloginKey: cGxhY2Vob2xkZXI=
-nhsloginPassword: cGxhY2Vob2xkZXI=
 sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
-spineCrt: cGxhY2Vob2xkZXI=
-spineKey: cGxhY2Vob2xkZXI=
-spinePfx: cGxhY2Vob2xkZXI=
-spinePfxPassword: cGxhY2Vob2xkZXI=
-tppCert: cGxhY2Vob2xkZXI=
-tppCertPassword: cGxhY2Vob2xkZXI=
-visionClientCertPfxStubbed: cGxhY2Vob2xkZXI=
-visionClientCertPfxPasswordStubbed: cGxhY2Vob2xkZXI=
-visionClientCertPfx: cGxhY2Vob2xkZXI=
-visionClientCertPfxPassword: cGxhY2Vob2xkZXI=
 
 sidecar_proxy:
   containerPort: 8443

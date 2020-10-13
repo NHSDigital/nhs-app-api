@@ -127,11 +127,6 @@ spec:
           {{- if $.Values.emisCertEnabled }}
         - name: EMIS_CERT_PATH
           value: "/mnt/secrets-store/emisPfx"
-        - name: EMIS_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: emiscert-password-{{ .Chart.AppVersion }}
-              key: password
           {{- end }}
         {{- end }}
         - name: KNOWNSERVICES_PATH
@@ -220,19 +215,9 @@ spec:
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
         - name: VISION_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"
-        - name: VISION_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: vision-client-cert-pfx-password-stubbed-{{ .Chart.AppVersion }}
-              key: password
         {{- else }}
         - name: VISION_BASE_URL
           value: "{{ $.Values.visionProtocol }}://{{ $.Values.visionHostname }}:{{ $.Values.visionPort}}/"
-        - name: VISION_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: vision-client-cert-pfx-password-{{ .Chart.AppVersion }}
-              key: password
         {{- end }}
         - name: VISION_APPLICATION_PROVIDER_ID
           value: nhson001
@@ -261,11 +246,6 @@ spec:
         {{- end }}
         - name: NDOP_CERT_PATH
           value: "/mnt/secrets-store/ndopPfx"
-        - name: NDOP_CERT_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: ndop-cert-password-{{ .Chart.AppVersion }}
-              key: password
         - name: NDOP_CLAIM_AUDIENCE
           value: "{{ $.Values.ndopClaimAudience }}"
         - name: NDOP_CLAIM_ISSUER

@@ -48,9 +48,6 @@ spec:
       - name: iproxy-config
         configMap:
           name: iproxy-microtest-config-{{ .Chart.AppVersion }}
-      - name: microtest-cert
-        secret:
-          secretName: microtest-cert-{{ .Chart.AppVersion }}
       containers:
       - name: iproxy-microtest
         image: {{ $.Values.registry }}/{{ $.Values.iproxy_microtest.image }}:{{ $.Values.iproxy_microtest.image_tag }}
@@ -77,8 +74,6 @@ spec:
         - name: iproxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: microtest-cert
-          mountPath: /etc/nginx/ssl_microtest
         livenessProbe:
           httpGet:
             path: /healthz
