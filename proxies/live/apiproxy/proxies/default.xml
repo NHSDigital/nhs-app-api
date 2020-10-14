@@ -1,5 +1,11 @@
 <ProxyEndpoint name="default">
-  <PreFlow/>
+  <PreFlow>
+    <Request>
+      <Step>
+        <Name>AssignMessage.Copy.RequestHeaders</Name>
+      </Step>
+    </Request>
+  </PreFlow>
   <Flows>
     <Flow name="ValidateHeader">
       <Request>
