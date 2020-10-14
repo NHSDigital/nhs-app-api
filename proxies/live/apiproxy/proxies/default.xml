@@ -1,6 +1,15 @@
 <ProxyEndpoint name="default">
   <PreFlow/>
   <Flows>
+    <Flow name="ValidateHeader">
+      <Request>
+        <Step>
+          <Name>RaiseFault.CheckCorrelationIdHeader</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/communication") and (request.header.X-Correlation-ID != null) and NOT (request.header.X-Correlation-ID JavaRegex "(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")</Condition>
+    </Flow>
     <Flow name="OptionsPreFlight">
       <Request/>
       <Response>
@@ -8,7 +17,7 @@
           <Name>AssignMessage.AddCors</Name>
         </Step>
       </Response>
-        <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
+      <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
     </Flow>
     <Flow name="AddPayloadToPing">
       <Description/>
