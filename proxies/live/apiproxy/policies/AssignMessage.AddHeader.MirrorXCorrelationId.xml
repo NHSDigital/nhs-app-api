@@ -1,0 +1,9 @@
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.AddHeader.MirrorXCorrelationId">
+	<Add>
+		<Headers>
+			<Header name="X-Correlation-ID">{request-correlation-id}</Header>
+		</Headers>
+	</Add>
+	<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.Copy.RequestHeaders">
+  <DisplayName>AssignMessage.Copy.RequestHeaders</DisplayName>
+  <AssignVariable>
+    <Name>request-correlation-id</Name>
+    <Ref>request.header.X-Correlation-ID</Ref>
+    <Value>NoCorrelationId</Value>
+  </AssignVariable>
+</AssignMessage>

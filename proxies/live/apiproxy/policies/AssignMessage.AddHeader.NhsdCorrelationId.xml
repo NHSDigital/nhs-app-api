@@ -1,0 +1,9 @@
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.AddHeader.NhsdCorrelationId">
+  <Add>
+      <Headers>
+          <Header name="NHSD-Correlation-ID">{request.header.X-Correlation-ID},{messageid}</Header>
+      </Headers>
+  </Add>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>
