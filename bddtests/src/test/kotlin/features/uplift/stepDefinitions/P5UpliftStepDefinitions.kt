@@ -89,7 +89,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     val linksToFollow = arrayListOf(
             {followAppointmentNativeNavBarLink()},
             {followPrescriptionsNativeNavBarLink()},
-            {followMyRecordNativeNavBarLink()},
+            {followYourHealthNativeNavBarLink()},
             {followAdviceNativeNavBarLink()}
     )
 
@@ -107,8 +107,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
   }
 
-  private fun followMyRecordNativeNavBarLink() {
-    nav.select(NavBarNative.NavBarType.MY_RECORD)
+  private fun followYourHealthNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
   }
 
   private fun followAdviceNativeNavBarLink() {

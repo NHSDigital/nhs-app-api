@@ -38,7 +38,6 @@ export const DATA_SHARING_OVERVIEW_NAME = 'data-sharing';
 export const DATA_SHARING_WHERE_USED_NAME = 'data-sharing-where-used';
 export const DATA_SHARING_DOES_NOT_APPLY_NAME = 'data-sharing-does-not-apply';
 export const DATA_SHARING_MAKE_YOUR_CHOICE_NAME = 'data-sharing-make-your-choice';
-export const MY_RECORD_NAME = 'my-record';
 export const HEALTH_RECORDS_NAME = 'health-records';
 export const GP_MEDICAL_RECORD_NAME = 'health-records-gp-medical-record';
 export const GP_MEDICAL_RECORD_GP_AT_HAND_NAME = 'health-records-gp-at-hand';
@@ -210,7 +209,6 @@ const names = [
   ORGAN_DONATION_WITHDRAWN_NAME,
   ORGAN_DONATION_YOUR_CHOICE_NAME,
   MESSAGES_NAME,
-  MY_RECORD_NAME,
   HEALTH_INFORMATION_UPDATES_NAME,
   HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
   GP_MESSAGES_NAME,

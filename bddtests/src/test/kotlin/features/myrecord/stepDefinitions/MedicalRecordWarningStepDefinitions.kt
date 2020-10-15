@@ -21,7 +21,7 @@ open class MedicalRecordWarningStepDefinitions {
 
     @Given("^I navigate to the Medical Record Page$")
     fun iNavigateToTheMedicalRecordPage() {
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
+        nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
     }
 
     @Then("^the Medical Record Warning Page is displayed$")

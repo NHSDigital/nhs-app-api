@@ -54,7 +54,6 @@ import {
   REFERRALS_PATH,
   GP_MEDICAL_RECORD_GP_AT_HAND_PATH,
   UPLIFT_GP_MEDICAL_RECORD_PATH,
-  MY_RECORD_PATH,
 } from '@/router/paths';
 import {
   HEALTH_RECORDS_NAME,
@@ -83,7 +82,6 @@ import {
   REFERRALS_NAME,
   GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
   UPLIFT_GP_MEDICAL_RECORD_NAME,
-  MY_RECORD_NAME,
 } from '@/router/names';
 
 import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -114,8 +112,8 @@ export const HEALTH_RECORDS = {
   name: HEALTH_RECORDS_NAME,
   component: HealthRecordsPage,
   meta: {
-    headerKey: 'navigation.pages.headers.healthRecords',
-    titleKey: 'navigation.pages.titles.healthRecords',
+    headerKey: 'navigation.pages.headers.yourHealth',
+    titleKey: 'navigation.pages.titles.yourHealth',
     proofLevel: proofLevel.P9,
     upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.HEALTH_RECORDS_CRUMB,
@@ -514,14 +512,7 @@ export const GP_MEDICAL_RECORD_GP_AT_HAND = {
   },
 };
 
-export const MY_RECORD = {
-  path: MY_RECORD_PATH,
-  name: MY_RECORD_NAME,
-  redirect: HEALTH_RECORDS.path,
-};
-
 export default [
-  MY_RECORD,
   HEALTH_RECORDS,
   GP_MEDICAL_RECORD,
   ALLERGIESANDREACTIONS,

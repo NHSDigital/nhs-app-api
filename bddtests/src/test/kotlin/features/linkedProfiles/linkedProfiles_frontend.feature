@@ -111,7 +111,7 @@ Feature: Login with proxy access
     When I navigate to Prescriptions
     And I click the View Orders link
     Then the prescriptions shutter page is displayed
-    When I navigate to My_Record
+    When I navigate to Your_Health
     And I click on the Gp medical record link
     And I click the 'Continue' button
     Then the medical record shutter page is displayed
@@ -293,7 +293,7 @@ Feature: Login with proxy access
     And the Prescriptions Hub page is displayed
     And I click the Order a repeat prescription button
     Then the prescriptions shutter page is displayed
-    When I navigate to My_Record
+    When I navigate to Your_Health
     And I click on the Gp medical record link
     And I click the 'Continue' button
     Then the medical record shutter page is displayed

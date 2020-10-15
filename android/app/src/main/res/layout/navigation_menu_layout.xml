@@ -40,17 +40,17 @@
         app:menuTitle="@string/prescription"
         android:focusable="true"
         android:focusableInTouchMode="false"
-        android:nextFocusForward="@id/myRecord"
+        android:nextFocusForward="@id/yourHealth"
         android:nextFocusDown="@id/homeLogoIcon"
         android:background="@drawable/icon_drawable_boarder_focusable" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
-        android:id="@+id/myRecord"
+        android:id="@+id/yourHealth"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable_record_active"
         app:inactiveIcon="@drawable/icon_drawable_record"
-        app:menuTitle="@string/my_record"
+        app:menuTitle="@string/your_health"
         android:focusable="true"
         android:focusableInTouchMode="false"
         android:nextFocusForward="@id/more"

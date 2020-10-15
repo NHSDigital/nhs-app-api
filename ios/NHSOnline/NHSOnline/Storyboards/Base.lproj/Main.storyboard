@@ -46,7 +46,7 @@
                                             <tabBarItem title="Advice" image="AdviceIcon" selectedImage="AdviceActiveIcon" id="BOa-Jr-RcV"/>
                                             <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
                                             <tabBarItem tag="2" title="Prescriptions" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="7Db-Tb-Oqe"/>
-                                            <tabBarItem tag="3" title="My record" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>
+                                            <tabBarItem tag="3" title="Your health" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>
                                             <tabBarItem tag="4" title="More" image="MoreIcon" selectedImage="MoreActiveIcon" id="TDg-3X-xAn"/>
                                         </items>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

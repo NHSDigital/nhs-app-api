@@ -148,7 +148,7 @@ open class MedicalRecordStepDefinitions {
 
     @Then("^I see my record button on the nav bar is highlighted$")
     fun thenISeeMyRecordButtonOnTheNavBarIsHighlighted() {
-        Assert.assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
+        Assert.assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
     }
 
     @Then("^No navigation menu bar item will be selected$")
@@ -157,7 +157,7 @@ open class MedicalRecordStepDefinitions {
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.ADVICE))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
+            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MORE))
         }
     }

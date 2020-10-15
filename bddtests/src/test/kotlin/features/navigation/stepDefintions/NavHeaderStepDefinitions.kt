@@ -20,7 +20,7 @@ class NavHeaderStepDefinitions {
 
     @Given("^I navigate away from the home page$")
     fun iAmOnTheRecordWarningPage() {
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
+        nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
     }
     @When("^I click the settings icon$")
     fun iClickTheMyAccountIcon() {

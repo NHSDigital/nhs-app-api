@@ -56,7 +56,7 @@ open class MedicalRecordHubPageStepDefinitions {
 
     @Then("I see the health records hub page")
     fun assertHealthRecordsHubPage() {
-        medicalRecordHubPage.pageTitleHealthRecords().assertSingleElementPresent()
+        medicalRecordHubPage.pageTitleYourHealth().assertSingleElementPresent()
     }
 
     @Then("^I see the Third Party menu item '(.*)'$")

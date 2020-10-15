@@ -41,7 +41,7 @@
     <menu-item v-if="isProofLevel9 && !isAny3rdPartyHealthServiceEnabled"
                id="menu-item-myRecord"
                :header-tag="headerTag"
-               data-sid="myrecord-menu-item"
+               data-sid="your-health-menu-item"
                :href="gpMedicalRecordPath"
                :text="$t('navigation.viewYourGpHealthRecord')"
                :aria-label="$t('navigation.viewYourGpHealthRecord')"

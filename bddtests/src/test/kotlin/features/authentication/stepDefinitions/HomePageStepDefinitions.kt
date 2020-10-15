@@ -190,7 +190,7 @@ class HomePageStepDefinitions {
 
     private fun followMedicalRecordLink(linkElement: HybridPageElement) {
         linkElement.click()
-        navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
+        navBar.isHighlighted(NavBarNative.NavBarType.YOUR_HEALTH)
     }
 
     private fun followOrganDonationLink(linkElement: HybridPageElement) {

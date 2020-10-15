@@ -79,7 +79,7 @@ Feature: Authorisation occurs during each URL visit
       | /appointments                                  | /appointments                                  |
       | /appointments/gp-appointments/booking          | /appointments/gp-appointments/booking          |
       | /                                              |                                                |
-      | /my-record                                     | /health-records                                |
+      | /health-records                                | /health-records                                |
       | /health-records/gp-medical-record              | /health-records/gp-medical-record              |
       | /prescriptions                                 | /prescriptions                                 |
       | /prescriptions/repeat-courses                  | /prescriptions/repeat-courses                  |

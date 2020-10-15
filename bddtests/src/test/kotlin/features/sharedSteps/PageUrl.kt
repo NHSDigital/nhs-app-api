@@ -26,7 +26,6 @@ open class PageUrl {
                         "manage cookies" to "/account/cookies",
                         "notifications settings" to "/account/notifications",
                         "terms and conditions" to "/terms-and-conditions",
-                        "my record" to "/my-record",
                         "gp at hand health record" to "/health-records/gp-at-hand",
                         "gp medical record" to "/health-records/gp-medical-record",
                         "health record hub" to "/health-records",

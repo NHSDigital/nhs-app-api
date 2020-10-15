@@ -40,7 +40,6 @@ export const DATA_SHARING_OVERVIEW_PATH = 'data-sharing';
 export const DATA_SHARING_WHERE_USED_PATH = 'data-sharing/where-used';
 export const DATA_SHARING_DOES_NOT_APPLY_PATH = 'data-sharing/does-not-apply';
 export const DATA_SHARING_MAKE_YOUR_CHOICE_PATH = 'data-sharing/make-your-choice';
-export const MY_RECORD_PATH = 'my-record';
 export const HEALTH_RECORDS_PATH = 'health-records';
 export const GP_MEDICAL_RECORD_PATH = 'health-records/gp-medical-record';
 export const GP_MEDICAL_RECORD_GP_AT_HAND_PATH = 'health-records/gp-at-hand';
@@ -160,7 +159,6 @@ export default {
   DATA_SHARING_WHERE_USED_PATH,
   DATA_SHARING_DOES_NOT_APPLY_PATH,
   DATA_SHARING_MAKE_YOUR_CHOICE_PATH,
-  MY_RECORD_PATH,
   HEALTH_RECORDS_PATH,
   GP_MEDICAL_RECORD_PATH,
   GP_MEDICAL_RECORD_GP_AT_HAND_PATH,

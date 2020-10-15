@@ -31,11 +31,11 @@ open class NavBarNative : NativePageObject() {
                 "prescriptions-menu-item",
                 "id/prescriptions",
                 "Prescriptions"),
-        MY_RECORD(
-                "myrecord-menu-item",
-                "myrecord-menu-item",
-                "id/myRecord",
-                "My record"),
+        YOUR_HEALTH(
+                "your-health-menu-item",
+                "your-health-menu-item",
+                "id/yourHealth",
+                "Your health"),
         MORE(
                 "more-menu-item",
                 "more-menu-item",
@@ -112,7 +112,7 @@ open class NavBarNative : NativePageObject() {
                     NavBarType.APPOINTMENTS,
                     NavBarType.PRESCRIPTIONS,
                     NavBarType.MORE,
-                    NavBarType.MY_RECORD
+                    NavBarType.YOUR_HEALTH
             )
             for (eachElement in navBar) {
                 if (isHighlighted(eachElement))

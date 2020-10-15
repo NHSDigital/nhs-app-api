@@ -228,7 +228,7 @@ class AuthenticationStepDefinitions {
     }
 
     private fun followMyRecordNativeNavBarLink() {
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
+        nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
         webHeader.isPageTitleCorrect("Your medical record")
         breadcrumbs.assertVisible()
     }

@@ -43,10 +43,10 @@
       </li>
       <li class="nhsuk-header__navigation-item">
         <a class="nhsuk-header__navigation-link" :href="recordPath"
-           data-sid="myrecord-menu-item"
+           data-sid="your-health-menu-item"
            data-purpose="myRecordPageLink"
            @click.prevent="setMenuitemState(recordPath)">
-          {{ $t('navigation.healthRecord') }}
+          {{ $t('navigation.yourHealth') }}
         </a>
       </li>
       <!-- Hidden as not in scope for mvp, will be needed in future -->

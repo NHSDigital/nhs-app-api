@@ -2,7 +2,6 @@ import get from 'lodash/fp/get';
 import difference from 'lodash/fp/difference';
 import intersection from 'lodash/fp/intersection';
 import medicalRecordRoutes, {
-  MY_RECORD,
   HEALTH_RECORDS,
   GP_MEDICAL_RECORD,
   UPLIFT_GP_MEDICAL_RECORD,
@@ -11,7 +10,6 @@ import medicalRecordRoutes, {
 import gpMedicalRecordAcceptance from '@/middleware/gpMedicalRecordAcceptance';
 
 const excludedRoutes = [
-  MY_RECORD,
   HEALTH_RECORDS,
   GP_MEDICAL_RECORD,
   UPLIFT_GP_MEDICAL_RECORD,

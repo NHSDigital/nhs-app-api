@@ -16,14 +16,14 @@ class MedicalRecordHubPage : HybridPageObject() {
         )
     }
 
-    fun pageTitleHealthRecords(): HybridPageElement {
-        val webDesktopLocator = "//h1[contains(text(),\"Health records\")]"
+    fun pageTitleYourHealth(): HybridPageElement {
+        val webDesktopLocator = "//h1[contains(text(),\"Your health\")]"
         return HybridPageElement(
                 webDesktopLocator = webDesktopLocator,
                 androidLocator = webDesktopLocator,
                 iOSLocator = webDesktopLocator,
                 page = this,
-                helpfulName = "Health Records"
+                helpfulName = "Your health"
         )
     }
 
