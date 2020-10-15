@@ -44,9 +44,8 @@ extends:
     # (App subscription make sense for most sandbox implementations)
       - environment: sandbox
         proxy_path: sandbox
-    # Enable int environment when ready by uncommenting:
-    #   - environment: int
-    #     make_spec_visible: true
-    #     depends_on:
-    #       - internal_qa
-    #       - internal_qa_sandbox
+      - environment: int
+        make_spec_visible: false
+        depends_on:
+          - internal_qa
+          - internal_qa_sandbox
