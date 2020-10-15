@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <KeyValueMapOperations encrypted="true" async="false" continueOnError="false" enabled="true" name="KeyValueMap.GetUpstreamApiKey" mapIdentifier="nhsa-variables-encrypted">
-    <DisplayName>KeyValueMap.GetUpstreamApiKey</DisplayName>
-    <Get assignTo="private.commsHubApiKey">
-        <Key>
-            <Parameter>api-key</Parameter>
-        </Key>
-    </Get>
+	<DisplayName>KeyValueMap.GetUpstreamApiKey</DisplayName>
+	<Get assignTo="private.commsHubApiKey">
+		<Key>
+			<Parameter>api-key</Parameter>
+		</Key>
+	</Get>
 </KeyValueMapOperations>
