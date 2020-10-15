@@ -1,8 +1,8 @@
 <AssignMessage continueOnError="false" enabled="true" name="AssignMessage.AddUpstreamApiKeyHeader">
-  <Add>
-    <Headers>
-      <Header name="X-API-Key">{private.commsHubApiKey}</Header>
-    </Headers>
-  </Add>
-  <AssignTo createNew="false" transport="http" type="request"/>
+	<Add>
+		<Headers>
+			<Header name="X-API-Key">{private.commsHubApiKey}</Header>
+		</Headers>
+	</Add>
+	<AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
