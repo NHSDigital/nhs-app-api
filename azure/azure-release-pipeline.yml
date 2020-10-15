@@ -45,7 +45,7 @@ extends:
       - environment: sandbox
         proxy_path: sandbox
       - environment: int
-        make_spec_visible: false
+        make_spec_visible: true
         depends_on:
           - internal_qa
           - internal_qa_sandbox
