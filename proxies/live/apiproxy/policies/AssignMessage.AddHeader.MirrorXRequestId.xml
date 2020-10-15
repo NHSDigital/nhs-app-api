@@ -1,9 +1,9 @@
 <AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.AddHeader.MirrorXRequestId">
-  <Add>
-      <Headers>
-          <Header name="X-Request-ID">{original-request-details.header.X-Request-ID}</Header>
-      </Headers>
-  </Add>
-  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response"/>
-</AssignMessage>
+	<Add>
+		<Headers>
+			<Header name="X-Request-ID">{original-request-details.header.X-Request-ID}</Header>
+		</Headers>
+	</Add>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>Î

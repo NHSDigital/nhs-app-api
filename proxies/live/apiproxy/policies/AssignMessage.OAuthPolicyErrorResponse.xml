@@ -1,7 +1,7 @@
 <AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.OAuthPolicyErrorResponse">
-  <Set>
-    <StatusCode>401</StatusCode>
-    <Payload contentType="application/json">
+	<Set>
+		<StatusCode>401</StatusCode>
+		<Payload contentType="application/json">
       {
         "resourceType": "OperationOutcome",
         "issue": [
@@ -21,8 +21,8 @@
           }
         ]
       }
-    </Payload>
-  </Set>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response" />
+		</Payload>
+	</Set>
+	<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" transport="http" type="response" />
 </AssignMessage>
