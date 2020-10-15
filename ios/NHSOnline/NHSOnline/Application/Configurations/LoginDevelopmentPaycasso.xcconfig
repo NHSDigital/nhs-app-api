@@ -1,0 +1,5 @@
+#include "Defaults.xcconfig"
+#include "Pods/Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.logindevelopment.xcconfig"
+
+HOME_URL = www-logindevelopment.nhsapp.service.nhs.uk/
+BASE_API_URL = api-logindevelopment.nhsapp.service.nhs.uk/

@@ -15,6 +15,8 @@
 	<string>https://$(ACCESSIBILITY_STATEMENT_URL_OLD)</string>
 	<key>AdminHelpUrlPath</key>
 	<string>$(ADMIN_HELP_URL_PATH)</string>
+	<key>AdviceUrlPath</key>
+	<string>$(ADVICE_URL_PATH)</string>
 	<key>ApiCallTimeoutSeconds</key>
 	<integer>5</integer>
 	<key>AppScheme</key>
@@ -25,8 +27,6 @@
 	<string>$(APPOINTMENTS_URL_PATH)</string>
 	<key>AppontmentsGpAtHandUrlPath</key>
 	<string>$(APPOINTMENTS_GP_AT_HAND_URL_PATH)</string>
-	<key>DeepLinkAppClosed</key>
-	<string></string>
 	<key>AuthRedirectPath</key>
 	<string>$(AUTH_REDIRECT_PATH)</string>
 	<key>BaseApiUrl</key>
@@ -37,6 +37,8 @@
 	<string>fidoAuthResponse</string>
 	<key>BiometricHelpURL</key>
 	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/apple-touch-and-face-ID-help/</string>
+	<key>BiometricLoginErrorPath</key>
+	<string>$(BIOMETRIC_LOGIN_ERROR_PATH)</string>
 	<key>BiometricsAssertionScheme</key>
 	<string>UAFV1TLV</string>
 	<key>BiometricsAuthenticationRequestEndpoint</key>
@@ -80,12 +82,12 @@
 	<string>1</string>
 	<key>CheckSymptomsUrlPath</key>
 	<string>$(CHECK_SYMPTOMS_URL_PATH)</string>
-	<key>PreRegistrationInstructionsPath</key>
-	<string>$(PRE_REGISTRATION_INFORMATION_PATH)</string>
-	<key>BiometricLoginErrorPath</key>
-	<string>$(BIOMETRIC_LOGIN_ERROR_PATH)</string>
 	<key>CidUrlSuffix</key>
 	<string>$(CID_URL_SUFFIX)</string>
+	<key>CompatibilityCheckEnabled</key>
+	<false/>
+	<key>CompatibilityScreenUrl</key>
+	<string>$(COMPATIBILITY_URL)</string>
 	<key>ConditionsUrlPath</key>
 	<string>https://$(CONDITIONS_URL_PATH)</string>
 	<key>ConfigurationApiPath</key>
@@ -98,6 +100,10 @@
 	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>DataSharingUrl</key>
 	<string>https://$(DATA_SHARING_URL)</string>
+	<key>DataSharingUrlPath</key>
+	<string>$(DATA_SHARING_URL_PATH)</string>
+	<key>DeepLinkAppClosed</key>
+	<string></string>
 	<key>ErrorTextViewUrls</key>
 	<dict>
 		<key>111.nhs.uk</key>
@@ -125,10 +131,6 @@
 	<string>$(HOME_URL)</string>
 	<key>HomeUrl</key>
 	<string>$(BASE_SCHEME)://$(HOME_URL)</string>
-	<key>CompatibilityScreenUrl</key>
-	<string>$(COMPATIBILITY_URL)</string>
-	<key>CompatibilityCheckEnabled</key>
-	<false/>
 	<key>HotJarLinkUrl</key>
 	<string>https://$(HOT_JAR_LINK_URL)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -141,6 +143,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LinkPropertyName</key>
+	<string>url</string>
 	<key>LoggerApiPath</key>
 	<string>$(LOGGER_API_PATH)</string>
 	<key>MedicalRecordAbbreviationsURL</key>
@@ -151,8 +155,6 @@
 	<integer>10</integer>
 	<key>MoreUrlPath</key>
 	<string>$(MORE_URL)</string>
-	<key>DataSharingUrlPath</key>
-	<string>$(DATA_SHARING_URL_PATH)</string>
 	<key>MyAccountUrlPath</key>
 	<string>$(MY_ACCOUNT_URL_PATH)</string>
 	<key>MyRecordGpAtHandUrlPath</key>
@@ -164,6 +166,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>So we can add events to your calendar, like appointments.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>So you can take a photo of your I.D.</string>
 	<key>NSFaceIDUsageDescription</key>
@@ -180,10 +184,6 @@
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>Nhs111Url</key>
 	<string>https://$(NHS_111_URL)</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>So we can add events to your calendar, like appointments.</string>
-	<key>LinkPropertyName</key>
-	<string>url</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
 	<key>OpenSourceLicencesURLOld</key>
@@ -192,6 +192,8 @@
 	<string>https://$(OPEN_SOURCE_LICENSE_URL)</string>
 	<key>OrganDonationUrlPath</key>
 	<string>$(ORGAN_DONATION_URL_PATH)</string>
+	<key>PreRegistrationInstructionsPath</key>
+	<string>$(PRE_REGISTRATION_INFORMATION_PATH)</string>
 	<key>PrescriptionsGpAtHandUrlPath</key>
 	<string>$(PRESCRIPTIONS_GP_AT_HAND_URL_PATH)</string>
 	<key>PrescriptionsUrlPath</key>
@@ -212,8 +214,6 @@
 	<integer>20</integer>
 	<key>SessionUrlPath</key>
 	<string>$(SESSION_URL_PATH)</string>
-	<key>AdviceUrlPath</key>
-	<string>$(ADVICE_URL_PATH)</string>
 	<key>TermsAndConditionsURL</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
 	<key>TermsAndConditionsURLOld</key>

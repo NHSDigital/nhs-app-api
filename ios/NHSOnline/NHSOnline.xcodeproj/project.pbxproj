@@ -365,6 +365,9 @@
 		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		469FABDF7E716557BFF2B030 /* Pods-NHSOnlinePaycasso.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.production.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.production.xcconfig"; sourceTree = "<group>"; };
 		4703497921945F5C00F72D05 /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
+		47588A662536FE750098B154 /* LoginDevelopment.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LoginDevelopment.xcconfig; sourceTree = "<group>"; };
+		47588A68253700490098B154 /* LoginDevelopmentPaycasso.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LoginDevelopmentPaycasso.xcconfig; sourceTree = "<group>"; };
+		47588A692537056F0098B154 /* NHSOnlineLoginDevelopment.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnlineLoginDevelopment.entitlements; sourceTree = "<group>"; };
 		4793CF0C219AF18500C95F51 /* CustomNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotifications.swift; sourceTree = "<group>"; };
 		4793CF0F219C319A00C95F51 /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		47D88A4521998CBD004771B5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -401,6 +404,7 @@
 		64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelSchemeHandler.swift; sourceTree = "<group>"; };
 		64C1C76C23E2E56E00FCBA57 /* UrlHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlHelperTests.swift; sourceTree = "<group>"; };
 		64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceManager.swift; sourceTree = "<group>"; };
+		655164F300A70F316BC3B932 /* Pods-NHSOnlineTests.logindevelopment.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.logindevelopment.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.logindevelopment.xcconfig"; sourceTree = "<group>"; };
 		677C88C146DF0514D6B87FC7 /* Pods-NHSOnline.scratch16.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch16.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch16.xcconfig"; sourceTree = "<group>"; };
 		6967F919E17363388D1FFC92 /* Pods-NHSOnlinePaycasso.scratch19.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch19.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch19.xcconfig"; sourceTree = "<group>"; };
 		6B08E80BF14ACD10D0843B6A /* Pods-NHSOnlineTests.browserstacktc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstacktc.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstacktc.xcconfig"; sourceTree = "<group>"; };
@@ -408,6 +412,7 @@
 		6BEE74B1BDAB6D03F316712A /* Pods-NHSOnline.scratch7.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch7.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch7.xcconfig"; sourceTree = "<group>"; };
 		6CA4937E214F04A817AFB057 /* Pods-NHSOnline.scratch15.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch15.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch15.xcconfig"; sourceTree = "<group>"; };
 		6CD739244EF471D35460DD49 /* Pods-NHSOnlineTests.scratch14.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch14.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch14.xcconfig"; sourceTree = "<group>"; };
+		73959C18C429D115A7A07A52 /* Pods-NHSOnline.logindevelopment.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.logindevelopment.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.logindevelopment.xcconfig"; sourceTree = "<group>"; };
 		7410A67FCF9D4CA6DAEA1A98 /* Pods-NHSOnline.browserstacklocal.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstacklocal.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstacklocal.xcconfig"; sourceTree = "<group>"; };
 		76EE1AA81D88A93C42BAAEC5 /* Pods-NHSOnlinePaycasso.scratch8.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch8.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch8.xcconfig"; sourceTree = "<group>"; };
 		785B81EC3A187F88689C66DD /* Pods-NHSOnlineTests.scratch21.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch21.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch21.xcconfig"; sourceTree = "<group>"; };
@@ -699,6 +704,8 @@
 				4703497921945F5C00F72D05 /* Preview.xcconfig */,
 				F91E2B2A24F6A9DE001BDD21 /* PreviewPaycasso.xcconfig */,
 				14B849312226E95F002E6851 /* BrowserStack.xcconfig */,
+				47588A662536FE750098B154 /* LoginDevelopment.xcconfig */,
+				47588A68253700490098B154 /* LoginDevelopmentPaycasso.xcconfig */,
 			);
 			path = Configurations;
 			sourceTree = "<group>";
@@ -911,6 +918,8 @@
 				21E64EA5D415BD48474CEDC5 /* Pods-NHSOnlineTests.demo.xcconfig */,
 				F04C92090469A3EDA6B3C9F1 /* Pods-NHSOnlineTests.preview.xcconfig */,
 				55A2C41FB4355AC2E7E19F37 /* Pods-NHSOnlineTests.production.xcconfig */,
+				73959C18C429D115A7A07A52 /* Pods-NHSOnline.logindevelopment.xcconfig */,
+				655164F300A70F316BC3B932 /* Pods-NHSOnlineTests.logindevelopment.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -991,6 +1000,7 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				47588A692537056F0098B154 /* NHSOnlineLoginDevelopment.entitlements */,
 				F97D8A9924E5D96400A2C06C /* Stubs */,
 				F9BAFC53247FD42600BF1CAE /* AddtionalServices */,
 				F9BAFC2C247FB32300BF1CAE /* AlertHandling */,
@@ -2088,6 +2098,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch1;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2196,6 +2207,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch2;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2304,6 +2316,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch3;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2412,6 +2425,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch4;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2520,6 +2534,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch5;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2628,6 +2643,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch6;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2736,6 +2752,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch7;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2844,6 +2861,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch8;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -2952,6 +2970,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch9;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3060,6 +3079,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3168,6 +3188,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3276,6 +3297,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstack;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3385,6 +3407,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch17;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3493,6 +3516,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch18;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3601,6 +3625,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch19;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3709,6 +3734,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch20;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -3817,6 +3843,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch21;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -4051,6 +4078,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.Onboardingsandpit;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -4159,6 +4187,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.Onboardingaos;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -4184,6 +4213,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "NHS App Onboarding AOS Distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = NHSOnline/NHSOnlineBridgingHeader.h;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = NHSOnline/NHSOnlineBridgingHeader.h;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4260,6 +4290,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -4311,6 +4342,142 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
 			};
 			name = Preview;
+		};
+		47588A622536FCB20098B154 /* LoginDevelopment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = "NHS Login Development";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.logindevelopment;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+			};
+			name = LoginDevelopment;
+		};
+		47588A632536FCB20098B154 /* LoginDevelopment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47588A662536FE750098B154 /* LoginDevelopment.xcconfig */;
+			buildSettings = {
+				APP_DISPLAY_NAME = "Login DEV";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-logindev";
+				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnlineLoginDevelopment.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.logindevelopment;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Onboarding NHS Login Dev";
+				SWIFT_OBJC_BRIDGING_HEADER = NHSOnline/NHSOnlineBridgingHeader.h;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = NHSOnline/NHSOnlineBridgingHeader.h;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = LoginDevelopment;
+		};
+		47588A642536FCB20098B154 /* LoginDevelopment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 655164F300A70F316BC3B932 /* Pods-NHSOnlineTests.logindevelopment.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				INFOPLIST_FILE = NHSOnlineTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = online.nhs.com.NHSOnlineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
+			};
+			name = LoginDevelopment;
+		};
+		47588A652536FCB20098B154 /* LoginDevelopment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47588A68253700490098B154 /* LoginDevelopmentPaycasso.xcconfig */;
+			buildSettings = {
+				APP_DISPLAY_NAME = Onboardingsandpit;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NHSOnline/Entitlements/NHSOnlineOnboardingsandpit.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.onboardingsandpit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = NHSOnline/NHSOnlineBridgingHeader.h;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = LoginDevelopment;
 		};
 		5598FF722189C32700767CAC /* BrowserstackLocal */ = {
 			isa = XCBuildConfiguration;
@@ -4372,6 +4539,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstack;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -4474,6 +4642,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -4672,6 +4841,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -4902,6 +5072,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch11a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -5010,6 +5181,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch13a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -5118,6 +5290,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch14;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -5226,6 +5399,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch15a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -5334,6 +5508,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch16a;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
@@ -6214,6 +6389,7 @@
 				C2466F4B2243ED3B006C336F /* Scratch11 */,
 				1381D46421BFFC2F00B54300 /* Scratch12 */,
 				2485C4E0246DA6E20014F1C5 /* Onboardingsandpit */,
+				47588A622536FCB20098B154 /* LoginDevelopment */,
 				24A6A46A24FD5C6D007EE11C /* Onboardingaos */,
 				1A18792122E07BD500F2BACC /* Debug */,
 				C2466F4E2243ED50006C336F /* Scratch13 */,
@@ -6251,6 +6427,7 @@
 				C2466F4C2243ED3B006C336F /* Scratch11 */,
 				1381D46521BFFC2F00B54300 /* Scratch12 */,
 				2485C4E1246DA6E20014F1C5 /* Onboardingsandpit */,
+				47588A632536FCB20098B154 /* LoginDevelopment */,
 				24A6A46B24FD5C6D007EE11C /* Onboardingaos */,
 				1A18792222E07BD500F2BACC /* Debug */,
 				C2466F4F2243ED50006C336F /* Scratch13 */,
@@ -6288,6 +6465,7 @@
 				C2466F4D2243ED3B006C336F /* Scratch11 */,
 				1381D46621BFFC2F00B54300 /* Scratch12 */,
 				2485C4E2246DA6E20014F1C5 /* Onboardingsandpit */,
+				47588A642536FCB20098B154 /* LoginDevelopment */,
 				24A6A46C24FD5C6D007EE11C /* Onboardingaos */,
 				1A18792322E07BD500F2BACC /* Debug */,
 				C2466F502243ED50006C336F /* Scratch13 */,
@@ -6325,6 +6503,7 @@
 				F91E29FA24F67447001BDD21 /* Scratch11 */,
 				F91E29FB24F67447001BDD21 /* Scratch12 */,
 				F91E29FC24F67447001BDD21 /* Onboardingsandpit */,
+				47588A652536FCB20098B154 /* LoginDevelopment */,
 				F91E29FD24F67447001BDD21 /* Debug */,
 				F91E29FE24F67447001BDD21 /* Scratch13 */,
 				F91E29FF24F67447001BDD21 /* Scratch14 */,
