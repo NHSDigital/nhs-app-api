@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.Copy.RequestProxyValues">
+  <DisplayName>AssignMessage.Copy.RequestProxyValues</DisplayName>
+  <AssignVariable>
+    <Name>request-url</Name>
+    <Ref>proxy.url</Ref>
+    <Value>NoUrl</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>request-pathSuffix</Name>
+    <Ref>proxy.pathsuffix</Ref>
+    <Value>NoSuffix</Value>
+  </AssignVariable>
+</AssignMessage>
