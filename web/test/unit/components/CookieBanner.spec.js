@@ -1,48 +1,62 @@
 import CookieBanner from '@/components/CookieBanner';
-import { createRouter, mount, createStore } from '../helpers';
+import { mount, createStore } from '../helpers';
 
-describe('components/CookieBanner.vue -', () => {
-  let $router;
-
-  const createCookieBanner = ($route = {}) => {
-    $router = createRouter();
-
-    const $store = createStore({
-      $router,
+describe('CookieBanner', () => {
+  let $store;
+  const createCookieBanner = ({ acknowledged = false, isNativeApp = false } = {}) => {
+    $store = createStore({
       state: {
         device: {
-          isNativeApp: false,
+          isNativeApp,
+        },
+        cookieBanner: {
+          acknowledged,
         },
       },
     });
-    return mount(CookieBanner, {
-      $store,
-      $router,
-      $route,
-    });
+    return mount(CookieBanner, { $store });
   };
 
-  describe('created ', () => {
-    it('will add push query to router when close button clicked', async () => {
+  describe('methods', () => {
+    it('will set acknowledged in the store and sessionStorage when close button clicked', () => {
+      Storage.prototype.setItem = jest.fn();
+
       const cookieBanner = createCookieBanner();
       expect(cookieBanner.vm.showCookieBanner).toBe(true);
 
       const button = cookieBanner.find('#btn_closeCookieBanner');
       button.trigger('click');
 
-      expect($router.push).toHaveBeenCalledWith({ query: { acknowledged: 'true' } });
+      expect(sessionStorage.setItem).toHaveBeenCalled();
     });
+  });
 
-    it('will show banner if query param not present', async () => {
-      const cookieBanner = createCookieBanner();
+  describe('computed', () => {
+    let cookieBanner;
+
+    beforeEach(() => {
+      cookieBanner = createCookieBanner();
+    });
+    it('will show banner if hasAcknowledgedCookies in sessionStorage is false', () => {
+      Storage.prototype.getItem = jest.fn('hasAcknowledgedCookies').mockImplementation(() => false);
       expect(cookieBanner.vm.showCookieBanner).toBe(true);
     });
 
-    it('will not show banner if query param present', async () => {
-      const $route = {
-        query: { acknowledged: 'true' },
-      };
-      const cookieBanner = createCookieBanner($route);
+    it('will not show banner if hasAcknowledgedCookies is set in the session storage', () => {
+      Storage.prototype.getItem = jest.fn('hasAcknowledgedCookies').mockImplementation(() => true);
+      // This needs to be created after the sessionStorage is mocked
+      cookieBanner = createCookieBanner();
+      expect(cookieBanner.vm.showCookieBanner).toBe(false);
+    });
+
+    it('will not show banner if hasAcknowledgedCookies is set in the session storage and acknowledged is set', () => {
+      Storage.prototype.getItem = jest.fn('hasAcknowledgedCookies').mockImplementation(() => true);
+      // This needs to be created after the sessionStorage is mocked
+      cookieBanner = createCookieBanner({ acknowledged: true });
+      expect(cookieBanner.vm.showCookieBanner).toBe(false);
+    });
+    it('will not show banner if on a native device', () => {
+      cookieBanner = createCookieBanner({ isNativeApp: true });
       expect(cookieBanner.vm.showCookieBanner).toBe(false);
     });
   });

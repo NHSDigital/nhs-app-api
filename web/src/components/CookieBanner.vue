@@ -34,20 +34,24 @@ export default {
   components: {
     GenericButton,
   },
+  data() {
+    return {
+      cookieBannerUrl: COOKIES_BANNER_URL,
+    };
+  },
   computed: {
-    cookieBannerUrl() {
-      return COOKIES_BANNER_URL;
-    },
     showCookieBanner() {
       return (
-        (this.$route.query || {}).acknowledged !== 'true' &&
+        !this.$store.state.cookieBanner.acknowledged &&
+        !sessionStorage.getItem('hasAcknowledgedCookies') &&
         !this.$store.state.device.isNativeApp
       );
     },
   },
   methods: {
     onCookieBannerClicked() {
-      this.$router.push({ query: { ...(this.$route.query || {}), acknowledged: 'true' } });
+      this.$store.dispatch('cookieBanner/acknowledge');
+      sessionStorage.setItem('hasAcknowledgedCookies', true);
     },
   },
 };
