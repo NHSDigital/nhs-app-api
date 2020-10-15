@@ -40,13 +40,15 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterfaceNhsLogin
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.Locale
 import java.io.File
+import java.util.Locale
+import java.util.UUID
 
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP_PRIVATE = "nativeApp"
 private const val NATIVE_APP_THIRDPARTY = "nhsappNative"
 private const val NATIVE_APP_LOGIN = "nativeNhsLogin"
+private const val BIOMETRIC_COOKIE_EXPIRY_IN_SECS = 60 * 60 * 24 * 365 * 5
 
 
 class NhsWeb(
@@ -258,12 +260,19 @@ class NhsWeb(
     }
 
     fun onBiometricOptionChanged() {
-        val cookies: String? = CookieManager.getInstance()
-                .getCookie(activity.resources.getString(R.string.cookieDomain))
-                ?.takeIf { it.contains("HideBiometricBanner=") }
-        if (cookies.isNullOrBlank()) {
+        val cookie = getCookie("HideBiometricBanner")
+        if (cookie.isNullOrBlank()) {
             CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
-                    "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
+                    "HideBiometricBanner=true; max-age=${BIOMETRIC_COOKIE_EXPIRY_IN_SECS}")
+        }
+    }
+
+    fun addNotificationCookie(nhsLoginId: String) {
+        val cookieName = buildNotificationsCookieName(nhsLoginId);
+        val cookie = getCookie(cookieName)
+        if(cookie.isNullOrBlank()) {
+            CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
+                cookieName)
         }
     }
 
@@ -402,5 +411,20 @@ class NhsWeb(
         paycassoService.start(paycassoData,
             onSuccess,
             onFailure)
+    }
+
+    fun checkNotificationCookie(nhsLoginId: String): Boolean {
+        return !getCookie("nhso.notifications-prompt--$nhsLoginId").isNullOrBlank()
+    }
+
+    private fun buildNotificationsCookieName(nhsLoginId: String) : String {
+        return "nhso.notifications-prompt--$nhsLoginId=$nhsLoginId;"
+    }
+
+
+    private fun getCookie(name: String): String? {
+        return CookieManager.getInstance()
+            .getCookie(activity.resources.getString(R.string.cookieDomain))
+            ?.takeIf { it.contains("$name=") }
     }
 }

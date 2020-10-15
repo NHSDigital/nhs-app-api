@@ -78,8 +78,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun onLogin() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.onLogin()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(nhsWebMock).onWebLoggedIn()
     }
@@ -90,6 +92,7 @@ class WebAppInterfacePrivateTest {
 
         webAppInterfacePrivate.onLogout()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(nhsWebMock).onWebLoggedOut()
     }
@@ -100,6 +103,7 @@ class WebAppInterfacePrivateTest {
 
         webAppInterfacePrivate.requestPnsToken("load")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(nhsWebMock).requestPnsToken("load")
     }
@@ -107,8 +111,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun clearMenuBar() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.clearMenuBarItem()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).clearMenuBarItem()
     }
@@ -116,8 +122,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun displayPageLeaveWarningTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.displayPageLeaveWarning()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showLeavingPageWarningDialogue()
     }
@@ -126,8 +134,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun setMenuBarItemTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.setMenuBarItem(0)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).setMenuBarItem(0)
     }
@@ -136,7 +146,9 @@ class WebAppInterfacePrivateTest {
     fun pageFocus() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterfacePrivate.resetPageFocus()
+
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).resetFocusToNhsLogoForAccessibility()
     }
@@ -144,8 +156,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun whiteScreen() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.hideWhiteScreen()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).hideBlankScreen()
     }
@@ -153,10 +167,34 @@ class WebAppInterfacePrivateTest {
     @Test
     fun onSessionExpiringTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.onSessionExpiring()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showExtendSessionDialogue()
+    }
+
+    @Test
+    fun addNotificationCookieTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
+        webAppInterfacePrivate.addNotificationCookie("loginId")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
+        runOnUiArgCaptor.firstValue.run()
+        verify(nhsWebMock).addNotificationCookie("loginId")
+    }
+
+    @Test
+    fun checkNotificationCookieTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
+        webAppInterfacePrivate.checkNotificationCookie("nhsLoginId")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).checkNotificationCookie("nhsLoginId")
     }
 
     @Test
@@ -175,8 +213,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun dismissProgressBarTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.dismissProgressBar()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).dismissProgressDialog()
     }
@@ -184,8 +224,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun getNotificationStatusTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.getNotificationsStatus()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(nhsWebMock).getNotificationsStatus()
     }
@@ -193,8 +235,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun attemptBiometricLoginTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.attemptBiometricLogin()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showBiometricLoginIfEnabled()
     }
@@ -202,8 +246,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun fetchBiometricSpecTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.fetchBiometricSpec()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).fetchBiometricSpec()
     }
@@ -211,8 +257,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun configureWebContextTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.configureWebContext("url", "retryPath")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).setHelpUrl("url")
         verify(contextMock).setRetryPath("retryPath")
@@ -227,8 +275,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun setHelpUrlTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.setHelpUrl("url")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).setHelpUrl("url")
     }
@@ -236,8 +286,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun setZoomableTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.setZoomable(true)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).setZoomable(true)
     }
@@ -245,8 +297,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun startDownloadTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.startDownload("base64", "file", "mime")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).startDownload("base64", "file", "mime")
     }
@@ -255,6 +309,7 @@ class WebAppInterfacePrivateTest {
     fun updateBiometricRegistrationWithTokenTest() {
         val mockAccessToken = "mockAccessToken"
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.updateBiometricRegistrationWithToken(mockAccessToken)
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
     }
@@ -262,8 +317,10 @@ class WebAppInterfacePrivateTest {
     @Test
     fun onAddToCalendar() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
+
         webAppInterfacePrivate.addEventToCalendar("stringifiedData")
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+
         runOnUiArgCaptor.firstValue.run()
         verify(addToCalendarHandlerMock).addToCalendar(addToCalendarData)
     }

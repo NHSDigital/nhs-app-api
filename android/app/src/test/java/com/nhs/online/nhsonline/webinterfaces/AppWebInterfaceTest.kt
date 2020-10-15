@@ -20,6 +20,12 @@ class AppWebInterfaceTest {
     }
 
     @Test
+    fun sendCheckNotificationCookieTest() {
+        appWebInterface.sendCheckNotificationCookie(true)
+        verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.deviceNotificationPromptCookieExists(true)", null)
+    }
+
+    @Test
     fun goToTest() {
         appWebInterface.goTo("testpath")
         verify(webviewMock).evaluateJavascript("window.nativeAppCallbacks.navigationGoTo('testpath')", null)

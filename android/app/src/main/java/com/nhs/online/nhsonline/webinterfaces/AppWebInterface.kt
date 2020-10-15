@@ -15,6 +15,12 @@ class AppWebInterface(private val webView: WebView) {
         }
     }
 
+    fun sendCheckNotificationCookie(hasNotificationCookie: Boolean?) {
+        Log.d(TAG, "${this::class.java.simpleName}: Entering sendCheckNotificationCookie")
+
+        dispatchNativeAppCallback("deviceNotificationPromptCookieExists", "$hasNotificationCookie")
+    }
+
     fun biometricCompletion(action: String, outcome: String, errorCode: String) {
         val response = """
             {
