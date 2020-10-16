@@ -4,6 +4,9 @@
 			<Step>
 				<Name>AssignMessage.Copy.RequestHeaders</Name>
 			</Step>
+			<Step>
+				<Name>AssignMessage.Copy.RequestProxyValues</Name>
+			</Step>
 		</Request>
 	</PreFlow>
 	<Flows>

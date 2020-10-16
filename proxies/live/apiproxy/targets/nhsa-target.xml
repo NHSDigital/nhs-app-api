@@ -35,6 +35,18 @@
 			</Step>
 		</Request>
 	</PreFlow>
+  <Flows>
+    <Flow name="RewriteLocationHeader">
+			<Description/>
+			<Request/>
+			<Response>
+				<Step>
+					<Name>JavaScript.Header.Rewrite.Location</Name>
+				</Step>
+			</Response>
+			<Condition>(response.header.Location != null)</Condition>
+		</Flow>
+  </Flows>
 	<HTTPTargetConnection>
 		<SSLInfo>
 			<Enabled>true</Enabled>
