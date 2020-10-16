@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-ingress-internal
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    externalDns: "true"
+  name: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ .Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  rules:
+    - host: info-{{ .Values.global.environment | replace "." "-" }}.private.{{ .Values.zone }}.{{ .Values.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-" }}
+              servicePort: {{ .Values.sidecar_proxy.containerPort }}
+            path: /
+  tls:
+    - hosts:
+        - info-{{ .Values.global.environment | replace "." "-" }}.private.{{ .Values.zone }}.{{ .Values.domain }}
+      secretName: {{ .Values.zone }}-{{ .Values.domain | replace "." "-" }}
