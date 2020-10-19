@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS App login DEV</string>
+    <string name="baseHost">www-logindevelopment.dev.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-logindevelopment.nhsapp.service.nhs.uk/</string>
+    <string name="baseApiURL">https://api-logindevelopment.nhsapp.service.nhs.uk/</string>
+    <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
+    <string name="ersUrl">pat.sa.refer.nhs.uk</string>
+    <string name="ersUrlScheme">https</string>
+    <string name="ersUrlPath">/nhslogin</string>
+</resources>

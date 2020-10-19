@@ -1,0 +1,605 @@
+---
+cosmosDBName: logindevelopment
+odsRemapEnabled: true
+odsRemapMap: "G85075:X00100;G85672:X00100;A21464:A29928"
+cidHostname: auth.ext.signin.nhs.uk
+cidFidoHostname: uaf.ext.signin.nhs.uk
+akamaiEnv: nhsapp.service.nhs.uk
+
+users:
+  notificationHubPath: nhsapp-logindevelopment
+
+web:
+  publicURL: www-logindevelopment.nhsapp.service.nhs.uk
+
+api:
+  publicURL: api-logindevelopment.nhsapp.service.nhs.uk
+
+# NIET_LOAD_END_FLAG
+# Please keep knownservices_config variable below NIET_LOAD_END_FLAG
+knownservices_config: {
+  "services": {
+    "111": {
+      "url": "https://111.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/isolation-note",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "111-service": {
+      "url": "https://111.service.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "nhs-uk": {
+      "url": "https://www.nhs.uk",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "integrationLevel": "Bronze",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/conditions",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/conditions/coronavirus-covid-19",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "Bronze",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "ndop": {
+      "url": "https://ndopapp-int1.thunderbird.service.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "hotjar": {
+      "url": "https://in.hotjar.com",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "integrationLevel": "Bronze",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/s",
+          "queryString": "siteId=859152&surveyId=95785",
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "cid-settings": {
+      "url": "https://settings.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-account": {
+      "url": "https://account.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-auth": {
+      "url": "https://auth.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-uaf": {
+      "url": "https://uaf.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-access": {
+      "url": "https://access.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    "cid-signin": {
+      "url": "https://signin.nhs.uk",
+      "javaScriptInteractionMode": "NhsLogin",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithoutWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/#/account/consent-to-use-login",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "nhs-web-app": {
+      "url": "https://WebAppBaseUrl",
+      "javaScriptInteractionMode": "NhsApp",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/pre-registration-information",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithoutWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/biometric-login-error",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithoutWebNavigation",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/get-health-advice",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Advice",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldOverlay",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/patient/account",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/account",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/appointments",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Appointments",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/appointments",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Appointments",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/more",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/more",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/health-records/gp-medical-record/documents/detail/*",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldWithNoHeaders",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/health-records/gp-medical-record/documents/detail/*",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "GoldWithNoHeaders",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/health-records",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/health-records",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "MyRecord",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/organ-donation",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/organ-donation",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "More",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/prescriptions",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Prescriptions",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/prescriptions",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Prescriptions",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/advice",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Advice",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        },
+        {
+          "path": "/patient/*/advice",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsApp",
+          "menuTab": "Advice",
+          "viewMode": "WebView",
+          "integrationLevel": "Gold",
+          "showSpinner": false,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": true
+        }
+      ]
+    },
+    "ers": {
+      "url": "https://pat.sa.refer.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "pkb": {
+      "url": "https://nhsapp-test.devstacks.pkb.io",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "pkb-alt": {
+      "url": "http://nhsapp-test.devstacks.pkb.io:443",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "Gold",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "substraktPatientPack": {
+      "url": "https://patientpack-development.ngrok.io",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "gncr": {
+      "url": "https://nhs-pep-glenr.enigmadev2.net",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "engage": {
+      "url": "https://nhs1-nhsapp.engage.gp",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "silver-third-party-api-test": {
+      "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "SilverThirdParty",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/not-allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/app-tab.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/paycasso.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsLogin",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "http-status": {
+      "url": "https://httpstat.us",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    }
+  }
+}

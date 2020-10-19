@@ -220,6 +220,11 @@ android {
             applicationIdSuffix ".onboardingaos"
             manifestPlaceholders = [appName: "NHS App Onboarding Aos"]
         }
+        logindev {
+            initWith debug
+            applicationIdSuffix ".logindev"
+            manifestPlaceholders = [appName: "NHS App login DEV"]
+        }
     }
     testOptions {
         unitTests {

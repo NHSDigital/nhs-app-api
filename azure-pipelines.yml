@@ -9,6 +9,7 @@ parameters:
       - browserstack
       - onboardingsandpit
       - onboardingaos
+      - logindev
       - previewRelease
       - scratch1
       - scratch2
