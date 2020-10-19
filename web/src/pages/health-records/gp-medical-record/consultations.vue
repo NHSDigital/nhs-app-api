@@ -35,13 +35,13 @@
                   {{ consultationHeader.header }} </p>
 
                 <ul v-if="consultationHeader.observationsWithTerm.length"
-                    class="nhsuk-u-margin-bottom-0">
+                    class="nhsuk-u-margin-bottom-0 break">
                   <li v-for="(obsWithTerm, obsWithTermIndex)
                         in consultationHeader.observationsWithTerm"
                       :key="`line-${obsWithTermIndex}`">
                     {{ obsWithTerm.term }}
                     <ul v-if="obsWithTerm.associatedTexts.length"
-                        class="nhsuk-u-margin-bottom-0">
+                        class="nhsuk-u-margin-bottom-0 break">
                       <li v-for="(obsWithTermText, obsWithTermTextIndex)
                             in obsWithTerm.associatedTexts"
                           :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
@@ -49,7 +49,7 @@
                   </li>
                 </ul>
                 <ul v-if="consultationHeader.associatedTexts.length"
-                    class="nhsuk-u-margin-bottom-0">
+                    class="nhsuk-u-margin-bottom-0 break">
                   <li v-for="(associatedText, associatedTextIndex)
                         in consultationHeader.associatedTexts"
                       :key="`line-${associatedTextIndex}`">
@@ -137,5 +137,8 @@ export default {
 a {
   display: inline-block;
   cursor: pointer;
+}
+.break {
+  word-break: break-word;
 }
 </style>

@@ -90,6 +90,10 @@ export default {
 
 h1 {
   @include nhsuk-responsive-margin(4, "bottom");
+  word-break: break-word;
+}
+span {
+  padding-top: 1em;
 }
 
 </style>

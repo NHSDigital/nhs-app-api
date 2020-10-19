@@ -9,7 +9,7 @@
                            :text="bannerText"
                            tag="a">
       <nhs-arrow-circle />
-      <span class="nhsuk-action-link__text">{{ bannerText }}</span>
+      <span class="nhsuk-action-link__text break">{{ bannerText }}</span>
     </analytics-tracked-tag>
     <a v-else
        :id="id"
@@ -19,7 +19,7 @@
        @click="doClick"
        @keypress.enter="doClick" >
       <nhs-arrow-circle />
-      <span class="nhsuk-action-link__text">{{ bannerText }}</span>
+      <span class="nhsuk-action-link__text break">{{ bannerText }}</span>
     </a>
   </div>
 </template>
@@ -79,3 +79,8 @@ export default {
   },
 };
 </script>
+<style>
+.break {
+  word-break: break-word;
+}
+</style>

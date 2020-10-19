@@ -2,18 +2,18 @@
   <div :class="[$style.welcomeInfo, !$store.state.device.isNativeApp && $style.desktopWeb]"
        data-sid="welcome-info">
     <p v-if="name" class="nhsuk-u-margin-bottom-0">
-      <strong>Name:</strong>
+      <strong>{{ $t('home.name') }}</strong>
       <span data-sid="user-name" data-hj-suppress>{{ name }}</span>
       <br>
     </p>
     <p v-if="dateOfBirth" class="nhsuk-u-margin-bottom-0">
-      <strong>Date of birth:</strong>
+      <strong>{{ $t('home.dateOfBirth') }}</strong>
       &nbsp;
       <span data-sid="user-date-of-birth">{{ dateOfBirth | longDate }}</span>
       <br>
     </p>
-    <p v-if="nhsNumber" id="welcomeSectionNhsNumber" class="nhsuk-u-margin-bottom-0">
-      <strong>NHS number:</strong>
+    <p v-if="nhsNumber" id="welcomeSectionNhsNumber" class="nhsuk-u-margin-bottom-2">
+      <strong>{{ $t('home.nhsNumber') }}</strong>
       <generic-voice-over-text-split :class="$style.fieldValue"
                                      :text="nhsNumber"
                                      :data-sid="'user-nhs-number'"/>

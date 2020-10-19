@@ -136,21 +136,22 @@ export default {
   .flex-baseline-container {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
 
     .nhs-app-message__title {
-      flex-grow: 1;
-      flex-shrink: 1;
       @include nhsuk-responsive-padding(0);
       @include nhsuk-responsive-margin(0);
       overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .nhs-app-message__date {
-      flex-shrink: 0;
       margin-left: nhsuk-spacing(2);
       @include nhsuk-typography-responsive(16);
       font-weight: $nhsuk-font-normal;
       color: $nhsuk-secondary-text-color;
+      word-break: break-word;
+      justify-content: right;
 
       &.nhs-app-message__date--unread {
         font-weight: $nhsuk-font-bold;

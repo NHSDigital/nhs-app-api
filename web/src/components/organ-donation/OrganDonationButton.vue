@@ -84,6 +84,10 @@ export default {
       @include nhsuk-responsive-padding(1, "bottom");
       @include nhsuk-responsive-padding(0, "top");
     }
+
+    p {
+      word-break: break-word;
+    }
   }
 
   .no-button {

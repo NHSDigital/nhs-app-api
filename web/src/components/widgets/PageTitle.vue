@@ -1,5 +1,5 @@
 <template>
-  <h1 :key="titleKey" aria-live="polite" :class="cssClass">
+  <h1 :key="titleKey" aria-live="polite" :class="[cssClass, 'break']">
     <span v-if="caption"
           :key="caption"
           :class="[captionSizeCss, 'nhsuk-caption--top']"
@@ -42,3 +42,8 @@ export default {
   },
 };
 </script>
+<style>
+.break {
+  word-break: break-word;
+}
+</style>

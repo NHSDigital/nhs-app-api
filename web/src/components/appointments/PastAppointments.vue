@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0">
+    <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0 break">
       {{ $t('appointments.past.pastAppointments') }}
     </h2>
     <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">
@@ -47,3 +47,8 @@ export default {
   },
 };
 </script>
+<style>
+.break {
+  word-break: break-word;
+}
+</style>

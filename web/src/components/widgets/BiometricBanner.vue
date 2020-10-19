@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showBiometricBanner">
+  <div v-if="showBiometricBanner" :class="$style.container">
     <message-dialog :extra-classes="[$style['flash-message']]"
                     message-id="success-dialog"
                     message-type="message"
@@ -91,6 +91,9 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
+  .container {
+    margin-top: 2em;
+  }
   .nhsuk-button-full-width {
     width: 100%;
   }

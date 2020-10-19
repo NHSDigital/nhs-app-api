@@ -6,4 +6,7 @@ export default {
   welcome: 'Welcome',
   age: 'Age',
   gpSurgery: 'GP surgery',
+  dateOfBirth: 'Date of birth:',
+  name: 'Name:',
+  nhsNumber: 'NHS number:',
 };

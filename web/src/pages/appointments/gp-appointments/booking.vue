@@ -36,7 +36,7 @@
             :options="filtersOptions"
             :guidance-msg="bookingGuidanceMsg"/>
 
-          <h2 v-if="showAvailableSlotsTitle" class="nhsuk-u-margin-bottom-0">
+          <h2 v-if="showAvailableSlotsTitle" class="nhsuk-u-margin-bottom-0 break">
             {{ $t('appointments.book.availableAppointments') }}
           </h2>
           <slot-list ref="slot_list" :available-slots="availableSlots" />
@@ -245,5 +245,8 @@ div:focus {
 
 .inline-link > a {
   display: inline-block;
+}
+.break {
+  word-break: break-word;
 }
 </style>

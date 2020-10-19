@@ -17,7 +17,7 @@
           </message-list>
         </message-dialog>
 
-        <div v-if="showRepeatCourses">
+        <div v-if="showRepeatCourses" class="break">
           <p class="nhsuk-u-padding-bottom-3">
             {{ $t('prescriptions.repeatCourses.currentlyAvailableRepeatPrescriptions') }}</p>
           <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
@@ -295,3 +295,8 @@ export default {
   },
 };
 </script>
+<style>
+.break {
+  word-break: break-word;
+}
+</style>

@@ -12,7 +12,7 @@ import pages.withoutRetrying
 class YourAppointmentsPage : AppointmentSharedElementsPage() {
 
     val upcomingAppointmentsHeading = HybridPageElement(
-            webDesktopLocator = "//h2[text()='Upcoming appointments']",
+            webDesktopLocator = "//h2[normalize-space(text())='Upcoming appointments']",
             page = this
     )
 

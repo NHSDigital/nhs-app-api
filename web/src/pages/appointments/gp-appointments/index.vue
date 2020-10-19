@@ -18,7 +18,7 @@
           <div v-if="showNoUpcomingAppointments"
                class="nhsuk-u-margin-bottom-3"
                data-purpose="upcoming-info">
-            <h2 class="nhsuk-u-margin-bottom-0">{{
+            <h2 class="nhsuk-u-margin-bottom-0 break">{{
               $t('appointments.upcoming.upcomingAppointments')
             }}</h2>
             <p class="nhsuk-u-margin-top-0">
@@ -29,7 +29,8 @@
                                  :cancellation-disabled="cancellationDisabled"/>
 
           <div v-if="showNoPastAppointments" data-purpose="past-info">
-            <h2 class="nhsuk-u-margin-bottom-0">{{ $t('appointments.past.pastAppointments') }}</h2>
+            <h2 class="nhsuk-u-margin-bottom-0 break">
+              {{ $t('appointments.past.pastAppointments') }}</h2>
             <div>
               <p class="nhsuk-u-padding-bottom-3">
                 {{ $t('appointments.past.none.youHaveNoRecentPastAppointments') }}
@@ -161,5 +162,8 @@ export default {
 <style module lang="scss" scoped>
 .inline-link > a {
   display: inline-block;
+}
+.break {
+  word-break: break-word;
 }
 </style>

@@ -13,12 +13,10 @@
 	padding-bottom: 0.850em;
 
 	.msg-content {
-		padding-top: 1.125em;
+		word-break: break-word;
 	}
 	.icon {
 		@include h4;
-		position: absolute;
-		height: 2.125em;
 		padding: 0.5em 1em 0.5em 1em;
 		box-sizing: border-box;
 		background-color: $nhs_blue;

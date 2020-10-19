@@ -11,14 +11,14 @@
           <div v-for="selectedPrescription in selectedPrescriptions"
                :key="selectedPrescription.courseId"
                data-purpose="selected-prescription">
-            <strong class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
-              {{ selectedPrescription.name }}</strong>
+            <p><strong class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
+              {{ selectedPrescription.name }}</strong></p>
             <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
           </div>
           <hr>
           <div v-if="specialRequestNecessity !== 'NotAllowed'">
-            <strong class="nhsuk-u-margin-bottom-0">
-              {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong>
+            <p><strong class="nhsuk-u-margin-bottom-0">
+              {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong></p>
             <p v-if="specialRequest"
                id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
             </p>
@@ -29,7 +29,9 @@
           <sjr-if journey="nominatedPharmacy">
             <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
               <hr>
-              <strong class="nhsuk-u-margin-bottom-0">{{ pharmacyHeader }}</strong>
+              <p class="nhsuk-u-margin-bottom-0">
+                <strong>{{ pharmacyHeader }}</strong>
+              </p>
               <pharmacy-summary id="pharmacy-summary"
                                 :pharmacy="nominatedPharmacy"/>
             </div>

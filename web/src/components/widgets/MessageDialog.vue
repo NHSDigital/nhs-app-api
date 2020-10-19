@@ -5,7 +5,7 @@
                 'nhsuk-width-container--full',
                 {[$style.desktopWeb] : !$store.state.device.isNativeApp},
                 plainStyle]">
-    <h2 v-if="showIcon" :class="['nhsuk-heading-m', $style.icon]">
+    <h2 v-if="showIcon" :class="['nhsuk-heading-m', $style.icon, $style.break]">
       {{ iText }}
     </h2>
     <div :id="messageId" :class="$style['msg-content']"
@@ -100,5 +100,8 @@ export default {
   &.desktopWeb {
     margin-left: 0-$three;
   }
+}
+.break {
+  word-break: break-word;
 }
 </style>
