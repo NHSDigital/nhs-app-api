@@ -17,8 +17,8 @@ Feature: Prescriptions submission Frontend
     And I click Continue on the Order a repeat prescription page
     Then I cannot see any nominated pharmacy information
     When I click Confirm and order repeat prescription
-    Then I see the Prescription Ordered success page
-    And I click the Back to my prescriptions link
+    Then I see the Order Success page with a playback of my order and what happens next
+    And I click the Go to your prescription orders link
     And I see the Repeat prescription page with 6 prescriptions
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
@@ -32,8 +32,8 @@ Feature: Prescriptions submission Frontend
     And I enter text "As soon as possible please" for special request
     And I click Continue on the Order a repeat prescription page
     And I click Confirm and order repeat prescription
-    Then I see the Prescription Ordered success page
-    And I click the Back to my prescriptions link
+    Then I see the Order Success page with a playback of my order and what happens next
+    And I click the Go to your prescription orders link
     And I see the Repeat prescription page with 6 prescriptions
     Examples:
       | GP System |
@@ -50,8 +50,8 @@ Feature: Prescriptions submission Frontend
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     And I click Confirm and order repeat prescription
-    Then I see the Prescription Ordered success page
-    And I click the Back to my prescriptions link
+    Then I see the Order Success page
+    And I click the Go to your prescription orders link
     And I see the Repeat prescription page with 2 prescriptions
     Examples:
     | GP System |

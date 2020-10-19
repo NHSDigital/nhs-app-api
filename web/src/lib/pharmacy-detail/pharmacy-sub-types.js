@@ -1,6 +1,5 @@
-/* eslint-disable import/prefer-default-export */
-const CommunityPharmacy = 'Community Pharmacy';
-const InternetPharmacy = 'Internet Pharmacy';
+export const CommunityPharmacy = 'Community Pharmacy';
+export const InternetPharmacy = 'Internet Pharmacy';
 
 export default {
   CommunityPharmacy,

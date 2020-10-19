@@ -77,8 +77,8 @@ export const NOMINATED_PHARMACY_CHECK = {
   name: NOMINATED_PHARMACY_CHECK_NAME,
   component: NominatedPharmacyCheckPage,
   meta: {
-    headerKey: 'navigation.pages.headers.prescriptions',
-    titleKey: 'navigation.pages.titles.prescriptions',
+    headerKey: 'navigation.pages.headers.nominatedPharmacyCheck',
+    titleKey: 'navigation.pages.titles.nominatedPharmacyCheck',
     crumb: breadcrumbs.NOMINATED_PHARMACY_CHECK_CRUMB,
     upliftRoute: UPLIFT_PRESCRIPTIONS,
     proofLevel: proofLevel.P9,

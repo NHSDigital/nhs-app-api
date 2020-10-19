@@ -325,17 +325,44 @@ Feature: nominated pharmacy journey
       | GP System | OdsCode |
       | EMIS      | SW11XR  |
 
-  Scenario Outline: The <GP System> user can see nominated pharmacy on the prescriptions summary page
+  Scenario: The EMIS user can see nominated pharmacy on the prescriptions confirmation page and a playback on the order success page
     Given the scenario is submit prescription
-    And I am using <GP System> GP System to submit my prescription
+    And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And my GP Practice is EPS enabled
-    And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     Then I see nominated pharmacy information is shown and correct
-    Examples:
-      | GP System | Pharmacy type | OdsCode |
-      | EMIS      | P1            | SW11XR  |
+    When I click Confirm and order repeat prescription
+    Then I see the Order Success page with a playback of my order and what happens next for nominated pharmacy
+    And I see nominated pharmacy information is shown and correct
+
+  Scenario: The EMIS user can see advice on what happens next with their internet pharmacy on the order success page
+    Given the scenario is submit prescription
+    And I am using EMIS GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And my GP Practice is EPS enabled
+    And I have a P1 typed Internet pharmacy with SW11XR OdsCode
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    And I click Confirm and order repeat prescription
+    Then I see the Order Success page with a playback of my order and what happens next for Internet pharmacy
+
+  Scenario: The EMIS user can see default advice on what happens next they have no nominated pharmacy
+    Given the scenario is submit prescription
+    And I am using EMIS GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And my GP Practice is EPS enabled
+    And I don't have a nominated pharmacy of any type
+    And I am logged in
+    When I retrieve the 'Your Prescriptions' page directly
+    And I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    And I click Confirm and order repeat prescription
+    Then I see the Order Success page with a playback of my order and what happens next with no nominated pharmacy
+    And I cannot see any nominated pharmacy information

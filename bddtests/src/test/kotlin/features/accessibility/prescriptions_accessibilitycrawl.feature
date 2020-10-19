@@ -14,7 +14,7 @@
       And I click Continue on the Order a repeat prescription page
       And the OrderPrescriptionsConfirm page is saved to disk
       When I click Confirm and order repeat prescription
-      Then I see the Prescription Ordered success page
+      Then I see the Order Success page
       And the PrescriptionsConfirmation page is saved to disk
 
     Scenario: The EMIS my prescriptions page is captured

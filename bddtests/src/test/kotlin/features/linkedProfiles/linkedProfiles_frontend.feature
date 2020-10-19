@@ -142,7 +142,7 @@ Feature: Login with proxy access
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
-    Then I see repeat prescription confirmation page loaded
+    Then I see the Order Success page with what happens next for proxy
     Examples:
       | GP System |
       | EMIS      |

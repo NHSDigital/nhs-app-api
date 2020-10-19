@@ -6,5 +6,6 @@ enum class PrescriptionsSerenityHelpers : ISerenityHelperEnums {
     FROM_DATE,
     PROVIDER,
     PRESCRIPTIONS_LIST_RESPONSE,
-    PRESCRIPTIONS_LOADER
+    PRESCRIPTIONS_LOADER,
+    SELECTED_COURSES
 }

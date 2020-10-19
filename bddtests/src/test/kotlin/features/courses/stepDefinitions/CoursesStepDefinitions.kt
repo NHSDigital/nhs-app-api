@@ -25,6 +25,7 @@ import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
+import utils.getOrFail
 import utils.getOrNull
 import utils.set
 
@@ -45,8 +46,6 @@ open class CoursesStepDefinitions {
     private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
 
     lateinit var coursesLoader: ICoursesLoader<*>
-
-    lateinit var selectedCourses: List<MedicationCourse>
 
     var numOfCourses: Int = 0
     var numOfRepeats: Int = 0
@@ -105,7 +104,7 @@ open class CoursesStepDefinitions {
         for (course in coursesToSelect) {
             repeatPrescriptions.selectRepeatPrescription(course)
         }
-        selectedCourses = coursesToSelect
+        PrescriptionsSerenityHelpers.SELECTED_COURSES.set(coursesToSelect)
     }
 
     @Given("^there are (\\d*) repeatable prescriptions available$")
@@ -194,12 +193,14 @@ open class CoursesStepDefinitions {
     @When("^I select (\\d+) additional repeat prescriptions$")
     fun iSelectXAdditionalRepeatPrescriptions(numberOfAdditionalRepeatPrescriptionsToSelect: Int) {
         val courses = getAvailableCoursesFilteredSortedOrdered()
+        val selectedCourses = PrescriptionsSerenityHelpers.SELECTED_COURSES
+                .getOrFail<List<MedicationCourse>>()
         val coursesToSelect = courses.drop(selectedCourses.size)
                 .take(numberOfAdditionalRepeatPrescriptionsToSelect)
         for (course in coursesToSelect) {
             repeatPrescriptions.selectRepeatPrescription(course)
         }
-        selectedCourses = selectedCourses.plus(coursesToSelect)
+        PrescriptionsSerenityHelpers.SELECTED_COURSES.set(selectedCourses.plus(coursesToSelect))
     }
 
     @Then("^a message is displayed indicating that you don't have any medication available to order$")
@@ -224,7 +225,7 @@ open class CoursesStepDefinitions {
     fun iSeeThePreviouslySelectedPrescriptionsOnTheConfirmRepeatPrescriptionPage() {
         confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
         confirmRepeatPrescriptionsOrderPage
-                .verifySelectedRepeatPrescriptions(selectedCourses)
+                .verifySelectedRepeatPrescriptions(PrescriptionsSerenityHelpers.SELECTED_COURSES.getOrFail())
     }
 
     @Then("^I see the entered special request text$")
@@ -257,7 +258,7 @@ open class CoursesStepDefinitions {
     @Then("^I see my previously selected repeat prescriptions selected$")
     fun iSeeMyPreviouslySelectedRepeatPrescriptionsSelected() {
         repeatPrescriptions.shouldBeDisplayed()
-        for (course in selectedCourses) {
+        for (course in PrescriptionsSerenityHelpers.SELECTED_COURSES.getOrFail<List<MedicationCourse>>()) {
             repeatPrescriptions.verifyPrescriptionIsSelected(course)
         }
     }

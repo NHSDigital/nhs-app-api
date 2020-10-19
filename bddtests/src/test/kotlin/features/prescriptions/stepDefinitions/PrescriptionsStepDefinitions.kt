@@ -28,7 +28,6 @@ import models.prescriptions.PrescriptionLoaderConfiguration
 import org.junit.Assert.assertTrue
 import pages.assertElementNotPresent
 import pages.assertIsVisible
-import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import utils.ProxySerenityHelpers
@@ -46,7 +45,6 @@ open class PrescriptionsStepDefinitions {
 
     private lateinit var viewOrders : ViewOrdersPrescriptionsPage
     private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
-    private lateinit var repeatPrescriptionConfirmation : RepeatPrescriptionConfirmationPage
 
     private val mockingClient = MockingClient.instance
 
@@ -331,16 +329,6 @@ open class PrescriptionsStepDefinitions {
     @Then("^I see view orders prescriptions page loaded$")
     fun iSeeViewOrdersPrescriptionsPageLoaded() {
         viewOrders.isLoaded()
-    }
-
-    @Then("^I see repeat prescription confirmation page loaded$")
-    fun iSeeRepeatPrescriptionConfirmationPageLoaded() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
-        if (currentProvider === Supplier.TPP) {
-            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().formattedFullName())
-        } else {
-            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().name.firstName)
-        }
     }
 
     @Then("^I see no prescriptions$")
