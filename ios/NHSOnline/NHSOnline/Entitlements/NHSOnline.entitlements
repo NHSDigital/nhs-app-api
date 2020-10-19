@@ -7,15 +7,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:nhsapp.service.nhs.uk</string>
-		
-		<!-- 
-			
-			NHSO-9029
-
 		<string>applinks:refer.nhs.uk</string>
-			
-		-->
-		
 	</array>
 </dict>
 </plist>
