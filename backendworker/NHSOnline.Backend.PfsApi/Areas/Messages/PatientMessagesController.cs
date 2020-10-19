@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Messages.Models;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -33,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
         [HttpGet]
         [ApiVersionRoute("patient/messages")]
-        public async Task<IActionResult> GetMessages([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> GetMessages([GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -44,8 +45,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
             await _auditor.Audit(AuditingOperations.ViewPatientPracticeMessagesRequest, "Viewing Patient to Practice Messages");
 
-            var gpUserSession = userSession.GpUserSession;
-
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
             var patientMessagesService = _gpSystemFactory
@@ -55,14 +54,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             var result = await patientMessagesService.GetMessages(gpUserSession);
 
             await result.Accept(new PatientMessagesResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PatientMessagesResultVisitor(_errorReferenceGenerator, userSession));
+            return result.Accept(new PatientMessagesResultVisitor(_errorReferenceGenerator, gpUserSession.Supplier));
         }
 
         [HttpGet]
         [ApiVersionRoute("patient/messages/{messageId}")]
         public async Task<IActionResult> GetMessageDetails(
             [FromRoute(Name = "messageId")] string messageId,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -72,8 +71,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
 
             await _auditor.Audit(AuditingOperations.GetPatientPracticeMessageDetailsRequest, "Getting Patient to Practice Message Details");
-
-            var gpUserSession = userSession.GpUserSession;
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -91,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [ApiVersionRoute("patient/messages/updateReadStatus")]
         public async Task<IActionResult> PostUpdateMessageReadStatus(
             [FromBody] UpdateMessageReadStatusRequestBody updateMessageReadStatusRequest,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -104,8 +101,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 AuditingOperations.UpdatePatientPracticeMessageUnreadStatusRequest,
                 $"Updating unread status for message with id {updateMessageReadStatusRequest.MessageId} to " +
                 $"{updateMessageReadStatusRequest.MessageReadState}");
-
-            var gpUserSession = userSession.GpUserSession;
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -121,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
         [HttpGet]
         [ApiVersionRoute("patient/messages/recipients")]
-        public async Task<IActionResult> GetMessageRecipients([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> GetMessageRecipients([GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -131,8 +126,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
 
             await _auditor.Audit(AuditingOperations.GetPatientPracticeMessageRecipientsRequest, "Getting Patient to Practice Message Recipients");
-
-            var gpUserSession = userSession.GpUserSession;
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -150,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [ApiVersionRoute("patient/messages")]
         public async Task<IActionResult> SendMessage(
             [FromBody] CreatePatientMessage message,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -161,8 +154,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
             await _auditor.Audit(AuditingOperations.CreatePatientPracticeMessageRequest,
                 "Creating a patient to practice message");
-
-            var gpUserSession = userSession.GpUserSession;
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -180,7 +171,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [ApiVersionRoute("patient/messages/{messageId}")]
         public async Task<IActionResult> DeleteMessage(
             [FromRoute(Name = "messageId")] string messageId,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
@@ -191,8 +182,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
             await _auditor.Audit(AuditingOperations.DeletePatientPracticeMessageRequest,
                 $"Deleting a patient to practice message with id {messageId}");
-
-            var gpUserSession = userSession.GpUserSession;
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 

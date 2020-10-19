@@ -1,11 +1,12 @@
 <template>
   <menu-item-list data-sid="navigation-list-menu">
-    <menu-item id="btn_messages"
+    <menu-item v-if="gpMessagingAvailable"
+               id="btn_messages"
                :header-tag="headerTag"
                data-purpose="messages-menu-item"
                :href="messagesPath"
                :show-indicator="hasMessageIndicator"
-               :text="messagesItemText"
+               :text="$t('navigation.viewYourMessages')"
                :aria-label="ariaLabel"
                :click-func="navigateToMessages"/>
 
@@ -90,7 +91,6 @@ import {
   ADVICE_PATH,
   LINKED_PROFILES_PATH,
   INDEX_PATH,
-  HEALTH_INFORMATION_UPDATES_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import sjrIf from '@/lib/sjrIf';
@@ -111,10 +111,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    linkToAppMessages: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -126,6 +122,7 @@ export default {
       healthRecordsHubPath: HEALTH_RECORDS_PATH,
       linkedProfilesPath: LINKED_PROFILES_PATH,
       indexPath: INDEX_PATH,
+      messagesPath: MESSAGES_PATH,
     };
   },
   computed: {
@@ -144,19 +141,14 @@ export default {
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];
     },
-    messagesItemText() {
-      return (this.linkToAppMessages)
-        ? this.$t('navigation.viewHealthInformationAndUpdates')
-        : this.$t('navigation.viewYourMessages');
-    },
-    messagesPath() {
-      return (this.linkToAppMessages) ? HEALTH_INFORMATION_UPDATES_PATH : MESSAGES_PATH;
+    gpMessagingAvailable() {
+      return !this.$store.state.gpMessages.gpMessagingSessionUnavailable;
     },
     ariaLabel() {
       return (this.hasMessageIndicator) ?
-        `${this.messagesItemText}
+        `${this.$t('navigation.viewYourMessages')}
           ${this.$t('navigation.youHaveUnreadMessages')}` :
-        this.messagesItemText;
+        this.$t('navigation.viewYourMessages');
     },
   },
   methods: {
@@ -171,9 +163,6 @@ export default {
       });
     },
     navigateToMessages() {
-      if (this.linkToAppMessages) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-      }
       redirectTo(this, this.messagesPath);
     },
   },

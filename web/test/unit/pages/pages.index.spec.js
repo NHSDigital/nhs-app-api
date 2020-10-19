@@ -147,11 +147,11 @@ describe('index', () => {
     const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
 
     each([
-      [false, false, true, 'View health information and updates'], // app messages only
+      [false, false, true, 'View your messages'], // app messages only
       [true, false, true, 'View your messages'], // app messages and im1 messaging
       [false, true, true, 'View your messages'], // app messages and silver messaging
       [true, true, true, 'View your messages'], // app messages, im1 messaging, silver messaging
-      [false, true, false, 'View health information and updates'], // app messages and (silver messaging but not P9)
+      [false, true, false, 'View your messages'], // app messages and (silver messaging but not P9)
     ]).describe('sjrIm1MessagingEnabled enabled is %s, silverIntegrationMessagesEnabled is %s, isProofLevel9 is %s', (
       sjrIm1MessagingEnabled, silverIntegrationMessagesEnabled,
       isProofLevel9, expectedText,

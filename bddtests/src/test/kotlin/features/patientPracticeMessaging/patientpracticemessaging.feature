@@ -143,7 +143,6 @@ Feature: Patient to practice messaging
       | unit           |
       | regular        |
 
-
   Scenario: A TPP patient can view their patient messaging inbox and the unread count is displayed
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, some of which are unread
@@ -166,7 +165,6 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then the message is marked as read
 
-
   Scenario: A TPP patient can view a patient message they started
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
@@ -178,7 +176,6 @@ Feature: Patient to practice messaging
     And I see a list of patient practice messages without the subject and without the unread count
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
-
 
   Scenario: A TPP patient can view an attachment on a message
     Given I am a TPP user who can access patient practice messaging
@@ -211,7 +208,6 @@ Feature: Patient to practice messaging
     And I see the view and download links on the message
     And I click on the view link
     Then I can view the message attachment
-
 
   Scenario: A TPP patient can download an attachment on a message
     And I am a TPP user who can access patient practice messaging
@@ -247,7 +243,6 @@ Feature: Patient to practice messaging
     And I click on the view link
     Then I see the invalid attachment message
 
-
   Scenario: A TPP patient can view a patient message the gp sent
     Given I am a TPP user who can access patient practice messaging
     And I have patient practice messages in my inbox, one of which came from the GP
@@ -259,7 +254,6 @@ Feature: Patient to practice messaging
     And I see a list of patient practice messages from the GP
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
-
 
   Scenario: A TPP patient can view their patient messaging inbox and the unread count is not displayed
     Given I am a TPP user who can access patient practice messaging
@@ -310,7 +304,6 @@ Feature: Patient to practice messaging
     When I click delete conversation on the delete page to confirm my decision
     Then I see the appropriate error for deleting patient practice message(s)
 
-
   Scenario: A user can see a patient practice message conversation with no unread messages
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
@@ -323,8 +316,8 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
 
-    @pending
-    @NHSO-8913
+  @pending
+  @NHSO-8913
   Scenario: A user can see an error message when the patient practice message cant be retrieved
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
@@ -337,8 +330,8 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then I see the appropriate error for getting patient practice message(s)
 
-    @pending
-    @NHSO-8913
+  @pending
+  @NHSO-8913
   Scenario: A user receives an error message if there is an unknown error when trying to access their patient practice messages
     Given I am an EMIS user who can access patient practice messaging
     And there is an unknown error getting patient practice messages
@@ -347,7 +340,6 @@ Feature: Patient to practice messaging
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And I see the appropriate error for listing patient practice message(s)
-
 
   Scenario: A user is looking for urgent advice via patient practice messaging
     Given I am an EMIS user who can access patient practice messaging
@@ -358,7 +350,6 @@ Feature: Patient to practice messaging
     Then I see the patient practice messaging urgency contact your gp page
     And I see a message explaining patient practice messaging is not for urgent advice
 
-
   Scenario: A user is not looking for urgent advice via patient practice messaging
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
@@ -368,3 +359,15 @@ Feature: Patient to practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
 
+  Scenario Outline: An <GP System> user without a GP session does not see a patient practice messaging link
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And the link to Patient Practice Messages is not available on the Messages Hub page
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |

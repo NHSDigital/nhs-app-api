@@ -1,6 +1,5 @@
 import NavigationListMenu from '@/components/NavigationListMenu';
-import { redirectTo } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES_PATH, MESSAGES_PATH } from '@/router/paths';
+import each from 'jest-each';
 import { mount, createStore, createRouter } from '../helpers';
 
 jest.mock('@/lib/utils');
@@ -8,25 +7,25 @@ jest.mock('@/lib/utils');
 let wrapper;
 let $store;
 let $router;
-let propsData;
 
 const mountAs = ({
   silverIntegrationsEnabled = false,
   isNativeApp = false,
   isLinkedEnabledEnabled = false,
   isProofLevel9 = true,
-  linkToAppMessages = false,
+  gpMessagingSessionUnavailable = false,
 } = {}) => {
   $router = createRouter();
-  propsData = {
-    linkToAppMessages,
-  };
   $store = createStore({
     state: {
       device:
         {
           isNativeApp,
         },
+      gpMessages:
+      {
+        gpMessagingSessionUnavailable,
+      },
     },
     getters: {
       'linkedAccounts/hasLinkedAccounts': isLinkedEnabledEnabled,
@@ -34,7 +33,7 @@ const mountAs = ({
       'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationsEnabled),
     },
   });
-  return mount(NavigationListMenu, { $store, $router, propsData });
+  return mount(NavigationListMenu, { $store, $router });
 };
 
 beforeEach(() => {
@@ -60,11 +59,15 @@ describe('Navigation Links ', () => {
     });
   });
 
-  describe('messaging link', () => {
-    it('will display a link to the messages hub', () => {
-      wrapper = mountAs();
-      expect(wrapper.find('#btn_messages').exists()).toBe(true);
-    });
+  describe('Messages Hub link', () => {
+    each([
+      [false, true],
+      [true, false],
+    ])
+      .it('messages hub link will be shown', (gpMessagingSessionUnavailable, isVisible) => {
+        wrapper = mountAs({ silverIntegrationsEnabled: true, gpMessagingSessionUnavailable });
+        expect(wrapper.find('#btn_messages').exists()).toBe(isVisible);
+      });
   });
 
   describe('P9 User', () => {
@@ -100,38 +103,6 @@ describe('Navigation Links ', () => {
 
     it('will show advice link', () => {
       expect(wrapper.find('#menu-item-advice').exists()).toBe(true);
-    });
-  });
-
-  describe('Messages Link', () => {
-    describe('linkToAppMessages is true', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ linkToAppMessages: true });
-        wrapper.vm.navigateToMessages();
-      });
-
-      it('will redirect to app messages', () => {
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
-      });
-
-      it('will set route crumb to appMessagesOnlyCrumb', () => {
-        expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-      });
-    });
-
-    describe('linkToAppMessages is false', () => {
-      beforeEach(() => {
-        wrapper = mountAs();
-        wrapper.vm.navigateToMessages();
-      });
-
-      it('will redirect to app messages', () => {
-        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, MESSAGES_PATH);
-      });
-
-      it('will set route crumb to appMessagesOnlyCrumb', () => {
-        expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-      });
     });
   });
 

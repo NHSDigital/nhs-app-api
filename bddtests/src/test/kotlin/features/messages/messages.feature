@@ -8,7 +8,8 @@ Feature: Messages
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -27,7 +28,8 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user with proof level 5 wishing to view my messages
     And I am logged in
-    When I follow the Health information and updates link from the home page
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
     Then the Messages Inbox page is displayed
 
   Scenario: A user with proof level 5 can see they have unread messages on the home page
@@ -65,7 +67,8 @@ Feature: Messages
       | /appointments/gp-appointments/booking  |
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -73,7 +76,8 @@ Feature: Messages
     When I click on the '/account' link in the message
     Then the Account page for mobile devices is displayed
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -89,7 +93,8 @@ Feature: Messages
       | https://111.nhs.uk/  |
       | 111.nhs.uk/  |
     And I am logged in
-    When I follow the Health information and updates link from the home page
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -105,7 +110,8 @@ Feature: Messages
       | email@address.com  |
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -118,7 +124,8 @@ Feature: Messages
       | /appointments/sausages  |
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     And I click on a sender in the Messages Inbox
@@ -133,7 +140,8 @@ Feature: Messages
     And I am a user wishing to view my messages, but I have no messages
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
 
@@ -144,7 +152,7 @@ Feature: Messages
       | messages      | disabled |
     And I am logged in
     When I navigate to the More page
-    Then the link to NHS App Messages link is not displayed
+    Then the link to NHS App Messages is not available on the Messages Hub page
     When I browse to the pages at the following urls I see the home page
       | /messages/app-messaging  |
       | /messages/app-messaging?source=ios  |
@@ -158,7 +166,8 @@ Feature: Messages
     And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And an error with a retry button is displayed indicating that there was a problem getting messages
     And the messages in the repository can be retrieved successfully
     And I click the 'Try again' button
@@ -169,7 +178,8 @@ Feature: Messages
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the senders and latest messages are displayed on the Messages Inbox page
     And retrieving the messages from the repository will cause an internal server error
     And I click on a sender in the Messages Inbox
@@ -183,7 +193,8 @@ Feature: Messages
     Given I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the Back link on the Messages Inbox page is displayed
     And I click on a sender in the Messages Inbox
@@ -199,7 +210,8 @@ Feature: Messages
     And I am a user wishing to view my messages
     And I am logged in
     When I navigate to the More page
-    And I click the App Messages link on the More page
+    And I click the Messages link on the More page
+    And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the Back link is not shown on the Messages Inbox page
     And I click on a sender in the Messages Inbox

@@ -18,6 +18,7 @@ import {
   CLEAR_SELECTED_RECIPIENT,
   SET_ATTACHMENT_ID,
   SET_HAS_UNREAD,
+  GP_MESSAGING_SESSION_UNAVAILABLE,
   initialState,
 } from './mutation-types';
 
@@ -92,5 +93,8 @@ export default {
     if (data) {
       state.hasUnread = data.some(message => message.unreadReplyInfo.present);
     }
+  },
+  [GP_MESSAGING_SESSION_UNAVAILABLE](state) {
+    state.gpMessagingSessionUnavailable = true;
   },
 };

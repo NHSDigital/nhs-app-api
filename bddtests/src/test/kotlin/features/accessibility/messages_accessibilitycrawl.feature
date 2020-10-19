@@ -6,7 +6,8 @@ Feature: Messages accessibility
     Given I am using the native app user agent
     And I am a user wishing to view my messages
     And I am logged in
-    When I follow the Health information and updates link from the home page
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
     Then the Messages Inbox page is displayed
     And the MessagesInbox page is saved to disk
     When I click on a sender in the Messages Inbox
@@ -22,7 +23,8 @@ Feature: Messages accessibility
     Given I am using the native app user agent
     And I am a user wishing to view my messages, but I have no messages
     And I am logged in
-    When I follow the Health information and updates link from the home page
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
     Then the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
     And the Messages_NoMessages page is saved to disk

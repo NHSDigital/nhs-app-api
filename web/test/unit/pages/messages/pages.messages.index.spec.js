@@ -188,20 +188,5 @@ describe('messages page', () => {
       wrapper.vm.navigateToAppMessages();
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
     });
-
-    it('will not set route crumb to appMessagesOnlyCrumb when not the only messages service enabled', () => {
-      mountPage();
-      wrapper.vm.navigateToAppMessages();
-      expect($store.dispatch).not.toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-    });
-
-    it('will set route crumb to appMessagesOnlyCrumb when the only messages service enabled', () => {
-      mountPage({
-        sjrIm1MessagingEnabled: false,
-        context: false,
-      });
-      wrapper.vm.navigateToAppMessages();
-      expect($store.dispatch).toHaveBeenCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-    });
   });
 });

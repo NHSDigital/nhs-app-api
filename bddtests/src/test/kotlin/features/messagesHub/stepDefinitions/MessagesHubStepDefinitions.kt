@@ -27,7 +27,17 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_im1_messaging")
     }
 
-    @Then("^the link to NHS App Messages link is not displayed$")
+    @When("^I click the App Messages link on the messages hub page")
+    fun iClickTheAppMessagesLinkOnTheMorePage() {
+        messagesHubPage.clickOnMenuItem("btn_appMessaging")
+    }
+
+    @When("^the link to Patient Practice Messages is not available on the Messages Hub page")
+    fun theIm1MessagesLinkIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_im1_messaging")
+    }
+
+    @Then("^the link to NHS App Messages is not available on the Messages Hub page$")
     fun theAppMessagesLinkIsNotDisplayed() {
         messagesHubPage.assertMenuItemNotDisplayed("btn_appMessaging")
     }

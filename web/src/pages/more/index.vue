@@ -2,25 +2,13 @@
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
       <menu-item
-        v-if="onlyAppMessagesEnabled"
-        id="btn_appMessaging"
-        header-tag="h2"
-        data-purpose="text_link"
-        :href="appMessagingPath"
-        :show-indicator="hasUnreadMessages"
-        :text="$t('messages.hub.healthInformationAndUpdates')"
-        :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
-        :click-func="navigateToAppMessages"
-        :aria-label="ariaLabel"/>
-
-      <menu-item
-        v-else
+        v-if="gpMessagingAvailable"
         id="btn_messages"
         header-tag="h2"
         data-purpose="text_link"
         :href="messagesPath"
         :text="$t('messages.messages')"
-        :description="$t('messages.sendOrViewMessagesFromSurgeryOrHealthServices')"
+        :description="$t('messages.hub.viewMessagesFromHealthServicesAndTheApp')"
         :show-indicator="hasUnreadMessages"
         :click-func="navigateToMessages"
         :aria-label="ariaLabel"/>
@@ -112,6 +100,7 @@ export default {
       isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
+      gpMessagingAvailable: !this.$store.state.gpMessages.gpMessagingSessionUnavailable,
       morePath: MORE_PATH,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       messagesPath: MESSAGES_PATH,
@@ -207,7 +196,7 @@ export default {
   },
   methods: {
     navigateToAppMessages() {
-      this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
+      this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
       redirectTo(this, this.appMessagingPath);
     },
     navigateToMessages() {

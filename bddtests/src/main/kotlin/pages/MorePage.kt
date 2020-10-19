@@ -20,7 +20,7 @@ open class MorePage : HybridPageObject() {
                     "information and choose whether or not it can be used for research and planning"
 
     private val messagesTitle = "Messages"
-    private val messagesDescription = "Get messages from your GP surgery and other NHS services."
+    private val messagesDescription = "View messages from health services and the NHS App"
 
     private val appMessagesTitle = "Health information and updates"
     private val appMessagesDescription = "View messages from health services and the NHS App"

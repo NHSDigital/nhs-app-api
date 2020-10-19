@@ -17,6 +17,7 @@ import {
   CLEAR_SELECTED_RECIPIENT,
   SET_ATTACHMENT_ID,
   SET_HAS_UNREAD,
+  GP_MESSAGING_SESSION_UNAVAILABLE,
 } from './mutation-types';
 
 export default {
@@ -45,7 +46,11 @@ export default {
       commit(SET_SUMMARIES, get('messageSummaries', response));
       commit(SET_HAS_UNREAD, get('messageSummaries', response));
       commit(LOADED_MESSAGES, true);
-    } catch {
+    } catch (error) {
+      const { response } = error;
+      if (response !== undefined && response.status === 599) {
+        commit(GP_MESSAGING_SESSION_UNAVAILABLE);
+      }
       // Nothing to do. A server error / messages error is displayed
     }
   },

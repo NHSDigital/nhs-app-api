@@ -38,11 +38,6 @@ class MoreStepDefinitions {
         morePage.btnMessages.click()
     }
 
-    @When("^I click the App Messages link on the More page")
-    fun iClickTheAppMessagesLinkOnTheMorePage() {
-        morePage.btnAppMessages.click()
-    }
-
     @When("^I click the Shared links link on the More page")
     fun iClickTheSharedLinksLinkOnTheMorePage() {
         morePage.btnSharedLinks.click()

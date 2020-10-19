@@ -2,7 +2,7 @@ import * as utils from '@/lib/utils';
 import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { MESSAGES_PATH, HEALTH_INFORMATION_UPDATES_PATH, DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
+import { MESSAGES_PATH, DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
 import { YOUR_NHS_DATA_MATTERS_URL } from '@/router/externalLinks';
 import { createStore, mount } from '../../helpers';
 
@@ -138,55 +138,6 @@ describe('more', () => {
 
           it('will not set breadcrumb', () => {
             expect($store.dispatch).not.toBeCalledWith('navigation/setRouteCrumb', expect.anything());
-          });
-        });
-      });
-    });
-  });
-
-  describe('only app messaging available', () => {
-    each([
-      [false, true], // app messages only
-      [true, false], // app messages and (silver messaging but not P9)
-    ]).describe('silver messaging is %s, proof level 9 is %s', (
-      silverIntegrationMessagesEnabled,
-      isProofLevel9,
-    ) => {
-      beforeEach(() => {
-        wrapper = mountAs({
-          sjrMessagingEnabled: true,
-          sjrIm1MessagingEnabled: false,
-          silverIntegrationMessagesEnabled,
-          isProofLevel9,
-        });
-      });
-
-      it('will not show messages link', () => {
-        expect(wrapper.find('#btn_messages').exists()).toBe(false);
-      });
-
-      describe('app messaging link', () => {
-        let appMessagingLink;
-
-        beforeEach(() => {
-          appMessagingLink = wrapper.find('#btn_appMessaging');
-        });
-
-        it('will exist', () => {
-          expect(appMessagingLink.exists()).toBe(true);
-        });
-
-        describe('click', () => {
-          beforeEach(() => {
-            appMessagingLink.trigger('click');
-          });
-
-          it('will redirect to HEALTH_INFORMATION_UPDATES', () => {
-            expect(utils.redirectTo).toBeCalledWith(wrapper.vm, HEALTH_INFORMATION_UPDATES_PATH);
-          });
-
-          it('will set breadcrumb to `appMessagesOnlyCrumb`', () => {
-            expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
           });
         });
       });

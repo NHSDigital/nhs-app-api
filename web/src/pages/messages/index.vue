@@ -171,9 +171,6 @@ export default {
       redirectTo(this, this.im1MessagingPath);
     },
     navigateToAppMessages() {
-      if (this.onlyAppMessagingEnabled) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'appMessagesOnlyCrumb');
-      }
       redirectTo(this, this.appMessagingPath);
     },
     ariaLabelGpMessages() {

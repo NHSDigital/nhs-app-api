@@ -16,8 +16,7 @@
       :body="publicHealthNotification.body"/>
     <biometric-banner v-if="!isProxying" />
     <navigation-list-menu v-if="!isProxying"
-                          :has-message-indicator="hasUnreadMessages"
-                          :link-to-app-messages="linkToAppMessages"/>
+                          :has-message-indicator="hasUnreadMessages"/>
     <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
@@ -73,12 +72,6 @@ export default {
     },
     isProxying() {
       return this.$store.getters['session/isProxying'];
-    },
-    linkToAppMessages() {
-      return this.appMessagingEnabled
-        && !this.gpMessagesEnabled
-        && (sjrIf({ $store: this.$store, journey: 'silverIntegrationMessages', disabled: true })
-          || !this.isProofLevel9);
     },
     isProofLevel9() {
       return this.$store.getters['session/isProofLevel9'];

@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
         private PatientMessagesController _systemUnderTest;
 
-        private P9UserSession _userSession;
+        private GpUserSession _userSession;
 
         private const string GetMessagesRequestAuditType = "PatientPracticeMessages_View_Request";
         private const string GetMessagesResponseAuditType = "PatientPracticeMessages_View_Response";
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _serviceDeskReference = "Service desk ref";
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new EmisUserSession();
 
             _systemUnderTest = new PatientMessagesController(
                 _mockGpSystemFactory.Object,
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessages(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessagesResult) successResult));
             MockAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
             MockAuditor(GetMessagesResponseAuditType, "Patient messages successfully retrieved");
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessageDetails("1",
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessageResult) successResult));
             MockAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
             MockAuditor(GetMessageResponseAuditType, "Patient message details successfully retrieved");
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessageRecipients(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessageRecipientsResult) successResult));
             MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
             MockAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved");
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.UpdateMessageMessageReadStatus(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
+                    It.Is<GpUserSession>(g => g == _userSession),
                     It.Is<UpdateMessageReadStatusRequestBody>(p => p.MessageId == requestBody.MessageId &&
                                                                    p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
                 .Returns(Task.FromResult((PutPatientMessageReadStatusResult) successResult));
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.DeleteMessage(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),"1"))
+                    It.Is<GpUserSession>(g => g == _userSession),"1"))
                 .Returns(Task.FromResult((DeletePatientMessageResult) successResult));
             MockAuditor(DeletePatientPracticeMessageRequest, "Deleting a patient to practice message with id 1");
             MockAuditor(DeletePatientPracticeMessageResponse, "Patient message successfully deleted");
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
+                    It.Is<GpUserSession>(g => g == _userSession),
                     message))
                 .Returns(Task.FromResult((PostPatientMessageResult) successResult));
             MockAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
@@ -267,7 +267,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.DeleteMessage(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession), "1"))
+                    It.Is<GpUserSession>(g => g == _userSession), "1"))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
 
@@ -312,7 +312,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessages(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
 
@@ -357,7 +357,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessageDetails("1",
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
 
@@ -402,7 +402,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessageRecipients(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                    It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
 
@@ -452,7 +452,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.UpdateMessageMessageReadStatus(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
+                    It.Is<GpUserSession>(g => g == _userSession),
                     It.Is<UpdateMessageReadStatusRequestBody>(
                         p => p.MessageId == requestBody.MessageId &&
                              p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
@@ -514,7 +514,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
+                    It.Is<GpUserSession>(g => g == _userSession),
                     message))
                 .Returns(Task.FromResult(serviceResult));
 
@@ -548,7 +548,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         {
             _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(
-                    ErrorCategory.PatientPracticeMessages, statusCode, _userSession.GpUserSession.Supplier))
+                    ErrorCategory.PatientPracticeMessages, statusCode, _userSession.Supplier))
                 .Returns(_serviceDeskReference)
                 .Verifiable();
         }
