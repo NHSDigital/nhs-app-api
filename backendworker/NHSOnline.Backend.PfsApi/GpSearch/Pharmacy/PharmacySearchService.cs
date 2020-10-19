@@ -229,6 +229,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     OrganisationSearchUtility.CreatePostcodeSearchQuery(search,
                         string.IsNullOrEmpty(parsedPostcode.Inward));
 
+                _logger.LogInformation($"Requesting postcode coordinates from NHS search - isFullPostcode={!string.IsNullOrEmpty(parsedPostcode.Inward)}");
                 var postcodeSearchResult = await _gpLookupClient.PostcodeSearch(postcodeSearchData);
 
                 if (!postcodeSearchResult.HasSuccessResponse)

@@ -16,6 +16,7 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
+using UnitTestHelper;
 using Task = System.Threading.Tasks.Task;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
     public class PharmacySearchServiceTests
     {
         private PharmacySearchService _pharmacySearchService;
-        private ILogger<PharmacySearchService> _logger;
+        private Mock<ILogger<PharmacySearchService>> _logger;
         private Mock<IGpLookupClient> _gpLookupClient;
         private Mock<IGpLookupConfig> _gpLookupConfig;
         private Mock<INhsSearchResultChecker> _nhsSearchResultChecker;
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _logger = _fixture.Freeze<ILogger<PharmacySearchService>>();
+            _logger = _fixture.Freeze<Mock<ILogger<PharmacySearchService>>>();
             _gpLookupClient = new Mock<IGpLookupClient>();
             _gpLookupConfig = new Mock<IGpLookupConfig>();
             _gpLookupConfig.SetupGet(x => x.OnlinePharmacyRandomisedSearchResultLimit).Returns(10);
@@ -51,15 +52,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _postcodeParser = new PostcodeParser();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
 
-            _pharmacySearchService = new PharmacySearchService(_logger, _gpLookupClient.Object, _gpLookupConfig.Object, _nhsSearchResultChecker.Object,
+            _pharmacySearchService = new PharmacySearchService(_logger.Object, _gpLookupClient.Object, _gpLookupConfig.Object, _nhsSearchResultChecker.Object,
                 _postcodeParser, _mockMapper.Object);
         }
 
         [TestMethod]
-        [DataRow("SE13", "Type eq 'PostcodeOutCode'")]
-        [DataRow("SE13 6JZ", "LocalType eq 'Postcode'")]
+        [DataRow("SE13", "Type eq 'PostcodeOutCode'", false)]
+        [DataRow("SE13 6JZ", "LocalType eq 'Postcode'", true)]
         public async Task
-            Search_WhenCalledWithValidPostcode_ReturnsListOfPharmacies(string postcode, string filterName)
+            Search_WhenCalledWithValidPostcode_ReturnsListOfPharmacies(string postcode, string filterName, bool expectedLogMessageValueForIsFullPostcode)
         {
             // Arrange
             const string latitude = "1";
@@ -143,6 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
             response.Response.Pharmacies.Count().Should().Be(1);
+            _logger.VerifyLogger(LogLevel.Information, $"Requesting postcode coordinates from NHS search - isFullPostcode={expectedLogMessageValueForIsFullPostcode}", Times.Once());
         }
 
         [TestMethod]
