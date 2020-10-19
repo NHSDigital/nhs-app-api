@@ -8,3 +8,4 @@
 * [Create Cocoapod From Third-Party Framework](How-Tos/create-cocoapod-from-thirdparty-framework.md)
 * [New Public Health Notifications](How-Tos/new-public-health-notifications.md)
 * [Recreate iOS Distribution Certificate](How-Tos/recreate-ios-distribution-certificate.md)
+* [Azure & Kubernetes CLI commands](How-Tos/azure-kubernetes-cli-commands.md)
