@@ -116,6 +116,23 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             splitConsoleMessage.Should().Contain("TransmissionId=transmissionId_4567");
         }
 
+        [TestMethod]
+        public async Task Login_LogsLoginData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new LoginData("requestId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.Login(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("RequestId=requestId_1234");
+        }
+
         private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
@@ -130,7 +147,8 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         {
             get
             {
-                yield return new object[] { Method(metricLogger => metricLogger.Login()), "Login" };
+                var loginData = new LoginData("requestId");
+                yield return new object[] { Method(metricLogger => metricLogger.Login(loginData)), "Login" };
                 yield return new object[] { Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };

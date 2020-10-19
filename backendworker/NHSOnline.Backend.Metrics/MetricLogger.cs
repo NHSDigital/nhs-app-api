@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Metrics
 
         public MetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
 
-        public Task Login() => WriteMetricLog();
+        public Task Login(LoginData data) => CreateMetricLog().With(data).WriteMetricLog();
 
         public Task UpliftStarted() => WriteMetricLog();
 

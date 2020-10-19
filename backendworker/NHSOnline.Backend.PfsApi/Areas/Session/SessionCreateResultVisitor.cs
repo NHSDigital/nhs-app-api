@@ -53,7 +53,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
-            await _metricLogger.Login();
+            var metricLoggingData = new LoginData(httpContext.TraceIdentifier);
+            await _metricLogger.Login(metricLoggingData);
 
             return new CreatedResult(string.Empty, responseBody);
         }

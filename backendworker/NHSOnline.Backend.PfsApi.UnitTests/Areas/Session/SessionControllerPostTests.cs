@@ -17,6 +17,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
@@ -579,6 +580,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             Context.Data.SessionConfigSettings.ProxyEnabled = true;
 
+            var expectedRequestId = "RequestId";
+            Context.Mocks.HttpContext.SetupGet(x => x.TraceIdentifier)
+                .Returns(expectedRequestId);
+
             Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
             {
                 new EmisProxyUserSession()
@@ -586,14 +591,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             Context.Data.UserSession.Key = "123";
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.UserSession.GpUserSession));
+            ArrangeGpSessionManagerCreateSession(
+                new GpSessionCreateResult.Success(Context.Data.UserSession.GpUserSession));
             ArrangeAudit();
 
             // Act
             await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
 
             // Assert
-            Context.Mocks.MetricLogger.Verify(x => x.Login(), Times.Once);
+            Context.Mocks.MetricLogger.Verify(x =>
+                    x.Login(It.Is<LoginData>(data => data.RequestId == expectedRequestId)),
+                Times.Once);
         }
 
         [TestMethod]
