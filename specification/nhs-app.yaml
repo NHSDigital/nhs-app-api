@@ -5,7 +5,7 @@ x-nhsd-api-platform:
     short_service_name: nhsa
     service_base_path: nhsapp
     product_display_name: NHS App
-    product_description: This is the NHS App service, where patents access their medical records and GP services
+    product_description: This is the NhsApp Communications Hub api for sending messages and stuff to patients.
     pipeline_name_prefix: NHS-App
 info:
   version: 1.0.0
@@ -46,7 +46,7 @@ paths:
               schema:
                 type: string
           content:
-            application/json:    
+            application/json:
               schema:
                 $ref: "#/components/schemas/Pets"
         default:
