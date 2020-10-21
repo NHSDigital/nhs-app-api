@@ -201,6 +201,13 @@
             "type": "string",
             "enum": [ "pkb", "pkbCie" ]
           }
+        },
+        "accountAdmin":  {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "gncr" ]
+          }
         }
       },
       "additionalProperties": false

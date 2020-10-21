@@ -79,6 +79,10 @@ export default {
         type: 'correspondence',
         redirectPath: '/correspondence',
       },
+      admin: {
+        type: 'admin',
+        redirectPath: '/patient/preferences',
+      },
     },
     engage: {
       admin: {

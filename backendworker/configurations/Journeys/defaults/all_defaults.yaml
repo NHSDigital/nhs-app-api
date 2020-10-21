@@ -18,6 +18,7 @@ journeys:
   messaging: true
   userInfo: true
   silverIntegrations:
+    accountAdmin: []
     carePlans: []
     consultations: []
     consultationsAdmin: []

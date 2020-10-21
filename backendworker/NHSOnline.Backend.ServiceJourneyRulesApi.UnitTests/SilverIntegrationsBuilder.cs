@@ -7,6 +7,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
     {
         private readonly SilverIntegrations _silverIntegrations = new SilverIntegrations();
 
+        public SilverIntegrationsBuilder AccountAdmin(params AccountAdminProvider[] providers)
+        {
+            _silverIntegrations.AccountAdmin = providers.ToList();
+            return this;
+        }
+
         public SilverIntegrationsBuilder CarePlans(params CarePlansProvider[] providers)
         {
             _silverIntegrations.CarePlans = providers.ToList();

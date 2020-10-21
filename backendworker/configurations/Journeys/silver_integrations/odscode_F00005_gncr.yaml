@@ -18,3 +18,5 @@ journeys:
       - gncr
     secondaryAppointments:
       - gncr
+    accountAdmin:
+      - gncr

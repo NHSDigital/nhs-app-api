@@ -15,7 +15,10 @@ describe('Settings', () => {
     showNotifications = true,
     showLinkedProfiles = true,
     source = 'ios',
-    versionEnabled = true } = {}) => {
+    versionEnabled = true,
+    isProofLevel9 = true,
+    gncrAccountAdminEnabled = true,
+  } = {}) => {
     $store = createStore({
       state: {
         device: {
@@ -25,9 +28,22 @@ describe('Settings', () => {
         session: {
           isLoggedIn: jest.fn(),
         },
+        knownServices: {
+          knownServices: [{
+            id: 'gncr',
+            url: 'www.url.com',
+          }],
+        },
       },
       getters: {
         'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
+        'session/isProofLevel9': isProofLevel9,
+        'serviceJourneyRules/silverIntegrationEnabled': jest.fn((context) => {
+          if (context.provider === 'gncr' && context.serviceType === 'accountAdmin') {
+            return gncrAccountAdminEnabled;
+          }
+          return false;
+        }),
       },
     });
     return mount(Settings, {
@@ -170,6 +186,23 @@ describe('Settings', () => {
           expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
         });
       });
+    });
+  });
+
+  describe('gncr preferences', () => {
+    it('will have the gncr preferences button', () => {
+      wrapper = mountSettings({
+        gncrAccountAdminEnabled: true,
+      });
+      const gncrPreferencesButton = wrapper.find('#btn_gncr_admin');
+      expect(gncrPreferencesButton.exists()).toBe(true);
+    });
+
+    it('will have not have the gncr preferences button when not enabled', () => {
+      wrapper = mountSettings({
+        gncrAccountAdminEnabled: false,
+      });
+      expect(wrapper.find('#btn_gncr_admin').exists()).toBe(false);
     });
   });
 });

@@ -105,6 +105,21 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'admin',
+        path: '/patient/preferences',
+        jumpOffContent: {
+          headerText: 'Great North Care Record service preferences',
+          descriptionText: '',
+        },
+        thirdPartyWarning: {
+          featureName: 'Service preferences [TBC - GNCR testing]',
+          servicePurchaser: 'service purchaser',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
   pkb: {

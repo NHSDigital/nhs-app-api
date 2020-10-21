@@ -9,6 +9,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public class SilverIntegrations : ICloneable<SilverIntegrations>
     {
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IList<AccountAdminProvider> AccountAdmin { get; set; }
+
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<CarePlansProvider> CarePlans { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
@@ -39,15 +42,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         {
             var silverIntegrations = new SilverIntegrations
             {
-                CarePlans = CarePlans?.ToList(),
-                Consultations = Consultations?.ToList(),
-                ConsultationsAdmin = ConsultationsAdmin?.ToList(),
-                HealthTrackers = HealthTrackers?.ToList(),
-                Libraries = Libraries?.ToList(),
-                Medicines = Medicines?.ToList(),
-                Messages = Messages?.ToList(),
-                SecondaryAppointments = SecondaryAppointments?.ToList(),
-                TestResults = TestResults?.ToList()
+                AccountAdmin = Clone(AccountAdmin),
+                CarePlans = Clone(CarePlans),
+                Consultations = Clone(Consultations),
+                ConsultationsAdmin = Clone(ConsultationsAdmin),
+                HealthTrackers = Clone(HealthTrackers),
+                Libraries = Clone(Libraries),
+                Medicines = Clone(Medicines),
+                Messages = Clone(Messages),
+                SecondaryAppointments = Clone(SecondaryAppointments),
+                TestResults = Clone(TestResults)
             };
 
             return silverIntegrations;
@@ -55,59 +59,31 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public void Merge(SilverIntegrations other)
         {
-            if (other?.CarePlans != null)
-            {
-                CarePlans ??= new List<CarePlansProvider>();
-                CarePlans = CarePlans.Union(other.CarePlans).ToList();
-            }
+            AccountAdmin = Merge(AccountAdmin, other?.AccountAdmin);
+            CarePlans = Merge(CarePlans, other?.CarePlans);
+            Consultations = Merge(Consultations, other?.Consultations);
+            ConsultationsAdmin = Merge(ConsultationsAdmin, other?.ConsultationsAdmin);
+            HealthTrackers = Merge(HealthTrackers, other?.HealthTrackers);
+            Libraries = Merge(Libraries, other?.Libraries);
+            Medicines = Merge(Medicines, other?.Medicines);
+            Messages = Merge(Messages, other?.Messages);
+            SecondaryAppointments = Merge(SecondaryAppointments, other?.SecondaryAppointments);
+            TestResults = Merge(TestResults, other?.TestResults);
+        }
 
-            if (other?.Consultations != null)
-            {
-                Consultations ??= new List<ConsultationsProvider>();
-                Consultations = Consultations.Union(other.Consultations).ToList();
-            }
+        private IList<T> Clone<T>(IList<T> toClone)
+        {
+            return toClone?.ToList();
+        }
 
-            if (other?.ConsultationsAdmin != null)
+        private IList<T> Merge<T>(IList<T> current, IList<T> toMerge)
+        {
+            if (toMerge is null)
             {
-                ConsultationsAdmin ??= new List<ConsultationsAdminProvider>();
-                ConsultationsAdmin = ConsultationsAdmin.Union(other.ConsultationsAdmin).ToList();
+                return current;
             }
-
-            if (other?.HealthTrackers != null)
-            {
-                HealthTrackers ??= new List<HealthTrackersProvider>();
-                HealthTrackers = HealthTrackers.Union(other.HealthTrackers).ToList();
-            }
-
-            if (other?.Libraries != null)
-            {
-                Libraries ??= new List<LibrariesProvider>();
-                Libraries = Libraries.Union(other.Libraries).ToList();
-            }
-
-            if (other?.Medicines != null)
-            {
-                Medicines ??= new List<MedicinesProvider>();
-                Medicines = Medicines.Union(other.Medicines).ToList();
-            }
-
-            if (other?.Messages != null)
-            {
-                Messages ??= new List<MessagesProvider>();
-                Messages = Messages.Union(other.Messages).ToList();
-            }
-
-            if (other?.SecondaryAppointments != null)
-            {
-                SecondaryAppointments ??= new List<SecondaryAppointmentsProvider>();
-                SecondaryAppointments = SecondaryAppointments.Union(other.SecondaryAppointments).ToList();
-            }
-
-            if (other?.TestResults != null)
-            {
-                TestResults ??= new List<TestResultsProvider>();
-                TestResults = TestResults.Union(other.TestResults).ToList();
-            }
+            current ??= new List<T>();
+            return current.Union(toMerge).ToList();
         }
     }
 }

@@ -92,6 +92,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         private static void AddSilverIntegrationValidations(JourneysValidator journeysValidator)
         {
             journeysValidator
+                .Add(journeys => journeys.SilverIntegrations?.AccountAdmin != null,
+                    "journeys.SilverIntegrations.AccountAdmin")
                 .Add(journeys => journeys.SilverIntegrations?.CarePlans != null,
                     "journeys.SilverIntegrations.CarePlans")
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,

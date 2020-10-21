@@ -10,19 +10,23 @@ describe('Account Page', () => {
 
   initFilters();
 
-  const $state = {
-    device: {
-      isNativeApp: false,
-    },
-    session: {
-      user: 'User',
-      dateOfBirth: '5/4/2019',
-      nhsNumber: '12346778',
-    },
-    appVersion: {
-      webVersion: 'web',
-    },
-  };
+  let $state;
+
+  beforeEach(() => {
+    $state = {
+      device: {
+        isNativeApp: false,
+      },
+      session: {
+        user: 'User',
+        dateOfBirth: '5/4/2019',
+        nhsNumber: '12346778',
+      },
+      appVersion: {
+        webVersion: 'web',
+      },
+    };
+  });
 
   const buildStoreGetters = ({
     notificationsEnabled = false,
@@ -31,6 +35,8 @@ describe('Account Page', () => {
     'serviceJourneyRules/notificationsEnabled': notificationsEnabled,
     'linkedAccounts/hasLinkedAccounts': showLinkedProfiles,
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
+    'session/isProofLevel9': true,
+    'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(false),
   });
 
   const createStyle = () => ({

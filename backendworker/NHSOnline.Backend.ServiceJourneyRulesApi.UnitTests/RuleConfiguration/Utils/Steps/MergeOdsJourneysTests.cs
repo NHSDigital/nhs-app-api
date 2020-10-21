@@ -68,6 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
+                        .AccountAdmin(AccountAdminProvider.gncr)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
                     .DocumentsEnabled(false)
@@ -155,6 +156,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
+                        .AccountAdmin(AccountAdminProvider.gncr)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
                         .TestResults(TestResultsProvider.pkb))
