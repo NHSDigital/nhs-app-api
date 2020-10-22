@@ -116,7 +116,6 @@ paths:
       operationId: create-communication
       description: TODO
       requestBody:
-        description: TODO request body description
         required: true
         content:
           application/json:
@@ -130,16 +129,44 @@ paths:
                   type: string
                   description: Optional Campaign Identifier, used to group multiple communication requests for later analysis.
                   maxLength: 50
-                  example: "2020_influenza"
+                  example: "2020_covid_plasma_appeal"
                 requestReference:
                   type: string
                   description: Optional human-readable transaction reference to later identify this request.
                   maxLength: 50
-                  example: "20201021_influenza_16"
+                  example: "20201022_covid_appeal_16"
                 channels:
-                  $ref: '#/components/schemas/Channels'
+                  type: object
+                  description: The channels by which the communication will be sent, and the content for each communication channel. Currently we only support sending in-app messages that appear within the NHS App. We intend to additionally offer native Apple and Android Push Notifications in the near future.
+                  properties:
+                    appMessage:
+                      type: object
+                      description: The communication content to appear as an in-app message.
+                      properties:
+                        sender:
+                          type: string
+                          description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
+                          maxLength: 50
+                          pattern: must not match <(.|\n)*?>
+                          example: NHS Blood and Transplant
+                        body:
+                          type: string
+                          description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
+                          maxLength: 1000
+                          pattern: must not match <(.|\n)*?>
+                          example: Have you had coronavirus (COVID-19)? \nThe NHS urgently needs blood plasma donations. It could save lives and be an important treatment during a second wave of infection.\nWe especially need men to donate. This includes men who have had coronavirus symptoms but no test.\nTo find out more about donating blood plasma and how to help, go to https://www.nhsbt.nhs.uk/who-can-donate-plasma
                 recipients:
-                  $ref: '#/components/schemas/Recipients'
+                  type: object
+                  description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
+                  properties:
+                    nhsNumbers:
+                      type: array
+                      description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
+                      example: ["9903002157", "9678304287"]
+                      items:
+                        type: string
+                        pattern: "^\\d{10}$"
+                        description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
       tags:
         - communication
       responses:
@@ -147,7 +174,6 @@ paths:
           description: indicating a new resource was successfully created in response to the request
         '400':
           description: indicates that the server cannot or will not process the request due to something that is perceived to be a client error 
-
 components:
   parameters:
     CorrelationId:
@@ -155,7 +181,7 @@ components:
       name: X-Correlation-ID
       required: false
       description: |
-        An identifer can be created when making a request, this will assist with any problems that may occur and should be included when an issue is raised with the helpdesk.
+        An identifier can be created when making a request, this will assist with any problems that may occur and should be included when an issue is raised with the helpdesk.
         
         If provided, this must be a GUID represented as 32 hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12,
 
@@ -168,30 +194,7 @@ components:
       name: X-Api-Key
       required: true
       description: |
-        TODO - explanation of the api key
+        An API Key used to authenticate the calling application. For more details see [Application-restricted RESTful APIs - API key authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-api-key-authentication). If this key is not supplied, or does not grant access to this API, a 401 Unauthorized response will be returned.
       schema:
         type: string
         example: AHkYeqh8N1yrnKGb108puMFUdmxnATkS
-  schemas:
-    Recipients:
-      type: object
-      description: TODO
-      properties:
-        nhsNumbers:
-          type: array
-          items:
-            type: string
-          description: TODO
-    Channels:
-      type: object
-      description: TODO
-      properties:
-        appMessage:
-          type: object
-          properties:
-            sender:
-              type: string
-            body:
-              type: string
-              
-    
