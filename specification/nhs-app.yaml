@@ -155,7 +155,7 @@ components:
       name: X-Correlation-ID
       required: false
       description: |
-        An identifer should be created when making a request, this will assist with any problems that may occur and should be included when an issue is raised with the helpdesk.
+        An identifer can be created when making a request, this will assist with any problems that may occur and should be included when an issue is raised with the helpdesk.
         
         If provided, this must be a GUID represented as 32 hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12,
 
@@ -193,13 +193,5 @@ components:
               type: string
             body:
               type: string
-        pushNotification:
-          type: object
-          properties:
-            title:
-              type: string
-            body:
-              type: string
-            url:
-              type: string
+              
     
