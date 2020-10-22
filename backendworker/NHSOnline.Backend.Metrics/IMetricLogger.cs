@@ -20,6 +20,8 @@ namespace NHSOnline.Backend.Metrics
 
         Task NotificationsDisabled();
 
+        Task NotificationsPrompt(NotificationsPromptData data);
+
         Task SilverIntegrationJumpOff(SilverIntegrationData data);
     }
 }

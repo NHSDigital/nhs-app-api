@@ -5227,6 +5227,39 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/devices/prompt/metrics: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "notifications metric logging"
+        summary: "logs metrics for the notifications prompt"
+        description: "logs metrics for the notifications prompt"
+        requestBody: 
+          x-name: "NotificationsPromptData"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "screenShown"
+                  - "notificationsRegistered"
+                  - "platform"
+                properties: 
+                  screenShown: 
+                    type: "boolean"
+                  notificationsRegistered: 
+                    type: "boolean"
+                  platform: 
+                    type: "string"
+          description: "Metrics to be logged for the notification prompt"
+          required: true
+          responses: 
+            200: 
+              description: "Successfully logged"
+            400: 
+              description: "Bad request. Supplied request is invalid."
     /v1/api/users/{nhsLoginId}/devices/registrations: 
       get: 
         tags: 

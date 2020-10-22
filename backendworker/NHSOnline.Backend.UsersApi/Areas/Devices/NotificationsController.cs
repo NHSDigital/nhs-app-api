@@ -16,7 +16,9 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         private readonly ILogger<NotificationsController> _logger;
         private readonly INotificationService _notificationService;
 
-        public NotificationsController(INotificationService notificationService, ILogger<NotificationsController> logger)
+        public NotificationsController(
+            INotificationService notificationService,
+            ILogger<NotificationsController> logger)
         {
             _notificationService = notificationService;
             _logger = logger;

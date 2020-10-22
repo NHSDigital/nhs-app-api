@@ -1,6 +1,6 @@
 import actions from '@/store/modules/notifications/actions';
 import { SET_REGISTRATION, SET_WAITING } from '@/store/modules/notifications/mutation-types';
-import { ACCOUNT_NOTIFICATIONS_NAME } from '@/router/names';
+import { ACCOUNT_NOTIFICATIONS_NAME, NOTIFICATIONS_NAME } from '@/router/names';
 import { createRouter } from '../../../helpers';
 
 describe('notifications actions', () => {
@@ -11,6 +11,7 @@ describe('notifications actions', () => {
   let error;
   let getSuccess;
   let postSuccess;
+  let logSuccess;
 
   const promiseReturn = (success) => {
     if (success) {
@@ -77,13 +78,22 @@ describe('notifications actions', () => {
     getSuccess = true;
     deleteSuccess = true;
     postSuccess = true;
+    logSuccess = true;
     commit = jest.fn();
     $http = {
       deleteV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(deleteSuccess)),
       getV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
       postV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(postSuccess)),
+      postV1ApiUsersMeDevicesPromptMetrics: jest.fn().mockImplementation(
+        () => promiseReturn(logSuccess),
+      ),
     };
     $router = createRouter(ACCOUNT_NOTIFICATIONS_NAME);
+    $router.history = {
+      pending: {
+        name: ACCOUNT_NOTIFICATIONS_NAME,
+      },
+    };
     actions.app = { $http, $router };
     actions.dispatch = jest.fn();
     global.nativeApp = {
@@ -104,42 +114,48 @@ describe('notifications actions', () => {
         deviceResponse.trigger = 'load';
       });
 
-      describe('found', () => {
-        beforeEach(async () => {
-          getSuccess = true;
-          await actions.authorised({ commit, state }, deviceResponse);
-        });
+      describe('Accounts notifications', () => {
+        describe('found', () => {
+          beforeEach(async () => {
+            actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+            getSuccess = true;
+            await actions.authorised({ commit, state }, deviceResponse);
+          });
 
-        it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
-          expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
-            { devicePns: deviceResponse.devicePns },
-          );
-        });
+          it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
+            expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
+              { devicePns: deviceResponse.devicePns },
+            );
+          });
 
-        it('will commit a value of `true` to `SET_REGISTRATION`', () => {
-          expect(commit).toBeCalledWith(SET_REGISTRATION, true);
-        });
+          it('will commit a value of `true` to `SET_REGISTRATION`', () => {
+            expect(commit).toBeCalledWith(SET_REGISTRATION, true);
+          });
 
-        it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
+          it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
+        });
       });
 
       describe('not found', () => {
-        beforeEach(async () => {
-          getSuccess = false;
-          await actions.authorised({ commit, state }, deviceResponse);
-        });
+        describe('account notifications', () => {
+          beforeEach(async () => {
+            actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+            getSuccess = false;
+            await actions.authorised({ commit, state }, deviceResponse);
+          });
 
-        it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
-          expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
-            { devicePns: deviceResponse.devicePns },
-          );
-        });
+          it('will call the `getV1ApiUsersMeDevices` endpoint', () => {
+            expect($http.getV1ApiUsersMeDevices).toBeCalledWith(
+              { devicePns: deviceResponse.devicePns },
+            );
+          });
 
-        it('will commit a value of `false` to `SET_REGISTRATION`', () => {
-          expect(commit).toBeCalledWith(SET_REGISTRATION, false);
-        });
+          it('will commit a value of `false` to `SET_REGISTRATION`', () => {
+            expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+          });
 
-        it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
+          it('will resolve loading promise with `authorised`', () => expect(loading).resolves.toBe('authorised'));
+        });
       });
     });
 
@@ -149,100 +165,221 @@ describe('notifications actions', () => {
       });
 
       describe('not registered', () => {
-        beforeEach(async () => {
-          state.registered = false;
-          await actions.authorised({ commit, state }, deviceResponse);
-        });
-
-        it('will call the `postV1ApiUsersMeDevices` endpoint', () => {
-          expect($http.postV1ApiUsersMeDevices).toBeCalledWith({
-            addDeviceRequest: {
-              devicePns: deviceResponse.devicePns,
-              deviceType: deviceResponse.deviceType,
-            },
-          });
-        });
-
-        it('will commit a value of `false` to `SET_WAITING`', () => {
-          expect(commit).toBeCalledWith(SET_WAITING, false);
-        });
-
-        it('will commit a value of `true` to `SET_REGISTRATION`', () => {
-          expect(commit).toBeCalledWith(SET_REGISTRATION, true);
-        });
-
-        describe('on error', () => {
-          beforeEach(() => {
+        describe('account notifications', () => {
+          beforeEach(async () => {
+            state.registered = false;
             actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
-            postSuccess = false;
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
-          toggleOnError({ deviceResponse, state });
+          it('will call the `postV1ApiUsersMeDevices` endpoint', () => {
+            expect($http.postV1ApiUsersMeDevices).toBeCalledWith({
+              addDeviceRequest: {
+                devicePns: deviceResponse.devicePns,
+                deviceType: deviceResponse.deviceType,
+              },
+            });
+          });
+
+          it('will commit a value of `false` to `SET_WAITING`', () => {
+            expect(commit).toBeCalledWith(SET_WAITING, false);
+          });
+
+          it('will commit a value of `true` to `SET_REGISTRATION`', () => {
+            expect(commit).toBeCalledWith(SET_REGISTRATION, true);
+          });
+
+          describe('on error', () => {
+            beforeEach(() => {
+              actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+              postSuccess = false;
+            });
+
+            toggleOnError({ deviceResponse, state });
+          });
+        });
+        describe('notifications prompt', () => {
+          beforeEach(async () => {
+            state.registered = false;
+            actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+            await actions.authorised({ commit, state }, deviceResponse);
+          });
+
+          it('will dispatch to log metrics', () => {
+            expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
+              screenShown: true,
+              notificationsRegistered: true,
+            });
+          });
+
+          describe('on error', () => {
+            const execute = async () => {
+              await actions.authorised({ commit, state }, deviceResponse);
+            };
+            beforeEach(() => {
+              actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+              postSuccess = false;
+              execute();
+            });
+
+            it('will dispatch to log metrics', () => {
+              expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
+                screenShown: true,
+                notificationsRegistered: true,
+              });
+            });
+          });
         });
       });
 
       describe('registered', () => {
-        beforeEach(async () => {
-          state.registered = true;
-          await actions.authorised({ commit, state }, deviceResponse);
-        });
-
-        it('will call the `deleteV1ApiUsersMeDevices` endpoint', () => {
-          expect($http.deleteV1ApiUsersMeDevices).toBeCalledWith(
-            { devicePns: deviceResponse.devicePns },
-          );
-        });
-
-        it('will commit a value of `false` to `SET_WAITING`', () => {
-          expect(commit).toBeCalledWith(SET_WAITING, false);
-        });
-
-        it('will commit a value of `false` to `SET_REGISTRATION`', () => {
-          expect(commit).toBeCalledWith(SET_REGISTRATION, false);
-        });
-
-        describe('on error', () => {
-          beforeEach(() => {
-            deleteSuccess = false;
+        describe('account notifications', () => {
+          beforeEach(async () => {
+            actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+            state.registered = true;
+            await actions.authorised({ commit, state }, deviceResponse);
           });
 
-          toggleOnError({ deviceResponse, state });
+          describe('on error', () => {
+            beforeEach(() => {
+              deleteSuccess = false;
+            });
+
+            toggleOnError({ deviceResponse, state });
+          });
+        });
+        describe('notifications prompt', () => {
+          beforeEach(async () => {
+            actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+            state.registered = true;
+            await actions.authorised({ commit, state }, deviceResponse);
+          });
+
+          describe('on error', () => {
+            const execute = async () => {
+              await actions.authorised({ commit, state }, deviceResponse);
+            };
+            beforeEach(() => {
+              deleteSuccess = false;
+              execute();
+            });
+
+            it('will dispatch to log metrics', () => {
+              expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
+                screenShown: true,
+                notificationsRegistered: false,
+              });
+            });
+          });
         });
       });
     });
   });
 
   describe('settingsStatus', () => {
-    let loading;
+    describe('account notifications', () => {
+      let loading;
 
-    beforeEach(() => {
-      loading = actions.load();
+      beforeEach(() => {
+        actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+        loading = actions.load();
+      });
+
+      describe('authorised', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'authorised');
+        });
+
+        it('will call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).toBeCalledWith('load');
+        });
+      });
+
+      describe('notDetermined', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'notDetermined');
+        });
+
+        it('will not call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+        });
+
+        it('will commit a value of `false` to `SET_REGISTRATION`', () => {
+          expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+        });
+
+        it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
+      });
+    });
+    describe('notifications prompt', () => {
+      let loading;
+
+      beforeEach(() => {
+        actions.app.$router.history.pending.name = NOTIFICATIONS_NAME;
+        loading = actions.load();
+      });
+
+      describe('authorised', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'authorised');
+        });
+
+        it('will call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).toBeCalledWith('load');
+        });
+      });
+
+      describe('denied', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'denied');
+        });
+
+        it('will push error screen`', () => {
+          expect(actions.app.$router.push).toBeCalled();
+        });
+      });
+
+      describe('notDetermined', () => {
+        beforeEach(() => {
+          actions.settingsStatus({ commit }, 'notDetermined');
+        });
+
+        it('will not call native app `requestPnsToken`', () => {
+          expect(global.nativeApp.requestPnsToken).not.toBeCalled();
+        });
+
+        it('will commit a value of `false` to `SET_REGISTRATION`', () => {
+          expect(commit).toBeCalledWith(SET_REGISTRATION, false);
+        });
+
+        it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
+      });
+    });
+  });
+
+  describe('logMetrics', () => {
+    const rootState = {
+      device: {
+        source: 'android',
+      },
+    };
+
+    beforeEach(async () => {
+      actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+      await actions.logMetrics({ rootState },
+        { screenShown: true, notificationsRegistered: true });
     });
 
-    describe('authorised', () => {
-      beforeEach(() => {
-        actions.settingsStatus({ commit }, 'authorised');
+    describe('postV1ApiUsersMeDevicesPromptMetrics', () => {
+      it('will call `postV1ApiUsersMeDevicesPromptMetrics`', () => {
+        expect($http.postV1ApiUsersMeDevicesPromptMetrics).toBeCalledWith({
+          notificationsPromptData: {
+            screenShown: true,
+            notificationsRegistered: true,
+            platform: 'android',
+          },
+        });
       });
-
-      it('will call native app `requestPnsToken`', () => {
-        expect(global.nativeApp.requestPnsToken).toBeCalledWith('load');
-      });
-    });
-
-    describe('notDetermined', () => {
-      beforeEach(() => {
-        actions.settingsStatus({ commit }, 'notDetermined');
-      });
-
-      it('will not call native app `requestPnsToken`', () => {
-        expect(global.nativeApp.requestPnsToken).not.toBeCalled();
-      });
-
-      it('will commit a value of `false` to `SET_REGISTRATION`', () => {
-        expect(commit).toBeCalledWith(SET_REGISTRATION, false);
-      });
-
-      it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
     });
   });
 
@@ -278,22 +415,42 @@ describe('notifications actions', () => {
   });
 
   describe('unauthorised', () => {
-    beforeEach(() => {
-      actions.unauthorised({ commit });
-    });
+    describe('account notifications', () => {
+      beforeEach(() => {
+        actions.app.$router.currentRoute.name = ACCOUNT_NOTIFICATIONS_NAME;
+        actions.unauthorised({ commit });
+      });
 
-    it('will commit a value of `false` to `SET_WAITING`', () => {
-      expect(commit).toBeCalledWith(SET_WAITING, false);
-    });
+      it('will commit a value of `false` to `SET_WAITING`', () => {
+        expect(commit).toBeCalledWith(SET_WAITING, false);
+      });
 
-    it('will dispatch `errors/addApiError` with error code `10002`', () => {
-      expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
-        response: {
-          status: 500,
-          data: {
-            errorCode: 10002,
+      it('will dispatch `errors/addApiError` with error code `10002`', () => {
+        expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
+          response: {
+            status: 500,
+            data: {
+              errorCode: 10002,
+            },
           },
-        },
+        });
+      });
+    });
+    describe('notifications prompt', () => {
+      beforeEach(() => {
+        actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+        actions.unauthorised({ commit });
+      });
+
+      it('will commit a value of `false` to `SET_WAITING`', () => {
+        expect(commit).toBeCalledWith(SET_WAITING, false);
+      });
+
+      it('will dispatch to log metrics', () => {
+        expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
+          screenShown: true,
+          notificationsRegistered: false,
+        });
       });
     });
   });

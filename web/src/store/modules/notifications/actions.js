@@ -7,6 +7,7 @@ import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
 import {
   SET_NOTIFICATION_COOKIE_EXISTS,
   SET_REGISTRATION, SET_WAITING,
+  TOGGLE_UPDATED,
 } from './mutation-types';
 
 const load = 'load';
@@ -46,10 +47,23 @@ export default {
         ? this.app.$http.postV1ApiUsersMeDevices({ addDeviceRequest: { devicePns, deviceType } })
         : this.app.$http.deleteV1ApiUsersMeDevices({ devicePns });
 
-      return promise.then(() => commit(SET_REGISTRATION, registering))
+      return promise.then(() => {
+        commit(SET_REGISTRATION, registering);
+
+        if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+          this.dispatch('notifications/logMetrics',
+            { screenShown: true,
+              notificationsRegistered: registering,
+            });
+        }
+      })
         // NHSO-7584
         .catch((error) => {
           if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+            this.dispatch('notifications/logMetrics',
+              { screenShown: true,
+                notificationsRegistered: state.registered,
+              });
             this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
           } else {
             if (get('response.status')(error) === 404) {
@@ -76,6 +90,16 @@ export default {
     NativeApp.getNotificationsStatus();
     return loading;
   },
+  logMetrics({ rootState }, params) {
+    const { screenShown, notificationsRegistered } = params;
+    const platform = rootState.device.source;
+
+    return this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({ notificationsPromptData: {
+      screenShown,
+      notificationsRegistered,
+      platform,
+    } });
+  },
   settingsStatus({ commit }, status) {
     switch (status) {
       case authorisationStatus.authorised:
@@ -83,12 +107,14 @@ export default {
         break;
       case authorisationStatus.denied:
         commit(SET_REGISTRATION, false);
+
         if (this.app.$router.history.pending !== null &&
           this.app.$router.history.pending.name === NOTIFICATIONS_NAME) {
           this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
         } else {
           addApiError(this, 10001);
         }
+
         resolveLoading(status);
         break;
       default:
@@ -105,12 +131,17 @@ export default {
   },
   toggle({ commit }) {
     commit(SET_WAITING, true);
+    commit(TOGGLE_UPDATED, true);
 
     NativeApp.requestPnsToken(toggle);
   },
   unauthorised({ commit }) {
     commit(SET_WAITING, false);
     if (this.app.$router.currentRoute.name === NOTIFICATIONS_NAME) {
+      this.dispatch('notifications/logMetrics',
+        { screenShown: true,
+          notificationsRegistered: false,
+        });
       this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
     } else {
       addApiError(this, 10002);

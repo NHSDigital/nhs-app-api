@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.Metrics
 
         public Task NotificationsDisabled() => WriteMetricLog();
 
+        public Task NotificationsPrompt(NotificationsPromptData data) => CreateMetricLog().With(data).WriteMetricLog();
+
         public Task SilverIntegrationJumpOff(SilverIntegrationData data) => CreateMetricLog().With(data).WriteMetricLog();
 
         private Task WriteMetricLog([CallerMemberName] string action = "")

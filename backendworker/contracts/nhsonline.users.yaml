@@ -134,6 +134,27 @@ paths:
             $ref: '#/components/responses/UnexpectedError'
           "502":
             $ref: '#/components/responses/UnexpectedError'
+  /users/me/devices/prompt/metrics:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - notifications metric logging
+      summary: logs metrics for the notifications prompt
+      description: logs metrics for the notifications prompt
+      requestBody:
+        x-name: NotificationsPromptData
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationsPromptData"
+        description: Metrics to be logged for the notification prompt
+        required: true
+        responses:
+          "200":
+            description: Successfully logged
+          "400":
+            $ref: '#/components/responses/BadRequest'
   /users/{nhsLoginId}/devices/registrations:
     get:
       tags:
@@ -217,4 +238,17 @@ components:
         body:
           type: string
         url:
+          type: string
+    NotificationsPromptData:
+      type: object
+      required:
+        - screenShown
+        - notificationsRegistered
+        - platform
+      properties:
+        screenShown:
+          type: boolean
+        notificationsRegistered:
+          type: boolean
+        platform:
           type: string

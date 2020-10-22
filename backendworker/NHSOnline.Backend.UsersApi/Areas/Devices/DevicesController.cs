@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,6 @@ using NHSOnline.Backend.UsersApi.Registrations;
 
 namespace NHSOnline.Backend.UsersApi.Areas.Devices
 {
-    [Route("api/users/me/devices")]
     public class DevicesController : Controller
     {
         private readonly IAccessTokenProvider _accessTokenProvider;
@@ -32,6 +32,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             _accessTokenProvider = accessTokenProvider;
         }
 
+        [Route("api/users/me/devices")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string devicePns)
         {
@@ -63,6 +64,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             }
         }
 
+        [Route("api/users/me/devices")]
         [HttpDelete]
         [UserProfile]
         public async Task<IActionResult> Delete([FromQuery] string devicePns)
@@ -95,6 +97,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             }
         }
 
+        [Route("api/users/me/devices")]
         [HttpPost]
         [UserProfile]
         public async Task<IActionResult> Post([FromBody] RegisterDeviceRequest model)
@@ -125,6 +128,44 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             {
                 _logger.LogExit();
             }
+        }
+
+        [Route("api/users/me/devices/prompt/metrics")]
+        [HttpPost]
+        [UserProfile]
+        public IActionResult PostMetrics([FromBody] NotificationsPromptData notificationsPromptData)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (!IsNotificationPromptDataValid(notificationsPromptData))
+                {
+                    return BadRequest();
+                }
+
+                _metricLogger.NotificationsPrompt(notificationsPromptData);
+                return new StatusCodeResult(StatusCodes.Status200OK);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private bool IsNotificationPromptDataValid(NotificationsPromptData data)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNull(data, nameof(data))
+                .IsNotNullOrWhitespace(data?.Platform, nameof(data.Platform))
+                .IsNotNullOrWhitespace(
+                    data?.NotificationsRegistered.ToString(
+                        CultureInfo.InvariantCulture),
+                    nameof(data.NotificationsRegistered))
+                .IsUriOrNull(data?.ScreenShown.ToString(
+                        CultureInfo.InvariantCulture),
+                    nameof(data.ScreenShown))
+                .IsValid();
         }
 
         private bool IsDevicePnsValid(string devicePns)

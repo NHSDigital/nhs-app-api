@@ -40,6 +40,10 @@ export default {
 
     if (notificationCookieExists
       || registered) {
+      this.$store.dispatch('notifications/logMetrics', {
+        screenShown: false,
+        notificationsRegistered: true,
+      });
       redirectTo(this, INDEX_PATH);
     }
   },
@@ -50,6 +54,14 @@ export default {
   methods: {
     onContinue() {
       this.$store.dispatch('notifications/addNotificationCookie');
+
+      const { toggleUpdated } = this.$store.state.notifications;
+      if (!toggleUpdated) {
+        this.$store.dispatch('notifications/logMetrics', {
+          screenShown: true,
+          notificationsRegistered: false,
+        });
+      }
 
       this.conditionalRedirect();
     },

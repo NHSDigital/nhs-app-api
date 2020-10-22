@@ -74,6 +74,7 @@ describe('notifications prompt page', () => {
           notifications: {
             notificationCookieExists: false,
             registered: false,
+            toggleUpdated: false,
           },
         },
       });
@@ -105,6 +106,13 @@ describe('notifications prompt page', () => {
 
       it('will add the cookie', () => {
         expect($store.dispatch).toHaveBeenCalledWith('notifications/addNotificationCookie');
+      });
+
+      it('will log metrics', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('notifications/logMetrics',
+          { screenShown: true,
+            notificationsRegistered: false,
+          });
       });
     });
   });
@@ -163,6 +171,13 @@ describe('notifications prompt page', () => {
 
       it('will redirect to the index page', () => {
         expect(LibUtils.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+      });
+
+      it('will log metrics', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('notifications/logMetrics',
+          { screenShown: false,
+            notificationsRegistered: true,
+          });
       });
     });
   });
