@@ -1,13 +1,12 @@
 <template>
   <menu-item
-    id="btn_gpHelpNoAppointment"
+    id="btn_adminHelp"
     header-tag="h2"
     data-purpose="text_link"
     :href="adminHelpPath"
     :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
     :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
     :click-func="navigate"
-    :click-param="adminHelpPath"
     :aria-label="ariaLabelCaption(
       'appointments.guidance.additionalGpServices.additionalGpServices',
       'appointments.guidance.additionalGpServices.getSickNotesAndLetters')"/>
@@ -15,22 +14,13 @@
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import {
-  APPOINTMENT_ADMIN_HELP_PATH,
-} from '@/router/paths';
+import { APPOINTMENT_ADMIN_HELP_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
 export default {
-  name: 'GpAdminHelpMenuItem',
+  name: 'AdminHelpMenuItem',
   components: {
     MenuItem,
-  },
-  props: {
-    previousRoute: {
-      type: String,
-      required: true,
-      default: undefined,
-    },
   },
   data() {
     return {
@@ -41,9 +31,8 @@ export default {
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
-    navigate(path) {
-      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.previousRoute);
-      redirectTo(this, path);
+    navigate() {
+      redirectTo(this, this.adminHelpPath);
     },
   },
 };

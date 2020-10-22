@@ -22,7 +22,7 @@ import onlineConsultations from './onlineConsultations';
 import organDonation from './organDonation';
 import prescriptions from './prescriptions';
 import profiles from './profiles';
-import symptomsChecker from './symptomsChecker';
+import adviceCheck from './adviceCheck';
 import termsAndConditions from './termsAndConditions';
 import thirdPartyProviders from './third-party-providers';
 import userResearch from './userResearch';
@@ -54,7 +54,7 @@ export default {
   organDonation,
   prescriptions,
   profiles,
-  symptomsChecker,
+  adviceCheck,
   termsAndConditions,
   thirdPartyProviders,
   userResearch,

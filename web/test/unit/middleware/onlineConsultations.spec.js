@@ -1,12 +1,12 @@
 import onlineConsultations from '@/middleware/onlineConsultations';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
+import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import {
   APPOINTMENTS_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
-  APPOINTMENT_GP_ADVICE_NAME,
+  GP_ADVICE_NAME,
   AUTH_RETURN_NAME,
 } from '@/router/names';
-import { mutationNames } from '../../../src/store/modules/serviceJourneyRules/constants';
 
 const { IM1_PROVIDER } = mutationNames;
 
@@ -91,7 +91,7 @@ describe('middleware/onlineConsultations', () => {
   describe('advice path', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENT_GP_ADVICE_NAME,
+        routeName: GP_ADVICE_NAME,
         isLoggedIn: true,
         isSjrLoaded: true,
         adminName: 'eConsult',
@@ -107,7 +107,7 @@ describe('middleware/onlineConsultations', () => {
   describe('advice path sjr not loaded', () => {
     beforeEach(async () => {
       await callOnlineConsultations({
-        routeName: APPOINTMENT_GP_ADVICE_NAME,
+        routeName: GP_ADVICE_NAME,
         isLoggedIn: true,
         isSjrLoaded: false,
         adminName: 'eConsult',

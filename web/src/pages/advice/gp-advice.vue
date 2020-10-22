@@ -5,11 +5,11 @@
       <message-dialog v-else-if="isError" role="alert" :focusable="true">
         <message-text data-purpose="error-heading"
                       :is-header="true">
-          {{ $t('appointments.gpAdvice.weAreExperiencingTechnicalDifficulties') }}
+          {{ $t('adviceCheck.gpAdvice.weAreExperiencingTechnicalDifficulties') }}
         </message-text>
         <message-text data-purpose="reason-error"
-                      :aria-label="$t('appointments.gpAdvice.ifTheProblemPersistsOneOneOne')">
-          {{ $t('appointments.gpAdvice.ifTheProblemPersists111') }}
+                      :aria-label="$t('adviceCheck.gpAdvice.ifTheProblemPersistsOneOneOne')">
+          {{ $t('adviceCheck.gpAdvice.ifTheProblemPersists111') }}
         </message-text>
       </message-dialog>
       <template v-else>
@@ -17,8 +17,8 @@
                                :provider="provider"
                                :provider-name="providerName"
                                :service-definition-id="serviceDefinitionId">
-          <p>{{ $t('appointments.gpAdvice.itTakesAroundFiveMinute') }}</p>
-          <p>{{ $t('appointments.gpAdvice.toSaveYouTypingIn') }}</p>
+          <p>{{ $t('adviceCheck.gpAdvice.itTakesAroundFiveMinute') }}</p>
+          <p>{{ $t('adviceCheck.gpAdvice.toSaveYouTypingIn') }}</p>
         </demographics-question>
 
         <condition-list v-else-if="conditionsList" :service-definitions="conditionsList"/>
@@ -45,7 +45,7 @@ const getServiceDefinitionId = store => (
 );
 
 export default {
-  name: 'GpAppointmentsGpAdvicePage',
+  name: 'AdviceGpAdvicePage',
   components: {
     MessageDialog,
     MessageText,
@@ -113,10 +113,10 @@ export default {
       this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', true);
 
       EventBus.$emit(UPDATE_HEADER, {
-        headerKey: 'appointments.gpAdvice.onlineConsultationsUnavailable',
-        captionKey: 'appointments.gpAdvice.askYouGpForAdvice',
+        headerKey: 'adviceCheck.gpAdvice.onlineConsultationsUnavailable',
+        captionKey: 'adviceCheck.gpAdvice.askYouGpForAdvice',
       });
-      EventBus.$emit(UPDATE_TITLE, 'appointments.gpAdvice.onlineConsultationsUnavailable');
+      EventBus.$emit(UPDATE_TITLE, 'adviceCheck.gpAdvice.onlineConsultationsUnavailable');
 
       this.available = false;
       return;

@@ -64,7 +64,7 @@ describe('BookingConfirmationErrors', () => {
       });
 
       it('will have a menu item for gp admin help', () => {
-        expect(wrapper.find('#btn_gpHelpNoAppointment').exists()).toBe(true);
+        expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
       });
 
       it('will have a menu item for corona virus advice', () => {
@@ -81,7 +81,7 @@ describe('BookingConfirmationErrors', () => {
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the admin help menu item if admin help is disabled', () => {
-        expect(wrapper.find('#btn_gpHelpNoAppointment').exists()).toBe(false);
+        expect(wrapper.find('#btn_adminHelp').exists()).toBe(false);
         expect(menuItems.length).toBe(3);
       });
     });

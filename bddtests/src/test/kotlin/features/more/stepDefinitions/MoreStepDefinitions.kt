@@ -28,24 +28,9 @@ class MoreStepDefinitions {
     lateinit var morePage: MorePage
     lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
 
-    @When("^I click the Engage Admin link on the More page$")
-    fun iClickTheEngageAdminLinkOnTheMorePage() {
-        morePage.btnEngageAdmin.click()
-    }
-
     @When("^I click the Messages link on the More page")
     fun iClickTheMessagesLinkOnTheMorePage() {
         morePage.btnMessages.click()
-    }
-
-    @When("^I click the Shared links link on the More page")
-    fun iClickTheSharedLinksLinkOnTheMorePage() {
-        morePage.btnSharedLinks.click()
-    }
-
-    @When("^I click the cie Shared health links link on the More page")
-    fun iClickTheCieSharedLinksLinkOnTheMorePage() {
-        morePage.btnPkbCieSharedHealthLinks.click()
     }
 
     @When("^I see the unread indicator on the More page")
@@ -61,12 +46,6 @@ class MoreStepDefinitions {
     @When("^I choose to set my organ donation preferences")
     fun setOrganDonationPreferences() {
         morePage.btnOrganDonation.click()
-    }
-
-    @When("^I click Additional GP services on the more page$")
-    fun iClickAdditionalGpServicesOnTheMorePage() {
-        morePage.btnOlcAdminHelp.assertSingleElementPresent()
-        morePage.btnOlcAdminHelp.click()
     }
 
     @Then("^I am on the More Page$")
@@ -87,31 +66,6 @@ class MoreStepDefinitions {
         webHeader.getPageTitle().waitForElement().withText("More")
     }
 
-    @Then("^the link to Engage Admin is not available on the More page$")
-    fun theLinkToEngageAdminIsNotAvailableOnTheMorePage() {
-        morePage.btnEngageAdmin.assertElementNotPresent()
-    }
-
-    @Then("^the link to Shared links is available on the More page$")
-    fun theLinkToSharedLinksIsAvailableOnTheMorePage() {
-        morePage.btnSharedLinks.assertSingleElementPresent()
-    }
-
-    @Then("^the link to cie Shared health links is available on the More page$")
-    fun theLinkToCieSharedHealthLinksIsAvailableOnTheMorePage() {
-        morePage.btnPkbCieSharedHealthLinks.assertSingleElementPresent()
-    }
-
-    @Then("^the link to Shared links is not available on the More page$")
-    fun theLinkToSharedLinksIsNotAvailableOnTheMorePage() {
-        morePage.btnSharedLinks.assertElementNotPresent()
-    }
-
-    @Then("^the link to cie Shared health links is not available on the More page$")
-    fun theLinkToCieSharedHealthLinksIsNotAvailableOnTheMorePage() {
-        morePage.btnPkbCieSharedHealthLinks.assertElementNotPresent()
-    }
-
     @Then("^the More page explains that it is not possible to access it while acting on behalf of someone else$")
     fun theMorePageExplainsThatItIsNotPossibleToAccessItWhileActingOnBehalfOfSomeoneElse(){
         morePage.assertProxyText(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
@@ -121,8 +75,7 @@ class MoreStepDefinitions {
     fun iSeeAndCanFollowLinksWithinTheMorePageBody() {
         val linksToFollow = arrayListOf(
                 { followDataSharingLink() },
-                { followOrganDonationLink() },
-                { followOlcAdminHelpLink() }
+                { followOrganDonationLink() }
         )
 
         linksToFollow.forEachIndexed { index, link ->
@@ -155,11 +108,6 @@ class MoreStepDefinitions {
             morePage.btnOrganDonation.click()
             browser.assertNewTab()
         }
-    }
-
-    private fun followOlcAdminHelpLink() {
-        iClickAdditionalGpServicesOnTheMorePage()
-        onlineConsultationsUnavailablePage.assertIsVisible(gpAdvice = false)
     }
 
     private fun navigateBackToMorePage() {

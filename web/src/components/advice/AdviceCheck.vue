@@ -1,18 +1,17 @@
 <template>
-  <div v-if="showTemplate" data-purpose="">
+  <div v-if="showTemplate">
     <menu-item-list>
-
       <menu-item id="btn_corona"
                  header-tag="h2"
                  :click-func="navigateToWebIntegration"
                  :click-param="coronaCheckerUrl"
                  :href="coronaCheckerUrl"
                  target="_blank"
-                 :text="$t('symptomsChecker.getAdviceAboutCoronavirus')"
-                 :description="$t('symptomsChecker.findOutWhatToDoIfYouHaveCoronavirus')"
+                 :text="$t('adviceCheck.getAdviceAboutCoronavirus')"
+                 :description="$t('adviceCheck.findOutWhatToDoIfYouHaveCoronavirus')"
                  :aria-label="ariaLabelCaption(
-                   'symptomsChecker.getAdviceAboutCoronavirus',
-                   'symptomsChecker.findOutWhatToDoIfYouHaveCoronavirus')"/>
+                   'adviceCheck.getAdviceAboutCoronavirus',
+                   'adviceCheck.findOutWhatToDoIfYouHaveCoronavirus')"/>
 
       <menu-item id="btn_choices"
                  header-tag="h2"
@@ -21,11 +20,11 @@
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
-                 :text="$t('symptomsChecker.searchConditionsAndTreatments')"
-                 :description="$t('symptomsChecker.findTrustedNhsInformation')"
+                 :text="$t('adviceCheck.searchConditionsAndTreatments')"
+                 :description="$t('adviceCheck.findTrustedNhsInformation')"
                  :aria-label="ariaLabelCaption(
-                   'symptomsChecker.searchConditionsAndTreatments',
-                   'symptomsChecker.findTrustedNhsInformation')"/>
+                   'adviceCheck.searchConditionsAndTreatments',
+                   'adviceCheck.findTrustedNhsInformation')"/>
 
       <menu-item id="btn_111"
                  header-tag="h2"
@@ -33,40 +32,28 @@
                  :click-param="symptomsCheckerUrl"
                  :href="symptomsCheckerUrl"
                  target="_blank"
-                 :text="$t('symptomsChecker.useNhs111Online')"
-                 :description="$t('symptomsChecker.checkIfYouNeedUrgentHelp')"
+                 :text="$t('adviceCheck.useNhs111Online')"
+                 :description="$t('adviceCheck.checkIfYouNeedUrgentHelp')"
                  :aria-label="ariaLabelCaption(
-                   'symptomsChecker.useNhsOneOneOneOnline',
-                   'symptomsChecker.checkIfYouNeedUrgentHelp')"/>
+                   'adviceCheck.useNhsOneOneOneOnline',
+                   'adviceCheck.checkIfYouNeedUrgentHelp')"/>
 
-      <menu-item v-if="loggedIn && isCdssAdvice && isProofLevel9"
-                 id="btn_gpAdvice"
-                 header-tag="h2"
-                 data-purpose="text_link"
-                 :click-func="navigate"
-                 :href="gpAdviceConditionsPath"
-                 :text="$t('symptomsChecker.askYourGpForAdvice')"
-                 :description="$t('symptomsChecker.consultThroughOnlineForm')"
-                 :aria-label="ariaLabelCaption(
-                   'symptomsChecker.askYourGpForAdvice',
-                   'symptomsChecker.consultThroughOnlineForm')"/>
+      <gp-advice-menu-item v-if="isLoggedIn && isCdssAdvice && isProofLevel9"/>
 
-      <third-party-jump-off-button v-if="showEngageMedicalAdvice && isProofLevel9"
+      <third-party-jump-off-button v-if="isLoggedIn && showEngageMedicalAdvice && isProofLevel9"
                                    id="btn_engage_medical_advice"
                                    provider-id="engage"
-                                   :provider-configuration="thirdPartyProvider.engage.medical" />
+                                   :provider-configuration="thirdPartyProvider.engage.medical"/>
     </menu-item-list>
   </div>
 </template>
 
 <script>
+import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import NativeApp from '@/services/native-app';
 import sjrIf from '@/lib/sjrIf';
-import { ADVICE_PATH, APPOINTMENT_GP_ADVICE_PATH } from '@/router/paths';
-import { APPOINTMENT_GP_ADVICE_NAME } from '@/router/names';
-import { redirectTo } from '@/lib/utils';
 import { SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS } from '@/router/externalLinks';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
@@ -74,6 +61,7 @@ import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuratio
 export default {
   name: 'AdviceCheck',
   components: {
+    GpAdviceMenuItem,
     MenuItemList,
     MenuItem,
     ThirdPartyJumpOffButton,
@@ -86,9 +74,10 @@ export default {
     return {
       symptomsCheckerUrl,
       conditionsCheckerUrl: this.$store.$env.CONDITIONS_CHECKER_URL,
-      advicePath: ADVICE_PATH,
       coronaCheckerUrl: this.$store.$env.CORONA_SERVICE_URL,
-      gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_NAME,
+      isLoggedIn: this.$store.getters['session/isLoggedIn'],
+      isCdssAdvice: sjrIf({ $store: this.$store, journey: 'cdssAdvice' }),
+      isProofLevel9: this.$store.getters['session/isProofLevel9'],
       showEngageMedicalAdvice: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -100,28 +89,7 @@ export default {
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.getters['session/isLoggedIn'];
-    },
-    isCdssAdvice() {
-      return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
-    },
-    isProofLevel9() {
-      return this.$store.getters['session/isProofLevel9'];
-    },
-  },
   methods: {
-    navigate(event) {
-      if (event.currentTarget.pathname === this.gpAdviceConditionsPath) {
-        this.$store.dispatch('onlineConsultations/setPreviousRoute', this.advicePath);
-        this.$store.dispatch('navigation/setBackLinkOverride', this.advicePath);
-        this.$store.dispatch('navigation/setRouteCrumb', 'adviceCrumb');
-        this.$store.dispatch('navigation/setNewMenuItem', 0);
-      }
-      redirectTo(this, APPOINTMENT_GP_ADVICE_PATH);
-      event.preventDefault();
-    },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },

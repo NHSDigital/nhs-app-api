@@ -79,6 +79,9 @@ describe('healthRecords', () => {
       ['pkb', 'Test Results', true, false, true],
       ['pkb', 'Test Results', true, true, false],
       ['pkb', 'Test Results', false, false, false],
+      ['cie', 'Test Results', true, false, true],
+      ['cie', 'Test Results', true, true, false],
+      ['cie', 'Test Results', false, false, false],
       ['pkb', 'Care Plans', true, false, true],
       ['pkb', 'Care Plans', true, true, false],
       ['pkb', 'Care Plans', false, false, false],
@@ -91,6 +94,12 @@ describe('healthRecords', () => {
       ['cie', 'Health Trackers', true, false, true],
       ['cie', 'Health Trackers', true, true, false],
       ['cie', 'Health Trackers', false, false, false],
+      ['pkb', 'secondary shared links', true, false, true],
+      ['pkb', 'secondary shared links', true, true, false],
+      ['pkb', 'secondary shared links', false, false, false],
+      ['cie', 'secondary shared links', true, false, true],
+      ['cie', 'secondary shared links', true, true, false],
+      ['cie', 'secondary shared links', false, false, false],
     ]).describe('%s %s enabled is %s, proxy is %s', (
       provider, linkType, integrationEnabled, isProxying, expectedResult,
     ) => {
@@ -110,6 +119,12 @@ describe('healthRecords', () => {
             break;
           case 'cieHealthTrackers':
             linkElement = '#btn_pkb_cie_health_trackers';
+            break;
+          case 'pkbSharedLinks':
+            linkElement = '#btn_pkb_shared_links';
+            break;
+          case 'cieSharedLinks':
+            linkElement = '#btn_pkb_cie_shared_links';
             break;
           default:
             break;

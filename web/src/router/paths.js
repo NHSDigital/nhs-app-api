@@ -27,7 +27,7 @@ export const APPOINTMENTS_PATH = 'appointments';
 export const GP_APPOINTMENTS_PATH = 'appointments/gp-appointments';
 export const HOSPITAL_APPOINTMENTS_PATH = 'appointments/hospital-appointments';
 export const APPOINTMENT_ADMIN_HELP_PATH = 'appointments/gp-appointments/admin-help';
-export const APPOINTMENT_GP_ADVICE_PATH = 'appointments/gp-appointments/gp-advice';
+export const GP_ADVICE_PATH = 'advice/gp-advice';
 export const APPOINTMENT_BOOKING_PATH = 'appointments/gp-appointments/booking';
 export const APPOINTMENT_CANCELLING_PATH = 'appointments/gp-appointments/cancelling';
 export const APPOINTMENT_CANCELLING_SUCCESS_PATH = 'appointments/gp-appointments/cancelling-success';
@@ -146,7 +146,7 @@ export default {
   GP_APPOINTMENTS_PATH,
   HOSPITAL_APPOINTMENTS_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
-  APPOINTMENT_GP_ADVICE_PATH,
+  GP_ADVICE_PATH,
   APPOINTMENT_BOOKING_PATH,
   APPOINTMENT_CANCELLING_PATH,
   APPOINTMENT_CANCELLING_SUCCESS_PATH,

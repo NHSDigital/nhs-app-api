@@ -25,26 +25,12 @@ open class MorePage : HybridPageObject() {
     private val appMessagesTitle = "Health information and updates"
     private val appMessagesDescription = "View messages from health services and the NHS App"
 
-    private val olcAdminHelpTitle = "Additional GP services"
-    private val olcAdminHelpDescription = "Get sick notes and GP letters or ask about recent tests"
-
-    private val engageAdminTitle = "Additional GP services"
-    private val engageAdminDescription = "Get sick notes and GP letters or ask about recent tests"
-
-    private val sharedLinksTitle = "Shared links"
-    private val sharedLinksDescription = "View links your doctor or health professional has shared with you"
-
-    private val pkbCieSharedHealthLinksTitle = "Shared health links"
-    private val pkbCieSharedHealthLinksDescription =
-            "View links or documents your health team has shared with you, or add your own"
-
     val content = LinksWithDescriptionsContent(
             linkBlockTitle = "More",
             containerXPath = "//div[@id='mainDiv']",
             linkStyling = "h2")
             .addLink(organDonationTitle, organDonationDescription)
             .addLink(dataSharingTitle, dataSharingDescription)
-            .addLink(olcAdminHelpTitle, olcAdminHelpDescription)
 
     val links by lazy { LinksElement(this, content) }
 
@@ -52,11 +38,6 @@ open class MorePage : HybridPageObject() {
     val btnMessages by lazy { links.link(messagesTitle, messagesDescription) }
     val btnAppMessages by lazy { links.link(appMessagesTitle, appMessagesDescription) }
     val btnDataSharing by lazy { links.link(dataSharingTitle, dataSharingDescription) }
-    val btnOlcAdminHelp by lazy { links.link(olcAdminHelpTitle, olcAdminHelpDescription) }
-    val btnEngageAdmin by lazy { links.link(engageAdminTitle, engageAdminDescription) }
-    val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
-    val btnPkbCieSharedHealthLinks by lazy {
-        links.link(pkbCieSharedHealthLinksTitle, pkbCieSharedHealthLinksDescription)}
 
     private val unreadIndicator = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_messages_discIndicator']",

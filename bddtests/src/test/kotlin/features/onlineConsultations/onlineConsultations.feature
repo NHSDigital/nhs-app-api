@@ -92,6 +92,6 @@ Scenario: A user sees an appropriate error when online consultations are switche
   And I can see and follow the Get health advice link
   When I click Ask your GP for Advice
   Then I see the online consultations unavailable message for gp advice
-  And I click on the More link on the header
-  When I click Additional GP services on the more page
+  When I navigate to Appointments
+  And I click the Additional GP services link on the Appointments Hub
   Then I see the online consultations unavailable message for admin help

@@ -129,23 +129,10 @@ export default {
       label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
     },
   },
-  gpAdvice: {
-    askYouGpForAdvice: 'Ask your GP for advice',
-    ifTheProblemPersists111: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-    ifTheProblemPersistsOneOneOne: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-    itTakesAroundFiveMinute: 'It takes around 5 minutes to answer a few questions about your condition.',
-    onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
-    toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
-    weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
-  },
   guidance: {
     additionalGpServices: {
       additionalGpServices: 'Additional GP services',
       getSickNotesAndLetters: 'Get sick notes and GP letters or ask about recent tests',
-    },
-    askGp: {
-      forAdvice: 'Ask your GP for advice',
-      consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
     },
     OneOneOne: {
       use111Online: 'Use NHS 111 online',

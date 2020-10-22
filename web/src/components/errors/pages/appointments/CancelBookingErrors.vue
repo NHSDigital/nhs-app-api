@@ -23,8 +23,8 @@
           alternative-actions-header="forbiddenErrors.appointments.whatYouCanDoNext">
           <template v-slot:items>
             <corona-virus-menu-item />
-            <gp-advice-menu-item v-if="isCdssAdvice" :previous-route="appointmentsPath"/>
-            <gp-admin-help-menu-item v-if="isCdssAdmin" :previous-route="appointmentsPath" />
+            <gp-advice-menu-item v-if="isCdssAdvice" route-crumb="appointmentsCrumb"/>
+            <admin-help-menu-item v-if="isCdssAdmin"/>
             <one-one-one-service-menu-item />
           </template>
         </error-screen-alternative-actions>
@@ -82,7 +82,7 @@ import ErrorParagraph from '@/components/errors/ErrorParagraph';
 import ErrorScreenAlternativeActions from '@/components/errors/ErrorScreenAlternativeActions';
 import ErrorTitle from '@/components/errors/ErrorTitle';
 import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
-import GpAdminHelpMenuItem from '@/components/menuItems/GpAdminHelpMenuItem';
+import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
 import OneOneOneServiceMenuItem from '@/components/menuItems/OneOneOneServiceMenuItem';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
@@ -106,7 +106,7 @@ export default {
     ErrorScreenAlternativeActions,
     ErrorTitle,
     GpAdviceMenuItem,
-    GpAdminHelpMenuItem,
+    AdminHelpMenuItem,
     OneOneOneServiceMenuItem,
   },
   mixins: [ErrorPageMixin],

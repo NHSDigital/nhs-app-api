@@ -1,10 +1,18 @@
 import AdviceIndexPage from '@/pages/advice';
-import { ADVICE_PATH } from '@/router/paths';
-import { ADVICE_NAME } from '@/router/names';
+import GpAdvicePage from '@/pages/advice/gp-advice';
+
+import { ADVICE_PATH, GP_ADVICE_PATH } from '@/router/paths';
+import { ADVICE_NAME, GP_ADVICE_NAME } from '@/router/names';
 import { LINKED_PROFILES_SHUTTER_ADVICE } from '@/router/routes/linked-profiles';
-import { baseNhsAppHelpUrl } from '@/router/externalLinks';
+import { UPLIFT_APPOINTMENTS } from '@/router/routes/appointments';
+import { baseNhsAppHelpUrl, onlineConsultationsHelpUrl } from '@/router/externalLinks';
+import sjrRedirectRules from '@/router/sjrRedirectRules';
+
 import { ADVICE_MENU_ITEM } from '@/middleware/nativeNavigation';
+
 import proofLevel from '@/lib/proofLevel';
+import CaptionSize from '@/lib/caption-size';
+
 import breadcrumbs from '@/breadcrumbs/advice';
 
 export const ADVICE = {
@@ -26,6 +34,24 @@ export const ADVICE = {
   },
 };
 
+export const GP_ADVICE = {
+  path: GP_ADVICE_PATH,
+  name: GP_ADVICE_NAME,
+  component: GpAdvicePage,
+  meta: {
+    captionKey: 'navigation.pages.headers.adviceGpAdvice',
+    captionSize: CaptionSize.Medium,
+    titleKey: 'navigation.pages.titles.adviceGpAdvice',
+    proofLevel: proofLevel.P9,
+    upliftRoute: UPLIFT_APPOINTMENTS,
+    crumb: breadcrumbs.GP_ADVICE_CRUMB,
+    helpUrl: onlineConsultationsHelpUrl,
+    sjrRedirectRules: [sjrRedirectRules.gpAdviceDisabledRedirect],
+    warningBanner: true,
+  },
+};
+
 export default [
   ADVICE,
+  GP_ADVICE,
 ];

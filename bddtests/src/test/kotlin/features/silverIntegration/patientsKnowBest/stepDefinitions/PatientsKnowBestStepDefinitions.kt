@@ -109,6 +109,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
     }
 
+    @Then("^the link to PKB shared links is not available on the health record hub page$")
+    fun theLinkToPkbSharedLinksIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Shared links").assertElementNotPresent()
+    }
+
     @Then("^the link to PKB test results is not available on the health record hub page$")
     fun theLinkToPkbTestResultsIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Test results").assertElementNotPresent()

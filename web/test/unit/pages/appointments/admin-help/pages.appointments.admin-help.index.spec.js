@@ -1,4 +1,4 @@
-import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help/index';
+import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help';
 import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import { redirectTo } from '@/lib/utils';

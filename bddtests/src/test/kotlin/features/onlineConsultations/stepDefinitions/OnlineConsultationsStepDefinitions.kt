@@ -6,7 +6,6 @@ import io.cucumber.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
 import pages.PageLeavingWarning
-import pages.navigation.WebHeader
 import pages.onlineConsultations.OnlineConsultationsPage
 import pages.onlineConsultations.OnlineConsultationsUnavailablePage
 import utils.SerenityHelpers
@@ -16,7 +15,6 @@ open class OnlineConsultationsStepDefinitions {
     private lateinit var onlineConsultationsPage: OnlineConsultationsPage
     private lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
     private lateinit var pageLeaveWarning: PageLeavingWarning
-    private lateinit var webHeader: WebHeader
 
     private val onlineConsultationsFactory = OnlineConsultationsFactory()
 
@@ -38,11 +36,6 @@ open class OnlineConsultationsStepDefinitions {
     @Given("^I have access to online consultations gp advice journey and it is not an emergency with no GP session$")
     fun iHaveAccessToOnlineConsultationsNonEmergencyWithNoGpSession() {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency(false)
-    }
-
-    @Given("^I click on the More link on the header$")
-    fun iClickOnTheMoreLinkOnTheHeader() {
-        webHeader.clickMorePageLink()
     }
 
     @When("^I accept demographics and terms and conditions question$")

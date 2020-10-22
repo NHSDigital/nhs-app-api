@@ -59,7 +59,7 @@ import {
   SWITCH_PROFILE_NAME,
   INDEX_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
-  APPOINTMENT_GP_ADVICE_NAME,
+  GP_ADVICE_NAME,
 } from '@/router/names';
 import OnUpdateHeaderMixin from '@/plugins/mixinDefinitions/OnUpdateHeaderMixin';
 import WarningBanner from './WarningBanner';
@@ -123,7 +123,7 @@ export default {
       const warningBanner = get('$route.meta.warningBanner', this);
       const routeName = this.$route.name;
       if (routeName === APPOINTMENT_ADMIN_HELP_NAME
-        || routeName === APPOINTMENT_GP_ADVICE_NAME) {
+        || routeName === GP_ADVICE_NAME) {
         return warningBanner && this.demographicsQuestionAnswered;
       }
       return warningBanner;

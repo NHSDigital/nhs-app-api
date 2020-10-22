@@ -3,22 +3,19 @@
     id="btn_gpAdvice"
     data-purpose="text_link"
     header-tag="h2"
-    :href="gpAdviceConditionsPath"
-    :text="$t('appointments.guidance.askGp.forAdvice')"
-    :description="$t('appointments.guidance.askGp.consultThroughOnlineForm')"
+    :href="gpAdvicePath"
+    :text="$t('adviceCheck.gpAdvice.askYourGpForAdvice')"
+    :description="$t('adviceCheck.gpAdvice.consultThroughOnlineForm')"
     :click-func="navigate"
-    :click-param="gpAdviceConditionsPath"
     :aria-label="ariaLabelCaption(
-      'appointments.guidance.askGp.forAdvice',
-      'appointments.guidance.askGp.consultThroughOnlineForm')"/>
+      'adviceCheck.gpAdvice.askYourGpForAdvice',
+      'adviceCheck.gpAdvice.consultThroughOnlineForm')"/>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import {
-  APPOINTMENT_GP_ADVICE_PATH,
-} from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
+import { GP_ADVICE_PATH } from '@/router/paths';
+import { redirectTo, isBlankString } from '@/lib/utils';
 
 export default {
   name: 'GpAdviceMenuItem',
@@ -26,24 +23,26 @@ export default {
     MenuItem,
   },
   props: {
-    previousRoute: {
+    routeCrumb: {
       type: String,
-      required: true,
+      required: false,
       default: undefined,
     },
   },
   data() {
     return {
-      gpAdviceConditionsPath: APPOINTMENT_GP_ADVICE_PATH,
+      gpAdvicePath: GP_ADVICE_PATH,
     };
   },
   methods: {
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;
     },
-    navigate(path) {
-      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.previousRoute);
-      redirectTo(this, path);
+    navigate() {
+      if (!isBlankString(this.routeCrumb)) {
+        this.$store.dispatch('navigation/setRouteCrumb', this.routeCrumb);
+      }
+      redirectTo(this, this.gpAdvicePath);
     },
   },
 };

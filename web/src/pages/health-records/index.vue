@@ -36,13 +36,23 @@
           <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying"
                                        id="btn_pkb_health_trackers"
                                        provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb
-                                         .healthTrackers" />
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.healthTrackers" />
           <third-party-jump-off-button v-if="showPkbCieHealthTracker && !isProxying"
                                        id="btn_pkb_cie_health_trackers"
                                        provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider.pkb
-                                         .healthTrackersCie" />
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.healthTrackersCie" />
+          <third-party-jump-off-button v-if="showPkbSharedLinks && !isProxying"
+                                       id="btn_pkb_shared_links"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.sharedLinks"/>
+          <third-party-jump-off-button v-if="showPkbCieSharedLinks && !isProxying"
+                                       id="btn_pkb_cie_shared_links"
+                                       provider-id="pkb"
+                                       :provider-configuration="thirdPartyProvider
+                                         .pkb.sharedLinksCie" />
           <third-party-jump-off-button v-if="showPatientPackLifestyleGuides && !isProxying"
                                        id="btn_substrakt_lifestyle_guides"
                                        provider-id="substraktPatientPack"
@@ -119,6 +129,22 @@ export default {
         context: {
           provider: 'pkbCie',
           serviceType: 'healthTrackers',
+        },
+      }),
+      showPkbSharedLinks: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'libraries',
+        },
+      }),
+      showPkbCieSharedLinks: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkbCie',
+          serviceType: 'libraries',
         },
       }),
       showPatientPackLifestyleGuides: sjrIf({

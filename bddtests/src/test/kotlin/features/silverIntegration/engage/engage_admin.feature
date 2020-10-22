@@ -9,16 +9,18 @@ Feature: Engage Admin
     Given I am using the native app user agent
     And I am a user who can view Admin from Engage
     And I am logged in
-    When I navigate to the more page
-    And I click the Engage Admin link on the More page
+    When I navigate to the Appointment Hub page
+    Then the Appointments Hub page is displayed
+    And I wait for 30 seconds
+    And I click the Engage Admin link
     And I am redirected to the redirector page with the header 'Additional GP services'
-    Then the warning message on the Redirector page explains the service is from Engage
+    And the warning message on the Redirector page explains the service is from Engage
 
-  Scenario: A user without access to Engage cannot see the menu item 'Additional GP services' on the More page
+  Scenario: A user without access to Engage cannot see the menu item 'Additional GP services' on the Appointments Hub
     Given I am a user who cannot view Admin from Engage
     And I am logged in
-    When I navigate to the more page
-    Then the link to Engage Admin is not available on the More page
+    When I navigate to the Appointment Hub page
+    Then the Engage Admin link is not available on the Appointments Hub
 
   Scenario: A user can follow the link to find out more about Admin from Engage
     Given I am a user who can view Admin from Engage

@@ -6,7 +6,6 @@ import BookingSuccessPage from '@/pages/appointments/gp-appointments/booking-suc
 import CancellingPage from '@/pages/appointments/gp-appointments/cancelling';
 import CancellingSuccessPage from '@/pages/appointments/gp-appointments/cancelling-success';
 import ConfirmationPage from '@/pages/appointments/gp-appointments/confirmation';
-import GpAdvicePage from '@/pages/appointments/gp-appointments/gp-advice';
 import GpAppointmentsIndexPage from '@/pages/appointments/gp-appointments';
 import GpAtHandPage from '@/pages/appointments/gp-at-hand';
 import HospitalAppointmentsPage from '@/pages/appointments/hospital-appointments';
@@ -29,7 +28,6 @@ import {
   APPOINTMENT_CANCELLING_PATH,
   APPOINTMENT_CANCELLING_SUCCESS_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
-  APPOINTMENT_GP_ADVICE_PATH,
 } from '@/router/paths';
 import {
   UPLIFT_APPOINTMENTS_NAME,
@@ -45,7 +43,6 @@ import {
   APPOINTMENT_CANCELLING_NAME,
   APPOINTMENT_CANCELLING_SUCCESS_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
-  APPOINTMENT_GP_ADVICE_NAME,
 } from '@/router/names';
 
 import { APPOINTMENTS_MENU_ITEM } from '@/middleware/nativeNavigation';
@@ -301,23 +298,6 @@ export const ADMIN_HELP = {
   },
 };
 
-export const GP_ADVICE = {
-  path: APPOINTMENT_GP_ADVICE_PATH,
-  name: APPOINTMENT_GP_ADVICE_NAME,
-  component: GpAdvicePage,
-  meta: {
-    captionKey: 'navigation.pages.headers.appointmentGpAdvice',
-    captionSize: CaptionSize.Medium,
-    titleKey: 'navigation.pages.titles.appointmentGpAdvice',
-    proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_APPOINTMENTS,
-    crumb: breadcrumbs.GP_ADVICE_CRUMB,
-    helpUrl: onlineConsultationsHelpUrl,
-    sjrRedirectRules: [sjrRedirectRules.gpAdviceDisabledRedirect],
-    warningBanner: true,
-  },
-};
-
 export default [
   UPLIFT_APPOINTMENTS,
   APPOINTMENTS,
@@ -332,5 +312,4 @@ export default [
   CANCELLING,
   CANCELLING_SUCCESS,
   ADMIN_HELP,
-  GP_ADVICE,
 ];

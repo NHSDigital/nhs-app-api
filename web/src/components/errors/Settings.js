@@ -24,7 +24,7 @@ import {
   TESTRESULTS_PATH,
   TESTRESULTSDETAIL_PATH,
   APPOINTMENT_ADMIN_HELP_PATH,
-  APPOINTMENT_GP_ADVICE_PATH,
+  GP_ADVICE_PATH,
   LOGIN_PATH,
   BEGINLOGIN_PATH,
   GP_MESSAGES_PATH,
@@ -70,7 +70,7 @@ export default {
       ignoredErrors: [480, 580],
     },
     {
-      route: APPOINTMENT_GP_ADVICE_PATH,
+      route: GP_ADVICE_PATH,
       ignoredErrors: [480, 580],
     },
     {

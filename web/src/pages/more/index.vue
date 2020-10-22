@@ -13,40 +13,10 @@
         :click-func="navigateToMessages"
         :aria-label="ariaLabel"/>
 
-      <menu-item
-        v-if="adminHelpEnabled"
-        id="btn_gp_help"
-        header-tag="h2"
-        data-purpose="text_link"
-        :href="adminHelpPath"
-        :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
-        :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
-        :click-func="navigateToAdminHelp"
-        :aria-label="$t('appointments.guidance.additionalGpServices.additionalGpServices') |
-          join($t('appointments.guidance.additionalGpServices.getSickNotesAndLetters') ,'. ')"/>
-
-      <third-party-jump-off-button
-        v-if="showEngageAdmin"
-        id="btn_engage_admin"
-        provider-id="engage"
-        :provider-configuration="thirdPartyProvider.engage.admin" />
-
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
                            :display-description="true"
                            :back-link-override="morePath"/>
-
-      <third-party-jump-off-button
-        v-if="showPkbSharedLinks"
-        id="btn_pkb_shared_links"
-        provider-id="pkb"
-        :provider-configuration="thirdPartyProvider.pkb.sharedLinks" />
-
-      <third-party-jump-off-button
-        v-if="showPkbCieSharedLinks"
-        id="btn_pkb_cie_shared_links"
-        provider-id="pkb"
-        :provider-configuration="thirdPartyProvider.pkb.sharedLinksCie" />
 
       <menu-item
         id="btn_data_sharing"
@@ -66,12 +36,9 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
-import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import sjrIf from '@/lib/sjrIf';
 import { redirectTo } from '@/lib/utils';
 import {
-  APPOINTMENT_ADMIN_HELP_PATH,
   MORE_PATH,
   MESSAGES_PATH,
   DATA_SHARING_OVERVIEW_PATH,
@@ -87,14 +54,11 @@ export default {
     MenuItemList,
     MenuItem,
     OrganDonationLink,
-    ThirdPartyJumpOffButton,
   },
   data() {
     return {
       hasUnreadMessages: false,
-      adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
       appMessagingPath: HEALTH_INFORMATION_UPDATES_PATH,
-      adminHelpPath: APPOINTMENT_ADMIN_HELP_PATH,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       isNativeApp: this.$store.state.device.isNativeApp,
@@ -102,7 +66,6 @@ export default {
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       gpMessagingAvailable: !this.$store.state.gpMessages.gpMessagingSessionUnavailable,
       morePath: MORE_PATH,
-      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       messagesPath: MESSAGES_PATH,
     };
   },
@@ -111,45 +74,6 @@ export default {
       return this.$store.state.device.isNativeApp
         ? DATA_SHARING_OVERVIEW_PATH
         : YOUR_NHS_DATA_MATTERS_URL;
-    },
-    hasEngageAdmin() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'engage',
-          serviceType: 'consultationsAdmin',
-        },
-      });
-    },
-    hasPkbSharedLinks() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'libraries',
-        },
-      });
-    },
-    hasPkbCieSharedLinks() {
-      return sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkbCie',
-          serviceType: 'libraries',
-        },
-      });
-    },
-    showEngageAdmin() {
-      return this.hasEngageAdmin && !this.isProxying;
-    },
-    showPkbSharedLinks() {
-      return this.hasPkbSharedLinks && !this.isProxying;
-    },
-    showPkbCieSharedLinks() {
-      return this.hasPkbCieSharedLinks && !this.isProxying;
     },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
@@ -201,13 +125,6 @@ export default {
     },
     navigateToMessages() {
       redirectTo(this, this.messagesPath);
-    },
-    navigateToAdminHelp() {
-      this.$store.dispatch('navigation/setNewMenuItem', 4);
-      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
-      this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
-      this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
-      redirectTo(this, this.adminHelpPath);
     },
     navigateToDataSharing() {
       if (this.$store.state.device.isNativeApp) {

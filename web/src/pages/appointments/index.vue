@@ -1,38 +1,45 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="showTemplate" data-purpose="">
-        <menu-item-list>
-          <menu-item id="btn_choices"
-                     header-tag="h2"
-                     data-purpose="text_link"
-                     :href="gpAppointmentsPath"
-                     :click-func="redirectToGpAppointments"
-                     :text="$t('appointments.hub.gpSurgeryAppointments')"
-                     :description="$t('appointments.hub.viewAndManageAppointmentsAtYourSurgery')"
-                     :aria-label="ariaLabelCaption(
-                       'appointments.hub.gpSurgeryAppointments',
-                       'appointments.hub.viewAndManageAppointmentsAtYourSurgery')"/>
-          <menu-item v-if="showHospitalAppointments"
-                     id="btn_hospital"
-                     header-tag="h2"
-                     data-purpose="text_link"
-                     :href="hospitalAppointmentsPath"
-                     :click-func="redirectToHospitalAppointments"
-                     :text="$t('appointments.hub.hospitalAndOtherAppointments')"
-                     :description="$t('appointments.hub.viewAndManageAppointmentsLikeReferrals')"
-                     :aria-label="ariaLabelCaption(
-                       'appointments.hub.hospitalAndOtherAppointments',
-                       'appointments.hub.viewAndManageAppointmentsLikeReferrals')"/>
-        </menu-item-list>
-      </div>
+      <menu-item-list>
+        <menu-item id="btn_choices"
+                   header-tag="h2"
+                   data-purpose="text_link"
+                   :href="gpAppointmentsPath"
+                   :click-func="redirectToGpAppointments"
+                   :text="$t('appointments.hub.gpSurgeryAppointments')"
+                   :description="$t('appointments.hub.viewAndManageAppointmentsAtYourSurgery')"
+                   :aria-label="ariaLabelCaption(
+                     'appointments.hub.gpSurgeryAppointments',
+                     'appointments.hub.viewAndManageAppointmentsAtYourSurgery')"/>
+        <admin-help-menu-item v-if="hasCdssAdmin && !isProxying"/>
+        <third-party-jump-off-button v-if="hasEngageAdmin && !isProxying"
+                                     id="btn_engage_admin"
+                                     provider-id="engage"
+                                     :provider-configuration="thirdPartyProvider
+                                       .engage.admin"/>
+        <menu-item v-if="showHospitalAppointments"
+                   id="btn_hospital"
+                   header-tag="h2"
+                   data-purpose="text_link"
+                   :href="hospitalAppointmentsPath"
+                   :click-func="redirectToHospitalAppointments"
+                   :text="$t('appointments.hub.hospitalAndOtherAppointments')"
+                   :description="$t('appointments.hub.viewAndManageAppointmentsLikeReferrals')"
+                   :aria-label="ariaLabelCaption(
+                     'appointments.hub.hospitalAndOtherAppointments',
+                     'appointments.hub.viewAndManageAppointmentsLikeReferrals')"/>
+      </menu-item-list>
     </div>
   </div>
 </template>
 
 <script>
+import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import {
   GP_APPOINTMENTS_PATH,
   HOSPITAL_APPOINTMENTS_PATH,
@@ -42,12 +49,25 @@ import sjrIf from '@/lib/sjrIf';
 export default {
   name: 'AppointmentsIndexPage',
   components: {
+    AdminHelpMenuItem,
     MenuItem,
     MenuItemList,
+    ThirdPartyJumpOffButton,
   },
   data() {
     return {
       isProxying: this.$store.getters['session/isProxying'],
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
+      test: this.$store.getters['serviceJourneyRules/silverIntegrationEnabled']({ serviceType: 'consultationsAdmin', provider: 'engage' }),
+      hasCdssAdmin: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
+      hasEngageAdmin: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'consultationsAdmin',
+        },
+      }),
     };
   },
   computed: {

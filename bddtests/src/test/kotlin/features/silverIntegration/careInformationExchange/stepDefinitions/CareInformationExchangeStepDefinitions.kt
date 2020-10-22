@@ -89,19 +89,24 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
-    @Given("^I am a user who can view Shared Links from Care Information Exchange$")
-    fun iAmAUserWhoCanViewSharedLinksFromCareInformationExchange(){
+    @Given("^I am a user who can view Shared Health Links from Care Information Exchange$")
+    fun iAmAUserWhoCanViewSharedHealthLinksFromCareInformationExchange(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_CIE)
     }
 
-    @Given("^I am a user who cannot view Shared Links from Care Information Exchange$")
-    fun iAmAUserWhoCannotViewSharedLinksFromCareInformationExchange(){
+    @Given("^I am a user who cannot view Shared Health Links from Care Information Exchange$")
+    fun iAmAUserWhoCannotViewSharedHealthLinksFromCareInformationExchange(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
     @Then("^the link to CIE Track your health is not available on the health record hub page$")
     fun theLinkToCieHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("^the link to CIE shared health links is not available on the health record hub page$")
+    fun theLinkToCieSharedLinksIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Shared health links").assertElementNotPresent()
     }
 
     @Then("^the link to CIE test results is not available on the health record hub page$")

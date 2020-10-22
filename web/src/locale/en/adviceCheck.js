@@ -1,0 +1,21 @@
+export default {
+  symptoms: 'Symptoms',
+  getAdviceAboutCoronavirus: 'Get advice about coronavirus',
+  findOutWhatToDoIfYouHaveCoronavirus: 'Find out what to do if you think you have coronavirus',
+  useNhs111Online: 'Use NHS 111 online',
+  useNhsOneOneOneOnline: 'Use NHS one one one online',
+  checkIfYouNeedUrgentHelp: 'Check if you need urgent help and find out what to do next',
+  searchConditionsAndTreatments: 'Search conditions and treatments',
+  findTrustedNhsInformation: 'Find trusted NHS information on hundreds of conditions',
+  gpAdvice: {
+    askYourGpForAdvice: 'Ask your GP for advice',
+    consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
+    askYouGpForAdvice: 'Ask your GP for advice',
+    ifTheProblemPersists111: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    ifTheProblemPersistsOneOneOne: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+    itTakesAroundFiveMinute: 'It takes around 5 minutes to answer a few questions about your condition.',
+    onlineConsultationsUnavailable: 'Online consultations are currently unavailable',
+    toSaveYouTypingIn: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
+    weAreExperiencingTechnicalDifficulties: 'Sorry, we\'re experiencing technical difficulties',
+  },
+};

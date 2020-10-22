@@ -25,7 +25,7 @@ export const GP_APPOINTMENTS_NAME = 'appointments-gp-appointments';
 export const HEALTH_INFORMATION_UPDATES_NAMES = 'messages-app-messaging';
 export const HOSPITAL_APPOINTMENTS_NAME = 'appointments-hospital-appointments';
 export const APPOINTMENT_ADMIN_HELP_NAME = 'appointments-gp-appointments-admin-help';
-export const APPOINTMENT_GP_ADVICE_NAME = 'appointments-gp-appointments-gp-advice';
+export const GP_ADVICE_NAME = 'advice-gp-advice';
 export const APPOINTMENT_BOOKING_NAME = 'appointments-gp-appointments-booking';
 export const APPOINTMENT_CANCELLING_NAME = 'appointments-gp-appointments-cancelling';
 export const APPOINTMENT_CANCELLING_SUCCESS_NAME = 'appointments-gp-appointments-cancelling-success';
@@ -146,7 +146,7 @@ const names = [
   GP_APPOINTMENTS_NAME,
   HOSPITAL_APPOINTMENTS_NAME,
   APPOINTMENT_ADMIN_HELP_NAME,
-  APPOINTMENT_GP_ADVICE_NAME,
+  GP_ADVICE_NAME,
   APPOINTMENT_BOOKING_NAME,
   APPOINTMENT_CANCELLING_NAME,
   APPOINTMENT_CANCELLING_SUCCESS_NAME,

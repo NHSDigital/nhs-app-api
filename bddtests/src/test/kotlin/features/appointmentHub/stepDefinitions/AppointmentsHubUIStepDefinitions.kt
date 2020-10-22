@@ -13,6 +13,16 @@ class AppointmentsHubUIStepDefinitions {
         appointmentHubPage.btnGPAppointmentsLinksWithDescriptionsContent.click()
     }
 
+    @When("^I click the Engage Admin link$")
+    fun iClickTheEngageAdminLink() {
+        appointmentHubPage.btnEngageAdminLinksWithDescriptionsContent.click()
+    }
+
+    @When("^I click the Additional GP services link on the Appointments Hub$")
+    fun iClickTheAdditionalGpServicesLinkOnTheAppointmentsHub() {
+        appointmentHubPage.btnOlcAdminHelpLinkWithDescriptionsContent.click()
+    }
+
     @When("^I click the 'Hospital and other services' link on the Appointments Hub$")
     fun iClickTheHospitalAndOtherServicesLinkOnTheAppointmentsHub() {
         appointmentHubPage.hospitalAppointmentsLink.click()
@@ -21,6 +31,11 @@ class AppointmentsHubUIStepDefinitions {
     @Then("^the Appointments Hub page is displayed$")
     fun assertIsDisplayed() {
         appointmentHubPage.assertAppointmentsHubIsDisplayed()
+    }
+
+    @Then("^the Engage Admin link is not available on the Appointments Hub$")
+    fun theEngageAdminLinkIsNotAvailableOnTheAppointmentsHub() {
+        appointmentHubPage.btnEngageAdminLinksWithDescriptionsContent.assertElementNotPresent()
     }
 
     @Then("^the 'Hospital and other services' link is not available on the Appointments Hub$")

@@ -11,6 +11,7 @@ import {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,
   GP_MEDICAL_RECORD_GP_AT_HAND_PATH,
   GP_MESSAGES_PATH,
+  ADVICE_PATH,
 } from '@/router/paths';
 
 import {
@@ -26,12 +27,14 @@ import {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
   GP_MEDICAL_RECORD_GP_AT_HAND_NAME,
   GP_MESSAGES_NAME,
+  ADVICE_NAME,
 } from '@/router/names';
 
 export default {
   adminHelpDisabledRedirect: {
     journey_disabled: 'cdssAdmin',
-    url: '/appointments',
+    url: APPOINTMENTS_PATH,
+    name: APPOINTMENTS_NAME,
   },
   deleteMessageRedirect: {
     journey_disabled: 'deleteGpMessages',
@@ -45,8 +48,8 @@ export default {
   },
   gpAdviceDisabledRedirect: {
     journey_disabled: 'cdssAdvice',
-    url: GP_APPOINTMENTS_PATH,
-    name: GP_APPOINTMENTS_NAME,
+    url: ADVICE_PATH,
+    name: ADVICE_NAME,
   },
   gpAtHandAppointmentRedirect: {
     journey: 'gpAtHandAppointments',
