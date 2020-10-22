@@ -176,11 +176,12 @@ components:
     Recipients:
       type: object
       description: TODO
-    NhsNumbers:
-      type: array
-      items: 
-        type: string
-      description: TODO
+      properties:
+        nhsNumbers:
+          type: array
+          items:
+            type: string
+          description: TODO
     Channels:
       type: object
       description: TODO
