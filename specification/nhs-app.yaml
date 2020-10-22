@@ -147,30 +147,6 @@ paths:
           description: TODO
         '400':
           description: TODO
-  /Communication/{id}:
-    parameters:
-      - $ref: '#/components/parameters/ApiKey'
-      - $ref: '#/components/parameters/CorrelationId'
-      - in: path
-        name: id
-        schema:
-          type: string
-          example: 2bb570ac-9981-486f-a291-6f5e5496523f
-        required: true
-        description: String ID of the communication to retrieve
-    get:
-      summary: Retrieve details of a communication that was previously requested
-      operationId: retrieve-communication
-      description: TODO
-      tags:
-        - communication
-      responses:
-        '200':
-          description: TODO
-        '400':
-          description: TODO
-        '404':
-          description: TODO
 
 components:
   parameters:
@@ -200,16 +176,11 @@ components:
     Recipients:
       type: object
       description: TODO
-      oneOf:
-        - $ref: '#/components/schemas/NhsNumbers'
-        - $ref: '#/components/schemas/OdsCode'   
     NhsNumbers:
       type: array
       items: 
         type: string
       description: TODO
-    OdsCode:
-      type: string
     Channels:
       type: object
       description: TODO
