@@ -34,7 +34,7 @@
     <about-us/>
 
     <p>
-      Version {{ $store.state.appVersion.webVersion }}
+      {{ $t('generic.version') }} {{ $store.state.appVersion.webVersion }}
       <span v-show="$store.state.appVersion.nativeVersion">
         ({{ $store.state.appVersion.nativeVersion }})
       </span>

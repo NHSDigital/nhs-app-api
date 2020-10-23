@@ -36,6 +36,7 @@ export default {
   tryAgain: 'Try again',
   unit: 'Unit',
   urgentAdvice: 'Urgent advice:',
+  version: 'Version',
   warning: 'Warning',
   year: 'Year',
   yes: 'Yes',

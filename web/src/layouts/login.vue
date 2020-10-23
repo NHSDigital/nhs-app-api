@@ -168,7 +168,6 @@ export default {
   .login-app-header-flex-container {
     display: flex;
     flex-direction: column;
-    height: 90vh;
   }
 
   @include desktopAndBelow(){
