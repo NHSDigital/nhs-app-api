@@ -42,37 +42,8 @@ info:
 
     | Environment       | Base URL                                                       |
     | ----------------- | -------------------------------------------------------------- |
-    | Sandbox           | `https://sandbox.api.service.nhs.uk/nhs-app/`                  |
     | Integration test  | `https://int.api.service.nhs.uk/nhs-app/`                      |
     | Production        | `https://api.service.nhs.uk/nhs-app/`                          |
-
-    ### Sandbox testing
-    Our [sandbox environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#sandbox-testing):
-    * is for early developer testing
-    * only covers a limited set of scenarios
-    * is stateless, so it does not actually persist any updates
-    * is open access, so does not allow you to test authorisation
-
-    For more details on sandbox testing, or to try out the sandbox using our "Try this API" feature, see the documentation for each endpoint.
-
-    Alternatively, you can try out the sandbox using our Postman collection:
-    
-    TODO - create a Postman collection for sandbox
-    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/todo)
-
-    ### Download Postman client
-
-    If you don’t have it, you can download Postman [here](https://www.postman.com).
-    
-    Click on the download button in the top right corner and follow the instructions.
-
-    ### Download our collection
-
-    If you already have the Postman client installed - click onto our postman collection (button above) - then click onto the ‘Postman for Windows’ or ‘Postman for Mac’ version - and click Open when prompted.
-    
-    Postman client should then open showing our Patient Demographics Sandbox.
-
-    If you have already downloaded the Sandbox collection from one of our other endpoints, found under the NHS App API pages, you don't have to download it again as the same collection covers all endpoints.
 
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
@@ -80,7 +51,7 @@ info:
     * is stateful, so persists updates
     * includes authorisation
         
-    TODO - add some information here about the NHS App test environments (onboarding sandpit, onboarding AOS), test user details, and links to Test Flight and Play Store for downloading the native apps?
+    Our integration test environment is currently pointing to the Onboarding Sandpit NHS App environment, which in turn is using the Sandpit environment of NHS Login.
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
@@ -98,8 +69,6 @@ info:
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: api.management@nhs.net
 servers:
-  - url: 'https://sandbox.api.service.nhs.uk/nhs-app'
-    description: Sandbox environment.
   - url: 'https://int.api.service.nhs.uk/nhs-app'
     description: Integration test environment.
   - url: 'https://api.service.nhs.uk/nhs-app'
