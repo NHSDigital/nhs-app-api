@@ -39,7 +39,7 @@
           </p>
           <p>{{ $t('organDonation.withdrawReason.makeSureYourFamilyKnow') }}</p>
           <error-group :show-error="showErrors">
-            <label for="reason">
+            <label class="nhsuk-label" for="reason">
               {{ $t('organDonation.withdrawReason.reasonForWithdrawing') }}
             </label>
             <error-message v-if="showErrors">

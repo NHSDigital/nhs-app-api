@@ -7,7 +7,7 @@
             :class="[$style['custom-dropdown__select'],
                      $style['custom-dropdown__select_element'],
                      $style['custom-dropdown__select--white'],
-                     $style['nhsuk-select']
+                     'nhsuk-select'
             ]"
             :required="required"
             tabindex="0">
