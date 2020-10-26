@@ -57,12 +57,8 @@ info:
 
     ## Onboarding
     You need to get your software approved by us before it can go live with this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
-    
-    TODO - add some information here about the SCAL process.
 
     To onboard for this API, follow the [Supplier Conformance Assessment List (SCAL) process.](https://digital.nhs.uk/developer/guides-and-documentation/onboarding-process#onboard-using-the-supplier-conformance-assessment-list-scal-process)
-
-    TODO - should the email address below be the NHS App mailbox rather than API Management?
 
   contact:
     name: NHS App API Support
@@ -81,9 +77,15 @@ paths:
       - $ref: '#/components/parameters/ApiKey'
       - $ref: '#/components/parameters/CorrelationId'
     post:
-      summary: Request that a communication be sent to one or more patients
+      summary: Send a communication
       operationId: create-communication
-      description: TODO
+      description: |
+        ## Overview
+        Use this endpoint to request that a communication be sent to one or more patients.
+        
+        Currently this endpoint can be used to send In-App Messages that appear within the NHS App. We intend to additionally offer functionality to send native Apple and Android Push Notifications in the near future.
+        
+        Recipients can currently be specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
       requestBody:
         required: true
         content:
@@ -140,9 +142,72 @@ paths:
         - communication
       responses:
         '201':
-          description: indicating a new resource was successfully created in response to the request
+          description: Indicates that the request has been successfully received by the server. The request to send the communication has been enqueued.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The location of the newly-created resource.
+              example: https://int.api.service.nhs.uk/nhsapp/communication/a2d10720-9e72-4ae4-be72-8cbe1be292d1
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: An identifier for the newly-created communication resource within the destination system.
+                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
         '400':
-          description: indicates that the server cannot or will not process the request due to something that is perceived to be a client error 
+          description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error.
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    propertyName:
+                      type: string
+                      description: The property name within the source payload that has failed validation.
+                      example: Recipients.NhsNumbers
+                    message:
+                      type: string
+                      description: A description of the reason why the source payload has failed validation.
+                      example: "Specified values are invalid: '2981615972','3846131965'"
+        '401':
+          description: Indicates the request has not been applied because it lacks valid authentication credentials. This may be due to a missing or invalid X-Api-Key header.
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fault:
+                    type: object
+                    properties:
+                      faultString:
+                        type: string
+                        example: "Invalid ApiKey"
+                      detail:
+                        type: object
+                        properties:
+                          errorcode:
+                            type: string
+                            example: "oauth.v2.InvalidApiKey"
 components:
   parameters:
     CorrelationId:
