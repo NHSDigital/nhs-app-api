@@ -3,12 +3,6 @@ Feature: Organ Donation View Frontend
 
 #  This test covers navigation via buttons/links
 
-  Scenario: A user can navigate to the external version of 'Manage organ donation decision' when toggle is set as so
-    Given I am a EMIS user not registered with organ donation, who wishes to register
-    And I am logged in
-    When I follow the organ donation link on the home page
-    Then the external Organ Donation page is displayed
-
   Scenario: A user can navigate to the native version of 'Manage organ donation preferences' when toggle is set as so
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register

@@ -26,7 +26,7 @@ open class WebHeader : HybridPageObject() {
     )
 
 
-    val myRecordPageLink = HybridPageElement(
+    val yourHealthPageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='myRecordPageLink']",
             page = this
     )
@@ -80,8 +80,8 @@ open class WebHeader : HybridPageObject() {
         appointmentsPageLink.click()
     }
 
-    fun clickMyRecordPageLink() {
-        myRecordPageLink.click()
+    fun clickYourHealthPageLink() {
+        yourHealthPageLink.click()
     }
 
     fun clickPrescriptionsPageLink() {

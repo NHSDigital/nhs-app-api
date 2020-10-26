@@ -1,7 +1,5 @@
 package pages
 
-import mockingFacade.linkedProfiles.LinkedProfileFacade
-import models.Patient
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
@@ -15,11 +13,18 @@ class HomePage : HybridPageObject() {
 
     val headerText: String = "Home"
 
-    val greeting = HybridPageElement(
-            webDesktopLocator = "//h2[@data-purpose='greeting']",
+    val welcomeInfo = HybridPageElement(
+            webDesktopLocator = "//div[@data-sid='welcome-info']",
             androidLocator = null,
             page = this,
-            helpfulName = "Greeting"
+            helpfulName = "Welcome info"
+    )
+
+    val welcomeInfoProxy = HybridPageElement(
+            webDesktopLocator = "//div[@data-sid='welcome-info-proxy']",
+            androidLocator = null,
+            page = this,
+            helpfulName = "Welcome info"
     )
 
     val dismissButton = HybridPageElement(
@@ -91,17 +96,8 @@ class HomePage : HybridPageObject() {
                 helpfulName = "$linkText Link")
     }
 
-    val organDonationLink = link("Manage your organ donation decision")
-
-    val linkedProfilesLink = link("Linked profiles")
-
     fun assertUnreadIndicatorPresent() {
         unreadIndicator.assertIsVisible()
-    }
-
-    fun assertHasWelcomeMessageFor(patient: Patient, includeTitle: Boolean = true) {
-        val name = patient.formattedFullName(includeTitle)
-        assertEquals("Welcome message did not match", "Welcome, $name", greeting.text)
     }
 
     fun assertPatientDetailIsVisible(detail:String, value: String) {
@@ -115,21 +111,19 @@ class HomePage : HybridPageObject() {
 
     private fun getPatientDetailElement(detail:String) : HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "${greeting.webDesktopLocator}/following-sibling::div[1]/" +
-                        "p[strong[text()='$detail:']]/span",
+                webDesktopLocator =
+                  "${welcomeInfo.webDesktopLocator}//dt[normalize-space(text())='$detail:']/following-sibling::dd[1]",
                 androidLocator = null,
                 page = this
         )
     }
 
-    fun assertHasProxyPatientDetails(proxyPatient: LinkedProfileFacade, expectedDetails: ArrayList<String>) {
-
-        assertHasWelcomeMessageFor(proxyPatient.profile)
+    fun assertHasProxyPatientDetails(expectedDetails: ArrayList<String>) {
         val actualDetails = arrayListOf<String>()
-        greeting.actOnTheElement {
+        welcomeInfoProxy.actOnTheElement {
             actualDetails.addAll(
                     it.findElements<WebElement>(
-                            By.xpath("./following-sibling::div[1]/p"))
+                            By.xpath("//div[@class='nhsuk-summary-list__row']"))
                             .map { element -> element.text })
         }
         assertCollection("ProxyPatientDetails", expectedDetails, actualDetails)

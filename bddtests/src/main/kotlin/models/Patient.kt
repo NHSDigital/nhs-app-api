@@ -65,6 +65,19 @@ data class Patient(
         linkedAccounts.forEach { e -> e.odsCode = targetOdsCode }
     }
 
+    /*
+     * Return patients with only basic details that they
+     * would have if the GP Supplier connection fails.
+     */
+    fun withoutGPSupplierConnection(): Patient {
+        return Patient(
+                name = this.name,
+                age = this.age,
+                contactDetails = this.contactDetails,
+                sex = this.sex
+        )
+    }
+
     companion object {
         fun getDefault(gpSystem: Supplier): Patient {
             return PatientHandler.getForSupplier(gpSystem).getDefault()

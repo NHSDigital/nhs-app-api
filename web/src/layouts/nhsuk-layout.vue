@@ -101,6 +101,7 @@ export default {
 
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
+  @import "../style/nhsuk-customisations/nhsuk-customisations";
   @import "../style/links";
   @import "../style/econsultoverrides";
 </style>

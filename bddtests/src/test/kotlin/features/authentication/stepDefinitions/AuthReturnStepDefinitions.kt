@@ -15,6 +15,8 @@ import models.Patient
 import models.patients.EmisPatients
 import models.patients.TppPatients
 import net.thucydides.core.annotations.Steps
+import utils.GlobalSerenityHelpers
+import utils.set
 import java.util.UUID
 
 class AuthReturnStepDefinitions {
@@ -40,6 +42,7 @@ class AuthReturnStepDefinitions {
     @Given("^I am logged into Citizen ID but EMIS session cannot be established$")
     fun loggedInInCitizenIdSessionNotEstablished() {
         this.patient = EmisPatients.montelFrye
+        GlobalSerenityHelpers.PATIENT.set(this.patient.withoutGPSupplierConnection())
 
         CitizenIdSessionCreateJourney().createFor(patient)
         mockingClient.forEmis.mock {

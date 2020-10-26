@@ -1,9 +1,8 @@
 <template>
   <div v-if="showTemplate">
-    <h2 data-purpose="greeting" data-hj-suppress class="nhsuk-u-margin-bottom-0">
-      {{ greetingMessage }}
-    </h2>
-    <welcome-section v-if="!isProxying" :date-of-birth="currentProfile.dateOfBirth"
+    <welcome-section v-if="!isProxying"
+                     :name="currentProfile.name"
+                     :date-of-birth="currentProfile.dateOfBirth"
                      :nhs-number="currentProfile.nhsNumber" />
     <proxy-welcome-section v-else :proxy-age="proxyAge" :proxy-details="currentProfile"/>
     <public-health-notification
@@ -57,15 +56,6 @@ export default {
         return this.$store.state.linkedAccounts.actingAsUser;
       }
       return this.$store.getters['session/currentProfile'];
-    },
-    greetingMessage() {
-      const message = this.$t('home.welcome');
-      if (this.isProxying) {
-        const { fullName } = this.currentProfile;
-        return `${message}, ${fullName}`;
-      }
-      const { name } = this.currentProfile;
-      return `${message}, ${name}`;
     },
     proxyAge() {
       return this.getDisplayedAgeText(this.currentProfile);

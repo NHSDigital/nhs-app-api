@@ -1,6 +1,5 @@
 package features.authentication.stepDefinitions
 
-import constants.Supplier
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -8,15 +7,11 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.authentication.steps.NavigationLinkText
 import features.authentication.steps.PatientDetail
-import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
-import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.AppointmentHubPage
-import pages.HealthAdvicePage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
 import pages.assertSingleElementPresent
@@ -30,9 +25,6 @@ import java.net.URL
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
 
 class HomePageStepDefinitions {
-
-    @Steps
-    private lateinit var appointmentHubPage: AppointmentHubPage
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
@@ -41,11 +33,8 @@ class HomePageStepDefinitions {
     private lateinit var loginSteps: LoginSteps
     @Steps
     private lateinit var navBar: NavBarNative
-    @Steps
-    private lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
-    private lateinit var healthAdvicePage: HealthAdvicePage
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -64,12 +53,6 @@ class HomePageStepDefinitions {
         loginSteps.loginPage.clickHelpIcon()
     }
 
-    @When("I follow the Appointments link from the home page$")
-    fun iFollowTheAppointmentsLinkFromTheHomePage() {
-        val linkElement = homeSteps.assertLinkIsVisible(NavigationLinkText.APPOINTMENTS)
-        followAppointmentsLink(linkElement)
-    }
-
     @When("I follow the Messages link from the home page$")
     fun iFollowTheMessagesLinkFromTheHomePage() {
         homeSteps.assertLinkIsVisible(NavigationLinkText.MESSAGES).click()
@@ -85,14 +68,14 @@ class HomePageStepDefinitions {
         homeSteps.assertHeaderVisible()
     }
 
+    @Then("^I see the proxy home page$")
+    fun iSeeTheProxyHomePage() {
+        homeSteps.assertProxyHeaderVisible()
+    }
+
     @Then("^I see the home page header$")
     fun iSeeTheHomePageHeader() {
         homeSteps.assertHeaderVisible()
-    }
-
-    @Then("^I see the linked profiles link$")
-    fun iSeeLinkedProfilesLink() {
-        homeSteps.assertLinkIsVisible(NavigationLinkText.LINKED_PROFILES)
     }
 
     @Then("^I see the current app version")
@@ -103,7 +86,6 @@ class HomePageStepDefinitions {
     @Then("^I see a collapsible link to a survey, which I can follow$")
     fun iSeeTheSurveyLink() {
         homeSteps.homePage.assertSurveyLinkCollapsibleAndExpandable()
-
         homeSteps.homePage.assertSurveyLinkContent()
         homeSteps.homePage.assertSurveyLinkCollapsibleAndExpandable()
         homeSteps.homePage.surveyContentLink.assertSingleElementPresent().click()
@@ -128,12 +110,6 @@ class HomePageStepDefinitions {
         homeSteps.assertProxyPatientDetailsShownFor(selectedProfile)
     }
 
-    @Then("^I see a welcome message for the (.*) patient with no title$")
-    fun iSeeAWelcomeMessageWithNoTitle(gpSystem: String) {
-        val patient = Patient.getDefault(Supplier.valueOf(gpSystem))
-        homeSteps.assertWelcomeMessageShownFor(patient, false)
-    }
-
     @Then("^I can't see the (.*) link on the homepage$")
     fun iCantSeeTheSpecifiedLink(linkText: String) {
         homeSteps.homePage.assertLinkNotPresent(linkText)
@@ -144,12 +120,9 @@ class HomePageStepDefinitions {
         val linkElement = homeSteps.homePage.assertLinkIsVisible(linkText)
 
         when (linkText) {
-            NavigationLinkText.ADVICE.linkText -> followHealthAdviceLink(linkElement)
-            NavigationLinkText.APPOINTMENTS.linkText -> followAppointmentsLink(linkElement)
             NavigationLinkText.PRESCRIPTIONS.linkText -> followPrescriptionLink(linkElement)
-            NavigationLinkText.MEDICAL_RECORD.linkText -> followMedicalRecordLink(linkElement)
-            NavigationLinkText.HEALTH_RECORDS.linkText -> followMedicalRecordLink(linkElement)
-            NavigationLinkText.ORGAN_DONATION.linkText -> followOrganDonationLink(linkElement)
+            NavigationLinkText.GP_HEALTH_RECORD.linkText -> followGPHealthRecordLink(linkElement)
+            NavigationLinkText.MESSAGES.linkText -> followMessagesLink(linkElement)
             else -> Assert.fail("Test set up incorrect, there is no matching follow on function for `$linkText`")
         }
     }
@@ -166,31 +139,19 @@ class HomePageStepDefinitions {
         homeSteps.homePage.assertHasPublicHealthNotifications(publicHealthNotifications)
     }
 
-    private fun followHealthAdviceLink(linkElement: HybridPageElement) {
-        linkElement.click()
-        healthAdvicePage.assertPageDisplayed()
-        navBar.isHighlighted(NavBarNative.NavBarType.ADVICE)
-    }
-
-    private fun followAppointmentsLink(linkElement: HybridPageElement) {
-        linkElement.click()
-        appointmentHubPage.assertAppointmentsHubIsDisplayed()
-        navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
-    }
-
     private fun followPrescriptionLink(linkElement: HybridPageElement) {
         linkElement.click()
         prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
     }
 
-    private fun followMedicalRecordLink(linkElement: HybridPageElement) {
+    private fun followGPHealthRecordLink(linkElement: HybridPageElement) {
         linkElement.click()
         navBar.isHighlighted(NavBarNative.NavBarType.YOUR_HEALTH)
     }
 
-    private fun followOrganDonationLink(linkElement: HybridPageElement) {
+    private fun followMessagesLink(linkElement: HybridPageElement) {
         linkElement.click()
-        organDonationSteps.iAmOnTheOrganDonationPage()
+        navBar.isHighlighted(NavBarNative.NavBarType.MORE)
     }
 }
 

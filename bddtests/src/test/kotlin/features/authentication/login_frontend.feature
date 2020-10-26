@@ -7,24 +7,19 @@ Feature: Login frontend
   Scenario Outline: A <GP System> user can see the home page after logging in
     Given I am a <GP System> patient
     And I am logged in
-    Then I see a welcome message for the <GP System> patient with no title
+    Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
-    And I can see and follow the Get health advice link
-    When I click the home icon
-    Then I see the home page
-    And I can see and follow the Book and manage appointments link
+    And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
     And I can see and follow the Order a repeat prescription link
     When I click the home icon
     Then I see the home page
-    And I can see and follow the View your health records link
-    When I click the home icon
-    Then I see the home page
-    And I can see and follow the Manage your organ donation decision link
+    And I can see and follow the View your messages link
+
     Examples:
       | GP System |
       | TPP       |
@@ -34,25 +29,18 @@ Feature: Login frontend
   Scenario: A EMIS user can see the home page after logging in
     Given I am a EMIS patient
     And I am logged in
-    Then I see a welcome message for the EMIS patient with no title
+    Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
-    And I can see and follow the Get health advice link
-    When I click the home icon
-    Then I see the home page
-    And I can see and follow the Book and manage appointments link
+    And I can see and follow the View your GP health record link
     When I click the home icon
     Then I see the home page
     And I can see and follow the Order a repeat prescription link
     When I click the home icon
     Then I see the home page
-    And I navigate to the health record hub page
-    And I see the health records hub page
-    When I click the home icon
-    Then I see the home page
-    And I can see and follow the Manage your organ donation decision link
+    And I can see and follow the View your messages link
 
   Scenario: A user can see the native instructions
     Given I am a patient using the native app
@@ -71,7 +59,7 @@ Feature: Login frontend
   Scenario: A patient with proof level 5 sees no NHS number when logging in
     Given I am a patient with proof level 5
     And I am logged in
-    Then I see a welcome message for the EMIS patient with no title
+    Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I don't see my NHS number on the home page
 
@@ -79,23 +67,20 @@ Feature: Login frontend
     Given I am a patient with proof level 5
     And I am logged in
     Then I am asked to prove my identity
-    And I can't see the Book and manage appointments link on the homepage
     And I can't see the Order a repeat prescription link on the homepage
     And I can't see the View your GP medical record link on the homepage
-    And I can't see the Manage your organ donation decision link on the homepage
-    And I can see and follow the Get health advice link
 
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient
     And I am logged in
-    Then I see a welcome message for the EMIS patient with no title
+    Then I see my Name on the home page
     And I do not see the yellow banner
 
   #Once prescriptions are completed for microtest, this test can be merged with above
   Scenario: A Microtest user sees the home page after logging in
     Given I am a MICROTEST patient
     And I am logged in
-    Then I see a welcome message for the MICROTEST patient with no title
+    Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
     And I see the home page header
@@ -103,9 +88,9 @@ Feature: Login frontend
   Scenario Outline: A <GP System> user can still login when the GP System fails
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
+    Then I see my Name on the home page
     And I see my Date of birth on the home page
     And I see my NHS number on the home page
-    And I see a welcome message for the <GP System> patient with no title
     And I can't see the Linked profiles link on the homepage
     Examples:
       | GP System |
@@ -116,7 +101,7 @@ Feature: Login frontend
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
-    Then I see a welcome message for the <GP System> patient with no title
+    Then I see my Name on the home page
     Examples:
       | GP System |
       | EMIS      |
@@ -125,7 +110,7 @@ Feature: Login frontend
 
   Scenario Outline: A <GP System> user can still log in without an Im1 connection token
     Given I am logged in as a <GP System> user without an Im1 connection token
-    Then I see a welcome message for the <GP System> patient with no title
+    Then I see my Name on the home page
     Examples:
       | GP System |
       | EMIS      |
@@ -232,8 +217,7 @@ Feature: Login frontend
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
-    And I see a welcome message for the EMIS patient with no title
-    And I can't see the Linked profiles link on the homepage
+    And I see my Name on the home page
 
   Scenario: CitizenID login is successful but TPP session returns error code 9
     Given I am logged into Citizen ID but TPP session returns error code 9
@@ -244,19 +228,10 @@ Feature: Login frontend
     When I click the 'Yes' radio button
     And I click the 'Continue' button
     Then I see the home page
-    And I can't see the Linked profiles link on the homepage
 
   Scenario: When an EMIS user has no userPatientLinkToken they can log in
     Given I attempt to log in as an EMIS user with no userPatientLinkToken
     Then I see the home page
-
-  Scenario: A user with 3rd party health services enabled will see the 'View your health records' link
-    Given I am a user who can view care plans from Patients Know Best
-    And I am logged in
-    And I see the home page header
-    And I see the navigation menu
-    And I can see and follow the View your health records link
-    Then I see the health records hub page
 
   Scenario: A user with no 3rd party health services enabled will see the 'View your GP health record' link
     Given I am a user who cannot view care plans from Patients Know Best and has an IM1 Medical Record journey

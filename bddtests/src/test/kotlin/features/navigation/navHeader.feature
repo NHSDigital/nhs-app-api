@@ -33,7 +33,7 @@ Feature: Use the navigation header bar
     And I am logged in
     And there are EMIS appointments available to book with a reason
     And a booked appointment can be cancelled
-    When I follow the Appointments link from the home page
+    When I retrieve the 'Appointment hub' page directly
     Then the Appointments Hub page is displayed
     When I click the GP Appointments link
     Then the Your Appointments page is displayed

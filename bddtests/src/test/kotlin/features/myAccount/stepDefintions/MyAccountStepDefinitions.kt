@@ -76,6 +76,7 @@ class MyAccountStepDefinitions {
             "Touch ID" -> myAccount.touchIDLink.click()
             "Fingerprint" -> myAccount.fingerprintLink.click()
             "NHS login" -> myAccount.nhsLoginLink.click()
+            "Linked profiles" -> myAccount.linkedProfilesLink.click()
         }
     }
 

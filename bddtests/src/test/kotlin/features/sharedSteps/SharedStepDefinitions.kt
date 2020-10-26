@@ -47,7 +47,7 @@ open class SharedStepDefinitions {
     @Steps
     lateinit var login: LoginSteps
     @Steps
-    lateinit var navBar: NavigationSteps
+    lateinit var navSteps: NavigationSteps
 
     lateinit var webHeader: WebHeader
     private val mockingClient = MockingClient.instance
@@ -239,7 +239,7 @@ open class SharedStepDefinitions {
 
     @When("^I navigate to (\\w+)$")
     open fun iNavigateTo(tab: String) {
-        navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
+        navSteps.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
     }
 
     @Then("^Wait for the request to complete$")
@@ -249,13 +249,13 @@ open class SharedStepDefinitions {
 
     @Then("^the (.*) menu button is highlighted")
     fun iSeeAHighlightedMenuButton(type: String) {
-        Assert.assertTrue(navBar.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
+        Assert.assertTrue(navSteps.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
     }
 
     @Then("^none of the menu buttons are highlighted")
     fun iDoNotSeeAHighlightedMenuButton() {
         if(home.headerNative.onMobile()) {
-            Assert.assertFalse("Nav bar has highlighted item, expected none", navBar.hasAnyTabSelected())
+            Assert.assertFalse("Nav bar has highlighted item, expected none", navSteps.hasAnyTabSelected())
         }
     }
 

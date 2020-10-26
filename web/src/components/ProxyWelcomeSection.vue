@@ -1,24 +1,32 @@
 <template>
-  <div :class="[$style.welcomeInfo, !$store.state.device.isNativeApp && $style.desktopWeb]"
-       data-sid="welcome-info-proxy">
-    <p class="nhsuk-u-margin-bottom-0">
-      <strong>
-        {{ $t('home.age') }}:
-      </strong>
-      <span data-sid="proxy-user-age">
-        {{ proxyAge }}
-      </span>
-      <br>
-    </p>
-
-    <p>
-      <strong>
-        {{ $t('home.gpSurgery') }}:
-      </strong>
-      <span data-sid="proxy-user-surgery">
-        {{ proxyDetails.gpPracticeName }}
-      </span>
-    </p>
+  <div data-sid="welcome-info-proxy">
+    <dl class="nhsuk-summary-list nhsuk-summary-list--no-border
+               nhs-app-summary-list-inline">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ $t('home.name') }}:
+        </dt>
+        <dd class="nhsuk-summary-list__value" data-sid="proxy-name" data-hj-suppress>
+          {{ proxyDetails.fullName }}
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ $t('home.age') }}:
+        </dt>
+        <dd class="nhsuk-summary-list__value" data-sid="proxy-user-age">
+          {{ proxyAge }}
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ $t('home.gpSurgery') }}:
+        </dt>
+        <dd class="nhsuk-summary-list__value" data-sid="proxy-user-surgery">
+          {{ proxyDetails.gpPracticeName }}
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 
@@ -27,10 +35,6 @@
 export default {
   name: 'ProxyWelcomeSection',
   props: {
-    name: {
-      type: String,
-      default: '',
-    },
     proxyDetails: {
       type: Object,
       default: null,
@@ -42,10 +46,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-
-  .welcomeInfo {
-    padding-bottom: 1em;
-  }
-</style>

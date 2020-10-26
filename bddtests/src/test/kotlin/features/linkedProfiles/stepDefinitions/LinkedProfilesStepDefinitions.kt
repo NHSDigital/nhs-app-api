@@ -8,6 +8,7 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
 import features.myrecord.factories.MyRecordFactory
+import features.navigation.steps.NavHeaderSteps
 import features.prescriptions.stepDefinitions.PrescriptionsDataSetup
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -27,6 +28,7 @@ import models.patients.PatientHandler
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
+import pages.account.MyAccountPage
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
 import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
@@ -34,7 +36,6 @@ import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
 import pages.linkedProfiles.shutterPages.SettingsShutterPage
 import pages.linkedProfiles.shutterPages.AdviceShutterPage
-import pages.navigation.WebHeader
 import pages.text
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
@@ -42,19 +43,19 @@ import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import java.util.*
 
 class LinkedProfilesStepDefinitions {
-
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var login: LoginSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var navHeader: NavHeaderSteps
 
-    lateinit var home: HomePage
-
+    private lateinit var homePage: HomePage
+    private lateinit var myAccountPage: MyAccountPage
     private lateinit var linkedProfilesPage: LinkedProfilesPage
     private lateinit var linkedProfileSummaryPage: LinkedProfileSummaryPage
     private lateinit var prescriptionsShutterPage: PrescriptionsShutterPage
@@ -62,7 +63,6 @@ class LinkedProfilesStepDefinitions {
     private lateinit var settingsShutterPage: SettingsShutterPage
     private lateinit var adviceShutterPage: AdviceShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
-    private lateinit var webHeader: WebHeader
 
     private val mockingClient = MockingClient.instance
 
@@ -120,19 +120,9 @@ class LinkedProfilesStepDefinitions {
 
     @Given("^I have switched to a linked profile$")
     fun iHaveSwitchedToALinkedProfile(){
-        iSelectTheLinkedProfilesLink()
+        iNavigateToLinkedProfiles()
         iSelectALinkedProfile()
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
-    }
-
-    @Given("^I click on the Appointments link on the header$")
-    fun iClickOnAppointmentsLinkInHeader() {
-        webHeader.clickAppointmentsPageLink()
-    }
-
-    @When("^I click on the My Record link on the header$")
-    fun iClickOnMyRecordLinkInHeader() {
-        webHeader.clickMyRecordPageLink()
     }
 
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
@@ -165,9 +155,13 @@ class LinkedProfilesStepDefinitions {
         linkedProfilesPage.isLoaded()
     }
 
-    @Then("^I select the linked profiles link from the home page$")
-    fun iSelectTheLinkedProfilesLink() {
-        home.linkedProfilesLink.click()
+    @When("^I navigate to linked profiles from the home page")
+    fun iNavigateToLinkedProfiles() {
+        navHeader.clickMyAccount()
+        myAccountPage.assertDisplayed()
+        myAccountPage.assertLinkedProfilesLinkIsPresent()
+        myAccountPage.linkedProfilesLink.click()
+        linkedProfilesPage.isLoaded()
     }
 
     @Then("^linked profiles are displayed$")
@@ -279,7 +273,7 @@ class LinkedProfilesStepDefinitions {
     @Then("^the yellow banner contains details for the user I am acting on behalf of$")
     fun theYellowBannerContainsDetailsForTheUserIAmActingOnBehalfOf() {
         val expectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        val bannerText = home.banner.text
+        val bannerText = homePage.banner.text
 
         Assert.assertTrue("Banner does not contain expected descriptive text",
                 bannerText.contains("Acting on behalf of"))

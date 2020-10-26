@@ -21,12 +21,9 @@ describe('index', () => {
     homeScreen = {},
     isNativeApp = false,
     isProofLevel9 = true,
-    sjrIm1MessagingEnabled = true,
-    silverIntegrationMessagesEnabled = true,
-    appMessagingEnabled = false,
     hasUnreadAppMessages = false,
     hasUnreadGpMessages = false,
-    silverIntegrationHealthLinksEnabled = false,
+    messagesUnavailable = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -34,7 +31,10 @@ describe('index', () => {
         practiceSettings: {
           im1MessagingEnabled: true,
         },
-        gpMessages: { hasUnread: hasUnreadGpMessages },
+        gpMessages: {
+          hasUnread: hasUnreadGpMessages,
+          gpMessagingSessionUnavailable: messagesUnavailable,
+        },
         messaging: { hasUnread: hasUnreadAppMessages },
         knownServices: {
           knownServices: [{
@@ -60,13 +60,9 @@ describe('index', () => {
         },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationMessagesEnabled': silverIntegrationMessagesEnabled,
         'session/isProofLevel9': isProofLevel9,
         'session/isProxying': isProxying,
         'session/currentProfile': { name: '' },
-        'serviceJourneyRules/messagingEnabled': appMessagingEnabled,
-        'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
-        'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationHealthLinksEnabled),
       },
     });
     return mount(Index, { $store, $router, mountOpts: { i18n }, stubs: ['BiometricBanner'] });
@@ -146,53 +142,29 @@ describe('index', () => {
   describe('messaging link', () => {
     const getMessagesLink = wrapperObj => wrapperObj.find('#btn_messages');
 
-    each([
-      [false, false, true, 'View your messages'], // app messages only
-      [true, false, true, 'View your messages'], // app messages and im1 messaging
-      [false, true, true, 'View your messages'], // app messages and silver messaging
-      [true, true, true, 'View your messages'], // app messages, im1 messaging, silver messaging
-      [false, true, false, 'View your messages'], // app messages and (silver messaging but not P9)
-    ]).describe('sjrIm1MessagingEnabled enabled is %s, silverIntegrationMessagesEnabled is %s, isProofLevel9 is %s', (
-      sjrIm1MessagingEnabled, silverIntegrationMessagesEnabled,
-      isProofLevel9, expectedText,
-    ) => {
-      let messagesLink;
+    let messagesLink;
 
-      beforeEach(() => {
-        wrapper = mountAs({
-          appMessagingEnabled: true,
-          sjrIm1MessagingEnabled,
-          silverIntegrationMessagesEnabled,
-          isProofLevel9,
-        });
-        messagesLink = getMessagesLink(wrapper);
-      });
+    it('will show messages link', () => {
+      wrapper = mountAs({});
+      messagesLink = getMessagesLink(wrapper);
+      expect(messagesLink.exists()).toBe(true);
+      expect(messagesLink.text()).toBe('View your messages');
+    });
 
-      it(`home page message link will show text from ${expectedText}`, () => {
-        expect(messagesLink.text()).toBe(expectedText);
+    it('will not show messages link when messages unavailable', () => {
+      wrapper = mountAs({
+        messagesUnavailable: true,
       });
+      messagesLink = getMessagesLink(wrapper);
+      expect(messagesLink.exists()).toBe(false);
     });
   });
 
-  describe('health record link', () => {
-    describe('hub link', () => {
-      it('home page health record link will show text for health records hub page', () => {
-        wrapper = mountAs({
-          silverIntegrationHealthLinksEnabled: true,
-        });
-        const healthRecordsHubLink = wrapper.find('#menu-item-health-record-hub');
-        expect(healthRecordsHubLink.text()).toBe('View your health records');
-      });
-    });
-
-    describe('gp health record link', () => {
-      it('home page health record link will show text for gp health record hub page', () => {
-        wrapper = mountAs({
-          silverIntegrationHealthLinksEnabled: false,
-        });
-        const healthRecordsHubLink = wrapper.find('#menu-item-myRecord');
-        expect(healthRecordsHubLink.text()).toBe('View your GP health record');
-      });
+  describe('gp health record link', () => {
+    it('home page health record link will show text for gp health record hub page', () => {
+      wrapper = mountAs({});
+      const healthRecordsHubLink = wrapper.find('#menu-item-myRecord');
+      expect(healthRecordsHubLink.text()).toBe('View your GP health record');
     });
   });
 });

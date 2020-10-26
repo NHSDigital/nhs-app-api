@@ -50,7 +50,8 @@ open class PageUrl {
                         "patient practice messaging delete success" to "/messages/gp-messages/delete-success",
                         "notifications settings" to "/account/notifications",
                         "advice" to "/advice",
-                        "messages hub" to "/messages"
+                        "messages hub" to "/messages",
+                        "linked profiles" to "/linked-profiles"
                 )
 
         fun getRelativePagePath(pageName: String): String {

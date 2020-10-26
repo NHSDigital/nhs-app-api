@@ -190,7 +190,7 @@ class AuthenticationStepDefinitions {
                 { NativeHeaderHelper.followAdviceHeaderLink(webHeader) },
                 { NativeHeaderHelper.followAppointmentHeaderLink(webHeader) },
                 { NativeHeaderHelper.followPrescriptionsHeaderLink(webHeader) },
-                { NativeHeaderHelper.followMedicalRecordHeaderLink(webHeader) },
+                { NativeHeaderHelper.followYourHealthHeaderLink(webHeader) },
                 { NativeHeaderHelper.followAccountHeaderLink(webHeader) }
         )
 

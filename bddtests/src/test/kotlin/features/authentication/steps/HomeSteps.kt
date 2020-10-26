@@ -12,6 +12,7 @@ import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
 enum class PatientDetail(val label: String) {
+    NAME("Name"),
     NHS_NUMBER("NHS number"),
     DOB("Date of birth");
 
@@ -21,15 +22,9 @@ enum class PatientDetail(val label: String) {
 }
 
 enum class NavigationLinkText (val linkText: String) {
-    ADVICE("Get health advice"),
-    APPOINTMENTS("Book and manage appointments"),
+    GP_HEALTH_RECORD("View your GP health record"),
     PRESCRIPTIONS("Order a repeat prescription"),
-    MEDICAL_RECORD("View your GP health record"),
-    HEALTH_RECORDS("View your health records"),
-    ORGAN_DONATION("Manage your organ donation decision"),
     MESSAGES("View your messages"),
-    HEALTH_INFORMATION_UPDATES("View health information and updates"),
-    LINKED_PROFILES("Linked profiles")
 }
 
 open class HomeSteps {
@@ -40,11 +35,6 @@ open class HomeSteps {
 
     @Steps
     lateinit var webHeader: WebHeader
-
-    @Step
-    fun assertWelcomeMessageShownFor(patient: Patient, includeTitle: Boolean = true) {
-        homePage.assertHasWelcomeMessageFor(patient, includeTitle)
-    }
 
     @Step
     fun assertPatientDetailIsVisible(patient: Patient, detail: PatientDetail) {
@@ -58,13 +48,19 @@ open class HomeSteps {
 
     @Step
     fun assertProxyPatientDetailsShownFor(proxyProfile: LinkedProfileFacade) {
-        homePage.assertHasProxyPatientDetails(proxyProfile, getExpectedProxyDetails(proxyProfile))
+        homePage.assertHasProxyPatientDetails(getExpectedProxyDetails(proxyProfile))
     }
 
     @Step
     fun assertHeaderVisible() {
         webHeader.getPageTitle().withText("Home")
-        homePage.greeting.assertIsVisible()
+        homePage.welcomeInfo.assertIsVisible()
+    }
+
+    @Step
+    fun assertProxyHeaderVisible() {
+        webHeader.getPageTitle().withText("Home")
+        homePage.welcomeInfoProxy.assertIsVisible()
     }
 
     @Step
@@ -72,7 +68,7 @@ open class HomeSteps {
         if (waitForLoginPage) {
             assertHeaderVisible()
         }
-        homePage.locatorMethods.assertNativeElementsLoaded(homePage.greeting)
+        homePage.locatorMethods.assertNativeElementsLoaded(homePage.welcomeInfo)
         if (homePage.onMobile()) {
             Assert.assertEquals("Dismiss button text", "Dismiss", homePage.dismissButton.textValue.trim())
             homePage.dismissButton.click()
@@ -90,6 +86,7 @@ open class HomeSteps {
 
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
         return arrayListOf(
+                "Name: ${proxyPatient.profile.formattedFullName(true)}",
                 "Age: ${proxyPatient.profile.age.formattedAge()}",
                 "GP surgery: ${proxyPatient.gpPracticeName}"
         )
@@ -97,6 +94,7 @@ open class HomeSteps {
 
     private fun getDetailValue(patient: Patient, detail: PatientDetail): String {
         return when (detail) {
+            PatientDetail.NAME -> patient.formattedFullName(false)
             PatientDetail.DOB -> patient.age.formattedDateOfBirth()
             PatientDetail.NHS_NUMBER -> patient.formattedNHSNumber()
         }

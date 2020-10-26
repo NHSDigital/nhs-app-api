@@ -4,7 +4,7 @@ Feature: Login with proxy access
   @smoketest
   Scenario: An EMIS user with proxy accounts can see proxy details and switch back to their own account
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
     And I see the proxy patient details of age and gp surgery
@@ -18,18 +18,17 @@ Feature: Login with proxy access
   Scenario Outline: A <Gp Provider> user proxying on behalf of another user will be shown appointments shutter page when appointments provider is <Appointments Provider>
     Given I am logged in as a <Gp Provider> user with linked profiles and appointments provider <Appointments Provider>
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And I see the yellow banner
     And the yellow banner contains details for the user I am acting on behalf of
     And I do not see the home page links
-    And I click on the Appointments link on the header
+    And I navigate to Appointments
     And the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the appointments shutter page is displayed
@@ -43,20 +42,19 @@ Feature: Login with proxy access
   Scenario Outline: A <Gp Provider> user proxying on behalf of another user will be shown Im1 Appointments page when appointments provider is <Appointments Provider>
     Given I am logged in as a <Gp Provider> user with linked profiles and appointments provider <Appointments Provider>
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And I see the yellow banner
     And the yellow banner contains details for the user I am acting on behalf of
     And I do not see the home page links
     And there are <Gp Provider> appointments available to book with a reason
     And I have no booked appointments for <Gp Provider>
-    And I click on the Appointments link on the header
+    And I navigate to Appointments
     And the page title is "Your GP appointments"
     Examples:
       | Gp Provider | Appointments Provider |
@@ -68,14 +66,13 @@ Feature: Login with proxy access
   Scenario Outline: An EMIS user proxying on behalf of another user will not be shown the Nominated pharmacy on repeat prescriptions page when provider is <Appointments Provider>
     Given I am logged in as a EMIS user with linked profiles and appointments provider <Appointments Provider>
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And I see the yellow banner
     And the yellow banner contains details for the user I am acting on behalf of
     And I do not see the home page links
@@ -96,14 +93,13 @@ Feature: Login with proxy access
   Scenario: An EMIS user sees shutter pages when proxying
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     And I select a linked profile with appointments enabled false, prescriptions enabled false and medical record enabled false
     And details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     When I click the settings icon
     Then the settings shutter page is displayed
     When I navigate to Advice
@@ -126,14 +122,13 @@ Feature: Login with proxy access
     Given I am logged in as a <GP System> user with linked profiles and appointments provider IM1
     And the scenario is submit prescription
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And there are 5 repeatable prescriptions available
@@ -152,17 +147,16 @@ Feature: Login with proxy access
   Scenario Outline: A <Gp System> user proxying on behalf of another will see the confirmation page after booking an appointment
     Given I am logged in as a <Gp System> user with linked profiles and appointments provider IM1
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And there are <Gp System> appointments available to book with a reason
     And I have no booked appointments for <Gp System>
-    And I click on the Appointments link on the header
+    And I navigate to Appointments
     And the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the page title is "Your GP appointments"
@@ -180,16 +174,15 @@ Feature: Login with proxy access
   Scenario: An EMIS user proxying on behalf of another will see the confirmation page after cancelling an appointment
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And EMIS is available to cancel a previously booked appointment before cutoff time because No longer required
-    And I click on the Appointments link on the header
+    And I navigate to Appointments
     And the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the page title is "Your GP appointments"
@@ -201,16 +194,15 @@ Feature: Login with proxy access
   Scenario: A TPP user proxying on behalf of another will see the confirmation page after cancelling an appointment
     Given I am logged in as a TPP user with linked profiles and appointments provider IM1
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
     When I select a linked profile
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
-    Then I see the home page
+    Then I see the proxy home page
     And TPP is available to cancel a previously booked appointment before cutoff time because No longer required
-    And I click on the Appointments link on the header
+    And I navigate to Appointments
     And the Appointments Hub page is displayed
     And I click the GP Appointments link
     And the page title is "Your GP appointments"
@@ -235,7 +227,7 @@ Feature: Login with proxy access
 
   Scenario: An TPP user with proxy accounts can see proxy details and switch back to their own account
     Given I am logged in as a TPP user with linked profiles and appointments provider IM1
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
     And I see the proxy patient details of age and gp surgery
@@ -251,7 +243,7 @@ Feature: Login with proxy access
     And I am logged in
     And I have switched to a linked profile
     And the GP Practice has enabled all medical records for the proxy patient
-    When I click on the My Record link on the header
+    When I navigate to Your_Health
     And I click on the Gp medical record link
     And I click the 'Continue' button
     Then I see the medical record v2 page
@@ -276,15 +268,14 @@ Feature: Login with proxy access
     Given I am logged in as a TPP user with linked profiles but no access to core services and appointments provider IM1
     And the scenario is submit prescription
     Then I see the home page
-    And I see the linked profiles link
-    When I select the linked profiles link from the home page
+    When I navigate to linked profiles from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
     And prescriptions is disabled for the proxy account at a GP Practice level
     And the GP Practice has disabled proxy access to summary care record functionality
     And the GP Practice has disabled proxy access to dcr events functionality for TPP
     And TPP user is not allowed to view appointments
-    Then I see the home page
+    Then I see the proxy home page
     When I click the settings icon
     Then the settings shutter page is displayed
     When I navigate to Advice

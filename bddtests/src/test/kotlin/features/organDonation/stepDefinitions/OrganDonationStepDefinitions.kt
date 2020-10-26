@@ -149,13 +149,7 @@ open class OrganDonationStepDefinitions {
         page.clickButton(buttonText)
     }
 
-    @When("^I follow the organ donation link on the home page")
-    fun followOrganDonationLinkOnHomePage() {
-        homePage.organDonationLink.click()
-    }
-
-    @Then("^the external Organ Donation page is displayed$")
-    fun iAmOnTheExternalOrganDonationPage() {
+    private fun iAmOnTheExternalOrganDonationPage() {
             aNewTabOpens(Config.instance.organDonation)
     }
 

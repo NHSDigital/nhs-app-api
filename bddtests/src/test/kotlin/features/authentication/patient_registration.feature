@@ -23,7 +23,7 @@ Feature: Patient Registration Frontend
     When I click the 'No' radio button
     And I click the 'Continue' button
     Then I see the signed in home page
-    And I see a welcome message for the <GP System> patient with no title
+    And I see my Name on the home page
     And I see the navigation menu
     And I see the home page header
 
