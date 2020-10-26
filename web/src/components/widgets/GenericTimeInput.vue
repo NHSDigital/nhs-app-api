@@ -21,7 +21,7 @@
                :name="`${name}-hour`"
                type="number"
                step="any"
-               :class="inputClasses">
+               :class="['ios-accessibility', inputClasses]">
       </div>
 
       <div class="nhsuk-date-input__item">
@@ -40,7 +40,7 @@
                :name="`${name}-minute`"
                type="number"
                step="any"
-               :class="inputClasses">
+               :class="['ios-accessibility', inputClasses]">
       </div>
     </div>
   </div>
@@ -120,5 +120,9 @@ export default {
 <style module lang="scss" scoped>
   div {
     display: inline-block;
+  }
+  .ios-accessibility {
+      min-height: 40px !important;
+      height: auto !important;
   }
 </style>

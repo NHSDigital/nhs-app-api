@@ -15,7 +15,9 @@
       </label>
       <input :id="`${name}-quantity`"
              v-model="quantity"
-             :class="['nhsuk-input nhsuk-input--width-2', error && 'nhsuk-input--error']"
+             :class="['nhsuk-input nhsuk-input--width-2',
+                      'ios-accessibility',
+                      error && 'nhsuk-input--error']"
              type="number"
              :name="`${name}-quantity`"
              pattern="[0-9]+"
@@ -139,3 +141,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+  .ios-accessibility {
+      min-height: 40px !important;
+      height: auto !important;
+  }
+</style>

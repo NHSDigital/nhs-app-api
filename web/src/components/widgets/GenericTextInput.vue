@@ -16,7 +16,7 @@
            :type="type"
            :pattern="pattern"
            :step="step"
-           :class="inputClasses"
+           :class="['ios-accessibility', inputClasses]"
            autocomplete="off"
            autocorrect="off"
            autocapitalize="off"
@@ -115,3 +115,9 @@ export default {
 };
 
 </script>
+<style lang="scss" scoped>
+  .ios-accessibility {
+      min-height: 40px !important;
+      height: auto !important;
+  }
+</style>

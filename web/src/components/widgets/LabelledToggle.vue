@@ -71,10 +71,13 @@ export default {
   border-bottom: 1px #d8dde0 solid;
   padding: 1em;
   margin: 5px -16px 1em;
+  display: flex;
+  justify-content: space-between;
   label {
     display: inline-block;
-    width: calc(100% - 4em);
+    max-width: calc(100% - 4em);
     vertical-align: middle;
+    flex: 1;
   }
   &.waiting{
     .spinner{

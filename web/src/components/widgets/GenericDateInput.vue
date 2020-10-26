@@ -14,7 +14,7 @@
                ref="day"
                v-model.number="dayValue"
                class="nhsuk-input nhsuk-date-input__input' nhsuk-input--width-2"
-               :class="inputClasses(2)"
+               :class="['ios-accessibility', inputClasses(2)]"
                :name="`${name}-day`" type="number"
                :required="required"
                pattern="[0-9]*" max="31" >
@@ -29,7 +29,7 @@
         <input :id="`${id}-month`"
                ref="month"
                v-model.number="monthValue"
-               :class="inputClasses(2)"
+               :class="['ios-accessibility', inputClasses(2)]"
                :name="`${name}-month`"
                :required="required"
                type="number"
@@ -46,7 +46,7 @@
                ref="year"
                v-model.number="yearValue"
                class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4"
-               :class="inputClasses(4)"
+               :class="['ios-accessibility', inputClasses(4)]"
                :name="`${name}-year`"
                :required="required"
                type="number"
@@ -140,3 +140,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+  .ios-accessibility {
+      min-height: 40px !important;
+      height: auto !important;
+  }
+</style>

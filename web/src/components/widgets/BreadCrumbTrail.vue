@@ -144,6 +144,7 @@ export default {
     }
 
     &.native {
+      display: grid;
       &:hover {
       background: none;
       box-shadow: none;

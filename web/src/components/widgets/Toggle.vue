@@ -71,6 +71,8 @@ export default {
 .toggleWrapper {
   display: inline-block;
   position: relative;
+  align-self: center;
+  justify-content: flex-end;
   .spinner {
     background: none;
     position: absolute;
