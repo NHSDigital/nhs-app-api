@@ -1,9 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.nhs.online.nhsonline",
-    "sha256_cert_fingerprints":
-    ["15:48:51:AC:CF:1E:FE:09:19:AB:B7:7D:B8:83:B0:BD:7F:69:38:F9:7A:7F:D2:85:9C:8B:C8:C4:7B:AC:95:59"]
-  }
-}]
