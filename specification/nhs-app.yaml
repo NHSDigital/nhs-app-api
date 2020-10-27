@@ -42,37 +42,8 @@ info:
 
     | Environment       | Base URL                                                       |
     | ----------------- | -------------------------------------------------------------- |
-    | Sandbox           | `https://sandbox.api.service.nhs.uk/nhs-app/`                  |
     | Integration test  | `https://int.api.service.nhs.uk/nhs-app/`                      |
     | Production        | `https://api.service.nhs.uk/nhs-app/`                          |
-
-    ### Sandbox testing
-    Our [sandbox environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#sandbox-testing):
-    * is for early developer testing
-    * only covers a limited set of scenarios
-    * is stateless, so it does not actually persist any updates
-    * is open access, so does not allow you to test authorisation
-
-    For more details on sandbox testing, or to try out the sandbox using our "Try this API" feature, see the documentation for each endpoint.
-
-    Alternatively, you can try out the sandbox using our Postman collection:
-    
-    TODO - create a Postman collection for sandbox
-    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/todo)
-
-    ### Download Postman client
-
-    If you don’t have it, you can download Postman [here](https://www.postman.com).
-    
-    Click on the download button in the top right corner and follow the instructions.
-
-    ### Download our collection
-
-    If you already have the Postman client installed - click onto our postman collection (button above) - then click onto the ‘Postman for Windows’ or ‘Postman for Mac’ version - and click Open when prompted.
-    
-    Postman client should then open showing our Patient Demographics Sandbox.
-
-    If you have already downloaded the Sandbox collection from one of our other endpoints, found under the NHS App API pages, you don't have to download it again as the same collection covers all endpoints.
 
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
@@ -80,26 +51,20 @@ info:
     * is stateful, so persists updates
     * includes authorisation
         
-    TODO - add some information here about the NHS App test environments (onboarding sandpit, onboarding AOS), test user details, and links to Test Flight and Play Store for downloading the native apps?
+    Our integration test environment is currently pointing to the Onboarding Sandpit NHS App environment, which in turn is using the Sandpit environment of NHS Login.
 
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
     ## Onboarding
     You need to get your software approved by us before it can go live with this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
-    
-    TODO - add some information here about the SCAL process.
 
     To onboard for this API, follow the [Supplier Conformance Assessment List (SCAL) process.](https://digital.nhs.uk/developer/guides-and-documentation/onboarding-process#onboard-using-the-supplier-conformance-assessment-list-scal-process)
-
-    TODO - should the email address below be the NHS App mailbox rather than API Management?
 
   contact:
     name: NHS App API Support
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: api.management@nhs.net
 servers:
-  - url: 'https://sandbox.api.service.nhs.uk/nhs-app'
-    description: Sandbox environment.
   - url: 'https://int.api.service.nhs.uk/nhs-app'
     description: Integration test environment.
   - url: 'https://api.service.nhs.uk/nhs-app'
@@ -112,9 +77,15 @@ paths:
       - $ref: '#/components/parameters/ApiKey'
       - $ref: '#/components/parameters/CorrelationId'
     post:
-      summary: Request that a communication be sent to one or more patients
+      summary: Send a communication
       operationId: create-communication
-      description: TODO
+      description: |
+        ## Overview
+        Use this endpoint to request that a communication be sent to one or more patients.
+        
+        Currently this endpoint can be used to send In-App Messages that appear within the NHS App. We intend to additionally offer functionality to send native Apple and Android Push Notifications in the near future.
+        
+        Recipients can currently be specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
       requestBody:
         required: true
         content:
@@ -171,9 +142,72 @@ paths:
         - communication
       responses:
         '201':
-          description: indicating a new resource was successfully created in response to the request
+          description: Indicates that the request has been successfully received by the server. The request to send the communication has been enqueued.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The location of the newly-created resource.
+              example: https://int.api.service.nhs.uk/nhsapp/communication/a2d10720-9e72-4ae4-be72-8cbe1be292d1
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: An identifier for the newly-created communication resource within the destination system.
+                    example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
         '400':
-          description: indicates that the server cannot or will not process the request due to something that is perceived to be a client error 
+          description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error.
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    propertyName:
+                      type: string
+                      description: The property name within the source payload that has failed validation.
+                      example: Recipients.NhsNumbers
+                    message:
+                      type: string
+                      description: A description of the reason why the source payload has failed validation.
+                      example: "Specified values are invalid: '2981615972','3846131965'"
+        '401':
+          description: Indicates the request has not been applied because it lacks valid authentication credentials. This may be due to a missing or invalid X-Api-Key header.
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fault:
+                    type: object
+                    properties:
+                      faultString:
+                        type: string
+                        example: "Invalid ApiKey"
+                      detail:
+                        type: object
+                        properties:
+                          errorcode:
+                            type: string
+                            example: "oauth.v2.InvalidApiKey"
 components:
   parameters:
     CorrelationId:
