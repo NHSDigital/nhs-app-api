@@ -16,6 +16,15 @@
 				<Name>VerifyApiKey.XApiKey</Name>
 			</Step>
 			<Step>
+				<Name>AssignMessage.RenameQuotaVarsFromVerifyAPIKeyPolicyClientId</Name>
+			</Step>
+			<Step>
+				<Name>Quota</Name>
+			</Step>
+			<Step> 
+				<Name>SpikeArrest</Name>   
+			</Step>
+			<Step>
 				<Name>AssignMessage.RemoveApiKeyHeader</Name>
 			</Step>
 			<Step>
