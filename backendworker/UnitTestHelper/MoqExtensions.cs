@@ -118,7 +118,7 @@ namespace UnitTestHelper
         }
 
         private static It.IsAnyType ItIsLogMessage(string message)
-            => It.Is<It.IsAnyType>((flv, _) => flv.ToString().Contains(message, StringComparison.InvariantCulture));
+            => It.Is<It.IsAnyType>((state, _) => state.ToString().Contains(message, StringComparison.InvariantCulture));
 
         private static Func<It.IsAnyType, Exception, string> ItIsAnyFormatter
             => It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true);

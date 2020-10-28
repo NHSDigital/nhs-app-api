@@ -68,8 +68,6 @@ namespace NHSOnline.Backend.Support
         public static class Regex
         {
             public const string GuidRegex = @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}";
-            public const string ClientSideLogMessageWhitelist = @"[^a-zA-Z0-9().;\-:/ \r\n]";
-            public const string ClientSideLogMessageNewLine = "\r\n";
             public const string TppDocumentDetailsRegexWithComments = @"(?<type>^[a-zA-Z0-9 ]*): (?<fileName>.*)\.(?<extension>[^\s]*) - (?<comments>[\s\S]*)";
             public const string TppDocumentDetailsRegexWithoutComments = @"(?<type>^[a-zA-Z0-9 ]*): (?<fileName>.*)\.(?<extension>[^\s]*)";
             public const string IdentifierRegex = @"^([^:]+):(Unit)*Recipient$";

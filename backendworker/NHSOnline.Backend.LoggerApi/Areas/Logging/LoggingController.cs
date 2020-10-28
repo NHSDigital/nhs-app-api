@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.LoggerApi.Areas.Logging
         {
             var createLogRequestValidator = new CreateLogRequestValidator(_logger);
 
-            if (!createLogRequestValidator.ValidateAndSanitize(model))
+            if (!createLogRequestValidator.Validate(model))
             {
                 return new BadRequestResult();
             }
