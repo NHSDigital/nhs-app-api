@@ -249,7 +249,6 @@ class MainActivity :
                         appWebInterface, knownServices)
             }
             lifeCycleObserver?.onMoveToForeground()
-            intentHandlers.handleIntent(intent, true, nhsWeb!!)
         }
     }
 
