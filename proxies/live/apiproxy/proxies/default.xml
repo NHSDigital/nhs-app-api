@@ -38,7 +38,7 @@
 			</Response>
 			<Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 		</Flow>
-    <Flow name="MirrorIncommingHeaders">
+		<Flow name="MirrorIncomingHeaders">
 			<Description/>
 			<Request/>
 			<Response>
