@@ -83,6 +83,7 @@ RUN npm run build
 
 # production stage
 FROM nhsapp.azurecr.io/nhsonline-nginx:v1.18.0 as release
+
 COPY --chown=www-data:www-data --from=build /app/dist /app
 COPY --chown=www-data:www-data --from=build /app/build/env.sh /app/build/env.sh
 COPY --chown=www-data:www-data nginx/nginx.conf.template /etc/nginx/nginx.conf.template
@@ -99,6 +100,9 @@ RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc
     chmod 400 /etc/sudoers.d/www-data
 
 USER www-data
+
+ARG COMMIT_ID
+ENV COMMIT_ID=${COMMIT_ID}
 
 EXPOSE $PORT
 CMD sudo update-ca-certificates; \
