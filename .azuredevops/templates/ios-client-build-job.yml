@@ -51,7 +51,7 @@ jobs:
       - task: Xcode@5
         displayName: 'Build ${{ parameters.target }}'
         inputs:
-          xcodeDeveloperDir: /Applications/Xcode_11.7.app
+          xcodeVersion: 11
           xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
           sdk: iphoneos
           scheme: '${{ parameters.scheme }}'
