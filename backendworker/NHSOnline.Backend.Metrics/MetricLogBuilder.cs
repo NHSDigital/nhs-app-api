@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Metrics
             _metricData = _metricData.Concat(metricData);
             return this;
         }
-
+        
         public Task WriteMetricLog()
         {
             var metrics = new List<string> { $"{TimestampLabel}={Timestamp()}" };

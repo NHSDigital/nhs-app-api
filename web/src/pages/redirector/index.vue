@@ -121,6 +121,7 @@ export default {
             ProviderId: this.thirdPartyServiceContent.serviceId,
             ProviderName: this.thirdPartyServiceContent.providerName,
             JumpOffId: this.JumpOffId,
+            Action: 'SilverIntegrationJumpOff',
           },
           ignoreError: true,
         })

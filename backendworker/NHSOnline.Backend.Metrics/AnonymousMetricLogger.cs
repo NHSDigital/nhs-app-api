@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Metrics
         private readonly IMetricContext _metricContext;
 
         public AnonymousMetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
-        
+
         public Task AppointmentBookResult(AppointmentMetricData data) => LogMetric(data);
 
         public Task AppointmentCancelResult(AppointmentMetricData data) => LogMetric(data);

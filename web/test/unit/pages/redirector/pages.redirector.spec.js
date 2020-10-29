@@ -223,6 +223,7 @@ describe('redirector page', () => {
           JumpOffId: 'messages',
           ProviderId: 'pkb',
           ProviderName: 'Patients Know Best',
+          Action: 'SilverIntegrationJumpOff',
         },
         ignoreError: true,
       };
@@ -329,6 +330,7 @@ describe('redirector page', () => {
           JumpOffId: 'messages',
           ProviderId: 'pkb',
           ProviderName: 'Patients Know Best',
+          Action: 'SilverIntegrationJumpOff',
         },
         ignoreError: true,
       };

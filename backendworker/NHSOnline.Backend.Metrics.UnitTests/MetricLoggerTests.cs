@@ -117,6 +117,26 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         }
 
         [TestMethod]
+        public async Task SilverIntegrationJumpOff_LogsSilverIntegrationAndVersionData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.SilverIntegrationJumpOff(silverIntegrationData);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId");
+            splitConsoleMessage.Should().Contain("ProviderId=providerId");
+            splitConsoleMessage.Should().Contain("ProviderName=providerName");
+            splitConsoleMessage.Should().Contain("JumpOffId=jumpOffId");
+        }
+
+        [TestMethod]
         public async Task Login_LogsLoginData()
         {
             // Arrange
@@ -162,11 +182,13 @@ namespace NHSOnline.Backend.Metrics.UnitTests
                 yield return new object[] { Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };
                 yield return new object[] { Method(metricLogger => metricLogger.NotificationsDisabled()), "NotificationsDisabled" };
 
+                var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
+                yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };
+
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }
         }
 
-        public static string MetricLogMethodsDisplayName(MethodInfo methodInfo, object[] data) =>
-            $"{methodInfo.Name}({data[1]})";
+        public static string MetricLogMethodsDisplayName(MethodInfo methodInfo, object[] data) => $"{methodInfo.Name}({data[1]})";
     }
 }

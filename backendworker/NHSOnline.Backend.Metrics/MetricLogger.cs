@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Metrics
 {
-    [SuppressMessage("Microsoft.Performance","CA1812", Justification = "Created by DI")]
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Created by DI")]
     internal sealed class MetricLogger : IMetricLogger
     {
         private readonly IMetricContext _metricContext;
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Metrics
         public Task UpliftStarted() => WriteMetricLog();
 
         public Task UserResearchOptIn() => WriteMetricLog();
-        
+
         public Task UserResearchOptOut() => WriteMetricLog();
 
         public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
@@ -27,6 +27,8 @@ namespace NHSOnline.Backend.Metrics
         public Task NotificationsEnabled() => WriteMetricLog();
 
         public Task NotificationsDisabled() => WriteMetricLog();
+
+        public Task SilverIntegrationJumpOff(SilverIntegrationData data) => CreateMetricLog().With(data).WriteMetricLog();
 
         private Task WriteMetricLog([CallerMemberName] string action = "")
         {

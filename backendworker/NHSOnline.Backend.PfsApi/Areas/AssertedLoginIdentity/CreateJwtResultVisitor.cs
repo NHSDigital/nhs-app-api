@@ -7,6 +7,7 @@ using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
 {
@@ -15,18 +16,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         private readonly ILogger _logger;
         private readonly IMetricLogger _metricLogger;
         private readonly CreateJwtRequest _request;
-        private readonly string _odsCode;
+        private readonly P5UserSession _userSession;
 
         public CreateJwtResultVisitor(
             ILogger logger,
             IMetricLogger metricLogger,
             CreateJwtRequest request,
-            string odsCode)
+            P5UserSession userSession)
         {
             _logger = logger;
             _metricLogger = metricLogger;
             _request = request;
-            _odsCode = odsCode;
+            _userSession = userSession;
         }
 
         public async Task<IActionResult> Visit(CreateJwtResult.Success result)
@@ -50,6 +51,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                 case "UpliftStarted":
                     await _metricLogger.UpliftStarted();
                     break;
+                case "SilverIntegrationJumpOff":
+                    var metricLoggerData = new SilverIntegrationData(_userSession.Key, _request.ProviderId, _request.ProviderName, _request.JumpOffId);
+                    await _metricLogger.SilverIntegrationJumpOff(metricLoggerData);
+                    break;
                 case { } unknownAction:
                     _logger.LogDebug("No metric logging for action {Action}", unknownAction);
                     break;
@@ -60,7 +65,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         {
             var kvp = new Dictionary<string, string>
             {
-                { "OdsCode", _odsCode },
+                { "OdsCode", _userSession.OdsCode },
                 { "ProviderId", _request.ProviderId },
                 { "ProviderName", _request.ProviderName },
                 { "JumpOffId", _request.JumpOffId },
