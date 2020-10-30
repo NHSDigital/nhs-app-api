@@ -86,7 +86,11 @@ spec:
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/mnt/secrets-store/sessionKey"
         - name: CORS_AUTHORITY
+          {{- if $.Values.akamaiEnv }}
+          value: "https://*.{{ $.Values.akamaiEnv }}"
+          {{- else }}
           value: "https://*.{{ $.Values.domain }}"
+          {{- end }}
         - name: MONGO_CONNECTION_STRING
         {{- if eq .Values.region "uksouth" }}
           valueFrom:
