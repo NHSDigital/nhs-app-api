@@ -65,7 +65,8 @@ class DeviceServiceTests: XCTestCase {
     func createDeviceService(version: Int, identifier: String, description: Device) -> DeviceService {
         deviceInfoProtocolMock = MockDeviceInfoProtocol(description: description,
                                                         version: version,
-                                                        identifier: identifier)
+                                                        identifier: identifier,
+                                                        architecture: "AChip")
 
         return DeviceService.init(viewController: viewControllerMock!, deviceInfoProtocol: deviceInfoProtocolMock!)
     }

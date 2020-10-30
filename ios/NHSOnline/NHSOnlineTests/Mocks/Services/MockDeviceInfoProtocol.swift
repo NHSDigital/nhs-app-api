@@ -5,11 +5,13 @@ class MockDeviceInfoProtocol: DeviceInfoProtocol {
     var description: Device
     var version: Int
     var identifier: String
+    var architecture: String
     
-    init(description: Device, version: Int, identifier: String) {
+    init(description: Device, version: Int, identifier: String, architecture: String) {
         self.description = description
         self.version = version
         self.identifier = identifier
+        self.architecture = architecture
     }
     
     func getIOSVersion() -> Int {
@@ -22,6 +24,10 @@ class MockDeviceInfoProtocol: DeviceInfoProtocol {
     
     func getDeviceIdentifier() -> String {
         return identifier
+    }
+    
+    func getDeviceArchitecture() -> String {
+        return architecture
     }
 
 }

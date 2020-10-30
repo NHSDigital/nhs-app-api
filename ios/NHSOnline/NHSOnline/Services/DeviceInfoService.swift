@@ -14,4 +14,9 @@ class DeviceInfoService: DeviceInfoProtocol {
     func getDeviceIdentifier() -> String {
         return Device.identifier
     }
+    
+    func getDeviceArchitecture() -> String {
+        let archInfo = NXGetLocalArchInfo()
+        return String(cString: (archInfo?.pointee.description)!)
+    }
 }
