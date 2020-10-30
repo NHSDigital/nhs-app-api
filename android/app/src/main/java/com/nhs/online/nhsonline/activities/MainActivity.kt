@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -24,6 +23,7 @@ import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
@@ -204,7 +204,7 @@ class MainActivity :
         webview.settings.allowUniversalAccessFromFileURLs = true
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
         val userAgent = webview.settings.userAgentString
-        webview.settings.userAgentString = "$userAgent $nhsAndroidUserAgent"
+        webview.settings.userAgentString = buildUserAgentString(userAgent)
     }
 
     override val url: String?
@@ -760,6 +760,13 @@ class MainActivity :
         } else {
             Log.d(TAG, "Permission not granted")
         }
+    }
+
+    fun buildUserAgentString(userAgent: String): String {
+        val manufacturer = "nhsapp-manufacturer/${Build.MANUFACTURER}"
+        val model = "nhsapp-model/${Build.MODEL}"
+        val architecture = "nhsapp-architecture/${Build.SUPPORTED_ABIS.joinToString(",")}"
+        return "$userAgent $nhsAndroidUserAgent $manufacturer $model $architecture"
     }
 
     override fun getActivity(): FragmentActivity = this

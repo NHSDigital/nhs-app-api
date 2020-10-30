@@ -66,6 +66,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
             Mocks.HttpContext.Setup(x => x.RequestServices).Returns(() => ServiceProvider);
+            Mocks.HttpContext.Setup(x => x.Request.Headers)
+                .Returns(new HeaderDictionary{ { "User-Agent", "userAgent" } });
         }
 
         internal SessionController CreateSystemUnderTest()

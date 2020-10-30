@@ -600,7 +600,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             // Assert
             Context.Mocks.MetricLogger.Verify(x =>
-                    x.Login(It.Is<LoginData>(data => data.RequestId == expectedRequestId)),
+                    x.Login(It.Is<LoginData>(
+                        data => data.RequestId == expectedRequestId
+                                && data.SessionId == "ApiSessionId"
+                                && data.UserAgent == "userAgent")),
                 Times.Once);
         }
 

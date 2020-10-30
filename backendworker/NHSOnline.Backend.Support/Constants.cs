@@ -52,6 +52,7 @@ namespace NHSOnline.Backend.Support
             public const string LoginClient = NhsoPrefix + "NHS-Login-Client";
             public const string JavascriptDisabled = NhsoPrefix + "Javascript-Disabled";
             public const string PatientId = NhsoPrefix + "Patient-Id";
+            public const string UserAgent = "User-Agent";
         }
 
         public static class HttpContextItems
