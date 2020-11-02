@@ -9,6 +9,8 @@ import features.authentication.stepDefinitions.AuthenticationFactory
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
+import features.pushNotifications.stepDefinitions.NotificationsFactory
+import features.pushNotifications.stepDefinitions.SettingStatus
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.EmisMockDefaults
@@ -26,7 +28,7 @@ import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import utils.getOrNull
+
 import utils.set
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -142,18 +144,12 @@ open class SharedStepDefinitions {
 
     @Given("^I log in to the app expecting to see the notifications prompt$")
     fun iLogInToTheAppExpectingTheNotificationsPrompt() {
-        handleLogin()
-    }
-
-    @Then("^I have not got the notifications cookie$")
-    fun iHaveNotGotTheNotificationsCookie(){
-        login.skipNotificationPromptCookie(false)
-        GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.set(true)
-    }
-
-    @Then("^I have got the notifications cookie$")
-    fun iHaveGotTheNotificationsCookie(){
-        GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.set(false)
+        val patient = handleLogin()
+        login.usingLoginWithNotificationOptions(
+                patient,
+                SettingStatus.NotDetermined,
+                authorised = true,
+                cookieExists = false)
     }
 
     @Given("^I am logged in$")
@@ -161,31 +157,45 @@ open class SharedStepDefinitions {
         doLogin(true)
     }
 
-    private fun doLogin(waitForLoginPage: Boolean) {
-        handleLogin()
+    @Given("^I am logged in with notifications denied$")
+    fun iAmLoggedInWithNotificationsDenied() {
+        val patient = handleLogin()
+        login.using(patient)
+        login.skipNotificationPromptCookie()
 
-        val shouldShowNotificationPrompt =
-                GlobalSerenityHelpers.SHOULD_SHOW_NOTIFICATION_PROMPT.getOrNull<Boolean>()
-        if (shouldShowNotificationPrompt == null || shouldShowNotificationPrompt == false) {
-            login.skipNotificationPromptCookie(true)
-        }
+        home.waitForLoginToCompleteSuccessfully(true)
 
-        home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
+        initialSetup(SettingStatus.Denied, false)
+
+        browser.executeScripts()
     }
 
-    private fun handleLogin() {
-        val patient = SerenityHelpers.getPatient()
-        browser.goToApp()
-
-        DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enableForPatientProxyAccounts(patient)
-
-        TermsAndConditionsJourneyFactory.consent(patient)
-
-        cookieSteps.setInstructionsCookie("true")
-
+    @Given("^I am logged in with notifications enabled skipping the notifications prompt$")
+    fun iAmLoggedInSkippingNotificationsPrompt() {
+        val patient = handleLogin()
         login.using(patient)
+        login.skipNotificationPromptCookie()
+
+        home.waitForLoginToCompleteSuccessfully(true)
+
+        val factory = initialSetup(SettingStatus.Authorised, true)
+        factory.setUpExistingRegistration()
+
+        browser.executeScripts()
+    }
+
+    @Given("^I am logged in with notifications enabled, but with an existing incorrect user device$")
+    fun iAmLoggedInWithNotificationsEnabledButIssuesOccurWhenLoggedIn() {
+        val patient = handleLogin()
+        login.using(patient)
+        login.skipNotificationPromptCookie()
+
+        home.waitForLoginToCompleteSuccessfully(true)
+
+        val factory = initialSetup(SettingStatus.Authorised, true)
+        factory.setUpInvalidMongoDeviceRegistration()
+
+        browser.executeScripts()
     }
 
     @When("^I login$")
@@ -267,5 +277,37 @@ open class SharedStepDefinitions {
     @Then("^the page contains the header '(.*)'$")
     fun thePageContainsTheHeaderText(title: String) {
         webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
+    }
+
+    private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {
+        val factory = NotificationsFactory()
+        factory.setUpUser()
+        factory.setUpDeviceValues()
+        factory.mockNativeNotificationFunctions(status, authorised)
+
+        return factory
+    }
+
+    private fun doLogin(waitForLoginPage: Boolean) {
+        val patient = handleLogin()
+
+        login.using(patient)
+
+        home.waitForLoginToCompleteSuccessfully(waitForLoginPage)
+    }
+
+    private fun handleLogin(): Patient {
+        val patient = SerenityHelpers.getPatient()
+        browser.goToApp()
+
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
+
+        cookieSteps.setInstructionsCookie("true")
+
+        return patient
     }
 }

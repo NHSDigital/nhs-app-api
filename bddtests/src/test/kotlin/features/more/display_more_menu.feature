@@ -6,10 +6,13 @@ Feature: Display More Menu
   @native
   Scenario: A logged in user using the native app can navigate to the more screen
     Given I am a EMIS patient using the native app
-    And I am logged in
+    And I log in to the app expecting to see the notifications prompt
+    Then I see the notifications prompt
+    When I do not accept notifications and continue
+    Then I see the home page
     And I navigate to More
     And I see the more page header
-    Then I see more button on the nav bar is highlighted
+    And I see more button on the nav bar is highlighted
 
   @smoketest
   @onlineconsultations

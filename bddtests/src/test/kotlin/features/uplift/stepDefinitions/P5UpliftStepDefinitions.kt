@@ -1,6 +1,7 @@
 package features.uplift.stepDefinitions
 
 import constants.Supplier
+import features.sharedSteps.BrowserSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import mocking.MockingClient
@@ -29,6 +30,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   private lateinit var p5ShutterPage: P5UpliftPage
   @Steps
   lateinit var nav: NavigationSteps
+  @Steps
+  private lateinit var browser: BrowserSteps
 
   lateinit var webHeader: WebHeader
 
@@ -39,6 +42,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Given("^I am a patient logging in natively with proof level 5$")
   fun iAmAPatientLoggingInNativelyWithProofLevel5() {
+    browser.setUserAgentSource("ios")
     GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
     setupPatient()
   }

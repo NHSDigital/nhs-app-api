@@ -19,7 +19,6 @@ Feature: Push Notifications
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
-    And I have not got the notifications cookie
     Then I see the notifications prompt
     When I accept notifications and continue
     Then I see the home page
@@ -27,7 +26,6 @@ Feature: Push Notifications
   Scenario: A user who already has the notifications cookie will not see the prompt during login
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
-    And I have got the notifications cookie
     And I am logged in
     Then I see the home page
 
@@ -35,7 +33,6 @@ Feature: Push Notifications
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
-    And I have not got the notifications cookie
     Then I see the notifications prompt
     When I do not accept notifications and continue
     Then I see the home page
@@ -44,7 +41,6 @@ Feature: Push Notifications
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time, with my initial state undetermined
     And I log in to the app expecting to see the notifications prompt
-    And I have not got the notifications cookie
     Then I see the notifications prompt
     When I accept notifications but I am denied
     Then I see the notification failure
@@ -79,7 +75,7 @@ Feature: Push Notifications
   Scenario: A user can disable push notifications for their device
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in
+    And I am logged in with notifications enabled skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed
@@ -123,7 +119,7 @@ Feature: Push Notifications
   Scenario: A user viewing notifications settings when an internal server error occurs sees an error
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications with existing incorrect user device
-    And I am logged in
+    And I am logged in with notifications enabled, but with an existing incorrect user device
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then an error is displayed indicating that the notifications service is not available
@@ -133,7 +129,7 @@ Feature: Push Notifications
   Scenario: A user attempting to disable a non-existing registration is shown an error message
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in
+    And I am logged in with notifications enabled skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed
@@ -147,7 +143,7 @@ Feature: Push Notifications
   Scenario: A user viewing notifications settings when their device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications with disabled device's notifications
-    And I am logged in
+    And I am logged in with notifications denied
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then an error is displayed indicating that the device's notifications are disabled
@@ -161,7 +157,7 @@ Feature: Push Notifications
   Scenario: A user attempting to disable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in
+    And I am logged in with notifications enabled skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed

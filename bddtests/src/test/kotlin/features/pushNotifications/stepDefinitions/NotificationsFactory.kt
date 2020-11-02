@@ -22,6 +22,7 @@ class NotificationsFactory {
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
                 SJRJourneyType.NOTIFICATIONS_ENABLED)
+
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney().createFor(patientToUse)
@@ -63,15 +64,25 @@ class NotificationsFactory {
         GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
     }
 
-    fun mockNativeNotificationFunctions(status: SettingStatus, authorised: Boolean = true) {
+    fun mockNativeNotificationFunctions(
+            status: SettingStatus,
+            authorised: Boolean = true,
+            cookieExists: Boolean = true) {
         val pns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+
         val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>().toLowerCase()
+
         val notificationsFunction =
                 if (authorised) mockNotificationsAuthorised(pns, deviceType)
                 else mockNotificationsUnauthorised()
+
         GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsFunction)
         val notificationsStatusFunction = mockNotificationsStatus(status)
+
         GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsStatusFunction)
+        val notificationDeviceCookieExistsFunction = mockNotificationCookieExistsCheck(cookieExists)
+        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(
+                notificationDeviceCookieExistsFunction)
     }
 
     fun setUpExistingRegistration(patient: Patient? = null) {
@@ -90,8 +101,12 @@ class NotificationsFactory {
 
     private fun mockNotificationsStatus(status: SettingStatus): String {
         return "getNotificationsStatus : " +
-                "function(){window.\$nuxt.\$store.dispatch(" +
-                "'notifications/settingsStatus', '${status.name.decapitalize()}')}"
+                "function(){window.nativeAppCallbacks.notificationsSettingsStatus('${status.name.decapitalize()}')}"
+    }
+
+    private fun mockNotificationCookieExistsCheck(exists: Boolean): String {
+        return "checkNotificationCookie : " +
+                "function(){ window.nativeAppCallbacks.deviceNotificationPromptCookieExists(${exists}) }"
     }
 
     private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {
