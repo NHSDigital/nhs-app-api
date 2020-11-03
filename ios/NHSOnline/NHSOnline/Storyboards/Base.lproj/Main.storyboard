@@ -183,73 +183,87 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7J3-ga-aZb">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2s6-Xt-nNY">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="0.85882352941176465" green="0.8784313725490196" blue="0.88235294117647056" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="Sorry, service temporarily unavailable" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="31B-C0-G75" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
-                                <rect key="frame" x="16" y="48" width="343" height="40"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="skL-vJ-CP3">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="165.5"/>
+                                        <subviews>
+                                            <textView multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="Sorry, service temporarily unavailable" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Vgb-GO-Sq3" customClass="ErrorTextView" customModule="NHSOnline" customModuleProvider="target">
+                                                <rect key="frame" x="16" y="48" width="343" height="35.5"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="713-kT-mep">
+                                                <rect key="frame" x="16" y="99.5" width="343" height="34"/>
+                                                <color key="backgroundColor" red="0.0" green="0.36862745099999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="34" id="Na2-8Y-64Q"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                <state key="normal" title="Try again">
+                                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="reloadPageTrigger:" destination="i9L-px-mbd" eventType="touchUpInside" id="2le-5I-d3w"/>
+                                                </connections>
+                                            </button>
+                                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Error" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Znl-RC-WNu" userLabel="Error Icon Text View">
+                                                <rect key="frame" x="16" y="32" width="109" height="32"/>
+                                                <color key="backgroundColor" red="0.85490196080000003" green="0.16078431369999999" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" notEnabled="YES" header="YES"/>
+                                                </accessibility>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="32" id="Ri0-ED-cAJ"/>
+                                                </constraints>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.8588667512" green="0.8765669465" blue="0.88410145039999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="713-kT-mep" firstAttribute="trailing" secondItem="skL-vJ-CP3" secondAttribute="trailing" constant="-16" id="16f-nc-WsQ"/>
+                                            <constraint firstItem="713-kT-mep" firstAttribute="bottom" secondItem="skL-vJ-CP3" secondAttribute="bottom" constant="-32" id="HHe-ef-r1M"/>
+                                            <constraint firstItem="Znl-RC-WNu" firstAttribute="top" secondItem="skL-vJ-CP3" secondAttribute="top" constant="32" id="Nwz-L6-Eam"/>
+                                            <constraint firstItem="Znl-RC-WNu" firstAttribute="leading" secondItem="skL-vJ-CP3" secondAttribute="leading" constant="16" id="QO7-Rt-CWx"/>
+                                            <constraint firstItem="Vgb-GO-Sq3" firstAttribute="top" secondItem="Znl-RC-WNu" secondAttribute="bottom" constant="-16" id="TnW-Ae-jw4"/>
+                                            <constraint firstItem="Vgb-GO-Sq3" firstAttribute="trailing" secondItem="skL-vJ-CP3" secondAttribute="trailing" constant="-16" id="Ubq-YR-GTM"/>
+                                            <constraint firstItem="Vgb-GO-Sq3" firstAttribute="leading" secondItem="skL-vJ-CP3" secondAttribute="leading" constant="16" id="ghC-2Z-w2k"/>
+                                            <constraint firstItem="713-kT-mep" firstAttribute="top" secondItem="Vgb-GO-Sq3" secondAttribute="bottom" constant="16" id="hT5-Gy-ecl"/>
+                                            <constraint firstItem="Znl-RC-WNu" firstAttribute="trailing" secondItem="skL-vJ-CP3" secondAttribute="trailing" constant="-250" id="p8D-ax-Ogy"/>
+                                            <constraint firstItem="713-kT-mep" firstAttribute="leading" secondItem="skL-vJ-CP3" secondAttribute="leading" constant="16" id="rdQ-AG-ecz"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="w14-Cb-2nP"/>
+                                    <constraint firstItem="skL-vJ-CP3" firstAttribute="top" secondItem="2s6-Xt-nNY" secondAttribute="top" id="Cg3-TA-HZK"/>
+                                    <constraint firstItem="skL-vJ-CP3" firstAttribute="trailing" secondItem="2s6-Xt-nNY" secondAttribute="trailing" id="ZDZ-VH-Iec"/>
+                                    <constraint firstItem="skL-vJ-CP3" firstAttribute="bottom" secondItem="2s6-Xt-nNY" secondAttribute="bottom" id="jRQ-0A-Gzq"/>
+                                    <constraint firstItem="skL-vJ-CP3" firstAttribute="leading" secondItem="2s6-Xt-nNY" secondAttribute="leading" id="sL6-kk-hKm"/>
+                                    <constraint firstItem="skL-vJ-CP3" firstAttribute="width" secondItem="2s6-Xt-nNY" secondAttribute="width" id="vuS-hh-V3W"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Qz-lq-7kU">
-                                <rect key="frame" x="16" y="104" width="343" height="34"/>
-                                <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="IfL-FP-Acc"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Try again">
-                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="reloadPageTrigger:" destination="i9L-px-mbd" eventType="touchUpInside" id="qec-zG-cAc"/>
-                                </connections>
-                            </button>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" text="Error" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sIw-cn-ITE">
-                                <rect key="frame" x="16" y="32" width="109" height="32"/>
-                                <color key="backgroundColor" red="0.85490196080000003" green="0.16078431369999999" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" notEnabled="YES" header="YES"/>
-                                </accessibility>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="D1l-Qi-gpC"/>
-                                </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.8588667512" green="0.8765669465" blue="0.88410145039999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="7J3-ga-aZb" firstAttribute="bottom" secondItem="FfV-2y-pL7" secondAttribute="bottom" id="1aV-3p-OHW"/>
-                            <constraint firstItem="7J3-ga-aZb" firstAttribute="trailing" secondItem="FfV-2y-pL7" secondAttribute="trailing" id="45Z-Ty-T5X"/>
-                            <constraint firstItem="sIw-cn-ITE" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="4Xr-rv-CJq"/>
-                            <constraint firstItem="31B-C0-G75" firstAttribute="top" secondItem="sIw-cn-ITE" secondAttribute="bottom" constant="-16" id="5Y6-zB-v9O"/>
-                            <constraint firstItem="sIw-cn-ITE" firstAttribute="top" secondItem="J0Q-Cj-kkS" secondAttribute="topMargin" constant="32" id="84X-Kf-yWt"/>
-                            <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="31B-C0-G75" secondAttribute="trailing" constant="16" id="Am0-6p-adc"/>
-                            <constraint firstItem="7J3-ga-aZb" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" id="Dxd-ua-na6"/>
-                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="top" secondItem="31B-C0-G75" secondAttribute="bottom" constant="16" id="IGI-fB-TfW"/>
-                            <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="4Qz-lq-7kU" secondAttribute="trailing" constant="16" id="JTr-c4-WyL"/>
-                            <constraint firstItem="sIw-cn-ITE" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="gF9-XT-EmR"/>
-                            <constraint firstItem="31B-C0-G75" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="gaI-fr-V1F"/>
-                            <constraint firstItem="FfV-2y-pL7" firstAttribute="trailing" secondItem="sIw-cn-ITE" secondAttribute="trailing" constant="250" id="mZn-ny-7dh"/>
-                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" constant="16" id="mpG-q9-2ze"/>
-                            <constraint firstItem="7J3-ga-aZb" firstAttribute="top" secondItem="FfV-2y-pL7" secondAttribute="top" id="oKR-sf-dAA"/>
+                            <constraint firstItem="2s6-Xt-nNY" firstAttribute="bottom" secondItem="FfV-2y-pL7" secondAttribute="bottom" id="fWU-kl-3Qt"/>
+                            <constraint firstItem="2s6-Xt-nNY" firstAttribute="top" secondItem="FfV-2y-pL7" secondAttribute="top" id="i3A-wt-MjP"/>
+                            <constraint firstItem="2s6-Xt-nNY" firstAttribute="trailing" secondItem="FfV-2y-pL7" secondAttribute="trailing" id="o8J-MA-ldh"/>
+                            <constraint firstItem="2s6-Xt-nNY" firstAttribute="leading" secondItem="FfV-2y-pL7" secondAttribute="leading" id="xj4-9y-sas"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FfV-2y-pL7"/>
                     </view>
                     <connections>
-                        <outlet property="errorIconTextView" destination="sIw-cn-ITE" id="AlP-qF-DYd"/>
-                        <outlet property="errorTextView" destination="31B-C0-G75" id="jS8-Ag-fle"/>
-                        <outlet property="tryAgainButton" destination="4Qz-lq-7kU" id="eBY-d9-Q9c"/>
+                        <outlet property="errorIconTextView" destination="Znl-RC-WNu" id="hQE-7S-YSE"/>
+                        <outlet property="errorTextView" destination="Vgb-GO-Sq3" id="5Kc-X8-RQt"/>
+                        <outlet property="scrollView" destination="2s6-Xt-nNY" id="kgv-gV-aAq"/>
+                        <outlet property="tryAgainButton" destination="713-kT-mep" id="xTz-lV-TSZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gcx-wZ-NfJ" userLabel="First Responder" sceneMemberID="firstResponder"/>

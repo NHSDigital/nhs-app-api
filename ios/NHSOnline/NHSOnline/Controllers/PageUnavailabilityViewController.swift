@@ -5,6 +5,7 @@ class PageUnavailabilityViewController: UIViewController {
     @IBOutlet weak var errorIconTextView: UITextView!
     @IBOutlet weak var errorTextView: ErrorTextView!
     @IBOutlet weak var tryAgainButton: UIButton!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var failedUrl: String? = nil
     
@@ -21,14 +22,14 @@ class PageUnavailabilityViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        errorTextView.layer.addTopBorder(color: UIColor(red:0.85, green:0.16, blue:0.11, alpha:1.0), thickness: 3)
         errorTextView.resizeErrorTextView()
+        scrollView.setContentOffset(.zero, animated: false)
+        errorTextView.layer.addTopBorder(color: UIColor(red:0.85, green:0.16, blue:0.11, alpha:1.0), thickness: 3)
     }
     
     override func viewDidLoad() {
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
-        
     }
     
     func setUnavailabilityError(errorMessage:ErrorMessage) {
