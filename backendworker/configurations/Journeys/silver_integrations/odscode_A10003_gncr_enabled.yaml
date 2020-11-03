@@ -1,0 +1,15 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A10003"
+journeys:
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    consultationsAdmin: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages:
+      - gncr
+    secondaryAppointments:
+      - gncr

@@ -58,6 +58,11 @@
                                        provider-id="substraktPatientPack"
                                        :provider-configuration="thirdPartyProvider
                                          .substraktPatientPack.lifestyleGuides" />
+          <third-party-jump-off-button
+            v-if="showGncrMessages && !isProxying"
+            id="btn_gncr_messages_and_consultations"
+            provider-id="gncr"
+            :provider-configuration="thirdPartyProvider.gncr.correspondence" />
         </menu-item-list>
       </div>
     </div>
@@ -153,6 +158,14 @@ export default {
         context: {
           provider: 'substraktPatientPack',
           serviceType: 'carePlans',
+        },
+      }),
+      showGncrMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'gncr',
+          serviceType: 'messages',
         },
       }),
       isProxying: this.$store.getters['session/isProxying'],

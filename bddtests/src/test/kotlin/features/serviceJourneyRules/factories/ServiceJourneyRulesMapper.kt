@@ -85,7 +85,9 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_ENABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_GNCR,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_GNCR))
                 .add(Supplier.EMIS, "A10004",
                         EnumSet.of(SJRJourneyType.DOCUMENTS_DISABLED,
                                 SJRJourneyType.IM1_MESSAGING_DISABLED,

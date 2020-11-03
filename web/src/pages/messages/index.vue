@@ -25,11 +25,6 @@
                                      provider-id="pkb"
                                      :provider-configuration="thirdPartyProvider.pkb.messagesCie" />
         <third-party-jump-off-button
-          v-if="gncrEnabled"
-          id="btn_gncr_messages_and_consultations"
-          provider-id="gncr"
-          :provider-configuration="thirdPartyProvider.gncr.correspondence" />
-        <third-party-jump-off-button
           v-if="testProviderEnabled"
           id="btn_test_silver_messages"
           provider-id="silver-third-party-api-test"
@@ -102,14 +97,6 @@ export default {
           serviceType: 'messages',
         },
       }),
-      hasGncrMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'gncr',
-          serviceType: 'messages',
-        },
-      }),
       hasTestProviderMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -131,7 +118,7 @@ export default {
     },
     onlyAppMessagingEnabled() {
       return !this.gpMessagesEnabled && this.appMessagingSjrEnabled &&
-      !this.engageEnabled && !this.pkbEnabled && !this.testProviderEnabled && !this.gncrEnabled;
+      !this.engageEnabled && !this.pkbEnabled && !this.testProviderEnabled;
     },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
@@ -147,9 +134,6 @@ export default {
     },
     testProviderEnabled() {
       return this.hasTestProviderMessages && this.isProofLevel9;
-    },
-    gncrEnabled() {
-      return this.hasGncrMessages && this.isProofLevel9;
     },
   },
   async mounted() {

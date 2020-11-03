@@ -73,18 +73,18 @@ export default {
   },
   gncr: {
     serviceId: 'gncr',
-    providerName: 'Great Northern Care Record',
+    providerName: 'Great North Care Record',
     jumpOffs: [
       {
         id: 'appointments',
         path: '/appointment',
         jumpOffContent: {
-          headerText: 'Appointments',
-          descriptionText: 'GNCR Appointments',
+          headerText: 'View and manage your hospital and other appointments',
+          descriptionText: 'This includes your hospital, mental health and social care appointments',
         },
         thirdPartyWarning: {
-          featureName: 'Feature name',
-          servicePurchaser: 'service purchaser',
+          featureName: 'Hospital and other appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
@@ -94,11 +94,11 @@ export default {
         id: 'correspondence',
         path: '/correspondence',
         jumpOffContent: {
-          headerText: 'GNCR correspondence',
-        //  descriptionText: '<TBC>',
+          headerText: 'Hospital and other healthcare letters',
+          descriptionText: 'This includes your hospital, mental health and social care letters and documents',
         },
         thirdPartyWarning: {
-          featureName: 'TBC - dummy text to support GNCR testing',
+          featureName: 'Hospital and other healthcare letters',
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
