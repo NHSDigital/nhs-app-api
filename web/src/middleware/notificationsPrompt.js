@@ -4,10 +4,9 @@ import { INDEX_NAME } from '@/router/names';
 
 export default async ({ to, store, next }) => {
   const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
-  const isWebVersionAfter = store.getters['appVersion/isWebVersionAfter'];
 
   if (store.state.device.isNativeApp
-    && (isNativeVersionAfter('1.41.0') || isWebVersionAfter('develop'))
+    && isNativeVersionAfter('1.41.0')
     && to.path === NOTIFICATIONS_PATH) {
     await store.dispatch('notifications/load');
     await store.dispatch('notifications/checkNotificationCookie');
