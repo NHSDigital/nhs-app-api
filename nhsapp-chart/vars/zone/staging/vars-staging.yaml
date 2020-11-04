@@ -42,7 +42,7 @@ econsultEnabled: true
 sixteenWeeksSlotsEnabled: true
 
 spineLdapLookupEnabled: true
-spineLdapCIDR: "10.196.94.141/32"
+spineLdapCIDR: "10.239.58.0/24"
 spineLdapHost: "ldap.nis1.national.ncrs.nhs.uk"
 
 spinePdsEnabled: true
