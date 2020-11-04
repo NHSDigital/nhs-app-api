@@ -1,7 +1,7 @@
 import notificationPrompt from '@/middleware/notificationsPrompt';
 import * as dependency from '@/lib/utils';
 import { NOTIFICATIONS_PATH } from '@/router/paths';
-import { INDEX_NAME } from '@/router/names';
+import { INDEX_NAME, NOTIFICATIONS_NAME } from '@/router/names';
 
 
 describe('notification prompt next', () => {
@@ -11,7 +11,8 @@ describe('notification prompt next', () => {
 
   const callsNotificationsPrompt = () => {
     const to = {
-      name: NOTIFICATIONS_PATH,
+      name: NOTIFICATIONS_NAME,
+      path: NOTIFICATIONS_PATH,
     };
     notificationPrompt({ next, to, store });
   };
@@ -24,6 +25,7 @@ describe('notification prompt next', () => {
           'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
           'session/isLoggedIn': jest.fn().mockReturnValue(true),
         },
+        dispatch: jest.fn(),
         state: {
           device: {
             isNativeApp: true,

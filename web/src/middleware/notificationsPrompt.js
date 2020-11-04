@@ -4,20 +4,22 @@ import { INDEX_NAME } from '@/router/names';
 
 export default async ({ to, store, next }) => {
   const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
-
-  if (store.state.device.isNativeApp
-    && isNativeVersionAfter('1.41.0')
-    && to.path === NOTIFICATIONS_PATH) {
-    await store.dispatch('notifications/load');
-    await store.dispatch('notifications/checkNotificationCookie');
-
+  if (to.path !== NOTIFICATIONS_PATH) {
     return next();
   }
 
-  return next(createRouteByNameObject({
-    name: INDEX_NAME,
-    query: to.query,
-    params: to.params,
-    store,
-  }));
+  if (to.path === NOTIFICATIONS_PATH
+  && (!isNativeVersionAfter('1.41.0') || !store.state.device.isNativeApp)) {
+    return next(createRouteByNameObject({
+      name: INDEX_NAME,
+      query: to.query,
+      params: to.params,
+      store,
+    }));
+  }
+
+  await store.dispatch('notifications/load');
+  await store.dispatch('notifications/checkNotificationCookie');
+
+  return next();
 };
