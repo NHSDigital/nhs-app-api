@@ -17,7 +17,11 @@ class MockDeviceInfoProtocol: DeviceInfoProtocol {
     func getIOSVersion() -> Int {
         return version
     }
-    
+
+    func getFullIOSVersion() -> String {
+        return "\(version)"
+    }
+
     func getDeviceDescription() -> Device {
         return description
     }

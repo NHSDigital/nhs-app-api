@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
+import android.os.Build.*
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.appcompat.app.ActionBar
@@ -23,7 +23,7 @@ import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.BuildConfig
+import com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
@@ -83,7 +83,7 @@ class MainActivity :
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
     lateinit var activityViewSwitcher: MainActivityViewSwitcher
-    private val nhsAndroidUserAgent = "nhsapp-android/" + com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
+    private val nhsAndroidUserAgent = "nhsapp-android/$VERSION_NAME"
     private lateinit var downloadHelper: FileDownloadHelper
     private lateinit var notificationsService: NotificationsService
     private lateinit var urlHelper: UrlHelper
@@ -109,8 +109,7 @@ class MainActivity :
         intentHandlers.registerHandler(ViewIntentHandler(this))
         intentHandlers.registerHandler(DefaultIntentHandler(this))
 
-        if (resources.getString(R.string.secureFlag) != "disabled" &&
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (resources.getString(R.string.secureFlag) != "disabled" && VERSION.SDK_INT < VERSION_CODES.O) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                     WindowManager.LayoutParams.FLAG_SECURE)
         }
@@ -432,7 +431,7 @@ class MainActivity :
     }
 
     override fun onPause() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
         super.onPause()
@@ -441,7 +440,7 @@ class MainActivity :
     override fun onResume() {
         super.onResume()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
@@ -772,10 +771,12 @@ class MainActivity :
     }
 
     fun buildUserAgentString(userAgent: String): String {
-        val manufacturer = "nhsapp-manufacturer/${Build.MANUFACTURER}"
-        val model = "nhsapp-model/${Build.MODEL}"
-        val architecture = "nhsapp-architecture/${Build.SUPPORTED_ABIS.joinToString(",")}"
-        return "$userAgent $nhsAndroidUserAgent $manufacturer $model $architecture"
+        val manufacturer = "nhsapp-manufacturer/${MANUFACTURER}"
+        val model = "nhsapp-model/${MODEL}"
+        val os = "nhsapp-os/${VERSION.RELEASE}"
+        val architecture = "nhsapp-architecture/${SUPPORTED_ABIS.joinToString(",")}"
+
+        return "$userAgent $nhsAndroidUserAgent $manufacturer $model $os $architecture"
     }
 
     override fun getActivity(): FragmentActivity = this

@@ -460,6 +460,7 @@ class MainActivityTest {
                 " nhsapp-android/${com.nhs.online.nhsonline.BuildConfig.VERSION_NAME}" +
                 " nhsapp-manufacturer/${Build.MANUFACTURER}" +
                 " nhsapp-model/${Build.MODEL}" +
+                " nhsapp-os/${Build.VERSION.RELEASE}" +
                 " nhsapp-architecture/${Build.SUPPORTED_ABIS.joinToString(",") }"
 
        assertEquals(expectedFullUserAgent, actualFullUserAgent)

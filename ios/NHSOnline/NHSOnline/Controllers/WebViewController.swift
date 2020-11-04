@@ -180,11 +180,13 @@ class WebViewController: UIViewController, WKUIDelegate {
     private func buildUserAgentString() -> String {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let deviceService = DeviceInfoService()
+
         let version = "nhsapp-ios/\(versionNumber)"
-        let model = "nhso-model/\(deviceService.getDeviceDescription())"
-        let architecture = "nhso-architecture/\(deviceService.getDeviceArchitecture())"
-        
-        return " \(version) nhso-manufacturer/apple \(model) \(architecture)"
+        let model = "nhsapp-model/\(deviceService.getDeviceDescription())"
+        let os = "nhsapp-os/\(deviceService.getFullIOSVersion())"
+        let architecture = "nhsapp-architecture/\(deviceService.getDeviceArchitecture())"
+
+        return " \(version) nhsapp-manufacturer/apple \(model) \(os) \(architecture)"
     }
 
     func reloadWebView() {

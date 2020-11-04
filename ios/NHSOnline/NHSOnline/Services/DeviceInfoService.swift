@@ -6,6 +6,10 @@ class DeviceInfoService: DeviceInfoProtocol {
     func getIOSVersion() -> Int {
         return Int(UIDevice().systemVersion.split(separator: ".")[0])!
     }
+
+    func getFullIOSVersion() -> String {
+        return UIDevice().systemVersion
+    }
     
     func getDeviceDescription() -> Device {
         return Device.current
