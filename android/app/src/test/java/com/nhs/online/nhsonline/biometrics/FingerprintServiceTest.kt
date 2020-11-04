@@ -79,7 +79,7 @@ class FingerprintServiceTest {
             preferencesServiceMock,
             fidoEndpointConfig,
             authenticationMock,
-            mock())
+            mock(), mock())
     }
 
     @Test
@@ -100,7 +100,7 @@ class FingerprintServiceTest {
             setAndroidApiVersion(version)
             val fingerprintService =
                 FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl,
-                    interactor, mock())
+                    interactor, mock(), mock())
             Assert.assertNotNull(fingerprintService)
         }
     }
@@ -118,7 +118,7 @@ class FingerprintServiceTest {
             setAndroidApiVersion(version)
             val fingerprintService =
                 FingerprintService.createIfDeviceSupported(biometricsInteractor, fidoServerUrl,
-                    interactor, mock())
+                    interactor, mock(), mock())
             Assert.assertNull(fingerprintService)
         }
     }

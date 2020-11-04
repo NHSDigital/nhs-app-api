@@ -106,7 +106,7 @@ class RegistrationServiceTest {
 
         registrationService =
             RegistrationService(mock(), mock(), mock(), mock(), mock(), fingerprintSystemChecker, preferencesService,
-                mock(), appWebInterface){
+                mock(), appWebInterface, mock()){
                     _,_,_-> mock()
             }
 
@@ -128,7 +128,8 @@ class RegistrationServiceTest {
                 fingerprintSystemChecker,
                 preferencesService,
                 mock(),
-                appWebInterface){_,_,_ -> mock()}
+                appWebInterface,
+                mock()){_,_,_ -> mock()}
 
         registrationService.startFidoRegistration(mockAccessToken)
 
@@ -157,7 +158,8 @@ class RegistrationServiceTest {
                 fingerprintSystemChecker,
                 preferencesService,
                 mock(),
-                appWebInterface){_,_,_ -> mock()}
+                appWebInterface,
+                mock()){_,_,_ -> mock()}
 
         registrationService.startFidoRegistration(mockAccessToken)
 
@@ -187,7 +189,8 @@ class RegistrationServiceTest {
                 fingerprintSystemChecker,
                 preferencesService,
                 mock(),
-                appWebInterface){_,_,_ -> mock()}
+                appWebInterface,
+                mock()){_,_,_ -> mock()}
 
         registrationService.startFidoRegistration(mockAccessToken)
 
@@ -229,7 +232,8 @@ class RegistrationServiceTest {
                 fingerprintSystemChecker,
                 preferencesService,
                 mock(),
-                appWebInterface){_,_,_ -> mock()}
+                appWebInterface,
+                mock()){_,_,_ -> mock()}
 
         registrationService.startFidoRegistration(mockAccessToken)
 

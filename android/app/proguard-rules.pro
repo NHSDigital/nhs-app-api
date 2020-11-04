@@ -28,7 +28,7 @@
 }
 
 # For Fido data classes that are used during GSon reflection
--keepclassmembers class com.nhs.online.fidoclient.uaf.message.* {<fields>;}
+-keep class com.nhs.online.fidoclient.uaf.message** { *; }
 
 # Start Square/Moshi Rules
 # JSR 305 annotations are for embedding nullability information.
@@ -53,4 +53,5 @@
     <fields>;
     **[] values();
 }
+
 #End

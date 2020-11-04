@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.utils.ErrorUtils.dumpStackTrace
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -31,8 +32,14 @@ class LoggingService(val context: Context, volleyQueueProvider: IVolleyQueueProv
             }
     }
 
-    override fun logError(message: String) {
-        log(message, LogLevel.Error )
+    override fun logError(message: String, cause: Exception?) {
+        var completeMessage = message
+
+        if (cause !== null) {
+            completeMessage += "\n${dumpStackTrace(cause)}"
+        }
+
+        log(completeMessage, LogLevel.Error)
     }
 
     override fun logInfo(message: String) {

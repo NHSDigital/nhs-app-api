@@ -18,6 +18,8 @@ import com.nhs.online.fidoclient.uaf.message.RegistrationRequest
 import com.nhs.online.fidoclient.utils.fidoHelpers
 import com.nhs.online.nhsonline.biometrics.utils.BiometricState
 import com.nhs.online.nhsonline.biometrics.utils.*
+import com.nhs.online.nhsonline.services.logging.ILoggingService
+import com.nhs.online.nhsonline.utils.ErrorUtils.dumpStackTrace
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -26,6 +28,8 @@ import org.json.JSONException
 import java.security.KeyStoreException
 import java.security.PublicKey
 import java.security.Signature
+import java.io.PrintWriter
+import java.io.StringWriter
 
 private val TAG = RegistrationService::class.java.simpleName
 private const val KEY_ID_PREFIX = "nhs-app-key"
@@ -41,6 +45,7 @@ class RegistrationService(
         private val preferencesService: FingerprintSharedPreferences,
         private val biometricState: BiometricState,
         private val appWebInterface: AppWebInterface,
+        private val logger: ILoggingService,
         val assertionFactory: (publicKey: PublicKey, signature: Signature, keyId: String) ->
         RegAssertionBuilder = {p,s,k -> RegAssertionBuilder(p, s, k) }
     ) {
@@ -50,6 +55,9 @@ class RegistrationService(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_FIND_CODE)
+
+            logFailure("Pre-check failed (minimum android version, compatible hardware and registered fingerprint)");
+
             return
         }
 
@@ -59,6 +67,13 @@ class RegistrationService(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_CHANGE_CODE)
+
+            if (facetId.isNullOrBlank()) {
+                logFailure("Unable to get facet ID");
+            } else {
+                logFailure("Access token was invalid");
+            }
+
             return
         }
 
@@ -91,6 +106,9 @@ class RegistrationService(
                     BiometricConstants.REGISTER,
                     BiometricConstants.FAILURE,
                     BiometricConstants.CANNOT_CHANGE_CODE)
+
+                logFailure("Bad response code from UAF registration message endpoint: ${response.statusCode}");
+
                 return
             }
             val result = response.result
@@ -116,6 +134,9 @@ class RegistrationService(
                         BiometricConstants.REGISTER,
                         BiometricConstants.FAILURE,
                         BiometricConstants.CANNOT_CHANGE_CODE)
+
+                    logFailure("Android fingerprint callback error")
+
                     return
                 }
             }
@@ -125,18 +146,22 @@ class RegistrationService(
             fingerprintDialog.showFingerprintAuthDialog(registerCallback, fingerprintContent)
         }
         catch(fidoException: Exception) {
-            Log.d(TAG, "Registration call failed due to fido exception", fidoException)
+            Log.e(TAG, "Registration call failed due to fido exception", fidoException)
             showErrorAndRemoveData(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_CHANGE_CODE)
+
+            logFailure("FIDO error", fidoException)
         }
         catch(e: Exception) {
-            Log.d(TAG, "Registration call failed", e)
+            Log.e(TAG, "Registration call failed", e)
             showErrorAndRemoveData(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_CHANGE_CODE)
+
+            logFailure("Exception was thrown", e)
         }
         biometricState.registrationStateChangeInProgress = false
     }
@@ -151,6 +176,9 @@ class RegistrationService(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_CHANGE_CODE)
+
+            logFailure("Unable to get fingerprint crypto signature");
+
             return Activity.RESULT_CANCELED
         }
         try {
@@ -163,6 +191,9 @@ class RegistrationService(
                         BiometricConstants.REGISTER,
                         BiometricConstants.FAILURE,
                         BiometricConstants.CANNOT_CHANGE_CODE)
+
+                    logFailure("Bad client registration HTTP response code: ${response.statusCode}");
+
                     return@sendClientRegistrationMsg
                 }
 
@@ -178,6 +209,8 @@ class RegistrationService(
                         BiometricConstants.REGISTER,
                         BiometricConstants.FAILURE,
                         BiometricConstants.CANNOT_CHANGE_CODE)
+
+                    logFailure("Unsuccessful client registration HTTP response");
                 }
             }
         }
@@ -186,6 +219,8 @@ class RegistrationService(
                 BiometricConstants.REGISTER,
                 BiometricConstants.FAILURE,
                 BiometricConstants.CANNOT_CHANGE_CODE)
+
+            logFailure("Keystore exception", keyStoreException);
         }
 
         return Activity.RESULT_OK
@@ -209,8 +244,11 @@ class RegistrationService(
     }
 
     private fun verifyIfRegistrationSuccess(serverResponse: String): Boolean {
-        if (serverResponse.equals(REGISTRATION_RESPONSE_ERROR, true))
+        if (serverResponse.equals(REGISTRATION_RESPONSE_ERROR, true)) {
+            logFailure("Client registration responded with an error")
+
             return false
+        }
 
         return try {
             val responseJSONArray = JSONArray(serverResponse)
@@ -227,6 +265,8 @@ class RegistrationService(
             status.equals(REGISTRATION_STATUS_SUCCESS, true)
                     && attestationStatus.equals(ATTESTATION_STATUS_VALID, true)
         } catch (e: JSONException) {
+            logFailure("Error parsing client registration response JSON", e)
+
             false
         }
     }
@@ -244,5 +284,10 @@ class RegistrationService(
     private fun showErrorAndRemoveData(action: String, outcome: String, errorCode: String){
         appWebInterface.biometricCompletion(action, outcome, errorCode)
         biometricCleanupHelper.removeFidoData()
+    }
+
+    private fun logFailure(reason: String, cause: Exception? = null)
+    {
+        logger.logError("Biometric registration failure: $reason", cause)
     }
 }

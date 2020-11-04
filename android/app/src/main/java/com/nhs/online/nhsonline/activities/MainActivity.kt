@@ -45,6 +45,7 @@ import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
+import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.support.intentHandlers.DefaultIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
@@ -155,8 +156,9 @@ class MainActivity :
             knownServices = configurationResponse.knownServices!!
         }
 
-        initialiseNhsWeb()
-        initialiseBiometrics()
+        val loggingService = LoggingService(this, VolleyQueueProvider())
+        initialiseNhsWeb(loggingService)
+        initialiseBiometrics(loggingService)
 
         intentHandlers.handleIntent(intent, true, nhsWeb!!)
 
@@ -175,8 +177,7 @@ class MainActivity :
         helpIcon.setOnClickListener { onHelpIconSelected() }
     }
 
-    private fun initialiseNhsWeb() {
-        val loggingService = LoggingService(this, VolleyQueueProvider())
+    private fun initialiseNhsWeb(loggingService: ILoggingService) {
         nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface,
             knownServices, paycassoService, loggingService, connectionStateMonitor)
 
@@ -185,9 +186,9 @@ class MainActivity :
         setHelpUrl(resources.getString(R.string.helpURL))
     }
 
-    private fun initialiseBiometrics() {
+    private fun initialiseBiometrics(loggingService: ILoggingService) {
         biometricsInteractor = BiometricsInteractor(this, nhsWeb!!, this)
-        biometricsInterface = BiometricsInterface(biometricsInteractor, this, appWebInterface)
+        biometricsInterface = BiometricsInterface(biometricsInteractor, this, appWebInterface, loggingService)
         configBiometricSetup(configurationResponse.fidoServerUrl)
     }
 
@@ -223,8 +224,11 @@ class MainActivity :
             configurationResponse = configServiceManager.getConfigurationResponse()
             if (configurationResponse.callSuccessful) {
                 knownServices = configurationResponse.knownServices!!
-                initialiseNhsWeb()
-                initialiseBiometrics()
+
+                val loggingService = LoggingService(this, VolleyQueueProvider())
+
+                initialiseNhsWeb(loggingService)
+                initialiseBiometrics(loggingService)
                 loadWelcomePage()
             } else {
                 logger.info(

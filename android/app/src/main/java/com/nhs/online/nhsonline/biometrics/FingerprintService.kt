@@ -9,6 +9,7 @@ import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 private const val keyIdPrefix = "com.nhs.online.nhsonline.fidouafclient.keystore.key"
@@ -21,7 +22,8 @@ class FingerprintService(
     preferencesService: FingerprintSharedPreferences,
     fidoEndpointConfig: FidoEndpointConfig,
     uafAuthenticator: Authentication,
-    appWebInterface: AppWebInterface
+    appWebInterface: AppWebInterface,
+    loggingService: ILoggingService
 ) {
 
     private val authenticationService: AuthenticationService
@@ -66,7 +68,8 @@ class FingerprintService(
                 fingerprintSystemChecker,
                 preferencesService,
                 biometricState,
-                appWebInterface)
+                appWebInterface,
+                loggingService)
 
         authenticationService =
             AuthenticationService(activity,
@@ -104,7 +107,8 @@ class FingerprintService(
             biometricsInteractor: BiometricsInteractor,
             fidoServerUrl: String,
             interactor: IInteractor,
-            appWebInterface: AppWebInterface
+            appWebInterface: AppWebInterface,
+            loggingService: ILoggingService
         ): FingerprintService? {
             if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null
@@ -133,7 +137,8 @@ class FingerprintService(
                 preferencesService,
                 fidoEndpointConfig,
                 uafAuthenticator,
-                appWebInterface)
+                appWebInterface,
+                loggingService)
         }
     }
 }
