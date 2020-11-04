@@ -42,8 +42,8 @@ info:
 
     | Environment       | Base URL                                                       |
     | ----------------- | -------------------------------------------------------------- |
-    | Integration test  | `https://int.api.service.nhs.uk/nhs-app/`                      |
-    | Production        | `https://api.service.nhs.uk/nhs-app/`                          |
+    | Integration test  | `https://int.api.service.nhs.uk/nhsapp/`                       |
+    | Production        | `https://api.service.nhs.uk/nhsapp/`                           |
 
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
@@ -65,9 +65,9 @@ info:
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: api.management@nhs.net
 servers:
-  - url: 'https://int.api.service.nhs.uk/nhs-app'
+  - url: 'https://int.api.service.nhs.uk/nhsapp'
     description: Integration test environment.
-  - url: 'https://api.service.nhs.uk/nhs-app'
+  - url: 'https://api.service.nhs.uk/nhsapp'
     description: 'Production environment.'
 tags:
   - name: communication
