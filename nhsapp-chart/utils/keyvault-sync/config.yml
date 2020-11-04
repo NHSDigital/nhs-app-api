@@ -1,0 +1,14 @@
+---
+dryRun: true
+overwriteExisting: true
+source: nhsapp-dev
+dest: nhsapp-staging
+secrets:
+  - emisPfx
+  - ndopPfx
+  - visionPfx
+certs:
+  - microtestPfx
+  - organdonationpfx
+  - spinePfx
+  - tppPfx

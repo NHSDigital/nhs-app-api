@@ -25,21 +25,20 @@ export MESSAGESAPI_SERVICE_NAME=messages.local.bitraft.io
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd)"
 
-NPMRC_PATH="${HOME}/.npmrc"
-MVN_CFG_PATH="${HOME}/.m2/settings.xml"
-
-GRADLE_CACHE_VOLUME="gradle-cache"
-
+HOME_PATH="${HOME}"
 DOCKER_ROOT="/"
 
 if [[ $(uname -s) =~ ^MING.* ]]; then
   REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd -W)"
 
-  NPMRC_PATH="${USERPROFILE}/.npmrc"
-  MVN_CFG_PATH="${USERPROFILE}/.m2/settings.xml"
-
+  HOME_PATH="${USERPROFILE}"
   DOCKER_ROOT="//"
 fi
+
+NPMRC_PATH="${HOME_PATH}/.npmrc"
+MVN_CFG_PATH="${HOME_PATH}/.m2/settings.xml"
+
+GRADLE_CACHE_VOLUME="gradle-cache"
 
 export REPO_ROOT
 export NPMRC_PATH

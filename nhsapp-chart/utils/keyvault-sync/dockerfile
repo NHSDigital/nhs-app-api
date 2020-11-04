@@ -1,0 +1,4 @@
+FROM mcr.microsoft.com/azure-powershell:alpine-3.10
+
+RUN pwsh -Command "Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted" \
+  && pwsh -Command "Install-Module powershell-yaml"
