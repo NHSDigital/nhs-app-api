@@ -4,6 +4,7 @@ import map from 'lodash/fp/map';
 import {
   REPEAT_PRESCRIPTION_COURSES_LOADED,
   INIT_REPEAT_PRESCRIPTIONS,
+  INIT_REPEAT_PRESCRIPTION_VALIDATED,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
@@ -36,6 +37,9 @@ export default {
       state[key] = defaultValues[key];
     })(state);
     state.selected = [];
+  },
+  [INIT_REPEAT_PRESCRIPTION_VALIDATED](state) {
+    state.validated = false;
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
     state.validated = !!validationObject.submitted;

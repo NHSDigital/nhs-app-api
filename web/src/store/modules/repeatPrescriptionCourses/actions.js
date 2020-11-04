@@ -3,6 +3,7 @@ import { GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import {
   REPEAT_PRESCRIPTION_COURSES_LOADED,
   INIT_REPEAT_PRESCRIPTIONS,
+  INIT_REPEAT_PRESCRIPTION_VALIDATED,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
@@ -43,6 +44,9 @@ export default {
     } finally {
       this.dispatch('device/unlockNavBar');
     }
+  },
+  initValidate({ commit }) {
+    commit(INIT_REPEAT_PRESCRIPTION_VALIDATED);
   },
   validate({ commit }, validationObject) {
     commit(REPEAT_PRESCRIPTION_VALIDATED, validationObject);

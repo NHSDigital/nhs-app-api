@@ -2,20 +2,21 @@
   <div v-if="showTemplate && !gpSessionApiError">
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-6">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="error"
-                        message-type="error"
-                        :focusable="true"
-                        role="alert">
-          <message-text>
-            {{ $t('prescriptions.repeatCourses.errors.thereIsAProblem') }}
-          </message-text>
-          <message-list class="nhsuk-u-margin-bottom-3">
-            <li v-if="!courseSelectionValid">
-              {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}</li>
-            <li v-if="!specialRequestValid">
-              {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}</li>
-          </message-list>
-        </message-dialog>
+        <div role="alert" aria-atomic="true">
+          <message-dialog v-if="error"
+                          message-type="error"
+                          :focusable="true">
+            <message-text>
+              {{ $t('prescriptions.repeatCourses.errors.thereIsAProblem') }}
+            </message-text>
+            <message-list class="nhsuk-u-margin-bottom-3">
+              <li v-if="!courseSelectionValid">
+                {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}</li>
+              <li v-if="!specialRequestValid">
+                {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}</li>
+            </message-list>
+          </message-dialog>
+        </div>
 
         <div v-if="showRepeatCourses" class="break">
           <p class="nhsuk-u-padding-bottom-3">
@@ -263,6 +264,8 @@ export default {
   },
   methods: {
     validate() {
+      this.$store.dispatch('repeatPrescriptionCourses/initValidate');
+
       if (this.courseSelectionValid && this.specialRequestValid) {
         let specialRequest = null;
         if (this.specialRequest) {
@@ -274,12 +277,14 @@ export default {
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
         redirectTo(this, this.confirmCoursesPath);
       } else {
-        const validationObj = {
-          isValid: this.courseSelectionValid && this.specialRequestValid,
-          submitted: true,
-        };
-        this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        this.$nextTick(() => {
+          const validationObj = {
+            isValid: this.courseSelectionValid && this.specialRequestValid,
+            submitted: true,
+          };
+          this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        });
       }
     },
     tryAgain() {
