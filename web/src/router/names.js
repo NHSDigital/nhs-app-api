@@ -108,6 +108,7 @@ export const PRESCRIPTIONS_GP_AT_HAND_NAME = 'prescriptions-gp-at-hand';
 export const PRESCRIPTION_REPEAT_COURSES_NAME = 'prescriptions-repeat-courses';
 export const PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_NAME = 'prescriptions-repeat-partial-success';
 export const PRESCRIPTIONS_ORDER_SUCCESS_NAME = 'prescriptions-order-success';
+export const SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_NAME = 'silver-integration-feature-not-available';
 export const LINKED_PROFILES_NAME = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_NAME = 'linked-profiles-summary';
 export const LINKED_PROFILES_SHUTTER_MORE_NAME = 'linked-profiles-shutter-more';
@@ -120,6 +121,7 @@ export const UPLIFT_APPOINTMENTS_NAME = 'uplift-appointments';
 export const UPLIFT_GP_MEDICAL_RECORD_NAME = 'uplift-gp-medical-record';
 export const UPLIFT_PRESCRIPTIONS_NAME = 'uplift-prescriptions';
 export const UPLIFT_MORE_NAME = 'uplift-more';
+export const UPLIFT_SILVER_INTEGRATION_NAME = 'uplift-siler-integration';
 export const USER_RESEARCH_NAME = 'user-research';
 export const REDIRECT_PARAMETER = 'redirect_to';
 export const REDIRECT_PAGE_PARAMETER = 'redirect_to_page';
@@ -232,6 +234,7 @@ const names = [
   PRESCRIPTION_REPEAT_COURSES_NAME,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_NAME,
   PRESCRIPTIONS_ORDER_SUCCESS_NAME,
+  SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_NAME,
   LINKED_PROFILES_NAME,
   LINKED_PROFILES_SUMMARY_NAME,
   LINKED_PROFILES_SHUTTER_MORE_NAME,
@@ -244,6 +247,7 @@ const names = [
   UPLIFT_GP_MEDICAL_RECORD_NAME,
   UPLIFT_PRESCRIPTIONS_NAME,
   UPLIFT_MORE_NAME,
+  UPLIFT_SILVER_INTEGRATION_NAME,
   USER_RESEARCH_NAME,
   REDIRECT_PARAMETER,
   REDIRECT_PAGE_PARAMETER,

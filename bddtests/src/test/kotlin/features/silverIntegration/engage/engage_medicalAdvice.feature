@@ -19,8 +19,8 @@ Feature: Engage Medical Advice
     And I navigate to the advice page
     And the link to Engage Medical Advice is not available on the Advice page
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Medical Advice from Engage
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs1-nhsapp.engage.gp%2F%3Fsso_route%3Dmedical'
     Then I am redirected to the redirector page with the header 'Ask your GP for advice'

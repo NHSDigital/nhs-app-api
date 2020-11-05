@@ -23,8 +23,8 @@ Feature: Care Information Exchange Medicines
     Then the Prescriptions Hub page is displayed
     And the CIE View Medicines link is available on the Prescriptions Hub
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Medicines from Care Information Exchange
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FmanageMedications.action%253Ftab%253Dtreatments%26brand=cie'
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'

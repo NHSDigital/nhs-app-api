@@ -57,9 +57,14 @@ If an entirely new third-party provider is being introduced, add a new entry to 
 
 Changes to the web project to add a new silver integration jump-off point should be limited to editing the following five files:
 
-* **web / src / lib / third-party-providers / jump-off-configuration.js** - edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump-off for a particular provider. Note that in the redirectPath field, any querystring parameters should be url encoded.
+* **web / src / lib / third-party-providers / jump-off-configuration.js** - edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump-off for a particular provider.
+    * **jumpOffId** - should match the `id` of the jumpOff in `third-party-providers.js` so the locale text can be retrieved for a jump off.
+    * **redirectPath** - Note that in the redirectPath field, any querystring parameters should be url encoded. Used when a user navigates to the redirector to find the jump off point so we can check if the feature is enabled for the user (in case they have navigated straight to the URL).
+    * **provider** - used by the redirector (along with `serviceType`) to check if the service journey rule is enabled.
+    * **serviceType** - used by the redirector (along with `providerId`) to check if the service journey rule is enabled.
+
 If adding a new child brand for the same primary provider (e.g Care Information Exchange as a child brand of Patients Know Best), add these as new jump-offs within the same parent thirdPartyProvider, disambiguated with suffixes - e.g. appointmentsCie for the CIE-branded version of PKB appointments.
-* **web / src / locale / en / third-party-providers.js** - again, edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump off for a particular provider. Child brands for the same primary provider should be added as new jump-offs within the same provider. 
+* **web / src / locale / en / third-party-providers.js** - again, edit the JSON to add a new jump off point, within a section for a new provider if this is the first jump off for a particular provider. Child brands for the same primary provider should be added as new jump-offs within the same provider.
     * **serviceId** - this should correspond to the ID of the associated Known Service.
     * **provider Name** - this text will appear on the third-party warning screen (if showThirdPartyWarning set to true in Known Services), and also within splunk logging and audit records.
     * **jumpOffs / id** - should correspond to the entry added in jump-off-configuration.js

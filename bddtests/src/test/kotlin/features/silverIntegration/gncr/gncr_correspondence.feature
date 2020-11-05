@@ -22,15 +22,15 @@ Feature: Great North Care Record Correspondence
     And the link to GNCR 'Hospital and other healthcare letters' is not available on the Health Records Hub page
 
   Scenario: A user can follow the link to Find out more about hospital and other healthcare letters
-    Given I am a EMIS patient
+    Given I am a user who can view Correspondence from GNCR
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs-pep-glenr.enigmadev2.net%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Correspondence from GNCR
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs-pep-glenr.enigmadev2.net%2Fcorrespondence'
     Then I am redirected to the redirector page with the header 'Hospital and other healthcare letters'

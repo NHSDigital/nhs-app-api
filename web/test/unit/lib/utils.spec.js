@@ -575,19 +575,19 @@ describe('util library', () => {
       const $te = create$T();
       each([{
         textType: 'headerText',
-        redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+        jumpOffId: 'messages',
         feature: 'jumpOffContent',
         expectedText: 'Messages and consultations with a doctor or health professional',
       }, {
         textType: 'featureName',
-        redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+        jumpOffId: 'messages',
         feature: 'thirdPartyWarning',
         expectedText: 'Messages and online consultations',
       }]).it('will bring back the correct third party locale text',
-        ({ textType, redirectPath, feature, expectedText }) => {
+        ({ textType, jumpOffId, feature, expectedText }) => {
           const thirdPartyLocales = $te('thirdPartyProviders.pkb') ? $t('thirdPartyProviders.pkb') : '';
           const retrievedText =
-            getThirdPartyLocaleText(thirdPartyLocales, redirectPath, feature, textType);
+            getThirdPartyLocaleText(thirdPartyLocales, jumpOffId, feature, textType);
 
           expect(retrievedText).toEqual(expectedText);
         });
@@ -663,10 +663,13 @@ describe('util library', () => {
   });
 
   describe('getThirdPartyJumpOff', () => {
-    const pkbJumpOffWithQueryString = { path: '/pkb.com/sso?jump=appointments' };
-    const ersJumpOffNoQueryString = { path: '/ers.com/login' };
-    const thirdPartyLocales = {
-      jumpOffs: [pkbJumpOffWithQueryString, ersJumpOffNoQueryString],
+    const pkbJumpOffWithQueryString = { redirectPath: '/pkb.com/sso?jump=appointments' };
+    const ersJumpOffNoQueryString = { redirectPath: '/ers.com/login' };
+    const pkbCieEncodedPartsInQuery = {
+      redirectPath: '/nhs-login/login?phrPath=%2Ftest%2FmyTests.action&brand=cie',
+    };
+    const thirdPartyConfig = {
+      jumpOffs: [pkbJumpOffWithQueryString, ersJumpOffNoQueryString, pkbCieEncodedPartsInQuery],
     };
 
     each([{
@@ -696,9 +699,12 @@ describe('util library', () => {
     }, {
       redirectPath: '/ers.com/login?source=login',
       expectedResultMatch: ersJumpOffNoQueryString,
+    }, {
+      redirectPath: '/nhs-login/login?phrPath=%2Ftest%2FmyTests.action&brand=cie', // encoded parts
+      expectedResultMatch: pkbCieEncodedPartsInQuery,
     }]).it('will correctly match third party jump off points', (data) => {
       // act
-      const result = getThirdPartyJumpOff(thirdPartyLocales, data.redirectPath);
+      const result = getThirdPartyJumpOff(thirdPartyConfig, data.redirectPath);
 
       // assert
       expect(result).toBe(data.expectedResultMatch);

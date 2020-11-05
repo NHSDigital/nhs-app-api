@@ -44,7 +44,7 @@ export default {
       headerTextData: '',
       descriptionTextData: '',
       isNativeApp: this.$store.state.device.isNativeApp,
-      jumpOffType: this.providerConfiguration.jumpOffType,
+      jumpOffId: this.providerConfiguration.jumpOffId,
       redirectPath: this.providerConfiguration.redirectPath,
     };
   },
@@ -68,7 +68,7 @@ export default {
     },
     getMessage(property) {
       const thirdPartyLocales = this.getText(`thirdPartyProviders.${this.providerId}`);
-      return getThirdPartyLocaleText(thirdPartyLocales, this.redirectPath, 'jumpOffContent', property);
+      return getThirdPartyLocaleText(thirdPartyLocales, this.jumpOffId, 'jumpOffContent', property);
     },
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';

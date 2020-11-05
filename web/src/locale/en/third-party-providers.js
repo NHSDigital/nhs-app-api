@@ -1,4 +1,11 @@
 export default {
+  errors: {
+    silverIntegrationNotAvailable: {
+      heading: 'This service is not available',
+      contactYourGpSurgery: 'If you need to access this service, contact your GP surgery for more information.',
+      goToNHSAppHome: 'Go to NHS App homepage',
+    },
+  },
   warningConjunctions: {
     heading: 'This service is provided by {providerName}',
     paragraph: '{{ servicePurchaser }} has chosen this {{ serviceType }} provider.',
@@ -11,7 +18,6 @@ export default {
     jumpOffs: [
       {
         id: 'admin',
-        path: '/?sso_route=admin',
         jumpOffContent: {
           headerText: 'Additional GP services',
           descriptionText: 'Get sick notes and GP letters or ask your GP surgery about something else',
@@ -26,7 +32,6 @@ export default {
       },
       {
         id: 'medical',
-        path: '/?sso_route=medical',
         jumpOffContent: {
           headerText: 'Ask your GP for advice',
           descriptionText: 'Answer questions online and get a response from your GP surgery',
@@ -41,7 +46,6 @@ export default {
       },
       {
         id: 'messages',
-        path: '/?sso_route=messages',
         jumpOffContent: {
           headerText: 'Online consultations',
           descriptionText: 'View your online consultations and any responses from your GP surgery',
@@ -62,7 +66,6 @@ export default {
     jumpOffs: [
       {
         id: 'manageYourReferral',
-        path: '/nhslogin',
         jumpOffContent: {
           headerText: 'Book or cancel your referral appointment',
           descriptionText: 'If you\'ve had a referral, '
@@ -77,7 +80,6 @@ export default {
     jumpOffs: [
       {
         id: 'appointments',
-        path: '/appointment',
         jumpOffContent: {
           headerText: 'View and manage your hospital and other appointments',
           descriptionText: 'This includes your hospital, mental health and social care appointments',
@@ -92,7 +94,6 @@ export default {
       },
       {
         id: 'correspondence',
-        path: '/correspondence',
         jumpOffContent: {
           headerText: 'Hospital and other healthcare letters',
           descriptionText: 'This includes your hospital, mental health and social care letters and documents',
@@ -107,7 +108,6 @@ export default {
       },
       {
         id: 'admin',
-        path: '/patient/preferences',
         jumpOffContent: {
           headerText: 'Great North Care Record service preferences',
           descriptionText: '',
@@ -128,7 +128,6 @@ export default {
     jumpOffs: [
       {
         id: 'appointments',
-        path: '/nhs-login/login?phrPath=/diary/listAppointments.action',
         jumpOffContent: {
           headerText: 'View appointments',
           descriptionText: 'See your upcoming and past hospital or other appointments',
@@ -143,7 +142,6 @@ export default {
       },
       {
         id: 'carePlans',
-        path: '/nhs-login/login?phrPath=/auth/listPlans.action',
         jumpOffContent: {
           headerText: 'Care plans',
           descriptionText: 'View your personalised care plans',
@@ -158,7 +156,6 @@ export default {
       },
       {
         id: 'healthTrackers',
-        path: '/nhs-login/login?phrPath=/pkbNhsMenu.action',
         jumpOffContent: {
           headerText: 'Track your health',
           descriptionText: 'Record symptoms and add to your health journal',
@@ -173,7 +170,6 @@ export default {
       },
       {
         id: 'messages',
-        path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         jumpOffContent: {
           headerText: 'Messages and consultations with a doctor or health professional',
           descriptionText: 'Send or view messages and online consultations with a doctor or health professional',
@@ -188,7 +184,6 @@ export default {
       },
       {
         id: 'sharedLinks',
-        path: '/nhs-login/login?phrPath=/library/manageLibrary.action',
         jumpOffContent: {
           headerText: 'Shared links',
           descriptionText: 'View links your doctor or health professional has shared with you',
@@ -203,7 +198,6 @@ export default {
       },
       {
         id: 'medicines',
-        path: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments',
         jumpOffContent: {
           headerText: 'Hospital and other prescriptions',
           descriptionText: 'See your current and past prescriptions',
@@ -218,7 +212,6 @@ export default {
       },
       {
         id: 'testResults',
-        path: '/nhs-login/login?phrPath=/test/myTests.action',
         jumpOffContent: {
           headerText: 'Test results',
           descriptionText: 'View test results from your hospital and other healthcare providers',
@@ -233,7 +226,6 @@ export default {
       },
       {
         id: 'appointmentsCie',
-        path: '/nhs-login/login?phrPath=/diary/listAppointments.action&brand=cie',
         jumpOffContent: {
           headerText: 'View appointments',
           descriptionText: 'See your upcoming and past hospital or other appointments',
@@ -249,7 +241,6 @@ export default {
       },
       {
         id: 'carePlansCie',
-        path: '/nhs-login/login?phrPath=/auth/listPlans.action&brand=cie',
         jumpOffContent: {
           headerText: 'Care plans',
           descriptionText: 'View your care plans from your hospital or other care provider, or add your own',
@@ -265,7 +256,6 @@ export default {
       },
       {
         id: 'healthTrackersCie',
-        path: '/nhs-login/login?phrPath=/pkbNhsMenu.action&brand=cie',
         jumpOffContent: {
           headerText: 'Track your health',
           descriptionText: 'Record symptoms and add to your health journal',
@@ -281,7 +271,6 @@ export default {
       },
       {
         id: 'messagesCie',
-        path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages&brand=cie',
         jumpOffContent: {
           headerText: 'Consultations, events and messages',
           descriptionText: 'See details of your visits and treatments, view clinical documents, message your health team, or fill in a consultation form',
@@ -297,7 +286,6 @@ export default {
       },
       {
         id: 'sharedLinksCie',
-        path: '/nhs-login/login?phrPath=/library/manageLibrary.action&brand=cie',
         jumpOffContent: {
           headerText: 'Shared health links',
           descriptionText: 'View links or documents your health team has shared with you, or add your own',
@@ -313,7 +301,6 @@ export default {
       },
       {
         id: 'medicinesCie',
-        path: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=cie',
         jumpOffContent: {
           headerText: 'Hospital and other medicines',
           descriptionText: 'View your current and past medicines or add a record of your own',
@@ -329,7 +316,6 @@ export default {
       },
       {
         id: 'testResultsCie',
-        path: '/nhs-login/login?phrPath=/test/myTests.action&brand=cie',
         jumpOffContent: {
           headerText: 'Test results',
           descriptionText: 'View test results from your hospital and other healthcare providers',
@@ -351,7 +337,6 @@ export default {
     jumpOffs: [
       {
         id: 'lifestyleGuides',
-        path: '/lifestyle_guides',
         jumpOffContent: {
           headerText: 'Lifestyle Guides',
           descriptionText: 'Patient Pack Lifestyle Guides',
@@ -372,7 +357,6 @@ export default {
     jumpOffs: [
       {
         id: 'messages',
-        path: '/index.html',
         jumpOffContent: {
           headerText: 'Test Provider',
           descriptionText: 'For testing NHS App Javascript API',

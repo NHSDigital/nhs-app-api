@@ -11,7 +11,7 @@ Feature: Engage Messages
     Then the Messages Hub page is displayed
     And the link to Engage Messages and consultations is not available on the Messages Hub page
 
-  Scenario: A user navigates to Engage messages and sees the warning message
+  Scenario: A user navigates directly to Engage messages and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Engage
     And I am logged in
@@ -38,8 +38,8 @@ Feature: Engage Messages
     When I click the link called 'Find out more about online consultation services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/'
     Then a new tab has been opened by the link
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Messages and Online Consultations from Engage
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs1-nhsapp.engage.gp%2F%3Fsso_route%3Dmessages'
     Then I am redirected to the redirector page with the header 'Messages'

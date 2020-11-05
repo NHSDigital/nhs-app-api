@@ -30,8 +30,8 @@ Feature: Engage Admin
     When I click the link called 'Find out more about online consultation services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/'
     Then a new tab has been opened by the link
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Admin from Engage
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs1-nhsapp.engage.gp%2F%3Fsso_route%3Dadmin'
     Then I am redirected to the redirector page with the header 'Additional GP services'

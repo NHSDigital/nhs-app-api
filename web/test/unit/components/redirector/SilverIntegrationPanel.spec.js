@@ -21,6 +21,7 @@ describe('Silver Integration warning panel', () => {
       },
       redirectPath: 'https://test.url.com/nhs-login/login?phrPath=/diary/listAppointments.action',
       sessionStorageName: 'sessionName',
+      jumpOffId: 'appointments',
     },
   });
 

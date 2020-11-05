@@ -6,7 +6,12 @@ import {
   APPOINTMENTS_NAME,
 } from '@/router/names';
 import { AppPage } from '@/static/js/v1/src/constants';
-import { GP_MEDICAL_RECORD_PATH, INDEX_PATH } from '@/router/paths';
+import {
+  GP_MEDICAL_RECORD_PATH,
+  INDEX_PATH,
+  UPLIFT_SILVER_INTEGRATION_PATH,
+  SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+} from '@/router/paths';
 import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
 import * as dependency from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
@@ -17,6 +22,7 @@ describe('redirector page', () => {
   let $route;
   let $router;
   let wrapper;
+  let getters;
   dependency.redirectTo = jest.fn();
   dependency.redirectByName = jest.fn();
 
@@ -39,6 +45,7 @@ describe('redirector page', () => {
   beforeEach(() => {
     $router = createRouter();
     wrapper = undefined;
+    getters = { 'session/isProofLevel9': true };
   });
 
   describe('has no redirect param', () => {
@@ -151,7 +158,7 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices list for non third party', () => {
+  describe('has redirect param external site on knownServices list for unknown third party', () => {
     let $http;
 
     beforeEach(() => {
@@ -166,7 +173,8 @@ describe('redirector page', () => {
           }],
         },
       };
-      const $store = createStore({ $http, state: $state });
+      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
+      const $store = createStore({ $http, state: $state, getters });
       $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
@@ -202,13 +210,13 @@ describe('redirector page', () => {
       };
       hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
-      const $store = createStore({ $http, state: $state });
+      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
+      const $store = createStore({ $http, state: $state, getters });
       $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
-
       wrapper = mountRedirector($http, $store);
     });
 
@@ -288,6 +296,74 @@ describe('redirector page', () => {
     });
   });
 
+  describe('has redirect param external site on knownServices for pkb but is not P9 proof level', () => {
+    let $http;
+
+    beforeEach(() => {
+      $http = createHttp();
+      const $state = {
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            requiresAssertedLoginIdentity: true,
+            showThirdPartyWarning: true,
+            url: 'http://www.url.com',
+          }],
+        },
+      };
+      getters['session/isProofLevel9'] = false;
+      const $store = createStore({ $http, state: $state, getters });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
+      $route = {
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+      };
+
+      wrapper = mountRedirector($http, $store);
+    });
+
+    it('will redirect to UPLIFT_SILVER_INTEGRATION_PATH path', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, UPLIFT_SILVER_INTEGRATION_PATH, expect.any(Object));
+    });
+  });
+
+  describe('has redirect param external site on knownServices but doesn\'t have silver integration feature enabled via SJR', () => {
+    let $http;
+
+    beforeEach(() => {
+      $http = createHttp();
+      const $state = {
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            requiresAssertedLoginIdentity: true,
+            showThirdPartyWarning: true,
+            url: 'http://www.url.com',
+          }],
+        },
+      };
+      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => false);
+      const $store = createStore({ $http, state: $state, getters });
+      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
+      $route = {
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+      };
+
+      wrapper = mountRedirector($http, $store);
+    });
+
+    it('will redirect to SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH path', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(
+          wrapper.vm,
+          SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+          expect.any(Object),
+        );
+    });
+  });
+
   describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale and thirdparty warning has been accepted', () => {
     let $http;
 
@@ -305,7 +381,8 @@ describe('redirector page', () => {
       };
       hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(true);
-      const $store = createStore({ $http, state: $state });
+      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
+      const $store = createStore({ $http, state: $state, getters });
       $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
@@ -336,6 +413,8 @@ describe('redirector page', () => {
       };
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
+      expect(getters['serviceJourneyRules/silverIntegrationEnabled'])
+        .toHaveBeenCalledWith({ provider: 'pkb', serviceType: 'messages' });
     });
 
     it('does not display the continue button', () => {

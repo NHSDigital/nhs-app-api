@@ -4,6 +4,7 @@
       v-if="shouldShowWarning"
       :known-service="services[0]"
       :redirect-path="redirectParameter"
+      :jump-off-id="jumpOffId"
       :session-storage-name="sessionStorageName"
       @click.stop.prevent="getAssertedLoginIdentityAndNavigate"
     />
@@ -14,6 +15,7 @@
 <script>
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
+import sjrIf from '@/lib/sjrIf';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
 import {
   REDIRECT_PARAMETER,
@@ -23,6 +25,8 @@ import {
 } from '@/router/names';
 import {
   INDEX_PATH,
+  UPLIFT_SILVER_INTEGRATION_PATH,
+  SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
 } from '@/router/paths';
 import {
   getPathAndQuery,
@@ -31,6 +35,7 @@ import {
   redirectByName,
 } from '@/lib/utils';
 import NativeApp from '@/services/native-app';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'InterstitialRedirectorPage',
@@ -47,6 +52,7 @@ export default {
       buttonDisabled: false,
       sessionStorageName: '',
       thirdPartyServiceContent: '',
+      jumpOffId: null,
     };
   },
   computed: {
@@ -85,36 +91,7 @@ export default {
       return;
     }
 
-    this.services = this.$store.state.knownServices.knownServices
-      .filter(service => this.redirectParameter.includes(service.url));
-
-    if (this.services.length > 0) {
-      const matchedService = this.services[0];
-      this.sessionStorageName = `agreedThirdPartyWarning_${matchedService.id}`;
-      this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
-      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${matchedService.id}`);
-      this.JumpOffId =
-        getThirdPartyJumpOff(this.thirdPartyServiceContent, this.redirectParameterAndQuery).id;
-
-      if (this.JumpOffId === undefined) {
-        redirectTo(this, INDEX_PATH);
-        return;
-      }
-
-      if (matchedService.showThirdPartyWarning === false ||
-          agreedToThirdPartyWarning(this.sessionStorageName)) {
-        if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
-          this.getAssertedLoginIdentityAndNavigate();
-        } else {
-          this.navigateToExternalPath(this.redirectParameter);
-        }
-        return;
-      }
-
-      this.showWarning = true;
-      return;
-    }
-    redirectTo(this, INDEX_PATH);
+    this.showThirdPartyWarningOrNavigate();
   },
   methods: {
     async getAssertedLoginIdentityAndNavigate() {
@@ -124,7 +101,7 @@ export default {
             IntendedRelyingPartyUrl: this.redirectParameter,
             ProviderId: this.thirdPartyServiceContent.serviceId,
             ProviderName: this.thirdPartyServiceContent.providerName,
-            JumpOffId: this.JumpOffId,
+            JumpOffId: this.jumpOffId,
             Action: 'SilverIntegrationJumpOff',
           },
           ignoreError: true,
@@ -154,6 +131,83 @@ export default {
       } else {
         window.location = url;
       }
+    },
+    canAccessSilverIntegration(store, { provider, serviceType }) {
+      return sjrIf({
+        $store: store,
+        journey: 'silverIntegration',
+        context: {
+          provider,
+          serviceType,
+        },
+      });
+    },
+    showThirdPartyWarningOrNavigate() {
+      this.services = this.$store.state.knownServices.knownServices
+        .filter(service => this.redirectParameter.includes(service.url));
+
+      if (this.services.length > 0) {
+        const matchedService = this.services[0];
+        this.sessionStorageName = `agreedThirdPartyWarning_${matchedService.id}`;
+        this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
+        this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${matchedService.id}`);
+
+        const thirdPartyConfig = get(`thirdPartyProvider.${matchedService.id}`)(jumpOffProperties);
+
+        if (!thirdPartyConfig) {
+          redirectTo(this, INDEX_PATH);
+          return;
+        }
+        const jumpOffConfig = getThirdPartyJumpOff(
+          { jumpOffs: Object.values(thirdPartyConfig) },
+          this.redirectParameterAndQuery,
+        );
+
+        this.jumpOffId = jumpOffConfig.jumpOffId;
+        if (this.jumpOffId === undefined) {
+          redirectTo(this, INDEX_PATH);
+          return;
+        }
+
+        if (matchedService.id !== 'silver-third-party-api-test') {
+          const featureJumpOffContent = this.thirdPartyServiceContent.jumpOffs.find(
+            item => item.id === jumpOffConfig.jumpOffId,
+          );
+
+          if (!this.$store.getters['session/isProofLevel9']) {
+            redirectTo(
+              this,
+              UPLIFT_SILVER_INTEGRATION_PATH,
+              { featureName: featureJumpOffContent.jumpOffContent.headerText },
+            );
+            return;
+          }
+
+          if (!this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
+            redirectTo(
+              this,
+              SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+              { featureName: featureJumpOffContent.jumpOffContent.headerText },
+            );
+            return;
+          }
+        }
+
+        if (matchedService.showThirdPartyWarning === false ||
+            agreedToThirdPartyWarning(this.sessionStorageName)) {
+          if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
+            this.getAssertedLoginIdentityAndNavigate();
+          } else {
+            this.navigateToExternalPath(this.redirectParameter);
+          }
+          return;
+        }
+
+        this.showWarning = true;
+        return;
+      }
+
+      redirectTo(this, INDEX_PATH);
     },
   },
 };

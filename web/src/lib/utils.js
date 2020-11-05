@@ -287,36 +287,36 @@ export const getPathAndQuery = (url) => {
   }
 };
 
-const getThirdPartyJumpOffMatchingFullUri = (thirdPartyLocales, redirectPath) => {
+const getThirdPartyJumpOffMatchingFullUri = (thirdPartyConfig, redirectPath) => {
   const decodedRedirectPath = decodeURIComponent(redirectPath);
-  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
-    if (thirdPartyLocales.jumpOffs[i].path === decodedRedirectPath) {
-      return thirdPartyLocales.jumpOffs[i];
+  for (let i = 0; i < thirdPartyConfig.jumpOffs.length; i += 1) {
+    if (decodeURIComponent(thirdPartyConfig.jumpOffs[i].redirectPath) === decodedRedirectPath) {
+      return thirdPartyConfig.jumpOffs[i];
     }
   }
   return null;
 };
 
-const getThirdPartyJumpOffMatchingUriPath = (thirdPartyLocales, redirectPath) => {
+const getThirdPartyJumpOffMatchingUriPath = (thirdPartyConfig, redirectPath) => {
   const decodedRedirectPath = decodeURIComponent(redirectPath);
   const path = decodedRedirectPath.split('?')[0];
-  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
-    if (thirdPartyLocales.jumpOffs[i].path === path) {
-      return thirdPartyLocales.jumpOffs[i];
+  for (let i = 0; i < thirdPartyConfig.jumpOffs.length; i += 1) {
+    if (decodeURIComponent(thirdPartyConfig.jumpOffs[i].redirectPath) === path) {
+      return thirdPartyConfig.jumpOffs[i];
     }
   }
   return null;
 };
 
-export const getThirdPartyJumpOff = (thirdPartyLocales, redirectPath) => {
-  if (thirdPartyLocales.jumpOffs !== undefined) {
+export const getThirdPartyJumpOff = (thirdPartyConfig, redirectPath) => {
+  if (thirdPartyConfig.jumpOffs !== undefined) {
     const jumpOffMatchingFullUri =
-      getThirdPartyJumpOffMatchingFullUri(thirdPartyLocales, redirectPath);
+      getThirdPartyJumpOffMatchingFullUri(thirdPartyConfig, redirectPath);
     if (jumpOffMatchingFullUri !== null) {
       return jumpOffMatchingFullUri;
     }
     const jumpOffMatchingUriPath =
-      getThirdPartyJumpOffMatchingUriPath(thirdPartyLocales, redirectPath);
+      getThirdPartyJumpOffMatchingUriPath(thirdPartyConfig, redirectPath);
     if (jumpOffMatchingUriPath !== null) {
       return jumpOffMatchingUriPath;
     }
@@ -324,12 +324,15 @@ export const getThirdPartyJumpOff = (thirdPartyLocales, redirectPath) => {
   return '';
 };
 
-export const getThirdPartyLocaleText = (thirdPartyLocales, redirectPath, feature, property) => {
-  const jumpOff = getThirdPartyJumpOff(thirdPartyLocales, redirectPath);
-  if (jumpOff === '') {
+export const getThirdPartyLocaleText = (thirdPartyLocales, jumpOffId, feature, property) => {
+  let jumpOffLocale;
+  if (thirdPartyLocales.jumpOffs !== undefined) {
+    jumpOffLocale = thirdPartyLocales.jumpOffs.find(item => item.id === jumpOffId);
+  }
+  if (!jumpOffLocale) {
     return '';
   }
-  return jumpOff[feature][property];
+  return jumpOffLocale[feature][property];
 };
 
 export const resetPageFocus = (store) => {

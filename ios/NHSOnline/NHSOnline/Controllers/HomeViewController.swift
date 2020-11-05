@@ -867,7 +867,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         case JavaScriptInteractionMode.NhsApp:
             return "the NhsApp"
         case JavaScriptInteractionMode.SilverThirdParty:
-            return "the a third party"
+            return "a third party"
         default:
             return "an unknown source"
         }

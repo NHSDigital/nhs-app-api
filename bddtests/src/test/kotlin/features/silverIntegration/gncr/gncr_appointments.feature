@@ -22,15 +22,15 @@ Feature: Great North Care Record Appointments
     And the link to GNCR View Appointments is not available on the Appointments page
 
   Scenario: A user can follow the link to Find out more about personal health records
-    Given I am a EMIS patient
+    Given I am a user who can view Appointments from GNCR
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs-pep-glenr.enigmadev2.net%2Fappointment'
     Then I am redirected to the redirector page with the header 'Hospital and other appointments'
     When I click the link called 'Find out more about personal health record services' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/'
     Then a new tab has been opened by the link
 
-  Scenario: A user navigates to an external partner site and will see a warning page
-    Given I am a EMIS patient
+  Scenario: A user navigates directly to an external partner site and will see a warning page
+    Given I am a user who can view Appointments from GNCR
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhs-pep-glenr.enigmadev2.net%2Fappointment'
     Then I am redirected to the redirector page with the header 'Hospital and other appointments'

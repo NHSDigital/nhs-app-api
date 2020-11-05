@@ -110,6 +110,7 @@ export const PRESCRIPTIONS_GP_AT_HAND_PATH = 'prescriptions/gp-at-hand';
 export const PRESCRIPTION_REPEAT_COURSES_PATH = 'prescriptions/repeat-courses';
 export const PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH = 'prescriptions/repeat-partial-success';
 export const PRESCRIPTIONS_ORDER_SUCCESS_PATH = 'prescriptions/order-success';
+export const SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH = 'silver-integration/feature-not-available';
 export const LINKED_PROFILES_PATH = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_PATH = 'linked-profiles/summary';
 export const LINKED_PROFILES_SHUTTER_MORE_PATH = 'linked-profiles/shutter/more';
@@ -122,6 +123,7 @@ export const UPLIFT_APPOINTMENTS_PATH = 'uplift/appointments';
 export const UPLIFT_GP_MEDICAL_RECORD_PATH = 'uplift/gp-medical-record';
 export const UPLIFT_PRESCRIPTIONS_PATH = 'uplift/prescriptions';
 export const UPLIFT_MORE_PATH = 'uplift/more';
+export const UPLIFT_SILVER_INTEGRATION_PATH = 'uplift/silver-integration';
 export const USER_RESEARCH_PATH = '/user-research';
 
 export default {
@@ -232,6 +234,7 @@ export default {
   PRESCRIPTION_REPEAT_COURSES_PATH,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH,
   PRESCRIPTIONS_ORDER_SUCCESS_PATH,
+  SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,
@@ -244,6 +247,7 @@ export default {
   UPLIFT_GP_MEDICAL_RECORD_PATH,
   UPLIFT_PRESCRIPTIONS_PATH,
   UPLIFT_MORE_PATH,
+  UPLIFT_SILVER_INTEGRATION_PATH,
   USER_RESEARCH_PATH,
 };
 

@@ -31,7 +31,6 @@
 
 <script>
 import WarningContentPanel from '@/components/widgets/WarningContentPanel';
-import { getPathAndQuery, getThirdPartyLocaleText } from '@/lib/utils';
 import { UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
@@ -46,16 +45,25 @@ export default {
       type: String,
       required: true,
     },
+    jumpOffId: {
+      type: String,
+      required: true,
+    },
     sessionStorageName: {
       type: String,
       required: true,
     },
   },
   data() {
+    const thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.knownService.id}`);
+    const jumpOffContent = thirdPartyServiceContent.jumpOffs.find(
+      item => item.id === this.jumpOffId,
+    );
+
     return {
       buttonDisabled: false,
-      thirdPartyServiceContent: this.getText(`thirdPartyProviders.${this.knownService.id}`),
-      redirectPathAndQuery: getPathAndQuery(this.redirectPath),
+      thirdPartyServiceContent,
+      jumpOffContent,
     };
   },
   async mounted() {
@@ -80,8 +88,8 @@ export default {
       return '';
     },
     getWarningMessage(property) {
-      if (this.knownService) {
-        return getThirdPartyLocaleText(this.thirdPartyServiceContent, this.redirectPathAndQuery, 'thirdPartyWarning', property);
+      if (this.jumpOffContent && this.jumpOffContent.thirdPartyWarning) {
+        return this.jumpOffContent.thirdPartyWarning[property];
       }
       return '';
     },

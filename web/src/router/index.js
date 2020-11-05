@@ -15,6 +15,7 @@ import medicalRecordRoutes from '@/router/routes/medical-record';
 import linkedProfilesRoutes from '@/router/routes/linked-profiles';
 import logoutRoute from '@/router/routes/logout';
 import organDonationRoutes from '@/router/routes/organ-donation';
+import silverIntegrationRoutes from '@/router/routes/silver-integration';
 import store from '@/store';
 
 import middlewarePipeline from '@/router/middlewarePipeline';
@@ -85,6 +86,7 @@ export const allRoutes = [
       ...accountRoutes,
       ...linkedProfilesRoutes,
       ...organDonationRoutes,
+      ...silverIntegrationRoutes,
       // Route matching happens in order, generalRoutes should
       // be last so to not match before all other routes have been checked,
       // as it contains a catch-all NOT_FOUND route

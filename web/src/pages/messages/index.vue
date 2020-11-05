@@ -28,7 +28,7 @@
           v-if="testProviderEnabled"
           id="btn_test_silver_messages"
           provider-id="silver-third-party-api-test"
-          :provider-configuration="thirdPartyProvider.testProvider.messages" />
+          :provider-configuration="thirdPartyProvider['silver-third-party-api-test'].messages" />
         <menu-item v-if="appMessagingSjrEnabled"
                    id="btn_appMessaging"
                    header-tag="h2"

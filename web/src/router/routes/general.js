@@ -1,5 +1,5 @@
 import IndexPage from '@/pages';
-import RedirectorPage from '@/pages/redirector';
+import RedirectorPage from '@/pages/redirector/index';
 import NotFoundPage from '@/pages/not-found';
 import breadcrumbs from '@/breadcrumbs/general';
 import {
