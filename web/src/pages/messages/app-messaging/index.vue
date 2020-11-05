@@ -16,7 +16,7 @@
                          :date-time="message.sentTime"
                          :unread-count="senderMessage.unreadCount"
                          :aria-label="messageLabel(senderMessage, message)"
-                         :href="generateMessageUrl(senderMessage)"
+                         :href="messagePath()"
                          :list-index="messageIndex"
                          :has-unread-messages="isUnread(senderMessage)"
                          date-format="DD/MM/YYYY"
@@ -78,14 +78,12 @@ export default {
     backClicked() {
       redirectTo(this, this.backLink);
     },
-    generateMessageUrl(senderMessage) {
-      return senderMessage.unreadCount > 0
-        ? `${HEALTH_INFORMATION_UPDATES_MESSAGES_PATH}#unreadMessages`
-        : HEALTH_INFORMATION_UPDATES_MESSAGES_PATH;
+    messagePath() {
+      return HEALTH_INFORMATION_UPDATES_MESSAGES_PATH;
     },
     goToMessages(senderMessage) {
       this.$store.dispatch('messaging/selectSender', senderMessage.sender);
-      redirectTo(this, this.generateMessageUrl(senderMessage.unreadCount));
+      redirectTo(this, this.messagePath());
     },
     messageLabel(senderMessage, message) {
       let label = this.$t('messages.messagesFromSenderLastSentOnDate')

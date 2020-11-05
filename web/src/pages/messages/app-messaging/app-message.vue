@@ -15,8 +15,8 @@
       <message v-for="(message, index) in readMessages" :key="index" :message="message" />
     </ul>
 
+    <scroll-to-anchor id="unreadMessages" />
     <template v-if="hasUnreadMessages">
-      <scroll-to-anchor id="unreadMessages" />
       <page-divider :text="$t('messages.unreadMessages')" />
 
       <ul id="unreadSection" :class="$style['message-panel__list']">

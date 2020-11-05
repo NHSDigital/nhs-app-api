@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import vueScrollTo from 'vue-scrollto';
+
 export default {
   name: 'ScrollToAnchor',
   computed: {
@@ -12,6 +14,9 @@ export default {
         !this.$store.state.device.isNativeApp || this.$style.scrollToAnchorNativePosition,
       ];
     },
+  },
+  mounted() {
+    vueScrollTo.scrollTo(this.$el, 250, { easing: vueScrollTo['ease-in'] });
   },
 };
 </script>

@@ -210,7 +210,7 @@ describe('practice patient messaging inbox', () => {
         });
 
         it('will redirect to view gp message path with unread messages url hash', () => {
-          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details#unreadMessages');
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/view-details');
         });
 
         it('will set message details if required', () => {

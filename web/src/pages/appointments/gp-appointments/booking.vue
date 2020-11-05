@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import VueScrollTo from 'vue-scrollto';
+import vueScrollTo from 'vue-scrollto';
 import { get, isEmpty } from 'lodash/fp';
 import BookingErrors from '@/components/errors/pages/appointments/BookingErrors';
 import Contact111 from '@/components/widgets/Contact111';
@@ -201,7 +201,7 @@ export default {
       this.filtered = true;
 
       if (this.showNoMatchingWarning) {
-        VueScrollTo.scrollTo(this.$refs.noMatching, 500, { easing: VueScrollTo['ease-in'] });
+        vueScrollTo.scrollTo(this.$refs.noMatching, 500, { easing: vueScrollTo['ease-in'] });
         const errors = [];
         errors.push(this.$t('appointments.book.noAppointmentsAvailable'));
         this.$store.app.$analytics.logicError(errors);

@@ -153,9 +153,7 @@ export default {
         this.$store.dispatch('gpMessages/setMessageDetails', { messageDetails: message });
       }
 
-      redirectTo(this, `${GP_MESSAGES_VIEW_MESSAGE_PATH}${
-        message.unreadReplyInfo.present ? '#unreadMessages' : ''
-      }`);
+      redirectTo(this, GP_MESSAGES_VIEW_MESSAGE_PATH);
     },
   },
 };
