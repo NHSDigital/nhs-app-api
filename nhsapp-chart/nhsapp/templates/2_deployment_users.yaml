@@ -39,7 +39,7 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: "{{ $.Values.keyvaultName }}-{{ .Chart.AppVersion }}"
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: session-key
         secret:
           secretName: session-key-{{ .Chart.AppVersion }}

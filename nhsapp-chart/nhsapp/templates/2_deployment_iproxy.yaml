@@ -40,7 +40,7 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: "{{ $.Values.keyvaultName }}-{{ .Chart.AppVersion }}"
+            secretProviderClass: "nhsapp-{{ $.Values.zone }}-{{ .Chart.AppVersion }}"
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
