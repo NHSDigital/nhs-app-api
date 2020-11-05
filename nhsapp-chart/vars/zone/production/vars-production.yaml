@@ -2,6 +2,7 @@
 cluster: productionuks1
 domain: nhsapp.service.nhs.uk
 zone: production
+keyvaultName: nhsapp-prod
 registry: nhsapprelease.azurecr.io
 cosmosDBName: production
 AZURE_SUBSCRIPTION_NAME: live

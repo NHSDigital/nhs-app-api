@@ -1,6 +1,7 @@
 ---
 cluster: sandboxuks1
 zone: sandbox
+keyvaultName: nhsapp-sandbox
 domain: nonlive.nhsapp.service.nhs.uk
 privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive

@@ -1,6 +1,7 @@
 ---
 cluster: staginguks1
 zone: staging
+keyvaultName: nhsapp-staging
 domain: nhsapp.service.nhs.uk
 registry: nhsapprelease.azurecr.io
 cosmosDBName: staging
