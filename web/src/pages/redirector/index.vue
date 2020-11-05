@@ -60,9 +60,13 @@ export default {
 
     let path;
 
-    if (redirectEnum && findByRedirectEnum(redirectEnum)) {
-      redirectByName(this, redirectEnum);
-      return;
+    if (redirectEnum) {
+      const pathName = findByRedirectEnum(redirectEnum);
+
+      if (pathName) {
+        redirectByName(this, pathName);
+        return;
+      }
     }
     if (this.redirectParameter) {
       if (isNhsAppRouteName(this.redirectParameter)) {
