@@ -2,7 +2,7 @@ import get from 'lodash/fp/get';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import jwt from 'jwt-decode';
-import { NOTIFICATIONS_NAME } from '@/router/names';
+import { NOTIFICATIONS_NAME, AUTH_RETURN_NAME } from '@/router/names';
 import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
 import {
   SET_NOTIFICATION_COOKIE_EXISTS,
@@ -143,6 +143,11 @@ export default {
           notificationsRegistered: false,
         });
       this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
+    } else if (this.app.$router.currentRoute.name === AUTH_RETURN_NAME) {
+      // if there is a fatal error when load is called during
+      // the middleware we need to ensure the promise is
+      // resolved and doesn't leave the user stuck
+      resolveLoading('');
     } else {
       addApiError(this, 10002);
     }

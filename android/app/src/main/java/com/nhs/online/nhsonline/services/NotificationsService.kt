@@ -27,8 +27,12 @@ class NotificationsService(
                 logger.log(Level.INFO, "FCM Registration Token: $FCM_token")
                 appWebInterface.notificationsAuthorised(FCM_token, trigger)
             }
+            firebaseClient.instanceId.addOnFailureListener { exception ->
+                logger.log(Level.INFO, "Failed to register for notifications", exception)
+                appWebInterface.notificationsUnauthorised()
+            }
         } catch (e: java.lang.Exception) {
-            logger.log(Level.WARNING, "Failed to register for notifications", e)
+            logger.log(Level.WARNING, "Error registering for notifications", e)
             appWebInterface.notificationsUnauthorised()
         }
     }
