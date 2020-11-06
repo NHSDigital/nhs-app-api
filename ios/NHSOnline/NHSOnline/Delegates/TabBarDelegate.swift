@@ -45,7 +45,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
         if(!viewController.applicationState.isReady()) {
-            setMenuBarItem(index: viewController.selectedTab!)
+            setMenuBarItem(index: viewController.selectedTab ?? -1)
             return
         }
         
@@ -61,7 +61,6 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         
         viewController.selectedTab = didSelect.tag
 
-        var _: String
         if(currentlySelectedItem != .Advice && previouslySelectedItem != .More && currentlySelectedItem !=
             .Appointments && currentlySelectedItem != .Prescriptions) {
             viewController.applicationState.block()

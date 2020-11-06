@@ -42,7 +42,20 @@ class TabBarDelegateTests : XCTestCase {
         tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
         
         XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled == false)
-        XCTAssert(viewController!.selectedTab==1)
+        XCTAssert(tabBarDelegate!.setMenuBarItemWasCalled == true)
+        XCTAssert(tabBarDelegate!.setMenuBarItemWasCalledWith == 1)
+        XCTAssert(viewController!.selectedTab == 1)
+    }
+
+    func test_WhenTheApplicationStateIsBusyAndSelectedTabIsNilThenTheSelectedTabRemainsNil() {
+        viewController!.applicationState.block()
+        viewController!.selectedTab = nil
+        tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
+        
+        XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled == false)
+        XCTAssert(tabBarDelegate!.setMenuBarItemWasCalled == true)
+        XCTAssert(tabBarDelegate!.setMenuBarItemWasCalledWith == -1)
+        XCTAssert(viewController!.selectedTab == nil)
     }
     
     func test_WhenSymptomsIsClickedOnThenTheApplicationStateIsNotBlocked() {
