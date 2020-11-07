@@ -100,12 +100,13 @@ describe('appointments confirmation page', () => {
         const findTelephoneError = () => wrapper.find('[data-purpose=telephone-error]');
 
         describe('empty telephone number', () => {
-          beforeEach(() => {
+          beforeEach(async () => {
             state = createState({ channel: Channel.Telephone });
             wrapper = mountConfirmation();
             wrapper.vm.symptoms = 'reason';
             button = wrapper.find('#btn_book_appointment');
             button.trigger('click');
+            await wrapper.vm.$nextTick();
             telephoneError = findTelephoneError();
           });
 
@@ -140,9 +141,10 @@ describe('appointments confirmation page', () => {
         });
 
         describe('empty reason', () => {
-          beforeEach(() => {
+          beforeEach(async () => {
             button = wrapper.find('#btn_book_appointment');
             button.trigger('click');
+            await wrapper.vm.$nextTick();
             errorContainer = findErrorContainer();
             reasonError = findReasonError();
           });

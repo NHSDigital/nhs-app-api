@@ -5,10 +5,9 @@
     </div>
     <div v-else>
       <div v-if="showError" class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
+        <div class="nhsuk-grid-column-full" role="alert" aria-atomic="true">
           <message-dialog message-type="error"
-                          :focusable="true"
-                          role="alert">
+                          :focusable="true">
             <message-text data-purpose="error-heading">
               {{ $t('appointments.confirmation.error.thereIsAProblem') }}
             </message-text>
@@ -325,38 +324,39 @@ export default {
     async onConfirmButtonClicked() {
       this.reasonError = false;
       this.telephoneNumberError = false;
-
-      if (this.slot.channel === channel.Telephone) {
-        this.telephoneNumber = this.telephoneNumber.trim();
-        if ((this.telephoneNumber.length === 0)
-          && (this.otherTelephoneNumber.trim().length === 0)) {
-          this.telephoneNumberError = true;
+      this.$nextTick(async () => {
+        if (this.slot.channel === channel.Telephone) {
+          this.telephoneNumber = this.telephoneNumber.trim();
+          if ((this.telephoneNumber.length === 0)
+            && (this.otherTelephoneNumber.trim().length === 0)) {
+            this.telephoneNumberError = true;
+          }
         }
-      }
 
-      const isMandatory = this.$store.state.availableAppointments
-        .bookingReasonNecessity === necessity.Mandatory;
-      this.symptoms = this.symptoms.trim();
-      if (this.symptoms.length === 0 && isMandatory) {
-        this.reasonError = true;
-      }
+        const isMandatory = this.$store.state.availableAppointments
+          .bookingReasonNecessity === necessity.Mandatory;
+        this.symptoms = this.symptoms.trim();
+        if (this.symptoms.length === 0 && isMandatory) {
+          this.reasonError = true;
+        }
 
-      if (this.showError) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
+        if (this.showError) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
 
-      await this.confirmTheAppointmentSlot(this.slot, this.symptoms,
-        this.telephoneNumber, this.otherTelephoneNumber.trim());
+        await this.confirmTheAppointmentSlot(this.slot, this.symptoms,
+          this.telephoneNumber, this.otherTelephoneNumber.trim());
 
-      if (this.error) {
-        return;
-      }
-      this.$store.dispatch('analytics/trackUserProperty', {
-        key: 'gpBookingSlot',
-        value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
+        if (this.error) {
+          return;
+        }
+        this.$store.dispatch('analytics/trackUserProperty', {
+          key: 'gpBookingSlot',
+          value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
+        });
+        redirectTo(this, APPOINTMENT_BOOKING_SUCCESS_PATH);
       });
-      redirectTo(this, APPOINTMENT_BOOKING_SUCCESS_PATH);
     },
     otherPhoneNumberSelected() {
       this.telephoneNumber = '';
