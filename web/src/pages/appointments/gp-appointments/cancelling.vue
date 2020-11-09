@@ -8,16 +8,17 @@
     <div v-else class="pull-content">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <message-dialog v-if="showError" :focusable="true"
-                          message-type="error" role="alert">
-            <message-text data-purpose="error-heading">
-              {{ $t('appointments.cancel.thereIsAProblem') }}
-            </message-text>
-            <message-list data-purpose="reason-error">
-              <li>{{ $t('appointments.cancel.selectAReason') }}</li>
-            </message-list>
-          </message-dialog>
-
+          <div role="alert" aria-atomic="true">
+            <message-dialog v-if="showError" :focusable="true"
+                            message-type="error">
+              <message-text data-purpose="error-heading">
+                {{ $t('appointments.cancel.thereIsAProblem') }}
+              </message-text>
+              <message-list data-purpose="reason-error">
+                <li>{{ $t('appointments.cancel.selectAReason') }}</li>
+              </message-list>
+            </message-dialog>
+          </div>
           <div data-purpose="info">
             <p class="nhsuk-u-padding-bottom-3">
               {{ $t('appointments.cancel.checkDetailsBeforeCancelling') }}</p>
@@ -152,9 +153,8 @@ export default {
       redirectTo(this, this.appointmentsPath);
     },
     async onCancelButtonClicked() {
+      this.submissionError = false;
       if (this.cancellationReasons.length === 0 || this.selectedReason) {
-        this.submissionError = false;
-
         const data = {
           appointmentId: this.appointment.id,
           cancellationReasonId: this.selectedReason,
@@ -169,9 +169,11 @@ export default {
         }
         redirectTo(this, APPOINTMENT_CANCELLING_SUCCESS_PATH);
       } else {
-        this.submissionError = true;
-        this.labelledBy = 'error-label';
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        this.$nextTick(() => {
+          this.submissionError = true;
+          this.labelledBy = 'error-label';
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        });
       }
     },
   },
