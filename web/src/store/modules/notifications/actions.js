@@ -94,11 +94,16 @@ export default {
     const { screenShown, notificationsRegistered } = params;
     const platform = rootState.device.source;
 
-    return this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({ notificationsPromptData: {
-      screenShown,
-      notificationsRegistered,
-      platform,
-    } });
+    this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({
+      notificationsPromptData:
+        {
+          screenShown,
+          notificationsRegistered,
+          platform,
+        },
+    }).catch(() => {
+      // do nothing as this is just logging
+    });
   },
   settingsStatus({ commit }, status) {
     switch (status) {

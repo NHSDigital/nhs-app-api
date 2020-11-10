@@ -23,7 +23,7 @@ import worker.models.messages.SingleMessageFacade
 import java.util.*
 import kotlin.collections.ArrayList
 
-private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 30000
+private const val ACCESS_TOKEN_ABOUT_TO_EXPIRE_MILLISECONDS = 50000
 
 class MessagesStepDefinitions {
 
