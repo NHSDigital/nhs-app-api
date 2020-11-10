@@ -227,6 +227,7 @@ class MainActivityTest {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
                 R.string.loginPath))
         spyActivity.configurationResponse.callSuccessful = true
+        spyActivity.configurationResponse.isSupportedVersion = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)
@@ -248,6 +249,20 @@ class MainActivityTest {
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(false)
         } //TODO - we keep this in? only utilised for the verification below
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        assertFalse(result)
+        verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun showBiometricLoginIfEnabled_VersionNotSupported_ReturnsFalse() {
+        spyActivity.configurationResponse.isSupportedVersion = false
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(false)
+        }
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
@@ -346,6 +361,7 @@ class MainActivityTest {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
                 R.string.loginPath))
         spyActivity.configurationResponse.callSuccessful = true
+        spyActivity.configurationResponse.isSupportedVersion = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)

@@ -692,7 +692,7 @@ class MainActivity :
     }
 
     override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
-        if (!configurationResponse.callSuccessful) {
+        if (!configurationResponse.callSuccessful || !configurationResponse.isSupportedVersion) {
             return false
         }
 
