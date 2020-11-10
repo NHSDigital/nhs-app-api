@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1uG-Rr-7gl">
-                    <rect key="frame" x="333" y="17.666666666666668" width="26" height="26.000000000000004"/>
+                    <rect key="frame" x="333" y="7.5" width="26" height="26"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="26" id="3zf-Hg-PrS"/>
                         <constraint firstAttribute="width" secondItem="1uG-Rr-7gl" secondAttribute="height" multiplier="1:1" id="pAd-Hh-yvQ"/>
@@ -32,7 +29,7 @@
                     <state key="normal" image="Settings"/>
                 </button>
                 <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vtS-qf-fCF">
-                    <rect key="frame" x="157.66666666666666" y="18.666666666666668" width="60" height="24.000000000000004"/>
+                    <rect key="frame" x="157.5" y="18.5" width="60" height="24"/>
                     <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
                         <accessibilityTraits key="traits" button="YES"/>
                         <bool key="isElement" value="YES"/>
@@ -42,35 +39,59 @@
                     </constraints>
                 </imageView>
                 <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Home" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
-                    <rect key="frame" x="16" y="16" width="26" height="29"/>
-                    <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
+                    <rect key="frame" x="16" y="7.5" width="26" height="26"/>
+                    <accessibility key="accessibilityConfiguration" identifier="Home">
                         <accessibilityTraits key="traits" button="YES"/>
                         <bool key="isElement" value="YES"/>
                     </accessibility>
                     <constraints>
+                        <constraint firstAttribute="height" constant="26" id="KiL-db-edb"/>
                         <constraint firstAttribute="width" constant="26" id="KiL-db-edk"/>
                     </constraints>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JB-cx-FgP">
-                    <rect key="frame" x="293" y="18" width="26" height="26"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JB-cx-FgP">
+                    <rect key="frame" x="287" y="8" width="26" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="26" id="FZ8-Mh-hvt"/>
                     </constraints>
                     <state key="normal" image="icon_header_help"/>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kV3-6d-6Hh">
+                    <rect key="frame" x="287.5" y="38.5" width="25" height="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Sr-cg-zih">
+                    <rect key="frame" x="324" y="38.5" width="44" height="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7v1-ql-lrC">
+                    <rect key="frame" x="13.5" y="38.5" width="31" height="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="1uG-Rr-7gl" firstAttribute="leading" secondItem="8JB-cx-FgP" secondAttribute="trailing" constant="14" id="2bu-ha-slH"/>
-                <constraint firstItem="1uG-Rr-7gl" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="6TN-sO-OYm"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="16" id="VXz-kb-2es"/>
+                <constraint firstItem="kV3-6d-6Hh" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="15" id="0GW-jK-LSL"/>
+                <constraint firstItem="1uG-Rr-7gl" firstAttribute="leading" secondItem="8JB-cx-FgP" secondAttribute="trailing" constant="20" id="2bu-ha-slH"/>
+                <constraint firstItem="1uG-Rr-7gl" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-10" id="6TN-sO-OYm"/>
+                <constraint firstItem="7v1-ql-lrC" firstAttribute="centerX" secondItem="kyn-vf-7A4" secondAttribute="centerX" id="Be4-rB-KTP"/>
+                <constraint firstItem="7v1-ql-lrC" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="15" id="DCn-Pt-1cK"/>
+                <constraint firstItem="1Sr-cg-zih" firstAttribute="centerX" secondItem="1uG-Rr-7gl" secondAttribute="centerX" id="Qxt-L2-Wqq"/>
+                <constraint firstItem="kV3-6d-6Hh" firstAttribute="centerX" secondItem="8JB-cx-FgP" secondAttribute="centerX" id="RkY-Ee-0ek"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="1uG-Rr-7gl" secondAttribute="trailing" constant="16" id="Vbl-TE-P6b"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="dfh-PR-ohj"/>
                 <constraint firstItem="vtS-qf-fCF" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dkP-xV-j9t"/>
                 <constraint firstItem="vtS-qf-fCF" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="kgd-bK-H4G"/>
-                <constraint firstItem="8JB-cx-FgP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="wN0-Fd-OhA"/>
-                <constraint firstItem="kyn-vf-7A4" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="wie-nl-S8d"/>
+                <constraint firstItem="8JB-cx-FgP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-10" id="wN0-Fd-OhA"/>
+                <constraint firstItem="kyn-vf-7A4" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-10" id="wie-nl-S8d"/>
+                <constraint firstItem="1Sr-cg-zih" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="15" id="yoe-8n-xLi"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
@@ -83,6 +104,6 @@
         <image name="Home" width="81" height="81"/>
         <image name="NHS Online - Logo" width="59" height="24"/>
         <image name="Settings" width="81" height="81"/>
-        <image name="icon_header_help" width="25.333333969116211" height="25"/>
+        <image name="icon_header_help" width="25.5" height="25"/>
     </resources>
 </document>

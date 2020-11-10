@@ -104,6 +104,9 @@
 
     <string name="header_icon_account">My account icon</string>
     <string name="header_icon_help">Help icon</string>
+    <string name="header_icon_help_label">Help</string>
+
+    <string name="header_icon_settings_label">Settings</string>
 
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 
