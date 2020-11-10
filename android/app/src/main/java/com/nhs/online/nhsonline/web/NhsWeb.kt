@@ -8,6 +8,7 @@ import android.webkit.URLUtil
 import android.webkit.WebView
 import com.google.gson.Gson
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.clients.ReferrerClient
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.data.PaycassoData
@@ -59,8 +60,9 @@ class NhsWeb(
         appWebInterface: AppWebInterface,
         private val knownServices: KnownServices,
         private val paycassoService: PaycassoService,
-        private val loggingService: ILoggingService,
-        private val connectionStateMonitor: ConnectionStateMonitor
+        loggingService: ILoggingService,
+        private val connectionStateMonitor: ConnectionStateMonitor,
+        referrerClient: ReferrerClient
 ) {
     private val urlLoader = UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
     private val urlHelper = UrlHelper(activity)
@@ -100,14 +102,32 @@ class NhsWeb(
         schemeHandlers.registerHandler(MailToSchemeHandler(activity))
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
-        val webInterceptor = WebClientInterceptor(uiInteractor, this,
-                activity, knownServices, schemeHandlers, loggingService, connectionStateMonitor)
+        val webInterceptor = WebClientInterceptor(
+                uiInteractor,
+                this,
+                activity,
+                knownServices,
+                schemeHandlers,
+                loggingService,
+                connectionStateMonitor)
 
         val addToCalendarHandler = AddToCalendarHandler(activity, loggingService)
 
-        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this, uiInteractor, settingsService, addToCalendarHandler)
-        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, addToCalendarHandler)
+        val webAppInterfacePrivate = WebAppInterfacePrivate(
+                activity,
+                this,
+                uiInteractor,
+                settingsService,
+                referrerClient,
+                addToCalendarHandler)
+
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(
+                activity,
+                this,
+                addToCalendarHandler)
+
         val webAppInterfaceNhsLogin = WebAppInterfaceNhsLogin(activity, this)
+
         webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
         webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
         webView.addJavascriptInterface(webAppInterfaceNhsLogin, NATIVE_APP_LOGIN)

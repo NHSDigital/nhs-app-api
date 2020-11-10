@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             // Arrange
             var mockMetricContext = new Mock<IMetricContext>();
             var metricLogger = CreateMetricLogger(mockMetricContext);
-            var data = new LoginData("requestId_1234", "sessionId_1234", "userAgent_1234");
+            var data = new LoginData("requestId_1234", "sessionId_1234", "userAgent_1234", "");
             using var consoleOut = new CaptureConsoleOut();
 
             // Act
@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         {
             get
             {
-                var loginData = new LoginData("requestId", "sessionId", "userAgent");
+                var loginData = new LoginData("requestId", "sessionId", "userAgent", "");
                 yield return new object[] { Method(metricLogger => metricLogger.Login(loginData)), "Login" };
                 yield return new object[] { Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };

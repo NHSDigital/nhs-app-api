@@ -31,3 +31,34 @@ describe('unlockNavBar', () => {
     expect(NativeCallbacks.pageLoadComplete).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('updateReferrer', () => {
+  it('will set referrer for android', () => {
+    const commit = jest.fn();
+    const rootState = {
+      device: {
+        source: 'android',
+      },
+    };
+
+    const referrerData = 'test';
+
+    actions.updateReferrer({ commit, rootState }, referrerData);
+    expect(commit).toHaveBeenCalledWith('SET_APP_REFERRER', 'test');
+  });
+
+  it('will not call to log metrics for ios', () => {
+    const commit = jest.fn();
+    const rootState = {
+      device: {
+        source: 'ios',
+      },
+    };
+
+    const referrerData = {
+      installReferrer: 'test',
+    };
+    actions.updateReferrer({ commit, rootState }, referrerData);
+    expect(commit).not.toHaveBeenCalled();
+  });
+});

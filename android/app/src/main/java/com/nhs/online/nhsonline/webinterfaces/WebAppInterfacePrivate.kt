@@ -5,6 +5,7 @@ import android.util.Log
 import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
+import com.nhs.online.nhsonline.clients.ReferrerClient
 import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.SettingsService
@@ -16,6 +17,7 @@ class WebAppInterfacePrivate(
     private val nhsWeb: NhsWeb,
     private val uiInteractor: IInteractor,
     private val settingsService: SettingsService,
+    private val referrerClient: ReferrerClient,
     private val addToCalendarHelper: IAddToCalendarHandler
 ) {
 
@@ -55,6 +57,12 @@ class WebAppInterfacePrivate(
     fun fetchBiometricSpec() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchBiometricSpec")
         runAction { uiInteractor.fetchBiometricSpec() }
+    }
+
+    @JavascriptInterface
+    fun fetchNativeAppReferrer(): String {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppReferrer")
+        return referrerClient.getReferrer()
     }
 
     @JavascriptInterface

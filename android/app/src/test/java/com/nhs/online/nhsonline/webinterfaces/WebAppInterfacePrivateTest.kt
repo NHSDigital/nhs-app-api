@@ -5,15 +5,18 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import com.android.installreferrer.api.InstallReferrerClient
 import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.clients.ReferrerClient
 import com.nhs.online.nhsonline.data.AddToCalendarData
 import com.nhs.online.nhsonline.interfaces.IAddToCalendarHandler
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
+import com.nhs.online.nhsonline.support.AppSharedPref
 import com.nhs.online.nhsonline.web.NhsWeb
 import org.junit.Assert
 import org.junit.Before
@@ -30,6 +33,8 @@ class WebAppInterfacePrivateTest {
     private lateinit var settingsService: SettingsService
     private lateinit var addToCalendarHandlerMock: IAddToCalendarHandler
     private lateinit var addToCalendarData: AddToCalendarData
+    private lateinit var referrerClient: ReferrerClient
+    private lateinit var referrerClientMock : InstallReferrerClient
 
     @Before
     fun setUp() {
@@ -71,7 +76,13 @@ class WebAppInterfacePrivateTest {
         addToCalendarHandlerMock = mock {
             on { parseCalendarData(any(), any()) }.thenReturn(addToCalendarData)
         }
-        webAppInterfacePrivate = WebAppInterfacePrivate(contextMock, nhsWebMock, contextMock, settingsService, addToCalendarHandlerMock)
+
+        referrerClientMock = mock()
+
+
+        referrerClient = ReferrerClient(AppSharedPref(contextMock), referrerClientMock)
+
+        webAppInterfacePrivate = WebAppInterfacePrivate(contextMock, nhsWebMock, contextMock, settingsService, referrerClient, addToCalendarHandlerMock)
         ConnectionStateMonitor(ResourceMockingClass().mockConnectedContext()).onAvailable(mock())
     }
 
@@ -186,6 +197,12 @@ class WebAppInterfacePrivateTest {
         val version = webAppInterfacePrivate.fetchNativeAppVersion()
         Assert.assertNotNull(version)
         Assert.assertEquals(version, BuildConfig.VERSION_NAME)
+    }
+
+    @Test
+    fun fetchNativeAppReferrerTest() {
+        val referrer = webAppInterfacePrivate.fetchNativeAppReferrer()
+        Assert.assertEquals(referrer, "")
     }
 
     @Test

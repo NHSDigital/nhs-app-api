@@ -8,10 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build.*
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +17,11 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.FragmentActivity
+import com.android.installreferrer.api.InstallReferrerClient
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
@@ -30,6 +31,7 @@ import com.nhs.online.nhsonline.biometrics.utils.BiometricConstants
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.clients.FirebaseClient
 import com.nhs.online.nhsonline.clients.HttpClient
+import com.nhs.online.nhsonline.clients.ReferrerClient
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
@@ -39,21 +41,21 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.registration.PaycassoFlowFactory
 import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.ConfigurationService
-import com.nhs.online.nhsonline.services.logging.LoggingService
-import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.logging.ILoggingService
+import com.nhs.online.nhsonline.services.logging.LoggingService
+import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.support.intentHandlers.DefaultIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
 import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
-import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.web.UserAgentBuilder.buildUserAgentString
+import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
@@ -91,6 +93,7 @@ class MainActivity :
     private lateinit var paycassoService: PaycassoService
     private lateinit var paycassoFlowFactory: PaycassoFlowFactory
     private lateinit var nhs111Uri: Uri
+    private lateinit var referrerClient: InstallReferrerClient
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -155,7 +158,15 @@ class MainActivity :
         }
 
         val loggingService = LoggingService(this, VolleyQueueProvider())
-        initialiseNhsWeb(loggingService)
+        referrerClient = InstallReferrerClient.newBuilder(this).build()
+
+        val referrerClient = ReferrerClient(
+                AppSharedPref(this),
+                referrerClient)
+
+        referrerClient.storeReferrer()
+
+        initialiseNhsWeb(loggingService, referrerClient)
         initialiseBiometrics(loggingService)
 
         intentHandlers.handleIntent(intent, true, nhsWeb!!)
@@ -169,15 +180,24 @@ class MainActivity :
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
 
         backToAccountButton.setOnClickListener { onSuccessButton() }
-        retryButton.setOnClickListener { onErrorRetryButton() }
+        retryButton.setOnClickListener { onErrorRetryButton(referrerClient) }
         homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
     }
 
-    private fun initialiseNhsWeb(loggingService: ILoggingService) {
-        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface,
-            knownServices, paycassoService, loggingService, connectionStateMonitor)
+    private fun initialiseNhsWeb(loggingService: ILoggingService, referrerClient: ReferrerClient) {
+        nhsWeb = NhsWeb(
+                this,
+                this,
+                webview,
+                notificationsService,
+                appWebInterface,
+                knownServices,
+                paycassoService,
+                loggingService,
+                connectionStateMonitor,
+                referrerClient)
 
         menuBar.nhsWeb = nhsWeb
 
@@ -212,7 +232,7 @@ class MainActivity :
     override val url: String?
         get() = webview.url
 
-    private fun onErrorRetryButton() {
+    private fun onErrorRetryButton(referrerClient: ReferrerClient) {
         logger.info("${this::class.java.simpleName}: Entering OnErrorRetryButton")
 
         if (!connectionStateMonitor.isConnectedToNetwork) {
@@ -228,7 +248,7 @@ class MainActivity :
 
                 val loggingService = LoggingService(this, VolleyQueueProvider())
 
-                initialiseNhsWeb(loggingService)
+                initialiseNhsWeb(loggingService, referrerClient)
                 initialiseBiometrics(loggingService)
                 loadWelcomePage()
             } else {

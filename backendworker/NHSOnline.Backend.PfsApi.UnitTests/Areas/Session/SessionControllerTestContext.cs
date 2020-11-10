@@ -225,7 +225,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             internal Mock<ISessionCacheService> SessionCacheService { get; } = new Mock<ISessionCacheService>();
             internal Mock<IAuthenticationService> AuthenticationService { get; } = new Mock<IAuthenticationService>();
             internal Mock<IMetricLogger> MetricLogger { get; } = new Mock<IMetricLogger>();
-            
+
             public void ConfigureServices(IServiceCollection serviceCollection)
             {
                 serviceCollection

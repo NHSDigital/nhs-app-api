@@ -1,6 +1,9 @@
 import Sources from '@/lib/sources';
 import NativeCallbacks from '@/services/native-app';
-import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE } from './mutation-types';
+import { INIT_DEVICE,
+  UPDATE_IS_NATIVE_APP,
+  SET_SOURCE_DEVICE,
+  SET_APP_REFERRER } from './mutation-types';
 
 export default {
   init({ commit }) {
@@ -19,5 +22,12 @@ export default {
   pageLoadComplete() {
     NativeCallbacks.pageLoadComplete();
     window.nhsAppPageLoadComplete = true;
+  },
+  updateReferrer({ commit, rootState }, referrer) {
+    const platform = rootState.device.source;
+
+    if (platform === 'android') {
+      commit(SET_APP_REFERRER, referrer);
+    }
   },
 };

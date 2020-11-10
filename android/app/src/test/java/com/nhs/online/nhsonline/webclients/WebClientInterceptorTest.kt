@@ -269,7 +269,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -312,7 +312,7 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -350,7 +350,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -398,7 +398,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -449,7 +449,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
 
         Mockito.clearInvocations(uiInteractorMock)
 
@@ -501,7 +501,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -550,7 +550,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -600,7 +600,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -746,7 +746,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -795,7 +795,7 @@ class WebClientInterceptorTest {
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
-                connectionStateMonitor)
+                connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,

@@ -86,22 +86,31 @@ export default {
     }
     return cookieValue.accessToken;
   },
-  async handleAuthResponse({ commit, state }, code) {
+  async handleAuthResponse({ commit, state, rootState }, code) {
     /**
      * This needs to fire a proxy method
      * as more work needs to be done before logging in
      * for now we will just edit the state object.
      */
-
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
 
     try {
-      const response = await this.app.$http
+      const response = rootState.device.referrer === undefined ? await this.app.$http
         .postV1Session({
           userSession: {
             authCode: code,
             codeVerifier,
             redirectUrl,
+          },
+          ignoreError: true,
+          returnResponse: true,
+        }) : await this.app.$http
+        .postV1Session({
+          userSession: {
+            authCode: code,
+            codeVerifier,
+            redirectUrl,
+            referrer: rootState.device.referrer,
           },
           ignoreError: true,
           returnResponse: true,

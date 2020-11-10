@@ -12,6 +12,7 @@ describe('actions', () => {
   const response = { consentGiven: true };
   let commit;
   let state;
+  let rootState;
 
   beforeEach(() => {
     actions.app = {
@@ -26,7 +27,10 @@ describe('actions', () => {
       },
       store: {
         state: {
-          device: { source: Sources.Web },
+          device: {
+            source: Sources.Web,
+            referrer: 'test',
+          },
         },
       },
       context: {
@@ -45,11 +49,17 @@ describe('actions', () => {
 
     actions.dispatch = jest.fn();
     actions.state = state;
+
+    rootState = {
+      device: {
+        referrer: 'test',
+      },
+    };
   });
 
   describe('handle auth response', () => {
     it('will set the info from the data received from the server', () => actions
-      .handleAuthResponse({ commit, state }, { code: '123' })
+      .handleAuthResponse({ commit, state, rootState }, { code: '123' })
       .then(() => {
         const call = find(x => x[0] === 'session/setInfo')(actions.dispatch.mock.calls);
         expect(call).not.toBeUndefined();

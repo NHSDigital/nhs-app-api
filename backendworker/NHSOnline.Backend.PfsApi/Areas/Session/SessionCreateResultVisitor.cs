@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _errorResultBuilder = errorResultBuilder;
         }
 
-        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext)
+        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string referrer)
         {
             var userSession = success.UserSession;
             var serviceJourneyRules = success.ServiceJourneyRules;
@@ -54,7 +54,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             responseBody = userSession.Accept(new CreateResponseFromUserSessionVisitor<PostUserSessionResponse>(_settings, responseBody));
 
             var userAgent = httpContext.Request.Headers[Constants.HttpHeaders.UserAgent];
-            var metricLoggingData = new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent);
+
+            var metricLoggingData = new LoginData(httpContext.TraceIdentifier, userSession.Key, userAgent, referrer);
             await _metricLogger.Login(metricLoggingData);
 
             return new CreatedResult(string.Empty, responseBody);

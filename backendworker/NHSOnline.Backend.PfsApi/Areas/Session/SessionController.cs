@@ -85,7 +85,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var request = new CreateSessionRequest(model, csrfToken, HttpContext);
                 var result = await _sessionCreator.CreateSession(request);
 
-                return await result.Accept(_sessionResultVisitor, HttpContext);
+                var referrer = "";
+
+                if (model?.Referrer != null)
+                {
+                    referrer = model.Referrer;
+                }
+
+                return await result.Accept(_sessionResultVisitor, HttpContext, referrer);
             }
             finally
             {

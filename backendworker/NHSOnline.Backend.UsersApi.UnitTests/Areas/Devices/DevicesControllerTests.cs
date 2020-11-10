@@ -411,7 +411,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                false);
 
             // Act
-            var result = _systemUnderTest.PostMetrics(notificationPromptData);
+            var result = _systemUnderTest.PostNotificationsPromptMetrics(notificationPromptData);
 
             // Assert
             result.Should().BeOfType<StatusCodeResult>()
@@ -429,7 +429,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
                 false);
 
             // Act
-            var result = _systemUnderTest.PostMetrics(notificationPromptData);
+            var result = _systemUnderTest.PostNotificationsPromptMetrics(notificationPromptData);
 
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();

@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         [Route("api/users/me/devices/prompt/metrics")]
         [HttpPost]
         [UserProfile]
-        public IActionResult PostMetrics([FromBody] NotificationsPromptData notificationsPromptData)
+        public IActionResult PostNotificationsPromptMetrics([FromBody] NotificationsPromptData notificationsPromptData)
         {
             try
             {

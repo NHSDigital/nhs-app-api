@@ -146,6 +146,9 @@ components:
         redirectUrl:
           type: string
           description: Redirect url provided when signing in to Citizen ID
+        referrer:
+          type: string
+          description: Where the app was referred to the user
     UserSessionResponse:
       type: object
       properties:

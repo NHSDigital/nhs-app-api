@@ -1,4 +1,4 @@
-import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, initialState } from './mutation-types';
+import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, SET_APP_REFERRER, initialState } from './mutation-types';
 
 export default {
   [UPDATE_IS_NATIVE_APP](state, isNativeApp) {
@@ -11,5 +11,8 @@ export default {
     const { isNativeApp, source } = state;
     // eslint-disable-next-line no-param-reassign
     state = Object.assign({}, initialState, { isNativeApp, source });
+  },
+  [SET_APP_REFERRER](state, referrer) {
+    state.referrer = referrer;
   },
 };

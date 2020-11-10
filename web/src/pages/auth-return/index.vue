@@ -9,6 +9,7 @@ import isEmpty from 'lodash/fp/isEmpty';
 import { TERMSANDCONDITIONS_PATH } from '@/router/paths';
 import { REDIRECT_PARAMETER } from '@/router/names';
 import AuthReturnLayout from '@/layouts/authReturn';
+import NativeReferrerSetup from '@/services/nativeReferrerSetup';
 
 export default {
   name: 'AuthReturnPage',
@@ -16,6 +17,8 @@ export default {
     AuthReturnLayout,
   },
   async mounted() {
+    NativeReferrerSetup(this.$store);
+
     const route = this.$router.currentRoute;
     await this.$store.dispatch('appVersion/init');
     const appVersion = this.$store.$env.VERSION_TAG;

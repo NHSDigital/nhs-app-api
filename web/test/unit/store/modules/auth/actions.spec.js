@@ -98,7 +98,10 @@ describe('actions', () => {
       },
       store: {
         state: {
-          device: { source: sources.Web },
+          device: {
+            source: sources.Web,
+            referrer: 'test',
+          },
         },
       },
       context: {
@@ -134,7 +137,12 @@ describe('actions', () => {
 
   describe('handle auth response', () => {
     beforeEach(async () => {
-      await actions.handleAuthResponse({ commit, state }, '123');
+      const rootState = {
+        device: {
+          referrer: 'test',
+        },
+      };
+      await actions.handleAuthResponse({ commit, state, rootState }, '123');
     });
 
     it('will set the session info from the received session timeout and the response', () => {

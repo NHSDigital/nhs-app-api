@@ -64,7 +64,7 @@ class NhsWebTest {
         connectionStateMonitor.onAvailable(network)
 
         nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(),
-                mock(), mock(), mock(), connectionStateMonitor)
+                mock(), mock(), mock(), connectionStateMonitor, mock())
 
         spyWeb = spy(nhsWeb)
 

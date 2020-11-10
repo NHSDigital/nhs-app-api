@@ -94,6 +94,15 @@ export default {
     return '';
   },
 
+  fetchNativeAppReferrer() {
+    const app = window.nativeApp;
+    if (app && app.fetchNativeAppReferrer) {
+      const referrer = app.fetchNativeAppReferrer();
+      return referrer;
+    }
+    return '';
+  },
+
   getNotificationsStatus() {
     const app = window.nativeApp;
     if (app && app.getNotificationsStatus) {
