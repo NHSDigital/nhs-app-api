@@ -4,14 +4,6 @@ window.nativeApp.getNotificationsStatus = function() {
     window.webkit.messageHandlers.getNotificationsStatus.postMessage(null);
 };
 
-window.nativeApp.addNotificationCookie = function(nhsLoginId) {
-    window.webkit.messageHandlers.addNotificationCookie.postMessage(nhsLoginId);
-};
-
-window.nativeApp.checkNotificationCookie = function(nhsLoginId) {
-    window.webkit.messageHandlers.checkNotificationCookie.postMessage(nhsLoginId);
-};
-
 window.nativeApp.attemptBiometricLogin = function() {
     window.webkit.messageHandlers.attemptBiometricLogin.postMessage(null);
 };

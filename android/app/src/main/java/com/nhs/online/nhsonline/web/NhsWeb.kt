@@ -267,15 +267,6 @@ class NhsWeb(
         }
     }
 
-    fun addNotificationCookie(nhsLoginId: String) {
-        val cookieName = buildNotificationsCookieName(nhsLoginId);
-        val cookie = getCookie(cookieName)
-        if(cookie.isNullOrBlank()) {
-            CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
-                cookieName)
-        }
-    }
-
     fun handleWebClientLocationResult(grantResults: IntArray) {
         chromeClient.handleLocationPermissionResult(grantResults)
     }
@@ -411,10 +402,6 @@ class NhsWeb(
         paycassoService.start(paycassoData,
             onSuccess,
             onFailure)
-    }
-
-    fun checkNotificationCookie(nhsLoginId: String): Boolean {
-        return !getCookie("nhso.notifications-prompt--$nhsLoginId").isNullOrBlank()
     }
 
     private fun buildNotificationsCookieName(nhsLoginId: String) : String {

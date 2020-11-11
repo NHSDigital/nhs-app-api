@@ -20,21 +20,9 @@ class WebAppInterfacePrivate(
 ) {
 
     @JavascriptInterface
-    fun addNotificationCookie(nhsLoginId: String) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering addNotificationCookie")
-        runAction { nhsWeb.addNotificationCookie(nhsLoginId) }
-    }
-
-    @JavascriptInterface
     fun attemptBiometricLogin() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering attemptBiometricLogin")
         runAction { uiInteractor.showBiometricLoginIfEnabled() }
-    }
-
-    @JavascriptInterface
-    fun checkNotificationCookie(nhsLoginId: String) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering checkNotificationCookie")
-        runAction { uiInteractor.checkNotificationCookie(nhsLoginId) }
     }
 
     @JavascriptInterface

@@ -112,6 +112,7 @@ describe('notifications prompt page', () => {
         expect($store.dispatch).toHaveBeenCalledWith('notifications/logMetrics',
           { screenShown: true,
             notificationsRegistered: false,
+            didErrorAttemptingToUpdateStatus: false,
           });
       });
     });
@@ -177,6 +178,7 @@ describe('notifications prompt page', () => {
         expect($store.dispatch).toHaveBeenCalledWith('notifications/logMetrics',
           { screenShown: false,
             notificationsRegistered: true,
+            didErrorAttemptingToUpdateStatus: false,
           });
       });
     });

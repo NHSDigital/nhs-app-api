@@ -176,28 +176,6 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
-    fun addNotificationCookieTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-
-        webAppInterfacePrivate.addNotificationCookie("loginId")
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-
-        runOnUiArgCaptor.firstValue.run()
-        verify(nhsWebMock).addNotificationCookie("loginId")
-    }
-
-    @Test
-    fun checkNotificationCookieTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-
-        webAppInterfacePrivate.checkNotificationCookie("nhsLoginId")
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).checkNotificationCookie("nhsLoginId")
-    }
-
-    @Test
     fun openAppSettingsTest() {
         webAppInterfacePrivate.openAppSettings()
         verify(settingsService).openSettings()

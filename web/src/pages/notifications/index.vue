@@ -43,6 +43,7 @@ export default {
       this.$store.dispatch('notifications/logMetrics', {
         screenShown: false,
         notificationsRegistered: true,
+        didErrorAttemptingToUpdateStatus: false,
       });
       redirectTo(this, INDEX_PATH);
     }
@@ -60,6 +61,7 @@ export default {
         this.$store.dispatch('notifications/logMetrics', {
           screenShown: true,
           notificationsRegistered: false,
+          didErrorAttemptingToUpdateStatus: false,
         });
       }
 

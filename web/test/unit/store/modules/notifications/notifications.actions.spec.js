@@ -1,17 +1,22 @@
 import actions from '@/store/modules/notifications/actions';
 import { SET_REGISTRATION, SET_WAITING } from '@/store/modules/notifications/mutation-types';
 import { ACCOUNT_NOTIFICATIONS_NAME, NOTIFICATIONS_NAME } from '@/router/names';
+import { setCookie } from '@/lib/cookie-manager';
 import { createRouter } from '../../../helpers';
+
+jest.mock('@/lib/cookie-manager');
 
 describe('notifications actions', () => {
   let $http;
   let $router;
+  let $cookies;
   let commit;
   let deleteSuccess;
   let error;
   let getSuccess;
   let postSuccess;
   let logSuccess;
+  let cookieValue;
 
   const promiseReturn = (success) => {
     if (success) {
@@ -80,6 +85,8 @@ describe('notifications actions', () => {
     postSuccess = true;
     logSuccess = true;
     commit = jest.fn();
+
+    const mockAccessToken = 'eyJzdWIiOiIzYzkwZDJkNy01NDc0LTRhY2QtODcyMi1jN2MzMzI4ODE0MjEiLCJhdWQiOiJuaHMtb25saW5lIiwia2lkIjoiNmQ2OWI3MjI2YTA5NDNiZGNlMzI4ZjFjMmYyZjFiNDMzYjI4NjlmMCIsImlzcyI6Imh0dHBzOi8vYXV0aC5leHQuc2lnbmluLm5ocy51ayIsInR5cCI6IkpXVCIsImV4cCI6MTU4ODMyNDQ1NSwiaWF0IjoxNTg4MzI0MTU1LCJhbGciOiJSUzUxMiIsImp0aSI6Ijk3NGZiNTMyLTFlYzktNDM2ZC05OTliLTY3Y2EzODI3ODg0ZiJ9.eyJzdWIiOiIzYzkwZDJkNy01NDc0LTRhY2QtODcyMi1jN2MzMzI4ODE0MjEiLCJuaHNfbnVtYmVyIjoiNTc4NTQ0NTg3NSIsImlzcyI6Imh0dHBzOi8vYXV0aC5leHQuc2lnbmluLm5ocy51ayIsInZlcnNpb24iOjAsInZ0bSI6Imh0dHBzOi8vYXV0aC5leHQuc2lnbmluLm5ocy51ay90cnVzdG1hcmsvYXV0aC5leHQuc2lnbmluLm5ocy51ayIsImNsaWVudF9pZCI6Im5ocy1vbmxpbmUiLCJyZXF1ZXN0aW5nX3BhdGllbnQiOiI1Nzg1NDQ1ODc1IiwiYXVkIjoibmhzLW9ubGluZSIsInRva2VuX3VzZSI6ImFjY2VzcyIsImF1dGhfdGltZSI6MTU4ODMyNDE1MSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBuaHNfYXBwX2NyZWRlbnRpYWxzIGdwX2ludGVncmF0aW9uX2NyZWRlbnRpYWxzIHByb2ZpbGVfZXh0ZW5kZWQiLCJ2b3QiOiJQOS5DcC5DZCIsImV4cCI6MTU4ODMyNDQ1NSwiaWF0IjoxNTg4MzI0MTU1LCJyZWFzb25fZm9yX3JlcXVlc3QiOiJwYXRpZW50YWNjZXNzIiwianRpIjoiOTc0ZmI1MzItMWVjOS00MzZkLTk5OWItNjdjYTM4Mjc4ODRmIn0.ZR5WUyRjAcW0KVfMZQOI10ccBfZ3XUR6OcChBNP-xSHl9D_RJAJ6ujjzOiuabnNnbZvWUmHphSGdwHZTodlYb0E3OQSxqLwgsaI1fOgbHNfEIwVWp_U_zsJqD78XZUECO9ZFOSolRBp3tHk0wT5C9PI3yFgWVogL0Tw92lqay_NL1V_V_YoaV2Vp-Wfa3XIXp-Ivsowrd6_iydeopE0iUcKxzaLR6ZnqIKhkSsUZZW7ICAxaJDLgVy1hGcbo6a37CQxqNcHzMaLA_9rQhVl51N8igzGThlh3I21iImMCe75j95GmnC_VAvcfCZVYHDOA0fngKgI-towzRGKPxEBF8w';
     $http = {
       deleteV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(deleteSuccess)),
       getV1ApiUsersMeDevices: jest.fn().mockImplementation(() => promiseReturn(getSuccess)),
@@ -87,6 +94,18 @@ describe('notifications actions', () => {
       postV1ApiUsersMeDevicesPromptMetrics: jest.fn().mockImplementation(
         () => promiseReturn(logSuccess),
       ),
+    };
+    $cookies = {
+      get: (cookieName) => {
+        switch (cookieName) {
+          case 'nhso.session':
+            return {
+              accessToken: mockAccessToken,
+            };
+          default:
+            return undefined;
+        }
+      },
     };
     $router = createRouter(ACCOUNT_NOTIFICATIONS_NAME);
     $router.history = {
@@ -100,6 +119,15 @@ describe('notifications actions', () => {
       getNotificationsStatus: jest.fn(),
       requestPnsToken: jest.fn(),
     };
+
+    actions.$cookies = $cookies;
+    actions.$env = {
+      SECURE_COOKIES: false,
+    };
+
+    setCookie.mockImplementation((cookie) => {
+      cookieValue = cookie;
+    });
   });
 
   describe('authorised', () => {
@@ -209,24 +237,27 @@ describe('notifications actions', () => {
             expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
               screenShown: true,
               notificationsRegistered: true,
+              didErrorAttemptingToUpdateStatus: false,
             });
           });
+        });
 
-          describe('on error', () => {
-            const execute = async () => {
-              await actions.authorised({ commit, state }, deviceResponse);
-            };
-            beforeEach(() => {
-              actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
-              postSuccess = false;
-              execute();
-            });
+        describe('on error', () => {
+          const execute = async () => {
+            await actions.authorised({ commit, state }, deviceResponse);
+          };
+          beforeEach(() => {
+            state.registered = false;
+            actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+            postSuccess = false;
+            execute();
+          });
 
-            it('will dispatch to log metrics', () => {
-              expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
-                screenShown: true,
-                notificationsRegistered: true,
-              });
+          it('will dispatch to log metrics', () => {
+            expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
+              screenShown: true,
+              notificationsRegistered: false,
+              didErrorAttemptingToUpdateStatus: true,
             });
           });
         });
@@ -252,7 +283,6 @@ describe('notifications actions', () => {
           beforeEach(async () => {
             actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
             state.registered = true;
-            await actions.authorised({ commit, state }, deviceResponse);
           });
 
           describe('on error', () => {
@@ -267,7 +297,8 @@ describe('notifications actions', () => {
             it('will dispatch to log metrics', () => {
               expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
                 screenShown: true,
-                notificationsRegistered: false,
+                notificationsRegistered: true,
+                didErrorAttemptingToUpdateStatus: true,
               });
             });
           });
@@ -450,6 +481,27 @@ describe('notifications actions', () => {
         expect(actions.dispatch).toBeCalledWith('notifications/logMetrics', {
           screenShown: true,
           notificationsRegistered: false,
+          didErrorAttemptingToUpdateStatus: true,
+        });
+      });
+    });
+  });
+
+  describe('addNotificationCookie', () => {
+    beforeEach(async () => {
+      actions.app.$router.currentRoute.name = NOTIFICATIONS_NAME;
+      await actions.addNotificationCookie();
+    });
+
+    describe('cookie', () => {
+      it('will add the cookie', () => {
+        expect(cookieValue !== null);
+        expect(setCookie).toBeCalledWith({
+          cookies: $cookies,
+          key: 'nhso.notifications-prompt-3c90d2d7-5474-4acd-8722-c7c332881421',
+          value: '3c90d2d7-5474-4acd-8722-c7c332881421',
+          expires: '1y',
+          secure: false,
         });
       });
     });

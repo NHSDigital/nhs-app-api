@@ -146,10 +146,7 @@ open class SharedStepDefinitions {
     fun iLogInToTheAppExpectingTheNotificationsPrompt() {
         val patient = handleLogin()
         login.usingLoginWithNotificationOptions(
-                patient,
-                SettingStatus.NotDetermined,
-                authorised = true,
-                cookieExists = false)
+                patient)
     }
 
     @Given("^I am logged in$")

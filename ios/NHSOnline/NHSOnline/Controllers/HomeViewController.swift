@@ -654,14 +654,6 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         notificationsService?.getNotificationsStatus()
     }
     
-    func addNotificationCookie(nhsLoginId: String) {
-        notificationsService?.addNotificationCookie(nhsLoginId: nhsLoginId)
-    }
-    
-    func checkNotificationCookie(nhsLoginId: String) {
-        notificationsService?.checkNotificationCookie(nhsLoginId: nhsLoginId)
-    }
-    
     func showDownloadError() {
         self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.DownloadError))
         self.updateHeaderText(headerText: getDownloadErrorStrings().DownloadPageHeader)

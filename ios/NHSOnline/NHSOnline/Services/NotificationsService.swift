@@ -66,22 +66,6 @@ class NotificationsService {
             }
         }
     }
-    
-    func addNotificationCookie(nhsLoginId: String) {
-        let cookieName = cookieHandler.createUniqueCookieKey(name: "notifications-prompt", uniqueIdentifier: nhsLoginId)
-        let cookieExists = cookieHandler.cookieExists(name: cookieName)
-        
-        if (cookieExists) {
-            return
-        }
-        
-        cookieHandler.setCookieFromNameAndValue(key: cookieName, value: "\(nhsLoginId)" as AnyObject)
-    }
-    
-    func checkNotificationCookie(nhsLoginId: String) {
-        let cookieExists = cookieHandler.cookieExists(name: cookieHandler.createUniqueCookieKey(name: "notifications-prompt", uniqueIdentifier: nhsLoginId))
-        self.appWebInterface.checkNotificationCookieExists(exists: cookieExists)
-    }
 
     func authorised(deviceToken: Data) {
         let devicePns = deviceToken.reduce("", { $0 + String(format: "%02X", $1) })

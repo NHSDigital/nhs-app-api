@@ -5246,6 +5246,7 @@
                   - "screenShown"
                   - "notificationsRegistered"
                   - "platform"
+                  - "didErrorAttemptingToUpdateStatus"
                 properties: 
                   screenShown: 
                     type: "boolean"
@@ -5253,6 +5254,8 @@
                     type: "boolean"
                   platform: 
                     type: "string"
+                  didErrorAttemptingToUpdateStatus: 
+                    type: "boolean"
           description: "Metrics to be logged for the notification prompt"
           required: true
           responses: 

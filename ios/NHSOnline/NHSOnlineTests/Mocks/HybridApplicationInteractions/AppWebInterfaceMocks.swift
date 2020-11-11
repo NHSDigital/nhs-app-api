@@ -16,7 +16,6 @@ class AppWebInterfaceMocks: AppWebInterface {
     var paycassoErrorMessage = ""
     var paycassoTransactionId = ""
     var paycassoTransactionType = ""
-    var notificationCookieFound = false
 
     override func biometricCompletion(action: String, outcome: String, errorCode: String) {
         biometricCompletionCalled = true
@@ -53,9 +52,5 @@ class AppWebInterfaceMocks: AppWebInterface {
         paycassoFaceMatched = isFaceMatched
         paycassoTransactionId = transactionId
         paycassoTransactionType = transactionType
-    }
-    
-    override func checkNotificationCookieExists(exists: Bool) {
-        notificationCookieFound = exists
     }
 }

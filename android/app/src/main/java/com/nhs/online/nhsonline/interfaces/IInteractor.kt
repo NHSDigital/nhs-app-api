@@ -12,8 +12,6 @@ interface IInteractor {
 
     fun dismissProgressDialog()
 
-    fun checkNotificationCookie(nhsLoginId: String)
-
     fun showBlankScreen()
 
     fun hideBlankScreen()

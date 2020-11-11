@@ -66,8 +66,7 @@ class NotificationsFactory {
 
     fun mockNativeNotificationFunctions(
             status: SettingStatus,
-            authorised: Boolean = true,
-            cookieExists: Boolean = true) {
+            authorised: Boolean = true) {
         val pns = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
 
         val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>().toLowerCase()
@@ -80,9 +79,6 @@ class NotificationsFactory {
         val notificationsStatusFunction = mockNotificationsStatus(status)
 
         GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(notificationsStatusFunction)
-        val notificationDeviceCookieExistsFunction = mockNotificationCookieExistsCheck(cookieExists)
-        GlobalSerenityHelpers.FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT.addToList(
-                notificationDeviceCookieExistsFunction)
     }
 
     fun setUpExistingRegistration(patient: Patient? = null) {
@@ -102,11 +98,6 @@ class NotificationsFactory {
     private fun mockNotificationsStatus(status: SettingStatus): String {
         return "getNotificationsStatus : " +
                 "function(){window.nativeAppCallbacks.notificationsSettingsStatus('${status.name.decapitalize()}')}"
-    }
-
-    private fun mockNotificationCookieExistsCheck(exists: Boolean): String {
-        return "checkNotificationCookie : " +
-                "function(){ window.nativeAppCallbacks.deviceNotificationPromptCookieExists(${exists}) }"
     }
 
     private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {

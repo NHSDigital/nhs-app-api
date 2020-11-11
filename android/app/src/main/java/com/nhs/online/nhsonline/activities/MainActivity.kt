@@ -725,11 +725,6 @@ class MainActivity :
         return biometricsInterface.isFingerprintRegistered
     }
 
-    override fun checkNotificationCookie(nhsLoginId: String) {
-        val hasNotificationCookie = nhsWeb?.checkNotificationCookie(nhsLoginId)
-        appWebInterface.sendCheckNotificationCookie(hasNotificationCookie)
-    }
-
     private fun onSuccessButton() {
         activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
         nhsWeb?.reloadCurrentUrl()

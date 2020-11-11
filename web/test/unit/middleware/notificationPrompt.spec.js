@@ -17,12 +17,11 @@ describe('notification prompt next', () => {
     notificationPrompt({ next, to, store });
   };
 
-  describe('Native version after true', () => {
+  describe('Native', () => {
     beforeEach(() => {
       next = jest.fn();
       store = {
         getters: {
-          'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
           'session/isLoggedIn': jest.fn().mockReturnValue(true),
         },
         dispatch: jest.fn(),
@@ -45,43 +44,11 @@ describe('notification prompt next', () => {
     });
   });
 
-  describe('Native version after false', () => {
-    beforeEach(() => {
-      next = jest.fn();
-      store = {
-        getters: {
-          'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(false),
-          'session/isLoggedIn': jest.fn().mockReturnValue(true),
-        },
-        state: {
-          device: {
-            isNativeApp: true,
-          },
-        },
-      };
-    });
-
-    describe('Navigation', () => {
-      beforeEach(() => {
-        callsNotificationsPrompt({});
-      });
-
-      it('will call next with index', () => {
-        expect(next).toBeCalledWith({
-          name: INDEX_NAME,
-          params: {},
-          query: undefined,
-        });
-      });
-    });
-  });
-
   describe('Not on native platform', () => {
     beforeEach(() => {
       next = jest.fn();
       store = {
         getters: {
-          'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(false),
           'session/isLoggedIn': jest.fn().mockReturnValue(true),
         },
         state: {

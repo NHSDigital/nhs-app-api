@@ -4,6 +4,7 @@ import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import jwt from 'jwt-decode';
 import { NOTIFICATIONS_NAME, AUTH_RETURN_NAME } from '@/router/names';
 import { NOTIFICATIONS_GENERIC_FAILURE_PATH } from '@/router/paths';
+import { setCookie } from '@/lib/cookie-manager';
 import {
   SET_NOTIFICATION_COOKIE_EXISTS,
   SET_REGISTRATION, SET_WAITING,
@@ -29,7 +30,6 @@ const addApiError = ({ dispatch }, errorCode, message) => dispatch('errors/addAp
 });
 
 let resolveLoading;
-let resolveChecking;
 
 export default {
   authorised({ state, commit }, deviceResponse) {
@@ -54,6 +54,7 @@ export default {
           this.dispatch('notifications/logMetrics',
             { screenShown: true,
               notificationsRegistered: registering,
+              didErrorAttemptingToUpdateStatus: false,
             });
         }
       })
@@ -63,6 +64,7 @@ export default {
             this.dispatch('notifications/logMetrics',
               { screenShown: true,
                 notificationsRegistered: state.registered,
+                didErrorAttemptingToUpdateStatus: true,
               });
             this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
           } else {
@@ -91,7 +93,10 @@ export default {
     return loading;
   },
   logMetrics({ rootState }, params) {
-    const { screenShown, notificationsRegistered } = params;
+    const { screenShown,
+      notificationsRegistered,
+      didErrorAttemptingToUpdateStatus,
+    } = params;
     const platform = rootState.device.source;
 
     this.app.$http.postV1ApiUsersMeDevicesPromptMetrics({
@@ -100,6 +105,7 @@ export default {
           screenShown,
           notificationsRegistered,
           platform,
+          didErrorAttemptingToUpdateStatus,
         },
     }).catch(() => {
       // do nothing as this is just logging
@@ -146,6 +152,7 @@ export default {
       this.dispatch('notifications/logMetrics',
         { screenShown: true,
           notificationsRegistered: false,
+          didErrorAttemptingToUpdateStatus: true,
         });
       this.app.$router.push({ path: NOTIFICATIONS_GENERIC_FAILURE_PATH });
     } else if (this.app.$router.currentRoute.name === AUTH_RETURN_NAME) {
@@ -157,26 +164,27 @@ export default {
       addApiError(this, 10002);
     }
   },
-  deviceCookieExists({ commit }, exists) {
-    commit(SET_NOTIFICATION_COOKIE_EXISTS, exists);
-    resolveChecking(exists);
-    resolveChecking = undefined;
-  },
   addNotificationCookie() {
     const cookieValue = this.$cookies.get('nhso.session');
     const decodedToken = jwt(cookieValue.accessToken);
-    NativeApp.addNotificationCookie(decodedToken.sub);
+
+    const cookieExists = !!this.$cookies.get(`nhso.notifications-prompt-${decodedToken.sub}`);
+    if (!cookieExists) {
+      setCookie({
+        cookies: this.$cookies,
+        key: `nhso.notifications-prompt-${decodedToken.sub}`,
+        value: decodedToken.sub,
+        expires: '1y',
+        secure: this.$env.SECURE_COOKIES,
+      });
+    }
   },
-  checkNotificationCookie() {
+  checkNotificationCookie({ commit }) {
     const cookieValue = this.$cookies.get('nhso.session');
     const decodedToken = jwt(cookieValue.accessToken);
 
-    const checking = new Promise((resolve) => {
-      resolveChecking = resolve;
-    });
+    const cookieExists = !!this.$cookies.get(`nhso.notifications-prompt-${decodedToken.sub}`);
 
-    NativeApp.checkNotificationCookie(decodedToken.sub);
-
-    return checking;
+    commit(SET_NOTIFICATION_COOKIE_EXISTS, cookieExists);
   },
 };

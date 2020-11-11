@@ -257,7 +257,6 @@
 		F9D169D724FE90A9004725E3 /* OnboardingsandpitPaycasso.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F93387BA24FE856A001B3485 /* OnboardingsandpitPaycasso.xcconfig */; };
 		F9D169D824FE9144004725E3 /* Pods-NHSOnlinePaycasso.onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 011BA87BA6FBD8BACA297D20 /* Pods-NHSOnlinePaycasso.onboardingsandpit.xcconfig */; };
 		F9D1FFC52534500A004ECE88 /* CookieHandlerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D1FFC42534500A004ECE88 /* CookieHandlerMocks.swift */; };
-		F9D1FFCD253451A2004ECE88 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D1FFCC253451A2004ECE88 /* NotificationServiceTests.swift */; };
 		F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */; };
 		F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */; };
 		F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */; };
@@ -604,7 +603,6 @@
 		F9D169ED24FEA047004725E3 /* DemoPaycasso.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DemoPaycasso.xcconfig; sourceTree = "<group>"; };
 		F9D169EE24FEA06B004725E3 /* ProductionPaycasso.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ProductionPaycasso.xcconfig; sourceTree = "<group>"; };
 		F9D1FFC42534500A004ECE88 /* CookieHandlerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieHandlerMocks.swift; sourceTree = "<group>"; };
-		F9D1FFCC253451A2004ECE88 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
 		F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadErrorStrings.swift; sourceTree = "<group>"; };
 		F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadStringHandler.swift; sourceTree = "<group>"; };
 		F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlertType.swift; sourceTree = "<group>"; };
@@ -1198,7 +1196,6 @@
 				4AB36C762514F80500204E08 /* DeviceServiceTests.swift */,
 				F381C32BC0511A0BF493AFD7 /* KnownServicesTests.swift */,
 				F975F4952481082E00D3957F /* BiometricServiceTests.swift */,
-				F9D1FFCC253451A2004ECE88 /* NotificationServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1847,7 +1844,6 @@
 				F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */,
 				4AB36C752514F7FA00204E08 /* MockDeviceInfoProtocol.swift in Sources */,
 				2EA7BDA72418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift in Sources */,
-				F9D1FFCD253451A2004ECE88 /* NotificationServiceTests.swift in Sources */,
 				4AB36C792515092400204E08 /* UIViewControllerMock.swift in Sources */,
 				F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */,
 				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,

@@ -245,6 +245,7 @@ components:
         - screenShown
         - notificationsRegistered
         - platform
+        - didErrorAttemptingToUpdateStatus
       properties:
         screenShown:
           type: boolean
@@ -252,3 +253,5 @@ components:
           type: boolean
         platform:
           type: string
+        didErrorAttemptingToUpdateStatus:
+          type: boolean

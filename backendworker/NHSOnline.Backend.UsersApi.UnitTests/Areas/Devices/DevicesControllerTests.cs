@@ -404,7 +404,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public void Post_Metric_Success_ReturnsStatus200Ok()
         {
             // Arrange
-           var notificationPromptData = new NotificationsPromptData(true, true, "iOS");
+           var notificationPromptData = new NotificationsPromptData(
+               true,
+               true,
+               "iOS",
+               false);
 
             // Act
             var result = _systemUnderTest.PostMetrics(notificationPromptData);
@@ -418,7 +422,11 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public void Post_Metric_BadRequest_ReturnsStatus400BadRequest()
         {
             // Arrange
-            var notificationPromptData = new NotificationsPromptData(true, true, "");
+            var notificationPromptData = new NotificationsPromptData(
+                true,
+                true,
+                "",
+                false);
 
             // Act
             var result = _systemUnderTest.PostMetrics(notificationPromptData);
