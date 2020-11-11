@@ -26,21 +26,24 @@ http {
 
   server {
     listen       ${PORT};
+    root         /app;
     server_name  localhost;
+    error_page 404 /index.html;
+    
     location /js/v1/nhsapp.js {
       expires      epoch;
-      root         /app;
     }
     location /config.json {
-      root        /app;
       ## override content-type ##
       types { } default_type "application/json";
       index       config.json;
     }
     location / {
-      root         /app;
       index  index.html;
       try_files $uri $uri/ /index.html;
+    }
+    location ~ /v[0-9]+-[0-9]+-[0-9]+/ {
+      try_files $uri =404;
     }
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
