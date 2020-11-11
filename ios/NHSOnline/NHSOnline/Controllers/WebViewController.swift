@@ -18,10 +18,14 @@ class WebViewController: UIViewController, WKUIDelegate {
         LoadUserScript(name: "WebEventsPrivate", contentController: contentController)
         LoadUserScript(name: "WebEventsNHSLogin", contentController: contentController)
         
+        let deviceInfoService = DeviceInfoService()
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let config = WKWebViewConfiguration()
+
         config.userContentController = contentController
         config.suppressesIncrementalRendering = true
-        config.applicationNameForUserAgent = buildUserAgentString()
+        config.applicationNameForUserAgent =
+            UserAgentBuilder(appVersion: appVersion, deviceService: deviceInfoService).buildUserAgent()
 
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
@@ -175,18 +179,6 @@ class WebViewController: UIViewController, WKUIDelegate {
             return false
         }
         return UrlHelper.isSameSchemeAndHostAsHomeUrl(url: URL(string: urlToNavigateTo))
-    }
-    
-    private func buildUserAgentString() -> String {
-        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let deviceService = DeviceInfoService()
-
-        let version = "nhsapp-ios/\(versionNumber)"
-        let model = "nhsapp-model/\(deviceService.getDeviceDescription())"
-        let os = "nhsapp-os/\(deviceService.getFullIOSVersion())"
-        let architecture = "nhsapp-architecture/\(deviceService.getDeviceArchitecture())"
-
-        return " \(version) nhsapp-manufacturer/apple \(model) \(os) \(architecture)"
     }
 
     func reloadWebView() {

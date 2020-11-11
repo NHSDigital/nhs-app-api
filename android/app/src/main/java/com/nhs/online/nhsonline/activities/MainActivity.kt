@@ -23,7 +23,6 @@ import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
 import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
@@ -54,6 +53,7 @@ import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.utils.UrlHelper
+import com.nhs.online.nhsonline.web.UserAgentBuilder.buildUserAgentString
 import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
@@ -83,7 +83,6 @@ class MainActivity :
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
     lateinit var activityViewSwitcher: MainActivityViewSwitcher
-    private val nhsAndroidUserAgent = "nhsapp-android/$VERSION_NAME"
     private lateinit var downloadHelper: FileDownloadHelper
     private lateinit var notificationsService: NotificationsService
     private lateinit var urlHelper: UrlHelper
@@ -198,12 +197,15 @@ class MainActivity :
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
         logger.info("Entering configureWebView")
+
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
         webview.settings.javaScriptCanOpenWindowsAutomatically = true
         webview.settings.allowUniversalAccessFromFileURLs = true
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
+
         val userAgent = webview.settings.userAgentString
+
         webview.settings.userAgentString = buildUserAgentString(userAgent)
     }
 
@@ -768,15 +770,6 @@ class MainActivity :
         } else {
             Log.d(TAG, "Permission not granted")
         }
-    }
-
-    fun buildUserAgentString(userAgent: String): String {
-        val manufacturer = "nhsapp-manufacturer/${MANUFACTURER}"
-        val model = "nhsapp-model/${MODEL}"
-        val os = "nhsapp-os/${VERSION.RELEASE}"
-        val architecture = "nhsapp-architecture/${SUPPORTED_ABIS.joinToString(",")}"
-
-        return "$userAgent $nhsAndroidUserAgent $manufacturer $model $os $architecture"
     }
 
     override fun getActivity(): FragmentActivity = this

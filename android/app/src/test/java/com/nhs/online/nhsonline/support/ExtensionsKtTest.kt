@@ -21,7 +21,6 @@ import org.robolectric.Robolectric.buildActivity
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-
 class ExtensionsKtTest {
     private lateinit var context: Context
 

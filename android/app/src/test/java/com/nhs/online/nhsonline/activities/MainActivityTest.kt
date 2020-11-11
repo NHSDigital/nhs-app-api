@@ -1,7 +1,6 @@
 package com.nhs.online.nhsonline.activities
 
 import android.app.onResume
-import android.os.Build
 import android.text.SpannableString
 import androidx.appcompat.app.AlertDialog
 import android.widget.TextView
@@ -23,7 +22,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.internal.util.reflection.FieldSetter
@@ -466,20 +464,6 @@ class MainActivityTest {
         spyActivity.openUrlInBrowserActivity(url)
 
         verify(openUrlInBrowserActivityMock).start(spyActivity, url, spyActivity)
-    }
-
-    @Test
-    fun buildUserAgentString_returnsFullUserAgentString() {
-        val userAgent = "test-user-agent"
-        val actualFullUserAgent = spyActivity.buildUserAgentString(userAgent)
-        val expectedFullUserAgent = userAgent +
-                " nhsapp-android/${com.nhs.online.nhsonline.BuildConfig.VERSION_NAME}" +
-                " nhsapp-manufacturer/${Build.MANUFACTURER}" +
-                " nhsapp-model/${Build.MODEL}" +
-                " nhsapp-os/${Build.VERSION.RELEASE}" +
-                " nhsapp-architecture/${Build.SUPPORTED_ABIS.joinToString(",") }"
-
-       assertEquals(expectedFullUserAgent, actualFullUserAgent)
     }
 
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)

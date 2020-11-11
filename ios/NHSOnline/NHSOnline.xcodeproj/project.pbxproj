@@ -86,6 +86,9 @@
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
 		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
 		993DCD87249A4837000D87BB /* CalendarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DCD86249A4837000D87BB /* CalendarData.swift */; };
+		B893B980255B04ED0065F611 /* UserAgentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B893B97F255B04ED0065F611 /* UserAgentBuilder.swift */; };
+		B893B982255B04ED0065F611 /* UserAgentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B893B97F255B04ED0065F611 /* UserAgentBuilder.swift */; };
+		B893B987255B076F0065F611 /* UserAgentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B893B986255B076F0065F611 /* UserAgentBuilderTests.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
 		C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C20578092028B94800CDBDC5 /* Assets.xcassets */; };
@@ -462,6 +465,8 @@
 		B0A6720928BA2BE3BEC60C39 /* Pods-NHSOnline.scratch6.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch6.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch6.xcconfig"; sourceTree = "<group>"; };
 		B49A60C8929C9DDF5E1F962C /* Pods-NHSOnlineTests.scratch16.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch16.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch16.xcconfig"; sourceTree = "<group>"; };
 		B70D63AC47EDDA805C4E89EC /* Pods-NHSOnlinePaycasso.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch5.xcconfig"; sourceTree = "<group>"; };
+		B893B97F255B04ED0065F611 /* UserAgentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilder.swift; sourceTree = "<group>"; };
+		B893B986255B076F0065F611 /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		BB7192E74405C7B2BA6D94C2 /* Pods-NHSOnlineTests.scratch8.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch8.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch8.xcconfig"; sourceTree = "<group>"; };
 		BC02D05DB2CC1077ECA2E407 /* Pods-NHSOnlineTests.scratch13.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch13.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch13.xcconfig"; sourceTree = "<group>"; };
 		C20577FF2028B94800CDBDC5 /* NHSOnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NHSOnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -798,6 +803,7 @@
 				ED6A4513244D99EA005BA1E9 /* UiInteraction */,
 				64C1C76823E2E0E000FCBA57 /* SchemeHandlers */,
 				64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */,
+				B893B97F255B04ED0065F611 /* UserAgentBuilder.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1013,16 +1019,16 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
+				F01745A6207B700700877E4D /* Info.plist */,
+				F9BAFC48247FC2DE00BF1CAE /* Controllers */,
 				3E2244CC24A49A1400DB989F /* CoreExtensions */,
 				F9BAFC34247FB76000BF1CAE /* Delegates */,
 				F9BAFC35247FB77800BF1CAE /* HybridApplicationInteractions */,
-				F01745A6207B700700877E4D /* Info.plist */,
 				3067F25321E39BF7009734AF /* Lifecycle */,
 				2EA7BDA32418FCAD00CFEDC8 /* Mocks */,
 				F381C3AFAB024BF56A9DAA6E /* Services */,
 				F381CA47FB67F4660F08CD08 /* Support */,
 				2EC6C6C82243128900EE49B9 /* Utils */,
-				F9BAFC48247FC2DE00BF1CAE /* Controllers */,
 				F9BAFC4E247FC40B00BF1CAE /* Views */,
 			);
 			path = NHSOnlineTests;
@@ -1201,6 +1207,7 @@
 			isa = PBXGroup;
 			children = (
 				F381C21CE00D37602BC492AE /* SchemeHandlers */,
+				B893B986255B076F0065F611 /* UserAgentBuilderTests.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1792,6 +1799,7 @@
 				2E1F14802417B57600788F25 /* KnownServicesProtocol.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */,
+				B893B980255B04ED0065F611 /* UserAgentBuilder.swift in Sources */,
 				640585EA249237EA009784D5 /* UserContent.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
@@ -1844,6 +1852,7 @@
 				F9BAFC42247FBAC100BF1CAE /* DocumentInteractionsControllerMocks.swift in Sources */,
 				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,
 				3E27D222248FC32F000C57E8 /* WKScriptMessageMock.swift in Sources */,
+				B893B987255B076F0065F611 /* UserAgentBuilderTests.swift in Sources */,
 				F9BAFC37247FB7A600BF1CAE /* WebViewMocks.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
 				2EA7BDA52418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift in Sources */,
@@ -1963,6 +1972,7 @@
 				F91E29D724F67447001BDD21 /* JavaScriptInteractionMode.swift in Sources */,
 				F91E29D824F67447001BDD21 /* LoggingServiceProtocol.swift in Sources */,
 				F91E29D924F67447001BDD21 /* ViewMode.swift in Sources */,
+				B893B982255B04ED0065F611 /* UserAgentBuilder.swift in Sources */,
 				F91E29DA24F67447001BDD21 /* ConfigurationServiceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
