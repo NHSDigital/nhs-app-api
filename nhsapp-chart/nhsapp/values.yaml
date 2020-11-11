@@ -158,18 +158,28 @@ cosmosDBPortRange:
   - 10255
   - 10256
 cosmosDBIPTrust:
-  - "51.140.52.73/32"   # CosmosDB UKSouth
-  - "51.140.70.75/32"   # CosmosDB UKSouth
-  - "51.140.75.146/32"  # CosmosDB UKSouth
-  - "51.140.83.56/32"   # CosmosDB UKSouth
-  - "51.140.99.233/32"  # CosmosDB UKSouth
-  - "51.140.146.0/27"   # CosmosDB UKSouth
-  - "51.143.189.37/32"  # CosmosDB UKSouth
-  - "51.140.210.0/27"   # CosmosDB UKWest
-  - "51.141.11.34/32"   # CosmosDB UKWest
-  - "51.141.25.77/32"   # CosmosDB UKWest
-  - "51.141.53.76/32"   # CosmosDB UKWest
-  - "51.141.55.229/32"  # CosmosDB UKWest
+  - "51.104.31.128/27"           # CosmosDB UKSouth 11.11.2020
+  - "51.105.66.0/26"             # CosmosDB UKSouth 11.11.2020 
+  - "51.105.74.0/26"             # CosmosDB UKSouth 11.11.2020
+  - "51.140.52.73/32"            # CosmosDB UKSouth 11.11.2020
+  - "51.140.70.75/32"            # CosmosDB UKSouth 11.11.2020
+  - "51.140.75.146/32"           # CosmosDB UKSouth 11.11.2020
+  - "51.140.83.56/32"            # CosmosDB UKSouth 11.11.2020
+  - "51.140.99.233/32"           # CosmosDB UKSouth 11.11.2020
+  - "51.140.146.0/27"            # CosmosDB UKSouth 11.11.2020
+  - "51.143.189.37/32"           # CosmosDB UKSouth 11.11.2020
+  - "2603:1020:705:402::c0/122"  # CosmosDB UKSouth 11.11.2020
+  - "2603:1020:705:802::c0/122"  # CosmosDB UKSouth 11.11.2020 
+  - "2603:1020:705:c02::c0/122"  # CosmosDB UKSouth 11.11.2020
+  - "13.87.56.0/27"              # CosmosDB UKSouth2 11.11.2020
+  - "2603:1020:405:402::c0/122"  # CosmosDB UKSouth2 11.11.2020
+  - "51.137.166.128/27"          # CosmosDB UKWest 11.11.2020
+  - "51.140.210.0/27"            # CosmosDB UKWest 11.11.2020
+  - "51.141.11.34/32"            # CosmosDB UKWest 11.11.2020
+  - "51.141.25.77/32"            # CosmosDB UKWest 11.11.2020
+  - "51.141.53.76/32"            # CosmosDB UKWest 11.11.2020
+  - "51.141.55.229/32"           # CosmosDB UKWest 11.11.2020
+  - "2603:1020:605:402::c0/122"  # CosmosDB UKWest 11.11.2020
 
 microtestHostname: nhsapp-test.microtest.co.uk
 microtestProtocol: https
