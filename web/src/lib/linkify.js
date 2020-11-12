@@ -51,7 +51,7 @@ export default (content) => {
     } else {
       const matchUrl = new URL(match.url);
       target = (matchUrl.hostname === window.location.hostname) ? '_self' : '_blank';
-      href = (matchUrl.hostname === window.location.hostname) ? matchUrl.pathname : match.url;
+      href = (matchUrl.hostname === window.location.hostname) ? `${matchUrl.pathname}${matchUrl.search}${matchUrl.hash}` : match.url;
     }
 
     result.push(`<a href="${href}" target="${target}">${match.text}</a>`);

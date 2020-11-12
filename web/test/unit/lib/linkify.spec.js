@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import linkifyContent from '@/lib/linkify';
 
 describe('linkify', () => {
@@ -53,15 +54,26 @@ describe('linkify', () => {
     });
 
     describe('content with an internal url', () => {
-      let result;
+      each([
+        ['no query or fragment', ''],
+        ['single query string parameter', '?foo=bar'],
+        ['multiple query string parameters', '?foo=bar&bar=ram'],
+        ['fragment identifier', '#foo'],
+        ['single query string parameter and fragment identifier', '?foo=bar#foo'],
+        ['multiple query string parameters and fragment identifier', '?foo=bar&bar=ram#foo'],
+      ]).describe('with %s', (
+        _title, extras,
+      ) => {
+        let result;
 
-      beforeEach(() => {
-        result = linkifyContent('Sample content with a link to http://localhost/foobar that works.');
-      });
+        beforeEach(() => {
+          result = linkifyContent(`Sample content with a link to http://localhost/foobar${extras} that works.`);
+        });
 
-      it('will return content with link opening in the same window', () => {
-        expect(result).toBe('Sample content with a link to <a href="/foobar" target="_self">'
-        + 'http://localhost/foobar</a> that works.');
+        it('will return content with link opening in the same window', () => {
+          expect(result).toBe(`Sample content with a link to <a href="/foobar${extras}" target="_self">`
+          + `http://localhost/foobar${extras}</a> that works.`);
+        });
       });
     });
 
