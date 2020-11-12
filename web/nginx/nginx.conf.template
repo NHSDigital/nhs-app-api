@@ -38,11 +38,6 @@ http {
     location /js/v1/nhsapp.js {
       expires      epoch;
     }
-    location /config.json {
-      ## override content-type ##
-      types { } default_type "application/json";
-      index       config.json;
-    }
     location / {
       index  index.html;
       try_files $uri $uri/ /index.html;

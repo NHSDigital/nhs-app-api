@@ -73,11 +73,14 @@ ARG COMMIT_ID
 ARG APP_VERSION_TAG
 
 RUN echo 'VUE_APP_COMMIT_ID='$COMMIT_ID >> /app/.env
+RUN echo $APP_VERSION_TAG | sed 's/\./\-/g' > /app/dashed_version
 
-RUN if [ -n "$APP_VERSION_TAG" ] ; then \
-        dashedVersion=$(echo $APP_VERSION_TAG | sed 's/\./\-/g'); \
-        sed -i "s/dev_web_npm/${dashedVersion}/" package.json; \
-    fi
+RUN DASHED_VERSION=$(cat /app/dashed_version); \
+    sed -i "s/dev_web_npm/${DASHED_VERSION}/" package.json; \
+    if [ -n "$DASHED_VERSION" ] ; then \
+        DASHED_VERSION="\/$DASHED_VERSION"; \
+    fi; \
+    sed -i "s/CONFIG_PATH/${DASHED_VERSION}/" src/main.js;
 
 RUN npm run build
 
@@ -86,6 +89,7 @@ FROM nhsapp.azurecr.io/nhsonline-nginx:v1.18.0 as release
 
 COPY --chown=www-data:www-data --from=build /app/dist /app
 COPY --chown=www-data:www-data --from=build /app/build/env.sh /app/build/env.sh
+COPY --chown=www-data:www-data --from=build /app/dashed_version /app/dashed_version
 COPY --chown=www-data:www-data nginx/nginx.conf.template /etc/nginx/nginx.conf.template
 
 USER root
@@ -107,12 +111,14 @@ ENV COMMIT_ID=${COMMIT_ID}
 
 EXPOSE $PORT
 CMD sudo update-ca-certificates; \
-    /app/build/env.sh ./app/config.json; \
+    DASHED_VERSION=$(cat /app/dashed_version); \
+    /app/build/env.sh ./app/$DASHED_VERSION/config.json; \
     envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf; \
     nginx;
 
 # 1. trust wildcard cert (mounted in helm)to allow communication between pods
-# 2. run env.sh script to create env.json for config endpoint
-# 3. create nginx.conf file - replace ${PORT} variable with value defined in helm
-# 4. start nginx
+# 2. get name of versioned folder vue assets are in
+# 3. run env.sh script to create env.json for config endpoint and place in versioned assets folder
+# 4. create nginx.conf file - replace ${PORT} variable with value defined in helm
+# 5. start nginx
 
