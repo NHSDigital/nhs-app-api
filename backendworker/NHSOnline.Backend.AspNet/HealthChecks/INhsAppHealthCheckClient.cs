@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace NHSOnline.Backend.HealthChecks
+namespace NHSOnline.Backend.AspNet.HealthChecks
 {
     public interface INhsAppHealthCheckClient
     {

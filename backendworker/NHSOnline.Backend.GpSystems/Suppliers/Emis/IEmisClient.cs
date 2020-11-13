@@ -7,7 +7,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
-using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {

@@ -48,7 +48,6 @@ namespace NHSOnline.Backend.Support
             public const string IdentityToken = NhsoPrefix + "Identity-Token";
             public const string WebAppVersion = NhsoPrefix + "Web-Version-Tag";
             public const string NativeAppVersion = NhsoPrefix + "Native-Version-Tag";
-            public const string CorrelationIdentifier = NhsoPrefix + "Request-ID";
             public const string LoginClient = NhsoPrefix + "NHS-Login-Client";
             public const string JavascriptDisabled = NhsoPrefix + "Javascript-Disabled";
             public const string PatientId = NhsoPrefix + "Patient-Id";

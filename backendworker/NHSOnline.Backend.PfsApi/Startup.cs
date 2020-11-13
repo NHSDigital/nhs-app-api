@@ -1,4 +1,3 @@
-using CorrelationId;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.AspNet.CorrelationId;
+using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Session;
@@ -17,7 +18,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
-using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
@@ -27,7 +27,6 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
@@ -72,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi
                 .AddCookie(ConfigureServiceCookies);
             services.AddScoped<CustomCookieAuthenticationEvents>();
 
-            services.AddCorrelationId();
+            services.AddNhsAppCorrelationId();
 
             services.AddCors();
 
@@ -174,18 +173,7 @@ namespace NHSOnline.Backend.PfsApi
 
             app.UseMiddleware<ProxyAuditingMiddleware>();
 
-            app.UseCorrelationId(new CorrelationIdOptions
-            {
-                Header = Constants.HttpHeaders.CorrelationIdentifier,
-                UseGuidForCorrelationId = true,
-                UpdateTraceIdentifier = false
-            });
-
-            app.UseLogRequestHeader(new LogRequestHeaderOptions
-            {
-                HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
-                LogTemplate = "CorrelationId={value}",
-            });
+            app.UseNhsAppCorrelationId();
 
             app.UseEndpoints(b => b.MapControllers());
 

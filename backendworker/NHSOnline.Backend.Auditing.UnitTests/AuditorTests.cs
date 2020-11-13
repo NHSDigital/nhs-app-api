@@ -18,7 +18,6 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.Auditing.UnitTests
 {

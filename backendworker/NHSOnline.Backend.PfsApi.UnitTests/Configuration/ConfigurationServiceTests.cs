@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Configuration;
 using NHSOnline.Backend.PfsApi.Devices;

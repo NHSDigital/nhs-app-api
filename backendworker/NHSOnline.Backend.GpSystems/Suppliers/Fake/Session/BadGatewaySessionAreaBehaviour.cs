@@ -1,5 +1,4 @@
-using System.Collections.Generic;
- using System.Threading.Tasks;
+using System.Threading.Tasks;
  using NHSOnline.Backend.GpSystems.Session;
  using NHSOnline.Backend.GpSystems.Suppliers.Fake.Users;
  using NHSOnline.Backend.Support;

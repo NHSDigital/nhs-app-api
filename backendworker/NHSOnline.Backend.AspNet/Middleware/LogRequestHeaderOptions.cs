@@ -1,11 +1,11 @@
-namespace NHSOnline.Backend.Support.Middleware
+namespace NHSOnline.Backend.AspNet.Middleware
 {
     public class LogRequestHeaderOptions
     {
-        
+
         public const string NameText = "{name}";
         public const string ValueText = "{value}";
-        
+
         /// <summary>
         /// The name of the header ex- CorrelationId.
         /// </summary>

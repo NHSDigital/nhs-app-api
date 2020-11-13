@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using CorrelationId;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,12 +18,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
     public sealed class UserInfoClientTests : IDisposable
     {
         public static readonly Uri BaseUri = new Uri("http://base_url/v1/api/");
-        
+
         private IUserInfoClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<IUserInfoApiConfig> _configMock;
-        private IFixture _fixture; 
-        private ICorrelationContextAccessor _correlationContext;
+        private IFixture _fixture;
         private Mock<HttpContext> _httpContext;
 
         [TestInitialize]
@@ -37,17 +35,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
 
             _configMock = _fixture.Create<Mock<IUserInfoApiConfig>>();
             _configMock.SetupGet(x => x.UserInfoApiBaseUrl).Returns(BaseUri);
-            
-            _correlationContext = new CorrelationContextAccessor();
 
             _fixture.Inject(new HttpClient(_mockHttpHandler));
             _fixture.Inject(_configMock);
-            _fixture.Inject(_correlationContext);
             _fixture.Freeze<UserInfoHttpClient>();
 
             _systemUnderTest = _fixture.Create<UserInfoClient>();
         }
-        
+
         [TestMethod]
         public async Task Post_ReturnsCreated()
         {
@@ -58,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
 
             // Act
             var response = await _systemUnderTest.Post(_fixture.Create<string>(), _httpContext.Object);
-            
+
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             response.HasSuccessResponse.Should().Be(true);
@@ -74,10 +69,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
             _mockHttpHandler
                 .WhenUserInfo(HttpMethod.Post, string.Empty)
                 .Respond(httpStatusCode);
-            
+
             // Act
             var response = await _systemUnderTest.Post(_fixture.Create<string>(), _httpContext.Object);
-            
+
             // Assert
             response.StatusCode.Should().Be(httpStatusCode);
             response.HasSuccessResponse.Should().Be(false);
@@ -87,6 +82,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             _mockHttpHandler.Dispose();
         }
-        
+
     }
 }

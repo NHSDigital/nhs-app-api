@@ -9,7 +9,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support.Logging;
-using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 {

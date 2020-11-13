@@ -1,6 +1,7 @@
+using CorrelationId.HttpClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.HealthChecks;
+using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.UserInfo
@@ -14,10 +15,11 @@ namespace NHSOnline.Backend.PfsApi.UserInfo
             services.AddSingleton<IUserInfoService, UserInfoService>();
 
             services.AddTransient<UserInfoHttpRequestIdentifier>();
-            
+
             services.AddHttpClient<UserInfoHttpClient>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<UserInfoHttpRequestIdentifier>>()
-                .AddHttpMessageHandler<HttpRequestIdentificationHandler<UserInfoHttpRequestIdentifier>>();
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<UserInfoHttpRequestIdentifier>>()
+                .AddCorrelationIdForwarding();
 
             services.AddNhsAppHealthCheck<UserInfoHttpClient>("UserInfo");
 

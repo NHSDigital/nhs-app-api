@@ -1,4 +1,3 @@
-using CorrelationId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,13 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.HealthChecks;
+using NHSOnline.Backend.AspNet.CorrelationId;
+using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.LoggerApi
 {
@@ -44,7 +43,7 @@ namespace NHSOnline.Backend.LoggerApi
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddOptions();
-            services.AddCorrelationId();
+            services.AddNhsAppCorrelationId();
 
             services.AddHttpsRedirection(options =>
             {
@@ -88,18 +87,7 @@ namespace NHSOnline.Backend.LoggerApi
             app.UseCors(Configuration);
             app.UseAuthentication();
 
-            app.UseCorrelationId(new CorrelationIdOptions
-            {
-                Header = Constants.HttpHeaders.CorrelationIdentifier,
-                UseGuidForCorrelationId = true,
-                UpdateTraceIdentifier = false
-            });
-
-            app.UseLogRequestHeader(new LogRequestHeaderOptions
-            {
-                HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
-                LogTemplate = "CorrelationId={value}",
-            });
+            app.UseNhsAppCorrelationId();
 
             app.UseEndpoints(c =>
             {

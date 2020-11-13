@@ -1,4 +1,3 @@
-using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -11,16 +10,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.AspNet.CorrelationId;
+using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
-using NHSOnline.Backend.HealthChecks;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UserInfoApi
@@ -54,7 +53,7 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddNhsAppHealthCheckService();
 
             services.AddOptions();
-            services.AddCorrelationId();
+            services.AddNhsAppCorrelationId();
 
             services.AddTransient(typeof(HttpTimeoutHandler<>));
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
@@ -112,18 +111,7 @@ namespace NHSOnline.Backend.UserInfoApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCorrelationId(new CorrelationIdOptions
-            {
-                Header = Constants.HttpHeaders.CorrelationIdentifier,
-                UseGuidForCorrelationId = true,
-                UpdateTraceIdentifier = false
-            });
-
-            app.UseLogRequestHeader(new LogRequestHeaderOptions
-            {
-                HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
-                LogTemplate = "CorrelationId={value}",
-            });
+            app.UseNhsAppCorrelationId();
 
             app.UseEndpoints(b =>
             {

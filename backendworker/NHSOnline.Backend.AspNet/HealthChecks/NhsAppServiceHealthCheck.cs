@@ -5,8 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.AspNet.CorrelationId;
 
-namespace NHSOnline.Backend.HealthChecks
+namespace NHSOnline.Backend.AspNet.HealthChecks
 {
     internal static class NhsAppServiceHealthCheck
     {
@@ -31,6 +32,8 @@ namespace NHSOnline.Backend.HealthChecks
         {
             try
             {
+                context.PrepareCorrelationIdContext();
+
                 using var request = new HttpRequestMessage(HttpMethod.Get, NhsAppServiceHealthCheck.ReadinessPath);
 
                 using var response = await _client.Client.SendAsync(

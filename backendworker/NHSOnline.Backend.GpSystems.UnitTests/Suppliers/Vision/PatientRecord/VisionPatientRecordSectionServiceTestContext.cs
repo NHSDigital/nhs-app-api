@@ -7,7 +7,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
-using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Sanitization;
 using UnitTestHelper;

@@ -3,7 +3,6 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {

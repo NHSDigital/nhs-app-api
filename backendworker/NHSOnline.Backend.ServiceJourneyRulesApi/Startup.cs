@@ -5,13 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.HealthChecks;
+using NHSOnline.Backend.AspNet.CorrelationId;
+using NHSOnline.Backend.AspNet.HealthChecks;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Extensions;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support.Middleware;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
@@ -41,6 +41,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
 
             services.AddNhsAppHealthCheckService();
 
+            services.AddNhsAppCorrelationId();
+
             services.AddSingleton(Configuration);
             services.AddTransient(typeof(HttpTimeoutHandler<>));
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
@@ -69,11 +71,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             app.UseRouting();
             app.UseCors(Configuration);
 
-            app.UseLogRequestHeader(new LogRequestHeaderOptions
-            {
-               HeaderName = Support.Constants.HttpHeaders.CorrelationIdentifier,
-               LogTemplate = "CorrelationId={value}",
-            });
+            app.UseNhsAppCorrelationId();
 
             app.UseEndpoints(b =>
             {

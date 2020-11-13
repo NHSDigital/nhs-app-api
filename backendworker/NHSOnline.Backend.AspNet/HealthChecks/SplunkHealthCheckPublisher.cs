@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
-namespace NHSOnline.Backend.HealthChecks
+namespace NHSOnline.Backend.AspNet.HealthChecks
 {
     internal sealed class SplunkHealthCheckPublisher: IHealthCheckPublisher
     {

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Support.Middleware;
+using NHSOnline.Backend.AspNet.Middleware;
 
-namespace NHSOnline.Backend.Support.UnitTests.Middleware
+namespace NHSOnline.Backend.AspNet.UnitTests.Middleware
 {
     [TestClass]
     public sealed class LogRequestHeaderMiddlewareTests

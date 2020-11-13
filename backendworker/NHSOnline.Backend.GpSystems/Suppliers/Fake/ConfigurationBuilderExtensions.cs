@@ -1,6 +1,4 @@
-using System;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Fake

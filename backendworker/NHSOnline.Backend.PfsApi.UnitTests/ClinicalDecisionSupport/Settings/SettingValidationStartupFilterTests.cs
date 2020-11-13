@@ -4,7 +4,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.Configuration;
 

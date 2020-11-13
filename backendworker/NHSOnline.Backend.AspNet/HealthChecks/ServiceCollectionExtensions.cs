@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace NHSOnline.Backend.HealthChecks
+namespace NHSOnline.Backend.AspNet.HealthChecks
 {
     public static class ServiceCollectionExtensions
     {

@@ -45,7 +45,8 @@ data:
                                'user_agent="$http_user_agent" '
                                'status=$status '
                                'response_size_bytes=$bytes_sent '
-                               'duration_seconds=$request_time';
+                               'duration_seconds=$request_time '
+                               'correlation_id="$http_nhso_request_id"';
 
         server {
             listen {{ $.Values.sidecar_proxy.containerPort }} ssl;

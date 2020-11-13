@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CorrelationId;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,11 +40,8 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests
 
             _mockLogger = new Mock<ILogger<ServiceJourneyRulesClient>>();
 
-            _systemUnderTest = new ServiceJourneyRulesClient(
-                _mockLogger.Object,
-                _sjrHttpClient,
-                new JsonResponseParser(),
-                new CorrelationContextAccessor());
+            _systemUnderTest =
+                new ServiceJourneyRulesClient(_mockLogger.Object, _sjrHttpClient, new JsonResponseParser());
         }
 
         [TestMethod]

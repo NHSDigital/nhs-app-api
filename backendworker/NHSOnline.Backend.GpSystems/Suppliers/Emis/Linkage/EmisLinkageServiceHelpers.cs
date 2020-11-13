@@ -3,7 +3,6 @@ using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
-using static NHSOnline.Backend.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 {

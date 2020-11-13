@@ -15,7 +15,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 {
