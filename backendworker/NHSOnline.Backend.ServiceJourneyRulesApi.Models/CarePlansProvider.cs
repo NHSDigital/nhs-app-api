@@ -10,6 +10,5 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     {
         pkb,
         pkbCie,
-        substraktPatientPack
     }
 }

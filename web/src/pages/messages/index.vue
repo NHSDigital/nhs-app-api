@@ -12,6 +12,11 @@
                    :description="$t('messages.hub.sendOrViewMessagesFromYourSurgery')"
                    :aria-label="ariaLabelGpMessages()"
                    :click-func="navigateToGpMessages"/>
+        <third-party-jump-off-button
+          v-if="substraktEnabled"
+          id="btn_substrakt_messages"
+          provider-id="substraktPatientPack"
+          :provider-configuration="thirdPartyProvider.substraktPatientPack.messages" />
         <third-party-jump-off-button v-if="engageEnabled"
                                      id="btn_engage_messages"
                                      provider-id="engage"
@@ -105,6 +110,14 @@ export default {
           serviceType: 'messages',
         },
       }),
+      hasSubstraktMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'substraktPatientPack',
+          serviceType: 'messages',
+        },
+      }),
     };
   },
   computed: {
@@ -114,11 +127,17 @@ export default {
         this.engageEnabled ||
         this.pkbEnabled ||
         this.pkbCieEnabled ||
+        this.substraktEnabled ||
         this.testProviderEnabled;
     },
     onlyAppMessagingEnabled() {
-      return !this.gpMessagesEnabled && this.appMessagingSjrEnabled &&
-      !this.engageEnabled && !this.pkbEnabled && !this.testProviderEnabled;
+      return this.appMessagingSjrEnabled &&
+        !this.gpMessagesEnabled &&
+        !this.engageEnabled &&
+        !this.pkbEnabled &&
+        !this.pkbCieEnabled &&
+        !this.substraktEnabled &&
+        !this.testProviderEnabled;
     },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
@@ -134,6 +153,9 @@ export default {
     },
     testProviderEnabled() {
       return this.hasTestProviderMessages && this.isProofLevel9;
+    },
+    substraktEnabled() {
+      return this.hasSubstraktMessages && !this.isProxying && this.isProofLevel9;
     },
   },
   async mounted() {

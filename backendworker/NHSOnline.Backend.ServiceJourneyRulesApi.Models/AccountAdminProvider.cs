@@ -8,5 +8,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public enum AccountAdminProvider
     {
         gncr,
+        substraktPatientPack,
     }
 }

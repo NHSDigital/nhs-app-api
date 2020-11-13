@@ -9,11 +9,13 @@ target:
   odsCode: "F00003"
 journeys:
   silverIntegrations:
-    carePlans:
+    accountAdmin:
       - substraktPatientPack
+    carePlans: []
     consultations: []
     healthTrackers: []
     libraries: []
     medicines: []
-    messages: []
+    messages:
+      - substraktPatientPack
     secondaryAppointments: []

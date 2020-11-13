@@ -497,7 +497,31 @@ knownservices_config: {
       "validateSession": true
     },
     "substraktPatientPack": {
-      "url": "https://patientpack-development.ngrok.io",
+      "url": "https://jump-point.test.substrakthealth.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "substraktPatientPack-admin": {
+      "url": "https://admin-request.test.substrakthealth.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "substraktPatientPack-auth": {
+      "url": "https://auth.test.substrakthealth.com",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
       "menuTab": "None",

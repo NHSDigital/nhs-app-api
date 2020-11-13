@@ -36,6 +36,9 @@ const mountPage = ({
         }, {
           id: 'engage',
           url: 'www.url.com',
+        }, {
+          id: 'substraktPatientPack',
+          url: 'www.url.com',
         }],
       },
     },
@@ -147,6 +150,10 @@ describe('messages page', () => {
       ['engage', true, false, false, false],
       ['engage', true, true, true, false],
       ['engage', false, false, true, false],
+      ['substraktPatientPack', true, false, true, true],
+      ['substraktPatientPack', true, false, false, false],
+      ['substraktPatientPack', true, true, true, false],
+      ['substraktPatientPack', false, false, true, false],
     ]).describe('%s messaging enabled is %s, proxy is %s', (
       provider, context, isProxying, isProofLevel9, expectedResult,
     ) => {
@@ -160,6 +167,9 @@ describe('messages page', () => {
             break;
           case 'engage':
             linkElement = '#btn_engage_messages';
+            break;
+          case 'substraktPatientPack':
+            linkElement = '#btn_substrakt_messages';
             break;
           default:
             break;

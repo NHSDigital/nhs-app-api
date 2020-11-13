@@ -333,17 +333,31 @@ export default {
   },
   substraktPatientPack: {
     serviceId: 'substraktPatientPack',
-    providerName: 'Patient Pack (Substrakt Health)',
+    providerName: 'Substrakt Health',
     jumpOffs: [
       {
-        id: 'lifestyleGuides',
+        id: 'messages',
         jumpOffContent: {
-          headerText: 'Lifestyle Guides',
-          descriptionText: 'Patient Pack Lifestyle Guides',
+          headerText: 'Ask your GP surgery a question',
+          descriptionText: 'Fill out a form to send a request, get advice or ask a question',
         },
         thirdPartyWarning: {
-          featureName: 'Feature name',
-          servicePurchaser: 'service purchaser',
+          featureName: 'Ask your GP surgery a question',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'accountAdmin',
+        jumpOffContent: {
+          headerText: 'Update your personal details',
+          descriptionText: 'Fill out a form to let your GP surgery know which details have changed',
+        },
+        thirdPartyWarning: {
+          featureName: 'Update your personal details',
+          servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',

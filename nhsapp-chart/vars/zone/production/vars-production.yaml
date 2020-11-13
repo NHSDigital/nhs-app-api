@@ -661,6 +661,42 @@ knownservices_config: {
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
-    }
+    },
+    "substraktPatientPack": {
+      "url": "https://jump-point.production.substrakthealth.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "substraktPatientPack-admin": {
+      "url": "https://admin-request.production.substrakthealth.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
+    "substraktPatientPack-auth": {
+      "url": "https://auth.production.substrakthealth.com",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
   }
 }

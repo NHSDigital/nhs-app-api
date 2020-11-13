@@ -12,6 +12,11 @@ class MessagesHubStepDefinitions {
         messagesHubPage.clickOnMenuItem("btn_pkb_messages_and_consultations")
     }
 
+    @When("^I click the Substrakt Ask Your GP Surgery a Question link on the Messages Hub page$")
+    fun clickOnSubstraktAskYourGpSurgeryAQuestion() {
+        messagesHubPage.clickOnMenuItem("btn_substrakt_messages")
+    }
+
     @When("^I click the CIE Messages and online consultations link on the Messages Hub page$")
     fun clickOnCieMessagesConsultations() {
         messagesHubPage.clickOnMenuItem("btn_pkb_cie_messages_and_consultations")
@@ -45,6 +50,11 @@ class MessagesHubStepDefinitions {
     @Then("^the link to Messages and consultations is not available on the Messages Hub page")
     fun theMessagesConsultationsLinkIsNotDisplayed() {
         messagesHubPage.assertMenuItemNotDisplayed("btn_pkb_messages_and_consultations")
+    }
+
+    @Then("^the link to Ask your GP surgery a Question is not available on the Messages Hub page")
+    fun theAskYourGPSurgeryAQuestionLinkIsNotDisplayed() {
+        messagesHubPage.assertMenuItemNotDisplayed("btn_substrakt_messages")
     }
 
     @Then("^the link to CIE Messages and consultations is not available on the Messages Hub page")

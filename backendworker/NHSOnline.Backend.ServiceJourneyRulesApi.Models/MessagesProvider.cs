@@ -12,5 +12,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         pkbCie,
         testSilverThirdPartyProvider,
         gncr,
+        substraktPatientPack,
     }
 }

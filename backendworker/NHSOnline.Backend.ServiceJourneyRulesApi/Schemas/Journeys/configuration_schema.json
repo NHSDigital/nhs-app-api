@@ -143,7 +143,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["pkb", "pkbCie", "substraktPatientPack"]
+            "enum": ["pkb", "pkbCie"]
           }
         },
         "consultations": {
@@ -185,7 +185,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb", "testSilverThirdPartyProvider", "pkbCie", "engage" , "gncr"]
+            "enum": [ "pkb", "testSilverThirdPartyProvider", "pkbCie", "engage" , "gncr", "substraktPatientPack"]
           }
         },
         "secondaryAppointments": {
@@ -206,7 +206,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "gncr" ]
+            "enum": [ "gncr", "substraktPatientPack"]
           }
         }
       },

@@ -1,18 +1,13 @@
-#
-#
-#   Sandpit users in ODS code F00004 are used by Substrakt.
-#   DO NOT enable any third-party silver integrations other than Substrakt (Patient Pack) for this ODS code.
-#
-#
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "F00004"
+  odsCode: "A82010"
 journeys:
   silverIntegrations:
     accountAdmin:
       - substraktPatientPack
     carePlans: []
     consultations: []
+    consultationsAdmin: []
     healthTrackers: []
     libraries: []
     medicines: []

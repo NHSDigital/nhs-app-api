@@ -53,11 +53,11 @@
                                        provider-id="pkb"
                                        :provider-configuration="thirdPartyProvider
                                          .pkb.sharedLinksCie" />
-          <third-party-jump-off-button v-if="showPatientPackLifestyleGuides && !isProxying"
-                                       id="btn_substrakt_lifestyle_guides"
+          <third-party-jump-off-button v-if="showPatientPackAccountAdmin && !isProxying"
+                                       id="btn_substrakt_update_details"
                                        provider-id="substraktPatientPack"
                                        :provider-configuration="thirdPartyProvider
-                                         .substraktPatientPack.lifestyleGuides" />
+                                         .substraktPatientPack.accountAdmin" />
           <third-party-jump-off-button
             v-if="showGncrMessages && !isProxying"
             id="btn_gncr_messages_and_consultations"
@@ -152,12 +152,12 @@ export default {
           serviceType: 'libraries',
         },
       }),
-      showPatientPackLifestyleGuides: sjrIf({
+      showPatientPackAccountAdmin: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'substraktPatientPack',
-          serviceType: 'carePlans',
+          serviceType: 'accountAdmin',
         },
       }),
       showGncrMessages: sjrIf({

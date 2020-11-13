@@ -95,11 +95,17 @@ export default {
       },
     },
     substraktPatientPack: {
-      lifestyleGuides: {
-        jumpOffId: 'lifestyleGuides',
-        redirectPath: '/lifestyle_guides',
+      messages: {
+        jumpOffId: 'messages',
+        redirectPath: '/jump/forms',
         provider: 'substraktPatientPack',
-        serviceType: 'carePlans',
+        serviceType: 'messages',
+      },
+      accountAdmin: {
+        jumpOffId: 'accountAdmin',
+        redirectPath: '/jump/update-details',
+        provider: 'substraktPatientPack',
+        serviceType: 'accountAdmin',
       },
     },
     gncr: {
