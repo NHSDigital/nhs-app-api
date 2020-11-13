@@ -50,7 +50,8 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
-                                SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_NONE))
+                                SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE))
                 .add(Supplier.TPP, "A55555",
                         EnumSet.of(SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 SJRJourneyType.NOTIFICATIONS_ENABLED,
@@ -120,7 +121,8 @@ class ServiceJourneyRulesMapper {
                 .add(Supplier.EMIS, "A82010",
                         EnumSet.of(
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_SUBSTRAKT,
-                                SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_SUBSTRAKT))
+                                SJRJourneyType.SILVER_INTEGRATION_ACCOUNT_ADMIN_SUBSTRAKT,
+                                SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_SUBSTRAKT))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,

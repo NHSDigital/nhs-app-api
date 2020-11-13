@@ -25,6 +25,7 @@ export const initialState = () => ({
       provider: IM1_PROVIDER,
     },
     silverIntegrations: {
+      accountAdmin: [],
       carePlans: [],
       consultations: [],
       consultationsAdmin: [],
@@ -32,6 +33,7 @@ export const initialState = () => ({
       libraries: [],
       medicines: [],
       messages: [],
+      participation: [],
       secondaryAppointments: [],
     },
     documents: false,

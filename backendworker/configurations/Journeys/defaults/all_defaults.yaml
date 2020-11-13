@@ -26,10 +26,11 @@ journeys:
     libraries: []
     medicines: []
     messages: []
+    participation: []
     secondaryAppointments: []
     testResults: []
   documents: false
-  im1Messaging: 
+  im1Messaging:
     isEnabled: false
     canDeleteMessages: false
     canUpdateReadStatus: false

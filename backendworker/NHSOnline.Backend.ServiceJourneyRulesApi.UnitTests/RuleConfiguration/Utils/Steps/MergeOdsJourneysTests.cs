@@ -70,6 +70,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SilverIntegrations(x => x
                         .AccountAdmin(AccountAdminProvider.gncr)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
+                        .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
@@ -123,6 +124,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)
                         .Messages(MessagesProvider.pkb)
+                        .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.pkb))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,
@@ -158,6 +160,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SilverIntegrations(x => x
                         .AccountAdmin(AccountAdminProvider.gncr)
                         .ConsultationsAdmin(ConsultationsAdminProvider.engage)
+                        .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers)
                         .TestResults(TestResultsProvider.pkb))
                     .DocumentsEnabled(false)
@@ -182,6 +185,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)
                         .Messages(MessagesProvider.pkb)
+                        .Participation(ParticipationProvider.substraktPatientPack)
                         .SecondaryAppointments(SecondaryAppointmentsProvider.ers , SecondaryAppointmentsProvider.pkb)
                         .TestResults(TestResultsProvider.pkb))
                     .HomeScreen(x => x.PublicHealthNotifications(new[] { CreatePublicHealthNotification("1") }))

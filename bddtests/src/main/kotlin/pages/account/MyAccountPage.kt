@@ -91,5 +91,16 @@ class MyAccountPage : HybridPageObject() {
     fun assertNHSLoginLinkIsPresent() {
         nhsLoginLink.assertIsVisible()
     }
+
+    fun getHeaderElement(title: String): HybridPageElement {
+        val locator = "//h2[contains(text(),\"$title\")]"
+        return HybridPageElement(
+                webDesktopLocator = locator,
+                androidLocator = locator,
+                iOSLocator = locator,
+                page = this,
+                helpfulName = title
+        )
+    }
 }
 

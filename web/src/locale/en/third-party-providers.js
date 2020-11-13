@@ -363,6 +363,20 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'patientParticipationGroups',
+        jumpOffContent: {
+          headerText: 'Patient participation groups',
+          descriptionText: 'Take part in our patient participation groups to help shape and improve the patient experience',
+        },
+        thirdPartyWarning: {
+          featureName: 'Patient participation groups',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
   'silver-third-party-api-test': {

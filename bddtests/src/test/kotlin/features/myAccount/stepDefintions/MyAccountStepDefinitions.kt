@@ -89,4 +89,9 @@ class MyAccountStepDefinitions {
     fun thereIsNoNotificationsLinkAvailable() {
         myAccount.notificationsLink.assertElementNotPresent()
     }
+
+    @When("I click the account menu item '(.*)'$")
+    fun clickMenuItem(title: String) {
+        myAccount.getHeaderElement(title).click()
+    }
 }

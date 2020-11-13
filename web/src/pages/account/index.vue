@@ -16,6 +16,11 @@
       <settings data-purpose="setting-section"
                 :show-notifications="showNotifications"
                 :show-biometrics="showBiometrics"/>
+      <third-party-jump-off-button v-if="showSubstraktParticipation"
+                                   id="btn_substrakt_participation"
+                                   provider-id="substraktPatientPack"
+                                   :provider-configuration="thirdPartyProvider
+                                     .substraktPatientPack.patientParticipationGroups" />
     </menu-item-list>
 
     <template v-if="$store.state.device.isNativeApp">
@@ -55,6 +60,8 @@ import MenuItemList from '@/components/MenuItemList';
 import NativeCallbacks from '@/services/native-app';
 import Settings from '@/components/account/Settings';
 import sjrIf from '@/lib/sjrIf';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import GenericButton from '@/components/widgets/GenericButton';
 import { ACCOUNT_COOKIES_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
@@ -70,12 +77,24 @@ export default {
     Settings,
     GenericButton,
     AnalyticsTrackedTag,
+    ThirdPartyJumpOffButton,
   },
   data() {
     return {
       nativeLoginOptionsMethodExists: true,
       cookiesPath: ACCOUNT_COOKIES_PATH,
       linkedProfilesPath: LINKED_PROFILES_PATH,
+      isProxying: this.$store.getters['session/isProxying'],
+      isProofLevel9: this.$store.getters['session/isProofLevel9'],
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
+      hasSubstraktParticipation: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'substraktPatientPack',
+          serviceType: 'participation',
+        },
+      }),
     };
   },
   computed: {
@@ -95,6 +114,9 @@ export default {
     },
     showCEMark() {
       return isTruthy(this.$store.$env.CE_MARK_ENABLED);
+    },
+    showSubstraktParticipation() {
+      return this.hasSubstraktParticipation && !this.isProxying && this.isProofLevel9;
     },
   },
   mounted() {

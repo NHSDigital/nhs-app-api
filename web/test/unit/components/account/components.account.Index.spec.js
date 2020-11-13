@@ -30,11 +30,19 @@ describe('Account.index', () => {
         session: {
           user: undefined,
         },
+        knownServices: {
+          knownServices: [{
+            id: 'substraktPatientPack',
+            url: 'www.url.com',
+          }],
+        },
       },
       getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockImplementation(() => true),
         'serviceJourneyRules/notificationsEnabled': false,
         'linkedAccounts/hasLinkedAccounts': false,
         'appVersion/isNativeVersionAfter': () => true,
+        'session/isProofLevel9': true,
       },
     };
   });
@@ -68,6 +76,41 @@ describe('Account.index', () => {
 
       expect(wrapper.find('[data-purpose=logout-button]').exists())
         .toBe(false);
+    });
+  });
+
+  describe('Page loaded', () => {
+    it('Substrakt participation SJR rule is checked', () => {
+      wrapper = mountIndex(store, { nativeLoginOptionsMethodExists: true });
+      expect(store.getters['serviceJourneyRules/silverIntegrationEnabled'])
+        .toHaveBeenCalledWith({ provider: 'substraktPatientPack', serviceType: 'participation' });
+    });
+  });
+
+  describe('Patient Participation panel', () => {
+    let patientParticipationPanel;
+    it('should be visible', () => {
+      wrapper = mountIndex(store, { nativeLoginOptionsMethodExists: true });
+      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
+      expect(patientParticipationPanel.exists()).toBe(true);
+    });
+
+    it('should not be visible if silver integration is not enabled', () => {
+      store.getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => false);
+      store.getters['session/isProofLevel9'] = true;
+
+      wrapper = mountIndex(store, { nativeLoginOptionsMethodExists: true });
+      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
+      expect(patientParticipationPanel.exists()).toBe(false);
+    });
+
+    it('should not be visible if not proof level 9', () => {
+      store.getters['session/isProofLevel9'] = false;
+      store.getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
+
+      wrapper = mountIndex(store, { nativeLoginOptionsMethodExists: true });
+      patientParticipationPanel = wrapper.find('#btn_substrakt_participation');
+      expect(patientParticipationPanel.exists()).toBe(false);
     });
   });
 });

@@ -100,6 +100,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries(LibrariesProvider.pkb)
                                 .Medicines(MedicinesProvider.pkb)
                                 .Messages(MessagesProvider.pkb)
+                                .Participation(ParticipationProvider.substraktPatientPack)
                                 .SecondaryAppointments( SecondaryAppointmentsProvider.pkb )
                                 .TestResults(TestResultsProvider.pkb))
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
@@ -131,6 +132,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
+                                .Participation()
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(false)
@@ -161,6 +163,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
+                                .Participation()
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(true)
@@ -213,6 +216,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
+                                .Participation()
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(true)
@@ -243,6 +247,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
+                                .Participation()
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(false)
@@ -273,6 +278,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries()
                                 .Medicines()
                                 .Messages()
+                                .Participation()
                                 .SecondaryAppointments()
                                 .TestResults())
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
@@ -375,7 +381,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     "A12",
                     ValidJourneys()
                         .SilverIntegrations(x => x.CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().SecondaryAppointments()
+                            .HealthTrackers().Libraries().Medicines().Messages().Participation().SecondaryAppointments()
                             .TestResults())
                         .Build()
                 },
@@ -383,7 +389,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     "A13",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().SecondaryAppointments()
+                            .HealthTrackers().Libraries().Medicines().Messages().Participation().SecondaryAppointments()
                             .TestResults())
                         .Build()
                 },
@@ -391,60 +397,67 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     "A14",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().ConsultationsAdmin().HealthTrackers()
-                            .Libraries().Medicines().Messages().SecondaryAppointments().TestResults())
+                            .Libraries().Medicines().Messages().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A15",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().HealthTrackers()
-                            .Libraries().Medicines().Messages().SecondaryAppointments().TestResults())
+                            .Libraries().Medicines().Messages().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A16",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .Libraries().Medicines().Messages().SecondaryAppointments().TestResults())
+                            .Libraries().Medicines().Messages().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A17",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Medicines().Messages().SecondaryAppointments().TestResults())
+                            .HealthTrackers().Medicines().Messages().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A18",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Messages().SecondaryAppointments().TestResults())
+                            .HealthTrackers().Libraries().Messages().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A19",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().SecondaryAppointments().TestResults())
+                            .HealthTrackers().Libraries().Medicines().Participation().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A20",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().TestResults())
+                            .HealthTrackers().Libraries().Medicines().Messages().SecondaryAppointments().TestResults())
                         .Build()
                 },
                 {
                     "A21",
                     ValidJourneys()
                         .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
-                            .HealthTrackers().Libraries().Medicines().Messages().SecondaryAppointments())
+                            .HealthTrackers().Libraries().Medicines().Messages().Participation().TestResults())
                         .Build()
                 },
                 {
                     "A22",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.AccountAdmin().CarePlans().Consultations().ConsultationsAdmin()
+                            .HealthTrackers().Libraries().Medicines().Messages().Participation().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A23",
                     ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
@@ -474,9 +487,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A17", "journeys.SilverIntegrations.Libraries");
             AssertError("A18", "journeys.SilverIntegrations.Medicines");
             AssertError("A19", "journeys.SilverIntegrations.Messages");
-            AssertError("A20", "journeys.SilverIntegrations.SecondaryAppointments");
-            AssertError("A21", "journeys.SilverIntegrations.TestResults");
-            AssertError("A22", "journeys.Supplier");
+            AssertError("A20", "journeys.SilverIntegrations.Participation");
+            AssertError("A21", "journeys.SilverIntegrations.SecondaryAppointments");
+            AssertError("A22", "journeys.SilverIntegrations.TestResults");
+            AssertError("A23", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -510,6 +524,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Libraries()
                     .Medicines()
                     .Messages()
+                    .Participation()
                     .SecondaryAppointments()
                     .TestResults())
                 .DocumentsEnabled(true)

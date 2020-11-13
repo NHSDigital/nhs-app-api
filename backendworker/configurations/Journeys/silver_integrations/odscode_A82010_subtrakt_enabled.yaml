@@ -13,4 +13,6 @@ journeys:
     medicines: []
     messages:
       - substraktPatientPack
+    participation:
+      - substraktPatientPack
     secondaryAppointments: []

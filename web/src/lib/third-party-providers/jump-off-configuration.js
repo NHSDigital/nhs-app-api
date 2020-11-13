@@ -107,6 +107,12 @@ export default {
         provider: 'substraktPatientPack',
         serviceType: 'accountAdmin',
       },
+      patientParticipationGroups: {
+        jumpOffId: 'patientParticipationGroups',
+        redirectPath: '/jump/join-ppg',
+        provider: 'substraktPatientPack',
+        serviceType: 'participation',
+      },
     },
     gncr: {
       appointments: {

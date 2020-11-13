@@ -55,6 +55,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public SilverIntegrationsBuilder Participation(params ParticipationProvider[] providers)
+        {
+             _silverIntegrations.Participation = providers.ToList();
+             return this;
+        }
+
         public SilverIntegrationsBuilder SecondaryAppointments(params SecondaryAppointmentsProvider[] providers)
         {
             _silverIntegrations.SecondaryAppointments = providers.ToList();

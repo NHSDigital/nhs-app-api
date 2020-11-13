@@ -9,6 +9,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.RedirectorPage
+import pages.account.MyAccountPage
 import pages.assertElementNotPresent
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
@@ -16,6 +17,7 @@ import utils.SerenityHelpers
 class SubstraktStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
+    private lateinit var myAccountPage: MyAccountPage
 
     @Given("^I am a user who can view Ask Your Gp Surgery a Question from Substrakt$")
     fun iAmAUserWhoCanViewAskYourGpSurgeryAQuestionFromSubstrakt(){
@@ -45,6 +47,26 @@ class SubstraktStepDefinitions : HybridPageObject() {
     @Then("^the link to Substrakt 'Update your personal details' is not available on the Health Records Hub page$")
     fun theLinkToSubstraktUpateYourPersonalDetailsIsNotAvailableMedicalRecordHubPage() {
         medicalRecordHubPage.getHeaderElement("Update your personal details").assertElementNotPresent()
+    }
+
+    @Given("^I am a user with proof level 5 who can view Participation groups from Substrakt$")
+    fun iAmAUserWithProofLevel5WhoCanViewPatientParticipationGroupsFromSubstrakt(){
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_SUBSTRAKT, IdentityProofingLevel.P5)
+    }
+
+    @Given("^I am a user who can view Patient participation groups from Substrakt$")
+    fun iAmAUserWhoCanViewPatientParticipationGroupsFromSubstrakt(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_SUBSTRAKT)
+    }
+
+    @Given("^I am a user who cannot view Patient participation groups from Substrakt$")
+    fun iAmAUserWhoCannotViewPatientParticipationGroupsFromSubstrakt(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_PARTICIPATION_NONE)
+    }
+
+    @Then("^the link to Substrakt 'Patient participation groups' is not available on the Account page$")
+    fun theLinkToSubstraktPatientParticipationGroupsIsNotAvailableMedicalRecordHubPage() {
+        myAccountPage.getHeaderElement("Patient participation groups").assertElementNotPresent()
     }
 
     @Then("the warning message on the Redirector page explains the service is from Substrakt$")

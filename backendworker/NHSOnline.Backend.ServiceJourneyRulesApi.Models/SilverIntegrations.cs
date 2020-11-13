@@ -33,6 +33,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public IList<MessagesProvider> Messages { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+        public IList<ParticipationProvider> Participation { get; set; }
+
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<SecondaryAppointmentsProvider> SecondaryAppointments { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
@@ -50,6 +53,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
                 Libraries = Clone(Libraries),
                 Medicines = Clone(Medicines),
                 Messages = Clone(Messages),
+                Participation = Clone(Participation),
                 SecondaryAppointments = Clone(SecondaryAppointments),
                 TestResults = Clone(TestResults)
             };
@@ -67,6 +71,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Libraries = Merge(Libraries, other?.Libraries);
             Medicines = Merge(Medicines, other?.Medicines);
             Messages = Merge(Messages, other?.Messages);
+            Participation = Merge(Participation, other?.Participation);
             SecondaryAppointments = Merge(SecondaryAppointments, other?.SecondaryAppointments);
             TestResults = Merge(TestResults, other?.TestResults);
         }

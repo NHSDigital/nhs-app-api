@@ -208,6 +208,13 @@
             "type": "string",
             "enum": [ "gncr", "substraktPatientPack"]
           }
+        },
+        "participation":  {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["substraktPatientPack"]
+          }
         }
       },
       "additionalProperties": false
