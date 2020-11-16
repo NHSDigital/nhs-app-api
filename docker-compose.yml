@@ -69,6 +69,7 @@ services:
       - ./docker/gplookup_connectivity.env
       - ./docker/nhslogin_connectivity_ext.env
       - ./docker/appointments.env
+      - ./docker/well-known.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}

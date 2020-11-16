@@ -246,6 +246,11 @@ tppSupportsLinkedAccounts: true
 # 16 weeks appointment slots
 sixteenWeeksSlotsEnabled: true
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingsandpit
+wellKnownAndroidFingerPrint: 48:B4:E9:D5:3D:1E:0D:A1:46:94:EB:79:0C:C9:F5:E6:CF:9B:4B:2B:C7:8A:B2:E5:A3:CB:1E:54:A7:63:5E:42
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingsandpit
+
 # Add Appointment to Native Calendar
 addAppointmentToCalendarEnabled: true
 

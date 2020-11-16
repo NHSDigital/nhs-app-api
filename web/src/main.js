@@ -43,7 +43,7 @@ const defineErrorHandling = () => {
   Vue.use(RouterExtensions, { router });
   Vue.use(NativeAppCallbacksPlugin);
   Vue.config.productionTip = false;
-  store.$env = (await Axios.get('CONFIG_PATH/config.json')).data;
+  store.$env = (await Axios.get('CONFIG_PATH/config.json')).data; // see the web dockerfile to see how this is defined at startup
   store.$cookies = Vue.$cookies;
 
   defineErrorHandling();

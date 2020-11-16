@@ -6,6 +6,10 @@ cidHostname: auth.aos.signin.nhs.uk
 cidFidoHostname: uaf.aos.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingaos
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingaos
+
 users:
   notificationHubPath: nhsapp-onboardingaos
 

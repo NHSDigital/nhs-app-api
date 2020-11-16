@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "${WELL_KNOWN_IOS_APP_ID}",
+                "paths": [ "*" ]
+            }
+        ]
+    }
+}

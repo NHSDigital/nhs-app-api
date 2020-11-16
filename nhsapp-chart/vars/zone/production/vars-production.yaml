@@ -45,6 +45,11 @@ nominatedpharmacyEnabled: true
 
 sixteenWeeksSlotsEnabled: true
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline
+wellKnownAndroidFingerPrint: 15:48:51:AC:CF:1E:FE:09:19:AB:B7:7D:B8:83:B0:BD:7F:69:38:F9:7A:7F:D2:85:9C:8B:C8:C4:7B:AC:95:59
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online
+
 spineLdapLookupEnabled: true
 spineLdapCIDR: "155.231.48.0/24"
 spineLdapHost: "ldap.national.ncrs.nhs.uk"

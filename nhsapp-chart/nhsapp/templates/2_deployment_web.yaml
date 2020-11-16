@@ -118,6 +118,12 @@ spec:
           value: "{{ $.Values.userResearchEnabled }}"
         - name: SIXTEEN_WEEKS_SLOTS_ENABLED
           value: "{{ $.Values.sixteenWeeksSlotsEnabled }}"
+        - name: WELL_KNOWN_ANDROID_PACKAGE_NAME
+          value: "{{ $.Values.wellKnownAndroidPackageName }}"
+        - name: WELL_KNOWN_ANDROID_FINGERPRINT
+          value: "{{ $.Values.wellKnownAndroidFingerPrint }}"
+        - name: WELL_KNOWN_IOS_APP_ID
+          value: "{{ $.Values.wellKnownIOSAppId }}"
         - name: ADD_APPOINTMENT_TO_CALENDAR_ENABLED
           value: "{{ $.Values.addAppointmentToCalendarEnabled }}"
         - name: ORGAN_DONATION_INTEGRATION_ENABLED
