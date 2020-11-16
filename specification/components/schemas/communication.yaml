@@ -1,0 +1,47 @@
+type: object
+required: 
+  - channels
+  - recipients
+properties:
+  campaignId:
+    type: string
+    description: Optional Campaign Identifier, used to group multiple communication requests for later analysis.
+    maxLength: 50
+    example: "2020_covid_plasma_appeal"
+  requestReference:
+    type: string
+    description: Optional human-readable transaction reference to later identify this request.
+    maxLength: 50
+    example: "20201022_covid_appeal_16"
+  channels:
+    type: object
+    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we only support sending in-app messages that appear within the NHS App. We intend to additionally offer native Apple and Android Push Notifications in the near future.
+    properties:
+      appMessage:
+        type: object
+        description: The communication content to appear as an in-app message.
+        properties:
+          sender:
+            type: string
+            description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
+            maxLength: 50
+            pattern: must not match <(.|\n)*?>
+            example: NHS Blood and Transplant
+          body:
+            type: string
+            description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
+            maxLength: 1000
+            pattern: must not match <(.|\n)*?>
+            example: Have you had coronavirus (COVID-19)? \nThe NHS urgently needs blood plasma donations. It could save lives and be an important treatment during a second wave of infection.\nWe especially need men to donate. This includes men who have had coronavirus symptoms but no test.\nTo find out more about donating blood plasma and how to help, go to https://www.nhsbt.nhs.uk/who-can-donate-plasma
+  recipients:
+    type: object
+    description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
+    properties:
+      nhsNumbers:
+        type: array
+        description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
+        example: ["9903002157", "9678304287"]
+        items:
+          type: string
+          pattern: "^\\d{10}$"
+          description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).

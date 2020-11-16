@@ -58,12 +58,12 @@ info:
     ## Onboarding
     You need to get your software approved by us before it can go live with this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
 
-    To onboard for this API, follow the [Supplier Conformance Assessment List (SCAL) process.](https://digital.nhs.uk/developer/guides-and-documentation/onboarding-process#onboard-using-the-supplier-conformance-assessment-list-scal-process)
+    To onboard for this API, please get in touch with the onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net) .
 
   contact:
     name: NHS App API Support
     url: 'https://digital.nhs.uk/developer/help-and-support'
-    email: api.management@nhs.net
+    email: app.onboarding@nhs.net
 servers:
   - url: 'https://int.api.service.nhs.uk/nhsapp'
     description: Integration test environment.
@@ -90,54 +90,10 @@ paths:
         required: true
         content:
           application/json:
+            example:
+              $ref: components/examples/requests/communication/appMessage.json
             schema:
-              type: object
-              required: 
-                - channels
-                - recipients
-              properties:
-                campaignId:
-                  type: string
-                  description: Optional Campaign Identifier, used to group multiple communication requests for later analysis.
-                  maxLength: 50
-                  example: "2020_covid_plasma_appeal"
-                requestReference:
-                  type: string
-                  description: Optional human-readable transaction reference to later identify this request.
-                  maxLength: 50
-                  example: "20201022_covid_appeal_16"
-                channels:
-                  type: object
-                  description: The channels by which the communication will be sent, and the content for each communication channel. Currently we only support sending in-app messages that appear within the NHS App. We intend to additionally offer native Apple and Android Push Notifications in the near future.
-                  properties:
-                    appMessage:
-                      type: object
-                      description: The communication content to appear as an in-app message.
-                      properties:
-                        sender:
-                          type: string
-                          description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
-                          maxLength: 50
-                          pattern: must not match <(.|\n)*?>
-                          example: NHS Blood and Transplant
-                        body:
-                          type: string
-                          description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
-                          maxLength: 1000
-                          pattern: must not match <(.|\n)*?>
-                          example: Have you had coronavirus (COVID-19)? \nThe NHS urgently needs blood plasma donations. It could save lives and be an important treatment during a second wave of infection.\nWe especially need men to donate. This includes men who have had coronavirus symptoms but no test.\nTo find out more about donating blood plasma and how to help, go to https://www.nhsbt.nhs.uk/who-can-donate-plasma
-                recipients:
-                  type: object
-                  description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
-                  properties:
-                    nhsNumbers:
-                      type: array
-                      description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
-                      example: ["9903002157", "9678304287"]
-                      items:
-                        type: string
-                        pattern: "^\\d{10}$"
-                        description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
+              $ref: components/schemas/communication.yaml      
       tags:
         - communication
       responses:
@@ -185,7 +141,7 @@ paths:
                       description: A description of the reason why the source payload has failed validation.
                       example: "Specified values are invalid: '2981615972','3846131965'"
         '401':
-          description: Indicates the request has not been applied because it lacks valid authentication credentials. This may be due to a missing or invalid X-Api-Key header.
+          description: Indicates that the request has not been enqueued because it lacks valid authentication credentials. This may be due to a missing or invalid X-Api-Key header.
           headers:
             X-Correlation-ID:
               schema:
@@ -208,6 +164,13 @@ paths:
                           errorcode:
                             type: string
                             example: "oauth.v2.InvalidApiKey"
+        '403':
+          description: Indicates that the request has not been enqueued because it requires functionality to which the client App is not entitled. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
 components:
   parameters:
     CorrelationId:
