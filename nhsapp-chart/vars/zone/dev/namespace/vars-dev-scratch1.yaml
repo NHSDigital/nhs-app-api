@@ -1,3 +1,8 @@
 ---
 users:
     notificationHubPath: nhsapp-nonlive-scratch1
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyScratch1"
+        notificationHubSecretVersion: "ae8b6b8480104dc1ab4be299d319459a"

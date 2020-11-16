@@ -1,3 +1,8 @@
 ---
 odsRemapEnabled: true
 odsRemapMap: "G85075:X00100;G85672:X00100"
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
+        notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"

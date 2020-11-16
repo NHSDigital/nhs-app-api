@@ -9,6 +9,11 @@ AZURE_SUBSCRIPTION_NAME: live
 keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
 keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKey"
+        notificationHubSecretVersion: "fd7cde94adc149ee88f96ef7168bba5f"
+
 SPLUNK_URL: "https://51.105.37.116:8088/services/collector/event/1.0"
 
 wildcardEnv: true

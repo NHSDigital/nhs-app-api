@@ -6,3 +6,8 @@ odsRemapMap: "G85075:X00100;G85672:X00100"
 
 users:
   notificationHubPath: nhsapp-nonlive-preview
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
+        notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"

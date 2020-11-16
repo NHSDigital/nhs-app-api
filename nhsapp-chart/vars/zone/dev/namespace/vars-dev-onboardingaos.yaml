@@ -11,7 +11,12 @@ wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingaos
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingaos
 
 users:
-  notificationHubPath: nhsapp-onboardingaos
+  notificationHubPath: nhsapp-nonlive-onboardingaos
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingAos"
+        notificationHubSecretVersion: "087821e9993b4edab4b251619a45e61e"
 
 web:
   publicURL: www-onboardingaos.nhsapp.service.nhs.uk

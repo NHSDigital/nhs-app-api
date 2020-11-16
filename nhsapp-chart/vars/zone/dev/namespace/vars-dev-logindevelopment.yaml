@@ -9,6 +9,11 @@ akamaiEnv: nhsapp.service.nhs.uk
 users:
   notificationHubPath: nhsapp-logindevelopment
 
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
+        notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"
+
 web:
   publicURL: www-logindevelopment.nhsapp.service.nhs.uk
 

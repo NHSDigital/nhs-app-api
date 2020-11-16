@@ -8,7 +8,12 @@ cidSettingsHostName: settings.sandpit.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
 users:
-  notificationHubPath: nhsapp-onboardingsandpit
+  notificationHubPath: nhsapp-nonlive-onboardingsandpit
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyOnboardingSandpit"
+        notificationHubSecretVersion: "bba7bb526937469cb0c5b0d00f160deb"
 
 web:
   publicURL: www-onboardingsandpit.nhsapp.service.nhs.uk

@@ -3,3 +3,8 @@ networkPolicyEnabled: true
 
 users:
     notificationHubPath: nhsapp-nonlive-scratch10
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyScratch10"
+        notificationHubSecretVersion: "25da565fa6114d81875754521b841c60"

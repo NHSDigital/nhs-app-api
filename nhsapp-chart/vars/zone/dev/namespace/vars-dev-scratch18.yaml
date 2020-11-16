@@ -4,3 +4,8 @@ environmentStubbed:
 
 users:
     notificationHubPath: nhsapp-nonlive-scratch18
+
+secrets:
+    notificationHub:
+        notificationHubSecretName: "notificationHubSharedAccessKeyScratch18"
+        notificationHubSecretVersion: "6a9b412c8f5a438ea3cfc85626863b3f"
