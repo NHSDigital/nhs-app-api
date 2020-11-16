@@ -28,6 +28,9 @@ const createConnectionErrorComponent = ({
       },
       device: { isNativeApp: false },
     },
+    getters: {
+      'appVersion/isNativeVersionAfter': () => true,
+    },
   });
 
   return mount(ConnectionError, {

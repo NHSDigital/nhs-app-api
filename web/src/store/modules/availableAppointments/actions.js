@@ -14,8 +14,8 @@ import {
 } from './mutation-types';
 
 const createError = ({ response }) => ({
-  status: response.status || '',
-  serviceDeskReference: response.data.serviceDeskReference || '',
+  status: (response && response.status) || '',
+  serviceDeskReference: (response && response.data.serviceDeskReference) || '',
 });
 
 export default {
@@ -28,9 +28,7 @@ export default {
     try {
       await this.app.$http.postV1PatientAppointments(param);
       commit(BOOKING_JOURNEY_START);
-      this.dispatch('' +
-        '' +
-        'analytics/satelliteTrack', 'appointment_booked');
+      this.dispatch('analytics/satelliteTrack', 'appointment_booked');
     } catch (error) {
       commit(ADD_ERROR, createError(error));
     }

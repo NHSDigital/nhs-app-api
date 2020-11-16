@@ -336,6 +336,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.setRetryPath.rawValue:
                 setRetryUrl(path: message.body as! String)
                 break;
+            case UserContent.showInternerConnectionError.rawValue:
+                self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+                break;
             case UserContent.setMenuBarItem.rawValue:
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break

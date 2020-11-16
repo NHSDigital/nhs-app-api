@@ -1,10 +1,19 @@
 import each from 'jest-each';
+import Vue from 'vue';
 import { redirectTo } from '@/lib/utils';
 import ConfirmationPage from '@/pages/appointments/gp-appointments/confirmation';
 import { APPOINTMENT_BOOKING_SUCCESS_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
+
+Vue.mixin({
+  methods: {
+    hasConnectionProblem() {
+      return false;
+    },
+  },
+});
 
 describe('confirmation.vue', () => {
   let $store;
@@ -22,6 +31,9 @@ describe('confirmation.vue', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        errors: {
+          hasConnectionProblem: false,
         },
         availableAppointments: {
           patientTelephoneNumbers: '3734',

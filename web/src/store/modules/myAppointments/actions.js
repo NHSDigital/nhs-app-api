@@ -13,8 +13,8 @@ import {
 } from './mutation-types';
 
 const createError = ({ response }) => ({
-  status: response.status || '',
-  serviceDeskReference: get('serviceDeskReference')(response.data) || '',
+  status: (response && response.status) || '',
+  serviceDeskReference: (response && get('serviceDeskReference')(response.data)) || '',
 });
 
 export default {

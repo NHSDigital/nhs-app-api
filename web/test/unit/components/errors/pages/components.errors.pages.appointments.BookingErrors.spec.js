@@ -8,7 +8,7 @@ describe('BookingErrors', () => {
   const mountWrapper = ({
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
-    status = 403,
+    status,
   } = {}) => mount(BookingErrors, {
     $store: createStore({
       $env: {
@@ -17,6 +17,9 @@ describe('BookingErrors', () => {
       state: {
         device: {
           source: 'web',
+        },
+        errors: {
+          hasConnectionProblem: false,
         },
       },
       getters: {
@@ -27,7 +30,11 @@ describe('BookingErrors', () => {
     propsData: {
       error: {
         status,
-
+      },
+    },
+    computed: {
+      hasConnection() {
+        return true;
       },
     },
     mountOpts: { i18n },
@@ -35,7 +42,7 @@ describe('BookingErrors', () => {
 
   describe('Page content', () => {
     describe('with olc access', () => {
-      const wrapper = mountWrapper();
+      const wrapper = mountWrapper({ status: 403 });
       const content = wrapper.findAll('p');
       const menuItems = wrapper.findAll(MenuItem);
 
@@ -77,7 +84,7 @@ describe('BookingErrors', () => {
     });
 
     describe('without cdss admin enabled', () => {
-      const wrapper = mountWrapper({ cdssAdminEnabled: false });
+      const wrapper = mountWrapper({ cdssAdminEnabled: false, status: 403 });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the admin help menu item if admin help is disabled', () => {
@@ -87,7 +94,7 @@ describe('BookingErrors', () => {
     });
 
     describe('without cdss advice enabled', () => {
-      const wrapper = mountWrapper({ cdssAdviceEnabled: false });
+      const wrapper = mountWrapper({ cdssAdviceEnabled: false, status: 403 });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the gp advice menu item if admin help is disabled', () => {
@@ -103,6 +110,11 @@ describe('BookingErrors', () => {
     ]).it('will display an error dialog for status code: %s', (status) => {
       const wrapper = mountWrapper({ status });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
+    });
+
+    it('will display a server error if there is no status returned', () => {
+      const wrapper = mountWrapper();
+      expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
     });
   });
 });

@@ -12,7 +12,7 @@ describe('GpAppointmentErrors', () => {
   const mountPage = ({
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
-    status = undefined,
+    status,
     userSessionCreateReferenceCode,
     isNativeApp = false,
     query = {},
@@ -54,6 +54,11 @@ describe('GpAppointmentErrors', () => {
           status,
         },
       },
+      computed: {
+        hasConnection() {
+          return true;
+        },
+      },
       mountOpts: { i18n, reload: jest.fn() },
       $route,
       $router,
@@ -69,9 +74,14 @@ describe('GpAppointmentErrors', () => {
       502,
       504,
       599,
-    ]).it('will display an error dialog for status code: %s', async (status) => {
-      wrapper = await mountPage({ status });
+    ]).it('will display an error dialog for status code: %s', (status) => {
+      wrapper = mountPage({ status });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
+    });
+
+    it('will display a server error if there is no status returned', () => {
+      wrapper = mountPage();
+      expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
     });
 
     it('will set the flag in the sessionStorage when isNative app is true', async () => {

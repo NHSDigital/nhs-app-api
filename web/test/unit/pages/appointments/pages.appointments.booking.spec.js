@@ -1,4 +1,5 @@
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
+import Vue from 'vue';
 import i18n from '@/plugins/i18n';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
@@ -7,6 +8,14 @@ jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $emit: jest.fn() },
 }));
+
+Vue.mixin({
+  methods: {
+    hasConnectionProblem() {
+      return false;
+    },
+  },
+});
 
 describe('booking.vue', () => {
   let wrapper;
@@ -26,6 +35,9 @@ describe('booking.vue', () => {
           filteredSlots: [],
           hasLoaded: true,
           error,
+        },
+        errors: {
+          hasConnectionProblem: false,
         },
         myAppointments: {
           disableCancellation: false,

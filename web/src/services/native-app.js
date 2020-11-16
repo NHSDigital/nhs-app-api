@@ -283,6 +283,15 @@ export default {
     return false;
   },
 
+  showInternetConnectionError() {
+    const app = window.nativeApp;
+    if (app && app.showInternetConnectionError) {
+      app.showInternetConnectionError();
+      return true;
+    }
+    return false;
+  },
+
   showMenuBar() {
     const app = window.nativeApp;
     if (app && app.showMenuBar) {

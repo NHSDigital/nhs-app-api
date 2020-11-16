@@ -791,4 +791,8 @@ class MainActivity :
     override fun openUrlInBrowserActivity(url: String) {
         openBrowserActivity.start(this, url, this)
     }
+
+    override fun showInternetConnectionError() {
+        nhsWeb!!.showNoConnectionError()
+    }
 }

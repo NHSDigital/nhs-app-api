@@ -1,6 +1,7 @@
 import isEmpty from 'lodash/fp/isEmpty';
 import isString from 'lodash/fp/isString';
 import values from 'lodash/fp/values';
+import NativeCallbacks from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import {
   ADD_API_ERROR,
@@ -34,12 +35,16 @@ export default {
   clearAllApiErrors({ commit }) {
     commit(CLEAR_ALL_API_ERRORS);
   },
-  setConnectionProblem({ commit }, hasConnectionProblem) {
+  setConnectionProblem({ commit, rootState }, hasConnectionProblem) {
     commit(SET_CONNECTION_PROBLEM, hasConnectionProblem);
 
     if (hasConnectionProblem) {
       EventBus.$emit(UPDATE_HEADER, 'generic.errors.internetConnectionError');
       EventBus.$emit(UPDATE_TITLE, 'generic.errors.internetConnectionError');
+
+      if (rootState.device.isNativeApp) {
+        NativeCallbacks.showInternetConnectionError();
+      }
     }
   },
 };

@@ -21,6 +21,7 @@ enum UserContent: String, CaseIterable {
     case pageLoadComplete = "pageLoadComplete"
     case requestPnsToken = "requestPnsToken"
     case resetPageFocus = "resetPageFocus"
+    case showInternerConnectionError = "showInternetConnectionError"
     case setMenuBarItem = "setMenuBarItem"
     case setHelpUrl = "setHelpUrl"
     case setRetryPath = "setRetryPath"

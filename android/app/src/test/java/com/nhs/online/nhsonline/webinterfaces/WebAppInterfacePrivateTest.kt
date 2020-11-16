@@ -306,6 +306,15 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
+    fun showInternetConnectionError() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfacePrivate.showInternetConnectionError()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showInternetConnectionError()
+    }
+
+    @Test
     fun updateBiometricRegistrationWithTokenTest() {
         val mockAccessToken = "mockAccessToken"
         val runOnUiArgCaptor = argumentCaptor<Runnable>()

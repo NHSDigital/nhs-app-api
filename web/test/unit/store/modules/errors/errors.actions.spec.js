@@ -1,4 +1,5 @@
 import actions from '@/store/modules/errors/actions';
+import NativeCallbacks from '@/services/native-app';
 import { SET_ROUTE_PATH, SET_CONNECTION_PROBLEM } from '@/store/modules/errors/mutation-types';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
@@ -8,7 +9,16 @@ jest.mock('@/services/event-bus', () => ({
 }));
 
 describe('errors actions', () => {
-  const app = {};
+  const app = {
+    rootState: {
+      device: {
+        isNativeApp: false,
+      },
+    },
+    getters: {
+      isNativeVersionAfter() { return true; },
+    },
+  };
   beforeEach(() => {
     app.commit = jest.fn();
   });
@@ -67,6 +77,22 @@ describe('errors actions', () => {
       // assert
       expect(app.commit).toHaveBeenCalledWith(SET_CONNECTION_PROBLEM, false);
       expect(EventBus.$emit).toHaveBeenCalledTimes(0);
+    });
+
+    it('will call commit and native callback if connection error and isNativeApp', () => {
+      const showInternetConnectionError = jest.spyOn(
+        NativeCallbacks, 'showInternetConnectionError',
+      ).mockImplementation(() => true);
+
+      app.rootState.device.isNativeApp = true;
+      actions.setConnectionProblem(app, true);
+
+      // assert
+      expect(app.commit).not.toHaveBeenCalledWith(SET_CONNECTION_PROBLEM, false);
+      expect(EventBus.$emit).toHaveBeenCalledTimes(2);
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(1, UPDATE_HEADER, 'generic.errors.internetConnectionError');
+      expect(EventBus.$emit).toHaveBeenNthCalledWith(2, UPDATE_TITLE, 'generic.errors.internetConnectionError');
+      expect(showInternetConnectionError).toBeCalled();
     });
   });
 });

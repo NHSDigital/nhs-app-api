@@ -85,4 +85,6 @@ interface IInteractor {
     fun dismissPageLeaveWarningDialogue()
 
     fun openUrlInBrowserActivity(url: String)
+
+    fun showInternetConnectionError()
 }

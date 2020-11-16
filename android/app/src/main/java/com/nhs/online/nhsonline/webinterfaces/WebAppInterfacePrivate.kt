@@ -167,6 +167,12 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
+    fun showInternetConnectionError() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showInternetConnectionError")
+        runAction { uiInteractor.showInternetConnectionError() }
+    }
+
+    @JavascriptInterface
     fun dismissPageLeaveWarningDialogue() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissAllDialogues")
         runAction { uiInteractor.dismissPageLeaveWarningDialogue() }

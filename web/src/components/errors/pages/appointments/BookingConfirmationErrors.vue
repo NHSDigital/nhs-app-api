@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="hasConnection">
     <error-container v-if="error.status === genericStatusCodes.BAD_REQUEST" :id="errorId">
       <error-title title="appointments.error.thereIsAProblemAppointments"
                    header="appointments.error.thereIsAProblem" />
@@ -11,7 +11,7 @@
                   :desktop-only="true" />
     </error-container>
 
-    <error-page v-if="error.status === genericStatusCodes.FORBIDDEN"
+    <error-page v-else-if="error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="backUrl">
       <template v-slot:content>
@@ -74,6 +74,15 @@
       <error-link from="generic.back"
                   :action="appointmentsPath"
                   :desktop-only="true"/>
+    </error-container>
+
+    <error-container v-else id="error-dialog-unknown">
+      <error-title title="apiErrors.pageHeader"
+                   header="apiErrors.pageHeader" />
+      <error-paragraph from="apiErrors.header" />
+      <contact-111
+        :text="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.text')"
+        :aria-label="$t('appointments.error.ifTheProblemContinuesAndYouNeedToBookOrCancel.label')"/>
     </error-container>
   </div>
 </template>
@@ -140,6 +149,9 @@ export default {
     },
     isCdssAdvice() {
       return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
+    },
+    hasConnection() {
+      return !this.hasConnectionProblem();
     },
   },
 };

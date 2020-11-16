@@ -86,6 +86,7 @@ export const mount = (component, {
   stubs = [],
   methods = {},
   slots = {},
+  computed = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const mountFn = shallow ? vueShallowMount : vueMount;
@@ -110,6 +111,7 @@ export const mount = (component, {
     methods,
     slots,
     i18n,
+    computed,
   };
 
   return mountFn(component, options);

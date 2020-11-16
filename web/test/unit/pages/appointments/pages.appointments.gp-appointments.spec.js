@@ -1,7 +1,15 @@
+import Vue from 'vue';
 import GPAppointments from '@/pages/appointments/gp-appointments';
 import { GP_APPOINTMENTS_PATH } from '@/router/paths';
 import { mount, createStore, createRouter } from '../../helpers';
 
+Vue.mixin({
+  methods: {
+    hasConnectionProblem() {
+      return false;
+    },
+  },
+});
 
 describe('index.vue', () => {
   let $store;
@@ -17,6 +25,9 @@ describe('index.vue', () => {
       state: {
         device: {
           isNativeApp,
+        },
+        errors: {
+          hasConnectionProblem: false,
         },
         myAppointments: {
           error: {

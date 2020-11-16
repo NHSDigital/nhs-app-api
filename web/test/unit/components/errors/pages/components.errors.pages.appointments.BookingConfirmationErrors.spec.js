@@ -18,6 +18,9 @@ describe('BookingConfirmationErrors', () => {
         device: {
           source: 'web',
         },
+        errors: {
+          hasConnectionProblem: false,
+        },
       },
       getters: {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
@@ -27,10 +30,14 @@ describe('BookingConfirmationErrors', () => {
     propsData: {
       error: {
         status,
-
       },
     },
     mountOpts: { i18n },
+    computed: {
+      hasConnection() {
+        return true;
+      },
+    },
   });
 
   describe('Page content', () => {

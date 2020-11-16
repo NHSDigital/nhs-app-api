@@ -42,7 +42,11 @@ export default {
   },
   computed: {
     showError() {
-      return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
+      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
+      if (isNativeVersionAfter('1.41.0')) {
+        return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
+      }
+      return this.$store.state.errors.hasConnectionProblem;
     },
   },
   methods: {
