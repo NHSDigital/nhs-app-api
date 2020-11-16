@@ -667,6 +667,18 @@ knownservices_config: {
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
+    "engage": {
+      "url": "https://nhs.engage.gp",
+      "subServices": null,
+      "javaScriptInteractionMode": "SilverThirdParty",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": true,
+      "requiresAssertedLoginIdentity": true,
+      "validateSession": true
+    },
     "substraktPatientPack": {
       "url": "https://jump-point.production.substrakthealth.com",
       "subServices": null,
