@@ -329,6 +329,33 @@ defaultUsers:
       dateOfBirth: "1925-11-02T00:00:00"
       sex: Male
 
+    9692237664:
+      userId: af975093-16c9-461f-8161-c5acbd037aeb
+      emailAddress: nhsapp.aos+pkb.user1@gmail.com
+      odsCode: F00001
+      givenName: Joseph
+      familyName: GWIN
+      dateOfBirth: 1952-02-17T00:00:00
+      sex: male
+
+    9692237672:
+      userId: babbf489-78ca-41d4-9854-be3f33788052
+      emailAddress: nhsapp.aos+pkb.user2@gmail.com
+      odsCode: F00001
+      givenName: Bruce
+      familyName: BISSET
+      dateOfBirth: 1935-12-06T00:00:00
+      sex: male
+
+    9692237680:
+      userId: 1f50fab4-9395-4084-a73a-62a4b1808f5c
+      emailAddress: nhsapp.aos+pkb.user3@gmail.com
+      odsCode: F00001
+      givenName: Mervyn
+      familyName: EDEN
+      dateOfBirth: 1937-06-12T00:00:00
+      sex: male
+
     # This user is for testing NHS Login Settings integration / account deletion and therefore has no corresponding account created with PKB
     # It is used to test NHS login behaviour when redirected from a third party for SSO.
 
@@ -442,6 +469,33 @@ defaultUsers:
       dateOfBirth: "1974-04-19T00:00:00"
       sex: Female
 
+    9692237753:
+      userId: 5ef694f6-b539-4e15-9d97-7c0c33cdaca5
+      emailAddress: nhsapp.aos+substrakt.user1@gmail.com
+      odsCode: F00003
+      givenName: Henry
+      familyName: HEAGUE
+      dateOfBirth: 1947-02-16T00:00:00
+      sex: male
+
+    9692237761:
+      userId: 3dc0882f-bf13-44cb-a4ae-b824cb8c3ae5
+      emailAddress: nhsapp.aos+substrakt.user2@gmail.com
+      odsCode: F00003
+      givenName: Wendy
+      familyName: LEEPER
+      dateOfBirth: 1952-01-18T00:00:00
+      sex: female
+
+    9692237788:
+      userId: 85aff74e-d493-4afc-97ff-9d910f0a344a
+      emailAddress: nhsapp.aos+substrakt.user3@gmail.com
+      odsCode: F00003
+      givenName: Sheri
+      familyName: RUDKIN
+      dateOfBirth: 1941-09-14T00:00:00
+      sex: female
+
   gncr:
     9996450422:
       userId: cc8ed018-7e96-4d39-afe3-512a20f7d19d
@@ -497,6 +551,33 @@ defaultUsers:
       dateOfBirth: "1931-01-01T00:00:00"
       sex: Male
 
+    9692237699:
+      userId: 56da05d1-e073-45b8-ba6b-fe0152f738db
+      emailAddress: nhsapp.aos+gncr.user1@gmail.com
+      odsCode: F00005
+      givenName: Bill
+      familyName: LAVERY
+      dateOfBirth: 1944-11-10T00:00:00
+      sex: male
+
+    9692237702:
+      userId: a864ff27-94f7-49f3-8067-e6dcd7d7b539
+      emailAddress: nhsapp.aos+gncr.user2@gmail.com
+      odsCode: F00005
+      givenName: Damien
+      familyName: COULCH
+      dateOfBirth: 1937-09-28T00:00:00
+      sex: male
+
+    9692237710:
+      userId: 0cbe36d1-814e-46f6-8e64-2b0f124b3a0d
+      emailAddress: nhsapp.aos+gncr.user3@gmail.com
+      odsCode: F00005
+      givenName: Jimmy
+      familyName: ABBOTT
+      dateOfBirth: 1926-07-19T00:00:00
+      sex: male
+
   engage:
     9998571235:
       userId: b1b203b7-6da0-4b30-b094-bdde63015ebc
@@ -524,3 +605,30 @@ defaultUsers:
       familyName: Jobs
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Female
+
+    9692237729:
+      userId: 36c64614-3d92-4f9d-a6b1-13c61e5c0273
+      emailAddress: nhsapp.aos+engage.user1@gmail.com
+      odsCode: F00006
+      givenName: Toby
+      familyName: HOLMES
+      dateOfBirth: 1943-05-09T00:00:00
+      sex: male
+
+    9692237737:
+      userId: 28c197b9-ae97-47fe-8ba0-9fd4c8471c5e
+      emailAddress: nhsapp.aos+engage.user2@gmail.com
+      odsCode: F00006
+      givenName: Hector
+      familyName: HIGHAM
+      dateOfBirth: 1947-03-19T00:00:00
+      sex: male
+
+    9692237745:
+      userId: 20efd815-0d65-4342-8635-f09b6580fa74
+      emailAddress: nhsapp.aos+engage.user3@gmail.com
+      odsCode: F00006
+      givenName: Neil
+      familyName: DEAN
+      dateOfBirth: 1942-03-21T00:00:00
+      sex: male
