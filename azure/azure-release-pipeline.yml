@@ -37,15 +37,11 @@ extends:
         make_spec_visible: true  # Off by default. Turn on to allow expose API developers can subscribe their Apps to
       - environment: internal-qa
         make_spec_visible: true
-      - environment: internal-qa-sandbox
-        proxy_path: sandbox
+      - environment: dev
         make_spec_visible: true
-    # make_spec_visible is false for sandbox environment
-    # (App subscription make sense for most sandbox implementations)
-      - environment: sandbox
-        proxy_path: sandbox
+        depends_on:
+          - internal_qa
       - environment: int
         make_spec_visible: true
         depends_on:
           - internal_qa
-          - internal_qa_sandbox
