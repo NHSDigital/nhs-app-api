@@ -10,6 +10,8 @@ jobs:
       - name: Grab ticket name
         if: contains(github.event.pull_request.head.ref, 'apm-') || contains(github.event.pull_request.head.ref, 'APM-') || contains(github.event.pull_request.head.ref, 'nhso-') || contains(github.event.pull_request.head.ref, 'NHSO-')
         run: echo ::set-env name=TICKET_NAME::$(echo ${{ github.event.pull_request.head.ref }} | grep -i -o '(apm|nhso)-[0-9]\+' | tr '[:lower:]' '[:upper:]')
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
       - name: Comment on PR
         if: contains(github.event.pull_request.head.ref, 'apm-') || contains(github.event.pull_request.head.ref, 'APM-') || contains(github.event.pull_request.head.ref, 'nhso-') || contains(github.event.pull_request.head.ref, 'NHSO-')
