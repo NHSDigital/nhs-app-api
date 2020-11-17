@@ -3,7 +3,7 @@ const env = require('./src/config/env.json');
 module.exports = {
   devServer: {
     before: (app) => {
-      app.get('/CONFIG_PATH/config.json', (req, res) => res.send(env));
+      app.get(/CONFIG_PATH\/config.json$/, (req, res) => res.send(env));
     },
     disableHostCheck: process.env.NODE_ENV !== 'production',
     port: env.PORT,

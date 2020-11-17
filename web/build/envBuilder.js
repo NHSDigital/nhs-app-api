@@ -107,7 +107,7 @@ var envFile = {};
 populateEnvFile(envFiles, envFile);
 
 var typedEnvFile = {};
-determineEnvType('build/env.sh', envFile, typedEnvFile);
+determineEnvType('build/docker-runtime/env.sh', envFile, typedEnvFile);
 
 const data = JSON.stringify(typedEnvFile);
 fs.writeFileSync('src/config/env.json', data);
