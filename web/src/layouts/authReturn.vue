@@ -11,7 +11,7 @@
       </div>
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
-          <div ref="mainContent" class="nhsuk-grid-column-two-thirds">
+          <div ref="mainContent" tabindex="-1" class="nhsuk-grid-column-two-thirds">
             <div id="mainContent">
               <div v-if="showError"
                    :class="!$store.state.device.isNativeApp && $style.desktopWeb">
