@@ -1,0 +1,103 @@
+parameters:
+  - name: iosTarget
+    type: string
+    default: BrowserStack
+  - name: uploadToAppStoreConnect
+    type: boolean
+    default: false
+
+jobs:
+  # build and upload AOS
+  - ${{ if eq(parameters.iosTarget, 'Onboardingaos') }}:
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Onboardingaos
+        certSecureFile: iOSOnboardingCertificate.p12
+        certPwd: '$(ios.onboarding.certificate.password)'
+        scheme: 'NHSOnlineOnboardingAOS'
+        provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
+        provisioningProfileName: 'NHS App Onboarding AOS Distribution'
+    - ${{ if eq(parameters['uploadToAppStoreConnect'], 'true') }}:
+        - template: ios-upload-ipa.yml
+          parameters:
+            target: Onboardingaos
+            uploadServiceEndpoint: nhsapp-onboardingAos-apple-app-store
+            uploadAppIdentifier: com.nhs.online.dev.onboardingaos
+
+  # build and upload Sandpit
+  - ${{ if eq(parameters.iosTarget, 'Onboardingsandpit') }}:
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Onboardingsandpit
+        certSecureFile: iOSOnboardingCertificate.p12
+        certPwd: '$(ios.onboarding.certificate.password)'
+        scheme: 'NHSOnline Onboarding SP'
+        provProfileSecureFile: iOSOnboardingDistributionSandpit.mobileprovision
+        provisioningProfileName: 'NHS App Onboarding SP Distribution'
+    - ${{ if eq(parameters['uploadToAppStoreConnect'], 'true') }}:
+        - template: ios-upload-ipa.yml
+          parameters:
+            target: Onboardingsandpit
+            uploadServiceEndpoint: nhsapp-onboardingSandpit-apple-app-store
+            uploadAppIdentifier: com.nhs.online.dev.onboardingsandpit
+  
+  # build dev versions
+  - ${{ if and(ne(parameters.iosTarget, 'Onboardingsandpit'), ne(parameters.iosTarget, 'Onboardingaos')) }}:
+    - template: ios-client-build-job.yml
+      parameters:
+        target: ${{ parameters.iosTarget }}
+
+  # build Preview
+  - ${{ if and(or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')), ne(parameters.iosTarget, 'Preview')) }}:
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Preview
+        provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
+        provisioningProfileName: 'NHS App Dev Preview'
+
+  # tagged build..
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
+    # build and upload Demo
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Demo
+        certSecureFile: iOSProductionCertificate.p12
+        certPwd: '$(ios.production.certificate.password)'
+        scheme: 'NHSOnline Demo'
+        provProfileSecureFile: iOSDemo.mobileprovision
+        provisioningProfileName: 'NHS App Demo Distribution'
+    - template: ios-upload-ipa.yml
+      parameters:
+        target: Demo
+        uploadServiceEndpoint: nhsapp-demo-apple-app-store
+        uploadAppIdentifier: com.nhs.online.demo
+
+    # build and upload Release
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Production
+        certSecureFile: iOSProductionCertificate.p12
+        certPwd: '$(ios.production.certificate.password)'
+        scheme: 'NHSOnline'
+        provProfileSecureFile: iOSProduction.mobileprovision
+        provisioningProfileName: 'NHS App Distribution'
+    - template: ios-upload-ipa.yml
+      parameters:
+        target: Production
+        uploadServiceEndpoint: nhsapp-release-apple-app-store
+        uploadAppIdentifier: com.nhs.online
+
+    # build and upload AOS    
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Onboardingaos
+        certSecureFile: iOSOnboardingCertificate.p12
+        certPwd: '$(ios.onboarding.certificate.password)'
+        scheme: 'NHSOnline Onboarding AOS'
+        provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
+        provisioningProfileName: 'NHS App Onboarding AOS Distribution'
+    - template: ios-upload-ipa.yml
+      parameters:
+        target: Onboardingaos
+        uploadServiceEndpoint: nhsapp-onboardingAos-apple-app-store
+        uploadAppIdentifier:  com.nhs.online.dev.onboardingaos

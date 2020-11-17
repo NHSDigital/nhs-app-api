@@ -1,0 +1,34 @@
+parameters:
+  - name: target
+    type: string
+    default: 'target'
+  - name: uploadServiceEndpoint
+    type: string
+    default: nhsapp-onboardingSandpit-apple-app-store     
+  - name: uploadAppIdentifier
+    type: string 
+    default: com.nhs.online.dev.onboardingsandpit
+
+jobs:
+  - job: upload_ios_${{ parameters.target }}
+    displayName: Upload ${{ parameters.target }} to App Store Connect 
+    dependsOn:
+      - build_ios_${{ parameters.target }}  
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: Download IPA
+        inputs:
+          downloadType: single
+          artifactName: iOS Package Files
+          itemPattern: '**/${{ parameters.target }}/*.ipa'
+
+      - task: AppStoreRelease@1
+        displayName: 'Publish to the App Store TestFlight track'
+        inputs:
+          serviceEndpoint: ${{ parameters.uploadServiceEndpoint }}
+          appIdentifier: ${{ parameters.uploadAppIdentifier }}
+          ipaPath: '$(build.artifactstagingdirectory)/iOS Package Files/${{ parameters.target }}/*.ipa'
+          shouldSkipWaitingForProcessing: true
+          shouldSkipSubmission: true

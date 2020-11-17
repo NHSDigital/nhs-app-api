@@ -1,13 +1,9 @@
 parameters:
-  - name: name
-    type: string
-    default: 'target'
   - name: condition
     type: string
     default: 'succeeded()'
   - name: target
     type: string
-    default: $(native.ios.target)
   - name: certSecureFile
     type: string
     default: 'iOSDevelopmentCertificate.p12'
@@ -25,8 +21,8 @@ parameters:
     default: 'NHS App Dev $(native.ios.target)'
 
 jobs:
-  - job: build_ios_${{ parameters.name }}
-    displayName: Build ${{ parameters.name }}
+  - job: build_ios_${{ parameters.target }}
+    displayName: Build ${{ parameters.target }}      
     dependsOn:
       - unit_test_ios
     condition: ${{ parameters.condition }}
@@ -69,3 +65,4 @@ jobs:
         inputs:
           pathToPublish: '$(Build.SourcesDirectory)/ipa'
           artifactName: iOS Package Files
+        

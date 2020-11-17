@@ -84,6 +84,11 @@ parameters:
     type: boolean
     default: false
 
+  - name: uploadToAppStoreConnect
+    displayName: Upload iOS Client to Testflight
+    type: boolean
+    default: false
+
 trigger:
   branches:
     include:
@@ -154,39 +159,10 @@ stages:
     dependsOn:
     jobs:
       - template: .azuredevops/templates/ios-client-test-job.yml
-
-      - template: .azuredevops/templates/ios-client-build-job.yml
+      - template: .azuredevops/templates/ios-client-build-setup.yml
         parameters:
-          name: Client
-
-      - ${{ if and(or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')), ne(parameters.iosTarget, 'Preview')) }}:
-        - template: .azuredevops/templates/ios-client-build-job.yml
-          parameters:
-            name: Preview
-            target: Preview
-            provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
-            provisioningProfileName: 'NHS App Dev Preview'
-
-      - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
-        - template: .azuredevops/templates/ios-client-build-job.yml
-          parameters:
-            name: Demo
-            target: Demo
-            certSecureFile: iOSProductionCertificate.p12
-            certPwd: '$(ios.production.certificate.password)'
-            scheme: 'NHSOnline Demo'
-            provProfileSecureFile: iOSDemo.mobileprovision
-            provisioningProfileName: 'NHS App Demo Distribution'
-
-        - template: .azuredevops/templates/ios-client-build-job.yml
-          parameters:
-            name: Release
-            target: Production
-            certSecureFile: iOSProductionCertificate.p12
-            certPwd: '$(ios.production.certificate.password)'
-            scheme: 'NHSOnline'
-            provProfileSecureFile: iOSProduction.mobileprovision
-            provisioningProfileName: 'NHS App Distribution'
+          iosTarget: ${{ parameters.iosTarget }}
+          uploadToAppStoreConnect: ${{ parameters.uploadToAppStoreConnect }}
 
   - stage: generate_code_coverage
     displayName: Generate Code Coverage
@@ -263,3 +239,4 @@ stages:
             parameters:
               job.name: Long Running
               tranche.tag: long-running
+      
