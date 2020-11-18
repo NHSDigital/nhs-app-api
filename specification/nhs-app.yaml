@@ -42,8 +42,8 @@ info:
 
     | Environment       | Base URL                                                       |
     | ----------------- | -------------------------------------------------------------- |
-    | Integration test  | `https://int.api.service.nhs.uk/nhsapp/`                       |
-    | Production        | `https://api.service.nhs.uk/nhsapp/`                           |
+    | Integration test  | `https://int.api.service.nhs.uk/nhs-app/`                      |
+    | Production        | `https://api.service.nhs.uk/nhs-app/`                          |
 
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
@@ -65,9 +65,9 @@ info:
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: app.onboarding@nhs.net
 servers:
-  - url: 'https://int.api.service.nhs.uk/nhsapp'
+  - url: 'https://int.api.service.nhs.uk/nhs-app'
     description: Integration test environment.
-  - url: 'https://api.service.nhs.uk/nhsapp'
+  - url: 'https://api.service.nhs.uk/nhs-app'
     description: 'Production environment.'
 tags:
   - name: communication
@@ -104,7 +104,7 @@ paths:
               schema:
                 type: string
               description: The location of the newly-created resource.
-              example: https://int.api.service.nhs.uk/nhsapp/communication/a2d10720-9e72-4ae4-be72-8cbe1be292d1
+              example: https://int.api.service.nhs.uk/nhs-app/communication/a2d10720-9e72-4ae4-be72-8cbe1be292d1
             X-Correlation-ID:
               schema:
                 type: string
