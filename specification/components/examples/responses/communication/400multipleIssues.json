@@ -1,0 +1,10 @@
+[
+    {
+        "propertyName": "CampaignId",
+        "message": "Exceeds maximum length"
+    },
+    {
+        "propertyName": "Channels.AppMessage.Sender",
+        "message": "Not specified"
+    }
+]
