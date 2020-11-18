@@ -134,7 +134,7 @@ x-nhsd-api-platform:
   meta:
     service_name: nhs-app
     short_service_name: nhsa
-    service_base_path: nhsapp
+    service_base_path: nhs-app
     product_display_name: NHS App
     product_description: This is the NHS App service, where patents access their medical
       records and GP services

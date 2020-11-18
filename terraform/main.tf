@@ -16,7 +16,7 @@ terraform {
 module "nhs-app" {
   source                   = "github.com/NHSDigital/api-platform-service-module"
   name                     = "nhs-app"
-  path                     = "nhsapp"
+  path                     = "nhs-app"
   apigee_environment       = var.apigee_environment
   proxy_type               = (var.force_sandbox || length(regexall("sandbox", var.apigee_environment)) > 0) ? "sandbox" : "live"
   namespace                = var.namespace
