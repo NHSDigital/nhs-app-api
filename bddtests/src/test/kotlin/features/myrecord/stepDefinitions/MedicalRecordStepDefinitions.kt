@@ -158,7 +158,7 @@ open class MedicalRecordStepDefinitions {
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
-            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MORE))
+            Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MESSAGES))
         }
     }
 }

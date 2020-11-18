@@ -3,10 +3,10 @@ HOT_JAR_LINK_URL = in.hotjar.com/s?siteId=859152&amp;surveyId=95785
 NHS_111_URL = 111.nhs.uk
 NHS_111_LOCATION_URL = 111.service.nhs.uk/
 
-MORE_URL = /more
 DATA_SHARING_URL_PATH = /data-sharing
 COMPATIBILITY_URL = /ios-compatibility
 
+MESSAGES_URL = /messages
 HEALTH_RECORDS_URL_PATH = /health-records
 MY_RECORD_URL_PATH = /my-record
 APPOINTMENTS_URL_PATH = /appointments

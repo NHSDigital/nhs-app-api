@@ -8,8 +8,9 @@ Feature: Data Sharing Frontend
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
-    And I retrieve the 'More' page directly
-    When I click the Data Sharing link on the More page
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    When I click the Data Sharing link on the health hub page
     Then the Data Sharing 'Overview' page is displayed
     And the content on the Data Sharing 'Overview' page is correct
     When I click the Next button on the Data Sharing page
@@ -72,11 +73,11 @@ Feature: Data Sharing Frontend
   Scenario: A desktop user is directed to the NHS website to find out more information on Data Sharing
     Given I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
-    And I retrieve the 'More' page directly
-    When I click the link called 'Choose if data from your health records is shared for research and planning' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
-    Then a new tab has been opened by the link
     When I browse to the pages at the following urls I see the home page
       | /data-sharing                   |
       | /data-sharing/where-used        |
       | /data-sharing/does-not-apply    |
       | /data-sharing/make-your-choice  |
+    And I retrieve the 'health record hub' page directly
+    And I click the link called 'Choose if data from your health records is shared for research and planning' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    Then a new tab has been opened by the link

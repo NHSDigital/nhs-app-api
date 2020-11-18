@@ -19,7 +19,6 @@ import utils.SerenityHelpers
 import java.net.URL
 
 class DataSharingStepDefinitions {
-
     private lateinit var overviewPage: OverviewDataSharingPage
     private lateinit var confidentialDataSharingPage: ConfidentialDataSharingPage
     private lateinit var choiceApplyDataSharingPage: ChoiceApplyDataSharingPage

@@ -152,7 +152,7 @@ class HomePageStepDefinitions {
 
     private fun followMessagesLink(linkElement: HybridPageElement) {
         linkElement.click()
-        navBar.isHighlighted(NavBarNative.NavBarType.MORE)
+        navBar.isHighlighted(NavBarNative.NavBarType.MESSAGES)
     }
 
     private fun followLinkedProfilesLink(linkElement: HybridPageElement) {

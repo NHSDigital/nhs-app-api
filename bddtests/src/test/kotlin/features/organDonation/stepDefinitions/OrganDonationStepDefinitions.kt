@@ -13,7 +13,6 @@ import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.HomePage
 import pages.navigation.HeaderNative
-import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationBasePage
 import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
@@ -149,14 +148,9 @@ open class OrganDonationStepDefinitions {
         page.clickButton(buttonText)
     }
 
-    private fun iAmOnTheExternalOrganDonationPage() {
-            aNewTabOpens(Config.instance.organDonation)
-    }
-
-    private fun pageOpensWithinNativeApp() {
-        header.locatorMethods.waitForNativeStepToComplete()
-        organDonationChoicePage.assertDisplayed()
-        navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
+    @Then("^the external Organ Donation page is displayed$")
+    fun iAmOnTheExternalOrganDonationPage() {
+        aNewTabOpens(Config.instance.organDonation)
     }
 
     private fun aNewTabOpens(url: String) {
@@ -167,13 +161,6 @@ open class OrganDonationStepDefinitions {
     @Then("^the internal Organ Donation page is displayed$")
     fun iAmOnTheInternalOrganDonationPage() {
         organDonationChoicePage.assertDisplayed()
-    }
-
-    fun iAmOnTheOrganDonationPage() {
-        when(header.onMobile()){
-            true -> pageOpensWithinNativeApp()
-            false -> iAmOnTheExternalOrganDonationPage()
-        }
     }
 
     @Then("^the '(.*)' button has the '(.*)' attribute$")

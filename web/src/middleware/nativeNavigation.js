@@ -3,7 +3,7 @@ export const ADVICE_MENU_ITEM = 0;
 export const APPOINTMENTS_MENU_ITEM = 1;
 export const PRESCRIPTIONS_MENU_ITEM = 2;
 export const YOUR_RECORD_MENU_ITEM = 3;
-export const MORE_MENU_ITEM = 4;
+export const MESSAGES_MENU_ITEM = 4;
 
 export default ({ to, store, next }) => {
   const { meta } = to;

@@ -5,6 +5,7 @@ import generalRoutes from '@/router/routes/general';
 import loginRoutes from '@/router/routes/login';
 import getHealthAdviceRoutes from '@/router/routes/get-health-advice';
 import appointmentsRoutes from '@/router/routes/appointments';
+import dataSharingRoutes from '@/router/routes/data-sharing';
 import prescriptionRoutes from '@/router/routes/prescriptions';
 import adviceRoutes from '@/router/routes/advice';
 import accountRoutes from '@/router/routes/account';
@@ -86,6 +87,7 @@ export const allRoutes = [
       ...accountRoutes,
       ...linkedProfilesRoutes,
       ...organDonationRoutes,
+      ...dataSharingRoutes,
       ...silverIntegrationRoutes,
       // Route matching happens in order, generalRoutes should
       // be last so to not match before all other routes have been checked,

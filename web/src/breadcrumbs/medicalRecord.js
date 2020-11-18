@@ -9,9 +9,11 @@ const UPLIFT_GP_MEDICAL_RECORD_CRUMB = {
   nativeDisabled: true,
 };
 
-const HEALTH_RECORDS_CRUMB = {
+export const HEALTH_RECORDS_CRUMB = {
   defaultCrumb: [INDEX_CRUMB],
   nativeDisabled: true,
+  i18nKey: 'yourHealth',
+  name: HEALTH_RECORDS_NAME,
 };
 
 const GP_MEDICAL_RECORD_CRUMB = {

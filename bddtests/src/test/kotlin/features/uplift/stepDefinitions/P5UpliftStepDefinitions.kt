@@ -94,7 +94,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
             {followAppointmentNativeNavBarLink()},
             {followPrescriptionsNativeNavBarLink()},
             {followYourHealthNativeNavBarLink()},
-            {followAdviceNativeNavBarLink()}
+            {followAdviceNativeNavBarLink()},
+            {followMessagesNativeNavBarLink()}
     )
 
     linksToFollow.forEachIndexed { index, link ->
@@ -119,4 +120,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     nav.select(NavBarNative.NavBarType.ADVICE)
   }
 
+  private fun followMessagesNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.MESSAGES)
+  }
 }

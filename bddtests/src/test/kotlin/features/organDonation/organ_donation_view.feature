@@ -1,18 +1,25 @@
 @organ-donation
 Feature: Organ Donation View Frontend
 
-#  This test covers navigation via buttons/links
-
+# These tests covers navigation via buttons/links
   Scenario: A user can navigate to the native version of 'Manage organ donation preferences' when toggle is set as so
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
-    And I retrieve the 'more' page directly
+    When I navigate to the health record hub page
+    Then I see the health records hub page
     When I choose to set my organ donation preferences
     Then the internal Organ Donation page is displayed
 
-# These tests navigate directly to the pages where the features are to be tested, to save time.
+  Scenario: A logged in user using desktop can navigate to the external organ donation site
+    Given I am a EMIS patient
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    When I choose to set my organ donation preferences
+    Then the external Organ Donation page is displayed
 
+# These tests navigate directly to the pages where the features are to be tested, to save time.
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to not donate their organs
     Given I am using the native app user agent
     And I am a <GP System> user registered with organ donation to not donate my organs

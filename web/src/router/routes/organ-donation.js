@@ -38,9 +38,9 @@ import {
   ORGAN_DONATION_WITHDRAWN_NAME,
   ORGAN_DONATION_YOUR_CHOICE_NAME,
 } from '@/router/names';
-import { UPLIFT_MORE } from '@/router/routes/more';
+import { UPLIFT_GP_MEDICAL_RECORD } from '@/router/routes/medical-record';
 
-import { MORE_MENU_ITEM } from '@/middleware/nativeNavigation';
+import { YOUR_RECORD_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
 import { organDonationHelpUrl } from '@/router/externalLinks';
@@ -53,10 +53,10 @@ export const ORGAN_DONATION = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -68,10 +68,10 @@ export const ORGAN_DONATION_ADDITIONAL_DETAILS = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_ADDITIONAL_DETAILS_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -83,10 +83,10 @@ export const ORGAN_DONATION_AMEND = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_AMEND_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -98,10 +98,10 @@ export const ORGAN_DONATION_FAITH = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_FAITH_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -113,10 +113,10 @@ export const ORGAN_DONATION_MORE_ABOUT_ORGANS = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_MORE_ABOUT_ORGANS_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -128,10 +128,10 @@ export const ORGAN_DONATION_SOME_ORGANS = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_SOME_ORGANS_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -143,10 +143,10 @@ export const ORGAN_DONATION_REVIEW_YOUR_DECISION = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_REVIEW_YOUR_DECISION_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -158,10 +158,10 @@ export const ORGAN_DONATION_VIEW_DECISION = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_VIEW_DECISION_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -173,10 +173,10 @@ export const ORGAN_DONATION_WITHDRAW_REASON = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonationWithdraw',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAW_REASON_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -188,10 +188,10 @@ export const ORGAN_DONATION_WITHDRAWN = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonationWithdraw',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_WITHDRAWN_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 
@@ -203,10 +203,10 @@ export const ORGAN_DONATION_YOUR_CHOICE = {
     headerKey: 'navigation.pages.headers.organDonation',
     titleKey: 'navigation.pages.titles.organDonation',
     proofLevel: proofLevel.P9,
-    upliftRoute: UPLIFT_MORE,
+    upliftRoute: UPLIFT_GP_MEDICAL_RECORD,
     crumb: breadcrumbs.ORGAN_DONATION_YOUR_CHOICE_CRUMB,
     helpUrl: organDonationHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: YOUR_RECORD_MENU_ITEM,
   },
 };
 

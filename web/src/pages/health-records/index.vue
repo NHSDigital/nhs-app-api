@@ -13,6 +13,7 @@
                      :aria-label="ariaLabelCaption(
                        'myRecord.hub.gpHealthRecord',
                        'myRecord.hub.viewAllergiesMedicinesAndMore')" />
+
           <third-party-jump-off-button v-if="showPkbTestResults && !isProxying"
                                        id="btn_pkb_test_results"
                                        provider-id="pkb"
@@ -63,6 +64,23 @@
             id="btn_gncr_messages_and_consultations"
             provider-id="gncr"
             :provider-configuration="thirdPartyProvider.gncr.correspondence" />
+
+          <organ-donation-link
+            id="btn_organ_donation"
+            header-tag="h2"
+            :display-description="true"
+            :back-link-override="yourHealthPath"/>
+
+          <menu-item
+            id="btn_data_sharing"
+            header-tag="h2"
+            data-purpose="text_link"
+            :href="dataSharingPath"
+            :text="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared')"
+            :description="$t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose')"
+            :click-func="navigateToDataSharing"
+            :aria-label="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared') |
+              join($t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose') ,'. ')"/>
         </menu-item-list>
       </div>
     </div>
@@ -71,23 +89,36 @@
 
 <script>
 
-import { GP_MEDICAL_RECORD_PATH } from '@/router/paths';
+import {
+  GP_MEDICAL_RECORD_PATH,
+  HEALTH_RECORDS_PATH,
+  DATA_SHARING_OVERVIEW_PATH,
+} from '@/router/paths';
+import {
+  YOUR_NHS_DATA_MATTERS_URL,
+} from '@/router/externalLinks';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import { redirectTo } from '@/lib/utils';
+import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 
 export default {
   components: {
     MenuItem,
     MenuItemList,
     ThirdPartyJumpOffButton,
+    OrganDonationLink,
   },
   data() {
     return {
       gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
+      yourHealthPath: HEALTH_RECORDS_PATH,
+      dataSharingPath: this.$store.state.device.isNativeApp
+        ? DATA_SHARING_OVERVIEW_PATH
+        : YOUR_NHS_DATA_MATTERS_URL,
       showPkbTestResults: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -184,6 +215,13 @@ export default {
     },
     redirectToMedicalRecord() {
       redirectTo(this, this.gpMedicalRecordPath);
+    },
+    navigateToDataSharing() {
+      if (this.$store.state.device.isNativeApp) {
+        redirectTo(this, this.dataSharingPath);
+      } else {
+        window.open(this.dataSharingPath, '_blank');
+      }
     },
   },
 };

@@ -12,22 +12,6 @@
         :show-indicator="hasUnreadMessages"
         :click-func="navigateToMessages"
         :aria-label="ariaLabel"/>
-
-      <organ-donation-link id="btn_organ_donation"
-                           header-tag="h2"
-                           :display-description="true"
-                           :back-link-override="morePath"/>
-
-      <menu-item
-        id="btn_data_sharing"
-        header-tag="h2"
-        data-purpose="text_link"
-        :href="dataSharingPath"
-        :text="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared')"
-        :description="$t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose')"
-        :click-func="navigateToDataSharing"
-        :aria-label="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared') |
-          join($t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose') ,'. ')"/>
     </menu-item-list>
   </div>
 </template>
@@ -35,25 +19,18 @@
 <script>
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import sjrIf from '@/lib/sjrIf';
 import { redirectTo } from '@/lib/utils';
 import {
-  MORE_PATH,
   MESSAGES_PATH,
-  DATA_SHARING_OVERVIEW_PATH,
   HEALTH_INFORMATION_UPDATES_PATH,
 } from '@/router/paths';
-import {
-  YOUR_NHS_DATA_MATTERS_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'MorePage',
   components: {
     MenuItemList,
     MenuItem,
-    OrganDonationLink,
   },
   data() {
     return {
@@ -65,16 +42,10 @@ export default {
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       gpMessagingAvailable: !this.$store.state.gpMessages.gpMessagingSessionUnavailable,
-      morePath: MORE_PATH,
       messagesPath: MESSAGES_PATH,
     };
   },
   computed: {
-    dataSharingPath() {
-      return this.$store.state.device.isNativeApp
-        ? DATA_SHARING_OVERVIEW_PATH
-        : YOUR_NHS_DATA_MATTERS_URL;
-    },
     gpMessagesEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
@@ -125,13 +96,6 @@ export default {
     },
     navigateToMessages() {
       redirectTo(this, this.messagesPath);
-    },
-    navigateToDataSharing() {
-      if (this.$store.state.device.isNativeApp) {
-        redirectTo(this, this.dataSharingPath);
-      } else {
-        window.open(this.dataSharingPath, '_blank');
-      }
     },
   },
 };

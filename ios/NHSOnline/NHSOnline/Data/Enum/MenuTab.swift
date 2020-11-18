@@ -4,7 +4,7 @@ enum MenuTab: String, Codable {
    case Appointments
    case Prescriptions
    case MyRecord
-   case More
+   case Messages
    case Unknown
 
    init(from decoder: Decoder) throws {

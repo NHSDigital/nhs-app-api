@@ -1,5 +1,9 @@
 import each from 'jest-each';
 import HealthRecords from '@/pages/health-records';
+import * as utils from '@/lib/utils';
+import { DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
+import { YOUR_NHS_DATA_MATTERS_URL } from '@/router/externalLinks';
+import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { createStore, mount, createRouter } from '../../helpers';
 
 describe('healthRecords', () => {
@@ -11,11 +15,12 @@ describe('healthRecords', () => {
   const mountAs = ({
     integrationEnabled = true,
     isProxying = false,
+    isNativeApp = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
-        device: { isNativeApp: false },
+        device: { isNativeApp },
         knownServices: {
           knownServices: [{
             id: 'pkb',
@@ -34,10 +39,29 @@ describe('healthRecords', () => {
   beforeEach(() => {
     wrapper = mountAs();
     window.open = jest.fn();
+    utils.redirectTo = jest.fn();
   });
 
   it('will dispatch device/unlockNavBar when page mounted', () => {
     expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
+
+  it('will include the organ donation link', () => {
+    expect(wrapper.find(OrganDonationLink).exists()).toBe(true);
+  });
+
+  describe('navigateToDataSharing', () => {
+    it('will redirect to DATA_SHARING_OVERVIEW_PATH if native', () => {
+      wrapper = mountAs({ isNativeApp: true });
+      wrapper.vm.navigateToDataSharing();
+      expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, DATA_SHARING_OVERVIEW_PATH);
+    });
+
+    it('will navigate to ndop home page if not native', () => {
+      wrapper = mountAs();
+      wrapper.vm.navigateToDataSharing();
+      expect(window.open).toHaveBeenCalledWith(YOUR_NHS_DATA_MATTERS_URL, '_blank');
+    });
   });
 
   describe('gp medical records link is always visible', () => {

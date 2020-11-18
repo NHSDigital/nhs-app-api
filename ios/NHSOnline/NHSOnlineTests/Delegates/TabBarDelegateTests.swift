@@ -66,10 +66,10 @@ class TabBarDelegateTests : XCTestCase {
         XCTAssert(viewController!.applicationState.isReady())
     }
     
-    func test_WhenMoreIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
-        let moreTabBarItem = UITabBarItem(title: "moreItem", image: nil, tag: 4)
-        viewController!.selectedTab = moreTabBarItem.tag
-        tabBarDelegate!.tabBar(tabBar!, didSelect: moreTabBarItem)
+    func test_WhenMessagesIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
+        let messagesTabBarItem = UITabBarItem(title: "messagesItem", image: nil, tag: 4)
+        viewController!.selectedTab = messagesTabBarItem.tag
+        tabBarDelegate!.tabBar(tabBar!, didSelect: messagesTabBarItem)
              
         XCTAssert(viewController!.applicationState.isReady())
     }

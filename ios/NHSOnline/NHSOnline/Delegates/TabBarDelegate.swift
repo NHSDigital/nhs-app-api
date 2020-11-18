@@ -8,7 +8,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case Appointments = 1
         case Prescriptions = 2
         case MyRecord = 3
-        case More = 4
+        case Messages = 4
     }
     
     init(controller: HomeViewController) {
@@ -35,7 +35,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
                 index = 2
             case .MyRecord:
                 index = 3
-            case .More:
+            case .Messages:
                 index = 4
             default:
                 index = -1
@@ -53,7 +53,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         let currentlySelectedItem = Menu(rawValue: didSelect.tag)!
         
         if(viewController.selectedTab == didSelect.tag) {
-            if(currentlySelectedItem != .More && currentlySelectedItem != .Advice && currentlySelectedItem !=
+            if(currentlySelectedItem != .Messages && currentlySelectedItem != .Advice && currentlySelectedItem !=
                 .Appointments && currentlySelectedItem != .Prescriptions) {
                 return
             }
@@ -61,7 +61,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         
         viewController.selectedTab = didSelect.tag
 
-        if(currentlySelectedItem != .Advice && previouslySelectedItem != .More && currentlySelectedItem !=
+        if(currentlySelectedItem != .Advice && previouslySelectedItem != .Messages && currentlySelectedItem !=
             .Appointments && currentlySelectedItem != .Prescriptions) {
             viewController.applicationState.block()
         }
@@ -85,8 +85,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case .MyRecord:
             selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().HealthRecordsUrlPath)
             break
-        case .More:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
+        case .Messages:
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MessagesUrlPath)
             break
         }
         selectPage(pageUrl: selectedURL)

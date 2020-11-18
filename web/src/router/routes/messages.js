@@ -47,7 +47,7 @@ import {
 } from '@/router/names';
 import { UPLIFT_MORE } from '@/router/routes/more';
 
-import { MORE_MENU_ITEM } from '@/middleware/nativeNavigation';
+import { MESSAGES_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
 import { messagingHelpUrl } from '@/router/externalLinks';
@@ -63,6 +63,7 @@ export const MESSAGES = {
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.MESSAGES_CRUMB,
     helpUrl: messagingHelpUrl,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -78,7 +79,7 @@ export const GP_MESSAGES = {
     crumb: breadcrumbs.GP_MESSAGES_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -93,7 +94,7 @@ export const GP_MESSAGES_URGENCY = {
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -109,7 +110,7 @@ export const GP_MESSAGES_URGENCY_CONTACT_YOUR_GP = {
     crumb: breadcrumbs.GP_MESSAGES_URGENCY_CONTACT_YOUR_GP_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -125,7 +126,7 @@ export const GP_MESSAGES_RECIPIENTS = {
     crumb: breadcrumbs.GP_MESSAGES_RECIPIENTS_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -147,7 +148,7 @@ export const GP_MESSAGES_SEND_MESSAGE = {
     crumb: breadcrumbs.GP_MESSAGES_SEND_MESSAGE_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -169,7 +170,7 @@ export const GP_MESSAGES_VIEW_DETAILS = {
     crumb: breadcrumbs.GP_MESSAGES_VIEW_DETAILS_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -185,7 +186,7 @@ export const GP_MESSAGES_DOWNLOAD_ATTACHMENT = {
     crumb: breadcrumbs.GP_MESSAGES_DOWNLOAD_ATTACHMENT_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -200,7 +201,7 @@ export const GP_MESSAGES_VIEW_ATTACHMENT = {
     crumb: breadcrumbs.GP_MESSAGES_VIEW_ATTACHMENT_CRUMB,
     helpUrl: messagingHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -225,7 +226,7 @@ export const GP_MESSAGES_DELETE = {
       sjrRedirectRules.im1MessagingDisabledRedirect,
       sjrRedirectRules.deleteMessageRedirect,
     ],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -250,7 +251,7 @@ export const GP_MESSAGES_DELETE_SUCCESS = {
       sjrRedirectRules.im1MessagingDisabledRedirect,
       sjrRedirectRules.deleteMessageRedirect,
     ],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -265,7 +266,7 @@ export const HEALTH_INFORMATION_UPDATES = {
     helpUrl: messagingHelpUrl,
     proofLevel: proofLevel.P5,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -279,7 +280,7 @@ export const HEALTH_INFORMATION_UPDATES_MESSAGES = {
     helpUrl: messagingHelpUrl,
     proofLevel: proofLevel.P5,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 

@@ -9,6 +9,6 @@ enum class MenuTab(val tabIndex: Int) {
     Appointments(1),
     Prescriptions(2),
     MyRecord(3),
-    More(4),
+    Messages(4),
     Unknown(-2)
 }

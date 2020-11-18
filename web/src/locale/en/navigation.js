@@ -4,7 +4,7 @@ export default {
   appointments: 'Appointments',
   prescriptions: 'Prescriptions',
   yourHealth: 'Your health',
-  more: 'More',
+  messages: 'Messages',
   account: 'Settings',
   logout: 'Log out',
   popularServices: 'Popular services',
@@ -34,6 +34,7 @@ export default {
     more: 'More',
     myRecord: 'Your GP health record',
     prescriptions: 'Prescriptions',
+    yourHealth: 'Your health',
   },
   header: {
     cookiesPolicy: 'cookies policy',

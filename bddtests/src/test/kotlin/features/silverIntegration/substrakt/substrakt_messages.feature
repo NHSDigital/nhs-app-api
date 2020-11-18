@@ -16,7 +16,7 @@ Feature: Substrakt Messages
     And I am a user who can view Ask Your Gp Surgery a Question from Substrakt
     And I am logged in
     When I navigate to the More page
-    Then I am on the More Page
+    Then I am on the More page
     And I click the Messages link on the More page
     And the Messages Hub page is displayed
     And I click the Substrakt Ask Your GP Surgery a Question link on the Messages Hub page

@@ -153,8 +153,8 @@
 	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL_OLD)</string>
 	<key>MenuTimeoutSeconds</key>
 	<integer>10</integer>
-	<key>MoreUrlPath</key>
-	<string>$(MORE_URL)</string>
+	<key>MessagesUrlPath</key>
+	<string>$(MESSAGES_URL)</string>
 	<key>MyAccountUrlPath</key>
 	<string>$(MY_ACCOUNT_URL_PATH)</string>
 	<key>MyRecordGpAtHandUrlPath</key>

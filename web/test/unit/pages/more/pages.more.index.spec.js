@@ -1,9 +1,7 @@
 import * as utils from '@/lib/utils';
 import each from 'jest-each';
 import More from '@/pages/more';
-import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { MESSAGES_PATH, DATA_SHARING_OVERVIEW_PATH } from '@/router/paths';
-import { YOUR_NHS_DATA_MATTERS_URL } from '@/router/externalLinks';
+import { MESSAGES_PATH } from '@/router/paths';
 import { createStore, mount } from '../../helpers';
 
 describe('more', () => {
@@ -48,10 +46,6 @@ describe('more', () => {
 
   it('will dispatch device/unlockNavBar when page mounted', () => {
     expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
-  });
-
-  it('will include the organ donation link', () => {
-    expect(wrapper.find(OrganDonationLink).exists()).toBe(true);
   });
 
   describe('not only app messaging is available', () => {
@@ -125,26 +119,6 @@ describe('more', () => {
 
     it('will not show the unread indicators when there are no unread messages', () => {
       expect(getUnreadIndicator(wrapper).exists()).toBe(false);
-    });
-  });
-
-  describe('methods', () => {
-    describe('navigateToDataSharing', () => {
-      it('will redirect to DATA_SHARING_OVERVIEW_PATH if native', () => {
-        wrapper = mountAs({ isNativeApp: true });
-
-        wrapper.vm.navigateToDataSharing();
-
-        expect(utils.redirectTo).toHaveBeenCalledWith(wrapper.vm, DATA_SHARING_OVERVIEW_PATH);
-      });
-
-      it('will navigate to ndop home page if not native', () => {
-        wrapper = mountAs();
-
-        wrapper.vm.navigateToDataSharing();
-
-        expect(window.open).toHaveBeenCalledWith(YOUR_NHS_DATA_MATTERS_URL, '_blank');
-      });
     });
   });
 });

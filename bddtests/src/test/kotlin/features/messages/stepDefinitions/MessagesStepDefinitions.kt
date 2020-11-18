@@ -9,13 +9,16 @@ import io.cucumber.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import features.sharedSteps.NavigationSteps
 import mocking.AccessTokenBuilder
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.IdentityProofingLevel
+import net.thucydides.core.annotations.Steps
 import pages.assertElementNotPresent
 import pages.messages.MessagesErrorPage
 import pages.messages.MessagesInboxPage
 import pages.messages.MessagesPage
+import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.messages.MessagesSummaryFacade
@@ -30,6 +33,9 @@ class MessagesStepDefinitions {
     private lateinit var messagesPage: MessagesPage
     private lateinit var messagesInboxPage: MessagesInboxPage
     private lateinit var messagesErrorPage: MessagesErrorPage
+
+    @Steps
+    lateinit var nav: NavigationSteps
 
     @Given("^I am a user wishing to view my messages$")
     fun iAmAUserWishingToViewTheirMessages() {
@@ -241,5 +247,10 @@ class MessagesStepDefinitions {
     fun theNamedEmailAddressIsIdentifiedAsALinkInTheMessage(email: String){
         val href = "mailto:$email"
         messagesPage.assertLinkExists(email,href, internal = false)
+    }
+
+    @Then("^I see messages button on the nav bar is highlighted$")
+    fun messagesButtonOnNavBarIsHighlighted() {
+        nav.assertSelectedTab(NavBarNative.NavBarType.MESSAGES)
     }
 }

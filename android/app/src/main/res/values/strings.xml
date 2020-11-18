@@ -4,7 +4,7 @@
     <string name="appointment">Appointments</string>
     <string name="prescription">Prescriptions</string>
     <string name="your_health">Your health</string>
-    <string name="more">More</string>
+    <string name="messages">Messages</string>
     <string name="my_account_header">My account</string>
     <string name="organ_donation_header">My organ donation decision</string>
     <!--Data sharing header should be updated in Android, iOS, and Web if changed-->
@@ -150,14 +150,14 @@
     </string-array>
 
     <string-array name="nonBlockingMenuItems">
-        <item>@string/more</item>
+        <item>@string/messages</item>
         <item>@string/advice</item>
         <item>@string/appointment</item>
         <item>@string/prescription</item>
     </string-array>
 
     <string-array name="reSelectableMenuItems">
-        <item>@string/more</item>
+        <item>@string/messages</item>
         <item>@string/advice</item>
         <item>@string/appointment</item>
         <item>@string/prescription</item>

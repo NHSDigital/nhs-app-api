@@ -42,20 +42,19 @@
         </a>
       </li>
       <li class="nhsuk-header__navigation-item">
-        <a class="nhsuk-header__navigation-link" :href="recordPath"
+        <a class="nhsuk-header__navigation-link" :href="yourHealthPath"
            data-sid="your-health-menu-item"
            data-purpose="myRecordPageLink"
-           @click.prevent="setMenuitemState(recordPath)">
+           @click.prevent="setMenuitemState(yourHealthPath)">
           {{ $t('navigation.yourHealth') }}
         </a>
       </li>
-      <!-- Hidden as not in scope for mvp, will be needed in future -->
       <li class="nhsuk-header__navigation-item">
-        <a class="nhsuk-header__navigation-link" :href="morePath"
-           data-sid="more-menu-item"
-           data-purpose="morePageLink"
-           @click.prevent="setMenuitemState(morePath)">
-          {{ $t('navigation.more') }}
+        <a class="nhsuk-header__navigation-link" :href="messagesPath"
+           data-sid="messages-menu-item"
+           data-purpose="messagesPageLink"
+           @click.prevent="setMenuitemState(messagesPath)">
+          {{ $t('navigation.messages') }}
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
@@ -79,7 +78,7 @@
 <script>
 import {
   APPOINTMENTS_PATH,
-  MORE_PATH,
+  MESSAGES_PATH,
   ADVICE_PATH,
   PRESCRIPTIONS_PATH,
   HEALTH_RECORDS_PATH,
@@ -101,8 +100,8 @@ export default {
       advicePath: ADVICE_PATH,
       appointmentsPath: APPOINTMENTS_PATH,
       prescriptionsPath: PRESCRIPTIONS_PATH,
-      recordPath: HEALTH_RECORDS_PATH,
-      morePath: MORE_PATH,
+      yourHealthPath: HEALTH_RECORDS_PATH,
+      messagesPath: MESSAGES_PATH,
       shouldShowMiniMenu: true,
       accountPath: ACCOUNT_PATH,
       logoutPath: LOGOUT_PATH,
@@ -118,7 +117,6 @@ export default {
       return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
     },
     setMenuitemState(path) {
-      // this.$store.app.$analytics.trackButtonClick(a.pathname);
       redirectTo(this, path);
       this.closeMiniMenu();
     },

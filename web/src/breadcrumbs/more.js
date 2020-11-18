@@ -13,31 +13,7 @@ export const MORE_CRUMB = {
   nativeDisabled: true,
 };
 
-const DATA_SHARING_OVERVIEW_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
-  nativeDisabled: false,
-};
-
-const DATA_SHARING_WHERE_USED_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
-  nativeDisabled: false,
-};
-
-const DATA_SHARING_DOES_NOT_APPLY_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
-  nativeDisabled: false,
-};
-
-const DATA_SHARING_MAKE_YOUR_CHOICE_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
-  nativeDisabled: false,
-};
-
 export default {
   UPLIFT_MORE_CRUMB,
   MORE_CRUMB,
-  DATA_SHARING_OVERVIEW_CRUMB,
-  DATA_SHARING_WHERE_USED_CRUMB,
-  DATA_SHARING_DOES_NOT_APPLY_CRUMB,
-  DATA_SHARING_MAKE_YOUR_CHOICE_CRUMB,
 };

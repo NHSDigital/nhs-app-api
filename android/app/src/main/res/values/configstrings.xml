@@ -13,6 +13,7 @@
     <string name="fidoGetRegRequestPath">/regRequest</string>
     <string name="fidoPostRegResponsePath">/regResponse</string>
     <string name="morePath">more</string>
+    <string name="messagesPath">messages</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="loginBiometricsError">biometric-login-error</string>
     <string name="myRecordPath">my-record</string>

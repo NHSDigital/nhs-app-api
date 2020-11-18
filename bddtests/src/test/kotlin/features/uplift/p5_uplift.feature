@@ -13,7 +13,7 @@ Feature: Proof level 5 shutter screens
       | appointment hub    | Appointments              |
       | gp medical record  | Your GP health record     |
       | more               | More                      |
-      | organ donation     | More                      |
+      | organ donation     | Your GP health record     |
       | your prescriptions | Prescriptions             |
 
   @native
@@ -32,5 +32,5 @@ Feature: Proof level 5 shutter screens
     | appointment hub    | Appointments              |
     | gp medical record  | Your GP health record     |
     | more               | More                      |
-    | organ donation     | More                      |
+    | organ donation     | Your GP health record     |
     | your prescriptions | Prescriptions             |

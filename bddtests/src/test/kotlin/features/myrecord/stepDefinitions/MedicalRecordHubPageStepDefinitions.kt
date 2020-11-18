@@ -13,6 +13,8 @@ import pages.assertSingleElementPresent
 
 open class MedicalRecordHubPageStepDefinitions {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
+    private val organDonationTitle = "Manage your organ donation decision"
+    private val dataSharingTitle = "Choose if data from your health records is shared for research and planning"
 
     @Given("^I am an (.*) patient with no access to any Third Party Health Record Hub Features$")
     fun setupUser(supplier: String) {
@@ -47,6 +49,16 @@ open class MedicalRecordHubPageStepDefinitions {
     @When("I click the menu item '(.*)'$")
     fun clickMenuItem(title: String) {
         medicalRecordHubPage.getHeaderElement(title).click()
+    }
+
+    @When("^I click the Data Sharing link on the health hub page")
+    fun iClickTheDataSharingLinkOnTheHealthHubPage() {
+        clickMenuItem(dataSharingTitle)
+    }
+
+    @When("^I choose to set my organ donation preferences")
+    fun iChooseToSetMyOrganDonationPreferences() {
+        clickMenuItem(organDonationTitle)
     }
 
     @Then("I see the 'GP health record' page")

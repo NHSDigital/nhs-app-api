@@ -31,7 +31,6 @@ import {
   SWITCH_PROFILE_NAME,
 } from '@/router/names';
 import {
-  MORE_MENU_ITEM,
   ADVICE_MENU_ITEM,
   CLEAR_SELECTED_MENU_ITEM,
   APPOINTMENTS_MENU_ITEM,
@@ -82,7 +81,7 @@ export const LINKED_PROFILES_SHUTTER_MORE = {
     crumb: breadcrumbs.LINKED_PROFILES_MORE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
-    nativeNavigation: MORE_MENU_ITEM,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
 

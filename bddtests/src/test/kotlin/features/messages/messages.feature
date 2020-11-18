@@ -2,7 +2,18 @@
 Feature: Messages
 #The following tests are gp system agnostic
 
-@smoketest
+  @native
+  Scenario: A logged in user using the native app can navigate to the messages screen
+    Given I am a EMIS patient using the native app
+    And I log in to the app expecting to see the notifications prompt
+    Then I see the notifications prompt
+    When I do not accept notifications and continue
+    Then I see the home page
+    And I navigate to Messages
+    And the Messages Hub page is displayed
+    And I see messages button on the nav bar is highlighted
+
+  @smoketest
   Scenario: A user can see their read and unread messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages

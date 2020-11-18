@@ -36,11 +36,11 @@ open class NavBarNative : NativePageObject() {
                 "your-health-menu-item",
                 "id/yourHealth",
                 "Your health"),
-        MORE(
-                "more-menu-item",
-                "more-menu-item",
-                "more",
-                "More",
+        MESSAGES(
+                "messages-menu-item",
+                "messages-menu-item",
+                "id/messages",
+                "Messages",
                 true)
     }
 
@@ -111,7 +111,7 @@ open class NavBarNative : NativePageObject() {
                     NavBarType.ADVICE,
                     NavBarType.APPOINTMENTS,
                     NavBarType.PRESCRIPTIONS,
-                    NavBarType.MORE,
+                    NavBarType.MESSAGES,
                     NavBarType.YOUR_HEALTH
             )
             for (eachElement in navBar) {

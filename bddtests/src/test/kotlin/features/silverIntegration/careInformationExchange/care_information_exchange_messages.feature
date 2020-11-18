@@ -16,7 +16,7 @@ Feature: Care Information Exchange Messages
     And I am a user who can view Messages and Online Consultations from Care Information Exchange
     And I am logged in
     When I navigate to the More page
-    Then I am on the More Page
+    Then I am on the More page
     And I click the Messages link on the More page
     And the Messages Hub page is displayed
     And I click the CIE Messages and online consultations link on the Messages Hub page

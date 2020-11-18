@@ -1,48 +1,48 @@
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
-import { MORE_CRUMB } from '@/breadcrumbs/more';
+import { HEALTH_RECORDS_CRUMB } from '@/breadcrumbs/medicalRecord';
 
 const ORGAN_DONATION_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_ADDITIONAL_DETAILS_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_AMEND_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_FAITH_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_MORE_ABOUT_ORGANS_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_SOME_ORGANS_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_REVIEW_YOUR_DECISION_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_VIEW_DECISION_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_WITHDRAW_REASON_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_WITHDRAWN_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 const ORGAN_DONATION_YOUR_CHOICE_CRUMB = {
-  defaultCrumb: [INDEX_CRUMB, MORE_CRUMB],
+  defaultCrumb: [INDEX_CRUMB, HEALTH_RECORDS_CRUMB],
 };
 
 

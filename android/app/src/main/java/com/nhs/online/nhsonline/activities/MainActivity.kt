@@ -364,8 +364,8 @@ class MainActivity :
             R.id.yourHealth -> {
                 path = resources.getString(R.string.healthRecordsPath)
             }
-            R.id.more -> {
-                path = resources.getString(R.string.morePath)
+            R.id.messages -> {
+                path = resources.getString(R.string.messagesPath)
             }
             R.id.appointments -> {
                 path = resources.getString(R.string.appointmentsPath)
@@ -609,7 +609,7 @@ class MainActivity :
             MenuTab.Appointments.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.appointments)
             MenuTab.Prescriptions.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.yourHealth)
-            MenuTab.More.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.more)
+            MenuTab.Messages.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.messages)
         }
         enableMenuBar();
     }

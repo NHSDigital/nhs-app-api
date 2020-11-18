@@ -234,8 +234,9 @@ Feature: Login with proxy access
     Given I am a <Gp System> user with linked profiles
     And I am logged in
     And I have switched to a linked profile
-    When I navigate to More
-    Then I see the more page header
+    Then I see the proxy home page
+    When I navigate to the More page
+    Then I am on the More page
     And the More page explains that it is not possible to access it while acting on behalf of someone else
     When I click the Switch to my profile button for the main user
     And I see the home page

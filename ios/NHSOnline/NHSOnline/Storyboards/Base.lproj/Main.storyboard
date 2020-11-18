@@ -47,7 +47,7 @@
                                             <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
                                             <tabBarItem tag="2" title="Prescriptions" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="7Db-Tb-Oqe"/>
                                             <tabBarItem tag="3" title="Your health" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>
-                                            <tabBarItem tag="4" title="More" image="MoreIcon" selectedImage="MoreActiveIcon" id="TDg-3X-xAn"/>
+                                            <tabBarItem tag="4" title="Messages" image="MessagesIcon" selectedImage="MessagesActiveIcon" id="TDg-3X-xAn"/>
                                         </items>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -277,8 +277,8 @@
         <image name="AdviceIcon" width="26.5" height="26.5"/>
         <image name="AppointmentActiveIcon" width="25.5" height="25.5"/>
         <image name="AppointmentIcon" width="26.5" height="26.5"/>
-        <image name="MoreActiveIcon" width="25.5" height="25.5"/>
-        <image name="MoreIcon" width="26.5" height="26.5"/>
+        <image name="MessagesActiveIcon" width="26.5" height="26.5"/>
+        <image name="MessagesIcon" width="26.5" height="26.5"/>
         <image name="PrescriptionsActiveIcon" width="25.5" height="25.5"/>
         <image name="PrescriptionsIcon" width="26.5" height="26.5"/>
         <image name="RecordActiveIcon" width="25.5" height="25.5"/>
