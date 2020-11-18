@@ -66,7 +66,7 @@ export const LINKED_PROFILES_SUMMARY = {
       const linkedAccount = store.getters['linkedAccounts/getSelectedLinkedAccount'];
       return i18n.t('navigation.pages.titles.linkedProfilesSummary', { fullName: linkedAccount.fullName });
     },
-    crumb: breadcrumbs.LINKED_PROFILES_SUMMARY_CRUMB,
+    crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
   },

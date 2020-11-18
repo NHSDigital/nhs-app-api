@@ -120,7 +120,7 @@ class LinkedProfilesStepDefinitions {
 
     @Given("^I have switched to a linked profile$")
     fun iHaveSwitchedToALinkedProfile(){
-        iNavigateToLinkedProfiles()
+        iNavigateToLinkedProfilesViaSettings()
         iSelectALinkedProfile()
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
     }
@@ -152,15 +152,6 @@ class LinkedProfilesStepDefinitions {
 
     @Then("^the linked profiles page is displayed$")
     fun theLinkedProfilesPageIsDisplayed() {
-        linkedProfilesPage.isLoaded()
-    }
-
-    @When("^I navigate to linked profiles from the home page")
-    fun iNavigateToLinkedProfiles() {
-        navHeader.clickMyAccount()
-        myAccountPage.assertDisplayed()
-        myAccountPage.assertLinkedProfilesLinkIsPresent()
-        myAccountPage.linkedProfilesLink.click()
         linkedProfilesPage.isLoaded()
     }
 
@@ -360,5 +351,13 @@ class LinkedProfilesStepDefinitions {
                     patient.age.formattedAge(),
                     displayedLinkedProfiles[index].age)
         }
+    }
+
+    private fun iNavigateToLinkedProfilesViaSettings() {
+        navHeader.clickMyAccount()
+        myAccountPage.assertDisplayed()
+        myAccountPage.assertLinkedProfilesLinkIsPresent()
+        myAccountPage.linkedProfilesLink.click()
+        linkedProfilesPage.isLoaded()
     }
 }

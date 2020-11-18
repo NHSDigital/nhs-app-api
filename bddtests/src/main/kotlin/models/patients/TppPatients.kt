@@ -8,7 +8,6 @@ import models.Patient
 import models.PatientAge
 import models.PatientContactDetails
 import models.PatientName
-import org.openqa.selenium.InvalidArgumentException
 import worker.models.patient.Im1ConnectionToken
 
 class TppPatients {
@@ -28,7 +27,7 @@ class TppPatients {
         }
 
         override fun getPatientWithNoLinkedProfiles(): Patient {
-            throw InvalidArgumentException("Not implemented for TPP")
+            return kevinBarry
         }
 
         override fun setOdsCode(patient: Patient, provider: String) {

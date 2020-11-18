@@ -123,6 +123,7 @@ class HomePageStepDefinitions {
             NavigationLinkText.PRESCRIPTIONS.linkText -> followPrescriptionLink(linkElement)
             NavigationLinkText.GP_HEALTH_RECORD.linkText -> followGPHealthRecordLink(linkElement)
             NavigationLinkText.MESSAGES.linkText -> followMessagesLink(linkElement)
+            NavigationLinkText.LINKED_PROFILES.linkText -> followLinkedProfilesLink(linkElement)
             else -> Assert.fail("Test set up incorrect, there is no matching follow on function for `$linkText`")
         }
     }
@@ -152,6 +153,10 @@ class HomePageStepDefinitions {
     private fun followMessagesLink(linkElement: HybridPageElement) {
         linkElement.click()
         navBar.isHighlighted(NavBarNative.NavBarType.MORE)
+    }
+
+    private fun followLinkedProfilesLink(linkElement: HybridPageElement) {
+        linkElement.click()
     }
 }
 

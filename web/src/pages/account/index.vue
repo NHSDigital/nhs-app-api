@@ -6,8 +6,7 @@
                  header-tag="h2"
                  :href="linkedProfilesPath"
                  :text="$t('account.linkedProfiles')"
-                 :click-func="goToUrl"
-                 :click-param="linkedProfilesPath"/>
+                 :click-func="navigateToLinkedProfiles"/>
       <menu-item id="'cookies'"
                  header-tag="h2"
                  :href="cookiesPath"
@@ -109,6 +108,10 @@ export default {
     },
     goToLoginOptions() {
       NativeCallbacks.goToLoginOptions();
+    },
+    navigateToLinkedProfiles() {
+      this.$store.dispatch('navigation/setRouteCrumb', 'settingsCrumb');
+      this.goToUrl(this.linkedProfilesPath);
     },
   },
 };

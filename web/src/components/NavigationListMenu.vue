@@ -5,6 +5,22 @@
                            :widen-on-tablet="true"
                            :text="$t('navigation.popularServices')"/>
     <menu-item-list data-sid="navigation-list-menu" class="nhsuk-u-margin-top-0">
+      <menu-item v-if="gpMessagingAvailable"
+                 id="btn_messages"
+                 :header-tag="headerTag"
+                 data-purpose="messages-menu-item"
+                 :href="messagesPath"
+                 :show-indicator="hasMessageIndicator"
+                 :text="$t('navigation.viewYourMessages')"
+                 :aria-label="messagesAriaLabel"
+                 :click-func="navigateToMessages"/>
+      <menu-item v-if="hasLinkedAccounts"
+                 id="linked-profiles-link"
+                 :header-tag="headerTag"
+                 :href="linkedProfilesPath"
+                 :text="$t('navigation.pages.headers.linkedProfiles')"
+                 :aria-label="$t('navigation.pages.headers.linkedProfiles')"
+                 :click-func="navigateToLinkedProfiles"/>
       <menu-item v-if="isProofLevel9"
                  id="menu-item-myRecord"
                  :header-tag="headerTag"
@@ -23,15 +39,6 @@
                  :aria-label="$t('navigation.orderARepeatPrescription')"
                  :click-func="goToUrl"
                  :click-param="prescriptionsPath"/>
-      <menu-item v-if="gpMessagingAvailable"
-                 id="btn_messages"
-                 :header-tag="headerTag"
-                 data-purpose="messages-menu-item"
-                 :href="messagesPath"
-                 :show-indicator="hasMessageIndicator"
-                 :text="$t('navigation.viewYourMessages')"
-                 :aria-label="messagesAriaLabel"
-                 :click-func="navigateToMessages"/>
     </menu-item-list>
   </div>
 </template>
@@ -44,6 +51,7 @@ import {
   MESSAGES_PATH,
   GP_MEDICAL_RECORD_PATH,
   PRESCRIPTIONS_PATH,
+  LINKED_PROFILES_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
@@ -69,6 +77,7 @@ export default {
       prescriptionsPath: PRESCRIPTIONS_PATH,
       gpMedicalRecordPath: GP_MEDICAL_RECORD_PATH,
       messagesPath: MESSAGES_PATH,
+      linkedProfilesPath: LINKED_PROFILES_PATH,
     };
   },
   computed: {
@@ -84,10 +93,17 @@ export default {
           ${this.$t('navigation.youHaveUnreadMessages')}` :
         this.$t('navigation.viewYourMessages');
     },
+    hasLinkedAccounts() {
+      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    },
   },
   methods: {
     navigateToMessages() {
       redirectTo(this, this.messagesPath);
+    },
+    navigateToLinkedProfiles() {
+      this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
+      this.goToUrl(this.linkedProfilesPath);
     },
   },
 };

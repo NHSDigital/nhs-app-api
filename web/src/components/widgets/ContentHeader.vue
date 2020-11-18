@@ -141,7 +141,6 @@ export default {
     currentBreadCrumbs() {
       const { crumbSetName } = this.$store.state.navigation;
       if (this.$route.meta.crumb[crumbSetName] === undefined) {
-        this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
         return this.$route.meta.crumb.defaultCrumb;
       }
 

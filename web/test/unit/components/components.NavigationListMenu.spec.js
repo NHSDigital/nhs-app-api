@@ -2,16 +2,16 @@ import NavigationListMenu from '@/components/NavigationListMenu';
 import each from 'jest-each';
 import { mount, createStore, createRouter } from '../helpers';
 
-jest.mock('@/lib/utils');
-
 let wrapper;
 let $store;
 let $router;
+let goToUrl;
 
 const mountAs = ({
   isNativeApp = false,
   isProofLevel9 = true,
   gpMessagingSessionUnavailable = false,
+  hasLinkedAccounts = true,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -27,12 +27,14 @@ const mountAs = ({
     },
     getters: {
       'session/isProofLevel9': isProofLevel9,
+      'linkedAccounts/hasLinkedAccounts': hasLinkedAccounts,
     },
   });
-  return mount(NavigationListMenu, { $store, $router });
+  return mount(NavigationListMenu, { $store, $router, methods: { goToUrl } });
 };
 
 beforeEach(() => {
+  goToUrl = jest.fn();
   wrapper = mountAs();
   window.open = jest.fn();
 });
@@ -40,13 +42,30 @@ beforeEach(() => {
 describe('Navigation Links ', () => {
   describe('Messages Hub link', () => {
     each([
-      [false, true],
-      [true, false],
+      ['shown', 'gpMessagingSession is available', false, true],
+      ['hidden', 'gpMessagingSession is unavailable', true, false],
     ])
-      .it('messages hub link will be shown', (gpMessagingSessionUnavailable, isVisible) => {
+      .it('messages hub link will be %s when user %s', (_linkState, _gpMessagingSesstionState, gpMessagingSessionUnavailable, isVisible) => {
         wrapper = mountAs({ gpMessagingSessionUnavailable });
         expect(wrapper.find('#btn_messages').exists()).toBe(isVisible);
       });
+  });
+
+  describe('Linked Accounts link', () => {
+    each([
+      ['shown', 'has linked accounts', true, true],
+      ['hidden', 'does not have linked accounts', false, false],
+    ])
+      .it('linked accounts link will be %s when user %s', (_linkState, _linkedAccountsState, hasLinkedAccounts, isVisible) => {
+        wrapper = mountAs({ hasLinkedAccounts });
+        expect(wrapper.find('#linked-profiles-link').exists()).toBe(isVisible);
+      });
+    it('will dispatch to set the breadcrumb to the default', () => {
+      wrapper = mountAs();
+      wrapper.vm.navigateToLinkedProfiles();
+
+      expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'defaultCrumb');
+    });
   });
 
   describe('P9 User', () => {
