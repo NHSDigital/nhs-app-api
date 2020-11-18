@@ -470,6 +470,33 @@ defaultUsers:
       dateOfBirth: "1964-02-15T00:00:00"
       sex: Male
 
+    9692239462:
+      userId: 157ba591-ec7c-4232-b3e7-e17de8e541a1
+      emailAddress: onboarding.nhsapp+gncr.user4@gmail.com
+      odsCode: F00005
+      givenName: Matthew
+      familyName: Niles
+      dateOfBirth: "1949-07-27T00:00:00"
+      sex: Male
+
+    9692239470:
+      userId: 6cc452ce-0477-43a3-92a6-7e20db0a8311
+      emailAddress: onboarding.nhsapp+gncr.user5@gmail.com
+      odsCode: F00005
+      givenName: Vernon
+      familyName: Brant
+      dateOfBirth: "1934-09-15T00:00:00"
+      sex: Male
+
+    9692239489:
+      userId: 9450de65-9f3c-4a46-846b-b8341e04d5b8
+      emailAddress: onboarding.nhsapp+gncr.user6@gmail.com
+      odsCode: F00005
+      givenName: Albert
+      familyName: Lundy
+      dateOfBirth: "1931-01-01T00:00:00"
+      sex: Male
+
   engage:
     9998571235:
       userId: b1b203b7-6da0-4b30-b094-bdde63015ebc
