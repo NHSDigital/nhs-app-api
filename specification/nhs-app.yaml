@@ -13,12 +13,15 @@ info:
     * send in-app messages to specific users of the NHS App
     * send native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
-    Currently, this API can only be accessed by organisations that deliver functionality to patients through the NHS App.
+    ## Who can use this API?
+    This API can only be accessed by organisations that deliver functionality to citizens through the NHS App.
 
     ## API status and roadmap
     This API is in [alpha](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
     - we are in the early stages of prototyping and may make extensive breaking changes based on developer feedback
     - we can't guarantee availability or performance
+
+    To see our roadmap, or to suggest, comment or vote on features for this API, see our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/?order=popular&filter=allexceptdone&tag=nhs-app-api).
     
     If you have any queries, please [contact us](https://digital.nhs.uk/developer/help-and-support).
 
@@ -26,7 +29,7 @@ info:
     This API is [RESTful](https://digital.nhs.uk/developer/guides-and-documentation/api-technologies-at-nhs-digital#basic-rest).
 
     ## Network access
-    This API is available on the internet.
+    This API is available on the internet, and, indirectly, on the [Health and Social Care Network (HSCN)](https://digital.nhs.uk/services/health-and-social-care-network).
     
     For more details see [Network access for APIs](https://digital.nhs.uk/developer/guides-and-documentation/network-access-for-apis).
     
@@ -39,32 +42,38 @@ info:
     We are considering transitioning to using the [OAuth 2.0 signed JWT authentication pattern](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication) to authorise the calling system.
 
     ## Environments and testing
+    | API Environment      | NHS Login Environment | Base URL                                    |
+    | -------------------- | --------------------- | ------------------------------------------- |
+    | Development          | Sandpit               | `https://dev.api.service.nhs.uk/nhs-app/`   |
+    | Integration Testing  | AOS                   | `https://int.api.service.nhs.uk/nhs-app/`   |
+    | Production           | Production            | `https://api.service.nhs.uk/nhs-app/`       |
 
-    | Environment       | Base URL                                                       |
-    | ----------------- | -------------------------------------------------------------- |
-    | Integration test  | `https://int.api.service.nhs.uk/nhs-app/`                      |
-    | Production        | `https://api.service.nhs.uk/nhs-app/`                          |
+    ### Development
+    Our development environment:
+    * includes authorisation
+    * is for initial development and [integration testing](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing)
+    * points to the Onboarding Sandpit NHS App environment, which in turn is using the NHS Login Sandpit environment
 
     ### Integration testing
     Our [integration test environment](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing):
-    * is for formal integration testing
-    * is stateful, so persists updates
     * includes authorisation
-        
-    Our integration test environment is currently pointing to the Onboarding Sandpit NHS App environment, which in turn is using the Sandpit environment of NHS Login.
-
+    * is for formal release testing and assurance when onboarding with NHS Login
+    * points to the Onboarding AOS NHS App environment, which in turn is using the NHS Login AOS environment
+    
     For more details see [integration testing with our RESTful APIs](https://digital.nhs.uk/developer/guides-and-documentation/testing#integration-testing-with-our-restful-apis).
 
     ## Onboarding
     You need to get your software approved by us before it can go live with this API. We call this onboarding. The onboarding process can sometimes be quite long, so it’s worth planning well ahead.
 
-    To onboard for this API, please get in touch with the onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net) .
+    To onboard for this API, please get in touch with the NHS App onboarding team at [app.onboarding@nhs.net](mailto:app.onboarding@nhs.net) .
 
   contact:
     name: NHS App API Support
     url: 'https://digital.nhs.uk/developer/help-and-support'
     email: app.onboarding@nhs.net
 servers:
+  - url: 'https://dev.api.service.nhs.uk/nhs-app'
+    description: Development environment.
   - url: 'https://int.api.service.nhs.uk/nhs-app'
     description: Integration test environment.
   - url: 'https://api.service.nhs.uk/nhs-app'
@@ -81,11 +90,11 @@ paths:
       operationId: create-communication
       description: |
         ## Overview
-        Use this endpoint to request that a communication be sent to one or more patients.
+        Use this endpoint to send a communication to one or more NHS App users.
         
-        Currently this endpoint can be used to send In-App Messages that appear within the NHS App. We intend to additionally offer functionality to send native Apple and Android Push Notifications in the near future.
+        Currently you can send in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications in the near future.
         
-        Recipients can currently be specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
+        Recipients are specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
       requestBody:
         required: true
         content:
@@ -98,7 +107,7 @@ paths:
         - communication
       responses:
         '201':
-          description: Indicates that the request has been successfully received by the server. The request to send the communication has been enqueued.
+          description: Request successfully received by the server and queued for sending to recipients.
           headers:
             Location:
               schema:
@@ -108,7 +117,7 @@ paths:
             X-Correlation-ID:
               schema:
                 type: string
-              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
             application/json:
               schema:
@@ -118,13 +127,15 @@ paths:
                     type: string
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
+              example:
+                $ref: components/examples/responses/communication/201success.json
         '400':
-          description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error.
+          description: There is an error in your request.
           headers:
             X-Correlation-ID:
               schema:
                 type: string
-              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
             application/json:
               schema:
@@ -140,13 +151,30 @@ paths:
                       type: string
                       description: A description of the reason why the source payload has failed validation.
                       example: "Specified values are invalid: '2981615972','3846131965'"
+              examples:
+                body-too-long:
+                  summary: App message body text exceeds maximum length
+                  value:
+                    $ref: components/examples/responses/communication/400senderTooLong.json
+                no-recipients:
+                  summary: No recipients have been specified
+                  value:
+                    $ref: components/examples/responses/communication/400noRecipients.json
+                invalid-nhs-numbers:
+                  summary: Some recipient NHS numbers are invalid
+                  value:
+                    $ref: components/examples/responses/communication/400invalidNhsNumbers.json
+                sender-missing-and-campaign-id-too-long:
+                  summary: Multiple issues - sender name is missing and campaign ID exceed maximum length
+                  value:
+                    $ref: components/examples/responses/communication/400multipleIssues.json
         '401':
-          description: Indicates that the request has not been enqueued because it lacks valid authentication credentials. This may be due to a missing or invalid X-Api-Key header.
+          description: Authorisation issue, for example a missing or invalid X-Api-Key header.
           headers:
             X-Correlation-ID:
               schema:
                 type: string
-              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
             application/json:
               schema:
@@ -164,13 +192,22 @@ paths:
                           errorcode:
                             type: string
                             example: "oauth.v2.InvalidApiKey"
+              examples:
+                invalid-api-key:
+                  summary: Invalid API key
+                  value:
+                    $ref: components/examples/responses/communication/401invalidApiKey.json
+                invalid-api-key-for-resource:
+                  summary: Invalid API key for given resource (valid API key, but not enabled for this API)
+                  value:
+                    $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
         '403':
-          description: Indicates that the request has not been enqueued because it requires functionality to which the client App is not entitled. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
+          description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
           headers:
             X-Correlation-ID:
               schema:
                 type: string
-              description: If an X-Correlation-ID was specified in the request, this will be mirrored in the response.
+              description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
 components:
   parameters:
     CorrelationId:
@@ -178,11 +215,11 @@ components:
       name: X-Correlation-ID
       required: false
       description: |
-        An identifier can be created when making a request, this will assist with any problems that may occur and should be included when an issue is raised with the helpdesk.
+        A unique message identifier. We use this to trace the message if you raise an issue with our helpdesk.
         
-        If provided, this must be a GUID represented as 32 hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12,
+        If provided, this must be a GUID represented as 32 hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12.
 
-        This will be mirrored back in the response headers.
+        This is mirrored back in the response headers.
       schema:
         type: string
         example: b5bc6879-103e-4a78-975e-87e815c5da58
@@ -191,7 +228,7 @@ components:
       name: X-Api-Key
       required: true
       description: |
-        An API Key used to authenticate the calling application. For more details see [Application-restricted RESTful APIs - API key authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-api-key-authentication). If this key is not supplied, or does not grant access to this API, a 401 Unauthorized response will be returned.
+        An API Key used to authenticate the calling application. For more details see [Application-restricted RESTful APIs - API key authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-api-key-authentication). If this key is not supplied, or does not grant access to this API, a 401 Unauthorized response is returned.
       schema:
         type: string
         example: AHkYeqh8N1yrnKGb108puMFUdmxnATkS
