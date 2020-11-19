@@ -30,6 +30,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? Documents { get; set; }
 
+        public bool? SupportsLinkedProfiles { get; set; }
+
         public Im1Messaging Im1Messaging { get; set; }
 
         public Journeys Clone() => new Journeys
@@ -46,6 +48,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             UserInfo = UserInfo,
             SilverIntegrations = SilverIntegrations?.Clone(),
             Documents = Documents,
+            SupportsLinkedProfiles = SupportsLinkedProfiles,
             Im1Messaging = Im1Messaging?.Clone(),
         };
 
@@ -110,6 +113,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             if (other.Documents.HasValue)
             {
                 Documents = other.Documents;
+            }
+
+            if (other.SupportsLinkedProfiles.HasValue)
+            {
+                SupportsLinkedProfiles = other.SupportsLinkedProfiles;
             }
 
             if (other.SilverIntegrations != null)

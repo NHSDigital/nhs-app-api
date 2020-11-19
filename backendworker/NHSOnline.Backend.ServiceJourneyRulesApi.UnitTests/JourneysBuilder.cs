@@ -156,6 +156,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder SupportsLinkedProfiles(bool? supportsLinkedProfiles)
+        {
+            _journeys.SupportsLinkedProfiles = supportsLinkedProfiles;
+            return this;
+        }
+
         public JourneysBuilder Im1MessagingEnabled(bool? isEnabled,
             bool? canDeleteMessages, bool? canUpdateReadStatus, bool? requiresDetailsRequest,
             bool? sendMessageSubject)

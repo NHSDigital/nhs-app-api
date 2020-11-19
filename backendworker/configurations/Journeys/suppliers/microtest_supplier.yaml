@@ -1,7 +1,5 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  supplier: "vision"
+  supplier: "microtest"
 journeys:
-  appointments:
-    provider: im1
   supportsLinkedProfiles: false

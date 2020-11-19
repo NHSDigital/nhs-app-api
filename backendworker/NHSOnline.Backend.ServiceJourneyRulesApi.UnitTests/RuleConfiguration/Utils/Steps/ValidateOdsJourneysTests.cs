@@ -104,6 +104,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .TestResults(TestResultsProvider.pkb))
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
+                            .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, true, true,
                                 true, true)
                             .WithSupplier(Supplier.Emis)
@@ -133,6 +134,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(false)
+                            .SupportsLinkedProfiles(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
                             .WithSupplier(Supplier.Tpp)
@@ -162,6 +164,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(true)
+                            .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(
                                 true,
                                 false,
@@ -213,6 +216,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(true)
+                            .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, false,
                                 false, false, false)
                             .WithSupplier(Supplier.Microtest)
@@ -242,6 +246,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .TestResults())
                             .DocumentsEnabled(false)
+                            .SupportsLinkedProfiles(false)
                             .Im1MessagingEnabled(false, false, false,
                                 false, false)
                             .WithSupplier(Supplier.Emis)
@@ -272,6 +277,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .TestResults())
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
+                            .SupportsLinkedProfiles(true)
                             .Im1MessagingEnabled(true, true, true,
                                 true, true)
                             .WithSupplier(Supplier.Tpp)
@@ -507,6 +513,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SecondaryAppointments()
                     .TestResults())
                 .DocumentsEnabled(true)
+                .SupportsLinkedProfiles(true)
                 .Im1MessagingEnabled(true,
                     true,
                     true,

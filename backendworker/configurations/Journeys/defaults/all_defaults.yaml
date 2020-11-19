@@ -35,3 +35,4 @@ journeys:
     canUpdateReadStatus: false
     requiresDetailsRequest: false
     sendMessageSubject: false
+  supportsLinkedProfiles: true

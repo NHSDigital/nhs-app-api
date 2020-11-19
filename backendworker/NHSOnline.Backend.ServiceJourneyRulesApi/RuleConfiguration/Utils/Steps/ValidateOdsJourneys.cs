@@ -79,6 +79,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.Messaging.HasValue, "journeys.Messaging")
                 .Add(journeys => journeys.UserInfo.HasValue, "journeys.UserInfo")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
+                .Add(journeys => journeys.SupportsLinkedProfiles.HasValue, "journeys.SupportsLinkedProfiles")
                 .Add((odsCode, journeys) => journeys.Supplier != Supplier.Unknown || odsCode == Constants.OdsCode.None,
                     "journeys.Supplier");
 

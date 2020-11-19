@@ -324,6 +324,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"userInfo\": \"false\"", DisplayName = "Valid configuration: userInfo = false")]
         [DataRow("\"documents\": \"true\"", DisplayName = "Valid configuration: documents = true")]
         [DataRow("\"documents\": \"false\"", DisplayName = "Valid configuration:. documents = false")]
+        [DataRow("\"supportsLinkedProfiles\": \"true\"", DisplayName = "Valid configuration: supportsLinkedProfiles = true")]
+        [DataRow("\"supportsLinkedProfiles\": \"false\"", DisplayName = "Valid configuration:. supportsLinkedProfiles = false")]
 
         [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\", \"sendMessageSubject\": \"true\"}",
             DisplayName = "Valid all im1messaging implementations enabled journey")]
@@ -394,6 +396,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.requiresDetailsRequest", true)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"requiresDetailsRequest\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.sendMessageSubject", true)]
+        [DataRow("supportsLinkedProfiles", "\"\"", "NotInEnumeration: #/journeys.supportsLinkedProfiles", false)]
+        [DataRow("supportsLinkedProfiles", "\"test\"", "NotInEnumeration: #/journeys.supportsLinkedProfiles", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

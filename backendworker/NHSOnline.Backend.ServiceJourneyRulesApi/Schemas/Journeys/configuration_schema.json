@@ -330,6 +330,7 @@
         "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision", "Microtest" ] },
         "userInfo": { "enum": ["true", "false"]  },
         "documents": { "enum": ["true", "false"]  },
+        "supportsLinkedProfiles": { "enum":  ["true", "false"] },
         "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" }
       },
       "anyOf": [
@@ -371,6 +372,9 @@
         },
         {
           "required": [ "documents" ]
+        },
+        {
+          "required": [ "supportsLinkedProfiles" ]
         },
         {
           "required": [ "im1Messaging" ]
