@@ -1,51 +1,50 @@
-﻿using NHSOnline.Backend.Auditing;
+using System.Threading.Tasks;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.OrganDonation;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
-    public class OrganDonationRegistrationUpdateAuditingVisitor : IOrganDonationRegistrationResultVisitor<object>
+    public class OrganDonationRegistrationUpdateAuditingVisitor : IOrganDonationRegistrationResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
         private const string AuditType = AuditingOperations.OrganDonationUpdateAuditTypeResponse;
 
-        public OrganDonationRegistrationUpdateAuditingVisitor(IAuditor auditor)
+        public OrganDonationRegistrationUpdateAuditingVisitor(IAuditor auditor, IMetricLogger metricLogger,
+            P9UserSession userSession)
         {
             _auditor = auditor;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
         
-        public object Visit(OrganDonationRegistrationResult.SuccessfullyRegistered result)
+        public async Task Visit(OrganDonationRegistrationResult.SuccessfullyRegistered result)
         {
-            _auditor.Audit(AuditType, "The organ donation decision has been successfully updated");
-
-            return null;
+            await _auditor.Audit(AuditType, "The organ donation decision has been successfully updated");
+            await _metricLogger.OrganDonationUpdateRegistration(new OrganDonationData(_userSession.Key));
         }
         
-        public object Visit(OrganDonationRegistrationResult.SystemError result)
+        public async Task Visit(OrganDonationRegistrationResult.SystemError result)
         {
-            _auditor.Audit(AuditType, "There was an issue registering the organ donation decision update");
-
-            return null;
+            await _auditor.Audit(AuditType, "There was an issue registering the organ donation decision update");
         }
 
-        public object Visit(OrganDonationRegistrationResult.UpstreamError result)
+        public async Task Visit(OrganDonationRegistrationResult.UpstreamError result)
         {
-            _auditor.Audit(AuditType, "There was an upstream error when registering the organ donation decision update");
-
-            return null;
+            await _auditor.Audit(AuditType, "There was an upstream error when registering the organ donation decision update");
         }
 
-        public object Visit(OrganDonationRegistrationResult.Timeout result)
+        public async Task Visit(OrganDonationRegistrationResult.Timeout result)
         {
-            _auditor.Audit(AuditType, "The organ donation registration update system took too long to respond");
-
-            return null;
+            await _auditor.Audit(AuditType, "The organ donation registration update system took too long to respond");
         }
         
-        public object Visit(OrganDonationRegistrationResult.BadRequest result)
+        public async Task Visit(OrganDonationRegistrationResult.BadRequest result)
         {
-            _auditor.Audit(AuditType, "The organ donation update registration request failed validation");
-
-            return null;
+            await _auditor.Audit(AuditType, "The organ donation update registration request failed validation");
         }
     }
 }

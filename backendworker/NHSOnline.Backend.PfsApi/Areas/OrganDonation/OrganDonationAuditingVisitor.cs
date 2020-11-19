@@ -2,7 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.OrganDonation;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
@@ -10,13 +12,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<OrganDonationController> _logger;
-        
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
+
         private const string AuditType = AuditingOperations.GetOrganDonationAuditTypeResponse;
 
-        public OrganDonationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger)
+        public OrganDonationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger,
+            IMetricLogger metricLogger, P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
 
         public async Task Visit(OrganDonationResult.NewRegistration result)
@@ -24,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 await _auditor.Audit(AuditType, "A default organ donation registration has been generated");
+                await _metricLogger.OrganDonationGetRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
             {
@@ -36,6 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 await _auditor.Audit(AuditType, "An existing organ donation registration been found");
+                await _metricLogger.OrganDonationGetRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
             {

@@ -20,6 +20,14 @@ namespace NHSOnline.Backend.Metrics
 
         Task NotificationsDisabled();
 
+        Task OrganDonationWithdrawRegistration(OrganDonationData data);
+
+        Task OrganDonationGetRegistration(OrganDonationData data);
+
+        Task OrganDonationCreateRegistration(OrganDonationData data);
+
+        Task OrganDonationUpdateRegistration(OrganDonationData data);
+
         Task NotificationsPrompt(NotificationsPromptData data);
 
         Task SilverIntegrationJumpOff(SilverIntegrationData data);

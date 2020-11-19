@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
@@ -21,6 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         private readonly ILogger<OrganDonationController> _logger;
         private readonly IAuditor _auditor;
         private readonly IOrganDonationValidationService _validator;
+        private readonly IMetricLogger _metricLogger;
         private readonly IOrganDonationService _organDonationService;
         private readonly IGpSystemFactory _gpSystemFactory;
 
@@ -29,12 +31,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             IGpSystemFactory gpSystemFactory,
             IOrganDonationService organDonationService,
             IAuditor auditor, 
-            IOrganDonationValidationService validator
+            IOrganDonationValidationService validator,
+            IMetricLogger metricLogger
         )
         {
             _logger = logger;
             _auditor = auditor;
             _validator = validator;
+            _metricLogger = metricLogger;
             _organDonationService = organDonationService;
             _gpSystemFactory = gpSystemFactory;
         }
@@ -60,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 var result = await _organDonationService.GetOrganDonation(demographicsResult, userSession);
 
-                await result.Accept(new OrganDonationAuditingVisitor(_auditor, _logger));
+                await result.Accept(new OrganDonationAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
                 return result.Accept(new OrganDonationResultVisitor());
             }
             finally
@@ -87,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 var result = await Register(model, userSession);
 
-                await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger));
+                await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
                 return result.Accept(new OrganDonationRegistrationVisitor());
             }
             finally
@@ -114,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 
                 var result = await Update(model, userSession);
 
-                result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor));
+                await result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor, _metricLogger, userSession));
                 return result.Accept(new OrganDonationRegistrationUpdateVisitor());
             }
             finally
@@ -136,7 +140,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 
                 var result = await Withdraw(model, userSession);
 
-                result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor));
+                await result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor, _metricLogger, userSession));
 
                 return result.Accept(new OrganDonationWithdrawResultVisitor());
             }

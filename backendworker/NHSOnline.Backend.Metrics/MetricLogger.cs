@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Metrics
 
         public MetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
 
-        public Task Login(LoginData data) => CreateMetricLog().With(data).WriteMetricLog();
+        public Task Login(LoginData data) => WriteMetricLog(data);
 
         public Task UpliftStarted() => WriteMetricLog();
 
@@ -22,15 +22,28 @@ namespace NHSOnline.Backend.Metrics
 
         public Task TermsAndConditionsInitialConsent() => WriteMetricLog();
 
-        public Task MessageRead(MessageReadData data) => CreateMetricLog().With(data).WriteMetricLog();
+        public Task MessageRead(MessageReadData data) => WriteMetricLog(data);
 
         public Task NotificationsEnabled() => WriteMetricLog();
 
         public Task NotificationsDisabled() => WriteMetricLog();
 
-        public Task NotificationsPrompt(NotificationsPromptData data) => CreateMetricLog().With(data).WriteMetricLog();
+        public Task NotificationsPrompt(NotificationsPromptData data) => WriteMetricLog(data);
 
-        public Task SilverIntegrationJumpOff(SilverIntegrationData data) => CreateMetricLog().With(data).WriteMetricLog();
+        public Task OrganDonationWithdrawRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationGetRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationCreateRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task OrganDonationUpdateRegistration(OrganDonationData data) => WriteMetricLog(data);
+
+        public Task SilverIntegrationJumpOff(SilverIntegrationData data) => WriteMetricLog(data);
+
+        private Task WriteMetricLog(IMetricData data, [CallerMemberName] string action = "")
+        {
+            return CreateMetricLog(action).With(data).WriteMetricLog();
+        }
 
         private Task WriteMetricLog([CallerMemberName] string action = "")
         {

@@ -2,7 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.OrganDonation;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
@@ -10,13 +12,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<OrganDonationController> _logger;
-        
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
+
         private const string AuditType = AuditingOperations.OrganDonationRegistrationAuditTypeResponse;
 
-        public OrganDonationRegistrationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger)
+        public OrganDonationRegistrationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger,
+            IMetricLogger metricLogger, P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
         
         public async Task Visit(OrganDonationRegistrationResult.SuccessfullyRegistered result)
@@ -24,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 await _auditor.Audit(AuditType, "The organ donation decision has been successfully registered");
+                await _metricLogger.OrganDonationCreateRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
             {

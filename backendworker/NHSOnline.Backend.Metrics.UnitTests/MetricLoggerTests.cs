@@ -155,6 +155,74 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             splitConsoleMessage.Should().Contain("UserAgent=userAgent_1234");
         }
 
+        [TestMethod]
+        public async Task OrganDonationGetRegistration_LogsOrganDonationData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new OrganDonationData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.OrganDonationGetRegistration(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
+        public async Task OrganDonationCreateRegistration_LogsOrganDonationData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new OrganDonationData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.OrganDonationCreateRegistration(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
+        public async Task OrganDonationUpdateRegistration_LogsOrganDonationData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new OrganDonationData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.OrganDonationUpdateRegistration(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
+        public async Task OrganDonationWithdrawRegistration_LogsOrganDonationData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new OrganDonationData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.OrganDonationWithdrawRegistration(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
         private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
@@ -184,6 +252,12 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
                 var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
                 yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };
+
+                var organDonationData = new OrganDonationData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationGetRegistration(organDonationData)), "OrganDonationGetRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationCreateRegistration(organDonationData)), "OrganDonationCreateRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationUpdateRegistration(organDonationData)), "OrganDonationUpdateRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationWithdrawRegistration(organDonationData)), "OrganDonationWithdrawRegistration" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }

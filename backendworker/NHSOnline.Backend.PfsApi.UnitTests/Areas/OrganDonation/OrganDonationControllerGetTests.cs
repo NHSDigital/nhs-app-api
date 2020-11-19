@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support;
@@ -39,7 +40,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(),
+                new EmisUserSession(), "im1token");
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
 
@@ -67,7 +69,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 _mockGpSystemFactory.Object,
                 _mockOrganDonationService.Object,
                 _mockAuditor.Object,
-                new Mock<IOrganDonationValidationService>().Object);
+                new Mock<IOrganDonationValidationService>().Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]

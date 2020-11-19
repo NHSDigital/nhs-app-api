@@ -10,6 +10,7 @@ using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.PfsApi.OrganDonation;
@@ -49,7 +50,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 new Mock<IGpSystemFactory>().Object,
                 _mockOrganDonationService.Object,
                 _mockAuditor.Object,
-                _mockValidator.Object);
+                _mockValidator.Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]
