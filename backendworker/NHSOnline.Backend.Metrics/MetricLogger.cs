@@ -40,6 +40,14 @@ namespace NHSOnline.Backend.Metrics
 
         public Task SilverIntegrationJumpOff(SilverIntegrationData data) => WriteMetricLog(data);
 
+        public Task MedicalRecordView(MedicalRecordData data) => WriteMetricLog(data);
+
+        public Task NominatedPharmacyCreate(NominatedPharmacyData data) => WriteMetricLog(data);
+
+        public Task NominatedPharmacyUpdate(NominatedPharmacyData data) => WriteMetricLog(data);
+
+        public Task RepeatPrescriptionOrder(RepeatPrescriptionData data) => WriteMetricLog(data);
+
         private Task WriteMetricLog(IMetricData data, [CallerMemberName] string action = "")
         {
             return CreateMetricLog(action).With(data).WriteMetricLog();
@@ -50,7 +58,7 @@ namespace NHSOnline.Backend.Metrics
             return CreateMetricLog(action).WriteMetricLog();
         }
 
-        private MetricLogBuilder CreateMetricLog([CallerMemberName] string action = "")
+        private MetricLogBuilder CreateMetricLog(string action)
         {
             return MetricLogBuilder.Create(_metricContext, action).With(IdentifyingMetricData());
         }

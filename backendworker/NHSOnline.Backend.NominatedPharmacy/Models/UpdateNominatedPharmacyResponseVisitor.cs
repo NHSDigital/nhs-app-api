@@ -5,7 +5,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 {
     public class UpdateNominatedPharmacyResponseVisitor  : IUpdateNominatedPharmacyResponseVisitor<IActionResult>
     {
-        public IActionResult Visit(UpdateNominatedPharmacyResponse.Success result)
+        public IActionResult Visit(UpdateNominatedPharmacyResponse.SuccessfullyUpdated result)
+        {
+            return new OkResult();
+        }
+
+        public IActionResult Visit(UpdateNominatedPharmacyResponse.SuccessfullyCreated result)
         {
             return new OkResult();
         }

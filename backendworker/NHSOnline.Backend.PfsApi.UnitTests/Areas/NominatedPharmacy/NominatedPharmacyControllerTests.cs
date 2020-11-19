@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
@@ -71,7 +72,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 _mockNominatedPharmacyGatewayUpdateService.Object,
                 _auditor.Object,
                 _configMock.Object,
-                _mockGpSearchService.Object);
+                _mockGpSearchService.Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]
@@ -397,11 +399,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         }
 
         [TestMethod]
-        public async Task Update_ReturnsResultFromService_WhenServiceReturnsSuccessfully()
+        public async Task Update_ReturnsResultFromService_WhenServiceReturnsSuccessfullyUpdated()
         {
             // Arrange
             var nhsNumber = _userSession.NhsNumber;
-            var updatePharmacyResult = new UpdateNominatedPharmacyResponse.Success(OdsCode, UpdatedOdsCode);
+            var updatePharmacyResult = new UpdateNominatedPharmacyResponse.SuccessfullyUpdated(OdsCode, UpdatedOdsCode);
+
+            _mockNominatedPharmacyGatewayUpdateService
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession))
+                .Returns(Task.FromResult((UpdateNominatedPharmacyResponse)updatePharmacyResult))
+                .Verifiable();
+
+            var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
+            {
+                OdsCode = UpdatedOdsCode
+            };
+
+            // Act
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
+
+            // Assert
+            _mockNominatedPharmacyGatewayUpdateService.Verify();
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be((int)HttpStatusCode.OK);
+
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public async Task Update_ReturnsResultFromService_WhenServiceReturnsSuccessfullyCreated()
+        {
+            // Arrange
+            var nhsNumber = _userSession.NhsNumber;
+            var updatePharmacyResult = new UpdateNominatedPharmacyResponse.SuccessfullyCreated(UpdatedOdsCode);
 
             _mockNominatedPharmacyGatewayUpdateService
                 .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession))

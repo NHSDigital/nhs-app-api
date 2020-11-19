@@ -9,6 +9,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
@@ -28,19 +29,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly IAuditor _auditor;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
+        private readonly IMetricLogger _metricLogger;
 
         public PrescriptionsController(
             ConfigurationSettings settings,
             ILogger<PrescriptionsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
-            IErrorReferenceGenerator errorReferenceGenerator)
+            IErrorReferenceGenerator errorReferenceGenerator,
+            IMetricLogger metricLogger)
         {
             _settings = settings;
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
             _errorReferenceGenerator = errorReferenceGenerator;
+            _metricLogger = metricLogger;
         }
 
         [HttpGet]
@@ -90,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
                 var result = await OrderPrescription(repeatPrescriptionRequest, gpUserSession, patientId);
 
-                await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));
+                await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds, _metricLogger, userSession));
                 return result.Accept(new OrderPrescriptionResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally

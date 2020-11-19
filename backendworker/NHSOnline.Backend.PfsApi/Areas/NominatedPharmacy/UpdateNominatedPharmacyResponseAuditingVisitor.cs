@@ -2,7 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -10,26 +12,50 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
     {
         private readonly IAuditor _auditor;
          private readonly ILogger<NominatedPharmacyController> _logger;
+         private readonly IMetricLogger _metricLogger;
+         private readonly P9UserSession _userSession;
 
-        private const string AuditType = AuditingOperations.UpdatedNominatedPharmacyResponse;
+         private const string AuditType = AuditingOperations.UpdatedNominatedPharmacyResponse;
 
-        public UpdateNominatedPharmacyResponseAuditingVisitor(IAuditor auditor, ILogger<NominatedPharmacyController> logger)
+        public UpdateNominatedPharmacyResponseAuditingVisitor(IAuditor auditor,
+            ILogger<NominatedPharmacyController> logger,
+            IMetricLogger metricLogger,
+            P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
 
-        public async Task Visit(UpdateNominatedPharmacyResponse.Success result)
+        public async Task Visit(UpdateNominatedPharmacyResponse.SuccessfullyUpdated result)
         {
             try
             {
-                await _auditor.Audit(AuditType, 
+                await _metricLogger.NominatedPharmacyUpdate(new NominatedPharmacyData(_userSession.Key));
+
+                await _auditor.Audit(AuditType,
                     $"Successfully updated nominated pharmacy from { result.OldOdsCode } to { result.NewOdsCode }");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.Success)}");
-            }        
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.SuccessfullyUpdated)}");
+            }
+        }
+
+        public async Task Visit(UpdateNominatedPharmacyResponse.SuccessfullyCreated result)
+        {
+            try
+            {
+                await _metricLogger.NominatedPharmacyCreate(new NominatedPharmacyData(_userSession.Key));
+
+                await _auditor.Audit(AuditType,
+                    $"Successfully created new nominated pharmacy registration to { result.NewOdsCode }");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.SuccessfullyUpdated)}");
+            }
         }
 
         public async Task Visit(UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure result)

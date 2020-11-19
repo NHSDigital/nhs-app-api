@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
@@ -89,7 +90,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 _mockLogger.Object,
                 _mockGpSystemFactory.Object,
                 _mockAuditor.Object,
-                _mockErrorReferenceGenerator.Object);
+                _mockErrorReferenceGenerator.Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]

@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         }
 
         [TestMethod]
-        public async Task Update_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        public async Task Update_ReturnsSuccessfullyUpdatedResult_WhenServiceReturnsSuccessfully_WithUpdatedPharmacyRegistration()
         {
             // Arrange
             var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult.Success(
@@ -83,7 +83,56 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                     npu.HasExistingNominatedPharmacy &&
                     string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal) &&
                     string.Equals(npu.ObjectId, ObjectId, StringComparison.Ordinal))), Times.Once);
-            result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.Success>();
+
+            var updateResponse = result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.SuccessfullyUpdated>().Subject;
+            updateResponse.OldOdsCode.Should().Be(OdsCode);
+            updateResponse.NewOdsCode.Should().Be(UpdatedOdsCode);
+        }
+
+        [TestMethod]
+        public async Task Update_ReturnsSuccessfullyCreatedResult_WhenServiceReturnsSuccessfully_WithNewPharmacyRegistration()
+        {
+            // Arrange
+            var noNominatedPharmacyBeforeUpdate = new GetNominatedPharmacyResult.Success(
+                new GetNominatedPharmacyResponse(HttpStatusCode.OK, string.Empty, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3, ObjectId));
+
+            var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult.Success(
+                new GetNominatedPharmacyResponse(HttpStatusCode.OK, UpdatedOdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyTypeP3, ObjectId));
+
+            _mockNominatedPharmacyService
+                .SetupSequence(x => x.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession))
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(noNominatedPharmacyBeforeUpdate)) // first call
+                .Returns(Task.FromResult<GetNominatedPharmacyResult>(nominatedPharmacyResultAfterUpdate)); // second call
+
+            var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.Accepted);
+
+            _mockNominatedPharmacyService
+                .Setup(x => x.UpdateNominatedPharmacy(It.Is<NominatedPharmacyUpdate>(
+                    npu =>
+                    string.Equals(npu.NhsNumber, NhsNumber, StringComparison.Ordinal) &&
+                    string.Equals(npu.PertinentSerialChangeNumber, _pertinentSerialChangeNumber, StringComparison.Ordinal) &&
+                    !npu.HasExistingNominatedPharmacy &&
+                    string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal) &&
+                    string.Equals(npu.ObjectId, ObjectId, StringComparison.Ordinal))))
+                .Returns(Task.FromResult(updateNominatedPharmacyResult))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(NhsNumber, UpdatedOdsCode, _userSession.CitizenIdUserSession);
+
+            // Assert
+            _mockNominatedPharmacyService.Verify();
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Exactly(2));
+            _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(It.Is<NominatedPharmacyUpdate>(
+                    npu =>
+                    string.Equals(npu.NhsNumber, NhsNumber, StringComparison.Ordinal) &&
+                    string.Equals(npu.PertinentSerialChangeNumber, _pertinentSerialChangeNumber, StringComparison.Ordinal) &&
+                    !npu.HasExistingNominatedPharmacy &&
+                    string.Equals(npu.UpdatedOdsCode, UpdatedOdsCode, StringComparison.Ordinal) &&
+                    string.Equals(npu.ObjectId, ObjectId, StringComparison.Ordinal))), Times.Once);
+
+            var updateResponse = result.Should().BeAssignableTo<UpdateNominatedPharmacyResponse.SuccessfullyCreated>().Subject;
+            updateResponse.NewOdsCode.Should().Be(UpdatedOdsCode);
         }
 
         [TestMethod]

@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.Metrics
 {
     internal class MetricLogBuilder
     {
+        internal const string SessionId = "SessionId";
         private const string ActionLabel = "Action";
         private const string OdsCodeLabel = "OdsCode";
         private const string TimestampLabel = "Timestamp";

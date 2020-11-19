@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
@@ -12,20 +14,29 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IAuditor _auditor;
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly string _courseIds;
-        
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
+
         private const string AuditType = AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsResponse;
 
-        public OrderPrescriptionResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger, string courseIds)
+        public OrderPrescriptionResultAuditingVisitor(IAuditor auditor,
+            ILogger<PrescriptionsController> logger,
+            string courseIds,
+            IMetricLogger metricLogger,
+            P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
             _courseIds = courseIds;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
 
         public async Task Visit(OrderPrescriptionResult.Success result)
         {
             try
             {
+                await _metricLogger.RepeatPrescriptionOrder(new RepeatPrescriptionData(_userSession.Key));
                 await _auditor.Audit(AuditType, "Repeat prescription request successfully created with course ids: {0}", _courseIds);
             }
             catch (Exception e)

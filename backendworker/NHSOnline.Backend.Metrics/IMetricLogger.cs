@@ -31,5 +31,13 @@ namespace NHSOnline.Backend.Metrics
         Task NotificationsPrompt(NotificationsPromptData data);
 
         Task SilverIntegrationJumpOff(SilverIntegrationData data);
+
+        Task MedicalRecordView(MedicalRecordData data);
+
+        Task NominatedPharmacyCreate(NominatedPharmacyData data);
+
+        Task NominatedPharmacyUpdate(NominatedPharmacyData data);
+        
+        Task RepeatPrescriptionOrder(RepeatPrescriptionData data);
     }
 }

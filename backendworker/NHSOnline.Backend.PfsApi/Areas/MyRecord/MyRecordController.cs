@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -21,17 +22,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly ILogger<MyRecordController> _logger;
         private readonly IAuditor _auditor;
         private readonly IMyRecordMetadataLogger _myRecordMetadataLogger;
-        
+        private readonly IMetricLogger _metricLogger;
+
         public MyRecordController(
             ILogger<MyRecordController> logger,
             IGpSystemFactory gpSystemFactory, 
             IAuditor auditor,
-            IMyRecordMetadataLogger myRecordMetadataLogger)
+            IMyRecordMetadataLogger myRecordMetadataLogger,
+            IMetricLogger metricLogger)
         {
             _gpSystemFactory = gpSystemFactory;
             _logger = logger;
             _auditor = auditor;
             _myRecordMetadataLogger = myRecordMetadataLogger;
+            _metricLogger = metricLogger;
         }
 
         [HttpGet]
@@ -63,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
             
             // Audit result of attempt to view patient record
-            await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger));
+            await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
 
             LogMetadata(userSession, result);
             

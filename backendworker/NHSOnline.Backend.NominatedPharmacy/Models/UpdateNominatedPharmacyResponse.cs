@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Models
@@ -6,16 +6,30 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
     public abstract class UpdateNominatedPharmacyResponse
     {
         public abstract T Accept<T>(IUpdateNominatedPharmacyResponseVisitor<T> visitor);
-
         
-        public class Success : UpdateNominatedPharmacyResponse
+        public class SuccessfullyUpdated : UpdateNominatedPharmacyResponse
         {
             public string OldOdsCode { get; }
             public string NewOdsCode { get; }
-            
-            public Success(string oldOdsCode, string newOdsCode)
+
+            public SuccessfullyUpdated(string oldOdsCode, string newOdsCode)
             {
                 OldOdsCode = oldOdsCode;
+                NewOdsCode = newOdsCode;
+            }
+
+            public override T Accept<T>(IUpdateNominatedPharmacyResponseVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class SuccessfullyCreated : UpdateNominatedPharmacyResponse
+        {
+            public string NewOdsCode { get; }
+            
+            public SuccessfullyCreated(string newOdsCode)
+            {
                 NewOdsCode = newOdsCode;
             }
             

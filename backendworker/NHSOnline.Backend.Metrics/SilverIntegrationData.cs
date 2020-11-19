@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Metrics
 
         public IEnumerable<KeyValuePair<string, string>> ToKeyValuePairs()
         {
-            yield return new KeyValuePair<string, string>("SessionId", _sessionId);
+            yield return new KeyValuePair<string, string>(MetricLogBuilder.SessionId, _sessionId);
             yield return new KeyValuePair<string, string>("ProviderId", _providerId);
             yield return new KeyValuePair<string, string>("ProviderName", _providerName);
             yield return new KeyValuePair<string, string>("JumpOffId", _jumpOffId);

@@ -65,6 +65,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             _logger.LogInformation($"Successfully requested requested change of nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }");
+            
+            return await ConfirmSuccessOfUpdate(nhsNumber, updatedOdsCode, cidUserSession, result.PharmacyOdsCode);
+        }
+
+        private async Task<UpdateNominatedPharmacyResponse> ConfirmSuccessOfUpdate(string nhsNumber, string updatedOdsCode,
+            CitizenIdUserSession cidUserSession, string originalPharmacyOdsCode)
+        {
+            var isNewlyCreatedPharmacyRegistration = string.IsNullOrWhiteSpace(originalPharmacyOdsCode);
 
             // Update to Nominated Pharmacy in Spine is asynchronous. Allow a configurable delay.
             if (_config.ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds > 0)
@@ -76,24 +84,30 @@ namespace NHSOnline.Backend.NominatedPharmacy
             var confirmNominatedPharmacyUpdatedResult = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber, cidUserSession);
             var confirmUpdateResponse = confirmNominatedPharmacyUpdatedResult.GetNominatedPharmacyResponse;
 
-            if (!result.HttpStatusCode.IsSuccessStatusCode())
+            if (!confirmUpdateResponse.HttpStatusCode.IsSuccessStatusCode())
             {
-                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
-                return new UpdateNominatedPharmacyResponse.InternalServerError(result.HttpStatusCode);
+                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { confirmUpdateResponse.HttpStatusCode }");
+                return new UpdateNominatedPharmacyResponse.InternalServerError(confirmUpdateResponse.HttpStatusCode);
             }
 
             if (!string.Equals(updatedOdsCode, confirmUpdateResponse.PharmacyOdsCode, StringComparison.Ordinal))
             {
-                _logger.LogError($"Nominated pharmacy update of ods code from { result.PharmacyOdsCode } to { updatedOdsCode } was accepted  " +
+                _logger.LogError($"Nominated pharmacy update of ods code from { originalPharmacyOdsCode } to { updatedOdsCode } was accepted  " +
                                  "but call to get nominated pharmacy still returns the old ods code.");
 
-                return new UpdateNominatedPharmacyResponse.UpdatedButStillOldCode(result.PharmacyOdsCode, updatedOdsCode);
+                return new UpdateNominatedPharmacyResponse.UpdatedButStillOldCode(originalPharmacyOdsCode, updatedOdsCode);
             }
 
-            _logger.LogInformation($"Successfully updated nominated pharmacy from { result.PharmacyOdsCode } to { updatedOdsCode }");
-            return new UpdateNominatedPharmacyResponse.Success(result.PharmacyOdsCode, updatedOdsCode);
-        }
+            if (isNewlyCreatedPharmacyRegistration)
+            {
+                _logger.LogInformation($"Successfully updated nominated pharmacy from { originalPharmacyOdsCode } to { updatedOdsCode }");
+                return new UpdateNominatedPharmacyResponse.SuccessfullyCreated(updatedOdsCode);
+            }
 
+            _logger.LogInformation($"Successfully updated nominated pharmacy from { originalPharmacyOdsCode } to { updatedOdsCode }");
+            return new UpdateNominatedPharmacyResponse.SuccessfullyUpdated(originalPharmacyOdsCode, updatedOdsCode);
+        }
+        
         private bool NominatedPharmacyGetHasError(GetNominatedPharmacyResponse response, out StatusCodeResult errorResult)
         {
             if (!response.HttpStatusCode.IsSuccessStatusCode())

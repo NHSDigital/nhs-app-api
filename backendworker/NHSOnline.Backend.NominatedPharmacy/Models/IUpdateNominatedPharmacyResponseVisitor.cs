@@ -2,7 +2,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 {
     public interface IUpdateNominatedPharmacyResponseVisitor<out T>
     {
-        T Visit(UpdateNominatedPharmacyResponse.Success result);
+        T Visit(UpdateNominatedPharmacyResponse.SuccessfullyUpdated result);
+        T Visit(UpdateNominatedPharmacyResponse.SuccessfullyCreated result);
         T Visit(UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure result);
         T Visit(UpdateNominatedPharmacyResponse.InternalServerError result);
         T Visit(UpdateNominatedPharmacyResponse.BadGateway result);

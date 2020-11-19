@@ -156,6 +156,76 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         }
 
         [TestMethod]
+        public async Task MedicalRecordView_LogsMedicalRecordData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new MedicalRecordData("sessionId_1234", true, false);
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.MedicalRecordView(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+            splitConsoleMessage.Should().Contain("HasSummaryRecordAccess=True");
+            splitConsoleMessage.Should().Contain("HasDetailedRecordAccess=False");
+        }
+
+        [TestMethod]
+        public async Task NominatedPharmacyCreate_LogsNominatedPharmacyData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new NominatedPharmacyData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.NominatedPharmacyCreate(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
+        public async Task NominatedPharmacyUpdate_LogsNominatedPharmacyData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new NominatedPharmacyData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.NominatedPharmacyUpdate(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
+        public async Task RepeatPrescriptionOrder_LogsRepeatPrescriptionData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new RepeatPrescriptionData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.RepeatPrescriptionOrder(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
         public async Task OrganDonationGetRegistration_LogsOrganDonationData()
         {
             // Arrange
@@ -249,6 +319,16 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
                 yield return new object[] { Method(metricLogger => metricLogger.NotificationsEnabled()), "NotificationsEnabled" };
                 yield return new object[] { Method(metricLogger => metricLogger.NotificationsDisabled()), "NotificationsDisabled" };
+
+                var medicalRecordData = new MedicalRecordData("sessionId", true, true);
+                yield return new object[] { Method(metricLogger => metricLogger.MedicalRecordView(medicalRecordData)), "MedicalRecordView" };
+
+                var nominatedPharmacyData = new NominatedPharmacyData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.NominatedPharmacyCreate(nominatedPharmacyData)), "NominatedPharmacyCreate" };
+                yield return new object[] { Method(metricLogger => metricLogger.NominatedPharmacyUpdate(nominatedPharmacyData)), "NominatedPharmacyUpdate" };
+
+                var repeatPrescriptionData = new RepeatPrescriptionData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.RepeatPrescriptionOrder(repeatPrescriptionData)), "RepeatPrescriptionOrder" };
 
                 var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
                 yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };

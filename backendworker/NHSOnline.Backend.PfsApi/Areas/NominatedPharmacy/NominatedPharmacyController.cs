@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
@@ -34,6 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private readonly IAuditor _auditor;
         private readonly INominatedPharmacyConfigurationSettings _config;
         private readonly IGpSearchService _gpSearchService;
+        private readonly IMetricLogger _metricLogger;
 
         public NominatedPharmacyController(
             ILogger<NominatedPharmacyController> logger,
@@ -44,7 +46,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             INominatedPharmacyGatewayUpdateService nominatedPharmacyGatewayUpdateService,
             IAuditor auditor,
             INominatedPharmacyConfigurationSettings config,
-            IGpSearchService gpSearchService
+            IGpSearchService gpSearchService,
+            IMetricLogger metricLogger
            )
         {
             _logger = logger;
@@ -56,6 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _auditor = auditor;
             _config = config;
             _gpSearchService = gpSearchService;
+            _metricLogger = metricLogger;
         }
 
         [HttpGet]
@@ -89,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
             _logger.LogExit();
 
-            await result.Accept(new UpdateNominatedPharmacyResponseAuditingVisitor(_auditor, _logger));
+            await result.Accept(new UpdateNominatedPharmacyResponseAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
             return result.Accept(new UpdateNominatedPharmacyResponseVisitor());
         }
 
