@@ -203,7 +203,7 @@ stages:
     dependsOn:
       - web
       - backend
-    condition: and(succeeded(), or(variables['security.run.scans'], eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')))
+    condition: false
     jobs:
       - template: .azuredevops/templates/run-security-scan-job.yml
 
