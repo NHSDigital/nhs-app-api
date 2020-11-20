@@ -28,15 +28,13 @@ const mountComponent = ({
   };
 
   wrapper = mount(MessageDialog, { propsData, $store, methods });
+  wrapper.vm.$refs.messageDialogContainer = {
+    focus: jest.fn(),
+    setAttribute: jest.fn(),
+  };
 };
 
 describe('MessageDialog', () => {
-  const matchedElement = {
-    blur: jest.fn(),
-    setAttribute: jest.fn(),
-    focus: jest.fn(),
-  };
-
   beforeEach(() => {
     EventBus.$on.mockClear();
     EventBus.$off.mockClear();
@@ -80,26 +78,20 @@ describe('MessageDialog', () => {
   });
 
   describe('focusDialog', () => {
-    beforeEach(() => {
-      document.getElementById = jest.fn(() => matchedElement);
-    });
-
     it('will not focus the dialog if focusable is false', () => {
       mountComponent();
-
       wrapper.vm.focusDialog();
 
-      expect(matchedElement.focus).not.toHaveBeenCalled();
-      expect(matchedElement.setAttribute).not.toHaveBeenCalled();
+      expect(wrapper.vm.$refs.messageDialogContainer.focus).not.toHaveBeenCalled();
+      expect(wrapper.vm.$refs.messageDialogContainer.setAttribute).not.toHaveBeenCalled();
     });
 
     it('will focus the dialog if focusable is true', () => {
       mountComponent({ focusable: true });
-
       wrapper.vm.focusDialog();
 
-      expect(matchedElement.focus).toHaveBeenCalled();
-      expect(matchedElement.setAttribute).toHaveBeenCalled();
+      expect(wrapper.vm.$refs.messageDialogContainer.focus).toHaveBeenCalled();
+      expect(wrapper.vm.$refs.messageDialogContainer.setAttribute).toHaveBeenCalledWith('tabindex', '-1');
     });
   });
 });

@@ -1,5 +1,5 @@
 <template>
-  <div id="message-dialog" data-purpose="error-container"
+  <div id="message-dialog" ref="messageDialogContainer" data-purpose="error-container"
        :class="[mType,
                 ...extraClasses,
                 'nhsuk-width-container--full',
@@ -78,14 +78,8 @@ export default {
     },
     focusDialog() {
       if (this.focusable) {
-        const element = document.getElementById('message-dialog');
-
-        if (!element) {
-          return;
-        }
-
-        element.setAttribute('tabindex', '-1');
-        element.focus();
+        this.$refs.messageDialogContainer.setAttribute('tabindex', '-1');
+        this.$refs.messageDialogContainer.focus();
       }
     },
   },
