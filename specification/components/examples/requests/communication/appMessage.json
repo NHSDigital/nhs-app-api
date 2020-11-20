@@ -1,16 +1,13 @@
 {
-    "campaignId": "2020_covid_plasma_appeal",
-    "requestReference": "20201022_covid_appeal_16",
-    "channels": {
-      "appMessage": {
-        "sender": "NHS Blood and Transplant",
-        "body": "Have you had coronavirus (COVID-19)? \n\nThe NHS urgently needs blood plasma donations. It could save lives and be an important treatment during a second wave of infection.\n\nWe especially need men to donate. This includes men who have had coronavirus symptoms but no test.\n\nTo find out more about donating blood plasma and how to help, go to https://www.nhsbt.nhs.uk/who-can-donate-plasma"
-      }
-    },
-    "recipients": {
-      "nhsNumbers": [
-        "9903002157",
-        "9678304287"
-      ]
-    }
-  }
+	"campaignId": "optional campaign id",
+	"requestReference": "optional request reference",
+	"channels": {
+		"appMessage": {
+			"sender": "Onboarded Third Party",
+			"body": "You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here: https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments"
+		}
+	},
+	"recipients": {
+		"nhsNumbers": ["9903002157"]
+	}
+}

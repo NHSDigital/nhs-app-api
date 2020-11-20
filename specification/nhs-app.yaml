@@ -92,15 +92,26 @@ paths:
         ## Overview
         Use this endpoint to send a communication to one or more NHS App users.
         
-        Currently you can send in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications in the near future.
+        Currently you can send in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications by 08 December 2020.
         
         Recipients are specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
       requestBody:
         required: true
         content:
           application/json:
-            example:
-              $ref: components/examples/requests/communication/appMessage.json
+            examples:
+              app-message:
+                summary: Sending an in-app message only
+                value:
+                  $ref: components/examples/requests/communication/appMessage.json
+              push-notification:
+                summary: Sending a push notification only
+                value:
+                  $ref: components/examples/requests/communication/pushNotification.json
+              app-message-and-push-notification:
+                summary: Sending an in-app message together with an associated push notification
+                value:
+                  $ref: components/examples/requests/communication/appMessageAndPushNotification.json
             schema:
               $ref: components/schemas/communication.yaml      
       tags:

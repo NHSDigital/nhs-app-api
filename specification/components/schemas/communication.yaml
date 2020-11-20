@@ -7,32 +7,69 @@ properties:
     type: string
     description: Optional Campaign Identifier, used to group multiple communication requests for later analysis.
     maxLength: 50
-    example: "2020_covid_plasma_appeal"
+    example: "optional campaign id"
   requestReference:
     type: string
     description: Optional human-readable transaction reference to later identify this request.
     maxLength: 50
-    example: "20201022_covid_appeal_16"
+    example: "optional request reference"
   channels:
     type: object
-    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we only support sending in-app messages that appear within the NHS App. We intend to additionally offer native Apple and Android Push Notifications in the near future.
+    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we support sending in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications by 08 December 2020.
     properties:
       appMessage:
         type: object
         description: The communication content to appear as an in-app message.
+        required:
+          - sender
+          - body
         properties:
           sender:
             type: string
             description: The name to be displayed in the NHS App as the sender of the message. The NHS App user interface will group together messages sent from the same sender name into a single thread of messages.
             maxLength: 50
             pattern: must not match <(.|\n)*?>
-            example: NHS Blood and Transplant
+            example: Onboarded Third Party
           body:
             type: string
             description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
             maxLength: 1000
             pattern: must not match <(.|\n)*?>
-            example: Have you had coronavirus (COVID-19)? \nThe NHS urgently needs blood plasma donations. It could save lives and be an important treatment during a second wave of infection.\nWe especially need men to donate. This includes men who have had coronavirus symptoms but no test.\nTo find out more about donating blood plasma and how to help, go to https://www.nhsbt.nhs.uk/who-can-donate-plasma
+            example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
+      pushNotification:
+        type: object
+        description: |
+          The communication content to appear as a native Apple or Android push notification. 
+
+          Notifications must use unicode characters. 
+          
+          They must not contain:
+
+          * personally identifiable information (for example: the name of a user's doctor)
+          * sensitive information (for example: details about a health condition)
+          * links to external websites
+
+          Notifications can only link to pages and features within the NHS App.
+        required:
+          - title
+          - body
+        properties:
+          title:
+            type: string
+            description: The title to be displayed at the top of the push notification.
+            maxLength: 50
+            example: You have a new message
+          body:
+            type: string
+            description: The body text to be displayed in the push notification.
+            maxLength: 200
+            example: The message may contain something important.
+          url:
+            type: string
+            format: uri
+            description: The URL to a page within the NHS App to be opened when the notification is tapped. If this property is not specified, the App will open on the home screen.
+            maxLength: 1000
+            example: https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging
   recipients:
     type: object
     description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
