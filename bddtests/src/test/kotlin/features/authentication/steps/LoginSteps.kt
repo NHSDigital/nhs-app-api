@@ -11,6 +11,8 @@ import pages.loggedOut.LoginPage
 import pages.loggedOut.LoginStubPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
+import webdrivers.isAndroid
+import webdrivers.isIOS
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
 
@@ -46,6 +48,11 @@ open class LoginSteps {
     fun usingLoginWithNotificationOptions(
             patient: Patient) {
         stubbedLoginAndResetScripts(patient, false)
+
+        if (loginPage.driver.isIOS() || loginPage.driver.isAndroid()) {
+            return
+        }
+
         val executor = loginPage.driver as JavascriptExecutor
 
         Thread.sleep(SLEEP_TIME_FOR_PROMISE)
