@@ -85,7 +85,7 @@ parameters:
     default: false
 
   - name: uploadToAppStoreConnect
-    displayName: Upload iOS Client to Testflight
+    displayName: Upload iOS Client to AppStore Connect
     type: boolean
     default: false
 
