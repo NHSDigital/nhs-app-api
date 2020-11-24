@@ -538,7 +538,7 @@ knownservices_config: {
       "validateSession": true
     },
     "gncr": {
-      "url": "https://nhs-pep-glenr.enigmadev2.net",
+      "url": "https://pepfront.enigmahost.net",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
       "menuTab": "None",
