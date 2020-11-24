@@ -91,20 +91,26 @@ Add the following "VM options":
 -Dappium.platformName=ANDROID
 ```
 
-Add the following environment variables:
+Add the following environment variables (It is important to ensure all of these are present):
 
 | Name                          | Description                                                                                                       |
 | ------------------------------| ----------------------------------------------------------------------------------------------------------------- |
 | BROWSERSTACK_USERNAME         | Your BrowserStack username                                                                                        |
 | BROWSERSTACK_ACCESS_KEY       | Your BrowserStack access key                                                                                      |
-| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) |
+| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) ensure this is set correctly or your local run wont work |
 | BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `Google Pixel 2`                                               |
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `8.0`                                                      |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-android` (e.g. `LPT4128-android`)   |
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
-| SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
+| SESSION_EXPIRY_MINUTES        | Set to 3                                                                 |
+| IS_NATIVE_APP_RUN             | Set to `true`                                                                                                     |
+
+
+The build also requires an apk to be uploaded, this is to be added at the directory `../android/app/build/outputs/apk/browserstack`. This can be generated locally or it can also be obtained from the azure build. The name which the build looks for is `app-browserstack-unsigned.apk` so ensure you get this apk. It is likely that the browserstack extension of this path will not exist so if needed, create it.
+
+Ensure before you begin to try to run any make command, that if you are from Kainos you connect to your vpn. This is important as without this in place you will not receive a successful connection to browserstack so your tests will not run successfully.
 
 To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
 
@@ -117,6 +123,11 @@ If you have used a different value to any of the defaults in the table above the
 ```bash
 make run-native-android BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" BROWSERSTACK_DEVICE_NAME="Nexus 5" RUN_LOCAL_BDD=1
 ```
+Once this has successfully came up, go into your intellij and run the tests you need.
+
+When the test has started and there are no failures for the browserstack connection, navigate in your browser to https://app-automate.browserstack.com/dashboard/v2 and sign in. If you are redirected away, once you sign in go to the app automate tab which is where your test run will be.
+
+In the list of sessions looks for one called `unknown-manual` (it should also have your name attached if there are multiples). Once you are in here you should be able to see the running/ran test you triggered from intellij.
 
 #### BrowserStack in IntelliJ - iOS
 
@@ -127,13 +138,13 @@ Add the following "VM options":
 -Dappium.platformName=iOS
 ```
 
-Add the following environment variables:
+Add the following environment variables (It is important to ensure all of these are present):
 
 | Name                          | Description                                                                                                       |
 | ------------------------------| ----------------------------------------------------------------------------------------------------------------- |
 | BROWSERSTACK_USERNAME         | Your BrowserStack username                                                                                        |
 | BROWSERSTACK_ACCESS_KEY       | Your BrowserStack access key                                                                                      |
-| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) |
+| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) ensure this is set correctly or your local run wont work |
 | BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `iPhone 8`                                                     |
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `12.1`                                                     |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-ios` (e.g. `LPT4128-ios`)           |
@@ -141,6 +152,12 @@ Add the following environment variables:
 | AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
+| IS_NATIVE_APP_RUN             | Set to `true`                                                                                                     |
+
+
+The build also requires an ipa to be uploaded, this is to be added at the directory stated in the environment variable `NATIVE_APP_PATH_IOS`. This can be generated locally or it can also be obtained from the azure build.
+
+Ensure before you begin to try to run any make command, that if you are from Kainos you connect to your vpn. This is important as without this in place you will not receive a successful connection to browserstack so your tests will not run successfully.
 
 To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
 
@@ -153,3 +170,9 @@ If you have used a different value to any of the defaults in the table above the
 ```bash
 make run-native-ios BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" BROWSERSTACK_DEVICE_NAME="iPhone X" RUN_LOCAL_BDD=1
 ```
+
+Once this has successfully came up, go into your intellij and run the tests you need.
+
+When the test has started and there are no failures for the browserstack connection, navigate in your browser to https://app-automate.browserstack.com/dashboard/v2 and sign in. If you are redirected away, once you sign in go to the app automate tab which is where your test run will be.
+
+In the list of sessions looks for one called `unknown-manual` (it should also have your name attached if there are multiples). Once you are in here you should be able to see the running/ran test you triggered from intellij.
