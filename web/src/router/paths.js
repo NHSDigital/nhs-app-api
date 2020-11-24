@@ -114,6 +114,7 @@ export const SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH = 'silver-integration
 export const LINKED_PROFILES_PATH = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_PATH = 'linked-profiles/summary';
 export const LINKED_PROFILES_SHUTTER_MORE_PATH = 'linked-profiles/shutter/more';
+export const LINKED_PROFILES_SHUTTER_MESSAGES_PATH = 'linked-profiles/shutter/messages';
 export const LINKED_PROFILES_SHUTTER_ADVICE_PATH = 'linked-profiles/shutter/advice';
 export const LINKED_PROFILES_SHUTTER_SETTINGS_PATH = 'linked-profiles/shutter/settings';
 export const LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH = 'linked-profiles/shutter/appointments';
@@ -238,6 +239,7 @@ export default {
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,
+  LINKED_PROFILES_SHUTTER_MESSAGES_PATH,
   LINKED_PROFILES_SHUTTER_ADVICE_PATH,
   LINKED_PROFILES_SHUTTER_SETTINGS_PATH,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,

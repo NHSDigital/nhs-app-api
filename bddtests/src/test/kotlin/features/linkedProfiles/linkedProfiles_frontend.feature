@@ -124,6 +124,8 @@ Feature: Login with proxy access
     Then the settings shutter page is displayed
     When I navigate to Advice
     Then the advice shutter page is displayed
+    When I navigate to Messages
+    Then the messages shutter page is displayed
     When I navigate to Prescriptions
     And I click the View Orders link
     Then the prescriptions shutter page is displayed
@@ -289,9 +291,7 @@ Feature: Login with proxy access
     Given I am logged in as a TPP user with linked profiles but no access to core services and appointments provider IM1
     And the scenario is submit prescription
     Then I see the home page
-    When I can see and follow the Linked profiles link
-    And I select a linked profile
-    And I click the Switch to this profile button for the proxy user
+    When I have switched to a linked profile
     And prescriptions is disabled for the proxy account at a GP Practice level
     And the GP Practice has disabled proxy access to summary care record functionality
     And the GP Practice has disabled proxy access to dcr events functionality for TPP
@@ -301,6 +301,8 @@ Feature: Login with proxy access
     Then the settings shutter page is displayed
     When I navigate to Advice
     Then the advice shutter page is displayed
+    When I navigate to Messages
+    Then the messages shutter page is displayed
     When I navigate to Prescriptions
     And the Prescriptions Hub page is displayed
     And I click the Order a repeat prescription button

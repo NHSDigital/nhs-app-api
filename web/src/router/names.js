@@ -112,6 +112,7 @@ export const SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_NAME = 'silver-integration
 export const LINKED_PROFILES_NAME = 'linked-profiles';
 export const LINKED_PROFILES_SUMMARY_NAME = 'linked-profiles-summary';
 export const LINKED_PROFILES_SHUTTER_MORE_NAME = 'linked-profiles-shutter-more';
+export const LINKED_PROFILES_SHUTTER_MESSAGES_NAME = 'linked-profiles-shutter-messages';
 export const LINKED_PROFILES_SHUTTER_ADVICE_NAME = 'linked-profiles-shutter-advice';
 export const LINKED_PROFILES_SHUTTER_SETTINGS_NAME = 'linked-profiles-shutter-settings';
 export const LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME = 'linked-profiles-shutter-appointments';
@@ -238,6 +239,7 @@ const names = [
   LINKED_PROFILES_NAME,
   LINKED_PROFILES_SUMMARY_NAME,
   LINKED_PROFILES_SHUTTER_MORE_NAME,
+  LINKED_PROFILES_SHUTTER_MESSAGES_NAME,
   LINKED_PROFILES_SHUTTER_ADVICE_NAME,
   LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,

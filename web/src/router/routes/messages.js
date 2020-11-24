@@ -46,7 +46,7 @@ import {
   HEALTH_INFORMATION_UPDATES_MESSAGES_NAME,
 } from '@/router/names';
 import { UPLIFT_MORE } from '@/router/routes/more';
-
+import { LINKED_PROFILES_SHUTTER_MESSAGES } from '@/router/routes/linked-profiles';
 import { MESSAGES_MENU_ITEM } from '@/middleware/nativeNavigation';
 
 import proofLevel from '@/lib/proofLevel';
@@ -64,6 +64,11 @@ export const MESSAGES = {
     crumb: breadcrumbs.MESSAGES_CRUMB,
     helpUrl: messagingHelpUrl,
     nativeNavigation: MESSAGES_MENU_ITEM,
+    redirectRules: [{
+      condition: 'session/isProxying',
+      value: true,
+      route: LINKED_PROFILES_SHUTTER_MESSAGES,
+    }],
   },
 };
 

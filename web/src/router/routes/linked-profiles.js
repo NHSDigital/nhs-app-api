@@ -5,6 +5,7 @@ import LinkedProfilesAdviceShutterPage from '@/pages/linked-profiles/shutter/adv
 import LinkedProfilesSettingsShutterPage from '@/pages/linked-profiles/shutter/settings';
 import LinkedProfilesAppointmentsShutterPage from '@/pages/linked-profiles/shutter/appointments';
 import LinkedProfilesPrescriptionsShutterPage from '@/pages/linked-profiles/shutter/prescriptions';
+import LinkedProfilesMessagesShutterPage from '@/pages/linked-profiles/shutter/messages';
 import SwitchProfilePage from '@/pages/switch-profile';
 
 import proofLevel from '@/lib/proofLevel';
@@ -14,6 +15,7 @@ import {
   LINKED_PROFILES_PATH,
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MORE_PATH,
+  LINKED_PROFILES_SHUTTER_MESSAGES_PATH,
   LINKED_PROFILES_SHUTTER_ADVICE_PATH,
   LINKED_PROFILES_SHUTTER_SETTINGS_PATH,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,
@@ -24,6 +26,7 @@ import {
   LINKED_PROFILES_NAME,
   LINKED_PROFILES_SUMMARY_NAME,
   LINKED_PROFILES_SHUTTER_MORE_NAME,
+  LINKED_PROFILES_SHUTTER_MESSAGES_NAME,
   LINKED_PROFILES_SHUTTER_ADVICE_NAME,
   LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
@@ -35,6 +38,7 @@ import {
   CLEAR_SELECTED_MENU_ITEM,
   APPOINTMENTS_MENU_ITEM,
   PRESCRIPTIONS_MENU_ITEM,
+  MESSAGES_MENU_ITEM,
 } from '@/middleware/nativeNavigation';
 import get from 'lodash/fp/get';
 
@@ -48,7 +52,7 @@ export const LINKED_PROFILES = {
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
-    // nativeNavigation: ?,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
 
@@ -68,6 +72,20 @@ export const LINKED_PROFILES_SUMMARY = {
     crumb: breadcrumbs.LINKED_PROFILES_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
+  },
+};
+
+export const LINKED_PROFILES_SHUTTER_MESSAGES = {
+  path: LINKED_PROFILES_SHUTTER_MESSAGES_PATH,
+  name: LINKED_PROFILES_SHUTTER_MESSAGES_NAME,
+  component: LinkedProfilesMessagesShutterPage,
+  meta: {
+    headerKey: 'profiles.shutter.messages.header',
+    titleKey: 'profiles.shutter.messages.header',
+    crumb: breadcrumbs.LINKED_PROFILES_MESSAGES_SHUTTER_CRUMB,
+    proofLevel: proofLevel.P5,
+    helpUrl: proxyHelpUrl,
+    nativeNavigation: MESSAGES_MENU_ITEM,
   },
 };
 
@@ -170,6 +188,7 @@ export default [
   LINKED_PROFILES,
   LINKED_PROFILES_SUMMARY,
   LINKED_PROFILES_SHUTTER_MORE,
+  LINKED_PROFILES_SHUTTER_MESSAGES,
   LINKED_PROFILES_SHUTTER_SETTINGS,
   LINKED_PROFILES_SHUTTER_ADVICE,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,

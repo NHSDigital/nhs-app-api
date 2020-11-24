@@ -36,6 +36,7 @@ import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
 import pages.linkedProfiles.shutterPages.SettingsShutterPage
 import pages.linkedProfiles.shutterPages.AdviceShutterPage
+import pages.linkedProfiles.shutterPages.MessagesShutterPage
 import pages.text
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
@@ -62,6 +63,7 @@ class LinkedProfilesStepDefinitions {
     private lateinit var appointmentsShutterPage: AppointmentsShutterPage
     private lateinit var settingsShutterPage: SettingsShutterPage
     private lateinit var adviceShutterPage: AdviceShutterPage
+    private lateinit var messagesShutterPage: MessagesShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
 
     private val mockingClient = MockingClient.instance
@@ -329,6 +331,18 @@ class LinkedProfilesStepDefinitions {
         } else {
             medicalRecordShutterComponent.assertText(selectedProfile.profile,
                     selectedProfile.profile.name.firstName)
+        }
+    }
+
+    @Then("^the messages shutter page is displayed$")
+    fun theMessagesShutterPageIsDisplayed() {
+        messagesShutterPage.isLoaded()
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            messagesShutterPage.assertText(selectedProfile.profile.formattedFullName())
+        } else {
+            messagesShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
     }
 

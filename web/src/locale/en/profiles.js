@@ -44,6 +44,11 @@ export default {
       summary: 'It\'s not possible to access this section while acting on {name}\'s behalf.',
       switch: 'Switch to your profile to access this section.',
     },
+    messages: {
+      header: 'Messages',
+      summary: 'It\'s not possible to access this section while acting on {name}\'s behalf.',
+      switch: 'Switch to your profile to access this section.',
+    },
     settings: {
       header: 'Settings',
       switch: 'Switch to your profile to access your settings.',
