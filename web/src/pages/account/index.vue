@@ -62,7 +62,6 @@ import Settings from '@/components/account/Settings';
 import sjrIf from '@/lib/sjrIf';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
-import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import GenericButton from '@/components/widgets/GenericButton';
 import { ACCOUNT_COOKIES_PATH, LINKED_PROFILES_PATH } from '@/router/paths';
 import { isTruthy } from '@/lib/utils';
@@ -81,7 +80,6 @@ export default {
   },
   data() {
     return {
-      nativeLoginOptionsMethodExists: true,
       cookiesPath: ACCOUNT_COOKIES_PATH,
       linkedProfilesPath: LINKED_PROFILES_PATH,
       isProxying: this.$store.getters['session/isProxying'],
@@ -99,10 +97,6 @@ export default {
   },
   computed: {
     showBiometrics() {
-      if (!canVersionHandleBiometricsWeb(this)) {
-        return this.nativeLoginOptionsMethodExists &&
-          this.$store.state.device.isNativeApp;
-      }
       return this.$store.state.device.isNativeApp;
     },
     showNotifications() {
@@ -118,11 +112,6 @@ export default {
     showSubstraktParticipation() {
       return this.hasSubstraktParticipation && !this.isProxying && this.isProofLevel9;
     },
-  },
-  mounted() {
-    if (!canVersionHandleBiometricsWeb(this)) {
-      this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
-    }
   },
   methods: {
     signout() {

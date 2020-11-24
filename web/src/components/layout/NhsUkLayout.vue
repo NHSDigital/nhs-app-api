@@ -63,7 +63,6 @@ import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import isFunction from 'lodash/fp/isFunction';
-import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import showShutterPage from '@/lib/proxy/shutter';
 import { INDEX } from '@/router/routes/general';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
@@ -203,8 +202,7 @@ export default {
 
     NativeVersionSetup(this.$store);
 
-    if (canVersionHandleBiometricsWeb(this)
-      && this.$store.state.loginSettings.biometricType === undefined) {
+    if (this.$store.state.loginSettings.biometricType === undefined) {
       NativeCallbacks.fetchBiometricSpec();
     }
 

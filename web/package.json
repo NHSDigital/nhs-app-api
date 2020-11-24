@@ -13,8 +13,11 @@
     "serve": "vue-cli-service serve",
     "vue-build": "vue-cli-service build --mode=production",
     "inspect": "vue-cli-service inspect",
-    "build": "npm run swagger-node && npm run bundle-static && npm run vue-build",
-    "dev": "npm run build-env-json && npm run swagger-node && npm run bundle-static && npm run serve",
+    "build-bundle": "npm run swagger-node && npm run bundle-static",
+    "build": "npm run build-bundle && npm run vue-build",
+    "start-dev": "npm run build-bundle && npm run serve",
+    "dev": "npm run build-env-json && npm run start-dev",
+    "docker-dev": "npm run build-docker-env-json && npm run start-dev",
     "transpile-eslint": "./node_modules/.bin/babel ./src/store/modules/serviceJourneyRules/constants.js --out-dir ./lint/.transpiled --config-file ./babel.config.js",
     "lint": "npm run transpile-eslint && eslint --max-warnings 0 --ext .js,.vue src test && echo 'Linting complete: no issues found'",
     "lintfix": "npm run transpile-eslint && eslint --fix --ext .js,.vue .",
@@ -25,7 +28,8 @@
     "swagger-node": "node build/swaggerNode.js --handlebars_path ./handlebarExtensions.js --contract_path ../contracts/index.yaml --output_path ../src/services/ --nhsonline_templates_path ./swagger-templates/nhsonline/",
     "shell": "$SHELL",
     "bundle-static": "webpack",
-    "build-env-json": "node build/envBuilder.js"
+    "build-env-json": "node build/envBuilder.js",
+    "build-docker-env-json": "node build/envBuilder.js --docker"
   },
   "precommit": "npm run lint",
   "author": "",

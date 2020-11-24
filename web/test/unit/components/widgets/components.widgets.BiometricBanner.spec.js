@@ -15,7 +15,7 @@ describe('BiometricBanner', () => {
     isNativeApp = true,
     source = 'ios',
     dismissed = false,
-    versionEnabled = true } = {}) => {
+  } = {}) => {
     $store = createStore({
       state: {
         device: {
@@ -28,9 +28,6 @@ describe('BiometricBanner', () => {
         loginSettings: {
           biometricType: undefined,
         },
-      },
-      getters: {
-        'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
       },
     });
     return mount(BiometricBanner, {
@@ -97,63 +94,16 @@ describe('BiometricBanner', () => {
     });
 
     describe('Biometric Link', () => {
-      describe('biometrics web enabled', () => {
-        describe('min app version met', () => {
-          let biometricsLink;
+      let biometricsLink;
 
-          beforeEach(() => {
-            wrapper = mountBiometricBanner({ versionEnabled: true });
-            biometricsLink = wrapper.find('#btn_goToSettings');
-          });
-
-          it('will navigate to the web biometrics', () => {
-            biometricsLink.trigger('click');
-            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
-          });
-        });
-
-        describe('min app version not met', () => {
-          let biometricsLink;
-          beforeEach(() => {
-            wrapper = mountBiometricBanner({ versionEnabled: false });
-            biometricsLink = wrapper.find('#btn_goToSettings');
-          });
-
-          it('will navigate to the web biometrics', () => {
-            biometricsLink.trigger('click');
-            expect(redirectTo).not.toHaveBeenCalled();
-          });
-        });
+      beforeEach(() => {
+        wrapper = mountBiometricBanner({ versionEnabled: true });
+        biometricsLink = wrapper.find('#btn_goToSettings');
       });
 
-      describe('biometrics web disabled', () => {
-        describe('android', () => {
-          let biometricsLink;
-
-          beforeEach(() => {
-            wrapper = mountBiometricBanner({ source: 'android' });
-            biometricsLink = wrapper.find('#btn_goToSettings');
-          });
-
-          it('will navigate to the web biometrics', () => {
-            biometricsLink.trigger('click');
-            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
-          });
-        });
-
-        describe('ios', () => {
-          let biometricsLink;
-
-          beforeEach(() => {
-            wrapper = mountBiometricBanner();
-            biometricsLink = wrapper.find('#btn_goToSettings');
-          });
-
-          it('will navigate to the web biometrics', () => {
-            biometricsLink.trigger('click');
-            expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
-          });
-        });
+      it('will navigate to the web biometrics', () => {
+        biometricsLink.trigger('click');
+        expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, LOGIN_SETTINGS_PATH);
       });
     });
   });

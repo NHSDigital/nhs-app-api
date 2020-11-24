@@ -28,14 +28,12 @@
 
 <script>
 import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
-import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import { redirectTo } from '@/lib/utils';
-import { appLoginHelpUrl } from '@/router/externalLinks';
 
 export default {
   name: 'Settings',
@@ -74,10 +72,6 @@ export default {
   },
   computed: {
     getBiometricLinkText() {
-      if (!canVersionHandleBiometricsWeb(this)) {
-        return 'account.loginAndPasswordOptions';
-      }
-
       if (this.$store.getters['loginSettings/getDeviceBiometricNameString'] !== undefined) {
         return this.$store.getters['loginSettings/getDeviceBiometricNameString'];
       }
@@ -93,12 +87,7 @@ export default {
   },
   methods: {
     goToLoginOptions() {
-      if (canVersionHandleBiometricsWeb(this)) {
-        redirectTo(this, LOGIN_SETTINGS_PATH);
-      } else {
-        this.configureWebContext(appLoginHelpUrl);
-        NativeCallbacks.goToLoginOptions();
-      }
+      redirectTo(this, LOGIN_SETTINGS_PATH);
     },
     showNotificationsClicked() {
       redirectTo(this, ACCOUNT_NOTIFICATIONS_PATH);

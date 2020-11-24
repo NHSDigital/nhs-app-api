@@ -37,7 +37,6 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import canVersionHandleBiometricsWeb from '@/lib/biometrics/canVersionHandleBiometricsWeb';
 import { LOGIN_SETTINGS_PATH } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
 import { redirectTo } from '@/lib/utils';
@@ -49,11 +48,6 @@ export default {
     GenericButton,
     MessageDialog,
     MessageText,
-  },
-  data() {
-    return {
-      nativeLoginOptionsMethodExists: true,
-    };
   },
   computed: {
     formData() {
@@ -70,9 +64,6 @@ export default {
   created() {
     this.$store.dispatch('biometricBanner/sync');
   },
-  mounted() {
-    this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
-  },
   methods: {
     dismissBiometricsBannerClicked() {
       this.$store.dispatch('biometricBanner/dismiss');
@@ -80,12 +71,7 @@ export default {
       NativeCallbacks.resetPageFocus();
     },
     goToLoginOptions() {
-      if (canVersionHandleBiometricsWeb(this)) {
-        redirectTo(this, LOGIN_SETTINGS_PATH);
-      } else {
-        this.configureWebContext(this.$route.meta.helpUrl);
-        NativeCallbacks.goToLoginOptions();
-      }
+      redirectTo(this, LOGIN_SETTINGS_PATH);
     },
   },
 };

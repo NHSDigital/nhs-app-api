@@ -1,113 +1,203 @@
-var fs = require('fs');
+const { execSync } = require('child_process');
+const { readFileSync, writeFileSync } = require('fs');
+const { exit } = require('process');
 
 const prefix = '.';
+const outputFilePath = 'src/config/env.json';
+const numberRegex = RegExp(/^\d+$/);
+const booleanRegex = RegExp(/^(true|false)$/);
+const dockerEnvRegex = RegExp(/^([^=]+)=(.*)$/);
+
+const errorAndExit = msg => {
+  console.error(`${__filename} => ${msg}`);
+
+  exit(1);
+}
+
+const isNonBlankString = val => typeof val === 'string' && val.trim() !== '';
+
+const isBooleanString = val => isNonBlankString(val) && booleanRegex.test(val.toLowerCase().trim());
+
+const isNumberString = val => isNonBlankString(val) && numberRegex.test(val.toLowerCase().trim());
 
 const findEnvFilePaths = (composeFilePath, outArray) => {
-
-  var lines = fs.readFileSync(prefix + composeFilePath).toString().split('\n');
+  const lines = readFileSync(prefix + composeFilePath).toString().split('\n');
   var foundWebSection = false;
   var foundWebEnvSection = false;
+  var finished = false;
 
-  for (var i=0, max=lines.length; i<max; i++) {
-    var line = lines[i].trim();
+  lines.forEach(rawLine => {
+    if (finished) {
+      return;
+    }
+
+    var line = rawLine.trim();
+
     if (line === 'web.local.bitraft.io:') {
       foundWebSection = true;
-    }
-    else if (foundWebSection && !foundWebEnvSection) {
-      if (line === 'env_file:') {
-        foundWebEnvSection = true;
-      }
-    }
-    else if (foundWebSection && foundWebEnvSection) {
+    } else if (foundWebSection && !foundWebEnvSection && line === 'env_file:') {
+      foundWebEnvSection = true;
+    } else if (foundWebSection && foundWebEnvSection) {
       if (line[0] == '-' ) {
         var boom = line.substr(2);
         outArray.push(boom);
-      }
-      else {
-        break;
+      } else {
+        finished = true;
       }
     }
-  }
+  });
 };
 
 const populateEnvFile = (filePaths, total) => {
   filePaths.forEach(r => {
-    var envs = fs.readFileSync(prefix + r).toString().split('\n');
+    const envs = readFileSync(prefix + r).toString().split('\n');
+
     envs.forEach(e => {
-      var kv = e.split('=');
-      total[kv[0]] = kv[1];
-    })
+      const [ k, v ] = e.split('=');
+
+      total[k] = v;
+    });
   })
 };
 
 const AddNumericConfig = (variable, value) => {
-  const numericValue = parseInt( value, 10 );
-  if (isNaN(numericValue)) {
-    console.log(`Failed AddNumericConfig for ${variable}=${value}`);
-    process.exit(1);
+  if (!isNumberString(value)) {
+    errorAndExit(`Failed AddNumericConfig for ${variable}=${value}`);
   }
-  return numericValue;
+
+  return parseInt(value, 10);
 };
 
 const AddBoolConfig = (variable, value) => {
-  const lowerCase = value.toLowerCase();
-  if (lowerCase !== 'true' && lowerCase !== 'false') {
-    console.log(`Failed AddBoolConfig for ${variable}=${value}`);
-    process.exit(1);
+  if (!isBooleanString(value)) {
+    errorAndExit(`Failed AddBoolConfig for ${variable}=${value}`);
   }
-  return (lowerCase === 'true');
+
+  return (value.toLowerCase().trim() === 'true');
 };
 
 const AddStringConfig = (variable, value) => {
-  if (value === undefined || value === '') {
-    console.log(`Failed AddStringConfig for ${variable}=${value}`);
-    process.exit(1);
+  if (!isNonBlankString(value)) {
+    errorAndExit(`Failed AddStringConfig for ${variable}=${value}`);
   }
+
   return value;
 };
 
 const determineEnvType = (envSh, config, formattedConfig) => {
-  var lines = fs.readFileSync(envSh).toString().split('\n');
-  var foundStart = false;
+  const lines = readFileSync(envSh).toString().split('\n');
+  let foundStart = false;
+  let finished = false;
 
-  for (var i=0, max=lines.length; i<max; i++) {
-    var line = lines[i].trim();
+  lines.forEach(rawLine => {
+    if (finished) {
+      return;
+    }
+
+    const line = rawLine.trim();
 
     if (line[0] === '#') {
-      continue;
-    }
-    else if (line === 'echo "Begin Generating web config json"') {
+      return;
+    } else if (line === 'echo "Begin Generating web config json"') {
       foundStart = true;
-    }
-    else if (line === 'echo "Completed Generating web config json"') {
-      break;
-    }
-    else if (foundStart) {
-      var command = (line.split(';')[0]).split(' ');
-      var envVar = command[1];
-      var rawValue = config[envVar];
+    } else if (line === 'echo "Completed Generating web config json"') {
+      finished = true;
 
-      if (command[0] === 'AddNumericConfig') {
+      return;
+    } else if (foundStart) {
+      const [ command, envVar ] = (line.split(';')[0]).split(' ');
+      const rawValue = config[envVar];
+
+      if (command === 'AddNumericConfig') {
         formattedConfig[envVar] = AddNumericConfig(envVar, rawValue);
-      }
-      else if (command[0] === 'AddBoolConfig') {
+      } else if (command === 'AddBoolConfig') {
         formattedConfig[envVar] = AddBoolConfig(envVar, rawValue);
-      }
-      else {
+      } else {
         formattedConfig[envVar] = AddStringConfig(envVar, rawValue);
       }
     }
-  }
+  });
+};
+
+const writeEnvFileAndExit = webEnv => {
+  const webEnvJson = JSON.stringify(webEnv, null, 2);
+
+  writeFileSync(outputFilePath, `${webEnvJson}\n`);
+
+  console.log(`${__filename} => Wrote web env JSON to ${outputFilePath}`);
+
+  exit(0);
 }
 
-var envFiles = [];
-findEnvFilePaths('./docker-compose.yml', envFiles);
+const parseDockerEnvVar = (webEnv, [ _, key, val ]) => {
+  let parsedVal;
 
-var envFile = {};
-populateEnvFile(envFiles, envFile);
+  if (isNumberString(val)) {
+    parsedVal = parseInt(val, 10);
+  } else if (isBooleanString(val)) {
+    parsedVal = val.toLowerCase().trim() === 'true';
+  } else if (isNonBlankString(val)) {
+    parsedVal = val;
+  } else {
+    console.warn(`Empty value detected for env var: ${key}`);
 
-var typedEnvFile = {};
-determineEnvType('build/docker-runtime/env.sh', envFile, typedEnvFile);
+    return;
+  }
 
-const data = JSON.stringify(typedEnvFile);
-fs.writeFileSync('src/config/env.json', data);
+  webEnv[key] = parsedVal;
+}
+
+const createEnvJsonFromDockerContainer = () => {
+  const errorAndExitDocker = msg =>
+    errorAndExit(`Error getting web env JSON from docker: ${msg}\nIs the local environment running?`);
+
+  try {
+    const webContainerId = 
+      execSync(`docker ps | grep web.local.bitraft | cut -d' ' -f1`).toString().trim();
+
+    if (webContainerId === '') {
+      errorAndExitDocker('no web container detected');
+    }
+
+    const webEnvDockerJson = 
+      execSync(`docker inspect --format='{{json .Config.Env}}' ${webContainerId}`).toString().trim();
+
+    if (webEnvDockerJson === '') {
+      errorAndExitDocker('web container inspect returned no data');
+    }
+
+    const webEnv = {};
+
+    JSON.parse(webEnvDockerJson)
+      .filter(e => dockerEnvRegex.test(e))
+      .map(e => dockerEnvRegex.exec(e))
+      .forEach(m => parseDockerEnvVar(webEnv, m));
+
+    writeEnvFileAndExit(webEnv);
+   } catch (ex) {
+    errorAndExitDocker(`${ex}`);
+   }
+};
+
+const main = () => {
+  const args = process.argv.map(a => a.toLowerCase().trim());
+
+  if (args.find(a => a === '--docker')) {
+    createEnvJsonFromDockerContainer();
+
+    return;
+  }
+
+  var envFiles = [];
+  findEnvFilePaths('./docker-compose.yml', envFiles);
+
+  var envFile = {};
+  populateEnvFile(envFiles, envFile);
+
+  var typedEnvFile = {};
+  determineEnvType('build/docker-runtime/env.sh', envFile, typedEnvFile);
+
+  writeEnvFileAndExit(typedEnvFile);
+}
+
+main()

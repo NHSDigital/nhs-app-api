@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import getters from '@/store/modules/appVersion/getters';
 
 describe('getters', () => {
@@ -11,143 +12,34 @@ describe('getters', () => {
   describe('isNativeVersionAfter', () => {
     const { isNativeVersionAfter } = getters;
 
-    describe('production version 1.14.0', () => {
-      let isVersionAfter;
+    each([
+      [false, undefined, '1.37.0'],
+      [false, null, '1.37.0'],
+      [false, '', '1.37.0'],
+      [false, '1.40.5', '1.40.5'],
+      [false, '1.41.0', '1.40.0'],
+      [false, '1.41.3', '1.40.3'],
+      [false, '1.40.x', '1.40.3'],
+      [false, '1.40.x', '1.40.9999'],
+      [false, '1.44.x', '1.44.99'],
+      [true, '1.37.0', ''],
+      [true, '1.37.0', undefined],
+      [true, '1.37.0', null],
+      [true, '1.40.x', '1.41.0'],
+      [true, '1.40.x', '1.41.6'],
+      [true, '1.44.0', 'develop'],
+      [true, '1.21.0', 'pr2883'],
+      [true, '1.40.0', '1.40.3'],
+      [true, '1.42.0', '1.43.0'],
+      [true, '1.42.6', '1.43.2'],
+      [true, '2.41.0', '2.50.0'],
+      [true, '2.41.8', '3.10.5'],
+    ]).it('will return %s for \'%s\' when production version is \'%s\'', (expected, versionToCheck, productionVersion) => {
+      const isVersionAfter = isNativeVersionAfter(
+        setVersion(productionVersion, productionVersion),
+      );
 
-      beforeEach(() => {
-        isVersionAfter = isNativeVersionAfter(setVersion('1.14.0', '1.14.0'));
-      });
-      it('will return true for 1.13.0', () => {
-        expect(isVersionAfter('1.13.0')).toEqual(true);
-      });
-
-      it('will return false for 1.14.0', () => {
-        expect(isVersionAfter('1.14.0')).toEqual(false);
-      });
-
-      it('will return false for 1.15.0', () => {
-        expect(isVersionAfter('1.15.0')).toEqual(false);
-      });
-
-      it('will return false for 1.14.0-RC1', () => {
-        expect(isVersionAfter('1.14.0-RC1')).toEqual(false);
-      });
-
-      it('will return false for develop', () => {
-        expect(isVersionAfter('develop')).toEqual(false);
-      });
-
-      it('will return false for 2838 MR', () => {
-        expect(isVersionAfter('2838')).toEqual(false);
-      });
-
-      it('will return false for 1.14.1', () => {
-        expect(isVersionAfter('1.14.1')).toEqual(false);
-      });
-    });
-
-    describe('RC version 1.14.0-RC4', () => {
-      let isVersionAfter;
-
-      beforeEach(() => {
-        isVersionAfter = isNativeVersionAfter(setVersion('1.14.0-RC4', '1.14.0-RC4'));
-      });
-
-      it('will return true for 1.13.0', () => {
-        expect(isVersionAfter('1.13.0')).toEqual(true);
-      });
-
-      it('will return false for 1.14.0', () => {
-        expect(isVersionAfter('1.14.0')).toEqual(false);
-      });
-
-      it('will return false for 1.15.0', () => {
-        expect(isVersionAfter('1.15.0')).toEqual(false);
-      });
-
-      it('will return false for 1.14.0-RC5', () => {
-        expect(isVersionAfter('1.14.0-RC5')).toEqual(false);
-      });
-
-      it('will return false for develop', () => {
-        expect(isVersionAfter('develop')).toEqual(false);
-      });
-
-      it('will return false for 2838 MR', () => {
-        expect(isVersionAfter('2838')).toEqual(false);
-      });
-    });
-
-    describe('develop number check', () => {
-      let isVersionAfter;
-
-      beforeEach(() => {
-        isVersionAfter = isNativeVersionAfter(setVersion('develop', 'develop'));
-      });
-
-      it('will return true for 1.13.0', () => {
-        expect(isVersionAfter('1.13.0')).toEqual(true);
-      });
-
-      it('will return true for 1.14.0', () => {
-        expect(isVersionAfter('1.14.0')).toEqual(true);
-      });
-
-      it('will return true for 1.15.0', () => {
-        expect(isVersionAfter('1.15.0')).toEqual(true);
-      });
-
-      it('will return true for 1.14.0-RC5', () => {
-        expect(isVersionAfter('1.14.0-RC5')).toEqual(true);
-      });
-
-      it('will return false for develop', () => {
-        expect(isVersionAfter('develop')).toEqual(false);
-      });
-
-      it('will return false for 2838 MR', () => {
-        expect(isVersionAfter('2838')).toEqual(false);
-      });
-    });
-
-    describe('2838 MR number check', () => {
-      let isVersionAfter;
-
-      beforeEach(() => {
-        isVersionAfter = isNativeVersionAfter(setVersion('2838', '2838'));
-      });
-
-      it('will return true for 1.13.0', () => {
-        expect(isVersionAfter('1.13.0')).toEqual(true);
-      });
-
-      it('will return true for 1.14.0', () => {
-        expect(isVersionAfter('1.14.0')).toEqual(true);
-      });
-
-      it('will return true for 1.15.0', () => {
-        expect(isVersionAfter('1.15.0')).toEqual(true);
-      });
-
-      it('will return true for 1.14.0-RC5', () => {
-        expect(isVersionAfter('1.14.0-RC5')).toEqual(true);
-      });
-
-      it('will return true for develop', () => {
-        expect(isVersionAfter('develop')).toEqual(true);
-      });
-
-      it('will return true for 2837', () => {
-        expect(isVersionAfter('2837')).toEqual(true);
-      });
-
-      it('will return false for 2838', () => {
-        expect(isVersionAfter('2838')).toEqual(false);
-      });
-
-      it('will return false for 2839', () => {
-        expect(isVersionAfter('2839')).toEqual(false);
-      });
+      expect(isVersionAfter(versionToCheck)).toEqual(expected);
     });
   });
 });
