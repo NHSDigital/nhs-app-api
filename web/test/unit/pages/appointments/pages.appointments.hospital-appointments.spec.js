@@ -1,4 +1,5 @@
 import each from 'jest-each';
+import find from 'lodash/fp/find';
 import HospitalAppointments from '@/pages/appointments/hospital-appointments';
 import { createStore, createRouter, mount } from '../../helpers';
 
@@ -8,6 +9,14 @@ describe('hospital appointments hub', () => {
   let $store;
   let $router;
 
+  const knownServices = [{
+    id: 'ers',
+    url: 'www.url.com',
+  }, {
+    id: 'pkb',
+    url: 'www.url.com',
+  }];
+
   const mountAs = ({
     context = true,
     isProxy = false,
@@ -16,17 +25,9 @@ describe('hospital appointments hub', () => {
     $store = createStore({
       state: {
         device: { isNativeApp: false },
-        knownServices: {
-          knownServices: [{
-            id: 'ers',
-            url: 'www.url.com',
-          }, {
-            id: 'pkb',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
+        'knownServices/matchOneById': id => find(service => service.id === id)(knownServices),
         'serviceJourneyRules/silverIntegrationEnabled': () => (context),
         'session/isProxying': isProxy,
       } });

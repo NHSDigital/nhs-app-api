@@ -1,4 +1,5 @@
 import each from 'jest-each';
+import find from 'lodash/fp/find';
 import i18n from '@/plugins/i18n';
 import Messages from '@/pages/messages/';
 import { redirectTo } from '@/lib/utils';
@@ -11,6 +12,17 @@ let linkElement;
 let wrapper;
 let $store;
 let $router;
+
+const knownServices = [{
+  id: 'pkb',
+  url: 'www.url.com',
+}, {
+  id: 'engage',
+  url: 'www.url.com',
+}, {
+  id: 'substraktPatientPack',
+  url: 'www.url.com',
+}];
 
 const mountPage = ({
   sjrMessagingEnabled = true,
@@ -29,25 +41,14 @@ const mountPage = ({
       device: { isNativeApp: false },
       gpMessages: { hasUnread: hasUnreadGPMessages },
       messaging: { hasUnread: hasUnreadAppMessages },
-      knownServices: {
-        knownServices: [{
-          id: 'pkb',
-          url: 'www.url.com',
-        }, {
-          id: 'engage',
-          url: 'www.url.com',
-        }, {
-          id: 'substraktPatientPack',
-          url: 'www.url.com',
-        }],
-      },
     },
     getters: {
-      'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
+      'knownServices/matchOneById': id => find(service => service.id === id)(knownServices),
       'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
+      'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
       'serviceJourneyRules/silverIntegrationEnabled': () => (context),
-      'session/isProxying': isProxying,
       'session/isProofLevel9': isProofLevel9,
+      'session/isProxying': isProxying,
     },
   });
   wrapper = mount(Messages, { $store, $router, mountOpts: { i18n } });

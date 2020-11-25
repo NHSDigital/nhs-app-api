@@ -27,6 +27,12 @@ Feature: Redirector
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https://doesnotexistintheknownservices.com'
     Then I see the home page
 
+  Scenario: A user navigating to a webpage in known services that is not a silver integration site will be redirected to that site
+    Given I am a EMIS patient
+    And I am logged in
+    When I navigate to the redirector page with a url of '/redirector?redirect_to=https://111.nhs.uk'
+    Then I am navigated to a third party site
+
   Scenario: The back button on the warning page will take the user to the previous page
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Patients Know Best

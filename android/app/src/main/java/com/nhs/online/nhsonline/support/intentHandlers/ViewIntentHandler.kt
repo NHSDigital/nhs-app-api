@@ -22,12 +22,11 @@ class ViewIntentHandler(private val context: Context) : IIntentHandler
 
         intent.dataString.let { url ->
             val urlString = urlHelper.createRedirectToUrl(url)
-            if (urlHelper.isSameHostAndSchemeAsHomeUrl(urlString.toString())) {
-                if (isAppClosed) {
-                    urlString?.let { appPersistData.storePersistedLink(urlString.toString()) }
-                } else {
-                    urlString?.let { nhsWeb.loadUrl(urlString.toString()) }
-                }
+
+            if (isAppClosed) {
+                urlString?.let { appPersistData.storePersistedLink(urlString.toString()) }
+            } else {
+                urlString?.let { nhsWeb.loadUrl(urlString.toString()) }
             }
         }
     }

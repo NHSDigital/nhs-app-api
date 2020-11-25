@@ -26,12 +26,12 @@ describe('ThirdParty Jumpoff Button', () => {
         device: {
           isNativeApp: native,
         },
-        knownServices: {
-          knownServices: [{
-            id: providerId,
-            url: providerUrl,
-          }],
-        },
+      },
+      getters: {
+        'knownServices/matchOneById': serviceId => ({
+          id: serviceId,
+          url: providerUrl,
+        }),
       },
     });
     propsData = {

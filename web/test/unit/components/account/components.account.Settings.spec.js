@@ -28,22 +28,20 @@ describe('Settings', () => {
         session: {
           isLoggedIn: jest.fn(),
         },
-        knownServices: {
-          knownServices: [{
-            id: 'gncr',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
         'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(versionEnabled),
-        'session/isProofLevel9': isProofLevel9,
+        'knownServices/matchOneById': id => ({
+          id,
+          url: 'www.url.com',
+        }),
         'serviceJourneyRules/silverIntegrationEnabled': jest.fn((context) => {
           if (context.provider === 'gncr' && context.serviceType === 'accountAdmin') {
             return gncrAccountAdminEnabled;
           }
           return false;
         }),
+        'session/isProofLevel9': isProofLevel9,
       },
     });
     return mount(Settings, {

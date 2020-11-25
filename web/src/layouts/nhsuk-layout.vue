@@ -86,10 +86,9 @@ export default {
         return true;
       }
 
-      const services = this.$store.state.knownServices.knownServices
-        .filter(service => redirectPath.includes(service.url));
+      const matchedService = this.$store.getters['knownServices/matchOneByUrl'](redirectPath);
 
-      return !(services.length > 0 && services[0].showThirdPartyWarning === true);
+      return !(matchedService && matchedService.showThirdPartyWarning === true);
     },
   },
   mounted() {

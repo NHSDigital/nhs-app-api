@@ -22,18 +22,16 @@ describe('Advice Check Menu', () => {
         device: {
           isNativeApp: false,
         },
-        knownServices: {
-          knownServices: [{
-            id: 'engage',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
-        'session/isLoggedIn': isLoggedIn,
+        'knownServices/matchOneById': id => ({
+          id,
+          url: 'www.url.com',
+        }),
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
-        'session/isProofLevel9': isProofLevel9,
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
+        'session/isLoggedIn': isLoggedIn,
+        'session/isProofLevel9': isProofLevel9,
       },
     });
 

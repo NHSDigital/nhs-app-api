@@ -50,12 +50,12 @@ export default {
   },
   computed: {
     path() {
-      const services = this.$store.state.knownServices.knownServices
-        .filter(service => this.providerId.includes(service.id));
-      if (services.length === 0) {
+      const matchedService = this.$store.getters['knownServices/matchOneById'](this.providerId);
+
+      if (!matchedService) {
         return '';
       }
-      const encodedUri = encodeURIComponent(services[0].url + this.redirectPath);
+      const encodedUri = encodeURIComponent(matchedService.url + this.redirectPath);
       return `/${this.redirectorPath}?${REDIRECT_PARAMETER}=${encodedUri}`;
     },
   },

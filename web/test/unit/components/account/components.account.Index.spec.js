@@ -26,17 +26,15 @@ describe('Account.index', () => {
         appVersion: {
           nativeVersion: 1,
         },
-        knownServices: {
-          knownServices: [{
-            id: 'substraktPatientPack',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockImplementation(() => silverIntegrationEnabled),
-        'serviceJourneyRules/notificationsEnabled': false,
         'appVersion/isNativeVersionAfter': () => true,
+        'knownServices/matchOneById': id => ({
+          id,
+          url: 'www.url.com',
+        }),
+        'serviceJourneyRules/notificationsEnabled': false,
+        'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockImplementation(() => silverIntegrationEnabled),
         'session/isProofLevel9': isProofLevel9,
       },
     });

@@ -43,6 +43,7 @@ export const REDIRECTOR = {
     proofLevel: proofLevel.P5,
     crumb: breadcrumbs.REDIRECTOR_CRUMB,
     helpUrl: thirdPartyHelpUrl,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
   },
 };
 

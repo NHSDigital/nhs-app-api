@@ -26,17 +26,6 @@ export default {
     return false;
   },
 
-  supportsNativeWebIntegration() {
-    const app = window.nativeApp;
-    return app && app.openWebIntegration;
-  },
-
-  openWebIntegration(url) {
-    const app = window.nativeApp;
-    const request = JSON.stringify({ url });
-    app.openWebIntegration(request);
-  },
-
   clearMenuBarItem() {
     const app = window.nativeApp;
     if (app && app.clearMenuBarItem) {

@@ -17,14 +17,12 @@ describe('appointments hub', () => {
     $store = createStore({
       state: {
         device: { isNativeApp: false },
-        knownServices: {
-          knownServices: [{
-            id: 'engage',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
+        'knownServices/matchOneById': id => ({
+          id,
+          url: 'www.url.com',
+        }),
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/silverIntegrationAppointmentsEnabled': silverIntegrationAppointmentsEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),

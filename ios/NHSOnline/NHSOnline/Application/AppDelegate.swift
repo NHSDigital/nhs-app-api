@@ -134,11 +134,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         
-        let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
-        if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
-        {
-            getViewController().webViewController?.loadPage(url: convertedUrl!)
-        }
+        let convertedUrl = UrlHelper.createRedirectToUrl(url: url)
+        getViewController().webViewController?.loadPage(url: convertedUrl!)
     }
 
     private func getViewController() -> HomeViewController {
@@ -158,10 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         
-        let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
-        if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
-        {
-            UserDefaults.standard.set(convertedUrl, forKey: config().LinkPropertyName)
-        }
+        let convertedUrl = UrlHelper.createRedirectToUrl(url: url)
+        UserDefaults.standard.set(convertedUrl, forKey: config().LinkPropertyName)
     }
 }

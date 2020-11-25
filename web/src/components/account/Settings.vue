@@ -28,7 +28,6 @@
 
 <script>
 import { ACCOUNT_NOTIFICATIONS_PATH, LOGIN_SETTINGS_PATH } from '@/router/paths';
-import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
@@ -102,11 +101,7 @@ export default {
       const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
 
       if (this.isNativeApp) {
-        if (NativeCallbacks.supportsNativeWebIntegration()) {
-          NativeCallbacks.openWebIntegration(settingsUrl);
-        } else {
-          window.location = settingsUrl;
-        }
+        window.location = settingsUrl;
       } else {
         window.open(settingsUrl, '_blank', 'noopener,noreferrer');
       }

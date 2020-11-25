@@ -20,13 +20,12 @@ class FirebaseMessagingIntentHandler(private val context: Context) : IIntentHand
         appPersistData = PersistData(context)
 
         intent.extras?.get("url")?.let { url ->
-            val urlString = UrlHelper(context).ensureUrlWithScheme(url.toString())
-            if (urlHelper.isSameHostAndSchemeAsHomeUrl(url.toString())) {
-                if (isAppClosed) {
-                    urlString?.let { appPersistData.storePersistedLink(it.toString()) }
-                } else {
-                    urlString?.let { nhsWeb.loadUrl(it.toString()) }
-                }
+            val urlString = urlHelper.createRedirectToUrl(url.toString())
+
+            if (isAppClosed) {
+                urlString?.let { appPersistData.storePersistedLink(it.toString()) }
+            } else {
+                urlString?.let { nhsWeb.loadUrl(it.toString()) }
             }
         }
     }

@@ -19,12 +19,6 @@ const createStore = ({
   $env: {},
   state: {
     device: { isNativeApp },
-    knownServices: {
-      knownServices: [{
-        id: 'pkb',
-        url: 'www.url.com',
-      }],
-    },
     nominatedPharmacy: {
       pharmacy: {
         pharmacyName,
@@ -32,11 +26,15 @@ const createStore = ({
     },
   },
   getters: {
+    'knownServices/matchOneById': id => ({
+      id,
+      url: 'www.url.com',
+    }),
     'nominatedPharmacy/nominatedPharmacyEnabled': nominatedPharmacyEnabled,
-    'serviceJourneyRules/nominatedPharmacyEnabled': sjrEnabled,
-    'session/isProxying': isProxying,
     'nominatedPharmacy/pharmacyName': pharmacyName,
+    'serviceJourneyRules/nominatedPharmacyEnabled': sjrEnabled,
     'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+    'session/isProxying': isProxying,
   },
 });
 

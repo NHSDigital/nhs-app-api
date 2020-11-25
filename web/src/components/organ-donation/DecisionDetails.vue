@@ -42,10 +42,7 @@
 </template>
 
 <script>
-import flow from 'lodash/fp/flow';
-import isEmpty from 'lodash/fp/isEmpty';
-import keys from 'lodash/fp/keys';
-import pickBy from 'lodash/fp/pickBy';
+import { flow, isEmpty, keys, pickBy } from 'lodash/fp';
 
 const pickChosen = flow(pickBy(val => val === 'Yes'), keys);
 const pickNotChosen = flow(pickBy(val => val === 'No'), keys);

@@ -17,48 +17,68 @@ import * as dependency from '@/lib/utils';
 import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/sessionStorage');
+jest.mock('@/services/native-app');
 
 describe('redirector page', () => {
   let $route;
   let $router;
   let wrapper;
-  let getters;
-  dependency.redirectTo = jest.fn();
-  dependency.redirectByName = jest.fn();
+  let $http;
 
-  const createState = () => ({
-    knownServices: {
-      knownServices: [{
-        requiresAssertedLoginIdentity: false,
-        url: 'http://www.url.com',
-      }],
-    },
-  });
+  const mountRedirector = ({
+    isNhsAppPath = true,
+    hasKnownService = false,
+    knownServiceId = 'pkb',
+    requiresAssertedLoginIdentity = false,
+    showThirdPartyWarning = false,
+    isSilverIntegrationEnabled = false,
+    isProofLevel9 = false,
+  } = {}) => {
+    $http = {
+      postV1PatientAssertedLoginIdentity: jest.fn()
+        .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
+    };
 
-  const createHttp = () => ({
-    postV1PatientAssertedLoginIdentity: jest.fn()
-      .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
-  });
+    const $store = createStore({
+      $http,
+      getters: {
+        'knownServices/matchOneByUrl': jest.fn().mockImplementation((url) => {
+          if (hasKnownService) {
+            return {
+              id: knownServiceId,
+              requiresAssertedLoginIdentity,
+              showThirdPartyWarning,
+              url,
+            };
+          }
+          return undefined;
+        }),
+        'session/isProofLevel9': isProofLevel9,
+        'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockImplementation(() => isSilverIntegrationEnabled),
+      },
+    });
 
-  const mountRedirector = ($http, $store) => mount(Redirector, { $http, $store, $router, $route });
+    $store.app.isNhsAppPath = jest.fn().mockReturnValue(isNhsAppPath);
+
+    return mount(Redirector, { $store, $router, $route });
+  };
 
   beforeEach(() => {
+    dependency.redirectTo = jest.fn();
+    dependency.redirectByName = jest.fn();
     $router = createRouter();
+    $route = {};
     wrapper = undefined;
-    getters = { 'session/isProofLevel9': true };
   });
 
   describe('has no redirect param', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: {},
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector();
     });
 
     it('will redirect to INDEX path', () => {
@@ -68,15 +88,12 @@ describe('redirector page', () => {
 
   describe('has empty redirect param', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: '' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector();
     });
 
     it('will redirect to INDEX path', () => {
@@ -86,14 +103,11 @@ describe('redirector page', () => {
 
   describe('has redirect param to internal route name', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
       };
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector();
     });
 
     it('will call redirectByName passing redirect param', () => {
@@ -103,15 +117,11 @@ describe('redirector page', () => {
 
   describe('has redirect param to internal route path', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(true);
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: GP_MEDICAL_RECORD_PATH },
       };
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({ isNhsAppPath: true });
     });
 
     it('will redirect to param value', () => {
@@ -122,16 +132,12 @@ describe('redirector page', () => {
 
   describe('has redirect param to a mis-spelled internal route path', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: `${GP_MEDICAL_RECORD_PATH}xyz` },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
     });
 
     it('will redirect to INDEX path', () => {
@@ -141,16 +147,12 @@ describe('redirector page', () => {
 
   describe('has redirect param external site not on knownServices list', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.google.com' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
     });
 
     it('will redirect to INDEX path', () => {
@@ -159,29 +161,19 @@ describe('redirector page', () => {
   });
 
   describe('has redirect param external site on knownServices list for unknown third party', () => {
-    let $http;
-
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'nonethirdParty',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: false,
-            url: 'http://www.url.com',
-          }],
-        },
-      };
-      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
-      const $store = createStore({ $http, state: $state, getters });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: false,
+        isNhsAppPath: false,
+        isSilverIntegrationEnabled: true,
+      });
     });
 
     it('will redirect to INDEX path', () => {
@@ -193,80 +185,102 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale', () => {
-    let $http;
+  describe('has redirect param external site on knownServices list for an unknown third party', () => {
+    const { location } = global;
 
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: true,
-            url: 'http://www.url.com',
-          }],
-        },
+      $route = {
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
       };
-      hasAgreedToThirdPartyWarning.mockClear();
+
+      delete global.location;
+
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        knownServiceId: 'unknown',
+        requiresAssertedLoginIdentity: false,
+        showThirdPartyWarning: false,
+        isSilverIntegrationEnabled: true,
+      });
+    });
+
+    it('will redirect using location to external url', () => {
+      expect(global.location).toBe('http://www.url.com');
+    });
+
+    it('warning section should not be shown', () => {
+      expect(wrapper.vm.shouldShowWarning).toEqual(false);
+    });
+
+    afterEach(() => {
+      global.location = location;
+    });
+  });
+
+
+  describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale', () => {
+    beforeEach(() => {
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
-      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
-      const $store = createStore({ $http, state: $state, getters });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
-      wrapper = mountRedirector($http, $store);
+
+      wrapper = mountRedirector({
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isNhsAppPath: false,
+        isSilverIntegrationEnabled: true,
+        isProofLevel9: true,
+      });
     });
 
     it('warning section should be shown', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(true);
     });
 
-    it('will call `postV1PatientAssertedLoginIdentity` on button click', () => {
-      const expectedRequest = {
-        assertedLoginIdentityRequest: {
-          IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
-          JumpOffId: 'messages',
-          ProviderId: 'pkb',
-          ProviderName: 'Patients Know Best',
-          Action: 'SilverIntegrationJumpOff',
-        },
-        ignoreError: true,
-      };
-      const continueButton = wrapper.find('a.nhsuk-button');
-      continueButton.trigger('click');
+    describe('on continue button click', () => {
+      beforeEach(() => {
+        const continueButton = wrapper.find('a.nhsuk-button');
+        continueButton.trigger('click');
+      });
 
-      expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
+      it('will call `postV1PatientAssertedLoginIdentity`', () => {
+        expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+            JumpOffId: 'messages',
+            ProviderId: 'pkb',
+            ProviderName: 'Patients Know Best',
+            Action: 'SilverIntegrationJumpOff',
+          },
+          ignoreError: true,
+        });
+      });
+    });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
     });
   });
 
   describe('has redirect param external site on knownServices for pkb and path not included in third-party-provider locale', () => {
-    let $http;
-
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: true,
-            url: 'http://www.url.com',
-          }],
-        },
-      };
-      hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(false);
-      const $store = createStore({ $http, state: $state });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/abc?def=ghi' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+      });
     });
 
     it('warning section should not be shown', () => {
@@ -276,19 +290,19 @@ describe('redirector page', () => {
     it('will redirect to INDEX path', () => {
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
     });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
+    });
   });
 
   describe('has redirect param not a url or internal path', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'something else' },
       };
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({ isNhsAppPath: false });
     });
 
     it('will redirect to INDEX path', () => {
@@ -296,30 +310,44 @@ describe('redirector page', () => {
     });
   });
 
-  describe('has redirect param external site on knownServices for pkb but is not P9 proof level', () => {
-    let $http;
-
+  describe('has redirect param external site on knownServices for pkb with SJR feature enabled but is not P9 proof level', () => {
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: true,
-            url: 'http://www.url.com',
-          }],
-        },
-      };
-      getters['session/isProofLevel9'] = false;
-      const $store = createStore({ $http, state: $state, getters });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isSilverIntegrationEnabled: true,
+        isProofLevel9: false,
+      });
+    });
+
+    it('will redirect to UPLIFT_SILVER_INTEGRATION_PATH path', () => {
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, UPLIFT_SILVER_INTEGRATION_PATH, expect.any(Object));
+    });
+  });
+
+  describe('has redirect param external site on knownServices for pkb with SJR feature disabled but is not P9 proof level', () => {
+    beforeEach(() => {
+      $route = {
+        name: INTERSTITIAL_REDIRECTOR_NAME,
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+      };
+
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isSilverIntegrationEnabled: false,
+        isProofLevel9: false,
+      });
     });
 
     it('will redirect to UPLIFT_SILVER_INTEGRATION_PATH path', () => {
@@ -329,29 +357,20 @@ describe('redirector page', () => {
   });
 
   describe('has redirect param external site on knownServices but doesn\'t have silver integration feature enabled via SJR', () => {
-    let $http;
-
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: true,
-            url: 'http://www.url.com',
-          }],
-        },
-      };
-      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => false);
-      const $store = createStore({ $http, state: $state, getters });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isProofLevel9: true,
+        isSilverIntegrationEnabled: false,
+      });
     });
 
     it('will redirect to SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH path', () => {
@@ -365,31 +384,21 @@ describe('redirector page', () => {
   });
 
   describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale and thirdparty warning has been accepted', () => {
-    let $http;
-
     beforeEach(() => {
-      $http = createHttp();
-      const $state = {
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            requiresAssertedLoginIdentity: true,
-            showThirdPartyWarning: true,
-            url: 'http://www.url.com',
-          }],
-        },
-      };
-      hasAgreedToThirdPartyWarning.mockClear();
       hasAgreedToThirdPartyWarning.mockReturnValue(true);
-      getters['serviceJourneyRules/silverIntegrationEnabled'] = jest.fn().mockImplementation(() => true);
-      const $store = createStore({ $http, state: $state, getters });
-      $store.app.isNhsAppPath = jest.fn().mockReturnValue(false);
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
       };
 
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector({
+        isNhsAppPath: false,
+        hasKnownService: true,
+        requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
+        isProofLevel9: true,
+        isSilverIntegrationEnabled: true,
+      });
     });
 
     it('warning section should be shown', () => {
@@ -401,7 +410,7 @@ describe('redirector page', () => {
     });
 
     it('will generate an asserted login identity for the matching service', () => {
-      const expectedRequest = {
+      expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith({
         assertedLoginIdentityRequest: {
           IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
           JumpOffId: 'messages',
@@ -410,29 +419,26 @@ describe('redirector page', () => {
           Action: 'SilverIntegrationJumpOff',
         },
         ignoreError: true,
-      };
-
-      expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
-      expect(getters['serviceJourneyRules/silverIntegrationEnabled'])
-        .toHaveBeenCalledWith({ provider: 'pkb', serviceType: 'messages' });
+      });
     });
 
     it('does not display the continue button', () => {
       const continueButton = wrapper.contains('a.nhsuk-button');
       expect(continueButton).toEqual(false);
     });
+
+    afterEach(() => {
+      hasAgreedToThirdPartyWarning.mockClear();
+    });
   });
 
   describe('has redirect to page param', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
       };
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector();
     });
 
     it('will call redirectByName passing redirect to page param', () => {
@@ -442,14 +448,11 @@ describe('redirector page', () => {
 
   describe('has redirect to page param with invalid value', () => {
     beforeEach(() => {
-      const $http = createHttp();
-      const $store = createStore({ state: createState() });
-
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: 'foo' },
       };
-      wrapper = mountRedirector($http, $store);
+      wrapper = mountRedirector();
     });
 
     it('will redirect to INDEX path', () => {

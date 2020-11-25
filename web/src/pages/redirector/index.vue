@@ -2,18 +2,17 @@
   <div v-if="showTemplate">
     <silver-integration-panel
       v-if="shouldShowWarning"
-      :known-service="services[0]"
+      :known-service="matchedService"
       :redirect-path="redirectParameter"
       :jump-off-id="jumpOffId"
       :session-storage-name="sessionStorageName"
-      @click.stop.prevent="getAssertedLoginIdentityAndNavigate"
-    />
+      @click.stop.prevent="getAssertedLoginIdentityAndNavigate"/>
     <div v-else :class="$style['spacer']" />
   </div>
 </template>
 
 <script>
-import get from 'lodash/fp/get';
+import { get, isEmpty } from 'lodash/fp';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import sjrIf from '@/lib/sjrIf';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
@@ -34,8 +33,7 @@ import {
   redirectTo,
   redirectByName,
 } from '@/lib/utils';
-import NativeApp from '@/services/native-app';
-import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import { getJumpOffConfiguration } from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   name: 'InterstitialRedirectorPage',
@@ -45,7 +43,7 @@ export default {
   data() {
     return {
       showWarning: false,
-      services: [],
+      matchedService: {},
       redirectParameter: '',
       redirectParameterAndQuery: '',
       buttonHref: '',
@@ -91,7 +89,7 @@ export default {
       return;
     }
 
-    this.showThirdPartyWarningOrNavigate();
+    this.handleExternalRedirect();
   },
   methods: {
     async getAssertedLoginIdentityAndNavigate() {
@@ -126,11 +124,7 @@ export default {
       return this.$te(key) ? this.$t(key) : '';
     },
     navigateToExternalPath(url) {
-      if (NativeApp.supportsNativeWebIntegration()) {
-        NativeApp.openWebIntegration(url);
-      } else {
-        window.location = url;
-      }
+      window.location = url;
     },
     canAccessSilverIntegration(store, { provider, serviceType }) {
       return sjrIf({
@@ -142,72 +136,108 @@ export default {
         },
       });
     },
-    showThirdPartyWarningOrNavigate() {
-      this.services = this.$store.state.knownServices.knownServices
-        .filter(service => this.redirectParameter.includes(service.url));
+    navigateToThirdParty() {
+      this.sessionStorageName = `agreedThirdPartyWarning_${this.matchedService.id}`;
 
-      if (this.services.length > 0) {
-        const matchedService = this.services[0];
-        this.sessionStorageName = `agreedThirdPartyWarning_${matchedService.id}`;
-        this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
-        this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${matchedService.id}`);
-
-        const thirdPartyConfig = get(`thirdPartyProvider.${matchedService.id}`)(jumpOffProperties);
-
-        if (!thirdPartyConfig) {
-          redirectTo(this, INDEX_PATH);
-          return;
+      if (this.matchedService.showThirdPartyWarning === false ||
+          agreedToThirdPartyWarning(this.sessionStorageName)) {
+        if (this.matchedService.requiresAssertedLoginIdentity || {} === true) {
+          this.getAssertedLoginIdentityAndNavigate();
+        } else {
+          this.navigateToExternalPath(this.redirectParameter);
         }
-        const jumpOffConfig = getThirdPartyJumpOff(
-          { jumpOffs: Object.values(thirdPartyConfig) },
-          this.redirectParameterAndQuery,
-        );
+        return;
+      }
+      this.showWarning = true;
+    },
+    checkIsProofLevel9({ featureJumpOffContent }, next) {
+      if (this.$store.getters['session/isProofLevel9']) {
+        next();
+        return;
+      }
 
-        this.jumpOffId = jumpOffConfig.jumpOffId;
-        if (this.jumpOffId === undefined) {
-          redirectTo(this, INDEX_PATH);
-          return;
-        }
+      redirectTo(
+        this,
+        UPLIFT_SILVER_INTEGRATION_PATH,
+        { featureName: featureJumpOffContent.jumpOffContent.headerText },
+      );
+    },
+    checkCanAccessSilverIntegration({ jumpOffConfig, featureJumpOffContent }, next) {
+      if (this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
+        next();
+        return;
+      }
 
-        if (matchedService.id !== 'silver-third-party-api-test') {
-          const featureJumpOffContent = this.thirdPartyServiceContent.jumpOffs.find(
-            item => item.id === jumpOffConfig.jumpOffId,
-          );
+      redirectTo(
+        this,
+        SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
+        { featureName: featureJumpOffContent.jumpOffContent.headerText },
+      );
+    },
+    getJumpOffConfig({ thirdPartyConfig }, next) {
+      this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
+      const jumpOffConfig = getThirdPartyJumpOff(
+        { jumpOffs: Object.values(thirdPartyConfig) },
+        this.redirectParameterAndQuery,
+      );
 
-          if (!this.$store.getters['session/isProofLevel9']) {
-            redirectTo(
-              this,
-              UPLIFT_SILVER_INTEGRATION_PATH,
-              { featureName: featureJumpOffContent.jumpOffContent.headerText },
-            );
-            return;
-          }
+      this.jumpOffId = jumpOffConfig.jumpOffId;
+      if (this.jumpOffId === undefined) {
+        redirectTo(this, INDEX_PATH);
+        return;
+      }
+      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.matchedService.id}`);
 
-          if (!this.canAccessSilverIntegration(this.$store, jumpOffConfig)) {
-            redirectTo(
-              this,
-              SILVER_INTEGRATION_FEATURE_NOT_AVAILABLE_PATH,
-              { featureName: featureJumpOffContent.jumpOffContent.headerText },
-            );
-            return;
-          }
-        }
+      const featureJumpOffContent = this.thirdPartyServiceContent.jumpOffs.find(
+        item => item.id === this.jumpOffId,
+      );
 
-        if (matchedService.showThirdPartyWarning === false ||
-            agreedToThirdPartyWarning(this.sessionStorageName)) {
-          if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
-            this.getAssertedLoginIdentityAndNavigate();
-          } else {
-            this.navigateToExternalPath(this.redirectParameter);
-          }
-          return;
-        }
+      next({ jumpOffConfig, featureJumpOffContent });
+    },
+    getThirdPartyConfig(_, next) {
+      const thirdPartyConfig = getJumpOffConfiguration(this.matchedService.id);
 
-        this.showWarning = true;
+      if (thirdPartyConfig) {
+        next({ thirdPartyConfig });
+        return;
+      }
+
+      if (this.matchedService.showThirdPartyWarning === false &&
+          this.matchedService.requiresAssertedLoginIdentity === false) {
+        this.navigateToExternalPath(this.redirectParameter);
         return;
       }
 
       redirectTo(this, INDEX_PATH);
+    },
+    handleExternalRedirect() {
+      this.matchedService = this.$store.getters['knownServices/matchOneByUrl'](this.redirectParameter) || {};
+
+      if (isEmpty(this.matchedService)) {
+        redirectTo(this, INDEX_PATH);
+        return;
+      }
+
+      let context = {};
+
+      const steps = [
+        this.getThirdPartyConfig,
+        this.getJumpOffConfig,
+        this.checkIsProofLevel9,
+        this.checkCanAccessSilverIntegration,
+        this.navigateToThirdParty,
+      ];
+
+      const executeStep = (index) => {
+        if (index < steps.length) {
+          steps[index](context, (values) => {
+            context = { ...context, ...values };
+            executeStep(index + 1);
+          });
+        }
+      };
+
+      executeStep(0);
     },
   },
 };

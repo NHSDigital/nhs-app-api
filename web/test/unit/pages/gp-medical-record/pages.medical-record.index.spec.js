@@ -21,14 +21,12 @@ describe('healthRecords', () => {
     $store = createStore({
       state: {
         device: { isNativeApp },
-        knownServices: {
-          knownServices: [{
-            id: 'pkb',
-            url: 'www.url.com',
-          }],
-        },
       },
       getters: {
+        'knownServices/matchOneById': id => ({
+          id,
+          url: 'www.url.com',
+        }),
         'serviceJourneyRules/silverIntegrationEnabled': () => (integrationEnabled),
         'session/isProxying': isProxying,
       },
