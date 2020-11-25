@@ -1,0 +1,6 @@
+---
+variables:
+  SILVERINT_DIRECTORY_INPUT: $(System.DefaultWorkingDirectory)/silver-integration-api-test-site/dist/*
+  AZURE_CONTAINER_NAME: '$web'
+  AZURE_STORAGE_ACCOUNT_NAME: silverintegrationtestsa
+  AZURE_SERVICE_CONNECTION_NON_LIVE: nhsapp-nonlive-terraform-sp

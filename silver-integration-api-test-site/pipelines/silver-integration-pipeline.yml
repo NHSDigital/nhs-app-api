@@ -1,0 +1,30 @@
+---
+trigger:
+  branches:
+    include:
+      - develop
+  paths:
+    include:
+      - silver-integration-api-test-site/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  - template: variables.yml
+
+stages:
+  - stage: file_upload
+    displayName: 'Upload Silver Integration Files'
+    jobs:
+      - job:
+        displayName: 'Run AzFileCopy'
+        steps:
+          - task: AzureFileCopy@4
+            displayName: 'Upload files to blob storage'
+            inputs:
+              SourcePath: $(SILVERINT_DIRECTORY_INPUT)
+              azureSubscription: $(AZURE_SERVICE_CONNECTION_NON_LIVE)
+              Destination: 'AzureBlob'
+              storage: $(AZURE_STORAGE_ACCOUNT_NAME)
+              ContainerName: $(AZURE_CONTAINER_NAME)
