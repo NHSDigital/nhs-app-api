@@ -45,6 +45,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             services.AddSingleton<IYamlReaderFactory, YamlReaderFactory>();
             services.AddSingleton<IYamlWriter, YamlWriter>();
             services.AddSingleton<IYamlToJsonConverter, YamlToJsonConverter>();
+            services.AddSingleton<IConfigurationExporter, ConfigurationExporter>();
             services.AddSingleton<IConfigurationRuleFileValidator, ConfigurationRuleFileValidator>();
             services.AddSingleton<ISchemaValidator, SchemaValidator>();
             services.AddSingleton<IFileHandler, FileHandler>();

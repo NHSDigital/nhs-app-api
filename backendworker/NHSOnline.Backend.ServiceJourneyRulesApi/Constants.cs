@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
     {
         public static class Args
         {
+            public const string ExportMode = "--export-only";
             public const string ValidateMode = "--validate-only";
         }
 

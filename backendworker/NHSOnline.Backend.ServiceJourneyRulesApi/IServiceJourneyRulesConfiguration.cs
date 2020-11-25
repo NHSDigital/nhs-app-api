@@ -9,9 +9,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         string RulesFolderPath { get; }
 
         string JourneysFolderPath { get; }
-        
+
         string InputFolderPath { get; }
-        
+
         string GlobalsFolderPath { get; }
+
+        string CsvExportOutputFilePath { get; }
     }
 }

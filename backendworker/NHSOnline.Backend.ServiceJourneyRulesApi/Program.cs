@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         internal enum RunMode
         {
             Validate,
+            Export,
             ServeWebApi
         }
 
@@ -27,13 +28,17 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         {
             Mode = DetermineRunModeFromCommandLineArgs(args);
 
-            if (Mode == RunMode.Validate)
+            switch (Mode)
             {
-                await BuildConsoleApp(args).RunAsync();
-            }
-            else
-            {
-                await BuildWebHost(args).RunAsync();
+                case RunMode.Validate:
+                    await BuildConsoleApp(args).RunAsync();
+                    break;
+                case RunMode.Export:
+                    await BuildExportApp(args).RunAsync();
+                    break;
+                default:
+                    await BuildWebHost(args).RunAsync();
+                    break;
             }
         }
 
@@ -59,6 +64,22 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 })
                 .Build();
 
+        private static IHost BuildExportApp(string[] args) =>
+            new HostBuilder()
+                .UseConsoleLifetime()
+                .ConfigureAppConfiguration(config => SetupConfiguration(config, args))
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddHostedService<ExportService>();
+                    new ServiceConfigurationModule().ConfigureServices(services, context.Configuration);
+                })
+                .ConfigureLogging((context, logging) =>
+                {
+                    logging.AddConfiguration(context.Configuration.GetSection("Logging"))
+                        .AddConsole();
+                })
+                .Build();
+
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
@@ -68,7 +89,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
 
         private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args) =>
             args.Any(s => s.Contains(Constants.Args.ValidateMode, StringComparison.Ordinal))
-                ? RunMode.Validate
-                : RunMode.ServeWebApi;
+                ? RunMode.Validate :
+                    args.Any(s => s.Contains(Constants.Args.ExportMode, StringComparison.Ordinal))
+                    ? RunMode.Export
+                    : RunMode.ServeWebApi;
     }
 }

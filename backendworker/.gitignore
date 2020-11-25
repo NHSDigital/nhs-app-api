@@ -5,6 +5,8 @@ NDependOut/
 
 # exclude everything in output
 configurations/output/*
+configurations/Validated/*
+configurations/Export/*
 
 # exclude everything in certs
 certs/*

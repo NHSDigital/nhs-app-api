@@ -1,0 +1,9 @@
+﻿{
+  "CONFIGURATION_FOLDER_PATH": "/<your-local-path>/nhsonline-app/backendworker/configurations",
+  "JOURNEYS_FOLDER_NAME": "Journeys",
+  "RULES_FOLDER_NAME": "Rules",
+  "GLOBALS_FOLDER_NAME": "Globals",
+  "GP_INFO_FILE_PATH": "/<your-local-path>/nhsonline-app/backendworker/configurations/gpinfo.csv",
+  "OUTPUT_FOLDER_PATH": "/<your-local-path>/nhsonline-app/backendworker/configurations/Validated",
+  "CSV_EXPORT_OUTPUT_FILE_PATH": "/<your-local-path>/nhsonline-app/backendworker/configurations/Export/ods-code-summary.csv"
+}

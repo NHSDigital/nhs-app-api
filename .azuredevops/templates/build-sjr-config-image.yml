@@ -3,7 +3,8 @@
 jobs:
   - job: build__production_sjr_config_image
     displayName: Build SJR Config Image (Production config)
-
+    variables:
+    - group: release_notes
     steps:
       - task: Docker@2
         displayName: Login to docker registry
@@ -17,9 +18,33 @@ jobs:
           filePath: sjr-config/buildscripts/01_generate_config_files.sh
 
       - task: Bash@3
+        displayName: Generate SJR report
+        inputs:
+          filePath: sjr-config/buildscripts/02_generate_sjr_report.sh
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish SJR report
+        inputs:
+          PathtoPublish: 'sjr-config/configurations/export/ods-code-summary.csv'
+          ArtifactName: 'SJR report'
+
+      - task: Bash@3
+        displayName: 'Send SJR report to Slack'
+        inputs:
+          targetType: 'inline'
+          script: |
+              set -e
+
+              # Get the latest pushed tag
+              export TAG=$(git describe --abbrev=0 --tags)
+
+              # Send the produced file to Slack
+              curl -F file=@sjr-config/configurations/export/ods-code-summary.csv -F "filename=ods-code-summary-${TAG}.csv" -F "initial_comment=SJR report ${TAG}" -F channels=$(SLACK_SJR_EXPORT_CHANNEL) -H "Authorization: Bearer $(SLACK_API_TOKEN)" https://slack.com/api/files.upload
+
+      - task: Bash@3
         displayName: Build config image
         inputs:
-          filePath: sjr-config/buildscripts/02_build_config_image.sh
+          filePath: sjr-config/buildscripts/03_build_config_image.sh
 
       - task: Docker@2
         displayName: Push

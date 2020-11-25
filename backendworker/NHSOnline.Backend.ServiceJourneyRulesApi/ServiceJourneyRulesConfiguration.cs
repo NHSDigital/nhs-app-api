@@ -15,6 +15,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         public string InputFolderPath { get; }
         public string GlobalsFolderPath { get; }
 
+        public string CsvExportOutputFilePath { get; }
+
         public ServiceJourneyRulesConfiguration(ILogger<IServiceConfigurationModule> logger,
             IConfiguration configuration)
         {
@@ -30,6 +32,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 RulesFolderPath = Path.Join(configurationFolderPath, rulesFolderName);
                 JourneysFolderPath = Path.Join(configurationFolderPath, journeysFolderName);
                 GlobalsFolderPath = Path.Join(configurationFolderPath, globalsFolderName);
+            }
+            else if (Program.Mode == Program.RunMode.Export)
+            {
+                OutputFolderPath = configuration.GetOrThrow("OUTPUT_FOLDER_PATH", logger);
+                CsvExportOutputFilePath = configuration.GetOrThrow("CSV_EXPORT_OUTPUT_FILE_PATH", logger);
             }
             else
             {
