@@ -69,12 +69,28 @@ class SubstraktStepDefinitions : HybridPageObject() {
         myAccountPage.getHeaderElement("Patient participation groups").assertElementNotPresent()
     }
 
-    @Then("the warning message on the Redirector page explains the service is from Substrakt$")
-    fun assertWarningMessageContent() {
+    @Then("the question warning message on the Redirector page explains the service is from Substrakt$")
+    fun assertQuestionWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This service is provided by Substrakt Health",
+                "Ask your GP surgery a question\nThis service is provided by Substrakt Health",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
+    }
+
+    @Then("the participation warning message on the Redirector page explains the service is from Substrakt$")
+    fun assertParticipationWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Patient participation groups\nThis service is provided by Substrakt Health",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the personal details warning message on the Redirector page explains the service is from Substrakt$")
+    fun assertPersonalDetailsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Update your personal details\nThis service is provided by Substrakt Health",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
     }
 
     private fun setupPatient(configuration: SJRJourneyType, proofLevel: IdentityProofingLevel? = null) {

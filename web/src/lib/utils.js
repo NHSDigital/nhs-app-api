@@ -4,8 +4,7 @@ import Mime from 'mime/Mime';
 import moment from 'moment-timezone';
 import 'url-polyfill';
 import { INDEX_PATH, EMPTY_PATH, INDEX_PATH_PARAM } from '@/router/paths';
-import NativeCallbacks from '@/services/native-app';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
@@ -352,12 +351,8 @@ export const getThirdPartyLocaleText = (thirdPartyLocales, jumpOffId, feature, p
   return jumpOffLocale[feature][property];
 };
 
-export const resetPageFocus = (store) => {
-  if (store.state.device.isNativeApp) {
-    NativeCallbacks.resetPageFocus();
-  }
-
-  EventBus.$emit(FOCUS_NHSAPP_ROOT);
+export const resetPageFocus = () => {
+  EventBus.$emit(FOCUS_NHSAPP_TITLE);
   window.scrollTo(0, 0);
 };
 

@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import NhsHeaderSvg from '@/components/icons/NhsHeaderSVG';
@@ -46,18 +45,7 @@ export default {
       default: true,
     },
   },
-  beforeMount() {
-    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focus);
-  },
-  beforeDestroy() {
-    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focus);
-  },
   methods: {
-    focus() {
-      if (this.$store.state.device.isNativeApp && this.isLogoLink) {
-        this.$refs.homeLogoEl.focus();
-      }
-    },
     onClick() {
       redirectTo(this, this.indexPath);
     },

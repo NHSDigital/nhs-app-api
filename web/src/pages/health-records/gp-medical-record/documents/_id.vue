@@ -158,6 +158,34 @@ export default {
   },
   methods: {
     navigateToView() {
+      const date = get('state.documents.currentDocument.date', this.$store);
+      const datePartString =
+        (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
+      const term = get('state.documents.currentDocument.term', this.$store);
+      const documentType = get('state.documents.currentDocument.documentType', this.$store);
+
+      let dateString;
+
+      if (!isBlankString(documentType)) {
+        dateString =
+          `${documentType} ${this.$t('myRecord.gpMedicalRecord.addedOn')} ${datePartString}`;
+      } else {
+        dateString = `${this.$t('myRecord.gpMedicalRecord.documentAddedOn')} ${datePartString}`;
+        dateString.charAt(0).toLowerCase();
+      }
+
+      const letterUpperRegex = /^[A-Z]+$/;
+
+      let termToUse = term;
+
+      if (term !== null && term !== '' && letterUpperRegex.test(term.charAt(0))) {
+        termToUse = term.charAt(0).toLowerCase() + term.slice(1);
+      }
+
+      const headerText = this.$t('navigation.pages.titles.myRecordDocumentsDetail',
+        { DocumentName: termToUse || dateString });
+
+      this.$store.dispatch('documents/setViewTitle', headerText);
       this.$router.push(createRouteByNameObject({
         name: DOCUMENT_DETAIL_NAME,
         params: { id: this.$route.params.id },

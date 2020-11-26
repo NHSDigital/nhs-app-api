@@ -21,7 +21,7 @@ Feature: Substrakt Messages
     And the Messages Hub page is displayed
     And I click the Substrakt Ask Your GP Surgery a Question link on the Messages Hub page
     And I am redirected to the redirector page with the header 'Ask your GP surgery a question'
-    And the warning message on the Redirector page explains the service is from Substrakt
+    And the question warning message on the Redirector page explains the service is from Substrakt
 
   Scenario: A user without access to Substrakt cannot see the menu item 'Ask Your Gp Surgery a Question' on the messages page
     Given I am a user who cannot view Ask Your Gp Surgery a Question from Substrakt

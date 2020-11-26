@@ -21,7 +21,7 @@ Feature: Care Information Exchange Messages
     And the Messages Hub page is displayed
     And I click the CIE Messages and online consultations link on the Messages Hub page
     And I am redirected to the redirector page with the header 'Consultations, events and messages'
-    And the warning message on the Redirector page explains the service is from Care Information Exchange
+    And the consultations warning on the page explains the service is from Care Information Exchange
 
   Scenario: A user without access to CIE cannot see the menu item 'Consultations, events and messages' on the more page
     Given I am a user who cannot view Messages and Online Consultations from Care Information Exchange

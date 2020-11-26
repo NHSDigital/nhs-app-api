@@ -11,7 +11,7 @@ Feature: Engage Medical Advice
     And the link to Engage Medical Advice is available on the Advice page
     And I click the Engage Medical Advice link on the Advice page
     And I am redirected to the redirector page with the header 'Ask your GP for advice'
-    And the warning message on the Redirector page explains the service is from Engage
+    And the advice warning message on the Redirector page explains the service is from Engage
 
   Scenario: A user without access to Engage cannot see the menu item 'Medical Advice' on the Advice page
     Given I am a user who cannot view Medical Advice from Engage

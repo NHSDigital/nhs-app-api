@@ -66,7 +66,6 @@ import isFunction from 'lodash/fp/isFunction';
 import showShutterPage from '@/lib/proxy/shutter';
 import { INDEX } from '@/router/routes/general';
 import { INDEX_CRUMB } from '@/breadcrumbs/general';
-import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import {
   DOCUMENT_DETAIL_NAME,
   LOGIN_NAME,
@@ -215,7 +214,6 @@ export default {
 
       if (this.$store.state.device.isNativeApp) {
         this.$store.dispatch('auth/nativeLogin');
-        NativeCallbacks.resetPageFocus();
       }
     }
     this.configureWebContext(this.currentHelpUrl);
@@ -225,16 +223,10 @@ export default {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
   },
-  beforeMount() {
-    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
-  },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.dismissProgressBar();
     }
-  },
-  beforeDestroy() {
-    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   methods: {
     isAnalyticsCookieAccepted() {
@@ -242,9 +234,6 @@ export default {
     },
     isHotJarSurveyVisible() {
       return this.isAnalyticsCookieAccepted() && this.$store.$env.HOTJAR_SURVEY_VISIBLE;
-    },
-    focusNhsAppRoot() {
-      this.$refs.nhsAppRoot.focus();
     },
     setSurveyBarStatus(isBarOpen) {
       this.surveyBarOpen = isBarOpen;

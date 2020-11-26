@@ -13,7 +13,7 @@ Feature: Patients Know Best Medicines
     And the PKB View Medicines link is available on the Prescriptions Hub
     When I click the PKB View Medicines link on the Prescriptions hub
     Then I am redirected to the redirector page with the header 'Hospital and other prescriptions'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the hospital and prescriptions warning on the page explains the service is from Patients Know Best
 
   Scenario: The menu item 'Hospital and other prescriptions' is visible on desktop
     Given I am a user who can view Medicines from Patients Know Best

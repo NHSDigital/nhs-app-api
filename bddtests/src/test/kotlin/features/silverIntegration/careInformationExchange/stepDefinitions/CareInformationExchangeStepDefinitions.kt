@@ -124,12 +124,62 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
         hospitalAppointmentsPage.btnCieAppointments.click()
     }
 
-    @Then("the warning message on the Redirector page explains the service is from Care Information Exchange$")
-    fun assertWarningMessageContent() {
+    @Then("the hospital and other warning explains the service is from Care Information Exchange$")
+    fun assertHospitalAndOtherMedicinesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This service is provided by Care Information Exchange (Patients Know Best)",
+                "Hospital and other medicines\n" +
+                        "This service is provided by Care Information Exchange (Patients Know Best)",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
+    }
+
+    @Then("the track your health warning explains the service is from Care Information Exchange$")
+    fun assertTrackYourHealthWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Track your health\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the view appointments warning on the page explains the service is from Care Information Exchange$")
+    fun assertViewAppointmentsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "View appointments\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the test results warning on the page explains the service is from Care Information Exchange$")
+    fun assertTestResultsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Test results\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the shared health warning on the page explains the service is from Care Information Exchange$")
+    fun assertVSharedHealthWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Shared health links\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the consultations warning on the page explains the service is from Care Information Exchange$")
+    fun assertConsultationsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Consultations, events and messages\n" +
+                    "This service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the care plan warning on the page explains the service is from Care Information Exchange$")
+    fun assertCarePlanWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Care plans\nThis service is provided by Care Information Exchange (Patients Know Best)",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
     }
 
     @Then("^the link to CIE View Appointments is not available on the Appointments page$")

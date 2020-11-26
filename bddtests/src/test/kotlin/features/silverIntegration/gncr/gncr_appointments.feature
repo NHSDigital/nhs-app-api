@@ -11,7 +11,7 @@ Feature: Great North Care Record Appointments
     And I can see the GNCR View Appointments link on the Appointments page
     When I click the GNCR View Appointments link on the Appointments page
     Then I am redirected to the redirector page with the header 'Hospital and other appointments'
-    And the warning message on the Redirector page explains the service is from GNCR
+    And the hospital and other warning message on the Redirector page explains the service is from GNCR
 
   Scenario: A user without access to GNCR cannot see the menu item 'Appointments' on the appointments page
     Given I am a user who cannot view Appointments from GNCR

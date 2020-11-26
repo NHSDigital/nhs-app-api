@@ -18,7 +18,7 @@ Feature: Substrakt Patient Participation Groups
     Then the Account Settings are available
     And I click the account menu item 'Patient participation groups'
     And I am redirected to the redirector page with the header 'Patient participation groups'
-    And the warning message on the Redirector page explains the service is from Substrakt
+    And the participation warning message on the Redirector page explains the service is from Substrakt
 
   Scenario: A user without access to Substrakt cannot see the menu item 'Patient participation groups' on the Account page
     Given I am a user who cannot view Patient participation groups from Substrakt

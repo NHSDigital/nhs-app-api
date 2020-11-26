@@ -111,7 +111,7 @@ import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import Shutter from '@/components/linked-profiles/Shutter';
 import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -173,7 +173,7 @@ export default {
     }
 
     this.$store.dispatch('myRecord/reload', true);
-    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+    EventBus.$emit(FOCUS_NHSAPP_TITLE);
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {

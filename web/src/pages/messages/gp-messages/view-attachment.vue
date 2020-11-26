@@ -20,7 +20,7 @@ import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
-import { UPDATE_HEADER, UPDATE_TITLE, FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, FOCUS_NHSAPP_TITLE, EventBus } from '@/services/event-bus';
 import {
   GP_MESSAGES_VIEW_MESSAGE_PATH,
   GP_MESSAGES_PATH,
@@ -78,7 +78,7 @@ export default {
     // from the content attribute so user can zoom
     // on their document.
     this.setZoom(true);
-    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+    EventBus.$emit(FOCUS_NHSAPP_TITLE);
   },
   beforeDestroy() {
     // Set the user-scalable=0 and maxium-scale=1.0

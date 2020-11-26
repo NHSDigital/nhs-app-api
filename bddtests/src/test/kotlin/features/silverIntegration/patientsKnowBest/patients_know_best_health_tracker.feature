@@ -12,7 +12,7 @@ Feature: Patients Know Best Health Tracker
     Then I see the health records hub page
     And I click the menu item 'Track your health'
     And I am redirected to the redirector page with the header 'Track your health'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the track your health warning message on the page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Track your health' on the Health Record Hub
     Given I am a user who cannot view health tracker from Patients Know Best

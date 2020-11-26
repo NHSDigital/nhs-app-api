@@ -36,8 +36,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { redirectTo } from '@/lib/utils';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import NativeApp from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import { INDEX_PATH } from '@/router/paths';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
@@ -65,10 +64,7 @@ export default {
       sessionStorage.setItem('agreedToMedicalWarning', true);
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
-      EventBus.$emit(FOCUS_NHSAPP_ROOT);
-      if (this.$store.state.device.isNativeApp) {
-        NativeApp.resetPageFocus();
-      }
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
     },
     onBackButtonClicked() {
       redirectTo(this, this.indexPath);

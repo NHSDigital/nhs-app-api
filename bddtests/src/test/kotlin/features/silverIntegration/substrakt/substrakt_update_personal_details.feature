@@ -13,7 +13,7 @@ Feature: Substrakt Update Personal Details
     Then I see the health records hub page
     And I click the menu item 'Update your personal details'
     And I am redirected to the redirector page with the header 'Update your personal details'
-    And the warning message on the Redirector page explains the service is from Substrakt
+    And the personal details warning message on the Redirector page explains the service is from Substrakt
 
   Scenario: A user without access to Substrakt cannot see the menu item 'Update your personal details' on the Health Record Hub page
     Given I am a user who cannot view Update your personal details from Substrakt

@@ -4,7 +4,7 @@ Feature: Patients Know Best Care Plans
 
   # P5 notes - the health record hub page is not available to P5 users, preventing them from accessing any silver integration care plans jump offs.
 
-  Scenario: A user navigates to PKB care plans and sees the warning message
+  Scenario: A user navigates to PKB care plans aGncrStepDefinitions.ktnd sees the warning message
     Given I am using the native app user agent
     And I am a user who can view care plans from Patients Know Best
     And I am logged in
@@ -12,7 +12,7 @@ Feature: Patients Know Best Care Plans
     Then I see the health records hub page
     And I click the menu item 'Care plans'
     And I am redirected to the redirector page with the header 'Care plans'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the care plans warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Care plans' on the Health Record Hub page
     Given I am a user who cannot view care plans from Patients Know Best

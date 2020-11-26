@@ -52,10 +52,6 @@ window.nativeApp.requestPnsToken = function(trigger) {
     window.webkit.messageHandlers.requestPnsToken.postMessage(trigger);
 };
 
-window.nativeApp.resetPageFocus = function() {
-    window.webkit.messageHandlers.resetPageFocus.postMessage(null);
-};
-
 window.nativeApp.setMenuBarItem = function(index) {
     window.webkit.messageHandlers.setMenuBarItem.postMessage(index);
 };

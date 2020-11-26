@@ -13,8 +13,7 @@ import QuestionQuantity from '@/components/online-consultations/QuestionQuantity
 import QuestionString from '@/components/online-consultations/QuestionString';
 import QuestionText from '@/components/online-consultations/QuestionText';
 import QuestionTime from '@/components/online-consultations/QuestionTime';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import NativeApp from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import { redirectTo } from '@/lib/utils';
 import { INDEX_PATH } from '@/router/paths';
 import { mount, shallowMount, createScrollTo } from '../../helpers';
@@ -77,7 +76,6 @@ describe('orchestrator', () => {
   afterEach(() => {
     dispatch.mockClear();
     scrollTo.mockClear();
-    NativeApp.resetPageFocus.mockClear();
     redirectTo.mockClear();
   });
 
@@ -568,8 +566,7 @@ describe('orchestrator', () => {
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', expectedParams);
-            expect(EventBus.$emit).not.toHaveBeenCalled();
-            expect(NativeApp.resetPageFocus).toHaveBeenCalled();
+            expect(EventBus.$emit).toHaveBeenCalled();
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
             expect(scrollTo).toHaveBeenCalledTimes(1);
           });
@@ -596,8 +593,7 @@ describe('orchestrator', () => {
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
             expect(blur).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/evaluateServiceDefinition', expectedParams);
-            expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
-            expect(NativeApp.resetPageFocus).not.toHaveBeenCalled();
+            expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_TITLE);
             expect(scrollTo).toHaveBeenCalledWith(0, 0);
             expect(scrollTo).toHaveBeenCalledTimes(1);
           });

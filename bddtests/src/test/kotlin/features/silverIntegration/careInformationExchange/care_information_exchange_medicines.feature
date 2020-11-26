@@ -13,7 +13,7 @@ Feature: Care Information Exchange Medicines
     And the CIE View Medicines link is available on the Prescriptions Hub
     When I click the CIE View Medicines link on the Prescriptions hub
     Then I am redirected to the redirector page with the header 'Hospital and other medicines'
-    And the warning message on the Redirector page explains the service is from Care Information Exchange
+    And the hospital and other warning explains the service is from Care Information Exchange
 
   Scenario: The menu item 'Hospital and other medicines' is visible on desktop
     Given I am a user who can view Medicines from Care Information Exchange

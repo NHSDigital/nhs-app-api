@@ -24,8 +24,7 @@ import {
   stripHtml,
 } from '@/lib/utils';
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import NativeCallbacks from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 jest.mock('@/services/native-app');
 jest.mock('@/services/event-bus', () => ({
@@ -73,8 +72,6 @@ describe('util library', () => {
   const PATIENT_ID = 1234;
 
   beforeEach(() => {
-    NativeCallbacks.resetPageFocus.mockClear();
-
     self = {
       $store: {
         app: {
@@ -635,21 +632,10 @@ describe('util library', () => {
     });
 
     describe('resetPageFocus', () => {
-      it('will call NativeCallbacks.resetPageFocus when isNativeApp is true', () => {
-        resetPageFocus({ state: { device: { isNativeApp: true } } });
-
-        expect(NativeCallbacks.resetPageFocus).toHaveBeenCalled();
-      });
-      it('will not call NativeCallbacks.resetPageFocus when isNativeApp is false', () => {
-        resetPageFocus({ state: { device: { isNativeApp: false } } });
-
-        expect(NativeCallbacks.resetPageFocus).not.toHaveBeenCalled();
-      });
-
-      it('will emit FOCUS_NHSAPP_ROOT on event bus', () => {
+      it('will emit FOCUS_NHSAPP_TITLE on event bus', () => {
         resetPageFocus({ state: { device: {} } });
 
-        expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
+        expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_TITLE);
       });
 
       it('will reset window scroll position', () => {

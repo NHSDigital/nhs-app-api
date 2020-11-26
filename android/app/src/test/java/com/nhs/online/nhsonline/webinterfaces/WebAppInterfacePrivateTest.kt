@@ -154,17 +154,6 @@ class WebAppInterfacePrivateTest {
     }
 
     @Test
-    fun pageFocus() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.resetPageFocus()
-
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).resetFocusToNhsLogoForAccessibility()
-    }
-
-    @Test
     fun whiteScreen() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
 

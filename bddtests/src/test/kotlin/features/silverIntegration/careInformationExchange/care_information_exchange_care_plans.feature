@@ -12,7 +12,7 @@ Feature: Care Information Exchange Care Plans
     Then I see the health records hub page
     And I click the menu item 'Care plans'
     And I am redirected to the redirector page with the header 'Care plans'
-    And the warning message on the Redirector page explains the service is from Care Information Exchange
+    And the care plan warning on the page explains the service is from Care Information Exchange
 
   Scenario: A user without access to CIE cannot see the menu item 'Care plans' on the Health Record Hub page
     Given I am a user who cannot view care plans from Care Information Exchange

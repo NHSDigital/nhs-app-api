@@ -14,7 +14,7 @@ Feature: Engage Admin
     And I wait for 30 seconds
     And I click the Engage Admin link
     And I am redirected to the redirector page with the header 'Additional GP services'
-    And the warning message on the Redirector page explains the service is from Engage
+    And the additional services warning message on the Redirector page explains the service is from Engage
 
   Scenario: A user without access to Engage cannot see the menu item 'Additional GP services' on the Appointments Hub
     Given I am a user who cannot view Admin from Engage

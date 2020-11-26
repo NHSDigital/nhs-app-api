@@ -12,7 +12,7 @@ Feature: Great North Care Record Correspondence
     Then I see the health records hub page
     And I click the menu item 'Hospital and other healthcare letters'
     And I am redirected to the redirector page with the header 'Hospital and other healthcare letters'
-    And the warning message on the Redirector page explains the service is from GNCR
+    And the healthcare letters warning message on the Redirector page explains the service is from GNCR
 
   Scenario: A user without access to GNCR cannot see the menu item 'Hospital and other healthcare letters' on the Health Record Hub page
     Given I am a user who cannot view Correspondence from GNCR

@@ -45,12 +45,7 @@ import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import Spinner from '@/components/widgets/Spinner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
-import {
-  FOCUS_NHSAPP_ROOT,
-  UPDATE_HEADER,
-  UPDATE_TITLE,
-  EventBus,
-} from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 export default {
   components: {
@@ -121,9 +116,6 @@ export default {
       this.$store.dispatch('appVersion/updateWebVersion', appVersion);
     }
   },
-  beforeMount() {
-    EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
-  },
   mounted() {
     EventBus.$emit(UPDATE_HEADER, this.$route.meta);
     EventBus.$emit(UPDATE_TITLE, this.$route.meta);
@@ -134,9 +126,6 @@ export default {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.dismissProgressBar();
     }
-  },
-  beforeDestroy() {
-    EventBus.$off(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
   },
   methods: {
     focusNhsAppRoot() {

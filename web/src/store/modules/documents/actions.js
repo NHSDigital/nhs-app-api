@@ -5,6 +5,7 @@ import {
   CLEAR,
   LOADED_DOCUMENT,
   SET_SELECTED_DOCUMENT_INFO,
+  SET_VIEW_DOCUMENT_TITLE,
 } from './mutation-types';
 
 const sanitizeFilename = sanitize;
@@ -120,5 +121,8 @@ export default {
   },
   setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
     commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);
+  },
+  setViewTitle({ commit }, title) {
+    commit(SET_VIEW_DOCUMENT_TITLE, title);
   },
 };

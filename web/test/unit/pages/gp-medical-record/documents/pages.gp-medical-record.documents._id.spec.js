@@ -302,7 +302,15 @@ describe('document view', () => {
   describe('methods', () => {
     it('will navigate to the view document page with the correct id in the path', async () => {
       // Arrange
-      const store = newStore();
+      const document = {
+        term: 'Document1',
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+        date: {},
+        isValidFile: true,
+      };
+      const store = newStore({ document });
       const route = { name: DOCUMENT_DETAIL_NAME, params: { id: 1 }, store };
       await mountPage({ $store: store });
 
@@ -310,6 +318,7 @@ describe('document view', () => {
       page.vm.navigateToView();
 
       // Assert
+      expect(store.dispatch).toHaveBeenCalledWith('documents/setViewTitle', 'Your document1');
       expect(utilsDependancy.createRouteByNameObject).toHaveBeenCalledWith(route);
     });
 

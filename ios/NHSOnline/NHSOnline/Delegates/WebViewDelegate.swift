@@ -154,7 +154,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
 
         if !UrlHelper.isSameSchemeAndHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
-            self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
+            self.viewController.announcePageTitle(pageTitle: webView.title)
         }
 
         if !webView.url!.absoluteString.contains(config().BiometricAuthResponseParam) {
@@ -295,9 +295,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.requestPnsToken.rawValue:
                 let trigger: String = message.body as! String
                 viewController.registerForPushNotifications(trigger: trigger)
-                break
-            case UserContent.resetPageFocus.rawValue:
-                viewController.headerBar.setFocusToNhsLogoForA11y()
                 break
             case UserContent.setHelpUrl.rawValue:
                 setHelpUrl(url: message.body as? String ?? config().HelpURL)

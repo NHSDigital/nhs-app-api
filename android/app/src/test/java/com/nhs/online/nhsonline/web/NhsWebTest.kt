@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.content.res.Resources
 import android.net.Network
+import android.view.accessibility.AccessibilityEvent
 import android.webkit.CookieManager
 import android.webkit.WebView
 import com.nhaarman.mockitokotlin2.*
@@ -58,6 +59,7 @@ class NhsWebTest {
         webViewMock = mock{
             on { settings }.doReturn(mock())
         }
+
         notificationsServiceMock = mock()
         network = mock()
         connectionStateMonitor = ConnectionStateMonitor(ResourceMockingClass().mockConnectionStateMonitorContext())
@@ -131,6 +133,19 @@ class NhsWebTest {
         spyNhsWeb.loadWelcomePage()
 
         verify(spyNhsWeb).loadUrl(baseURL)
+    }
+
+    @Test
+    fun loadWelcomePage_SendsAccessibilityEvent() {
+        val resourceMock = resourceMocks
+        val spyNhsWeb = spy(nhsWeb)
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+
+        spyNhsWeb.loadWelcomePage()
+
+        verify(spyNhsWeb).loadUrl(baseURL)
+        verify(webViewMock, times(1))
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
 
     @Test

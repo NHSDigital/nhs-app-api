@@ -129,12 +129,60 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         hospitalAppointmentsPage.btnPkbAppointments.click()
     }
 
-    @Then("the warning message on the Redirector page explains the service is from Patients Know Best$")
-    fun assertWarningMessageContent() {
+    @Then("the messages and consultations warning on the page explains the service is from Patients Know Best$")
+    fun assertMessagesAndconsultationsWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This service is provided by Patients Know Best",
+                "Messages and online consultations\nThis service is provided by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
+    }
+
+    @Then("the hospital and prescriptions warning on the page explains the service is from Patients Know Best$")
+    fun assertHospitalAndPrescriptionsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Hospital and other prescriptions\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the shared links warning on the page explains the service is from Patients Know Best$")
+    fun assertSharedLinksWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Shared links\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the test results warning on the page explains the service is from Patients Know Best$")
+    fun assertTestResultsMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Test results\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the view appointments warning on the page explains the service is from Patients Know Best$")
+    fun assertViewAppointmentsWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "View appointments\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the care plans warning message on the Redirector page explains the service is from Patients Know Best$")
+    fun assertCarePlansWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Care plans\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
+    }
+
+    @Then("the track your health warning message on the page explains the service is from Patients Know Best$")
+    fun assertTrackYourHealthWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Track your health\nThis service is provided by Patients Know Best",
+            "Your GP surgery or hospital has chosen this personal health record service provider.",
+            "Find out more about personal health record services")
     }
 
     @Then("^the link to PKB View Appointments is not available on the Appointments page$")

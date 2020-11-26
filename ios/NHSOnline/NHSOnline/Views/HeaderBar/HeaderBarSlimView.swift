@@ -35,10 +35,4 @@ class HeaderBarSlim: UIView {
         self.layer.shadowRadius = 5
         self.layer.shadowOpacity = 0.5
     }
-    
-    func setFocusToNhsLogoForA11y() {
-        if !isHidden && UIAccessibilityIsVoiceOverRunning() {
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.backButtonArrow)
-        }
-    }
 }

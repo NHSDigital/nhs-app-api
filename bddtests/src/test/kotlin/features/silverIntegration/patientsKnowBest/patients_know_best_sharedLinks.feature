@@ -13,7 +13,7 @@ Feature: Patients Know Best Shared Links
     Then I see the health records hub page
     And I click the menu item 'Shared links'
     And I am redirected to the redirector page with the header 'Shared links'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the shared links warning on the page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Shared links' on the health record hub page
     Given I am a user who cannot view Shared Links from Patients Know Best

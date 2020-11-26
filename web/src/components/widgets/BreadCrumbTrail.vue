@@ -52,8 +52,7 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack, createRouteByNameObject } from '@/lib/utils';
-import NativeApp from '@/services/native-app';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import backLinkOverrides from '@/router/backLinkOverRides';
 import { SWITCH_PROFILE_NAME } from '@/router/names';
 
@@ -115,11 +114,7 @@ export default {
         serviceDefinitionId,
       });
 
-      if (this.isNativeApp) {
-        NativeApp.resetPageFocus();
-      } else {
-        EventBus.$emit(FOCUS_NHSAPP_ROOT);
-      }
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
       window.scrollTo(0, 0);
     },
   },

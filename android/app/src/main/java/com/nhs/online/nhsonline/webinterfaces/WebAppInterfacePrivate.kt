@@ -127,12 +127,6 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun resetPageFocus() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
-        runAction { uiInteractor.resetFocusToNhsLogoForAccessibility() }
-    }
-
-    @JavascriptInterface
     fun setHelpUrl(url: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setHelpUrl")
         runAction { uiInteractor.setHelpUrl(url) }

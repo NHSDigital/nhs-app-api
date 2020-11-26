@@ -1,7 +1,9 @@
 <template>
   <fieldset class="nhsuk-fieldset" :aria-describedby="error ? `${name}-error` : undefined">
     <legend :class="['nhsuk-fieldset__legend', legendSize, 'nhsuk-u-margin-bottom-3']">
-      <h1 class="nhsuk-fieldset__heading nhsuk-u-margin-top-3">{{ heading }}</h1>
+      <h1 ref="nhsukRadiosHeader"
+          class="nhsuk-fieldset__heading nhsuk-u-margin-top-3"
+          tabindex="-1">{{ heading }}</h1>
     </legend>
 
     <div role="alert" aria-atomic="true">
@@ -99,6 +101,12 @@ export default {
   },
   created() {
     this.checkAndEmitIsValueValid(this.choice);
+  },
+  mounted() {
+    if (document.activeElement !== null) {
+      document.activeElement.blur();
+    }
+    this.$refs.nhsukRadiosHeader.focus();
   },
   methods: {
     checkAndEmitIsValueValid(value) {

@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.web
 import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import android.view.accessibility.AccessibilityEvent
 import android.webkit.CookieManager
 import android.webkit.URLUtil
 import android.webkit.WebView
@@ -103,6 +104,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
         val webInterceptor = WebClientInterceptor(
+                activity.resources,
                 uiInteractor,
                 this,
                 activity,
@@ -143,6 +145,7 @@ class NhsWeb(
 
     fun loadUrl(path: String) {
         Log.d(TAG, "Entering loadUrl")
+        webView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
 
         val hasFidoLoginError = path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
                 uiInteractor.canDisplayBiometricLogin() &&

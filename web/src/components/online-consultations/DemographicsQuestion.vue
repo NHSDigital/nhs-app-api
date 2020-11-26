@@ -60,8 +60,7 @@ import {
   DEMOGRAPHICS_QUESTION_OPTION,
 } from '@/lib/online-consultations/constants/nojsInputNames';
 import { redirectTo } from '@/lib/utils';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import NativeApp from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import {
   PRIVACY_POLICY_URL,
@@ -134,12 +133,7 @@ export default {
         serviceDefinitionId: this.serviceDefinitionId,
       });
 
-      if (this.isNativeApp) {
-        NativeApp.resetPageFocus();
-      } else {
-        EventBus.$emit(FOCUS_NHSAPP_ROOT);
-      }
-
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
       window.scrollTo(0, 0);
     },
   },

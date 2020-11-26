@@ -1,5 +1,8 @@
 <template>
-  <h1 :key="titleKey" aria-live="polite" :class="[cssClass, 'break']">
+  <h1 :key="titleKey"
+      ref="nhsAppHeader"
+      :class="[cssClass, 'break']"
+      tabindex="-1">
     <span v-if="caption"
           :key="caption"
           :class="[captionSizeCss, 'nhsuk-caption--top']"
@@ -11,6 +14,7 @@
 </template>
 <script>
 import CaptionSize from '@/lib/caption-size';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 export default {
   name: 'PageTitle',
@@ -38,6 +42,26 @@ export default {
         return this.captionSize;
       }
       return CaptionSize.Large;
+    },
+  },
+  beforeMount() {
+    EventBus.$on(FOCUS_NHSAPP_TITLE, this.focusNhsAppHeader);
+  },
+  beforeDestroy() {
+    EventBus.$off(FOCUS_NHSAPP_TITLE, this.focusNhsAppHeader);
+  },
+  updated() {
+    this.focusNhsAppHeader();
+  },
+  mounted() {
+    this.focusNhsAppHeader();
+  },
+  methods: {
+    focusNhsAppHeader() {
+      if (document.activeElement !== null) {
+        document.activeElement.blur();
+      }
+      this.$refs.nhsAppHeader.focus();
     },
   },
 };

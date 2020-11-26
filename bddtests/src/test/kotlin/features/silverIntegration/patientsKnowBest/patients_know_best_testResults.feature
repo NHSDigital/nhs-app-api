@@ -12,7 +12,7 @@ Feature: Patients Know Best Test Results
     Then I see the health records hub page
     And I click the menu item 'Test results'
     And I am redirected to the redirector page with the header 'Test results'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the test results warning on the page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Test results' on the Health Record Hub page
     Given I am a user who cannot view test results from Patients Know Best

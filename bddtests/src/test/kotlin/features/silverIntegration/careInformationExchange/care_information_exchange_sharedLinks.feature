@@ -13,7 +13,7 @@ Feature: Care Information Exchange Shared Links
     Then I see the health records hub page
     And I click the menu item 'Shared health links'
     And I am redirected to the redirector page with the header 'Shared health links'
-    And the warning message on the Redirector page explains the service is from Care Information Exchange
+    And the shared health warning on the page explains the service is from Care Information Exchange
 
   Scenario: A user without access to CIE cannot see the menu item 'Shared health links' on the health record hub page
     Given I am a user who cannot view Shared Health Links from Care Information Exchange

@@ -1,11 +1,13 @@
 package com.nhs.online.nhsonline.webclients
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
 import android.os.Handler
 import android.util.Log
+import android.view.accessibility.AccessibilityEvent
 import android.webkit.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
@@ -26,6 +28,7 @@ private const val WOFF2 = "woff2"
 private val TAG = WebClientInterceptor::class.java.simpleName
 
 class WebClientInterceptor(
+        private val resources: Resources,
         private val uiInteractor: IInteractor,
         private val nhsWeb: NhsWeb,
         private val context: Context,
@@ -252,8 +255,22 @@ class WebClientInterceptor(
 
     override fun onPageFinished(view: WebView?, url: String?) {
         Log.d(TAG, "Entering onPageFinished > url $url")
-        if (shouldHandleUnavailability(url)) {
+
+        if (url.isNullOrBlank()) {
+            Log.d(TAG, "Exiting onPageFinished > url was null or blank")
+            super.onPageFinished(view, url)
+
+            return
+        }
+
+        val urlString = url!!
+
+        if (shouldHandleUnavailability(urlString)) {
             cancelTrackingWebRequestResponse()
+        }
+
+        if (urlString.contains(resources.getString(R.string.authRedirectPath))) {
+            view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
 
         view?.isFocusable = true
@@ -262,16 +279,15 @@ class WebClientInterceptor(
             uiInteractor.showWebviewScreen()
         }
 
-        super.onPageFinished(view, url)
-
-        hideKnownServicesSpinner(url)
+        super.onPageFinished(view, urlString)
+        hideKnownServicesSpinner(urlString)
 
         // TODO: Needs a better way of handling dismissal of the progress dialog
         //       Currently leaves the app too tied to a specific path from Login
         //       but is needed to dismiss the progress dialog without a delay before the page transition to login
-        if (!url!!.contains(context.resources.getString(R.string.fido_auth_response)) &&
-                !(url!!.contains(URL(context.resources.getString(R.string.nhsLoginSuffix)).host) &&
-                url!!.contains(context.resources.getString(R.string.login_auth_code_path)))) {
+        if (!urlString.contains(context.resources.getString(R.string.fido_auth_response)) &&
+                !(urlString.contains(URL(context.resources.getString(R.string.nhsLoginSuffix)).host) &&
+                        urlString.contains(context.resources.getString(R.string.login_auth_code_path)))) {
             uiInteractor.dismissProgressDialog()
         }
     }

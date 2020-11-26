@@ -6,6 +6,7 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.net.Network
 import android.net.Uri
+import android.view.accessibility.AccessibilityEvent
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -53,12 +54,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -81,12 +83,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -123,12 +126,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -163,12 +167,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -213,12 +218,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -262,6 +268,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -271,6 +278,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -302,6 +310,7 @@ class WebClientInterceptorTest {
         val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -314,6 +323,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -343,6 +353,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -352,6 +363,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -377,6 +389,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = resourceMock.mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -400,6 +413,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -428,6 +442,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = resourceMock.mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -454,6 +469,7 @@ class WebClientInterceptorTest {
         Mockito.clearInvocations(uiInteractorMock)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -480,6 +496,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -503,6 +520,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -529,6 +547,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -552,6 +571,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -578,7 +598,7 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
-        val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -602,6 +622,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -630,6 +651,7 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -637,6 +659,7 @@ class WebClientInterceptorTest {
         connectionStateMonitor.onLost(network)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockDisconnectedContext(),
@@ -678,12 +701,14 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockConnectedContext(),
@@ -724,13 +749,15 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
-        val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
         val url = "https://111.nhs.uk/"
+
+        whenever(resources.getString(R.string.authRedirectPath)).doReturn("/auth-return")
         whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
                 RootService(
                         requiresAssertedLoginIdentity = true,
@@ -748,6 +775,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -773,7 +801,9 @@ class WebClientInterceptorTest {
         val contextMock: Context = ResourceMockingClass().mockContext()
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
-        val webViewMock: WebView = mock()
+        val resources: Resources = mock()
+
+        whenever(resources.getString(R.string.authRedirectPath)).doReturn("/auth-return")
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -797,6 +827,7 @@ class WebClientInterceptorTest {
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
@@ -813,6 +844,33 @@ class WebClientInterceptorTest {
     }
 
     @Test
+    fun onPageFinished_authReturn_SendsAccessibilityEvent() {
+        val webViewMock =
+                setupAccessibilityTestAndReturnWebView("https://111.nhs.uk/auth-return")
+
+        verify(webViewMock, times(1))
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+    }
+
+    @Test
+    fun onPageFinished_NonAuthReturn_DoesNotSendsAccessibilityEvent() {
+        val webViewMock =
+                setupAccessibilityTestAndReturnWebView("https://111.nhs.uk/test")
+
+        verify(webViewMock, times(0))
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+    }
+
+    @Test
+    fun onPageFinished_BlankUrl_DoesNotSendsAccessibilityEvent() {
+        val webViewMock =
+                setupAccessibilityTestAndReturnWebView(null)
+
+        verify(webViewMock, times(0))
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+    }
+
+    @Test
     fun stopLoadingWebViewTest() {
         val connectionStateMonitor: ConnectionStateMonitor
         val resourceMock = ResourceMockingClass()
@@ -824,6 +882,7 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
@@ -832,6 +891,7 @@ class WebClientInterceptorTest {
         connectionStateMonitor.onLost(network)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockDisconnectedContext(),
@@ -860,12 +920,14 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockDisconnectedContext(),
@@ -896,12 +958,14 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
         val webInterceptor = WebClientInterceptor(
+                resources,
                 uiInteractorMock,
                 nhsWebMock,
                 contextMock,
@@ -947,12 +1011,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -981,12 +1046,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -1015,12 +1081,13 @@ class WebClientInterceptorTest {
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
+        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        webClientInterceptor = WebClientInterceptor(uiInteractorMock,
+        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
                 nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
                 connectionStateMonitor)
 
@@ -1031,5 +1098,42 @@ class WebClientInterceptorTest {
 
     private fun createWebView(activity: Activity): WebView {
         return WebView(activity)
+    }
+
+    private fun setupAccessibilityTestAndReturnWebView(url: String?): WebView {
+        val connectionStateMonitor: ConnectionStateMonitor
+        val resourceMock = ResourceMockingClass()
+
+        val uiInteractorMock: IInteractor = mock()
+        val knownServicesMock: KnownServices = mock()
+        val contextMock: Context = ResourceMockingClass().mockContext()
+        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
+        val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
+
+        val network: Network = mock()
+        connectionStateMonitor = ConnectionStateMonitor(contextMock)
+        connectionStateMonitor.onAvailable(network)
+
+        whenever(resources.getString(R.string.authRedirectPath)).doReturn("/auth-return")
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
+                connectionStateMonitor, mock())
+        val webInterceptor = WebClientInterceptor(
+                resources,
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                loggingServiceMock,
+                connectionStateMonitor
+        )
+
+        val webViewMock: WebView = mock()
+        webInterceptor.onPageFinished(webViewMock, url)
+
+        return webViewMock
     }
 }

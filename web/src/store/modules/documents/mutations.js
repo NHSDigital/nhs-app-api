@@ -5,6 +5,7 @@ import {
   CLEAR,
   LOADED_DOCUMENT,
   SET_SELECTED_DOCUMENT_INFO,
+  SET_VIEW_DOCUMENT_TITLE,
   initialState,
 } from './mutation-types';
 
@@ -31,5 +32,8 @@ export default {
   },
   [SET_SELECTED_DOCUMENT_INFO](state, document) {
     state.currentDocument = document;
+  },
+  [SET_VIEW_DOCUMENT_TITLE](state, title) {
+    state.viewDocumentTitle = title;
   },
 };

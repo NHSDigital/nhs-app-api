@@ -21,7 +21,7 @@ Feature: Patients Know Best Messages
     And the Messages Hub page is displayed
     And I click the PKB Messages and online consultations link on the Messages Hub page
     And I am redirected to the redirector page with the header 'Messages and online consultations'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the messages and consultations warning on the page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Messages and online consultations' on the more page
     Given I am a user who cannot view Messages and Online Consultations from Patients Know Best

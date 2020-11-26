@@ -178,6 +178,7 @@ describe('NhsUkLayout', () => {
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
       [MORE.name, MORE],
+      [DOCUMENT_DETAIL.name, DOCUMENT_DETAIL],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         wrapper = createPage($store, page);
@@ -190,7 +191,6 @@ describe('NhsUkLayout', () => {
 
     describe.each([
       [LOGIN.name, LOGIN],
-      [DOCUMENT_DETAIL.name, DOCUMENT_DETAIL],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         wrapper = createPage($store, page);

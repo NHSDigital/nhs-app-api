@@ -17,7 +17,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import Glossary from '@/components/Glossary';
 import { GP_MEDICAL_RECORD_PATH, DOCUMENT_PATH, LOGOUT_PATH, LOGIN_PATH } from '@/router/paths';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import { redirectTo } from '@/lib/utils';
 import {
   CLINICAL_ABBREVIATIONS_URL,
@@ -52,6 +52,7 @@ export default {
     if (!this.$store.state.documents.currentDocument.data) {
       await this.$store.dispatch('documents/loadDocument', { documentIdentifier: this.$route.params.id });
     }
+
     this.documentData = this.$store.state.documents.currentDocument.data;
 
     if (this.documentData) {
@@ -65,7 +66,7 @@ export default {
     // from the content attribute so user can zoom
     // on their document.
     this.setZoom(true);
-    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+    EventBus.$emit(FOCUS_NHSAPP_TITLE);
   },
   beforeDestroy() {
     // Set the user-scalable=0 and maxium-scale=1.0

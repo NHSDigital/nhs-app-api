@@ -45,8 +45,7 @@ import MenuItemList from '@/components/MenuItemList';
 import GenericButton from '@/components/widgets/GenericButton';
 import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import NativeApp from '@/services/native-app';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 export default {
   name: 'ConditionList',
@@ -85,11 +84,7 @@ export default {
         answeringConditionsQuestion: true,
       });
       this.$store.dispatch('onlineConsultations/setGpAdviceServiceDefinitionId', serviceDefinitionId);
-      if (this.isNativeApp) {
-        NativeApp.resetPageFocus();
-      } else {
-        EventBus.$emit(FOCUS_NHSAPP_ROOT);
-      }
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
       window.scrollTo(0, 0);
     },
     endMyConsultationClicked() {

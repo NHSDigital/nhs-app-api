@@ -1,11 +1,13 @@
 <template>
   <div class="warning-content-panel">
     <div class="warning-content-panel__content">
-      <p class="nhsuk-body-m nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1"
-         data-purpose="warning-pre-header">
-        <slot name="preHeader"/>
-      </p>
-      <h1 class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-2">
+      <h1 ref="warningContentPanelHeader"
+          tabindex="-1"
+          class="nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-4">
+        <p class="nhsuk-u-padding-top-4 nhsuk-caption-l whiteText"
+           data-purpose="warning-pre-header">
+          <slot name="preHeader"/>
+        </p>
         <slot name="header"/>
       </h1>
       <slot/>
@@ -16,6 +18,12 @@
 <script>
 export default {
   name: 'WarningContentPanel',
+  mounted() {
+    if (document.activeElement !== null) {
+      document.activeElement.blur();
+    }
+    this.$refs.warningContentPanelHeader.focus();
+  },
 };
 </script>
 
@@ -27,6 +35,10 @@ export default {
 @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
 @import "../../style/colours";
+
+.whiteText {
+  color: $color_nhsuk-white !important;
+}
 
 .warning-content-panel {
   @include nhsuk-responsive-margin(4, "top");

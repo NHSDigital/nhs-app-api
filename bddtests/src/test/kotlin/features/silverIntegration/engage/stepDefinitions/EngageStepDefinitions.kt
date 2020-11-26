@@ -48,12 +48,28 @@ class EngageStepDefinitions : HybridPageObject() {
         healthAdvicePage.engageMedicalAdvice.click()
     }
 
-    @Then("the warning message on the Redirector page explains the service is from Engage$")
-    fun assertWarningMessageContent() {
+    @Then("the advice warning message on the Redirector page explains the service is from Engage$")
+    fun assertAdviceWarningMessageContent() {
         redirector.interruptionCard.assertContent(
-                "This service is provided by Engage Health Systems Limited",
-                "Your GP surgery has chosen this online consultation service provider.",
-                "Find out more about online consultation services")
+            "Ask your GP for advice\nThis service is provided by Engage Health Systems Limited",
+            "Your GP surgery has chosen this online consultation service provider.",
+            "Find out more about online consultation services")
+    }
+
+    @Then("the messages warning message on the Redirector page explains the service is from Engage$")
+    fun assertMessagesWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Messages\nThis service is provided by Engage Health Systems Limited",
+            "Your GP surgery has chosen this online consultation service provider.",
+            "Find out more about online consultation services")
+    }
+
+    @Then("the additional services warning message on the Redirector page explains the service is from Engage$")
+    fun assertAdditionalServicesWarningMessageContent() {
+        redirector.interruptionCard.assertContent(
+            "Additional GP services\nThis service is provided by Engage Health Systems Limited",
+            "Your GP surgery has chosen this online consultation service provider.",
+            "Find out more about online consultation services")
     }
 
     @Given("^I am a user who can view Messages and Online Consultations from Engage$")

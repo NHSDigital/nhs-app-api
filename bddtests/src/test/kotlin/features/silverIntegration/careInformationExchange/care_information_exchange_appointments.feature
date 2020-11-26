@@ -13,7 +13,7 @@ Feature: Care Information Exchange Appointments
     And I can see the CIE View Appointments link on the Appointments page
     When I click the CIE View Appointments link on the Appointments page
     Then I am redirected to the redirector page with the header 'View appointments'
-    And the warning message on the Redirector page explains the service is from Care Information Exchange
+    And the view appointments warning on the page explains the service is from Care Information Exchange
 
   Scenario: A user without access to CIE cannot see the menu item 'Appointments' on the appointments page
     Given I am a user who cannot view Appointments from Care Information Exchange

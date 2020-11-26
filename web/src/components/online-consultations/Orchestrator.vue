@@ -114,8 +114,7 @@ import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
 import { INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import NativeApp from '@/services/native-app';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 export default {
   name: 'Orchestrator',
@@ -285,11 +284,7 @@ export default {
           provider: this.provider,
           serviceDefinitionId: this.serviceDefinitionId,
         });
-        if (this.isNativeApp) {
-          NativeApp.resetPageFocus();
-        } else {
-          EventBus.$emit(FOCUS_NHSAPP_ROOT);
-        }
+        EventBus.$emit(FOCUS_NHSAPP_TITLE);
       }
       window.scrollTo(0, 0);
     },
@@ -300,11 +295,7 @@ export default {
         provider: this.provider,
         serviceDefinitionId: this.serviceDefinitionId,
       });
-      if (this.isNativeApp) {
-        NativeApp.resetPageFocus();
-      } else {
-        EventBus.$emit(FOCUS_NHSAPP_ROOT);
-      }
+      EventBus.$emit(FOCUS_NHSAPP_TITLE);
       window.scrollTo(0, 0);
     },
     backToHomeClicked() {

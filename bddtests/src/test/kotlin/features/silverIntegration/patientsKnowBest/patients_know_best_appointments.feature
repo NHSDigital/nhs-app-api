@@ -13,7 +13,7 @@ Feature: Patients Know Best Appointments
     And I can see the PKB View Appointments link on the Appointments page
     When I click the PKB View Appointments link on the Appointments page
     Then I am redirected to the redirector page with the header 'View appointments'
-    And the warning message on the Redirector page explains the service is from Patients Know Best
+    And the view appointments warning on the page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Appointments' on the appointments page
     Given I am a user who cannot view Appointments from Patients Know Best

@@ -425,8 +425,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
     }
     
-    func resetFocusAndAnnouncePageTitle(pageTitle: String?) {
-        self.headerBar.setFocusToNhsLogoForA11y()
+    func announcePageTitle(pageTitle: String?) {
         if let title = pageTitle {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, title)
         }

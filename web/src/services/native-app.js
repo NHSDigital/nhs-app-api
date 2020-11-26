@@ -220,15 +220,6 @@ export default {
     return false;
   },
 
-  resetPageFocus() {
-    const app = window.nativeApp;
-    if (app && app.resetPageFocus) {
-      app.resetPageFocus();
-      return true;
-    }
-    return false;
-  },
-
   /**
    * @deprecated since version 1.21, here for backwards compatibility
    * */

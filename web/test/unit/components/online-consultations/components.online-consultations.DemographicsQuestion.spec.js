@@ -1,8 +1,7 @@
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
 import GenericButton from '@/components/widgets/GenericButton';
 import i18n from '@/plugins/i18n';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
-import NativeApp from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 import each from 'jest-each';
 import {
   ONLINE_CONSULTATIONS_PRIVACY_URL,
@@ -60,7 +59,6 @@ describe('demographics question', () => {
     describe('demographicsContinueClicked', () => {
       afterEach(() => {
         EventBus.$emit.mockClear();
-        NativeApp.resetPageFocus.mockClear();
       });
 
       it('will update store consent given if isAccepted is true and dispatch getServiceDefinition action', async () => {
@@ -97,11 +95,7 @@ describe('demographics question', () => {
 
         // Assert
         expect(document.activeElement.blur).toHaveBeenCalled();
-        if (!isNative) {
-          expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_ROOT);
-        } else {
-          expect(NativeApp.resetPageFocus).toHaveBeenCalled();
-        }
+        expect(EventBus.$emit).toHaveBeenCalledWith(FOCUS_NHSAPP_TITLE);
         expect(scrollTo).toHaveBeenCalledWith(0, 0);
         expect(scrollTo).toHaveBeenCalledTimes(1);
       });
