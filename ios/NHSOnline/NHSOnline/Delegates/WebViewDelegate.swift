@@ -180,31 +180,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
 
         if shouldHandleErrors {
-            if badResponse {
-                return self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
-            }
-
-            if withError._domain == "NSURLErrorDomain" {
-                if let info = withError._userInfo as? [String: Any] {
-                    if let url = info["NSErrorFailingURLKey"] as? URL {
-                        switch knownServicesProvider.getKnownServices() {
-                        case .success(let knownServices):
-                            self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
-                        default:
-                            self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
-                        }
-                    }
-                }
-            } else {
-                switch knownServicesProvider.getKnownServices() {
-                case .success(let knownServices):
-                    self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
-                default:
-                    self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
-                }
-            }
-
             Logger.logError(message: "Failed to load the page with error: %@", withError.localizedDescription)
+            self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
         }
         viewController.applicationState.unBlock()
     }
@@ -397,12 +374,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
             if (url?.host == baseUrl?.host) {
-                switch knownServicesProvider.getKnownServices() {
-                case .success(let knownServices):
-                    self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
-                default:
-                    self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
-                }
+                self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
             }
         }
     }

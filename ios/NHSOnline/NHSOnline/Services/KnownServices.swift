@@ -139,13 +139,6 @@ class KnownServices {
         return nil
     }
 
-    func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
-        guard let theUrl = url, getRootServiceByHostAndScheme(host: (theUrl.host)!, scheme: (theUrl.scheme)!) != nil else {
-            return ErrorMessage(.ServiceUnavailable)
-        }
-        return ErrorMessage(.NoInternetConnection)
-    }
-
     struct SubServiceMatch {
         let subService: SubService
         let pathMatch: Bool
