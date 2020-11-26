@@ -2,8 +2,8 @@
 cosmosDBName: logindevelopment
 odsRemapEnabled: true
 odsRemapMap: "G85075:X00100;G85672:X00100;A21464:A29928"
-cidHostname: auth.ext.signin.nhs.uk
-cidFidoHostname: uaf.ext.signin.nhs.uk
+cidHostname: auth.dev18.signin.nhs.uk
+cidFidoHostname: uaf.dev18.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
 users:
@@ -136,7 +136,7 @@ knownservices_config: {
       ]
     },
     "cid-settings": {
-      "url": "https://settings.ext.signin.nhs.uk",
+      "url": "https://settings.dev18.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -148,7 +148,7 @@ knownservices_config: {
       "validateSession": false
     },
     "cid-account": {
-      "url": "https://account.ext.signin.nhs.uk",
+      "url": "https://account.dev18.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
@@ -160,7 +160,7 @@ knownservices_config: {
       "validateSession": false
     },
     "cid-auth": {
-      "url": "https://auth.ext.signin.nhs.uk",
+      "url": "https://auth.dev18.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
@@ -172,7 +172,7 @@ knownservices_config: {
       "validateSession": false
     },
     "cid-uaf": {
-      "url": "https://uaf.ext.signin.nhs.uk",
+      "url": "https://uaf.dev18.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
@@ -184,7 +184,7 @@ knownservices_config: {
       "validateSession": false
     },
     "cid-access": {
-      "url": "https://access.ext.signin.nhs.uk",
+      "url": "https://access.dev18.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
