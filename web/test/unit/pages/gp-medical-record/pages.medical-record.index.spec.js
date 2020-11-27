@@ -44,8 +44,30 @@ describe('healthRecords', () => {
     expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
   });
 
-  it('will include the organ donation link', () => {
-    expect(wrapper.find(OrganDonationLink).exists()).toBe(true);
+  describe('visible links', () => {
+    describe('when not proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs();
+      });
+      it('will include the organ donation link', () => {
+        expect(wrapper.find(OrganDonationLink).exists()).toBe(true);
+      });
+      it('will include the ndop link', () => {
+        expect(wrapper.find('#btn_data_sharing').exists()).toBe(true);
+      });
+    });
+
+    describe('when proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ isProxying: true });
+      });
+      it('will not include the organ donation link', () => {
+        expect(wrapper.find(OrganDonationLink).exists()).toBe(false);
+      });
+      it('will not include the ndop link', () => {
+        expect(wrapper.find('#btn_data_sharing').exists()).toBe(false);
+      });
+    });
   });
 
   describe('navigateToDataSharing', () => {

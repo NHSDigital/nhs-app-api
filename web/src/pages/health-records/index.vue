@@ -14,73 +14,75 @@
                        'myRecord.hub.gpHealthRecord',
                        'myRecord.hub.viewAllergiesMedicinesAndMore')" />
 
-          <third-party-jump-off-button v-if="showPkbTestResults && !isProxying"
-                                       id="btn_pkb_test_results"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.testResults" />
-          <third-party-jump-off-button v-if="showPkbCieTestResults && !isProxying"
-                                       id="btn_pkb_cie_test_results"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.testResultsCie" />
-          <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying"
-                                       id="btn_pkb_care_plans"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.carePlans" />
-          <third-party-jump-off-button v-if="showPkbCieCarePlans && !isProxying"
-                                       id="btn_pkb_cie_care_plans"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.carePlansCie" />
-          <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying"
-                                       id="btn_pkb_health_trackers"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.healthTrackers" />
-          <third-party-jump-off-button v-if="showPkbCieHealthTracker && !isProxying"
-                                       id="btn_pkb_cie_health_trackers"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.healthTrackersCie" />
-          <third-party-jump-off-button v-if="showPkbSharedLinks && !isProxying"
-                                       id="btn_pkb_shared_links"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.sharedLinks"/>
-          <third-party-jump-off-button v-if="showPkbCieSharedLinks && !isProxying"
-                                       id="btn_pkb_cie_shared_links"
-                                       provider-id="pkb"
-                                       :provider-configuration="thirdPartyProvider
-                                         .pkb.sharedLinksCie" />
-          <third-party-jump-off-button v-if="showPatientPackAccountAdmin && !isProxying"
-                                       id="btn_substrakt_update_details"
-                                       provider-id="substraktPatientPack"
-                                       :provider-configuration="thirdPartyProvider
-                                         .substraktPatientPack.accountAdmin" />
-          <third-party-jump-off-button
-            v-if="showGncrMessages && !isProxying"
-            id="btn_gncr_messages_and_consultations"
-            provider-id="gncr"
-            :provider-configuration="thirdPartyProvider.gncr.correspondence" />
+          <div v-if="!isProxying">
+            <third-party-jump-off-button v-if="showPkbTestResults"
+                                         id="btn_pkb_test_results"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.testResults" />
+            <third-party-jump-off-button v-if="showPkbCieTestResults"
+                                         id="btn_pkb_cie_test_results"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.testResultsCie" />
+            <third-party-jump-off-button v-if="showPkbCarePlans"
+                                         id="btn_pkb_care_plans"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.carePlans" />
+            <third-party-jump-off-button v-if="showPkbCieCarePlans"
+                                         id="btn_pkb_cie_care_plans"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.carePlansCie" />
+            <third-party-jump-off-button v-if="showPkbHealthTracker"
+                                         id="btn_pkb_health_trackers"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.healthTrackers" />
+            <third-party-jump-off-button v-if="showPkbCieHealthTracker"
+                                         id="btn_pkb_cie_health_trackers"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.healthTrackersCie" />
+            <third-party-jump-off-button v-if="showPkbSharedLinks"
+                                         id="btn_pkb_shared_links"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.sharedLinks"/>
+            <third-party-jump-off-button v-if="showPkbCieSharedLinks"
+                                         id="btn_pkb_cie_shared_links"
+                                         provider-id="pkb"
+                                         :provider-configuration="thirdPartyProvider
+                                           .pkb.sharedLinksCie" />
+            <third-party-jump-off-button v-if="showPatientPackAccountAdmin"
+                                         id="btn_substrakt_update_details"
+                                         provider-id="substraktPatientPack"
+                                         :provider-configuration="thirdPartyProvider
+                                           .substraktPatientPack.accountAdmin" />
+            <third-party-jump-off-button
+              v-if="showGncrMessages"
+              id="btn_gncr_messages_and_consultations"
+              provider-id="gncr"
+              :provider-configuration="thirdPartyProvider.gncr.correspondence" />
 
-          <organ-donation-link
-            id="btn_organ_donation"
-            header-tag="h2"
-            :display-description="true"
-            :back-link-override="yourHealthPath"/>
+            <organ-donation-link
+              id="btn_organ_donation"
+              header-tag="h2"
+              :display-description="true"
+              :back-link-override="yourHealthPath"/>
 
-          <menu-item
-            id="btn_data_sharing"
-            header-tag="h2"
-            data-purpose="text_link"
-            :href="dataSharingPath"
-            :text="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared')"
-            :description="$t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose')"
-            :click-func="navigateToDataSharing"
-            :aria-label="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared') |
-              join($t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose') ,'. ')"/>
+            <menu-item
+              id="btn_data_sharing"
+              header-tag="h2"
+              data-purpose="text_link"
+              :href="dataSharingPath"
+              :text="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared')"
+              :description="$t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose')"
+              :click-func="navigateToDataSharing"
+              :aria-label="$t('dataSharing.chooseIfDataFromYourHealthRecordIsShared') |
+                join($t('dataSharing.findOutHowTheNhsUsesYourInformationAndChoose') ,'. ')"/>
+          </div>
         </menu-item-list>
       </div>
     </div>
