@@ -144,12 +144,18 @@ describe('index', () => {
 
     let messagesLink;
 
-    it('will show messages link', () => {
-      wrapper = mountAs({});
-      messagesLink = getMessagesLink(wrapper);
-      expect(messagesLink.exists()).toBe(true);
-      expect(messagesLink.text()).toBe('View your messages');
-    });
+    each([
+      ['will have text \'View your unread messages\' when there are unread messages', true, true, 'View your unread messages'],
+      ['will have text \'View your unread messages\' when there are only unread app messages', false, true, 'View your unread messages'],
+      ['will have text \'View your unread messages\' when there are only unread GP messages', true, false, 'View your unread messages'],
+      ['will have text \'View your messages\' when there are no unread messages', false, false, 'View your messages'],
+    ]).it('%s',
+      (_, hasUnreadGpMessages, hasUnreadAppMessages, expectedText) => {
+        wrapper = mountAs({ hasUnreadAppMessages, hasUnreadGpMessages });
+        messagesLink = getMessagesLink(wrapper);
+        expect(messagesLink.exists()).toBe(true);
+        expect(messagesLink.text()).toBe(expectedText);
+      });
 
     it('will not show messages link when messages unavailable', () => {
       wrapper = mountAs({

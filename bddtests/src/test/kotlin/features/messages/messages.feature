@@ -39,7 +39,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user with proof level 5 wishing to view my messages
     And I am logged in
-    When I follow the Messages link from the home page
+    When I follow the unread messages link from the home page
     And I click the App Messages link on the messages hub page
     Then the Messages Inbox page is displayed
 
@@ -68,7 +68,7 @@ Feature: Messages
     And I am a user wishing to view my messages and GP surgery messages
     And I am logged in
     Then I can see I have unread messages on the home page
-    When I follow the Messages link from the home page
+    When I follow the unread messages link from the home page
     Then the Messages Hub page is displayed with the unread indicator for app messaging
 
   Scenario: A user can see their messages and follow an internal link

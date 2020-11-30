@@ -53,6 +53,11 @@ class HomePageStepDefinitions {
         loginSteps.loginPage.clickHelpIcon()
     }
 
+    @When("I follow the unread messages link from the home page$")
+    fun iFollowTheUnreadMessagesLinkFromTheHomePage() {
+        homeSteps.assertLinkIsVisible(NavigationLinkText.UNREAD_MESSAGES).click()
+    }
+
     @When("I follow the Messages link from the home page$")
     fun iFollowTheMessagesLinkFromTheHomePage() {
         homeSteps.assertLinkIsVisible(NavigationLinkText.MESSAGES).click()

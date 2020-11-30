@@ -178,10 +178,9 @@ export default {
         @include nhsuk-responsive-padding(1, "right");
         @include nhsuk-typography-responsive(14);
         font-weight: $nhsuk-font-bold;
-        background-color: $color_nhsuk-yellow;
+        background-color: $color_nhsuk-red;
         border-radius: nhsuk-spacing(3);
-        color: $nhsuk-text-color;
-        border: 1px solid #B58F1C;
+        color: $color_nhsuk-white;
         display: inline-block;
         min-width: nhsuk-spacing(4);
         min-height: nhsuk-spacing(4);

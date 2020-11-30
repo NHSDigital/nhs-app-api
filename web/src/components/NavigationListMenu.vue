@@ -11,8 +11,8 @@
                  data-purpose="messages-menu-item"
                  :href="messagesPath"
                  :show-indicator="hasMessageIndicator"
-                 :text="$t('navigation.viewYourMessages')"
-                 :aria-label="messagesAriaLabel"
+                 :text="messagesLabel"
+                 :aria-label="messagesLabel"
                  :click-func="navigateToMessages"/>
       <menu-item v-if="hasLinkedAccounts"
                  id="linked-profiles-link"
@@ -87,11 +87,10 @@ export default {
     gpMessagingAvailable() {
       return !this.$store.state.gpMessages.gpMessagingSessionUnavailable;
     },
-    messagesAriaLabel() {
-      return (this.hasMessageIndicator) ?
-        `${this.$t('navigation.viewYourMessages')}
-          ${this.$t('navigation.youHaveUnreadMessages')}` :
-        this.$t('navigation.viewYourMessages');
+    messagesLabel() {
+      return this.hasMessageIndicator ?
+        this.$t('navigation.viewYourUnreadMessages')
+        : this.$t('navigation.viewYourMessages');
     },
     hasLinkedAccounts() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];

@@ -25,6 +25,7 @@ enum class NavigationLinkText (val linkText: String) {
     GP_HEALTH_RECORD("View your GP health record"),
     PRESCRIPTIONS("Order a repeat prescription"),
     MESSAGES("View your messages"),
+    UNREAD_MESSAGES("View your unread messages"),
     LINKED_PROFILES("Linked profiles"),
 }
 

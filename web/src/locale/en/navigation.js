@@ -13,6 +13,7 @@ export default {
   viewYourHealthRecords: 'View your health records',
   viewHealthInformationAndUpdates: 'View health information and updates',
   viewYourMessages: 'View your messages',
+  viewYourUnreadMessages: 'View your unread messages',
   youHaveUnreadMessages: 'You have unread messages',
   myAccount: 'My Account',
   accessMyAccountSettings: 'Access my account settings',
