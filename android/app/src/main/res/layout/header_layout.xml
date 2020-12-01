@@ -39,7 +39,8 @@
         android:textSize="@dimen/_8ssp"
         android:textColor="#FFFFFF"
         android:layout_width="0dp"
-        android:paddingBottom="@dimen/_2sdp" />
+        android:paddingBottom="@dimen/_2sdp"
+        android:importantForAccessibility="no"/>
 
     <ImageView
         android:id="@+id/nhsLogoIcon"
@@ -69,11 +70,11 @@
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/myAccountIcon"
+        app:layout_constraintRight_toLeftOf="@id/settingsIcon"
         app:layout_constraintBottom_toTopOf="@id/helpIconText"
         android:nextFocusUp="@id/messages"
         android:nextFocusDown="@id/webview"
-        android:nextFocusForward="@id/myAccountIcon"
+        android:nextFocusForward="@id/settingsIcon"
         android:paddingLeft="@dimen/_6sdp"
         android:paddingRight="@dimen/_6sdp"
         android:paddingTop="@dimen/_7sdp"
@@ -93,14 +94,15 @@
         android:textSize="@dimen/_8ssp"
         android:textColor="#FFFFFF"
         android:layout_width="0dp"
-        android:paddingBottom="@dimen/_2sdp"/>
+        android:paddingBottom="@dimen/_2sdp"
+        android:importantForAccessibility="no"/>
 
     <ImageView
-        android:id="@+id/myAccountIcon"
+        android:id="@+id/settingsIcon"
         android:layout_width="wrap_content"
         android:adjustViewBounds="true"
         android:background="@drawable/icon_drawable_boarder_focusable"
-        android:contentDescription="@string/header_icon_account"
+        android:contentDescription="@string/header_icon_settings"
         android:focusable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -117,7 +119,7 @@
         android:id="@+id/settingsIconText"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        app:layout_constraintTop_toBottomOf="@id/myAccountIcon"
+        app:layout_constraintTop_toBottomOf="@id/settingsIcon"
         app:layout_constraintLeft_toRightOf="@id/helpIconText"
         app:layout_constraintRight_toRightOf="parent"
         android:text="@string/header_icon_settings_label"
@@ -126,6 +128,7 @@
         android:textColor="#FFFFFF"
         android:layout_width="0dp"
         android:paddingRight="@dimen/_6sdp"
-        android:paddingBottom="@dimen/_2sdp"/>
+        android:paddingBottom="@dimen/_2sdp"
+        android:importantForAccessibility="no"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

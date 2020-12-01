@@ -182,7 +182,7 @@ class MainActivity :
         backToAccountButton.setOnClickListener { onSuccessButton() }
         retryButton.setOnClickListener { onErrorRetryButton(referrerClient) }
         homeLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
-        myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
+        settingsIcon.setOnClickListener { onSettingsIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
     }
 
@@ -410,7 +410,7 @@ class MainActivity :
         menuBar.deselectActiveItem()
     }
 
-    private fun onMyAccountIconSelected() {
+    private fun onSettingsIconSelected() {
         nhsWeb?.loadUrl(resources.getString(R.string.myAccountPath))
         menuBar.deselectActiveItem()
     }
