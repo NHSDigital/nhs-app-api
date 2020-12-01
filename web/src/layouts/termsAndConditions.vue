@@ -45,7 +45,12 @@ import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
 import Spinner from '@/components/widgets/Spinner';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
-import { FOCUS_NHSAPP_ROOT, UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import {
+  FOCUS_NHSAPP_ROOT,
+  UPDATE_HEADER,
+  UPDATE_TITLE,
+  EventBus,
+} from '@/services/event-bus';
 
 export default {
   components: {
@@ -121,6 +126,7 @@ export default {
   },
   mounted() {
     EventBus.$emit(UPDATE_HEADER, this.$route.meta);
+    EventBus.$emit(UPDATE_TITLE, this.$route.meta);
     NativeVersionSetup(this.$store);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));

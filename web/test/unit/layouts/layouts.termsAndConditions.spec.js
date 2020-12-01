@@ -4,7 +4,7 @@ import i18n from '@/plugins/i18n';
 import TsAndCsLayout from '@/layouts/termsAndConditions';
 import OnUpdateTitleMixin from '@/plugins/mixinDefinitions/OnUpdateTitleMixin';
 import ResetSpinnerMixin from '@/plugins/mixinDefinitions/ResetSpinnerMixin';
-import { UPDATE_HEADER, EventBus } from '@/services/event-bus';
+import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { createStore, shallowMount } from '../helpers';
 
 jest.mock('@/services/event-bus', () => ({
@@ -14,6 +14,7 @@ jest.mock('@/services/event-bus', () => ({
 
 const routeMeta = {
   headerKey: 'terms-conditions-header',
+  titleKey: 'terms-conditions-title',
   helpUrl: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
 };
 
@@ -74,6 +75,11 @@ describe('termsAndConditions.vue ', () => {
     it('will emit UPDATE_HEADER passing the current route meta as event', () => {
       createDefaultPage(createLayoutStore(), { 'content-header': '<div/>' });
       expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, routeMeta);
+    });
+
+    it('will emit UPDATE_TITLE passing the current route meta as event', () => {
+      createDefaultPage(createLayoutStore(), { 'content-header': '<div/>' });
+      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, routeMeta);
     });
   });
 
