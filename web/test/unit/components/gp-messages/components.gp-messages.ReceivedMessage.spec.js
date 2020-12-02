@@ -56,18 +56,17 @@ describe('Received Message', () => {
     });
 
     it('will display read sender', () => {
-      const sender = wrapper.find('#initialMessageReplySender0').element.firstChild.data;
+      const sender = wrapper.find('#initialMessageReplySender0').text();
       expect(sender).toBe('Test');
     });
 
     it('will display read message time', () => {
-      const dateTime = wrapper.find('#initialMessageReplyDateTime0').element.firstChild.data;
-      const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
-      expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
+      const dateTime = wrapper.find('time').text();
+      expect(dateTime.trim()).toBe('Sent 9 December 2019 at 1:56pm');
     });
 
     it('will display read message content', () => {
-      const content = wrapper.find('#initialMessageReplyPanel0>p').element.firstChild.data;
+      const content = wrapper.find('#initialMessageReplyPanel0 > p').text();
       expect(content).toBe('This is a test');
     });
   });

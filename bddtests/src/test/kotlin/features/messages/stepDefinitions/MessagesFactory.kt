@@ -27,7 +27,7 @@ private const val TWO_MONTHS: Long = 2
 private const val ONE_MONTH: Long = 1
 class MessagesFactory {
 
-    private val frontendSummaryDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    private val frontendSummaryDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
     private val twoMonthsAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(TWO_MONTHS)
     private val oneMonthAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(ONE_MONTH)
     private val oneWeekAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusDays(SEVEN_DAYS)

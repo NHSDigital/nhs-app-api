@@ -3,7 +3,7 @@ ul.nhs-app-message {
   margin-bottom: nhsuk-spacing(3);
   padding-left: nhsuk-spacing(0);
   border-top: 1px $nhsuk-border-color solid;
-  @include govuk-media-query($until: desktop) {
+  @include govuk-media-query($until: tablet) {
     margin-left: (-$nhsuk-gutter-half);
     margin-right: (-$nhsuk-gutter-half);
   }

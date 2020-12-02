@@ -15,7 +15,7 @@
       <template v-else>
         <menu-item-list-header id="messages_list_header"
                                header-tag="h2"
-                               :widen-on-desktop="true"
+                               widen-on-tablet
                                :text="$t('messages.yourMessages')"/>
 
         <p v-if="hasNoSummaries">{{ $t('messages.youHaveNoMessages') }}</p>

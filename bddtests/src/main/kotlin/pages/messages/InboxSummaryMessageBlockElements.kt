@@ -8,7 +8,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import worker.models.messages.MessagesSummaryFacade
 
-private const val SPAN_COUNT_WITH_UNREAD: Int = 3
+private const val SPAN_COUNT_WITH_UNREAD: Int = 2
 
 class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
 
@@ -48,14 +48,15 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
     private class InboxMessageBlockElement(private val element: WebElementFacade) {
         private val headerElement = element.findElement<WebElement>(By.xpath(".//h2"))
         private val paragraphElement = element.findElement<WebElement>(By.xpath(".//p"))
+        private val timeElement = element.findElement<WebElement>(By.xpath(".//time"))
         private val spanElements = element.findElements<WebElement>(By.xpath(".//span"))
 
         private val hasUnread = spanElements.count() == SPAN_COUNT_WITH_UNREAD
 
         val sender: String = headerElement.text
-        val sentTime: String = spanElements[0].text
+        val sentTime: String = timeElement.text
         val messageBody: String = paragraphElement.text
-        val unreadCount: Int? = if (hasUnread) spanElements[2].text.toInt() else 0
+        val unreadCount: Int? = if (hasUnread) spanElements.last().text.toInt() else 0
 
         fun click() {
             element.click()

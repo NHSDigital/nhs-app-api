@@ -32,17 +32,17 @@
         </div>
       </div>
     </div>
-    <p :id="idPrefix+`MessageReplyDateTime`+index"
-       class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">
-      {{ formattedTime }}
-    </p>
+    <formatted-date-time :id="idPrefix+`MessageReplyDateTime`+index"
+                         class="nhsuk-u-font-size-16"
+                         :date-time="message.sentDateTime" />
   </div>
 </template>
 
 <script>
-import LinkifyContent from '@/components/widgets/LinkifyContent';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { formatIndividualMessageTime, redirectTo, isBlankString } from '@/lib/utils';
+import FormattedDateTime from '@/components/widgets/FormattedDateTime';
+import LinkifyContent from '@/components/widgets/LinkifyContent';
+import { isBlankString, redirectTo } from '@/lib/utils';
 import {
   GP_MESSAGES_VIEW_ATTACHMENT_PATH,
   GP_MESSAGES_DOWNLOAD_ATTACHMENT_PATH,
@@ -52,8 +52,9 @@ import { GP_MESSAGES_DOWNLOAD_ATTACHMENT_NAME } from '@/router/names';
 export default {
   name: 'ReceivedMessagePanel',
   components: {
-    LinkifyContent,
     DesktopGenericBackLink,
+    FormattedDateTime,
+    LinkifyContent,
   },
   props: {
     index: {
@@ -84,9 +85,6 @@ export default {
     };
   },
   computed: {
-    formattedTime() {
-      return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
-    },
     getContent() {
       return this.messageContent || '';
     },

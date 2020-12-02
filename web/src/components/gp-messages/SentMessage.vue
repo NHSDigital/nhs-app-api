@@ -17,24 +17,21 @@
                            :content="getContent" tag="p"/>
         </div>
         <div>
-          <p :id="sentPrefixIdentifier+`MessageSentDateTime`+sentIndex"
-             :class="[$style.messageSentDateTime,
-                      'nhsuk-u-font-size-16',
-                      'nhsuk-u-margin-bottom-0']">
-            {{ formattedTime }}
-          </p>
+          <formatted-date-time :id="sentPrefixIdentifier+`MessageSentDateTime`+sentIndex"
+                               :class="[$style.messageSentDateTime, 'nhsuk-u-font-size-16']"
+                               :date-time="message.sentDateTime" />
         </div>
       </div>
     </li>
   </div>
 </template>
 <script>
+import FormattedDateTime from '@/components/widgets/FormattedDateTime';
 import LinkifyContent from '@/components/widgets/LinkifyContent';
-import { formatIndividualMessageTime } from '@/lib/utils';
 
 export default {
   name: 'SentMessage',
-  components: { LinkifyContent },
+  components: { FormattedDateTime, LinkifyContent },
   props: {
     message: {
       type: Object,
@@ -64,9 +61,6 @@ export default {
     },
     hasSubject() {
       return this.message.subject !== undefined;
-    },
-    formattedTime() {
-      return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
     },
     getContent() {
       return this.messageContent || '';

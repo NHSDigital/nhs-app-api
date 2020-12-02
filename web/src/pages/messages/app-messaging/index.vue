@@ -19,7 +19,6 @@
                          :href="messagePath()"
                          :list-index="messageIndex"
                          :has-unread-messages="isUnread(senderMessage)"
-                         date-format="DD/MM/YYYY"
                          @click="goToMessages(senderMessage)"/>
       </li>
     </ul>

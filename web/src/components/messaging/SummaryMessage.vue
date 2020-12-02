@@ -8,10 +8,13 @@
       <h2 :class="['nhsuk-heading-xs', $style['nhs-app-message__title']]">
         {{ title }}
       </h2>
-      <span :class="{
-        [$style['nhs-app-message__date']]: true,
-        [$style['nhs-app-message__date--unread']]: unreadCount || hasUnreadMessages
-      }">{{ formattedTime }}</span>
+      <formatted-date-time
+        :class="{
+          [$style['nhs-app-message__date']]: true,
+          [$style['nhs-app-message__date--unread']]: unreadCount || hasUnreadMessages
+        }"
+        :date-time="dateTime"
+        summary-time-format />
     </div>
     <div :class="$style['flex-baseline-container']" aria-hidden="true">
       <p id="subject" :class="['nhsuk-body-s', $style['nhs-app-message__subject-line']]">
@@ -32,11 +35,13 @@
 </template>
 
 <script>
-import { formatDate } from '@/plugins/filters';
-import { formatInboxMessageTime } from '@/lib/utils';
+import FormattedDateTime from '@/components/widgets/FormattedDateTime';
 
 export default {
   name: 'SummaryMessage',
+  components: {
+    FormattedDateTime,
+  },
   props: {
     title: {
       type: String,
@@ -59,11 +64,6 @@ export default {
     dateTime: {
       type: String,
       required: true,
-    },
-    dateFormat: {
-      type: String,
-      required: false,
-      default: undefined,
     },
     hasUnreadMessages: {
       type: Boolean,
@@ -88,13 +88,6 @@ export default {
     listIndex: {
       type: Number,
       required: true,
-    },
-  },
-  computed: {
-    formattedTime() {
-      return this.dateFormat
-        ? formatDate(this.dateTime, this.dateFormat)
-        : formatInboxMessageTime(this.dateTime, this.$t.bind(this));
     },
   },
 };

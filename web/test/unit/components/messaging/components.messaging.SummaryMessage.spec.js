@@ -1,6 +1,5 @@
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { formatInboxMessageTime } from '@/lib/utils';
-import { formatDate } from '@/plugins/filters';
 import { createRouter, createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
@@ -22,7 +21,6 @@ describe('summary message', () => {
   const mountSummaryMessage = ({
     unreadCount = 0,
     hasUnreadMessages = false,
-    dateFormat = undefined,
     subTitle = 'Test subject',
   } = {}) => mount(
     SummaryMessage, {
@@ -38,7 +36,6 @@ describe('summary message', () => {
         title,
         subTitle,
         dateTime,
-        dateFormat,
         unreadCount,
         hasUnreadMessages,
         listIndex,
@@ -109,7 +106,7 @@ describe('summary message', () => {
   });
 
   describe('dateTime', () => {
-    it('will format dateTime using formattedInboxMessageTime util if dateFormat not given', () => {
+    it('will format dateTime using formattedInboxMessageTime util', () => {
       const expectedFormattedTime = 'Sent 14 September 2019 at 2:15am';
       formatInboxMessageTime.mockImplementation(date => (
         date === dateTime
@@ -118,21 +115,6 @@ describe('summary message', () => {
       ));
 
       wrapper = mountSummaryMessage();
-      const sentTime = wrapper.find(`.${dateTimeClass}`);
-
-      expect(sentTime.text()).toBe(expectedFormattedTime);
-    });
-
-    it('will format dateTime using provided dateFormat if given', () => {
-      const expectedFormattedTime = '14/09/2019';
-      const dateFormat = 'DD/MM/YYYY';
-      formatDate.mockImplementation(date => (
-        date === dateTime
-          ? expectedFormattedTime
-          : ''
-      ));
-
-      wrapper = mountSummaryMessage({ dateFormat });
       const sentTime = wrapper.find(`.${dateTimeClass}`);
 
       expect(sentTime.text()).toBe(expectedFormattedTime);

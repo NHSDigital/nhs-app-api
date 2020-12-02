@@ -90,7 +90,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
 
     private fun getMessageDate(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "$baseMessagePath//span",
+                webDesktopLocator = "$baseMessagePath//time",
                 androidLocator = null,
                 page = this
         )

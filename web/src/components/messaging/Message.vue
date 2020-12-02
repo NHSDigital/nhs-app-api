@@ -5,19 +5,20 @@
       <div :class="$style['message-panel__content']">
         <linkify-content class="panel-content" :content="message.body" tag="p" />
       </div>
-      <time :class="$style['message-panel__time']"
-            :datetime="sentTime | formatDate('YYYY-MM-DD h:mma')"
-      >Sent {{ sentTime | formatDate('h:mma, DD MMMM YYYY') }}</time>
+      <formatted-date-time :class="$style['message-panel__time']"
+                           :date-time="message.sentTime" />
     </div>
   </li>
 </template>
 
 <script>
+import FormattedDateTime from '@/components/widgets/FormattedDateTime';
 import LinkifyContent from '@/components/widgets/LinkifyContent';
 
 export default {
   name: 'Message',
   components: {
+    FormattedDateTime,
     LinkifyContent,
   },
   props: {
@@ -25,12 +26,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  data() {
-    return {
-      content: this.message.body,
-      sentTime: this.message.sentTime,
-    };
   },
   created() {
     if (!this.message.read) {

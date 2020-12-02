@@ -65,6 +65,8 @@ const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
         localeValue = $t('generic.midday');
       } else if (hours === 0) {
         localeValue = $t('generic.midnight');
+      } else {
+        return 'ha';
       }
     }
 

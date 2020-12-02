@@ -55,7 +55,7 @@ describe('messaging messages', () => {
           sender: testSender,
           senderMessages: [{
             sender: testSender,
-            messages: [{ body: 'read message 1', read: true }],
+            messages: [{ body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' }],
           }],
         });
         await wrapper.vm.$nextTick();
@@ -94,7 +94,7 @@ describe('messaging messages', () => {
             sender: testSender,
             senderMessages: [{
               sender: testSender,
-              messages: [{ body: 'read message 1', read: true }],
+              messages: [{ body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' }],
             }],
           });
           await wrapper.vm.$nextTick();
@@ -112,7 +112,7 @@ describe('messaging messages', () => {
             sender: testSender,
             senderMessages: [{
               sender: testSender,
-              messages: [{ body: 'read message 1', read: true }],
+              messages: [{ body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' }],
             }],
             isNativeApp: false,
           });
@@ -150,7 +150,7 @@ describe('messaging messages', () => {
           sender: testSender,
           senderMessages: [{
             sender: testSender,
-            messages: [{ body: 'read message 1', read: true }],
+            messages: [{ body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' }],
           }],
         });
         await wrapper.vm.$nextTick();
@@ -171,9 +171,9 @@ describe('messaging messages', () => {
         senderMessages: [{
           sender: testSender,
           messages: [
-            { body: 'read message 1', read: true },
-            { body: 'read message 2', read: true },
-            { body: 'read message 3', read: true },
+            { body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 2', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 3', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
           ],
         }],
       });
@@ -211,10 +211,10 @@ describe('messaging messages', () => {
         senderMessages: [{
           sender: testSender,
           messages: [
-            { body: 'unread message 1', read: false },
-            { body: 'unread message 2', read: false },
-            { body: 'read message 4', read: true },
-            { body: 'unread message 3', read: false },
+            { body: 'unread message 1', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'unread message 2', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 4', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'unread message 3', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
           ],
         }],
       });
@@ -254,13 +254,13 @@ describe('messaging messages', () => {
         senderMessages: [{
           sender: testSender,
           messages: [
-            { body: 'read message 1', read: true },
-            { body: 'read message 2', read: true },
-            { body: 'read message 3', read: true },
-            { body: 'unread message 1', read: false },
-            { body: 'unread message 2', read: false },
-            { body: 'read message 4', read: true },
-            { body: 'unread message 3', read: false },
+            { body: 'read message 1', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 2', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 3', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'unread message 1', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'unread message 2', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'read message 4', read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: 'unread message 3', read: false, sentTime: '2019-09-14T02:15:12.356Z' },
           ],
         }],
       });

@@ -1,6 +1,6 @@
 import i18n from '@/plugins/i18n';
 import ReceivedMessagePanel from '@/components/gp-messages/ReceivedMessagePanel';
-import { formatInboxMessageTime, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { createStore, createRouter, shallowMount } from '../../helpers';
 
 jest.mock('@/lib/utils');
@@ -9,10 +9,6 @@ describe('Received Message Panel', () => {
   let wrapper;
   let store;
   let $router;
-
-  beforeAll(() => {
-    formatInboxMessageTime.mockImplementation(() => '2019-12-09T13:56:50.377Z');
-  });
 
   beforeEach(() => {
     $router = createRouter();
