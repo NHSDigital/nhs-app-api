@@ -14,7 +14,7 @@
                  :text="messagesLabel"
                  :aria-label="messagesLabel"
                  :click-func="navigateToMessages"/>
-      <menu-item v-if="hasLinkedAccounts"
+      <menu-item v-if="supportsLinkedProfiles"
                  id="linked-profiles-link"
                  :header-tag="headerTag"
                  :href="linkedProfilesPath"
@@ -92,8 +92,8 @@ export default {
         this.$t('navigation.viewYourUnreadMessages')
         : this.$t('navigation.viewYourMessages');
     },
-    hasLinkedAccounts() {
-      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    supportsLinkedProfiles() {
+      return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
     },
   },
   methods: {

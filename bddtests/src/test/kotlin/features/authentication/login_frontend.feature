@@ -85,6 +85,18 @@ Feature: Login frontend
     And I see my NHS number on the home page
     And I see the home page header
 
+  Scenario Outline: A <GP System> user whos GP system supports proxy can still login when the GP System fails
+    Given I am an <GP System> patient whose GP system is unavailable
+    And I am logged in
+    Then I see my Name on the home page
+    And I see my Date of birth on the home page
+    And I see my NHS number on the home page
+    And I can see and follow the Linked profiles link
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   Scenario Outline: A <GP System> user can still login when the GP System fails
     Given I am an <GP System> patient whose GP system is unavailable
     And I am logged in
@@ -94,8 +106,6 @@ Feature: Login frontend
     And I can't see the Linked profiles link on the homepage
     Examples:
       | GP System |
-      | EMIS      |
-      | TPP       |
       | VISION    |
       | MICROTEST |
 

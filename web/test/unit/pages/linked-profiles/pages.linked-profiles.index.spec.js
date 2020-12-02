@@ -1,17 +1,23 @@
 import i18n from '@/plugins/i18n';
 import LinkedProfileIndex from '@/pages/linked-profiles/index';
-import { LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
+import { INDEX_PATH, LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
+import NoLinkedProfiles from '@/components/linked-profiles/NoLinkedProfiles';
 import { createStore, mount } from '../../helpers';
 
-describe('linked profile is there', () => {
+describe('linked profile index', () => {
   let $store;
   let wrapper;
 
   const createState = (state = {
     device: {
       source: 'web',
+    },
+    serviceJourneyRules: {
+      rules: {
+        supportsLinkedProfiles: false,
+      },
     },
     linkedAccounts: {
       items: [
@@ -46,8 +52,9 @@ describe('linked profile is there', () => {
       $store.app.$analytics = {
         trackButtonClick: jest.fn(),
       };
-      wrapper = mountPage();
       $store.getters['linkedAccounts/hasLinkedAccounts'] = true;
+
+      wrapper = mountPage();
     });
 
     it('first linked user name and age is visible', () => {
@@ -56,6 +63,7 @@ describe('linked profile is there', () => {
       expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 0. 20 years old');
       expect(linkedProfileMenuItem.text()).toContain('user 0');
       expect(wrapper.find('#linked-account-age-0').text()).toEqual('20 years old');
+      expect(wrapper.find(NoLinkedProfiles).exists()).toBe(false);
     });
 
     it('second linked user name and dob is visible', () => {
@@ -65,6 +73,7 @@ describe('linked profile is there', () => {
       expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 1. 42 years old');
       expect(linkedProfileMenuItem.text()).toContain('user 1');
       expect(wrapper.find('#linked-account-age-1').text()).toEqual('42 years old');
+      expect(wrapper.find(NoLinkedProfiles).exists()).toBe(false);
     });
 
     it('should navigate when specific linked profile is clicked', () => {
@@ -82,5 +91,34 @@ describe('linked profile is there', () => {
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY_PATH);
     });
+  });
+
+  it('will redirect back to the home page if supportsLinkedProfiles is false', () => {
+    dependency.redirectTo = jest.fn();
+    $store = createStore({ state: createState() });
+    wrapper = mountPage();
+
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+  });
+
+  it('will not redirect back to the home page if supportsLinkedProfiles is true', () => {
+    dependency.redirectTo = jest.fn();
+    $store = createStore({ state: createState() });
+    $store.state.serviceJourneyRules.rules.supportsLinkedProfiles = true;
+
+    wrapper = mountPage();
+
+    expect(dependency.redirectTo)
+      .not
+      .toHaveBeenCalledWith(wrapper.vm, INDEX_PATH);
+  });
+
+  it('will show the NoLinkedProfiles information when hasLinkedProfiles is false', () => {
+    $store = createStore({ state: createState() });
+    wrapper = mountPage();
+
+    expect(wrapper.find(NoLinkedProfiles).exists())
+      .toBe(true);
   });
 });

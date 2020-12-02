@@ -1,7 +1,11 @@
 export default {
   actingOnBehalfOf: 'Acting on behalf of',
+  addALinkedProfile: 'Add a linked profile',
   age: 'Age',
   bookAGpAppointment: 'Book a GP appointment',
+  contactTheGpSurgery: 'Contact the GP surgery of the person you would like to set up a linked profile for, and ask them to register you for proxy access.',
+  familyMemberAndCarers: 'Family members and carers can access health services on behalf of someone else through linked profiles.',
+  findOutMore: 'Find out more about linked profiles',
   gpSurgery: 'GP surgery',
   itMayNotBePossibleToProxyRightNow: 'Sorry, there is a problem with this service. It may not be possible to access services in the app on behalf of other people right now.',
   orderARepeatPrescription: 'Order a repeat prescription',
@@ -12,6 +16,8 @@ export default {
   toAccessServicesForNameYouNeedToUseTheirProfile: 'To access services in the app for {fullName}, you need to use their profile.',
   viewTheirGpHealthRecord: 'View their GP health record',
   youCanAccessForTheFollowingPeople: 'You can access services in the app for the following people.',
+  youCanBookAppointments: 'You can book appointments for them, order repeat prescriptions, and view their health record, where appropriate.',
+  youDoNotHaveAny: 'You do not have any linked profiles set up on your account.',
   shutter: {
     prescriptions: {
       header: 'You do not have access to {name}\'s repeat prescriptions',

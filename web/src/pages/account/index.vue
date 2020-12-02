@@ -1,8 +1,8 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
     <menu-item-list data-purpose="settings-menu">
-      <menu-item v-if="hasLinkedProfiles"
-                 id="'linked-profiles-link'"
+      <menu-item v-if="supportsLinkedProfiles"
+                 id="linked-profiles-link"
                  header-tag="h2"
                  :href="linkedProfilesPath"
                  :text="$t('account.linkedProfiles')"
@@ -103,8 +103,8 @@ export default {
       return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
         this.$store.state.device.isNativeApp;
     },
-    hasLinkedProfiles() {
-      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    supportsLinkedProfiles() {
+      return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
     },
     showCEMark() {
       return isTruthy(this.$store.$env.CE_MARK_ENABLED);

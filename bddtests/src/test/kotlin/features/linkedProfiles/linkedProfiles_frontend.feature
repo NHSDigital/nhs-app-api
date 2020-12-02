@@ -15,9 +15,9 @@ Feature: Login with proxy access
     And I see the home page
     And I do not see the yellow banner
 
-
-  Scenario Outline: An <Gp Provider> user with proxy accounts and I can see the linked profiles on the home page
-    Given I am logged in as a <Gp Provider> user with linked profiles and appointments provider IM1
+  Scenario Outline: An <Gp Provider> user whos GP supports proxy can see their linked profiles
+    Given I am a <Gp Provider> patient
+    And I am logged in
     When I can see and follow the Linked profiles link
     Then the linked profiles page is displayed
     Examples:
@@ -25,11 +25,11 @@ Feature: Login with proxy access
       | EMIS        |
       | TPP         |
 
-
-  Scenario Outline: An <Gp Provider> user with no proxy accounts and I cannot see the linked profiles on the home page
+  Scenario Outline: An <Gp Provider> user whos GP supports proxy with no proxy accounts can then see information on how to add a linked profile
     Given I am logged in as a <Gp Provider> user with no linked profiles
     And I see the home page
-    Then I can't see the Linked profiles link on the homepage
+    When I can see and follow the Linked profiles link
+    Then I see information on how to setup a linked profile
     Examples:
       | Gp Provider |
       | EMIS        |

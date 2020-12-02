@@ -31,6 +31,7 @@ import pages.HomePage
 import pages.account.MyAccountPage
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
+import pages.linkedProfiles.shutterPages.NoLinkedProfilesShutterPage
 import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
 import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
@@ -65,6 +66,7 @@ class LinkedProfilesStepDefinitions {
     private lateinit var adviceShutterPage: AdviceShutterPage
     private lateinit var messagesShutterPage: MessagesShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
+    private lateinit var noLinkedProfilesShutterPage: NoLinkedProfilesShutterPage
 
     private val mockingClient = MockingClient.instance
 
@@ -344,6 +346,11 @@ class LinkedProfilesStepDefinitions {
         } else {
             messagesShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
+    }
+
+    @Then("^I see information on how to setup a linked profile$")
+    fun iSeeInformationOnHowToAddALinkedProfile() {
+        noLinkedProfilesShutterPage.assertText()
     }
 
     private fun checkDisplayedValuesAreCorrect(

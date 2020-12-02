@@ -11,23 +11,25 @@ const mountAs = ({
   isNativeApp = false,
   isProofLevel9 = true,
   gpMessagingSessionUnavailable = false,
-  hasLinkedAccounts = true,
+  supportsLinkedProfiles = true,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
     state: {
-      device:
-        {
-          isNativeApp,
-        },
-      gpMessages:
-      {
+      device: {
+        isNativeApp,
+      },
+      gpMessages: {
         gpMessagingSessionUnavailable,
+      },
+      serviceJourneyRules: {
+        rules: {
+          supportsLinkedProfiles,
+        },
       },
     },
     getters: {
       'session/isProofLevel9': isProofLevel9,
-      'linkedAccounts/hasLinkedAccounts': hasLinkedAccounts,
     },
   });
   return mount(NavigationListMenu, { $store, $router, methods: { goToUrl } });
@@ -45,7 +47,7 @@ describe('Navigation Links ', () => {
       ['shown', 'gpMessagingSession is available', false, true],
       ['hidden', 'gpMessagingSession is unavailable', true, false],
     ])
-      .it('messages hub link will be %s when user %s', (_linkState, _gpMessagingSesstionState, gpMessagingSessionUnavailable, isVisible) => {
+      .it('messages hub link will be %s when user %s', (_, __, gpMessagingSessionUnavailable, isVisible) => {
         wrapper = mountAs({ gpMessagingSessionUnavailable });
         expect(wrapper.find('#btn_messages').exists()).toBe(isVisible);
       });
@@ -53,15 +55,15 @@ describe('Navigation Links ', () => {
 
   describe('Linked Accounts link', () => {
     each([
-      ['shown', 'has linked accounts', true, true],
-      ['hidden', 'does not have linked accounts', false, false],
+      ['shown', 'supports linked profiles', true, true],
+      ['hidden', 'does not support linked profiles', false, false],
     ])
-      .it('linked accounts link will be %s when user %s', (_linkState, _linkedAccountsState, hasLinkedAccounts, isVisible) => {
-        wrapper = mountAs({ hasLinkedAccounts });
+      .it('will be %s when the gp %s', (_, __, supportsLinkedProfiles, isVisible) => {
+        wrapper = mountAs({ supportsLinkedProfiles });
         expect(wrapper.find('#linked-profiles-link').exists()).toBe(isVisible);
       });
     it('will dispatch to set the breadcrumb to the default', () => {
-      wrapper = mountAs();
+      wrapper = mountAs({ supportsLinkedProfiles: true });
       wrapper.vm.navigateToLinkedProfiles();
 
       expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'defaultCrumb');

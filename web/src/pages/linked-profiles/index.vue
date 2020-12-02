@@ -1,6 +1,9 @@
 <template>
   <div v-if="showTemplate">
-    <div class="nhsuk-grid-row">
+
+    <no-linked-profiles v-if="!hasLinkedProfiles" id="no-linked-profiles"/>
+
+    <div v-else class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p class="nhsuk-u-margin-bottom-3">
           {{ $t('profiles.youCanAccessForTheFollowingPeople') }}
@@ -8,14 +11,14 @@
         <menu-item-list>
           <menu-item
             v-for="(item, index) in linkedAccounts"
-            :id="'linked-account-menu-item-' + index"
+            :id="`linked-account-menu-item-${index}`"
             :key="index"
             :text="item.fullName"
             :click-func="onLinkedProfileClicked"
             :click-param="item.id"
             :description="getDisplayedAgeText(item)"
             description-data-sid="age-months"
-            :description-id="'linked-account-age-' + index"
+            :description-id="`linked-account-age-${index}`"
             header-tag="h2"
             href="#"
             :aria-label="ariaLabelCaption(
@@ -32,14 +35,17 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
-import { LINKED_PROFILES_SUMMARY_PATH } from '@/router/paths';
+import { LINKED_PROFILES_SUMMARY_PATH, INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import find from 'lodash/fp/find';
+import NoLinkedProfiles from '@/components/linked-profiles/NoLinkedProfiles';
+
 
 export default {
   components: {
     MenuItemList,
     MenuItem,
+    NoLinkedProfiles,
   },
   mixins: [CalculateAgeInMonthsAndYears],
   data() {
@@ -51,6 +57,14 @@ export default {
     linkedProfileSummaryPath() {
       return LINKED_PROFILES_SUMMARY_PATH;
     },
+    hasLinkedProfiles() {
+      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    },
+  },
+  created() {
+    if (!this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles) {
+      redirectTo(this, INDEX_PATH);
+    }
   },
   methods: {
     ariaLabelCaption(fullName, age) {

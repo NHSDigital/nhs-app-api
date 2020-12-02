@@ -17,14 +17,18 @@ Feature: View My Account Page
     Then the Account page is displayed
     And I see the current app version
 
-  Scenario: A patient can see the linked accounts and cookies link and the nhs login link
-    Given I am a EMIS patient
+  Scenario Outline: A patient can see the linked accounts and cookies link and the nhs login link
+    Given I am a <Gp System> patient
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
     And the Linked Profiles link is displayed
     And the Cookies link is displayed
     And the NHS login link is displayed
+    Examples:
+      | Gp System |
+      | EMIS      |
+      | TPP       |
 
   Scenario: A patient can navigate to the nhs login settings page to update their account details
     Given I am a EMIS patient
@@ -75,12 +79,16 @@ Feature: View My Account Page
     When I click the link called 'Accessibility statement' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/'
     Then a new tab has been opened by the link
 
-  Scenario: A patient can navigate to Settings page and can not see the linked account link
-    Given I am logged in as a EMIS user with no linked profiles
+  Scenario Outline: A patient can navigate to Settings page and can not see the linked account link
+    Given I am logged in as a <Gp System> user
     And I click the settings icon
     Then the Account page is displayed
     And the Linked Profiles link is not displayed
     And the Cookies link is displayed
+    Examples:
+      | Gp System |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device
     Given I am a EMIS patient using the native app

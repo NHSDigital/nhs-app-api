@@ -2,6 +2,7 @@ import AboutUs from '@/components/account/AboutUs';
 import AccountPage from '@/pages/account/index';
 import i18n from '@/plugins/i18n';
 import WebFooter from '@/components/widgets/WebFooter';
+import each from 'jest-each';
 import { createStore, initFilters, mount } from '../../helpers';
 
 describe('Account Page', () => {
@@ -17,6 +18,11 @@ describe('Account Page', () => {
       device: {
         isNativeApp: false,
       },
+      serviceJourneyRules: {
+        rules: {
+          supportsLinkedProfiles: false,
+        },
+      },
       session: {
         user: 'User',
         dateOfBirth: '5/4/2019',
@@ -30,10 +36,8 @@ describe('Account Page', () => {
 
   const buildStoreGetters = ({
     notificationsEnabled = false,
-    showLinkedProfiles = false,
   } = {}) => ({
     'serviceJourneyRules/notificationsEnabled': notificationsEnabled,
-    'linkedAccounts/hasLinkedAccounts': showLinkedProfiles,
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
     'session/isProofLevel9': true,
     'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(false),
@@ -55,16 +59,16 @@ describe('Account Page', () => {
   const mountPage = ({
     notificationsEnabled = false,
     isNativeApp = false,
-    showLinkedProfiles = false,
+    supportsLinkedProfiles = false,
   }) => {
     const $store = createStore({ state: $state });
 
     $store.getters = buildStoreGetters({
       notificationsEnabled,
-      showLinkedProfiles,
     });
 
     $state.device.isNativeApp = isNativeApp;
+    $state.serviceJourneyRules.rules.supportsLinkedProfiles = supportsLinkedProfiles;
     return mount(AccountPage, {
       $store,
       $state,
@@ -78,7 +82,7 @@ describe('Account Page', () => {
       wrapper = mountPage({
         notificationsEnabled: true,
         isNativeApp: true,
-        showLinkedProfiles: true,
+        supportsLinkedProfiles: true,
       });
     });
 
@@ -109,30 +113,14 @@ describe('Account Page', () => {
     });
   });
 
-  describe('on desktop with showLinkedProfiles false', () => {
-    beforeEach(() => {
-      wrapper = mountPage({ notificationsEnabled: true,
-        isNativeApp: false,
-        showLinkedProfiles: false,
+  describe('linked profiles link', () => {
+    each([
+      ['shown', 'supports linked profiles', true, true],
+      ['hidden', 'does not support linked profiles', false, false],
+    ])
+      .it('will be %s when the gp %s', (_, __, supportsLinkedProfiles, isVisible) => {
+        wrapper = mountPage({ supportsLinkedProfiles });
+        expect(wrapper.find('#linked-profiles-link').exists()).toBe(isVisible);
       });
-    });
-
-    it('will not have a linked profiles link', () => {
-      expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
-    });
-  });
-
-  describe('on desktop with showLinkedProfiles true', () => {
-    beforeEach(() => {
-      wrapper = mountPage({
-        notificationsEnabled: true,
-        isNativeApp: false,
-        showLinkedProfiles: true,
-      });
-    });
-
-    it('will have a linked profiles link', () => {
-      expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
-    });
   });
 });
