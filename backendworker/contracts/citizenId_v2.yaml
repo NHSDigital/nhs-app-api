@@ -1,11 +1,73 @@
 openapi: 3.0.0
 
 info:
-  version: 2.0.1
+  version: 2.0.2
   title: NHS App Middleware for NHS Login.
   description: NHS App Middleware endpoints to allow NHS Login to retrieve and validate linkage details and IM1 Connection Tokens.
 
 paths:
+  /v2/gp-practice/{odsCode}:
+    get:
+      tags:
+        - gp-practice
+      summary: Gets information about a GP Practice based on their ODS Code
+      description: |
+        Authentication is via client certificates.
+        Note: If the error responses don't contain the JSON body as described here then there's something else the matter and it should be raised with the NHS App team.
+      parameters:
+        - in: path
+          name: odsCode
+          schema:
+            $ref: '#/components/schemas/OdsCode'
+          required: true
+          description: Organisation code of the GP Practice
+        - in: header
+          name: NHSO-Request-ID
+          description: Arbitrary unique string that allows tracing of the request
+          schema:
+            type: string
+            minimum: 1
+            example: 865ad0d1-dcf2-4e31-bb06-6d4ae08184f0
+          required: true
+      responses:
+        "200":
+          description: Successful lookup. GP System Supplier returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  odsCode:
+                    $ref: '#/components/schemas/OdsCode'
+                  gpSystemSupplier:
+                    $ref: '#/components/schemas/GpSystemSupplier'
+        "404":
+          description: GP Practice not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  odsCode:
+                    $ref: '#/components/schemas/OdsCode'
+                  errorReason:
+                    type: string
+                    description: Human readable error reason to aid debugging
+                    example: GP Practice with ODS code A29928 was not found
+        "500":
+          description: An unknown error occurred within the service, this should be raised with the NHS App team.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  odsCode:
+                    $ref: '#/components/schemas/OdsCode'
+                  errorReason:
+                    type: string
+                    description: Human readable error reason to aid debugging
+                    example: Could not connect to external service
+
   /v2/patient/im1connection:
     get:
       tags:
@@ -25,7 +87,7 @@ paths:
           required: true
           description: ODS code for the Patient's GP.
           schema:
-            type: string
+            $ref: '#/components/schemas/OdsCode'
       responses:
         "200":
           description: Successful operation. IM1 Connection Token and NHS Numbers returned.
@@ -318,6 +380,22 @@ components:
             linkageKey:
               type: string
               description: Patient's GP IM1 Linkage Key.
+
+    GpSystemSupplier:
+      type: string
+      enum:
+        - EMIS
+        - TPP
+        - Vision
+        - Microtest
+        - NhsTestGpSupplier
+      description: GP System Supplier for the GP Practice
+
+    OdsCode:
+      type: string
+      description: ODS code for the GP Practice
+      minimum: 1
+      example: A29928
 
     apiErrorResponse:
       type: object
