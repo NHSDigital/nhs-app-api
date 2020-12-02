@@ -12,7 +12,9 @@
                            :click-func="clickFunc">
       <div :class="[$style.listMenuItemContainer, showMeta ? $style['withMeta'] : '']">
         <component :is="headerTag"
-                   :class="['nhsuk-heading-s', $style.break]"
+                   :class="['nhsuk-heading-s',
+                            $style.break,
+                            highlightText ? $style['highlight-text'] : '']"
                    :aria-label="ariaText">{{ text }}</component>
 
         <p v-if="description"
@@ -95,6 +97,10 @@ export default {
       default: undefined,
     },
     showIndicator: {
+      type: Boolean,
+      default: false,
+    },
+    highlightText: {
       type: Boolean,
       default: false,
     },
@@ -246,5 +252,9 @@ export default {
 
   .break {
     word-break: break-word;
+  }
+
+  .highlight-text {
+    color: $color_nhsuk-red;
   }
 </style>

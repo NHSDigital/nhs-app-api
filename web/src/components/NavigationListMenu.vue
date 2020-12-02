@@ -11,6 +11,7 @@
                  data-purpose="messages-menu-item"
                  :href="messagesPath"
                  :show-indicator="hasMessageIndicator"
+                 :highlight-text="hasMessageIndicator"
                  :text="messagesLabel"
                  :aria-label="messagesLabel"
                  :click-func="navigateToMessages"/>
