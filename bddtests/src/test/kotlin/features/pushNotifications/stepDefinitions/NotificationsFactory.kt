@@ -64,6 +64,10 @@ class NotificationsFactory {
         GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
     }
 
+    fun checkUserRegistered(accessToken: String? = null): Boolean {
+        return NotificationsApi.checkUserExists(accessToken)
+    }
+
     fun mockNativeNotificationFunctions(
             status: SettingStatus,
             authorised: Boolean = true) {

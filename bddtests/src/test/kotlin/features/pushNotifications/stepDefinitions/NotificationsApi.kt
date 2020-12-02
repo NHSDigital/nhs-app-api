@@ -1,6 +1,7 @@
 package features.pushNotifications.stepDefinitions
 
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpStatus
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
@@ -28,6 +29,21 @@ class NotificationsApi {
                     .userDevices
                     .get(pnsToken, authToken)
             PushNotificationsSerenityHelpers.GET_RESPONSE.set(response)
+        }
+
+        fun checkUserExists(authToken: String?): Boolean {
+            val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .userDevices
+                    .get(pnsToken, authToken)
+            
+            if (response?.statusLine !== null &&
+                    response.statusLine?.statusCode !== null &&
+                    response.statusLine.statusCode == HttpStatus.SC_NO_CONTENT) {
+                return true
+            }
+
+            return false
         }
 
         fun deleteRegistration(authToken: String?, pnsToken: String? = null) {
