@@ -77,7 +77,7 @@ export default {
     display: inline-block;
     max-width: calc(100% - 4em);
     vertical-align: middle;
-    flex: 1;
+    flex: 1 0 0;
   }
   &.waiting{
     .spinner{
