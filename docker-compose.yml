@@ -120,6 +120,7 @@ services:
       - ./docker/proxy_access.env
       - ./docker/appointments.env
       - ./docker/pfs.env
+      - ./docker/knownservices.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:

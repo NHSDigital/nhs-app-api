@@ -18,13 +18,12 @@ namespace NHSOnline.Backend.PfsApi
 
         public static IConfigurationRoot BuildConfiguration(string[] args)
         {
-            var knownServicesConfigPath = EnvironmentExtensions.GetOrThrow("KNOWNSERVICES_PATH");
-
             return new ConfigurationBuilder()
+                .AddJsonFile("KnownServices.json", optional: false, reloadOnChange: false)
+                .AddJsonFile("ThirdPartyApiTestKnownServices.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
                 .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
-                .AddJsonFile($"{knownServicesConfigPath}", optional: false, reloadOnChange: false)
                 .AddFakeGpConfigurationFile()
                 .Build();
         }

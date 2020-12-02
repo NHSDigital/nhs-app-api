@@ -52,9 +52,6 @@ spec:
       - name: sidecar-proxy-config
         configMap:
           name: api-sidecar-proxy-config-{{ .Chart.AppVersion }}
-      - name: knownservices-config
-        configMap:
-          name: api-knownservices-config-{{ .Chart.AppVersion }}
       containers:
       - name: api
         image: {{ $.Values.registry }}/{{ $.Values.api.image }}:{{ $.Values.api.image_tag }}
@@ -71,6 +68,10 @@ spec:
         env:
 {{- with $.Values.api.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
+{{- end }}
+{{- range $key, $val := $.Values.api.knownServicesOverrides }}
+        - name: {{ $key }}
+          value: "{{ $val }}"
 {{- end }}
         - name: NHS_WEB_APP_BASE_URL
           {{- if (and ($.Values.web.publicURL) (or (not $.Values.environmentStubbed) ($.Values.environmentPerftest))) }}
@@ -136,8 +137,6 @@ spec:
           value: "/mnt/secrets-store/emisPfx"
           {{- end }}
         {{- end }}
-        - name: KNOWNSERVICES_PATH
-          value: "/app/config/KnownServices.json"
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
           value: "/app/FakeGpSupplierConfig.yml"
         - name: NOMINATED_PHARMACY_ENABLED
@@ -382,8 +381,6 @@ spec:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca
           readOnly: true
-        - name: knownservices-config
-          mountPath: /app/config
         livenessProbe:
           tcpSocket:
             port: 8080

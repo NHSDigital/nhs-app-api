@@ -2,3 +2,15 @@
 cidHostname: auth.dev18.signin.nhs.uk
 cidFidoHostname: uaf.dev18.signin.nhs.uk
 cidSettingsHostName: settings.dev18.signin.nhs.uk
+
+api:
+  knownServicesOverrides:
+    services__cid_settings__url: https://settings.dev.signin.nhs.uk
+    services__cid_account__url: https://account.dev.signin.nhs.uk
+    services__cid_account__javaScriptInteractionMode: NhsLogin
+    services__cid_auth__url: https://auth.dev.signin.nhs.uk
+    services__cid_auth__javaScriptInteractionMode: NhsLogin
+    services__cid_uaf__url: https://uaf.dev.signin.nhs.uk
+    services__cid_uaf__javaScriptInteractionMode: NhsLogin
+    services__cid_access__url: https://access.dev.signin.nhs.uk
+    services__cid_access__javaScriptInteractionMode: NhsLogin

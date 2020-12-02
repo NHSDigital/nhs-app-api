@@ -1,0 +1,77 @@
+{
+  "services": {
+    "silver_third_party_api_test": {
+      "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": true,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "SilverThirdParty",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/not-allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/app-tab.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/paycasso.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "NhsLogin",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "integrationLevel": "SilverWithWebNavigation",
+          "showSpinner": true,
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
+    },
+    "http_status": {
+      "url": "https://httpstat.us",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "integrationLevel": "SilverWithWebNavigation",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    }
+  }
+}

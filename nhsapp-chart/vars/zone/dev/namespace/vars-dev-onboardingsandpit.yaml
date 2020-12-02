@@ -20,3 +20,9 @@ web:
 
 api:
   publicURL: api-onboardingsandpit.nhsapp.service.nhs.uk
+  knownServicesOverrides:
+    services__cid_settings__url: https://settings.sandpit.signin.nhs.uk
+    services__cid_account__url: https://account.sandpit.signin.nhs.uk
+    services__cid_auth__url: https://auth.sandpit.signin.nhs.uk
+    services__cid_uaf__url: https://uaf.sandpit.signin.nhs.uk
+    services__cid_access__url: https://access.sandpit.signin.nhs.uk
