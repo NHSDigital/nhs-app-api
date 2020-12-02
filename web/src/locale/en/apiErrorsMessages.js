@@ -17,14 +17,14 @@ export default {
         label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
       },
     },
-  },
-  view_details: {
-    400: {
-      pageTitle: 'Message error',
-      pageHeader: 'Message error',
-      header: 'There is a problem getting your message',
-      message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
-      retryButtonText: 'Try again',
+    view_details: {
+      400: {
+        pageTitle: 'Message error',
+        pageHeader: 'Message error',
+        header: 'There is a problem getting your message',
+        message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
+        retryButtonText: 'Try again',
+      },
     },
   },
   delete: {

@@ -45,6 +45,10 @@ open class ErrorPage : HybridPageObject() {
         button.withText(text).assertElementNotPresent()
     }
 
+    fun clickButton() {
+        button.click()
+    }
+
     fun assertHasButton(expectedText: String) {
         button.assertSingleElementPresent()
         assertEquals("Expected button text", expectedText, button.text)

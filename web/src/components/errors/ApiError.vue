@@ -35,8 +35,8 @@
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>
       </message-dialog>
-      <form v-if="retryButtonText && (isNativeApp || retryAction)"
-            ref="retryFormRef" :action="retryUrl" method="get" tabindex="-1">
+      <form v-if="retryButtonText" ref="retryFormRef"
+            :action="retryUrl" method="get" tabindex="-1">
         <generic-button
           :class="[
             ...dynamicStyle('nhs-button'),
@@ -49,13 +49,6 @@
           {{ retryButtonText }}
         </generic-button>
       </form>
-      <desktopGenericBackLink
-        v-if="retryButtonText && !isNativeApp && retryUrl"
-        :path="retryUrl"
-        :button-text="retryButtonText"
-        data-purpose="retry-or-back-button"
-        @clickAndPrevent="onRetryButtonClicked"
-      />
     </div>
     <div v-else>
       <header-slim :show-in-native="true" :show-in-desktop="false">{{ header }}</header-slim>

@@ -316,8 +316,6 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
 
-  @pending
-  @NHSO-8913
   Scenario: A user can see an error message when the patient practice message cant be retrieved
     Given I am an EMIS user who can access patient practice messaging
     And I have patient practice messages in my inbox, all of which are read
@@ -330,8 +328,6 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then I see the appropriate error for getting patient practice message(s)
 
-  @pending
-  @NHSO-8913
   Scenario: A user receives an error message if there is an unknown error when trying to access their patient practice messages
     Given I am an EMIS user who can access patient practice messaging
     And there is an unknown error getting patient practice messages
@@ -340,6 +336,9 @@ Feature: Patient to practice messaging
     Then the Messages Hub page is displayed
     And I click on the patient practice Messages link on the Messages Hub page
     And I see the appropriate error for listing patient practice message(s)
+    And I have patient practice messages in my inbox, all of which are read
+    When I click try again
+    Then I see a list of patient practice messages
 
   Scenario: A user is looking for urgent advice via patient practice messaging
     Given I am an EMIS user who can access patient practice messaging

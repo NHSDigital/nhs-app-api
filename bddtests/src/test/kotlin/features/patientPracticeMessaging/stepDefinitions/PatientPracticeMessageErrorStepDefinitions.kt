@@ -47,6 +47,11 @@ class PatientPracticeMessageErrorStepDefinitions {
                         "go to 111.nhs.uk or call 111.")
     }
 
+    @Then("^I click try again")
+    fun iClickTryAgain() {
+        errorPage.clickButton()
+    }
+
     @Then("^I see the appropriate error for (.*) patient practice message\\(s\\)$")
     fun iSeeTheAppropriateErrorForPatientPracticeMessage(action: String) {
         when (action) {
@@ -58,7 +63,7 @@ class PatientPracticeMessageErrorStepDefinitions {
                         .assertHasButton("Try again")
             }
             "getting" -> {
-                errorPage.assertPageHeader("Message Error")
+                errorPage.assertPageHeader("Message error")
                         .assertNoSubHeader()
                         .assertHeaderText("There is a problem getting your message")
                         .assertMessageText("Try again now. If the problem " +
@@ -67,7 +72,7 @@ class PatientPracticeMessageErrorStepDefinitions {
                         .assertHasButton("Try again")
             }
             "listing" -> {
-                errorPage.assertPageHeader("Messages Error")
+                errorPage.assertPageHeader("Messages error")
                         .assertNoSubHeader()
                         .assertHeaderText("There is a problem getting your messages")
                         .assertMessageText("Try again now.")
