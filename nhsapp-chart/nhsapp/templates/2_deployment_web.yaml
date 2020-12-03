@@ -7,6 +7,9 @@ metadata:
   labels:
     app: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}
     version: {{ .Chart.AppVersion | quote }}
+  annotations:
+    collectord.io/www--logs-replace.1-search: 'http_referrer="(?P<referrer_url>[^?]+)\?[^"]+"'
+    collectord.io/www--logs-replace.1-val: 'http_referrer="${referrer_url}?<query_string_redacted>"'
 spec:
   selector:
     matchLabels:
