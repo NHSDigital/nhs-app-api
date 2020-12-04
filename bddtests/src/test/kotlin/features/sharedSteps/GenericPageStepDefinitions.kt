@@ -42,6 +42,12 @@ class GenericPageStepDefinitions {
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
+    @When("^I click the internal link called '(.*)' with a url of '(.*)'$")
+    fun iClickANamedInternalLinkWithAUrl(linkTitle: String, url: String) {
+        browser.storeCurrentTabCount()
+        genericPage.assertLinkExists(linkTitle, url, internal = true).click()
+    }
+
     @Then("^I see the error reference code with prefix '(.*)'$")
     fun iSeeTheErrorReferenceCode(prefix: String){
         genericPage.containsText("Reference: $prefix")

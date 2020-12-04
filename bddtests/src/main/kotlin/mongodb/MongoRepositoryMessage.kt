@@ -18,7 +18,7 @@ data class MongoRepositoryMessage(val NhsLoginId: String?,
                     "\"_ts\" : ISODate(\"${message.sentTime}\")," +
                     "\"NhsLoginId\" : \"${nhsLoginId}\"," +
                     "\"Sender\" : \"${message.sender}\"," +
-                    "\"Version\" : 1," +
+                    "\"Version\" : ${message.version}," +
                     "\"Body\" : \"${message.body}\"," +
                     "\"ReadTime\" : $readString" +
                     "\"SentTime\" : ISODate(\"${message.sentTime}\")" +

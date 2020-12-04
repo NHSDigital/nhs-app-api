@@ -30,7 +30,7 @@ class MessagesPostStepDefinitionsBackend {
                 body = "Message One",
                 communicationId = communicationId,
                 transmissionId = transmissionId,
-                version = 1)
+                version = MessageVersion.PLAIN_TEXT.value)
         val nhsLoginId = "0123456789ABCDEF"
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(message)

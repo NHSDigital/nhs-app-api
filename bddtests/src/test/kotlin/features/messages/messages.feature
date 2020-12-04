@@ -71,7 +71,7 @@ Feature: Messages
     When I follow the unread messages link from the home page
     Then the Messages Hub page is displayed with the unread indicator for app messaging
 
-  Scenario: A user can see their messages and follow an internal link
+  Scenario: A user can see their plain text messages and follow an internal link
     Given I am using the native app user agent
     And I am a user wishing to view my appointments and my messages with content
       | /account  |
@@ -98,7 +98,7 @@ Feature: Messages
     When I click the 'Back' breadcrumb
     Then the Messages page is displayed
 
-  Scenario: A user can see their messages and follow an external link
+  Scenario: A user can see their plain text messages and follow an external link
     Given I am using the native app user agent
     And I am a user wishing to view my messages with content
       | https://111.nhs.uk/  |
@@ -115,7 +115,7 @@ Feature: Messages
     When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
     Then a new tab has been opened by the link
 
-  Scenario: A user can see their messages and see a mailto link
+  Scenario: A user can see their plain text messages and see a mailto link
     Given I am using the native app user agent
     And I am a user wishing to view my messages with content
       | email@address.com  |
@@ -128,6 +128,50 @@ Feature: Messages
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     And the email address 'email@address.com' is identified as a link in the message
+
+  Scenario: A user can see their markdown messages and follow an external link
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with markdown content
+      | [https://111.nhs.uk/](https://111.nhs.uk/)  |
+      | [111.nhs.uk/](https://111.nhs.uk/)  |
+    And I am logged in
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
+    And the Messages Inbox page is displayed
+    And the senders and latest messages are displayed on the Messages Inbox page
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    When I click the link called 'https://111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    Then a new tab has been opened by the link
+    When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    Then a new tab has been opened by the link
+
+  Scenario: A user can see their markdown messages and follow an internal link
+    Given I am using the native app user agent
+    And I am a user wishing to view my appointments and my messages with markdown content
+      | [Account](/account)  |
+    And I am logged in
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
+    And the Messages Inbox page is displayed
+    And the senders and latest messages are displayed on the Messages Inbox page
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    When I click the internal link called 'Account' with a url of '/account'
+    Then the Account page for mobile devices is displayed
+
+  Scenario: A user can see their markdown messages and see a mailto link
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with markdown content
+      | [email1@address.com](mailto:email1@address.com)  |
+    And I am logged in
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
+    And the Messages Inbox page is displayed
+    And the senders and latest messages are displayed on the Messages Inbox page
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    And the email address 'email1@address.com' is identified as a link in the message
 
   Scenario: A user can see their messages and follow an incorrect internal link
     Given I am using the native app user agent

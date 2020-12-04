@@ -28,9 +28,11 @@ private const val ONE_MONTH: Long = 1
 class MessagesFactory {
 
     private val frontendSummaryDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-    private val twoMonthsAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(TWO_MONTHS)
-    private val oneMonthAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(ONE_MONTH)
-    private val oneWeekAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusDays(SEVEN_DAYS)
+    private val timeNow = ZonedDateTime.now(ZoneId.of("Europe/London"))
+
+    private val twoMonthsAgo = timeNow.minusMonths(TWO_MONTHS)
+    private val oneMonthAgo = timeNow.minusMonths(ONE_MONTH)
+    private val oneWeekAgo = timeNow.minusDays(SEVEN_DAYS)
 
     private val senderOne = "Sender One"
     private val senderTwo = "Sender Two"
@@ -51,15 +53,16 @@ class MessagesFactory {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
-        val senderOneMessageOne = createReadMessage(senderOne, "Message One", twoMonthsAgo)
-        val senderOneMessageTwo = createUnreadMessage(senderOne, "Message Two", oneMonthAgo)
-        val senderOneMessageThree = createReadMessage(senderOne, "Message Three", oneWeekAgo)
+        val senderOneMessageOne = createReadMessage(senderOne, "Message One", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
+        val senderOneMessageTwo = createUnreadMessage(senderOne, "Message Two", oneMonthAgo, MessageVersion.PLAIN_TEXT)
+        val senderOneMessageThree = createReadMessage(senderOne, "Message Three", oneWeekAgo, MessageVersion.PLAIN_TEXT)
         val senderOneMessages = createSenderMessages(
                 arrayListOf(senderOneMessageOne, senderOneMessageTwo, senderOneMessageThree))
         val senderOneSummaryMessage = MessagesSummaryFacade(senderOne, 1, arrayListOf(senderOneMessageThree),
                 lastMessageTime = frontendSummaryDateFormatter.format(oneWeekAgo))
 
-        val senderTwoMessageOne = createUnreadMessage(senderTwo, "Message Three", twoMonthsAgo)
+        val senderTwoMessageOne = createUnreadMessage(
+                senderTwo, "Message Three", twoMonthsAgo, MessageVersion.PLAIN_TEXT)
         val senderTwoMessages = createSenderMessages(arrayListOf(senderTwoMessageOne))
         val senderTwoSummaryMessage = MessagesSummaryFacade(senderTwo, 1, arrayListOf(senderTwoMessageOne),
                 lastMessageTime = frontendSummaryDateFormatter.format(twoMonthsAgo))
@@ -76,13 +79,13 @@ class MessagesFactory {
         MessagesSerenityHelpers.EXPECTED_READ_MESSAGES.set(arrayListOf(senderOneMessageOne))
     }
 
-    fun setUpMultipleMessagesWithContentInCache(table: DataTable) {
+    fun setUpMultipleMessagesWithContentInCache(table: DataTable, messageVersion: MessageVersion) {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
         val links = table.toSingleElementList()
         val messages = links.mapIndexed{ index, link -> createReadMessage(senderOne,
-                "message ${prefixInternalLink(link)}", twoMonthsAgo.minusDays(index.toLong()))}
+                "message ${prefixInternalLink(link)}", twoMonthsAgo.minusDays(index.toLong()), messageVersion)}
 
         val senderMessages = createSenderMessages(messages as ArrayList<SingleMessageFacade>)
         val senderSummaryMessage = MessagesSummaryFacade(senderOne, 0, arrayListOf(messages.first()),
@@ -105,17 +108,20 @@ class MessagesFactory {
         val nhsLoginId = patient.subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
-        val messageToPost = MessageRequest(senderOne, "Message One", 1)
+        val messageToPost = MessageRequest(senderOne, "Message One", MessageVersion.PLAIN_TEXT.value)
         val response = MessagesApi.postSetup(messageToPost, nhsLoginId)
         MessagesSerenityHelpers.MESSAGE_ID.set(response?.messageId)
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(messageToPost)
     }
 
-    private fun createReadMessage(sender: String, body: String, sentTime: ZonedDateTime): SingleMessageFacade {
+    private fun createReadMessage(
+            sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
+    ): SingleMessageFacade {
         return SingleMessageFacade(sender,
                 body,
                 true,
-                MongoDBConnection.mongoDateFormatter.format(sentTime)
+                MongoDBConnection.mongoDateFormatter.format(sentTime),
+                messageVersion.value
         )
     }
 
@@ -125,11 +131,14 @@ class MessagesFactory {
         MongoDBConnection.MessagesCollection.clearAndInsertJson(listOf(asInvalidJson(nhsLoginId, senderOne)))
     }
 
-    private fun createUnreadMessage(sender: String, body: String, sentTime: ZonedDateTime): SingleMessageFacade {
+    private fun createUnreadMessage(
+            sender: String, body: String, sentTime: ZonedDateTime, messageVersion: MessageVersion
+    ): SingleMessageFacade {
         return SingleMessageFacade(sender,
                 body,
                 false,
-                MongoDBConnection.mongoDateFormatter.format(sentTime)
+                MongoDBConnection.mongoDateFormatter.format(sentTime),
+                messageVersion.value
         )
     }
 

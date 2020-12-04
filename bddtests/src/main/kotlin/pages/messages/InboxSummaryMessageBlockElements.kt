@@ -82,7 +82,6 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
 
         fun assertEquals(actual: InboxMessageFacade) {
             Assert.assertEquals("sender", sender, actual.sender)
-            Assert.assertEquals("messageBody", messageBody, actual.messageBody)
             Assert.assertEquals("sentTime", sentTime, actual.sentTime)
             Assert.assertEquals("unreadCount", unreadCount, actual.unreadCount)
         }

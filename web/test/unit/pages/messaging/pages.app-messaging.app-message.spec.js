@@ -1,7 +1,7 @@
 import Messages from '@/pages/messages/app-messaging/app-message';
 import { HEALTH_INFORMATION_UPDATES_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
-import { createStore, mount } from '../../helpers';
+import { createStore, mount, normaliseNewLines } from '../../helpers';
 
 jest.mock('@/lib/utils', () => ({
   ...jest.requireActual('@/lib/utils'),
@@ -296,6 +296,31 @@ describe('messaging messages', () => {
       expect(unreadMessages.at(1).text()).toContain('unread message 2');
       expect(unreadMessages.at(2).text()).toContain('read message 4');
       expect(unreadMessages.at(3).text()).toContain('unread message 3');
+    });
+  });
+
+  describe('has version 0 and 1 messages', () => {
+    beforeEach(async () => {
+      wrapper = mountMessages({
+        sender: testSender,
+        senderMessages: [{
+          sender: testSender,
+          messages: [
+            { body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: '**Supports linkify** http://test.com', version: 0, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+            { body: '**Supports markdown** http://test.com', version: 1, read: true, sentTime: '2019-09-14T02:15:12.356Z' },
+          ],
+        }],
+      });
+    });
+
+    it('will show all messages', () => {
+      const readMessages = wrapper.findAll(`.${panelItemClass}`);
+
+      expect(readMessages.length).toBe(3);
+      expect(normaliseNewLines(readMessages.at(0).html())).toContain('<div class="panel-content"><p><strong>Supports markdown</strong> http://test.com</p></div>');
+      expect(normaliseNewLines(readMessages.at(1).html())).toContain('<p class="panel-content">**Supports linkify** <a href="http://test.com" target="_blank">http://test.com</a></p>');
+      expect(normaliseNewLines(readMessages.at(2).html())).toContain('<div class="panel-content"><p><strong>Supports markdown</strong> http://test.com</p></div>');
     });
   });
 });

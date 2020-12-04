@@ -118,6 +118,11 @@ export const key = {
   Tab: 'Tab',
 };
 
+export const messageVersion = {
+  PlainText: 0,
+  Markdown: 1,
+};
+
 export const navigateBack = (self) => {
   self.$router.goBack();
 };
@@ -278,6 +283,16 @@ export const hrefForURL = (originalURL) => {
     return originalURL;
   }
   return `//${originalURL}`;
+};
+
+export const isSameHostNameAndProtocol = (url) => {
+  try {
+    const theUrl = new URL(url);
+    return theUrl.protocol === window.location.protocol &&
+      theUrl.hostname === window.location.hostname;
+  } catch (e) {
+    return false;
+  }
 };
 
 export const getPathAndQuery = (url) => {

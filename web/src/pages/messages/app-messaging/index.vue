@@ -35,8 +35,9 @@
 
 <script>
 import { formatDate } from '@/plugins/filters';
-import { redirectTo, stripHtml } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { HEALTH_INFORMATION_UPDATES_MESSAGES_PATH, MESSAGES_PATH } from '@/router/paths';
+import { toPlainText } from '@/lib/markdown';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
@@ -96,7 +97,7 @@ export default {
       }
       return label;
     },
-    sanitizedContent: stripHtml,
+    sanitizedContent: toPlainText,
     isUnread: message => message.unreadCount > 0,
   },
 };

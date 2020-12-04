@@ -1,20 +1,27 @@
 import mockdate from 'mockdate';
 import Message from '@/components/messaging/Message';
-import { createStore, mount } from '../../helpers';
+import { createStore, mount, normaliseNewLines } from '../../helpers';
 
 describe('message', () => {
   let $store;
   let wrapper;
 
-  const mountMessage = ({ body, sentTime, read, id } = {}) => mount(Message, {
+  const mountMessage = ({
+    body = 'Lorem ipsum \n dolor sit amet',
+    id = '0000-0001',
+    sentTime = '2020-12-14T14:15:12.356Z',
+    read = false,
+    version = 1,
+  } = {}) => mount(Message, {
     $store,
     propsData: {
       message: {
         body,
+        id,
         sender: 'Test sender',
         sentTime,
         read,
-        id,
+        version,
       },
     },
   });
@@ -22,16 +29,37 @@ describe('message', () => {
   beforeEach(() => {
     mockdate.set('2020-12-18T14:15:12.356Z');
     $store = createStore();
-    wrapper = mountMessage({
-      body: 'Test1\nnew Line\nregards',
-      sentTime: '2020-12-14T14:15:12.356Z',
-      read: false,
-      id: '0000-0001',
-    });
+    wrapper = mountMessage();
   });
 
-  it('will replace message content new lines with `<br/>`', () => {
-    expect(wrapper.find('p').html()).toBe('<p class="panel-content">Test1<br>new Line<br>regards</p>');
+  describe('message version', () => {
+    let content;
+    describe('Linkify', () => {
+      beforeEach(() => {
+        wrapper = mountMessage({
+          version: 0,
+        });
+        content = normaliseNewLines(wrapper.find('.panel-content').html());
+      });
+
+      it('will render content in a `<p>` tag including `<br>` tags for new lines', () => {
+        expect(content).toBe('<p class="panel-content">Lorem ipsum <br> dolor sit amet</p>');
+      });
+    });
+
+    describe('Markdown', () => {
+      beforeEach(() => {
+        wrapper = mountMessage({
+          body: 'Lorem ipsum \n dolor sit amet',
+          version: 1,
+        });
+        content = normaliseNewLines(wrapper.find('.panel-content').html());
+      });
+
+      it('will wrap content in a `<div>` then a `<p>` tag', () => {
+        expect(content).toBe('<div class="panel-content"><p>Lorem ipsum dolor sit amet</p></div>');
+      });
+    });
   });
 
   describe('sent time', () => {
@@ -57,10 +85,7 @@ describe('message', () => {
 
     beforeEach(() => {
       wrapper = mountMessage({
-        body: 'Test1\nnew Line\nregards',
-        sentTime: '2020-12-14T14:15:12.356Z',
         read: true,
-        id: '0000-0001',
       });
     });
 

@@ -123,3 +123,4 @@ export const shallowMount = (component, options = {}) =>
 export const toClass = style => `.${style}`;
 
 export const normaliseWhiteSpace = value => (value.replace(/\s+/g, ' '));
+export const normaliseNewLines = content => normaliseWhiteSpace(content.replace(/\r?\n/g, ''));

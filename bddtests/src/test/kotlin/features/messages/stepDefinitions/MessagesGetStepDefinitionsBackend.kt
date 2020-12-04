@@ -162,7 +162,8 @@ class MessagesGetStepDefinitionsBackend {
                     message.sender,
                     message.body,
                     message.read?.toLowerCase() =="true" ,
-                    message.sentTime)
+                    message.sentTime,
+                    message.version)
         }
     }
 }

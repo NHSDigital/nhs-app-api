@@ -39,11 +39,7 @@ class MessagesStepDefinitions {
 
     @Given("^I am a user wishing to view my messages$")
     fun iAmAUserWishingToViewTheirMessages() {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null,
-                SJRJourneyType.MESSAGES_ENABLED)
-        val factory = MessagesFactory()
-        factory.setUpUser(patient)
+        val factory = setupMessagesEnabledPatient()
         factory.setUpMultipleMessagesInCache()
     }
 
@@ -90,12 +86,17 @@ class MessagesStepDefinitions {
 
     @Given("^I am a user wishing to view my appointments and my messages with content$")
     fun iAmAUserWishingToViewTheirAppointmentsAndMessagesWithContent(table: DataTable) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null,
-                SJRJourneyType.MESSAGES_ENABLED)
-        val factory = MessagesFactory()
-        factory.setUpUser(patient)
-        factory.setUpMultipleMessagesWithContentInCache(table)
+        val factory = setupMessagesEnabledPatient()
+        factory.setUpMultipleMessagesWithContentInCache(table, MessageVersion.PLAIN_TEXT)
+        val factoryAppointments = AppointmentsBookingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+        factoryAppointments.generateDefaultAvailableAppointmentSlotExample()
+        factoryAppointments.generateSuccessfulBookingResponse()
+    }
+
+    @Given("^I am a user wishing to view my appointments and my messages with markdown content$")
+    fun iAmAUserWishingToViewTheirAppointmentsAndMessagesWithMarkdownContent(table: DataTable) {
+        val factory = setupMessagesEnabledPatient()
+        factory.setUpMultipleMessagesWithContentInCache(table, MessageVersion.MARKDOWN)
         val factoryAppointments = AppointmentsBookingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factoryAppointments.generateDefaultAvailableAppointmentSlotExample()
         factoryAppointments.generateSuccessfulBookingResponse()
@@ -103,30 +104,24 @@ class MessagesStepDefinitions {
 
     @Given("^I am a user wishing to view my messages with content$")
     fun iAmAUserWishingToViewTheirMessagesWithContent(table: DataTable) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null,
-                SJRJourneyType.MESSAGES_ENABLED)
-        val factory = MessagesFactory()
-        factory.setUpUser(patient)
-        factory.setUpMultipleMessagesWithContentInCache(table)
+        val factory = setupMessagesEnabledPatient()
+        factory.setUpMultipleMessagesWithContentInCache(table, MessageVersion.PLAIN_TEXT)
+    }
+
+    @Given("^I am a user wishing to view my messages with markdown content$")
+    fun iAmAUserWishingToViewTheirMessagesWithMarkdownContent(table: DataTable) {
+        val factory = setupMessagesEnabledPatient()
+        factory.setUpMultipleMessagesWithContentInCache(table, MessageVersion.MARKDOWN)
     }
 
     @Given("^I am a user wishing to view my messages, but I have no messages$")
     fun iAmAUserWishingToViewTheirMessagesButIHaveNoMessages() {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null,
-                SJRJourneyType.MESSAGES_ENABLED)
-        val factory = MessagesFactory()
-        factory.setUpUser(patient)
+        setupMessagesEnabledPatient()
     }
 
     @Given("^I am a user wishing to view my messages but retrieving the messages will cause an internal server error$")
     fun iAmAUserWishingToViewTheirMessagesButIHaveAnInvalidMessage() {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
-                null,
-                SJRJourneyType.MESSAGES_ENABLED)
-        val factory = MessagesFactory()
-        factory.setUpUser(patient)
+        val factory = setupMessagesEnabledPatient()
         factory.setUpInvalidMessageInCache()
     }
 
@@ -252,5 +247,15 @@ class MessagesStepDefinitions {
     @Then("^I see messages button on the nav bar is highlighted$")
     fun messagesButtonOnNavBarIsHighlighted() {
         nav.assertSelectedTab(NavBarNative.NavBarType.MESSAGES)
+    }
+
+    private fun setupMessagesEnabledPatient(): MessagesFactory {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                SJRJourneyType.MESSAGES_ENABLED)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
+
+        return factory
     }
 }

@@ -5,26 +5,27 @@ import isString from 'lodash/fp/isString';
 import mockdate from 'mockdate';
 import moment from 'moment';
 import {
-  isFalsy,
-  isTruthy,
-  redirectTo,
-  redirectByName,
-  readableBytes,
-  stripHtml,
   formatInboxMessageTime,
   formatIndividualMessageTime,
   getPathAndQuery,
-  getThirdPartyLocaleText,
-  mimeType,
-  resetPageFocus,
   getPathWithPatientIdPrefix,
-  gpSessionErrorHasRetried,
   getThirdPartyJumpOff,
+  getThirdPartyLocaleText,
+  gpSessionErrorHasRetried,
+  isFalsy,
+  isTruthy,
+  isSameHostNameAndProtocol,
+  mimeType,
   normaliseWhiteSpace,
+  readableBytes,
+  redirectTo,
+  redirectByName,
+  resetPageFocus,
+  stripHtml,
 } from '@/lib/utils';
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
-import NativeCallbacks from '@/services/native-app';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import NativeCallbacks from '@/services/native-app';
 
 jest.mock('@/services/native-app');
 jest.mock('@/services/event-bus', () => ({
@@ -542,6 +543,58 @@ describe('util library', () => {
         ['2020-01-21T00:00:01.000Z', 'Sent 21 January 2020 at midnight'],
       ])('will format %s date to %s', (messageDate, expectedFormattedDate) => {
         expect(formatIndividualMessageTime(messageDate, $t)).toEqual(expectedFormattedDate);
+      });
+    });
+
+    describe('isSameHostNameAndProtocol', () => {
+      const { location } = window;
+
+      beforeEach(() => {
+        delete window.location;
+        window.location = {
+          protocol: 'https:',
+          hostname: 'www.test.com',
+        };
+      });
+
+      afterEach(() => {
+        window.location = location;
+      });
+
+      describe('valid matching URLs', () => {
+        each([
+          ['https://www.test.com'],
+          ['https://www.test.com?query=string'],
+          ['https://www.test.com/path'],
+          ['https://www.test.com/#anchor'],
+        ]).it('will return true for `%s`)', (url) => {
+          expect(isSameHostNameAndProtocol(url)).toEqual(true);
+        });
+      });
+
+      describe('valid but not matching URLs', () => {
+        each([
+          ['http://www.test.com'],
+          ['http://www.test.com?query=string'],
+          ['http://www.test.com/path'],
+          ['http://www.anothertest.com'],
+          ['http://www.anothertest.com/path'],
+          ['https://www.anothertest.com'],
+          ['https://www.anothertest.com/path'],
+          ['https://www.anothertest.com/path#anchor'],
+        ]).it('will return false for `%s`', (url) => {
+          expect(isSameHostNameAndProtocol(url)).toEqual(false);
+        });
+      });
+
+      describe('invalid URLs', () => {
+        each([
+          ['/path?query=string'],
+          ['some random string'],
+          ['email@address.com'],
+        ]).it('will return false for `%s`', (url) => {
+          expect(isSameHostNameAndProtocol(url)).toEqual(false);
+        });
       });
     });
 
