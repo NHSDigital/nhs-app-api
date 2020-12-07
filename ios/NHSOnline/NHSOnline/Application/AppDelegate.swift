@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             homeViewController.configurationServiceProvider = ConfigurationServiceManager.getConfigurationServiceProvider()
             homeViewController.splashScreen = SplashScreen()
             homeViewController.progressSpinner = ProgressSpinner()
+            homeViewController.fileDownloader = FileDownloadHelper()
+            homeViewController.dataDownloadAlertHandler = DataDownloadAlertHandler()
             
             let navigationController = UINavigationController(rootViewController: homeViewController)
             self.window?.rootViewController = navigationController

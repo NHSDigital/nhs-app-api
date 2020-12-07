@@ -14,7 +14,6 @@ class BiometricServiceTests: XCTestCase {
     var mockApplicationState: ApplicationStateMocks!
     var mockSplashScreen: SplashScreenViewMocks!
     var mockProgressSpinner: ProgressSpinnerViewMocks!
-    var mockDocumentInteractionController: DocumentInteractionsControllerMocks!
     var testWebview: WKWebView!
 
     override func setUp() {
@@ -44,10 +43,7 @@ class BiometricServiceTests: XCTestCase {
         
         mockProgressSpinner = ProgressSpinnerViewMocks()
         vcHome?.progressSpinner = mockProgressSpinner
-        
-        mockDocumentInteractionController = DocumentInteractionsControllerMocks()
-        vcHome?.documentInteractionController = mockDocumentInteractionController
-        
+                
         vcHome.webViewController?.loadPage(url: config().HomeUrl)
     
     }

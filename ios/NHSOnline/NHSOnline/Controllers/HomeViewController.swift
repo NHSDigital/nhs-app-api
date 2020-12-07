@@ -14,6 +14,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     var progressSpinner: ProgressSpinner?
     var splashScreen: SplashScreen?
+    var fileDownloader: FileDownloadHelper?
+    var dataDownloadAlertHandler: DataDownloadAlertHandler?
     
     var applicationState = ApplicationState()
     var documentInteractionController = UIDocumentInteractionController()
@@ -662,92 +664,18 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     }
     
     func showDataDownloadAlert(alertType: DataDownloadAlertType) {
-        let alert = DataDownloadAlertHandler().getDownloadAlert(type: alertType)
-        alert.show()
+        let alert = dataDownloadAlertHandler?.getDownloadAlert(type: alertType)
+        alert?.show()
     }
     
     func downloadFile(messageBody: String) {
-         if #available(iOS 10.0, *) {
-             let splitMessage = messageBody.components(separatedBy: "|split|")
-             let base64Data = splitMessage[0]
-             let fileName = splitMessage[1]
-             let mimeType = splitMessage[2]
-
-             let dataWithoutStart = base64Data.split(separator: ",", maxSplits: 1, omittingEmptySubsequences: true)[1]
-             let convertedData = Data(base64Encoded: String(describing: dataWithoutStart), options: .ignoreUnknownCharacters)
-
-             if (mimeType.containsAnyOf(["image"])){
-                 
-                 let tmpURL = FileManager.default.temporaryDirectory
-                     .appendingPathComponent(fileName)
-                 do {
-                     try convertedData!.write(to: tmpURL)
-                 } catch {
-                     self.showDownloadError()
-                     return
-                 }
-                 self.documentInteractionController.url = tmpURL
-                 self.documentInteractionController.uti = "public.image, public.content"
-                 self.documentInteractionController.name = tmpURL.lastPathComponent
-                 if UIDevice.current.userInterfaceIdiom == .pad {
-                     var squareFrame: CGRect {
-                         let midX = self.view.bounds.midX
-                         let midY = self.view.bounds.midY
-                         let size: CGFloat = 64
-                         return CGRect(x: midX-size/2, y: midY-size/2, width: size, height: size)
-                     }
-                     
-                     self.documentInteractionController.presentOptionsMenu(
-                         from: squareFrame,
-                         in: self.view,
-                         animated: true
-                     )
-                 } else {
-                     self.documentInteractionController.presentOptionsMenu(
-                         from: self.view.frame,
-                         in: self.view,
-                         animated: true
-                     )
-                 }
-             } else {
-                 let tmpURL = FileManager.default.temporaryDirectory
-                     .appendingPathComponent(fileName)
-                 do {
-                     try convertedData!.write(to: tmpURL)
-                 } catch {
-                     self.showDownloadError()
-                     return
-                 }
-                     
-                 self.documentInteractionController.url = tmpURL
-                 self.documentInteractionController.uti = "public.data, public.content"
-                 self.documentInteractionController.name = tmpURL.lastPathComponent
-                 if UIDevice.current.userInterfaceIdiom == .pad {
-                     var squareFrame: CGRect {
-                         let midX = self.view.bounds.midX
-                         let midY = self.view.bounds.midY
-                         let size: CGFloat = 64
-                         return CGRect(x: midX-size/2, y: midY-size/2, width: size, height: size)
-                     }
-                     
-                     self.documentInteractionController.presentOpenInMenu(
-                         from: squareFrame,
-                         in: self.view,
-                         animated: true
-                     )
-                 } else {
-                 self.documentInteractionController.presentOpenInMenu(
-                     from: self.view.frame,
-                     in: self.view,
-                     animated: true
-                 )
-                 }
-             }
-             
-         } else {
-             self.showDataDownloadAlert(alertType: .OSNotSupported)
-             return
-         }
+        switch fileDownloader!.getDownloader().downloadFile(data: messageBody, view: self.view, documentInteractionController: documentInteractionController) {
+        case .NOT_SUPPORTED:
+            self.showDataDownloadAlert(alertType: .OSNotSupported)
+        case .ERROR:
+            self.showDownloadError()
+        case .SUCCESS: break
+        }
     }
     
     func handleBiometricStatusChangeRequest(biometricState: BiometricState) {

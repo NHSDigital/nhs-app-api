@@ -8,7 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		0084665FA422D9B0FC5280F7 /* Pods_NHSOnlineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DEFA77287A2083DC61F7007 /* Pods_NHSOnlineTests.framework */; };
+		101DFC3E25AC68370003DDFB /* Base64File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101DFC3D25AC68370003DDFB /* Base64File.swift */; };
 		107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
+		10B3A66525ACADC9005FAE14 /* FileDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EC9A3C257F640500D88668 /* FileDownloadHelper.swift */; };
+		10B3A66625ACADD0005FAE14 /* Base64File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101DFC3D25AC68370003DDFB /* Base64File.swift */; };
+		10B3A66925ACAFFD005FAE14 /* FileDownloadHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A66825ACAFFC005FAE14 /* FileDownloadHelperTests.swift */; };
+		10B3A66B25ACB011005FAE14 /* Base64FileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A66A25ACB011005FAE14 /* Base64FileTests.swift */; };
+		10B3A66E25ADC721005FAE14 /* FileDownloadHelperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A66D25ADC721005FAE14 /* FileDownloadHelperMock.swift */; };
+		10B3A67325AF400E005FAE14 /* FileDownloadHelperImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A67225AF400E005FAE14 /* FileDownloadHelperImpl.swift */; };
+		10B3A67525AF42FE005FAE14 /* FileDownloadStaticLibMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A67425AF42FE005FAE14 /* FileDownloadStaticLibMock.swift */; };
+		10B3A67A25B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B3A67925B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift */; };
+		10EC9A3D257F640500D88668 /* FileDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EC9A3C257F640500D88668 /* FileDownloadHelper.swift */; };
 		135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A621C9EF78001EC74B /* CookieHandler.swift */; };
 		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
 		1381D48621BFFFD300B54300 /* AAID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47821BFFFD000B54300 /* AAID.swift */; };
@@ -280,6 +290,7 @@
 		0D2F739177513211DDB2441E /* Pods-NHSOnlineTests.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.browserstack.xcconfig"; sourceTree = "<group>"; };
 		0ECE893C0BD161095925CE56 /* Pods-NHSOnline.scratch14.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch14.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch14.xcconfig"; sourceTree = "<group>"; };
 		101D48F7BA2E91FC78B74792 /* Pods-NHSOnline.scratch17.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch17.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch17.xcconfig"; sourceTree = "<group>"; };
+		101DFC3D25AC68370003DDFB /* Base64File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64File.swift; sourceTree = "<group>"; };
 		105BB9762178DC4300571671 /* Scratch1.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch1.xcconfig; sourceTree = "<group>"; };
 		105BB9772178DC5200571671 /* Scratch2.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch2.xcconfig; sourceTree = "<group>"; };
 		105BB9782178DC5D00571671 /* Scratch3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch3.xcconfig; sourceTree = "<group>"; };
@@ -292,6 +303,13 @@
 		105BB9932179C0C400571671 /* Scratch10.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch10.xcconfig; sourceTree = "<group>"; };
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
 		107EA7B621CCE3CC006C675B /* nativeAppAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nativeAppAssets; path = ../../nativeAppAssets; sourceTree = "<group>"; };
+		10B3A66825ACAFFC005FAE14 /* FileDownloadHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadHelperTests.swift; sourceTree = "<group>"; };
+		10B3A66A25ACB011005FAE14 /* Base64FileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64FileTests.swift; sourceTree = "<group>"; };
+		10B3A66D25ADC721005FAE14 /* FileDownloadHelperMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadHelperMock.swift; sourceTree = "<group>"; };
+		10B3A67225AF400E005FAE14 /* FileDownloadHelperImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadHelperImpl.swift; sourceTree = "<group>"; };
+		10B3A67425AF42FE005FAE14 /* FileDownloadStaticLibMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadStaticLibMock.swift; sourceTree = "<group>"; };
+		10B3A67925B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlertStringHandlerMock.swift; sourceTree = "<group>"; };
+		10EC9A3C257F640500D88668 /* FileDownloadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadHelper.swift; sourceTree = "<group>"; };
 		131F8EAF219739A56E33B702 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.onboardingsandpit.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.onboardingsandpit.xcconfig"; sourceTree = "<group>"; };
 		135171A621C9EF78001EC74B /* CookieHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CookieHandler.swift; sourceTree = "<group>"; };
 		13730A21220454FF00437FC1 /* BiometricType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricType.swift; sourceTree = "<group>"; };
@@ -710,6 +728,58 @@
 			path = Configurations;
 			sourceTree = "<group>";
 		};
+		10B3A66725ACAFB0005FAE14 /* FileDownload */ = {
+			isa = PBXGroup;
+			children = (
+				10B3A66825ACAFFC005FAE14 /* FileDownloadHelperTests.swift */,
+				10B3A66A25ACB011005FAE14 /* Base64FileTests.swift */,
+			);
+			path = FileDownload;
+			sourceTree = "<group>";
+		};
+		10B3A66C25ADC6F2005FAE14 /* FileDownload */ = {
+			isa = PBXGroup;
+			children = (
+				10B3A66D25ADC721005FAE14 /* FileDownloadHelperMock.swift */,
+				10B3A67425AF42FE005FAE14 /* FileDownloadStaticLibMock.swift */,
+			);
+			path = FileDownload;
+			sourceTree = "<group>";
+		};
+		10B3A67625B034A7005FAE14 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				10B3A67725B034B1005FAE14 /* Strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		10B3A67725B034B1005FAE14 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				10B3A67825B034C4005FAE14 /* StringHandlers */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
+		10B3A67825B034C4005FAE14 /* StringHandlers */ = {
+			isa = PBXGroup;
+			children = (
+				10B3A67925B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift */,
+			);
+			path = StringHandlers;
+			sourceTree = "<group>";
+		};
+		10EC9A3E257F65CD00D88668 /* FileDownload */ = {
+			isa = PBXGroup;
+			children = (
+				101DFC3D25AC68370003DDFB /* Base64File.swift */,
+				10EC9A3C257F640500D88668 /* FileDownloadHelper.swift */,
+				10B3A67225AF400E005FAE14 /* FileDownloadHelperImpl.swift */,
+			);
+			path = FileDownload;
+			sourceTree = "<group>";
+		};
 		131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */ = {
 			isa = PBXGroup;
 			children = (
@@ -742,6 +812,7 @@
 		2EA7BDA32418FCAD00CFEDC8 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				10B3A67625B034A7005FAE14 /* Resources */,
 				4AB36C782515092400204E08 /* UIViewControllerMock.swift */,
 				F975F4A6248142FA00D3957F /* Core */,
 				F975F49F24813C5500D3957F /* HybridApplicationInteractions */,
@@ -805,6 +876,7 @@
 		64C1C76723E2E0C400FCBA57 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				10EC9A3E257F65CD00D88668 /* FileDownload */,
 				ED6A4513244D99EA005BA1E9 /* UiInteraction */,
 				64C1C76823E2E0E000FCBA57 /* SchemeHandlers */,
 				64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */,
@@ -1213,6 +1285,7 @@
 		F381CA47FB67F4660F08CD08 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				10B3A66725ACAFB0005FAE14 /* FileDownload */,
 				F381C21CE00D37602BC492AE /* SchemeHandlers */,
 				B893B986255B076F0065F611 /* UserAgentBuilderTests.swift */,
 			);
@@ -1357,6 +1430,7 @@
 		F9BAFC49247FC30900BF1CAE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				10B3A66C25ADC6F2005FAE14 /* FileDownload */,
 				4AB36C742514F7FA00204E08 /* MockDeviceInfoProtocol.swift */,
 				F9BAFC44247FBB5900BF1CAE /* ConfigurationServiceMocks.swift */,
 				2EA7BDA62418FCF700CFEDC8 /* ConfigurationServiceProtocolMocks.swift */,
@@ -1759,6 +1833,8 @@
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				64070BCB24A0E2FF00A7D3ED /* LogLevel.swift in Sources */,
+				101DFC3E25AC68370003DDFB /* Base64File.swift in Sources */,
+				10EC9A3D257F640500D88668 /* FileDownloadHelper.swift in Sources */,
 				4AF2612225233B85002123B1 /* CompatibilityStruct.swift in Sources */,
 				F959D50624F91ECF001F923A /* PCSVeriSureFlowResponseStub.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
@@ -1827,6 +1903,7 @@
 				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
+				10B3A67325AF400E005FAE14 /* FileDownloadHelperImpl.swift in Sources */,
 				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
 				64C1C76423DB4E2400FCBA57 /* KnownServices.swift in Sources */,
 				F381C09CCA60457CD0421BB2 /* KnownService.swift in Sources */,
@@ -1852,6 +1929,7 @@
 				F98EB0BF2486AAE100BD06A8 /* WebViewDelegateMocks.swift in Sources */,
 				F975F4A124813C6B00D3957F /* AppWebInterfaceMocks.swift in Sources */,
 				4AB36C772514F80500204E08 /* DeviceServiceTests.swift in Sources */,
+				10B3A67A25B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift in Sources */,
 				64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */,
 				F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */,
 				4AB36C752514F7FA00204E08 /* MockDeviceInfoProtocol.swift in Sources */,
@@ -1866,6 +1944,8 @@
 				2EA7BDA52418FCDD00CFEDC8 /* KnownServicesProtocolMocks.swift in Sources */,
 				F9BAFC45247FBB5900BF1CAE /* ConfigurationServiceMocks.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
+				10B3A67525AF42FE005FAE14 /* FileDownloadStaticLibMock.swift in Sources */,
+				10B3A66E25ADC721005FAE14 /* FileDownloadHelperMock.swift in Sources */,
 				F9D1FFC52534500A004ECE88 /* CookieHandlerMocks.swift in Sources */,
 				3E27D224248FC7D2000C57E8 /* WKFrameInfoMock.swift in Sources */,
 				F9BAFC33247FB6B000BF1CAE /* TabBarDelegateMocks.swift in Sources */,
@@ -1874,6 +1954,7 @@
 				F9BAFC3B247FBA0700BF1CAE /* SplashScreenViewMocks.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
 				3EEE3C2F24A4B95E000B8126 /* LoggingServiceMocks.swift in Sources */,
+				10B3A66B25ACB011005FAE14 /* Base64FileTests.swift in Sources */,
 				F975F4A82481430D00D3957F /* LocalAuthenticationMocks.swift in Sources */,
 				F381C7AB1F32D5FDAAD348F6 /* KnownServicesTests.swift in Sources */,
 				3E734E7924A4DC5D0093DDFB /* WKNavigationResponseMock.swift in Sources */,
@@ -1883,6 +1964,7 @@
 				4AF2612425233B97002123B1 /* CompatibilityServiceTests.swift in Sources */,
 				F975F4962481082E00D3957F /* BiometricServiceTests.swift in Sources */,
 				F94E3477248547D9009CAAC0 /* BiometricServiceMocks.swift in Sources */,
+				10B3A66925ACAFFD005FAE14 /* FileDownloadHelperTests.swift in Sources */,
 				F381CE46D03B8D3A42FC7693 /* TelSchemeHandlerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1898,11 +1980,13 @@
 				F91E298B24F67447001BDD21 /* PaycassoDocumentTypes.swift in Sources */,
 				F91E298C24F67447001BDD21 /* DataDownloadStringHandler.swift in Sources */,
 				F91E298D24F67447001BDD21 /* CustomNotifications.swift in Sources */,
+				10B3A66525ACADC9005FAE14 /* FileDownloadHelper.swift in Sources */,
 				F91E298E24F67447001BDD21 /* PageUnavailabilityViewController.swift in Sources */,
 				F91E298F24F67447001BDD21 /* BiometricErrors.swift in Sources */,
 				F91E299024F67447001BDD21 /* HeaderBarSlimView.swift in Sources */,
 				F91E299124F67447001BDD21 /* FidoEndpointHelper.swift in Sources */,
 				F91E299224F67447001BDD21 /* ErrorTextView.swift in Sources */,
+				10B3A66625ACADD0005FAE14 /* Base64File.swift in Sources */,
 				F91E299324F67447001BDD21 /* WebViewController.swift in Sources */,
 				F91E299424F67447001BDD21 /* LogLevel.swift in Sources */,
 				F91E299524F67447001BDD21 /* MailToSchemeHandler.swift in Sources */,

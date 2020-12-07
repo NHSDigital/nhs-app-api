@@ -48,6 +48,9 @@ import com.nhs.online.nhsonline.services.logging.ILoggingService
 import com.nhs.online.nhsonline.services.logging.LoggingService
 import com.nhs.online.nhsonline.services.logging.VolleyQueueProvider
 import com.nhs.online.nhsonline.support.*
+import com.nhs.online.nhsonline.support.fileDownloading.Base64File
+import com.nhs.online.nhsonline.support.fileDownloading.FileDownloadHelper
+import com.nhs.online.nhsonline.support.fileDownloading.STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.support.intentHandlers.DefaultIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
@@ -94,6 +97,7 @@ class MainActivity :
     private lateinit var paycassoFlowFactory: PaycassoFlowFactory
     private lateinit var nhs111Uri: Uri
     private lateinit var referrerClient: InstallReferrerClient
+    private lateinit var loggingService: ILoggingService
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -133,6 +137,7 @@ class MainActivity :
 
         configureWebView()
         appWebInterface = AppWebInterface(webview)
+        loggingService = LoggingService(this, VolleyQueueProvider())
         downloadHelper = FileDownloadHelper(this)
         paycassoFlowFactory = PaycassoFlowFactory(logger)
         paycassoService = PaycassoService(paycassoFlowFactory.getFlow(this))
@@ -382,22 +387,28 @@ class MainActivity :
     }
 
     override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
+        if (downloadHelper.setFileAndCheckForPermission(Base64File(fileName, mimeType, base64Data))) {
+            downloadFile()
+        }
+    }
 
-        downloadHelper.fileName = fileName
-        downloadHelper.fileMimeType = mimeType
-        downloadHelper.base64Data = base64Data
-
-        // User needs to allow access to their
-        // internal storage on the device.
-        if (downloadHelper.isStoragePermissionGranted()) {
-            try {
-                downloadHelper.convertBase64StringToFileAndStoreIt()
-            } catch (e: Exception) {
-                Log.e(TAG, "Download document resulted in error: ", e)
-                showDownloadDocumentFailureError()
-            }
+    private fun downloadFile() {
+        val file = downloadHelper.base64File
+        if (downloadHelper.tryDownload()) {
+            loggingService.logInfo("File name ${file?.fileName} with mime-type ${file?.fileMimeType} downloaded successfully from ${file?.source}")
         } else {
-            downloadHelper.showStoragePermissionsPopup()
+            loggingService.logError("Failed to download ${file?.fileName} with mime-type of ${file?.fileMimeType}, and media type of ${file?.dataMediaType} from ${file?.source}");
+            showDownloadDocumentFailureError()
+        }
+        downloadHelper.clearFile()
+    }
+
+    private fun handleDownloadPermissionResult(grantResults: IntArray) {
+        if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            Log.d(com.nhs.online.nhsonline.activities.TAG, "Permissions granted for storage")
+            downloadFile()
+        } else {
+            Log.d(com.nhs.online.nhsonline.activities.TAG, "Permission not granted")
         }
     }
 
@@ -774,16 +785,6 @@ class MainActivity :
             title = null
             setHomeButtonEnabled(isHomeEnabled)
             setDisplayHomeAsUpEnabled(isHomeEnabled)
-        }
-    }
-
-    private fun handleDownloadPermissionResult(grantResults: IntArray) {
-        if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-            Log.d(TAG, "Permissions granted for storage")
-
-            startDownload(downloadHelper.base64Data, downloadHelper.fileName, downloadHelper.fileMimeType)
-        } else {
-            Log.d(TAG, "Permission not granted")
         }
     }
 
