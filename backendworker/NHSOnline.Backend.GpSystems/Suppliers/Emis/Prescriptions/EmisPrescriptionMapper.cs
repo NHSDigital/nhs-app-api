@@ -4,16 +4,19 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisPrescriptionMapper : IEmisPrescriptionMapper
     {
         private readonly ILogger _logger;
+        private readonly IGpSystem _gpSystem;
 
-        public EmisPrescriptionMapper(ILogger<EmisPrescriptionMapper> logger)
+        public EmisPrescriptionMapper(ILogger<EmisPrescriptionMapper> logger, IGpSystemFactory gpSystemFactory)
         {
             _logger = logger;
+            _gpSystem = gpSystemFactory.CreateGpSystem(Supplier.Emis);
         }
 
         public PrescriptionListResponse Map(PrescriptionRequestsGetResponse prescriptionGetResponse)
@@ -93,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             _logger.LogInformation($"{result.Prescriptions.Count()} prescriptions mapped");
             _logger.LogInformation($"{result.Courses.Count()} courses mapped");
-            
+
             return result;
         }
 
@@ -107,6 +110,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             var result = new CourseListResponse
             {
                 Courses = (courseGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(MapMedicationCourseToCourse),
+                SpecialRequestCharacterLimit = _gpSystem.PrescriptionSpecialRequestCharacterLimit
             };
 
             return result;

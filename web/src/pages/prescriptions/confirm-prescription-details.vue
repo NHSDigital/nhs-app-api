@@ -39,16 +39,12 @@
         </Card>
       </CardGroupItem>
     </CardGroup>
-    <div>
-      <no-js-form :action="confirmPrescriptionsPath" :value="{}" method="post">
-        <generic-button id="btn_confirm_and_order_prescription"
-                        class="nhsuk-button"
-                        click-delay="medium"
-                        @click="onConfirmButtonClicked">
-          {{ $t('prescriptions.confirmDetails.confirmAndOrder') }}
-        </generic-button>
-      </no-js-form>
-    </div>
+    <generic-button id="btn_confirm_and_order_prescription"
+                    class="nhsuk-button"
+                    click-delay="medium"
+                    @click="onConfirmButtonClicked">
+      {{ $t('prescriptions.confirmDetails.confirmAndOrder') }}
+    </generic-button>
     <div class="nhsuk-body-m">
       <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="prescriptionRepeatCoursesPath"
@@ -75,7 +71,6 @@ import {
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
-import NoJsForm from '@/components/no-js/NoJsForm';
 
 const onSubmit = async (store, selectedCourseIds, specialRequest) => {
   const repeatPrescriptionOrder = {
@@ -96,7 +91,6 @@ export default {
     Card,
     CardGroupItem,
     CardGroup,
-    NoJsForm,
   },
   data() {
     return {

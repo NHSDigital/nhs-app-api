@@ -64,6 +64,12 @@ namespace NHSOnline.Backend.Support
             public const string GpPracticeEnglandWales = @"^[A-Z0-9]{6}$";
         }
 
+        public static class SpecialRequestCharacterLimit
+        {
+            public const int Default = 1000;
+            public const int Tpp = 500;
+        }
+
         public static class Regex
         {
             public const string GuidRegex = @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}";

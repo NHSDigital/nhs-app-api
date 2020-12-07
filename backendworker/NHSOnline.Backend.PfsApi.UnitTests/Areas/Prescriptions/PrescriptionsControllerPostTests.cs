@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.Success()));
 
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
                 .Returns(true);
 
             // Act
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.PartialSuccess(response)));
 
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
                 .Returns(true);
 
             // Act
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             // Arrange
             _repeatPrescriptionRequest.CourseIds = new List<string> { "Course 1", "Course 2" };
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
                 .Returns(false);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     StatusCodes.Status400BadRequest,  _gpSession.Supplier))
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
                 .Returns(true);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     expectedStatusCode, _gpSession.Supplier))

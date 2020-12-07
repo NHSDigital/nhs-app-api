@@ -30,6 +30,8 @@ import utils.getOrNull
 import utils.set
 
 private const val MILLISECONDS_TO_WAIT_FOR_CONTINUE: Long = 500
+private const val SPECIAL_REQUEST_LIMIT = 1000
+private const val TPP_SPECIAL_REQUEST_LIMIT = 500
 
 open class CoursesStepDefinitions {
 
@@ -174,6 +176,12 @@ open class CoursesStepDefinitions {
                 .to(repeatPrescriptions.typeTextIntoSpecialRequestTextArea("<script>"))
     }
 
+    @Then("^I can see how many characters I have left for my special request$")
+    fun iCanSeeHowManyCharactersIHaveLeftForMySpecialRequest() {
+        val text = getSpecialRequestCharactersRemainingText()
+        Assert.assertTrue(repeatPrescriptions.specialRequestCharactersRemainingTextIsVisible(text))
+    }
+
     @When("^I click 'Order a new repeat prescription'$")
     fun iClickOrderARepeatPrescription() {
         prescriptionsHubPage.clickOrderARepeatPrescriptionButton()
@@ -275,6 +283,20 @@ open class CoursesStepDefinitions {
         Assert.assertTrue(
                 repeatPrescriptions.isNoSpecialRequestTextEnteredMessageVisible() ==
                         (visibility.toLowerCase() == isVisibleIndicator))
+    }
+
+    private fun getSpecialRequestCharactersRemainingText(): String {
+        val specialRequest = Serenity.sessionVariableCalled<String>("specialRequestText") ?: ""
+        val charactersRemaining = when(SerenityHelpers.getGpSupplier()) {
+            Supplier.TPP -> TPP_SPECIAL_REQUEST_LIMIT - specialRequest.length
+            else -> SPECIAL_REQUEST_LIMIT - specialRequest.length
+        }
+        val pluralisedCharacters = when(charactersRemaining) {
+            1 -> "character"
+            else -> "characters"
+        }
+
+        return "You have $charactersRemaining $pluralisedCharacters remaining."
     }
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {

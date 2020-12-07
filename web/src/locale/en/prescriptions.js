@@ -74,7 +74,7 @@ export default {
     specialRequestsOptional: 'Special requests relating to this order (optional)',
     specialRequestsMandatory: 'Special requests relating to this order',
     thisTextMayNotBeSeen: 'This text may not be seen by your GP. For important requests, contact your GP surgery.',
-    specialRequestCharacterLimit: 'Limit is 1000 characters (about 150 words)',
+    specialRequestCharacterLimit: 'You have 0 characters remaining. | You have 1 character remaining. | You have {n} characters remaining.',
     continue: 'Continue',
   },
   viewOrders: {

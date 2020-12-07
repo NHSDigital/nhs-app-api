@@ -9,9 +9,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.SharedModels;
+using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 {
@@ -21,15 +23,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private IFixture _fixture;
         private IVisionPrescriptionMapper _mapper;
         private ILogger<VisionPrescriptionMapper> _logger;
+        private Mock<IGpSystemFactory> _gpSystemFactoryMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _logger = Mock.Of<ILogger<VisionPrescriptionMapper>>();
-            _mapper = new VisionPrescriptionMapper(_logger);
-
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+
+            _logger = Mock.Of<ILogger<VisionPrescriptionMapper>>();
+
+            _gpSystemFactoryMock = new Mock<IGpSystemFactory>();
+            _gpSystemFactoryMock
+                .Setup(f => f.CreateGpSystem(Supplier.Vision))
+                .Returns(_fixture.Create<VisionGpSystem>());
+
+            _mapper = new VisionPrescriptionMapper(_logger, _gpSystemFactoryMock.Object);
         }
 
         [TestMethod]
@@ -356,6 +365,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             Action act = () => _mapper.Map((EligibleRepeats)null);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("eligibleRepeatsResponse");
+        }
+
+        [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_ReturnsResultWithSpecialRequestCharacterLimitOf1000()
+        {
+            // Arrange
+            var item = new EligibleRepeats();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SpecialRequestCharacterLimit.Should().Be(1000);
         }
 
         [TestMethod]

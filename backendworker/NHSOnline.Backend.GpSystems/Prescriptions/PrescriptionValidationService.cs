@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
     {
         bool IsGetValid(DateTimeOffset? fromDate, DateTimeOffset defaultFromDate);
 
-        bool IsPostValid(RepeatPrescriptionRequest request);
+        bool IsPostValid(RepeatPrescriptionRequest request, int specialRequestCharacterLimit);
     }
 
     public abstract class PrescriptionValidationService : IPrescriptionValidationService
@@ -32,14 +32,14 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
 
         protected abstract bool IsSupplierGetValid(DateTimeOffset? fromDate, DateTimeOffset defaultFromDate);
 
-        public bool IsPostValid(RepeatPrescriptionRequest request)
+        public bool IsPostValid(RepeatPrescriptionRequest request, int specialRequestCharacterLimit)
         {
             var courseIdsValid = new ValidateAndLog(_logger)
                 .IsListPopulated(request.CourseIds, nameof(request.CourseIds))
                 .IsSafeString(request.SpecialRequest, nameof(request.SpecialRequest))
                 .IsValid();
 
-            var specialRequestValid = IsValidSpecialRequest(request.SpecialRequest);
+            var specialRequestValid = IsValidSpecialRequest(request.SpecialRequest, specialRequestCharacterLimit);
 
             var supplierSpecificRequestValid = IsSupplierPostValid(request);
 
@@ -59,9 +59,9 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
             return false;
         }
 
-        private  bool IsValidSpecialRequest(string specialRequest)
+        private  bool IsValidSpecialRequest(string specialRequest, int characterLimit)
         {
-            if (specialRequest != null && specialRequest.Length > 1000)
+            if (specialRequest != null && specialRequest.Length > characterLimit)
             {
                 _logger.LogWarning("Invalid special request");
                 return false;

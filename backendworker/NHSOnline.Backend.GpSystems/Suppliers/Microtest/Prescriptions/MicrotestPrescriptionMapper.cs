@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
+using NHSOnline.Backend.Support;
 using Course = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions.Course;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
@@ -11,6 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
     public class MicrotestPrescriptionMapper : IMicrotestPrescriptionMapper
     {
         private readonly ILogger _logger;
+        private readonly IGpSystem _gpSystem;
 
         private static readonly IDictionary<string, Status> StatusMap =
             new Dictionary<string, Status>(StringComparer.OrdinalIgnoreCase)
@@ -21,9 +23,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
                 { PrescriptionStatus.Cancelled, Status.Unknown },
             };
 
-        public MicrotestPrescriptionMapper(ILogger<MicrotestPrescriptionMapper> logger)
+        public MicrotestPrescriptionMapper(ILogger<MicrotestPrescriptionMapper> logger, IGpSystemFactory gpSystemFactory)
         {
             _logger = logger;
+            _gpSystem = gpSystemFactory.CreateGpSystem(Supplier.Microtest);
         }
 
         public PrescriptionListResponse Map(PrescriptionHistoryGetResponse prescriptionHistoryGetResponse)
@@ -38,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             var allCourseItems = new List<GpSystems.Prescriptions.Models.Course>();
 
             _logger.LogInformation($"Mapping {prescriptionHistoryGetResponse.Courses.Count()} courses.");
-            
+
             if (prescriptionHistoryGetResponse.Courses.Any())
             {
                 foreach (var item in prescriptionHistoryGetResponse.Courses)
@@ -118,6 +121,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             var result = new CourseListResponse
             {
                 Courses = (courseGetResponse.Courses ?? Enumerable.Empty<Course>()).Select(MapMicrotestCourseToGenericCourse),
+                SpecialRequestCharacterLimit = _gpSystem.PrescriptionSpecialRequestCharacterLimit
             };
 
             return result;

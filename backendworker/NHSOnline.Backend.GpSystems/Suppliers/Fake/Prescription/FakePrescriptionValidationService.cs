@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Prescriptions
             return true;
         }
 
-        public bool IsPostValid(RepeatPrescriptionRequest request)
+        public bool IsPostValid(RepeatPrescriptionRequest request, int specialRequestCharacterLimit)
         {
             return true;
         }

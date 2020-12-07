@@ -1,28 +1,42 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 {
     [TestClass]
     public class EmisPrescriptionMapperTests
     {
+        private IFixture _fixture;
         private IEmisPrescriptionMapper _mapper;
         private ILogger<EmisPrescriptionMapper> _logger;
-        
-        
+        private Mock<IGpSystemFactory> _gpSystemFactoryMock;
+
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
+
             _logger = Mock.Of<ILogger<EmisPrescriptionMapper>>();
-            _mapper = new EmisPrescriptionMapper(_logger);;
+
+            _gpSystemFactoryMock = new Mock<IGpSystemFactory>();
+            _gpSystemFactoryMock
+                .Setup(f => f.CreateGpSystem(Supplier.Emis))
+                .Returns(_fixture.Create<EmisGpSystem>());
+
+            _mapper = new EmisPrescriptionMapper(_logger, _gpSystemFactoryMock.Object);
         }
 
         [TestMethod]
@@ -30,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         {
             // Act
             Action act = () => _mapper.Map((PrescriptionRequestsGetResponse)null);
-            
+
             // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionGetResponse");
         }
@@ -415,6 +429,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         }
 
         [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_ReturnsResultWithSpecialRequestCharacterLimitOf1000()
+        {
+            // Arrange
+            var item = new CoursesGetResponse();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SpecialRequestCharacterLimit.Should().Be(1000);
+        }
+
+        [TestMethod]
         public void MapCoursesGetResponseToCourseListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
@@ -427,7 +455,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             result.Should().NotBeNull();
             result.Courses.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void MapCoursesGetResponseToCourseListResponse_WithValues_ReturnsResultValues()
         {

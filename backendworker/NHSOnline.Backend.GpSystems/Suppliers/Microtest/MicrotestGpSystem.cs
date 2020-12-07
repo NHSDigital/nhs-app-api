@@ -121,5 +121,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         }
 
         public bool SupportsLinkedAccounts => false;
+
+        public int PrescriptionSpecialRequestCharacterLimit { get; } = Constants.SpecialRequestCharacterLimit.Default;
     }
 }

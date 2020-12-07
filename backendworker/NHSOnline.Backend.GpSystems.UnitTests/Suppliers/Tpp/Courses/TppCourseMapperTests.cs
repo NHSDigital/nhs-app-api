@@ -8,8 +8,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
 {
@@ -19,15 +21,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
         private IFixture _fixture;
         private ITppCourseMapper _mapper;
         private ILogger<TppCourseMapper> _logger;
+        private Mock<IGpSystemFactory> _gpSystemFactoryMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _logger = Mock.Of<ILogger<TppCourseMapper>>();
-            _mapper = new TppCourseMapper(_logger);
-
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+
+            _logger = Mock.Of<ILogger<TppCourseMapper>>();
+
+            _gpSystemFactoryMock = new Mock<IGpSystemFactory>();
+            _gpSystemFactoryMock
+                .Setup(f => f.CreateGpSystem(Supplier.Tpp))
+                .Returns(_fixture.Create<TppGpSystem>());
+
+            _mapper = new TppCourseMapper(_logger, _gpSystemFactoryMock.Object);
         }
 
         [TestMethod]
@@ -36,6 +45,50 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
             Action act = () => _mapper.Map(null);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("medications");
+        }
+
+        [TestMethod]
+        public void Map_WithEmptyValues_ReturnsTppCoursesListResponse_WithSpecialRequestCharacterLimit500()
+        {
+            // Arrange
+            var item = new List<Medication>();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().BeOfType<CourseListResponse>();
+            result.SpecialRequestCharacterLimit.Should().Be(500);
+        }
+
+        [TestMethod]
+        public void Map_WithValues_ReturnsTppCoursesListResponse_WithSpecialRequestCharacterLimit500()
+        {
+            // Arrange
+            var item = new List<Medication>
+            {
+                new Medication
+                {
+                    Drug = _fixture.Create<string>(),
+                    DrugId = Guid.NewGuid().ToString(),
+                    Details = _fixture.Create<string>(),
+                    Requestable = "y",
+                    Type = "Repeat",
+                },
+                new Medication
+                {
+                    Drug = _fixture.Create<string>(),
+                    DrugId = Guid.NewGuid().ToString(),
+                    Details = _fixture.Create<string>(),
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().BeOfType<CourseListResponse>();
+            result.SpecialRequestCharacterLimit.Should().Be(500);
         }
 
         [TestMethod]
@@ -97,7 +150,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
                         Name = item.ElementAt(1).Drug,
                         Details = item.ElementAt(1).Details
                     }
-                }
+                },
+                SpecialRequestCharacterLimit = 500
             };
 
             result.Should().BeEquivalentTo(expectedResult);

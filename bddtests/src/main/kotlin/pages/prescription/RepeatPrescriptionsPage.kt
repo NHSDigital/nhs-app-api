@@ -65,6 +65,10 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         return findByXpath("//h3[contains(., \"$message\")]").isVisible
     }
 
+    fun specialRequestCharactersRemainingTextIsVisible(text: String): Boolean {
+        return findByXpath("//p[@id=\"specialRequestCharactersRemaining\"][contains(., \"$text\")]").isVisible
+    }
+
     fun verifyVisiblePrescriptionCount(count: Int) {
         val nameXpath = "//span[@data-label=\"prescription-name\"]"
         val namesListed = findAllByXpath(nameXpath)
@@ -168,5 +172,4 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     fun typeTextIntoSpecialRequestTextArea(text: String): String {
         return specialRequestTextArea.typeTextIntoTextArea(text)
     }
-
 }

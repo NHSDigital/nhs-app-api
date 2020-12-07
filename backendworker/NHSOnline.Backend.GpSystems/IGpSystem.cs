@@ -50,5 +50,7 @@ namespace NHSOnline.Backend.GpSystems
         IRecreateSessionMapperService GetRecreateSessionMapperService();
 
         bool SupportsLinkedAccounts { get; }
+
+        int PrescriptionSpecialRequestCharacterLimit { get; }
     }
 }

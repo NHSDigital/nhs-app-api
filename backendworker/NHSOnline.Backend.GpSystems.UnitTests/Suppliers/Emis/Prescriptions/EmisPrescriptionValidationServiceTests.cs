@@ -14,6 +14,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
     public class EmisPrescriptionValidationServiceTests
     {
         private PrescriptionValidationService _prescriptionRequestValidationService;
+        private const int MAX_LENGTH = 1000;
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Arrange
             var defaultFromDate = new DateTime(2000, 1, 3);
             var fromDate = defaultFromDate.AddSeconds(-1);
-            
+
             // Act
             var result = _prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate);
 
@@ -90,16 +91,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
                     "28985814-bb40-4b37-8f1d-c5f323b098da",
-                }               
+                }
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
 
             // Assert
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenModelIsInValidType()
         {
@@ -110,27 +111,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
                     "notAGuid",
-                }               
+                }
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
 
             // Assert
             result.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenCourseIdsIsEmpty()
         {
             // Arrange
             var modelUnderTest = new RepeatPrescriptionRequest
             {
-                CourseIds = new List<string>()  
+                CourseIds = new List<string>()
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
 
             // Assert
             result.Should().BeFalse();
@@ -153,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
 
             // Assert
             result.Should().Be(isValid);

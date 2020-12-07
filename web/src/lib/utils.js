@@ -345,3 +345,9 @@ export const resetPageFocus = (store) => {
   EventBus.$emit(FOCUS_NHSAPP_ROOT);
   window.scrollTo(0, 0);
 };
+
+export const normaliseWhiteSpace = text => (
+  isBlankString(text)
+    ? text
+    : text.replace(/[\n\r\s]+/g, ' ')
+);

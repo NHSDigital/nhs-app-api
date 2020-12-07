@@ -206,6 +206,9 @@ components:
           $ref: "./nhsonline.shared.yaml#/components/schemas/Necessity"
           description: Indicates whether the patient can supply a special request when
             ordering a prescription.
+        specialRequestCharacterLimit:
+          type: integer
+          description: The maximum number of characters permitted in the special request.
     RepeatPrescriptionRequest:
       type: object
       required:

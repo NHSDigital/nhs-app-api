@@ -194,13 +194,10 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY_INTERRUPT_PATH);
     },
     onOrderRepeatPrescriptionClicked() {
-      const path = this.getContinueButtonPath();
+      const path = GetNavigationPathFromPrescriptions(this.$store);
       this.$store.app.$analytics.trackButtonClick(path, true);
       this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
       redirectTo(this, path);
-    },
-    getContinueButtonPath() {
-      return GetNavigationPathFromPrescriptions(this.$store);
     },
     ariaLabelCaption(header, body) {
       return `${header}. ${body}`;

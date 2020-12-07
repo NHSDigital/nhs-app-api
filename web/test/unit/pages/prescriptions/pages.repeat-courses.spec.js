@@ -1,29 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import each from 'jest-each';
 import Necessity from '@/lib/necessity';
 import RepeatCoursesPage from '@/pages/prescriptions/repeat-courses';
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { createLocalVue } from '@vue/test-utils';
 import { PRESCRIPTION_REPEAT_COURSES_PATH } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
-import { shallowMount } from '../../helpers';
+import { mount } from '../../helpers';
 
 jest.mock('@/services/event-bus', () => ({
   ...jest.requireActual('@/services/event-bus'),
   EventBus: { $on: jest.fn(), $off: jest.fn(), $emit: jest.fn() },
 }));
-
-const createMockMixinPlugin = () => Vue.mixin({
-  computed: {
-    showTemplate: {
-      get() {
-        return false;
-      },
-      set() {
-      },
-    },
-  },
-});
 
 const repeatPrescriptionCourses = [
   { id: 'repeat-course-id-1' },
@@ -35,9 +21,9 @@ const createStore = ({
   hasLoaded = true,
   validated,
   specialRequestNecessity = Necessity.Mandatory,
+  specialRequestCharacterLimit = 1000,
   specialRequest,
   error,
-  hasRetried = false,
   specialRequestIds = [],
   isValid = false,
   specialRequestValid = false,
@@ -60,12 +46,13 @@ const createStore = ({
       repeatPrescriptionCourses,
       validated,
       specialRequestNecessity,
+      specialRequestCharacterLimit,
       specialRequest,
       error,
     },
     nominatedPharmacy: {},
     session: {
-      hasRetried,
+      hasRetried: false,
     },
     device: {
       isNativeApp: false,
@@ -79,12 +66,7 @@ const createStore = ({
   },
 });
 
-const createRepeatCoursesPage = async ($store) => {
-  const $http = jest.fn();
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
-  localVue.mixin(createMockMixinPlugin());
-
+const createRepeatCoursesPage = ($store) => {
   const $route = {
     query: {
       hr: true,
@@ -92,22 +74,21 @@ const createRepeatCoursesPage = async ($store) => {
     path: PRESCRIPTION_REPEAT_COURSES_PATH,
   };
 
-  return shallowMount(RepeatCoursesPage, {
-    localVue,
+  return mount(RepeatCoursesPage, {
     methods: {
       reload: jest.fn(),
     },
     mocks: {
-      $http,
       $route,
       $store,
       $style: {
         msg: 'mock msg',
       },
-      showTemplate: () => true,
     },
   });
 };
+
+let page;
 
 describe('prescriptions/repeat-courses.vue -', () => {
   beforeEach(() => {
@@ -118,33 +99,134 @@ describe('prescriptions/repeat-courses.vue -', () => {
     it('will fetch courses', async () => {
       // Arrange
       const $store = createStore({ hasLoaded: false });
-      $store.getters = {
-        'repeatPrescriptionCourses/selectedIds': [],
-      };
-
       jest.spyOn($store, 'dispatch');
 
       // Act
-      await createRepeatCoursesPage($store);
+      createRepeatCoursesPage($store);
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/load');
     });
   });
 
-  describe('error', () => {
-    let page;
+  describe('special request', () => {
+    each([500, 800]).it('will indicate there are %s characters remaining when set as the limit', async (limit) => {
+      const $store = createStore({
+        specialRequest: '',
+        specialRequestCharacterLimit: limit,
+      });
 
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
+
+      expect(page.find('p#specialRequestCharactersRemaining').text()).toEqual(`You have ${limit} characters remaining.`);
+    });
+
+    each([
+      ['0 characters', '20 characters long!!'],
+      ['1 character', '19 characters long.'],
+      ['2 characters', '18 characters long'],
+    ]).it(
+      'will indicate there is %s remaining when the limit is 20 and the request is "%s"',
+      async (remainingCharacters, request) => {
+        const $store = createStore({
+          specialRequest: request,
+          specialRequestCharacterLimit: 20,
+        });
+
+        page = createRepeatCoursesPage($store);
+        await page.vm.$nextTick();
+
+        expect(page.find('p#specialRequestCharactersRemaining').text()).toEqual(`You have ${remainingCharacters} remaining.`);
+      },
+    );
+
+    each([
+      [' multiple\nnew\nlines', 'multiple new lines'],
+      ['  more\n\rnew\r lines\r\n\r', 'more new lines'],
+      ['lots    of \r\n spaces    ', 'lots of spaces'],
+    ]).it('will trim and normalise white space in the special request before dispatching to store', async (request, formattedRequest) => {
+      // Arrange
+      const $store = createStore({
+        isValid: true,
+        specialRequestValid: true,
+        specialRequest: request,
+      });
+      jest.spyOn($store, 'dispatch');
+
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
+
+      // Act
+      page.vm.validate();
+      await page.vm.$nextTick();
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('repeatPrescriptionCourses/updateAdditionalInfo', {
+        specialRequest: formattedRequest,
+      });
+    });
+
+    it('will not have an aria live attribute on the special request character limit by default', () => {
+      const $store = createStore({
+        isValid: true,
+        specialRequestValid: true,
+      });
+
+      // Act
+      page = createRepeatCoursesPage($store);
+
+      // Assert
+      expect(page.vm.specialRequestAriaLive).toEqual('');
+      expect(page.find('p#specialRequestCharactersRemaining').attributes()['aria-live']).toEqual('');
+    });
+
+    it('will have a polite aria live attribute on the special request character limit when special request input is focused', async () => {
+      const $store = createStore({
+        isValid: true,
+        specialRequestValid: true,
+      });
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
+
+      // Act
+      page.find('#specialRequest').trigger('focus');
+
+      // Assert
+      expect(page.vm.specialRequestAriaLive).toEqual('polite');
+      expect(page.find('p#specialRequestCharactersRemaining').attributes()['aria-live']).toEqual('polite');
+    });
+
+    it('will have a polite aria live attribute on the special request character limit when special request input is focused', async () => {
+      const $store = createStore({
+        isValid: true,
+        specialRequestValid: true,
+      });
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
+
+      // Act
+      page.find('#specialRequest').trigger('focus');
+
+      // Assert
+      expect(page.vm.specialRequestAriaLive).toEqual('polite');
+      expect(page.find('p#specialRequestCharactersRemaining').attributes()['aria-live']).toEqual('polite');
+    });
+  });
+
+  describe('error', () => {
     it('will show an error if the course selection is invalid', async () => {
       // Arrange
       const $store = createStore({
         validated: true,
         specialRequestValid: true,
       });
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
 
       // Act
-      page = await createRepeatCoursesPage($store);
-      await page.vm.validate();
+      page.vm.validate();
+      await page.vm.$nextTick();
 
       // Assert
       expect(page.vm.error).toBe(true);
@@ -159,10 +241,12 @@ describe('prescriptions/repeat-courses.vue -', () => {
         isValid: true,
         specialRequestIds: ['repeat-course-id-1'],
       });
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
 
       // Act
-      page = await createRepeatCoursesPage($store);
-      await page.vm.validate();
+      page.vm.validate();
+      await page.vm.$nextTick();
 
       // Assert
       expect(page.vm.error).toBe(true);
@@ -180,7 +264,8 @@ describe('prescriptions/repeat-courses.vue -', () => {
       });
 
       // Act
-      page = await createRepeatCoursesPage($store);
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
 
       // Assert
       expect(page.vm.error).toBe(false);
@@ -196,7 +281,8 @@ describe('prescriptions/repeat-courses.vue -', () => {
       });
 
       // Act
-      page = await createRepeatCoursesPage($store);
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
 
       // Assert
       expect(page.vm.error).toBe(true);
@@ -213,7 +299,8 @@ describe('prescriptions/repeat-courses.vue -', () => {
       });
 
       // Act
-      page = await createRepeatCoursesPage($store);
+      page = createRepeatCoursesPage($store);
+      await page.vm.$nextTick();
 
       // Assert
       expect(page.vm.error).toBe(false);

@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems
 
         public Supplier Supplier => Supplier.Disconnected;
         public bool SupportsLinkedAccounts => false;
+        public int PrescriptionSpecialRequestCharacterLimit => 0;
 
         public IAppointmentsService GetAppointmentsService() => throw new NoGpSessionAvailableException();
 

@@ -6,6 +6,7 @@ using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Courses;
+using NHSOnline.Backend.Support;
 using Status = NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.Prescriptions.Status;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
@@ -13,10 +14,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
     public class VisionPrescriptionMapper : IVisionPrescriptionMapper
     {
         private readonly ILogger _logger;
+        private readonly IGpSystem _gpSystem;
 
-        public VisionPrescriptionMapper(ILogger<VisionPrescriptionMapper> logger)
+        public VisionPrescriptionMapper(ILogger<VisionPrescriptionMapper> logger, IGpSystemFactory gpSystemFactory)
         {
             _logger = logger;
+            _gpSystem = gpSystemFactory.CreateGpSystem(Supplier.Vision);
         }
 
         public PrescriptionListResponse Map(PrescriptionHistory prescriptionGetResponse)
@@ -92,6 +95,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             {
                 Courses = eligibleRepeatsResponse.Repeats.Select(MapRepeatToCourse),
                 SpecialRequestNecessity = eligibleRepeatsResponse.Settings?.AllowFreeText == true ? SharedModels.Necessity.Optional : SharedModels.Necessity.NotAllowed,
+                SpecialRequestCharacterLimit = _gpSystem.PrescriptionSpecialRequestCharacterLimit
             };
 
             return result;

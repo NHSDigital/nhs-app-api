@@ -2,14 +2,12 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-        <no-js-form :action="getContinueButtonPath()" method="get" :value="{}">
-          <generic-button
-            id="repeat-prescription-button"
-            :button-classes="['nhsuk-button']"
-            @click.stop.prevent="onOrderRepeatPrescriptionClicked">
-            {{ $t('prescriptions.hub.orderARepeatPrescription') }}
-          </generic-button>
-        </no-js-form>
+        <generic-button
+          id="repeat-prescription-button"
+          :button-classes="['nhsuk-button']"
+          @click.stop.prevent="onOrderRepeatPrescriptionClicked">
+          {{ $t('prescriptions.hub.orderARepeatPrescription') }}
+        </generic-button>
         <menu-item-list>
           <menu-item
             id="view-orders"
@@ -51,7 +49,6 @@
 
 <script>
 import MenuItemList from '@/components/MenuItemList';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import GenericButton from '@/components/widgets/GenericButton';
 import MenuItem from '@/components/MenuItem';
 import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
@@ -79,7 +76,6 @@ export default {
   components: {
     MenuItemList,
     MenuItem,
-    NoJsForm,
     GenericButton,
     ThirdPartyJumpOffButton,
   },
@@ -157,13 +153,10 @@ export default {
   },
   methods: {
     onOrderRepeatPrescriptionClicked() {
-      const path = this.getContinueButtonPath();
+      const path = GetNavigationPathFromPrescriptions(this.$store);
       this.$store.app.$analytics.trackButtonClick(path, true);
       this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
       redirectTo(this, path);
-    },
-    getContinueButtonPath() {
-      return GetNavigationPathFromPrescriptions(this.$store);
     },
     onViewOrdersClicked() {
       redirectTo(this, this.viewOrdersPath);

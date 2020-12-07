@@ -886,6 +886,9 @@
                         - "NotAllowed"
                         - "Optional"
                         - "Mandatory"
+                    specialRequestCharacterLimit: 
+                      type: "integer"
+                      description: "The maximum number of characters permitted in the special request."
           401: 
             description: "User session missing or expired."
           403: 

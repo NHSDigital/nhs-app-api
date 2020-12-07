@@ -13,8 +13,9 @@ Feature: Prescriptions submission Frontend
     And I am logged in
     And I navigate to prescriptions
     And I select 5 repeatable prescriptions to order
-    And I enter text "As soon as possible please" for special request
-    And I click Continue on the Order a repeat prescription page
+    When I enter text "As soon as possible please" for special request
+    Then I can see how many characters I have left for my special request
+    When I click Continue on the Order a repeat prescription page
     Then I cannot see any nominated pharmacy information
     When I click Confirm and order repeat prescription
     Then I see the Order Success page with a playback of my order and what happens next
@@ -30,7 +31,8 @@ Feature: Prescriptions submission Frontend
     When I retrieve the 'Your Prescriptions' page directly
     And I select 5 repeatable prescriptions to order
     And I enter text "As soon as possible please" for special request
-    And I click Continue on the Order a repeat prescription page
+    Then I can see how many characters I have left for my special request
+    When I click Continue on the Order a repeat prescription page
     And I click Confirm and order repeat prescription
     Then I see the Order Success page with a playback of my order and what happens next
     And I click the Go to your prescription orders link

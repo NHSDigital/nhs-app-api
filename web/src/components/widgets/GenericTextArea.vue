@@ -18,7 +18,8 @@
               autocomplete="off"
               autocorrect="off"
               autocapitalize="off"
-              spellcheck="false"/>
+              spellcheck="false"
+              @focus="onFocus"/>
   </div>
 </template>
 
@@ -99,6 +100,9 @@ export default {
   methods: {
     focus() {
       this.$refs.textArea.focus();
+    },
+    onFocus(event) {
+      this.$emit('focus', event);
     },
   },
 };

@@ -20,6 +20,7 @@ import {
   getPathWithPatientIdPrefix,
   gpSessionErrorHasRetried,
   getThirdPartyJumpOff,
+  normaliseWhiteSpace,
 } from '@/lib/utils';
 import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
@@ -699,6 +700,21 @@ describe('util library', () => {
 
       // assert
       expect(result).toBe(data.expectedResultMatch);
+    });
+  });
+
+  describe('normaliseWhiteSpace', () => {
+    each([undefined, null, '', {}, 4])
+      .it('will return the given argument if it is not a string or is blank', (text) => {
+        expect(normaliseWhiteSpace(text)).toEqual(text);
+      });
+
+    each([
+      ['\n\rmultiple\nnew\nlines', ' multiple new lines'],
+      ['more\n\rnew\r lines\r\n\r', 'more new lines '],
+      ['lots    of \n\n  \r\n    spaces', 'lots of spaces'],
+    ]).it('will normalise all white space sequences to a single space', (text, formattedText) => {
+      expect(normaliseWhiteSpace(text)).toEqual(formattedText);
     });
   });
 });

@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 {
     public interface ITppCourseMapper
     {
-        CourseListResponse Map(List<Medication> medications);  
+        CourseListResponse Map(List<Medication> medications);
     }
 }

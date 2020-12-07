@@ -63,4 +63,10 @@ describe('GenericTextArea.vue', () => {
     expect(wrapper.emitted('input').length).toBe(2);
     expect(wrapper.emitted('input')[1][0]).toEqual('Update and emit this');
   });
+
+  it('will emit a \'focus\' event when the textarea is focused', () => {
+    wrapper.find('textarea').trigger('focus');
+
+    expect(wrapper.emitted('focus').length).toBe(1);
+  });
 });

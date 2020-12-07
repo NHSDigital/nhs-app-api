@@ -21,72 +21,65 @@
         <div v-if="showRepeatCourses" class="break">
           <p class="nhsuk-u-padding-bottom-3">
             {{ $t('prescriptions.repeatCourses.currentlyAvailableRepeatPrescriptions') }}</p>
-          <no-js-form :action="repeatCoursesPath" :value="{}" method="post">
-            <div>
-              <div :class="selectMedicationErrorStyle">
-                <error-message v-if="error && !courseSelectionValid" id="error-type">
-                  {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
-                </error-message>
-                <CardGroup role="list" class="nhsuk-grid-row">
-                  <CardGroupItem class="nhsuk-grid-column-full">
-                    <Card>
-                      <fieldset class="nhsuk-fieldset">
-                        <legend class="nhsuk-fieldset__legend"
-                                role="heading">
-                          {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}
-                        </legend>
-                        <repeat-prescription v-model="selected"/>
-                      </fieldset>
-                    </Card>
-                  </CardGroupItem>
-                </CardGroup>
-              </div>
-            </div>
-            <div v-if="specialRequestNecessity !== 'NotAllowed'"
-                 role="form"
-                 :class="mandatoryReasonErrorStyle">
-              <div>
-                <p>
-                  {{ $t('prescriptions.repeatCourses.changePharmacy') }}
-                </p>
-              </div>
-              <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
-                     class="nhsuk-body-m">
-                <strong>{{ $t('prescriptions.repeatCourses.specialRequestsOptional') }}</strong>
-              </label>
-              <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
-                     class="nhsuk-body-m">
-                <strong>{{ $t('prescriptions.repeatCourses.specialRequestsMandatory') }} </strong>
-              </label>
-              <p id="disclaimer" class="nhsuk-body-m">
-                {{ $t('prescriptions.repeatCourses.thisTextMayNotBeSeen') }}</p>
-              <error-message v-if="showMandatoryReasonError" id="error-type">
-                {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
-              </error-message>
-              <generic-text-area id="specialRequest"
-                                 v-model="specialRequest"
-                                 :required="(specialRequestNecessity === 'Mandatory')"
-                                 :error.sync="showMandatoryReasonError"
-                                 :text-area-classes="['nhsuk-u-margin-bottom-0']"
-                                 text-area-ref="specialRequest"
-                                 name="nojs.repeatPrescriptionCourses.specialRequest"
-                                 maxlength="1000"/>
-              <p id="maxSpecialRequest" class="nhsuk-u-padding-bottom-4">
-                {{ $t('prescriptions.repeatCourses.specialRequestCharacterLimit') }}</p>
-            </div>
-            <generic-button id="btn_order_prescription"
-                            :button-classes="['nhsuk-button']"
-                            @click.prevent="validate">
-              {{ $t('prescriptions.repeatCourses.continue') }}
-            </generic-button>
-          </no-js-form>
+          <div :class="selectMedicationErrorStyle">
+            <error-message v-if="error && !courseSelectionValid" id="error-type">
+              {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
+            </error-message>
+            <CardGroup role="list" class="nhsuk-grid-row">
+              <CardGroupItem class="nhsuk-grid-column-full">
+                <Card>
+                  <fieldset class="nhsuk-fieldset">
+                    <legend class="nhsuk-fieldset__legend"
+                            role="heading">
+                      {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}
+                    </legend>
+                    <repeat-prescription v-model="selected"/>
+                  </fieldset>
+                </Card>
+              </CardGroupItem>
+            </CardGroup>
+          </div>
+          <div v-if="specialRequestNecessity !== 'NotAllowed'"
+               role="form"
+               :class="mandatoryReasonErrorStyle">
+            <p>{{ $t('prescriptions.repeatCourses.changePharmacy') }}</p>
+            <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
+                   class="nhsuk-body-m">
+              <strong>{{ $t('prescriptions.repeatCourses.specialRequestsOptional') }}</strong>
+            </label>
+            <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
+                   class="nhsuk-body-m">
+              <strong>{{ $t('prescriptions.repeatCourses.specialRequestsMandatory') }} </strong>
+            </label>
+            <p id="disclaimer" class="nhsuk-body-m">
+              {{ $t('prescriptions.repeatCourses.thisTextMayNotBeSeen') }}</p>
+            <error-message v-if="showMandatoryReasonError" id="error-type">
+              {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
+            </error-message>
+            <generic-text-area id="specialRequest"
+                               v-model="specialRequest"
+                               :required="(specialRequestNecessity === 'Mandatory')"
+                               :error.sync="showMandatoryReasonError"
+                               :text-area-classes="['nhsuk-u-margin-bottom-0']"
+                               text-area-ref="specialRequest"
+                               :maxlength="`${specialRequestCharacterLimit}`"
+                               aria-describedby="specialRequestCharactersRemaining"
+                               @focus.once="onFocusSpecialRequest"/>
+            <p id="specialRequestCharactersRemaining"
+               class="nhsuk-u-padding-bottom-4"
+               :aria-live="specialRequestAriaLive">
+              {{ remainingCharacters }}</p>
+          </div>
+          <generic-button id="btn_order_prescription"
+                          :button-classes="['nhsuk-button']"
+                          @click.prevent="validate">
+            {{ $t('prescriptions.repeatCourses.continue') }}
+          </generic-button>
         </div>
 
         <div v-if="showNoRepeatCourses">
           <h3>{{ $t('prescriptions.repeatCourses.youDoNotHaveAny') }}</h3>
-          <p>
-            {{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}
-          </p>
+          <p>{{ $t('prescriptions.repeatCourses.ifYouHaveThatAreNotShown') }}</p>
         </div>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="getBackPath"
@@ -111,7 +104,6 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
 
 import {
@@ -121,7 +113,8 @@ import {
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
-import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import { redirectTo, gpSessionErrorHasRetried,
+  normaliseWhiteSpace, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
@@ -147,7 +140,6 @@ export default {
     MessageDialog,
     MessageText,
     MessageList,
-    NoJsForm,
     ErrorMessage,
     GenericButton,
     GenericTextArea,
@@ -159,8 +151,8 @@ export default {
   },
   data() {
     return {
+      specialRequestAriaLive: '',
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
-      prescriptionChoices: this.$store.state.repeatPrescriptionCourses,
       selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
       tryAgainPath: PRESCRIPTION_REPEAT_COURSES_PATH,
     };
@@ -244,6 +236,19 @@ export default {
     selectMedicationErrorStyle() {
       return (this.error && !this.courseSelectionValid) ? 'nhsuk-form-group--error' : '';
     },
+    specialRequestCharacterLimit() {
+      return this.$store.state.repeatPrescriptionCourses.specialRequestCharacterLimit;
+    },
+    remainingCharacters() {
+      const requestLength = this.specialRequest.length;
+      const remaining = this.specialRequestCharacterLimit - requestLength;
+
+      return this.$tc(
+        'prescriptions.repeatCourses.specialRequestCharacterLimit',
+        remaining,
+        { n: remaining },
+      );
+    },
   },
   watch: {
     '$route.query.ts': function watchTimestamp() {
@@ -269,12 +274,9 @@ export default {
       if (this.courseSelectionValid && this.specialRequestValid) {
         let specialRequest = null;
         if (this.specialRequest) {
-          specialRequest = this.specialRequest.trim();
+          specialRequest = normaliseWhiteSpace(this.specialRequest).trim();
         }
-        const repeatPrescriptionCoursesAdditionalInfo = {
-          specialRequest,
-        };
-        this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
+        this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', { specialRequest });
         redirectTo(this, this.confirmCoursesPath);
       } else {
         this.$nextTick(() => {
@@ -296,6 +298,9 @@ export default {
     },
     backButtonClicked() {
       redirectTo(this, this.getBackPath);
+    },
+    onFocusSpecialRequest() {
+      this.specialRequestAriaLive = 'polite';
     },
   },
 };

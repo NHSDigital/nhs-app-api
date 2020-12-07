@@ -8,8 +8,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
+using NHSOnline.Backend.Support;
 using Course = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions.Course;
 using MappedCourse = NHSOnline.Backend.GpSystems.Prescriptions.Models.Course;
 
@@ -21,15 +23,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
         private IFixture _fixture;
         private IMicrotestPrescriptionMapper _mapper;
         private ILogger<MicrotestPrescriptionMapper> _logger;
+        private Mock<IGpSystemFactory> _gpSystemFactoryMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _logger = Mock.Of<ILogger<MicrotestPrescriptionMapper>>();
-            _mapper = new MicrotestPrescriptionMapper(_logger);
-
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+
+            _logger = Mock.Of<ILogger<MicrotestPrescriptionMapper>>();
+
+            _gpSystemFactoryMock = new Mock<IGpSystemFactory>();
+            _gpSystemFactoryMock
+                .Setup(f => f.CreateGpSystem(Supplier.Microtest))
+                .Returns(_fixture.Create<MicrotestGpSystem>());
+
+            _mapper = new MicrotestPrescriptionMapper(_logger, _gpSystemFactoryMock.Object);
         }
 
         [TestMethod]
@@ -183,6 +192,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("courseGetResponse");
+        }
+
+        [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_ReturnsResultWithSpecialRequestCharacterLimitOf1000()
+        {
+            // Arrange
+            var item = new CoursesGetResponse();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SpecialRequestCharacterLimit.Should().Be(1000);
         }
 
         [TestMethod]
