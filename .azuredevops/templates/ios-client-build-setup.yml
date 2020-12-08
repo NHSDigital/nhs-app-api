@@ -14,7 +14,7 @@ jobs:
         target: Onboardingaos
         certSecureFile: iOSOnboardingCertificate.p12
         certPwd: '$(ios.onboarding.certificate.password)'
-        scheme: 'NHSOnlineOnboardingAOS'
+        scheme: 'NHSOnline Onboarding AOS'
         provProfileSecureFile: iOSOnboardingDistributionAOS.mobileprovision
         provisioningProfileName: 'NHS App Onboarding AOS Distribution'
     - ${{ if eq(parameters['uploadToAppStoreConnect'], 'true') }}:
@@ -40,9 +40,20 @@ jobs:
             target: Onboardingsandpit
             uploadServiceEndpoint: nhsapp-onboardingSandpit-apple-app-store
             uploadAppIdentifier: com.nhs.online.dev.onboardingsandpit
+
+  # build and upload NHS Login Dev
+  - ${{ if eq(parameters.iosTarget, 'LoginDevelopment') }}:
+    - template: ios-client-build-job.yml
+      parameters:
+        target: LoginDevelopment
+        certSecureFile: iOSOnboardingCertificate.p12
+        certPwd: '$(ios.onboarding.certificate.password)'
+        scheme: 'NHSOnline Login Dev'
+        provProfileSecureFile: iOSOnboardingDistributionLoginDev.mobileprovision
+        provisioningProfileName: 'NHS App Onboarding NHS Login Dev'
   
   # build dev versions
-  - ${{ if and(ne(parameters.iosTarget, 'Onboardingsandpit'), ne(parameters.iosTarget, 'Onboardingaos')) }}:
+  - ${{ if and(ne(parameters.iosTarget, 'Onboardingsandpit'), ne(parameters.iosTarget, 'Onboardingaos'), ne(parameters.iosTarget, 'LoginDevelopment')) }}:
     - template: ios-client-build-job.yml
       parameters:
         target: ${{ parameters.iosTarget }}
