@@ -4,8 +4,8 @@ The NHSApp integration tests describe and verify the behaviour of the applicatio
 
 See also:
 
-* [Automated BDD Testing](https://confluence.service.nhs.uk/display/NO/Automated+BDD+Testing)
-* [BDD Standards](https://confluence.service.nhs.uk/display/NO/BDD+Standards)
+* [Automated BDD Testing](https://nhsd-confluence.digital.nhs.uk/display/NO/Automated+BDD+Testing)
+* [BDD Standards](https://nhsd-confluence.digital.nhs.uk/display/NO/BDD+Standards)
 
 ## Integration Tests Setup
 

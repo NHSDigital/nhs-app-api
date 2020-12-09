@@ -1,7 +1,7 @@
 Code Review Checklist
 =====================
 
-Refer to https://confluence.service.nhs.uk/display/NO/Peer+review+checklist for more details.
+Refer to https://nhsd-confluence.digital.nhs.uk/display/NO/Peer+review+checklist for more details.
 
 - [ ] Does the code actually achieve the task at hand? Have you seen it? Does it look correct?
 - [ ] Do you understand what the code is doing?

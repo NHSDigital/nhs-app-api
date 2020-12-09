@@ -1,6 +1,6 @@
 # NHS Online Android
 
-[Setup instructions on Confluence](https://confluence.service.nhs.uk/display/NO/Android)
+[Setup instructions on Confluence](https://nhsd-confluence.digital.nhs.uk/display/NO/Android)
 
 ## Update Path to include emulator
 
@@ -8,7 +8,7 @@ Add the SDK emulator directory (`C:\Users\<username>\AppData\Local\Android\Sdk\e
 
 ## FIDO Client Library
 
-The Fido client library is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://confluence.service.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
+The Fido client library is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://nhsd-confluence.digital.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
 
 ## Development Debug Keystore
 

@@ -24,7 +24,7 @@ git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 
 ## Commit code
 
-Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy).
+Review the [Git Branching Strategy](https://nhsd-confluence.digital.nhs.uk/display/NO/Git+Branching+Strategy).
 
 ## Host file entries
 

@@ -94,4 +94,4 @@ In general there are only two areas of the integration test suite that will requ
 ## Further Resources
 
 * An example pull request that added a new silver integration jump off point (Patients Know Best Shared Links) - https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp/pullrequest/770
-* The [Knowledge Share](https://confluence.service.nhs.uk/display/NO/Knowledge+share) session on 01 May 2020 includes a piece by Ian Nelson demonstrating how to add a new silver integration jump off point.
+* The [Knowledge Share](https://nhsd-confluence.digital.nhs.uk/display/NO/Knowledge+share) session on 01 May 2020 includes a piece by Ian Nelson demonstrating how to add a new silver integration jump off point.

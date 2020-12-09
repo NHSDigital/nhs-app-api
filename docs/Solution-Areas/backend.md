@@ -1,6 +1,6 @@
 # Backend Worker
 
-The backend worker is composed of the Router and IM1 Bridge components as described in the [Backend Logical Architecture](https://confluence.service.nhs.uk/display/NO/Target+Architecture+-+Backend+Logical).
+The backend worker is composed of the Router and IM1 Bridge components as described in the [Backend Logical Architecture](https://nhsd-confluence.digital.nhs.uk/display/NO/Target+Architecture+-+Backend+Logical).
 
 ## Running
 
