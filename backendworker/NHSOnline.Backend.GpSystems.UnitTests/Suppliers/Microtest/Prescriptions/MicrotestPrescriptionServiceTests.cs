@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _microtestPrescriptionMapper = _fixture.Freeze<Mock<IMicrotestPrescriptionMapper>>();
             _gpLinkedAccountModel = new GpLinkedAccountModel(_microtestUserSession, _patientId);
-            _settings = new MicrotestConfigurationSettings(null, string.Empty, string.Empty, PrescriptionsMaxCoursesSoftLimit, 0);
+            _settings = new MicrotestConfigurationSettings(null, false, string.Empty, string.Empty, PrescriptionsMaxCoursesSoftLimit, 0);
 
             _repeatPrescriptionRequest = new RepeatPrescriptionRequest
             {

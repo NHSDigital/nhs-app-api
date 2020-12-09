@@ -43,6 +43,32 @@ namespace NHSOnline.Backend.Support
             return configuration[key];
         }
 
+        public static bool GetBoolOrThrow(this IConfiguration configuration, string key, ILogger logger)
+        {
+            var strValue = GetOrThrow(configuration, key, logger);
+
+            if (bool.TryParse(strValue, out var value))
+            {
+                return value;
+            }
+
+            logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
+            throw new ConfigurationNotValidException(key);
+        }
+
+        public static bool GetBoolOrDefault(this IConfiguration configuration, string key, ILogger logger)
+        {
+            var value = false;
+            var strValue = GetOrWarn(configuration, key, logger);
+
+            if (strValue != null && !bool.TryParse(strValue, out value))
+            {
+                logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
+            }
+
+            return value;
+        }
+
         public static int GetIntOrThrow(this IConfiguration configuration, string key, ILogger logger)
         {
             var strValue = GetOrThrow(configuration, key, logger);

@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
     {
         public Uri BaseUrl { get; set; }
 
+        public bool CertificateEnabled { get; set; }
+
         public string CertificatePath { get; set; }
 
         public string CertificatePassphrase { get; set; }
@@ -20,12 +22,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public MicrotestConfigurationSettings(
             Uri baseUrl,
+            bool certificateEnabled,
             string certificatePath,
             string certificatePassphrase,
             int? prescriptionsMaxCoursesSoftLimit,
             int? coursesMaxCoursesLimit)
         {
             BaseUrl = baseUrl;
+            CertificateEnabled = certificateEnabled;
             CertificatePath = certificatePath;
             CertificatePassphrase = certificatePassphrase;
             PrescriptionsMaxCoursesSoftLimit = prescriptionsMaxCoursesSoftLimit;
@@ -43,14 +47,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         public static MicrotestConfigurationSettings CreateAndValidate(IConfiguration configuration, ILogger logger)
         {
             var baseUrlstring = configuration.GetOrWarn("MICROTEST_BASE_URL", logger);
-            var certificatePath = configuration.GetOrWarn("MICROTEST_CERT_PATH", logger);
-            var certificatePassphrase = configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", logger);
+            var certificateEnabled = configuration.GetBoolOrThrow("MICROTEST_CERTIFICATE_ENABLED", logger);
+
+            var certificatePath = certificateEnabled
+                ? configuration.GetOrWarn("MICROTEST_CERT_PATH", logger)
+                : string.Empty;
+            var certificatePassphrase = certificateEnabled
+                ? configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", logger)
+                : string.Empty;
 
             var prescriptionsMaxCoursesSoftLimit = configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", logger);
             var coursesMaxCoursesLimit = configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", logger);
 
             var config = new MicrotestConfigurationSettings(
                 new Uri(baseUrlstring),
+                certificateEnabled,
                 certificatePath,
                 certificatePassphrase,
                 prescriptionsMaxCoursesSoftLimit,

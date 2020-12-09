@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
         private const string CertificatePath = "CertificatePath";
         private const string CertificatePassphrase = "CertificatePassphrase";
+        private const bool CertificateEnabled = true;
         private const int PrescriptionsLimit = 100;
         private const int CoursesLimit = 100;
         private IMicrotestClient _systemUnderTest;
@@ -42,8 +43,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
 
             _mockHttpHandler = new MockHttpMessageHandler();
-            
-            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificatePath, CertificatePassphrase, PrescriptionsLimit, CoursesLimit);
+
+            _configurationSettings = new MicrotestConfigurationSettings(BaseUri, CertificateEnabled, CertificatePath, CertificatePassphrase, PrescriptionsLimit, CoursesLimit);
 
             _httpClient = new MicrotestHttpClient(new HttpClient(_mockHttpHandler), _configurationSettings);
 
@@ -134,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             var nonJsonResponse = _fixture.Create<string>();
 
             var pastAppointmentsFromDate = _fixture.Create<DateTimeOffset>();
-            var path = "patient/appointments?pastAppointmentsFromDate=" + 
+            var path = "patient/appointments?pastAppointmentsFromDate=" +
                        pastAppointmentsFromDate.ToString("yyyy-MM-dd",
                                                                   System.Globalization.CultureInfo.InvariantCulture);
 

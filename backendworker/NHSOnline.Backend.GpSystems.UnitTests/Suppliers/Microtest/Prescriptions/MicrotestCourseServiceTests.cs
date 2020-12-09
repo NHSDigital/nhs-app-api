@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             _microtestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _microtestPrescriptionMapper = _fixture.Freeze<Mock<IMicrotestPrescriptionMapper>>();
-            _settings = new MicrotestConfigurationSettings(null, string.Empty, string.Empty, 0, CoursesMaxCoursesLimit);
+            _settings = new MicrotestConfigurationSettings(null, false, string.Empty, string.Empty, 0, CoursesMaxCoursesLimit);
 
             _fixture.Inject(_settings);
             _fixture.Inject(_logger);
@@ -194,7 +194,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _microtestClient.Verify(x => x.CoursesGet(_microtestUserSession.OdsCode, _microtestUserSession.NhsNumber));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().Be(response);
-            
+
             capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfCourses);
         }
 
@@ -318,7 +318,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
             _microtestClient.Verify();
         }
-        
+
         [TestMethod]
         public async Task Get_Returns403ForbiddenResponse_WhenForbiddenExceptionOccursCallingMicrotest()
         {

@@ -272,6 +272,8 @@ spec:
         - name: MICROTEST_BASE_URL
           value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
           {{- end }}
+        - name: MICROTEST_CERTIFICATE_ENABLED
+          value: "{{ $.Values.microtestCertificateEnabled }}"
         - name: ConfigurationSettings__CookieDomain
           {{- if $.Values.akamaiEnv }}
           value: .{{ $.Values.akamaiEnv }}

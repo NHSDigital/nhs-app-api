@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Support.UnitTests
 {
@@ -22,13 +24,13 @@ namespace NHSOnline.Backend.Support.UnitTests
         }
 
         [TestMethod]
-        public void KeyFound_AndIsInteger_ReturnsExpectedValue()
+        public void GetIntOrDefault_KeyFoundAndIsInteger_ReturnsExpectedValue()
         {
             // Arrange
             _configurationBuilder.AddInMemoryCollection(
                 new Dictionary<string, string>() { { ConfigurationKeyName, "1" } });
             var configuration = _configurationBuilder.Build();
-            
+
             // Act
             var result = configuration.GetIntOrDefault(ConfigurationKeyName, _logger.Object);
 
@@ -39,7 +41,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("abc")]
-        public void KeyFound_AndIsNotInteger_ReturnsDefaultIntZero(string configurationValue)
+        public void GetIntOrDefault_KeyFoundAndIsNotInteger_ReturnsDefaultIntZero(string configurationValue)
         {
             // Arrange
             _configurationBuilder.AddInMemoryCollection(
@@ -54,7 +56,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         }
 
         [TestMethod]
-        public void KeyNotFound_ReturnsDefaultIntZero()
+        public void GetIntOrDefault_KeyNotFound_ReturnsDefaultIntZero()
         {
             // Arrange
             _configurationBuilder.AddInMemoryCollection();
@@ -65,6 +67,141 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             // Assert
             result.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void GetBoolOrDefault_KeyNotFound_ReturnsFalse()
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection();
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrDefault(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("")]
+        [DataRow("Not a false string")]
+        public void GetBoolOrDefault_KeyFoundUnparsableString_ReturnsFalse(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrDefault(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("false")]
+        [DataRow("False")]
+        [DataRow("FALSE")]
+        public void GetBoolOrDefault_KeyFoundAndFalseString_ReturnsFalse(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrDefault(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("true")]
+        [DataRow("True")]
+        [DataRow("TRUE")]
+        public void GetBoolOrDefault_KeyFoundAndTrueString_ReturnsTrue(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrDefault(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void GetBoolOrThrow_KeyNotFound_ThrowsConfigurationNotValidException()
+        {
+            // Arrange
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            Action act = () => configuration.GetBoolOrThrow(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            act.Should().Throw<ConfigurationNotValidException>()
+                .And.Message.Should().Be("Configuration value 'configuration_key' is not valid");
+        }
+
+        [DataTestMethod]
+        [DataRow("")]
+        [DataRow("Not a false string")]
+        public void GetBoolOrThrow_KeyFoundUnparsableString_ThrowsConfigurationNotValidException(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            Action act = () => configuration.GetBoolOrThrow(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            act.Should().Throw<ConfigurationNotValidException>()
+                .And.Message.Should().Be("Configuration value 'configuration_key' is not valid");
+        }
+
+        [DataTestMethod]
+        [DataRow("false")]
+        [DataRow("False")]
+        [DataRow("FALSE")]
+        public void GetBoolOrThrow_KeyFoundAndFalseString_ReturnsFalse(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrThrow(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("true")]
+        [DataRow("True")]
+        [DataRow("TRUE")]
+        public void GetBoolOrThrow_KeyFoundAndTrueString_ReturnsTrue(string value)
+        {
+            // Arrange
+            _configurationBuilder.AddInMemoryCollection(
+                new Dictionary<string, string>() { { ConfigurationKeyName, value } });
+            var configuration = _configurationBuilder.Build();
+
+            // Act
+            var result = configuration.GetBoolOrThrow(ConfigurationKeyName, _logger.Object);
+
+            // Assert
+            result.Should().BeTrue();
         }
 
         [TestMethod]

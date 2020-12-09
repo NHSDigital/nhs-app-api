@@ -11,9 +11,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             ILogger<MicrotestHttpClientHandler> logger,
             ICertificateService certificateService)
         {
+            if (!configurationSettings.CertificateEnabled)
+            {
+                return;
+            }
+
             ServerCertificateCustomValidationCallback =
                 certificateService.ServerCertificateValidationHandler;
-
             var path = configurationSettings.CertificatePath;
             var password = configurationSettings.CertificatePassphrase;
             logger.LogInformation($"MICROTEST_CERT_PATH: {path}");
