@@ -287,10 +287,10 @@ web:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 60
   analyticsEnvironment: "development"
   analyticsURL: "//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js"
@@ -312,7 +312,7 @@ api:
   maxReplicas: 1
   memoryRequest: "256Mi"
   memoryLimit: "512Mi"
-  cpuRequest: "125m"
+  cpuRequest: "100m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
   emisExtendedTimeout: 10
@@ -342,9 +342,9 @@ cid:
   minReplicas: 1
   maxReplicas: 1
   memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryLimit: "400Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
   mongoDatabaseAuditCollection: audit_info
   environmentVariables:
@@ -402,9 +402,9 @@ iproxy:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "125Mi"
-  memoryLimit: "250Mi"
-  cpuRequest: "125m"
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
   environmentVariables:
@@ -455,10 +455,10 @@ users:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
   mongoDatabaseUserDeviceCollection: devices
   mongoDatabaseUserDeviceAuditCollection: audit_devices
@@ -476,10 +476,10 @@ messages:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
   mongoDatabaseMessagesCollection: messages
   mongoDatabaseMessagesAuditCollection: audit_messages
@@ -497,10 +497,10 @@ info:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
@@ -519,10 +519,10 @@ sjr:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
+  memoryRequest: "150Mi"
+  memoryLimit: "256Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   inputPath: /configurations  # From mounted image
