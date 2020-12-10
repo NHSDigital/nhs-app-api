@@ -48,6 +48,9 @@ http {
     location ~ favicon.ico$ {
       try_files $uri =404;
     }
+    location /.well-known/apple-app-site-association {
+      default_type application/json;
+    }
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
       root   /usr/share/nginx/html;
