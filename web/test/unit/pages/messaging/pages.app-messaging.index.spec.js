@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import i18n from '@/plugins/i18n';
 import Index from '@/pages/messages/app-messaging/index';
 import { initialState } from '@/store/modules/messaging/mutation-types';
@@ -146,5 +147,32 @@ describe('messaging index', () => {
       backLink.find('a').trigger('click');
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, MESSAGES_PATH);
     });
+  });
+
+  describe('message summary aria label', () => {
+    it('will indicate the sender and date of the last message received', async () => {
+      createSummaryMessage({ body: 'Read summary message', sender: 'Test sender' });
+
+      wrapper = mountIndex();
+      await wrapper.vm.$nextTick();
+
+      const ariaLabel = wrapper.find(`.${messageSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
+
+      expect(ariaLabel).toEqual('Messages from: Test sender. The last message was sent on 14 September 2019. ');
+    });
+
+    each([[1, ''], [5, 's']])
+      .it('will include an appropriately pluralised unread count when some messages are unread', async (count, pluralisation) => {
+        createSummaryMessage({ body: 'Read summary message', sender: 'Test sender', unreadCount: count });
+        const expected = 'Messages from: Test sender. ' +
+          `The last message was sent on 14 September 2019. You have ${count} unread message${pluralisation}. `;
+
+        wrapper = mountIndex();
+        await wrapper.vm.$nextTick();
+
+        const ariaLabel = wrapper.find(`.${messageSectionClass}>.${messageItemClass}>a`).attributes('aria-label');
+
+        expect(ariaLabel).toEqual(expected);
+      });
   });
 });

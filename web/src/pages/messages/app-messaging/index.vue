@@ -90,7 +90,7 @@ export default {
         .replace('{sender}', senderMessage.sender)
         .replace('{date}', formatDate(message.sentTime, 'DD MMMM YYYY'));
 
-      if (this.unreadCount > 0) {
+      if (senderMessage.unreadCount > 0) {
         label += this.$t('messages.youHaveCountUnreadMessagePlural')
           .replace('{count}', senderMessage.unreadCount)
           .replace('{plural}', senderMessage.unreadCount > 1 ? 's' : '');
