@@ -3,14 +3,15 @@
     <h2 class="nhsuk-u-margin-bottom-0 break">
       {{ $t('appointments.upcoming.upcomingAppointments') }}
     </h2>
-    <CardGroup v-for="(chunk, index) in chunked" :key="index" role="list" class="nhsuk-grid-row">
-      <CardGroupItem v-for="appointment in chunk"
+    <CardGroup :key="index" role="list" class="nhsuk-grid-row">
+      <CardGroupItem v-for="appointment in appointments"
                      :key="appointment.id" class="nhsuk-grid-column-one-half">
-        <Card>
+        <Card class="nhsuk-u-margin-bottom-5">
           <appointment :appointment="appointment"
                        :cancellation-disabled="cancellationDisabled"
                        :telephone-message="$t('appointments.upcoming.weWillCallYouOn')"
                        data-purpose="upcoming-appointments"
+                       class="nhsuk-u-margin-bottom-3"
                        role="listitem"/>
         </Card>
       </CardGroupItem>
@@ -20,7 +21,6 @@
 
 <script>
 import Appointment from '@/components/appointments/Appointment';
-import chunk from 'lodash/fp/chunk';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -41,11 +41,6 @@ export default {
     cancellationDisabled: {
       default: false,
       type: Boolean,
-    },
-  },
-  computed: {
-    chunked() {
-      return chunk(2)(this.appointments);
     },
   },
 };
