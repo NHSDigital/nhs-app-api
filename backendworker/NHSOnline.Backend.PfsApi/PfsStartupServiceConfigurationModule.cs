@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.Support;
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton(configuration);
             services.AddMongoSessionCacheService();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
-            services.AddTransient<IIm1CacheService, Im1CacheService>();
+            services.AddIm1CacheService();
             services.AddTransient<IGpSessionManager, GpSessionManager>();
             services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
             services.AddTransient<IGpSystemResolver, GpSystemResolver>();

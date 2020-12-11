@@ -12,6 +12,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;

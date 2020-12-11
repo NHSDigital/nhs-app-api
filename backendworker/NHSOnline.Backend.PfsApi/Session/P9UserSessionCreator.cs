@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.GpSession;
@@ -108,9 +108,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             var tokenObject = JObject.Parse(im1ConnectionToken);
 
-            if (tokenObject.TryGetValue(Im1CacheService.Im1ConnectionTokenCacheKeyPropertyName,
-                StringComparison.Ordinal,
-                out var cacheKeyToken))
+            if (tokenObject.TryGetValue(_im1CacheService.CacheKeyPropertyName, StringComparison.Ordinal, out var cacheKeyToken))
             {
                 var cacheKey = cacheKeyToken.ToString();
                 if (!string.IsNullOrEmpty(cacheKey))

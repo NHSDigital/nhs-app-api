@@ -26,6 +26,7 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.CidApi.DependencyInjection;
 using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.CidApi.Filters;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.CidApi
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
-            services.AddTransient<IIm1CacheService, Im1CacheService>();
+            services.AddIm1CacheService();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddTransient<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
             services.AddTransient<IGetLinkageKeysService, GetLinkageKeysService>();

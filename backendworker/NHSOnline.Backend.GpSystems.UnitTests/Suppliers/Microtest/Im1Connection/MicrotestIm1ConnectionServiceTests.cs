@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using System.Net.Http;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 using UnitTestHelper;
 using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 

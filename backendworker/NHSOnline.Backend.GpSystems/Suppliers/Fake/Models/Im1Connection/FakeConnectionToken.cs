@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using NHSOnline.Backend.GpSystems.Im1Connection.Cache;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Models.Im1Connection
 {
