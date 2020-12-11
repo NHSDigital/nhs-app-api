@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -188,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -229,7 +229,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -244,7 +244,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -259,7 +259,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
@@ -274,11 +274,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        private MongoSessionCacheService CreateMongoSessionCacheService()
+        {
+            var serialiserService = new UserSessionSerialiserService();
+            var encryptionService = new UserSessionEncryptionService(serialiserService, _mockCipherService.Object);
+            return new MongoSessionCacheService(_mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object, encryptionService);
         }
 
         private static string CreateSessionJsonWithTypeName(string typeName)
@@ -325,7 +332,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                     It.IsAny<CancellationToken>()))
                 .Callback<BsonDocument, InsertOneOptions, CancellationToken>((doc, opts, token) => update = doc);
 
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var sut = CreateMongoSessionCacheService();
             await sut.CreateUserSession(userSession);
 
             return update["session"].AsString;

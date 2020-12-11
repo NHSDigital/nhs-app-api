@@ -1,8 +1,8 @@
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
-    public interface IMongoSessionCacheServiceConfig
+    internal interface IMongoSessionCacheServiceConfig
     {
-        string MongoDatabaseName { get; }
-        string MongoDatabaseSessionCollectionName { get; }
+        string DatabaseName { get; }
+        string CollectionName { get; }
     }
 }

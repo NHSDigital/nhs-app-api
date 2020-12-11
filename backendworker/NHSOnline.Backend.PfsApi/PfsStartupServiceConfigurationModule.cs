@@ -23,8 +23,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddWkhtmltopdf();
 
             services.AddSingleton(configuration);
-            services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
-            services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
+            services.AddMongoSessionCacheService();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddTransient<IGpSessionManager, GpSessionManager>();

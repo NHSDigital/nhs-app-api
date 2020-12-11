@@ -10,12 +10,12 @@ namespace NHSOnline.Backend.Support.Logging
 {
     public static class LoggingExtensions
     {
-        public static void LogEnter<T>(this ILogger<T> logger, [CallerMemberName] string methodName = "")
+        public static void LogEnter(this ILogger logger, [CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Entering {methodName}");
         }
 
-        public static void LogExit<T>(this ILogger<T> logger, [CallerMemberName] string methodName = "")
+        public static void LogExit(this ILogger logger, [CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Exiting {methodName}");
         }
