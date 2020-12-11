@@ -82,7 +82,7 @@ class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
         mockingClient.forEmis.mock { authentication.sessionRequest(patient).respondWithForbidden() }
     }
 
-    override fun validOAuthDetailsAndGpSystemUnavailable() {
+    override fun validOAuthDetailsAndGpSystemUnavailable(patient: Patient) {
         mockingClient.forEmis.mock { practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel()) }
         mockingClient.forEmis.mock { authentication.endUserSessionRequest().respondWithServiceUnavailable() }
         mockingClient.forEmis.mock { authentication.sessionRequest(patient)

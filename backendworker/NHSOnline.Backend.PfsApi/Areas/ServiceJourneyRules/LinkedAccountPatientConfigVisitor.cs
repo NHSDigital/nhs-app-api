@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
@@ -19,19 +20,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         private readonly SessionConfigurationSettings _sessionSettings;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
+        private readonly GpUserSession _gpUserSession;
 
         public LinkedAccountPatientConfigVisitor(
             ILogger<ServiceJourneyRulesController> logger,
             IAuditor auditor,
             SessionConfigurationSettings sessionSettings,
             IGpSystemFactory gpSystemFactory,
-            ISessionCacheService sessionCacheService)
+            ISessionCacheService sessionCacheService,
+            GpUserSession gpUserSession)
         {
             _logger = logger;
             _auditor = auditor;
             _sessionSettings = sessionSettings;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
+            _gpUserSession = gpUserSession;
         }
 
         public Task<LinkedAccountsConfigResult> Visit(P5UserSession userSession)
@@ -55,13 +59,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
             var validAccounts = Enumerable.Empty<LinkedAccount>();
 
-            var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
+            var gpSystem = _gpSystemFactory.CreateGpSystem(_gpUserSession.Supplier);
 
-            if (gpSystem.SupportsLinkedAccounts && userSession.GpUserSession.HasLinkedAccounts)
+            if (gpSystem.SupportsLinkedAccounts)
             {
                 var linkedAccountsService = gpSystem.GetLinkedAccountsService();
 
-                var linkedAccountsResult = await linkedAccountsService.GetLinkedAccounts(userSession.GpUserSession);
+                var linkedAccountsResult = await linkedAccountsService.GetLinkedAccounts(_gpUserSession);
 
                 if (linkedAccountsResult is LinkedAccountsResult.Success success)
                 {

@@ -28,17 +28,11 @@ import models.patients.PatientHandler
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
+import pages.text
 import pages.account.MyAccountPage
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
 import pages.linkedProfiles.shutterPages.NoLinkedProfilesShutterPage
-import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
-import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
-import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
-import pages.linkedProfiles.shutterPages.SettingsShutterPage
-import pages.linkedProfiles.shutterPages.AdviceShutterPage
-import pages.linkedProfiles.shutterPages.MessagesShutterPage
-import pages.text
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
@@ -60,12 +54,6 @@ class LinkedProfilesStepDefinitions {
     private lateinit var myAccountPage: MyAccountPage
     private lateinit var linkedProfilesPage: LinkedProfilesPage
     private lateinit var linkedProfileSummaryPage: LinkedProfileSummaryPage
-    private lateinit var prescriptionsShutterPage: PrescriptionsShutterPage
-    private lateinit var appointmentsShutterPage: AppointmentsShutterPage
-    private lateinit var settingsShutterPage: SettingsShutterPage
-    private lateinit var adviceShutterPage: AdviceShutterPage
-    private lateinit var messagesShutterPage: MessagesShutterPage
-    private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
     private lateinit var noLinkedProfilesShutterPage: NoLinkedProfilesShutterPage
 
     private val mockingClient = MockingClient.instance
@@ -157,6 +145,14 @@ class LinkedProfilesStepDefinitions {
     @Then("^the linked profiles page is displayed$")
     fun theLinkedProfilesPageIsDisplayed() {
         linkedProfilesPage.isLoaded()
+    }
+    
+    @When("^I navigate to linked profiles from the home page")
+    fun iNavigateToLinkedProfiles() {
+        navHeader.clickMyAccount()
+        myAccountPage.assertDisplayed()
+        myAccountPage.assertLinkedProfilesLinkIsPresent()
+        myAccountPage.linkedProfilesLink.click()
     }
 
     @Then("^linked profiles are displayed$")
@@ -275,77 +271,6 @@ class LinkedProfilesStepDefinitions {
 
         Assert.assertTrue("Banner does not contain expected name",
                 bannerText.contains(expectedProfile.profile.formattedFullName()))
-    }
-
-    @Then("^the advice shutter page is displayed$")
-    fun theAdviceShutterPageIsDisplayed() {
-        adviceShutterPage.isLoaded()
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        if (gpSystem === Supplier.TPP) {
-            adviceShutterPage.assertText(selectedProfile.profile.formattedFullName())
-        } else {
-            adviceShutterPage.assertText(selectedProfile.profile.name.firstName)
-        }
-    }
-
-    @Then("^the settings shutter page is displayed$")
-    fun theSettingsShutterPageIsDisplayed() {
-        settingsShutterPage.isLoaded()
-        settingsShutterPage.assertText()
-    }
-
-    @Then("^the prescriptions shutter page is displayed$")
-    fun thePrescriptionsShutterPageIsDisplayed() {
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        if (gpSystem === Supplier.TPP) {
-            prescriptionsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
-            prescriptionsShutterPage.assertText(selectedProfile.profile.formattedFullName())
-        } else {
-            prescriptionsShutterPage.isLoaded(selectedProfile.profile.name.firstName)
-            prescriptionsShutterPage.assertText(selectedProfile.profile.name.firstName)
-        }
-    }
-
-    @Then("^the appointments shutter page is displayed$")
-    fun theAppointmentsShutterPageIsDisplayed() {
-
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE
-                .getOrFail<LinkedProfileFacade>()
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        if (gpSystem === Supplier.TPP) {
-            appointmentsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
-            appointmentsShutterPage.assertText(selectedProfile.profile.formattedFullName())
-        } else {
-            appointmentsShutterPage.isLoaded(selectedProfile.profile.name.firstName)
-            appointmentsShutterPage.assertText(selectedProfile.profile.name.firstName)
-        }
-    }
-
-    @Then("^the medical record shutter page is displayed$")
-    fun theMedicalRecordShutterPageIsDisplayed() {
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        if (gpSystem === Supplier.TPP) {
-            medicalRecordShutterComponent.assertText(selectedProfile.profile,
-                    selectedProfile.profile.formattedFullName())
-        } else {
-            medicalRecordShutterComponent.assertText(selectedProfile.profile,
-                    selectedProfile.profile.name.firstName)
-        }
-    }
-
-    @Then("^the messages shutter page is displayed$")
-    fun theMessagesShutterPageIsDisplayed() {
-        messagesShutterPage.isLoaded()
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        val gpSystem = SerenityHelpers.getGpSupplier()
-        if (gpSystem === Supplier.TPP) {
-            messagesShutterPage.assertText(selectedProfile.profile.formattedFullName())
-        } else {
-            messagesShutterPage.assertText(selectedProfile.profile.name.firstName)
-        }
     }
 
     @Then("^I see information on how to setup a linked profile$")

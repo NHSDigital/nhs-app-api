@@ -53,6 +53,7 @@ import {
   GP_MEDICAL_RECORD_PATH,
   PRESCRIPTIONS_PATH,
   LINKED_PROFILES_PATH,
+  INDEX_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
@@ -97,12 +98,16 @@ export default {
       return this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles;
     },
   },
+  created() {
+    this.$store.dispatch('navigation/clearBackLinkOverride');
+  },
   methods: {
     navigateToMessages() {
       redirectTo(this, this.messagesPath);
     },
     navigateToLinkedProfiles() {
       this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
+      this.$store.dispatch('navigation/setBackLinkOverride', INDEX_PATH);
       this.goToUrl(this.linkedProfilesPath);
     },
   },

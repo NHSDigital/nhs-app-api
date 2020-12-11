@@ -37,7 +37,16 @@ describe('linked profile index', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(LinkedProfileIndex, { $store, mountOpts: { i18n } });
+  const mountPage = ({ hasRetried = false, timestamp = 123 } = {}) => mount(LinkedProfileIndex,
+    { $store,
+      mountOpts: { i18n },
+      $route: {
+        query: {
+          hr: hasRetried,
+          ts: timestamp,
+        },
+      },
+    });
 
   describe('show linked profile links', () => {
     let linkedProfileMenuItem;
@@ -90,6 +99,16 @@ describe('linked profile index', () => {
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/select', $store.state.linkedAccounts.items[1]);
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, LINKED_PROFILES_SUMMARY_PATH);
+    });
+
+    it('will dispatch the retry flag if hr query parameter is set', () => {
+      wrapper = mountPage({ hasRetried: true });
+      expect($store.dispatch).toHaveBeenCalledWith('session/setRetry', true);
+    });
+
+    it('will watch and reload if the timestamp value changes', () => {
+      wrapper = mountPage({ timestamp: 12345 });
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/initialiseConfig');
     });
   });
 

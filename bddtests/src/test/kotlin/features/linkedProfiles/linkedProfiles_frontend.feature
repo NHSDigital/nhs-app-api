@@ -317,3 +317,46 @@ Feature: Login with proxy access
     And the appointments shutter page is displayed
     When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'http://stubs.local.bitraft.io:8080/external/covid'
     Then a new tab has been opened by the link
+
+  Scenario Outline: An <GP System> user can recover their session when in linked profiles on try again
+    Given I am an <GP System> patient with linked profiles whose GP system is unavailable
+    And I am logged in
+    When I navigate to linked profiles from the home page
+    Then I see appropriate linked profiles try again error message when there is no GP session
+    When The <GP System> GP system becomes available
+    And I click the 'Try again' button
+    Then linked profiles are displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  Scenario Outline: An <GP System> user cannot recover their session when in linked profiles and sees a permanent error on try again
+    Given I am an <GP System> patient with linked profiles whose GP system is unavailable
+    And I am logged in
+    When I navigate to linked profiles from the home page
+    And I see appropriate linked profiles try again error message when there is no GP session
+    And I click the 'Try again' button
+    Then I see what I can do next with a linked accounts error message and reference code '<Code>'
+    And I click the session error back link
+    When I click the Linked profiles link on the settings page
+    Then I see what I can do next with a linked accounts error message and reference code '<Code>'
+    Examples:
+      | GP System | Code   |
+      | EMIS      | 3e     |
+      | TPP       | 3t     |
+
+  Scenario Outline: An <GP System> user recovers their session when navigating in the app
+    Given I am an <GP System> patient with linked profiles whose GP system is unavailable
+    And I am logged in
+    When I navigate to linked profiles from the home page
+    And I see appropriate linked profiles try again error message when there is no GP session
+    And I click the error 'Back' link
+    And The <GP System> GP system becomes available
+    And I click the Linked profiles link on the settings page
+    Then linked profiles are displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+

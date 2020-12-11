@@ -16,6 +16,12 @@ class SerenityHelpers {
             GlobalSerenityHelpers.PATIENT.setIfNotAlreadySet(patientToSet)
         }
 
+        fun setPatientIfNull(patientToSet: Patient) {
+            if (getPatientOrNull() == null) {
+                setPatient(patientToSet)
+            }
+        }
+
         fun resetPatient(patientToSet: Patient) {
             val currentStoredValue = getValueOrNull<Any>(GlobalSerenityHelpers.PATIENT)
             if (currentStoredValue !== null) {

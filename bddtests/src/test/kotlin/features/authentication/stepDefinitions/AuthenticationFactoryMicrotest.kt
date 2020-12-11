@@ -6,7 +6,7 @@ import java.time.Duration
 
 class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST) {
 
-    override fun validOAuthDetailsAndGpSystemUnavailable() {
+    override fun validOAuthDetailsAndGpSystemUnavailable(patient: Patient) {
         mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithServiceUnavailable()
         }

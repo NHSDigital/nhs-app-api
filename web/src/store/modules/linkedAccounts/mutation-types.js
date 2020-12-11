@@ -1,4 +1,5 @@
 export const LOADED = 'LOADED';
+export const ADD_ERROR = 'ADD_ERROR';
 export const CLEAR = 'CLEAR';
 export const INIT = 'INIT';
 export const LOSS_PROXY = 'LOSS_PROXY';
@@ -15,6 +16,7 @@ export const initialState = () => ({
   selectedLinkedAccount: null,
   actingAsUser: null,
   hasErrored: false,
+  error: null,
   recoverFromProxyLoss: false,
   config: {
     hasLoaded: false,

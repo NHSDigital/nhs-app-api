@@ -6,8 +6,10 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
@@ -64,9 +66,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/configuration")]
-        public async Task<IActionResult> GetLinkedAccountPatientConfig([UserSession] P5UserSession userSession)
+        public async Task<IActionResult> GetLinkedAccountPatientConfig(
+            [GpSession(IgnoreP5Users=true)] GpUserSession gpUserSession,
+            [UserSession] P5UserSession userSession)
         {
-            var visitor = new LinkedAccountPatientConfigVisitor(_logger, _auditor, _sessionSettings, _gpSystemFactory, _sessionCacheService);
+            var visitor = new LinkedAccountPatientConfigVisitor(_logger, _auditor, _sessionSettings, _gpSystemFactory, _sessionCacheService, gpUserSession);
             var result = await userSession.Accept(visitor);
 
             return result.Accept(new LinkedAccountsConfigResultVisitor());
@@ -76,18 +80,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         [ApiVersionRoute("patient/linked-account-journey-configuration")]
         public async Task<IActionResult> GetLinkedAccountConfiguration(
             [FromHeader(Name = PatientId)] Guid patientId,
-            [UserSession] P9UserSession userSession)
+            [GpSession] GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                var gpUserSession = userSession.GpUserSession;
-
                 var linkedAccountsService =
                     _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier).GetLinkedAccountsService();
 
-                string odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, patientId);
+                var odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, patientId);
 
                 _logger.LogInformation("Fetching Service Journey Rules for linked account");
 

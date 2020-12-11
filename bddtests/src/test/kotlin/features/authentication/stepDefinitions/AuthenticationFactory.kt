@@ -8,15 +8,16 @@ import models.Patient
 
 abstract class AuthenticationFactory(protected val gpSystem: Supplier) {
 
-    protected val patient: Patient = Patient.getDefault(gpSystem)
     protected val mockingClient = SerenityHelpers.getMockingClient()
     protected val associationType = AssociationType.Self
+    protected var patient: Patient
 
     init {
-        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setPatientIfNull(Patient.getDefault(gpSystem))
+        patient = SerenityHelpers.getPatient()
     }
 
-    abstract fun validOAuthDetailsAndGpSystemUnavailable()
+    abstract fun validOAuthDetailsAndGpSystemUnavailable(patient: Patient)
     abstract fun validOAuthDetailsAndGpSystemBadGateway()
     abstract fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
     abstract fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long)

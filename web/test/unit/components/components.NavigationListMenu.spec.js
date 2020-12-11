@@ -1,5 +1,6 @@
 import NavigationListMenu from '@/components/NavigationListMenu';
 import each from 'jest-each';
+import { INDEX_PATH } from '@/router/paths';
 import { mount, createStore, createRouter } from '../helpers';
 
 let wrapper;
@@ -62,11 +63,12 @@ describe('Navigation Links ', () => {
         wrapper = mountAs({ supportsLinkedProfiles });
         expect(wrapper.find('#linked-profiles-link').exists()).toBe(isVisible);
       });
-    it('will dispatch to set the breadcrumb to the default', () => {
+    it('will dispatch to set the breadcrumb to the default and to setBackLinkOverride', () => {
       wrapper = mountAs({ supportsLinkedProfiles: true });
       wrapper.vm.navigateToLinkedProfiles();
 
       expect($store.dispatch).toBeCalledWith('navigation/setRouteCrumb', 'defaultCrumb');
+      expect($store.dispatch).toBeCalledWith('navigation/setBackLinkOverride', INDEX_PATH);
     });
   });
 

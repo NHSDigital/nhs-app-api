@@ -58,6 +58,14 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
             _logger.LogInformation($"Injecting {nameof(GpUserSession)} into controller method parameters");
 
+            var ignoreP5Users = gpSessionParameters.Any(d =>
+            {
+                return d.ParameterInfo
+                    .GetCustomAttributes(typeof(GpSessionAttribute), true)
+                    .Cast<GpSessionAttribute>()
+                    .Any(a => a.IgnoreP5Users);
+            });
+
             var sessionOption = _userSessionService.GetUserSession<P9UserSession>();
 
             await sessionOption.IfSome(async session =>
@@ -71,13 +79,17 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 {
                     await next();
                 }
-            }).IfNone(() =>
+            }).IfNone( async () =>
             {
+                if (ignoreP5Users)
+                {
+                    await next();
+                    return;
+                }
+
                 _logger.LogError("Attempted to inject GP Session parameter for non P9 User Session");
 
                 context.Result = new UnauthorizedResult();
-
-                return Task.CompletedTask;
             });
         }
 

@@ -1,5 +1,6 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import {
+  ADD_ERROR,
   CLEAR,
   LOADED,
   INIT,
@@ -35,9 +36,14 @@ export default {
   [INIT](state) {
     init(state);
   },
+  [ADD_ERROR](state, errorDetails) {
+    state.error = errorDetails;
+    state.config.hasLoaded = true;
+  },
   [CLEAR](state) {
     clearLinkedAccounts(state);
     clearSelectedLinkedAccount(state);
+    state.error = null;
   },
   [SELECT](state, selected) {
     state.selectedLinkedAccount = selected;

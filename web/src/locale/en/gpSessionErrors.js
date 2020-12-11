@@ -17,4 +17,12 @@ export default {
     emergencyHeader: 'Find out how to get an emergency prescription',
     emergencyDescription: 'Find out what to do if you have run out of your prescribed medicines',
   },
+  linkedProfiles: {
+    sorryLinkedProfiles: 'Sorry, linked profiles are unavailable',
+    temporaryHeader: 'Sorry, there is a problem getting your linked profiles information',
+    youAreNotCurrentlyAble: 'You are not currently able to access linked profiles.',
+    ifYouNeedAccessToHealthServices: 'If you need to access health services on behalf of someone else, contact their GP surgery directly or try again later.',
+    ifYouHaveAccessedLinkedProfiles: 'If you have accessed linked profiles before, select ',
+    forUrgentMedicalAdvice: 'For urgent medical advice, go to ',
+  },
 };

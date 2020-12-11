@@ -19,6 +19,7 @@ import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
+import models.patients.PatientHandler
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -55,28 +56,31 @@ open class SharedStepDefinitions {
     @Given("^I am an? (.*) patient$")
     fun initialisePatientAndGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        mockingClient.favicon()
-
         val patient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(supplier)
+        setupPatient(patient, supplier)
 
-        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     @Given("^I am an? (.*) patient whose GP system is unavailable$")
     fun initialisePatientAndUnavailableGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        mockingClient.favicon()
-
         val patient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(patient)
-        CitizenIdSessionCreateJourney().createFor(patient)
+        setupPatient(patient, supplier)
 
-        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable()
+        AuthenticationFactory.getForSupplier(supplier)
+                .validOAuthDetailsAndGpSystemUnavailable(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    @Given("^I am an? (.*) patient with linked profiles whose GP system is unavailable$")
+    fun initialisePatientWithLinkedProfilesAndUnavailableGpSystem(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithLinkedProfiles()
+        setupPatient(patient, supplier)
+
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
@@ -106,15 +110,10 @@ open class SharedStepDefinitions {
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
         val supplier = Supplier.valueOf(gpSystem)
-        mockingClient.favicon()
-
         val patient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(supplier)
+        setupPatient(patient, supplier)
 
-        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
@@ -125,15 +124,10 @@ open class SharedStepDefinitions {
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
         val supplier = Supplier.EMIS
-        mockingClient.favicon()
-
         val patient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(supplier)
+        setupPatient(patient, supplier)
 
-        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
@@ -306,5 +300,14 @@ open class SharedStepDefinitions {
         cookieSteps.setInstructionsCookie("true")
 
         return patient
+    }
+
+    private fun setupPatient(patient: Patient, supplier: Supplier) {
+        mockingClient.favicon()
+
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 }

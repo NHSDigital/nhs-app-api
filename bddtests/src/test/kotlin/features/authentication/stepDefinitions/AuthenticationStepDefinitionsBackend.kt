@@ -88,8 +88,9 @@ class AuthenticationStepDefinitionsBackend {
     @Given("^I have valid OAuth details and (.*) is not available$")
     fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        CitizenIdSessionCreateJourney().createFor(Patient.getDefault(supplier))
-        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable()
+        val patient = Patient.getDefault(supplier)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        AuthenticationFactory.getForSupplier(supplier).validOAuthDetailsAndGpSystemUnavailable(patient)
     }
 
     @Given("^I have valid OAuth details and (.*) returns a Bad Gateway response$")

@@ -80,6 +80,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
         }
 
+        public static void MethodWithIgnoreP5UserAttribute(
+            [GpSession(IgnoreP5Users = true)] GpUserSession gpUserSession,
+            Guid patientId)
+        {
+        }
+
         public static void MethodWithMultiplePatientIdAttributes(
             [GpSession] GpUserSession gpUserSession,
             [FromHeader(Name = Constants.HttpHeaders.PatientId)]
@@ -247,6 +253,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             Assert.AreEqual(
                 typeof(UnauthorizedResult),
                 _context.Result.GetType());
+        }
+
+        [TestMethod]
+        public async Task WhenFilterInvoked_WithP5SessionIgnored_ThenNextMiddlewareIsCalled()
+        {
+            UseP5Session();
+
+            BuildEndpointParameters(nameof(MethodWithIgnoreP5UserAttribute));
+
+            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
+
+            Assert.IsTrue(_nextCalled);
         }
 
         [TestMethod]

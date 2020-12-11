@@ -22,6 +22,7 @@ import {
   GP_MESSAGES_URGENCY_NAME,
   GP_MESSAGES_VIEW_MESSAGE_NAME,
   SWITCH_PROFILE_NAME,
+  LINKED_PROFILES_NAME,
 } from '@/router/names';
 
 /**
@@ -47,6 +48,9 @@ export default {
   [APPOINTMENT_CANCELLING_SUCCESS_NAME]: {
     ignoreStore: true,
     defaultPath: APPOINTMENTS_PATH,
+  },
+  [LINKED_PROFILES_NAME]: {
+    defaultPath: ACCOUNT_PATH,
   },
   [LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME]: {
     ignoreStore: true,

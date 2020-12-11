@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { INDEX_PATH } from '@/router/paths';
+import { GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import get from 'lodash/fp/get';
 import moment from 'moment';
 import {
   CLEAR,
@@ -14,7 +16,13 @@ import {
   SET_LINKED_ACCOUNTS_CONFIG,
   SWITCH_TO_LINKED_ACCOUNT,
   SWITCH_TO_MAIN_USER_ACCOUNT,
+  ADD_ERROR,
 } from './mutation-types';
+
+const createError = ({ response }) => ({
+  status: (response && response.status) || '',
+  serviceDeskReference: (response && get('serviceDeskReference')(response.data)) || '',
+});
 
 export default {
   async load({ commit }) {
@@ -31,10 +39,25 @@ export default {
       this.dispatch('device/unlockNavBar');
     }
   },
-  async initialiseConfig({ commit }) {
-    const patientConfigResponse = await this.app.$http.getV1PatientConfiguration();
-    if (patientConfigResponse) {
+  async initialiseConfig({ commit, rootState }) {
+    commit(CLEAR);
+    try {
+      const patientConfigResponse = await this.app.$http.getV1PatientConfiguration({
+        ignoreError: true,
+      });
       commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse);
+
+      if (rootState.device.isNativeApp) {
+        sessionStorage.removeItem('hasRetried');
+      }
+
+      this.dispatch('session/setRetry', false);
+    } catch (error) {
+      if (error.response && error.response.status !== GP_SESSION_ERROR_STATUS) {
+        this.dispatch('errors/addApiError', error);
+      } else {
+        commit(ADD_ERROR, createError(error));
+      }
     }
   },
   init({ commit }) {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
@@ -37,11 +38,34 @@ namespace NHSOnline.Backend.PfsApi.Filters
             {
                 var gpSystem = context.RequestServices.GetRequiredService<IGpSystemFactory>().CreateGpSystem(userSession.GpUserSession.Supplier);
 
+                if (gpSystem.Supplier == Supplier.Disconnected)
+                {
+                    _logger.LogInformation("GP supplier disconnected, returning.");
+                    context.SetLinkedAccountAuditInfo(new LinkedAccountAuditInfo
+                    {
+                        IsProxyMode = false,
+                        ProxyNhsNumber = null
+                    });
+                }
+
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))
                 {
                     var linkedAccountsService = gpSystem.GetLinkedAccountsService();
                     var gpSessionDetails = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
-                    var result = linkedAccountsService.GetProxyAuditData(gpSessionDetails);
+                    var result = new LinkedAccountAuditInfo
+                    {
+                        IsProxyMode = false,
+                        ProxyNhsNumber = null
+                    };
+
+                    try
+                    {
+                        result = linkedAccountsService.GetProxyAuditData(gpSessionDetails);
+                    } 
+                    catch (UnauthorisedGpSystemHttpRequestException) 
+                    {
+                        _logger.LogError("Unable to get linked account information: GP service has returned an unauthorised response, the GP session for the current user is probably invalid/expired");
+                    }
 
                     context.SetLinkedAccountAuditInfo(result);
                 }

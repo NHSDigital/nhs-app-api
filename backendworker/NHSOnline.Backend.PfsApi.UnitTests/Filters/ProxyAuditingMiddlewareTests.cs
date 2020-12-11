@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 
@@ -193,6 +194,47 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             // Assert
             _context.GetLinkedAccountAuditInfo().Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task LinkedAccountAuditInfo_StoresNullNhsNumber_WhenGpSupplierIsDisconnected()
+        {
+
+            // Arrange
+            _mockGpSystemFactory.Setup(f => f
+                    .CreateGpSystem(_userSession.GpUserSession.Supplier))
+                .Returns(new NullGpSystem(new Mock<ILogger<NullGpSystem>>().Object));
+
+            _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, "1234");
+
+            var subject = new ProxyAuditingMiddleware(_next, _mockLogger.Object);
+
+            // Act
+            await subject.Invoke(_context);
+
+            // Assert
+            _context.GetLinkedAccountAuditInfo().ProxyNhsNumber.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task LinkedAccountAuditInfo_StoresNullNhsNumber_WhenUnauthorisedGpHttpRequestException_Thrown()
+        {
+
+            // Arrange
+            _mockLinkedAccountService.Setup(las => las.GetProxyAuditData(
+                    It.Is<GpLinkedAccountModel>(m =>
+                        m.GpUserSession == _userSession.GpUserSession
+                        && m.PatientId == _patientId)))
+                .Throws<UnauthorisedGpSystemHttpRequestException>();
+            _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, _patientId.ToString());
+
+            var subject = new ProxyAuditingMiddleware(_next, _mockLogger.Object);
+
+            // Act
+            await subject.Invoke(_context);
+
+            // Assert
+            _context.GetLinkedAccountAuditInfo().ProxyNhsNumber.Should().BeNull();
         }
     }
 }

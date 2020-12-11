@@ -84,7 +84,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         }
     }
 
-    override fun validOAuthDetailsAndGpSystemUnavailable() {
+    override fun validOAuthDetailsAndGpSystemUnavailable(patient: Patient) {
         mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(patient))

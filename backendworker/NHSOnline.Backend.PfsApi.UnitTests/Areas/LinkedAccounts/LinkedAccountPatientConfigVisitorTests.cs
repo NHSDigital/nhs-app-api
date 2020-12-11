@@ -17,7 +17,7 @@ using NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 {
     [TestClass]
     public class LinkedAccountPatientConfigVisitorTests
@@ -52,7 +52,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 _mockAuditor.Object,
                 _config,
                 _mockGpSystemFactory.Object,
-                _mockSessionCacheService.Object);
+                _mockSessionCacheService.Object,
+                _gpUserSession.Object);
         }
 
         [TestMethod]
@@ -64,11 +65,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Disconnected))
                 .Returns(_mockGpSystem.Object);
 
+            var nullGpSession = new NullGpSession(Supplier.Emis, "failure at life");
+
             var userSession = new P9UserSession("csrfToken",
                 "nhsNumber",
                 It.IsAny<CitizenIdUserSession>(),
-                new NullGpSession(Supplier.Emis, "failure at life"),
+                nullGpSession,
                 "im1ConnectionToken");
+
+            _systemUnderTest = new LinkedAccountPatientConfigVisitor(
+                _mockLogger.Object,
+                _mockAuditor.Object,
+                _config,
+                _mockGpSystemFactory.Object,
+                _mockSessionCacheService.Object,
+                nullGpSession);
 
             // Act
             var result = await _systemUnderTest.Visit(userSession);

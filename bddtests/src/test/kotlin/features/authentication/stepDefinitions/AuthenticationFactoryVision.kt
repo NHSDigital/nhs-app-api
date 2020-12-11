@@ -71,7 +71,7 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
         }
     }
 
-    override fun validOAuthDetailsAndGpSystemUnavailable() {
+    override fun validOAuthDetailsAndGpSystemUnavailable(patient: Patient) {
         mockingClient.forVision.mock {
             authentication.getConfigurationRequest(
                     VisionMockDefaults.getVisionUserSession(patient))
@@ -89,10 +89,6 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
 
     companion object {
         val mockingClient = SerenityHelpers.getMockingClient()
-
-        fun patientIsAlreadyRegistered(patient: Patient) {
-            createInvalidTestForVision(patient, "Already Registered")
-        }
 
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision.mock {

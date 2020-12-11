@@ -13,5 +13,6 @@ namespace NHSOnline.Backend.PfsApi.GpSession
     [AttributeUsage(AttributeTargets.Parameter)]
     public sealed class GpSessionAttribute : Attribute
     {
+        public bool IgnoreP5Users { get; set; }
     }
 }

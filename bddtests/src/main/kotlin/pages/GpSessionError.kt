@@ -13,6 +13,12 @@ open class GpSessionError: HybridPageObject() {
         return this
     }
 
+    fun assertLink(linkText: String): GpSessionError {
+        val message = getElement("//a[contains(text(),'$linkText')]")
+        message.assertIsVisible()
+        return this
+    }
+
     fun assertReferenceCode(referenceCode: String): GpSessionError {
         val message = getElement("//div[contains(text(), 'Reference: $referenceCode')]")
         message.assertIsVisible()
@@ -20,9 +26,7 @@ open class GpSessionError: HybridPageObject() {
     }
 
     fun assertReportAProblemLink(): GpSessionError {
-        val message = getElement("//a[contains(text(),'Report a problem')]" +
-                "[starts-with(@href, 'https://www.nhs.uk/contact-us/nhs-app-contact-us')]")
-        message.assertIsVisible()
+        assertLink("Report a problem")
         return this
     }
 

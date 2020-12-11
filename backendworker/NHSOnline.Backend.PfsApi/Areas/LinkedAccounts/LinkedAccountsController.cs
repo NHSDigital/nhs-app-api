@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -42,16 +43,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts")]
         [HttpGet]
-        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get(
+            [GpSession] GpUserSession gpUserSession,
+            [UserSession] P9UserSession userSession)
         {
             await _auditor.Audit(AuditingOperations.GetLinkedAccountsRequest, "Retrieving linked accounts");
-            _logger.LogInformation($"Fetching linked accounts supplier {userSession.GpUserSession.Supplier}");
+            _logger.LogInformation($"Fetching linked accounts supplier {gpUserSession.Supplier}");
 
             var linkedAccountsService = _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .CreateGpSystem(gpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var result = await linkedAccountsService.GetLinkedAccounts(userSession.GpUserSession);
+            var result = await linkedAccountsService.GetLinkedAccounts(gpUserSession);
 
             if (result is LinkedAccountsResult.Success success && success.HasAnyProxyInfoBeenUpdatedInSession)
             {
@@ -66,7 +69,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts/access-summary")]
         [HttpGet]
-        public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id, [UserSession] P9UserSession userSession)
+        public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id,
+            [GpSession] GpUserSession gpUserSession)
         {
             await _auditor.Audit(AuditingOperations.LinkedAccountsAccessSummaryRequest,
                 $"Retrieving linked account summary detail for Id {id}");
@@ -80,17 +84,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             }
 
             var linkedAccountsService = _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .CreateGpSystem(gpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
             _logger.LogDebug("Fetching linked account");
 
             var odsCodeForLinkedAccount =
-                linkedAccountsService.GetOdsCodeForLinkedAccount(userSession.GpUserSession, id);
+                linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, id);
 
             _logger.LogDebug($"ODS code for linked account={odsCodeForLinkedAccount}");
 
-            var linkedAccountSummaryTask = linkedAccountsService.GetLinkedAccount(userSession.GpUserSession, id);
+            var linkedAccountSummaryTask = linkedAccountsService.GetLinkedAccount(gpUserSession, id);
             var gpPracticeSearchTask = _gpSearchService.GetGpPracticeByOdsCode(odsCodeForLinkedAccount);
 
             _logger.LogDebug("Running multiple tasks to get details for linked account");
@@ -135,7 +139,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts/switch/{id:guid}")]
         [HttpPost]
-        public async Task<IActionResult> Switch(Guid id, [UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Switch(Guid id, [GpSession] GpUserSession gpUserSession)
         {
             _logger.LogInformation($"Attempt to switch to profile id {id}");
 
@@ -143,10 +147,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 $"Request to switch to linked account {id}");
 
             var linkedAccountsService = _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .CreateGpSystem(gpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var linkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, id);
+            var linkedAccountModel = new GpLinkedAccountModel(gpUserSession, id);
 
             var switchResult = await linkedAccountsService.SwitchAccount(linkedAccountModel);
 
@@ -154,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             {
                 var linkedAccountAuditInfo = HttpContext.GetLinkedAccountAuditInfo();
 
-                var (fromNhsNumber, toNhsNumber) = GetNhsNumbers(id, linkedAccountAuditInfo, userSession, linkedAccountsService);
+                var (fromNhsNumber, toNhsNumber) = GetNhsNumbers(id, linkedAccountAuditInfo, gpUserSession, linkedAccountsService);
                 success.ToNhsNumber = toNhsNumber;
 
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
@@ -165,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         }
 
         private static (string fromNhsNumber, string toNhsNumber) GetNhsNumbers(Guid id,
-            LinkedAccountAuditInfo linkedAccountAuditInfo, P9UserSession userSession,
+            LinkedAccountAuditInfo linkedAccountAuditInfo, GpUserSession gpUserSession,
             ILinkedAccountsService linkedAccountsService)
         {
             var fromNhsNumber = "";
@@ -174,13 +178,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             {
                 //switching from proxy to main account
                 fromNhsNumber = linkedAccountAuditInfo.ProxyNhsNumber;
-                toNhsNumber = userSession.GpUserSession.NhsNumber;
+                toNhsNumber = gpUserSession.NhsNumber;
             }
             else
             {
                 //switching from main a/c
-                fromNhsNumber = userSession.GpUserSession.NhsNumber;
-                toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
+                fromNhsNumber = gpUserSession.NhsNumber;
+                toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(gpUserSession, id);
             }
 
             fromNhsNumber = fromNhsNumber.RemoveWhiteSpace();

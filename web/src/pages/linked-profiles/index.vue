@@ -1,7 +1,9 @@
 <template>
   <div v-if="showTemplate">
 
-    <no-linked-profiles v-if="!hasLinkedProfiles" id="no-linked-profiles"/>
+    <no-linked-profiles v-if="!hasLinkedProfiles && !error" id="no-linked-profiles"/>
+
+    <linked-profile-errors v-else-if="error"/>
 
     <div v-else class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -39,32 +41,45 @@ import { LINKED_PROFILES_SUMMARY_PATH, INDEX_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import find from 'lodash/fp/find';
 import NoLinkedProfiles from '@/components/linked-profiles/NoLinkedProfiles';
-
+import LinkedProfileErrors from '@/components/linked-profiles/LinkedProfileErrors';
 
 export default {
   components: {
     MenuItemList,
     MenuItem,
     NoLinkedProfiles,
+    LinkedProfileErrors,
   },
   mixins: [CalculateAgeInMonthsAndYears],
-  data() {
-    return {
-      linkedAccounts: this.$store.state.linkedAccounts.items,
-    };
-  },
   computed: {
+    linkedAccounts() {
+      return this.$store.state.linkedAccounts.items;
+    },
     linkedProfileSummaryPath() {
       return LINKED_PROFILES_SUMMARY_PATH;
     },
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
+    error() {
+      return this.$store.state.linkedAccounts.error;
+    },
   },
-  created() {
+  watch: {
+    '$route.query.ts': async function watchTimestamp() {
+      await this.$store.dispatch('linkedAccounts/initialiseConfig');
+    },
+  },
+  async created() {
     if (!this.$store.state.serviceJourneyRules.rules.supportsLinkedProfiles) {
       redirectTo(this, INDEX_PATH);
     }
+
+    if (this.$route.query.hr) {
+      this.$store.dispatch('session/setRetry', true);
+    }
+
+    await this.$store.dispatch('linkedAccounts/initialiseConfig');
   },
   methods: {
     ariaLabelCaption(fullName, age) {
