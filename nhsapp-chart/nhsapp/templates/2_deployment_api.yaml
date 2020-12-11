@@ -295,7 +295,17 @@ spec:
               key: secret
         {{- end }}
         - name: SESSION_MONGO_DATABASE_NAME
+          value: {{ $.Values.cosmosDBName }}-mongo
+        - name: SESSION_MONGO_DATABASE_COLLECTION
+          value: session
+        - name: SESSION_MONGO_SECONDARY_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}
+        - name: SESSION_MONGO_SECONDARY_DATABASE_COLLECTION
+          value: session
+        - name: IM1CACHE_MONGO_DATABASE_NAME
+          value: {{ $.Values.cosmosDBName }}
+        - name: IM1CACHE_MONGO_DATABASE_COLLECTION
+          value: im1cache
         {{- if $.Values.appInsightsEnabled }}
         - name: APPINSIGHTS_INSTRUMENTATIONKEY
           valueFrom:

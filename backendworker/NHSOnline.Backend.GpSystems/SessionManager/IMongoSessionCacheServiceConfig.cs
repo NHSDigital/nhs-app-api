@@ -4,5 +4,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     {
         string DatabaseName { get; }
         string CollectionName { get; }
+        string SecondaryDatabaseName { get; }
+        string SecondaryCollectionName { get; }
     }
 }

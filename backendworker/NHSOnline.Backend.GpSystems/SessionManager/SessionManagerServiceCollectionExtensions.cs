@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<UserSessionEncryptionService>();
             services.AddTransient<UserSessionSerialiserService>();
+            services.AddTransient<IMongoSessionCache, DualMongoSessionCache>();
         }
     }
 }

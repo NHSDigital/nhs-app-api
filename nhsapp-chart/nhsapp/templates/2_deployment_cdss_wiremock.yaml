@@ -73,8 +73,6 @@ spec:
               name: cosmosdb-mongodb-connection-string-ukw-{{ .Chart.AppVersion }}
               key: secret
         {{- end }}
-        - name: SESSION_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca

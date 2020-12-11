@@ -180,8 +180,10 @@ spec:
           {{- end }}
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
           value: "/app/FakeGpSupplierConfig.yml"
-        - name: SESSION_MONGO_DATABASE_NAME
+        - name: IM1CACHE_MONGO_DATABASE_NAME
           value: {{ $.Values.cosmosDBName }}
+        - name: IM1CACHE_MONGO_DATABASE_COLLECTION
+          value: im1cache
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"

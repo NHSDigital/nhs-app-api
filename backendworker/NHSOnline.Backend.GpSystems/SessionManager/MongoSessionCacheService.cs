@@ -1,6 +1,6 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
@@ -11,17 +11,16 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     {
         private readonly ILogger<MongoSessionCacheService> _logger;
         private readonly UserSessionEncryptionService _encryptionService;
-        private readonly MongoSessionCacheAccessor _cacheAccessor;
+        private readonly IMongoSessionCache _mongoSessionCache;
 
         public MongoSessionCacheService(
             ILogger<MongoSessionCacheService> logger,
-            IMongoClient mongoClient,
-            IMongoSessionCacheServiceConfig config,
-            UserSessionEncryptionService encryptionService)
+            UserSessionEncryptionService encryptionService,
+            IMongoSessionCache mongoSessionCache)
         {
             _logger = logger;
             _encryptionService = encryptionService;
-            _cacheAccessor = new MongoSessionCacheAccessor(logger, mongoClient, config.DatabaseName, config.CollectionName);
+            _mongoSessionCache = mongoSessionCache;
         }
 
         public async Task<string> CreateUserSession(UserSession userSession)
@@ -30,11 +29,13 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             {
                 _logger.LogEnter();
 
+                var sessionId = Guid.NewGuid().ToString();
                 var encodedUserSession = _encryptionService.Encode(userSession);
-                var sessionKey = await _cacheAccessor.Create(encodedUserSession);
 
-                userSession.Key = sessionKey;
-                return sessionKey;
+                await _mongoSessionCache.Create(sessionId, encodedUserSession);
+
+                userSession.Key = sessionId;
+                return sessionId;
             }
             finally
             {
@@ -48,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             {
                 _logger.LogEnter();
 
-                var encodedUserSession = await _cacheAccessor.Get(sessionId);
+                var encodedUserSession = await _mongoSessionCache.Get(sessionId);
                 return encodedUserSession.Select(RecreateUserSession);
             }
             finally
@@ -70,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             {
                 _logger.LogEnter();
 
-                return await _cacheAccessor.Delete(sessionId);
+                return await _mongoSessionCache.Delete(sessionId);
             }
             finally
             {
@@ -85,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 _logger.LogEnter();
 
                 var encodedUserSession = _encryptionService.Encode(userSession);
-                await _cacheAccessor.Update(userSession.Key, encodedUserSession);
+                await _mongoSessionCache.Update(userSession.Key, encodedUserSession);
             }
             finally
             {

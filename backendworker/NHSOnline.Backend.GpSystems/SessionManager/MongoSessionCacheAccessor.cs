@@ -27,16 +27,15 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _collectionName = collectionName;
         }
 
-        public async Task<string> Create(string encodedUserSession)
+        public async Task Create(string sessionId, string encodedUserSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                var sessionKey = Guid.NewGuid().ToString();
                 var update = new BsonDocument
                 {
-                    Id(sessionKey),
+                    Id(sessionId),
                     Session(encodedUserSession),
                     CurrentTimestamp()
                 };
@@ -45,8 +44,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 {
                     await GetCollection().InsertOneAsync(update);
                 }
-
-                return sessionKey;
             }
             finally
             {
