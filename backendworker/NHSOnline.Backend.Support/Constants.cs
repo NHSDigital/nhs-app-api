@@ -221,6 +221,7 @@ namespace NHSOnline.Backend.Support
         {
             public const string ProviderIdentifierHeader = "provider";
             public const string SessionIdentifierHeader = "olcSessionId";
+            public const string ApiVersion = "X-API-VERSION";
         }
 
         public static class VisionConstants

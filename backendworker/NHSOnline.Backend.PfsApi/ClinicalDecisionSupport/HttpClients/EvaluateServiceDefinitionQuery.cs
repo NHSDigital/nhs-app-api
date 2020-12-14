@@ -20,10 +20,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<HttpResponseMessage> EvaluateServiceDefinition(string providerKey,
+        public async Task<HttpResponseMessage> EvaluateServiceDefinition(
+            string providerKey,
             string serviceDefinitionId,
             string requestBody,
             bool addJavascriptDisabledHeader,
+            string version,
             string sessionId = null)
         {
             try
@@ -49,6 +51,12 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     {
                         requestMessage.Headers.Add(
                             Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader, sessionId);
+                    }
+
+                    if (version != "1")
+                    {
+                        requestMessage.Headers.Add(
+                            Support.Constants.OnlineConsultationConstants.ApiVersion, version);
                     }
 
                     if (addJavascriptDisabledHeader)

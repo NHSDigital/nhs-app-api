@@ -1,6 +1,7 @@
 src/services/nhsonlineapi.js
 src/services/v1nhsonlineapi.js
 src/services/v2nhsonlineapi.js
+src/services/v3nhsonlineapi.js
 src/services/fhircdsapi.js
 src/config/env.json
 FETCH_HEAD

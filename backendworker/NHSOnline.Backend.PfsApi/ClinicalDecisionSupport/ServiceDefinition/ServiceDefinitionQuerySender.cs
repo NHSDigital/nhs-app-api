@@ -116,6 +116,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string parameters,
             bool addJavascriptDisabledHeader,
             string odsCode,
+            string version,
             string sessionId = null)
         {
             HttpResponseMessage responseMessage;
@@ -128,6 +129,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     serviceDefinitionId,
                     parameters,
                     addJavascriptDisabledHeader,
+                    version,
                     sessionId);
             }
             catch (HttpRequestException e)

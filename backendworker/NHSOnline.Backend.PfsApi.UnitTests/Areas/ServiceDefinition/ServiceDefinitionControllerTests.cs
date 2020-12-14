@@ -89,6 +89,29 @@
          }
 
          [TestMethod]
+         public async Task GetServiceDefinition_WhenServiceGetServiceDefinitionV2ReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
+         {
+
+            // Arrange
+            MockServiceGetServiceDefinition(new ServiceDefinitionResult.Success("this is a v2 service definition"),
+                _userSession, description: ServiceDefinitionDescriptionV2, version: "2");
+            var serviceDefinitionMetaData = new ServiceDefinitionMetaData
+            {
+                Id = ServiceDefinitionId,
+                Type = ServiceDefinitionTypeEnum.AdminHelp
+            };
+
+            // Act
+            var response = await _systemUnderTest.GetServiceDefinitionV2(serviceDefinitionMetaData,
+                Provider, _userSession);
+
+            // Assert
+            var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().Be("this is a v2 service definition");
+         }
+
+         [TestMethod]
          public async Task EvaluateServiceDefinition_WhenBodyIsNull_ThenBadRequestIsReturned()
          {
              // Act
@@ -115,6 +138,27 @@
 
              // Act
              var response = await _systemUnderTest.EvaluateServiceDefinition(
+                 Provider,
+                 _evaluateParameters,
+                 false,
+                 _userSession);
+
+             // Assert
+             VerifyEvaluationWithOdsCodeIsLogged(ServiceDefinitionDescriptionV2);
+         }
+
+         [TestMethod]
+         public async Task EvaluateServiceDefinitionV2_WhenCalled_ThenEvaluatingConsultationIsLogged()
+         {
+             // Arrange
+             AddServiceDefinitionMetaDataToParameters();
+             MockServiceDefinitionParametersHelper();
+
+             MockServiceEvaluateServiceDefinition(new ServiceDefinitionResult.Success("this is a v2 evaluate response"),
+                 _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2, version: "2");
+
+             // Act
+             var response = await _systemUnderTest.EvaluateServiceDefinitionV2(
                  Provider,
                  _evaluateParameters,
                  false,
@@ -273,10 +317,10 @@
          }
 
          private void MockServiceGetServiceDefinition(ServiceDefinitionResult result, P9UserSession userSession, string provider = Provider, string serviceDefinitionId = ServiceDefinitionId,
-             string description = ServiceDefinitionDescriptionV1)
+             string description = ServiceDefinitionDescriptionV1, string version = "1")
          {
              Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedGetByIdMatch =
-                 s => s.GetServiceDefinition(provider, serviceDefinitionId, description, userSession);
+                 s => s.GetServiceDefinition(provider, serviceDefinitionId, description, userSession, version);
 
              _mockServiceDefinitionService
                  .Setup(expectedGetByIdMatch)
@@ -286,7 +330,7 @@
 
          private void MockServiceEvaluateServiceDefinition(ServiceDefinitionResult result, P9UserSession userSession, Parameters parameters,
              string provider = Provider, string serviceDefinitionId = ServiceDefinitionId, string description = ServiceDefinitionDescriptionV1,
-             bool jsDisabled = false, bool demographicsConsentGiven = false)
+             bool jsDisabled = false, bool demographicsConsentGiven = false, string version ="1")
          {
              Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedEvaluateMatch =
                  s => s.EvaluateServiceDefinition(
@@ -296,7 +340,8 @@
                      parameters,
                      jsDisabled,
                      demographicsConsentGiven,
-                     userSession);
+                     userSession,
+                     version);
 
              _mockServiceDefinitionService
                  .Setup(expectedEvaluateMatch)

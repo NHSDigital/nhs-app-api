@@ -150,11 +150,12 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<bool>(),
+                      "1",
                      null))
                  .Throws<HttpRequestException>();
 
              // Act
-             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -169,7 +170,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -184,7 +185,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -202,7 +203,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -219,7 +220,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -240,7 +241,7 @@
                  .Returns(SessionId);
 
              // Act
-             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              _mockSenderLogger.VerifyLogger(
@@ -258,7 +259,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession, "1");
 
              // Assert
              _mockSenderLogger.VerifyLogger(
@@ -282,7 +283,7 @@
          public async Task EvaluateServiceDefinition_WhenNullParametersProvided_ReturnsBadRequest()
          {
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, null, false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, null, false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -298,11 +299,12 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<bool>(),
+                     "1",
                      null))
                  .Throws<HttpRequestException>();
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
@@ -316,7 +318,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -330,7 +332,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -347,7 +349,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -363,7 +365,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -386,7 +388,7 @@
                  .Returns(SessionId);
 
              // Act
-             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, requestParameters, false, false, _userSession);
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, requestParameters, false, false, _userSession, "1");
 
              // Assert
              _mockSenderLogger.VerifyLogger(
@@ -403,7 +405,7 @@
              MockEvaluateServiceDefinitionQueryEvaluateWithNullSessionId();
 
              // Act
-             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              _mockSenderLogger.VerifyLogger(
@@ -424,6 +426,7 @@
                      It.IsAny<string>(),
                      It.Is<string>(body => body.Contains("\"resourceType\":\"Patient\"", StringComparison.Ordinal)),
                      It.IsAny<bool>(),
+                     "1",
                      SessionId))
                  .ReturnsAsync(_httpResponse);
 
@@ -469,7 +472,7 @@
              _mockFhirParameterHelpers.Setup(h => h.GetSessionIdFromParameters(bodyParameters)).Returns(SessionId);
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, bodyParameters, false, true ,_userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, bodyParameters, false, true , _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();
@@ -491,11 +494,12 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.Is<bool>(addHeader => addHeader == addJsDisabledHeader),
+                     "1",
                      null))
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), addJsDisabledHeader, false, _userSession);
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), addJsDisabledHeader, false, _userSession, "1");
 
              // Assert
              _mockFhirSanitizationHelper.Verify(fsh => fsh.SanitizeGuidanceResponse(
@@ -515,11 +519,12 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.Is<bool>(addHeader => addHeader == addJsDisabledHeader),
+                     "1",
                      null))
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), addJsDisabledHeader, false, _userSession);
+             var response = await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), addJsDisabledHeader, false, _userSession, "1");
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.CustomError>().Subject.ErrorCode.Should()
@@ -538,11 +543,12 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<bool>(),
+                     "1",
                      null))
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession);
+             await _service.EvaluateServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, new Parameters(), false, false, _userSession, "1");
 
              // Assert
              _mockSenderLogger.VerifyLogger(LogLevel.Information, $"Ending consultation for {ServiceDefinitionDescription}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
@@ -737,6 +743,7 @@
                      It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<bool>(),
+                     "1",
                      null))
                  .ReturnsAsync(_httpResponse);
          }

@@ -5,11 +5,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
 {
     public interface IEvaluateServiceDefinitionQuery
     {
-        Task<HttpResponseMessage> EvaluateServiceDefinition(
-            string providerKey,
+        Task<HttpResponseMessage> EvaluateServiceDefinition(string providerKey,
             string serviceDefinitionId,
             string requestBody,
             bool addJavascriptDisabledHeader,
+            string version,
             string sessionId = null);
     }
 }

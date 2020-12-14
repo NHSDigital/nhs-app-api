@@ -107,3 +107,7 @@ paths:
     $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1details
   /v2/cdss/service-definition/{provider}/isValid:
     $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1isValid
+  /v3/cdss/service-definition/{provider}:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}
+  /v3/cdss/service-definition/{provider}/evaluate:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1evaluate

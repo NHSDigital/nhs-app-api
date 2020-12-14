@@ -38,6 +38,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             [FromRoute(Name = "provider")] string provider,
             [UserSession] P9UserSession userSession)
         {
+            return await HandleGetServiceDefinition(metaData, provider, userSession, "1");
+        }
+
+        [HttpPost]
+        [ApiVersion("3"), ApiVersionRoute("cdss/service-definition/{provider}")]
+        public async Task<IActionResult> GetServiceDefinitionV2(
+            [FromBody] ServiceDefinitionMetaData metaData,
+            [FromRoute(Name = "provider")] string provider,
+            [UserSession] P9UserSession userSession)
+        {
+            return await HandleGetServiceDefinition(metaData, provider, userSession, "2");
+        }
+
+        public async Task<IActionResult> HandleGetServiceDefinition(ServiceDefinitionMetaData metaData, string provider,
+            P9UserSession userSession, string version)
+        {
             try
             {
                 _logger.LogEnter();
@@ -46,7 +62,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                 {
                     var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
 
-                    return (await _service.GetServiceDefinition(provider, metaData.Id, description, userSession))
+                    return (await _service.GetServiceDefinition(
+                            provider,
+                            metaData.Id,
+                            description,
+                            userSession,
+                            version))
                         .Accept(new ServiceDefinitionResultVisitor());
                 }
 
@@ -69,6 +90,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             [FromQuery] bool demographicsConsentGiven,
             [UserSession] P9UserSession userSession)
         {
+            return await HandleEvaluateServiceDefinition(provider, parameters, demographicsConsentGiven, userSession, "1");
+        }
+
+        [HttpPost]
+        [ApiVersion("3"), ApiVersionRoute("cdss/service-definition/{provider}/evaluate")]
+        public async Task<IActionResult> EvaluateServiceDefinitionV2(
+            [FromRoute(Name = "provider")] string provider,
+            [FromBody] Parameters parameters,
+            [FromQuery] bool demographicsConsentGiven,
+            [UserSession] P9UserSession userSession)
+        {
+            return await HandleEvaluateServiceDefinition(provider, parameters, demographicsConsentGiven, userSession, "2");
+        }
+
+        private async Task<IActionResult> HandleEvaluateServiceDefinition(string provider, Parameters parameters,
+            bool demographicsConsentGiven, P9UserSession userSession, string version)
+        {
             try
             {
                 _logger.LogEnter();
@@ -82,27 +120,29 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 parameters = _fhirParameterHelpers.RemoveServiceDefinitionMetadataFromParameters(parameters, out var metaData);
 
-                if (!(metaData is null))
-                {
-                    var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
+                if (metaData is null) {
+                    _logger.LogInformation(
+                        $"{nameof(_fhirParameterHelpers.RemoveServiceDefinitionMetadataFromParameters)} returned null metaData");
 
-                    _logger.LogInformation($"Evaluating for {description}. ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
-
-                    return (await _service.EvaluateServiceDefinition(
-                            provider,
-                            metaData.Id,
-                            description,
-                            parameters,
-                            "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
-                                StringComparison.Ordinal),
-                            demographicsConsentGiven,
-                            userSession))
-                        .Accept(new ServiceDefinitionResultVisitor());
+                    return new ServiceDefinitionResult.BadRequest().Accept(new ServiceDefinitionResultVisitor());
                 }
 
-                _logger.LogInformation($"{nameof(_fhirParameterHelpers.RemoveServiceDefinitionMetadataFromParameters)} returned null metaData");
+                var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
 
-                return new ServiceDefinitionResult.BadRequest().Accept(new ServiceDefinitionResultVisitor());
+                _logger.LogInformation(
+                    $"Evaluating for {description}. ODSCode: {userSession.CitizenIdUserSession.OdsCode ??= "None"}");
+
+                return (await _service.EvaluateServiceDefinition(
+                        provider,
+                        metaData.Id,
+                        description,
+                        parameters,
+                        "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
+                            StringComparison.Ordinal),
+                        demographicsConsentGiven,
+                        userSession,
+                        version))
+                    .Accept(new ServiceDefinitionResultVisitor());
             }
             finally
             {

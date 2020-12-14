@@ -59,7 +59,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             string providerKey,
             string serviceDefinitionId,
             string serviceDefinitionDescription,
-            P9UserSession userSession)
+            P9UserSession userSession,
+            string version)
         {
             try
             {
@@ -78,7 +79,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     }),
                     false,
-                    odsCode);
+                    odsCode,
+                    version);
             }
             finally
             {
@@ -110,7 +112,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             Parameters parameters,
             bool addJavascriptDisabledHeader,
             bool demographicsConsentGiven,
-            P9UserSession userSession)
+            P9UserSession userSession,
+            string version)
         {
             try
             {
@@ -175,6 +178,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
                     userSession.OdsCode,
+                    version,
                     _fhirParameterHelpers.GetSessionIdFromParameters(parameters));
             }
             finally
