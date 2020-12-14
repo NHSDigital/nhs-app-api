@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddTransient<Im1TokenSerialiserService>();
             services.AddTransient<Im1TokenEncryptionService>();
+            services.AddTransient<IMongoIm1Cache, DualMongoIm1Cache>();
         }
     }
 }

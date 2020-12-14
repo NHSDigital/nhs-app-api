@@ -1,8 +1,10 @@
-﻿namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
+namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
 {
     public interface IIm1CacheServiceConfig
     {
-        string MongoDatabaseName { get; }
-        string MongoDatabaseIm1CollectionName { get; }
+        string DatabaseName { get; }
+        string CollectionName { get; }
+        string SecondaryDatabaseName { get; }
+        string SecondaryCollectionName { get; }
     }
 }

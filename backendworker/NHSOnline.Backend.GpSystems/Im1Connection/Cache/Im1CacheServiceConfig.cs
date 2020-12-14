@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
 
@@ -6,13 +6,17 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
 {
     public class Im1CacheServiceConfig : IIm1CacheServiceConfig
     {
-        public string MongoDatabaseName { get; }
-        public string MongoDatabaseIm1CollectionName { get; }
+        public string DatabaseName { get; }
+        public string CollectionName { get; }
+        public string SecondaryDatabaseName { get; }
+        public string SecondaryCollectionName { get; }
 
         public Im1CacheServiceConfig(IConfiguration configuration, ILogger<Im1CacheServiceConfig> logger)
         {
-            MongoDatabaseName = configuration.GetOrThrow("IM1CACHE_MONGO_DATABASE_NAME", logger);
-            MongoDatabaseIm1CollectionName = configuration.GetOrThrow("IM1CACHE_MONGO_DATABASE_COLLECTION", logger);
+            DatabaseName = configuration.GetOrThrow("IM1CACHE_MONGO_DATABASE_NAME", logger);
+            CollectionName = configuration.GetOrThrow("IM1CACHE_MONGO_DATABASE_COLLECTION", logger);
+            SecondaryDatabaseName = configuration.GetOrThrow("IM1CACHE_MONGO_SECONDARY_DATABASE_NAME", logger);
+            SecondaryCollectionName = configuration.GetOrThrow("IM1CACHE_MONGO_SECONDARY_DATABASE_COLLECTION", logger);
         }
     }
 }

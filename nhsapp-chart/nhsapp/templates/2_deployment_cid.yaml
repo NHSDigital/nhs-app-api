@@ -181,8 +181,12 @@ spec:
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
           value: "/app/FakeGpSupplierConfig.yml"
         - name: IM1CACHE_MONGO_DATABASE_NAME
-          value: {{ $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
         - name: IM1CACHE_MONGO_DATABASE_COLLECTION
+          value: im1cache
+        - name: IM1CACHE_MONGO_SECONDARY_DATABASE_NAME
+          value: {{ $.Values.cosmosDBName }}
+        - name: IM1CACHE_MONGO_SECONDARY_DATABASE_COLLECTION
           value: im1cache
         volumeMounts:
         - name: secrets-store-inline

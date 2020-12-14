@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
             }
         }
 
-        public async Task<Option<string>> Get(string key)
+        internal async Task<Option<string>> Get(string key)
         {
             try
             {
@@ -82,8 +82,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
             }
         }
 
-
-        public async Task<bool> Delete(string key)
+        internal async Task<bool> Delete(string key)
         {
             try
             {

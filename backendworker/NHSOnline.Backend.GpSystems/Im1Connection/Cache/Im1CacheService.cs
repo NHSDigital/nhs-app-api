@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -13,18 +12,16 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
         private readonly ILogger _logger;
 
         private readonly Im1TokenEncryptionService _encryptionService;
-        private readonly MongoIm1CacheAccessor _cacheAccessor;
+        private readonly IMongoIm1Cache _cache;
 
         public Im1CacheService(
             ILogger<Im1CacheService> logger,
             Im1TokenEncryptionService encryptionService,
-            IMongoClient mongoClient,
-            IIm1CacheServiceConfig config)
+            IMongoIm1Cache cache)
         {
             _logger = logger;
             _encryptionService = encryptionService;
-
-            _cacheAccessor = new MongoIm1CacheAccessor(logger, mongoClient, config.MongoDatabaseName, config.MongoDatabaseIm1CollectionName);
+            _cache = cache;
         }
 
         public string CacheKeyPropertyName => Im1ConnectionTokenCacheKeyPropertyName;
@@ -36,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
                 _logger.LogEnter();
 
                 var connectionToken = _encryptionService.Encode(value);
-                await _cacheAccessor.Save(key, connectionToken);
+                await _cache.Save(key, connectionToken);
             }
             finally
             {
@@ -50,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
             {
                 _logger.LogEnter();
 
-                var cachedValue = await _cacheAccessor.Get(key);
+                var cachedValue = await _cache.Get(key);
 
                 return cachedValue.Select(_encryptionService.Decode<T>);
             }
@@ -66,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection.Cache
             {
                 _logger.LogEnter();
 
-                return await _cacheAccessor.Delete(key);
+                return await _cache.Delete(key);
             }
             finally
             {
