@@ -1,21 +1,23 @@
 <template>
   <div v-if="showTemplate && !hasSent">
     <div class="nhsuk-grid-row nhsuk-grid-column-full">
-      <div v-if="showError" class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <message-dialog id="errorDialog" message-type="error" role="alert" :focusable="true">
-            <message-text data-purpose="error-heading">
-              {{ $t('messages.thereIsAProblem') }}
-            </message-text>
-            <message-list>
-              <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
-                {{ $t('messages.enterASubject') }}
-              </li>
-              <li v-if="messageTextError" data-purpose="message-error">
-                {{ $t('messages.enterAMessage') }}
-              </li>
-            </message-list>
-          </message-dialog>
+      <div role="alert" aria-atomic="true">
+        <div v-if="showError" class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <message-dialog message-type="error" :focusable="true">
+              <message-text data-purpose="error-heading">
+                {{ $t('messages.thereIsAProblem') }}
+              </message-text>
+              <message-list>
+                <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
+                  {{ $t('messages.enterASubject') }}
+                </li>
+                <li v-if="messageTextError" data-purpose="message-error">
+                  {{ $t('messages.enterAMessage') }}
+                </li>
+              </message-list>
+            </message-dialog>
+          </div>
         </div>
       </div>
       <p id="subHeader"
@@ -46,7 +48,7 @@
                                 $t('messages.enterASubject')"
                               aria-describedby="text-must-be-shorter-than-64"
                               :error="subjectError"
-                              :required="true"/>
+                              :required="false"/>
         </div>
       </sjr-if>
       <div :class="['nhsuk-u-padding-top-4', getErrorClass]">
@@ -152,35 +154,37 @@ export default {
       this.messageTextError = false;
       this.subjectError = false;
 
-      if (this.messageText.trim() === '') {
-        this.messageTextError = true;
-      }
+      this.$nextTick(async () => {
+        if (this.messageText.trim() === '') {
+          this.messageTextError = true;
+        }
 
-      if (this.subjectText.trim() === '') {
-        this.subjectError = true;
-      }
+        if (this.subjectText.trim() === '') {
+          this.subjectError = true;
+        }
 
-      if (this.showError) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
-      const { messageText, subjectText } = this;
+        if (this.showError) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
+        const { messageText, subjectText } = this;
 
-      this.$store.dispatch('gpMessages/setSelectedMessageID', '0');
-      await this.$store.dispatch('gpMessages/sendMessage', { messageText, subjectText });
+        this.$store.dispatch('gpMessages/setSelectedMessageID', '0');
+        await this.$store.dispatch('gpMessages/sendMessage', { messageText, subjectText });
 
-      if (this.$store.state.gpMessages.messageSent) {
-        this.$store.dispatch('gpMessages/setMessageDetails', {
-          messageDetails: {
-            messageId: '0',
-            subject: subjectText,
-            content: messageText,
-            sentDateTime: new Date(),
-            outboundMessage: true,
-            replies: [],
-          } });
-        redirectTo(this, GP_MESSAGES_VIEW_MESSAGE_PATH);
-      }
+        if (this.$store.state.gpMessages.messageSent) {
+          this.$store.dispatch('gpMessages/setMessageDetails', {
+            messageDetails: {
+              messageId: '0',
+              subject: subjectText,
+              content: messageText,
+              sentDateTime: new Date(),
+              outboundMessage: true,
+              replies: [],
+            } });
+          redirectTo(this, GP_MESSAGES_VIEW_MESSAGE_PATH);
+        }
+      });
     },
     onBackButtonClicked() {
       redirectTo(this, GP_MESSAGES_RECIPIENTS_PATH);

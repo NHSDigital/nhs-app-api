@@ -72,7 +72,7 @@ describe('patient messaging messages', () => {
       wrapper.vm.subjectError = true;
       wrapper.vm.messageTextError = true;
 
-      const errorDialog = wrapper.find('#errorDialog');
+      const errorDialog = wrapper.find('#message-dialog');
       const subjectError = wrapper.find('#subjectText-error-message');
       const messageError = wrapper.find('#messageText-error-message');
 
@@ -92,7 +92,7 @@ describe('patient messaging messages', () => {
       mountPage({ sendMessageSubjectEnabled: false });
       wrapper.vm.subjectError = true;
 
-      const errorDialog = wrapper.find('#errorDialog');
+      const errorDialog = wrapper.find('#message-dialog');
       const subjectError = wrapper.find('#subjectText-error-message');
 
       expect(errorDialog.exists()).toBe(false);
@@ -149,6 +149,7 @@ describe('patient messaging messages', () => {
       wrapper.vm.subjectText = 'Test subject';
 
       await wrapper.vm.onSendMessageButtonClicked();
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.vm.messageTextError).toBe(false);
       expect(wrapper.vm.subjectError).toBe(false);
@@ -168,6 +169,7 @@ describe('patient messaging messages', () => {
       wrapper.vm.subjectText = '';
 
       await wrapper.vm.onSendMessageButtonClicked();
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.vm.messageTextError).toBe(true);
       expect(wrapper.vm.subjectError).toBe(true);

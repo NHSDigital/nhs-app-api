@@ -23,7 +23,8 @@
            :aria-label="$t('messages.contactSurgeryForMoreInformationOrGoToOneOneOne')">
           {{ $t('messages.contactSurgeryForMoreInformationOr') }}
           <a style="display:inline" href="https://111.nhs.uk">
-            {{ $t('messages.nhs111Link') }}</a>
+            {{ $t('messages.nhs111Link') }}
+          </a>
           {{ $t('messages.or') }}
           <a style="display:inline" href="tel:111">
             {{ $t('messages.call111Link') }}.
@@ -103,13 +104,16 @@ export default {
       this.isValid = validation.isValid;
     },
     continueButtonClicked() {
-      if (!this.isValid) {
-        this.isError = true;
-        return;
-      }
-      redirectTo(this, this.answer === YES
-        ? GP_MESSAGES_URGENCY_CONTACT_GP_PATH
-        : GP_MESSAGES_RECIPIENTS_PATH);
+      this.isError = false;
+      this.$nextTick(() => {
+        if (!this.isValid) {
+          this.isError = true;
+          return;
+        }
+        redirectTo(this, this.answer === YES
+          ? GP_MESSAGES_URGENCY_CONTACT_GP_PATH
+          : GP_MESSAGES_RECIPIENTS_PATH);
+      });
     },
     backLinkClicked() {
       redirectTo(this, this.$store.state.navigation.backLinkOverride || this.messagingPath);

@@ -104,6 +104,7 @@ describe('gp messages urgency page', () => {
       await wrapper.vm.$nextTick();
 
       wrapper.find('#continueButton').trigger('click');
+      await wrapper.vm.$nextTick();
 
       const errorContent = wrapper.find('[data-purpose="error-container"] [data-purpose="error"]');
       const validationError = errorContent.find('ul li');
@@ -117,6 +118,7 @@ describe('gp messages urgency page', () => {
       await wrapper.vm.$nextTick();
 
       wrapper.find('#continueButton').trigger('click');
+      await wrapper.vm.$nextTick();
 
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/urgency/contact-your-gp');
     });
@@ -126,6 +128,7 @@ describe('gp messages urgency page', () => {
       await wrapper.vm.$nextTick();
 
       wrapper.find('#continueButton').trigger('click');
+      await wrapper.vm.$nextTick();
 
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, 'messages/gp-messages/recipients');
     });

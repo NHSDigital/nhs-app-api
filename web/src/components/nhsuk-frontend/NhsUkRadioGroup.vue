@@ -4,16 +4,18 @@
       <h1 class="nhsuk-fieldset__heading nhsuk-u-margin-top-3">{{ heading }}</h1>
     </legend>
 
-    <message-dialog v-if="error" message-type="error" role="alert" :focusable="true">
-      <message-text>
-        {{ $t('messages.thereIsAProblem') }}
-      </message-text>
-      <message-list>
-        <li>
-          {{ errorText }}
-        </li>
-      </message-list>
-    </message-dialog>
+    <div role="alert" aria-atomic="true">
+      <message-dialog v-if="error" message-type="error" :focusable="true">
+        <message-text>
+          {{ $t('messages.thereIsAProblem') }}
+        </message-text>
+        <message-list>
+          <li>
+            {{ errorText }}
+          </li>
+        </message-list>
+      </message-dialog>
+    </div>
 
     <div :class="['nhsuk-form-group', error ? 'nhsuk-form-group--error' : undefined]">
       <span v-if="error" :id="`${name}-error`" class="nhsuk-error-message">
