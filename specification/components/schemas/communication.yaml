@@ -32,7 +32,33 @@ properties:
             example: Onboarded Third Party
           body:
             type: string
-            description: The body text of the message to be displayed in the NHS App. Currently we support plain text only. Carriage returns can be entered as \n. The NHS App user interface will attempt to 'linkify' any hyperlinks in the text. We have a story on our backlog to consider supporting [Markdown](https://en.wikipedia.org/wiki/Markdown), and welcome any feedback you may have on this suggestion.
+            description: |
+              The body text of the message to be displayed in the NHS App. We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for in-app messages.
+
+              Currently supported Markdown syntax:
+              * Emphasis
+                * Bold text \*\*Bold\*\*
+                * Italic text \_Italic\_
+
+              * Lists
+                * Bullet list:
+
+                  \* Item1
+
+                  \* Item2
+
+                  \* Item3
+
+              * Ordered lists
+
+                1\. Item1
+
+                1\. Item2
+
+                1\. Item3
+
+              * Link with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
+              * Link with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
             maxLength: 1000
             pattern: must not match <(.|\n)*?>
             example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
