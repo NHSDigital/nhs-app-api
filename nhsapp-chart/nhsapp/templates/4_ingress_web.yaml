@@ -34,6 +34,7 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
+    {{- if eq .Values.zone .Values.global.environment }}
     - host: www.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -41,9 +42,12 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /{{ $.Values.web.image_tag | replace "." "-" }}
+    {{- end }}
   tls:
     - hosts:
         - www-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
         - www-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
+      {{- if eq .Values.zone .Values.global.environment }}
         - www.{{ $.Values.zone }}.{{ $.Values.domain }}
+      {{- end }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
