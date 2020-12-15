@@ -8,4 +8,4 @@ journeys:
     conditionsServiceDefinition: CONDITION_LIST
   cdssAdmin:
     provider: eConsult
-    serviceDefinition: GEC_ADM
+    serviceDefinition: CONDITION_LIST_ADMIN

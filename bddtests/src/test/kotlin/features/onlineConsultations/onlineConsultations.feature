@@ -8,9 +8,9 @@ Scenario: A user can go through the online consultations gp advice journey and i
   Then the Advice page is displayed
   When I click Ask your GP for Advice
   And I accept demographics and terms and conditions question
-  And I click on a condition
-  And I select my gender and click continue
   And I am submitting the questionnaire for myself
+  And I see a condition list for myself
+  And I click on a condition
   And I am in an emergency and I agree to end my consultation
   Then I see advice on what to do next
 
@@ -21,9 +21,9 @@ Scenario: A user going through the online consultations journey accidentally nav
   Then the Advice page is displayed
   When I click Ask your GP for Advice
   And I accept demographics and terms and conditions question
-  And I click on a condition
-  And I select my gender and click continue
   And I am submitting the questionnaire for myself
+  And I see a condition list for myself
+  And I click on a condition
   And I navigate to Appointments
   Then I see the page leave warning
   And I click stay on page on the popup
@@ -37,9 +37,9 @@ Scenario: A user going through the online consultations journey navigates away a
   Then the Advice page is displayed
   When I click Ask your GP for Advice
   And I accept demographics and terms and conditions question
-  And I click on a condition
-  And I select my gender and click continue
   And I am submitting the questionnaire for myself
+  And I see a condition list for myself
+  And I click on a condition
   And I click the home icon
   And I see the page leave warning
   Then I click leave the page on the popup
@@ -52,15 +52,42 @@ Scenario: A user can go through the online consultations gp advice journey and i
   Then the Advice page is displayed
   When I click Ask your GP for Advice
   And I accept demographics and terms and conditions question
-  And I click on a condition
-  And I select my gender and click continue
   And I am submitting the questionnaire for myself
+  And I see a condition list for myself
+  And I click on a condition
   And I am not in an emergency
+  And I select my gender and click continue
   And I insert my symptoms and click continue
   And I insert my date of birth
   And I select how much alcohol I drink weekly
   And I insert how long I have felt the pain
-  Then I see a care plan
+  Then I see a care plan for myself
+
+  Scenario: A user can go through the online consultations gp advice journey for their child and it is not an emergency
+    Given I am logged in as a EMIS user with no linked profiles
+    And I have access to online consultations gp advice journey for my child
+    When I navigate to Advice
+    Then the Advice page is displayed
+    When I click Ask your GP for Advice
+    And I accept demographics and terms and conditions question
+    And I am submitting the questionnaire for my child
+    And I see a condition list for my child
+    And I click on a condition
+    And I select my childs gender and click continue
+    And I insert my childs symptoms and click continue
+    And I insert my childs date of birth
+    And I insert how long my child has had symptoms
+    Then I see a care plan for my child
+
+  Scenario: A user under 18 cannot proceed down the child journey
+    Given I am logged in as a EMIS user under 18
+    And I have access to the child journey when I am under 18
+    When I navigate to Advice
+    Then the Advice page is displayed
+    When I click Ask your GP for Advice
+    And I accept demographics and terms and conditions question
+    And I am submitting the questionnaire for my child
+    Then I see a message informing me I am too young
 
   Scenario: A user can go through the online consultations gp advice journey and it is not an emergency with no GP session
     Given I am an EMIS patient whose GP system is unavailable
@@ -70,15 +97,16 @@ Scenario: A user can go through the online consultations gp advice journey and i
     Then the Advice page is displayed
     When I click Ask your GP for Advice
     And I accept demographics and terms and conditions question
-    And I click on a condition
-    And I select my gender and click continue
     And I am submitting the questionnaire for myself
+    And I see a condition list for myself
+    And I click on a condition
     And I am not in an emergency
+    And I select my gender and click continue
     And I insert my symptoms and click continue
     And I insert my date of birth
     And I select how much alcohol I drink weekly
     And I insert how long I have felt the pain
-    Then I see a care plan
+    Then I see a care plan for myself
 
   Scenario: A user can go through the online consultations gp advice journey and there is a delayed response
     Given I am logged in as a EMIS user with no linked profiles
@@ -87,15 +115,16 @@ Scenario: A user can go through the online consultations gp advice journey and i
     Then the Advice page is displayed
     When I click Ask your GP for Advice
     And I accept demographics and terms and conditions question
-    And I click on a condition
-    And I select my gender and click continue
     And I am submitting the questionnaire for myself
+    And I see a condition list for myself
+    And I click on a condition
     And I am not in an emergency
+    And I select my gender and click continue
     And I insert my symptoms and click continue
     And I insert my date of birth
     And I select how much alcohol I drink weekly
     And I insert how long I have felt the pain
-    Then I see a care plan
+    Then I see a care plan for myself
 
   Scenario: A user can go through the online consultations gp advice journey and there is a timeout
     Given I am logged in as a EMIS user with no linked profiles
@@ -104,10 +133,11 @@ Scenario: A user can go through the online consultations gp advice journey and i
     Then the Advice page is displayed
     When I click Ask your GP for Advice
     And I accept demographics and terms and conditions question
-    And I click on a condition
-    And I select my gender and click continue
     And I am submitting the questionnaire for myself
+    And I see a condition list for myself
+    And I click on a condition
     And I am not in an emergency
+    And I select my gender and click continue
     And I insert my symptoms and click continue
     And I insert my date of birth
     And I select how much alcohol I drink weekly

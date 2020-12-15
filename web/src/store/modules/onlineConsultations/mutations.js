@@ -26,6 +26,13 @@ import {
   SET_CONDITIONS_LIST,
   SET_JOURNEY_INFO,
   SET_IS_AVAILABLE,
+  SET_SELF_OR_CHILD_REQUIRED,
+  SET_SELF_OR_CHILD_INPUT_DATA,
+  SET_DISCLAIMER_INPUT_DATA,
+  SET_SERVICE_DEFINITION_ID,
+  SET_CHILD_JOURNEY_SELECTED,
+  SET_DEFAULT_CONDITION,
+  SET_PRE_DOB,
 } from './mutation-types';
 
 export default {
@@ -53,11 +60,18 @@ export default {
     state.additionalValue = undefined;
     state.latestAdditionalValue = undefined;
     state.conditionsList = undefined;
+    state.selfOrChildRequired = false;
     if (clearAll) {
       state.gpAdviceServiceDefinitionId = undefined;
       state.demographicsConsentGiven = false;
       state.demographicsQuestionAnswered = false;
       state.available = undefined;
+      state.selfOrChildInputData = undefined;
+      state.disclaimerInputData = undefined;
+      state.serviceDefinitionId = undefined;
+      state.childJourneySelected = undefined;
+      state.defaultCondition = undefined;
+      state.preDob = undefined;
     }
   },
   [SET_SESSION_ID](state, sessionId) {
@@ -144,5 +158,26 @@ export default {
   },
   [SET_IS_AVAILABLE](state, available) {
     state.available = available;
+  },
+  [SET_SELF_OR_CHILD_REQUIRED](state, selfOrChildRequired) {
+    state.selfOrChildRequired = selfOrChildRequired;
+  },
+  [SET_SELF_OR_CHILD_INPUT_DATA](state, selfOrChildData) {
+    state.selfOrChildInputData = selfOrChildData;
+  },
+  [SET_DISCLAIMER_INPUT_DATA](state, disclaimerData) {
+    state.disclaimerInputData = disclaimerData;
+  },
+  [SET_SERVICE_DEFINITION_ID](state, serviceDefinitionId) {
+    state.serviceDefinitionId = serviceDefinitionId;
+  },
+  [SET_CHILD_JOURNEY_SELECTED](state) {
+    state.childJourneySelected = true;
+  },
+  [SET_DEFAULT_CONDITION](state, defaultCondition) {
+    state.defaultCondition = defaultCondition;
+  },
+  [SET_PRE_DOB](state, dobFormatted) {
+    state.preDob = dobFormatted;
   },
 };

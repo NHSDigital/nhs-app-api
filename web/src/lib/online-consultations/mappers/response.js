@@ -21,6 +21,13 @@ export function getQuestionnaireId(response) {
   return questionnaireIds[0].extension[0].valueReference.reference.substring(1);
 }
 
+export function getQuestionnaireIds(response) {
+  const questionnaireIds = response.dataRequirement
+    .filter(d => d.type === QUESTIONNAIRE_RESPONSE);
+
+  return questionnaireIds;
+}
+
 function getQuestionnaireResponse(guidanceResponse) {
   const questionnaireResponse = guidanceResponse.contained
     .filter(c => c.resourceType === QUESTIONNAIRE_RESPONSE);
@@ -119,12 +126,23 @@ export function getQuestionnaireItem(response) {
 export function getQuestionnaireResponseAnswers(response) {
   try {
     const questionnaireResponse = getQuestionnaireResponse(response);
-    const questionnaireId = getQuestionnaireId(response);
-    let questionAnswerReturn;
+    const questionnaireIds = getQuestionnaireIds(response);
 
-    if (questionnaireResponse.item !== undefined) {
-      questionAnswerReturn = questionnaireResponse.item.filter(c => c.linkId === questionnaireId);
-      return questionAnswerReturn[0];
+    for (let i = 0; i < questionnaireIds.length; i += 1) {
+      let id;
+
+      if (questionnaireIds[i].extension) {
+        id = questionnaireIds[i].extension[0].valueReference.reference.substring(1);
+      } else {
+        ({ id } = questionnaireIds[i]);
+      }
+
+      if (questionnaireResponse.item !== undefined) {
+        const questionAnswerReturn = questionnaireResponse.item.filter(c => c.linkId === id);
+        if (questionAnswerReturn.length > 0) {
+          return questionAnswerReturn[0];
+        }
+      }
     }
     return undefined;
   } catch (e) {
@@ -153,6 +171,22 @@ export function getPreviousQuestion(guidanceResponse) {
     return undefined;
   } catch (e) {
     return undefined;
+  }
+}
+
+/**
+ * @param {{requiresSelfOrChild:boolean}} object
+ * @param guidanceResponse
+ */
+export function getSelfOrChild(guidanceResponse) {
+  try {
+    const requiresSelfOrChild = guidanceResponse.dataRequirement
+      .filter(d => d.id === 'PRE_POV_SELF_OR_CHILD' ||
+        d.id === 'PRE_POV_SELFONLY');
+
+    return requiresSelfOrChild.length > 0;
+  } catch (e) {
+    return false;
   }
 }
 

@@ -9,19 +9,29 @@ import pages.sharedElements.DropdownElement
 import pages.typeTextIntoTextArea
 import pages.value
 import pages.withNormalisedText
-import utils.SerenityHelpers
 
 class OnlineConsultationsPage: HybridPageObject() {
-
-    private val firstName: String = SerenityHelpers.getPatient().name.firstName
 
     private val expectedAdviceText =
             "You've chosen to end your consultation. " +
             "Your practice hasn't been notified and won't contact you about your request. " +
             "You should still seek medical advice now."
 
-    private val expectedCarePlanText = "Thank you $firstName. " +
-            "The answers to your consultation have been securely sent to your GPs at Integration Test Practice."
+    private val childTitle = "To ensure we ask you relevant questions, choose your child's condition."
+    private val childLink = "I cannot find my child's condition"
+
+    private val adultTitle = "To ensure we ask you relevant questions, choose your condition."
+    private val adultLink = "I cannot find my condition"
+
+    private val expectedTooYoungMessage = "You must be between 18 and 125 years old in order to complete this request."
+
+    private val expectedAdultCarePlanText = "If your condition gets worse while you're waiting for a " +
+            "response, call the practice on 01234567890 as soon as possible. If the practice is closed, call NHS " +
+            "111. For immediate, life-threatening emergencies, call 999."
+
+    private val expectedChildCarePlanText = "If your child's condition gets worse while you're waiting for a " +
+            "response, call the practice on 01234567890 as soon as possible. If the practice is closed, call NHS " +
+            "111. For immediate, life-threatening emergencies, call 999."
 
     fun endMyConsultationButtonClicked() {
         HybridPageElement(webDesktopLocator = "//button[contains(text(),'End my consultation')]",
@@ -29,28 +39,29 @@ class OnlineConsultationsPage: HybridPageObject() {
     }
 
     fun iSeeAdviceOnWhatToDoNext(){
-        HybridPageElement(
-                webDesktopLocator = "//span/span",
-                page = this)
-                .withNormalisedText("Emergency advice:")
-                .assertIsVisible()
-        HybridPageElement(
-                webDesktopLocator = "//span",
-                page = this)
-                .withNormalisedText(expectedAdviceText)
-                .assertIsVisible()
+        assertVisualElement("span", text = expectedAdviceText)
     }
 
-    fun iSeeACarePlan() {
-        HybridPageElement(
-                webDesktopLocator = "//div//h1",
-                page = this)
-                .withNormalisedText(expectedCarePlanText)
-                .assertIsVisible()
+    fun iSeeACarePlan(type: String) {
+        val carePlanText = if(type == "my child") expectedChildCarePlanText else expectedAdultCarePlanText
+        assertVisualElement("div", "alert", carePlanText)
+    }
+
+    fun iSeeTheCannotFindConditionLink(type: String) {
+        val linkText = if(type == "my child") childLink else adultLink
+        assertVisualElement("a", "cannotFindConditionLink", linkText)
+    }
+
+    fun iSeeTheConditionListTitle(type: String) {
+        val titleText = if(type == "my child") childTitle else adultTitle
+        assertVisualElement("p", "conditionListTitle", titleText)
+    }
+
+    fun iSeeAMessageForTooYoung() {
+        assertVisualElement("div", "question", expectedTooYoungMessage)
     }
 
     fun clickFormElement(element: String = "input", id: String) {
-
         return HybridPageElement(
                 webDesktopLocator = "//$element[@id='$id']",
                 page = this).click()
@@ -71,6 +82,16 @@ class OnlineConsultationsPage: HybridPageObject() {
     fun selectUnit(unit: String) {
         DropdownElement("Unit", "QuantityUnitDropdown", this)
                 .selectByText(unit)
+    }
+
+
+    private fun assertVisualElement(element: String, id: String? = null, text: String) {
+        val webDesktopLocator = if (id != null) "//$element[@id='$id']" else "//$element"
+        HybridPageElement(
+                webDesktopLocator,
+                page = this)
+                .withNormalisedText(text)
+                .assertIsVisible()
     }
 
     private fun dateOfBirthElement(id: String, expectedValue: String){

@@ -5,6 +5,7 @@ import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import moment from 'moment';
 
 const pointRegExp = /^Point:(\d*),(\d*)$/;
+const dobAnswerIds = ['PRE_DOB_PARENT', 'PRE_DOB_SELF'];
 
 function prependZero(value) {
   return (value < 10 && `${value}`.length === 1) ? `0${value}` : value;
@@ -56,6 +57,9 @@ function getAnswerItem(question, answer) {
           code: answer,
         },
       }];
+      break;
+    case QuestionTypes.DATE_AS_STRING:
+      item.answer = [{ valueDate: `${answer}` }];
       break;
     case QuestionTypes.DATE:
       item.answer = [{
@@ -219,37 +223,34 @@ export function getAnswerFromItem(question, answer) {
   return answerFromResponse[0];
 }
 
-function getInputDataParameter({ question,
+function createInputData(items, questionId) {
+  return {
+    name: INPUT_DATA,
+    resource: {
+      resourceType: QUESTIONNAIRE_RESPONSE,
+      status: COMPLETED,
+      item: [items],
+      questionnaire: {
+        reference: `Questionnaire/${questionId}`,
+      },
+    },
+  };
+}
+
+export function getInputDataParameter({ question,
   answer,
-  answerIsValid,
   answerIsEmpty,
   previousQuestion,
   previousSelected }) {
-  let inputData;
-  if (answerIsValid || previousSelected === true) {
-    inputData = {
-      name: INPUT_DATA,
-      resource: {
-        resourceType: QUESTIONNAIRE_RESPONSE,
-        status: COMPLETED,
-        item: [],
-        questionnaire: {
-          reference: `Questionnaire/${question.id}`,
-        },
-      },
-    };
-    if (previousSelected === true) {
-      inputData.resource.item.push(getAnswerItem(previousQuestion, true));
-    } else if (!answerIsEmpty) {
-      inputData.resource.item.push(getAnswerItem(question, answer));
-    } else {
-      inputData.resource.item.push({
-        linkId: question.id,
-      });
-    }
+  if (previousSelected) {
+    return createInputData(getAnswerItem(previousQuestion, true), question.id);
   }
 
-  return inputData;
+  if (!answerIsEmpty) {
+    return createInputData(getAnswerItem(question, answer), question.id);
+  }
+
+  return createInputData({ linkId: question.id }, question.id);
 }
 
 function getServiceDefinitionMetaDataParameters(serviceDefinitionId, serviceDefinitionType) {
@@ -275,16 +276,44 @@ export function getParameters(
       ...getServiceDefinitionMetaDataParameters(serviceDefinitionId, serviceDefinitionType),
     );
 
-    if ((state.answerIsValid && state.dataRequirements && state.dataRequirements.organization)
-        || answeringConditionsQuestion) {
-      parameters.parameter.push(getOrganizationParameter(rootState.session.gpOdsCode));
-    }
-
-    if (state.status === DATA_REQUIRED && !answeringConditionsQuestion) {
+    if (state.status === DATA_REQUIRED) {
       if (state.sessionId) {
         parameters.parameter.push(getSessionIdParameter(state.sessionId));
       }
-      parameters.parameter.push(getInputDataParameter(state));
+
+      if (state.answerIsValid || state.previousSelected) {
+        parameters.parameter.push(getInputDataParameter(state));
+      }
+
+      if ((state.answerIsValid || answeringConditionsQuestion) &&
+        state.dataRequirements &&
+        state.dataRequirements.organization) {
+        parameters.parameter.push(getOrganizationParameter(rootState.session.gpOdsCode));
+      }
+
+      // As part of paeds changes going from DOB
+      // to conditions list requires the self or child answer
+      if (state.selfOrChildRequired && state.selfOrChildInputData) {
+        const { name, resource } = state.selfOrChildInputData;
+
+        parameters.parameter.push({
+          name, resource,
+        });
+      }
+
+      // Going from DOB to conditions list requires the disclaimer answer to be passed
+      if (state.question && dobAnswerIds.includes(state.question.id)) {
+        const { name, resource } = state.disclaimerInputData;
+
+        parameters.parameter.push({
+          name, resource,
+        });
+      }
+
+      if (state.preDob) {
+        parameters.parameter.push(state.preDob);
+        delete state.preDob;
+      }
     }
 
     return parameters;

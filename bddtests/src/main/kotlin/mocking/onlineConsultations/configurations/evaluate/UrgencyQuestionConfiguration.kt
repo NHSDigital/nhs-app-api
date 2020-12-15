@@ -7,27 +7,57 @@ class UrgencyQuestionConfiguration : IQuestionConfiguration {
        "resourceType":"Parameters",
        "parameter":[
           {
-             "name":"sessionId",
-             "valueString":"f59d8846-2968-45f7-8ab9-8acc57ebd858"
+             "name":"organization",
+             "resource":{
+                "resourceType":"Organization",
+                "identifier":[
+                   {
+                      "value":"A29928"
+                   }
+                ]
+             }
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_SELFONLY"
+                   "reference":"Questionnaire/GLO_PRE_DISCLAIMERS"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"PRE_STD_AD_SELFONLY",
+                      "linkId":"GLO_PRE_DISCLAIMERS",
                       "answer":[
                          {
                             "valueCoding":{
-                               "code":"PRE_STD_AD_SELFONLY_SELF"
+                               "code":"GLO_PRE_DISCLAIMERS_1"
                             }
                          }
                       ]
+                   }
+                ]
+             }
+          },
+          {
+             "name":"patient",
+             "resource":{
+                "resourceType":"Patient",
+                "identifier":[
+                   {
+                      "system":"https://fhir.nhs.uk/Id/nhs-number",
+                      "value":"{{nhsNumber}}"
+                   }
+                ],
+                "name":[
+                   {
+                        "text" : "{{name}} {{familyName}}"
+                   }
+                ],
+                "birthDate":"{{dob}}",
+                "address":[
+                   {
+                      "text":"{{address}}"
                    }
                 ]
              }

@@ -11,6 +11,7 @@ abstract class PatientHandler {
     abstract fun getPatientWithLinkedProfiles(): Patient
     abstract fun getPatientWithNoLinkedProfiles(): Patient
     abstract fun setOdsCode(patient: Patient, provider: String)
+    abstract fun getPatientUnder18(): Patient
 
     companion object : SupplierSpecificFactory<PatientHandler>() {
         override val map: HashMap<Supplier, (() -> (PatientHandler))> by lazy {

@@ -29,6 +29,10 @@ class EmisPatients {
             return picaJones
         }
 
+        override fun getPatientUnder18(): Patient {
+            return lenaluthor
+        }
+
         override fun setOdsCode(patient: Patient, provider: String) {
             val targetOdsCode = when (provider.toUpperCase()) {
                 "ECONSULT" -> EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT
@@ -130,7 +134,7 @@ class EmisPatients {
                         surname = "Danvers"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
-                age = PatientAge(dateOfBirth = "1972-04-12"),
+                age = PatientAge(dateOfBirth = "2004-04-12"),
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,

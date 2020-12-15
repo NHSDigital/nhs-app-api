@@ -105,7 +105,8 @@ export default {
       }
     },
     async goToPreviousQuestion() {
-      const { provider, serviceDefinitionId } = this.$store.state.onlineConsultations.journeyInfo;
+      const { provider } = this.$store.state.onlineConsultations.journeyInfo;
+      const { serviceDefinitionId } = this.$store.state.onlineConsultations;
       document.activeElement.blur();
 
       await this.$store.dispatch('onlineConsultations/setPrevious');

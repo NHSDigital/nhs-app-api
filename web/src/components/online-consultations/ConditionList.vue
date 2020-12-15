@@ -1,11 +1,15 @@
 <template>
-  <div :class="!isNativeApp && $style.desktopWeb">
+  <div v-if="shouldShowContent" :class="!isNativeApp && $style.desktopWeb">
     <div id="conditionInfo" data-purpose="info">
-      <p>{{ $t('onlineConsultations.conditions.chooseYourCondition') }}</p>
-      <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-        <a id="cannotFindConditionLink" role="link" href="#"
+      <p id="conditionListTitle">
+        {{ $t(`onlineConsultations.conditions.${conditionsListTitle}`) }}
+      </p>
+      <p v-if="generalGpAdviceServiceDefinition"
+         class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+        <a id="cannotFindConditionLink"
+           role="link" href="#"
            @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-          {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}</a>
+          {{ $t(`onlineConsultations.conditions.${defaultConditionLinkText}`) }}</a>
       </p>
     </div>
     <div v-for="serviceDefinition in serviceDefinitions"
@@ -23,10 +27,13 @@
                    :click-param="serviceDefinitionItem.id"/>
       </menu-item-list>
     </div>
-    <p id="endConditionInfo" class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-      <a id="cannotFindConditionLink" role="link" href="#"
+    <p v-if="generalGpAdviceServiceDefinition"
+       id="endConditionInfo"
+       class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+      <a id="cannotFindConditionLink"
+         role="link" href="#"
          @click.prevent="onConditionClicked(generalGpAdviceServiceDefinition)">
-        {{ $t('onlineConsultations.conditions.iCannotFindMyCondition') }}
+        {{ $t(`onlineConsultations.conditions.${defaultConditionLinkText}`) }}
       </a>
     </p>
     <generic-button id="endMyConsultationButton"
@@ -42,7 +49,7 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import GenericButton from '@/components/widgets/GenericButton';
 import { INDEX_PATH } from '@/router/paths';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, CHILD_DEFAULT_SERVICE_DEFINITION } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 export default {
@@ -68,14 +75,41 @@ export default {
       indexPath: INDEX_PATH,
       provider: this.$store.state.serviceJourneyRules.rules.cdssAdvice.provider,
       generalGpAdviceServiceDefinition:
-        this.$store.state.serviceJourneyRules.rules.cdssAdvice.serviceDefinition,
+        this.$store.state.onlineConsultations.defaultCondition,
     };
   },
-  created() {
-    this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+  computed: {
+    shouldShowContent() {
+      return this.serviceDefinitions.length > 1;
+    },
+    isChildJourney() {
+      return this.$store.state.onlineConsultations.childJourneySelected;
+    },
+    defaultConditionLinkText() {
+      return this.generalGpAdviceServiceDefinition === CHILD_DEFAULT_SERVICE_DEFINITION
+        ? 'iCannotFindMyChildsCondition' : 'iCannotFindMyCondition';
+    },
+    conditionsListTitle() {
+      return this.isChildJourney ? 'chooseChildsCondition' : 'chooseYourCondition';
+    },
+  },
+  async created() {
+    if (this.serviceDefinitions.length > 1) {
+      this.$store.dispatch('pageLeaveWarning/shouldSkipDisplayingLeavingWarning', false);
+    } else {
+      const serviceDefinitionId = this.serviceDefinitions[0].items[0].id;
+
+      this.$store.dispatch('onlineConsultations/setServiceDefinitionId', serviceDefinitionId);
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
+        serviceDefinitionId,
+        provider: this.provider,
+        answeringConditionsQuestion: true,
+      });
+    }
   },
   methods: {
     async onConditionClicked(serviceDefinitionId) {
+      this.$store.dispatch('onlineConsultations/setServiceDefinitionId', serviceDefinitionId);
       await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
         serviceDefinitionId,
         provider: this.provider,

@@ -1,9 +1,9 @@
-package mocking.onlineConsultations.configurations.evaluate
+package mocking.onlineConsultations.configurations.evaluate.childJourney
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 import utils.SerenityHelpers
 
-class CarePlanConfiguration: IQuestionConfiguration {
+class CarePlanChildConfiguration: IQuestionConfiguration {
 
     private val patient = SerenityHelpers.getPatient()
 
@@ -29,7 +29,7 @@ class CarePlanConfiguration: IQuestionConfiguration {
                          {
                             "valueQuantity":{
                                "value":5,
-                               "unit":"m"
+                               "unit":"d"
                             }
                          }
                       ]
@@ -69,8 +69,8 @@ class CarePlanConfiguration: IQuestionConfiguration {
                         <li>Your practice will respond to you by 
                         phone or email <strong>before 6:30 PM on 28 February 2020</strong>.</li></ul>
                         <div id='alert' class='messageBox alert 
-                        intro-text'>If your condition gets worse while you're waiting for a response, call the practice 
-                        on 01234567890 as soon as possible. If the practice is closed, call NHS 111. 
+                        intro-text'>If your child's condition gets worse while you're waiting for a response, 
+                        call the practice on 01234567890 as soon as possible. If the practice is closed, call NHS 111.
                         For immediate, life-threatening emergencies, call 999.
                         <p/></div><p><strong>Here are two important tips for ensuring you receive a 
                         response:</strong></p><ul><li>A call from

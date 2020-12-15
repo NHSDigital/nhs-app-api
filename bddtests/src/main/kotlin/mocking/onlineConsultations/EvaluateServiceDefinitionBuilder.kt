@@ -8,7 +8,8 @@ import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 
 class EvaluateServiceDefinitionBuilder(hasGpSession: Boolean, serviceDefinitionId: String,
-                                       configuration: IQuestionConfiguration)
+                                       configuration: IQuestionConfiguration,
+                                        isChild: Boolean)
     : OnlineConsultationsMappingBuilder("POST",
                                         "/fhir/ServiceDefinition/$serviceDefinitionId/\$evaluate") {
 
@@ -16,6 +17,7 @@ class EvaluateServiceDefinitionBuilder(hasGpSession: Boolean, serviceDefinitionI
         and all other related code within the OLC BDDs */
         private var _configuration: IQuestionConfiguration = configuration
         private var patient: Patient = SerenityHelpers.getPatient()
+        private var _isChild: Boolean = isChild
         private val address = if (hasGpSession) {
             patient.contactDetails.address.full()
         } else {
@@ -38,8 +40,15 @@ class EvaluateServiceDefinitionBuilder(hasGpSession: Boolean, serviceDefinitionI
 
     fun respondWithSuccess(): Mapping {
         //The replace will need removed when we can get the address from NHS login
+        var response = _configuration.response
+        response = response.replace("{{address}}", address)
+
+        if (_isChild) {
+            response.replace("{{child}}", "child's")
+        }
+
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(_configuration.response.replace("{{address}}", address))
+            andJsonBody(response)
                     .build()
         }
     }

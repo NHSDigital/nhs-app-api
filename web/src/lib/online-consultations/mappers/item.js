@@ -15,6 +15,10 @@ export function getConditionsList(questionnaire) {
   }
 }
 
+export function getGeneralServiceDefinition(questionnaire) {
+  return questionnaire.item[0].item[0].linkId;
+}
+
 export function getQuestion(item) {
   try {
     let { type } = item;

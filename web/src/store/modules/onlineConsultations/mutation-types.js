@@ -25,6 +25,13 @@ export const SET_ADVICE_PROVIDER_NAME = 'SET_ADVICE_PROVIDER_NAME';
 export const SET_CONDITIONS_LIST = 'SET_CONDITIONS_LIST';
 export const SET_JOURNEY_INFO = 'SET_JOURNEY_INFO';
 export const SET_IS_AVAILABLE = 'SET_IS_AVAILABLE';
+export const SET_SELF_OR_CHILD_REQUIRED = 'SET_SELF_OR_CHILD_REQUIRED';
+export const SET_SELF_OR_CHILD_INPUT_DATA = 'SET_SELF_OR_CHILD_INPUT_DATA';
+export const SET_DISCLAIMER_INPUT_DATA = 'SET_DISCLAIMER_INPUT_DATA';
+export const SET_SERVICE_DEFINITION_ID = 'SET_SERVICE_DEFINITION_ID';
+export const SET_CHILD_JOURNEY_SELECTED = 'SET_CHILD_JOURNEY_SELECTED';
+export const SET_DEFAULT_CONDITION = 'SET_DEFAULT_CONDITION';
+export const SET_PRE_DOB = 'SET_PRE_DOB';
 
 export const initialState = () => ({
   demographicsQuestionAnswered: false,
@@ -57,4 +64,10 @@ export const initialState = () => ({
   conditionsList: undefined,
   journeyInfo: {},
   available: undefined,
+  selfOrChildRequired: false,
+  selfOrChildInputData: undefined,
+  disclaimerInputData: undefined,
+  serviceDefinitionId: undefined,
+  childJourneySelected: undefined,
+  preDob: undefined,
 });

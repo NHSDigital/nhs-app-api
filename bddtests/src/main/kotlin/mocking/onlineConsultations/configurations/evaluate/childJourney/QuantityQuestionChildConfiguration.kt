@@ -1,31 +1,29 @@
-package mocking.onlineConsultations.configurations.evaluate
+package mocking.onlineConsultations.configurations.evaluate.childJourney
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
-    override val request  = """{
+class QuantityQuestionChildConfiguration: IQuestionConfiguration {
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
              "name":"sessionId",
-             "valueString":"1"
+             "valueString":"4ea9390f-f6f2-410b-8d46-39b37a6a1753"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_SEX"
+                   "reference":"Questionnaire/PRE_STD_AD_DOB"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"PRE_STD_AD_SEX",
+                      "linkId":"PRE_STD_AD_DOB",
                       "answer":[
                          {
-                            "valueCoding":{
-                               "code":"PRE_STD_AD_SEX_M"
-                            }
+                            "valueDate":"2004-02-01"
                          }
                       ]
                    }
@@ -34,7 +32,6 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
           }
        ]
     }"""
-
 
     override val response: String = """{
        "resourceType":"GuidanceResponse",
@@ -45,18 +42,17 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
+                   "valueString":"1"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"NHS_ADMIN_AD_REFERRALPAINDURATION",
              "status":"active",
              "item":[
                 {
-                   "linkId":"Q_BRP_BRP_AD_1_GROUP",
-                   "text":"",
+                   "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION_GROUP",
                    "type":"group",
                    "item":[
                       {
@@ -64,7 +60,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                             {
                                "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                                "valueCodeableConcept":{
-                                  "id":"backButton",
+                                  "id":"codeableConcept",
                                   "coding":[
                                      {
                                         "system":"http://hl7.org/fhir/ValueSet/questionnaire-item-control",
@@ -76,44 +72,57 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"Q_BRP_BRP_AD_1_PREV",
-                         "text":"",
+                         "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION_PREV",
                          "type":"boolean",
                          "required":false
                       },
                       {
+                         "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION",
+                         "text":"How long has your child had the symptoms?",
+                         "type":"quantity",
+                         "required":false,
+                         "repeats":false,
                          "extension":[
                             {
-                               "url":"http://hl7.org/fhir/StructureDefinition/maxLength",
-                               "valueInteger":500
+                               "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                               "valueCoding":{
+                                  "system":"http://unitsofmeasure.org",
+                                  "code":"d",
+                                  "display":"days"
+                               }
+                            },
+                            {
+                               "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                               "valueCoding":{
+                                  "system":"http://unitsofmeasure.org",
+                                  "code":"h",
+                                  "display":"hours"
+                               }
                             }
-                         ],
-                         "linkId":"Q_BRP_BRP_AD_1",
-                         "text":"Please tell us in a few words how we can help.",
-                         "type":"text",
-                         "required":true
+                         ]
                       }
                    ]
                 }
              ]
           }
        ],
+       "requestId":"1",
        "module":{
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T11:32:01.729",
+       "occurrenceDateTime":"2019-05-23T11:18:04.864",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"NHS_ADMIN_AD_REFERRALPAINDURATION",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#Q_BRP_BRP_AD_1"
+                      "reference":"#NHS_ADMIN_AD_REFERRALPAINDURATION"
                    }
                 }
              ],

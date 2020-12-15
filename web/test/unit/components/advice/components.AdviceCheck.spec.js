@@ -55,7 +55,7 @@ describe('Advice Check Menu', () => {
       ['Coronavirus', 0, { h2: 'Get advice about coronavirus', p: 'Find out what to do if you think you have coronavirus' }],
       ['Conditions and treatments', 1, { h2: 'Search conditions and treatments', p: 'Find trusted NHS information on hundreds of conditions' }],
       ['NHS 111 online', 2, { h2: 'Use NHS 111 online', p: 'Check if you need urgent help and find out what to do next' }],
-      ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Consult your GP through an online form. Your GP surgery will reply by phone or email' }],
+      ['CDSS GP advice', 3, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery' }],
       ['Engage GP advice', 4, { h2: 'Ask your GP for advice', p: 'Answer questions online and get a response from your GP surgery' }],
     ]).describe('%s menu item', (_, position, text) => {
       beforeEach(() => {

@@ -15,10 +15,10 @@ class OnlineConsultationsFactory {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.conditionsRequest().respondWithSuccess()
+            onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
+            onlineConsultationsMappingBuilder.conditionsRequest().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.genderRequest().respondWithSuccess()
@@ -34,6 +34,63 @@ class OnlineConsultationsFactory {
         }
     }
 
+    fun setUpOnlineConsultationsUnder18Message() {
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.youMustBeOver18().respondWithSuccess()
+        }
+    }
+
+    fun setupOnlineConsultationsDataChild(hasGpSession: Boolean = true, timeOut: Int = 0) {
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .conditionsRequest(hasGpSession, isChildCondition = true)
+                    .respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder.selfOrChildRequest(hasGpSession).respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .genderRequest(isChild = true)
+                    .respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .howWeCanHelpQuestion(isChild = true)
+                    .respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .dobQuestion(isChild = true)
+                    .respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .quantityQuestion(isChild = true)
+                    .respondWithSuccess()
+        }
+        mockingClient.forOnlineConsultations.mock {
+            onlineConsultationsMappingBuilder
+                    .carePlan(isChild = true)
+                    .delayedResponse(timeOut)
+        }
+    }
+
     fun setupOnlineConsultationsDataNonEmergency(hasGpSession: Boolean = true, timeOut: Int = 0) {
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
@@ -45,10 +102,10 @@ class OnlineConsultationsFactory {
             onlineConsultationsMappingBuilder.conditionsRequest(hasGpSession).respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
+            onlineConsultationsMappingBuilder.selfOrChildRequest(hasGpSession).respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.urgencyQuestion().respondWithSuccess()
+            onlineConsultationsMappingBuilder.urgencyQuestion(hasGpSession).respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.genderRequest(hasGpSession).respondWithSuccess()

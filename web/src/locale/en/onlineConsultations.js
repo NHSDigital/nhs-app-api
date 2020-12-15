@@ -1,7 +1,9 @@
 export default {
   conditions: {
     chooseYourCondition: 'To ensure we ask you relevant questions, choose your condition.',
+    chooseChildsCondition: 'To ensure we ask you relevant questions, choose your child\'s condition.',
     iCannotFindMyCondition: 'I cannot find my condition',
+    iCannotFindMyChildsCondition: 'I cannot find my child\'s condition',
   },
   demographics: {
     checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',

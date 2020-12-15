@@ -48,6 +48,7 @@ describe('Admin Help page', () => {
           adminProviderName: 'eConsult Health Ltd',
           error,
           demographicsQuestionAnswered,
+          serviceDefinitionId: 'NHS_ADMIN',
         },
         pageLeaveWarning: {
           shouldSkipDisplayingLeavingWarning: false,
@@ -94,6 +95,10 @@ describe('Admin Help page', () => {
 
       it('will dispatch onlineConsultations/serviceDefinitionIsValid with provider as argument', () => {
         expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+      });
+
+      it('will dispatch onlineConsultations/setServiceDefinitionId with service id', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/setServiceDefinitionId', 'NHS_ADMIN');
       });
 
       it('will not emit any update header events', () => {

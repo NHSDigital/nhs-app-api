@@ -1,33 +1,63 @@
-package mocking.onlineConsultations.configurations.evaluate
+package mocking.onlineConsultations.configurations.evaluate.childJourney
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
-    override val request  = """{
+class GenderQuestionChildConfiguration: IQuestionConfiguration {
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
-             "name":"sessionId",
-             "valueString":"1"
+             "name":"organization",
+             "resource":{
+                "resourceType":"Organization",
+                "identifier":[
+                   {
+                      "value":"A29928"
+                   }
+                ]
+             }
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_SEX"
+                   "reference":"Questionnaire/GLO_PRE_DISCLAIMERS"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"PRE_STD_AD_SEX",
+                      "linkId":"GLO_PRE_DISCLAIMERS",
                       "answer":[
                          {
                             "valueCoding":{
-                               "code":"PRE_STD_AD_SEX_M"
+                               "code":"GLO_PRE_DISCLAIMERS_1"
                             }
                          }
                       ]
+                   }
+                ]
+             }
+          },
+          {
+             "name":"patient",
+             "resource":{
+                "resourceType":"Patient",
+                "identifier":[
+                   {
+                      "system":"https://fhir.nhs.uk/Id/nhs-number",
+                      "value":"{{nhsNumber}}"
+                   }
+                ],
+                "name":[
+                   {
+                        "text" : "{{name}} {{familyName}}"
+                   }
+                ],
+                "birthDate":"{{dob}}",
+                "address":[
+                   {
+                      "text":"{{address}}"
                    }
                 ]
              }
@@ -35,8 +65,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {
@@ -45,18 +74,17 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
+                   "valueString":"1"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"PRE_STD_AD_SEX",
              "status":"active",
              "item":[
                 {
-                   "linkId":"Q_BRP_BRP_AD_1_GROUP",
-                   "text":"",
+                   "linkId":"PRE_STD_AD_SEX_GROUP",
                    "type":"group",
                    "item":[
                       {
@@ -64,7 +92,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                             {
                                "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                                "valueCodeableConcept":{
-                                  "id":"backButton",
+                                  "id":"codeableConcept",
                                   "coding":[
                                      {
                                         "system":"http://hl7.org/fhir/ValueSet/questionnaire-item-control",
@@ -76,44 +104,53 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"Q_BRP_BRP_AD_1_PREV",
-                         "text":"",
-                         "type":"boolean",
+                         "linkId":"PRE_STD_AD_SEX_PREV",
+                         "type":"choice",
                          "required":false
                       },
                       {
-                         "extension":[
+                         "linkId":"PRE_STD_AD_SEX",
+                         "text":"Tell us your child's gender",
+                         "type":"choice",
+                         "required":true,
+                         "repeats":false,
+                         "option":[
                             {
-                               "url":"http://hl7.org/fhir/StructureDefinition/maxLength",
-                               "valueInteger":500
+                               "valueCoding":{
+                                  "code":"PRE_STD_AD_SEX_F",
+                                  "display":"Female"
+                               }
+                            },
+                            {
+                               "valueCoding":{
+                                  "code":"PRE_STD_AD_SEX_M",
+                                  "display":"Male"
+                               }
                             }
-                         ],
-                         "linkId":"Q_BRP_BRP_AD_1",
-                         "text":"Please tell us in a few words how we can help.",
-                         "type":"text",
-                         "required":true
+                         ]
                       }
                    ]
                 }
              ]
           }
        ],
+       "requestId":"1",
        "module":{
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T11:32:01.729",
+       "occurrenceDateTime":"2019-05-23T11:06:54.969",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"PRE_STD_AD_SEX",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#Q_BRP_BRP_AD_1"
+                      "reference":"#PRE_STD_AD_SEX"
                    }
                 }
              ],

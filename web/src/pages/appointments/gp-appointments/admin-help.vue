@@ -21,6 +21,7 @@
           <p>{{ $t('appointments.adminHelp.itTakesAroundFiveMinutes') }}</p>
           <p>{{ $t('appointments.adminHelp.toSaveYouTypingIn') }}</p>
         </demographics-question>
+        <condition-list v-else-if="conditionsList" :service-definitions="conditionsList"/>
         <orchestrator v-else :provider="provider" :service-definition-id="serviceDefinitionId"/>
       </template>
     </div>
@@ -33,6 +34,7 @@ import Orchestrator from '@/components/online-consultations/Orchestrator';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
+import ConditionList from '@/components/online-consultations/ConditionList';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 import { LOGIN_PATH } from '@/router/paths';
 
@@ -44,17 +46,23 @@ export default {
     OnlineConsultationsUnavailable,
     Orchestrator,
     DemographicsQuestion,
+    ConditionList,
   },
   data() {
     return {
       provider: this.$store.state.serviceJourneyRules.rules.cdssAdmin.provider,
-      serviceDefinitionId: this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition,
       available: undefined,
     };
   },
   computed: {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
+    },
+    serviceDefinitionId() {
+      return this.$store.state.onlineConsultations.serviceDefinitionId;
+    },
+    conditionsList() {
+      return this.$store.state.onlineConsultations.conditionsList;
     },
     isError() {
       return this.$store.state.onlineConsultations.error;
@@ -68,6 +76,8 @@ export default {
   },
   async created() {
     await this.$store.dispatch('onlineConsultations/serviceDefinitionIsValid', this.provider);
+    this.$store.dispatch('onlineConsultations/setServiceDefinitionId',
+      this.$store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition);
 
     if (this.$store.state.onlineConsultations.available === undefined) {
       // unable to get available status due to API error

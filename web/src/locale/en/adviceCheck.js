@@ -9,7 +9,7 @@ export default {
   findTrustedNhsInformation: 'Find trusted NHS information on hundreds of conditions',
   gpAdvice: {
     askYourGpForAdvice: 'Ask your GP for advice',
-    consultThroughOnlineForm: 'Consult your GP through an online form. Your GP surgery will reply by phone or email',
+    consultThroughOnlineForm: 'Answer questions online and get a response from your GP surgery. You may be able to get advice for your child if it\'s available at your surgery',
     askYouGpForAdvice: 'Ask your GP for advice',
     ifTheProblemPersists111: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
     ifTheProblemPersistsOneOneOne: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',

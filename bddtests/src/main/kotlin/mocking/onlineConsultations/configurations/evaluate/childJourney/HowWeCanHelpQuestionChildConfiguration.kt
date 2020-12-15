@@ -1,8 +1,8 @@
-package mocking.onlineConsultations.configurations.evaluate
+package mocking.onlineConsultations.configurations.evaluate.childJourney
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
+class HowWeCanHelpQuestionChildConfiguration: IQuestionConfiguration {
     override val request  = """{
        "resourceType":"Parameters",
        "parameter":[
@@ -89,7 +89,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                             }
                          ],
                          "linkId":"Q_BRP_BRP_AD_1",
-                         "text":"Please tell us in a few words how we can help.",
+                         "text":"Please tell us what symptoms your child is showing.",
                          "type":"text",
                          "required":true
                       }

@@ -30,6 +30,10 @@ class MicrotestPatients {
             throw InvalidArgumentException("Not implemented for MICROTEST")
         }
 
+        override fun getPatientUnder18(): Patient {
+            throw InvalidArgumentException("Not implemented for MICROTEST")
+        }
+
         private val eldsonBuleckIm1ConnectionToken = Im1ConnectionToken(
                 "6pqW/zJEGD5kZ7Zo9J8z1qeIi8LgU7kibAU40CtvjIjWcmQlELqVGhrDZBiAmogsR6LAy9CM4rKVn9nxWrCYmw==",
                 nhsNumber = MicrotestMockDefaults.DEFAULT_NHS_NUMBER

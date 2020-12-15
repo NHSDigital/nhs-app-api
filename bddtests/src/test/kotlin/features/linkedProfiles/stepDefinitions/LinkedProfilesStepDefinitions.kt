@@ -93,21 +93,15 @@ class LinkedProfilesStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = PatientHandler.getForSupplier(supplier).getPatientWithNoLinkedProfiles()
         SerenityHelpers.setGpSupplier(supplier)
+        setupAndLogIn(patient, supplier, false)
+    }
 
-        SerenityHelpers.setPatient(patient)
-
-        CitizenIdSessionCreateJourney().createFor(patient)
-        SessionCreateJourneyFactory
-                .getForSupplier(supplier)
-                .createFor(patient)
-        TermsAndConditionsJourneyFactory.consent(patient)
-
-        DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabled(patient)
-
-        browser.goToApp()
-        login.using(patient)
+    @Given("^I am logged in as a (.*) user under 18")
+    fun iAmLoggedInAsAPatientUnder18(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientUnder18()
+        SerenityHelpers.setGpSupplier(supplier)
+        setupAndLogIn(patient, supplier, false)
     }
 
     @Given("^I have switched to a linked profile$")
@@ -118,22 +112,30 @@ class LinkedProfilesStepDefinitions {
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
     }
 
-    private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
-        setup(patient, gpSystem)
+    private fun setupAndLogIn(patient: Patient, gpSystem: Supplier, hasProxyAccounts: Boolean = true) {
+        setup(patient, gpSystem, hasProxyAccounts)
         browser.goToApp()
         login.using(patient)
     }
 
-    private fun setup(patient: Patient, gpSystem: Supplier) {
+    private fun setup(patient: Patient, gpSystem: Supplier, hasProxyAccounts: Boolean = true) {
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory
                 .getForSupplier(gpSystem)
                 .createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
-        DemographicsFactory
-                .getForSupplier(gpSystem)
-                .enableForPatientProxyAccounts(patient)
+
+        if (hasProxyAccounts) {
+            DemographicsFactory
+                    .getForSupplier(gpSystem)
+                    .enableForPatientProxyAccounts(patient)
+        } else {
+            DemographicsFactory
+                    .getForSupplier(gpSystem)
+                    .enabled(patient)
+        }
+
     }
 
     @Given("^the GP Practice has enabled all medical records for the proxy patient$")

@@ -1,31 +1,29 @@
-package mocking.onlineConsultations.configurations.evaluate
+package mocking.onlineConsultations.configurations.evaluate.childJourney
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
-    override val request  = """{
+class DOBQuestionChildConfiguration: IQuestionConfiguration {
+    override val request = """{
        "resourceType":"Parameters",
        "parameter":[
           {
              "name":"sessionId",
-             "valueString":"1"
+             "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_SEX"
+                   "reference":"Questionnaire/Q_BRP_BRP_AD_1"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"PRE_STD_AD_SEX",
+                      "linkId":"Q_BRP_BRP_AD_1",
                       "answer":[
                          {
-                            "valueCoding":{
-                               "code":"PRE_STD_AD_SEX_M"
-                            }
+                            "valueString":"My child has a bad cough and a sore throat"
                          }
                       ]
                    }
@@ -35,8 +33,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
        ]
     }"""
 
-
-    override val response: String = """{
+    override val response = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {
@@ -45,17 +42,17 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
+                   "valueString":"4ea9390f-f6f2-410b-8d46-39b37a6a1753"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"PRE_STD_AD_DOB",
              "status":"active",
              "item":[
                 {
-                   "linkId":"Q_BRP_BRP_AD_1_GROUP",
+                   "linkId":"PRE_STD_AD_DOB_GROUP",
                    "text":"",
                    "type":"group",
                    "item":[
@@ -76,7 +73,7 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"Q_BRP_BRP_AD_1_PREV",
+                         "linkId":"PRE_STD_AD_DOB_PREV",
                          "text":"",
                          "type":"boolean",
                          "required":false
@@ -84,14 +81,40 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
                       {
                          "extension":[
                             {
-                               "url":"http://hl7.org/fhir/StructureDefinition/maxLength",
-                               "valueInteger":500
+                               "url":"http://hl7.org/fhir/StructureDefinition/minValue",
+                               "valueDate":"1894-02-26"
+                            },
+                            {
+                               "url":"http://hl7.org/fhir/StructureDefinition/maxValue",
+                               "valueDate":"2002-02-25"
+                            },
+                            {
+                               "url":"http://hl7.org/fhir/StructureDefinition/entryFormat",
+                               "valueString":"You must be between 18 and 125 years old in order to 
+                                    complete this request"
                             }
                          ],
-                         "linkId":"Q_BRP_BRP_AD_1",
-                         "text":"Please tell us in a few words how we can help.",
-                         "type":"text",
+                         "linkId":"PRE_STD_AD_DOB",
+                         "text":"Tell us your childs date of birth",
+                         "type":"date",
                          "required":true
+                      }
+                   ]
+                }
+             ]
+          },
+          {
+             "resourceType":"QuestionnaireResponse",
+             "questionnaire":{
+                "reference":"Questionnaire/PRE_STD_AD_DOB"
+             },
+             "status":"completed",
+             "item":[
+                {
+                   "linkId":"PRE_STD_AD_DOB",
+                   "answer":[
+                      {
+                         "valueDate":"2004-02-01"
                       }
                    ]
                 }
@@ -102,18 +125,18 @@ class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T11:32:01.729",
+       "occurrenceDateTime":"2020-02-25T12:38:00.885",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"Q_BRP_BRP_AD_1",
+             "id":"PRE_STD_AD_DOB",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#Q_BRP_BRP_AD_1"
+                      "reference":"#PRE_STD_AD_DOB"
                    }
                 }
              ],

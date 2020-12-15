@@ -30,6 +30,10 @@ class VisionPatients {
             throw InvalidArgumentException("Not implemented for VISION")
         }
 
+        override fun getPatientUnder18(): Patient {
+            throw InvalidArgumentException("Not implemented for VISION")
+        }
+
         private val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
                 im1CacheKey = "aHQMSopfOJlA5vk4zLJJfKEynO8ApadWcwZExxmhfXll0Eahv" +
                         "bnqSg6GEL6h2vjze3egwyTNIp68Q5GT5o3CAg==",

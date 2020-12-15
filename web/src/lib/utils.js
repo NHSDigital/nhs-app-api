@@ -16,6 +16,8 @@ const protocol = 'http://';
 const secureProtocol = 'https://';
 export const GP_SESSION_ERROR_STATUS = 599;
 export const CONSENT_NOT_GIVEN_DESCRIPTION = 'ConsentNotGiven';
+export const CHILD_DEFAULT_SERVICE_DEFINITION = 'PCI_UWC__T';
+export const ADULT_DEFAULT_SERVICE_DEFINITION = 'GEC_GEN__F';
 
 const customMimeTypes = new Mime({
   'image/bmp': ['dib'],

@@ -2,7 +2,7 @@ package mocking.onlineConsultations.configurations.evaluate
 
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class ConditionsConfigurations: IQuestionConfiguration {
+class ChildConditions: IQuestionConfiguration {
   override val request  = """{
     "resourceType":"Parameters",
     "parameter":[
@@ -24,7 +24,7 @@ class ConditionsConfigurations: IQuestionConfiguration {
                    "answer": [
                        {
                            "valueCoding": {
-                               "code": "PRE_POV_SELF"
+                               "code": "PRE_POV_CHILD"
                            }
                        }
                    ]
@@ -45,6 +45,7 @@ class ConditionsConfigurations: IQuestionConfiguration {
      } 
     ]
  }"""
+
     override val response: String = """{
        "resourceType":"GuidanceResponse",
        "contained":[
@@ -61,114 +62,24 @@ class ConditionsConfigurations: IQuestionConfiguration {
                    "item":[
                       {
                          "linkId":"BRP_BRP",
-                         "text":"Breathing problems",
+                         "text":"Breathing problems for child",
                          "type":"boolean",
                          "required":false
                       },
                    ]
                 },
                 {
-                   "linkId":"EYE",
-                   "text":"Eye problems",
+                   "linkId":"TEST_CONDITION",
+                   "text":"Test child condition",
                    "type":"group",
                    "required":false,
                    "item":[
                       {
-                         "linkId":"EYE_CNJ",
-                         "text":"Conjunctivitis",
+                         "linkId":"TEST_CONDITION",
+                         "text":"Test child condition",
                          "type":"boolean",
                          "required":false
                       },
-                   ]
-                },
-                {
-                   "linkId":"GBS",
-                   "text":"Gut, bowel & stomach",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"GBS_DAV",
-                         "text":"Gastroenteritis",
-                         "type":"boolean",
-                         "required":false
-                      },
-                   ]
-                },
-                {
-                   "linkId":"JTP",
-                   "text":"Joint pain",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"JTP_SPN",
-                         "text":"Shoulder pain",
-                         "type":"boolean",
-                         "required":false
-                      },
-                   ]
-                },
-                {
-                   "linkId":"LTC",
-                   "text":"Long term conditions",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"LTC_HYT",
-                         "text":"Hypertension review",
-                         "type":"boolean",
-                         "required":false
-                      }
-                   ]
-                },
-                {
-                   "linkId":"MHL",
-                   "text":"Men's health",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"MHL_CYS",
-                         "text":"Bladder infection in men",
-                         "type":"boolean",
-                         "required":false
-                      },
-                   ]
-                },
-                {
-                   "linkId":"MLL",
-                   "text":"Mental health",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"MLL_ANX",
-                         "text":"Anxiety",
-                         "type":"boolean",
-                         "required":false
-                      },
-                   ]
-                },
-                {
-                   "linkId":"WHL",
-                   "text":"Women's health",
-                   "type":"group",
-                   "required":false,
-                   "item":[
-                      {
-                         "linkId":"WHL_BVG",
-                         "text":"Bacterial vaginosis",
-                         "type":"boolean",
-                         "required":false
-                      },
-                      {
-                         "linkId":"WHL_VAD",
-                         "text":"Vaginal discharge",
-                         "type":"boolean",
-                         "required":false
-                      }
                    ]
                 }
              ]
@@ -179,13 +90,13 @@ class ConditionsConfigurations: IQuestionConfiguration {
             "status": "active",
             "item": [
                 {
-                    "linkId": "GEC",
+                    "linkId": "PCI_UWC",
                     "text": "General Advice",
                     "type": "group",
                     "required": false,
                     "item": [
                         {
-                            "linkId": "GEC_GEN__F",
+                            "linkId": "PCI_UWC__T",
                             "text": "General Advice",
                             "type": "boolean",
                             "required": false

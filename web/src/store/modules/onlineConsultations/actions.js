@@ -9,12 +9,14 @@ import {
   getQuestionnaireResponseAnswers,
   getAllIssues,
   getQuestionnaireId,
+  getSelfOrChild,
 } from '@/lib/online-consultations/mappers/response';
-import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
-import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
+import { getQuestion, getConditionsList, getGeneralServiceDefinition } from '@/lib/online-consultations/mappers/item';
+import { getParameters, getAnswerFromItem, getInputDataParameter } from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
 import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
 import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
+import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 import {
   CLEAR,
   SET_SESSION_ID,
@@ -43,6 +45,13 @@ import {
   SET_CONDITIONS_LIST,
   SET_JOURNEY_INFO,
   SET_IS_AVAILABLE,
+  SET_SELF_OR_CHILD_REQUIRED,
+  SET_SELF_OR_CHILD_INPUT_DATA,
+  SET_DISCLAIMER_INPUT_DATA,
+  SET_SERVICE_DEFINITION_ID,
+  SET_CHILD_JOURNEY_SELECTED,
+  SET_DEFAULT_CONDITION,
+  SET_PRE_DOB,
 } from './mutation-types';
 
 const initialiseLeaveWarnings = (store) => {
@@ -61,6 +70,9 @@ const initialiseLeaveWarnings = (store) => {
     return browserString;
   };
 };
+
+const selfOrChildIds = ['PRE_POV_SELF', 'PRE_POV_CHILD'];
+const dobAnswerIds = ['PRE_DOB_PARENT', 'PRE_DOB_SELF'];
 
 const isTermsAndConditions = (parameters) => {
   if (typeof parameters !== 'object') {
@@ -118,7 +130,7 @@ export default {
       rootState.serviceJourneyRules.rules, serviceDefinitionId,
     );
 
-    return store.app.$httpV2.postV2CdssServiceDefinitionByProvider({
+    return store.app.$httpV3.postV3CdssServiceDefinitionByProvider({
       serviceDefinitionMetaData: {
         id: serviceDefinitionId,
         type: serviceDefinitionType,
@@ -167,6 +179,7 @@ export default {
       addJavascriptDisabledHeader,
       answeringConditionsQuestion,
     } = params;
+
     const serviceDefinitionType = getServiceDefinitionType(
       rootState.serviceJourneyRules.rules, serviceDefinitionId,
     );
@@ -201,7 +214,24 @@ export default {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
 
-    return store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate(
+    if (state.answer && Array.isArray(state.answer) && state.answer[0] === 'GLO_PRE_DISCLAIMERS_1') {
+      requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
+      const inputData = getInputDataParameter(state);
+      commit(SET_DISCLAIMER_INPUT_DATA, { name: inputData.name, resource: inputData.resource });
+    }
+
+    if (state.answer && ((Array.isArray(state.answer) && state.answer[0] === 'PRE_POV_SELFONLY_SELF') ||
+        selfOrChildIds.includes(state.answer))) {
+      const inputData = getInputDataParameter(state);
+      commit(SET_SELF_OR_CHILD_INPUT_DATA,
+        { name: inputData.name, resource: inputData.resource });
+    }
+
+    if (state.answer === 'PRE_POV_CHILD') {
+      commit(SET_CHILD_JOURNEY_SELECTED, true);
+    }
+
+    return store.app.$httpV3.postV3CdssServiceDefinitionByProviderEvaluate(
       requestParams,
     ).then((response) => {
       commit(CLEAR);
@@ -214,17 +244,33 @@ export default {
       commit(SET_STATUS, status);
 
       if (status === DATA_REQUIRED) {
+        const dataRequirements = getDataRequirements(response);
+
+        if (dataRequirements !== undefined) {
+          commit(SET_DATA_REQUIREMENTS, dataRequirements);
+        }
+
         const sessionId = getSessionId(response);
         const questionnaire = getQuestionnaire(response, getQuestionnaireId(response));
         const question = getQuestion(getQuestionnaireItem(response));
         const conditionsList = getConditionsList(questionnaire);
+
+        // The default condition if the user cannot find a condition relevant
+        // to them from the conditions list
+        const defaultCondition = getQuestionnaire(response, 'DEFAULT_CONDITION');
+
         const isConditionsQuestion = questionnaire.id ===
           rootState.serviceJourneyRules.rules.cdssAdvice.conditionsServiceDefinition;
         const issues = getAllIssues(response);
         const previousQuestion = getQuestion(getPreviousQuestion(response));
         const previousAnswers = getQuestionnaireResponseAnswers(response);
+        const selfOrChildAnswerRequired = getSelfOrChild(response);
 
-        if ((sessionId === undefined || question === undefined) && conditionsList === undefined) {
+        if ((sessionId === undefined ||
+            question === undefined) &&
+          question &&
+          !dobAnswerIds.includes(question.id) &&
+          conditionsList === undefined) {
           showError(store);
           return;
         }
@@ -232,6 +278,13 @@ export default {
         commit(SET_SESSION_ID, sessionId);
         commit(SET_PREVIOUS_QUESTION, previousQuestion);
         if (isConditionsQuestion) {
+          // The default condition will not exist if user is too young
+          let defaultConditionLinkId = '';
+          if (defaultCondition) {
+            defaultConditionLinkId = getGeneralServiceDefinition(defaultCondition);
+          }
+
+          commit(SET_DEFAULT_CONDITION, defaultConditionLinkId);
           commit(SET_CONDITIONS_LIST, conditionsList);
         } else {
           commit(SET_QUESTION, question);
@@ -239,10 +292,28 @@ export default {
         if (issues !== undefined) {
           commit(SET_VALIDATION_ERROR_FROM_RESPONSE, issues);
         }
-        if (previousAnswers !== undefined) {
-          const answersFormatted = getAnswerFromItem(question, previousAnswers);
-          commit(SET_ANSWER, answersFormatted, question.type);
+
+        if (previousAnswers) {
+          if ((previousAnswers.linkId === 'PRE_DOB_SELF') ||
+              previousAnswers.linkId === 'PRE_DOB_PARENT') {
+            state.question = {
+              id: previousAnswers.linkId,
+              type: QuestionTypes.DATE_AS_STRING,
+            };
+            state.answer = previousAnswers.answer[0].valueDate;
+            state.answerIsEmpty = false;
+
+            commit(SET_PRE_DOB, getInputDataParameter(state));
+          } else {
+            const answersFormatted = getAnswerFromItem(question, previousAnswers);
+            commit(SET_ANSWER, answersFormatted, question.type);
+          }
         }
+
+        if (selfOrChildAnswerRequired) {
+          commit(SET_SELF_OR_CHILD_REQUIRED, selfOrChildAnswerRequired);
+        }
+
         return;
       }
 
@@ -333,5 +404,8 @@ export default {
   },
   setJourneyInfo({ commit }, journeyInfo) {
     commit(SET_JOURNEY_INFO, journeyInfo);
+  },
+  setServiceDefinitionId({ commit }, id) {
+    commit(SET_SERVICE_DEFINITION_ID, id);
   },
 };

@@ -8,6 +8,7 @@ import models.Patient
 import models.PatientAge
 import models.PatientContactDetails
 import models.PatientName
+import org.openqa.selenium.InvalidArgumentException
 import worker.models.patient.Im1ConnectionToken
 
 class TppPatients {
@@ -40,6 +41,10 @@ class TppPatients {
             }
             patient.updateOdsCodes(targetOdsCode)
             updateUnitId(patient, targetOdsCode)
+        }
+
+        override fun getPatientUnder18(): Patient {
+            throw InvalidArgumentException("Not implemented for TPP")
         }
 
         private val kevinBarryIm1ConnectionToken = Im1ConnectionToken(

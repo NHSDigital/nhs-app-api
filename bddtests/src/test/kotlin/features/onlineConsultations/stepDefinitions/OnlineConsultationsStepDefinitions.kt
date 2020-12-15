@@ -36,6 +36,16 @@ open class OnlineConsultationsStepDefinitions {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency()
     }
 
+    @Given("^I have access to online consultations gp advice journey for my child$")
+    fun iHaveAccessToOnlineConsultationsForMyChild() {
+        onlineConsultationsFactory.setupOnlineConsultationsDataChild()
+    }
+
+    @Given("I have access to the child journey when I am under 18$")
+    fun iHaveAccessToChildJourneyWhenUnder18() {
+        onlineConsultationsFactory.setUpOnlineConsultationsUnder18Message()
+    }
+
     @Given("^I have access to online consultations gp advice journey and the response is delayed by (.*) seconds$")
     fun iHaveAccessToOnlineConsultationsNonEmergencyDelayedResponse(seconds: Int) {
         val timeOut = seconds * MILLISECONDS_IN_A_SECOND
@@ -59,6 +69,11 @@ open class OnlineConsultationsStepDefinitions {
         answerQuestionAndContinue(elementId = OnlineConsultationConstants.MALE_GENDER_CHOICE)
     }
 
+    @When("^I select my childs gender and click continue$")
+    fun iSelectMyChildsGender(){
+        answerQuestionAndContinue(elementId = OnlineConsultationConstants.MALE_GENDER_CHOICE)
+    }
+
     @When("^I click the end my consultation button$")
     fun iClickTheEndMyConsultationButton(){
         onlineConsultationsPage.endMyConsultationButtonClicked()
@@ -76,6 +91,12 @@ open class OnlineConsultationsStepDefinitions {
         continueClicked()
     }
 
+    @When("^I am submitting the questionnaire for my child$")
+    fun iAmSubmittingTheQuestionnaireForChild() {
+        onlineConsultationsPage.clickFormElement(id = OnlineConsultationConstants.CHILD_CHOICE)
+        continueClicked()
+    }
+
     @When("^I am not in an emergency$")
     fun iAmNotInAnEmergency(){
         answerQuestionAndContinue(elementId = OnlineConsultationConstants.NON_EMERGENCY_CHOICE)
@@ -86,6 +107,14 @@ open class OnlineConsultationsStepDefinitions {
         onlineConsultationsPage.insertText("textarea",
                                            OnlineConsultationConstants.HOW_CAN_WE_HELP_TEXTFIELD,
                                            "I need medication for my sore throat")
+        continueClicked()
+    }
+
+    @When("^I insert my childs symptoms and click continue$")
+    fun iInsertMyChildsSymptoms() {
+        onlineConsultationsPage.insertText("textarea",
+                OnlineConsultationConstants.HOW_CAN_WE_HELP_TEXTFIELD,
+                "My child has a bad cough and a sore throat")
         continueClicked()
     }
 
@@ -102,6 +131,12 @@ open class OnlineConsultationsStepDefinitions {
         continueClicked()
     }
 
+    @When("^I insert my childs date of birth$")
+    fun iInsertMyChildsDateOfBirth(){
+        onlineConsultationsPage.checkDateOfBirthPopulated("2004-02-01")
+        continueClicked()
+    }
+
     @When("^I select how much alcohol I drink weekly$")
     fun iSelectAlcoholAmount(){
         answerQuestionAndContinue(elementId=OnlineConsultationConstants.ALCOHOL_CHOICE)
@@ -114,14 +149,32 @@ open class OnlineConsultationsStepDefinitions {
         continueClicked()
     }
 
+    @When("^I insert how long my child has had symptoms$")
+    fun iInsertHowLongMyChildHasHadSymptoms() {
+        onlineConsultationsPage.insertText(id=OnlineConsultationConstants.QUANTITY_NUMBER_INPUT, text="5")
+        onlineConsultationsPage.selectUnit("days")
+        continueClicked()
+    }
+
     @Then("^I see advice on what to do next$")
     fun iSeeAdviceOnWhatToDoNext(){
         onlineConsultationsPage.iSeeAdviceOnWhatToDoNext()
     }
 
-    @Then("^I see a care plan$")
-    fun iSeeACarePlan(){
-        onlineConsultationsPage.iSeeACarePlan()
+    @Then("^I see a message informing me I am too young$")
+    fun iSeeAMessageThatIAmTooYoung() {
+        onlineConsultationsPage.iSeeAMessageForTooYoung()
+    }
+
+    @Then("^I see a care plan for (myself|my child)$")
+    fun iSeeACarePlanForMyChild(type: String) {
+        onlineConsultationsPage.iSeeACarePlan(type)
+    }
+
+    @Then("^I see a condition list for (myself|my child)$")
+    fun iSeeAConditionList(type: String) {
+        onlineConsultationsPage.iSeeTheConditionListTitle(type)
+        onlineConsultationsPage.iSeeTheCannotFindConditionLink(type)
     }
 
     @Then("^I see the online consultations unavailable message for (gp advice|admin help)$")

@@ -36,28 +36,52 @@ describe('online consultations mappers parameters', () => {
     };
   });
 
-  describe('answer is valid', () => {
-    describe('organization is a data requirement', () => {
-      it('will add organization parameter', () => {
-        // Arrange
-        state.answerIsValid = true;
-        state.dataRequirements = { organization: true };
+  describe('status is data-required', () => {
+    beforeEach(() => {
+      state.status = DATA_REQUIRED;
+      state.question = {
+        id: 'test',
+      };
+    });
 
-        // Act
-        const parameters = getParameters(state, rootState);
+    describe('answer is valid', () => {
+      describe('organization is a data requirement', () => {
+        it('will add organization parameter', () => {
+          // Arrange
+          state.answerIsValid = true;
+          state.dataRequirements = { organization: true };
 
-        // Assert
-        const organizationParameter = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER)[0];
-        expect(organizationParameter.resource.resourceType).toEqual(ORGANIZATION_RESOURCE);
-        expect(organizationParameter.resource.identifier.value).toEqual(rootState.session.gpOdsCode);
+          // Act
+          const parameters = getParameters(state, rootState);
+
+          // Assert
+          const organizationParameter = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER)[0];
+          expect(organizationParameter.resource.resourceType).toEqual(ORGANIZATION_RESOURCE);
+          expect(organizationParameter.resource.identifier.value).toEqual(rootState.session.gpOdsCode);
+        });
+      });
+
+      describe('organization is not a data requirement', () => {
+        it('will not add organization parameter', () => {
+          // Arrange
+          state.answerIsValid = true;
+          state.dataRequirements = { organization: false };
+
+          // Act
+          const parameters = getParameters(state, rootState);
+
+          // Assert
+          const organizationParameters = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER);
+          expect(organizationParameters).toHaveLength(0);
+        });
       });
     });
 
-    describe('organization is not a data requirement', () => {
-      it('will not add organization parameter', () => {
+    describe('answer is invalid', () => {
+      each([true, false]).it('will not add organization parameter', (organizationRequired) => {
         // Arrange
-        state.answerIsValid = true;
-        state.dataRequirements = { organization: false };
+        state.answerIsValid = false;
+        state.dataRequirements = { organization: organizationRequired };
 
         // Act
         const parameters = getParameters(state, rootState);
@@ -66,27 +90,6 @@ describe('online consultations mappers parameters', () => {
         const organizationParameters = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER);
         expect(organizationParameters).toHaveLength(0);
       });
-    });
-  });
-
-  describe('answer is invalid', () => {
-    each([true, false]).it('will not add organization parameter', (organizationRequired) => {
-      // Arrange
-      state.answerIsValid = false;
-      state.dataRequirements = { organization: organizationRequired };
-
-      // Act
-      const parameters = getParameters(state, rootState);
-
-      // Assert
-      const organizationParameters = parameters.parameter.filter(p => p.name === ORGANIZATION_PARAMETER);
-      expect(organizationParameters).toHaveLength(0);
-    });
-  });
-
-  describe('status is data-required', () => {
-    beforeEach(() => {
-      state.status = DATA_REQUIRED;
     });
 
     it('will add the current consultation session id as a parameter', () => {
@@ -131,6 +134,55 @@ describe('online consultations mappers parameters', () => {
         // Assert
         const inputDataParameter = parameters.parameter.filter(p => p && p.name === INPUT_DATA)[0];
         expect(inputDataParameter).toEqual(defaultInputData);
+      });
+
+      it('will add self or child input data if required', () => {
+        // Arrange
+        state.selfOrChildRequired = true;
+        state.selfOrChildInputData = {
+          name: 'test',
+          resource: {},
+        };
+        state.question = { id: 'test' };
+
+        // Act
+        const parameters = getParameters(state, rootState);
+
+        // Assert
+        const selfOrChildInputData = parameters.parameter.filter(p => p && p.name === 'test')[0];
+        expect(selfOrChildInputData).toEqual({ name: 'test', resource: {} });
+      });
+
+      it('will add disclaimer input data for parent dob question', () => {
+        // Arrange
+        state.disclaimerInputData = {
+          name: 'test',
+          resource: {},
+        };
+        state.question = { id: 'PRE_DOB_PARENT' };
+
+        // Act
+        const parameters = getParameters(state, rootState);
+
+        // Assert
+        const selfOrChildInputData = parameters.parameter.filter(p => p && p.name === 'test')[0];
+        expect(selfOrChildInputData).toEqual({ name: 'test', resource: {} });
+      });
+
+      it('will add disclaimer input data for self dob question', () => {
+        // Arrange
+        state.disclaimerInputData = {
+          name: 'test',
+          resource: {},
+        };
+        state.question = { id: 'PRE_DOB_SELF' };
+
+        // Act
+        const parameters = getParameters(state, rootState);
+
+        // Assert
+        const selfOrChildInputData = parameters.parameter.filter(p => p && p.name === 'test')[0];
+        expect(selfOrChildInputData).toEqual({ name: 'test', resource: {} });
       });
 
       describe('answer is not empty', () => {
