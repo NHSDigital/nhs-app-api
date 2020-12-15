@@ -320,25 +320,11 @@ spec:
           value: "Microsoft.ApplicationInsights.Profiler.AspNetCore"
         {{- end }}
         - name: AUDIT_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.api.mongoDatabaseAuditCollection }}
-        - name: AUDIT_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: FAKE_GP_USERS_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: VERSION_TAG
           value: "{{ $.Values.api.image_tag }}"
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.organDonationStubbed)) }}

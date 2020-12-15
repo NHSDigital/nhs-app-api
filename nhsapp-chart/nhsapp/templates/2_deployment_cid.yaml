@@ -165,19 +165,11 @@ spec:
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: AUDIT_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.cid.mongoDatabaseAuditCollection }}
         - name: FAKE_GP_USERS_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: FAKE_GP_SUPPLIER_CONFIG_PATH
           value: "/app/FakeGpSupplierConfig.yml"
         - name: IM1CACHE_MONGO_DATABASE_NAME
