@@ -1,0 +1,57 @@
+parameters:
+  - name: working_directory
+    type: string
+  - name: target_url
+    type: string
+  - name: test_folder_path
+    type: string
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
+    inputs:
+      packageType: sdk
+      version: 3.1.x
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet restore
+    inputs:
+      command: restore
+      projects: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
+      feedsToUse: 'config'
+      nugetConfigPath: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nuget.config'
+      includeNuGetOrg: true
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish Integration Tests
+    inputs:
+      command: 'publish'
+      version: '3.1.x'
+      projects: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
+      publishWebProjects: false
+      zipAfterPublish: false
+      arguments: "--configuration Release -o Publish"
+
+  - task: DotNetCoreCLI@2
+    displayName: Execute integration tests
+    inputs:
+      command: 'custom'
+      custom: vstest
+      arguments: >
+        ${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.dll
+        --logger:"trx;LogFileName=${{ parameters.working_directory }}/IntegrationTests/Tests.trx"
+        --settings:${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/test.runsettings
+        -- TestRunParameters.Parameter(name="\""ApplicationUrl"\"",value="\""${{ parameters.target_url }}"\"")
+        -- TestRunParameters.Parameter(name="\""ApigeeApiKey"\"",value="\""$(CLIENT_ID)"\"")
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results ${{ parameters.working_directory }}/IntegrationTests/Tests.trx'
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '${{ parameters.working_directory }}/IntegrationTests/Tests.trx'
+      mergeTestResults: true
+      testRunTitle: 'Integration Tests'
+    continueOnError: true
+    condition: succeededOrFailed()
+    
