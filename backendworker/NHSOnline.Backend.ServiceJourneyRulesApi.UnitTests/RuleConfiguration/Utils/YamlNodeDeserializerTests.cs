@@ -15,7 +15,7 @@ using YamlDotNet.Serialization;
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils
 {
     [TestClass]
-    public sealed class YamlNodeDeserializerTests : IDisposable
+    public sealed class YamlNodeDeserializerTests
     {
         private IFixture _fixture;
         private YamlNodeDeserializer _yamlNodeDeserializer;
@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
 
         private Mock<IParser> _mockReader;
         private Mock<IParser> _mockNodeParser;
-        private StringReader _stringReader;
 
         private string _baseIncludePath;
         private string _tag;
@@ -68,7 +67,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_WhenUnsupportedModelSpecified_ThrowsInvalidOperationException()
         {
-            SetupMocks<object>();
+            using var mocks = SetupMocks<object>();
 
             Deserialize(out _);
 
@@ -79,7 +78,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [ExpectedException(typeof(FileNotFoundException))]
         public void Deserialize_WhenReaderThrowsFileNotFoundException_ThrowsFileNotFoundException()
         {
-            SetupMocks<PublicHealthNotification>(useMissingFile: true, throwsFileNotFound: true);
+            using var mocks = SetupMocks<PublicHealthNotification>(useMissingFile: true, throwsFileNotFound: true);
 
             Deserialize(out _);
 
@@ -93,10 +92,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             bool parsingEventIsNull,
             bool hasValidTag)
         {
-            SetupMocks<PublicHealthNotification>(parsingEventIsNull, hasValidTag);
+            using var mocks = SetupMocks<PublicHealthNotification>(parsingEventIsNull, hasValidTag);
 
             var deserialized = Deserialize(out var value);
-            
+
             Assert.IsNull(value);
             Assert.IsFalse(deserialized);
         }
@@ -104,10 +103,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [TestMethod]
         public void Deserialize_HappyPath_ReturnsDeserializedValueAndTrue()
         {
-            SetupMocks<PublicHealthNotification>();
-            
+            using var mocks = SetupMocks<PublicHealthNotification>();
+
             var deserialized = Deserialize(out var value);
-            
+
             Assert.IsNotNull(value);
             Assert.AreSame(_expectedDeserializedResponse, value);
             Assert.IsTrue(deserialized);
@@ -115,13 +114,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             VerifyAll();
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _stringReader?.Dispose();
-        }
-
-        private void SetupMocks<T>(
+        private IDisposable SetupMocks<T>(
             bool parsingEventIsNull = false,
             bool useValidTag = true,
             bool useMissingFile = false,
@@ -129,44 +122,45 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             var modelName = typeof(T).Name;
             var fileName = useMissingFile ? NonExistingFileName : ExistingFileName;
-            
+
             var tag = useValidTag ? _tag : _fixture.Create<string>();
             var value = $"{modelName}s/{fileName}";
-            
-            var fullFileName = Path.Join(_baseIncludePath,$"{value}.yaml");
-            
-            MockTextReaderBuilder(fullFileName, throwsFileNotFound);
-            MockParserBuilder();
+
+            var fullFileName = Path.Join(_baseIncludePath, $"{value}.yaml");
+
+            var stringReader = MockTextReaderBuilder(fullFileName, throwsFileNotFound);
+            MockParserBuilder(stringReader);
             MockDeserializer<T>();
             CreateReader(parsingEventIsNull, tag, value);
+
+            return stringReader;
         }
 
-        private void MockTextReaderBuilder(string fullFileName, bool throwsFileNotFound)
+        private StringReader MockTextReaderBuilder(string fullFileName, bool throwsFileNotFound)
         {
-            _stringReader = new StringReader(fullFileName);
+            var stringReader = new StringReader(fullFileName);
 
             var setup = _mockStringReaderBuilder
-                .Setup(s => s
-                    .GetReader(It.Is<string>(
-                        text => text.Equals(fullFileName, StringComparison.Ordinal))));
+                .Setup(s => s.GetReader(It.Is<string>(text => text.Equals(fullFileName, StringComparison.Ordinal))));
 
             if (throwsFileNotFound)
             {
-                setup.Throws<FileNotFoundException>()
-                    .Verifiable();
-                return;
+                setup.Throws<FileNotFoundException>().Verifiable();
             }
-            
-            setup.Returns(_stringReader)
-                .Verifiable();
+            else
+            {
+                setup.Returns(stringReader).Verifiable();
+            }
+
+            return stringReader;
         }
 
-        private void MockParserBuilder()
+        private void MockParserBuilder(StringReader stringReader)
         {
             _mockParserBuilder
                 .Setup(p => p
                     .GetParser(
-                        It.Is<TextReader>(r => r == _stringReader)))
+                        It.Is<TextReader>(r => r == stringReader)))
                 .Returns(_mockNodeParser.Object)
                 .Verifiable();
         }
@@ -205,11 +199,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockStringReaderBuilder.Verify();
             _mockParserBuilder.Verify();
             _mockDeserializer.Verify();
-        }
-
-        public void Dispose()
-        {
-            TestCleanup();
         }
     }
 }

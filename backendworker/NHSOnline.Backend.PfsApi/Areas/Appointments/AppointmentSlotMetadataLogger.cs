@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
@@ -34,20 +35,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         
         internal class AppointmentSlotsInformation
         {
-            public string[] SlotTypes { get; }
-            public string[] SessionNames { get; }
-            public string[] Locations { get; }
-            public Slot[] Slots { get; }
+            public IReadOnlyList<string> SlotTypes { get; }
+            public IReadOnlyList<string> SessionNames { get; }
+            public IReadOnlyList<string> Locations { get; }
+            public IReadOnlyList<Slot> Slots { get; }
             public string Supplier { get; }
             public string OdsCode { get; }
             public bool HasBookingGuidance { get; }
             public string BookingGuidance { get;  }
 
             public AppointmentSlotsInformation(
-                string[] slotTypes, 
-                string[] sessionNames, 
-                string[] locations,
-                Slot[] slots, 
+                IReadOnlyList<string> slotTypes,
+                IReadOnlyList<string> sessionNames,
+                IReadOnlyList<string> locations,
+                IReadOnlyList<Slot> slots, 
                 string supplier, 
                 string odsCode,
                 string bookingGuidance)
@@ -131,13 +132,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             var today = _dateTimeProvider.Today;
             
             var appointmentSlotsValue =
-                new AppointmentSlotsValue(today, appointmentSlotsInformation.SlotTypes.Length);
+                new AppointmentSlotsValue(today, appointmentSlotsInformation.SlotTypes.Count);
             
             CapturedAppointmentTypes.TryGetValue(appointmentSlotsInformation.OdsCode, out var existingValue);
             
             if (existingValue == null || 
                 existingValue.CurrentDate.Date != today ||
-                existingValue.SlotTypeCount < appointmentSlotsInformation.SlotTypes.Length)
+                existingValue.SlotTypeCount < appointmentSlotsInformation.SlotTypes.Count)
 
             {
                 CapturedAppointmentTypes.AddOrUpdate(appointmentSlotsInformation.OdsCode, appointmentSlotsValue,

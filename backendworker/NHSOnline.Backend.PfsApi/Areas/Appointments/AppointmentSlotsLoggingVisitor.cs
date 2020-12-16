@@ -17,9 +17,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             public string Supplier { get; }
             public string OdsCode { get; }
-            public string[] SlotTypes { get; }
-            public string[] SlotTypesFromGpSystem { get; }
-            public string[] Locations { get; }
+            public IReadOnlyList<string> SlotTypes { get; }
+            public IReadOnlyList<string> SlotTypesFromGpSystem { get; }
+            public IReadOnlyList<string> Locations { get; }
             public int SlotCount { get; }
             public int? FurthestSlotDays { get; }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace NHSOnline.Backend.Support
 {
@@ -100,8 +101,7 @@ namespace NHSOnline.Backend.Support
                     public const string Tpic = "tpic";
                 }
 
-                public static readonly List<string> ImageTypes = new List<string>
-                {
+                public static readonly ImmutableList<string> ImageTypes = ImmutableList.Create(
                     ImageType.Bmp,
                     ImageType.Dib,
                     ImageType.Gif,
@@ -113,8 +113,7 @@ namespace NHSOnline.Backend.Support
                     ImageType.Tiff,
                     ImageType.Png,
                     ImageType.Tga,
-                    ImageType.Tpic
-                };
+                    ImageType.Tpic);
 
                 public static class DocumentType
                 {
@@ -125,13 +124,11 @@ namespace NHSOnline.Backend.Support
                     public const string Dot = "dot";
                 }
 
-                public static readonly List<string> DocumentTypes = new List<string>
-                {
+                public static readonly ImmutableList<string> DocumentTypes = ImmutableList.Create(
                     DocumentType.Doc,
                     DocumentType.Docx,
                     DocumentType.Docm,
-                    DocumentType.Dot
-                };
+                    DocumentType.Dot);
 
                 public static class TextType
                 {
@@ -139,13 +136,11 @@ namespace NHSOnline.Backend.Support
                     public const string Rtf = "rtf";
                 }
 
-                public static readonly List<string> TextTypes = new List<string>
-                {
+                public static readonly ImmutableList<string> TextTypes = ImmutableList.Create(
                     TextType.Txt,
-                    TextType.Rtf
-                };
+                    TextType.Rtf);
 
-                public static readonly Dictionary<string, string> DocumentMimeTypes = new Dictionary<string, string>
+                public static readonly IReadOnlyDictionary<string, string> DocumentMimeTypes = new Dictionary<string, string>
                 {
                     { DocumentType.Pdf, "application/pdf" },
                     { ImageType.Bmp, "image/bmp" },
@@ -168,8 +163,7 @@ namespace NHSOnline.Backend.Support
                     { TextType.Txt, "text/plain"}
                 };
 
-                public static readonly List<string> WhiteListTypes = new List<string>
-                {
+                public static readonly ImmutableList<string> WhiteListTypes = ImmutableList.Create(
                     ImageType.Bmp,
                     ImageType.Dib,
                     ImageType.Gif,
@@ -186,11 +180,9 @@ namespace NHSOnline.Backend.Support
                     DocumentType.Dot,
                     DocumentType.Pdf,
                     TextType.Txt,
-                    TextType.Rtf
-                };
+                    TextType.Rtf);
 
-                public static readonly List<string> TppViewableWhiteListTypes = new List<string>
-                {
+                public static readonly ImmutableList<string> TppViewableWhiteListTypes = ImmutableList.Create(
                     ImageType.Bmp,
                     ImageType.Dib,
                     ImageType.Gif,
@@ -198,8 +190,7 @@ namespace NHSOnline.Backend.Support
                     ImageType.Jpeg,
                     ImageType.Jpe,
                     ImageType.Jfif,
-                    ImageType.Png,
-                };
+                    ImageType.Png);
             }
 
             public const string ImageHtmlFormat =

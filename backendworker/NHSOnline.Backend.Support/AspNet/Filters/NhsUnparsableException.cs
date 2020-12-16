@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 {
     public class NhsUnparsableException : FormatException
     {
-        public List<NhsUnparsableExceptionError> ErrorMessages { get; }
+        public IReadOnlyCollection<NhsUnparsableExceptionError> ErrorMessages { get; }
 
         public NhsUnparsableException()
         {

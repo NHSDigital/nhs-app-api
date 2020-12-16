@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
@@ -18,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments
 
         private class CancellationReasonsInformation
         {
-            public string[] CancellationReasons { get; }
+            public IReadOnlyList<string> CancellationReasons { get; }
 
             public string Supplier { get; }
 
@@ -77,13 +78,13 @@ namespace NHSOnline.Backend.GpSystems.Appointments
         private static bool ShouldBeLogged(CancellationReasonsInformation cancellationReasonsInformation)
         {
             var cancellationReasonsValue =
-                new CancellationReasonsValue(DateTime.Today, cancellationReasonsInformation.CancellationReasons.Length);
+                new CancellationReasonsValue(DateTime.Today, cancellationReasonsInformation.CancellationReasons.Count);
 
             CapturedCancellationReasons.TryGetValue(cancellationReasonsInformation.OdsCode, out var existingValue);
 
             if (existingValue == null ||
                 existingValue.CurrentDate.Date != DateTime.Today.Date ||
-                existingValue.ReasonCount < cancellationReasonsInformation.CancellationReasons.Length)
+                existingValue.ReasonCount < cancellationReasonsInformation.CancellationReasons.Count)
             {
                 CapturedCancellationReasons.AddOrUpdate(cancellationReasonsInformation.OdsCode,
                     cancellationReasonsValue,
