@@ -45,6 +45,7 @@ users:
 
 splunk:
   pidIndex: apppid_nhsapp_dev
+  specialCategoryIndex: appspecialcategory_nhsapp_dev
 
 qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"

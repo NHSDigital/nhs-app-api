@@ -75,6 +75,7 @@ patientPracticeMessagingEnabled: false
 
 splunk:
   pidIndex: apppid_nhsapp_prod
+  specialCategoryIndex: appspecialcategory_nhsapp_prod
 
 qualtricsBaseUrl: "https://nhsdigital.eu.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"

@@ -7,6 +7,11 @@ metadata:
   labels:
     app: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}
     version: {{ .Chart.AppVersion | quote }}
+  annotations:
+    collectord.io/api--logs-override.1-match: '(?i)NhsNumber'
+    collectord.io/api--logs-override.1-index: {{ $.Values.splunk.pidIndex }}
+    collectord.io/api--logs-override.2-match: Action=(AppointmentBookResult|AppointmentCancelResult)
+    collectord.io/api--logs-override.2-index: {{ $.Values.splunk.specialCategoryIndex }}
 spec:
   selector:
     matchLabels:
@@ -21,8 +26,6 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "true"
         rolleveryrelease: {{ randAlphaNum 5 | quote }}
-        collectord.io/api--logs-override.1-match: '(?i)NhsNumber'
-        collectord.io/api--logs-override.1-index: {{ $.Values.splunk.pidIndex }}
     spec:
       affinity:
         podAntiAffinity:
