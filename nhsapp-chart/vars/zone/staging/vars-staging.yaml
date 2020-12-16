@@ -14,8 +14,6 @@ secrets:
         notificationHubSecretName: "notificationHubSharedAccessKey"
         notificationHubSecretVersion: "fd7cde94adc149ee88f96ef7168bba5f"
 
-SPLUNK_URL: "https://51.105.37.116:8088/services/collector/event/1.0"
-
 wildcardEnv: true
 
 addAppointmentToCalendarEnabled: true
@@ -150,6 +148,9 @@ metrics:
   memoryLimit: "120Mi"
   cpuRequest: "3m"
   cpuLimit: "30m"
+
+splunk:
+  pidIndex: apppid_nhsapp_staging
 
 qualtricsBaseUrl: "https://env.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_21oowrmextjSJqb"

@@ -21,6 +21,8 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "true"
         rolleveryrelease: {{ randAlphaNum 5 | quote }}
+        collectord.io/api--logs-override.1-match: '(?i)NhsNumber'
+        collectord.io/api--logs-override.1-index: {{ $.Values.splunk.pidIndex }}
     spec:
       affinity:
         podAntiAffinity:

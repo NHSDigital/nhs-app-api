@@ -14,8 +14,6 @@ secrets:
         notificationHubSecretName: "notificationHubSharedAccessKey"
         notificationHubSecretVersion: "a6635ca8e4464192a85c3d29b00d5c59"
 
-SPLUNK_URL: "https://51.145.12.117:8088/services/collector/event/1.0"
-
 addAppointmentToCalendarEnabled: true
 
 cidHostname: auth.login.nhs.uk
@@ -74,6 +72,9 @@ organDonationClientId: ODR-26-NHSAP
 organDonationDataExpirySeconds: 86400
 
 patientPracticeMessagingEnabled: false
+
+splunk:
+  pidIndex: apppid_nhsapp_prod
 
 qualtricsBaseUrl: "https://nhsdigital.eu.qualtrics.com/API/v3/"
 qualtricsDirectoryId: "POOL_3f8iG2TIImtgHLn"
