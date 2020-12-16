@@ -8,6 +8,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         where TEnum: struct, IConvertible
     {
         [JsonConverter(typeof(StringEnumConverter), false)]
-        public TEnum? Provider { get; set; }
+        public TEnum Provider { get; set; }
     }
 }

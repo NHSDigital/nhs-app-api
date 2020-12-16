@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
     {
         public string Ods { get; set; }
 
-        public GpInfoSupplier Supplier { get; set; }
+        public GpInfoSupplier? Supplier { get; set; }
 
         public string EndpointCreated { get; set; }
         

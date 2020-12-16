@@ -260,7 +260,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .BeEquivalentTo(supplierConfiguration.Journeys.AddSupplier(Supplier.Microtest));
         }
 
-        private TargetConfiguration CreateTargetConfiguration(Supplier supplier = Supplier.Unknown,
+        private TargetConfiguration CreateTargetConfiguration(Supplier? supplier = null,
             string odsCode = null, List<string> odsCodes = null, string ccgCode = null, string all = null)
         {
             return new TargetConfiguration

@@ -80,14 +80,23 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.UserInfo.HasValue, "journeys.UserInfo")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.SupportsLinkedProfiles.HasValue, "journeys.SupportsLinkedProfiles")
-                .Add((odsCode, journeys) => journeys.Supplier != Supplier.Unknown || odsCode == Constants.OdsCode.None,
-                    "journeys.Supplier");
+                .Add(ValidSupplier, "journeys.Supplier");
 
             AddSilverIntegrationValidations(journeysValidator);
             AddIm1MessagingValidations(journeysValidator);
             AddHomeScreenValidations(journeysValidator);
 
             return journeysValidator;
+
+            static bool ValidSupplier(string odsCode, Journeys journeys)
+            {
+                if (journeys.Supplier.HasValue && journeys.Supplier != Supplier.Unknown)
+                {
+                    return true;
+                }
+
+                return journeys.Supplier == null && odsCode == Constants.OdsCode.None;
+            }
         }
 
         private static void AddSilverIntegrationValidations(JourneysValidator journeysValidator)

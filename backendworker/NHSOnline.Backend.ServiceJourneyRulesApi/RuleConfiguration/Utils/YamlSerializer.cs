@@ -11,12 +11,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         public YamlSerializer()
         {
             _serializer = new SerializerBuilder()
-                .WithNamingConvention(new CamelCaseNamingConvention())
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
                 .Build();
         }
 
         public void Serialize<TModel>(TextWriter writer, TModel model)
             where TModel : class, new()
             => _serializer.Serialize(writer, model);
+
     }
 }

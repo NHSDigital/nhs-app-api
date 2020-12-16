@@ -15,6 +15,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 
         public string CcgCode { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public Supplier? Supplier { get; set; }
     }
 }

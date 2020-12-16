@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         {
             var targets = GetTargets(gpInfos, configuration.Target);
 
-            return targets.ToDictionary(t => t.Ods, t => configuration.Journeys.Clone().AddSupplier((Supplier)t.Supplier));
+            return targets.ToDictionary(t => t.Ods, t => configuration.Journeys.Clone().AddSupplier(t.Supplier.ToSupplier()));
         }
 
         private static IEnumerable<GpInfo> GetTargets(IDictionary<string, GpInfo> gpInfos, Target target)
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                         string.Equals(i.Value.CcgCode, target.CcgCode, StringComparison.Ordinal));
                     break;
                 case var _ when target.Supplier != default:
-                    gpInfoTargets = gpInfoTargets.Where(i => (int) i.Value.Supplier == (int) target.Supplier);
+                    gpInfoTargets = gpInfoTargets.Where(i => i.Value.Supplier.ToSupplier() == target.Supplier);
                     break;
             }
 

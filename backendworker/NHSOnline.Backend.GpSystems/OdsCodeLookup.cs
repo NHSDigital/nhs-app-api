@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems
                 var rules = await _serviceJourneyRulesClient.GetServiceJourneyRules(odsCode);
                 if(rules.HasSuccessResponse && rules.Body?.Journeys != null)
                 {
-                    return rules.Body.Journeys.Supplier;
+                    return rules.Body.Journeys.Supplier ?? Supplier.Unknown;
                 }
 
                 return Supplier.Unknown;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var camelCaseNamingConvention = new CamelCaseNamingConvention();
+            var camelCaseNamingConvention = CamelCaseNamingConvention.Instance;
 
             services.AddTransient<IServiceJourneyRulesService, ServiceJourneyRulesService>();
             services.AddTransient<IProcessState, ProcessState>();
@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             
             services.AddSingleton(new SerializerBuilder()
                 .WithNamingConvention(camelCaseNamingConvention)
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
                 .JsonCompatible()
                 .Build());
             services.AddSingleton(Assembly.GetExecutingAssembly());

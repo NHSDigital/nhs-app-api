@@ -40,15 +40,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
         public bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
         {
-            var scalar = reader.Peek<Scalar>();
-
-            if (scalar == null || !_tag.Equals(scalar.Tag, StringComparison.Ordinal))
+            if (reader.Accept<Scalar>(out var scalar) &&
+                _tag.Equals(scalar.Tag, StringComparison.Ordinal))
             {
-                value = null;
-                return false;
+                return DeserializeNode(reader, scalar, out value);
             }
 
-            return DeserializeNode(reader, scalar, out value);
+            value = null;
+            return false;
         }
 
         private bool DeserializeNode(IParser reader, Scalar scalar, out object value)

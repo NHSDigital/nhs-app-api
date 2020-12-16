@@ -4,7 +4,9 @@ using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NodeDeserializers;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {
@@ -45,6 +47,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         {
             return _deserializerBuilder
                 .WithTagMapping(_tag, typeof(object))
+                .WithNodeDeserializer(new NullableEnumScalarNodeDeserializer(), x => x.InsteadOf<ScalarNodeDeserializer>())
                 .WithNodeDeserializer(
                     new YamlNodeDeserializer(
                         _deserializerBuilder.Build(),
@@ -56,6 +59,35 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
                         _serviceProvider.GetService<ILogger<YamlNodeDeserializer>>()),
                     x => x.OnTop())
                 .Build();
+        }
+
+        private sealed class NullableEnumScalarNodeDeserializer : INodeDeserializer
+        {
+            private readonly INodeDeserializer _scalarNodeDeserializer = new ScalarNodeDeserializer();
+
+            public bool Deserialize(IParser parser, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
+            {
+                // Accept looks at the current value but does not consume it so it is still available for the ScalarNodeDeserializer
+                if (!parser.Accept<Scalar>(out var scalar))
+                {
+                    value = null;
+                    return false;
+                }
+
+                // YamlDotNet 9.1.1 does not correctly handle deserialization of nullable enums
+                // https://github.com/aaubry/YamlDotNet/issues/544
+                var underlyingType = Nullable.GetUnderlyingType(expectedType) ?? expectedType;
+                if (underlyingType.IsEnum)
+                {
+                    // Consume the current token
+                    parser.MoveNext();
+
+                    value = Enum.Parse(underlyingType, scalar.Value, true);
+                    return true;
+                }
+
+                return _scalarNodeDeserializer.Deserialize(parser, expectedType, nestedObjectDeserializer, out value);
+            }
         }
     }
 }

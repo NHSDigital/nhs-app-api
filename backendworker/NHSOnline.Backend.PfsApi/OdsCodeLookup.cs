@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRules.Common;
 using NHSOnline.Backend.Support;
@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi
                 var rules = await _serviceJourneyRulesClient.GetServiceJourneyRules(odsCode);
                 if(rules.HasSuccessResponse && rules.Body?.Journeys != null)
                 {
-                    return rules.Body.Journeys.Supplier;
+                    return rules.Body.Journeys.Supplier ?? Supplier.Unknown;
                 }
 
                 return Supplier.Unknown;

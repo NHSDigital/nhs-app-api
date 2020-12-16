@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
            return new YamlReader<TModel>(
                 FilePath, 
                 schemaData,
-                new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build(),
+                new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build(),
                 _mockLogger.Object,
                 _mockYamlToJsonConverter.Object,
                 _mockSchemaValidator.Object,

@@ -43,12 +43,12 @@ namespace NHSOnline.Backend.PfsApi.Session
             return await _auditor.Audit()
                 .AccessToken(citizenIdSessionResult.Session.AccessToken)
                 .NhsNumber(citizenIdSessionResult.NhsNumber)
-                .Supplier(serviceJourneyRules.Journeys.Supplier)
+                .Supplier(serviceJourneyRules.Journeys.Supplier ?? Supplier.Unknown)
                 .Operation(AuditingOperations.GpSessionCreate)
                 .Details("Attempting to create Session")
                 .Execute(() => CreateP9UserSession(
                     citizenIdSessionResult,
-                    serviceJourneyRules.Journeys.Supplier,
+                    serviceJourneyRules.Journeys.Supplier ?? Supplier.Unknown,
                     citizenIdSessionResult.Session.OdsCode,
                     csrfToken));
         }
