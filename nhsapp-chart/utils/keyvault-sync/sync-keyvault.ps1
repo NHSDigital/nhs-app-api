@@ -28,7 +28,7 @@ function Export-Secret {
 function Sync-Secret {
   param($Config, $Secret)
 
-  Write-Host "Syncing secrets from $($Config.source) to $($Config.dest)"
+  Write-Host -ForegroundColor Yellow "Attempting to add secret '$($Secret.Name)' to destination keyvault '$($Config.source)'"
 
   if (Get-AzKeyVaultSecret -VaultName $Config.dest -Name $Secret.Name -ErrorAction SilentlyContinue) {
     if (-Not $Config.overwriteExisting) {
@@ -36,16 +36,27 @@ function Sync-Secret {
     }
   }
 
-  Set-AzKeyVaultSecret -VaultName $Config.dest `
-    -Name $Secret.Name `
-    -Expires $Secret.Expires `
-    -NotBefore $Secret.NotBefore `
-    -ContentType $Secret.ContentType `
-    -Tags $Secret.Tags `
-    -SecretValue $Secret.SecretValue `
-    -WhatIf:$Config.dryRun
+  try {
+    $secretParams = @{
+      VaultName =  $Config.dest;
+      Name =  $Secret.Name;
+      Expires =  $Secret.Expires;
+      NotBefore =  $Secret.NotBefore;
+      ContentType =  $Secret.ContentType;
+      Tags =  $Secret.Tags;
+      SecretValue =  $Secret.SecretValue
+    }
 
-  Write-Host -ForegroundColor Green "Secret '$($Secret.Name)' synced to destination keyvault '$($Config.dest)'"
+    Set-AzKeyVaultSecret @secretParams -WhatIf:$Config.dryRun
+  
+    Write-Host -ForegroundColor Green "Secret '$($Secret.Name)' added to destination keyvault '$($Config.dest)'"
+  } catch {
+    if (-Not $Config.ignoreAddSecretErrors) {
+      throw $_.Exception
+    }
+
+    Write-Host -ForegroundColor Red "Error adding secret '$($Secret.Name)' to destination keyvault '$($Config.dest)':`n$($_.Exception.Message)"
+  }
 }
 
 function Sync-Secrets {
@@ -53,9 +64,17 @@ function Sync-Secrets {
 
   Write-Host "Syncing secrets from $($Config.source) to $($Config.dest)"
 
-  $Config.secrets `
-    | ForEach-Object { Export-Secret -VaultName $Config.source -SecretName $_ } `
-    | ForEach-Object { Sync-Secret -Config $Config -Secret $_ }
+  $secrets = $Config.secrets
+
+  if ($secrets.GetType().Name -eq "String" -and $secrets.ToLower().Trim() -eq "all") {
+    $secrets = Get-AzKeyVaultSecret -VaultName $Config.source | Select-Object -ExpandProperty Name
+  }
+
+  foreach ($secretName in $secrets) {
+    $secret = Export-Secret -VaultName $Config.source -SecretName $secretName
+
+    Sync-Secret -Config $Config -Secret $secret
+  }
 }
 
 function Export-Cert {
@@ -63,10 +82,12 @@ function Export-Cert {
 
   Write-Host "Exporting certificate '${CertName}' from source keyvault '${VaultName}'"
 
-  $kvSecret = Export-Secret -VaultName $VaultName -SecretName $CertName `
-    | Select-Object -ExpandProperty SecretValue `
-    | ConvertFrom-SecureString -AsPlainText
+  $exportParams = @{
+    VaultName = $VaultName;
+    SecretName = $CertName
+  }
 
+  $kvSecret = Export-Secret @exportParams | Select-Object -ExpandProperty SecretValue | ConvertFrom-SecureString -AsPlainText
   $kvSecretBytes = [System.Convert]::FromBase64String($kvSecret)
 
   $certCollection = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
@@ -86,14 +107,25 @@ function Sync-Cert {
 
   $certCollection = Export-Cert -VaultName $Config.source -CertName $Cert.Name 
 
-  Write-Host "Importing certificate '$($Cert.Name)' to destination keyvault '$($Config.source)'"
+  Write-Host -ForegroundColor Yellow "Attempting to import certificate '$($Cert.Name)' to destination keyvault '$($Config.source)'"
 
-  Import-AzKeyVaultCertificate -VaultName $Config.dest `
-    -Name $Cert.Name `
-    -CertificateCollection $certCollection `
-    -WhatIf:$Config.dryRun
+  try {
+    $importParams = @{
+      VaultName = $Config.dest;
+      Name = $Cert.Name;
+      CertificateCollection = $certCollection
+    }
 
-  Write-Host -ForegroundColor Green "Certificate '$($Cert.Name)' synced to destination keyvault '$($Config.dest)'"
+    Import-AzKeyVaultCertificate @importParams -WhatIf:$Config.dryRun
+
+    Write-Host -ForegroundColor Green "Certificate '$($Cert.Name)' synced to destination keyvault '$($Config.dest)'"
+  } catch {
+    if (-Not $Config.ignoreCertImportErrors) {
+      throw $_.Exception
+    }
+
+    Write-Host -ForegroundColor Red "Error importing cert '$($Cert.Name)' into destination keyvault '$($Config.dest)':`n$($_.Exception.Message)"
+  }
 }
 
 function Sync-Certs {
@@ -101,9 +133,17 @@ function Sync-Certs {
 
   Write-Host "Syncing certificates from $($Config.source) to $($Config.dest)"
 
-  $Config.certs `
-    | ForEach-Object { Get-AzKeyVaultCertificate -VaultName $Config.source -Name $_ } `
-    | ForEach-Object { Sync-Cert -Config $Config -Cert $_ }
+  $certs = $Config.certs
+
+  if ($certs.GetType().Name -eq "String" -and $certs.ToLower().Trim() -eq "all") {
+    $certs = Get-AzKeyVaultCertificate -VaultName $Config.source | Select-Object -ExpandProperty Name
+  }
+
+  foreach ($certName in $certs) {
+    $cert = Get-AzKeyVaultCertificate -VaultName $Config.source -Name $certName
+
+    Sync-Cert -Config $Config -Cert $cert
+  }
 }
 
 function Main {
@@ -111,11 +151,8 @@ function Main {
 
   $config = Get-Content -Raw -Path $configPath | ConvertFrom-Yaml
 
-  if (-Not (Get-AzContext)) {
-    Write-Warning "You will now be asked to sign into Azure (context will be cached for future runs)"
-
-    Connect-AzAccount
-  }
+  Write-Warning "You will now be asked to sign into Azure"
+  Connect-AzAccount -UseDeviceAuthentication
 
   Sync-Certs -Config $config
   Sync-Secrets -Config $config

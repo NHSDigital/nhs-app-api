@@ -1,14 +1,14 @@
 ---
 dryRun: true
 overwriteExisting: true
+# syncing both certs and secrets at once can cause conflicts 
+# when attempting to sync cert secrets, enable this flag to
+# ignore secret sync errors
+ignoreSecretSyncErrors: false
+ignoreCertImportErrors: false
 source: nhsapp-dev
-dest: nhsapp-staging
-secrets:
-  - emisPfx
-  - ndopPfx
-  - visionPfx
-certs:
-  - microtestPfx
-  - organdonationpfx
-  - spinePfx
-  - tppPfx
+dest: nhsapp-sandbox
+# either an array of secret names or 'all' to sync all secrets
+secrets: all
+# either an array of cert names or 'all' to sync all certs
+certs: all
