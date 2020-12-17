@@ -109,7 +109,6 @@ class PaycassoService(
 
             flowConfiguration.isDisplayDocumentPreview = true
             flowConfiguration.isDisplayCancelButton = true
-            flowConfiguration.receiveMrzData = true
 
             return flowConfiguration
         }

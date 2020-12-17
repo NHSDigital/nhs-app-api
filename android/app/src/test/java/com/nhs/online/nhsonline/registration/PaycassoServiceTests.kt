@@ -1,6 +1,5 @@
 package com.nhs.online.nhsonline.registration
 
-import android.util.Log
 import com.nhaarman.mockitokotlin2.*
 import com.nhs.online.nhsonline.data.*
 import com.nhs.online.nhsonline.interfaces.IPaycassoFlow
@@ -12,17 +11,18 @@ import com.paycasso.sdk.api.flow.model.FlowConfiguration
 import com.paycasso.sdk.api.flow.model.SessionTokenCredentials
 import com.paycasso.sdk.api.flow.view.ViewConfiguration
 import com.paycasso.sdk.api.flow.view.configuration.*
+import com.paycasso.sdk.api.flow.view.configuration.enums.ConfigurationSide
 import com.paycasso.sdk.api.flow.view.configuration.enums.DocumentConfigurationSide
-import com.paycasso.sdk.api.flow.view.configuration.enums.EChipScreenType
-import com.paycasso.sdk.api.flow.view.configuration.enums.PreviewConfigurationSide
-import com.paycasso.view.*
-import com.paycasso.view.nhs.*
+import com.paycasso.view.nhs.capturecontrol.PassportCaptureControlFragment
+import com.paycasso.view.nhs.documentpreview.FrontDocumentPreviewFragment
+import com.paycasso.view.nhs.finish.FinishTransitionFragment
+import com.paycasso.view.nhs.transition.PassportTransitionFragment
+
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import paycasso.TransactionData
 import java.util.HashMap
 
 @RunWith(RobolectricTestRunner::class)
@@ -54,7 +54,6 @@ class PaycassoServiceTests {
                 transactionReference = "transactionReference",
                 appUserId = "appUserId",
                 deviceId = "deviceId",
-                hasNfcJourney = false,
                 transactionType = "DocuSure"
             ),
             transactionDetails = PaycassoTransactionDetails(
@@ -95,12 +94,16 @@ class PaycassoServiceTests {
 
         // Setting up views
         val expectedDocumentPreviewViewFrontConfiguration = DocumentPreviewViewConfiguration()
-        expectedDocumentPreviewViewFrontConfiguration.previewSide = PreviewConfigurationSide.FRONT
-        expectedDocumentPreviewViewFrontConfiguration.screen = NhsDocumentPreviewViewFragment()
+        expectedDocumentPreviewViewFrontConfiguration.previewSide = ConfigurationSide.FRONT
+        expectedDocumentPreviewViewFrontConfiguration.screen = FrontDocumentPreviewFragment()
 
         val expectedDocumentViewConfiguration = DocumentViewConfiguration()
         expectedDocumentViewConfiguration.documentSide = DocumentConfigurationSide.FRONT
-        expectedDocumentViewConfiguration.screen = NhsPassportTransitionFragment()
+        expectedDocumentViewConfiguration.screen = PassportTransitionFragment()
+
+        val expectedDocumentCaptureControlConfiguration = DocumentCaptureControlViewConfiguration()
+        expectedDocumentCaptureControlConfiguration.documentSide = ConfigurationSide.FRONT
+        expectedDocumentCaptureControlConfiguration.screen = PassportCaptureControlFragment()
 
         val expectedDocumentPreviewConfigurationList = arrayListOf(
             expectedDocumentPreviewViewFrontConfiguration
@@ -110,6 +113,12 @@ class PaycassoServiceTests {
             expectedDocumentViewConfiguration
         )
 
+        val expectedDocumentCaptureControlConfigurationList = arrayListOf(
+            expectedDocumentCaptureControlConfiguration)
+
+        val documentCaptureControlViewConfigurations = HashMap<Int, List<DocumentCaptureControlViewConfiguration>>()
+        documentCaptureControlViewConfigurations[1] = expectedDocumentCaptureControlConfigurationList
+
         val documentPreviewViewConfigurations =
             HashMap<Int, List<DocumentPreviewViewConfiguration>>()
         documentPreviewViewConfigurations[1] = expectedDocumentPreviewConfigurationList
@@ -117,45 +126,14 @@ class PaycassoServiceTests {
         val documentViewConfigurations = HashMap<Int, List<DocumentViewConfiguration>>()
         documentViewConfigurations[1] = expectedDocumentViewConfigurationList
 
-        val faceViewConfiguration = FaceViewConfiguration()
-        faceViewConfiguration.screen = FaceTransitionFragment()
-
         val finishViewConfiguration = FinishViewConfiguration()
-        finishViewConfiguration.screen = NhsFinishTransitionFragment()
-
-        val eChipViewConfigurations = HashMap<EChipScreenType, EChipViewConfiguration>()
-        val configuration1 = EChipViewConfiguration()
-        configuration1.setScreenType(EChipScreenType.NO_NFC)
-        configuration1.setScreen(NhsEChipNoNfcFragment())
-
-        val configuration2 = EChipViewConfiguration()
-        configuration2.setScreenType(EChipScreenType.ERROR)
-        configuration2.setScreen(NhsEChipErrorFragment())
-
-        val configuration4 = EChipViewConfiguration()
-        configuration4.setScreenType(EChipScreenType.HINT)
-        configuration4.setScreen(NhsEChipHintFragment())
-
-        val configuration5 = EChipViewConfiguration()
-        configuration5.setScreenType(EChipScreenType.PROCESSING)
-        configuration5.setScreen(NhsEChipProcessingFragment())
-
-        val configuration6 = EChipViewConfiguration()
-        configuration6.setScreenType(EChipScreenType.MRZ_READING)
-        configuration6.setScreen(NhsEChipMrzReadingFragment())
-
-        eChipViewConfigurations[EChipScreenType.NO_NFC] = configuration1
-        eChipViewConfigurations[EChipScreenType.ERROR] = configuration2
-        eChipViewConfigurations[EChipScreenType.HINT] = configuration4
-        eChipViewConfigurations[EChipScreenType.PROCESSING] = configuration5
-        eChipViewConfigurations[EChipScreenType.MRZ_READING] = configuration6
+        finishViewConfiguration.screen = FinishTransitionFragment()
 
         val expectedViewConfiguration = ViewConfiguration()
         expectedViewConfiguration.documentPreviewViewConfigurations = documentPreviewViewConfigurations
-        expectedViewConfiguration.eChipViewConfigurations = eChipViewConfigurations
-        expectedViewConfiguration.faceViewConfiguration = faceViewConfiguration
         expectedViewConfiguration.documentViewConfigurations = documentViewConfigurations
         expectedViewConfiguration.finishViewConfiguration = finishViewConfiguration
+        expectedViewConfiguration.documentCaptureControlViewConfigurations = documentCaptureControlViewConfigurations
 
 
         paycassoService.start(paycassoData, success, failure)
@@ -191,17 +169,15 @@ class PaycassoServiceTests {
         Assert.assertTrue(flowConfigurationArgumentCaptor.firstValue.displayDocumentPreview)
 
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.finishViewConfiguration.screen
-                is NhsFinishTransitionFragment)
-        Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.faceViewConfiguration.screen
-                is FaceTransitionFragment)
+                is FinishTransitionFragment)
         Assert.assertEquals(viewConfigurationArgumentCaptor.firstValue.
             documentViewConfigurations[0]!![0].documentSide, DocumentConfigurationSide.FRONT)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.
-            documentViewConfigurations[0]!![0].screen is NhsPassportTransitionFragment)
+            documentViewConfigurations[0]!![0].screen is PassportTransitionFragment)
         Assert.assertEquals(viewConfigurationArgumentCaptor.firstValue.
-            documentPreviewViewConfigurations[0]!![0].previewSide, PreviewConfigurationSide.FRONT)
+            documentPreviewViewConfigurations[0]!![0].previewSide, ConfigurationSide.FRONT)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.
-            documentPreviewViewConfigurations[0]!![0].screen is NhsDocumentPreviewViewFragment)
+            documentPreviewViewConfigurations[0]!![0].screen is FrontDocumentPreviewFragment)
     }
     
     @Test
@@ -233,7 +209,6 @@ class PaycassoServiceTests {
             transactionReference = "transactionReference",
             appUserId = "appUserId",
             deviceId = "deviceId",
-            hasNfcJourney = false,
             transactionType = "DocuSure"
         )
         val documentConfigurations = arrayListOf(documentConfiguration)

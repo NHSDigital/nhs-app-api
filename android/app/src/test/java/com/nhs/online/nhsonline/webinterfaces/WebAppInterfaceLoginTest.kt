@@ -59,7 +59,6 @@ class WebAppInterfaceLoginTest {
             "transactionReference",
             "externalAppUserId",
             "externalDeviceId",
-            true,
             "DocuSure"
         )
         val transactionDetails = PaycassoTransactionDetails(

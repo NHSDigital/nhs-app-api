@@ -107,8 +107,7 @@ This section lists the different objects used as parameters in API methods and c
 | externalReferences.consumerReference    | String  | -                                                                               | Must be a non-empty string                        |
 | externalReferences.transactionReference | String  | -                                                                               | Must be a non-empty string                        |
 | externalReferences.appUserId            | String  | -                                                                               | Must be a non-empty string                        |
-| externalReferences.deviceId             | String  | -                                                                               | Must be a non-empty string                        |
-| externalReferences.hasNfcJourney        | Boolean | Do you want to attempt to scan an NFC chip in the journey? (biometric passport) | Must be present                                   |
+| externalReferences.deviceId             | String  | -                                                                               | Must be a non-empty string                        |                                  
 | externalReferences.transactionType      | String  | The type of user journey                                                        | One of: `InstaSure`, `VeriSure` or `DocuSure`     |
 | transactionDetails                      | Object  | User journey config                                                             | Must be non-null                                  |
 | transactionDetails.documentType         | String  | The type of document being requested from the user                              | One of: `DriversLicence`, `Passport` or `PhotoId` |

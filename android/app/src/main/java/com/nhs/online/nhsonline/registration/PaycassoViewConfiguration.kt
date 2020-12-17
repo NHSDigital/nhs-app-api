@@ -3,18 +3,21 @@ package com.nhs.online.nhsonline.registration
 import com.nhs.online.nhsonline.data.PaycassoDocumentType
 import com.nhs.online.nhsonline.data.PaycassoExternalReferences
 import com.paycasso.sdk.api.flow.builders.ViewConfigurationBuilder
-import com.paycasso.sdk.api.flow.enums.MrzLocation
 import com.paycasso.sdk.api.flow.enums.TransactionType
 import com.paycasso.sdk.api.flow.model.DocumentConfiguration
 import com.paycasso.sdk.api.flow.view.configuration.*
 import com.paycasso.sdk.api.flow.view.configuration.enums.DocumentConfigurationSide
-import com.paycasso.sdk.api.flow.view.configuration.enums.EChipScreenType
-import com.paycasso.sdk.api.flow.view.configuration.enums.PreviewConfigurationSide
+import com.paycasso.sdk.api.flow.view.configuration.enums.ConfigurationSide
 import com.paycasso.sdk.api.flow.view.screen.TransitionViewFragment
-import com.paycasso.sdk.api.flow.view.screen.base.ViewFragment
-import com.paycasso.view.FaceTransitionFragment
-import com.paycasso.view.nhs.*
-import java.util.*
+import com.paycasso.view.nhs.capturecontrol.BaseCaptureControlFragment
+import com.paycasso.view.nhs.capturecontrol.DlCaptureControlFragment
+import com.paycasso.view.nhs.capturecontrol.IdCaptureControlFragment
+import com.paycasso.view.nhs.capturecontrol.PassportCaptureControlFragment
+import com.paycasso.view.nhs.documentpreview.BackDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.FrontDocumentPreviewFragment
+import com.paycasso.view.nhs.finish.FinishTransitionFragment
+import com.paycasso.view.nhs.transition.*
+import kotlin.collections.ArrayList
 
 class PaycassoViewConfiguration(
     private val documentType: PaycassoDocumentType
@@ -29,7 +32,6 @@ class PaycassoViewConfiguration(
                 configurationList,
                 externalReferences.transactionType)
             PaycassoDocumentType.Passport -> getViewConfigurationBuilderPassport(
-                externalReferences.hasNfcJourney,
                 configurationList,
                 externalReferences.transactionType)
             PaycassoDocumentType.PhotoId -> getViewConfigurationBuilderId(
@@ -38,24 +40,28 @@ class PaycassoViewConfiguration(
             )
         }
 
-    private fun getViewConfigurationBuilderPassport(hasNfcJourney: Boolean = false,
-                                                    configurationList: ArrayList<DocumentConfiguration>,
+    private fun getViewConfigurationBuilderPassport(configurationList: ArrayList<DocumentConfiguration>,
                                                     transactionType: String): ViewConfigurationBuilder {
+
+        // Information screen for Passport
+        // In the passport journey we only scan the front of the passport
         val documentViewConfigurationList = arrayListOf(
-            getDocumentViewConfiguration(DocumentConfigurationSide.FRONT, NhsPassportTransitionFragment())
-        )
-        val documentPreviewViewConfigurationList = arrayListOf(
-            getDocumentPreviewConfiguration(PreviewConfigurationSide.FRONT)
+            getDocumentViewConfiguration(DocumentConfigurationSide.FRONT,
+                PassportTransitionFragment())
         )
 
-        if(hasNfcJourney) {
-            configurationList[0].echipPresence = true
-            configurationList[0].mrzLocation = MrzLocation.FRONT
-        }
+        // 'Check the picture' screen
+        val documentPreviewViewConfigurationList = arrayListOf(
+            getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+        )
+
+        // Overlay on camera
+        val frontDocumentSide = getCaptureControlConfiguration(ConfigurationSide.FRONT,
+            PassportCaptureControlFragment())
         
 
         return setupConfiguration(configurationList,
-            NhsDefaultCaptureControlViewFragment(),
+            listOf(frontDocumentSide),
             documentViewConfigurationList,
             documentPreviewViewConfigurationList,
             transactionType)
@@ -63,59 +69,80 @@ class PaycassoViewConfiguration(
 
     private fun getViewConfigurationBuilderId(configurationList: ArrayList<DocumentConfiguration>,
                                               transactionType: String): ViewConfigurationBuilder {
-        val firstFrontDocument = getDocumentViewConfiguration(DocumentConfigurationSide.FRONT,
-            NhsIdFirstTransitionFragment())
-        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(PreviewConfigurationSide.FRONT)
-        val documentViewConfigurationList = arrayListOf(firstFrontDocument)
-        val documentPreviewViewConfigurationList = arrayListOf(firstFrontDocumentPreview)
 
-        val firstBackDocumentPreview = getDocumentPreviewConfiguration(PreviewConfigurationSide.BACK)
+        // Information screen for front of Id
+        val firstFrontDocument = getDocumentViewConfiguration(DocumentConfigurationSide.FRONT,
+            IdFrontTransitionFragment())
+
+        // Information screen for back of Id
         val firstBackDocument = getDocumentViewConfiguration(DocumentConfigurationSide.BACK,
-            NhsIdSecondTransitionFragment())
-        documentViewConfigurationList.add(firstBackDocument)
-        documentPreviewViewConfigurationList.add(firstBackDocumentPreview)
+            IdBackTransitionFragment())
+
+        // 'Check the picture' screen for front of Id
+        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+
+        // 'Check the picture' for back of Id
+        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK)
+
+        // Overlay on camera for front
+        val frontDocumentSide = getCaptureControlConfiguration(ConfigurationSide.FRONT,
+            controlFragment = IdCaptureControlFragment())
+
+        // Overlay on camera for back
+        val backDocumentSide = getCaptureControlConfiguration(ConfigurationSide.BACK,
+            IdCaptureControlFragment())
 
         return setupConfiguration(configurationList,
-            NhsDefaultCaptureControlViewFragment(),
-            documentViewConfigurationList,
-            documentPreviewViewConfigurationList,
+            arrayListOf(frontDocumentSide, backDocumentSide),
+            arrayListOf(firstFrontDocument, firstBackDocument),
+            arrayListOf(firstFrontDocumentPreview, firstBackDocumentPreview),
             transactionType)
     }
 
     private fun getViewConfigurationBuilderDriversLicence(configurationList: ArrayList<DocumentConfiguration>,
                                               transactionType: String): ViewConfigurationBuilder {
-        val firstFrontDocument = getDocumentViewConfiguration(DocumentConfigurationSide.FRONT,
-            NhsDriverLicenceFirstTransitionFragment())
-        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(PreviewConfigurationSide.FRONT)
-        val documentViewConfigurationList = arrayListOf(firstFrontDocument)
-        val documentPreviewViewConfigurationList = arrayListOf(firstFrontDocumentPreview)
 
-        val firstBackDocumentPreview = getDocumentPreviewConfiguration(PreviewConfigurationSide.BACK)
+        // Information screen to scan front of DL
+        val firstFrontDocument = getDocumentViewConfiguration(DocumentConfigurationSide.FRONT,
+            DlFrontTransitionFragment())
+
+        // Information screen to scan back of DL
         val firstBackDocument = getDocumentViewConfiguration(DocumentConfigurationSide.BACK,
-            NhsDriverLicenceSecondTransitionFragment())
-        documentViewConfigurationList.add(firstBackDocument)
-        documentPreviewViewConfigurationList.add(firstBackDocumentPreview)
+            DlBackTransitionFragment())
+
+        // 'Check the picture' screen for front
+        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+
+        // 'Check the picture' screen for back
+        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK)
+
+        // Camera overlay screens for front and back
+        val frontDocumentSide = getCaptureControlConfiguration(ConfigurationSide.FRONT,
+            DlCaptureControlFragment())
+
+        val backDocumentSide = getCaptureControlConfiguration(ConfigurationSide.BACK,
+            DlCaptureControlFragment())
 
         return setupConfiguration(configurationList,
-            NhsDriverLicenceCaptureControlViewFragment(),
-            documentViewConfigurationList,
-            documentPreviewViewConfigurationList,
+            arrayListOf(frontDocumentSide, backDocumentSide),
+            arrayListOf(firstFrontDocument, firstBackDocument),
+            arrayListOf(firstFrontDocumentPreview, firstBackDocumentPreview),
             transactionType)
     }
 
     private fun setupConfiguration(configurationList: ArrayList<DocumentConfiguration>,
-                                   captureControlViewFragment: ViewFragment,
+                                   captureControlViewFragmentList: List<DocumentCaptureControlViewConfiguration>,
                                    documentViewConfigurationList: ArrayList<DocumentViewConfiguration>,
                                    documentPreviewViewConfigurationList: ArrayList<DocumentPreviewViewConfiguration>,
                                    transactionType: String = "")
-            : ViewConfigurationBuilder{
+            : ViewConfigurationBuilder {
         val documentViewConfigurations = hashMapOf<Int, List<DocumentViewConfiguration>>()
+        val captureControlViewConfigurations = hashMapOf<Int, List<DocumentCaptureControlViewConfiguration>>()
         val documentPreviewViewConfigurations =
             hashMapOf<Int, List<DocumentPreviewViewConfiguration>>()
 
-        val captureControlViewConfiguration =
-            CaptureControlViewConfiguration()
-        captureControlViewConfiguration.setScreen(captureControlViewFragment)
+        captureControlViewConfigurations[captureControlViewConfigurations.size] =
+            captureControlViewFragmentList
 
         documentViewConfigurations[documentViewConfigurations.size] =
             documentViewConfigurationList
@@ -130,18 +157,16 @@ class PaycassoViewConfiguration(
         }
 
         return ViewConfigurationBuilder()
-            .eChipViewConfigurations(eChipViewConfigurationMap)
             .documentViewConfigurations(documentViewConfigurations)
-            .faceViewConfiguration(faceViewConfiguration)
             .finishViewConfiguration(finishViewConfiguration)
             .documentPreviewViewConfigurations(documentPreviewViewConfigurations)
+            .documentCaptureControlViewConfigurations(captureControlViewConfigurations)
             .transactionType(transactionDocumentType)
-            .captureViewConfiguration(captureControlViewConfiguration)
             .documentConfigurationList(configurationList)
     }
 
     private fun getDocumentViewConfiguration(side: DocumentConfigurationSide,
-                                         screen: TransitionViewFragment)
+                                             screen: TransitionViewFragment)
             : DocumentViewConfiguration {
         val document = DocumentViewConfiguration()
         document.documentSide = side
@@ -149,57 +174,34 @@ class PaycassoViewConfiguration(
         return document
     }
 
-    private fun getDocumentPreviewConfiguration(side: PreviewConfigurationSide)
+    private fun getDocumentPreviewConfiguration(side: ConfigurationSide)
             : DocumentPreviewViewConfiguration {
         val document = DocumentPreviewViewConfiguration()
         document.previewSide = side
-        document.screen = NhsDocumentPreviewViewFragment()
+
+        document.screen =
+            if (side == ConfigurationSide.FRONT) FrontDocumentPreviewFragment()
+            else BackDocumentPreviewFragment()
+
         return document
+    }
+
+    private fun getCaptureControlConfiguration(side: ConfigurationSide,
+                                               controlFragment: BaseCaptureControlFragment):
+            DocumentCaptureControlViewConfiguration {
+
+        val documentCaptureControlViewConfiguration = DocumentCaptureControlViewConfiguration()
+        documentCaptureControlViewConfiguration.documentSide = side
+        documentCaptureControlViewConfiguration.screen = controlFragment
+        return documentCaptureControlViewConfiguration
+
     }
 
 
     private val finishViewConfiguration: FinishViewConfiguration
         get() {
             val finishViewConfiguration = FinishViewConfiguration()
-            finishViewConfiguration.setScreen(NhsFinishTransitionFragment())
+            finishViewConfiguration.setScreen(FinishTransitionFragment())
             return finishViewConfiguration
-        }
-
-    private val faceViewConfiguration: FaceViewConfiguration
-        get() {
-            val faceViewConfiguration = FaceViewConfiguration()
-            faceViewConfiguration.setScreen(FaceTransitionFragment())
-            return faceViewConfiguration
-        }
-
-    private val eChipViewConfigurationMap: Map<EChipScreenType, EChipViewConfiguration>
-        get() {
-            val eChipViewConfigurations = HashMap<EChipScreenType, EChipViewConfiguration>()
-            val configuration1 = EChipViewConfiguration()
-            configuration1.setScreenType(EChipScreenType.NO_NFC)
-            configuration1.setScreen(NhsEChipNoNfcFragment())
-
-            val configuration2 = EChipViewConfiguration()
-            configuration2.setScreenType(EChipScreenType.ERROR)
-            configuration2.setScreen(NhsEChipErrorFragment())
-
-            val configuration4 = EChipViewConfiguration()
-            configuration4.setScreenType(EChipScreenType.HINT)
-            configuration4.setScreen(NhsEChipHintFragment())
-
-            val configuration5 = EChipViewConfiguration()
-            configuration5.setScreenType(EChipScreenType.PROCESSING)
-            configuration5.setScreen(NhsEChipProcessingFragment())
-
-            val configuration6 = EChipViewConfiguration()
-            configuration6.setScreenType(EChipScreenType.MRZ_READING)
-            configuration6.setScreen(NhsEChipMrzReadingFragment())
-
-            eChipViewConfigurations[EChipScreenType.NO_NFC] = configuration1
-            eChipViewConfigurations[EChipScreenType.ERROR] = configuration2
-            eChipViewConfigurations[EChipScreenType.HINT] = configuration4
-            eChipViewConfigurations[EChipScreenType.PROCESSING] = configuration5
-            eChipViewConfigurations[EChipScreenType.MRZ_READING] = configuration6
-            return eChipViewConfigurations
         }
 }

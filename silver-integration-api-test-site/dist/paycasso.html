@@ -38,13 +38,6 @@
         <option value="PhotoId">Photo Id</option>
       </select><br><br>
 
-      <label for="nfc">NFC Enabled?</label><br>
-      <small>(only applicable to passport)</small><br>
-      <select name="nfc" id="nfc">
-        <option selected value="n">No</option>
-        <option value="y">Yes</option>
-      </select><br><br>
-
       <label for="transactionType">Transaction type</label><br>
       <select name="transactionType" id="transactionType">
         <option selected value="DocuSure">DocuSure (Document validation only)</option>
@@ -62,7 +55,6 @@
         const token = document.getElementById("token").value
         const type = document.getElementById("type").value
         const paycassoUrl = document.getElementById("paycassoUrl").value || "https://api-london-prod.paycasso.com"
-        const nfcValue = document.getElementById("nfc").value
         const transactionType = document.getElementById("transactionType").value
 
         const request = {
@@ -75,7 +67,6 @@
             transactionReference: "thenhsapp",
             appUserId: "externalAppUserId",
             deviceId: "externalDeviceId",
-            hasNfcJourney: (nfcValue == 'y') ? true : false,
             transactionType
           },
           transactionDetails: {

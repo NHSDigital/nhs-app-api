@@ -8,6 +8,5 @@ data class PaycassoExternalReferences (
     val transactionReference: String,
     val appUserId: String,
     val deviceId: String,
-    val hasNfcJourney: Boolean,
     val transactionType: String
 )
