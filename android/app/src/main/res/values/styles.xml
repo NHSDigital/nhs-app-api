@@ -25,6 +25,12 @@
         <item name="android:textSize">@dimen/menuBarItemFontSize</item>
     </style>
 
+    <style name="header_default_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/headerMenuTextColor</item>
+        <item name="android:textSize">@dimen/headerItemFontSize</item>
+    </style>
+
     <style name="error_header_default_text" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textColor">@color/black</item>

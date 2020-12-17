@@ -5,7 +5,9 @@
     <dimen name="menuBarItemIconHeight">@dimen/_21sdp</dimen>
     <dimen name="menuBarItemIconWidth">@dimen/_21sdp</dimen>
     <dimen name="menuBarItemIconBottomMargin">@dimen/_5sdp</dimen>
-    <dimen name="menuBarItemFontSize">@dimen/_7ssp</dimen>
+    <dimen name="menuBarItemFontSize">@dimen/_7sdp</dimen>
+
+    <dimen name="headerItemFontSize">@dimen/_8sdp</dimen>
 
     <dimen name="errorTextSize">@dimen/_16ssp</dimen>
     <dimen name="errorHeaderTextSize">@dimen/_24ssp</dimen>

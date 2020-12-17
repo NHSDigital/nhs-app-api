@@ -10,6 +10,8 @@
     <color name="activeMenuTextColor">@color/nhsBlue</color>
     <color name="menuBarTopBorder">#BCC0C4</color>
 
+    <color name="headerMenuTextColor">#FFFFFF</color>
+
     <color name="progressbar_color">#0054af</color>
     <color name="progressbar_background_color">#46ffffff</color>
     <color name="progressbar_icon_background_color">#ccffffff</color>
