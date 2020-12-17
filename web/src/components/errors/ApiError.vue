@@ -35,7 +35,8 @@
           <report-a-problem :reference="hasSessionReferenceCode"/>
         </message-text>
       </message-dialog>
-      <form v-if="retryButtonText" ref="retryFormRef"
+      <form v-if="retryButtonText && !backLinkUrl" id="retryButton"
+            ref="retryFormRef"
             :action="retryUrl" method="get" tabindex="-1">
         <generic-button
           :class="[
@@ -49,6 +50,14 @@
           {{ retryButtonText }}
         </generic-button>
       </form>
+      <desktopGenericBackLink
+        v-if="retryButtonText && backLinkUrl"
+        id="backLink"
+        :path="backLinkUrl"
+        :button-text="retryButtonText"
+        data-purpose="back-button"
+        @clickAndPrevent="backLinkClicked"
+      />
     </div>
     <div v-else>
       <header-slim :show-in-native="true" :show-in-desktop="false">{{ header }}</header-slim>
@@ -74,6 +83,7 @@ import ReportAProblem from '@/components/errors/ReportAProblem';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import NativeApp from '@/services/native-app';
 import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
+import { redirectTo } from '@/lib/utils';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -124,6 +134,13 @@ export default {
         return routePathFormatted.substr(prefix.length);
       }
       return routePathFormatted;
+    },
+    backLinkUrl() {
+      return getMappedValue({
+        map: this.$store.state.errors.pageSettings.backLinks,
+        errorCode: this.errorCode,
+        statusCode: this.statusCode,
+      });
     },
     errorCode() {
       return get('$store.state.errors.apiErrors[0].error')(this);
@@ -293,6 +310,9 @@ export default {
     },
     get111HyperLink() {
       return '<a href="https://111.nhs.uk" target="_blank" rel="noopener noreferrer" style="display:inline">111.nhs.uk</a>';
+    },
+    backLinkClicked() {
+      redirectTo(this, this.backLinkUrl);
     },
   },
 };

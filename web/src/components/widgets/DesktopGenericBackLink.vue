@@ -5,7 +5,7 @@
        :target="target"
        data-purpose="main-back-button"
        @click.prevent="$emit('clickAndPrevent', $event)">
-      {{ $t(getBackButtonText) }}</a>
+      {{ $te(getBackButtonText) ? $t(getBackButtonText) : getBackButtonText }}</a>
   </p>
 </template>
 <script>

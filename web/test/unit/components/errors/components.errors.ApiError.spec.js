@@ -44,6 +44,7 @@ const createState = ({
   path,
   status,
   userSessionCreateReferenceCode,
+  backLinks = {},
 }) => ({
   session: {
     userSessionCreateReferenceCode,
@@ -60,6 +61,7 @@ const createState = ({
         action,
         additionalInfoComponentName,
         errorOverrideStyles: {},
+        backLinks,
       },
       routePath: path,
     },
@@ -374,6 +376,37 @@ describe('api errors', () => {
               wrapper.vm.setFocus();
 
               expect(wrapper.vm.$refs.retryFormRef.focus).toHaveBeenCalled();
+            });
+          });
+
+          describe('back link', () => {
+            it('will show the back link if there is a back link url for the error', () => {
+              state = createState({
+                isNativeApp: false,
+                path: '/prescriptions/confirm-prescription-details',
+                status: 466,
+                backLinks: { 466: 'prescriptions' },
+              });
+
+              $store = createStore({ getters, state });
+              wrapper = mountApiError();
+
+              expect(wrapper.find('#backLink').exists()).toBe(true);
+              expect(wrapper.find('#retryButton').exists()).toBe(false);
+            });
+
+            it('will not show the back link if there is no back link url for the error', () => {
+              state = createState({
+                isNativeApp: false,
+                path: '/prescriptions/confirm-prescription-details',
+                status: 500,
+                backLinks: { 466: 'prescriptions' },
+              });
+              $store = createStore({ getters, state });
+              wrapper = mountApiError();
+
+              expect(wrapper.find('#backLink').exists()).toBe(false);
+              expect(wrapper.find('#retryButton').exists()).toBe(true);
             });
           });
         });

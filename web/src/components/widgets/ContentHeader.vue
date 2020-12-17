@@ -110,7 +110,19 @@ export default {
     },
     isBreadCrumbVisible() {
       return this.showBreadCrumb &&
+        !this.hideBreadCrumbForApiError &&
         !isEmpty(this.currentBreadCrumbs());
+    },
+    hideBreadCrumbForApiError() {
+      // if the status code is present in the hideBreadcrumb object
+      // then we want to hide the breadcumb for that error
+      if (this.$store.state.errors.pageSettings) {
+        const statusCode = get('$store.state.errors.apiErrors[0].status')(this);
+        const { hideBreadCrumb } = this.$store.state.errors.pageSettings;
+        return hideBreadCrumb && hideBreadCrumb[statusCode];
+      }
+
+      return false;
     },
     showWarningBanner() {
       return this.showExternalServiceWarning ||

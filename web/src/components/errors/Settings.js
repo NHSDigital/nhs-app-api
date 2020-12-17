@@ -217,6 +217,12 @@ export default {
       redirectUrl: {
         default: PRESCRIPTIONS_PATH,
       },
+      hideBreadCrumb: {
+        466: true,
+      },
+      backLinks: {
+        466: PRESCRIPTIONS_PATH,
+      },
     },
     {
       route: PRESCRIPTION_CONFIRM_COURSES_PATH,

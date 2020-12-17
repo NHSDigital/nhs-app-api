@@ -30,6 +30,7 @@ describe('ContentHeader.vue', () => {
           device: {
             isNativeApp: true,
           },
+          errors: {},
           navigation: {
             crumbSetName: 'testCrumb',
           },
@@ -116,6 +117,7 @@ describe('ContentHeader.vue', () => {
           device: {
             isNativeApp: true,
           },
+          errors: {},
           navigation: {
             crumbSetName: 'testCrumb',
           },
@@ -180,6 +182,7 @@ describe('ContentHeader.vue', () => {
           device: {
             isNativeApp: true,
           },
+          errors: {},
           navigation: {
             crumbSetName: 'testCrumb',
           },
@@ -295,6 +298,7 @@ describe('ContentHeader.vue', () => {
         state: {
           device: { isNativeApp: true },
           navigation: { crumbSetName: {} },
+          errors: {},
           onlineConsultations: { demographicsQuestionAnswered: false },
           serviceJourneyRules: {
             rules: {
@@ -336,5 +340,44 @@ describe('ContentHeader.vue', () => {
       const pageTitle = wrapper.find(PageTitle);
       expect(pageTitle.vm.titleKey).toBe('Test HeaderTest Caption');
     });
+  });
+
+  describe('Breadcrumb visibility', () => {
+    let $store;
+    let wrapper;
+
+    const mountAs = ({ pageSettings = {}, apiErrors = [] } = {}) => {
+      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+      $store = createStore({
+        state: {
+          device: { isNativeApp: true },
+          navigation: { crumbSetName: 'testCrumb' },
+          errors: { pageSettings, apiErrors },
+          session: {
+            csrfToken: 'someToken',
+          },
+        },
+      });
+      return mount(ContentHeader, {
+        $store,
+        $route: { meta: { crumb: { testCrumb: ['crumb'] } } },
+      });
+    };
+
+    each([
+      [499, 500, true],
+    ])
+      .it('will hide the breadcrumb if an error has the appropriate property',
+        (apiErrorStatus, pageSettingsStatus, breadcrumbVisible) => {
+          const apiErrors = [{ status: apiErrorStatus }];
+          const pageSettings = {
+            hideBreadCrumb: {
+              [pageSettingsStatus]: true,
+            },
+          };
+
+          wrapper = mountAs({ pageSettings, apiErrors });
+          expect(wrapper.find('#bread-crumb').exists()).toBe(breadcrumbVisible);
+        });
   });
 });
