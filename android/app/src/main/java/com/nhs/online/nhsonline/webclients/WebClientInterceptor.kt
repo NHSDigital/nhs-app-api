@@ -48,6 +48,11 @@ class WebClientInterceptor(
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         Log.d(TAG, "Entering shouldOverrideUrlLoading > url $url")
 
+        // Scheme handlers need to be executed first in order for the app to safely handle mailto: and tel: links
+        if (schemeHandlers.handleUrl(url)) {
+            return true
+        }
+
         if (urlHasAppScheme(url)) {
             val sanitizedUrl = ensureSupportedScheme(url)
             Log.d(TAG, "Overriding url $url to $sanitizedUrl")
@@ -60,9 +65,6 @@ class WebClientInterceptor(
         }
 
         showKnownServicesSpinner(view.url, url)
-
-        if (schemeHandlers.handleUrl(url))
-            return true
 
         try {
             if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
