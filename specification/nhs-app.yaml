@@ -230,7 +230,7 @@ components:
       description: |
         A unique message identifier. We use this to trace the message if you raise an issue with our helpdesk.
         
-        If provided, this must be a GUID represented as 32 hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12.
+        If provided, we recommend a GUID for uniqueness and convenience.
 
         This is mirrored back in the response headers.
       schema:
