@@ -1,5 +1,5 @@
 <template>
-  <p data-purpose="msg-text">
+  <p data-purpose="msg-text" :aria-label="getAriaLabel()">
     <template v-for="(content, index) in $t(from)">
       {{ content.text }}
       <analytics-tracked-tag v-if="content.linkText"
@@ -46,6 +46,16 @@ export default {
         url += `?${this.queryParam.param}=${this.queryParam.value}`;
       }
       return url;
+    },
+    getAriaLabel() {
+      const sections = this.$t(this.from);
+      let ariaLabel = '';
+      sections.forEach((section) => {
+        if (section.label) {
+          ariaLabel += section.label;
+        }
+      });
+      return ariaLabel.length > 0 ? ariaLabel : undefined;
     },
   },
 };

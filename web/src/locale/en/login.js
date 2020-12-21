@@ -45,31 +45,37 @@ export default {
     dueToLegalRestrictionsUntilYouAreThirteen: [
       {
         text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to ',
+        label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to one one one dot nhs dot uk',
         linkUrl: 'https://111.nhs.uk',
         linkText: '111.nhs.uk',
       },
       {
         text: ' or call 111.',
+        label: ' or call one one one.',
       },
     ],
     ifYouNeed: [
       {
         text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to',
+        label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk',
         linkUrl: 'https://111.nhs.uk',
         linkText: '111.nhs.uk',
       },
       {
         text: ' or call 111.',
+        label: ' or call one one one.',
       },
     ],
     ifYouNeedInEngland: [
       {
         text: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to ',
+        label: 'If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to one one one dot nhs dot uk',
         linkUrl: 'https://111.nhs.uk',
         linkText: '111.nhs.uk',
       },
       {
         text: ' or call 111.',
+        label: ' or call one one one.',
       },
     ],
     ifYouNeedInNorthernIrelandOrScotland: {
@@ -79,16 +85,19 @@ export default {
     ifYouNeedInWales: [
       {
         text: 'If you need an appointment or prescription, go to ',
+        label: 'If you need an appointment or prescription, go to My Health Online, link,',
         linkUrl: 'https://111.wales.nhs.uk/contactus/myhealthonline/',
         linkText: 'My Health Online',
       },
       {
         text: ' or contact your GP surgery directly. For urgent medical advice, go to ',
+        label: ' or contact your GP surgery directly. For urgent medical advice, go to one one one dot wales dot nhs dot uk',
         linkUrl: 'https://111.wales.nhs.uk',
         linkText: '111.wales.nhs.uk',
       },
       {
         text: ' or call 111.',
+        label: ' or call one one one.',
       },
     ],
     ifYouStillNeedHelp: [

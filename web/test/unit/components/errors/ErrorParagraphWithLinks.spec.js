@@ -30,10 +30,12 @@ describe('ErrorParagraphWithLinks', () => {
           {
             text: 'Go to ',
             linkUrl: 'https://example.com',
+            label: 'Go to https://example.com',
             linkText: 'example link',
           },
           {
             text: ' or call 111.',
+            label: ' or call one one one.',
           },
         ];
 
@@ -71,15 +73,18 @@ describe('ErrorParagraphWithLinks', () => {
           {
             text: 'Go to ',
             linkUrl: 'https://example.com',
+            label: 'Go to https://example.com',
             linkText: 'link 1',
           },
           {
             text: ' or ',
             linkUrl: 'https://google.com',
+            label: ' or https://google.com',
             linkText: 'link 2',
           },
           {
             text: ' or call 111.',
+            label: ' or call one one one.',
           },
         ];
 
@@ -155,6 +160,98 @@ describe('ErrorParagraphWithLinks', () => {
 
           expect(paragraph.text()).toContain('If you still need to access the app,');
           expect(paragraph.text()).toContain('contact us');
+        });
+      });
+    });
+
+    describe('translates to aria label', () => {
+      const from = 'foo.text';
+      let paragraph;
+      describe('no labels', () => {
+        const contents = [
+          {
+            text: 'Go to ',
+            linkUrl: 'https://example.com',
+            linkText: 'example link',
+          },
+          {
+            text: ' or call 111',
+          },
+        ];
+        beforeEach(() => {
+          const $t = jest.fn().mockImplementation((key) => {
+            switch (key) {
+              case 'foo.text':
+                return contents;
+              default:
+                return undefined;
+            }
+          });
+          wrapper = mountWrapper({ $t, from });
+          paragraph = wrapper.find('p');
+        });
+        it('will not exist', () => {
+          expect(paragraph.attributes('aria-label')).toBe(undefined);
+        });
+      });
+      describe('single label', () => {
+        const contents = [
+          {
+            text: 'Go to ',
+            label: 'Go to https://example.com.',
+            linkUrl: 'https://example.com',
+            linkText: 'example link',
+          },
+        ];
+        beforeEach(() => {
+          const $t = jest.fn().mockImplementation((key) => {
+            switch (key) {
+              case 'foo.text':
+                return contents;
+              default:
+                return undefined;
+            }
+          });
+          wrapper = mountWrapper({ $t, from });
+          paragraph = wrapper.find('p');
+        });
+        it('will translate `from`', () => {
+          expect(paragraph.attributes('aria-label')).toBe('Go to https://example.com.');
+        });
+      });
+      describe('multiple labels', () => {
+        const contents = [
+          {
+            text: 'Go to ',
+            label: 'Go to https://example.com',
+            linkUrl: 'https://example.com',
+            linkText: 'link 1',
+          },
+          {
+            text: ' or ',
+            label: ' or https://google.com',
+            linkUrl: 'https://google.com',
+            linkText: 'link 2',
+          },
+          {
+            text: ' or call 111.',
+            label: ' or call one one one.',
+          },
+        ];
+        beforeEach(() => {
+          const $t = jest.fn().mockImplementation((key) => {
+            switch (key) {
+              case 'foo.text':
+                return contents;
+              default:
+                return undefined;
+            }
+          });
+          wrapper = mountWrapper({ $t, from });
+          paragraph = wrapper.find('p');
+        });
+        it('will translate `from`', () => {
+          expect(paragraph.attributes('aria-label')).toBe('Go to https://example.com or https://google.com or call one one one.');
         });
       });
     });
