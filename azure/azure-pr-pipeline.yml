@@ -37,8 +37,17 @@ extends:
     product_description: ${{ variables.product_description }}
     spec_file: ${{ variables.spec_file }}
     portal_api_requires_callback_url: false
+    config_ids:
+     - /ptl/azure-devops/env-internal-dev/test-app/internal-testing-internal-dev/CLIENT_ID
     apigee_deployments:
       - environment: internal-dev
+        post_deploy:
+          - template: ./templates/run-integration-tests.yml
+            parameters:
+              working_directory: $(Pipeline.Workspace)/s
+              test_folder_path: $(Pipeline.Workspace)/s/${{ variables.service_name }}/$(SERVICE_ARTIFACT_NAME)/tests
+              target_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/$(SERVICE_BASE_PATH)/
         make_spec_visible: true
       - environment: internal-dev-sandbox
         proxy_path: sandbox
+        
