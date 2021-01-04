@@ -67,7 +67,7 @@ describe('nominated pharmacy choose type page', () => {
       expect(continueButton.text()).toEqual('Continue');
     });
 
-    it('will redirect to the nominated pharmacy search page', () => {
+    it('will redirect to the nominated pharmacy search page', async () => {
       wrapper.vm.selected(PharmacyTypeChoice.HIGH_STREET_PHARMACY);
       continueButton.trigger('click');
       errorComponent = wrapper.find('#errorHeading');
@@ -78,7 +78,7 @@ describe('nominated pharmacy choose type page', () => {
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH_PATH);
     });
 
-    it('will redirect to the dsp interrupt page', () => {
+    it('will redirect to the dsp interrupt page', async () => {
       wrapper.vm.selected(PharmacyTypeChoice.ONLINE_PHARMACY);
       continueButton.trigger('click');
       errorComponent = wrapper.find('#errorHeading');
@@ -89,9 +89,10 @@ describe('nominated pharmacy choose type page', () => {
         NOMINATED_PHARMACY_DSP_INTERRUPT_PATH);
     });
 
-    it('will not redirect to next page in flow when no radio button is selected', () => {
+    it('will not redirect to next page in flow when no radio button is selected', async () => {
       wrapper.vm.selected(null);
       continueButton.trigger('click');
+      await wrapper.vm.$nextTick();
       errorComponent = wrapper.find('#errorHeading');
 
       expect(errorComponent.exists()).toBe(true);

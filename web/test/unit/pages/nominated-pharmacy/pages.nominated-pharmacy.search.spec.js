@@ -71,6 +71,7 @@ describe('search pharmacies', () => {
 
       // act
       await page.vm.searchClicked();
+      await page.vm.$nextTick();
 
       // assert
       expect(page.vm.showInvalidSearchError).toBe(true);
@@ -85,6 +86,7 @@ describe('search pharmacies', () => {
 
       // act
       await page.vm.searchClicked();
+      await page.vm.$nextTick();
 
       // assert
       expect(page.vm.showInvalidSearchError).toBe(true);

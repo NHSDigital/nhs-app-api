@@ -8,14 +8,16 @@
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="showErrors" message-type="error" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('nominatedPharmacy.search.errorMessageHeader') }}
-          </message-text>
-          <message-list data-purpose="empty-search-error">
-            <li id="empty-search-error">{{ $t('nominatedPharmacy.search.emptySearchError') }}</li>
-          </message-list>
-        </message-dialog>
+        <div role="alert" aria-atomic="true">
+          <message-dialog v-if="showErrors" message-type="error" :focusable="true">
+            <message-text data-purpose="error-heading">
+              {{ $t('nominatedPharmacy.search.errorMessageHeader') }}
+            </message-text>
+            <message-list data-purpose="empty-search-error">
+              <li id="empty-search-error">{{ $t('nominatedPharmacy.search.emptySearchError') }}</li>
+            </message-list>
+          </message-dialog>
+        </div>
       </div>
     </div>
     <div class="nhsuk-grid-row">
@@ -133,8 +135,10 @@ export default {
 
       if (!this.validateSearchQueryLength(processedQuery)
           || !this.validateSearchQueryPattern(processedQuery)) {
-        this.showInvalidSearchError = true;
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        this.$nextTick(() => {
+          this.showInvalidSearchError = true;
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        });
         return;
       }
 

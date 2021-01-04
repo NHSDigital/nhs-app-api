@@ -3,16 +3,18 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="showErrors"
-                        message-type="error"
-                        :focusable="true">
-          <message-text id="errorHeading" data-purpose="error-heading">
-            {{ $t('nominatedPharmacy.chooseType.errorHeading') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li>{{ $t('nominatedPharmacy.chooseType.errorMessage') }}</li>
-          </message-list>
-        </message-dialog>
+        <div role="alert" aria-atomic="true">
+          <message-dialog v-if="showErrors"
+                          message-type="error"
+                          :focusable="true">
+            <message-text id="errorHeading" data-purpose="error-heading">
+              {{ $t('nominatedPharmacy.chooseType.errorHeading') }}
+            </message-text>
+            <message-list data-purpose="reason-error">
+              <li>{{ $t('nominatedPharmacy.chooseType.errorMessage') }}</li>
+            </message-list>
+          </message-dialog>
+        </div>
       </div>
     </div>
 
@@ -87,7 +89,7 @@ export default {
       interruptPath: NOMINATED_PHARMACY_INTERRUPT_PATH,
       highStreetSearchPath: NOMINATED_PHARMACY_SEARCH_PATH,
       dspInterruptPath: NOMINATED_PHARMACY_DSP_INTERRUPT_PATH,
-      hasTriedToContinue: false,
+      hasContinuedWithoutSelection: false,
       radioButtons: [
         {
           hint: this.$t('nominatedPharmacy.chooseType.highStreetHint'),
@@ -107,11 +109,8 @@ export default {
     currentChoice() {
       return get('$store.state.nominatedPharmacy.chosenType')(this);
     },
-    hasMadeDecision() {
-      return this.selectedValue !== null;
-    },
     showErrors() {
-      return this.hasTriedToContinue && !this.hasMadeDecision;
+      return this.hasContinuedWithoutSelection;
     },
   },
   created() {
@@ -121,10 +120,12 @@ export default {
   },
   methods: {
     continueClicked() {
-      this.hasTriedToContinue = true;
-
-      if (this.showErrors) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
+      this.hasContinuedWithoutSelection = false;
+      if (this.selectedValue === null) {
+        this.$nextTick(() => {
+          this.hasContinuedWithoutSelection = true;
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+        });
         return;
       }
 
