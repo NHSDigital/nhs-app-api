@@ -21,3 +21,8 @@ users:
   mongoDatabaseUserDeviceCollection: devices
 
 nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
+
+secrets:
+  notificationHub:
+      notificationHubSecretName: "notificationHubSharedAccessKey"
+      notificationHubSecretVersion: "00000"
