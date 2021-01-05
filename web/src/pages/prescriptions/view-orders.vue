@@ -234,6 +234,10 @@ export default {
     list-style: none;
     padding-left: 0;
     margin-bottom: .2em;
+    @include govuk-media-query($until: desktop) {
+      margin-left: (-$nhsuk-gutter-half);
+      margin-right: (-$nhsuk-gutter-half);
+    }
   }
 
   .list menu p {
@@ -246,10 +250,6 @@ export default {
     list-style: none;
     margin-bottom: nhsuk-spacing(3);
     border-top: 1px $nhsuk-border-color solid;
-    @include govuk-media-query($until: desktop) {
-      margin-left: (-$nhsuk-gutter-half);
-      margin-right: (-$nhsuk-gutter-half);
-    }
   }
 
   .nhs-app-message p {
