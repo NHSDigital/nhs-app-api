@@ -15,6 +15,7 @@ metadata:
     version: {{ .Chart.AppVersion | quote }}
 spec:
   rules:
+    {{- if .Values.createDefaultIngress }}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -48,6 +49,7 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users
+    {{- end }}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:

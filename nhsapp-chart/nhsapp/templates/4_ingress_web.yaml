@@ -20,6 +20,7 @@ metadata:
     version: {{ .Chart.AppVersion | quote }}
 spec:
   rules:
+    {{- if .Values.createDefaultIngress }}
     - host: www-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -27,6 +28,7 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
+    {{- end }}
     - host: www-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:

@@ -1,4 +1,5 @@
 ---
+{{- if .Values.createDefaultIngress }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -30,3 +31,4 @@ spec:
     - hosts:
         - cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
+{{- end }}

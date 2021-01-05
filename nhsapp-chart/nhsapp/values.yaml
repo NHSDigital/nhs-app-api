@@ -266,6 +266,10 @@ organdonationSubscription: cGxhY2Vob2xkZXI=
 sessionKey: cGxhY2Vob2xkZXI=
 spinePartyId: cGxhY2Vob2xkZXI=
 
+# Ingress Configuration
+# Toggles creation of www-{env}.{zone}.{domain} url. Disable to use redirector chart.
+createDefaultIngress: true
+
 sidecar_proxy:
   containerPort: 8443
   memoryRequest: "128Mi"

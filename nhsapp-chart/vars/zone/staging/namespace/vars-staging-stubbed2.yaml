@@ -31,6 +31,8 @@ emisCertEnabled: true
 emisPort: 444
 emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
 
+# Use redirector chart
+createDefaultIngress: false
 
 web:
   image_tag: latest
