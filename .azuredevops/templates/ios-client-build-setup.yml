@@ -112,3 +112,18 @@ jobs:
         target: Onboardingaos
         uploadServiceEndpoint: nhsapp-onboardingAos-apple-app-store
         uploadAppIdentifier:  com.nhs.online.dev.onboardingaos
+    
+    # build and upload Sandpit
+    - template: ios-client-build-job.yml
+      parameters:
+        target: Onboardingsandpit
+        certSecureFile: iOSOnboardingCertificate.p12
+        certPwd: '$(ios.onboarding.certificate.password)'
+        scheme: 'NHSOnline Onboarding SP'
+        provProfileSecureFile: iOSOnboardingDistributionSandpit.mobileprovision
+        provisioningProfileName: 'NHS App Onboarding SP Distribution'
+    - template: ios-upload-ipa.yml
+      parameters:
+        target: Onboardingsandpit
+        uploadServiceEndpoint: nhsapp-onboardingSandpit-apple-app-store
+        uploadAppIdentifier: com.nhs.online.dev.onboardingsandpit
