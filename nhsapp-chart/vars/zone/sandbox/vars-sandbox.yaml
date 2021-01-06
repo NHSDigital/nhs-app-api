@@ -6,6 +6,9 @@ privateDomain: private.nonlive.nhsapp.service.nhs.uk
 AZURE_SUBSCRIPTION_NAME: nonlive
 cosmosDBName: ops
 
+keyvaultSubscriptionID: 47e498b8-ad52-4421-b6d0-d7f9988429df
+keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
+
 addAppointmentToCalendarEnabled: true
 emisCertEnabled: true
 fakeGpSystemEnabled: true
@@ -25,7 +28,7 @@ nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 secrets:
   notificationHub:
       notificationHubSecretName: "notificationHubSharedAccessKey"
-      notificationHubSecretVersion: "00000"
+      notificationHubSecretVersion: "f174920b96bc4b338ea13c02998ba2d1"
 # Not used, just to prevent chart from crashing on install
 splunk:
   pidIndex: apppid_nhsapp_dev
