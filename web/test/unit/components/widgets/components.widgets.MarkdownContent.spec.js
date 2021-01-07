@@ -1,7 +1,7 @@
 import MarkdownContent from '@/components/widgets/MarkdownContent';
 import each from 'jest-each';
 import { key } from '@/lib/utils';
-import { createRouter, mount, normaliseNewLines } from '../../helpers';
+import { createRouter, createStore, mount, normaliseNewLines } from '../../helpers';
 
 const createEvent = ({ keyName, href }) => ({
   key: keyName,
@@ -16,15 +16,6 @@ const createEvent = ({ keyName, href }) => ({
   },
 });
 
-const $store = {
-  state: {
-    device: {
-      isNativeApp: false,
-    },
-  },
-  getters: {},
-};
-
 describe('MarkdownContent', () => {
   let $router;
   let wrapper;
@@ -32,17 +23,30 @@ describe('MarkdownContent', () => {
   const mountMarkdownContent = ({
     content = 'lorem ipsum dolor sit amet',
     id,
-  } = {}) => {
-    $store.getters['session/isLoggedIn'] = jest.fn();
-    return mount(MarkdownContent, {
-      $router,
-      $store,
-      propsData: {
-        content,
-        id,
+    hasKnownService = false,
+    requiresAssertedLoginIdentity = false,
+  } = {}) => mount(MarkdownContent, {
+    $router,
+    $store: createStore({
+      getters: {
+        'session/isLoggedIn': jest.fn(),
+        'knownServices/matchOneByUrl': jest.fn().mockImplementation((url) => {
+          if (hasKnownService) {
+            return {
+              id: 'pkb',
+              requiresAssertedLoginIdentity,
+              url,
+            };
+          }
+          return undefined;
+        }),
       },
-    });
-  };
+    }),
+    propsData: {
+      content,
+      id,
+    },
+  });
 
   beforeEach(() => {
     $router = createRouter();
@@ -69,24 +73,6 @@ describe('MarkdownContent', () => {
     describe('content', () => {
       it('will display the content as root element html', () => {
         expect(wrapper.find('p').html()).toEqual('<p>lorem ipsum dolor sit amet</p>');
-      });
-
-      describe('with links', () => {
-        beforeEach(() => {
-          wrapper = mountMarkdownContent({ content: 'lorem ipsum dolor [111.nhs.uk](https://111.nhs.uk) sit amet' });
-        });
-
-        it('will display the content as root element html', () => {
-          expect(wrapper.text()).toEqual('lorem ipsum dolor 111.nhs.uk sit amet');
-        });
-
-        it('will convert the text links to `A` tags', () => {
-          const linkElement = wrapper.find('a');
-
-          expect(linkElement.exists()).toBe(true);
-          expect(linkElement.attributes().href).toEqual('https://111.nhs.uk');
-          expect(linkElement.text()).toEqual('111.nhs.uk');
-        });
       });
 
       describe('with allowed markdown', () => {
@@ -180,6 +166,64 @@ describe('MarkdownContent', () => {
 
           it('will set href attribute', () => {
             expect(linkElement.attributes().href).toEqual('https://test.com');
+          });
+
+          it('will set target attribute to _blank', () => {
+            expect(linkElement.attributes().target).toEqual('_blank');
+          });
+
+          it('will set link text', () => {
+            expect(linkElement.text()).toEqual('Lorem ipsum dolor sit amet');
+          });
+        });
+
+        describe('external markdown links to a knownSerivce', () => {
+          let linkElement;
+
+          beforeEach(() => {
+            wrapper = mountMarkdownContent({
+              content: '[Lorem ipsum dolor sit amet](https://test.com)',
+              hasKnownService: true,
+              requiresAssertedLoginIdentity: false,
+            });
+            linkElement = wrapper.find('a');
+          });
+
+          it('will render link', () => {
+            expect(linkElement.exists()).toBe(true);
+          });
+
+          it('will set href attribute', () => {
+            expect(linkElement.attributes().href).toEqual('https://test.com');
+          });
+
+          it('will set target attribute to _blank', () => {
+            expect(linkElement.attributes().target).toEqual('_blank');
+          });
+
+          it('will set link text', () => {
+            expect(linkElement.text()).toEqual('Lorem ipsum dolor sit amet');
+          });
+        });
+
+        describe('external markdown links to a knownSerivce that requires asserted login identity', () => {
+          let linkElement;
+
+          beforeEach(() => {
+            wrapper = mountMarkdownContent({
+              content: '[Lorem ipsum dolor sit amet](https://ssotest.com)',
+              hasKnownService: true,
+              requiresAssertedLoginIdentity: true,
+            });
+            linkElement = wrapper.find('a');
+          });
+
+          it('will render link', () => {
+            expect(linkElement.exists()).toBe(true);
+          });
+
+          it('will set href attribute', () => {
+            expect(linkElement.attributes().href).toEqual('/redirector?redirect_to=https%3A%2F%2Fssotest.com');
           });
 
           it('will set target attribute to _blank', () => {

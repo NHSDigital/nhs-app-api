@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      renderedContent: markdownContent(this.content),
+      renderedContent: markdownContent({ store: this.$store, content: this.content }),
     };
   },
   mounted() {
@@ -41,8 +41,9 @@ export default {
     },
     navigateTo(event) {
       const href = event.target.getAttribute('href');
+      const target = event.target.getAttribute('target');
 
-      if (href.startsWith('/') && !href.startsWith('//')) {
+      if (href.startsWith('/') && !href.startsWith('//') && target !== '_blank') {
         event.preventDefault();
         redirectTo(this, href, null);
       }

@@ -129,7 +129,7 @@ Feature: Messages
     Then the Messages page is displayed
     And the email address 'email@address.com' is identified as a link in the message
 
-  Scenario: A user can see their markdown messages and follow an external link
+  Scenario: A user can see their markdown messages and follow some external links
     Given I am using the native app user agent
     And I am a user wishing to view my messages with markdown content
       | [https://111.nhs.uk/](https://111.nhs.uk/)  |
@@ -144,6 +144,20 @@ Feature: Messages
     When I click the link called 'https://111.nhs.uk/' with a url of 'https://111.nhs.uk/'
     Then a new tab has been opened by the link
     When I click the link called '111.nhs.uk/' with a url of 'https://111.nhs.uk/'
+    Then a new tab has been opened by the link
+
+  Scenario: A user can see their markdown messages and follow a link to an nhs partner site via a redirector url
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with markdown content
+      | [silver.local.bitraft.io](http://silver.local.bitraft.io:5000)  |
+    And I am logged in
+    When I follow the Messages link from the home page
+    And I click the App Messages link on the messages hub page
+    And the Messages Inbox page is displayed
+    And the senders and latest messages are displayed on the Messages Inbox page
+    And I click on a sender in the Messages Inbox
+    Then the Messages page is displayed
+    When I click the internal link called 'silver.local.bitraft.io' with a url of '/redirector?redirect_to=http%3A%2F%2Fsilver.local.bitraft.io%3A5000'
     Then a new tab has been opened by the link
 
   Scenario: A user can see their markdown messages and follow an internal link
