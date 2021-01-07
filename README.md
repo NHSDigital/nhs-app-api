@@ -1,13 +1,12 @@
 # NHS App
 
-![Build](https://github.com/NHSDigital/nhs-app/workflows/Build/badge.svg?branch=master)
+![Build](https://github.com/NHSDigital/nhs-app-api/workflows/Build/badge.svg?branch=master)
 
 This is a RESTful HL7® FHIR® API specification for the NHS App API.
 
 * `specification/` This [Open API Specification](https://swagger.io/docs/specification/about/) describes the endpoints, methods and messages exchanged by the API. Use it to generate interactive documentation; the contract between the API and its consumers.
-* `sandbox/` This NodeJS application implements a mock implementation of the service. Use it as a back-end service to the interactive documentation to illustrate interactions and concepts. It is not intended to provide an exhaustive/faithful environment suitable for full development and testing.
 * `scripts/` Utilities helpful to developers of this specification.
-* `proxies/` Live (connecting to another service) and sandbox (using the sandbox container) Apigee API Proxy definitions.
+* `proxies/` Live Apigee API Proxy definitions.
 
 Consumers of the API will find developer documentation on the [NHS Digital Developer Hub](https://developer.digital.nhs.uk/).
 
@@ -52,7 +51,7 @@ There are `make` commands that alias some of this functionality:
  * `serve` -- Serves a preview of the specification in human-readable format
 
 ### Testing
-Each API and team is unique. We encourage you to use a `test/` folder in the root of the project, and use whatever testing frameworks or apps your team feels comfortable with. It is important that the URL your test points to be configurable. We have included some stubs in the Makefile for running tests.
+The `tests/` folder contains some .NET integration tests to verify that the API endpoints can be successfully exercised when presented with valid authentication headers.
 
 ### VS Code Plugins
 
