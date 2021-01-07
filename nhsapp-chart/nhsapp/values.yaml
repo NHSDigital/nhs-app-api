@@ -269,6 +269,8 @@ spinePartyId: cGxhY2Vob2xkZXI=
 # Ingress Configuration
 # Toggles creation of www-{env}.{zone}.{domain} url. Disable to use redirector chart.
 createDefaultIngress: true
+# Toggles creation of api-{env}.private.{zone}.{domain} url. Enable if not using redirector.
+createDefaultPrivateIngress: false
 
 sidecar_proxy:
   containerPort: 8443

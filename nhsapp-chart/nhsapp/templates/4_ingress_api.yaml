@@ -39,7 +39,7 @@ spec:
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v[1,2]/api/users/.{36}/messages
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
           {{- end }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
@@ -58,9 +58,13 @@ spec:
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
           - backend:
-              serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v1/api/log
+            path: /v[1,2]/api/users/info
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/me/info
           {{- if $.Values.messagesEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
@@ -69,8 +73,12 @@ spec:
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v[1,2]/api/users/.{36}/messages
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
           {{- end }}
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v1/api/log
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}

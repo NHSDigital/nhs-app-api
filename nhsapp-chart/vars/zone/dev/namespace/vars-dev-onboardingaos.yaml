@@ -10,6 +10,9 @@ akamaiEnv: nhsapp.service.nhs.uk
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingaos
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingaos
 
+# Allow access to private API without the redirector
+createDefaultPrivateIngress: true
+
 users:
   notificationHubPath: nhsapp-nonlive-onboardingaos
 

@@ -30,10 +30,8 @@ emisCertEnabled: true
 emisPort: 444
 emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
 
-secrets:
-    notificationHub:
-        notificationHubSecretName: "notificationHubSharedAccessKeyStubbed"
-        notificationHubSecretVersion: "34b898c1d9cc4956a1c4ceb6d1e0cf3e"
+# Use redirector chart
+createDefaultIngress: false
 
 web:
   image_tag: latest
@@ -49,4 +47,9 @@ cid:
 users:
   notificationHubPath: nhsapp-stubbed
   notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-...
+
+secrets:
+  notificationHub:
+    notificationHubSecretName: "notificationHubSharedAccessKeyStubbed"
+    notificationHubSecretVersion: "34b898c1d9cc4956a1c4ceb6d1e0cf3e"
+

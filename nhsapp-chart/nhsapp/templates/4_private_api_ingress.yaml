@@ -15,6 +15,11 @@ metadata:
     version: {{ .Chart.AppVersion | quote }}
 spec:
   rules:
+    {{- if .Values.createDefaultPrivateIngress }}
+    {{- /*
+      The paths here should match the block below and the private ingress in the redirector chart:
+      https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-ops-redirector-chart?path=%2Ftemplates%2Fprivate_api_ingress.yaml
+    */}}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}.private.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -37,7 +42,7 @@ spec:
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v[1,2]/api/users/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})/messages
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
@@ -46,6 +51,7 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users
+    {{- end }}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.private.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
         paths:
@@ -54,17 +60,25 @@ spec:
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
           - backend:
-              serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v1/api/log
+            path: /v[1,2]/api/users/info
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/me/info
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /v[1,2]/api/users/me/messages
+            path: /v[1,2]/api/users/([A-Fa-f0-9-]{36})/messages
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v[1,2]/api/users/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})/messages
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v1/api/log
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}

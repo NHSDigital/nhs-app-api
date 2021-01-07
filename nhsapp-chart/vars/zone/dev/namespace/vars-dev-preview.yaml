@@ -4,6 +4,9 @@ networkPolicyEnabled: true
 odsRemapEnabled: true
 odsRemapMap: "G85075:X00100;G85672:X00100"
 
+# Allow access to private API without the redirector
+createDefaultPrivateIngress: true
+
 users:
   notificationHubPath: nhsapp-nonlive-preview
 

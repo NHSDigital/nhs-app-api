@@ -7,6 +7,9 @@ cidFidoHostname: uaf.sandpit.signin.nhs.uk
 cidSettingsHostName: settings.sandpit.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
+# Allow access to private API without the redirector
+createDefaultPrivateIngress: true
+
 users:
   notificationHubPath: nhsapp-nonlive-onboardingsandpit
 
