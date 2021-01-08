@@ -100,11 +100,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             }
             catch (Exception e)
             {
-                _logger.LogError(
-                    $"Something went wrong during building the response. Exception message: {e.Message}");
+                _logger.LogError(e, $"Something went wrong during building the response. Exception message: {e.Message}");
                 return new LinkageResult.InternalServerError();
             }
-
         }
 
         private static AddNhsUserRequest CreateRequest(CreateLinkageRequest createLinkageRequest)
