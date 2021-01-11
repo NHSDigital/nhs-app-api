@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="3.7.0-6.20517.6" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1" PrivateAssets="All" />
     <PackageReference Include="NHSOnline.CodeAnalysers" Version="0.3.0" PrivateAssets="All" />
   </ItemGroup>
