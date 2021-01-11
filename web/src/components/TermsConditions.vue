@@ -1,15 +1,18 @@
 <template>
   <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
-      <message-dialog :class="$style.customErrorBox"
-                      :focusable="true"
-                      message-type="error"
-                      role="alert">
-        <message-text>{{ $t('termsAndConditions.errors.youCannotContinue.header') }}</message-text>
-        <message-list>
-          <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
-        </message-list>
-      </message-dialog>
+      <div role="alert" aria-atomic="true">
+        <message-dialog :class="$style.customErrorBox"
+                        :focusable="true"
+                        message-type="error">
+          <message-text>
+            {{ $t('termsAndConditions.errors.youCannotContinue.header') }}
+          </message-text>
+          <message-list>
+            <li>{{ $t('termsAndConditions.errors.youCannotContinue.text') }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
     </div>
     <div id="text_body" :class="$style.info">
       <p>{{ $t('termsAndConditions.initial.youMustAgreeTo') }}
@@ -48,7 +51,6 @@
     <div :class="getErrorState()">
       <error-message v-if="hasTriedToContinue && !areTermsAccepted"
                      id="error_txt"
-                     role="alert"
                      :class="$style.validationText">
         {{ $t('termsAndConditions.initial.acceptConditionsCheckBox.youCannotUseWithoutAgreeing') }}
       </error-message>
@@ -140,29 +142,33 @@ export default {
       event.stopPropagation();
     },
     async onConfirmButtonClicked() {
-      this.hasTriedToContinue = true;
+      this.hasTriedToContinue = false;
 
-      if (!this.areTermsAccepted) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
+      this.$nextTick(async () => {
+        this.hasTriedToContinue = true;
 
-      const consentRequest = {
-        ConsentGiven: true,
-        AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
-      };
+        if (!this.areTermsAccepted) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
 
-      await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
+        const consentRequest = {
+          ConsentGiven: true,
+          AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
+        };
 
-      if (!this.$store.state.termsAndConditions.areAccepted) {
-        return;
-      }
+        await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
 
-      if (isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)) {
-        this.$router.push({ path: NOTIFICATIONS_PATH });
-      } else {
-        this.$router.push({ path: USER_RESEARCH_PATH });
-      }
+        if (!this.$store.state.termsAndConditions.areAccepted) {
+          return;
+        }
+
+        if (isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)) {
+          this.$router.push({ path: NOTIFICATIONS_PATH });
+        } else {
+          this.$router.push({ path: USER_RESEARCH_PATH });
+        }
+      });
     },
     getErrorState() {
       if (this.hasTriedToContinue && !this.areTermsAccepted) {

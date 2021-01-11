@@ -103,6 +103,7 @@ describe('TermsConditions acceptance', () => {
 
     it('updates the terms acceptance when submit button is clicked', async () => {
       wrapper.find('#btn_accept').trigger('click');
+      await wrapper.vm.$nextTick();
       expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
         consentRequest: {
           ConsentGiven: true,
