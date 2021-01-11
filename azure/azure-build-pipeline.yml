@@ -17,7 +17,7 @@ resources:
     - repository: common
       type: github
       name: NHSDigital/api-management-utils
-      ref: refs/heads/edge
+      ref: refs/heads/APM-1162-readd-proxy-upload-error-logs
       endpoint: NHSDigital
 
 variables:
