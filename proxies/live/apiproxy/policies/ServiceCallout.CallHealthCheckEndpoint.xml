@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="true" enabled="true" name="ServiceCallout.CallHealthCheckEndpoint">
+    <DisplayName>ServiceCallout.CallHealthCheckEndpoint</DisplayName>
+    <Properties/>
+    <Request clearPayload="true" variable="healthCheckRequest">
+        <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    </Request>
+    <Response>healthCheckResponse</Response>
+    <HTTPTargetConnection>
+        <SSLInfo>
+            <Enabled>true</Enabled>
+        </SSLInfo>
+        <LoadBalancer>
+            <Server name="nhs-app"/>
+        </LoadBalancer>
+        <Path>/health-check</Path>
+    </HTTPTargetConnection>
+    <Timeout>20000</Timeout>
+</ServiceCallout>
