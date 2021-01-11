@@ -90,8 +90,13 @@ spec:
           value: "http://*:{{ $.Values.api.containerPort }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
+        {{- if $.Values.environmentStubbed }}
+        - name: NHS_SEARCH_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/nhs-search-indexes/"
+        {{- else }}
         - name: NHS_SEARCH_BASE_URL
           value: "https://iproxy-nhssearch-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
+        {{- end }}
         - name: POSTCODE_LOOKUP_SEARCH_RADIUS_KM
           value: "{{ $.Values.postcodeLookupSearchRadiusKm }}"
         - name: GP_LOOKUP_API_KEY
@@ -377,7 +382,7 @@ spec:
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
-          readOnly: true    
+          readOnly: true
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates/internalca
           readOnly: true
