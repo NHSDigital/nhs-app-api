@@ -29,6 +29,30 @@
 			</Response>
 			<Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 		</Flow>
+		<!-- <Flow name="StatusEndpoint">
+			<Description/>
+			<Request>
+				<Step>
+					<Name>KeyValueMapOperations.GetSecureVariables</Name>
+				</Step>
+				<Step>
+					<Name>KeyValueMapOperations.GetSharedSecureVariables</Name>
+				</Step>
+				<Step>
+					<Condition>private.apigee.status-endpoint-api-key NotEquals request.header.apikey</Condition>
+					<Name>RaiseFault.401Unauthorized</Name>
+				</Step>
+				<Step>
+					<Name>ServiceCallout.CallHealthCheckEndpoint</Name>
+				</Step>
+			</Request>
+			<Response>
+				<Step>
+					<Name>JavaScript.SetStatusResponse</Name>
+				</Step>
+			</Response>
+			<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
+		</Flow> -->
 		<Flow name="MirrorIncomingHeaders">
 			<Description/>
 			<Request/>
@@ -56,6 +80,9 @@
 	</RouteRule>
 	<RouteRule name="NoRoutePing">
 		<Condition>(proxy.pathsuffix MatchesPath "/_ping") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
+	</RouteRule>
+	<RouteRule name="NoRouteStatus">
+		<Condition>(proxy.pathsuffix MatchesPath "/_status") and ((request.verb = "GET") or (request.verb = "HEAD"))</Condition>
 	</RouteRule>
 	<RouteRule name="nhs-app-target">
 		<TargetEndpoint>nhs-app-target</TargetEndpoint>
