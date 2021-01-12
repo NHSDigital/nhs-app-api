@@ -36,6 +36,7 @@ extends:
     spec_file: ${{ variables.spec_file }}
     portal_api_requires_callback_url: false
     enable_monitoring: true
+    enable_status_monitoring: true
     apigee_deployments:
       - environment: internal-dev
         make_spec_visible: true  # Off by default. Turn on to allow expose API developers can subscribe their Apps to
