@@ -1,9 +1,9 @@
-<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.AddHeader.NhsdSupplierAppId">
-	<Add>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignMessage.SetHeader.NhsdSupplierAppId">
+	<Set>
 		<Headers>
 			<Header name="NHSD-Supplier-App-ID">{developer.app.id}</Header>
 		</Headers>
-	</Add>
+	</Set>
 	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
 	<AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
