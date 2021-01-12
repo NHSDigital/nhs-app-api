@@ -59,6 +59,7 @@ properties:
 
               * Link with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
               * Link with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
+              * Images ![NHS Logo](https://assets.nhs.uk/images/nhs-logo.png)
             maxLength: 1000
             pattern: must not match <(.|\n)*?>
             example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
