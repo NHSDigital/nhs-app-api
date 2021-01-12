@@ -90,7 +90,7 @@ spec:
           value: "http://*:{{ $.Values.api.containerPort }}"
         - name: GP_LOOKUP_API_RESULTS_LIMIT
           value: "{{ $.Values.gpLookupApiResultsLimit }}"
-        {{- if $.Values.environmentStubbed }}
+        {{- if $.Values.environmentStubbed.nhsSearchStubbed }}
         - name: NHS_SEARCH_BASE_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/nhs-search-indexes/"
         {{- else }}

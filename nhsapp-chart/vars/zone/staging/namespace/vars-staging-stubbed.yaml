@@ -24,6 +24,7 @@ environmentStubbed:
   microtestStubbed: true
   cdssStubbed: true
   spineStubbed: true
+  nhsSearchStubbed: true
 
 emisCertEnabled: true
 emisPort: 444
