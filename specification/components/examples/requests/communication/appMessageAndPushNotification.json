@@ -4,7 +4,7 @@
     "channels": {
         "appMessage": {
             "sender": "Onboarded Third Party",
-            "body": "You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here: https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments"
+            "body": "You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)"
         },
         "pushNotification": {
             "title": "You have a new message",
