@@ -44,7 +44,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.io.File
 import java.util.Locale
-import java.util.UUID
 
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP_PRIVATE = "nativeApp"
@@ -157,26 +156,26 @@ class NhsWeb(
             return
         }
 
-        if (!connectionStateMonitor.isConnectedToNetwork) {
-            showNoConnectionError()
-            return
-        }
-
-        val url: String = if (shouldIgnorePersistedLink(path)) {
+        val urlToLoad: String = if (shouldIgnorePersistedLink(path)) {
             urlLoader.produceValidUrl(path)
         } else {
             getPersistedLink()
         }
         appPersistData.clearPersistedLink()
 
-        reloadUrl = url
+        reloadUrl = urlToLoad
+
+        if (!connectionStateMonitor.isConnectedToNetwork) {
+            showNoConnectionError()
+            return
+        }
 
         val loginUrl = readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
         if (path.startsWith(loginUrl)) {
             requiresFullPageLoad = true
             isUserLoggedIn = false
         }
-        urlLoader.loadUrl(url, requiresFullPageLoad)
+        urlLoader.loadUrl(urlToLoad, requiresFullPageLoad)
     }
 
     private fun shouldIgnorePersistedLink(path: String): Boolean {

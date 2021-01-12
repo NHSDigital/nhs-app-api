@@ -121,7 +121,7 @@ class NhsWebTest {
 
         verify(interactorMock).showUnavailabilityError(any())
         assertNull(nhsWeb.reloadUrl)
-        verifyZeroInteractions(urlLoader)
+        verify(urlLoader, times(0)).loadUrl(any(), any())
     }
 
     @Test
