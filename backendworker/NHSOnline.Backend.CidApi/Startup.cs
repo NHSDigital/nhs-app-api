@@ -90,7 +90,6 @@ namespace NHSOnline.Backend.CidApi
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddIm1CacheService();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddTransient<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();

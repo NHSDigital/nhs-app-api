@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.PfsApi
 
             services.AddSingleton(configuration);
             services.AddMongoSessionCacheService();
-            services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddIm1CacheService();
             services.AddTransient<IGpSessionManager, GpSessionManager>();
             services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
