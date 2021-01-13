@@ -250,3 +250,9 @@ Feature: Login frontend
     And I see the navigation menu
     And I can see and follow the View your GP health record link
     Then the Medical Record Warning Page is displayed
+
+  Scenario: A user who does not accept NHS login terms and conditions will see the appropriate error
+    Given I am a user who does not accept the NHS login terms and conditions
+    And I am logging in
+    Then I see an error informing me to accept NHS login terms and conditions
+

@@ -1,8 +1,9 @@
 <template>
   <div>
     <div id="app">
-      <div v-if="showError" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-        <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+      <div v-if="showError"
+           :class="!isNativeApp && $style.desktopWeb">
+        <div v-if="!isNativeApp" :class="$style['header-container-desktop']">
           <web-header :show-menu="false" :show-links="false"/>
         </div>
         <div v-else>
@@ -12,13 +13,14 @@
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
           <div ref="mainContent" tabindex="-1" class="nhsuk-grid-column-two-thirds">
-            <div id="mainContent">
-              <div v-if="showError"
-                   :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            <div id="maincontent">
+              <div v-if="showError && !termsNotAccepted"
+                   id="authReturnError"
+                   :class="!isNativeApp && $style.desktopWeb">
                 <div tabindex="-1"
                      :class="[mainClass, $style['main-container-desktop']]">
                   <div :id="$style.serverError"
-                       :class="$store.state.device.isNativeApp
+                       :class="isNativeApp
                          ? 'pull-content nhsuk-u-padding-top-7'
                          : ''">
                     <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4
@@ -142,6 +144,21 @@
                   </div>
                 </div>
               </div>
+              <div v-else-if="termsNotAccepted"
+                   id="termsAndConditionsError"
+                   :class="isNativeApp && 'pull-content nhsuk-u-padding-top-7'">
+                <page-title>
+                  {{ $t('login.authReturn.termsNotAccepted') }}
+                </page-title>
+                <p class="nhsuk-u-margin-top-3">
+                  {{ $t('login.authReturn.youCannotUse') }}
+                </p>
+                <p>{{ $t('login.authReturn.ifYouNeedToBook') }}</p>
+                <contact-111
+                  :text="$t('appointments.confirmation.error.forUrgentMedicalAdvice.text')"
+                  :aria-label="$t('appointments.confirmation.error.forUrgentMedicalAdvice.label')"/>
+                <error-link from="login.authReturn.backToLogin" :action="loginUrl"/>
+              </div>
               <div v-else>
                 <main >
                   <div :class="$style['blue-body']">
@@ -169,6 +186,7 @@
 import get from 'lodash/fp/get';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
+import Contact111 from '@/components/widgets/Contact111';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
@@ -179,15 +197,18 @@ import ErrorUnorderedList from '@/components/errors/ErrorUnorderedList';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HeaderSlim from '@/components/HeaderSlim';
 import NativeVersionSetup from '@/services/nativeVersionSetup';
+import PageTitle from '@/components/widgets/PageTitle';
 import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import { LOGIN_PATH } from '@/router/paths';
+import { CONSENT_NOT_GIVEN_DESCRIPTION } from '@/lib/utils';
 
 export default {
   components: {
     ApiError,
     ConnectionError,
+    Contact111,
     ErrorContainer,
     ErrorHeader,
     ErrorLink,
@@ -197,6 +218,7 @@ export default {
     ErrorUnorderedList,
     FlashMessage,
     HeaderSlim,
+    PageTitle,
     Spinner,
     WebHeader,
     WebFooter,
@@ -211,18 +233,25 @@ export default {
   },
   data() {
     return {
+      consentNotGivenDescription: CONSENT_NOT_GIVEN_DESCRIPTION,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
     };
   },
   computed: {
     title() {
-      return this.showError && this.$t('login.authReturn.loginFailed');
+      const title = (this.termsNotAccepted) ?
+        this.$t('login.authReturn.termsNotAccepted') :
+        this.$t('login.authReturn.loginFailed');
+      return this.showError && `${title} - ${this.$t('appTitle')}`;
     },
     contactUsParam() {
       return {
         param: 'errorcode',
         value: this.serviceDeskReference,
       };
+    },
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
     },
     loginUrl() {
       return LOGIN_PATH;
@@ -247,6 +276,9 @@ export default {
     },
     showError() {
       return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
+    },
+    termsNotAccepted() {
+      return this.$route.query.error_description === this.consentNotGivenDescription;
     },
   },
   mounted() {

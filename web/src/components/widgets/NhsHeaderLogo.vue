@@ -67,6 +67,7 @@ export default {
       text-decoration: underline;
     }
   }
+
   @include tabletAndBelow() {
    span {
      padding-top: 0;

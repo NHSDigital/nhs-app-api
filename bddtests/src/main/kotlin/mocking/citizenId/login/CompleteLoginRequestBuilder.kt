@@ -27,4 +27,16 @@ class CompleteLoginRequestBuilder(val patient: Patient, customId: String? = null
                 "${redirectUri}?state={{request.query.state}}&code=" +
                         patient.authCode)
     }
+
+    fun respondWithTermsNotAcceptedResponse(): Mapping {
+        val redirectUri = if(GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrFail()
+                && !Config.instance.isNativeAppTestRun) {
+            Config.instance.cidRedirectUri
+        } else {
+            "{{request.query.redirect_uri}}"
+        }
+
+        return redirectTo("${redirectUri}?state={{request.query.state}}&" +
+                "error=access_denied&error_description=ConsentNotGiven")
+    }
 }

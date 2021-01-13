@@ -1,6 +1,7 @@
 import AuthReturnLayout from '@/layouts/authReturn';
 import i18n from '@/plugins/i18n';
 import { AUTH_RETURN_PATH } from '@/router/paths';
+import each from 'jest-each';
 import { mount, createStore } from '../helpers';
 
 
@@ -19,6 +20,7 @@ describe('authReturn layout', () => {
     status,
     shallow = false,
     showApiError = true,
+    query = {},
   }) => mount(AuthReturnLayout, {
     shallow,
     mocks: {
@@ -44,6 +46,9 @@ describe('authReturn layout', () => {
         },
       },
     }),
+    $route: {
+      query,
+    },
     mountOpts: { i18n },
   });
 
@@ -230,11 +235,45 @@ describe('authReturn layout', () => {
         expect(head.title).toBeUndefined();
       });
 
-      it('will set title to loginFailed if showError is true', () => {
-        wrapper = mountAuthReturnLayout({ shallow: true });
-        const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
-        expect(head.title).toBe('Login failed');
+
+      each([
+        ['ConsentNotGiven', 'You need to accept NHS login terms of use to continue'],
+        ['ExampleErrorDescription', 'Login failed'],
+      ])
+        .it('will set the correct title if errorDescription is %s',
+          (errorDescription, expectedTitle) => {
+            const query = { error_description: errorDescription };
+            wrapper = mountAuthReturnLayout({ query, shallow: true });
+
+            const head = wrapper.vm.$options.metaInfo.call(wrapper.vm);
+            expect(head.title).toBe(`${expectedTitle} - NHS App`);
+          });
+    });
+
+    describe('nhs login terms not accepted', () => {
+      it('has the correct content', () => {
+        const query = { error_description: 'ConsentNotGiven' };
+        wrapper = mountAuthReturnLayout({ query, shallow: true });
+
+        const termsError = wrapper.find('#termsAndConditionsError');
+        const paragraphs = termsError.findAll('p');
+
+        expect(paragraphs.at(0).text()).toBe('You cannot use the NHS app if you have not accepted NHS login terms of use.');
+        expect(paragraphs.at(1).text()).toBe('If you need to book an appointment or get a prescription now, contact your GP surgery directly.');
       });
+
+      each([
+        ['ConsentNotGiven', true, false],
+        ['ExampleErrorDescription', false, true],
+      ])
+        .it('will show the correct error if the error_description query param is %s',
+          (errorDescription, termsAndConditionsErrorVisible, authReturnErrorVisible) => {
+            const query = { error_description: errorDescription };
+            wrapper = mountAuthReturnLayout({ query, shallow: true });
+
+            expect(wrapper.find('#termsAndConditionsError').exists()).toBe(termsAndConditionsErrorVisible);
+            expect(wrapper.find('#authReturnError').exists()).toBe(authReturnErrorVisible);
+          });
     });
   });
 });

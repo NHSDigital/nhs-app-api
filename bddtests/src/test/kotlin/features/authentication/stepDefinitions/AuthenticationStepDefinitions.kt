@@ -21,6 +21,7 @@ import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndCondi
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.NhsLoginTermsAndConditionsError
 import pages.ServiceUnavailablePage
 import pages.account.MyAccountPage
 import pages.assertElementNotPresent
@@ -53,6 +54,7 @@ class AuthenticationStepDefinitions {
     lateinit var myAccount: MyAccountPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
     lateinit var accountCreationpage: CIDAccountCreationPage
+    lateinit var nhsLoginTermsAndConditionsError: NhsLoginTermsAndConditionsError
     lateinit var currentUrl: String
 
     private val mockingClient = MockingClient.instance
@@ -245,6 +247,16 @@ class AuthenticationStepDefinitions {
                 "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
                         "You can still contact your GP surgery to access your NHS services. " +
                         "For urgent medical advice, go to 111.nhs.uk or call 111.")
+    }
+
+    @Then("^I see an error informing me to accept NHS login terms and conditions")
+    fun iSeeAnErrorInformingMeToAcceptNHSLoginTerms() {
+        nhsLoginTermsAndConditionsError.assertTitle()
+                .assertParagraphText("You cannot use the NHS app if you have not accepted NHS login terms of use.")
+                .assertParagraphText("If you need to book an appointment or get a prescription now, " +
+                        "contact your GP surgery directly.")
+                .assertParagraphText("For urgent medical advice, go to 111.nhs.uk or call 111.")
+                .assertLinkExists("Back to login", "/login", true)
     }
 
     @Then("^I see the login page$")

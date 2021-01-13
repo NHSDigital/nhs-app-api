@@ -108,6 +108,13 @@ class AuthenticationErrorStepDefinitions {
         setupAndLogIn(patient, supplier)
     }
 
+    @Given("^I am a user who does not accept the NHS login terms and conditions$")
+    fun iAmAUserWhoDoesNotAcceptLoginTCs() {
+        val patient = Patient.getDefault(Supplier.EMIS)
+        SerenityHelpers.setPatient(patient)
+        CitizenIdSessionCreateJourney().createTermsNotAcceptedFor(patient)
+    }
+
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier, hasNullToken: Boolean = false) {
         SerenityHelpers.setPatient(patient)
 

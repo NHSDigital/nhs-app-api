@@ -29,6 +29,13 @@ class CitizenIdSessionCreateJourney {
         }
     }
 
+    fun createTermsNotAcceptedFor(patient: Patient) {
+        createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
+        mockingClient.forCitizenId.mock {
+            completeLoginRequest(patient).respondWithTermsNotAcceptedResponse()
+        }
+    }
+
     fun createInvalidFor(patient: Patient) {
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         val idToken = mockingStepsInitialise(patient, redirectUri)

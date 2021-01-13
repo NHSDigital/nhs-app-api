@@ -136,6 +136,11 @@ open class SharedStepDefinitions {
         doLogin(false)
     }
 
+    @Given("^I am logging in$")
+    fun iAmLoggingIn() {
+        doLogin(false)
+    }
+
     @Given("^I log in to the app expecting to see the notifications prompt$")
     fun iLogInToTheAppExpectingTheNotificationsPrompt() {
         val patient = handleLogin()

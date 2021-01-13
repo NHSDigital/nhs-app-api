@@ -28,7 +28,9 @@ export default {
   youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
   authReturn: {
     backToHome: 'Back to home',
+    backToLogin: 'Back to login',
     goBackAndTryAgain: 'Go back to the home screen and try logging in again.',
+    ifYouNeedToBook: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly.',
     ifYouKeepSeeingThisQuoteCode: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
     ifYouKeepSeeingThisQuoteCodeToHelpUs: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
     ifYourSurgeryIsInEngland: 'If your GP surgery is in England ',
@@ -38,6 +40,7 @@ export default {
     notAvailableInNorthernIrelandOrScotland: 'The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England.',
     notAvailableInWales: 'The NHS App is not available in Wales because health services are managed separately from England.',
     reference: 'Reference: ',
+    termsNotAccepted: 'You need to accept NHS login terms of use to continue',
     thisCanBeOneOfTwoProblems: 'This can be one of two problems:',
     weCannotConnectToSurgeryOrMatchYourNhsNumber: 'Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery.',
     weCannotGetYourDetailsFromYourGpSurgery: 'We cannot get your details from your GP surgery.',
@@ -118,6 +121,7 @@ export default {
         label: 'we cannot connect to your GP surgery',
       },
     },
+    youCannotUse: 'You cannot use the NHS app if you have not accepted NHS login terms of use.',
   },
   biometrics: {
     goBackToTheHomepage: 'Go back to the homepage and try logging in again.',

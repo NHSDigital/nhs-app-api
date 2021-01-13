@@ -9,6 +9,7 @@ import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 const protocol = 'http://';
 const secureProtocol = 'https://';
 export const GP_SESSION_ERROR_STATUS = 599;
+export const CONSENT_NOT_GIVEN_DESCRIPTION = 'ConsentNotGiven';
 
 const customMimeTypes = new Mime({
   'image/bmp': ['dib'],
