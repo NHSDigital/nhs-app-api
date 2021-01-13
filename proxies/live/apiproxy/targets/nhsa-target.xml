@@ -34,10 +34,10 @@
 				<Name>AssignMessage.AddUpstreamApiKeyHeader</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddHeader.NhsdCorrelationId</Name>
+				<Name>AssignMessage.SetHeader.NhsdCorrelationId</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddHeader.NhsdSupplierAppId</Name>
+				<Name>AssignMessage.SetHeader.NhsdSupplierAppId</Name>
 			</Step>
 			<Step>
 				<Name>AssignMessage.RemoveHeader.XCorrelationId</Name>
