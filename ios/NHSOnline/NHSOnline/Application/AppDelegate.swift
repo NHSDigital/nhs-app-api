@@ -7,7 +7,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     var rootViewController: UINavigationController?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         clearCaches()
 
         application.ignoreSnapshotOnNextApplicationLaunch()
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         clearCaches()
         
         let webPageUrl = userActivity.webpageURL?.absoluteString
@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         clearCaches()
                 
         self.finishLoginToApp(url.absoluteString)
@@ -139,10 +139,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     private func getViewController() -> HomeViewController {
-        return rootViewController?.childViewControllers.first as! HomeViewController;
+        return rootViewController?.children.first as! HomeViewController;
     }
     
-    private func handleNotifications(launchOptions: [UIApplicationLaunchOptionsKey: Any]?) {
+    private func handleNotifications(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         guard let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] else {
             return
         }

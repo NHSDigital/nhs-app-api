@@ -34,7 +34,7 @@ class ProgressSpinner {
                                  endAngle: endAngle,
                                  clockwise: true).cgPath
         spinnerLayer.lineWidth = 5.0
-        spinnerLayer.lineCap = kCALineCapSquare
+        spinnerLayer.lineCap = CAShapeLayerLineCap.square
         spinnerLayer.strokeColor = #colorLiteral(red: 0, green: 0.368627451, blue: 0.7215686275, alpha: 1)
         spinnerLayer.fillColor = UIColor.clear.cgColor
 

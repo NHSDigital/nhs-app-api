@@ -286,7 +286,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case UserContent.openAppSettings.rawValue:
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                 }
                 break
             case UserContent.pageLoadComplete.rawValue:

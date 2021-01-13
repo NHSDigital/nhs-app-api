@@ -24,7 +24,7 @@ class HeaderBarSlim: UIView {
         backButtonArrow.accessibilityLabel = NSLocalizedString("BackArrowTitle", comment: "")
         backButtonArrow.accessibilityHint = NSLocalizedString("BackArrowHint", comment: "")
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [backButtonArrow, closeIcon]
+        headerBarView.accessibilityElements = [backButtonArrow!, closeIcon!]
         addSubview(headerBarView)
     }
     

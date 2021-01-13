@@ -102,7 +102,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         
         setUpControllers()
         
-        self.addChildViewController(self.webViewController!)
+        self.addChild(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
 
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
@@ -272,7 +272,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     
     func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
         if let a11yLabel = accessibilityLabel {
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, a11yLabel)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: a11yLabel)
         }
     }
     
@@ -422,12 +422,12 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         hideProgressBar()
         cycleFromViewController(oldViewController: webViewController!, toViewController: errorViewController!)
         currentNativeViewController = errorViewController
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: errorViewController?.errorTextView)
     }
     
     func announcePageTitle(pageTitle: String?) {
         if let title = pageTitle {
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, title)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: title)
         }
     }
     
@@ -442,14 +442,14 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     }
     
     func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
-        oldViewController.willMove(toParentViewController: nil)
-        self.addChildViewController(newViewController)
+        oldViewController.willMove(toParent: nil)
+        self.addChild(newViewController)
         self.addSubview(subView: newViewController.view, toView:self.containerView!)
         oldViewController.view.accessibilityElementsHidden = true
         newViewController.view.accessibilityElementsHidden = false
         oldViewController.view.removeFromSuperview()
-        oldViewController.removeFromParentViewController()
-        newViewController.didMove(toParentViewController: self)
+        oldViewController.removeFromParent()
+        newViewController.didMove(toParent: self)
     }
     
     func createHomeUrlSubRequestWithPath(urlPathToAppend: String) -> String {
@@ -658,7 +658,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         self.updateHeaderText(headerText: getDownloadErrorStrings().DownloadPageHeader)
         cycleFromViewController(oldViewController: self.webViewController!, toViewController: errorViewController!)
         currentNativeViewController = errorViewController
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: errorViewController?.errorTextView)
     }
     
     func showDataDownloadAlert(alertType: DataDownloadAlertType) {
@@ -877,11 +877,11 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         
         if #available(iOS 10.0, *) {
             let settingsAction = UIAlertAction(title: showSettingGoToSettingsButtonText, style: .default) { (_) -> Void in
-                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                     return
                 }
                 if UIApplication.shared.canOpenURL(settingsUrl) {
-                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
+                    UIApplication.shared.open(settingsUrl, options: [:], completionHandler:{ (success) in })
                 }
             }
             alertController.addAction(settingsAction)
@@ -934,4 +934,3 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         self.present(alert, animated: true)
     }
 }
-

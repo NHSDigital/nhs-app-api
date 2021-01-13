@@ -27,7 +27,7 @@ class HeaderBar: UIView {
         NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
         NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [NHSHomeLogo, helpIcon, myAccountIcon]
+        headerBarView.accessibilityElements = [NHSHomeLogo!, helpIcon!, myAccountIcon!]
         addSubview(headerBarView)
     }
     

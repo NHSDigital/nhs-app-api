@@ -4,11 +4,11 @@ extension UINavigationController {
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    override open var childViewControllerForStatusBarStyle: UIViewController? {
+    override open var childForStatusBarStyle: UIViewController? {
       return topViewController
     }
 
-    override open var childViewControllerForStatusBarHidden: UIViewController? {
+    override open var childForStatusBarHidden: UIViewController? {
       return topViewController
     }
 }

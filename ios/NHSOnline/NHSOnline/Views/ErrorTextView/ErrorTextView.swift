@@ -18,15 +18,15 @@ class ErrorTextView: UITextView {
         
         self.attributedText = attributedServiceError
         self.linkTextAttributes = [
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.blue,
-            NSAttributedStringKey.underlineColor.rawValue: UIColor.blue,
-            NSAttributedStringKey.underlineStyle.rawValue: NSUnderlineStyle.styleSingle.rawValue
+            NSAttributedString.Key.foregroundColor: UIColor.blue,
+            NSAttributedString.Key.underlineColor: UIColor.blue,
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         resizeErrorTextView()
     }
     
     func resizeErrorTextView() {
-        self.textContainerInset = UIEdgeInsetsMake(30, 12, 10, 12)
+        self.textContainerInset = UIEdgeInsets.init(top: 30, left: 12, bottom: 10, right: 12)
         let size = CGSize(width: self.bounds.width, height: .infinity)
         let estimatedSize = self.sizeThatFits(size)
         self.constraints.forEach{(constraint) in
@@ -37,7 +37,7 @@ class ErrorTextView: UITextView {
     }
     
     private func toHeaderAttributedText(headerText:String)-> NSMutableAttributedString {
-        let fontAttribute = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17)]
+        let fontAttribute = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)]
         return NSMutableAttributedString(string: headerText, attributes: fontAttribute)
     }
     
@@ -50,7 +50,7 @@ class ErrorTextView: UITextView {
             }
         }
         
-        let textAttribute = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17), NSAttributedStringKey.paragraphStyle : NSMutableParagraphStyle()]
+        let textAttribute = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17), NSAttributedString.Key.paragraphStyle : NSMutableParagraphStyle()]
         
         let attributedText = NSMutableAttributedString(string: "\(newLines)\(text)", attributes: textAttribute)
         

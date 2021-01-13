@@ -28,13 +28,13 @@ class LifecycleHandlers: NSObject {
 
     func createLifecycleObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.didFinishLaunchingNotification),
-                name: Notification.Name.UIApplicationDidFinishLaunching, object: nil)
+                name: UIApplication.didFinishLaunchingNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.appEnteredForeground),
-                name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+                name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didBecomeActive),
-                name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+                name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground),
-                name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
+                name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.performAppVersionCheck),
                 name: CustomNotifications.pageUnavailabilityOnReloadWebView, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.showAPIUnavailableError),
@@ -88,7 +88,7 @@ class LifecycleHandlers: NSObject {
         let appUpdateRequiredCloseButtonText = NSLocalizedString("AppUpdateRequiredCloseButtonText", comment: "")
         let appUpdateRequiredGoToUpdateButtonText = NSLocalizedString("AppUpdateRequiredGoToUpdateButtonText", comment: "")
 
-        let alert = UIAlertController(title: appUpdateRequiredTitle, message: appUpdateRequiredMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: appUpdateRequiredTitle, message: appUpdateRequiredMessage, preferredStyle: UIAlertController.Style.alert)
 
         let appStoreUrl = config().AppStoreUrl
         if (!appStoreUrl.isEmpty) {
@@ -97,7 +97,7 @@ class LifecycleHandlers: NSObject {
 
                 if let url = URL(string: appStoreUrl), UIApplication.shared.canOpenURL(url) {
                     if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        UIApplication.shared.open(url)
                     } else {
                         UIApplication.shared.openURL(url)
                     }
@@ -137,7 +137,7 @@ class LifecycleHandlers: NSObject {
 
     private func setTabBarFont() {
         UITabBarItem.appearance().setTitleTextAttributes(
-                [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 8)],
+                [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 8)],
                 for: .normal)
     }
 
