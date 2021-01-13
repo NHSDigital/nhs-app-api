@@ -205,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
 
             // Assert
             result.Should().NotBeNull();
-            result.SpecialRequestCharacterLimit.Should().Be(1000);
+            result.SpecialRequestCharacterLimit.Should().Be(450);
         }
 
         [TestMethod]

@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             result.Should().Be(expectedValue);
         }
-        
+
         [TestMethod]
         public void NhsNumberFormat_PreFormattedString_ReturnsFormattedString()
         {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             result.Should().Be(expectedValue);
         }
-        
+
         [TestMethod]
         public void RemoveWhiteSpace_WhiteSpaceMidString_ReturnsStringNoWhiteSpace()
         {
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             result.Should().Be(expectedValue);
         }
-        
+
         [TestMethod]
         public void RemoveWhiteSpace_WhiteSpacePreString_ReturnsStringNoWhiteSpace()
         {
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             result.Should().Be(expectedValue);
         }
-        
+
         [TestMethod]
         public void RemoveWhiteSpace_WhiteSpacePostString_ReturnsStringNoWhiteSpace()
         {
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.Support.UnitTests
 
             result.Should().Be(expectedValue);
         }
-        
+
         [TestMethod]
         public void RemoveWhiteSpace_WhiteSpaceStartMidEndString_ReturnsStringNoWhiteSpace()
         {
@@ -112,6 +112,34 @@ namespace NHSOnline.Backend.Support.UnitTests
             const string expectedValue = "0123456789";
 
             var result = sourceString.RemoveWhiteSpace();
+
+            result.Should().Be(expectedValue);
+        }
+
+        [TestMethod]
+        public void FindNewEncodedLength_StringHas0EncodedCharacters_ReturnsLengthOfString()
+        {
+            const string sourceString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porta.";
+            const int sourceEncodedValue = 4;
+
+            const int expectedValue = 66;
+
+            var result = sourceString.FindNewlineStringEncodedLength(sourceEncodedValue);
+
+            result.Should().Be(expectedValue);
+        }
+
+        [TestMethod]
+        public void FindNewEncodedLength_StringHasEncodedCharacters_ReturnsLengthOfString()
+        {
+            const string sourceString = "Lorem ipsum dolor " + "\n" +
+                                        "si amet, " + "\n" +
+                                        "consectetur adipiscing.";
+            const int sourceEncodedValue = 5;
+
+            const int expectedValue = 60;
+
+            var result = sourceString.FindNewlineStringEncodedLength(sourceEncodedValue);
 
             result.Should().Be(expectedValue);
         }

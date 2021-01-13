@@ -113,8 +113,7 @@ import {
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
-import { redirectTo, gpSessionErrorHasRetried,
-  normaliseWhiteSpace, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
+import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
@@ -274,7 +273,7 @@ export default {
       if (this.courseSelectionValid && this.specialRequestValid) {
         let specialRequest = null;
         if (this.specialRequest) {
-          specialRequest = normaliseWhiteSpace(this.specialRequest).trim();
+          specialRequest = this.specialRequest.trim();
         }
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', { specialRequest });
         redirectTo(this, this.confirmCoursesPath);

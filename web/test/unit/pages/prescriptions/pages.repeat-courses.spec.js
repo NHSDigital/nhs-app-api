@@ -142,10 +142,9 @@ describe('prescriptions/repeat-courses.vue -', () => {
     );
 
     each([
-      [' multiple\nnew\nlines', 'multiple new lines'],
-      ['  more\n\rnew\r lines\r\n\r', 'more new lines'],
-      ['lots    of \r\n spaces    ', 'lots of spaces'],
-    ]).it('will trim and normalise white space in the special request before dispatching to store', async (request, formattedRequest) => {
+      [' single leading and trailing space ', 'single leading and trailing space'],
+      ['  multiple leading and trailing space  ', 'multiple leading and trailing space'],
+    ]).it('will trim the special request before dispatching to store', async (request, formattedRequest) => {
       // Arrange
       const $store = createStore({
         isValid: true,

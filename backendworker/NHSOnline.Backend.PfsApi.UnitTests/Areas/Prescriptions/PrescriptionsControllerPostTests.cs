@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Metrics;
@@ -60,14 +61,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _repeatPrescriptionRequest = new RepeatPrescriptionRequest();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _gpSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
+
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), _gpSession, "im1token");
 
             _mockPrescriptionsService = new Mock<IPrescriptionService>();
             _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();
 
             _mockAuditor = new Mock<IAuditor>();
-
-            _gpSession = new EmisUserSession();
 
             _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes,
                 MinimumAppAge, MinimumLinkageAge);
@@ -109,7 +110,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.Success()));
 
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _gpSession))
                 .Returns(true);
 
             // Act
@@ -143,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.PartialSuccess(response)));
 
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _gpSession))
                 .Returns(true);
 
             // Act
@@ -177,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             // Arrange
             _repeatPrescriptionRequest.CourseIds = new List<string> { "Course 1", "Course 2" };
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _gpSession))
                 .Returns(false);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     StatusCodes.Status400BadRequest,  _gpSession.Supplier))
@@ -230,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockPrescriptionValidationService
-                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _mockGpSystem.Object.PrescriptionSpecialRequestCharacterLimit))
+                .Setup(x => x.IsPostValid(_repeatPrescriptionRequest, _gpSession))
                 .Returns(true);
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     expectedStatusCode, _gpSession.Supplier))

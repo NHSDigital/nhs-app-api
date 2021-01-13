@@ -30,8 +30,7 @@ import utils.getOrNull
 import utils.set
 
 private const val MILLISECONDS_TO_WAIT_FOR_CONTINUE: Long = 500
-private const val SPECIAL_REQUEST_LIMIT = 1000
-private const val TPP_SPECIAL_REQUEST_LIMIT = 500
+private const val SPECIAL_REQUEST_LIMIT = 450
 
 open class CoursesStepDefinitions {
 
@@ -287,10 +286,7 @@ open class CoursesStepDefinitions {
 
     private fun getSpecialRequestCharactersRemainingText(): String {
         val specialRequest = Serenity.sessionVariableCalled<String>("specialRequestText") ?: ""
-        val charactersRemaining = when(SerenityHelpers.getGpSupplier()) {
-            Supplier.TPP -> TPP_SPECIAL_REQUEST_LIMIT - specialRequest.length
-            else -> SPECIAL_REQUEST_LIMIT - specialRequest.length
-        }
+        val charactersRemaining = SPECIAL_REQUEST_LIMIT - specialRequest.length
         val pluralisedCharacters = when(charactersRemaining) {
             1 -> "character"
             else -> "characters"

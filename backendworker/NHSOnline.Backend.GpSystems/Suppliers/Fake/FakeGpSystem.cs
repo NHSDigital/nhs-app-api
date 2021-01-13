@@ -87,7 +87,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
             throw new NotImplementedException();
 
         public bool SupportsLinkedAccounts => true;
-
-        public int PrescriptionSpecialRequestCharacterLimit { get; } = Constants.SpecialRequestCharacterLimit.Default;
     }
 }

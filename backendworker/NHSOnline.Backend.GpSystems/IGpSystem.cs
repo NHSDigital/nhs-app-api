@@ -51,6 +51,6 @@ namespace NHSOnline.Backend.GpSystems
 
         bool SupportsLinkedAccounts { get; }
 
-        int PrescriptionSpecialRequestCharacterLimit { get; }
+        int PrescriptionSpecialRequestCharacterLimit => Constants.SpecialRequestCharacterLimit.FrontendLimit;
     }
 }

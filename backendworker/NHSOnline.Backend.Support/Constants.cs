@@ -68,8 +68,13 @@ namespace NHSOnline.Backend.Support
 
         public static class SpecialRequestCharacterLimit
         {
-            public const int Default = 1000;
-            public const int Tpp = 500;
+            public const int FrontendLimit = 450;
+            public const int BackendLimit = 500;
+        }
+
+        public static class EncodedCharacterValues
+        {
+            public const int NewLineEncodedValue = 5;
         }
 
         public static class Regex

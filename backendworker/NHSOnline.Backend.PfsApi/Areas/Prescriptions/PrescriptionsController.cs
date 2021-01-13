@@ -151,7 +151,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 return new OrderPrescriptionResult.BadRequest();
             }
 
-            if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest, gpSystem.PrescriptionSpecialRequestCharacterLimit))
+            repeatPrescriptionRequest.SpecialRequest =
+                prescriptionRequestValidationService.MassageSpecialRequest(repeatPrescriptionRequest.SpecialRequest);
+
+            if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest, userSession))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
                 return new OrderPrescriptionResult.BadRequest();

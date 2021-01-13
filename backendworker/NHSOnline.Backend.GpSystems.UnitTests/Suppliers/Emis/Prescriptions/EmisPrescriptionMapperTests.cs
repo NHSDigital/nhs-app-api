@@ -439,7 +439,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 
             // Assert
             result.Should().NotBeNull();
-            result.SpecialRequestCharacterLimit.Should().Be(1000);
+            result.SpecialRequestCharacterLimit.Should().Be(450);
         }
 
         [TestMethod]

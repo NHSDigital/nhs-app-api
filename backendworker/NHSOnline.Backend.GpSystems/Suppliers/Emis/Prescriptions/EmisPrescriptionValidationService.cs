@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.SharedModels;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 {
@@ -18,9 +20,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             return true;
         }
 
-        protected override bool IsSupplierPostValid(RepeatPrescriptionRequest request)
+        protected override bool IsSupplierPostValid(RepeatPrescriptionRequest request, GpUserSession gpUserSession)
         {
-            return IsValidGuidList(request.CourseIds);
+            var necessity = ((EmisUserSession) gpUserSession).PrescriptionSpecialRequestNecessity;
+
+            var specialRequestIsValid = necessity == Necessity.NotAllowed && request.SpecialRequest is null ||
+                                        necessity == Necessity.Mandatory && !string.IsNullOrEmpty(request.SpecialRequest) ||
+                                        necessity == Necessity.Optional;
+
+            return IsValidGuidList(request.CourseIds) && specialRequestIsValid;
         }
 
         private static bool IsValidGuidList(IEnumerable<string> courseIds)

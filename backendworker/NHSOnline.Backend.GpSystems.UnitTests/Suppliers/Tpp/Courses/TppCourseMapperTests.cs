@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
 
             // Assert
             result.Should().BeOfType<CourseListResponse>();
-            result.SpecialRequestCharacterLimit.Should().Be(500);
+            result.SpecialRequestCharacterLimit.Should().Be(450);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
 
             // Assert
             result.Should().BeOfType<CourseListResponse>();
-            result.SpecialRequestCharacterLimit.Should().Be(500);
+            result.SpecialRequestCharacterLimit.Should().Be(450);
         }
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Courses
                         Details = item.ElementAt(1).Details
                     }
                 },
-                SpecialRequestCharacterLimit = 500
+                SpecialRequestCharacterLimit = 450
             };
 
             result.Should().BeEquivalentTo(expectedResult);

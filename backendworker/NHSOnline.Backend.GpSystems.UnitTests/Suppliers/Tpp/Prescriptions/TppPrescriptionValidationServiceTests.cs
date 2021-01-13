@@ -6,7 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 {
@@ -14,7 +16,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
     public class TppPrescriptionValidationServiceTests
     {
         private PrescriptionValidationService _prescriptionRequestValidationService;
-        private const int MAX_LENGTH = 500;
 
         [TestInitialize]
         public void TestInitialize()
@@ -91,11 +92,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 {
                     "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
                     "28985814-bb40-4b37-8f1d-c5f323b098da",
-                }
+                },
+                SpecialRequest = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Quisque vestibulum.",
             };
+            var userSession = new TppUserSession { Name = "John Doe" };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeTrue();
@@ -111,11 +114,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 {
                     "anyString",
                     "notAGuidIsAllowed",
-                }
+                },
+                SpecialRequest = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Quisque vestibulum.",
             };
+            var userSession = new TppUserSession { Name = "John Doe" };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeTrue();
@@ -129,9 +134,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             {
                 CourseIds = new List<string>()
             };
+            var userSession = new TppUserSession { Name = "John Doe" };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeFalse();
@@ -152,9 +158,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 },
                 SpecialRequest = new string('x', specialRequestLength),
             };
+            var userSession = new TppUserSession { Name = "John Doe" };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().Be(isValid);

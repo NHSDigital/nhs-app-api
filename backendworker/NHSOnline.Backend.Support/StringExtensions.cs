@@ -46,5 +46,15 @@ namespace NHSOnline.Backend.Support
 
             return sourceString;
         }
+
+        public static int FindNewlineStringEncodedLength(this string sourceString, int encodedCharacterValue)
+        {
+            var newlineCount = sourceString.Split('\n').Length - 1;
+
+            //Subtracting 1 as we don't need to use the full encodedCharacterValue to find the length, as 1 character already exists in the string
+            var encodedSourceStringLength  = newlineCount * (encodedCharacterValue - 1) + sourceString.Length;
+            return encodedSourceStringLength;
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 {
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             return true;
         }
 
-        protected override bool IsSupplierPostValid(RepeatPrescriptionRequest request)
+        protected override bool IsSupplierPostValid(RepeatPrescriptionRequest request, GpUserSession gpUserSession)
         {
             return true;
         }

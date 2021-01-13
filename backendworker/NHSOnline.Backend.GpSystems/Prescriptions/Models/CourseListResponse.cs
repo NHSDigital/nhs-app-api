@@ -13,6 +13,6 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions.Models
         [JsonConverter(typeof(StringEnumConverter), false)]
         public Necessity SpecialRequestNecessity { get; set; } = Necessity.Optional;
 
-        public int SpecialRequestCharacterLimit { get; set; } = Constants.SpecialRequestCharacterLimit.Default;
+        public int SpecialRequestCharacterLimit { get; set; } = Constants.SpecialRequestCharacterLimit.FrontendLimit;
     }
 }

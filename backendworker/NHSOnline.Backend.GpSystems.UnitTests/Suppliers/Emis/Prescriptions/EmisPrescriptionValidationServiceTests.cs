@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.SharedModels;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
@@ -13,8 +15,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
     [TestClass]
     public class EmisPrescriptionValidationServiceTests
     {
+        private string SpecialRequestWith1Newlines = "Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit.";
+
+        private string FormattedSpecialRequestWith1Newlines = "Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit.";
+
+        private string SpecialRequest500CharsWith13Newlines = "Lorem ipsum dolor \nsit amet, \nconsectetur adipiscing elit. \nNulla feugiat commodo dolor, \nmaximus elementum turpis interdum quis. \nNunc lacinia, metus in vulputate interdum, \nelit magna placerat massa, \nnon dignissim lacus magna eget erat. \nInteger lobortis volutpat tristique. \nNulla semper tincidunt neque ac imperdiet. \nPraesent ipsum ante, \nimperdiet non purus eu, dapibus vulputate mi. \nNam eget aliquet felis. \nSuspendisse lacus tellus, egestas mattis vulputate eget, tincidunt nec justo. Quisq";
+
+        private string FormattedSpecialRequest500CharsWith13Newlines = "Lorem ipsum dolor  sit amet,  consectetur adipiscing elit.  Nulla feugiat commodo dolor,  maximus elementum turpis interdum quis.  Nunc lacinia, metus in vulputate interdum,  elit magna placerat massa,  non dignissim lacus magna eget erat.  Integer lobortis volutpat tristique.  Nulla semper tincidunt neque ac imperdiet.  Praesent ipsum ante,  imperdiet non purus eu, dapibus vulputate mi.  Nam eget aliquet felis.  Suspendisse lacus tellus, egestas mattis vulputate eget, tincidunt nec justo. Quisq";
+
         private PrescriptionValidationService _prescriptionRequestValidationService;
-        private const int MAX_LENGTH = 1000;
 
         [TestInitialize]
         public void TestInitialize()
@@ -91,11 +100,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
                     "28985814-bb40-4b37-8f1d-c5f323b098da",
-                }
+                },
+                SpecialRequest = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Quisque vestibulum.",
             };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeTrue();
@@ -113,9 +124,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     "notAGuid",
                 }
             };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeFalse();
@@ -129,19 +141,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             {
                 CourseIds = new List<string>()
             };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().BeFalse();
         }
 
         [DataTestMethod]
-        [DataRow(999, true)]
-        [DataRow(1000, true)]
-        [DataRow(1001, false)]
-        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenSpecialRequestExceedsMaxLength(int specialRequestLength, bool isValid)
+        [DataRow(Necessity.Optional, 499, true)]
+        [DataRow(Necessity.Optional, 500, true)]
+        [DataRow(Necessity.Optional, 501, false)]
+        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenSpecialRequestExceedsMaxLength(Necessity necessity, int specialRequestLength, bool isValid)
         {
             // Arrange
             var modelUnderTest = new RepeatPrescriptionRequest
@@ -152,9 +165,94 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 },
                 SpecialRequest = new string('x', specialRequestLength),
             };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = necessity };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, MAX_LENGTH);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
+
+            // Assert
+            result.Should().Be(isValid);
+        }
+
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsTrue_WhenNewlineConvertedToSpaces()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                SpecialRequest = SpecialRequestWith1Newlines
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.MassageSpecialRequest(modelUnderTest.SpecialRequest);
+
+            // Assert
+            result.Should().BeEquivalentTo(FormattedSpecialRequestWith1Newlines);
+        }
+
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsTrue_WhenSpecialRequest500CharsIncl13Newlines()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                SpecialRequest = SpecialRequest500CharsWith13Newlines
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.MassageSpecialRequest(modelUnderTest.SpecialRequest);
+
+            // Assert
+            result.Should().BeEquivalentTo(FormattedSpecialRequest500CharsWith13Newlines);
+        }
+
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenSpecialRequestEmpty()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
+                    "28985814-bb40-4b37-8f1d-c5f323b098da",
+                },
+                SpecialRequest = "",
+            };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Mandatory };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow(Necessity.NotAllowed, "This is a special request", false)]
+        [DataRow(Necessity.NotAllowed, null, true)]
+        [DataRow(Necessity.NotAllowed, "", false)]
+        [DataRow(Necessity.Optional, "This is a special request", true)]
+        [DataRow(Necessity.Optional, "", true)]
+        [DataRow(Necessity.Optional, null, true)]
+        [DataRow(Necessity.Mandatory, "", false)]
+        [DataRow(Necessity.Mandatory, "This is a special request", true)]
+        [DataRow(Necessity.Mandatory, null, false)]
+        public void IsPostValid_ReturnsTrue_WhenSpecialRequestSatisfiesNecessity(Necessity necessity, string specialRequest, bool isValid)
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    Guid.NewGuid().ToString(),
+                },
+                SpecialRequest = specialRequest
+            };
+            var userSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = necessity };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest, userSession);
 
             // Assert
             result.Should().Be(isValid);

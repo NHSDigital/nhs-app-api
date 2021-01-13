@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support.Logging
             var message = $"{title}: {string.Join(" ", items)}";
             logger.LogInformation(message);
         }
-        
+
         public static void LogAppointmentReasonInformation(this ILogger logger, string bookingReason)
         {
             bookingReason = bookingReason ?? string.Empty;
@@ -44,16 +44,19 @@ namespace NHSOnline.Backend.Support.Logging
 
             logger.LogInformationKeyValuePairs("Appointments Booking Reason Info", kvp);
         }
-        
+
         public static void LogSpecialRequestInformation(this ILogger logger, string requestComment)
         {
             requestComment = requestComment ?? string.Empty;
             var moreThanOneCharacter = requestComment.Length >= 1;
-            
+
+
+            var encodedSpecialRequestLength = requestComment.FindNewlineStringEncodedLength(Constants.EncodedCharacterValues.NewLineEncodedValue);
+
             var kvp = new Dictionary<string, string>
             {
                 { "More than one character in special request", $"{moreThanOneCharacter}" },
-                { "Characters entered in special request",  $"{requestComment.Length }" }
+                { "Characters entered in special request",  $"{encodedSpecialRequestLength }" }
             };
 
             logger.LogInformationKeyValuePairs("Special Request Prescriptions", kvp);
@@ -87,5 +90,13 @@ namespace NHSOnline.Backend.Support.Logging
             logger.LogWarning("Model state validation failed: {0}",
                 modelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
         }
+
+
+        public static void LogFieldCharacterLimitExceeded(this ILogger logger, string pageName, string fieldName, string description, int newlines)
+        {
+            var message = ($"{pageName} - {fieldName} - {description} - {newlines} new lines added");
+            logger.LogInformation(message);
+        }
+
     }
 }
