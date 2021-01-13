@@ -31,7 +31,11 @@ data:
                         'request_uri="$request_uri" '
                         'status=$status '
                         'response_size_bytes=$bytes_sent '
-                        'duration_seconds=$request_time';
+                        'duration_seconds=$request_time '
+                        'upstream_address=$upstream_addr '
+                        'upstream_connect_time=$upstream_connect_time '
+                        'upstream_header_time=$upstream_header_time '
+                        'upstream_response_time=$upstream_response_time';
 
         resolver 8.8.8.8 8.8.4.4;
 
