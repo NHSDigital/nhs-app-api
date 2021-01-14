@@ -106,17 +106,11 @@ export default {
     },
   },
 };
-
 </script>
+
 <style module lang="scss" scoped>
   @import "../../style/colours";
   @import '~nhsuk-frontend/packages/core/settings/all';
   @import '~nhsuk-frontend/packages/core/tools/all';
   @import '~nhsuk-frontend/packages/components/textarea/textarea';
-
-  div {
-    .nhsuk-textarea {
-      /*width: 100%;*/
-    }
-  }
 </style>

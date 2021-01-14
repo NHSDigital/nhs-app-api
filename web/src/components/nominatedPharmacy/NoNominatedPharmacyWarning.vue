@@ -45,17 +45,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/colours";
-@import '../../style/info';
-
-.link {
-  margin-top: 0.5em;
-  margin-bottom: 1.5em;
-  cursor: pointer;
-  text-decoration: underline;
-  color: $nhs_blue;
-  display: block;
-  font-weight: bold;
-}
-
+  @import "@/style/custom/no-nominated-pharmacy-warning";
 </style>

@@ -17,22 +17,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/textstyles";
-.msgList {
-  list-style: none;
-  padding: 0em 1em 0em 1em;
-  li {
-    padding-top: 0.25em;
-    @include message;
-  }
-  &.error {
-    li {
-      color: $error;
-      p {
-        color: $error;
-      }
-    }
-  }
-}
-
+  @import "@/style/custom/message-list";
 </style>

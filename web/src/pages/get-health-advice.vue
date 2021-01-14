@@ -41,14 +41,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  .webHeader {
-   &.web {
-    margin-top: -3.625em;
-   }
-  }
-
-  .nativeHeader {
-    padding: 0 0 3.125em 2.0px;
-  }
-
+  @import "@/style/custom/get-health-advice";
 </style>

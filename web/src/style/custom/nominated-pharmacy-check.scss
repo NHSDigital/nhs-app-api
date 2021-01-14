@@ -1,0 +1,27 @@
+@import '../fonts';
+@import '../buttons';
+@import '../textstyles';
+@import "../panels";
+@import '../listmenu';
+@import "../home";
+
+div {
+  &.desktopWeb {
+  max-width: 540px;
+
+  .warningText {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+
+  li {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+
+  p {
+    font-family: $default_web;
+    font-weight: normal;
+    }
+  }
+}

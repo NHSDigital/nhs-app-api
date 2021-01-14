@@ -105,58 +105,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../style/colours";
-@import "../style/tags";
-@import '~nhsuk-frontend/packages/core/settings/typography';
-@import '~nhsuk-frontend/packages/core/tools/typography';
-@import '~nhsuk-frontend/packages/core/settings/breakpoints';
-@import '~nhsuk-frontend/packages/core/settings/colours';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-
-.list-menu-container_prescriptions {
-  padding: 0.8em 2em 0.8em 1em;
-}
-
-.no-chevron {
-  background: $color_nhsuk-white;
-  border-bottom: none !important;
-  border-top: none !important;
-}
-
-.nhs-app-prescription__medicine {
-  padding-top: 2px;
-  padding-bottom: 0;
-  font-weight: 600;
-}
-
-.nhs-app-prescription__dosage {
-  margin-bottom: 12px;
-}
-
-@media (min-width: 40.0625em) {
-  .nhs-app-prescription__instructions {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
-}
-
-.nhs-app-prescription__instructions{
-  line-height: 1.71429;
-  display: block;
-  margin-top: 0;
-  margin-bottom: 12px;
-  color: #425563;
-}
-
-.nhs-app-message__date {
-  flex-shrink: 0;
-  margin-left: nhsuk-spacing(2);
-  font-size: 1em;
-  float: right;
-  @include nhsuk-typography-responsive(16);
-  font-weight: 600;
-}
+@import "@/style/custom/historic-prescription";
 </style>

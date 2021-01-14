@@ -1,0 +1,17 @@
+@import "../info";
+@import "../nhsuklinks";
+@import "../textstyles";
+
+.pull-content {
+  display: block;
+}
+
+div {
+  .info {
+    a {
+      display: inline;
+      vertical-align: unset;
+      padding: 0;
+    }
+  }
+}

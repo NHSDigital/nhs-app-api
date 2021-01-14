@@ -62,26 +62,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../../style/fonts";
-  @import '~nhsuk-frontend/packages/core/all.scss';
-  @import '~nhsuk-frontend/packages/components/action-link/action-link';
-
-  .nhsuk-button-full-width {
-    width: 100%;
-  }
-
-  .logoutPanel {
-    text-align: center;
-  }
-
-  .logoutLink {
-    vertical-align: middle;
-    padding-left: 0;
-    text-align: center;
-    color: $color_nhsuk-blue;
-
-    &:visited {
-      color: $color_nhsuk-blue;
-    }
-  }
+  @import "@/style/custom/session-expiry-modal";
 </style>

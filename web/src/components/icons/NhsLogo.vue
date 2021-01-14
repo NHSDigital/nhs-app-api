@@ -36,6 +36,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/icons";
-@import "../../style/home";
+@import "@/style/_icons";
+@import "@/style/_home";
 </style>

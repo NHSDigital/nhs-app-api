@@ -29,10 +29,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.no {
-  margin: 0;
-  display: inline-block;
-  width:35px;
-  height:35px;
-}
+  @import "@/style/custom/no-icon";
 </style>

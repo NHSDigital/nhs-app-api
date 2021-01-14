@@ -1,0 +1,10 @@
+@import '~nhsuk-frontend/packages/core/settings/colours';
+
+@import "../errorvalidation";
+@import "../selectors";
+
+.subHeader {
+  text-decoration: none;
+  color: $color_nhsuk-black;
+  display: inline-block;
+}

@@ -324,19 +324,6 @@ export default {
   }
 </style>
 
-
 <style module lang="scss" scoped>
-  .container {
-    .button {
-      min-width: 16.875em;
-      padding-left: 2em;
-      padding-right: 2em;
-      max-width: 960px;
-      width: auto;
-    }
-  }
-
-  ::v-deep strong {
-    display: inline;
-  }
+  @import "@/style/custom/orchestrator";
 </style>

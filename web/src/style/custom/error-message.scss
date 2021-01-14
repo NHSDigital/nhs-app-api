@@ -1,0 +1,7 @@
+@import "../errorvalidation";
+
+.validation-text {
+ &.desktopWeb{
+  color: $error;
+ }
+}

@@ -25,19 +25,7 @@ export default {
   name: 'OtherServices',
 };
 </script>
+
 <style module lang="scss" scoped>
-    @import "../style/home";
-    @import "../style/spacings";
-    @import "../style/webshared";
-
-    @include desktopAndBelow() {
-    }
-
-    @include fromDesktop() {
-    }
-
-    a {
-        display: inline-block;
-    }
-
+  @import "@/style/custom/other-services";
 </style>

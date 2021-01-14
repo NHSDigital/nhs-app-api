@@ -295,26 +295,5 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-@import "../style/home";
-
-div {
-  &.desktopWeb {
-    .header-container-desktop,
-    .footer-container-desktop {
-      order: 0;
-      flex: 0 0 auto;
-      align-self: stretch;
-      width: 100%;
-    }
-  }
-}
-
-.blue-body {
-  background-color: rgb(0, 94, 184);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
+@import "../style/custom/auth-return-layout";
 </style>

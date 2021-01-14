@@ -18,19 +18,7 @@ export default {
   name: 'SessionExpiredBanner',
 };
 </script>
-<style module lang="scss" scoped>
-@import "../style/textstyles";
-@import "../style/colours";
-.error-timeout {
-  background: $warning_title;
-  @include default_text;
-  color: #000;
-  width: 100%;
-  margin-top: 0.1em;
-  padding: 0.3em;
-}
 
-.center {
-  text-align: center;
-}
+<style module lang="scss" scoped>
+  @import "@/style/custom/session-expired-banner";
 </style>

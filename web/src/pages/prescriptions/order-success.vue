@@ -152,31 +152,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~nhsuk-frontend/packages/core/settings/colours';
-
-#pharmacy-url {
-  vertical-align: baseline;
-  display: inline;
-}
-
-h2.what-happens-next-heading {
-  margin: 0;
-}
-
-#prescription-order-success-summary {
-  p {
-    &:first-of-type {
-      padding-top: 0;
-    }
-
-    &:last-of-type {
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  .prescription-description {
-    color: $nhsuk-secondary-text-color;
-  }
-}
+  @import "@/style/custom/prescriptions-order-success";
 </style>

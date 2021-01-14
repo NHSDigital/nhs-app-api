@@ -319,16 +319,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
-  @import '../../style/spacings';
-
-  .additionalInformation {
-     margin-bottom: 1em
-  }
-
-  .information-error {
-    p {
-      margin-top: 0.5em
-    }
-  }
+  @import "@/style/custom/api-error"
 </style>

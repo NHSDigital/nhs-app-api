@@ -56,22 +56,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../style/info";
-@import "../style/nhsuklinks";
-@import "../style/textstyles";
-.pull-content{
-  display: block;
-}
-div {
-  .info {
-    a {
-      display: inline;
-      vertical-align: unset;
-      padding: 0;
-    }
-  }
-  .desktopWeb {
-    max-width: 540px;
-  }
-}
+  @import "@/style/custom/gp-at-hand-content";
 </style>

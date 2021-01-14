@@ -89,7 +89,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  a {
-    display: inline-block;
-  }
+  @import "@/style/custom/a-inline-block";
 </style>

@@ -152,17 +152,5 @@ export default {
 </script>
 
 <style lang="scss">
-  p.panel-content > a{
-    display: inline;
-    font-weight: normal;
-    vertical-align: unset;
-  }
-
-  .nhsuk-app-chat {
-    list-style-type: none;
-  }
-
-  .nhsuk-reply-info-divider {
-    border-top: 1px solid #d8dde0;
-  }
+  @import "@/style/custom/gp-messages-view-details";
 </style>

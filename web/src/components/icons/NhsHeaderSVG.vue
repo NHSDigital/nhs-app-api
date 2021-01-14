@@ -20,4 +20,3 @@ export default {
   name: 'NhsHeaderSvg',
 };
 </script>
-<style ></style>

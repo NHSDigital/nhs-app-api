@@ -1,0 +1,13 @@
+@import '../buttons';
+@import '../nhsukoverrides';
+@import '../textstyles';
+
+div.desktopWeb {
+  .cannotFindConditionLink {
+    margin-bottom: 1.5em !important;
+  }
+}
+
+button {
+  margin-top: 1.5em;
+}

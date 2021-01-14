@@ -32,5 +32,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/medrecordcontent';
+  @import "@/style/_medrecordcontent";
 </style>

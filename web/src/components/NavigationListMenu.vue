@@ -115,9 +115,5 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import '../style/colours';
-
-  a:visited {
-    color: $nhs_blue;
-  }
+  @import "@/style/custom/navigation-list-menu";
 </style>

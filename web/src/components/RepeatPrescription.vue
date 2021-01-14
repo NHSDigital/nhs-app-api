@@ -58,20 +58,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../style/forms";
-  @import "../style/accessibility";
-
-  .prescriptionDescription {
-    padding-top: 0.250em;
-    padding-bottom: 0.250em;
-    display: block;
-  }
-
-  label {
-    &>span {
-      font-weight: normal;
-      font-size: 1em;
-    }
-    padding-bottom: 0.250em;
-  }
+  @import "@/style/custom/repeat-prescription";
 </style>

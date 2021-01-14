@@ -36,26 +36,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/all.scss';
-  @import '~nhsuk-frontend/packages/components/footer/_footer.scss';
-  @import "../../style/desktopWeb/accessibility";
-
-  .nhsuk-footer li {
-    width: fit-content;
-  }
-  .nhsuk-footer ul {
-    width: fit-content;
-  }
-
-  a {
-    display: table;
-
-    &:focus {
-      @include linkFocusStyle;
-    }
-
-    &:hover {
-      @include linkHoverStyle;
-    }
-  }
+  @import "@/style/custom/web-footer";
 </style>

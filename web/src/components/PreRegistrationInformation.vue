@@ -48,12 +48,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-    @import "../style/home";
-    @import "../style/spacings";
-    @import "../style/webshared";
-
-    a {
-        display: inline-block;
-    }
-
+  @import "@/style/custom/pre-registration-information";
 </style>

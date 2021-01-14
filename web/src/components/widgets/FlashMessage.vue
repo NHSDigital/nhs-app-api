@@ -63,7 +63,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.flash-message {
-  margin-top: 1.125em;
-}
+  @import "@/style/custom/flash-message";
 </style>

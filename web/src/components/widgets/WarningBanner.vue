@@ -41,24 +41,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/colours';
-
-  .yellow {
-    background: $warning_title;
-  }
-
-  .border {
-    border-bottom: 1px $color_nhsuk-grey-4 solid;
-  }
-
-  .silver {
-    background: $background;
-  }
-
-  .floating{
-    position: sticky;
-    top: 0px;
-    z-index: 999;
-  }
-
+  @import "@/style/custom/warning-banner";
 </style>

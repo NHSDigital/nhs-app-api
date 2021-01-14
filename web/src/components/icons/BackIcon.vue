@@ -37,12 +37,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/colours";
-svg.back {
-  margin: 1em;
-  margin-top: 0.875em;
-  height: 1.375em;
-  outline-style:none;
-}
-
+  @import "@/style/custom/back-icon";
 </style>

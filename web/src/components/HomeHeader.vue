@@ -53,23 +53,5 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import "../style/homeheader";
-  a.anchor-icon{
-    color: $white;
-    right: 0;
-  }
-  a.fixed-right {
-    position: absolute;
-    right: 0;
-  }
-  .adviceBanner {
-    border-top:solid 1px #F0F4F5;
-    width:100%;
-    padding-right: 20px;
-    padding-left:17px;
-
-    h2 {
-      color:$white;
-    }
-  }
+  @import "@/style/custom/home-header";
 </style>

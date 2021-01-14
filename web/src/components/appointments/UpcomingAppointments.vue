@@ -45,8 +45,7 @@ export default {
   },
 };
 </script>
-<style>
-.break {
-  word-break: break-word;
-}
+
+<style lang="scss">
+  @import "@/style/custom/break";
 </style>

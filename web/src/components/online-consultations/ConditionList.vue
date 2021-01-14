@@ -101,18 +101,5 @@ export default {
   }
 </style>
 <style module lang="scss" scoped>
-  @import '../../style/textstyles';
-  @import '../../style/nhsukoverrides';
-  @import '../../style/buttons';
-
-  div.desktopWeb {
-    .cannotFindConditionLink {
-      margin-bottom: 1.5em !important;
-    }
-  }
-
-  button {
-    margin-top: 1.5em;
-  }
-
+  @import "@/style/custom/condition-list";
 </style>

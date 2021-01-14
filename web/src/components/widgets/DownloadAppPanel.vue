@@ -33,23 +33,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  ul {
-    margin: 0;
-    padding: 0;
-    li {
-      list-style: none;
-      a {
-        display: inline-block;
-        vertical-align: top;
-        &:focus,
-        &:hover {
-          border-radius: 4px;
-        }
-        img{
-          display: block;
-        }
-      }
-    }
-  }
+<style module lang="scss" scoped>
+  @import "@/style/custom/download-app-panel";
 </style>

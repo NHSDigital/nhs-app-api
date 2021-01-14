@@ -74,7 +74,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  .h2 {
-    padding-bottom: 0.5em;
-  }
+  @import "@/style/custom/warning";
 </style>

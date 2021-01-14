@@ -114,10 +114,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-
-  .nhsuk-back-link__link {
-    display: inline-block;
-    cursor: pointer;
-  }
-
+  @import "@/style/custom/pharmacy-detail";
 </style>

@@ -71,12 +71,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../../style/selectors";
-@import "../../../style/errorvalidation";
-@import '~nhsuk-frontend/packages/core/settings/colours';
-  .subHeader {
-    text-decoration: none;
-    color: $color_nhsuk-black;
-    display: inline-block;
-  }
+  @import "@/style/custom/slot-list";
 </style>

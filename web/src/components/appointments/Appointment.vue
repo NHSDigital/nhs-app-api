@@ -154,36 +154,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
- @import '~nhsuk-frontend/packages/core/settings/colours';
-
-  .nhsuk-appointment-card {
-
-    .date-time-header {
-      display: block;
-
-      span.time {
-      }
-    }
-
-    p {
-      word-break: break-word;
-    }
-
-    a.nhsuk-action-link__link {
-      font-weight: bold;
-      color: $color_nhsuk-red;
-      display:inline-block;
-    }
-
-    a.nhsuk-action-link__link {
-      &:focus {
-        color: $color_nhsuk-red;
-      }
-
-      &:hover {
-        color: $color_nhsuk-red;
-      }
-    }
-  }
-
+ @import "@/style/custom/appointments";
 </style>

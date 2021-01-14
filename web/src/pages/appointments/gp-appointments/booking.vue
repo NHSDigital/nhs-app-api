@@ -215,16 +215,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../../style/accessibility";
-
-div:focus {
-  outline: none !important;
-}
-
-.inline-link > a {
-  display: inline-block;
-}
-.break {
-  word-break: break-word;
-}
+  @import "@/style/custom/booking";
+  @import "@/style/custom/break";
+  @import "@/style/custom/inline-block-a";
 </style>

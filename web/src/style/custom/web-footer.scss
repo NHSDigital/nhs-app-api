@@ -1,0 +1,24 @@
+@import '~nhsuk-frontend/packages/core/all.scss';
+@import '~nhsuk-frontend/packages/components/footer/_footer.scss';
+
+@import "../desktopWeb/accessibility";
+
+.nhsuk-footer li {
+  width: fit-content;
+}
+
+.nhsuk-footer ul {
+  width: fit-content;
+}
+
+a {
+  display: table;
+
+  &:focus {
+    @include linkFocusStyle;
+  }
+
+  &:hover {
+    @include linkHoverStyle;
+  }
+}

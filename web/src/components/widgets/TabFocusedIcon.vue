@@ -46,26 +46,8 @@ export default {
     this.stylingBinding = this.iconClasses;
   },
 };
-
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/colours";
-svg.tabFocus {
-  outline-color: $focus_highlight !important;
-  outline-style: solid !important;
-  outline-width: thick;
-}
-
-svg.defaultStyle {
-  margin: 0 0;
-  display: inline-block;
-  height: 0;
-  width: auto;
-  position: fixed;
-  right: 0;
-  top: 0;
-  cursor: pointer;
-  outline-style: none;
-}
+  @import "@/style/custom/tab-focused-icon";
 </style>

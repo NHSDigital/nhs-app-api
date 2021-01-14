@@ -74,6 +74,6 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../../style/colours";
-@import "../../../style/desktopWeb/accessibility";
+@import "@/style/_colours";
+@import "@/style/desktopWeb/_accessibility";
 </style>

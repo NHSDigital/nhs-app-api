@@ -69,44 +69,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/settings/all';
-  @import '~nhsuk-frontend/packages/core/tools/all';
-  @import '~nhsuk-frontend/packages/core/settings/colours';
-  @import '~nhsuk-frontend/packages/core/settings/globals';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/components/panel/panel';
-  @import "../../style/colours";
-
-  .nhsuk-panel-group__item {
-    padding-left: 15%;
-    text-align: right;
-    width: 100%;
-    display: inline-block;
-
-    .nhsuk-panel-sender-container{
-      float: right;
-    }
-
-    .nhsuk-panel {
-      background-color: $grey_panel;
-      border: 1px solid $border_grey;
-      text-align: left;
-      width: fit-content;
-      float: right;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      -ms-word-break: break-all;
-      word-break: break-all;
-      word-break: break-word;
-    }
-  }
-
-  .nhsuk-panel-sender {
-    text-align: right;
-  }
-
-  .messageSentDateTime {
-    text-align: right;
-    float: right;
-  }
+  @import "@/style/custom/sent-message";
 </style>

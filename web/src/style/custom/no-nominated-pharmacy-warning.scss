@@ -1,0 +1,12 @@
+@import "../colours";
+@import '../info';
+
+.link {
+  margin-top: 0.5em;
+  margin-bottom: 1.5em;
+  cursor: pointer;
+  text-decoration: underline;
+  color: $nhs_blue;
+  display: block;
+  font-weight: bold;
+}

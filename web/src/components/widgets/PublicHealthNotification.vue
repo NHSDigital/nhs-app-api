@@ -59,14 +59,5 @@ export default {
 </script>
 
 <style lang="scss">
-.public-health-notification {
-  a {
-    vertical-align: baseline;
-    cursor: pointer;
-
-    &.inline {
-      display: inline;
-    }
-  }
-}
+  @import "@/style/custom/public-health-notification";
 </style>

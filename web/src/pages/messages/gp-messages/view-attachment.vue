@@ -113,12 +113,5 @@ export default {
 </script>
 
 <style lang="scss">
-  .attachmentContainer {
-    margin-bottom: 40px;
-    word-break: break-word;
-
-    img {
-      max-width: 100%;
-    }
-  }
+  @import "@/style/custom/gp-messages-view-attachment";
 </style>

@@ -28,8 +28,7 @@ export default {
 </script>
 
 <style lang="scss" module scoped>
-@import "../../style/colours";
-@import "../../style/icons";
+@import "@/style/_colours";
+@import "@/style/_icons";
 @import "~nhsuk-frontend/packages/nhsuk";
-
 </style>

@@ -1,0 +1,10 @@
+.public-health-notification {
+  a {
+    vertical-align: baseline;
+    cursor: pointer;
+
+    &.inline {
+      display: inline;
+    }
+  }
+}

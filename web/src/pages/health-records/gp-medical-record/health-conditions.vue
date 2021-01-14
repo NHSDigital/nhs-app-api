@@ -113,11 +113,6 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-a {
-  display: inline-block;
-  cursor: pointer;
-}
-li {
-  list-style-type: none;
-}
+  @import "@/style/custom/inline-block-pointer";
+  @import "@/style/custom/health-conditions";
 </style>

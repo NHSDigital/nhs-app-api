@@ -64,8 +64,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  .nhsuk-checkboxes__input {
-    height: 40px;
-    width: 40px;
-  }
+  @import "@/style/custom/generic-checkbox";
 </style>

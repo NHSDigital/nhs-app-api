@@ -62,9 +62,5 @@ export default {
 </script>
 
 <style lang="scss" module scoped>
-a {
-  display: inline-block;
-  vertical-align: unset;
-  padding: 0;
-}
+  @import "@/style/custom/error-paragraph-with-links"
 </style>

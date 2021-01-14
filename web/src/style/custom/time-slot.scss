@@ -1,0 +1,33 @@
+@import '../desktopWeb/accessibility';
+@import "../selectors";
+@import '../textstyles';
+
+.timeSlot {
+  @extend .selector;
+  padding: 0;
+
+  a {
+    @include default_text;
+    text-decoration: none;
+    font-weight: normal;
+    padding: 1em;
+    &.desktopWeb {
+     font-family: $default-web;
+     font-weight: lighter;
+    }
+    &:focus {
+      background-color: white;
+      border-radius: 0.313em;
+    }
+
+    &:hover {
+      background-color: white;
+      border-radius: 0.313em;
+        @include outlineStyleLight;
+    }
+  }
+
+  .strong {
+    font-weight: 700;
+  }
+}

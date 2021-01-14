@@ -141,15 +141,5 @@ export default {
 </script>
 
 <style lang="scss">
-  .demographicsQuestion p:not(:last-of-type) {
-    margin-bottom: 1em;
-  }
-
-  #online_consultations_help_link {
-    display: inline;
-  }
-
-  #demographicsContinueButton {
-    margin-top: 1em;
-  }
+  @import "@/style/custom/demographics-question";
 </style>

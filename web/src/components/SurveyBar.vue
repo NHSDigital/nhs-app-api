@@ -45,6 +45,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" module scoped>
   @import "../style/surveybar";
 </style>

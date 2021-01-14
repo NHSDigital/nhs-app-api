@@ -83,31 +83,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/fonts';
-  @import '../../style/buttons';
-  @import '../../style/textstyles';
-  @import "../../style/panels";
-  @import '../../style/listmenu';
-  @import "../../style/home";
-
-div {
-  &.desktopWeb {
-  max-width: 540px;
-
-  .warningText {
-    font-family: $default_web;
-    font-weight: normal;
-  }
-
-  li {
-    font-family: $default_web;
-    font-weight: normal;
-  }
-
-  p {
-    font-family: $default_web;
-    font-weight: normal;
-    }
-  }
-}
+  @import "@/style/custom/nominated-pharmacy-check";
 </style>

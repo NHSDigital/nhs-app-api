@@ -76,7 +76,5 @@ export default {
 </script>
 
 <style lang="scss">
-.nhsuk-checkboxes {
-  margin-bottom: 16px;
-}
+  @import "@/style/custom/checkbox-group";
 </style>

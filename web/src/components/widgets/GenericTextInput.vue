@@ -113,11 +113,8 @@ export default {
     },
   },
 };
-
 </script>
+
 <style lang="scss" scoped>
-  .ios-accessibility {
-      min-height: 40px !important;
-      height: auto !important;
-  }
+  @import "@/style/custom/ios-accessibility";
 </style>

@@ -72,10 +72,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.appointedRep {
-  margin: 0 auto;
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-}
+  @import "@/style/custom/appointed-rep-icon";
 </style>

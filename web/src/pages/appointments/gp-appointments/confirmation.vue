@@ -375,7 +375,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.inline-link > a {
-  display: inline-block;
-}
+  @import "@/style/custom/inline-block-a";
 </style>

@@ -57,21 +57,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/textstyles";
-.msgText {
-  padding: 1em 1em 0 1em;
-  @include message;
-  &.header {
-    @include default_label;
-    }
-  &.plainHeader {
-    @include default_label;
-    }
-  &.footerMargin {
-   margin-bottom: 1em;
-  }
-}
-.unindented {
-  padding: 1em 1em 0 0;
-}
+  @import "@/style/custom/message-text";
 </style>

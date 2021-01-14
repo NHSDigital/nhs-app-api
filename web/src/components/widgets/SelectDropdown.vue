@@ -71,18 +71,5 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/forms";
-@import "../../style/select";
-@import "../../style/errorvalidation";
-
-div {
- &.desktopWeb {
-  .custom-dropdown__select--white {
-   padding-right: 70px;
-  }
- }
- }
-select::-ms-expand {
-  display: none;
-}
+  @import "@/style/custom/select-dropdown";
 </style>

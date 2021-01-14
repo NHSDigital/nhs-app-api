@@ -42,9 +42,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.flex-container{
-  display: flex;
-}
+  @import "@/style/custom/flex-container";
 </style>
 
 <style>

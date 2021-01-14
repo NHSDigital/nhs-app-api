@@ -1,0 +1,15 @@
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/tools/mixins';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+
+.nhsuk-card-group {
+  @include flex();
+
+  margin-bottom: nhsuk-spacing(5);
+
+  @include mq($until: desktop) {
+    margin-bottom: nhsuk-spacing(4);
+  }
+}

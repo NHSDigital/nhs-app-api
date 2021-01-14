@@ -156,9 +156,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/listmenu';
-  @import '~nhsuk-frontend/packages/core/settings/colours';
-  .results-styling {
-    color: $color_nhsuk-black;
-  }
+  @import "@/style/custom/nominated-pharmacy-results";
 </style>

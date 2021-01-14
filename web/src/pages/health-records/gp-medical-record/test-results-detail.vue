@@ -68,21 +68,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/_textstyles';
-  .vision-test-results {
-    min-width: 50em;
-  }
-
-  .test-result-content {
-    box-sizing: border-box;
-    padding: 1em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    margin-top: 0.5em;
-    background-color: #ffffff;
-    overflow-x: scroll;
-    display: inline-block;
-    margin-right: 2em;
-    min-width: 100%;
-  }
+  @import "@/style/custom/test-results-detail";
 </style>

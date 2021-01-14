@@ -85,41 +85,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/colours';
-@import '~nhsuk-frontend/packages/core/settings/globals';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-
-
-.flex-container{
-  display: flex;
-  justify-content: flex-start;
-  @include nhsuk-responsive-margin(4, "bottom");
-
-  .icon {
-    @include nhsuk-responsive-margin(3, "right ");
-  }
-
-  .label {
-    @include nhsuk-responsive-padding(0, "top");
-    @include nhsuk-responsive-margin(0, "bottom");
-    align-content: center;
-    align-items: center;
-   }
-}
-
-.optout-label {
-  color: $color_nhsuk-red;
-}
-.optin-label {
-  color: $color_nhsuk-green;
-}
-.appointedrep-label {
-  color: $color_nhsuk-blue;
-}
-.withdraw-label {
-  color: $color_nhsuk-purple;
-}
+  @import "@/style/custom/your-decision";
 </style>

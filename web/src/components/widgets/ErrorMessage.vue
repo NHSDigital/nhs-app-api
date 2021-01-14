@@ -24,11 +24,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/errorvalidation";
-
-  .validation-text {
-   &.desktopWeb{
-    color: $error;
-   }
-  }
+  @import "@/style/custom/error-message";
 </style>

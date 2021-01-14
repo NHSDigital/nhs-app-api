@@ -57,65 +57,6 @@ export default {
 };
 </script>
 
-<style>
-.cookieBannerDisplay {
-  display: none;
-}
-</style>
-
 <style lang="scss" module scoped>
-@import "../style/colours";
-@import "../style/textstyles";
-@import "../style/webshared";
-@import "../style/screensizes";
-
-@import "~nhsuk-frontend/packages/core/all.scss";
-
-.nhsuk-cookie-banner {
-  background: white;
-  position: relative;
-  box-shadow: 0 0 4px 0 #212b32;
-  padding: 24px 0 0px;
-  width: 100%;
-  z-index: 1;
-}
-
-.cookie-close {
-  margin-top: -20px;
-  float: right;
-  button {
-    padding: 0px 15px 30px 15px;
-    top: 0px;
-    right: 5px;
-    cursor: pointer;
-    background: white url(~@/assets/icon-close.svg) center no-repeat;
-    border: none;
-
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    outline: none;
-
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    &:focus,
-    &:hover {
-      box-shadow: 0 0 0 4px $focus_highlight;
-      outline: none;
-    }
-  }
-}
-a {
-  display: inline-block;
-  padding-bottom: 3px;
-}
-
-p {
-  padding-right: 10px;
-}
+  @import "@/style/custom/cookie-banner";
 </style>

@@ -44,31 +44,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/listmenu';
-@import "../../style/panels";
-@import "../../style/colours";
-@import "../../style/textstyles";
-@import "../../style/home";
-
-.opening-times {
-  margin-bottom: 1em;
-  margin-top: 1em;
-}
-
-.column {
-  float: left;
-  width: 50%;
-}
-
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-  padding-bottom: 0.5em;
-}
-
-.additional-padding {
-  margin-top: 1em;
-}
+  @import "@/style/custom/pharmacy-opening-times";
 </style>
 

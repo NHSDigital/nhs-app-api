@@ -253,12 +253,7 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
-  @import '../../../../style/textstyles';
-  @import '~nhsuk-frontend/packages/core/settings/typography';
-  @import '~nhsuk-frontend/packages/core/settings/globals';
 
-  pre {
-    font-family: $nhsuk-font;
-  }
+<style module lang="scss" scoped>
+  @import "@/style/custom/health-records-gp-medical-record-document-id";
 </style>

@@ -117,12 +117,8 @@ export default {
   },
 };
 </script>
+
 <style module lang="scss" scoped>
-  div {
-    display: inline-block;
-  }
-  .ios-accessibility {
-      min-height: 40px !important;
-      height: auto !important;
-  }
+  @import "@/style/custom/div-inline-block";
+  @import "@/style/custom/ios-accessibility";
 </style>

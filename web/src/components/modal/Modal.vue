@@ -83,28 +83,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  .container {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: 9999;
-  }
-
-  .reveal-modal {
-    min-width: 250px;
-    width: 80%;
-    background: #ffffff;
-    margin: 0 auto;
-    position: relative;
-    z-index: 99999;
-    top: 25%;
-    padding: 30px;
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  }
+  @import "@/style/custom/modal";
 </style>

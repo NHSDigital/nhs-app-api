@@ -11,40 +11,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/tools/mixins';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-
-  /* card group
-   ========================================================================== */
-
-  /**
-   * card group allows you to have a row of cards.
-   *
-   * 1. Flexbox is used to make each card in a row the same height.
-   */
-
-  .nhsuk-card-group__item {
-    @include flex-item(); /* [1] */
-
-    @include mq($until: desktop) {
-      margin-bottom: nhsuk-spacing(4);
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  /**
-  The below styling is used for ie11 specifically. Can be removed once we don't support ie11.
-   */
-  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .nhsuk-card-group__item {
-      @include govuk-media-query($until: desktop) {
-        flex: 1 0 80%;
-      }
-    }
-  }
+  @import "@/style/custom/widgets-card-group-item";
 </style>

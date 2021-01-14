@@ -160,10 +160,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.inline-link > a {
-  display: inline-block;
-}
-.break {
-  word-break: break-word;
-}
+  @import "@/style/custom/break";
+  @import "@/style/custom/inline-block-a";
 </style>

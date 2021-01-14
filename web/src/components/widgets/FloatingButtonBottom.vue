@@ -60,23 +60,5 @@ export default {
 </script>
 
 <style lang="scss" scoped module>
-@import "../../style/colours";
-.float-button-container {
-  position: fixed;
-  bottom: 4.250em;
-  left: 0em;
-  right: 0em;
-  background-color: $white;
-  box-sizing: border-box;
-  padding: 1em;
-  border-top: 0.063em $background solid;
-  border-bottom: 0.063em $background solid;
-  z-index: 4;
-  box-shadow: 0em -0.100em 0.200em rgba(0, 0, 0, .1);
-  &.button-container-native {
-    bottom: 0;
-    word-wrap:break-word;
-  }
-}
-
+  @import "@/style/custom/floating-button-bottom";
 </style>

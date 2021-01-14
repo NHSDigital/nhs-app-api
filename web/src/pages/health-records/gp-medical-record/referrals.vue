@@ -107,17 +107,5 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../../style/colours";
-@import "../../../style/desktopWeb/accessibility";
-a {
-  display: inline-block;
-  &:focus {
-    @include outlineStyle;
-    background-color: $focus_highlight;
-  }
-  &:hover {
-    @include linkHoverStyle;
-    cursor: pointer;
-  }
-}
+  @import "@/style/custom/referrals";
 </style>

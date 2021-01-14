@@ -11,16 +11,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/tools/mixins';
-  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-
-.list-menu {
-  list-style: none;
-  margin: 5px -16px 0.5em;
-
-  @include govuk-media-query('tablet') {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
+  @import "@/style/custom/menu-item-list";
 </style>

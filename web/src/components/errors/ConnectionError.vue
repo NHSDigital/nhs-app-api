@@ -66,12 +66,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
-
-  .desktopWeb {
-    button.button {
-      width: auto;
-      min-width: 12.5em;
-    }
-  }
+  @import "@/style/custom/connection-error";
 </style>

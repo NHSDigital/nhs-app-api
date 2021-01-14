@@ -1,0 +1,6 @@
+@import '../textstyles';
+
+#mainDiv {
+  padding: 0;
+  @include default_text;
+}

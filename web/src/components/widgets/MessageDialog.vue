@@ -87,15 +87,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/messages";
-@import "../../style/spacings";
-
-.plain {
-  &.desktopWeb {
-    margin-left: 0-$three;
-  }
-}
-.break {
-  word-break: break-word;
-}
+  @import "@/style/custom/message-dialog";
 </style>

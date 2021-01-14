@@ -134,11 +134,6 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-a {
-  display: inline-block;
-  cursor: pointer;
-}
-.break {
-  word-break: break-word;
-}
+  @import "@/style/custom/break";
+  @import "@/style/custom/inline-block-pointer";
 </style>

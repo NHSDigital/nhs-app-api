@@ -101,7 +101,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  .user-info {
-    display: inline-block;
-  }
+  @import "@/style/custom/linked-profiles-summary";
 </style>

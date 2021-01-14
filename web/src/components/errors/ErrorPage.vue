@@ -54,7 +54,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
- hr {
-  margin: 0.5em auto 0.5em;
- }
+  @import "@/style/custom/hr-margin";
 </style>

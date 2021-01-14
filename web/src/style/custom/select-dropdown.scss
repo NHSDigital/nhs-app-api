@@ -1,0 +1,15 @@
+@import "../errorvalidation";
+@import "../forms";
+@import "../select";
+
+div {
+  &.desktopWeb {
+    .custom-dropdown__select--white {
+      padding-right: 70px;
+    }
+  }
+}
+
+select::-ms-expand {
+  display: none;
+}

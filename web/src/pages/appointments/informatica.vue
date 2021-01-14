@@ -37,30 +37,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/nhsuklinks";
-@import "../../style/textstyles";
-
-a {
-  text-decoration: underline;
-}
-div {
-  .info {
-    a {
-      display: inline;
-      vertical-align: unset;
-      font-weight: normal;
-      padding: 0;
-    }
-  }
-  .desktopWeb {
-    max-width: 540px;
-    .info {
-      p {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
-    }
-  }
-}
+  @import "@/style/custom/informatica";
 </style>

@@ -49,10 +49,9 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/listmenu';
-  @import "../../style/panels";
-  @import "../../style/colours";
-  @import "../../style/textstyles";
-  @import "../../style/home";
-
+  @import "@/style/_listmenu";
+  @import "@/style/_panels";
+  @import "@/style/_colours";
+  @import "@/style/_textstyles";
+  @import "@/style/_home";
 </style>

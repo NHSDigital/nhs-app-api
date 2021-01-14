@@ -1,0 +1,16 @@
+@import "../colours";
+@import "../desktopWeb/accessibility";
+
+a {
+  display: inline-block;
+
+  &:focus {
+    @include outlineStyle;
+    background-color: $focus_highlight;
+  }
+  
+  &:hover {
+    @include linkHoverStyle;
+    cursor: pointer;
+  }
+}

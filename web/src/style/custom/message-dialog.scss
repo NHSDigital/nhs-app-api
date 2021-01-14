@@ -1,0 +1,12 @@
+@import "../messages";
+@import "../spacings";
+
+.plain {
+  &.desktopWeb {
+    margin-left: 0-$three;
+  }
+}
+
+.break {
+  word-break: break-word;
+}

@@ -70,58 +70,5 @@ div.panel-content{
 </style>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/breakpoints';
-@import '~nhsuk-frontend/packages/core/settings/colours';
-@import '~nhsuk-frontend/packages/core/settings/globals';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/settings/typography';
-@import '~nhsuk-frontend/packages/core/tools/functions';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/mixins';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-@import '~nhsuk-frontend/packages/core/tools/typography';
-
-.message-panel__item{
-  @include nhsuk-responsive-margin(4, "bottom");
-  list-style: none;
-  width: 80%;
-  &:last-child {
-    @include nhsuk-responsive-margin(0, "bottom");
-  }
-}
-
-.message-panel__sender{
-  @include nhsuk-responsive-padding(0);
-  @include nhsuk-responsive-margin(0);
-  @include nhsuk-typography-responsive(16);
-  color: $color_nhsuk-grey-1;
-}
-
-.message-panel__time{
-  @include nhsuk-responsive-padding(0);
-  @include nhsuk-responsive-margin(0);
-  @include nhsuk-typography-responsive(14);
-}
-
-.message-panel__content{
-  @include panel($color_nhsuk-white, $nhsuk-text-color);
-  @include nhsuk-responsive-padding(2);
-  @include nhsuk-responsive-margin(0);
-  border-radius: nhsuk-spacing(1);
-  border: 1px solid $color_nhsuk-grey-4;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
-
-  :last-child{
-    @include nhsuk-responsive-margin(0, "bottom");
-  }
-
-  ol{
-    padding-left:1.3em;
-  }
-}
+  @import "@/style/custom/message";
 </style>

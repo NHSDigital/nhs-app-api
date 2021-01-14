@@ -170,61 +170,6 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-  @import '../../style/colours';
-  @import '../../style/screensizes';
-  @import '../../style/textstyles';
-  @import "../../style/fonts";
-  @import "../../style/arrow";
-  @import '../../style/accessibility';
-  @import '../../style/desktopWeb/accessibility';
-
-  .fix-breadcrumb {
-    z-index: 4;
-    position: fixed;
-    width: 100%;
-  }
-
-  .bannerLine {
-    height: 5px;
-  }
-
-  .bannerLine-padding {
-    padding-top: 7px;
-  }
-
-  .native-padding {
-    padding-top: 46px;
-  }
-
-  .banner {
-    @include icon-arrow-left;
-    color: $black;
-    text-decoration: none;
-    padding: 0 10px;
-    margin: 0 -10px;
-    background-position: right 10px center;
-
-    &:hover {
-      text-decoration: underline;
-      box-shadow: none;
-      cursor: pointer;
-    }
-
-    &:focus {
-      @include focusStyleLightMenuItem;
-      outline-color: $black;
-      box-shadow: inset 0 0 0 4px $black;
-      outline-offset: -5px;
-    }
-  }
-
-  .focusedItem {
-    &:focus {
-      @include focusStyleLightMenuItem;
-      color: #000;
-    }
-  }
-
-
+  @import "@/style/custom/content-header";
 </style>
 

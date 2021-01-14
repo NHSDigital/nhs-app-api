@@ -23,12 +23,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/colours";
-.error-circle {
-  fill: $error_dark
-}
-
- .desktopErrorIcon{
-  fill: $error
- }
+  @import "@/style/custom/error-marker-icon";
 </style>

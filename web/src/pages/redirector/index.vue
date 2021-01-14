@@ -244,7 +244,5 @@ export default {
 </script>
 
 <style module lang="scss">
-.spacer {
-  min-height: 100vh;
-}
+  @import "@/style/custom/redirector";
 </style>

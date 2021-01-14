@@ -81,23 +81,5 @@ export default {
 
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/settings/all';
-  @import '~nhsuk-frontend/packages/core/tools/all';
-  @import '~nhsuk-frontend/packages/core/settings/colours';
-  @import '~nhsuk-frontend/packages/core/settings/globals';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/components/button/button';
-  @import '../../../style/colours';
-
-  .nhsuk-button{
-    background-color: $button_red;
-
-    &:focus {
-      background-color: $button_red_focus;
-    }
-
-    &:hover {
-      background-color: $button_red_focus;
-    }
-  }
-  </style>
+  @import "@/style/custom/gp-messages-delete";
+</style>

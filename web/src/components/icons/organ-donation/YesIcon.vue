@@ -59,10 +59,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.yes {
-  margin: 0;
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-}
+  @import "@/style/custom/yes-icon";
 </style>

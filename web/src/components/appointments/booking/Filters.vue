@@ -146,5 +146,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
- @import "../../../style/forms";
+ @import "@/style/_forms";
  </style>

@@ -19,47 +19,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/breakpoints';
-@import "~nhsuk-frontend/packages/core/settings/colours";
-@import "~nhsuk-frontend/packages/core/settings/spacing";
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import "~nhsuk-frontend/packages/core/tools/spacing";
-
-.page-divider {
-  text-align: center;
-  .page-divider__content {
-    position: relative;
-    bottom: nhsuk-spacing(6);
-    margin: 0 auto;
-    margin-bottom: -(nhsuk-spacing(6));
-    @include govuk-media-query($until: tablet) {
-      bottom: nhsuk-spacing(5);
-      margin-bottom: -(nhsuk-spacing(5));
-    }
-    .page-divider__inner {
-      background: $color_nhsuk-grey-5;
-      display: inline-block;
-      padding: nhsuk-spacing(1) nhsuk-spacing(2);
-    }
-  }
-
-  .page-divider__content:before {
-    content: "";
-    position: absolute;
-    height: 5px;
-    border-top: 1px solid #d8dde0;
-    width: 28%;
-    top: 1em;
-    left: 0;
-  }
-
-  .page-divider__content:after {
-    content: "";
-    position: absolute;
-    height: 5px;
-    border-top: 1px solid #d8dde0;
-    width: 28%;
-    top: 1em;
-    right: 0; }
-}
+  @import "@/style/custom/page-divider";
 </style>

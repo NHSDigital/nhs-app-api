@@ -1,0 +1,22 @@
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+
+    a {
+      display: inline-block;
+      vertical-align: top;
+
+      &:focus,
+      &:hover {
+        border-radius: 4px;
+      }
+      
+      img{
+        display: block;
+      }
+    }
+  }
+}

@@ -54,10 +54,6 @@ export default {
     SkipLink,
   },
   props: {
-    showAccountIcon: {
-      type: Boolean,
-      default: true,
-    },
     showHeaderButtons: {
       type: Boolean,
       default: true,
@@ -112,86 +108,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/colours';
-  @import '../../style/screensizes';
-  @import '../../style/textstyles';
-  @import "../../style/fonts";
-
-  header {
-    background: $nhs_blue;
-    color: $white;
-    position: relative;
-    height: auto;
-    display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 4;
-    box-sizing: border-box;
-    min-width: 300px;
-
-    .header-content {
-     display: block;
-
-     .nhsLogo {
-      color: $white;
-      display: inline-block;
-
-      a.anchor-icon {
-       color: $white;
-       display: inline-block;
-
-      }
-     }
-
-     a.mini-menu-toggler {
-      display: none;
-
-      :focus {
-       background-color: transparent;
-       border-color: $focus_highlight;
-       box-shadow: 0 0 0 3px $focus_highlight;
-      }
-     }
-    }
-    .menuButton {
-      margin-right: 0;
-    }
-
-    @include fromTablet() {
-      .menuButton {
-        margin-right: 0;
-      }
-    }
-
-    @include tabletAndBelow() {
-      .header-content {
-        a.mini-menu-toggler {
-          float: right;
-          margin-top: 0.8em;
-          display: inline-block;
-          font-family: $frutiger-roman;
-          font-weight: 700;
-          line-height: 2em;
-          color: $white;
-          font-size: 1.125em;
-          border: 1px $white solid;
-          border-radius: 0.5em;
-          padding: 0.125em 0.8em;
-          margin-left: 1em;
-          cursor: pointer;
-
-          &:focus {
-            box-shadow: 0 0 0 4px $focus_highlight;
-          }
-
-          &:hover {
-            background: $hover_blue;
-            box-shadow: 0 0 0 4px $focus_highlight;
-            text-decoration: none;
-          }
-        }
-      }
-    }
-  }
+  @import "@/style/custom/web-header";
 </style>

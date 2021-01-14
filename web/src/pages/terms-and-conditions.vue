@@ -51,11 +51,5 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-  @import "../style/spacings";
-
-  section {
-    display: block;
-    padding: 0 1em 2.5em;
-  }
-
+  @import "@/style/custom/terms-and-conditions";
 </style>

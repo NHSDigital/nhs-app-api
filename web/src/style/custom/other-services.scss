@@ -1,0 +1,13 @@
+@import "../home";
+@import "../spacings";
+@import "../webshared";
+
+@include desktopAndBelow() {
+}
+
+@include fromDesktop() {
+}
+
+a {
+    display: inline-block;
+}

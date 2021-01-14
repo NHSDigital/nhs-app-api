@@ -154,10 +154,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
- hr {
-  margin: 0.5em auto 0.5em;
- }
- .wrapContent {
-   word-wrap: break-word;
- }
+  @import "@/style/custom/prescriptions-confirm-prescription-details";
 </style>

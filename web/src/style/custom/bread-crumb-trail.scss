@@ -1,0 +1,29 @@
+@import "../colours";
+@import "../desktopWeb/accessibility";
+
+a {
+  line-height: 1.5em;
+  text-decoration: underline;
+  display: inline-block;
+
+  &:focus {
+    @include linkFocusStyle;
+  }
+
+  &:hover {
+    @include linkHoverStyle;
+  }
+
+  &.native {
+    display: grid;
+    &:hover {
+    background: none;
+    box-shadow: none;
+    color: $nhs_blue;
+    }
+  }
+}
+
+.native-back {
+  display: block;
+}

@@ -109,9 +109,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  a{
-    display: inline;
-    font-weight: normal;
-    vertical-align: unset;
-  }
+  @import "@/style/custom/confirmation";
 </style>

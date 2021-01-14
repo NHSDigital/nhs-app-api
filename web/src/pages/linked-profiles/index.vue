@@ -95,10 +95,7 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
-@import '../../style/colours';
 
-.dateOfBirth {
-  color: black;
-}
+<style module lang="scss" scoped>
+  @import "@/style/custom/linked-profiles-index";
 </style>

@@ -48,9 +48,11 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
 </style>
+
 <style module lang="scss" scoped>
   @import '../../style/buttons';
 </style>

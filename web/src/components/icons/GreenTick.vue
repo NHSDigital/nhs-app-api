@@ -18,5 +18,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/colours';
+@import "@/style/_colours";
 </style>

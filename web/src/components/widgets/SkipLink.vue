@@ -20,11 +20,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/all.scss';
-  @import '~nhsuk-frontend/packages/components/skip-link/_skip-link.scss';
-
-  .nhsuk-skip-link:active, .nhsuk-skip-link:focus
-  {
-    z-index: 999;
-  }
+  @import "@/style/custom/skip-link";
 </style>

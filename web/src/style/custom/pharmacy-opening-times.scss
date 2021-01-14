@@ -1,0 +1,26 @@
+@import "../colours";
+@import "../home";
+@import '../listmenu';
+@import "../panels";
+@import "../textstyles";
+
+.opening-times {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  padding-bottom: 0.5em;
+}
+
+.additional-padding {
+  margin-top: 1em;
+}

@@ -60,6 +60,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
+  @import "@/style/_medrecordtitle";
+  @import "@/style/desktopWeb/_accessibility";
 </style>

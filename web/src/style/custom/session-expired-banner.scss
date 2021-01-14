@@ -1,0 +1,15 @@
+@import "../colours";
+@import "../textstyles";
+
+.error-timeout {
+  background: $warning_title;
+  @include default_text;
+  color: #000;
+  width: 100%;
+  margin-top: 0.1em;
+  padding: 0.3em;
+}
+
+.center {
+  text-align: center;
+}

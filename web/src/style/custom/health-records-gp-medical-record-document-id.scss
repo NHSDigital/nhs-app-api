@@ -1,0 +1,8 @@
+@import '~nhsuk-frontend/packages/core/settings/typography';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+
+@import '../textstyles';
+
+pre {
+  font-family: $nhsuk-font;
+}

@@ -29,17 +29,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/breakpoints';
-@import '~nhsuk-frontend/packages/core/settings/globals';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/functions';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-
-.formatted-time{
-  @include nhsuk-responsive-padding(0);
-  @include nhsuk-responsive-margin(0);
-  display: block;
-}
+  @import "@/style/custom/formatted-date-time";
 </style>

@@ -34,30 +34,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../../style/colours';
-  @import "../../style/arrow";
-  @import '../../style/accessibility';
-  @import '../../style/desktopWeb/accessibility';
-
-  .banner {
-    @include icon-arrow-left;
-    color: $black;
-    text-decoration: none;
-    padding: 0 10px;
-    margin: 0 -10px;
-    background-position: right 10px center;
-
-    &:hover {
-      text-decoration: underline;
-      box-shadow: none;
-      cursor: pointer;
-    }
-
-    &:focus {
-      @include focusStyleLightMenuItem;
-      outline-color: $black;
-      box-shadow: inset 0 0 0 4px $black;
-      outline-offset: -5px;
-    }
-  }
+  @import "@/style/custom/coronavirus-banner";
 </style>

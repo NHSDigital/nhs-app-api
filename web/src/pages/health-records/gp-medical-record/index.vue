@@ -204,12 +204,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/medrecordcontent';
-
-  .user-info {
-    display: inline-block;
-  }
-  .user-info-name {
-    display: inline-block;
-  }
+  @import "@/style/custom/gp-medical-record-index";
 </style>

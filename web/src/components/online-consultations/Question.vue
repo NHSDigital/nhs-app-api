@@ -75,35 +75,5 @@ export default {
 </script>
 
 <style lang="scss">
-  .nhsuk-form-group a {
-    vertical-align: baseline;
-    display: inline !important;
-  }
-
-  .question.required,
-  .optionalLabel.marginBottom {
-    margin-bottom: 1em !important;
-  }
-
-  .question {
-    .nhsuk-hint:last-of-type {
-      margin-bottom: 0 !important;
-    }
-
-    a {
-      display: inline;
-      vertical-align: baseline;
-    }
-  }
-  .nhsuk-care-card {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  .nhsuk-hint {
-    b {
-      display: inline-block;
-    }
-
-  }
+  @import "@/style/custom/question";
 </style>

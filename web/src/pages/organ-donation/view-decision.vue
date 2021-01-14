@@ -74,7 +74,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.messageText {
-  padding-bottom: 1em !important;
-}
+  @import "@/style/custom/organ-donation-view-decision";
 </style>

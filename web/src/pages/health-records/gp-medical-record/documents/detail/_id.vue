@@ -104,12 +104,5 @@ export default {
 </script>
 
 <style lang="scss">
-  .documentContainer {
-    margin-bottom: 40px;
-    word-break: break-word;
-
-    img {
-      max-width: 100%;
-    }
-  }
+  @import "@/style/custom/health-records-gp-medical-record-document-detail-id";
 </style>

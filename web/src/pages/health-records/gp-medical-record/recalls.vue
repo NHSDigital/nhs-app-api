@@ -110,8 +110,5 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-a {
-  display: inline-block;
-  cursor: pointer;
-}
+  @import "@/style/custom/inline-block-pointer";
 </style>

@@ -112,15 +112,5 @@ export default {
 </script>
 
 <style module lang='scss' scoped>
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-
-.message-panel__list {
-  @include nhsuk-responsive-margin(2, "top");
-  @include nhsuk-responsive-margin(2, "bottom");
-  @include nhsuk-responsive-padding(0, "left");
-  list-style: none;
-}
+  @import "@/style/custom/app-message";
 </style>

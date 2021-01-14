@@ -51,16 +51,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '~nhsuk-frontend/packages/core/settings/all';
-  @import '~nhsuk-frontend/packages/core/tools/all';
-  @import '~nhsuk-frontend/packages/core/settings/colours';
-  @import '~nhsuk-frontend/packages/core/settings/globals';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/components/panel/panel';
-  @import "../../style/colours";
-
-  .nhsuk-panel-group__item {
-    padding-right: 15%;
-  }
-
+  @import "@/style/custom/received-message";
 </style>

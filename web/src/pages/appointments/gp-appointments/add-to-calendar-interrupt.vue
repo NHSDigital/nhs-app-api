@@ -85,17 +85,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-
-h1 {
-  @include nhsuk-responsive-margin(4, "bottom");
-  word-break: break-word;
-}
-span {
-  padding-top: 1em;
-}
-
+  @import "@/style/custom/add-to-calendar-interrupt";
 </style>

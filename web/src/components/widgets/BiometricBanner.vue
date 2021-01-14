@@ -75,29 +75,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  .container {
-    margin-top: 2em;
-  }
-  .nhsuk-button-full-width {
-    width: 100%;
-  }
-  a {
-    display: inline;
-    cursor: pointer;
-  }
-  .center {
-    text-align: center;
-  }
-  .msgText {
-    padding: 1em 1em 1em 1em;
-    margin-top:0;
-    background-color: #ffffff;
-  }
-  .msgText a {
-    text-align: center;
-  }
-  .flash-message {
-    margin-top: 1.125em;
-    margin-bottom: 1.25em;
-  }
+  @import "@/style/custom/biometric-banner";
 </style>

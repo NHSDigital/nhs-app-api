@@ -51,8 +51,7 @@ export default {
   },
 };
 </script>
+
 <style module lang="scss">
-  html {
-    background-color: #f0f4f5 !important
-  }
+  @import "@/style/custom/ios-compatibility";
 </style>

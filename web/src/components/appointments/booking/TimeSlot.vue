@@ -63,36 +63,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../../style/selectors";
-@import '../../../style/textstyles';
-@import '../../../style/desktopWeb/accessibility';
-
-.timeSlot {
-  @extend .selector;
-  padding: 0;
-
-  a {
-    @include default_text;
-    text-decoration: none;
-    font-weight: normal;
-    padding: 1em;
-    &.desktopWeb {
-     font-family: $default-web;
-     font-weight: lighter;
-    }
-    &:focus {
-      background-color: white;
-      border-radius: 0.313em;
-    }
-
-    &:hover {
-      background-color: white;
-      border-radius: 0.313em;
-        @include outlineStyleLight;
-    }
-  }
- .strong {
-   font-weight: 700;
- }
-}
+  @import "@/style/custom/time-slot";
 </style>

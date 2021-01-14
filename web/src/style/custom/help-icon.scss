@@ -1,0 +1,33 @@
+@import "../colours";
+
+.help {
+  margin: 0.8em 1em;
+  display: inline-block;
+  height: 1.575em;
+  width: auto;
+  cursor: pointer;
+  outline-style:none;
+}
+
+.path, .rect {
+  fill: #fff;
+  stroke-miterlimit: 10;
+}
+
+.path, .rect, .circle {
+  stroke: #fff;
+}
+
+.path {
+  stroke-width: 3px;
+}
+
+.rect {
+  stroke-width: 2px;
+}
+
+.circle {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-width: 7px;
+}

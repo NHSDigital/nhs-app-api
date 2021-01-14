@@ -157,56 +157,6 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-  @import "../style/home";
-  @import "../style/spacings";
-  @import "../style/webshared";
-  @import "../style/nofooter";
-
-  .error-container {
-    @include space(padding, all, 1em);
-  }
-
-  .login-app-header-flex-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 90vh;
-  }
-
-  @include desktopAndBelow(){
-    .nhs-app-mobile-hide {
-      display: none;
-    }
-  }
-
-  @include fromDesktop(){
-    .nhs-app-desktop-hide {
-      display: none;
-    }
-  }
-
-  .login-app-header-full-container {
-    height: 100%;
-  }
-
-  a {
-    display: inline-block;
-  }
-
-  .error-container {
-    @include space(padding, all, 1em);
-  }
-
-  .appVersion {
-    text-align: center;
-  }
-
-  .sub-header {
-    margin: 0.5em 0;
-  }
-
-  .rule {
-    height: 0.063em;
-    border: none;
-  }
+  @import "../style/custom/login-layout";
 
 </style>

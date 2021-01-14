@@ -55,8 +55,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-.info p > a {
-  vertical-align: baseline;
-  display: inline;
-}
+  @import "@/style/custom/gp-messages-urgency-contact-your-gp";
 </style>

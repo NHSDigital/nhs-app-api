@@ -107,11 +107,7 @@ export default {
   },
 };
 </script>
+
 <style module lang="scss" scoped>
-@import "../style/accessibility";
-@import '../style/colours';
-@import "../style/home";
-.appVersion {
-  text-align: center;
-}
+  @import "@/style/custom/login";
 </style>

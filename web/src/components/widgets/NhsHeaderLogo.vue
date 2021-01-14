@@ -52,27 +52,7 @@ export default {
   },
 };
 </script>
+
 <style module lang="scss" scoped>
-  @import "../../style/colours";
-  @import '../../style/screensizes';
-  a {
-    &:visited, &:active {
-      color: $white;
-    }
-
-    &:hover {
-      background: $hover_blue;
-      box-shadow: 0 0 0 3px $hover_blue;
-      color: $white;
-      text-decoration: underline;
-    }
-  }
-
-  @include tabletAndBelow() {
-   span {
-     padding-top: 0;
-   }
-  }
+  @import "@/style/custom/nhs-header-logo";
 </style>
-
-

@@ -58,10 +58,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  div {
-    display: inline-block;
-  }
-  img {
-    width: 100%;
-  }
+  @import "@/style/custom/generic-image-input";
 </style>

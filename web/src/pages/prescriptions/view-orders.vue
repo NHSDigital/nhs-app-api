@@ -215,62 +215,7 @@ export default {
   },
 };
 </script>
+
 <style module lang="scss" scoped>
-  @import '../../style/arrow';
-  @import '~nhsuk-frontend/packages/core/settings/colours';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/settings/globals';
-  @import '~nhsuk-frontend/packages/core/settings/typography';
-  @import '~nhsuk-frontend/packages/core/tools/typography';
-  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
-
-  a {
-    display: inline-block;
-  }
-
-  .list-menu {
-    border-top: 1px #D8DDE0 solid;
-    list-style: none;
-    padding-left: 0;
-    margin-bottom: .2em;
-    @include govuk-media-query($until: desktop) {
-      margin-left: (-$nhsuk-gutter-half);
-      margin-right: (-$nhsuk-gutter-half);
-    }
-  }
-
-  .list menu p {
-    margin-bottom: 0;
-    padding-right: 3em;
-    color: #212b32;
-  }
-
-  .nhs-app-message {
-    list-style: none;
-    margin-bottom: nhsuk-spacing(3);
-    border-top: 1px $nhsuk-border-color solid;
-  }
-
-  .nhs-app-message p {
-    padding-top: 2px;
-    padding-bottom: 0;
-    color: $dark_grey;
-  }
-
-  .nhs-app-panel-heading {
-    margin-bottom: 0;
-    margin-top: 1em;
-
-    @include mq($until: desktop) {
-      margin: 1em -1em 0;
-    }
-
-    h1, h2, h3, h4, h5 {
-      background-color: $color_nhsuk-white;
-      padding: 0.5em 16px 0.5em 16px;
-      border-top: 1px solid #d8dde0;
-      margin-bottom: 0;
-    }
-  }
+  @import "@/style/custom/prescriptions-view-orders";
 </style>

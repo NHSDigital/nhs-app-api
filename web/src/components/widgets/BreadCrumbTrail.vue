@@ -122,33 +122,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/colours";
-  @import "../../style/desktopWeb/accessibility";
-
-  a {
-    line-height: 1.5em;
-    text-decoration: underline;
-    display: inline-block;
-
-    &:focus {
-      @include linkFocusStyle;
-    }
-
-    &:hover {
-      @include linkHoverStyle;
-    }
-
-    &.native {
-      display: grid;
-      &:hover {
-      background: none;
-      box-shadow: none;
-      color: $nhs_blue;
-      }
-    }
-  }
-
-  .native-back {
-    display: block;
-  }
+  @import "@/style/custom/bread-crumb-trail";
 </style>
