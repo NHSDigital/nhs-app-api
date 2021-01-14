@@ -1,14 +1,16 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="showErrors" id="errors" :focusable="true">
-        <message-text data-purpose="error-heading">
-          {{ $t('organDonation.thereIsAProblem') }}
-        </message-text>
-        <message-list data-purpose="reason-error">
-          <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
-        </message-list>
-      </message-dialog>
+      <div role="alert" aria-atomic="true">
+        <message-dialog v-if="showErrors" id="errors" :focusable="true">
+          <message-text data-purpose="error-heading">
+            {{ $t('organDonation.thereIsAProblem') }}
+          </message-text>
+          <message-list data-purpose="reason-error">
+            <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
       <h2>{{ $t('organDonation.reviewYourDecision.aboutYou') }}</h2>
       <personal-details
         :name="$store.state.organDonation.registration.nameFull"
@@ -123,16 +125,20 @@ export default {
   },
   methods: {
     clickSubmit() {
-      this.submitAttempted = true;
+      this.submitAttempted = false;
 
-      if (this.showErrors) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
+      this.$nextTick(() => {
+        this.submitAttempted = true;
 
-      this.isDisabled = true;
+        if (this.showErrors) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
 
-      this.$store.dispatch('organDonation/submitDecision');
+        this.isDisabled = true;
+
+        this.$store.dispatch('organDonation/submitDecision');
+      });
     },
   },
 };

@@ -2,17 +2,18 @@
   <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div>
-        <message-dialog v-if="showErrors" id="errors"
-                        message-type="error"
-                        role="alert"
-                        :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('organDonation.thereIsAProblem') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li>{{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}</li>
-          </message-list>
-        </message-dialog>
+        <div role="alert" aria-atomic="true">
+          <message-dialog v-if="showErrors" id="errors"
+                          message-type="error"
+                          :focusable="true">
+            <message-text data-purpose="error-heading">
+              {{ $t('organDonation.thereIsAProblem') }}
+            </message-text>
+            <message-list data-purpose="reason-error">
+              <li>{{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}</li>
+            </message-list>
+          </message-dialog>
+        </div>
         <div :class="[$style.form]">
           <h2>{{ $t('organDonation.withdrawReason.withdrawYourPreviousDecision') }}</h2>
           <p>{{ $t('organDonation.withdrawReason.differentToOptingOut') }}</p>
@@ -139,15 +140,18 @@ export default {
       redirectTo(this, ORGAN_DONATION_AMEND_PATH);
     },
     continueClicked() {
-      this.hasTriedToContinue = true;
+      this.hasTriedToContinue = false;
 
-      if (this.showErrors) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
+      this.$nextTick(() => {
+        this.hasTriedToContinue = true;
 
-      this.$store.dispatch('organDonation/setWithdrawReasonId', this.reasonId);
-      redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
+        if (this.showErrors) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
+        this.$store.dispatch('organDonation/setWithdrawReasonId', this.reasonId);
+        redirectTo(this, ORGAN_DONATION_REVIEW_YOUR_DECISION_PATH);
+      });
     },
     goBack() {
       this.$store.dispatch('organDonation/withdrawCancel');

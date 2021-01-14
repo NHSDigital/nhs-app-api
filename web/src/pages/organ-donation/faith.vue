@@ -1,14 +1,16 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="showError" message-type="error" :focusable="true">
-        <message-text data-purpose="error-heading">
-          {{ $t('organDonation.thereIsAProblem') }}
-        </message-text>
-        <message-list data-purpose="reason-error">
-          <li>{{ $t('organDonation.faith.respondToFaithBeliefDeclaration') }}</li>
-        </message-list>
-      </message-dialog>
+      <div role="alert" aria-atomic="true">
+        <message-dialog v-if="showError" message-type="error" :focusable="true">
+          <message-text data-purpose="error-heading">
+            {{ $t('organDonation.thereIsAProblem') }}
+          </message-text>
+          <message-list data-purpose="reason-error">
+            <li>{{ $t('organDonation.faith.respondToFaithBeliefDeclaration') }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
       <h2>{{ $t('organDonation.faith.faithSlashBeliefs') }}</h2>
       <p>{{ $t('organDonation.faith.askFamilyWhenYouDie') }}</p>
       <collapsible-dialog>
@@ -104,12 +106,17 @@ export default {
       this.$store.dispatch('organDonation/setFaithDeclaration', value);
     },
     continueClicked() {
-      this.hasTriedToContinue = true;
-      if (this.showError) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-      } else {
+      this.hasTriedToContinue = false;
+
+      this.$nextTick(() => {
+        this.hasTriedToContinue = true;
+
+        if (this.showError) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
         redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS_PATH);
-      }
+      });
     },
   },
 };

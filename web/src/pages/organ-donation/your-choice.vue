@@ -1,14 +1,16 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="showErrors" message-type="error" :focusable="true">
-        <message-text data-purpose="error-heading">
-          {{ $t('organDonation.thereIsAProblem') }}
-        </message-text>
-        <message-list data-purpose="reason-error">
-          <li>{{ $t('organDonation.yourChoice.chooseToDonate') }}</li>
-        </message-list>
-      </message-dialog>
+      <div role="alert" aria-atomic="true">
+        <message-dialog v-if="showErrors" message-type="error" :focusable="true">
+          <message-text data-purpose="error-heading">
+            {{ $t('organDonation.thereIsAProblem') }}
+          </message-text>
+          <message-list data-purpose="reason-error">
+            <li>{{ $t('organDonation.yourChoice.chooseToDonate') }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
       <div>
         <h2>{{ $t('organDonation.yourChoice.yourChoice') }}</h2>
         <p>{{ $t('organDonation.yourChoice.youCanDonateSomeOrAll') }}</p>
@@ -107,18 +109,22 @@ export default {
       this.hasTriedToContinue = false;
     },
     continueClicked() {
-      this.hasTriedToContinue = true;
+      this.hasTriedToContinue = false;
 
-      if (this.showErrors) {
-        EventBus.$emit(FOCUS_ERROR_ELEMENT);
-        return;
-      }
+      this.$nextTick(() => {
+        this.hasTriedToContinue = true;
 
-      if (this.currentChoice) {
-        redirectTo(this, ORGAN_DONATION_FAITH_PATH);
-      } else {
-        redirectTo(this, ORGAN_DONATION_SOME_ORGANS_PATH);
-      }
+        if (this.showErrors) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
+
+        if (this.currentChoice) {
+          redirectTo(this, ORGAN_DONATION_FAITH_PATH);
+        } else {
+          redirectTo(this, ORGAN_DONATION_SOME_ORGANS_PATH);
+        }
+      });
     },
     selected(value) {
       this.$store.dispatch(this.setAllOrgansAction, value);

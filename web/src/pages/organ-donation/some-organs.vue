@@ -2,19 +2,21 @@
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div ref="validationMessage" tabindex="-1">
-        <message-dialog v-if="showErrors" message-type="error" :focusable="true">
-          <message-text data-purpose="error-heading">
-            {{ $t('organDonation.thereIsAProblem') }}
-          </message-text>
-          <message-list data-purpose="reason-error">
-            <li v-if="!areAllSelected">
-              {{ $t('organDonation.someOrgans.chooseYesOrNoForEachOrgan') }}
-            </li>
-            <li v-if="areAllSelected && !hasYesSelection">
-              {{ $t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan') }}
-            </li>
-          </message-list>
-        </message-dialog>
+        <div role="alert" aria-atomic="true">
+          <message-dialog v-if="showErrors" message-type="error" :focusable="true">
+            <message-text data-purpose="error-heading">
+              {{ $t('organDonation.thereIsAProblem') }}
+            </message-text>
+            <message-list data-purpose="reason-error">
+              <li v-if="!areAllSelected">
+                {{ $t('organDonation.someOrgans.chooseYesOrNoForEachOrgan') }}
+              </li>
+              <li v-if="areAllSelected && !hasYesSelection">
+                {{ $t('organDonation.someOrgans.chooseYesForAtLeastOneOrgan') }}
+              </li>
+            </message-list>
+          </message-dialog>
+        </div>
       </div>
       <div>
         <h2>{{ $t('organDonation.someOrgans.yourChoice') }}</h2>
@@ -112,12 +114,17 @@ export default {
   },
   methods: {
     continueClicked() {
-      this.hasTriedToContinue = true;
-      if (this.hasMadeChoices) {
+      this.hasTriedToContinue = false;
+
+      this.$nextTick(() => {
+        this.hasTriedToContinue = true;
+
+        if (this.showErrors) {
+          EventBus.$emit(FOCUS_ERROR_ELEMENT);
+          return;
+        }
         redirectTo(this, ORGAN_DONATION_FAITH_PATH);
-        return;
-      }
-      EventBus.$emit(FOCUS_ERROR_ELEMENT);
+      });
     },
     moreAboutOrgansClicked() {
       redirectTo(this, ORGAN_DONATION_MORE_ABOUT_ORGANS_PATH);
