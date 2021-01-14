@@ -2,12 +2,12 @@ plugins {
     id 'net.linguica.maven-settings' version '0.5'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'jacoco'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-kapt'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "jacoco"
+apply plugin: "com.google.gms.google-services"
+apply plugin: "kotlin-kapt"
 
 def developmentFolder = java.nio.file.Paths.get(System.getProperty("user.home"),
         '.nhsonline/secrets/android-development.gradle')
@@ -179,7 +179,7 @@ android {
             applicationIdSuffix ".scratch15"
             manifestPlaceholders = [appName: "NHS App Scratch 15"]
         }
-	    scratch16 {
+        scratch16 {
             initWith debug
             applicationIdSuffix ".scratch16"
             manifestPlaceholders = [appName: "NHS App Scratch 16"]
@@ -250,48 +250,53 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
-    implementation 'com.intuit.sdp:sdp-android:1.0.5'
-    implementation 'com.intuit.ssp:ssp-android:1.0.5'
-    implementation 'commons-codec:commons-codec:1.11'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.android.installreferrer:installreferrer:2.1'
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
-    implementation 'com.nhs.online.fidoclient:fidoclient:1.0.4'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.squareup.moshi:moshi:1.10.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.10.0'
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation "androidx.vectordrawable:vectordrawable:1.0.0"
 
-    implementation 'com.paycasso.sdk:paycasso:2021.1.19-11-3'
-    implementation 'com.paycasso.sdk:paycasso-view:2021.1.19-11-3'
-    implementation 'com.paycasso.sdk:paycasso-opencv:2020.8.10'
-    implementation 'com.paycasso.sdk:paycasso-tensorflow:2020.8.10'
-    implementation 'com.paycasso.sdk:paycasso-jj2000:2020.8.10'
+    implementation "com.intuit.sdp:sdp-android:1.0.5"
+    implementation "com.intuit.ssp:ssp-android:1.0.5"
 
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.10.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation "commons-codec:commons-codec:1.11"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    implementation "androidx.browser:browser:1.0.0"
+    implementation "com.android.volley:volley:1.1.1"
+    implementation "com.android.installreferrer:installreferrer:2.1"
+    implementation "com.jakewharton.threetenabp:threetenabp:1.2.0"
+    implementation "com.nhs.online.fidoclient:fidoclient:1.0.4"
+    implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.firebase:firebase-messaging:17.3.4"
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:4.3.1'
-    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
-    testImplementation 'org.robolectric:shadows-httpclient:4.3'
-    testImplementation 'com.android.volley:volley:1.1.1'
+    implementation "com.iproov.sdk:iproov:6.3.1"
+
+    implementation "com.squareup.moshi:moshi:1.10.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.10.0"
+
+    implementation "com.paycasso.sdk:paycasso:2021.1.19-11-3"
+    implementation "com.paycasso.sdk:paycasso-view:2021.1.19-11-3"
+    implementation "com.paycasso.sdk:paycasso-opencv:2020.8.10"
+    implementation "com.paycasso.sdk:paycasso-tensorflow:2020.8.10"
+    implementation "com.paycasso.sdk:paycasso-jj2000:2020.8.10"
+
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.10.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation "org.robolectric:shadows-httpclient:4.3"
+    testImplementation "com.android.volley:volley:1.1.1"
 }
 
 jacoco {
-    toolVersion = '0.8.5'
+    toolVersion = "0.8.5"
 }
 
 repositories {
     maven {
-        url 'https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1'
-        name 'nhsapp'
+        url "https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1"
+        name "nhsapp"
     }
 }
 
@@ -301,10 +306,10 @@ tasks.withType(Test) {
     finalizedBy jacocoTestReport
 
     jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+    jacoco.excludes = ["jdk.internal.*"]
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ["testDebugUnitTest"]) {
     reports {
         xml.enabled = true
         html.enabled = true

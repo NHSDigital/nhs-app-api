@@ -41,6 +41,7 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.registration.PaycassoFlowFactory
 import com.nhs.online.nhsonline.registration.PaycassoService
 import com.nhs.online.nhsonline.services.ConfigurationService
+import com.nhs.online.nhsonline.services.IProovService
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
@@ -90,6 +91,7 @@ class MainActivity :
     lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private lateinit var downloadHelper: FileDownloadHelper
     private lateinit var notificationsService: NotificationsService
+    private lateinit var iProovService: IProovService
     private lateinit var urlHelper: UrlHelper
     private lateinit var appPersistData: PersistData
     private lateinit var intentHandlers: IntentHandlers
@@ -144,6 +146,9 @@ class MainActivity :
 
         val notificationManager = NotificationManagerCompat(this)
         notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
+
+        iProovService = IProovService()
+        iProovService.installIProov(webview)
 
         connectionStateMonitor = ConnectionStateMonitor(this)
         connectionStateMonitor.registerNetworkCallback()
@@ -295,6 +300,7 @@ class MainActivity :
         super.onDestroy()
         biometricsInterface.cancelAllProgressingTasks()
         connectionStateMonitor.deregisterNetworkCallback()
+        iProovService.uninstallIProov(webview)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -625,7 +631,7 @@ class MainActivity :
             MenuTab.MyRecord.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.yourHealth)
             MenuTab.Messages.tabIndex -> menuBar.switchActiveMenuItemTo(R.id.messages)
         }
-        enableMenuBar();
+        enableMenuBar()
     }
 
     override fun clearMenuBarItem() {

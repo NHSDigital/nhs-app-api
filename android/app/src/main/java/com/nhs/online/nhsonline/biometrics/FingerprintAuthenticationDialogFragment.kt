@@ -74,8 +74,8 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog.setTitle(fingerprintContent?.title)
-        dialog.setCanceledOnTouchOutside(false)
+        dialog?.setTitle(fingerprintContent?.title)
+        dialog?.setCanceledOnTouchOutside(false)
         return inflater.inflate(R.layout.fingerprint_dialog_container, container, false)
     }
 
@@ -108,7 +108,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
     }
 
     // This is for when the user cancels the dialog using the back button on their phone.
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         fingerprintAuthProcessor?.cancel()
         dismissAllowingStateLoss()

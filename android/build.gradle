@@ -27,6 +27,11 @@ allprojects {
         mavenLocal()
         google()
         jcenter()
+
+        maven {
+            url "https://raw.githubusercontent.com/iProov/android/master/maven/"
+            name "iproov"
+        }
     }
 }
 

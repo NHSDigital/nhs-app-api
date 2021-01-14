@@ -1,0 +1,14 @@
+---
+odsRemapEnabled: true
+odsRemapMap: "A24915:A29928"
+cidHostname: auth.dev10.signin.nhs.uk
+cidFidoHostname: uaf.dev10.signin.nhs.uk
+cidSettingsHostName: settings.dev10.signin.nhs.uk
+
+api:
+  knownServicesOverrides:
+    services__cid_settings__url: https://settings.dev10.signin.nhs.uk
+    services__cid_account__url: https://account.dev10.signin.nhs.uk
+    services__cid_auth__url: https://auth.dev10.signin.nhs.uk
+    services__cid_uaf__url: https://uaf.dev10.signin.nhs.uk
+    services__cid_access__url: https://access.dev10.signin.nhs.uk

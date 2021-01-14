@@ -48,6 +48,7 @@ parameters:
     - ext
     - aos
     - sandpit
+    - dev10
 - name: imageVersionOverride
   displayName: "Optional image version override (develop or tag)"
   type: string
