@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Nhs.App.Api.Integration.Tests
 {
     [TestClass]
-    public class CommunicationPostHttpFunctionsTests: CommunicationHttpFunctionBase
+    public class CommunicationHttpFunctionsLegacyTests : CommunicationHttpFunctionBase
     {
         private static string _sendToNhsNumbers;
         private static string _sendToOdsCode;
@@ -124,6 +124,12 @@ namespace Nhs.App.Api.Integration.Tests
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             var responseObject = await DeserializeResponseAsync<CommunicationPostResponse>(response);
             Guid.TryParse(responseObject.Id, out _).Should().BeTrue();
+        }
+
+        private static string BuildValidCommunicationPostBody(string nhsNumbersJson, string odsCodeJson, string channelsJson)
+        {
+            return $"{{ \"channels\": {{ {channelsJson} }}," +
+                   $" \"recipients\": {{ \"nhsNumbers\": {nhsNumbersJson}, \"odsCode\": {odsCodeJson} }} }}";
         }
     }
 }
