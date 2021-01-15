@@ -152,4 +152,20 @@ describe('OnUpdateHeaderMixin', () => {
       });
     });
   });
+  describe('onUpdateCaption method', () => {
+    let setHeaderProp;
+
+    beforeEach(() => {
+      setHeaderProp = jest.fn();
+      wrapper = mountOnUpdateHeaderMixin({ methods: { setHeaderProp } });
+      setHeaderProp.mockClear();
+    });
+
+    describe('newCaption', () => {
+      it('will call setHeaderProp passing caption, newCaption value, and localised parameter', () => {
+        wrapper.vm.onUpdateCaption('caption', false);
+        expect(setHeaderProp).toHaveBeenCalledWith('caption', 'caption', true);
+      });
+    });
+  });
 });

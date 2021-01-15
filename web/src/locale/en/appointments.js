@@ -18,7 +18,7 @@ export default {
     addToCalendar: {
       addToCalendar: 'Add to calendar',
       ifThisAppointmentChanges: 'If this appointment changes, you\'ll have to update your calendar yourself',
-      yourCalendarWillNoUpdate: 'Your calendar will not update automatically if the appointment is changed or cancelled.',
+      yourCalendarWillNotUpdate: 'Your calendar will not update automatically if the appointment is changed or cancelled.',
     },
   },
   book: {

@@ -3,17 +3,19 @@ import i18n from '@/plugins/i18n';
 import NativeApp from '@/services/native-app';
 import * as dependency from '@/lib/utils';
 import { APPOINTMENTS_PATH } from '@/router/paths';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE, UPDATE_LOCALISED_CAPTION } from '@/services/event-bus';
 import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 jest.mock('@/services/native-app');
+jest.mock('@/services/event-bus', () => ({
+  ...jest.requireActual('@/services/event-bus'),
+  EventBus: { $emit: jest.fn() },
+}));
 
 describe('add-to-calendar-interrupt.vue', () => {
   let $store;
   let wrapper;
-
-  let dateAndTime;
-  let heading;
   let para;
   let addToCalendarButton;
 
@@ -47,23 +49,42 @@ describe('add-to-calendar-interrupt.vue', () => {
     });
   });
 
-  describe('date and time', () => {
-    it('appointment date and time will be displayed', () => {
+  describe('created', () => {
+    beforeEach(() => {
+      EventBus.$emit.mockClear();
       wrapper = createAddToCalendarInterruptPage();
-      dateAndTime = wrapper.find('.nhsuk-caption-m');
+    });
 
-      expect(dateAndTime.exists()).toBe(true);
-      expect(dateAndTime.text()).toContain('Wednesday 19 August 2020 at 6:00pm');
+    it('will dispatch to update header', () => {
+      expect(EventBus.$emit)
+        .toHaveBeenCalledWith(
+          UPDATE_HEADER,
+          { headerKey: 'appointments.appointment.addToCalendar.ifThisAppointmentChanges' },
+        );
+    });
+
+    it('will dispatch to update title', () => {
+      expect(EventBus.$emit)
+        .toHaveBeenCalledWith(
+          UPDATE_TITLE, 'appointments.appointment.addToCalendar.ifThisAppointmentChanges',
+        );
+    });
+
+    it('will dispatch to update the caption', () => {
+      expect(EventBus.$emit)
+        .toHaveBeenCalledWith(
+          UPDATE_LOCALISED_CAPTION, 'Wednesday 19 August 2020 at 6:00pm',
+        );
     });
   });
 
-  describe('heading', () => {
-    it('page heading will be displayed', () => {
+  describe('main paragraph', () => {
+    it('main paragraph will be displayed', () => {
       wrapper = createAddToCalendarInterruptPage();
-      heading = wrapper.find('.nhsuk-heading-xl');
+      para = wrapper.find('p');
 
-      expect(heading.exists()).toBe(true);
-      expect(heading.text()).toContain('If this appointment changes, you\'ll have to update your calendar yourself');
+      expect(para.exists()).toBe(true);
+      expect(para.text()).toBe('Your calendar will not update automatically if the appointment is changed or cancelled.');
     });
   });
 

@@ -2,14 +2,8 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-        <h1 class="nhsuk-heading-xl nhs-app-xl">
-          <span class="nhsuk-caption-m nhsuk-caption-–top">
-            {{ formatDate(appointment.startTime) }} at {{ formatTime(appointment.startTime) }}
-          </span>
-          {{ $t('appointments.appointment.addToCalendar.ifThisAppointmentChanges') }}
-        </h1>
 
-        <p>{{ $t('appointments.appointment.addToCalendar.yourCalendarWillNoUpdate') }}</p>
+        <p>{{ $t('appointments.appointment.addToCalendar.yourCalendarWillNotUpdate') }}</p>
 
         <primary-button id="addToCalendarButton" @click.stop.prevent="onAddToCalendar">
           {{ $t('appointments.appointment.addToCalendar.addToCalendar') }}
@@ -25,6 +19,7 @@ import { APPOINTMENTS_PATH } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 import PrimaryButton from '@/components/PrimaryButton';
 import NativeApp from '@/services/native-app';
+import { EventBus, UPDATE_HEADER, UPDATE_TITLE, UPDATE_LOCALISED_CAPTION } from '@/services/event-bus';
 
 export default {
   name: 'AddToCalendarInterruptPage',
@@ -41,6 +36,13 @@ export default {
     if (!this.appointment) {
       redirectTo(this, APPOINTMENTS_PATH);
     }
+    EventBus.$emit(UPDATE_HEADER, {
+      headerKey: 'appointments.appointment.addToCalendar.ifThisAppointmentChanges',
+    });
+    EventBus.$emit(UPDATE_TITLE, 'appointments.appointment.addToCalendar.ifThisAppointmentChanges');
+
+    EventBus.$emit(UPDATE_LOCALISED_CAPTION,
+      `${this.formatDate(this.appointment.startTime)} at ${this.formatTime(this.appointment.startTime)}`);
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
