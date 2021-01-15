@@ -19,15 +19,7 @@
         <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
-        <error-screen-alternative-actions
-          alternative-actions-header="forbiddenErrors.appointments.whatYouCanDoNext">
-          <template v-slot:items>
-            <corona-virus-menu-item />
-            <gp-advice-menu-item v-if="isCdssAdvice" route-crumb="appointmentsCrumb"/>
-            <admin-help-menu-item v-if="isCdssAdmin"/>
-            <one-one-one-service-menu-item />
-          </template>
-        </error-screen-alternative-actions>
+        <alternative-appointment-actions/>
       </template>
     </error-page>
 
@@ -81,18 +73,14 @@
 </template>
 
 <script>
+import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
-import CoronaVirusMenuItem from '@/components/menuItems/CoronaVirusMenuItem';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorScreenAlternativeActions from '@/components/errors/ErrorScreenAlternativeActions';
 import ErrorTitle from '@/components/errors/ErrorTitle';
-import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
-import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
-import OneOneOneServiceMenuItem from '@/components/menuItems/OneOneOneServiceMenuItem';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
@@ -101,22 +89,17 @@ import {
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
 } from '@/router/paths';
-import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'CancelBookingErrors',
   components: {
+    AlternativeAppointmentActions,
     Contact111,
-    CoronaVirusMenuItem,
     ErrorContainer,
     ErrorLink,
     ErrorPage,
     ErrorParagraph,
-    ErrorScreenAlternativeActions,
     ErrorTitle,
-    GpAdviceMenuItem,
-    AdminHelpMenuItem,
-    OneOneOneServiceMenuItem,
   },
   mixins: [ErrorPageMixin],
   props: {
@@ -137,12 +120,6 @@ export default {
     };
   },
   computed: {
-    isCdssAdmin() {
-      return sjrIf({ $store: this.$store, journey: 'cdssAdmin' });
-    },
-    isCdssAdvice() {
-      return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
-    },
     hasConnection() {
       return !this.hasConnectionProblem();
     },

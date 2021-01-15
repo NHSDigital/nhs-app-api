@@ -1,5 +1,14 @@
 import BookingPage from '@/pages/appointments/gp-appointments/booking';
+import Vue from 'vue';
 import { createStore, mount } from '../../helpers';
+
+Vue.mixin({
+  methods: {
+    hasConnectionProblem() {
+      return false;
+    },
+  },
+});
 
 const availableAppointments = (options = {}) => ({
   slots: options.slots || [],
@@ -24,63 +33,7 @@ const createBookingPage = ($store) => {
   });
 };
 
-describe('booking.vue - noAvailableAppointments', () => {
-  it('will return true when slots has been loaded and are empty', () => {
-    const $store = createStore({
-      state: {
-        availableAppointments: availableAppointments({ hasLoaded: true }),
-        myAppointments: {
-          disableCancellation: false,
-        },
-        device: {
-          source: 'web',
-        },
-      },
-    });
-
-    const page = createBookingPage($store);
-    expect(page.vm.noAvailableAppointments).toBeDefined();
-    expect(page.vm.noAvailableAppointments).toBeTruthy();
-  });
-
-  it('will return false when slots has been loaded and are not empty', () => {
-    const $store = createStore({
-      state: {
-        availableAppointments: availableAppointments({ slots: [{}], hasLoaded: true }),
-        myAppointments: {
-          disableCancellation: false,
-        },
-        device: {
-          source: 'web',
-        },
-      },
-    });
-
-    const page = createBookingPage($store);
-    expect(page.vm.noAvailableAppointments).toBeDefined();
-    expect(page.vm.noAvailableAppointments).toBeFalsy();
-  });
-
-  it('will return false when slots has not been loaded', () => {
-    const $store = createStore({
-      state: {
-        availableAppointments: availableAppointments({ slots: new Map() }),
-        myAppointments: {
-          disableCancellation: false,
-        },
-        device: {
-          source: 'web',
-        },
-      },
-    });
-
-    const page = createBookingPage($store);
-    expect(page.vm.noAvailableAppointments).toBeDefined();
-    expect(page.vm.noAvailableAppointments).toBeFalsy();
-  });
-});
-
-describe('booking.vue - showNoMatchingWarning', () => {
+describe('showNoMatchingWarning', () => {
   it('will return true when slots has been loaded and are not empty', () => {
     const $store = createStore({
       state: {
@@ -136,7 +89,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
   });
 });
 
-describe('booking.vue - notMatchSearchCriteria', () => {
+describe('notMatchSearchCriteria', () => {
   it('will return false when filtered slots are not empty', () => {
     const $store = createStore({
       state: {
@@ -212,9 +165,12 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return true when filtered slots are empty and location and type have been selected', () => {
     const $store = createStore({
       state: {
-        availableAppointments: availableAppointments({ selectedOptions: {
-          type: 'type',
-          location: 'location' },
+        availableAppointments: availableAppointments({
+          slots: [{}],
+          hasLoaded: true,
+          selectedOptions: {
+            type: 'type',
+            location: 'location' },
         }),
         myAppointments: {
           disableCancellation: false,

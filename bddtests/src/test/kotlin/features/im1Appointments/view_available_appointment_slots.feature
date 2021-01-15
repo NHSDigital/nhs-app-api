@@ -137,7 +137,7 @@ Feature: View Available Appointment Slots Frontend
     Given there are no available appointment slots for <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then a message is displayed indicating there are no slots available
+    Then I see a message informing me that the GP has no online appointments available and what to do next
     Examples:
       | GP System |
       | TPP       |

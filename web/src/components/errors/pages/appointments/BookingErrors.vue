@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasConnection">
-    <error-page v-if="error.status === genericStatusCodes.FORBIDDEN"
+    <error-page v-if="error && error.status === genericStatusCodes.FORBIDDEN"
                 header-locale-ref="forbiddenErrors.appointments.gpAppointmentBookingUnavailable"
                 :back-url="appointmentsPath">
       <template v-slot:content>
@@ -8,21 +8,36 @@
         <contact-111 :text="$t('forbiddenErrors.appointments.ifTheProblemContinues')"/>
       </template>
       <template v-slot:actions>
-        <error-screen-alternative-actions
-          alternative-actions-header="forbiddenErrors.appointments.whatYouCanDoNext">
-          <template v-slot:items>
-            <corona-virus-menu-item />
-            <gp-advice-menu-item v-if="isCdssAdvice" route-crumb="appointmentsCrumb"/>
-            <admin-help-menu-item v-if="isCdssAdmin"/>
-            <one-one-one-service-menu-item />
-          </template>
-        </error-screen-alternative-actions>
+        <alternative-appointment-actions/>
+      </template>
+    </error-page>
+
+    <error-page v-else-if="!availableAppointments && !error"
+                id="no-appoinments-available"
+                header-locale-ref="appointments.book.noAppointmentsAvailable"
+                :back-url="appointmentsPath">
+      <template v-slot:content>
+        <p>{{ $t('appointments.book.youWillNeedToContactGpSurgery') }}</p>
+        <contact-111
+          :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
+          :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
+      </template>
+      <template v-slot:actions>
+        <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
+        <p>{{ $t('appointments.book.stayAtHome') }}</p>
+        <p>
+          <a href="https://111.nhs.uk/COVID-19"
+             rel="noopener noreferrer"
+             :aria-label="$t('appointments.book.useThe111CoronavirusService.label')">
+            {{ $t('appointments.book.useThe111CoronavirusService.text') }}</a>
+        </p>
+        <alternative-appointment-actions :show-coronavirus-item="false"/>
       </template>
     </error-page>
 
     <error-container
-      v-else-if="error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
-        || error.status === genericStatusCodes.BAD_GATEWAY"
+      v-else-if="error && (error.status === genericStatusCodes.INTERNAL_SERVER_ERROR
+        || error.status === genericStatusCodes.BAD_GATEWAY)"
       :id="errorId">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainOrContactUs"
@@ -39,7 +54,7 @@
     </error-container>
 
     <error-container
-      v-else-if="error.status === genericStatusCodes.GATEWAY_TIMEOUT"
+      v-else-if="error && error.status === genericStatusCodes.GATEWAY_TIMEOUT"
       :id="errorId">
       <error-title title="appointments.error.thereIsAProblemLoading"/>
       <error-paragraph from="appointments.error.tryAgainNowOrContactUs"
@@ -67,19 +82,15 @@
 </template>
 
 <script>
+import AlternativeAppointmentActions from '@/components/appointments/AlternativeAppointmentActions';
 import Contact111 from '@/components/widgets/Contact111';
-import CoronaVirusMenuItem from '@/components/menuItems/CoronaVirusMenuItem';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPage from '@/components/errors/ErrorPage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
-import ErrorScreenAlternativeActions from '@/components/errors/ErrorScreenAlternativeActions';
 import ErrorTitle from '@/components/errors/ErrorTitle';
-import GpAdviceMenuItem from '@/components/menuItems/GpAdviceMenuItem';
-import AdminHelpMenuItem from '@/components/menuItems/AdminHelpMenuItem';
-import OneOneOneServiceMenuItem from '@/components/menuItems/OneOneOneServiceMenuItem';
 
 import genericStatus from '@/components/errors/statusCodes/GenericStatusCodes';
 import appointmentStatus from '@/components/errors/statusCodes/AppointmentCustomStatusCodes';
@@ -88,30 +99,28 @@ import {
   APPOINTMENTS_PATH,
   GP_APPOINTMENTS_PATH,
 } from '@/router/paths';
-import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'BookingErrors',
   components: {
+    AlternativeAppointmentActions,
     Contact111,
-    CoronaVirusMenuItem,
     ErrorButton,
     ErrorContainer,
     ErrorLink,
     ErrorPage,
     ErrorParagraph,
-    ErrorScreenAlternativeActions,
     ErrorTitle,
-    GpAdviceMenuItem,
-    AdminHelpMenuItem,
-    OneOneOneServiceMenuItem,
   },
   mixins: [ErrorPageMixin],
   props: {
     error: {
       type: Object,
       default: undefined,
-      required: true,
+    },
+    availableAppointments: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -121,15 +130,11 @@ export default {
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       genericStatusCodes: genericStatus,
       appointmentStatusCodes: appointmentStatus,
-      errorId: `error-dialog-${this.error.status}`,
     };
   },
   computed: {
-    isCdssAdmin() {
-      return sjrIf({ $store: this.$store, journey: 'cdssAdmin' });
-    },
-    isCdssAdvice() {
-      return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
+    errorId() {
+      return this.error ? `error-dialog-${this.error.status}` : 'unknown-error';
     },
     hasConnection() {
       return !this.hasConnectionProblem();

@@ -77,27 +77,6 @@ describe('booking.vue', () => {
     EventBus.$emit.mockClear();
   });
 
-  describe('available appointments has no slots', () => {
-    it('will show "no slot message"', async () => {
-      createBookingPage();
-
-      await wrapper.vm.$nextTick();
-
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_HEADER, 'appointments.book.noAppointmentsAvailable');
-      expect(EventBus.$emit).toHaveBeenCalledWith(UPDATE_TITLE, 'appointments.book.noAppointmentsAvailable');
-
-      const warning = wrapper.find('[data-purpose="no-appointments-warning"]');
-      expect(warning.exists()).toBeTruthy();
-      expect(warning.findAll('p').at(0).text()).toBe('You\'ll need to contact your GP surgery to book an appointment.');
-      expect(warning.findAll('p').at(1).text()).toContain('For urgent medical advice, go to');
-      expect(warning.findAll('p').at(1).text()).toContain('11.nhs.uk');
-      expect(warning.findAll('p').at(1).text()).toContain('or call 111.');
-      expect(warning.findAll('h2').at(0).text()).toBe('If you think you might have coronavirus');
-      expect(warning.findAll('p').at(2).text()).toBe('Stay at home and avoid close contact with other people.');
-      expect(warning.findAll('p').at(3).text()).toBe('Use the 111 coronavirus service to see if you need medical help.');
-    });
-  });
-
   describe('no matching slots', () => {
     it('will show "not match search criteria message"', () => {
       const slots = [{}];

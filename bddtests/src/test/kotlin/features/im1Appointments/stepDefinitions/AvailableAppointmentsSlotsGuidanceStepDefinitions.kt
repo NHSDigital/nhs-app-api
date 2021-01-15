@@ -9,11 +9,15 @@ import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
+import pages.NoOnlineAppointments
 
 class AvailableAppointmentsSlotsGuidanceStepDefinitions {
 
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
+
+    @Steps
+    lateinit var noOnlineAppointmentsMessage: NoOnlineAppointments
 
     @Given("^there are available appointment slots with different criteria for (.*) " +
             "when (.*) appointment slot guidance is provided$")
@@ -28,6 +32,27 @@ class AvailableAppointmentsSlotsGuidanceStepDefinitions {
             else -> guidanceMessageDescription
         }
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage)
+    }
+
+    @When("^I acknowledge that there are no appointments and go back to my appointments$")
+    fun iAcknowledgeThatThereAreNoAppointmentsAndGoBackToMyAppointments() {
+        noOnlineAppointmentsMessage.clickBackLink()
+    }
+
+    @Then("^I see a message informing me that the GP has no online appointments available and what to do next")
+    fun iSeeANoOnlineAppointmentsMessage() {
+        noOnlineAppointmentsMessage.assertPageHeader("No appointments available to book online at this time")
+        noOnlineAppointmentsMessage.assertParagraphText("You\'ll need to contact your GP surgery " +
+                "to book an appointment.")
+        noOnlineAppointmentsMessage.assertParagraphText("For urgent medical advice, go to")
+        noOnlineAppointmentsMessage.assertLinkExists(
+                "Use the 111 coronavirus service to see if you need medical help.",
+                "https://111.nhs.uk/COVID-19", false)
+        noOnlineAppointmentsMessage.assertCoronaVirusInfoHeader()
+                .assertParagraphText("Stay at home and avoid close contact with other people.")
+                .assertGpAdminMenuItem()
+                .assertGpAdviceMenuItem()
+                .assertNHS111Online()
     }
 
     @Given("^there are available appointment slots with different criteria for (.*) when guidance cannot be retrieved$")

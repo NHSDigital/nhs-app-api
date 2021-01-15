@@ -24,15 +24,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             containsTextXpathSubstring
     )
     private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "", "")
-
-    private val noAppointmentsWarningTitle = HybridPageElement(
-            webDesktopLocator = "//h1[contains(text(), 'No appointments available to book online at this time')]",
-            page = this
-    )
-    private val noAppointmentsWarningContent = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='no-appointments-warning']",
-            page = this
-    )
+    
     private val noAppointmentsForFilterWarningContent = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='no-appointments-matching-filter']",
             page = this
@@ -65,30 +57,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             "Appointment time period filter",
             this
     )
-
-    fun assertNoAppointmentSlotsAvailableWarningIsVisible() {
-        noAppointmentsWarningTitle.assertSingleElementPresent().assertIsVisible()
-        noAppointmentsWarningContent.assertSingleElementPresent().assertIsVisible()
-        noAppointmentsWarningContent.actOnTheElement {
-
-            val bannerTitle = it.findElement<WebElement>(By.xpath("./h2[1]")).text
-            Assert.assertEquals("Expected h2 title", "If you think you might have coronavirus", bannerTitle)
-
-            val actualText = it.findElements<WebElement>(By.tagName("p"))
-                    .map { element -> element.text }
-
-            val expectedText = arrayListOf("You'll need to contact your GP surgery to book an appointment.",
-                    "For urgent medical advice, go to 111.nhs.uk or call 111.",
-                    "Stay at home and avoid close contact with other people.",
-                    "Use the 111 coronavirus service to see if you need medical help.")
-
-            val message = "Expected text. " +
-                    "Expected: ${expectedText.joinToString()}. " +
-                    "Actual: ${actualText.joinToString()}."
-            Assert.assertEquals(message, expectedText.count(), actualText.count())
-            Assert.assertTrue(message, expectedText.containsAll(actualText))
-        }
-    }
 
     fun assertNoAppointmentSlotsAvailableForCurrentFilterWarningIsVisible() {
         noAppointmentsForFilterWarningContent.assertSingleElementPresent().assertIsVisible()

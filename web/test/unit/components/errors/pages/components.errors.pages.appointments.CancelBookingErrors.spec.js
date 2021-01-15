@@ -119,5 +119,10 @@ describe('CancelBookingErrors', () => {
       const wrapper = mountWrapper();
       expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
     });
+
+    it('will display a server error if there is an unknown status returned', () => {
+      const wrapper = mountWrapper({ status: 600 });
+      expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
+    });
   });
 });

@@ -1,7 +1,8 @@
 <template>
   <div v-if="showTemplate">
-    <div v-if="error">
-      <booking-errors :error="error"/>
+    <div v-if="error || (hasLoaded && !availableAppointments)">
+      <booking-errors :error="error"
+                      :available-appointments="availableAppointments"/>
     </div>
     <div v-else>
       <ul :class="$style['sr-only']" role="list"
@@ -15,20 +16,6 @@
 
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
-          <div v-if="noAvailableAppointments" data-purpose="no-appointments-warning">
-            <p>{{ $t('appointments.book.youWillNeedToContactGpSurgery') }}</p>
-            <contact-111
-              :text="$t('appointments.book.forUrgentMedicalAdvice.text')"
-              :aria-label="$t('appointments.book.forUrgentMedicalAdvice.label')"/>
-            <h2>{{ $t('appointments.book.ifYouThinkYouMightHaveCoronavirus') }}</h2>
-            <p>{{ $t('appointments.book.stayAtHome') }}</p>
-            <p>
-              <a href="https://111.nhs.uk/COVID-19"
-                 rel="noopener noreferrer"
-                 :aria-label="$t('appointments.book.useThe111CoronavirusService.label')">
-                {{ $t('appointments.book.useThe111CoronavirusService.text') }}</a>
-            </p>
-          </div>
 
           <filters
             v-if="availableAppointments"
@@ -71,7 +58,6 @@ import Contact111 from '@/components/widgets/Contact111';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
-import { UPDATE_HEADER, UPDATE_TITLE, EventBus } from '@/services/event-bus';
 
 import {
   GP_APPOINTMENTS_PATH,
@@ -122,7 +108,7 @@ export default {
   },
   computed: {
     availableAppointments() {
-      return this.hasLoaded && !isEmpty(this.slots);
+      return !isEmpty(this.slots);
     },
     availableSlots() {
       return get('state.availableAppointments.filteredSlots')(this.$store);
@@ -138,9 +124,6 @@ export default {
     },
     hasLoaded() {
       return get('state.availableAppointments.hasLoaded')(this.$store);
-    },
-    noAvailableAppointments() {
-      return this.hasLoaded && isEmpty(this.slots);
     },
     numberOfAvailableAppointments() {
       let count = 0;
@@ -185,11 +168,6 @@ export default {
     await load({ $store: this.$store }, query);
 
     this.filtered = containsFilter(query);
-
-    if (!this.error && this.noAvailableAppointments) {
-      EventBus.$emit(UPDATE_HEADER, 'appointments.book.noAppointmentsAvailable');
-      EventBus.$emit(UPDATE_TITLE, 'appointments.book.noAppointmentsAvailable');
-    }
   },
   methods: {
     goBack() {

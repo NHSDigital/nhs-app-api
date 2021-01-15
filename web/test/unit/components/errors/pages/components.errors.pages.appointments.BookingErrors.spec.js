@@ -8,7 +8,8 @@ describe('BookingErrors', () => {
   const mountWrapper = ({
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
-    status,
+    availableAppointments = true,
+    error,
   } = {}) => mount(BookingErrors, {
     $store: createStore({
       $env: {
@@ -28,9 +29,8 @@ describe('BookingErrors', () => {
       },
     }),
     propsData: {
-      error: {
-        status,
-      },
+      error,
+      availableAppointments,
     },
     computed: {
       hasConnection() {
@@ -42,7 +42,7 @@ describe('BookingErrors', () => {
 
   describe('Page content', () => {
     describe('with olc access', () => {
-      const wrapper = mountWrapper({ status: 403 });
+      const wrapper = mountWrapper({ error: { status: 403 } });
       const content = wrapper.findAll('p');
       const menuItems = wrapper.findAll(MenuItem);
 
@@ -84,7 +84,8 @@ describe('BookingErrors', () => {
     });
 
     describe('without cdss admin enabled', () => {
-      const wrapper = mountWrapper({ cdssAdminEnabled: false, status: 403 });
+      const error = { status: 403 };
+      const wrapper = mountWrapper({ cdssAdminEnabled: false, error });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the admin help menu item if admin help is disabled', () => {
@@ -94,7 +95,8 @@ describe('BookingErrors', () => {
     });
 
     describe('without cdss advice enabled', () => {
-      const wrapper = mountWrapper({ cdssAdviceEnabled: false, status: 403 });
+      const error = { status: 403 };
+      const wrapper = mountWrapper({ cdssAdviceEnabled: false, error });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the gp advice menu item if admin help is disabled', () => {
@@ -108,13 +110,26 @@ describe('BookingErrors', () => {
       502,
       504,
     ]).it('will display an error dialog for status code: %s', (status) => {
-      const wrapper = mountWrapper({ status });
+      const error = { status };
+      const wrapper = mountWrapper({ error });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
 
     it('will display a server error if there is no status returned', () => {
-      const wrapper = mountWrapper();
+      const wrapper = mountWrapper({ error: {} });
       expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
+    });
+
+    it('will display a server error if there is an unknown status returned', () => {
+      const wrapper = mountWrapper({ error: { status: 600 } });
+      expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
+    });
+  });
+
+  describe('no appointments available', () => {
+    it('will show the error if there is no appointments available', () => {
+      const wrapper = mountWrapper({ availableAppointments: false });
+      expect(wrapper.find('#no-appoinments-available').exists()).toBe(true);
     });
   });
 });

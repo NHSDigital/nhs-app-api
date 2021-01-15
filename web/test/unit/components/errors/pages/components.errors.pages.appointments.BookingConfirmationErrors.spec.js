@@ -114,5 +114,10 @@ describe('BookingConfirmationErrors', () => {
       const wrapper = mountWrapper({ status });
       expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
+
+    it('will display a server error if there is an unknown status returned', () => {
+      const wrapper = mountWrapper({ status: 600 });
+      expect(wrapper.find('#error-dialog-unknown').exists()).toBe(true);
+    });
   });
 });

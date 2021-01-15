@@ -194,11 +194,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.theAvailableAppointmentSlotsAreRetrieved()
     }
 
-    @When("^I acknowledge that there are no appointments and go back to my appointments$")
-    fun iAcknowledgeThatThereAreNoAppointmentsAndGoBackToMyAppointments() {
-        availableAppointments.clickOnBackLink()
-    }
-
     @When("^I decide I don't want to select an appointment and go back$")
     fun iDecideIDoNotWantToSelectAnAppointmentAndGoBack() {
         availableAppointments.clickOnBackLink()
@@ -237,11 +232,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^no available slots are displayed$")
     fun noAvailableSlotsAreDisplayed() {
         availableAppointments.verifyThatNoSlotsAreDisplayed()
-    }
-
-    @Then("^a message is displayed indicating there are no slots available$")
-    fun aMessageIsDisplayedIndicatingThereAreNoSlotAvailable() {
-        availableAppointments.availableAppointmentsPage.assertNoAppointmentSlotsAvailableWarningIsVisible()
     }
 
     @Then("^a message is displayed indicating there are no slots for selected criteria$")
