@@ -38,8 +38,8 @@ paths:
       responses:
         "201":
           description: Successfully authenticated. The session ID is returned in a cookie
-            name `NHSO-Session-Id`. This cookie should be included in subsequent
-            requests.
+            named `NHSO-Session-Id` and the session expiry in a cookie named `NHSO-Session-Expiry`.
+            These cookies should be included in subsequent requests.
           content:
             application/json:
               schema:
@@ -93,7 +93,7 @@ paths:
         - session
       summary: Deletes a user session for an authenticated user.
       description: Given a valid session cookie deletes the users session and signs the
-        user out. Requires NHSO-Session-Id cookie obtained from post session
+        user out. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies obtained from post session
         endpoint.
       responses:
         "204":
@@ -110,7 +110,7 @@ paths:
         - session
       summary: Extends a user session for an authenticated user.
       description: Extends a user session for an authenticated user, by calling an upstream
-        endpoint. Requires NHSO-Session-Id cookie obtained from post session
+        endpoint. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies obtained from post session
         endpoint.
       responses:
         "200":

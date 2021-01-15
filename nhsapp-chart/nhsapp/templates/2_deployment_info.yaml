@@ -52,9 +52,9 @@ spec:
       - name: sidecar-proxy-config
         configMap:
           name: info-sidecar-proxy-config-{{ .Chart.AppVersion }}
-      - name: nhslogin-key
+      - name: auth-signing-key
         secret:
-          secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
+          secretName: {{ $.Values.authSigningKeyName }}-{{ .Chart.AppVersion }}
       containers:
       - name: info
         image: {{ $.Values.registry }}/{{ $.Values.info.image }}:{{ $.Values.info.image_tag }}
@@ -139,12 +139,12 @@ spec:
           value: "{{ $.Values.qualtricsDirectoryId }}"
         - name: QUALTRICS_MAILING_LIST_ID
           value: "{{ $.Values.qualtricsMailingListId }}"
-        - name: NHSLOGIN_KEY_PATH
-          value: "/mnt/secrets-store/nhsloginKey"
-        - name: NHSLOGIN_KEY_PASSWORD
+        - name: AUTH_SIGNING_KEY
+          value: "/mnt/secrets-store/authSigningKey"
+        - name: AUTH_SIGNING_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
+              name: {{ $.Values.authSigningKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
         - name: NHSAPP_API_KEY
           valueFrom:

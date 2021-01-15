@@ -1,6 +1,10 @@
 version: "3.4"
 
 secrets:
+  auth_signing_private_key:
+    file: "~/.nhsonline/secrets/auth_signing_private_key.pem"
+  auth_signing_rsapass:
+    file: "~/.nhsonline/secrets/auth_signing_rsapass.password"
   azure_notification_hub_key:
     file: "~/.nhsonline/secrets/azure_notification_hub_key"
   microtest_cert:
@@ -11,10 +15,6 @@ secrets:
     file: "~/.nhsonline/secrets/gp_lookup_api_key"
   nhsapp_api_key:
     file: "~/.nhsonline/secrets/nhsapp_api_key"
-  nhslogin_private_key:
-    file: "~/.nhsonline/secrets/nhslogin_ext_private_key.pem"
-  nhslogin_rsapass:
-    file: "~/.nhsonline/secrets/nhslogin_ext_rsapass.password"
   organ_donation_cert:
     file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
   organ_donation_cert_passphrase:
@@ -77,6 +77,9 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
+          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
+            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
+          fi
           if [ -f "$$TPP_CERT_PASSPHRASE" ]; then
             export TPP_CERT_PASSPHRASE=$$(<$$TPP_CERT_PASSPHRASE)
           fi
@@ -91,9 +94,6 @@ services:
           fi
           if [ -f "$$GP_LOOKUP_API_KEY" ]; then
             export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
-          fi
-          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
-            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
           if [ -f "$$NDOP_CERT_PASSPHRASE" ]; then
             export NDOP_CERT_PASSPHRASE=$$(<$$NDOP_CERT_PASSPHRASE)
@@ -124,11 +124,11 @@ services:
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
+      - auth_signing_private_key
+      - auth_signing_rsapass
       - gp_lookup_api_key
       - microtest_cert
       - microtest_cert_passphrase
-      - nhslogin_private_key
-      - nhslogin_rsapass
       - organ_donation_cert
       - organ_donation_cert_passphrase
       - session_encryption_key
@@ -200,14 +200,14 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
+          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
+            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
+          fi
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
           fi
           if [ -f "$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
             export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
-          fi
-          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
-            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
           exec $$*
       - "--"
@@ -216,8 +216,8 @@ services:
       - ./docker/notificationhub_connectivity.env
       - ./docker/users.env
     secrets:
-      - nhslogin_private_key
-      - nhslogin_rsapass
+      - auth_signing_private_key
+      - auth_signing_rsapass
       - azure_notification_hub_key
       - nhsapp_api_key
 
@@ -227,11 +227,11 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
+          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
+            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
+          fi
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
-          fi
-          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
-            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
           if [ -f "$$QUALTRICS_API_KEY" ]; then
             export QUALTRICS_API_KEY=$$(<$$QUALTRICS_API_KEY)
@@ -244,9 +244,9 @@ services:
       - ./docker/qualtrics_connectivity.env
       - ./docker/userinfo.env
     secrets:
+      - auth_signing_private_key
+      - auth_signing_rsapass
       - nhsapp_api_key
-      - nhslogin_private_key
-      - nhslogin_rsapass
       - qualtrics_api_key
 
   messages.local.bitraft.io:
@@ -255,11 +255,11 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
+          if [ -f "$$AUTH_SIGNING_PASSWORD" ]; then
+            export AUTH_SIGNING_PASSWORD=$$(<$$AUTH_SIGNING_PASSWORD)
+          fi
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
-          fi
-          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
-            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
           exec $$*
       - "--"
@@ -267,9 +267,9 @@ services:
     env_file:
       - ./docker/messages.env
     secrets:
+      - auth_signing_private_key
+      - auth_signing_rsapass
       - nhsapp_api_key
-      - nhslogin_private_key
-      - nhslogin_rsapass
 
   log.local.bitraft.io:
     image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}

@@ -11,7 +11,9 @@ namespace NHSOnline.Backend.Support
             base.ConfigureServices(services, configuration);
 
             services.AddTransient<IGuidCreator, GuidCreator>();
-            
+
+            services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+
             services.AddTransient<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddTransient<IRandomStringGenerator, RandomStringGenerator>();
             services.AddTransient<IErrorReferenceGenerator, ErrorReferenceGenerator>();

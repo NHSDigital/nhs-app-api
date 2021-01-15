@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.Support
         public static class CookieNames
         {
             public const string SessionId = "NHSO-Session-Id";
+            public const string SessionExpiry = "NHSO-Session-Expiry";
         }
 
         public static class CustomHttpStatusCodes

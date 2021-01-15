@@ -5,37 +5,35 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing.UnitTestsSupport;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.PfsApi.Areas.Session;
-using NHSOnline.Backend.PfsApi.Areas.Session.Models;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
+namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 {
     [TestClass]
-    public class SessionControllerPostTests
+    public class SessionCreatorTests
     {
-        private SessionControllerTestContext Context { get; set; }
+        private SessionCreatorTestContext Context { get; set; }
 
         [TestInitialize]
         public void TestInitialize()
         {
-            Context = new SessionControllerTestContext();
+            Context = new SessionCreatorTestContext();
         }
 
         [TestMethod]
-        public async Task Post_CIDUserProfileCallFails_ReturnsBadRequest()
+        public async Task CreateSession_CIDUserProfileCallReturnsBadRequest_ReturnsLoginBadRequestError()
         {
             // Arrange
             Context.ArrangeAntiforgery();
@@ -57,34 +55,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                             et.Category == ErrorCategory.Login &&
                             et.StatusCode == StatusCodes.Status400BadRequest &&
                             et.SourceApi == SourceApi.None)))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference,
-            };
-
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            Context.Mocks.CitizenIdSessionService.Verify();
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3a");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
+                errorResult.ErrorTypes.StatusCode.Should().Be(400);
             }
 
+            Context.Mocks.CitizenIdSessionService.Verify();
             Context.Mocks.Auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Post_CIDUserProfileCallFails_WithBadGateway_ReturnsBadGateway()
+        public async Task CreateSession_CIDUserProfileCallReturnsBadGateway_ReturnsLoginBadGatewayError()
         {
             // Arrange
             Context.ArrangeAntiforgery();
+
             Context.Mocks.CitizenIdSessionService
                 .Setup(x => x.Create(
                     Context.Data.UserSessionRequest.AuthCode,
@@ -99,31 +96,32 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
                     StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
+            using (new AssertionScope())
+            {
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3n");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.NhsLogin);
+                errorResult.ErrorTypes.StatusCode.Should().Be(502);
+            }
+
             Context.Mocks.CitizenIdSessionService.Verify();
-            result.Should().BeAssignableTo<ObjectResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             Context.Mocks.Auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
-        public async Task Post_UnknownOdsCode_Returns464OdsCodeNotSupported()
+        public async Task CreateSession_UnknownOdsCode_ReturnsLoginOdsCodeNotSupportedError()
         {
             // Arrange
-            Context.ArrangeAntiforgery();
-            Context.ArrangeCitizenIdService();
-            Context.ArrangeOdsCodeMassager();
-
-            Context.Mocks.ErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
-                .Verifiable();
+            var auditStub = ArrangeAudit();
 
             ServiceJourneyRulesConfigResult serviceJourneyRulesConfigResult =
                 new ServiceJourneyRulesConfigResult.Success(new ServiceJourneyRulesResponse
@@ -131,28 +129,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     Journeys = new Journeys { Supplier = Supplier.Unknown }
                 });
 
+            Context.ArrangeAntiforgery();
+            Context.ArrangeCitizenIdService();
+            Context.ArrangeOdsCodeMassager();
+
+            Context.Mocks.ErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
+                .Verifiable();
+
             Context.Mocks.ServiceJourneyRulesService
                 .Setup(x => x.GetServiceJourneyRulesForOdsCode(Context.Data.UserProfile.OdsCode))
                 .Returns(Task.FromResult(serviceJourneyRulesConfigResult))
                 .Verifiable();
 
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference
-            };
-
-            var auditStub = ArrangeAudit();
-
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should()
-                    .Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3f");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
+                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Unknown);
@@ -160,14 +163,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Details.Should().Be("Attempting to create Session");
                 auditStub.ResponseDetails.Should().Be("Failed to determine the GP system based on ODS code 'OdsCode'");
             }
-
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         [TestMethod]
-        public async Task Post_GpSessionManagerReturnInvalidConnectionToken_ReturnsCreated()
+        public async Task CreateSession_GpSessionManagerReturnsInvalidConnectionToken_ReturnsSuccessResultWithNullGpSession()
         {
             // Arrange
+            var auditStub = ArrangeAudit();
+            var expectedUserSession = new P9UserSession(
+                SessionCreatorTestContext.CsrfRequestToken,
+                Context.Data.UserInfo.NhsNumber,
+                Context.Data.CitizenIdSessionResult.Session,
+                new NullGpSession(Supplier.Disconnected, SessionCreatorTestContext.ServiceDeskReference),
+                Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+            {
+                Key = SessionCreatorTestContext.ApiSessionId
+            };
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
@@ -175,37 +187,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.ArrangeSessionCacheService();
             Context.ArrangeServiceJourneyRulesService();
 
-            Context.Mocks.ErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.GPSessionUnavailable>()))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
-                .Verifiable();
-
-            var auditStub = ArrangeAudit();
-
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.InvalidConnectionToken());
 
+            Context.Mocks.ErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.GPSessionUnavailable>()))
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
+                .Verifiable();
+
             // Act
-            var expectedValue = new PostUserSessionResponse()
-            {
-                Name = $"{Context.Data.UserProfile.GivenName} {Context.Data.UserProfile.FamilyName}",
-                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
-                OdsCode = Context.Data.UserProfile.OdsCode,
-                DateOfBirth = Context.Data.CitizenIdUserSession.DateOfBirth,
-                NhsNumber = Context.Data.UserProfile.NhsNumber,
-                AccessToken = Context.Data.UserProfile.AccessToken,
-                ServiceJourneyRules = Context.Data.ServiceJourneyRulesResponse,
-                ProofLevel = ProofLevel.P9,
-                Token = SessionControllerTestContext.CsrfRequestToken,
-                UserSessionCreateReferenceCode = SessionControllerTestContext.ServiceDeskReference
-            };
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status201Created);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Emis);
@@ -215,19 +216,31 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             Context.Mocks.Auditor.Verify();
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         [TestMethod]
-        public async Task Post_GpSessionManagerReturnsForbidden_ReturnsCreated()
+        public async Task CreateSession_GpSessionManagerReturnsForbidden_ReturnsSuccessResultWithNullGpSession()
         {
             // Arrange
+            var auditStub = ArrangeAudit();
+            var expectedUserSession = new P9UserSession(
+                SessionCreatorTestContext.CsrfRequestToken,
+                Context.Data.UserInfo.NhsNumber,
+                Context.Data.CitizenIdSessionResult.Session,
+                new NullGpSession(Supplier.Disconnected, SessionCreatorTestContext.ServiceDeskReference),
+                Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+            {
+                Key = SessionCreatorTestContext.ApiSessionId
+            };
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
             Context.ArrangeGpSystemFactory();
             Context.ArrangeSessionCacheService();
             Context.ArrangeServiceJourneyRulesService();
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("Message"));
 
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(
@@ -236,36 +249,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                             et.Category == ErrorCategory.Login &&
                             et.StatusCode == Constants.CustomHttpStatusCodes.Status599GpSessionUnavailable &&
                             et.SourceApi == SourceApi.None)))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
             Context.Data.UserSession.Key = "123";
 
-            var auditStub = ArrangeAudit();
-
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("Message"));
-
             // Act
-            var expectedValue = new PostUserSessionResponse()
-            {
-                Name = $"{Context.Data.UserProfile.GivenName} {Context.Data.UserProfile.FamilyName}",
-                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
-                OdsCode = Context.Data.UserProfile.OdsCode,
-                DateOfBirth = Context.Data.CitizenIdUserSession.DateOfBirth,
-                NhsNumber = Context.Data.UserProfile.NhsNumber,
-                AccessToken = Context.Data.UserProfile.AccessToken,
-                ServiceJourneyRules = Context.Data.ServiceJourneyRulesResponse,
-                ProofLevel = ProofLevel.P9,
-                Token = SessionControllerTestContext.CsrfRequestToken,
-                UserSessionCreateReferenceCode = SessionControllerTestContext.ServiceDeskReference
-            };
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            // Assert
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status201Created);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Emis);
@@ -275,16 +276,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             Context.Mocks.Auditor.Verify();
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         [DataTestMethod]
         [DynamicData(nameof(TestData))]
-        public async Task Post_GpSupplierSessionCreateFails_ReturnsCreatedWithNoGpSession(
-            GpSessionCreateResult gpSessionCreateResult,
-            int expectedStatusCode)
+        public async Task CreateSession_GpSupplierSessionCreateFails_ReturnsSuccessResultWithNullGpSession(
+            GpSessionCreateResult gpSessionCreateResult)
         {
             // Arrange
+            var auditStub = ArrangeAudit();
+            var expectedUserSession = new P9UserSession(
+                SessionCreatorTestContext.CsrfRequestToken,
+                Context.Data.UserInfo.NhsNumber,
+                Context.Data.CitizenIdSessionResult.Session,
+                new NullGpSession(Supplier.Disconnected, SessionCreatorTestContext.ServiceDeskReference),
+                Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+            {
+                Key = SessionCreatorTestContext.ApiSessionId
+            };
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
@@ -292,27 +302,31 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.ArrangeSessionCacheService();
             Context.ArrangeServiceJourneyRulesService();
 
+            ArrangeGpSessionManagerCreateSession(gpSessionCreateResult);
+
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(
                     It.Is<ErrorTypes>(
                         et =>
                             et.Category == ErrorCategory.Login &&
-                            et.StatusCode == expectedStatusCode &&
+                            et.StatusCode == 201 &&
                             et.SourceApi == SourceApi.Emis)))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
 
-            var auditStub = ArrangeAudit();
-
-            ArrangeGpSessionManagerCreateSession(gpSessionCreateResult);
-
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            // Assert
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(expectedStatusCode);
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
                 auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
                 auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
                 auditStub.Supplier.Should().Be(Supplier.Emis);
@@ -320,26 +334,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Details.Should().Be("Attempting to create Session");
                 auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
-
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         private static IEnumerable<object[]> TestData
         {
             get
             {
-                yield return new object[] { new GpSessionCreateResult.Timeout("Timeout"), 201 };
-                yield return new object[] { new GpSessionCreateResult.Unparseable("Unparseable"), 201 };
-                yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway"), 201 };
-                yield return new object[] { new GpSessionCreateResult.BadRequest("BadRequest"), 201 };
-                yield return new object[] { new GpSessionCreateResult.InternalServerError("InternalServerError"), 201 };
+                yield return new object[] { new GpSessionCreateResult.Timeout("Timeout") };
+                yield return new object[] { new GpSessionCreateResult.Unparseable("Unparseable") };
+                yield return new object[] { new GpSessionCreateResult.BadGateway("BadGateway") };
+                yield return new object[] { new GpSessionCreateResult.BadRequest("BadRequest") };
+                yield return new object[] { new GpSessionCreateResult.InternalServerError("InternalServerError") };
             }
         }
 
         [TestMethod]
-        public async Task Post_GetServiceJourneyRulesForOdsReturnsNotFound_Returns464InternalServerError()
+        public async Task CreateSession_GetServiceJourneyRulesForOdsReturnsNotFound_ReturnsLogin464Error()
         {
             // Arrange
+            ServiceJourneyRulesConfigResult serviceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.NotFound();
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
@@ -352,13 +366,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference
-            };
-            ServiceJourneyRulesConfigResult serviceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.NotFound();
 
             Context.Mocks.ServiceJourneyRulesService
                 .Setup(x =>
@@ -369,24 +378,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.Mocks.Auditor.Setup(x => x.Audit()).Returns(new AuditBuilderStub());
 
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3f");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.None);
             }
 
             Context.Mocks.ServiceJourneyRulesService.Verify();
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         [TestMethod]
-        public async Task Post_GetServiceJourneyRulesForOdsReturnsInternalServerError_Returns500InternalServerError()
+        public async Task CreateSession_GetServiceJourneyRulesForOdsReturnsInternalServerError_ReturnsLogin500Error()
         {
             // Arrange
+            ServiceJourneyRulesConfigResult serviceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.InternalServerError();
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
@@ -399,15 +412,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOtherError>()))
-                .Returns(SessionControllerTestContext.ServiceDeskReference)
+                .Returns(SessionCreatorTestContext.ServiceDeskReference)
                 .Verifiable();
-
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = SessionControllerTestContext.ServiceDeskReference
-            };
-
-            ServiceJourneyRulesConfigResult serviceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.InternalServerError();
 
             Context.Mocks.ServiceJourneyRulesService
                 .Setup(x =>
@@ -418,24 +424,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.Mocks.Auditor.Setup(x => x.Audit()).Returns(new AuditBuilderStub());
 
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
-                objectResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-                objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                var errorResult = result.Should().BeAssignableTo<CreateSessionResult.ErrorResult>().Subject;
+
+                errorResult.ErrorTypes.Category.Should().Be(ErrorCategory.Login);
+                errorResult.ErrorTypes.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                errorResult.ErrorTypes.Prefix.Should().BeEquivalentTo("3k");
+                errorResult.ErrorTypes.SourceApi.Should().Be(SourceApi.ServiceJourneyRules);
             }
 
             Context.Mocks.ServiceJourneyRulesService.Verify();
-            Context.Mocks.SessionControllerLogger.Verify();
         }
 
         [TestMethod]
-        public async Task Post_HappyPath_ReturnsUsersSessionResponse()
+        public async Task CreateSession_HappyPath_ReturnsSuccessResult()
         {
             // Arrange
+            var auditStub = ArrangeAudit();
+
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
@@ -450,69 +460,56 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 new EmisProxyUserSession()
             };
 
-            var gpUserSession = new EmisUserSession
-            {
-                Im1MessagingEnabled = true,
-                Name = $"{Context.Data.UserProfile.GivenName} {Context.Data.UserProfile.FamilyName}",
-                NhsNumber = Context.Data.UserProfile.NhsNumber
-            };
-
-            Context.Data.UserSession.Key = "123";
-
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(gpUserSession));
-            ArrangeAudit();
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
 
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
-
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var expectedUserSessionResponse = new PostUserSessionResponse
-            {
-                Name = $"{Context.Data.UserProfile.GivenName} {Context.Data.UserProfile.FamilyName}",
-                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
-                OdsCode = Context.Data.UserProfile.OdsCode,
-                DateOfBirth = Context.Data.CitizenIdUserSession.DateOfBirth,
-                NhsNumber = Context.Data.UserProfile.NhsNumber,
-                AccessToken = Context.Data.UserProfile.AccessToken,
-                ServiceJourneyRules = Context.Data.ServiceJourneyRulesResponse
-            };
-
             using (new AssertionScope())
             {
-                var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-                var actualUserSessionResponse = createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
-                actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
-                actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
-                actualUserSessionResponse.Token.Should().Be(SessionControllerTestContext.CsrfRequestToken);
-                actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
-                actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
-                actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
-                actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
-                actualUserSessionResponse.Im1MessagingEnabled.Should().BeTrue();
-                actualUserSessionResponse.UserSessionCreateReferenceCode.Should().BeNull();
-                actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                var expectedUserSession = new P9UserSession(
+                    SessionCreatorTestContext.CsrfRequestToken,
+                    Context.Data.UserInfo.NhsNumber,
+                    Context.Data.CitizenIdSessionResult.Session,
+                    Context.Data.UserSession.GpUserSession,
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+                {
+                    Key = SessionCreatorTestContext.ApiSessionId,
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                };
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
+                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
         }
 
         [DataTestMethod]
         [DynamicData(nameof(TestDataServiceReference))]
-        public async Task Post_HappyPathNoGpSession_ReturnsUsersSessionResponse_WithServiceDeskReference(
+        public async Task CreateSession_HappyPathNoGpSession_ReturnsUserSessionWithNullGpSession(
             GpSessionCreateResult gpSessionCreateResult,
             string expectedServiceDeskReference)
         {
             // Arrange
+            var auditStub = ArrangeAudit();
+
+            Context.ArrangeGpSystemFactory();
             Context.ArrangeAntiforgery();
             Context.ArrangeCitizenIdService();
             Context.ArrangeOdsCodeMassager();
-            Context.ArrangeGpSystemFactory();
             Context.ArrangeSessionCacheService();
             Context.ArrangeServiceJourneyRulesService();
 
-            Context.Data.UserSession.Key = "123";
-
             ArrangeGpSessionManagerCreateSession(gpSessionCreateResult);
-            ArrangeAudit();
 
             Context.Mocks.ErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes>()))
@@ -520,35 +517,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
-            var expectedUserSessionResponse = new PostUserSessionResponse
-            {
-                Name = $"{Context.Data.UserProfile.GivenName} {Context.Data.UserProfile.FamilyName}",
-                SessionTimeout = SessionControllerTestContext.SessionTimeoutSeconds,
-                OdsCode = Context.Data.UserProfile.OdsCode,
-                DateOfBirth = Context.Data.CitizenIdUserSession.DateOfBirth,
-                NhsNumber = Context.Data.UserProfile.NhsNumber,
-                AccessToken = Context.Data.UserProfile.AccessToken,
-                ServiceJourneyRules = Context.Data.ServiceJourneyRulesResponse
-            };
-
             using (new AssertionScope())
             {
-                var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-                var actualUserSessionResponse = createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
-                actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
-                actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
-                actualUserSessionResponse.Token.Should().Be(SessionControllerTestContext.CsrfRequestToken);
-                actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
-                actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
-                actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
-                actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
-                actualUserSessionResponse.Im1MessagingEnabled.Should().BeFalse();
-                actualUserSessionResponse.UserSessionCreateReferenceCode.Should().Contain(expectedServiceDeskReference);
-                actualUserSessionResponse.UserSessionCreateReferenceCode.Length.Should().Be(2);
-                actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+                var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
+
+                var expectedUserSession = new P9UserSession(
+                    SessionCreatorTestContext.CsrfRequestToken,
+                    Context.Data.UserInfo.NhsNumber,
+                    Context.Data.CitizenIdSessionResult.Session,
+                    new NullGpSession(Supplier.Disconnected, expectedServiceDeskReference),
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken)
+                {
+                    Key = SessionCreatorTestContext.ApiSessionId,
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                };
+
+                successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
+                successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
+
+                auditStub.AccessTokenString.Should().Be(Context.Data.CitizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(Context.Data.UserProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Session successfully created.");
             }
         }
 
@@ -568,7 +563,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_HappyPath_CallsMetricLoggerLogin()
+        public async Task CreateSession_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
         {
             // Arrange
             Context.ArrangeAntiforgery();
@@ -578,70 +573,29 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.ArrangeSessionCacheService();
             Context.ArrangeServiceJourneyRulesService();
 
-            Context.Data.SessionConfigSettings.ProxyEnabled = true;
-
-            var expectedRequestId = "RequestId";
-            Context.Mocks.HttpContext.SetupGet(x => x.TraceIdentifier)
-                .Returns(expectedRequestId);
-
-            Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
-            {
-                new EmisProxyUserSession()
-            };
-
-            Context.Data.UserSession.Key = "123";
-
-            ArrangeGpSessionManagerCreateSession(
-                new GpSessionCreateResult.Success(Context.Data.UserSession.GpUserSession));
             ArrangeAudit();
 
-            // Act
-            await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
-
-            // Assert
-            Context.Mocks.MetricLogger.Verify(x =>
-                    x.Login(It.Is<LoginData>(
-                        data => data.RequestId == expectedRequestId
-                                && data.SessionId == "ApiSessionId"
-                                && data.UserAgent == "userAgent")),
-                Times.Once);
-        }
-
-        [TestMethod]
-        public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
-        {
-            // Arrange
-            Context.ArrangeAntiforgery();
-            Context.ArrangeCitizenIdService();
-            Context.ArrangeOdsCodeMassager();
-            Context.ArrangeGpSystemFactory();
-            Context.ArrangeSessionCacheService();
-            Context.ArrangeServiceJourneyRulesService();
-
             Context.Data.SessionConfigSettings.ProxyEnabled = true;
             Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
             {
                 new EmisProxyUserSession()
             };
-            Context.Data.UserSession.Key = "123";
 
             Context.Mocks.Im1CacheService
                 .Setup(x => x.DeleteIm1ConnectionToken(Context.Data.ConnectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true));
 
-            ArrangeAudit();
-
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.UserSession.GpUserSession));
 
             // Act
-            await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
             Context.Mocks.Im1CacheService.Verify();
         }
 
         [TestMethod]
-        public async Task Post_Im1ConnectionTokenIsAGuid_DoesNotAttemptToDeleteFromCache()
+        public async Task CreateSession_Im1ConnectionTokenIsAGuid_DoesNotAttemptToDeleteFromCache()
         {
             // Arrange
             Context.ArrangeAntiforgery();
@@ -649,6 +603,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.ArrangeOdsCodeMassager();
             Context.ArrangeGpSystemFactory();
             Context.ArrangeServiceJourneyRulesService();
+
+            ArrangeAudit();
 
             Context.Data.UserInfo.Im1ConnectionToken  = "0E5DD1C4-C519-4EF5-9B0F-624357F6F26F";
 
@@ -661,12 +617,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))
                 .Returns(Task.FromResult(false));
 
-            ArrangeAudit();
-
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.UserSession.GpUserSession));
 
             // Act
-            await CreateSystemUnderTest().Post(Context.Data.UserSessionRequest);
+            await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
 
             // Assert
             Context.Mocks.Im1CacheService.Verify(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()), Times.Never);
@@ -687,6 +641,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
         private AuditBuilderStub ArrangeAudit() => Context.ArrangeAudit();
 
-        private SessionController CreateSystemUnderTest() => Context.CreateSystemUnderTest();
+        private SessionCreator CreateSystemUnderTest() => Context.CreateSystemUnderTest();
     }
 }

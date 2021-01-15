@@ -43,6 +43,10 @@ function validate_secret {
 validate_secret android-debug-store-file
 validate_secret android-development.gradle
 validate_secret android_keystore.password
+validate_secret auth_signing_private_key.pem
+validate_secret auth_signing_rsapass.password
+validate_secret auth_signing_dev_private_key.pem
+validate_secret auth_signing_dev_rsapass.password
 validate_secret azure_notification_hub_key
 validate_secret azure_notification_hub_key_bdd
 validate_secret browserstack_accesskey
@@ -50,10 +54,6 @@ validate_secret gp_lookup_api_key
 validate_secret microtest_client_cert.password
 validate_secret microtest_client_cert.pfx
 validate_secret nhsapp_api_key
-validate_secret nhslogin_dev_private_key.pem
-validate_secret nhslogin_dev_rsapass.password
-validate_secret nhslogin_ext_private_key.pem
-validate_secret nhslogin_ext_rsapass.password
 validate_secret organ_donation_cert.password
 validate_secret organ_donation_cert.pfx
 validate_secret session_encryption_key

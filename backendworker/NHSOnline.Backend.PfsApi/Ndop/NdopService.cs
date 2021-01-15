@@ -1,24 +1,26 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Ndop.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.PfsApi.Ndop
 {
     public class NdopService: INdopService
     {
         private readonly ILogger<NdopService> _logger;
-        private readonly INdopSigning _ndopSigning;
+        private readonly ISigning _signing;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IConfiguration _configuration;
 
         private const string ClaimTypeNhsNumber = "nhs_number";
-        
-        public NdopService(INdopSigning ndopSigning, IConfiguration configuration, ILogger<NdopService> logger)
+
+        public NdopService(ISigning signing, IJwtTokenGenerator jwtTokenGenerator, IConfiguration configuration, ILogger<NdopService> logger)
         {
-            _ndopSigning = ndopSigning;
+            _signing = signing;
+            _jwtTokenGenerator = jwtTokenGenerator;
             _configuration = configuration;
             _logger = logger;
         }
@@ -27,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.Ndop
         {
             try
             {
-                var signingCredentials = _ndopSigning.GetSigningCredentials();
+                var signingCredentials = _signing.GetSigningCredentials("NDOP");
                 var claimAudience = _configuration.GetOrWarn("NDOP_CLAIM_AUDIENCE", _logger);
                 var claimIssuer = _configuration.GetOrWarn("NDOP_CLAIM_ISSUER", _logger);
 
@@ -42,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Ndop
                     _logger.LogError("Could not get Ndop claim audience/issuer.");
                     return new GetNdopResult.InternalServerError();
                 }
-                
+
                 var claims = new[]
                 {
                     new Claim(ClaimTypeNhsNumber, nhsNumber.RemoveWhiteSpace())
@@ -50,17 +52,8 @@ namespace NHSOnline.Backend.PfsApi.Ndop
 
                 var expiryTime = DateTime.UtcNow.AddSeconds(30);
 
-                
-
-                var jwtToken = new JwtSecurityToken(
-                    audience: claimAudience,
-                    issuer: claimIssuer,
-                    claims: claims,
-                    expires: expiryTime,
-                    signingCredentials: signingCredentials
-                );
-
-                var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+                var token = _jwtTokenGenerator.GenerateJwtSecurityToken(
+                    signingCredentials, expiryTime, claimAudience, claimIssuer, claims);
 
                 return new GetNdopResult.Success(new NdopResponse { Token = token });
             }

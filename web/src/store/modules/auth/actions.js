@@ -34,7 +34,7 @@ const final = ({ self, commit }) => {
 
 const removeSessionCookies = self => removeCookies({
   cookies: self.$cookies,
-  key: ['nhso.terms', 'nhso.session', 'NHSO-Session-Id'],
+  key: ['nhso.terms', 'nhso.session', 'NHSO-Session-Id', 'NHSO-Session-Expiry'],
 });
 
 const logoutCleanUp = ({ self }) => {

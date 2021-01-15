@@ -7,7 +7,11 @@ namespace NHSOnline.Backend.Support.Certificate
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<ISigning, Signing>();
             services.AddTransient<ICertificateService, CertificateService>();
+
+            services.AddSingleton<AuthSigningConfig>();
+
             base.ConfigureServices(services, configuration);
         }
     }

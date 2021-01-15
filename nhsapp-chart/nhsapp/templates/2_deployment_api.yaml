@@ -264,12 +264,12 @@ spec:
         {{- end }}
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
-        - name: NHSLOGIN_KEY_PATH
-          value: "/mnt/secrets-store/nhsloginKey"
-        - name: NHSLOGIN_KEY_PASSWORD
+        - name: AUTH_SIGNING_KEY
+          value: "/mnt/secrets-store/authSigningKey"
+        - name: AUTH_SIGNING_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
+              name: {{ $.Values.authSigningKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
         - name: MICROTEST_BASE_URL

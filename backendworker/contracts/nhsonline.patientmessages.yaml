@@ -2,7 +2,7 @@ openapi: 3.0.2
 info:
   version: 0.0.1
   title: NHS App Practice to Patient Messages API
-  description: NHS App Practice to Patient Messages API - endpoints pertaining to Practice to Patient Secure Messaging. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+  description: NHS App Practice to Patient Messages API - endpoints pertaining to Practice to Patient Secure Messaging. All require an NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from Session endpoint).
 paths:
   /messages:
     get:

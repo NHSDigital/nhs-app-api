@@ -3,7 +3,7 @@ info:
   version: 0.0.1
   title: NHS App Sub-API - Pharmacies
   description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require
-    NHSO-Session-Id cookie in header from session endpoint.
+    NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint.
 paths:
   /pharmacies:
     get:

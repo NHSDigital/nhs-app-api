@@ -53,9 +53,9 @@ spec:
       - name: sidecar-proxy-config
         configMap:
           name: messages-sidecar-proxy-config-{{ .Chart.AppVersion }}
-      - name: nhslogin-key
+      - name: auth-signing-key
         secret:
-          secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
+          secretName: {{ $.Values.authSigningKeyName }}-{{ .Chart.AppVersion }}
       containers:
       - name: messages
         image: {{ $.Values.registry }}/{{ $.Values.messages.image }}:{{ $.Values.messages.image_tag }}
@@ -130,12 +130,12 @@ spec:
             secretKeyRef:
               name: nhsapp-api-key-{{ .Chart.AppVersion }}
               key: apikey
-        - name: NHSLOGIN_KEY_PATH
-          value: "/mnt/secrets-store/nhsloginKey"
-        - name: NHSLOGIN_KEY_PASSWORD
+        - name: AUTH_SIGNING_KEY
+          value: "/mnt/secrets-store/authSigningKey"
+        - name: AUTH_SIGNING_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
+              name: {{ $.Values.authSigningKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
         volumeMounts:
         - name: secrets-store-inline

@@ -193,7 +193,7 @@
         tags: 
           - "appointments"
         summary: "Cancels an upcoming appointment for the logged on user."
-        description: "Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         requestBody: 
           x-name: "AppointmentCancelRequest"
           description: "Details of the appointment to be cancelled, along with reason for the booking being cancelled."
@@ -346,7 +346,7 @@
         tags: 
           - "appointments"
         summary: "Gets a list of existing appointments for the logged on user."
-        description: "Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         responses: 
           200: 
             description: "Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns."
@@ -547,7 +547,7 @@
         tags: 
           - "appointments"
         summary: "Creates a GP Appointment for the logged on user."
-        description: "Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         requestBody: 
           x-name: "AppointmentBookRequest"
           content: 
@@ -715,7 +715,7 @@
         tags: 
           - "appointment-slots"
         summary: "Gets a list of available appointments for the logged on user."
-        description: "Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         responses: 
           200: 
             description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
@@ -855,7 +855,7 @@
         tags: 
           - "courses"
         summary: "Gets a list of prescriptions courses for the given patient."
-        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
+        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint."
         responses: 
           200: 
             description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
@@ -964,7 +964,7 @@
         tags: 
           - "demographics"
         summary: "Gets demographic information for the logged on user."
-        description: "Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         responses: 
           200: 
             description: "Returns demographic data for the logged in user."
@@ -1019,7 +1019,7 @@
         tags: 
           - "myrecord"
         summary: "Gets the record for the logged on user."
-        description: "Returns the users medical record for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns the users medical record for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         responses: 
           200: 
             description: "Returns myrecord data for the logged in user."
@@ -1730,7 +1730,7 @@
         tags: 
           - "myrecord section"
         summary: "Gets a specific section from the record for the logged on user."
-        description: "Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         parameters: 
           - 
             in: "query"
@@ -2521,7 +2521,7 @@
         tags: 
           - "prescriptions"
         summary: "Creates a repeat prescription request for the logged in user"
-        description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-Id cookie in header from session endpoint."
+        description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint."
         requestBody: 
           content: 
             application/json: 
@@ -2700,7 +2700,7 @@
         tags: 
           - "prescriptions"
         summary: "Gets a list of requested repeat prescriptions for the logged on user."
-        description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
+        description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint."
         parameters: 
           - 
             in: "query"
@@ -2851,7 +2851,7 @@
         tags: 
           - "termsAndConditions"
         summary: "Gets the patient consent for the logged on user."
-        description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         responses: 
           200: 
             description: "Returns patient consent data for the logged in user."
@@ -3818,7 +3818,7 @@
           x-name: "UserSession"
         responses: 
           201: 
-            description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."
+            description: "Successfully authenticated. The session ID is returned in a cookie named `NHSO-Session-Id` and the session expiry in a cookie named `NHSO-Session-Expiry`. These cookies should be included in subsequent requests."
             content: 
               application/json: 
                 schema: 
@@ -4153,7 +4153,7 @@
         tags: 
           - "session"
         summary: "Deletes a user session for an authenticated user."
-        description: "Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint."
+        description: "Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies obtained from post session endpoint."
         responses: 
           204: 
             description: "Successfully deleted session and user signed out"
@@ -4168,7 +4168,7 @@
         tags: 
           - "session"
         summary: "Extends a user session for an authenticated user."
-        description: "Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint."
+        description: "Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies obtained from post session endpoint."
         responses: 
           200: 
             description: "Successfully extended."
@@ -4354,7 +4354,7 @@
         tags: 
           - "pharmacy"
         summary: "Gets the nominated pharmacy detail for a given patient."
-        description: "Returns the nominated pharmacy detail for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
+        description: "Returns the nominated pharmacy detail for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint."
         responses: 
           200: 
             description: "Returns a pharmacy object with its associated meta data. Returns an empty pharmacy if no nominated pharmacy was found."
@@ -5046,7 +5046,7 @@
           - "asserted-login-identity"
           - "single-sign-on"
         summary: "Creates an asserted login identity javacript web token for the logged-in user."
-        description: "Creates and returns an asserted login identity javascript web token for the logged-in users. This can be used for the purpose of single sign-on into other NHS Login relying parties. Requires NHSO-Session-Id cookie in header from the Session endpoint."
+        description: "Creates and returns an asserted login identity javascript web token for the logged-in users. This can be used for the purpose of single sign-on into other NHS Login relying parties. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from the Session endpoint."
         requestBody: 
           x-name: "AssertedLoginIdentityRequest"
           content: 
@@ -5094,7 +5094,7 @@
           - "authorization"
           - "tokens"
         summary: "Refreshes a user`s access token"
-        description: "Refreshes a users access token by calling NhsLogin with the users refresh token, returns the refreshed access token. Requires NHSO-Session-Id cookie in header from session endpoint."
+        description: "Refreshes a users access token by calling NhsLogin with the users refresh token, returns the refreshed access token. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint."
         responses: 
           200: 
             description: "Access token successfuly refreshed."
@@ -5737,7 +5737,7 @@
         tags: 
           - "patient document"
         summary: "Gets a specific document from the user's documents for the logged on user."
-        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         requestBody: 
           content: 
             application/json: 
@@ -5811,7 +5811,7 @@
         tags: 
           - "patient document"
         summary: "Gets a specific document and initiates a download of the document."
-        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint)."
         requestBody: 
           content: 
             application/json: 

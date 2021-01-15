@@ -8,7 +8,6 @@ namespace NHSOnline.Backend.PfsApi.Ndop
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<INdopService, NdopService>();
-            services.AddTransient<INdopSigning, NdopSigning>();
             base.ConfigureServices(services, configuration);
         }
     }

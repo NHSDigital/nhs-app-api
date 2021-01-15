@@ -3,7 +3,7 @@ info:
   version: 0.0.1
   title: NHS App Sub-API - Nominated Pharmacy
   description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require
-    NHSO-Session-Id cookie in header from session endpoint.
+    NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint.
 paths:
   /nominated-pharmacy:
     get:
@@ -11,7 +11,7 @@ paths:
         - pharmacy
       summary: Gets the nominated pharmacy detail for a given patient.
       description: Returns the nominated pharmacy detail for the logged in user. Requires
-        NHSO-Session-Id cookie in header from session endpoint.
+        NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint.
       responses:
         "200":
           description: Returns a pharmacy object with its associated meta data. Returns an

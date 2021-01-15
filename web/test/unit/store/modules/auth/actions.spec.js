@@ -67,7 +67,11 @@ describe('actions', () => {
     });
 
     it('will remove the `NHSO-Session-Id` cookie', () => {
-      expect(actions.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('NHSO-Session-Id');
+    });
+
+    it('will remove the `NHSO-Session-Expiry` cookie', () => {
+      expect(actions.$cookies.remove).toHaveBeenCalledWith('NHSO-Session-Expiry');
     });
   };
 

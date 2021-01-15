@@ -69,7 +69,7 @@ organDonationPath: uat3/odr/v1/
 organDonationClientId: ODR-26-NHSAP
 organDonationDataExpirySeconds: 86400
 
-nhsLoginKeyName: nhslogin-key
+authSigningKeyName: auth-signing-key
 cidHostname: auth.ext.signin.nhs.uk
 cidProtocol: https
 cidClientID: nhs-online

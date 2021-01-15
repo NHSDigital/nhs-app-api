@@ -26,8 +26,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         private Uri _citizenIdApiBaseUrl;
         private string _clientId;
         private string _issuer;
-        private string _nhsLoginKeyPath;
-        private string _nhsLoginKeyPassword;
         private string _nhsLoginTokenPath;
         private Mock<ICitizenIdConfig> _mockConfig;
         private CitizenIdClient _systemUnderTest;
@@ -43,8 +41,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _citizenIdApiBaseUrl = _fixture.Create<Uri>();
             _clientId = _fixture.Create<string>();
             _issuer = _fixture.Create<string>();
-            _nhsLoginKeyPath = _fixture.Create<string>();
-            _nhsLoginKeyPassword = _fixture.Create<string>();
             _nhsLoginTokenPath = _fixture.Create<string>();
 
             _mockHttpHandler = new MockHttpMessageHandler();
@@ -53,8 +49,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockConfig.SetupGet(x => x.CitizenIdApiBaseUrl).Returns(_citizenIdApiBaseUrl);
             _mockConfig.SetupGet(x => x.ClientId).Returns(_clientId);
             _mockConfig.SetupGet(x => x.Issuer).Returns(_issuer);
-            _mockConfig.SetupGet(x => x.NhsLoginKeyPath).Returns(_nhsLoginKeyPath);
-            _mockConfig.SetupGet(x => x.NhsLoginKeyPassword).Returns(_nhsLoginKeyPassword);
             _mockConfig.SetupGet(x => x.TokenPath).Returns(_nhsLoginTokenPath);
 
             _httpClient = new CitizenIdHttpClient(new HttpClient(_mockHttpHandler), _mockConfig.Object);

@@ -3,7 +3,7 @@ info:
   version: 0.0.5
   title: NHS App Sub-API - Demographics
   description: NHS App Sub-API - endpoints pertaining to demographics. All require an
-    NHSO-Session-Id cookie (obtained from Session endpoint).
+    NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from Session endpoint).
 paths:
   /demographics:
     get:
@@ -11,7 +11,7 @@ paths:
         - demographics
       summary: Gets demographic information for the logged on user.
       description: Returns personal details and address details for the logged-in user.
-        Requires NHSO-Session-Id cookie (obtained from session endpoint).
+        Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
       responses:
         "200":
           description: Returns demographic data for the logged in user.

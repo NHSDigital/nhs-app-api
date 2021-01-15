@@ -2,14 +2,14 @@
 info:
   version: 0.0.7
   title: NHS App Sub-API - Terms and Conditions
-  description: NHS App Sub-API - endpoints pertaining to terms and conditions. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+  description: NHS App Sub-API - endpoints pertaining to terms and conditions. All require an NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from Session endpoint).
 paths:
   /consent:
     get:
       tags:
         - termsAndConditions
       summary: Gets the patient consent for the logged on user.
-      description: Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      description: Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
       responses:
         "200":
           description: Returns patient consent data for the logged in user.

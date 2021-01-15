@@ -21,27 +21,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ConfigurationSettings _settings;
         private readonly IMetricLogger _metricLogger;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
+        private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
 
         public SessionCreateResultVisitor(
             UserSessionService userSessionService,
             ILogger<SessionCreateResultVisitor> logger,
             ConfigurationSettings settings,
             IMetricLogger metricLogger,
-            ISessionErrorResultBuilder errorResultBuilder)
+            ISessionErrorResultBuilder errorResultBuilder,
+            ISessionExpiryCookieCreator sessionExpiryCookieCreator)
         {
             _userSessionService = userSessionService;
             _logger = logger;
             _settings = settings;
             _metricLogger = metricLogger;
             _errorResultBuilder = errorResultBuilder;
+            _sessionExpiryCookieCreator = sessionExpiryCookieCreator;
         }
 
-        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string referrer)
+        public async Task<IActionResult> Visit(CreateSessionResult.Success success, HttpContext httpContext, string sessionCookieExpiryToken, string referrer)
         {
             var userSession = success.UserSession;
             var serviceJourneyRules = success.ServiceJourneyRules;
 
             await AppendCookieToResponse(userSession.Key, httpContext);
+            _sessionExpiryCookieCreator.AppendSessionExpiryCookie(httpContext, sessionCookieExpiryToken);
 
             _userSessionService.SetUserSession(userSession);
             _logger.LogInformation($"Created {userSession.GetType().Name}");

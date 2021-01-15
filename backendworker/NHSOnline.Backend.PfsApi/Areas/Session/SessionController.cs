@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ISessionCreator _sessionCreator;
         private readonly IUserSessionManager _userSessionManager;
         private readonly ICreateSessionResultVisitor<Task<IActionResult>> _sessionResultVisitor;
+        private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
 
         public SessionController(
             ConfigurationSettings settings,
@@ -31,7 +32,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IAntiforgery antiforgery,
             ISessionCreator sessionCreator,
             IUserSessionManager userSessionManager,
-            ICreateSessionResultVisitor<Task<IActionResult>> sessionResultVisitor)
+            ICreateSessionResultVisitor<Task<IActionResult>> sessionResultVisitor,
+            ISessionExpiryCookieCreator sessionExpiryCookieCreator)
         {
             _settings = settings;
             _logger = logger;
@@ -40,6 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _sessionCreator = sessionCreator;
             _userSessionManager = userSessionManager;
             _sessionResultVisitor = sessionResultVisitor;
+            _sessionExpiryCookieCreator = sessionExpiryCookieCreator;
         }
 
         [HttpGet]
@@ -81,6 +84,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     return _errorResultBuilder.BuildResult(new ErrorTypes.LoginBadRequest());
                 }
 
+                var sessionExpiryCookieToken = _sessionExpiryCookieCreator.GetSessionExpiryCookieToken();
+
+                if (sessionExpiryCookieToken is null)
+                {
+                    return _errorResultBuilder.BuildResult(new ErrorTypes.LoginUnexpectedError());
+                }
+
                 var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
                 var request = new CreateSessionRequest(model, csrfToken, HttpContext);
                 var result = await _sessionCreator.CreateSession(request);
@@ -92,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     referrer = model.Referrer;
                 }
 
-                return await result.Accept(_sessionResultVisitor, HttpContext, referrer);
+                return await result.Accept(_sessionResultVisitor, HttpContext, sessionExpiryCookieToken, referrer);
             }
             finally
             {

@@ -9,9 +9,9 @@ secrets:
     file: "./docker/stubbed/certs/TestCert.pfx"
   microtest_cert_passphrase:
     file: "./docker/stubbed/certs/TestCert.password"
-  nhslogin_private_key:
+  auth_signing_private_key:
     file: "./docker/stubbed/certs/private_key.pem"
-  nhslogin_rsapass:
+  auth_signing_rsapass:
     file: "./docker/stubbed/certs/private_key.password"
   vision_cert:
     file: "./docker/stubbed/certs/TestCert.pfx"

@@ -41,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Session
         private static void ConfigureSessionManagementServices(IServiceCollection services)
         {
             services.AddTransient<IUserSessionManager, UserSessionManager>();
+            services.AddTransient<ISessionExpiryCookieCreator, SessionExpiryCookieCreator>();
 
             ConfigureCreateSessionServices(services);
             ConfigureDeleteSessionServices(services);

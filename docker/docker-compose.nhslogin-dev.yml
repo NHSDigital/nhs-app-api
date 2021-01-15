@@ -2,10 +2,10 @@ version: "3.4"
 
 secrets:
 
-  nhslogin_private_key:
-    file: "~/.nhsonline/secrets/nhslogin_dev_private_key.pem"
-  nhslogin_rsapass:
-    file: "~/.nhsonline/secrets/nhslogin_dev_rsapass.password"
+  auth_signing_private_key:
+    file: "~/.nhsonline/secrets/auth_signing_dev_private_key.pem"
+  auth_signing_rsapass:
+    file: "~/.nhsonline/secrets/auth_signing_dev_rsapass.password"
 
 services:
 

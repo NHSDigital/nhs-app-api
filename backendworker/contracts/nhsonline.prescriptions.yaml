@@ -3,7 +3,7 @@ info:
   version: 0.0.6
   title: NHS App Sub-API - Prescriptions
   description: NHS App Sub-API - endpoints pertaining to repeat prescriptions require
-    NHSO-Session-Id cookie in header from session endpoint.
+    NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint.
 paths:
   /courses:
     get:
@@ -11,7 +11,7 @@ paths:
         - courses
       summary: Gets a list of prescriptions courses for the given patient.
       description: Returns a list of prescriptions courses for the logged in user. Requires
-        NHSO-Session-Id cookie in header from session endpoint.
+        NHSO-Session-Id and NHSO-Session-Expiry cookies in header from session endpoint.
       responses:
         "200":
           description: Returns list of courses and associated meta data. Returns empty
@@ -54,7 +54,7 @@ paths:
         - prescriptions
       summary: Creates a repeat prescription request for the logged in user
       description: For the given logged on user, will request a repeat prescription for a
-        list of prescription courses. Requires NHSO-Session-Id cookie in header
+        list of prescription courses. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header
         from session endpoint.
       requestBody:
         content:
@@ -126,7 +126,7 @@ paths:
         - prescriptions
       summary: Gets a list of requested repeat prescriptions for the logged on user.
       description: For a given date range, returns a list of courses and repeat
-        prescriptions for the logged in user. Requires NHSO-Session-Id cookie in
+        prescriptions for the logged in user. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in
         header from session endpoint.
       parameters:
         - in: query

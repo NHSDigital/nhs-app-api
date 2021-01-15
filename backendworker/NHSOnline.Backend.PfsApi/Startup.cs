@@ -106,21 +106,14 @@ namespace NHSOnline.Backend.PfsApi
             options.Cookie.HttpOnly = true;
             options.EventsType = typeof(CustomCookieAuthenticationEvents);
             options.TicketDataFormat = new UnencryptedCookieDataFormat();
+            options.Cookie.SameSite = SameSiteMode.Lax;
+            options.Cookie.SecurePolicy = _env.IsDevelopment()
+                ? CookieSecurePolicy.SameAsRequest
+                : CookieSecurePolicy.Always;
 
             if (!string.IsNullOrEmpty(_configurationSettings.CookieDomain))
             {
                 options.Cookie.Domain = _configurationSettings.CookieDomain;
-            }
-
-            if (_env.IsDevelopment())
-            {
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                options.Cookie.SameSite = SameSiteMode.Lax;
-            }
-            else
-            {
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Lax;
             }
         }
 

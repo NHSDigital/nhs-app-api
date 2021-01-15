@@ -3,7 +3,7 @@ info:
   version: 0.0.7
   title: NHS App Sub-API - Organ Donation
   description: NHS App Sub-API - endpoints pertaining to Organ Donation -  All require an
-    NHSO-Session-Id cookie (obtained from Session endpoint).
+    NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from Session endpoint).
 paths:
   /organdonation:
     get:

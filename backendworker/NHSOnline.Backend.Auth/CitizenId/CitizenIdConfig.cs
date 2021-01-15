@@ -10,8 +10,6 @@ namespace NHSOnline.Backend.Auth.CitizenId
         public Uri CitizenIdApiBaseUrl { get; set; }
         public string ClientId { get; set; }
         public string Issuer { get; set; }
-        public string NhsLoginKeyPath { get; set; }
-        public string NhsLoginKeyPassword { get; set; }
         public string TokenPath { get; set; } = "token";
 
         public CitizenIdConfig(IConfiguration configuration, ILogger<CitizenIdConfig> logger)
@@ -21,9 +19,6 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
             ClientId = configuration.GetOrWarn("CITIZEN_ID_CLIENT_ID", logger);
             Issuer = configuration.GetOrWarn("CITIZEN_ID_JWT_ISSUER", logger);
-
-            NhsLoginKeyPath = configuration.GetOrWarn("NHSLOGIN_KEY_PATH", logger);
-            NhsLoginKeyPassword = configuration.GetOrWarn("NHSLOGIN_KEY_PASSWORD", logger);
         }
     }
 }

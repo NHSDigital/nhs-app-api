@@ -13,7 +13,7 @@ paths:
       summary: Creates an asserted login identity javacript web token for the logged-in user.
       description: Creates and returns an asserted login identity javascript web token for the
         logged-in users. This can be used for the purpose of single sign-on into other NHS Login
-        relying parties. Requires NHSO-Session-Id cookie in header from the Session endpoint.
+        relying parties. Requires NHSO-Session-Id and NHSO-Session-Expiry cookies in header from the Session endpoint.
       requestBody:
         x-name: AssertedLoginIdentityRequest
         content:

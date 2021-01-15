@@ -3,7 +3,7 @@ info:
   version: 0.0.5
   title: NHS App Sub-API - My Record
   description: NHS App Sub-API - endpoints pertaining to patient record. All require an
-    NHSO-Session-Id cookie (obtained from Session endpoint).
+    NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from Session endpoint).
 paths:
   /my-record:
     get:
@@ -11,7 +11,7 @@ paths:
         - myrecord
       summary: Gets the record for the logged on user.
       description: Returns the users medical record for the logged in user. Requires
-        NHSO-Session-Id cookie (obtained from session endpoint).
+        NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
       responses:
         "200":
           description: Returns myrecord data for the logged in user.
@@ -37,7 +37,7 @@ paths:
         - myrecord section
       summary: Gets a specific section from the record for the logged on user.
       description: Returns only the specified section from the users medical record for the
-        logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained
+        logged in user (Vision only). Requires NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained
         from session endpoint).
       parameters:
         - in: query
@@ -112,7 +112,7 @@ paths:
         - documents
       summary: Gets the list of documents for the logged on user.
       description: Returns the users medical documents for the logged in user (EMIS only). Requires
-        NHSO-Session-Id cookie (obtained from session endpoint).
+        NHSO-Session-Id and NHSO-Session-Expiry cookies (obtained from session endpoint).
       responses:
         "200":
           description: Returns a list of medical documents data for the logged in user.
