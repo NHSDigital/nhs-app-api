@@ -5,11 +5,11 @@
     data-purpose="text_link"
     :href="adminHelpPath"
     :text="$t('appointments.guidance.additionalGpServices.additionalGpServices')"
-    :description="$t('appointments.guidance.additionalGpServices.getSickNotesAndLetters')"
+    :description="$t(description)"
     :click-func="navigate"
     :aria-label="ariaLabelCaption(
       'appointments.guidance.additionalGpServices.additionalGpServices',
-      'appointments.guidance.additionalGpServices.getSickNotesAndLetters')"/>
+      description)"/>
 </template>
 
 <script>
@@ -21,6 +21,13 @@ export default {
   name: 'AdminHelpMenuItem',
   components: {
     MenuItem,
+  },
+  props: {
+    description: {
+      type: String,
+      required: false,
+      default: 'appointments.guidance.additionalGpServices.getSickNotesAndLetters',
+    },
   },
   data() {
     return {

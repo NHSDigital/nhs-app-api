@@ -63,6 +63,9 @@ describe('showNoMatchingWarning', () => {
           source: 'web',
         },
       },
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => true,
+      },
     });
 
     const page = createBookingPage($store);

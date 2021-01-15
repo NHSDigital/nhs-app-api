@@ -46,6 +46,9 @@ describe('booking.vue', () => {
           source: 'web',
         },
       },
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => true,
+      },
     });
 
     wrapper = mount(BookingPage, {

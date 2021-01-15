@@ -8,6 +8,7 @@ describe('BookingConfirmationErrors', () => {
   const mountWrapper = ({
     cdssAdviceEnabled = true,
     cdssAdminEnabled = true,
+    silverIntegrationEnabled = true,
     status = 403,
   } = {}) => mount(BookingConfirmationErrors, {
     $store: createStore({
@@ -25,6 +26,7 @@ describe('BookingConfirmationErrors', () => {
       getters: {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
+        'serviceJourneyRules/silverIntegrationEnabled': () => (silverIntegrationEnabled),
       },
     }),
     propsData: {
@@ -62,8 +64,8 @@ describe('BookingConfirmationErrors', () => {
         expect(content.at(1).text()).toContain('or call 111.');
       });
 
-      it('will have 4 menu items', () => {
-        expect(menuItems.length).toBe(4);
+      it('will have 6 menu items', () => {
+        expect(menuItems.length).toBe(6);
       });
 
       it('will have a menu item for gp advice', () => {
@@ -83,8 +85,11 @@ describe('BookingConfirmationErrors', () => {
       });
     });
 
-    describe('without cdss admin enabled', () => {
-      const wrapper = mountWrapper({ cdssAdminEnabled: false });
+    describe('without cdss admin and silverIntegration enabled', () => {
+      const wrapper = mountWrapper({
+        cdssAdminEnabled: false,
+        silverIntegrationEnabled: false,
+      });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the admin help menu item if admin help is disabled', () => {
@@ -93,13 +98,34 @@ describe('BookingConfirmationErrors', () => {
       });
     });
 
-    describe('without cdss advice enabled', () => {
-      const wrapper = mountWrapper({ cdssAdviceEnabled: false });
+    describe('without cdss advice and silverIntegration enabled', () => {
+      const wrapper = mountWrapper({
+        cdssAdviceEnabled: false,
+        silverIntegrationEnabled: false,
+      });
       const menuItems = wrapper.findAll(MenuItem);
 
       it('will not show the gp advice menu item if admin help is disabled', () => {
         expect(wrapper.find('#btn_gpAdvice').exists()).toBe(false);
         expect(menuItems.length).toBe(3);
+      });
+    });
+
+    describe('with only silverIntegration enabled', () => {
+      const wrapper = mountWrapper({
+        cdssAdviceEnabled: false,
+        cdssAdminEnabled: false,
+      });
+      const menuItems = wrapper.findAll(MenuItem);
+
+      it('will show the gp advice menu item when silverIntegration is enabled', () => {
+        expect(wrapper.find('#btn_gpAdvice').exists()).toBe(true);
+        expect(menuItems.length).toBe(4);
+      });
+
+      it('will show the admin help menu item when silverIntegration is enabled', () => {
+        expect(wrapper.find('#btn_adminHelp').exists()).toBe(true);
+        expect(menuItems.length).toBe(4);
       });
     });
 

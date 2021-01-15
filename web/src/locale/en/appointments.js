@@ -133,6 +133,9 @@ export default {
     additionalGpServices: {
       additionalGpServices: 'Additional GP services',
       getSickNotesAndLetters: 'Get sick notes and GP letters or ask about recent tests',
+      engage: {
+        getSickNotesAndLetters: 'Get sick notes and GP letters or ask your GP surgery about something else',
+      },
     },
     OneOneOne: {
       use111Online: 'Use NHS 111 online',

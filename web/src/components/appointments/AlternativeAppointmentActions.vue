@@ -5,6 +5,10 @@
       <corona-virus-menu-item v-if="showCoronavirusItem"/>
       <gp-advice-menu-item v-if="isCdssAdvice" route-crumb="appointmentsCrumb"/>
       <admin-help-menu-item v-if="isCdssAdmin"/>
+      <gp-advice-menu-item v-if="showEngageMedicalAdvice" route-crumb="appointmentsCrumb"/>
+      <admin-help-menu-item
+        v-if="showEngageAdminHelp" description="appointments
+          .guidance.additionalGpServices.engage.getSickNotesAndLetters"/>
       <one-one-one-service-menu-item />
     </template>
   </error-screen-alternative-actions>
@@ -39,6 +43,26 @@ export default {
     },
     isCdssAdvice() {
       return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
+    },
+    showEngageMedicalAdvice() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'consultations',
+        },
+      });
+    },
+    showEngageAdminHelp() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'engage',
+          serviceType: 'consultationsAdmin',
+        },
+      });
     },
   },
 };
