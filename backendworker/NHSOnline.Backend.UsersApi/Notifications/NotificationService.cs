@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.UsersApi.Notifications
 
                 var notification = new Notification
                 {
-                    Title = notificationSendRequest.Title.Trim(),
+                    Title = notificationSendRequest.Title?.Trim(),
                     Subtitle = notificationSendRequest.Subtitle?.Trim(),
                     Body = notificationSendRequest.Body.Trim(),
                     Url = string.IsNullOrWhiteSpace(notificationSendRequest.Url)

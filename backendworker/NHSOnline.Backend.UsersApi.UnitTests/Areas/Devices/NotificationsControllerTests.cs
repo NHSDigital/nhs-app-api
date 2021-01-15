@@ -57,6 +57,34 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         [DataRow(null)]
         [DataRow("")]
         [DataRow("   ")]
+        public async Task Post_NoTitleRequest_Returns202Accepted(string title)
+        {
+            // Arrange
+            var sendRequest = new NotificationSendRequest
+            {
+                Title = title,
+                Subtitle = "subtitle",
+                Body = "body",
+                Url = "http://www.example.com"
+            };
+
+            _mockNotificationService
+                .Setup(x => x.Send(NhsLoginId, sendRequest))
+                .ReturnsAsync(new NotificationSendResult.Success());
+
+            // Act
+            var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
+
+            // Assert
+            _mockNotificationService.VerifyAll();
+
+            result.Should().BeOfType<AcceptedResult>();
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
         public async Task Post_NoSubtitleRequest_Returns202Accepted(string subtitle)
         {
             // Arrange
@@ -107,30 +135,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
             _mockNotificationService.VerifyAll();
 
             result.Should().BeOfType<AcceptedResult>();
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("   ")]
-        public async Task Post_NoTitleRequest_Returns400BadRequest(string title)
-        {
-            // Arrange
-            var sendRequest = new NotificationSendRequest
-            {
-                Title = title,
-                Subtitle = "subtitle",
-                Body = "body",
-                Url = "http://www.example.com"
-            };
-
-            // Act
-            var result = await _systemUnderTest.Post(NhsLoginId, sendRequest);
-
-            // Assert
-            _mockNotificationService.VerifyAll();
-
-            result.Should().BeOfType<BadRequestResult>();
         }
 
         [TestMethod]

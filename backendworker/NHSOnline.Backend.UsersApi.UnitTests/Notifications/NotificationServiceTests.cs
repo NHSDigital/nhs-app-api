@@ -65,6 +65,40 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
         }
 
         [TestMethod]
+        public async Task Send_RequestTitleIsNull_ReturnsSuccessResult()
+        {
+            // Arrange
+            const string subtitle = "subtitle";
+            const string body = "body";
+            const string url = "http://www.example.com";
+
+            var request = new NotificationSendRequest
+            {
+                Title = null,
+                Subtitle = subtitle,
+                Body = body,
+                Url = url
+            };
+
+            _mockAzureHubClient
+                .Setup(x => x.SendNotification(NhsLoginId,
+                    It.Is<Notification>(y =>
+                        y.Title == null &&
+                        y.Subtitle == subtitle &&
+                        y.Body == body &&
+                        y.Url == new Uri(url))))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _systemUnderTest.Send(NhsLoginId, request);
+
+            // Assert
+            _mockAzureHubClient.VerifyAll();
+
+            result.Should().BeOfType<NotificationSendResult.Success>();
+        }
+
+        [TestMethod]
         public async Task Send_RequestSubtitleIsNull_ReturnsSuccessResult()
         {
             // Arrange

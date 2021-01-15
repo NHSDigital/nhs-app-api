@@ -50,7 +50,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
         {
             return new ValidateAndLog(_logger)
                 .IsNotNull(request, nameof(request))
-                .IsNotNullOrWhitespace(request?.Title, nameof(request.Title))
                 .IsNotNullOrWhitespace(request?.Body, nameof(request.Body))
                 .IsUriOrNull(request?.Url, nameof(request.Url))
                 .IsValid();
