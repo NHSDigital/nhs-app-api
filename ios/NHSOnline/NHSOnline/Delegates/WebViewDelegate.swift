@@ -3,7 +3,6 @@ import SafariServices
 import WebKit
 import LocalAuthentication
 import os.log
-import iProov
 
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     let knownServicesProvider: KnownServicesProtocol
@@ -64,22 +63,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
-        if (checkIfIproov(navigationAction: navigationAction)) {
-            let url = navigationAction.request.url
-            IProov.handle(url: url!, from: webView)
-            decisionHandler(.cancel)
-            return
-        }
-
         navigate(webView: webView, navigationAction: navigationAction, decisionHandler: decisionHandler);
-    }
-    
-    func checkIfIproov(navigationAction: WKNavigationAction) -> Bool {
-        if (navigationAction.navigationType == .linkActivated && navigationAction.request.url?.host == "iproov.app") {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private func navigate(webView: WKWebView, navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

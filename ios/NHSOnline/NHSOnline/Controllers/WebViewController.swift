@@ -1,6 +1,7 @@
 import UIKit
 import WebKit
 import os.log
+import iProov
 
 class WebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: WebViewDelegate?
@@ -28,6 +29,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             UserAgentBuilder(appVersion: appVersion, deviceService: deviceInfoService).buildUserAgent()
 
         webView = WKWebView(frame: .zero, configuration: config)
+        webView.installIProovNativeBridge()
         webView.uiDelegate = self
         webView.allowsLinkPreview = false
         

@@ -8,20 +8,20 @@ if ENV['PAYCASSO'].present?
     source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/paycasso-framework-cocoapod'
     source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/paycasso-view-framework-cocoapod'
     source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/paycasso-lottie-cocoapod'
-    pod 'FidoClientIOS', '~> 1.0.3'
+    pod 'FidoClientIOS', '~> 2.0.0'
     pod 'paycasso-framework', '~> 2020.9.11-11'
     pod 'paycasso-view-framework', '~> 2020.9.15-11'
     pod 'paycasso-lottie', '~> 2020.9.16-1.0'
-    pod 'SwiftyJSON', '~> 4.0.0'
-    pod 'iProov', '~> 7.3.0'
+    pod 'SwiftyJSON', '~> 5.0.0'
+    pod 'iProov', '~> 7.5.0'
     pod 'DeviceKit', '3.2'
   end
 else
   target 'NHSOnline' do
     platform :ios, '9.0'
-    pod 'FidoClientIOS', '~> 1.0.3'
-    pod 'SwiftyJSON', '~> 4.0.0'
-    pod 'iProov', '~> 7.3.0'
+    pod 'FidoClientIOS', '~> 2.0.0'
+    pod 'SwiftyJSON', '~> 5.0.0'
+    pod 'iProov', '~> 7.5.0'
     pod 'DeviceKit', '~> 3.2'
     target 'NHSOnlineTests' do
       inherit! :search_paths

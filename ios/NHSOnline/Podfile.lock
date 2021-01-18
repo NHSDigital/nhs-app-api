@@ -1,24 +1,24 @@
 PODS:
   - BCryptSwift (1.1)
   - DeviceKit (3.2.0)
-  - FidoClientIOS (1.0.3):
+  - FidoClientIOS (2.0.0):
     - BCryptSwift
-    - SwiftyJSON (~> 4.0)
-  - iProov (7.3.0):
-    - KeychainAccess (~> 4.1.0)
-    - Socket.IO-Client-Swift (~> 15.2.0)
-    - SwiftyJSON (~> 4.0.0)
-  - KeychainAccess (4.1.0)
+    - SwiftyJSON (~> 5.0)
+  - iProov (7.5.0):
+    - KeychainAccess (~> 4.1)
+    - Socket.IO-Client-Swift (~> 15.2)
+    - SwiftyJSON (~> 5.0)
+  - KeychainAccess (4.2.1)
   - Socket.IO-Client-Swift (15.2.0):
     - Starscream (~> 3.1)
   - Starscream (3.1.1)
-  - SwiftyJSON (4.0.0)
+  - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - DeviceKit (~> 3.2)
-  - FidoClientIOS (~> 1.0.3)
-  - iProov (~> 7.3.0)
-  - SwiftyJSON (~> 4.0.0)
+  - FidoClientIOS (~> 2.0.0)
+  - iProov (~> 7.5.0)
+  - SwiftyJSON (~> 5.0.0)
 
 SPEC REPOS:
   "https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-fido-client-ios-cocoapod":
@@ -35,13 +35,13 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   BCryptSwift: f69992ea5685f6714260842c2770688043b89ab2
   DeviceKit: d081659419cce07c0b5239dbc9fb39ed7413c7fe
-  FidoClientIOS: 03c5b424af920f7e70736d231ec83e1280e26b51
-  iProov: 6ff202ee804f1f08b672d81c11bd99cf5a3ebf79
-  KeychainAccess: 445e28864fe6d3458b41fa211bcdc39890e8bd5a
+  FidoClientIOS: dd31de02c8bc40ed4874c368cf703c7b9e00eefd
+  iProov: 16de51166c50a08ec0d2a32334687c7d0e5236e3
+  KeychainAccess: 9b07f665298d13c3a85881bd3171f6f49b8151c1
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
-  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 3bf40a25e468d752fe9a127e56d323fdf86116f5
+PODFILE CHECKSUM: 52b6b436ecef739cc36de944261b7f8a6166020b
 
 COCOAPODS: 1.10.1
