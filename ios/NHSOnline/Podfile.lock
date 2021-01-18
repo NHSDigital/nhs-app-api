@@ -16,7 +16,7 @@ PODS:
 
 DEPENDENCIES:
   - DeviceKit (~> 3.2)
-  - FidoClientIOS
+  - FidoClientIOS (~> 1.0.3)
   - iProov (~> 7.3.0)
   - SwiftyJSON (~> 4.0.0)
 
@@ -42,6 +42,6 @@ SPEC CHECKSUMS:
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: f663f692ec9b4b63da3628bc2a7b3a2162a1b98e
+PODFILE CHECKSUM: 3bf40a25e468d752fe9a127e56d323fdf86116f5
 
 COCOAPODS: 1.10.1
