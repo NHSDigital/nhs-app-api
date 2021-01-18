@@ -17,7 +17,6 @@ namespace Nhs.App.Api.Integration.Tests
     {
         private static string[] _sendToNhsNumbers;
         private static string _sendToOdsCode;
-        private const string InAppMessagePath = "communication/in-app/FHIR/R4/CommunicationRequest";
 
         private enum PayloadContentKind
         {
@@ -30,6 +29,13 @@ namespace Nhs.App.Api.Integration.Tests
             NhsNumbers,
             OdsCode
         }
+
+        private static readonly List<string> EndpointPaths = new List<string>
+        {
+            "communication/in-app/FHIR/R4/CommunicationRequest",
+            "communication/notification/FHIR/R4/CommunicationRequest",
+            "communication/in-app-with-notification/FHIR/R4/CommunicationRequest"
+        };
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
@@ -45,60 +51,75 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4InAppPost_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode()
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode()
         {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
+            foreach (var endpointPath in EndpointPaths)
+            {
+                // Arrange
+                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
 
-            await CommunicationFhirR4InAppPost_ValidTest(validPayload);
+                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
+            }
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4InAppPost_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode()
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode()
         {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
+            foreach (var endpointPath in EndpointPaths)
+            {
+                // Arrange
+                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
 
-            await CommunicationFhirR4InAppPost_ValidTest(validPayload);
+                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
+            }
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4InAppPost_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode()
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode()
         {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
+            foreach (var endpointPath in EndpointPaths)
+            {
+                // Arrange
+                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
 
-            await CommunicationFhirR4InAppPost_ValidTest(validPayload);
+                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
+            }
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4InAppPost_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode()
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode()
         {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
+            foreach (var endpointPath in EndpointPaths)
+            {
+                // Arrange
+                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
 
-            await CommunicationFhirR4InAppPost_ValidTest(validPayload);
+                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
+            }
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4InAppPost_InvalidApiKey_Returns401Unauthorized()
+        public async Task CommunicationFhirR4Post_InvalidApiKey_Returns401Unauthorized()
         {
-            // Arrange
-            using var httpClient = CreateHttpClient();
-            httpClient.DefaultRequestHeaders.Remove("x-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
+            foreach (var endpointPath in EndpointPaths)
+            {
+                // Arrange
+                using var httpClient = CreateHttpClient();
+                httpClient.DefaultRequestHeaders.Remove("x-api-key");
+                httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
 
-            var stringPayload = BuildValidRequestBody();
-            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+                var stringPayload = BuildValidRequestBody();
+                var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
-            // Act
-            var response = await httpClient.PostAsync(InAppMessagePath, httpContent);
+                // Act
+                var response = await httpClient.PostAsync(endpointPath, httpContent);
 
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+                // Assert
+                response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            }
         }
 
-        private static async Task CommunicationFhirR4InAppPost_ValidTest(string validPayload)
+        private static async Task CommunicationFhirR4Post_ValidTest(string validPayload, string endpointPath)
         {
             // Arrange, continued.
             using var httpClient = CreateHttpClient();
@@ -106,14 +127,14 @@ namespace Nhs.App.Api.Integration.Tests
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await httpClient.PostAsync(InAppMessagePath, httpContent);
+            var response = await httpClient.PostAsync(endpointPath, httpContent);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             var responseObject = await DeserializeResponseAsync<CommunicationPostResponse>(response);
             Guid.TryParse(responseObject.Id, out var communicationId).Should().BeTrue();
 
-            response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{InAppMessagePath}/{communicationId}");
+            response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{communicationId}");
         }
 
         private static string BuildValidRequestBody(
