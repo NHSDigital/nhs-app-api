@@ -39,11 +39,5 @@ namespace Nhs.App.Api.Integration.Tests
 
             return responseObject;
         }
-
-        protected static string BuildValidCommunicationPostBody(string nhsNumbersJson, string odsCodeJson, string channelsJson)
-        {
-            return $"{{ \"channels\": {{ {channelsJson} }}," +
-                   $" \"recipients\": {{ \"nhsNumbers\": {nhsNumbersJson}, \"odsCode\": {odsCodeJson} }} }}";
-        }
     }
 }
