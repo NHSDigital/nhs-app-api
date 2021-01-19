@@ -33,7 +33,7 @@ emisApplicationID: "C849DB19-4EB0-4BDF-ABF3-7C5233739AF0"
 secrets:
     notificationHub:
         notificationHubSecretName: "notificationHubSharedAccessKeyStubbed"
-        notificationHubSecretVersion: "cb98a1a6e58d4574ad41e7de84c9454c"
+        notificationHubSecretVersion: "34b898c1d9cc4956a1c4ceb6d1e0cf3e"
 
 web:
   image_tag: latest

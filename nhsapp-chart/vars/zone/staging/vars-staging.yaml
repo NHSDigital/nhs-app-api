@@ -12,7 +12,7 @@ keyvaultTenantID: 50f6071f-bbfe-401a-8803-673748e629e2
 secrets:
     notificationHub:
         notificationHubSecretName: "notificationHubSharedAccessKey"
-        notificationHubSecretVersion: "fd7cde94adc149ee88f96ef7168bba5f"
+        notificationHubSecretVersion: "ed60d1ae92f44e228e62bec53197d67e"
 
 wildcardEnv: true
 
@@ -163,7 +163,7 @@ logger:
 messagesEnabled: true
 
 users:
-  notificationHubPath: nhsapp-demo
+  notificationHubPath: nhsapp-staging
   notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
 
 metrics:
