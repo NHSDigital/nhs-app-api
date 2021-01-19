@@ -14,9 +14,15 @@
 		<Request>
 			<Step>
 				<Name>VerifyApiKey.XApiKey</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/Communication")</Condition>
 			</Step>
 			<Step>
 				<Name>AssignMessage.RenameQuotaVarsFromVerifyAPIKeyPolicyClientId</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/Communication")</Condition>
+			</Step>
+			<Step>
+				<Name>OauthV2.VerifyAccessToken</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/CommunicationRequest")</Condition>
 			</Step>
 			<Step>
 				<Name>Quota</Name>
@@ -26,6 +32,7 @@
 			</Step>
 			<Step>
 				<Name>AssignMessage.RemoveApiKeyHeader</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/Communication")</Condition>
 			</Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
