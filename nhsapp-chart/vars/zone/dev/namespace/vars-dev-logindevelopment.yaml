@@ -2,8 +2,6 @@
 cosmosDBName: logindevelopment
 odsRemapEnabled: true
 odsRemapMap: "G85075:X00100;G85672:X00100;A21464:A29928"
-cidHostname: auth.dev18.signin.nhs.uk
-cidFidoHostname: uaf.dev18.signin.nhs.uk
 akamaiEnv: nhsapp.service.nhs.uk
 
 users:
@@ -19,10 +17,3 @@ web:
 
 api:
   publicURL: api-logindevelopment.nhsapp.service.nhs.uk
-  knownServicesOverrides:
-    services__cid_settings__url: https://settings.dev18.signin.nhs.uk
-    services__cid_account__url: https://account.dev18.signin.nhs.uk
-    services__cid_auth__url: https://auth.dev18.signin.nhs.uk
-    services__cid_uaf__url: https://uaf.dev18.signin.nhs.uk
-    services__cid_access__url: https://access.dev18.signin.nhs.uk
-    services__ers__url: https://pat.sa.refer.nhs.uk

@@ -123,7 +123,7 @@
     },
     "cid_account": {
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -134,7 +134,7 @@
     },
     "cid_auth": {
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -145,7 +145,7 @@
     },
     "cid_uaf": {
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
@@ -156,7 +156,7 @@
     },
     "cid_access": {
       "subServices": null,
-      "javaScriptInteractionMode": "None",
+      "javaScriptInteractionMode": "NhsLogin",
       "menuTab": "None",
       "viewMode": "WebView",
       "integrationLevel": "SilverWithoutWebNavigation",
