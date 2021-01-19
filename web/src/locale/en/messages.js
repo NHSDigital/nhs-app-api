@@ -39,7 +39,6 @@ export default {
   unreadMessage: 'Unread message',
   unreadMessages: 'Unread messages',
   view: 'View',
-  viewFullMessage: 'View full message',
   whenYouDownloadYouBecomeResponsible: 'When you download this file, you become responsible for keeping it confidential.',
   you: 'You',
   youCannotReplyToThis: 'You cannot reply to this message',

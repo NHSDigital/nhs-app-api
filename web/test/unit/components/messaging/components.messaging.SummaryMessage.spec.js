@@ -9,6 +9,7 @@ describe('summary message', () => {
   const dateTimeClass = 'nhs-app-message__date';
   const metaClass = 'nhs-app-message__meta';
   const subjectLineClass = 'nhs-app-message__subject-line';
+  const subjectLineClassUnead = 'nhs-app-message__subject-line--unread';
   const title = 'Test sender';
   const dateTime = '2019-09-14T02:15:12.356Z';
   const listIndex = 1;
@@ -30,6 +31,7 @@ describe('summary message', () => {
         [dateTimeClass]: dateTimeClass,
         [metaClass]: metaClass,
         [subjectLineClass]: subjectLineClass,
+        [subjectLineClassUnead]: subjectLineClassUnead,
         [unreadCountClass]: unreadCountClass,
       },
       propsData: {
@@ -60,6 +62,32 @@ describe('summary message', () => {
       const subject = wrapper.find('#subject');
 
       expect(subject.text()).toBe('Test subject');
+    });
+
+    describe('is unread', () => {
+      beforeEach(() => {
+        wrapper = mountSummaryMessage({ unreadCount: 3, hasUnreadMessages: true });
+      });
+
+      it('will use unread style', () => {
+        const subject = wrapper.find('#subject');
+        const unreadClass = subject.find(`.${subjectLineClassUnead}`);
+        expect(unreadClass.exists()).toBe(true);
+      });
+    });
+
+    describe('is read', () => {
+      beforeEach(() => {
+        wrapper = mountSummaryMessage();
+      });
+
+      it('will use not use unread style', () => {
+        const subject = wrapper.find('#subject');
+        const unreadClass = subject.find(`.${subjectLineClassUnead}`);
+        const readClass = subject.find(`.${subjectLineClass}`);
+        expect(readClass.exists()).toBe(true);
+        expect(unreadClass.exists()).toBe(false);
+      });
     });
   });
 

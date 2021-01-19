@@ -17,7 +17,11 @@
         summary-time-format />
     </div>
     <div :class="$style['flex-baseline-container']" aria-hidden="true">
-      <p id="subject" :class="['nhsuk-body-s', $style['nhs-app-message__subject-line']]">
+      <p id="subject" :class="{
+        'nhsuk-body-s': true,
+        [$style['nhs-app-message__subject-line']]: true,
+        [$style['nhs-app-message__subject-line--unread']]: unreadCount|| hasUnreadMessages
+      }">
         {{ subTitle }}
       </p>
       <br>
@@ -26,11 +30,6 @@
               :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
       </span>
     </div>
-    <span v-if="!hasSubject"
-          :class="['nhsuk-u-font-size-16','nhsuk-u-margin-bottom-0',
-                   'nhsuk-u-padding-top-0', $style.viewFullMessageText]">
-      <strong>{{ this.$t('messages.viewFullMessage') }}</strong>
-    </span>
   </a>
 </template>
 
@@ -50,11 +49,6 @@ export default {
     subTitle: {
       type: String,
       required: true,
-    },
-    hasSubject: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
     text: {
       type: String,
@@ -159,8 +153,11 @@ export default {
       @include nhsuk-responsive-padding(0, "bottom");
       @include nhsuk-responsive-margin(0, "bottom");
       color: $nhsuk-secondary-text-color;
-      font-weight: $nhsuk-font-bold;
       @include overflow-ellipsis;
+
+      &.nhs-app-message__subject-line--unread{
+        font-weight: $nhsuk-font-bold;
+      }
     }
 
     .nhs-app-message__meta{

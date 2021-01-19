@@ -27,7 +27,6 @@
             <summary-message :id="summary.messageId"
                              :title="summary.recipient"
                              :sub-title="getSubtitle(summary)"
-                             :has-subject="hasSubject"
                              :date-time="summary.lastMessageDateTime"
                              :aria-label="getMessageLabel(summary)"
                              :has-unread-messages="summary.unreadReplyInfo.present"
