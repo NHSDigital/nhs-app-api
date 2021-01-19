@@ -43,6 +43,7 @@ data:
                                'request_uri="$request_uri" '
                                'user_agent="$http_user_agent" '
                                'status=$status '
+                               'language_preference="$http_accept_language" '
                                'response_size_bytes=$bytes_sent '
                                'duration_seconds=$request_time '
                                'correlation_id="$http_nhso_request_id"';
