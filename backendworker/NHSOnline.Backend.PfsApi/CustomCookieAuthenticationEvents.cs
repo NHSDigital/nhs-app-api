@@ -16,13 +16,16 @@ namespace NHSOnline.Backend.PfsApi
     {
         private readonly ILogger<CustomCookieAuthenticationEvents> _logger;
         private readonly IGpSessionManager _gpSessionManager;
+        private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
 
         public CustomCookieAuthenticationEvents(
             ILogger<CustomCookieAuthenticationEvents> logger,
-            IGpSessionManager gpSessionManager)
+            IGpSessionManager gpSessionManager,
+            ISessionExpiryCookieCreator sessionExpiryCookieCreator)
         {
             _logger = logger;
             _gpSessionManager = gpSessionManager;
+            _sessionExpiryCookieCreator = sessionExpiryCookieCreator;
         }
 
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
@@ -34,10 +37,14 @@ namespace NHSOnline.Backend.PfsApi
             }
 
             var retrieveSessionResult = await RetrieveSession(context);
+            var sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
 
-            if (retrieveSessionResult is RetrieveSessionResult.Success success)
+            if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
             {
                 context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
+
+                _sessionExpiryCookieCreator.AppendSessionExpiryCookie(context.HttpContext, sessionExpiryToken);
+
                 _logger.LogDebug("Finish: Validate Principal");
                 return;
             }
@@ -54,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi
 
             var token = context.Request.Headers["X-CSRF-TOKEN"];
 
-            return  await _gpSessionManager.RetrieveSession(sessionId, token);
+            return await _gpSessionManager.RetrieveSession(sessionId, token);
         }
 
         private static async Task RejectPrincipalAndSignOut(CookieValidatePrincipalContext context)

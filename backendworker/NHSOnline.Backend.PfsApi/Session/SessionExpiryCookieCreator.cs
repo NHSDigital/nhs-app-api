@@ -41,9 +41,9 @@ namespace NHSOnline.Backend.PfsApi.Session
             _logger = logger;
         }
 
-        public string GetSessionExpiryCookieToken()
+        public string CreateSessionExpiryToken()
         {
-            var token = CreateSessionExpiryToken();
+            var token = GenerateToken();
 
             var isValid = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(token, nameof(token))
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             return token;
         }
 
-        private string CreateSessionExpiryToken()
+        private string GenerateToken()
         {
             RSAParameters rsaParameters;
 

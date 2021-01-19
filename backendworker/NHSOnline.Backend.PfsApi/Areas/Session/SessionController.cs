@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     return _errorResultBuilder.BuildResult(new ErrorTypes.LoginBadRequest());
                 }
 
-                var sessionExpiryCookieToken = _sessionExpiryCookieCreator.GetSessionExpiryCookieToken();
+                var sessionExpiryCookieToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
 
                 if (sessionExpiryCookieToken is null)
                 {

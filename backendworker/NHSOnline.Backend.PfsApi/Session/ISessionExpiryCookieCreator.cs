@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 {
     public interface ISessionExpiryCookieCreator
     {
-        string GetSessionExpiryCookieToken();
+        string CreateSessionExpiryToken();
         void AppendSessionExpiryCookie(HttpContext context, string token);
     }
 }

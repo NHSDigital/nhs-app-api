@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         [TestMethod]
         [DataRow("")]
         [DataRow(null)]
-        public void GetSessionExpiryCookieToken_WhenTokenIsNullOrEmpty_ReturnsNull(string token)
+        public void CreateSessionExpiryToken_WhenTokenIsNullOrEmpty_ReturnsNull(string token)
         {
             // Arrange
             Context.ArrangeDateTimeUtcNow();
@@ -25,28 +25,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             Context.ArrangeJwtTokenGenerator(token);
 
             // Act
-            var actualToken = Context.CreateSystemUnderTest().GetSessionExpiryCookieToken();
+            var actualToken = Context.CreateSystemUnderTest().CreateSessionExpiryToken();
 
             // Assert
             actualToken.Should().BeNull();
         }
 
         [TestMethod]
-        public void GetSessionExpiryCookieToken_WhenSigningThrowsException_ReturnsNull()
+        public void CreateSessionExpiryToken_WhenSigningThrowsException_ReturnsNull()
         {
             // Arrange
             Context.ArrangeDateTimeUtcNow();
             Context.ArrangeSigningException();
 
             // Act
-            var actualToken = Context.CreateSystemUnderTest().GetSessionExpiryCookieToken();
+            var actualToken = Context.CreateSystemUnderTest().CreateSessionExpiryToken();
 
             // Assert
             actualToken.Should().BeNull();
         }
 
         [TestMethod]
-        public void GetSessionExpiryCookieToken_WhenTokenIsGenerated_ReturnsToken()
+        public void CreateSessionExpiryToken_WhenTokenIsGenerated_ReturnsToken()
         {
             // Arrange
             Context.ArrangeDateTimeUtcNow();
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             Context.ArrangeJwtTokenGenerator();
 
             // Act
-            var actualToken = Context.CreateSystemUnderTest().GetSessionExpiryCookieToken();
+            var actualToken = Context.CreateSystemUnderTest().CreateSessionExpiryToken();
 
             // Assert
             actualToken.Should().BeEquivalentTo(SessionExpiryCookieCreatorTestContext.JwtToken);
