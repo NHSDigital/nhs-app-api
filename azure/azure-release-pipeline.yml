@@ -50,3 +50,7 @@ extends:
         make_spec_visible: true
         depends_on:
           - internal_qa
+      - environment: prod
+        make_spec_visible: true
+        depends_on:
+          - internal_qa
