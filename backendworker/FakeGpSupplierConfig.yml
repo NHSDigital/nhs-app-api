@@ -198,15 +198,6 @@ defaultUsers:
       dateOfBirth: "2017-09-04T00:00:00"
       sex: Male
 
-    9824463178:
-      userId:
-      emailAddress: nhso2018+frank.spencer@gmail.com
-      odsCode: C83615
-      givenName: Frank
-      familyName: Spencer
-      dateOfBirth: "1968-02-12T00:00:00"
-      sex: Male
-
   ers:
     5900110915:
       userId: be309d68-f401-4031-8aaf-f9c60d190bd9
