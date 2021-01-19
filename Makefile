@@ -76,6 +76,9 @@ run-bdd:	## Run the BDD tests as they are run in the CI build
 
 run-deps: validate_local_secrets validate_local_images
 
+run-tools: ## Launch the NHS App devops tools container loaded with useful kubectl helpers
+	./buildscripts/run-devops-tools-docker.sh
+
 configure-package-feed:	## Create or Update configuration files for accessing ADO package feeds ()
 	./buildscripts/configure_package_feed.sh
 
