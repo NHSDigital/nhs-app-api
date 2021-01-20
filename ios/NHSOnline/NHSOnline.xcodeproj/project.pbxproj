@@ -90,6 +90,7 @@
 		64C1C76F23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */; };
 		7992275824212AF70057D406 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7992275724212AF70057D406 /* SplashScreenView.swift */; };
 		79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */; };
+		7D7F451E25B2114500F0FD75 /* NHSOnline.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7D7F451D25B2114500F0FD75 /* NHSOnline.sh */; };
 		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
 		8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */; };
 		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
@@ -438,6 +439,7 @@
 		79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressSpinnerView.swift; sourceTree = "<group>"; };
 		7AE2649CA379AD6260106346 /* Pods-NHSOnlinePaycasso.scratch18.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch18.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch18.xcconfig"; sourceTree = "<group>"; };
 		7B067342A89688F101646C21 /* Pods-NHSOnlineTests.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch12.xcconfig"; sourceTree = "<group>"; };
+		7D7F451D25B2114500F0FD75 /* NHSOnline.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = NHSOnline.sh; sourceTree = "<group>"; };
 		7EB00BFC273B621D0B251911 /* Pods-NHSOnline.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstack.xcconfig"; sourceTree = "<group>"; };
 		7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch4.xcconfig"; sourceTree = "<group>"; };
 		8A55006C23D6158600795739 /* NHSOnlineScratch1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnlineScratch1.entitlements; sourceTree = "<group>"; };
@@ -996,6 +998,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7D7F451C25B2110F00F0FD75 /* BuildScripts */ = {
+			isa = PBXGroup;
+			children = (
+				7D7F451D25B2114500F0FD75 /* NHSOnline.sh */,
+			);
+			path = BuildScripts;
+			sourceTree = "<group>";
+		};
 		8A55006E23D89AF600795739 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
@@ -1050,6 +1060,7 @@
 		C20577F62028B94800CDBDC5 = {
 			isa = PBXGroup;
 			children = (
+				7D7F451C25B2110F00F0FD75 /* BuildScripts */,
 				8A87FBC822E9B58B00AF3E93 /* Frameworks */,
 				107EA7B621CCE3CC006C675B /* nativeAppAssets */,
 				C20578012028B94800CDBDC5 /* NHSOnline */,
@@ -1573,6 +1584,7 @@
 			buildConfigurationList = C20578272028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnline" */;
 			buildPhases = (
 				5CBA77BC811F657F451C5DA3 /* [CP] Check Pods Manifest.lock */,
+				7D7F451925B1E25A00F0FD75 /* Run Build Script */,
 				C20577FB2028B94800CDBDC5 /* Sources */,
 				C20577FC2028B94800CDBDC5 /* Frameworks */,
 				C20577FD2028B94800CDBDC5 /* Resources */,
@@ -1691,6 +1703,7 @@
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
+				7D7F451E25B2114500F0FD75 /* NHSOnline.sh in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
@@ -1774,6 +1787,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7D7F451925B1E25A00F0FD75 /* Run Build Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Build Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/BuildScripts/NHSOnline.sh\n";
 		};
 		86539751AAC0FD5FBA1CE05E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
