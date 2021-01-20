@@ -2,7 +2,7 @@
 set -e -u
 
 VOLUME_NAME="nhsapp-devops-tools-home-dir"
-IMAGE_TAG="${TAG:-31206}"
+IMAGE_TAG="${TAG:-31373}"
 
 
 if ! docker volume inspect "$VOLUME_NAME" &>/dev/null; then
