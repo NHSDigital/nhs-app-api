@@ -14,7 +14,7 @@ import com.paycasso.sdk.api.flow.view.configuration.*
 import com.paycasso.sdk.api.flow.view.configuration.enums.ConfigurationSide
 import com.paycasso.sdk.api.flow.view.configuration.enums.DocumentConfigurationSide
 import com.paycasso.view.nhs.capturecontrol.PassportCaptureControlFragment
-import com.paycasso.view.nhs.documentpreview.FrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.passport.PassportDocumentPreviewFragment
 import com.paycasso.view.nhs.finish.FinishTransitionFragment
 import com.paycasso.view.nhs.transition.PassportTransitionFragment
 
@@ -95,7 +95,7 @@ class PaycassoServiceTests {
         // Setting up views
         val expectedDocumentPreviewViewFrontConfiguration = DocumentPreviewViewConfiguration()
         expectedDocumentPreviewViewFrontConfiguration.previewSide = ConfigurationSide.FRONT
-        expectedDocumentPreviewViewFrontConfiguration.screen = FrontDocumentPreviewFragment()
+        expectedDocumentPreviewViewFrontConfiguration.screen = PassportDocumentPreviewFragment()
 
         val expectedDocumentViewConfiguration = DocumentViewConfiguration()
         expectedDocumentViewConfiguration.documentSide = DocumentConfigurationSide.FRONT
@@ -177,7 +177,7 @@ class PaycassoServiceTests {
         Assert.assertEquals(viewConfigurationArgumentCaptor.firstValue.
             documentPreviewViewConfigurations[0]!![0].previewSide, ConfigurationSide.FRONT)
         Assert.assertTrue(viewConfigurationArgumentCaptor.firstValue.
-            documentPreviewViewConfigurations[0]!![0].screen is FrontDocumentPreviewFragment)
+            documentPreviewViewConfigurations[0]!![0].screen is PassportDocumentPreviewFragment)
     }
     
     @Test

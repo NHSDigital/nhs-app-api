@@ -262,8 +262,8 @@ dependencies {
     implementation 'com.squareup.moshi:moshi:1.10.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.10.0'
 
-    implementation 'com.paycasso.sdk:paycasso:2020.12.11-11-2'
-    implementation 'com.paycasso.sdk:paycasso-view:2020.12.11-11-2'
+    implementation 'com.paycasso.sdk:paycasso:2021.1.19-11-3'
+    implementation 'com.paycasso.sdk:paycasso-view:2021.1.19-11-3'
     implementation 'com.paycasso.sdk:paycasso-opencv:2020.8.10'
     implementation 'com.paycasso.sdk:paycasso-tensorflow:2020.8.10'
     implementation 'com.paycasso.sdk:paycasso-jj2000:2020.8.10'

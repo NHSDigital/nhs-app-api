@@ -13,8 +13,12 @@ import com.paycasso.view.nhs.capturecontrol.BaseCaptureControlFragment
 import com.paycasso.view.nhs.capturecontrol.DlCaptureControlFragment
 import com.paycasso.view.nhs.capturecontrol.IdCaptureControlFragment
 import com.paycasso.view.nhs.capturecontrol.PassportCaptureControlFragment
-import com.paycasso.view.nhs.documentpreview.BackDocumentPreviewFragment
-import com.paycasso.view.nhs.documentpreview.FrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.base.BaseDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.dl.DlBackDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.dl.DlFrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.id.IdBackDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.id.IdFrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.passport.PassportDocumentPreviewFragment
 import com.paycasso.view.nhs.finish.FinishTransitionFragment
 import com.paycasso.view.nhs.transition.*
 import kotlin.collections.ArrayList
@@ -52,7 +56,7 @@ class PaycassoViewConfiguration(
 
         // 'Check the picture' screen
         val documentPreviewViewConfigurationList = arrayListOf(
-            getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+            getDocumentPreviewConfiguration(ConfigurationSide.FRONT, PassportDocumentPreviewFragment())
         )
 
         // Overlay on camera
@@ -79,10 +83,12 @@ class PaycassoViewConfiguration(
             IdBackTransitionFragment())
 
         // 'Check the picture' screen for front of Id
-        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT,
+            IdFrontDocumentPreviewFragment())
 
         // 'Check the picture' for back of Id
-        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK)
+        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK,
+            IdBackDocumentPreviewFragment())
 
         // Overlay on camera for front
         val frontDocumentSide = getCaptureControlConfiguration(ConfigurationSide.FRONT,
@@ -111,10 +117,12 @@ class PaycassoViewConfiguration(
             DlBackTransitionFragment())
 
         // 'Check the picture' screen for front
-        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT)
+        val firstFrontDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.FRONT,
+            DlFrontDocumentPreviewFragment())
 
         // 'Check the picture' screen for back
-        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK)
+        val firstBackDocumentPreview = getDocumentPreviewConfiguration(ConfigurationSide.BACK,
+            DlBackDocumentPreviewFragment())
 
         // Camera overlay screens for front and back
         val frontDocumentSide = getCaptureControlConfiguration(ConfigurationSide.FRONT,
@@ -174,14 +182,13 @@ class PaycassoViewConfiguration(
         return document
     }
 
-    private fun getDocumentPreviewConfiguration(side: ConfigurationSide)
+    private fun getDocumentPreviewConfiguration(side: ConfigurationSide,
+                                    documentPreviewFragment: BaseDocumentPreviewFragment)
             : DocumentPreviewViewConfiguration {
         val document = DocumentPreviewViewConfiguration()
         document.previewSide = side
 
-        document.screen =
-            if (side == ConfigurationSide.FRONT) FrontDocumentPreviewFragment()
-            else BackDocumentPreviewFragment()
+        document.screen = documentPreviewFragment
 
         return document
     }

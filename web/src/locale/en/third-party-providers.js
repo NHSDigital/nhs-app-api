@@ -379,7 +379,7 @@ export default {
       },
     ],
   },
-  'silver-third-party-api-test': {
+  silver_third_party_api_test: {
     serviceId: 'silver-third-party-api-test',
     providerName: 'Test Silver Third Party Provider',
     jumpOffs: [

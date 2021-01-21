@@ -74,3 +74,5 @@ api:
     services__gncr__requiresAssertedLoginIdentity: true
     services__gncr__validateSession: true
     services__engage__url: https://nhs1-nhsapp.engage.gp
+    services__silver_third_party_api_test__url: https://silverintegrationtestsa.z33.web.core.windows.net
+

@@ -7,8 +7,11 @@ import com.paycasso.sdk.api.flow.view.configuration.DocumentPreviewViewConfigura
 import com.paycasso.sdk.api.flow.view.configuration.DocumentViewConfiguration
 import com.paycasso.sdk.api.flow.view.configuration.enums.ConfigurationSide
 import com.paycasso.sdk.api.flow.view.configuration.enums.DocumentConfigurationSide
-import com.paycasso.view.nhs.documentpreview.BackDocumentPreviewFragment
-import com.paycasso.view.nhs.documentpreview.FrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.dl.DlFrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.dl.DlBackDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.id.IdFrontDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.id.IdBackDocumentPreviewFragment
+import com.paycasso.view.nhs.documentpreview.passport.PassportDocumentPreviewFragment
 import com.paycasso.view.nhs.transition.*
 import org.junit.Assert
 import org.junit.Test
@@ -67,12 +70,12 @@ class PaycassoViewConfigurationTests {
         Assert.assertEquals(ConfigurationSide.FRONT,
             viewConfiguration.documentPreviewViewConfigurations[0]!![0].previewSide)
         Assert.assertTrue(viewConfiguration.documentPreviewViewConfigurations[0]!![0].screen
-                is FrontDocumentPreviewFragment)
+                is DlFrontDocumentPreviewFragment)
 
         Assert.assertEquals(ConfigurationSide.BACK,
             viewConfiguration.documentPreviewViewConfigurations[0]!![1].previewSide)
         Assert.assertTrue(viewConfiguration.documentPreviewViewConfigurations[0]!![1].screen
-                is BackDocumentPreviewFragment)
+                is DlBackDocumentPreviewFragment)
 
         Assert.assertEquals(DocumentConfigurationSide.FRONT,
             viewConfiguration.documentViewConfigurations[0]!![0].documentSide)
@@ -131,12 +134,12 @@ class PaycassoViewConfigurationTests {
         Assert.assertEquals(ConfigurationSide.FRONT,
             viewConfiguration.documentPreviewViewConfigurations[0]!![0].previewSide)
         Assert.assertTrue(viewConfiguration.documentPreviewViewConfigurations[0]!![0].screen
-                is FrontDocumentPreviewFragment)
+                is IdFrontDocumentPreviewFragment)
 
         Assert.assertEquals(ConfigurationSide.BACK,
             viewConfiguration.documentPreviewViewConfigurations[0]!![1].previewSide)
         Assert.assertTrue(viewConfiguration.documentPreviewViewConfigurations[0]!![1].screen
-                is BackDocumentPreviewFragment)
+                is IdBackDocumentPreviewFragment)
 
         Assert.assertEquals(DocumentConfigurationSide.FRONT,
             viewConfiguration.documentViewConfigurations[0]!![0].documentSide)
@@ -170,7 +173,7 @@ class PaycassoViewConfigurationTests {
 
         val expectedDocumentViewConfiguration = DocumentViewConfiguration()
         expectedDocumentViewConfiguration.documentSide = DocumentConfigurationSide.FRONT
-        expectedDocumentViewConfiguration.screen = FrontDocumentPreviewFragment()
+        expectedDocumentViewConfiguration.screen = PassportDocumentPreviewFragment()
 
 
         val expectedDocumentPreviewConfigurationList = arrayListOf(
@@ -191,7 +194,7 @@ class PaycassoViewConfigurationTests {
         Assert.assertEquals(ConfigurationSide.FRONT,
             viewConfiguration.documentPreviewViewConfigurations[0]!![0].previewSide)
         Assert.assertTrue(viewConfiguration.documentPreviewViewConfigurations[0]!![0].screen
-                is FrontDocumentPreviewFragment)
+                is PassportDocumentPreviewFragment)
 
         // Assert documentViewConfigurations fields
         Assert.assertEquals(DocumentConfigurationSide.FRONT,

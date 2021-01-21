@@ -32,7 +32,7 @@
         <third-party-jump-off-button
           v-if="testProviderEnabled"
           id="btn_test_silver_messages"
-          provider-id="silver-third-party-api-test"
+          provider-id="silver_third_party_api_test"
           :provider-configuration="thirdPartyProvider['silver-third-party-api-test'].messages" />
         <menu-item v-if="appMessagingSjrEnabled"
                    id="btn_appMessaging"
