@@ -280,6 +280,8 @@ class MainActivity :
             }
             lifeCycleObserver?.onMoveToForeground()
         }
+
+        nhsWeb?.setWebViewFocus()
     }
 
     override fun onStop() {
@@ -476,6 +478,7 @@ class MainActivity :
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
+        nhsWeb?.setWebViewFocus()
 
         if (configurationResponse.callSuccessful) {
             nhsWeb?.reloadLoginUrl()

@@ -144,7 +144,8 @@ class NhsWeb(
 
     fun loadUrl(path: String) {
         Log.d(TAG, "Entering loadUrl")
-        webView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+
+        setWebViewFocus()
 
         val hasFidoLoginError = path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
                 uiInteractor.canDisplayBiometricLogin() &&
@@ -176,6 +177,10 @@ class NhsWeb(
             isUserLoggedIn = false
         }
         urlLoader.loadUrl(urlToLoad, requiresFullPageLoad)
+    }
+
+    fun setWebViewFocus() {
+        webView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
     }
 
     private fun shouldIgnorePersistedLink(path: String): Boolean {

@@ -270,7 +270,7 @@ class WebClientInterceptor(
         }
 
         if (urlString.contains(resources.getString(R.string.authRedirectPath))) {
-            view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+            view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
         }
 
         view?.isFocusable = true

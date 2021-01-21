@@ -849,7 +849,7 @@ class WebClientInterceptorTest {
                 setupAccessibilityTestAndReturnWebView("https://111.nhs.uk/auth-return")
 
         verify(webViewMock, times(1))
-                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
     }
 
     @Test

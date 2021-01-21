@@ -145,7 +145,7 @@ class NhsWebTest {
 
         verify(spyNhsWeb).loadUrl(baseURL)
         verify(webViewMock, times(1))
-                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
     }
 
     @Test

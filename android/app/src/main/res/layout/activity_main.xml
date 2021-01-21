@@ -73,12 +73,12 @@
         <include
             android:id="@+id/errorViewLayout"
             layout="@layout/error_layout"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <include
             android:id="@+id/successViewLayout"
             layout="@layout/success_layout"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </FrameLayout>
 
