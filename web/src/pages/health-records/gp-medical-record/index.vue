@@ -1,5 +1,16 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
+    <inset-text v-if="showTemplate && hasSummaryRecordAccess && !hasDetailedRecordAccess"
+                :compact="true">
+      <p>
+        {{ $t('myRecord.askYourGpForDcrAccess') }}
+        <a style="vertical-align: baseline; display: inline"
+           :href="helpAndSupportUrl"
+           target="_blank" rel="noopener noreferrer">
+          {{ $t('myRecord.findOutMoreAboutRequestingAccess') }}</a>
+      </p>
+    </inset-text>
+
     <div v-if="showPatientDetails"
          id="mainDiv"
          data-sid="user-info-details">
@@ -11,7 +22,7 @@
       </h2>
       <p class="nhsuk-label nhsuk-u-margin-top-0
                   nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-        {{ $t('myRecord.dateOfBirth') }}
+        {{ $t('myRecord.dateOfBirth') }}:
       </p>
       <p data-sid="user-date-of-birth"
          :class="[$style['user-info'],
@@ -21,7 +32,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('myRecord.nhsNumber') }}
+        {{ $t('myRecord.nhsNumber') }}:
       </p>
       <p data-sid="user-nhs-number"
          :class="[$style['user-info'],
@@ -30,7 +41,7 @@
       </p>
       <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-        {{ $t('myRecord.address') }}
+        {{ $t('myRecord.address') }}:
       </p>
       <p data-sid="user-address"
          :class="[$style['user-info'],
@@ -43,7 +54,7 @@
     <proxy-patient-details v-else-if="showTemplate && isProxying"
                            :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
 
-    <div v-if="showTemplate && hasRecordAccess()" :class="$style.summaryRecordContainer"
+    <div v-if="showTemplate && hasRecordAccess" :class="$style.summaryRecordContainer"
          data-purpose="medical-record-menu">
       <menu-item-list>
         <template v-if="hasSummaryRecordAccess">
@@ -66,11 +77,9 @@
           <dcr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
         </template>
       </menu-item-list>
-      <template v-if="!hasDetailedRecordAccess">
-        <p>
-          {{ $t('myRecord.thisIsASummaryToViewMoreContactSurgery') }}
-        </p>
-      </template>
+
+      <p v-if="!hasDetailedRecordAccess">{{ $t('myRecord.thisIsASummary') }}</p>
+
       <glossary/>
     </div>
     <div v-else class="pull-content">
@@ -97,6 +106,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import InsetText from '@/components/InsetText';
 import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
 import DcrTppGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrTPPGpRecord';
 import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
@@ -112,12 +122,14 @@ import agreedToMedicalWarning from '@/lib/sessionStorage';
 import Shutter from '@/components/linked-profiles/Shutter';
 import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
+import { HEALTH_RECORDS_HELP_AND_SUPPORT_URL } from '@/router/externalLinks';
 
 const PATIENTDETAILS = 'patientdetails';
 
 export default {
   components: {
     Glossary,
+    InsetText,
     DcrEmisGpRecord,
     DcrTppGpRecord,
     DcrVisionGpRecord,
@@ -135,6 +147,7 @@ export default {
     return {
       PATIENTDETAILS,
       isProxying: this.$store.getters['session/isProxying'],
+      helpAndSupportUrl: HEALTH_RECORDS_HELP_AND_SUPPORT_URL,
     };
   },
   computed: {
@@ -144,14 +157,17 @@ export default {
     hasDetailedRecordAccess() {
       return get('$store.state.myRecord.record.hasDetailedRecordAccess')(this);
     },
+    hasSummaryRecordAccess() {
+      return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
+    },
+    hasRecordAccess() {
+      return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
+    },
     hasAcceptedTerms() {
       return get('$store.state.myRecord.hasAcceptedTerms')(this);
     },
     hasLoaded() {
       return get('$store.state.myRecord.hasLoaded')(this);
-    },
-    hasSummaryRecordAccess() {
-      return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
     },
     showPatientDetails() {
       return (this.showTemplate &&
@@ -177,9 +193,6 @@ export default {
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
-    hasRecordAccess() {
-      return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
-    },
     shouldLoadRecord() {
       if (!this.hasAgreedToMedicalWarning) return false;
       if (!this.hasLoaded) return true;

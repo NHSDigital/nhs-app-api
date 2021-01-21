@@ -46,6 +46,29 @@ class MyRecordFactoryTpp: MyRecordFactory() {
         }
     }
 
+    override fun enabledWithNoDcrAccess(patient: Patient) {
+
+        mockingClient.forTpp.mock {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
+        }
+
+        mockingClient.forTpp.mock {
+            myRecord.patientRecordRequest(patient.tppUserSession!!)
+                    .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                            "Requested record access is disabled by the practice",
+                            "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+        }
+
+        val startDate = OffsetDateTime.now()
+        val endDate = startDate.minusDays(END_DATE)
+
+        mockingClient.forTpp.mock {
+            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
+                    .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+        }
+    }
+
     override fun enabledWithData(
             patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions) {
         throw UnsupportedOperationException()

@@ -86,6 +86,42 @@ class MyRecordFactoryEmis: MyRecordFactory() {
         }
     }
 
+    override fun enabledWithNoDcrAccess(patient: Patient) {
+        mockingClient.forEmis.mock {
+            myRecord.testResultsRequest(patient)
+                    .respondWithExceptionWhenNotEnabled()
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.immunisationsRequest(patient)
+                    .respondWithExceptionWhenNotEnabled()
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.medicationsRequest(patient)
+                    .respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.problemsRequest(patient)
+                    .respondWithExceptionWhenNotEnabled()
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.consultationsRequest(patient)
+                    .respondWithExceptionWhenNotEnabled()
+        }
+
+        mockingClient.forEmis.mock {
+            myRecord.documentsRequest(patient)
+                    .respondWithSuccess(DocumentsData.getNoDocumentData())
+        }
+    }
+
     override fun enabledWithData(
             patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions) {
         throw UnsupportedOperationException()

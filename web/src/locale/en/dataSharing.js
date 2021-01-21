@@ -71,8 +71,6 @@ export default {
   yourHealthRecordsContainConfidentialInformation: 'Your health records contain a type of data called confidential patient information. This data can be used to help with research and planning. You can choose to stop your confidential patient information being used for research and planning.',
   yourIndividualCare: 'Your individual care',
   yourInformationIsLookedAfter: 'Your confidential patient information is looked after in accordance with good practice and the law.',
-  youAreChoosingForHealthAndCareSystemNotNhspApp: [
-    'You\'re choosing if data from your health records is used across the health and care system in England.',
-    'You\'re not choosing if the NHS App uses your data.',
-  ],
+  youAreChoosingForHealthAndCareSystems: 'You\'re choosing if data from your health records is used across the health and care system in England.',
+  youAreNotChoosingForNhsApp: 'You\'re not choosing if the NHS App uses your data.',
 };

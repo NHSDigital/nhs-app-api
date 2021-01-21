@@ -5,7 +5,7 @@ import i18n from '@/plugins/i18n';
 import * as dependancy from '@/services/event-bus';
 import * as utilsDependancy from '@/lib/utils';
 import { DOCUMENT_DETAIL_NAME } from '@/router/names';
-import { mount, createRouter, createStore } from '../../../helpers';
+import { mount, createRouter, createStore } from '../../../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 

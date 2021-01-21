@@ -14,6 +14,7 @@ abstract class MyRecordFactory {
     abstract fun disabled(patient:Patient)
     abstract fun disabledForProxy(patient:Patient, actingOnBehalfOf: Patient)
     abstract fun enabledWithBlankRecord(patient: Patient)
+    abstract fun enabledWithNoDcrAccess(patient: Patient)
     abstract fun enabledWithData(
             patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions)
     abstract fun enabledWithAllRecords(patient: Patient)

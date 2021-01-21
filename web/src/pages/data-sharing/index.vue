@@ -13,7 +13,10 @@
         <p>{{ $t('dataSharing.yourHealthRecordsContainConfidentialInformation') }}</p>
         <p>{{ $t('dataSharing.yourChoiceWillOnlyApplyInEngland') }}</p>
 
-        <inset-text :paragraphs="$t('dataSharing.youAreChoosingForHealthAndCareSystemNotNhspApp')"/>
+        <inset-text>
+          <p>{{ $t('dataSharing.youAreChoosingForHealthAndCareSystems') }}</p>
+          <p>{{ $t('dataSharing.youAreNotChoosingForNhsApp') }}</p>
+        </inset-text>
 
         <h2>{{ $t('dataSharing.whatIsConfidentialInformation') }}</h2>
         <p>{{ $t('dataSharing.confidentialInformationIsWhenTwoTypes') }}</p>

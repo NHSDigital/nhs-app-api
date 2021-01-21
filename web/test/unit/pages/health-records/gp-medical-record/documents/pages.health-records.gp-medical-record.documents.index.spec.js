@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import DocumentsPage from '@/pages/health-records/gp-medical-record/documents/index';
 import i18n from '@/plugins/i18n';
-import { createStore, shallowMount } from '../../../helpers';
+import { createStore, shallowMount } from '../../../../helpers';
 
 let page;
 let $store;

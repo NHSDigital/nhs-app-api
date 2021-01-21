@@ -29,6 +29,22 @@ Feature: Combined Frontend - Medical Record v2
       | GP System |
       | TPP       |
 
+  Scenario Outline: A <GP System> user can see information on what to do when DCR access is disabled
+    Given I am a <GP System> user setup to use medical record version 2
+    And the GP Practice has disabled DCR access for the patient
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then the Medical Record Warning Page is displayed
+    When I click the 'Continue' button
+    Then I see the medical record v2 page with information on asking for DCR access
+    When I click the link called 'Find out more about requesting access.' with a url of 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/'
+    Then a new tab has been opened by the link
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
   Scenario Outline: A <GP System> user can view their med record with bad medicines and consultations data and OK test results data - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And The GP practice responds with bad medications data

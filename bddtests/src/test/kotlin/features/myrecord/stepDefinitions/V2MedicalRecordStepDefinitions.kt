@@ -29,11 +29,10 @@ open class V2MedicalRecordStepDefinitions {
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
     fun iAmAUserSetupToUseMedicalRecordV2(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        SerenityHelpers.setGpSupplier(supplier)
+        val patient = Patient.getDefault(supplier)
 
-        SerenityHelpers.setPatient(Patient.getDefault(supplier))
+        SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
-        val patient = SerenityHelpers.getPatient()
 
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
@@ -51,6 +50,12 @@ open class V2MedicalRecordStepDefinitions {
     fun thenISeeTheMedicalRecordV2Page(){
         medicalRecordV2Page.pageTitle.assertIsVisible()
         medicalRecordV2Page.clinicalAbbreviationsLink.assertIsVisible()
+    }
+
+    @Then("^I see the medical record v2 page with information on asking for DCR access$")
+    fun thenISeeTheMedicalRecordV2PageWithInfoOnAskingForDcrAccess(){
+        thenISeeTheMedicalRecordV2Page()
+        medicalRecordV2Page.assertInfoAskingForDcrAccessVisible()
     }
 
     @Then("^I see a message telling me to contact my GP for information on My Record - Medical Record v2$")

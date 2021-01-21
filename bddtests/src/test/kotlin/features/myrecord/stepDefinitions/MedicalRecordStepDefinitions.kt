@@ -114,12 +114,12 @@ open class MedicalRecordStepDefinitions {
 
     @Given("^the GP Practice has enabled all medical records for the patient$")
     fun givenTheGPPracticeHasEnabledAllMedicalRecordsForThePatient() {
-        val supplier = SerenityHelpers.getGpSupplier()
-        val patient = SerenityHelpers.getPatient()
+        setupMedicalRecordAccessForPatient(dcrAccessEnabled = true)
+    }
 
-        CitizenIdSessionCreateJourney().createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-        MyRecordFactory.getForSupplier(supplier).enabledWithAllRecords(patient)
+    @Given("^the GP Practice has disabled DCR access for the patient$")
+    fun givenTheGPPracticeHasDisabledDcrAccessForThePatient() {
+        setupMedicalRecordAccessForPatient(dcrAccessEnabled = false)
     }
 
     @When("^I enter url address for my record directly into the url$")
@@ -159,6 +159,17 @@ open class MedicalRecordStepDefinitions {
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.YOUR_HEALTH))
             Assert.assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MESSAGES))
+        }
+    }
+
+    private fun setupMedicalRecordAccessForPatient(dcrAccessEnabled: Boolean) {
+        val supplier = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+
+        if (dcrAccessEnabled) {
+            MyRecordFactory.getForSupplier(supplier).enabledWithAllRecords(patient)
+        } else {
+            MyRecordFactory.getForSupplier(supplier).enabledWithNoDcrAccess(patient)
         }
     }
 }

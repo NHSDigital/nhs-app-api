@@ -32,7 +32,10 @@
 
         <p>{{ $t('dataSharing.choiceWillNotImpactYourCare') }}</p>
 
-        <inset-text :paragraphs="$t('dataSharing.youAreChoosingForHealthAndCareSystemNotNhspApp')"/>
+        <inset-text>
+          <p>{{ $t('dataSharing.youAreChoosingForHealthAndCareSystems') }}</p>
+          <p>{{ $t('dataSharing.youAreNotChoosingForNhsApp') }}</p>
+        </inset-text>
 
         <form id="ndop-token-form"
               ref="ndopTokenForm"

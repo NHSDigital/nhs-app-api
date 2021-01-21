@@ -5,7 +5,7 @@ import { initialState } from '@/store/modules/myRecord/mutation-types';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import NativeCallbacks from '@/services/native-app';
 import Glossary from '@/components/Glossary';
-import { createStore, shallowMount } from '../../../helpers';
+import { createStore, shallowMount } from '../../../../helpers';
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/services/native-app');

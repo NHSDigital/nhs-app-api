@@ -1,9 +1,10 @@
 <template>
-  <div class="nhsuk-inset-text">
+  <div :class="{
+    'nhsuk-inset-text': true,
+    'nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1': compact,
+  }" data-purpose="inset-text">
     <span class="nhsuk-u-visually-hidden">{{ $t('components.insetText.heading') }}</span>
-    <p v-for="paragraph of paragraphs" :key="paragraph">
-      {{ paragraph }}
-    </p>
+    <slot/>
   </div>
 </template>
 
@@ -12,9 +13,10 @@
 export default {
   name: 'InsetText',
   props: {
-    paragraphs: {
-      type: Array,
-      required: true,
+    compact: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 };

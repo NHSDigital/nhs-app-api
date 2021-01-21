@@ -53,6 +53,35 @@ class MyRecordFactoryVision: MyRecordFactory() {
         { request -> request.respondWithSuccess(ExaminationsData.getVisionExaminationsDataWithNoExaminationsData()) }
     }
 
+    override fun enabledWithNoDcrAccess(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView,
+                VisionConstants.htmlResponseFormat)
+        { request -> request.respondWithSuccess(AllergiesData.getVisionAllergiesData(0))}
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView,
+                VisionConstants.xmlResponseFormat)
+        { request -> request.respondWithAccessDeniedError() }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.proceduresView,
+                VisionConstants.htmlResponseFormat)
+        { request -> request.respondWithAccessDeniedError() }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.medicationsView)
+        { request -> request.respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())}
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView)
+        { request -> request.respondWithAccessDeniedError() }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
+        { request -> request.respondWithAccessDeniedError() }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.diagnosisView)
+        { request -> request.respondWithAccessDeniedError() }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.examinationsView)
+        { request -> request.respondWithAccessDeniedError() }
+    }
+
     override fun enabledWithAllRecords(patient: Patient){
         mocker.generatePatientDataResponse(patient, VisionConstants.allergiesView,
                 VisionConstants.htmlResponseFormat)

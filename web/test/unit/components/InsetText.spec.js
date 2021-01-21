@@ -1,34 +1,34 @@
+import each from 'jest-each';
 import InsetText from '@/components/InsetText';
-import { createStore, mount } from '../helpers';
+import { mount } from '../helpers';
 
-const paragraphs = ['para1', 'para2'];
-
-const createInsetTextComponent = $store => mount(InsetText, {
-  $store,
+const createInsetTextComponent = (compact = false) => mount(InsetText, {
   propsData: {
-    paragraphs,
+    compact,
+  },
+  slots: {
+    default: '<a id="slotLink"></a>',
   },
 });
 
 describe('InsetText', () => {
-  let wrapper;
-  let $store;
-
-  beforeEach(() => {
-    $store = createStore({
-    });
-
-    wrapper = createInsetTextComponent($store);
-  });
-
   it('includes the hidden span', () => {
+    const wrapper = createInsetTextComponent();
+
     expect(wrapper.find('.nhsuk-u-visually-hidden').exists()).toBe(true);
   });
 
-  it('includes all paragraphs', () => {
-    const paras = wrapper.findAll('p');
+  it('has a default slot for content', () => {
+    const wrapper = createInsetTextComponent();
 
-    expect(wrapper.find('p').exists()).toBe(true);
-    paragraphs.forEach((paragraph, index) => expect(paras.at(index).text()).toBe(paragraph));
+    expect(wrapper.find('a[id=slotLink]').exists()).toBe(true);
+  });
+
+  each([true, false]).it('will have top and bottom margin when compact', (compact) => {
+    const classes = createInsetTextComponent(compact)
+      .find('[data-purpose=inset-text]').classes() || [];
+
+    expect(classes.includes('nhsuk-u-margin-top-1')).toBe(compact);
+    expect(classes.includes('nhsuk-u-margin-bottom-1')).toBe(compact);
   });
 });

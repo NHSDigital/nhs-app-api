@@ -56,6 +56,10 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
                 }
     }
 
+    override fun enabledWithNoDcrAccess(patient: Patient) {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
         throw NotImplementedError("Not implemented for this GP system")
     }

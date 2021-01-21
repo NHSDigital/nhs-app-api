@@ -36,3 +36,4 @@ export const CLINICAL_ABBREVIATIONS_URL = 'https://www.nhs.uk/using-the-nhs/nhs-
 export const ONLINE_CONSULTATIONS_PRIVACY_URL = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/';
 export const NOMINATED_PHARMACY_DSP_URL = 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies';
 export const LINKED_PROFILES_FIND_OUT_MORE_URL = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/proxy/';
+export const HEALTH_RECORDS_HELP_AND_SUPPORT_URL = 'https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/health-records/';
