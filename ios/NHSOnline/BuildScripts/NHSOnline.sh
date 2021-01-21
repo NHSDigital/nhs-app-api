@@ -1,7 +1,7 @@
 INFO_PLIST="${SRCROOT}/${INFOPLIST_FILE}"
 PLISTBUDDY="/usr/libexec/PlistBuddy"
 
-if  [ "${CONFIGURATION}" = "Development" ] || [ "${CONFIGURATION}" = "Debug" ] || [ "${CONFIGURATION}" = "BrowserstackLocal" ]; then
+if  [ "${CONFIGURATION}" = "Development" ] || [ "${CONFIGURATION}" = "Debug" ] || [ "${CONFIGURATION}" = "BrowserStack" ]|| [ "${CONFIGURATION}" = "BrowserstackLocal" ]; then
     $PLISTBUDDY -c "Set :NSAppTransportSecurity:NSAllowsArbitraryLoads true" "${INFO_PLIST}"
 else
     $PLISTBUDDY -c "Set :NSAppTransportSecurity:NSAllowsArbitraryLoads false" "${INFO_PLIST}"
