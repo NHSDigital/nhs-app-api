@@ -25,25 +25,12 @@
   color: $black;
 }
 
-@mixin actionLinkHighlightStyle {
-  outline: 4px solid transparent;
-  box-shadow: 0 0 0 4px $focus_highlight;
-  outline-offset: -6px;
-  color: $black;
-}
-
-@mixin checkboxOutlineStyle {
-  outline: 4px solid transparent;
-  box-shadow: 0 0 0 4px $focus_highlight;
-}
-
 @mixin linkHoverStyle {
   background: $hover_highlight;
   box-shadow: 0 0 0 4px $hover_highlight;
   color: $black;
   width: auto;
 }
-
 
 @mixin linkFocusStyle {
   background: $focus_highlight;

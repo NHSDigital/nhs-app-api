@@ -183,5 +183,11 @@ export default {
 <style module lang="scss" scoped>
 @import "../../../style/forms";
 @import "../../../style/info";
-@import "../../../style/desktopWeb/inputcontrol";
+
+.errorBorder{
+  outline-color: red;
+  box-shadow: 0 0 0 3px red;
+  border-radius: 0.313em;
+  outline-width: thick;
+}
 </style>
