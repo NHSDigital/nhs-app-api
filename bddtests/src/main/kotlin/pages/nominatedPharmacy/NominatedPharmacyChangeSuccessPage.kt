@@ -10,7 +10,7 @@ open class NominatedPharmacyChangeSuccessPage : PharmacyDetailComponent() {
     private lateinit var headerNative: HeaderNative
 
     val prescriptionsLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(), 'Go to your prescription orders')]",
+            webDesktopLocator = "//a[contains(text(), 'Go to your prescriptions')]",
             page = this
     )
 

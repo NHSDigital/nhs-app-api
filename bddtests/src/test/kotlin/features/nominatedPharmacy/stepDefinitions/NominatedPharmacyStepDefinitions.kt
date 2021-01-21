@@ -171,7 +171,7 @@ class NominatedPharmacyStepDefinitions {
         }
     }
 
-    @When("^I click on the go to your prescriptions orders link$")
+    @When("^I click on the go to your prescriptions link$")
     fun iClickOnGoToYourRepeatPrescriptionsLink() {
         nominatedPharmacyChangeSuccessPage.prescriptionsLink.click()
     }
@@ -183,13 +183,13 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see my nominated pharmacy on the prescriptions hub page$")
     fun iSeeMyNominatedPharmacyOnThePrescriptionsPage() {
-        val updatedPharmacy = NominatedPharmacySerenityHelpers
-                .MY_NOMINATED_PHARMACY
-                .getOrFail<NhsAzureSearchOrganisationItem>()
+        ensureNominatedPharmacyIsCorrect()
+    }
 
-        Assert.assertEquals(
-                "Nominated pharmacy name is not correct",
-                updatedPharmacy.OrganisationName, prescriptionsHubPage.pharmacyName.text)
+    @Then("^I see my updated nominated pharmacy on the prescriptions hub page$")
+    fun iSeeMyUpdatedNominatedPharmacyOnThePrescriptionsPage() {
+        prescriptionsHubPage.nominatedPharmacyLink.assertIsVisible("Nominated pharmacy panel is visible")
+        ensureNominatedPharmacyIsCorrect()
     }
 
     @Then("^I see the help text for no set nominated pharmacy$")
@@ -198,17 +198,6 @@ class NominatedPharmacyStepDefinitions {
                 "Help text for no set pharmacy is missing",
                 "You do not have a nominated pharmacy.",
                 viewOrdersPrescriptionsPage.noSetNominatedPharmacyHelpText.text)
-    }
-
-    @Then("^I see my nominated pharmacy on the view orders page$")
-    fun iSeeMyNominatedPharmacyOnTheViewOrdersPage() {
-        val updatedPharmacy = NominatedPharmacySerenityHelpers
-                .MY_NOMINATED_PHARMACY
-                .getOrFail<NhsAzureSearchOrganisationItem>()
-
-        Assert.assertEquals(
-                "Nominated pharmacy name is not correct",
-                updatedPharmacy.OrganisationName, viewOrdersPrescriptionsPage.getNominatedPharmacyName())
     }
 
     @Then("^I see that I haven't nominated a pharmacy on the prescriptions page$")
@@ -302,5 +291,13 @@ class NominatedPharmacyStepDefinitions {
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
+    }
+
+    private fun ensureNominatedPharmacyIsCorrect() {
+        val nominatedPharmacy= NominatedPharmacySerenityHelpers
+                .MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
+
+        Assert.assertEquals("Nominated pharmacy name is not correct",
+                nominatedPharmacy.OrganisationName, prescriptionsHubPage.pharmacyName.text)
     }
 }

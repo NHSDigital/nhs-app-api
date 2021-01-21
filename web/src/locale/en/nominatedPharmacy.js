@@ -4,7 +4,7 @@ export default {
     header: 'Your nominated pharmacy is: ',
     highStreetPrescription: 'Your prescriptions will be sent to {pharmacyName} from now on.',
     highStreetPrescriptionCollectionMessage: 'Collect your prescriptions from {pharmacyName} when they are ready to collect.',
-    linkLabel: 'Go to your prescription orders',
+    linkLabel: 'Go to your prescriptions',
     postalWarning: 'Your prescriptions will be sent to {pharmacyName}. Once they’ve checked and prepared your prescriptions, {pharmacyNameRepeated} will send them to you in the post.',
     registrationWarning: 'You may need to register with {pharmacyName} separately at ',
     registrationWarningWithNoUrl: 'You may need to register with {pharmacyName} separately.',

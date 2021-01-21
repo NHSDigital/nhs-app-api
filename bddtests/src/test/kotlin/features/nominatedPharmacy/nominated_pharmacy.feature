@@ -29,10 +29,9 @@ Feature: nominated pharmacy journey
     And I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
-    When I click on the go to your prescriptions orders link
-    Then I see view orders prescriptions page loaded
-    And I see my nominated pharmacy on the view orders page
-
+    When I click on the go to your prescriptions link
+    Then the Prescriptions Hub page is displayed
+    And I see my updated nominated pharmacy on the prescriptions hub page
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | se1       | SW11XR  |
@@ -61,10 +60,9 @@ Feature: nominated pharmacy journey
     And I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
-    When I click on the go to your prescriptions orders link
-    Then I see view orders prescriptions page loaded
-    And I see my nominated pharmacy on the view orders page
-
+    When I click on the go to your prescriptions link
+    Then the Prescriptions Hub page is displayed
+    And I see my updated nominated pharmacy on the prescriptions hub page
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | se1       | SW11XR  |
@@ -205,10 +203,9 @@ Feature: nominated pharmacy journey
     Then I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
-    When I click on the go to your prescriptions orders link
-    Then I see view orders prescriptions page loaded
-    And I see my nominated pharmacy on the view orders page
-
+    When I click on the go to your prescriptions link
+    Then the Prescriptions Hub page is displayed
+    And I see my updated nominated pharmacy on the prescriptions hub page
     Examples:
       | GP System | search text |
       | EMIS      | se1       |

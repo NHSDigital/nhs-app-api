@@ -40,7 +40,7 @@
       <div class="nhsuk-grid-column-full">
         <desktopGenericBackLink
           id="to-prescriptions-link"
-          :path="prescriptionsOrdersPath"
+          :path="prescriptionsHubPath"
           :button-text="'nominatedPharmacy.changeSuccess.linkLabel'"
           @clickAndPrevent="prescriptionsLinkClicked"/>
       </div>
@@ -52,7 +52,7 @@
 /* eslint-disable global-require */
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { PRESCRIPTIONS_VIEW_ORDERS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
+import { PRESCRIPTIONS_PATH, NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH } from '@/router/paths';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import { redirectTo, hrefForURL, displayedURL } from '@/lib/utils';
@@ -71,7 +71,7 @@ export default {
     return {
       pharmacy: null,
       currentPage: NOMINATED_PHARMACY_CHANGE_SUCCESS_PATH,
-      prescriptionsOrdersPath: PRESCRIPTIONS_VIEW_ORDERS_PATH,
+      prescriptionsHubPath: PRESCRIPTIONS_PATH,
       isHighStreetSelected:
         this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY,
       isOnlineOnlySelected:
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     prescriptionsLinkClicked() {
-      redirectTo(this, this.prescriptionsOrdersPath);
+      redirectTo(this, this.prescriptionsHubPath);
     },
   },
 };

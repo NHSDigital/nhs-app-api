@@ -326,11 +326,6 @@ open class PrescriptionsStepDefinitions {
                         providerHasAllPrescriptionFields())
     }
 
-    @Then("^I see view orders prescriptions page loaded$")
-    fun iSeeViewOrdersPrescriptionsPageLoaded() {
-        viewOrders.isLoaded()
-    }
-
     @Then("^I see no prescriptions$")
     fun iSeeNoPrescriptions() {
         assertTrue(viewOrders.isNoPrescriptionsMessageVisible())
