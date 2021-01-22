@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using FluentAssertions;
 using Hl7.Fhir.Model;
@@ -30,12 +31,38 @@ namespace Nhs.App.Api.Integration.Tests
             OdsCode
         }
 
-        private static readonly List<string> EndpointPaths = new List<string>
+        public class EndpointInfo
         {
-            "communication/in-app/FHIR/R4/CommunicationRequest",
-            "communication/notification/FHIR/R4/CommunicationRequest",
-            "communication/in-app-with-notification/FHIR/R4/CommunicationRequest"
-        };
+            public string Path { get; set; }
+            public string DisplayName { get; set; }
+        }
+
+        private static IEnumerable<object[]> Endpoints
+        {
+            get
+            {
+                yield return new object[]{ new EndpointInfo
+                {
+                    Path = "communication/in-app/FHIR/R4/CommunicationRequest",
+                    DisplayName = "In-App"
+                }};
+
+                yield return new object[]{ new EndpointInfo
+                {
+                    Path = "communication/notification/FHIR/R4/CommunicationRequest",
+                    DisplayName = "Notification"
+                }};
+
+                yield return new object[]{ new EndpointInfo
+                {
+                    Path = "communication/in-app-with-notification/FHIR/R4/CommunicationRequest",
+                    DisplayName = "In-App With Notification"
+                }};
+            }
+        }
+
+        public static string EndpointInfoDisplayName(MethodInfo methodInfo, object[] data) =>
+            $"{methodInfo.Name}({((EndpointInfo)data[0]).DisplayName})";
 
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
@@ -51,72 +78,63 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode()
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
-            foreach (var endpointPath in EndpointPaths)
-            {
-                // Arrange
-                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
+            // Arrange
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
 
-                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
-            }
+            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode()
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task
+            CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
-            foreach (var endpointPath in EndpointPaths)
-            {
-                // Arrange
-                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
+            // Arrange
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
 
-                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
-            }
+            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode()
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
-            foreach (var endpointPath in EndpointPaths)
-            {
-                // Arrange
-                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
+            // Arrange
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
 
-                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
-            }
+            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode()
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
-            foreach (var endpointPath in EndpointPaths)
-            {
-                // Arrange
-                var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
+            // Arrange
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
 
-                await CommunicationFhirR4Post_ValidTest(validPayload, endpointPath);
-            }
+            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
-        public async Task CommunicationFhirR4Post_InvalidApiKey_Returns401Unauthorized()
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationFhirR4Post_InvalidApiKey_Returns401Unauthorized(EndpointInfo endpoint)
         {
-            foreach (var endpointPath in EndpointPaths)
-            {
-                // Arrange
-                using var httpClient = CreateHttpClient();
-                httpClient.DefaultRequestHeaders.Remove("x-api-key");
-                httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
+            // Arrange
+            using var httpClient = CreateHttpClient();
+            httpClient.DefaultRequestHeaders.Remove("x-api-key");
+            httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
 
-                var stringPayload = BuildValidRequestBody();
-                var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+            var stringPayload = BuildValidRequestBody();
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
-                // Act
-                var response = await httpClient.PostAsync(endpointPath, httpContent);
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
 
-                // Assert
-                response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            }
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
         private static async Task CommunicationFhirR4Post_ValidTest(string validPayload, string endpointPath)
