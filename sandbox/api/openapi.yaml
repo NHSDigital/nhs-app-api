@@ -136,6 +136,6 @@ x-nhsd-api-platform:
     short_service_name: nhsa
     service_base_path: nhs-app
     product_display_name: NHS App
-    product_description: This is the NHS App service, where patents access their medical
+    product_description: This is the NHS App service, where patients access their medical
       records and GP services
     pipeline_name_prefix: NHS-App
