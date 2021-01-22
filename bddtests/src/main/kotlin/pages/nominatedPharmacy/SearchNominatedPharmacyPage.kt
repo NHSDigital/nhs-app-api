@@ -27,7 +27,7 @@ open class SearchNominatedPharmacyPage : HybridPageObject() {
     }
 
     fun isInvalidPostcodeErrorVisible(): Boolean {
-        val message = "Enter a valid English postcode"
+        val message = "Enter a valid full postcode in England"
         return findByXpath("//li[contains(.,'$message')]").isVisible
     }
 
@@ -38,7 +38,7 @@ open class SearchNominatedPharmacyPage : HybridPageObject() {
 
     fun isNoResultsFoundMessageVisible(postCode: String) : Boolean {
         val message = "We could not find any results for \"" +
-                postCode + "\". Make sure you enter a valid English postcode."
+                postCode + "\". Make sure you enter a valid full postcode in England."
         return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 

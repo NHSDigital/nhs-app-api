@@ -117,7 +117,7 @@ describe('search pharmacies', () => {
       expect(page.vm.showInvalidSearchError).toBe(false);
       expect(page.find('#empty-search-error').exists()).toBe(false);
       expect($http.getV1PatientPharmacies).toHaveBeenCalled();
-      expect(page.vm.foundNoResultsMessage).toBe(`We could not find any results for "${page.vm.searchQuery}". Make sure you enter a valid English postcode.`);
+      expect(page.vm.foundNoResultsMessage).toBe(`We could not find any results for "${page.vm.searchQuery}". Make sure you enter a valid full postcode in England.`);
     });
   });
 

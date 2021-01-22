@@ -61,11 +61,11 @@ export default {
   },
   openingTimes: 'Opening times',
   search: {
-    emptySearchError: 'Enter a valid English postcode',
+    emptySearchError: 'Enter a valid full postcode in England',
     errorMessageHeader: 'There\'s a problem',
     searchButton: 'Search',
-    searchInputHint: 'For example, LS1',
-    searchInputLabel: 'Enter a postcode',
+    searchInputHint: 'For example, LS1 1AB',
+    searchInputLabel: 'Enter a full postcode in England',
   },
   searchResults: {
     backButton: 'Search again',
@@ -74,7 +74,7 @@ export default {
       noResultsFound: {
         header: 'No results found for "{searchQuery}"',
         title: 'No results found for "{searchQuery}"',
-        foundNoResults: 'We could not find any results for "{searchQuery}". Make sure you enter a valid English postcode.',
+        foundNoResults: 'We could not find any results for "{searchQuery}". Make sure you enter a valid full postcode in England.',
       },
     },
     highStreet: {
