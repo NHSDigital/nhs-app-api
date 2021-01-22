@@ -351,7 +351,7 @@ cid:
   cpuRequest: "100m"
   cpuLimit: "200m"
   targetCPUUtilizationPercentage: 80
-  mongoDatabaseAuditCollection: audit_info
+  mongoDatabaseAuditCollection: audit
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
