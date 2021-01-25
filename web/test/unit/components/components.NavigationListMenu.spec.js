@@ -82,6 +82,9 @@ describe('Navigation Links ', () => {
     it('will show GP Health record link', () => {
       expect(wrapper.find('#menu-item-myRecord').exists()).toBe(true);
     });
+    it('will show linked profiles link', () => {
+      expect(wrapper.find('#linked-profiles-link').exists()).toBe(true);
+    });
   });
 
   describe('P5 User', () => {
@@ -93,6 +96,9 @@ describe('Navigation Links ', () => {
     });
     it('will not show GP Health record link', () => {
       expect(wrapper.find('#menu-item-myRecord').exists()).toBe(false);
+    });
+    it('will not show linked profiles link', () => {
+      expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
     });
   });
 });

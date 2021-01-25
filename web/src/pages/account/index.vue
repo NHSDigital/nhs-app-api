@@ -1,7 +1,7 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
     <menu-item-list data-purpose="settings-menu">
-      <menu-item v-if="supportsLinkedProfiles"
+      <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
                  id="linked-profiles-link"
                  header-tag="h2"
                  :href="linkedProfilesPath"

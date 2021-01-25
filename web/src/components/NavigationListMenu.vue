@@ -15,7 +15,7 @@
                  :text="messagesLabel"
                  :aria-label="messagesLabel"
                  :click-func="navigateToMessages"/>
-      <menu-item v-if="supportsLinkedProfiles"
+      <menu-item v-if="supportsLinkedProfiles && isProofLevel9"
                  id="linked-profiles-link"
                  :header-tag="headerTag"
                  :href="linkedProfilesPath"

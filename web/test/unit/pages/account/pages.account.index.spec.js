@@ -36,10 +36,11 @@ describe('Account Page', () => {
 
   const buildStoreGetters = ({
     notificationsEnabled = false,
+    isProofLevel9 = true,
   } = {}) => ({
     'serviceJourneyRules/notificationsEnabled': notificationsEnabled,
     'appVersion/isNativeVersionAfter': jest.fn().mockReturnValue(true),
-    'session/isProofLevel9': true,
+    'session/isProofLevel9': isProofLevel9,
     'serviceJourneyRules/silverIntegrationEnabled': jest.fn().mockReturnValue(false),
   });
 
@@ -60,11 +61,13 @@ describe('Account Page', () => {
     notificationsEnabled = false,
     isNativeApp = false,
     supportsLinkedProfiles = false,
+    isProofLevel9 = true,
   }) => {
     const $store = createStore({ state: $state });
 
     $store.getters = buildStoreGetters({
       notificationsEnabled,
+      isProofLevel9,
     });
 
     $state.device.isNativeApp = isNativeApp;
@@ -115,11 +118,13 @@ describe('Account Page', () => {
 
   describe('linked profiles link', () => {
     each([
-      ['shown', 'supports linked profiles', true, true],
-      ['hidden', 'does not support linked profiles', false, false],
+      ['shown', 'displays linked profiles if P9 and linked profiles are supported', true, true, true],
+      ['hidden', 'does not display linked profiles if P9 and linked profiles are not supported', false, true, false],
+      ['hidden', 'does not display linked profiles if P5', true, false, false],
+      ['hidden', 'does not display linked profiles if P5 and linked profiles are not supported', false, false, false],
     ])
-      .it('will be %s when the gp %s', (_, __, supportsLinkedProfiles, isVisible) => {
-        wrapper = mountPage({ supportsLinkedProfiles });
+      .it('will be %s and %s', (_, __, supportsLinkedProfiles, isProofLevel9, isVisible) => {
+        wrapper = mountPage({ supportsLinkedProfiles, isProofLevel9 });
         expect(wrapper.find('#linked-profiles-link').exists()).toBe(isVisible);
       });
   });

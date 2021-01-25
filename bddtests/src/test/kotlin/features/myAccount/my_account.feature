@@ -104,3 +104,11 @@ Feature: View My Account Page
       | Face ID       |
       | Touch ID      |
       | Fingerprint   |
+
+    Scenario: A patient with proof level 5 navigates to Settings page
+      Given I am a patient with proof level 5
+      And I am logged in
+      And I click the settings icon
+      Then the Account page is displayed
+      And the Linked Profiles link is not displayed
+

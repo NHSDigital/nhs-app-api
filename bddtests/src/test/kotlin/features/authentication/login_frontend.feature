@@ -69,6 +69,7 @@ Feature: Login frontend
     Then I am asked to prove my identity
     And I can't see the Order a repeat prescription link on the homepage
     And I can't see the View your GP medical record link on the homepage
+    And I can't see the Linked profiles link on the homepage
 
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient
