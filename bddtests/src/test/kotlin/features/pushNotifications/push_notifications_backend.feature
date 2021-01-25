@@ -2,6 +2,7 @@
 @backend
 Feature: Push Notifications Backend
 
+  @smoketest
   Scenario: An api user can register their device for push notifications
     Given I am an api user wishing to register their device for push notifications
     And I have logged in and have a valid session cookie
@@ -64,7 +65,7 @@ Feature: Push Notifications Backend
     When I get the registration for push notifications without a pns token
     Then I receive a "Bad Request" error
 
-  @smoketest
+  @tech-debt @NHSO-3417
   Scenario: An api user getting their notifications registration where azure record has been removed will receive a 404
     # This scenario handles multiple users registering on the same device.
     # User 1 registers, and a record is made in azure and cosmos
