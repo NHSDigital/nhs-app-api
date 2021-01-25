@@ -8,23 +8,22 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
-    internal sealed class MongoSessionCacheAccessor
+    internal sealed class MongoSessionCacheAccessor: IMongoSessionCache
     {
         private readonly ILogger _logger;
         private readonly IMongoClient _mongoClient;
         private readonly string _databaseName;
         private readonly string _collectionName;
 
-        internal MongoSessionCacheAccessor(
-            ILogger logger,
+        public MongoSessionCacheAccessor(
+            ILogger<MongoSessionCacheAccessor> logger,
             IMongoClient mongoClient,
-            string databaseName,
-            string collectionName)
+            IMongoSessionCacheServiceConfig config)
         {
             _logger = logger;
             _mongoClient = mongoClient;
-            _databaseName = databaseName;
-            _collectionName = collectionName;
+            _databaseName = config.DatabaseName;
+            _collectionName = config.CollectionName;
         }
 
         public async Task Create(string sessionId, string encodedUserSession)

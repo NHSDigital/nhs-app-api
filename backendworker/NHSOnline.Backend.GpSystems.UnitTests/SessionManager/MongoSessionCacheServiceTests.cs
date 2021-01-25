@@ -285,7 +285,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         {
             var serialiserService = new UserSessionSerialiserService();
             var encryptionService = new UserSessionEncryptionService(serialiserService, _mockCipherService.Object);
-            var mongoSessionCache = new DualMongoSessionCache(new Mock<ILogger<DualMongoSessionCache>>().Object, _mockMongoClient.Object, _mockConfig.Object);
+            var mongoSessionCache = new MongoSessionCacheAccessor(new Mock<ILogger<MongoSessionCacheAccessor>>().Object, _mockMongoClient.Object, _mockConfig.Object);
             return new MongoSessionCacheService(_mockLogger.Object, encryptionService, mongoSessionCache);
         }
 
