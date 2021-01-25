@@ -294,6 +294,23 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         }
 
         [TestMethod]
+        public async Task AppointmentBook_LogsAppointmentBookData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new AppointmentData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.AppointmentBook(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
+        [TestMethod]
         public async Task UpliftStarted_LogsUpliftStartedData()
         {
             // Arrange
@@ -324,6 +341,9 @@ namespace NHSOnline.Backend.Metrics.UnitTests
         {
             get
             {
+                var appointmentData = new AppointmentData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.AppointmentBook(appointmentData)), "AppointmentBook" };
+
                 var loginData = new LoginData("requestId", "sessionId", "userAgent", "");
                 yield return new object[] { Method(metricLogger => metricLogger.Login(loginData)), "Login" };
 
@@ -347,17 +367,18 @@ namespace NHSOnline.Backend.Metrics.UnitTests
                 yield return new object[] { Method(metricLogger => metricLogger.NominatedPharmacyCreate(nominatedPharmacyData)), "NominatedPharmacyCreate" };
                 yield return new object[] { Method(metricLogger => metricLogger.NominatedPharmacyUpdate(nominatedPharmacyData)), "NominatedPharmacyUpdate" };
 
+                var organDonationData = new OrganDonationData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationGetRegistration(organDonationData)), "OrganDonationGetRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationCreateRegistration(organDonationData)), "OrganDonationCreateRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationUpdateRegistration(organDonationData)), "OrganDonationUpdateRegistration" };
+                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationWithdrawRegistration(organDonationData)), "OrganDonationWithdrawRegistration" };
+
                 var repeatPrescriptionData = new RepeatPrescriptionData("sessionId");
                 yield return new object[] { Method(metricLogger => metricLogger.RepeatPrescriptionOrder(repeatPrescriptionData)), "RepeatPrescriptionOrder" };
 
                 var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
                 yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };
 
-                var organDonationData = new OrganDonationData("sessionId");
-                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationGetRegistration(organDonationData)), "OrganDonationGetRegistration" };
-                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationCreateRegistration(organDonationData)), "OrganDonationCreateRegistration" };
-                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationUpdateRegistration(organDonationData)), "OrganDonationUpdateRegistration" };
-                yield return new object[] { Method(metricLogger => metricLogger.OrganDonationWithdrawRegistration(organDonationData)), "OrganDonationWithdrawRegistration" };
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }

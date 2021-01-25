@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.Metrics
 
         public MetricLogger(IMetricContext metricContext) => _metricContext = metricContext;
 
+        public Task AppointmentBook(AppointmentData data) => WriteMetricLog(data);
+
         public Task Login(LoginData data) => WriteMetricLog(data);
 
         public Task UpliftStarted(UpliftStartedData data) => WriteMetricLog(data);

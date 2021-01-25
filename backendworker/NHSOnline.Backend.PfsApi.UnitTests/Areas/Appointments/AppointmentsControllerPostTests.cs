@@ -102,14 +102,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
                 new Mock<IAppointmentTypeTransformingVisitor>().Object,
-                _mockMetricLogger.Object);
+                _mockMetricLogger.Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]
         public async Task Post_AppointmentsServiceBookReturnsSuccess_ReturnsCreated()
         {
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>();
@@ -125,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Callback<AppointmentMetricData>((data)=> appointmentMetricData = data);
 
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<CreatedResult>();
@@ -153,7 +154,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession, _userSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -205,7 +206,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+            var result = await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession, _userSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -225,7 +226,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession);
+            await _systemUnderTest.Post(_appointmentBookRequest, _patientId, _gpSession, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();

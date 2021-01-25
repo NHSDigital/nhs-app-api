@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -10,16 +13,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AppointmentsController> _logger;
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
         private readonly string _slotId;
         private readonly DateTimeOffset? _slotStartTime;
         private const string AuditType = AuditingOperations.BookAppointmentAuditTypeResponse;
 
-        public AppointmentBookAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string slotId, DateTimeOffset? slotStartTime)
+        public AppointmentBookAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string slotId, DateTimeOffset? slotStartTime, IMetricLogger metricLogger,
+            P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
             _slotId = slotId;
             _slotStartTime = slotStartTime;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
 
         public async Task Visit(AppointmentBookResult.Success result)
@@ -28,6 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 await _auditor.Audit(AuditType, "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                     _slotId, _slotStartTime);
+                await _metricLogger.AppointmentBook(new AppointmentData(_userSession.Key));
             }
             catch (Exception e)
             {

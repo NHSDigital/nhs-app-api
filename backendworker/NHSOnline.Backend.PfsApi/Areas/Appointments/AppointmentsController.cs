@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IAppointmentTypeTransformingVisitor _appointmentTypeTransformingVisitor;
-        private readonly IAnonymousMetricLogger _metricLogger;
+        private readonly IAnonymousMetricLogger _anonymousMetricLogger;
+        private readonly IMetricLogger _metricLogger;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
@@ -36,7 +37,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
             IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor,
-            IAnonymousMetricLogger metricLogger)
+            IAnonymousMetricLogger anonymousMetricLogger,
+            IMetricLogger metricLogger)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
@@ -44,6 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _sessionCacheService = sessionCacheService;
             _errorReferenceGenerator = errorReferenceGenerator;
             _appointmentTypeTransformingVisitor = appointmentTypeTransformingVisitor;
+            _anonymousMetricLogger = anonymousMetricLogger;
             _metricLogger = metricLogger;
         }
 
@@ -67,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId));
 
                 return await result.Accept(
-                    new AppointmentCancelResultVisitor(request, _errorReferenceGenerator, gpUserSession.Supplier, _metricLogger));
+                    new AppointmentCancelResultVisitor(request, _errorReferenceGenerator, gpUserSession.Supplier, _anonymousMetricLogger));
             }
             finally
             {
@@ -112,7 +115,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public async Task<IActionResult> Post(
             [FromBody] AppointmentBookRequest request,
             [FromHeader(Name=PatientId)] Guid patientId,
-            [GpSession] GpUserSession gpUserSession)
+            [GpSession] GpUserSession gpUserSession,
+            [UserSession] P9UserSession p9UserSession)
         {
             try
             {
@@ -127,9 +131,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 var result = await Book(request, gpUserSession, patientId);
 
                 await result.Accept(
-                    new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));
+                    new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime, _metricLogger, p9UserSession));
 
-                return await result.Accept(new AppointmentBookResultVisitor(request, _errorReferenceGenerator, gpUserSession.Supplier, _metricLogger));
+                return await result.Accept(new AppointmentBookResultVisitor(request, _errorReferenceGenerator, gpUserSession.Supplier, _anonymousMetricLogger));
             }
             finally
             {

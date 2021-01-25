@@ -91,8 +91,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
                 _mockAppointmentTypeTransformingVisitor.Object,
-                new Mock<IAnonymousMetricLogger>().Object);
-
+                new Mock<IAnonymousMetricLogger>().Object,
+                new Mock<IMetricLogger>().Object);
         }
 
         [TestMethod]

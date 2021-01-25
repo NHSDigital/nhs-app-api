@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.Metrics
 {
     public interface IMetricLogger
     {
+        Task AppointmentBook(AppointmentData data);
+
         Task Login(LoginData data);
 
         Task UpliftStarted(UpliftStartedData data);
@@ -37,7 +39,7 @@ namespace NHSOnline.Backend.Metrics
         Task NominatedPharmacyCreate(NominatedPharmacyData data);
 
         Task NominatedPharmacyUpdate(NominatedPharmacyData data);
-        
+
         Task RepeatPrescriptionOrder(RepeatPrescriptionData data);
     }
 }
