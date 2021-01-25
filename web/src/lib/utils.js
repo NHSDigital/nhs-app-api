@@ -3,7 +3,12 @@ import { getType as lookupMimeType } from 'mime';
 import Mime from 'mime/Mime';
 import moment from 'moment-timezone';
 import 'url-polyfill';
-import { INDEX_PATH, EMPTY_PATH, INDEX_PATH_PARAM } from '@/router/paths';
+import {
+  INDEX_PATH,
+  EMPTY_PATH,
+  INDEX_PATH_PARAM,
+  PATIENT_ID_REGEX_PATTERN,
+} from '@/router/paths';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 const protocol = 'http://';
@@ -213,6 +218,11 @@ export const getPathWithPatientIdPrefix = ({ trimmedPath, store }) => {
   }
   return replacedPatientIdPath;
 };
+
+export const removePatientIdPrefixFromPath = path =>
+  (isBlankString(path)
+    ? path
+    : path.replace(new RegExp(`^/patient(/${PATIENT_ID_REGEX_PATTERN})?/?`), EMPTY_PATH));
 
 // TODO add more unit tests here
 export const checkIfPathShouldHavePatientPrefix = ({ path, store }) => {

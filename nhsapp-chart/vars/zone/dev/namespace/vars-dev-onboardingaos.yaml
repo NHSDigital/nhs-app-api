@@ -23,6 +23,7 @@ secrets:
 
 web:
   publicURL: www-onboardingaos.nhsapp.service.nhs.uk
+  thirdPartyJumpOffLoggingEnabled: true
 
 api:
   publicURL: api-onboardingaos.nhsapp.service.nhs.uk

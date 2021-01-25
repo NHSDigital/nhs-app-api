@@ -74,6 +74,8 @@ spec:
 {{- end }}
         - name: PORT
           value: "{{ $.Values.web.containerPort }}"
+        - name: THIRD_PARTY_JUMP_OFF_LOGGING_ENABLED
+          value: "{{ $.Values.web.thirdPartyJumpOffLoggingEnabled }}"
         - name: ANALYTICS_ENVIRONMENT
           value: "{{ $.Values.web.analyticsEnvironment }}"
         - name: ANALYTICS_SCRIPT_URL

@@ -20,6 +20,7 @@ import {
   readableBytes,
   redirectTo,
   redirectByName,
+  removePatientIdPrefixFromPath,
   resetPageFocus,
   stripHtml,
 } from '@/lib/utils';
@@ -754,6 +755,24 @@ describe('util library', () => {
       ['lots    of \n\n  \r\n    spaces', 'lots of spaces'],
     ]).it('will normalise all white space sequences to a single space', (text, formattedText) => {
       expect(normaliseWhiteSpace(text)).toEqual(formattedText);
+    });
+  });
+
+  describe('removePatientIdPrefixFromPath', () => {
+    each([
+      [undefined, undefined],
+      ['', ''],
+      [null, null],
+      [1, 1],
+      [{}, {}],
+      ['/', '/'],
+      ['/patient', '/'],
+      ['/patient/a', '/a'],
+      ['/patient/c5af7c34-b4ba-4f1a-bff8-476324e5f835', '/'],
+      ['/patient/c5af7c34-b4ba-4f1a-bff8-476324e5f835/a', '/a'],
+      ['/patient/c5af7c34-b4ba-4f1a-bff8-476324e5f835/a/b', '/a/b'],
+    ]).it('will remove the /patient/patientId prefix from the path', (path, expected) => {
+      expect(removePatientIdPrefixFromPath(path)).toEqual(expected);
     });
   });
 });

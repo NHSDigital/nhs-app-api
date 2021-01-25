@@ -303,6 +303,7 @@ web:
   hotjarSiteId: "859152"
   dataPreferencesUrl: https://ndopapp-int1.thunderbird.service.nhs.uk/createsession
   bloodDonationUrl: https://www.blood.co.uk/
+  thirdPartyJumpOffLoggingEnabled: false
   environmentVariables: {}
 
 api:

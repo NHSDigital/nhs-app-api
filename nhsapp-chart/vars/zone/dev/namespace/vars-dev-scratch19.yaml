@@ -6,3 +6,6 @@ secrets:
     notificationHub:
         notificationHubSecretName: "notificationHubSharedAccessKeyScratch19"
         notificationHubSecretVersion: "7eccdf7f4b1d4c13ab1df81c41062938"
+
+web:
+    thirdPartyJumpOffLoggingEnabled: true

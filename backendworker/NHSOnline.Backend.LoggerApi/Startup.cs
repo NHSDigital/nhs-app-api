@@ -53,8 +53,10 @@ namespace NHSOnline.Backend.LoggerApi
             services.AddNhsAppHealthCheckService();
 
             services.AddSingleton(Configuration);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+            services.AddTransient<LoggerSessionLoggerScope>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -71,6 +73,7 @@ namespace NHSOnline.Backend.LoggerApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            app.UseMiddleware<LoggerSessionLoggingScopeMiddleware>();
             app.Use(async (context, next) =>
             {
                 var logger = loggerFactory.CreateLogger<Startup>();

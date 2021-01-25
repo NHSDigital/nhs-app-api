@@ -9,9 +9,9 @@
 
 This script is used to build the **config.json** file that is served at `<WEB_URL>/config.json` (when built and ran using Docker; see **web/Dockerfile**).
 
-- Open **web/build/env.sh**
-- Add a new key-value pair for the new variable
-  - e.g. `"MY_NEW_ENV_VAR": "'"$MY_NEW_ENV_VAR"'"`
+- Open **web/build/docker-runtime/env.sh**
+- Add the new environment variable with the appropriate envBuilder function name
+  - e.g. AddBoolConfig NEW_ENV_VAR
 
 ---
 

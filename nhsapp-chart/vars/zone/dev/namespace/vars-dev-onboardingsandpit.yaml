@@ -20,6 +20,7 @@ secrets:
 
 web:
   publicURL: www-onboardingsandpit.nhsapp.service.nhs.uk
+  thirdPartyJumpOffLoggingEnabled: true
 
 api:
   publicURL: api-onboardingsandpit.nhsapp.service.nhs.uk

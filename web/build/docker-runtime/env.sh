@@ -53,6 +53,7 @@ AddNumericConfig() {
 config='{}';
 echo "Begin Generating web config json"
 AddNumericConfig PORT;
+AddBoolConfig THIRD_PARTY_JUMP_OFF_LOGGING_ENABLED;
 AddStringConfig URI_FORMAT_API_CLIENT;
 AddStringConfig URI_FORMAT_CID_REDIRECT_WEB;
 AddStringConfig URI_FORMAT_CID_REDIRECT_NATIVE;

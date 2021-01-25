@@ -3,7 +3,7 @@
     <h2 class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-0 break">
       {{ $t('appointments.past.pastAppointments') }}
     </h2>
-    <CardGroup :key="index" role="list" class="nhsuk-grid-row">
+    <CardGroup role="list" class="nhsuk-grid-row">
       <CardGroupItem v-for="appointment in appointments"
                      :key="appointment.id" class="nhsuk-grid-column-one-half">
         <Card class="nhsuk-u-margin-bottom-5">
