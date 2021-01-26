@@ -210,19 +210,25 @@ android {
             manifestPlaceholders = [appName: "NHS App Scratch 21"]
         }
         onboardingsandpit {
-            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".onboardingsandpit"
             manifestPlaceholders = [appName: "NHS App Onboarding Sandpit"]
+            signingConfig signingConfigs.debug
         }
         onboardingaos {
-            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".onboardingaos"
             manifestPlaceholders = [appName: "NHS App Onboarding Aos"]
+            signingConfig signingConfigs.debug
         }
         logindev {
-            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".logindev"
             manifestPlaceholders = [appName: "NHS App login DEV"]
+            signingConfig signingConfigs.debug
         }
     }
     testOptions {
