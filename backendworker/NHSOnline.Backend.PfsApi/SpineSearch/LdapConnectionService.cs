@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -29,17 +29,15 @@ namespace NHSOnline.Backend.PfsApi.SpineSearch
 
         public ILdapConnection CreateLdapConnection()
         {
-            var ldapConnection = new LdapConnection
+            var ldapConnectionOptions = new LdapConnectionOptions()
+                .ConfigureLocalCertificateSelectionCallback(ClientCertificateSelectionHandler)
+                .ConfigureRemoteCertificateValidationCallback(_certificateService.ServerCertificateValidationHandler);
+
+            return new LdapConnection(ldapConnectionOptions)
             {
                 SecureSocketLayer = true,
                 ConnectionTimeout = _configurationSettings.DefaultHttpTimeoutSeconds * 1000,
             };
-
-            ldapConnection.UserDefinedClientCertSelectionDelegate += ClientCertificateSelectionHandler;
-            ldapConnection.UserDefinedServerCertValidationDelegate +=
-                    _certificateService.ServerCertificateValidationHandler;
-           
-            return ldapConnection;
         }
 
         public void ConnectAndBind(ILdapConnection ldapConnection)
