@@ -24,6 +24,7 @@ export default {
   useNhsAppOnlineToAccessServices: 'Use NHS App online to access services on your desktop or laptop computer, through your web browser.  You do not need to install anything to get started.',
   useThisServiceTo: 'Use this service to:',
   viewYourMedicalRecord: 'view your medical record securely',
+  viewYourNhsNumber: 'view your NHS number',
   whatToDoIfYouAre13To15: 'What to do if you\'re aged 13 to 15',
   youWillNeedToContactSurgeryToRequestAccess: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
   authReturn: {
