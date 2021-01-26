@@ -1,0 +1,2 @@
+---
+# EXT Login environment variables located in default values file. This file exists to prevent errors in the Helm Upgrade command.

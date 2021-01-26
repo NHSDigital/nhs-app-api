@@ -1,0 +1,181 @@
+name: ${{ parameters.namespace }}-$(Build.SourceBranchName)-$(Date:yyyyMMdd)_$(Rev:r)
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+parameters:
+- name: namespace
+  displayName: Namespace
+  type: string
+  default: scratch1
+  values:
+    - scratch1
+    - scratch2
+    - scratch3
+    - scratch4
+    - scratch5
+    - scratch6
+    - scratch7
+    - scratch8
+    - scratch9
+    - scratch10
+    - scratch11
+    - scratch12
+    - scratch13
+    - scratch14
+    - scratch15
+    - scratch16
+    - scratch17
+    - scratch18
+    - scratch19
+    - scratch20
+    - scratch21
+    - dev
+    - onboardingsandpit
+    - onboardingaos
+    - logindevelopment
+    - preview
+    - demo
+    - ops1
+    - ops2
+    - ops3
+- name: loginEnv
+  displayName: Login environment
+  type: string
+  default: ext
+  values:
+    - ext
+    - aos
+    - sandpit
+- name: imageVersionOverride
+  displayName: "Optional image version override (develop or tag)"
+  type: string
+  default: "None"
+
+variables:
+- name: region 
+  value: uksouth
+- name: environment
+  value: dev
+- name: AKS_SHORTNAME
+  value: devuks1
+- name: DECODE_PERCENTS
+  value: false
+- name: cosmosDBName
+  value: scratch
+- name: helmVersion
+  value: 3.2.3
+- group: Ops
+
+stages:
+- stage: DeployNHSApp
+  displayName: Deploy NHS App
+  jobs:
+  - job:
+    displayName: 'Deploy NHS App to ${{ parameters.namespace }}'
+    steps:
+    - task: Bash@3
+      displayName: Set version
+      inputs:
+        targetType: 'inline'
+        script: |
+          if [[ "${{ parameters.imageVersionOverride }}" != "None" ]]; then
+            echo "Using version override ${{ parameters.imageVersionOverride }}"
+            version=${{ parameters.imageVersionOverride }}
+            echo "##vso[task.setvariable variable=version]${{ parameters.imageVersionOverride }}"
+            echo "$version"
+          elif [ "$(Build.SourceBranchName)" == "develop" ]; then
+            echo "Versioning for develop"
+            version=$(echo "develop")
+            echo "##vso[task.setvariable variable=version]$version"
+            echo "$version"
+          elif [[ "$(Build.SourceBranchName)" =~ ^v[0-9]+\.[0-9]+ ]]; then
+            echo "Versioning for tag $(Build.SourceBranchName)"
+            version=$(Build.SourceBranchName)
+            echo "##vso[task.setvariable variable=version]$version"
+          else
+            echo "Versioning for pull request (latest git hash) $(Build.SourceBranch)"
+            version=$(az repos pr list --source-branch $(Build.SourceBranch) | jq -r '.[].lastMergeCommit.commitId')
+            echo "##vso[task.setvariable variable=version]$version"
+            echo "$version"
+            echo "##vso[task.logissue type=warning]If you have recently pushed a new change to your pull request branch, your pods may be in a failed state while the NHS App CI pipeline builds the images."
+          fi
+      env:
+        AZURE_DEVOPS_EXT_PAT: $(AZURE_DEVOPS_EXT_PAT)
+    - task: Bash@3
+      displayName: 'Update chart version'
+      inputs:
+        workingDirectory: $(System.DefaultWorkingDirectory)/nhsapp-chart/nhsapp/
+        targetType: 'inline'
+        script: sed -i -e "s|1.0.0|$chartVersion|g" Chart.yaml && sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml        
+      env:
+        chartVersion: $(Build.SourceBranchName)
+        appImageTag: $(version)
+    - task: AzureCLI@2
+      displayName: Get cluster IP
+      inputs:
+        azureSubscription: nhsapp-nonlive-terraform-sp
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          PUBLIC_IP_ADDRESS=`az network public-ip show --name nhsapp-$(AKS_SHORTNAME)_PIP --resource-group nhsapp-$(AKS_SHORTNAME)_PIP | jq '.ipAddress' | tr -d '"'`/32
+          echo $PUBLIC_IP_ADDRESS              
+          echo "##vso[task.setvariable variable=clusterIP;]$PUBLIC_IP_ADDRESS"
+    - task: HelmInstaller@1
+      displayName: 'Install Helm'
+      inputs:
+        helmVersionToInstall: $(helmVersion)
+    - task: Kubernetes@1
+      displayName: 'Kubernetes Login'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceEndpoint: nhsapp-$(AKS_SHORTNAME)-${{ parameters.namespace }}
+        command: login
+    - task: Bash@3
+      displayName: 'Uninstall old releases'
+      inputs:
+        targetType: 'inline'
+        script: |
+          if [[ $(helm ls -n ${{ parameters.namespace }} --short) ]]; then 
+            helm ls -n ${{ parameters.namespace }} --short | xargs helm delete $old_releases -n ${{ parameters.namespace }} && sleep 10
+          else
+            echo "No releases to uninstall."
+          fi
+    - task: HelmDeploy@0
+      displayName: Helm Upgrade
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceEndpoint: nhsapp-$(AKS_SHORTNAME)-${{ parameters.namespace }}
+        namespace: ${{ parameters.namespace }}
+        command: upgrade
+        chartType: filepath
+        chartPath: $(System.DefaultWorkingDirectory)/nhsapp-chart/nhsapp/
+        releaseName: ${{ parameters.namespace }}-$(Build.SourceBranchName)
+        valueFile: $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/cluster/vars-$(AKS_SHORTNAME).yaml
+        arguments: --set global.environment="${{ parameters.namespace }}"
+                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml 
+                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.namespace }}.yaml
+                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml 
+                   --set appImageTag=$(version)
+                   --set cid.image_tag=$(version)
+                   --set api.image_tag=$(version)
+                   --set web.image_tag=$(version)
+                   --set cdsswiremock.image_tag=$(version)
+                   --set logger.image_tag=$(version)
+                   --set sjr.image_tag=$(version)
+                   --set sjrconfig.image_tag=$(version)
+                   --set stub_loader.image_tag=$(version)
+                   --set wiremock.image_tag=$(version)
+                   --set users.image_tag=$(version)
+                   --set messages.image_tag=$(version)
+                   --set info.image_tag=$(version)
+                   --reset-values
+                   --install
+                   --set cosmosDBName=$(cosmosDBName)
+                   --set region=$(region)
+                   --set zone=$(environment)
+                   --set clusterIP=$(clusterIP)
+        install: true
+        waitForExecution: false
