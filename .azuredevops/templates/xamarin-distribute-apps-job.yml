@@ -1,0 +1,47 @@
+jobs:
+  - job:
+    displayName: Xamarin Distribute Apps
+    pool:
+      vmImage: 'macos-latest'
+
+    variables:
+      output.directory: '$(build.binariesDirectory)/$(build.configuration)'
+
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: Download Android Apps
+        inputs:
+          downloadType: single
+          artifactName: Xamarin Android Clients
+          itemPattern: |
+            Xamarin Android Clients/com.nhs.online.nhsonline.staging.apk
+
+      - task: DownloadBuildArtifacts@0
+        displayName: Download iOS Apps
+        inputs:
+          downloadType: single
+          artifactName: Xamarin iOS Clients
+          itemPattern: |
+            Xamarin iOS Clients/NHSOnline.App.Staging.ipa
+
+      - task: AppCenterDistribute@3
+        displayName: Distribute Android Staging
+        inputs:
+          serverEndpoint: 'appcenter'
+          appSlug: 'nhsapp/NhsAppStaging'
+          appFile: '$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.staging.apk'
+          symbolsOption: 'Android'
+          releaseNotesOption: 'input'
+          releaseNotesInput: 'Dummy release notes'
+          destinationType: 'groups'
+
+      - task: AppCenterDistribute@3
+        displayName: Distribute iOS
+        inputs:
+          serverEndpoint: 'appcenter'
+          appSlug: 'nhsapp/NhsAppStaging-1'
+          appFile: '$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.Staging.ipa'
+          symbolsOption: 'Apple'
+          releaseNotesOption: 'input'
+          releaseNotesInput: 'Dummy release notes'
+          destinationType: 'groups'

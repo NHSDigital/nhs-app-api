@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NHSOnline.App.Controls.FullNavigationFooterItem"
+             x:Name="Root">
+
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="BackgroundColor" Value="{StaticResource NhsUkWhite}" />
+                <Setter Property="Padding" Value="0,0,0,10" />
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="8" />
+                <Setter Property="LineBreakMode" Value="WordWrap" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </View.Resources>
+
+    <ContentView.Content>
+        <StackLayout AutomationId="{Binding Text, Source={x:Reference Name=Root}}">
+            <ContentView Content="{Binding Icon, Source={x:Reference Name=Root}}"/>
+            <Label 
+                Text="{Binding Text, Source={x:Reference Name=Root}}"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

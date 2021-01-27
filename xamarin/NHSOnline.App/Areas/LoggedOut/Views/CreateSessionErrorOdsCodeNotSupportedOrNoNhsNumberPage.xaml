@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             mc:Ignorable="d"
+             x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionErrorOdsCodeNotSupportedOrNoNhsNumberPage"
+             BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}"
+             x:Name="Root">
+
+    <ScrollView>
+        <StackLayout>
+
+            <controls:Heading1 Text="Login failed" />
+
+            <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" LabelText="Error">
+                <StackLayout BindingContext="{x:Reference Name=Root}">
+                    <controls:Heading2 Text="If your GP surgery is in Wales" />
+                    <controls:Paragraph Text="The NHS App is not available in Wales because health services are managed separately from England." />
+                    <controls:Paragraph>
+                        <FormattedString>
+                            <Span Text="If you need an appointment or prescription, go to " />
+                            <controls:LinkSpan Text="My Health Online" Tapped="{Binding MyHealthOnlineCommand}" />
+                            <Span Text=" or contact your GP surgery directly. For urgent medical advice, go to " />
+                            <controls:LinkSpan Text="111.wales.nhs.uk" Tapped="{Binding OneOneOneWalesCommand}" />
+                            <Span Text=" or call 111." />
+                        </FormattedString>
+                    </controls:Paragraph>
+
+                    <controls:Heading2 Text="If your GP surgery is in England" />
+                    <controls:Paragraph Text="Either we cannot connect to your GP surgery, or we cannot match your NHS number to a GP surgery." />
+                    <controls:Paragraph>
+                        <FormattedString>
+                            <Span Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, go to " />
+                            <controls:LinkSpan Text="111.nhs.uk" Tapped="{Binding OneOneOneCommand}" />
+                            <Span Text=" or call 111." />
+                        </FormattedString>
+                    </controls:Paragraph>
+                    <controls:Paragraph>
+                        <FormattedString>
+                            <Span Text="If you still need help to access the app, " />
+                            <controls:LinkSpan Text="contact us" Tapped="{Binding ContactUsCommand}" />
+                            <Span Text="." />
+                        </FormattedString>
+                    </controls:Paragraph>
+
+                    <controls:Heading2 Text="If your GP surgery is in Northern Ireland or Scotland" />
+                    <controls:Paragraph Text="The NHS App is not available in Northern Ireland or Scotland because health services are managed separately from England." />
+                    <controls:Paragraph Text="If you need an appointment or prescription, contact your GP surgery directly. For urgent medical advice, call 111." />
+
+                    <controls:Paragraph>
+                        <FormattedString>
+                            <Span Text="Reference: " FontSize="12" />
+                            <Span Text="{Binding ServiceDeskReference}" FontSize="12" />
+                        </FormattedString>
+                    </controls:Paragraph>
+                </StackLayout>
+            </controls:NhsErrorCallout>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

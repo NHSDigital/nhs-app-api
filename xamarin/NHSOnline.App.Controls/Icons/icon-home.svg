@@ -1,0 +1,24 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 26 26"
+        id="vector">
+  <title>NHS App home icon</title>
+  <desc>NHS App home icon</desc>
+  <path
+          id="path"
+          d="M 1.083 11.917 L 13.116 1.083 L 24.917 11.709"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill-rule="evenodd"/>
+  <path
+          id="path_1"
+          d="M 21.667 8.667 L 21.667 24.917 L 16.643 24.917 L 16.643 15.921 L 9.749 15.921 L 9.749 24.917 L 4.333 24.917 L 4.333 8.667"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="1.8"
+          stroke-linejoin="round"
+          fill-rule="evenodd"/>
+</svg>

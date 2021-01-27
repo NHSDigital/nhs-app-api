@@ -1,0 +1,15 @@
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+Dockerfile
+*.user
+*/bin
+*/obj
+**/*.assets.json
+**/*.deps.json
+buildscripts/
+TestResults/
+Makefile

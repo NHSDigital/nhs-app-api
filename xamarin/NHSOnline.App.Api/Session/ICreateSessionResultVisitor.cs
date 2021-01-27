@@ -1,0 +1,13 @@
+namespace NHSOnline.App.Api.Session
+{
+    public interface ICreateSessionResultVisitor<T>
+    {
+        T Visit(CreateSessionResult.Created created);
+        T Visit(CreateSessionResult.Failed failed);
+        T Visit(CreateSessionResult.BadRequest badRequest);
+        T Visit(CreateSessionResult.OdsCodeNotSupportedOrNoNhsNumber odsCodeNotSupportedOrNoNhsNumber);
+        T Visit(CreateSessionResult.FailedAgeRequirement failedAgeRequirement);
+        T Visit(CreateSessionResult.BadResponseFromUpstreamSystem badResponseFromUpstreamSystem);
+        T Visit(CreateSessionResult.UpstreamSystemTimeout odsCodeNotSupportedOrNoNhsNumber);
+    }
+}

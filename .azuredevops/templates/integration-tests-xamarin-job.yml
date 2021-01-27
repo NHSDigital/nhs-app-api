@@ -1,0 +1,83 @@
+jobs:
+  - job:
+    displayName: Build and Integration Test
+    steps:
+      - template: set-branch-tag-steps.yml
+      - template: docker-login-steps.yml
+      - template: nuget-authenticate.yml
+
+      - task: DownloadBuildArtifacts@0
+        displayName: Download Android App
+        inputs:
+          downloadType: single
+          artifactName: Xamarin Android Clients
+          itemPattern: |
+            Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk
+
+      - task: DownloadBuildArtifacts@0
+        displayName: Download iOS
+        inputs:
+          downloadType: single
+          artifactName: Xamarin iOS Clients
+          itemPattern: |
+            Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa
+
+      - task: Bash@3
+        displayName: Initialise Secrets
+        env:
+          AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
+        inputs:
+          targetType: 'inline'
+          script: |
+            mkdir -p ~/.nhsonline/secrets
+            echo "$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" > ~/.nhsonline/secrets/azure_notification_hub_key_bdd
+
+      - task: ShellScript@2
+        displayName: Restore Packages
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/01_restore_packages.sh
+
+      - task: ShellScript@2
+        displayName: Build
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/02_build.sh
+
+      - task: ShellScript@2
+        displayName: Package Integration Tests
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/03_package_integration_tests.sh
+
+      - task: ShellScript@2
+        displayName: Run Integration Tests
+        env:
+          BrowserStack__Key: $(browserstack.access.key)
+          BrowserStack__Build: $(Build.BuildNumber)
+          NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk"
+          NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/04_run_integration_tests.sh
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: Integration Tests Results
+          test.path: "xamarinintegrationtests/TestResults"
+          test.path.exists.variable.name: integration.tests.results.exists
+
+      - task: Bash@3
+        displayName: Fix Tests Results Paths
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            find xamarinintegrationtests/TestResults -name '*.trx' -exec sed -ir -e 's#storage="/src/#storage="xamarinintegrationtests/#' -e 's#codeBase="/src/#codeBase="xamarinintegrationtests/#' \{\} \;
+            find xamarinintegrationtests/TestResults -name '*.trx' -exec cat \{\} \;
+
+      - task: PublishTestResults@2
+        displayName: Publish Test Results
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
+        inputs:
+          testRunTitle: Xamarin Integration Tests
+          testResultsFormat: VSTest
+          testResultsFiles: xamarinintegrationtests/TestResults/*.trx
+          failTaskOnFailedTests: false
+          mergeTestResults: true

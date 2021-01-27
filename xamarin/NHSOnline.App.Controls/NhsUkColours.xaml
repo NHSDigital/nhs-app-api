@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Colours can be found at https://service-manual.nhs.uk/design-system/styles/colour -->
+
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="NHSOnline.App.Controls.NhsUkColours">
+    <Color x:Key="HomeBlueInnerGradient">#0072df</Color>
+    <Color x:Key="HomeBlueOuterGradient">#0053a3</Color>
+    <Color x:Key="ButtonGreenLowerGradient">#00401e</Color>
+    <Color x:Key="NhsUkBlue">#005EB8</Color>
+    <Color x:Key="NhsUkWhite">#FFFFFF</Color>
+    <Color x:Key="NhsUkGreen">#007f3b</Color>
+    <Color x:Key="NhsUkDarkGrey">#425563</Color>
+    <Color x:Key="NhsUkMidGrey">#768692</Color>
+    <Color x:Key="NhsUkYellow">#ffeb3b</Color>
+    <Color x:Key="NhsUkWarmYellow">#FFB81C</Color>
+    <Color x:Key="NhsUkPaleYellow">#fff9c4</Color>
+    <Color x:Key="NhsUkRed">#d5281b</Color>
+    <Color x:Key="NhsUkDarkPink">#7C2855</Color>
+    <Color x:Key="NhsUkPurple">#330072</Color>
+    <Color x:Key="NhsUkSecondaryBlue1">#337EC6</Color>
+    <Color x:Key="NhsUkSecondaryBlue2">#ACCAE8</Color>
+    <Color x:Key="NhsUkSecondaryBlue3">#D4E4F3</Color>
+    <Color x:Key="NhsUkSecondaryBlue4">#E6EFF8</Color>
+    <Color x:Key="NhsUkSecondaryGrey1">#687784</Color>
+    <Color x:Key="NhsUkSecondaryGrey2">#98A4AD</Color>
+    <Color x:Key="NhsUkSecondaryGrey3">#B3BBC1</Color>
+    <Color x:Key="NhsUkSecondaryGrey4">#DFE2E5</Color>
+    <Color x:Key="NhsUkSecondaryGrey5">#EDEFF1</Color>
+    <Color x:Key="NhsUkSecondaryGrey6">#F3F5F6</Color>
+    <Color x:Key="NhsUkSecondaryGrey7">#F9FAFB</Color>
+    <Color x:Key="NhsUkSecondaryYellow1">#FFE8B4</Color>
+    <Color x:Key="NhsUkSecondaryYellow2">#FFF1CC</Color>
+    <Color x:Key="NhsUkSecondaryYellow3">#FFF8E8</Color>
+    <Color x:Key="NhsUkPrimaryText">#212B32</Color>
+    <Color x:Key="NhsUkSecondaryText">#4c6272</Color>
+    <Color x:Key="NhsUkPrimaryLinkBlue">#005EB8</Color>
+    <Color x:Key="NhsUkPageBackgroundGrey">#F0F4F5</Color>
+    <Color x:Key="NhsUkLinkHover">#7C2855</Color>
+    <Color x:Key="NhsUkLinkVisited">#330072</Color>
+    <Color x:Key="NhsUkLinkActive">#002f5c</Color>
+    <Color x:Key="NhsUkFocus">#ffeb3b</Color>
+    <Color x:Key="NhsUkFocusText">#212b32</Color>
+    <Color x:Key="NhsUkBorder">#d8dde0</Color>
+    <Color x:Key="NhsUkFormBorder">#4c6272</Color>
+    <Color x:Key="NhsUkError">#d5281b</Color>
+    <Color x:Key="NhsUkButton">#007f3b</Color>
+    <Color x:Key="NhsUkSecondaryButton">#4c6272</Color>
+</ResourceDictionary>
