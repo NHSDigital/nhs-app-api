@@ -6,6 +6,8 @@ namespace NHSOnline.Backend.Metrics
     {
         Task AppointmentBook(AppointmentData data);
 
+        Task AppointmentCancel(AppointmentData data);
+
         Task Login(LoginData data);
 
         Task UpliftStarted(UpliftStartedData data);

@@ -343,6 +343,7 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             {
                 var appointmentData = new AppointmentData("sessionId");
                 yield return new object[] { Method(metricLogger => metricLogger.AppointmentBook(appointmentData)), "AppointmentBook" };
+                yield return new object[] { Method(metricLogger => metricLogger.AppointmentCancel(appointmentData)), "AppointmentCancel" };
 
                 var loginData = new LoginData("requestId", "sessionId", "userAgent", "");
                 yield return new object[] { Method(metricLogger => metricLogger.Login(loginData)), "Login" };
@@ -378,7 +379,6 @@ namespace NHSOnline.Backend.Metrics.UnitTests
 
                 var silverIntegrationData = new SilverIntegrationData("sessionId", "providerId", "providerName", "jumpOffId");
                 yield return new object[] { Method(metricLogger => metricLogger.SilverIntegrationJumpOff(silverIntegrationData)), "SilverIntegrationJumpOff" };
-
 
                 static Func<IMetricLogger, Task> Method(Func<IMetricLogger, Task> method) => method;
             }

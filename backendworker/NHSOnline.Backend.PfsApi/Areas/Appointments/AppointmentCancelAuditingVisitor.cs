@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.Metrics;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -10,14 +13,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AppointmentsController> _logger;
+        private readonly IMetricLogger _metricLogger;
+        private readonly P9UserSession _userSession;
         private readonly string _appointmentId;
         private const string AuditType = AuditingOperations.CancelAppointmentAuditTypeResponse;
 
-        public AppointmentCancelAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string appointmentId)
+        public AppointmentCancelAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string appointmentId, IMetricLogger metricLogger, P9UserSession userSession)
         {
             _auditor = auditor;
             _logger = logger;
             _appointmentId = appointmentId;
+            _metricLogger = metricLogger;
+            _userSession = userSession;
         }
 
         public async Task Visit(AppointmentCancelResult.Success result)
@@ -26,6 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 await _auditor.Audit(AuditType, "Appointment successfully cancelled for appointment with id: {0}",
                     _appointmentId);
+                await _metricLogger.AppointmentCancel(new AppointmentData(_userSession.Key));
             }
             catch (Exception e)
             {

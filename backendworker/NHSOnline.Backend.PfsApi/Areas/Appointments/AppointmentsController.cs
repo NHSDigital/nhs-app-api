@@ -54,7 +54,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public async Task<IActionResult> Delete(
             [FromBody] AppointmentCancelRequest request,
             [FromHeader(Name=PatientId)] Guid patientId,
-            [GpSession] GpUserSession gpUserSession)
+            [GpSession] GpUserSession gpUserSession,
+            [UserSession] P9UserSession p9UserSession)
         {
             try
             {
@@ -67,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 var result = await Cancel(request, gpUserSession, patientId);
 
-                await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId));
+                await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId, _metricLogger, p9UserSession));
 
                 return await result.Accept(
                     new AppointmentCancelResultVisitor(request, _errorReferenceGenerator, gpUserSession.Supplier, _anonymousMetricLogger));

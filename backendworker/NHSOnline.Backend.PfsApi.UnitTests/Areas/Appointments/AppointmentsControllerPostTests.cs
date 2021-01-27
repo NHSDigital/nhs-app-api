@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
         private Guid _patientId;
-        private Mock<IAnonymousMetricLogger> _mockMetricLogger;
+        private Mock<IAnonymousMetricLogger> _mockAnonymousMetricLogger;
 
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Returns(true);
 
             _mockAuditor = new Mock<IAuditor>();
-            _mockMetricLogger = new Mock<IAnonymousMetricLogger>();
+            _mockAnonymousMetricLogger = new Mock<IAnonymousMetricLogger>();
 
             _mockAppointmentsService.Setup(x => x.Book(
                     It.Is<GpLinkedAccountModel>(
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 new Mock<ISessionCacheService>().Object,
                 _mockErrorReferenceGenerator.Object,
                 new Mock<IAppointmentTypeTransformingVisitor>().Object,
-                _mockMetricLogger.Object,
+                _mockAnonymousMetricLogger.Object,
                 new Mock<IMetricLogger>().Object);
         }
 
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             AppointmentMetricData appointmentMetricData = null;
-            _mockMetricLogger.Setup(x => x.AppointmentBookResult(It.IsAny<AppointmentMetricData>()))
+            _mockAnonymousMetricLogger.Setup(x => x.AppointmentBookResult(It.IsAny<AppointmentMetricData>()))
                 .Returns(Task.CompletedTask)
                 .Callback<AppointmentMetricData>((data)=> appointmentMetricData = data);
 

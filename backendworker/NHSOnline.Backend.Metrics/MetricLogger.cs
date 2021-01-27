@@ -14,6 +14,8 @@ namespace NHSOnline.Backend.Metrics
 
         public Task AppointmentBook(AppointmentData data) => WriteMetricLog(data);
 
+        public Task AppointmentCancel(AppointmentData data) => WriteMetricLog(data);
+
         public Task Login(LoginData data) => WriteMetricLog(data);
 
         public Task UpliftStarted(UpliftStartedData data) => WriteMetricLog(data);
