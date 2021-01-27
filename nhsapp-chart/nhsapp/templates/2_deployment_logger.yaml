@@ -57,6 +57,8 @@ spec:
       - name: logger
         image: {{ $.Values.registry }}/{{ $.Values.logger.image }}:{{ $.Values.logger.image_tag }}
         imagePullPolicy: {{ $.Values.logger.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.logger.containerPort }}
         resources:
@@ -103,6 +105,8 @@ spec:
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
         resources:

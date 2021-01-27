@@ -52,6 +52,8 @@ spec:
       - name: iproxy-microtest
         image: {{ $.Values.registry }}/{{ $.Values.iproxy_microtest.image }}:{{ $.Values.iproxy_microtest.image_tag }}
         imagePullPolicy: {{ $.Values.iproxy_microtest.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         securityContext:
           capabilities:
             add:

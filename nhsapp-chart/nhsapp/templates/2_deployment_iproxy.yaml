@@ -51,6 +51,8 @@ spec:
       - name: iproxy
         image: {{ $.Values.registry }}/{{ $.Values.iproxy.image }}:{{ $.Values.iproxy.image_tag }}
         imagePullPolicy: {{ $.Values.iproxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         command: ["/bin/sh"]
         args: ["-c", "cat /mnt/secrets-store/spineCrt | base64 -d > /tmp/spineCrt && cat /mnt/secrets-store/spineKey | base64 -d > /tmp/spineKey && nginx -g 'daemon off;'"]
         ports:

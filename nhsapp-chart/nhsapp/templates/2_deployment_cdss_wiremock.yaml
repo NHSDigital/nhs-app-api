@@ -40,6 +40,8 @@ spec:
       - name: cdsswiremock
         image: {{ $.Values.registry }}/{{ $.Values.cdsswiremock.image }}:{{ $.Values.cdsswiremock.image_tag }}
         imagePullPolicy: {{ $.Values.cdsswiremock.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.cdsswiremock.containerPort }}
         resources:
@@ -92,6 +94,8 @@ spec:
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
         resources:

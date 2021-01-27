@@ -61,6 +61,8 @@ spec:
       - name: sjr
         image: {{ $.Values.registry }}/{{ $.Values.sjr.image }}:{{ $.Values.sjr.image_tag }}
         imagePullPolicy: {{ $.Values.sjr.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.sjr.containerPort }}
         resources:
@@ -106,6 +108,8 @@ spec:
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
         - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
         resources:

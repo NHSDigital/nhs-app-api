@@ -33,6 +33,8 @@ spec:
       - name: wiremock
         image: {{ $.Values.registry }}/{{ $.Values.wiremock.image }}:{{ $.Values.wiremock.image_tag }}
         imagePullPolicy: {{ $.Values.wiremock.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         resources:
           requests:
             memory: {{ $.Values.wiremock.memoryRequest }}
@@ -73,6 +75,8 @@ spec:
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
         imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        lifecycle:
+          {{- include "nhsapp.preStopHook" . | indent 12 }}
         resources:
           requests:
             memory: {{ $.Values.sidecar_proxy.memoryRequest }}
