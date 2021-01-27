@@ -1,0 +1,67 @@
+---
+trigger: none
+
+schedules:
+  - cron: 0 3 * * Mon,Tue,Wed,Thu,Fri
+    displayName: Nightly Update
+    branches:
+      include:
+        - develop
+    always: true
+
+resources:
+  - repo: self
+
+jobs:
+  - job:
+    displayName: NuKeeper
+
+    variables:
+      dotnet.cli.telemetry.optout: true
+      dotnet.nologo: true
+
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+      - template: templates/nuget-authenticate.yml
+
+      - task: UseDotNet@2
+        displayName: 'Use .NET Core sdk 3.1'
+        inputs:
+          packageType: sdk
+          version: 3.1.x
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+
+      - task: Bash@3
+        displayName: Install NuKeeper
+        inputs:
+          targetType: inline
+          script: |
+            dotnet tool install nukeeper --global
+
+      - task: Bash@3
+        displayName: Configure git
+        inputs:
+          targetType: inline
+          script: |
+            git config --global user.name NuKeeper
+            git config --global user.email nhsapp.ops@nhs.net
+
+      - task: Bash@3
+        displayName: NuKeeper Minor
+        inputs:
+          targetType: filePath
+          filePath: buildscripts/run_nukeeper.sh
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          CHANGE: minor
+
+      - task: Bash@3
+        displayName: NuKeeper Major
+        inputs:
+          targetType: filePath
+          filePath: buildscripts/run_nukeeper.sh
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          CHANGE: major
