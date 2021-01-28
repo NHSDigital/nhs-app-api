@@ -1,14 +1,11 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Notifications;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
@@ -62,26 +59,13 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             result.Should().BeOfType<DeleteRegistrationResult.InternalServerError>();
         }
 
-        [DataTestMethod]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Moved)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Moved)]
-        public async Task Delete_WhenDeleteInstallationThrowsAMessageException_ReturnsBadGatewayResult
-        (
-            WebExceptionStatus webExceptionStatus,
-            HttpStatusCode statusCode
-        )
+        [TestMethod]
+        public async Task Delete_WhenDeleteInstallationThrowsAMessageException_ReturnsBadGatewayResult()
         {
             // Arrange
             _mockAzureNotificationsHubClient
                 .Setup(x => x.DeleteInstallation(InstallationId))
-                .Throws(
-                    new MessagingException("Message exception",
-                        new WebException("Web exception",
-                            null,
-                            webExceptionStatus,
-                            HttpWebResponseHelper.CreateFromStatusCode(statusCode))));
+                .Throws(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Delete(InstallationId);

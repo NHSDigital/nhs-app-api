@@ -1,15 +1,12 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.UsersApi.Notifications;
 using NHSOnline.Backend.UsersApi.Repository;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 {
@@ -96,16 +93,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             result.Should().BeOfType<RegistrationExistsResult.InternalServerError>();
         }
 
-        [DataTestMethod]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Moved)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Moved)]
-        public async Task Exists_WhenInstallationExistsThrowsAMessageException_ReturnsBadGatewayResult
-        (
-            WebExceptionStatus webExceptionStatus,
-            HttpStatusCode statusCode
-        )
+        [TestMethod]
+        public async Task Exists_WhenInstallationExistsThrowsAMessageException_ReturnsBadGatewayResult()
         {
             // Arrange
             var userDevice = new UserDevice
@@ -115,12 +104,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.InstallationExists(userDevice.RegistrationId))
-                .Throws(
-                    new MessagingException("Message exception",
-                        new WebException("Web exception",
-                            null,
-                            webExceptionStatus,
-                            HttpWebResponseHelper.CreateFromStatusCode(statusCode))));
+                .Throws(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Exists(userDevice);

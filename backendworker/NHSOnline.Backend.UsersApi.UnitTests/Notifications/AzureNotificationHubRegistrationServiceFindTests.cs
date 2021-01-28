@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             // Arrange
             _mockAzureNotificationsHubClient
                 .Setup(x => x.FindInstallationIdentifiersByNhsLoginId(NhsLoginId))
-                .ThrowsAsync(new MessagingException("This is an exception"));
+                .ThrowsAsync(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Find(NhsLoginId);

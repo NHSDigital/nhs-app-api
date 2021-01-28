@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -219,7 +218,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
                         y.Subtitle == subtitle &&
                         y.Body == body &&
                         y.Url == new Uri(url))))
-                .ThrowsAsync(new MessagingException("This is an exception"));
+                .ThrowsAsync(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Send(NhsLoginId, request);

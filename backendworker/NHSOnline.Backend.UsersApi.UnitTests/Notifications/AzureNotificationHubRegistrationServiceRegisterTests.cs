@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Azure.NotificationHubs;
-using Microsoft.Azure.NotificationHubs.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -268,16 +266,8 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
             result.Should().BeOfType<RegistrationResult.InternalServerError>();
         }
 
-        [DataTestMethod]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.ProtocolError, HttpStatusCode.Moved)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Gone)]
-        [DataRow(WebExceptionStatus.SendFailure, HttpStatusCode.Moved)]
-        public async Task Register_WhenCreateOrUpdateRegistrationThrowsAMessageException_ReturnsBadGatewayResult
-        (
-            WebExceptionStatus webExceptionStatus,
-            HttpStatusCode statusCode
-        )
+        [TestMethod]
+        public async Task Register_WhenCreateOrUpdateRegistrationThrowsAMessageException_ReturnsBadGatewayResult()
         {
             // Arrange
             var registerDeviceRequest = new RegisterDeviceRequest
@@ -298,12 +288,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications
 
             _mockAzureNotificationsHubClient
                 .Setup(x => x.CreateOrUpdateInstallation(_installation))
-                .Throws(
-                    new MessagingException("Message exception",
-                        new WebException("Web exception",
-                            null,
-                            webExceptionStatus,
-                            HttpWebResponseHelper.CreateFromStatusCode(statusCode))));
+                .Throws(MessagingExceptionFactory.Create());
 
             // Act
             var result = await _systemUnderTest.Register(DevicePns, _deviceType, NhsLoginId);
