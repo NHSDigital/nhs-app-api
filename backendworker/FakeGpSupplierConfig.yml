@@ -356,6 +356,33 @@ defaultUsers:
       dateOfBirth: 1937-06-12T00:00:00
       sex: male
 
+    9692236498:
+      userId: 75c89f09-2eab-4aed-ba91-ad9cdc608a14
+      emailAddress: nhsapp.aos+pkb.user4@gmail.com
+      odsCode: F00002
+      givenName: Harry
+      familyName: TUCKER
+      dateOfBirth: 1991-04-21T00:00:00
+      sex: male
+
+    9692236501:
+      userId: d9677f53-2f4a-4f4b-b2f2-8f0a3329062f
+      emailAddress: nhsapp.aos+pkb.user5@gmail.com
+      odsCode: F00002
+      givenName: Steve
+      familyName: EYES
+      dateOfBirth: 1986-06-27T00:00:00
+      sex: male
+
+    9692236285:
+      userId: 75c89f09-2eab-4aed-ba91-ad9cdc608a14
+      emailAddress: nhsapp.aos+pkb.user6@gmail.com
+      odsCode: F00002
+      givenName: Eric
+      familyName: ELLIOT
+      dateOfBirth: 2004-01-30T00:00:00
+      sex: male
+
     # This user is for testing NHS Login Settings integration / account deletion and therefore has no corresponding account created with PKB
     # It is used to test NHS login behaviour when redirected from a third party for SSO.
 
@@ -576,6 +603,105 @@ defaultUsers:
       givenName: Jimmy
       familyName: ABBOTT
       dateOfBirth: 1926-07-19T00:00:00
+      sex: male
+
+    9692235971:
+      userId: d176f75c-f932-42df-9c0c-39dfa6167b36
+      emailAddress: onboarding.nhsapp+gncr.user7@gmail.com
+      odsCode: F00005
+      givenName: Felix
+      familyName: HARVEY
+      dateOfBirth: 1944-02-25T00:00:00
+      sex: male
+
+    9692235998:
+      userId: 7d828747-8a1b-46dd-8e97-08d69e60af41
+      emailAddress: onboarding.nhsapp+gncr.user8@gmail.com
+      odsCode: F00005
+      givenName: Shaun
+      familyName: TUCKER
+      dateOfBirth: 1950-09-19T00:00:00
+      sex: male
+
+    9692236005:
+      userId: 1032c0b5-44a4-415b-b43a-04190cb75593
+      emailAddress: onboarding.nhsapp+gncr.user9@gmail.com
+      odsCode: F00005
+      givenName: Landon
+      familyName: SYMES
+      dateOfBirth: 1946-11-17T00:00:00
+      sex: male
+
+    9692236056:
+      userId: 6d7e27ae-8b3a-4309-881b-f796018f6b31
+      emailAddress: onboarding.nhsapp+gncr.user10@gmail.com
+      odsCode: F00005
+      givenName: Susan
+      familyName: SLATER
+      dateOfBirth: 1936-07-17T00:00:00
+      sex: female
+
+    9692236064:
+      userId: a181d68e-cd2e-4c60-b682-ebe4239e6025
+      emailAddress: onboarding.nhsapp+gncr.user11@gmail.com
+      odsCode: F00005
+      givenName: Netta
+      familyName: DOOLAN
+      dateOfBirth: 1951-07-23T00:00:00
+      sex: female
+
+    9692236072:
+      userId: 64c74919-91e8-41b7-b9b8-c24190debedf
+      emailAddress: onboarding.nhsapp+gncr.user12@gmail.com
+      odsCode: F00005
+      givenName: Lena
+      familyName: UNWIN
+      dateOfBirth: 1944-04-07T00:00:00
+      sex: female
+
+    9692236102:
+      userId: cc5b460a-200f-4474-87c3-ae0bd2345531
+      emailAddress: onboarding.nhsapp+gncr.user13@gmail.com
+      odsCode: F00005
+      givenName: Thelma
+      familyName: PIERCE
+      dateOfBirth: 1947-10-07T00:00:00
+      sex: female
+
+    9692236110:
+      userId: 5b2f4f75-fbca-4269-b399-4f9895ec3313
+      emailAddress: onboarding.nhsapp+gncr.user14@gmail.com
+      odsCode: F00005
+      givenName: Sibyl
+      familyName: CORRIN
+      dateOfBirth: 1946-05-06T00:00:00
+      sex: female
+
+    9692236455:
+      userId: b78e77e9-eb07-4a8f-a87e-ffc3bccb33b6
+      emailAddress: onboarding.nhsapp+gncr.user15@gmail.com
+      odsCode: F00005
+      givenName: Keith
+      familyName: PYE
+      dateOfBirth: 1999-05-15T00:00:00
+      sex: male
+
+    9692236463:
+      userId: 26269f2e-900b-4fcd-9593-d544149b5140
+      emailAddress: onboarding.nhsapp+gncr.user16@gmail.com
+      odsCode: F00005
+      givenName: Edward
+      familyName: LEWERS
+      dateOfBirth: 1981-11-01T00:00:00
+      sex: male
+
+    9692236471:
+      userId: c41898fb-4889-47f6-8c8e-0255b355a83c
+      emailAddress: onboarding.nhsapp+gncr.user17@gmail.com
+      odsCode: F00005
+      givenName: Sidney
+      familyName: COY
+      dateOfBirth: 1992-09-11T00:00:00
       sex: male
 
   engage:
