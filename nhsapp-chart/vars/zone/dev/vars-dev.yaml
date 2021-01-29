@@ -38,6 +38,10 @@ ndopClaimAudience: https://ndopapp-int1.thunderbird.service.nhs.uk
 contactUsUrl: https://www.nhs.uk/contact-us/nhs-app-contact-us
 nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.preview
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.preview
+
 users:
   notificationHubPath: nhsapp-nonlive
   notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=

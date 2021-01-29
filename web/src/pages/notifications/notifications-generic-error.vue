@@ -18,7 +18,7 @@
 import PrimaryButton from '@/components/PrimaryButton';
 import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
 import NativeCallbacks from '@/services/native-app';
-import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import RedirectMixin from '@/components/RedirectMixin';
 
 export default {
   name: 'NotificationsGenericError',
@@ -26,7 +26,7 @@ export default {
     NoReturnFlowLayout,
     PrimaryButton,
   },
-  mixins: [TermsConditionsMixin],
+  mixins: [RedirectMixin],
   mounted() {
     NativeCallbacks.showHeaderSlim();
     NativeCallbacks.hideWhiteScreen();

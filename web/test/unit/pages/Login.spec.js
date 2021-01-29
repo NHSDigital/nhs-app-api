@@ -1,10 +1,12 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
-import { BEGINLOGIN_PATH } from '@/router/paths';
 import NativeApp from '@/services/native-app';
+import { PRE_REGISTRATION_INFORMATION_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
+jest.mock('@/lib/utils');
 
 const loginResponse = {
   loginUrl: 'boom',
@@ -13,31 +15,19 @@ const loginResponse = {
   },
 };
 
-AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
-  .mockReturnValue(loginResponse);
+AuthorisationService.prototype.generateLoginUrl = jest.fn().mockReturnValue(loginResponse);
 
 const fidoQuery = { fidoAuthResponse: 'Boom' };
 
 describe('login page', () => {
   let $store;
   let wrapper;
-  let $cookies;
-
-  beforeEach(() => {
-    delete window.location;
-  });
 
   const mountPage = ({
     isNativeApp = true,
     query = {},
     data,
-    instructionsViewed = true,
   } = {}) => {
-    $cookies = {
-      get: jest.fn().mockImplementation('BetaCookie').mockReturnValue({}),
-      set: jest.fn(),
-    };
-
     $store = createStore({
       state: {
         appVersion: {
@@ -47,26 +37,25 @@ describe('login page', () => {
         device: {
           isNativeApp,
         },
-        getters: {
-          'preRegistrationInformation/instructionsViewed': instructionsViewed,
-        },
       },
-      $cookies,
     });
 
     return mount(Login, {
-      shallow: true,
       $store,
       $route: {
         query,
       },
-      $cookies,
       data,
+      stubs: {
+        'login-layout': '<div><slot/></div>',
+      },
     });
   };
 
   beforeEach(() => {
+    delete window.location;
     AuthorisationService.mockClear();
+    redirectTo.mockClear();
   });
 
   describe('template', () => {
@@ -82,28 +71,24 @@ describe('login page', () => {
     beforeEach(() => {
       dismissPageLeaveWarningDialogue = jest.spyOn(NativeApp, 'dismissPageLeaveWarningDialogue').mockImplementation(() => true);
 
-      wrapper = mountPage({ instructionsViewed: false });
-    });
-
-    it('will call pre registration sync', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('preRegistrationInformation/sync');
+      wrapper = mountPage();
     });
 
     it('will call page leave warning reset', () => {
-      expect($store.dispatch).toHaveBeenCalledWith('pageLeaveWarning/reset');
+      expect($store.dispatch).toBeCalledWith('pageLeaveWarning/reset');
     });
 
     it('sets window onbeforeunload event to null', () => {
       window.onbeforeunload = () => {};
 
       AuthorisationService.mockClear();
-      wrapper = mountPage({ instructionsViewed: false });
+      wrapper = mountPage();
 
       expect(window.onbeforeunload).toBe(null);
     });
 
     it('will call native app leave warning reset', () => {
-      expect(dismissPageLeaveWarningDialogue).toHaveBeenCalled();
+      expect(dismissPageLeaveWarningDialogue).toBeCalled();
     });
   });
 
@@ -119,10 +104,9 @@ describe('login page', () => {
         });
 
         it('will generate login url using fido auth response', () => {
-          expect(generateLoginUrl).toHaveBeenCalledTimes(1);
-          expect(generateLoginUrl).toHaveBeenCalledWith({
+          expect(generateLoginUrl).toBeCalledTimes(1);
+          expect(generateLoginUrl).toBeCalledWith({
             isNativeApp: true,
-            cookies: $cookies,
             redirectTo: undefined,
             fidoAuthResponse: 'Boom',
           });
@@ -136,7 +120,7 @@ describe('login page', () => {
       describe('on web', () => {
         it('will not generate login url or change window location', () => {
           wrapper = mountPage({ query: fidoQuery, isNativeApp: false });
-          expect(AuthorisationService).not.toHaveBeenCalled();
+          expect(AuthorisationService).not.toBeCalled();
           expect(window.location).toBeUndefined();
         });
       });
@@ -149,26 +133,46 @@ describe('login page', () => {
       describe(description, () => {
         it('will not generate login url or change window location', () => {
           wrapper = mountPage({ isNativeApp });
-          expect(AuthorisationService).not.toHaveBeenCalled();
+          expect(AuthorisationService).not.toBeCalled();
           expect(window.location).toBeUndefined();
         });
       });
     });
   });
 
-  describe('pre registration button', () => {
+  describe('continue button', () => {
+    const query = { REDIRECT_PARAMETER: 'foo' };
+    let button;
+
     beforeEach(() => {
-      wrapper = mountPage({ instructionsViewed: false });
+      wrapper = mountPage({ query });
+      button = wrapper.find('#viewInstructionsButton');
     });
 
-    it('will not have a form that performs a get request to the begin login path', () => {
-      const form = wrapper.find(`form[action="${BEGINLOGIN_PATH}"]`);
-
-      expect(form.exists()).toBe(false);
+    it('will exist', () => {
+      expect(button.exists()).toBe(true);
     });
 
-    it('will have a button to go to the instructions page', () => {
-      expect(wrapper.find('#viewInstructionsButton').exists()).toBe(true);
+    it('will be enabled', () => {
+      expect(wrapper.vm.isButtonDisabled).toBe(false);
+    });
+
+    describe('on click', () => {
+      beforeEach(() => {
+        button.trigger('click');
+      });
+
+      it('will disable button', () => {
+        expect(wrapper.vm.isButtonDisabled).toBe(true);
+      });
+
+      it('will dispatch `analytics/satelliteTrack`', () => {
+        expect($store.dispatch).toBeCalledWith('analytics/satelliteTrack', 'login');
+      });
+
+      it('will redirect to PRE_REGISTRATION_INFORMATION_PATH and passing the query', () => {
+        expect(redirectTo).toBeCalledWith(wrapper.vm, PRE_REGISTRATION_INFORMATION_PATH, query);
+      });
     });
   });
 });

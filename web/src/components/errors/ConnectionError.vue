@@ -42,12 +42,6 @@ export default {
   },
   computed: {
     showError() {
-      const isNativeVersionAfter = this.$store.getters['appVersion/isNativeVersionAfter'];
-
-      if (isNativeVersionAfter('1.41.x')) {
-        return this.$store.state.errors.hasConnectionProblem && !this.isNativeApp;
-      }
-
       return this.$store.state.errors.hasConnectionProblem;
     },
   },

@@ -104,7 +104,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
-import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import RedirectMixin from '@/components/RedirectMixin';
 import { USER_RESEARCH_PATH, NOTIFICATIONS_PATH } from '@/router/paths';
 import { isFalsy } from '@/lib/utils';
 import {
@@ -124,7 +124,7 @@ export default {
     MessageText,
     GenericCheckbox,
   },
-  mixins: [TermsConditionsMixin],
+  mixins: [RedirectMixin],
   data() {
     return {
       termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
@@ -163,11 +163,11 @@ export default {
           return;
         }
 
-        if (isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)) {
-          this.$router.push({ path: NOTIFICATIONS_PATH });
-        } else {
-          this.$router.push({ path: USER_RESEARCH_PATH });
-        }
+        const path = isFalsy(this.$store.$env.USER_RESEARCH_ENABLED)
+          ? NOTIFICATIONS_PATH
+          : USER_RESEARCH_PATH;
+
+        this.$router.push({ path, query: this.$route.query });
       });
     },
     getErrorState() {

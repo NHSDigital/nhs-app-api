@@ -9,6 +9,7 @@ import {
   INDEX_PATH_PARAM,
   PATIENT_ID_REGEX_PATTERN,
 } from '@/router/paths';
+import { INTERSTITIAL_REDIRECTOR_NAME, REDIRECT_PARAMETER, isNhsAppRouteName } from '@/router/names';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 const protocol = 'http://';
@@ -158,13 +159,34 @@ export const readableBytes = (bytes) => {
 
 export const createRouteByNameObject = ({ name, query, params, store }) => {
   const newParams = { ...params };
-  const isLoggedIn = store.getters['session/isLoggedIn']();
-  if (isLoggedIn && store.getters['linkedAccounts/isPatientIdNotEmpty']) {
+  if (store.getters['session/isLoggedIn']() && store.getters['linkedAccounts/isPatientIdNotEmpty']) {
     newParams.patientId = store.getters['linkedAccounts/getPatientId'];
   } else {
     delete newParams.patientId;
   }
   return { name, query, params: newParams };
+};
+
+export const createConditionalRedirectRouteByName = ({ name, query, params, store }) => {
+  const redirectName = get(REDIRECT_PARAMETER)(query);
+  const routeQuery = query;
+  let routeName = name;
+
+  if (redirectName) {
+    if (isNhsAppRouteName(redirectName)) {
+      delete routeQuery[REDIRECT_PARAMETER];
+      routeName = redirectName;
+    } else {
+      routeName = INTERSTITIAL_REDIRECTOR_NAME;
+    }
+  }
+
+  return createRouteByNameObject({
+    name: routeName,
+    query: routeQuery,
+    params,
+    store,
+  });
 };
 
 export const redirectByName = ({ $router, $store }, name, query) => {

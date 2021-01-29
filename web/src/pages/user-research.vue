@@ -59,7 +59,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
-import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import RedirectMixin from '@/components/RedirectMixin';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
 import {
@@ -78,7 +78,7 @@ export default {
     RadioGroup,
     TermsAndConditionsLayout,
   },
-  mixins: [TermsConditionsMixin],
+  mixins: [RedirectMixin],
   data() {
     return {
       choices: [
@@ -108,7 +108,7 @@ export default {
         } catch {
           // do nothing
         } finally {
-          this.$router.push({ path: NOTIFICATIONS_PATH });
+          this.$router.push({ path: NOTIFICATIONS_PATH, query: this.$route.query });
         }
       }
     },

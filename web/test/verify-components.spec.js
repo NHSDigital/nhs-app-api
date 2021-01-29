@@ -11,7 +11,7 @@ const exclusions = [
   '../src/components/widgets/HotJar.vue',
   '../src/components/NativeOnlyMixin.vue',
   '../src/components/gp-medical-record/ReloadRecordMixin.vue',
-  '../src/components/TermsConditionsMixin.vue',
+  '../src/components/RedirectMixin.vue',
   '../src/components/errors/ErrorPageMixin.vue',
 ];
 

@@ -20,6 +20,6 @@ tester.run('html-end-tags', rule, {
       filename: 'test.vue',
       code: '<span role="text"/>',
       errors: ["'Should not use role=text, as flagged in accessibility report'"],
-    }
+    },
   ],
 });

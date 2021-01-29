@@ -5,6 +5,10 @@ environmentStubbed:
 users:
     notificationHubPath: nhsapp-nonlive-scratch18
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch18
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch18
+
 secrets:
     notificationHub:
         notificationHubSecretName: "notificationHubSharedAccessKeyScratch18"

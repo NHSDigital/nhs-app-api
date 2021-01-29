@@ -5,6 +5,8 @@ import isString from 'lodash/fp/isString';
 import mockdate from 'mockdate';
 import moment from 'moment';
 import {
+  createConditionalRedirectRouteByName,
+  createRouteByNameObject,
   formatInboxMessageTime,
   formatIndividualMessageTime,
   getPathAndQuery,
@@ -24,7 +26,8 @@ import {
   resetPageFocus,
   stripHtml,
 } from '@/lib/utils';
-import { INDEX_PATH, INDEX_PATH_PARAM } from '@/router/paths';
+import { INDEX_PATH, INDEX_PATH_PARAM, NOTIFICATIONS_PATH } from '@/router/paths';
+import { INTERSTITIAL_REDIRECTOR_NAME, MESSAGES_NAME, REDIRECT_PARAMETER } from '@/router/names';
 import { EventBus, FOCUS_NHSAPP_TITLE } from '@/services/event-bus';
 
 jest.mock('@/services/native-app');
@@ -102,6 +105,119 @@ describe('util library', () => {
         push: jest.fn(),
       },
     };
+  });
+
+  describe('createRouteByNameObject', () => {
+    const patientId = 'patientId';
+    const name = 'foo';
+    let query;
+    let store;
+    let params;
+    let isLoggedIn;
+
+    beforeEach(() => {
+      query = {};
+      isLoggedIn = false;
+      params = { patientId: 'some other value' };
+      store = {
+        getters: {
+          'linkedAccounts/getPatientId': patientId,
+          'linkedAccounts/isPatientIdNotEmpty': false,
+          'session/isLoggedIn': () => isLoggedIn,
+        },
+      };
+    });
+
+    describe('is logged in', () => {
+      let route;
+
+      beforeEach(() => {
+        isLoggedIn = true;
+        route = createRouteByNameObject({ name, query, params, store });
+      });
+
+      it('will not contain patient id', () => {
+        expect(route).toStrictEqual({ name, query, params: {} });
+      });
+
+      describe('patient id is not empty', () => {
+        beforeEach(() => {
+          store.getters['linkedAccounts/isPatientIdNotEmpty'] = true;
+          route = createRouteByNameObject({ name, query, params, store });
+        });
+
+        it('will contain patient id', () => {
+          expect(route).toStrictEqual({ name, query, params: { patientId } });
+        });
+      });
+    });
+
+    describe('is not logged in', () => {
+      let route;
+
+      beforeEach(() => {
+        isLoggedIn = false;
+        route = createRouteByNameObject({ name, query, params, store });
+      });
+
+      it('will not contain patient id', () => {
+        expect(route).toStrictEqual({ name, query, params: {} });
+      });
+    });
+  });
+
+  describe('createConditionalRedirectRouteByName', () => {
+    const name = 'foo';
+    const store = {
+      getters: {
+        'session/isLoggedIn': jest.fn(),
+      },
+    };
+
+    describe('has no redirect parameter', () => {
+      let route;
+
+      beforeEach(() => {
+        route = createConditionalRedirectRouteByName({ name, query: {}, store });
+      });
+
+      it('will retain route name', () => {
+        expect(route).toStrictEqual({ name, query: {}, params: {} });
+      });
+    });
+
+    describe('has redirect parameter to route name', () => {
+      let route;
+
+      beforeEach(() => {
+        const query = {
+          [REDIRECT_PARAMETER]: MESSAGES_NAME,
+        };
+        route = createConditionalRedirectRouteByName({ name, query, store });
+      });
+
+      it('will replace route name with redirect parameter', () => {
+        expect(route).toStrictEqual({ name: MESSAGES_NAME, query: {}, params: {} });
+      });
+    });
+
+    describe.each([
+      NOTIFICATIONS_PATH,
+      'https://www.example.com',
+    ])('has redirect parameter to `%s` path', (path) => {
+      const query = {
+        [REDIRECT_PARAMETER]: path,
+      };
+      let route;
+
+      beforeEach(() => {
+        route = createConditionalRedirectRouteByName({ name, query, store });
+      });
+
+      it('will replace route name with interstitial route name and pass redirect parameter', () => {
+        expect(route).toStrictEqual({ name: INTERSTITIAL_REDIRECTOR_NAME, query, params: {} });
+      });
+    });
   });
 
   describe('getPathWithPatientIdPrefix', () => {

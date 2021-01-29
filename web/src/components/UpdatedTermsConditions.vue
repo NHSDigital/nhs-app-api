@@ -81,7 +81,7 @@ import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
-import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import RedirectMixin from '@/components/RedirectMixin';
 import {
   TERMS_AND_CONDITIONS_URL,
   PRIVACY_POLICY_URL,
@@ -100,7 +100,7 @@ export default {
     MessageList,
     MessageText,
   },
-  mixins: [TermsConditionsMixin],
+  mixins: [RedirectMixin],
   data() {
     return {
       termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,
@@ -126,7 +126,7 @@ export default {
         await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
 
         if (this.$store.state.termsAndConditions.areAccepted) {
-          this.$router.push({ path: NOTIFICATIONS_PATH });
+          this.$router.push({ path: NOTIFICATIONS_PATH, query: this.$route.query });
         }
       } else {
         EventBus.$emit(FOCUS_ERROR_ELEMENT);

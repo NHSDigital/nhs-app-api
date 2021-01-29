@@ -186,7 +186,7 @@ export const NOTIFICATIONS_GENERIC_ERROR = {
   meta: {
     headerKey: 'navigation.pages.headers.notificationsGenericError',
     titleKey: 'navigation.pages.headers.notificationsGenericError',
-    middleware: [urlResolution, notificationsPrompt],
+    middleware: [urlResolution],
     proofLevel: proofLevel.P5,
     crumb: {},
     helpUrl: baseNhsAppHelpUrl,

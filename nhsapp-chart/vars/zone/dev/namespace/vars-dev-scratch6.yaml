@@ -2,6 +2,10 @@
 users:
     notificationHubPath: nhsapp-nonlive-scratch6
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch6
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch6
+
 secrets:
     notificationHub:
         notificationHubSecretName: "notificationHubSharedAccessKeyScratch6"

@@ -13,10 +13,8 @@
 import PrimaryButton from '@/components/PrimaryButton';
 import NoReturnFlowLayout from '@/layouts/no-return-flow-layout';
 import NotificationsContent from '@/components/Notifications/NotificationsContent';
-import { redirectTo } from '@/lib/utils';
-import { INDEX_PATH } from '@/router/paths';
 import NativeCallbacks from '@/services/native-app';
-import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import RedirectMixin from '@/components/RedirectMixin';
 
 export default {
   name: 'Index',
@@ -25,27 +23,20 @@ export default {
     NoReturnFlowLayout,
     PrimaryButton,
   },
-  mixins: [TermsConditionsMixin],
-  async beforeCreate() {
-    if (!this.$store.state.device.isNativeApp) {
-      redirectTo(this, INDEX_PATH);
-    }
-  },
+  mixins: [RedirectMixin],
   created() {
     const { notificationCookieExists, registered } = this.$store.state.notifications;
-    if (!notificationCookieExists
-      && registered) {
+    if (!notificationCookieExists && registered) {
       this.$store.dispatch('notifications/addNotificationCookie');
     }
 
-    if (notificationCookieExists
-      || registered) {
+    if (notificationCookieExists || registered) {
       this.$store.dispatch('notifications/logMetrics', {
         screenShown: false,
         notificationsRegistered: true,
         didErrorAttemptingToUpdateStatus: false,
       });
-      redirectTo(this, INDEX_PATH);
+      this.conditionalRedirect();
     }
   },
   mounted() {

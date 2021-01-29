@@ -1,7 +1,7 @@
 import TermsConditions from '@/components/TermsConditions';
 import * as LibUtils from '@/lib/utils';
 import { TERMSANDCONDITIONS_NAME } from '@/router/names';
-import { TERMSANDCONDITIONS_PATH } from '@/router/paths';
+import { NOTIFICATIONS_PATH, TERMSANDCONDITIONS_PATH, USER_RESEARCH_PATH } from '@/router/paths';
 import { FOCUS_ERROR_ELEMENT, EventBus } from '@/services/event-bus';
 import { createRouter, createStore, mount } from '../helpers';
 
@@ -115,23 +115,27 @@ describe('TermsConditions acceptance', () => {
 });
 
 describe('terms and conditions are accepted', () => {
-  let state;
+  const query = { parameter: 'value' };
 
   beforeEach(() => {
-    state = {
+    const state = {
       termsAndConditions: {
         areAccepted: true,
         acceptTerms: jest.fn(input => input),
       },
       device: { isNativeApp: false },
     };
+    wrapper = createTermsConditionsComponent({ query, state });
+    wrapper.vm.areTermsAccepted = true;
+    wrapper.vm.isAnalyticsCookieAccepted = true;
   });
 
-  describe('current route has no redirect query param', () => {
+  describe.each([
+    [true, USER_RESEARCH_PATH],
+    [false, NOTIFICATIONS_PATH],
+  ])('user research enabled is %s', (isUserResearchEnabled, path) => {
     beforeEach(() => {
-      wrapper = createTermsConditionsComponent({ state });
-      wrapper.vm.areTermsAccepted = true;
-      wrapper.vm.isAnalyticsCookieAccepted = true;
+      $store.$env.USER_RESEARCH_ENABLED = isUserResearchEnabled;
     });
 
     describe('when the accept button is clicked', () => {
@@ -146,6 +150,10 @@ describe('terms and conditions are accepted', () => {
             AnalyticsCookieAccepted: true,
           },
         });
+      });
+
+      it(`will push "${path}" and query to the router`, () => {
+        expect($router.push).toBeCalledWith({ path, query });
       });
     });
   });

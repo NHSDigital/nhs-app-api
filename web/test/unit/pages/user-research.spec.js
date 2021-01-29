@@ -6,7 +6,7 @@ import { createRouter, createStore, mount } from '../helpers';
 LibUtils.redirectTo = jest.fn();
 LibUtils.redirectByName = jest.fn();
 
-const mountUserResearch = ({ methods, $http, $router }) => mount(UserResearch, {
+const mountUserResearch = ({ methods, $http, $router, query }) => mount(UserResearch, {
   $store: createStore({
     $http,
     state: {
@@ -22,10 +22,14 @@ const mountUserResearch = ({ methods, $http, $router }) => mount(UserResearch, {
   stubs: {
     'terms-and-conditions-layout': '<div><slot/></div>',
   },
+  $route: {
+    query,
+  },
   $router,
 });
 
 describe('user research', () => {
+  const query = 'foo';
   let wrapper;
   let conditionalRedirect;
   let $http;
@@ -44,6 +48,7 @@ describe('user research', () => {
         conditionalRedirect,
       },
       $router,
+      query,
     });
   });
 
@@ -104,8 +109,8 @@ describe('user research', () => {
           });
         });
 
-        it('will call conditional redirect', () => {
-          expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
+        it('will push NOTIFICATIONS_PATH to the router', () => {
+          expect($router.push).toBeCalledWith({ path: NOTIFICATIONS_PATH, query });
         });
       });
 
@@ -119,8 +124,8 @@ describe('user research', () => {
           clickButton();
         });
 
-        it('will still call conditional redirect', () => {
-          expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
+        it('will still push NOTIFICATIONS_PATH to the router', () => {
+          expect($router.push).toBeCalledWith({ path: NOTIFICATIONS_PATH, query });
         });
       });
     });

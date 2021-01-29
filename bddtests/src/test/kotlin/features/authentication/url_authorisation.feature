@@ -99,7 +99,7 @@ Feature: Authorisation occurs during each URL visit
       | /appointments/gp-appointments/cancelling   | /appointments/gp-appointments |
       | /appointments/gp-appointments/confirmation | /appointments/gp-appointments |
 
-  Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
+  Scenario Outline: User who has not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
     Given I am a EMIS patient
     And I am not logged in
     When I browse to the <Url> and see the login page
@@ -119,3 +119,50 @@ Feature: Authorisation occurs during each URL visit
       | /redirector?redirect_to=appointments        | /appointments                     |
       | /nonexistent                                |                                   |
 
+  Scenario Outline: A User who has not accepted updated T&C and not logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after accepting terms
+    Given I am a EMIS patient who has accepted terms and conditions but updated terms and conditions exist
+    And I am not logged in
+    When I browse to the <Url> and see the login page
+    And I login
+    Then the updated Terms and Conditions page is displayed
+    When I agree to the updated terms and conditions
+    Then I am on the relevant <Page> page
+    Examples:
+      | Url                                         | Page                              |
+      | /appointments                               | /appointments                     |
+      | /                                           |                                   |
+      | /health-records/gp-medical-record           | /health-records/gp-medical-record |
+      | /prescriptions                              | /prescriptions                    |
+      | /prescriptions/confirm-prescription-details | /prescriptions                    |
+      | /advice                                     | /advice                           |
+      | /terms-and-conditions                       |                                   |
+      | /logout                                     | /login                            |
+      | /redirector                                 |                                   |
+      | /redirector?redirect_to=appointments        | /appointments                     |
+      | /nonexistent                                |                                   |
+
+  Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
+    Given I am a EMIS patient who has not already accepted terms and conditions
+    And I am not logged in
+    When I browse to the <Url> and see the login page
+    And I login
+    Then the Terms and Conditions page is displayed
+    When I check the agree to terms and conditions checkbox
+    And I click the continue button on Terms and Conditions
+    Then the User Research page is displayed
+    When I click the 'No' radio button
+    And I click the 'Continue' button
+    Then I am on the relevant <Page> page
+    Examples:
+      | Url                                         | Page                              |
+      | /appointments                               | /appointments                     |
+      | /                                           |                                   |
+      | /health-records/gp-medical-record           | /health-records/gp-medical-record |
+      | /prescriptions                              | /prescriptions                    |
+      | /prescriptions/confirm-prescription-details | /prescriptions                    |
+      | /advice                                     | /advice                           |
+      | /terms-and-conditions                       |                                   |
+      | /logout                                     | /login                            |
+      | /redirector                                 |                                   |
+      | /redirector?redirect_to=appointments        | /appointments                     |
+      | /nonexistent                                |                                   |

@@ -1,19 +1,21 @@
-import { REDIRECT_PARAMETER } from '@/router/names';
-import AuthorisationService from '@/services/authorisation-service';
+import { BEGINLOGIN_NAME } from '@/router/names';
+import { createRouteByNameObject } from '@/lib/utils';
 
 export default (context) => {
-  const { from, store, next } = context;
+  const { to, store, next } = context;
 
-  if (!store.state.device.isNativeApp || store.$cookies.get('SkipPreRegistrationPage') === 'true') {
-    const authorisationService = new AuthorisationService(store.$env);
-    const { loginUrl } = authorisationService.generateLoginUrl({
-      isNativeApp: store.state.device.isNativeApp,
-      redirectTo: from.query[REDIRECT_PARAMETER],
-      cookies: store.$cookies,
+  store.dispatch('preRegistrationInformation/sync');
+
+  if (!store.state.device.isNativeApp || store.state.preRegistrationInformation.seen) {
+    const beginLoginRoute = createRouteByNameObject({
+      name: BEGINLOGIN_NAME,
+      query: to.query,
+      params: to.params,
+      store,
     });
 
-    window.location.href = loginUrl;
-  } else {
-    next();
+    return next(beginLoginRoute);
   }
+
+  return next();
 };

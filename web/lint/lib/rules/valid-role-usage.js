@@ -1,5 +1,4 @@
 const utils = require('eslint-plugin-vue/lib/utils');
-const { transform } = require('lodash');
 
 module.exports = {
   meta: {
@@ -18,7 +17,7 @@ module.exports = {
         if (utils.hasAttribute(node, 'role')) {
           const targetAttribute = utils.getAttribute(node, 'role');
           if (targetAttribute.value && targetAttribute.value.value === 'text') {
-              message = 'Should not use role=text, as flagged in accessibility report';
+            message = 'Should not use role=text, as flagged in accessibility report';
           }
         }
         if (message) {

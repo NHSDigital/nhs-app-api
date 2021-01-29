@@ -1,96 +1,79 @@
 import notificationPrompt from '@/middleware/notificationsPrompt';
-import * as dependency from '@/lib/utils';
 import { NOTIFICATIONS_PATH } from '@/router/paths';
 import { INDEX_NAME, NOTIFICATIONS_NAME } from '@/router/names';
+import { createConditionalRedirectRouteByName } from '@/lib/utils';
+import { createStore } from '../helpers';
+
+jest.mock('@/lib/utils');
 
 describe('notification prompt next', () => {
-  let nativeVersionIsSupported = true;
+  const params = 'params';
+  const query = 'query';
   let next;
   let store;
-  dependency.createRoutePathObject = jest.fn(x => ({ path: x.path }));
 
-  const callsNotificationsPrompt = () => {
+  const callsNotificationsPrompt = ({ isNativeApp }) => {
     const to = {
       name: NOTIFICATIONS_NAME,
+      params,
       path: NOTIFICATIONS_PATH,
+      query,
     };
+    next = jest.fn();
+    store = createStore({
+      getters: {
+        'session/isLoggedIn': jest.fn().mockReturnValue(true),
+      },
+      state: {
+        device: {
+          isNativeApp,
+        },
+      },
+    });
     notificationPrompt({ next, to, store });
   };
 
-  describe('Native', () => {
+  describe('native', () => {
     beforeEach(() => {
-      next = jest.fn();
-      store = {
-        getters: {
-          'session/isLoggedIn': jest.fn().mockReturnValue(true),
-          'appVersion/isNativeVersionAfter': () => nativeVersionIsSupported,
-        },
-        dispatch: jest.fn(),
-        state: {
-          device: {
-            isNativeApp: true,
-          },
-        },
-      };
+      callsNotificationsPrompt({ isNativeApp: true });
     });
 
-    describe('Supported native version', () => {
-      describe('Navigation', () => {
-        beforeEach(() => {
-          callsNotificationsPrompt({});
-        });
-
-        it('will call next', () => {
-          expect(next).toBeCalled();
-        });
-      });
+    it('will dispatch `notifications/load`', () => {
+      expect(store.dispatch).toBeCalledWith('notifications/load');
     });
 
-    describe('Unsupported native version', () => {
-      describe('Navigation', () => {
-        beforeEach(() => {
-          nativeVersionIsSupported = false;
-          callsNotificationsPrompt({});
-        });
+    it('will dispatch `notifications/load`', () => {
+      expect(store.dispatch).toBeCalledWith('notifications/checkNotificationCookie');
+    });
 
-        it('will call next with index', () => {
-          expect(next).toBeCalledWith({
-            name: INDEX_NAME,
-            params: {},
-            query: undefined,
-          });
-        });
-      });
+    it('will call next', () => {
+      expect(next).toBeCalled();
     });
   });
 
-  describe('Not on native platform', () => {
+  describe('not on native platform', () => {
+    const redirectRoute = 'redirectRoute';
+
     beforeEach(() => {
-      next = jest.fn();
-      store = {
-        getters: {
-          'session/isLoggedIn': jest.fn().mockReturnValue(true),
-        },
-        state: {
-          device: {
-            isNativeApp: false,
-          },
-        },
-      };
+      createConditionalRedirectRouteByName.mockReturnValue(redirectRoute);
+      callsNotificationsPrompt({ isNativeApp: false });
     });
 
-    describe('Navigation', () => {
-      beforeEach(() => {
-        callsNotificationsPrompt({});
-      });
+    it('will not dispatch any actions', () => {
+      expect(store.dispatch).not.toBeCalled();
+    });
 
-      it('will call next with index', () => {
-        expect(next).toBeCalledWith({
-          name: INDEX_NAME,
-          params: {},
-          query: undefined,
-        });
+    it('will create redirect route to INDEX', () => {
+      expect(createConditionalRedirectRouteByName).toBeCalledWith({
+        name: INDEX_NAME,
+        params,
+        query,
+        store,
       });
+    });
+
+    it('will call next with redirect route', () => {
+      expect(next).toBeCalledWith(redirectRoute);
     });
   });
 });

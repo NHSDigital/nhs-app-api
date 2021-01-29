@@ -1,177 +1,149 @@
-import getters from '@/store/modules/session/getters';
 import termsAndConditions from '@/middleware/termsAndConditions';
-import { TERMS_AND_CONDITIONS } from '@/router/routes/login';
-import { LOGOUT } from '@/router/routes/logout';
-import { APPOINTMENTS } from '@/router/routes/appointments';
 import {
-  TERMSANDCONDITIONS_NAME,
-  APPOINTMENTS_NAME,
-  REDIRECT_PARAMETER,
-  INTERSTITIAL_REDIRECTOR_NAME,
+  LOGOUT_NAME,
   NOTIFICATIONS_NAME,
+  TERMSANDCONDITIONS_NAME,
 } from '@/router/names';
-import { initialState as sessionState } from '@/store/modules/session/mutation-types';
-import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
-import * as dependency from '@/lib/utils';
+import { createConditionalRedirectRouteByName } from '@/lib/utils';
+import { createStore } from '../helpers';
 
-const { isLoggedIn } = getters;
+jest.mock('@/lib/utils');
 
 describe('middleware/termsAndConditions', () => {
-  let context;
-  dependency.createRouteByNameObject = jest.fn(x => ({ name: x.name, query: x.query }));
+  const createConditionalRedirectRouteByNameResult = 'Return conditional route';
+  let store;
+  let to;
+  let next;
 
-  beforeEach(() => {
-    const state = {
-      session: sessionState(),
-      termsAndConditions: termsAndConditionsState(),
-    };
+  const callTermsAndConditions = () => termsAndConditions({ next, to, store });
 
-    context = {
-      next: jest.fn(),
-      store: {
-        state,
-        commit: jest.fn(),
-        dispatch: jest.fn(),
-        getters: {
-          'session/isLoggedIn': isLoggedIn(state),
-        },
-        $cookies: {
-          get: jest.fn(),
-          set: jest.fn(),
-        },
-      },
-      to: {
-        ...TERMS_AND_CONDITIONS,
-        query: {},
-      },
-    };
+  beforeAll(() => {
+    createConditionalRedirectRouteByName
+      .mockReturnValue(createConditionalRedirectRouteByNameResult);
   });
 
-  describe('is logged in', () => {
+  beforeEach(() => {
+    store = createStore({
+      state: {
+        termsAndConditions: {
+          areAccepted: false,
+          updatedConsentRequired: false,
+        },
+      },
+    });
+
+    to = {
+      query: 'query',
+      params: 'params',
+    };
+
+    next = jest.fn();
+  });
+
+  afterEach(() => {
+    createConditionalRedirectRouteByName.mockClear();
+  });
+
+  describe('terms have been accepted and updated consent is not required', () => {
+    beforeEach(async () => {
+      store.state.termsAndConditions.areAccepted = true;
+      store.state.termsAndConditions.updatedConsentRequired = false;
+    });
+
+    describe(`navigating to ${TERMSANDCONDITIONS_NAME}`, () => {
+      beforeEach(async () => {
+        to.name = TERMSANDCONDITIONS_NAME;
+        await callTermsAndConditions();
+      });
+
+      it('will dispatch `termsAndConditions/checkAcceptance`', () => {
+        expect(store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
+      });
+
+      it('will create conditional notifications redirect route', () => {
+        expect(createConditionalRedirectRouteByName).toBeCalledWith({
+          name: NOTIFICATIONS_NAME,
+          query: to.query,
+          params: to.params,
+          store,
+        });
+      });
+
+      it('will call next with conditional notifications redirect route result', () => {
+        expect(next).toBeCalledWith(createConditionalRedirectRouteByNameResult);
+      });
+    });
+
+    describe('navigating to any other page', () => {
+      beforeEach(async () => {
+        to.name = 'foo';
+        await callTermsAndConditions();
+      });
+
+      it('will dispatch `termsAndConditions/checkAcceptance`', () => {
+        expect(store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
+      });
+
+      it('will not create conditional redirect route', () => {
+        expect(createConditionalRedirectRouteByName).not.toBeCalled();
+      });
+
+      it('will call next', () => {
+        expect(next).toBeCalled();
+      });
+    });
+  });
+
+  describe.each([
+    ['terms not accepted', false, true],
+    ['updated consent required', true, true],
+  ])('%s', (_, areAccepted, updatedConsentRequired) => {
     beforeEach(() => {
-      context.store.state.session.csrfToken = 'token';
+      store.state.termsAndConditions.areAccepted = areAccepted;
+      store.state.termsAndConditions.updatedConsentRequired = updatedConsentRequired;
     });
 
-    describe('terms not accepted', () => {
-      beforeEach(() => {
-        context.store.state.termsAndConditions.areAccepted = false;
+    describe.each([
+      LOGOUT_NAME,
+      TERMSANDCONDITIONS_NAME,
+    ])('navigating to %s', (name) => {
+      beforeEach(async () => {
+        to.name = name;
+        await callTermsAndConditions();
       });
 
-      it('will check the server if the terms and conditions are not accepted on the state', async () => {
-        context.to = TERMS_AND_CONDITIONS;
-        await termsAndConditions(context);
-        expect(context.store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
+      it('will dispatch `termsAndConditions/checkAcceptance`', () => {
+        expect(store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
       });
 
-      it('will allow logout regardless of acceptance of the terms', async () => {
-        context.to = LOGOUT;
-        await termsAndConditions(context);
-        expect(context.next).not.toBeCalledWith(expect.anything);
-        expect(context.next).toBeCalled();
+      it('will not create conditional redirect route', () => {
+        expect(createConditionalRedirectRouteByName).not.toBeCalled();
       });
 
-      describe('will redirect to', () => {
-        beforeEach(() => {
-          context.to = APPOINTMENTS;
-          context.to.query = {};
-        });
-
-        it('terms and conditions when not accepted', async () => {
-          await termsAndConditions(context);
-          expect(context.next).toBeCalledWith({
-            name: TERMSANDCONDITIONS_NAME,
-            query: {},
-          });
-        });
-
-        it('terms and conditions with redirect query param when not accepted', async () => {
-          context.to.query = { [REDIRECT_PARAMETER]: LOGOUT.name };
-          await termsAndConditions(context);
-          expect(context.next).toBeCalledWith({
-            name: TERMSANDCONDITIONS_NAME,
-            query: { [REDIRECT_PARAMETER]: LOGOUT.name },
-          });
-        });
-      });
-
-      describe('dispatch says terms have been accepted', () => {
-        beforeEach(async () => {
-          context.store.dispatch = jest.fn(() => new Promise((resolve) => {
-            context.store.state.termsAndConditions.areAccepted = true;
-            resolve();
-          }));
-        });
-
-        it('will redirect to NOTIFICATIONS', async () => {
-          await termsAndConditions(context);
-          expect(context.next).toHaveBeenCalledWith({
-            name: NOTIFICATIONS_NAME,
-            query: {},
-          });
-        });
-
-        it('will redirect to query param target', async () => {
-          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME };
-          await termsAndConditions(context);
-          expect(context.next).toBeCalledWith({
-            name: APPOINTMENTS_NAME,
-            query: {},
-          });
-        });
-
-        it('will redirect to query parameter target and pass source parameter', async () => {
-          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME, source: 'web' };
-          await termsAndConditions(context);
-          expect(context.next).toBeCalledWith({
-            name: APPOINTMENTS_NAME,
-            query: { source: 'web' },
-          });
-        });
+      it('will call next', () => {
+        expect(next).toBeCalled();
       });
     });
 
-    describe('terms accepted in state', () => {
-      describe('no redirect in query string', () => {
-        beforeEach(async () => {
-          context.store.state.termsAndConditions.areAccepted = true;
-          await termsAndConditions(context);
-        });
-
-        it('will redirect to NOTIFICATIONS', async () => {
-          expect(context.next).toBeCalledWith({
-            name: NOTIFICATIONS_NAME,
-            query: {},
-          });
-        });
+    describe('navigating to any other page', () => {
+      beforeEach(async () => {
+        to.name = 'foo';
+        await callTermsAndConditions();
       });
 
-      describe('internal route redirect in query string', () => {
-        beforeEach(async () => {
-          context.store.state.termsAndConditions.areAccepted = true;
-          context.to.query = { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME };
-          await termsAndConditions(context);
-        });
-
-        it('will redirect to target of redirect_to parameter', async () => {
-          expect(context.next).toBeCalledWith({
-            name: APPOINTMENTS_NAME,
-            query: {},
-          });
-        });
+      it('will dispatch `termsAndConditions/checkAcceptance`', () => {
+        expect(store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
       });
 
-      describe('external route redirect in query string', () => {
-        beforeEach(async () => {
-          context.store.state.termsAndConditions.areAccepted = true;
-          context.to.query = { [REDIRECT_PARAMETER]: 'somethingelse', source: 'web' };
-          await termsAndConditions(context);
-        });
+      it('will not create conditional redirect route', () => {
+        expect(createConditionalRedirectRouteByName).not.toBeCalled();
+      });
 
-        it('will redirect to redirector page with redirect_to parameter', async () => {
-          expect(context.next).toBeCalledWith({
-            name: INTERSTITIAL_REDIRECTOR_NAME,
-            query: context.to.query,
-          });
+      it('will call next with terms and conditions route', () => {
+        expect(next).toBeCalledWith({
+          name: TERMSANDCONDITIONS_NAME,
+          query: to.query,
+          params: to.params,
         });
       });
     });

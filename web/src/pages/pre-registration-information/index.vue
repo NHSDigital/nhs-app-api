@@ -2,31 +2,52 @@
   <nhs-uk-app-layout>
     <div>
       <pre-registration-information :should-show-header="false"/>
-      <login-button button-text="generic.continue"/>
+      <generic-button id="login-button"
+                      class="nhsuk-u-margin-bottom-3"
+                      :button-classes="['nhsuk-button']"
+                      type="submit"
+                      data-id="login-button"
+                      @click="trackLogin">
+        {{ $t("generic.continue") }}
+      </generic-button>
     </div>
   </nhs-uk-app-layout>
 </template>
 
 <script>
-import PreRegistrationInformation from '@/components/PreRegistrationInformation';
-import LoginButton from '@/components/widgets/LoginButton';
-import NativeCallbacks from '@/services/native-app';
+import GenericButton from '@/components/widgets/GenericButton';
+import NativeApp from '@/services/native-app';
 import NhsUkAppLayout from '@/layouts/nhsuk-layout';
+import PreRegistrationInformation from '@/components/PreRegistrationInformation';
+import { BEGINLOGIN_PATH } from '@/router/paths';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'PreRegistrationInformationPage',
   components: {
-    PreRegistrationInformation,
-    LoginButton,
+    GenericButton,
     NhsUkAppLayout,
+    PreRegistrationInformation,
+  },
+  data() {
+    return {
+      isButtonDisabled: false,
+    };
   },
   mounted() {
-    if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.showHeaderSlim();
-      NativeCallbacks.hideWhiteScreen();
-    } else {
-      window.scrollTo(0, 0);
-    }
+    NativeApp.showHeaderSlim();
+    NativeApp.hideWhiteScreen();
+  },
+  methods: {
+    async trackLogin() {
+      if (!this.isButtonDisabled) {
+        this.isButtonDisabled = true;
+
+        this.$store.dispatch('analytics/satelliteTrack', 'login');
+        await this.$store.dispatch('preRegistrationInformation/continue');
+        redirectTo(this, BEGINLOGIN_PATH, this.$route.query);
+      }
+    },
   },
 };
 </script>

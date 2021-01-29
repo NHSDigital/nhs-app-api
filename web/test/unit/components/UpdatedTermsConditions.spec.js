@@ -99,10 +99,10 @@ describe('UpdatedTermsConditions acceptance Process', () => {
 });
 
 describe('terms and conditions are accepted', () => {
-  let state;
+  const query = { parameter: 'value' };
 
   beforeEach(() => {
-    state = {
+    const state = {
       termsAndConditions: {
         areAccepted: true,
         acceptTerms: jest.fn(input => input),
@@ -110,24 +110,19 @@ describe('terms and conditions are accepted', () => {
       device: { isNativeApp: false },
     };
     wrapper = createUpdatedTermsConditionsComponent(
-      { state, route: { ...TERMSANDCONDITIONS, query: {} } },
+      { state, route: { ...TERMSANDCONDITIONS, query } },
     );
+    wrapper.vm.areTermsAccepted = true;
+    wrapper.vm.isAnalyticsCookieAccepted = true;
   });
 
-  describe('current route has no redirect query param', () => {
+  describe('when the accept button is clicked', () => {
     beforeEach(() => {
-      wrapper.vm.areTermsAccepted = true;
-      wrapper.vm.isAnalyticsCookieAccepted = true;
+      wrapper.find('#btn_accept').trigger('click');
     });
 
-    describe('when the accept button is clicked', () => {
-      beforeEach(() => {
-        wrapper.find('#btn_accept').trigger('click');
-      });
-
-      it('will redirect to INDEX route when the button is pushed', async () => {
-        expect($router.push).toHaveBeenCalledWith({ path: NOTIFICATIONS_PATH });
-      });
+    it('will push NOTIFICATIONS_PATH and query to the router', async () => {
+      expect($router.push).toBeCalledWith({ path: NOTIFICATIONS_PATH, query });
     });
   });
 });

@@ -10,6 +10,10 @@ akamaiEnv: nhsapp.service.nhs.uk
 # Allow access to private API without the redirector
 createDefaultPrivateIngress: true
 
+# well known
+wellKnownAndroidPackageName: com.nhs.online.nhsonline.onboardingsandpit
+wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.onboardingsandpit
+
 users:
   notificationHubPath: nhsapp-nonlive-onboardingsandpit
 

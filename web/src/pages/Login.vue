@@ -8,7 +8,7 @@
         </h2>
         <generic-button id="viewInstructionsButton"
                         :button-classes="getButtonClasses"
-                        @click="onContinueClicked">
+                        @click.stop.prevent="onContinueClicked">
           {{ $t('login.continueWithNhsLogin') }}
         </generic-button>
       </div>
@@ -43,11 +43,11 @@ export default {
   data() {
     return {
       authoriseUrl: BEGINLOGIN_PATH,
-      redirectParameter: this.$route.query[REDIRECT_PARAMETER],
-      redirectName: REDIRECT_PARAMETER,
       instructionsUrl: PRE_REGISTRATION_INFORMATION_PATH,
+      isButtonDisabled: false,
       isUsingNativeApp: this.$store.state.device.isNativeApp,
-      hasSeenInstructions: this.$store.getters['preRegistrationInformation/instructionsViewed'],
+      redirectName: REDIRECT_PARAMETER,
+      redirectParameter: this.$route.query[REDIRECT_PARAMETER],
     };
   },
   computed: {
@@ -57,8 +57,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('preRegistrationInformation/sync');
-
     this.$store.dispatch('pageLeaveWarning/reset');
 
     if (typeof window === 'object') {
@@ -99,9 +97,9 @@ export default {
     },
     onContinueClicked() {
       if (!this.isButtonDisabled) {
-        this.$store.dispatch('analytics/satelliteTrack', 'login');
         this.isButtonDisabled = true;
-        redirectTo(this, this.instructionsUrl, this.redirectParameter);
+        this.$store.dispatch('analytics/satelliteTrack', 'login');
+        redirectTo(this, this.instructionsUrl, this.$route.query);
       }
     },
   },
