@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Metrics
     {
         Task Login(LoginData data);
 
-        Task UpliftStarted();
+        Task UpliftStarted(UpliftStartedData data);
 
         Task UserResearchOptOut();
 

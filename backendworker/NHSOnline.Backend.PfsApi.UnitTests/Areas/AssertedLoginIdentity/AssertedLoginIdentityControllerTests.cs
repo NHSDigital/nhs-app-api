@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -206,13 +208,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAssertedLoginIdentityService
                 .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
                 .Returns(new CreateJwtResult.Success(expectedResponse));
-            var request = new CreateJwtRequest { Action = "UpliftStarted"};
+            var request = new CreateJwtRequest { Action = "UpliftStarted" };
 
             // Act
             await _systemUnderTest.Post(request, _p5UserSession);
 
             // Assert
-            _mockMetricLogger.Verify(x => x.UpliftStarted(), Times.Once);
+            _mockMetricLogger.Verify(
+                x => x.UpliftStarted(
+                    It.Is<UpliftStartedData>(
+                        data => MatchesSessionId(data, _p5UserSession.Key))), Times.Once);
+        }
+
+        private bool MatchesSessionId(UpliftStartedData actual, string expectedSessionId)
+        {
+            var sessionId = actual.ToKeyValuePairs().Single();
+            return sessionId.Key == "SessionId" && sessionId.Value == expectedSessionId;
         }
 
         [TestMethod]

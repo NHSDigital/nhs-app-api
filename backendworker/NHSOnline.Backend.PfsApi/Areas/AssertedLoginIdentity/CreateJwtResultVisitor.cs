@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
             switch (_request.Action)
             {
                 case "UpliftStarted":
-                    await _metricLogger.UpliftStarted();
+                    await _metricLogger.UpliftStarted(new UpliftStartedData(_userSession.Key));
                     break;
                 case "SilverIntegrationJumpOff":
                     var metricLoggerData = new SilverIntegrationData(_userSession.Key, _request.ProviderId, _request.ProviderName, _request.JumpOffId);

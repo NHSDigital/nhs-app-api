@@ -293,6 +293,23 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
         }
 
+        [TestMethod]
+        public async Task UpliftStarted_LogsUpliftStartedData()
+        {
+            // Arrange
+            var mockMetricContext = new Mock<IMetricContext>();
+            var metricLogger = CreateMetricLogger(mockMetricContext);
+            var data = new UpliftStartedData("sessionId_1234");
+            using var consoleOut = new CaptureConsoleOut();
+
+            // Act
+            await metricLogger.UpliftStarted(data);
+
+            // Assert
+            var splitConsoleMessage = MetricLoggerAssert.AssertSingleLine(consoleOut.ToString()).Split(" ");
+            splitConsoleMessage.Should().Contain("SessionId=sessionId_1234");
+        }
+
         private static IMetricLogger CreateMetricLogger(Mock<IMetricContext> mockMetricContext)
         {
             var services = new ServiceCollection();
@@ -309,7 +326,10 @@ namespace NHSOnline.Backend.Metrics.UnitTests
             {
                 var loginData = new LoginData("requestId", "sessionId", "userAgent", "");
                 yield return new object[] { Method(metricLogger => metricLogger.Login(loginData)), "Login" };
-                yield return new object[] { Method(metricLogger => metricLogger.UpliftStarted()), "UpliftStarted" };
+
+                var upliftStartedData = new UpliftStartedData("sessionId");
+                yield return new object[] { Method(metricLogger => metricLogger.UpliftStarted(upliftStartedData)), "UpliftStarted" };
+
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptIn()), "UserResearchOptIn" };
                 yield return new object[] { Method(metricLogger => metricLogger.UserResearchOptOut()), "UserResearchOptOut" };
                 yield return new object[] { Method(metricLogger => metricLogger.TermsAndConditionsInitialConsent()), "TermsAndConditionsInitialConsent" };
