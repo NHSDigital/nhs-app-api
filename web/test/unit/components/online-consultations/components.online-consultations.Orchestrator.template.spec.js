@@ -94,7 +94,6 @@ describe('orchestrator', () => {
           const dialogMessage = orchestrator.find('message-list-stub > li');
 
           expect(messageDialog.vm.$props.messageType).toEqual('error');
-          expect(messageDialog.vm.$attrs.role).toEqual('alert');
           expect(dialogHeader.element.innerHTML.trim()).toEqual(expectedValidationHeader);
           expect(dialogMessage.element.innerHTML).toEqual(expectedValidationErrorMessage);
         });

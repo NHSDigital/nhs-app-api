@@ -532,6 +532,7 @@ describe('orchestrator', () => {
 
           // Act
           await orchestrator.vm.continueClicked();
+          await orchestrator.vm.$nextTick();
 
           // Assert
           expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
@@ -561,6 +562,7 @@ describe('orchestrator', () => {
 
             // Act
             await orchestrator.vm.continueClicked();
+            await orchestrator.vm.$nextTick();
 
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');
@@ -588,6 +590,7 @@ describe('orchestrator', () => {
 
             // Act
             await orchestrator.vm.continueClicked();
+            await orchestrator.vm.$nextTick();
 
             // Assert
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/setValidationError');

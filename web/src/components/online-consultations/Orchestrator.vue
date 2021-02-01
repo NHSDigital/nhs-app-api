@@ -1,18 +1,20 @@
 <template>
   <div :class="[!isNativeApp && $style.container, 'pull-content']">
     <div v-if="question && isDataRequired" id="questionnaire-container">
-      <message-dialog v-if="isValidationError"
-                      :key="questionKey"
-                      message-type="error"
-                      role="alert">
-        <message-text>
-          {{ $t('onlineConsultations.validationErrors.thereIsAProblem') }}
-        </message-text>
-        <message-list>
-          <li>{{ validationErrorMessage }}</li>
-          <li v-for="error in validationErrorMessageFromResponse" :key="error">{{ error }}</li>
-        </message-list>
-      </message-dialog>
+      <div aria-atomic="true" role="alert">
+        <message-dialog v-if="isValidationError"
+                        :key="questionKey"
+                        :focusable="true"
+                        message-type="error">
+          <message-text>
+            {{ $t('onlineConsultations.validationErrors.thereIsAProblem') }}
+          </message-text>
+          <message-list>
+            <li>{{ validationErrorMessage }}</li>
+            <li v-for="error in validationErrorMessageFromResponse" :key="error">{{ error }}</li>
+          </message-list>
+        </message-dialog>
+      </div>
 
       <form @submit.prevent="continueClicked">
         <question :id="question.id"
@@ -277,16 +279,19 @@ export default {
       if (this.$store.state.onlineConsultations.isLoadingFile) {
         return;
       }
-      await this.$store.dispatch('onlineConsultations/setValidationError');
-      if (!this.isValidationError) {
-        document.activeElement.blur();
-        await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
-          provider: this.provider,
-          serviceDefinitionId: this.serviceDefinitionId,
-        });
-        EventBus.$emit(FOCUS_NHSAPP_TITLE);
-      }
-      window.scrollTo(0, 0);
+      await this.$store.dispatch('onlineConsultations/clearValidation');
+      this.$nextTick(async () => {
+        await this.$store.dispatch('onlineConsultations/setValidationError');
+        if (!this.isValidationError) {
+          document.activeElement.blur();
+          await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
+            provider: this.provider,
+            serviceDefinitionId: this.serviceDefinitionId,
+          });
+          EventBus.$emit(FOCUS_NHSAPP_TITLE);
+        }
+        window.scrollTo(0, 0);
+      });
     },
     async backClicked() {
       document.activeElement.blur();
