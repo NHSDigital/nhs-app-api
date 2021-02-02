@@ -65,7 +65,7 @@ namespace NHSOnline.App.Controls
             var targetSize = info.Rect.AspectFill(_svgSize.ToSizeI());
             var scale = targetSize.Size.Width / _svgSize.Width;
 
-            var matrix = SKMatrix.MakeScale(scale, scale);
+            var matrix = SKMatrix.CreateScale(scale, scale);
             canvas.DrawPicture(picture, ref matrix);
         }
 
