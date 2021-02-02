@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
@@ -135,6 +136,87 @@ namespace Nhs.App.Api.Integration.Tests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+
+            // TODO - NHSO-11327 - enhance this test to check that the output is an OperationOutcome with appropriate properties.
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationPost_UnparseablePayload_Returns400BadRequest(EndpointInfo endpoint)
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+
+            var httpContent = new StringContent("{ bad Json", Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+
+            issue.Diagnostics.Should().Contain("Invalid Json encountered.");
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationPost_ValidJsonInvalidFhirResourceUnknownResourceType_Returns400BadRequest(EndpointInfo endpoint)
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+
+            var stringPayload = BuildValidRequestBody();
+            stringPayload = stringPayload.Replace("\"CommunicationRequest\"", "\"UnknownType\"", StringComparison.OrdinalIgnoreCase);
+
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+
+            issue.Diagnostics.Should().Contain("Cannot locate type information for type 'UnknownType'");
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationPost_ValidJsonInvalidFhirResourceMissingResourceType_Returns400BadRequest(EndpointInfo endpoint)
+        {
+            // Arrange
+            using var httpClient = CreateHttpClient();
+
+            var stringPayload = BuildValidRequestBody();
+            stringPayload = stringPayload.Replace("\"ResourceType\":", "", StringComparison.OrdinalIgnoreCase);
+            stringPayload = stringPayload.Replace( "\"CommunicationRequest\",", "", StringComparison.OrdinalIgnoreCase);
+
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
+
+            issue.Diagnostics.Should().Contain("Root object has no type indication (resourceType)");
         }
 
         private static async Task CommunicationFhirR4Post_ValidTest(string validPayload, string endpointPath)
@@ -218,7 +300,7 @@ namespace Nhs.App.Api.Integration.Tests
 
         private static List<ResourceReference> BuildValidRecipient(RecipientKind recipientKind)
         {
-            List<ResourceReference> recipients = new List<ResourceReference>();
+            var recipients = new List<ResourceReference>();
 
             if (recipientKind == RecipientKind.OdsCode)
             {
@@ -238,6 +320,15 @@ namespace Nhs.App.Api.Integration.Tests
             }
 
             return recipients;
+        }
+
+        private static async Task<OperationOutcome> ParseOperationOutcome(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            var operationOutcome = new FhirJsonParser().Parse<OperationOutcome>(responseString);
+
+            return operationOutcome;
         }
     }
 }
