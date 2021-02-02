@@ -423,3 +423,14 @@ Feature: View Courses Frontend
       | TPP       |
       | VISION    |
       | MICROTEST |
+
+  Scenario: A user can get help with medical abbreviations from the order a repeat prescription page
+    Given I am a EMIS patient
+    And special request text has been enabled and is 'Optional'
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And I am logged in
+    And I navigate to prescriptions
+    When I click 'Order a new repeat prescription'
+    And I click 'Help with medical abbreviations'
+    Then I see the medical abbreviations help link

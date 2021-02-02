@@ -19,40 +19,41 @@
         </div>
 
         <div v-if="showRepeatCourses" class="break">
-          <p class="nhsuk-u-padding-bottom-3">
-            {{ $t('prescriptions.repeatCourses.currentlyAvailableRepeatPrescriptions') }}</p>
+          <h2 class="nhsuk-u-padding-bottom-3">
+            {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}</h2>
           <div :class="selectMedicationErrorStyle">
             <error-message v-if="error && !courseSelectionValid" id="error-type">
               {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
             </error-message>
-            <CardGroup role="list" class="nhsuk-grid-row">
-              <CardGroupItem class="nhsuk-grid-column-full">
-                <Card>
-                  <fieldset class="nhsuk-fieldset">
-                    <legend class="nhsuk-fieldset__legend"
-                            role="heading">
-                      {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}
-                    </legend>
-                    <repeat-prescription v-model="selected"/>
-                  </fieldset>
-                </Card>
-              </CardGroupItem>
-            </CardGroup>
+            <repeat-prescription v-model="selected"/>
           </div>
           <div v-if="specialRequestNecessity !== 'NotAllowed'"
                role="form"
                :class="mandatoryReasonErrorStyle">
-            <p>{{ $t('prescriptions.repeatCourses.changePharmacy') }}</p>
-            <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest"
-                   class="nhsuk-body-m">
-              <strong>{{ $t('prescriptions.repeatCourses.specialRequestsOptional') }}</strong>
-            </label>
-            <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest"
-                   class="nhsuk-body-m">
-              <strong>{{ $t('prescriptions.repeatCourses.specialRequestsMandatory') }} </strong>
-            </label>
-            <p id="disclaimer" class="nhsuk-body-m">
-              {{ $t('prescriptions.repeatCourses.thisTextMayNotBeSeen') }}</p>
+            <div v-if="specialRequestNecessity === 'Optional'">
+              <label class="nhsuk-body-m" for="specialRequest">
+                <h2>
+                  <strong>
+                    {{ $t('prescriptions.repeatCourses.specialRequestsOptionalLabel') }}
+                  </strong>
+                </h2>
+              </label>
+              <p id="disclaimer"
+                 class="nhsuk-body-m" >
+                {{ $t('prescriptions.repeatCourses.specialRequestsOptionalMessage') }}</p>
+            </div>
+            <div v-else-if="specialRequestNecessity === 'Mandatory'">
+              <label class="nhsuk-body-m" for="specialRequest">
+                <h2>
+                  <strong>
+                    {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryLabel') }}
+                  </strong>
+                </h2>
+              </label>
+              <p id="disclaimer"
+                 class="nhsuk-body-m" >
+                {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryMessage') }}</p>
+            </div>
             <error-message v-if="showMandatoryReasonError" id="error-type">
               {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
             </error-message>
@@ -75,6 +76,19 @@
                           @click.prevent="validate">
             {{ $t('prescriptions.repeatCourses.continue') }}
           </generic-button>
+          <collapsible-details id="medicalAbbreviationCollapsible">
+            <template slot="header">
+              {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.label') }}
+            </template>
+            <p>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.message') }}</p>
+            <span>{{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.guidance') }}
+              <a id="medicalAbbreviationHelpLink"
+                 style="display: inline; vertical-align: baseline"
+                 :href="medicalAbbreviationsPath"
+                 target="_blank" rel="noopener noreferrer">
+                {{ $t('prescriptions.repeatCourses.helpWithMedicalAbbreviation.linkText') }}</a>
+            </span>
+          </collapsible-details>
         </div>
 
         <div v-if="showNoRepeatCourses">
@@ -105,6 +119,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import PrescriptionErrors from '@/components/errors/pages/prescriptions/PrescriptionsErrors';
+import CollapsibleDetails from '@/components/widgets/collapsible/CollapsibleDetails';
 
 import {
   NOMINATED_PHARMACY_CHECK_PATH,
@@ -112,12 +127,10 @@ import {
   PRESCRIPTION_CONFIRM_COURSES_PATH,
   PRESCRIPTION_REPEAT_COURSES_PATH,
 } from '@/router/paths';
+import { CLINICAL_ABBREVIATIONS_URL } from '@/router/externalLinks';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import Card from '@/components/widgets/card/Card';
 
 const loadData = async (store) => {
   if (!store.state.repeatPrescriptionCourses.hasLoaded) {
@@ -143,10 +156,8 @@ export default {
     GenericButton,
     GenericTextArea,
     DesktopGenericBackLink,
-    Card,
-    CardGroupItem,
-    CardGroup,
     PrescriptionErrors,
+    CollapsibleDetails,
   },
   data() {
     return {
@@ -154,6 +165,7 @@ export default {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest || '',
       selected: this.$store.getters['repeatPrescriptionCourses/selectedIds'],
       tryAgainPath: PRESCRIPTION_REPEAT_COURSES_PATH,
+      medicalAbbreviationsPath: CLINICAL_ABBREVIATIONS_URL,
     };
   },
   computed: {

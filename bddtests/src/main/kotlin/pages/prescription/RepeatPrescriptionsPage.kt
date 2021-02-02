@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
+import pages.assertIsVisible
 import pages.navigation.HeaderNative
 import pages.typeTextIntoTextArea
 
@@ -27,12 +28,13 @@ fun resolveDetailsField(dosage: String?, quantity: String?): ArrayList<String> {
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject() {
-    var headerText: String = "Select medication"
+    var headerText: String = "Order a repeat prescription"
     lateinit var headerBar: HeaderNative
 
     private val prescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
     private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
     private val specialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
+    private val medicalAbbreviationExtLink = "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             webDesktopLocator = "//button[@id='btn_order_prescription']",
@@ -42,6 +44,16 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     val specialRequestTextArea = HybridPageElement(
             webDesktopLocator = specialRequestTextAreaXpath,
+            page = this
+    )
+
+    val medicalAbbreviationLabel = HybridPageElement(
+            webDesktopLocator = "//summary/span[contains(text(),'Help with medical abbreviations')]",
+            page = this
+    )
+
+    val medicalAbbreviationLink = HybridPageElement(
+            webDesktopLocator = "//a[contains(text(),'abbreviations commonly found in medical records')]",
             page = this
     )
 
@@ -56,7 +68,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun isNoSpecialRequestTextEnteredMessageVisible(): Boolean {
-        val message = "Enter any special requests relating to this order"
+        val message = "Add a note about your prescription"
         return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 
@@ -171,5 +183,14 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     fun typeTextIntoSpecialRequestTextArea(text: String): String {
         return specialRequestTextArea.typeTextIntoTextArea(text)
+    }
+
+    fun clickMedicalAbbreviationsLabel() {
+        medicalAbbreviationLabel.click()
+    }
+
+    fun checkMedicalAbbreviationsLink(): Boolean {
+        medicalAbbreviationLink.assertIsVisible()
+        return medicalAbbreviationLink.elements.get(0).getAttribute("href") == medicalAbbreviationExtLink
     }
 }

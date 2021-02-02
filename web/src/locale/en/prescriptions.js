@@ -63,19 +63,26 @@ export default {
   repeatCourses: {
     errors: {
       thereIsAProblem: 'There\'s a problem',
-      enterSpecialRequests: 'Enter any special requests relating to this order',
+      enterSpecialRequests: 'Add a note about your prescription',
       selectAtLeastOne: 'Select at least one medicine',
     },
     currentlyAvailableRepeatPrescriptions: 'Medications currently available for repeat prescription',
-    currentlyAvailableToOrder: 'Medication currently available to order',
+    currentlyAvailableToOrder: 'Medicine currently available to order',
     youDoNotHaveAny: 'You don\'t have any medication available to order right now',
     ifYouHaveThatAreNotShown: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
     changePharmacy: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
-    specialRequestsOptional: 'Special requests relating to this order (optional)',
-    specialRequestsMandatory: 'Special requests relating to this order',
-    thisTextMayNotBeSeen: 'This text may not be seen by your GP. For important requests, contact your GP surgery.',
+    specialRequestsOptionalLabel: 'Add notes for your GP surgery (optional)',
+    specialRequestsMandatoryLabel: 'Add notes for your GP surgery',
+    specialRequestsOptionalMessage: 'You can add a note about your prescription here. Your note may not be seen or replied to, so if you have an important request for this prescription, contact your GP surgery.',
+    specialRequestsMandatoryMessage: 'You can add a note about your prescription here or type \'none\'. Your note may not be seen or replied to, so if you have an important request for this prescription, contact your GP surgery.',
     specialRequestCharacterLimit: 'You have 0 characters remaining. | You have 1 character remaining. | You have {n} characters remaining.',
     continue: 'Continue',
+    helpWithMedicalAbbreviation: {
+      label: 'Help with medical abbreviations',
+      message: 'You may see medical abbreviations that you are not familiar with.',
+      guidance: 'We have guidance for ',
+      linkText: 'abbreviations commonly found in medical records.',
+    },
   },
   viewOrders: {
     nominatedPharmacy: {

@@ -192,6 +192,11 @@ open class CoursesStepDefinitions {
         repeatPrescriptions.clickOnButtonContainingText("Continue")
     }
 
+    @When("^I click 'Help with medical abbreviations'$")
+    fun iClickMedicalAbbreviationsLinkFromTheOrderARepeatPrescriptionsPage() {
+        repeatPrescriptions.clickMedicalAbbreviationsLabel()
+    }
+
     @When("^I click 'Change this repeat prescription' on the Prescription confirmation page$")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionsOrderPage.clickChangeThisPrescriptionButton()
@@ -208,6 +213,11 @@ open class CoursesStepDefinitions {
             repeatPrescriptions.selectRepeatPrescription(course)
         }
         PrescriptionsSerenityHelpers.SELECTED_COURSES.set(selectedCourses.plus(coursesToSelect))
+    }
+
+    @Then("^I see the medical abbreviations help link$")
+    fun iSeeTheMedicalAbbreviationsHelpLink() {
+        Assert.assertTrue(repeatPrescriptions.checkMedicalAbbreviationsLink())
     }
 
     @Then("^a message is displayed indicating that you don't have any medication available to order$")
