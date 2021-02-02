@@ -54,7 +54,7 @@ jobs:
           targetType: filePath
           filePath: buildscripts/run_nukeeper.sh
         env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          Nukeeper_azure_devops_token: $(System.AccessToken)
           CHANGE: minor
 
       - task: Bash@3
@@ -63,5 +63,5 @@ jobs:
           targetType: filePath
           filePath: buildscripts/run_nukeeper.sh
         env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          Nukeeper_azure_devops_token: $(System.AccessToken)
           CHANGE: major

@@ -11,14 +11,14 @@ source buildscripts/lib/functions_logging.sh
 
 function join_by { local d=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$d}"; }
 
-[ -n "$SYSTEM_ACCESSTOKEN" ] || die "SYSTEM_ACCESSTOKEN must be set"
+[ -n "$Nukeeper_azure_devops_token" ] || die "Nukeeper_azure_devops_token must be set"
 [ -n "$BUILD_REPOSITORY_URI" ] || die "BUILD_REPOSITORY_URI must be set"
 
 CHECKOUT_DIRECTORY="${AGENT_TEMPDIRECTORY:-$TEMP}/nukeeper"
 CHANGE=${CHANGE:-minor}
 
 NUKEEPER_ARGS=(repo)
-NUKEEPER_ARGS+=("$BUILD_REPOSITORY_URI" "$SYSTEM_ACCESSTOKEN")
+NUKEEPER_ARGS+=("$BUILD_REPOSITORY_URI")
 NUKEEPER_ARGS+=(--checkout-directory "$CHECKOUT_DIRECTORY")
 NUKEEPER_ARGS+=(--maxpackageupdates 1000)
 NUKEEPER_ARGS+=(--verbosity detailed)
@@ -43,11 +43,12 @@ case "$CHANGE" in
     NUKEEPER_ARGS+=(--branchnametemplate 'feature/nhso-10482-update-{Name}-to-{Version}-{Hash}')
 
     # Exclude Microsoft packages upgraded to .Net 5.0
-    NUKEEPER_EXCLUDES+=('Microsoft.AspNetCore.Mvc.NewtonsoftJson')
     NUKEEPER_EXCLUDES+=('Microsoft.AspNetCore.Authentication.JwtBearer')
-    NUKEEPER_EXCLUDES+=('Microsoft.Extensions.DependencyInjection')
-    NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Logging')
+    NUKEEPER_EXCLUDES+=('Microsoft.AspNetCore.Mvc.NewtonsoftJson')
     NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Configuration')
+    NUKEEPER_EXCLUDES+=('Microsoft.Extensions.DependencyInjection')
+    NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Http')
+    NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Logging')
 
     # NHSO-12995
     NUKEEPER_EXCLUDES+=('Hl7.Fhir.STU3')
