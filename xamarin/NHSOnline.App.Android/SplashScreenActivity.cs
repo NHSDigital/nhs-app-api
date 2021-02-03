@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Android.App;
 using Android.Content;
-using Android.Support.V7.App;
+using AndroidX.AppCompat.App;
 
 namespace NHSOnline.App.Droid
 {

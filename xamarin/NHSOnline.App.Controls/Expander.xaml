@@ -3,6 +3,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
              x:Class="NHSOnline.App.Controls.Expander"
              x:Name="Root">
     <View.Resources>
@@ -20,14 +21,14 @@
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
                 <Setter Property="FontSize" Value="15" />
             </Style>
-            <Style TargetType="Expander">
+            <Style TargetType="views:Expander">
                 <Setter Property="Margin" Value="0, 20, 0, 20" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
     
-    <Expander>
-        <Expander.Header>
+    <views:Expander>
+        <views:Expander.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -40,7 +41,7 @@
                 <icons:IconPlus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" HeightRequest="40" IsVisible="True">
                     <icons:IconPlus.Triggers>
                         <DataTrigger TargetType="icons:IconPlus" Value="True"
-                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}">
+                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type views:Expander}}, Path=IsExpanded}">
                             <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </icons:IconPlus.Triggers>
@@ -49,7 +50,7 @@
                 <icons:IconMinus Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" HeightRequest="40" IsVisible="False">
                     <icons:IconMinus.Triggers>
                         <DataTrigger TargetType="icons:IconMinus" Value="True"
-                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type Expander}}, Path=IsExpanded}">
+                                     Binding="{Binding Source={RelativeSource AncestorType={x:Type views:Expander}}, Path=IsExpanded}">
                             <Setter Property="IsVisible" Value="True" />
                         </DataTrigger>
                     </icons:IconMinus.Triggers>
@@ -58,7 +59,7 @@
                 <Label Grid.Row="0" Grid.Column="1" StyleClass="ExpanderHeader"
                        Text="{Binding HeaderText, Source={x:Reference Name=Root}}" />
             </Grid>
-        </Expander.Header>
+        </views:Expander.Header>
         
         <Grid Padding="50,0,50,0">
             <Grid.ColumnDefinitions>
@@ -71,5 +72,5 @@
             <Label Grid.Row="0" Grid.Column="0" StyleClass="ExpanderBody"
                    Text="{Binding BodyText, Source={x:Reference Name=Root}}" />
         </Grid>
-    </Expander>
+    </views:Expander>
 </ContentView>
