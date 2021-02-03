@@ -3,7 +3,6 @@ TEST_SCRIPTS := $(sort $(wildcard buildscripts/*run*.sh))
 BUILD_SCRIPTS := $(sort $(filter-out $(TEST_SCRIPTS),$(ALL_SCRIPTS)))
 
 build: $(BUILD_SCRIPTS)	## Build all integration test components
-test: $(TEST_SCRIPTS)	## Run integration tests
 
 .PHONY: $(ALL_SCRIPTS) run run-local run-deps
 $(ALL_SCRIPTS):
