@@ -100,6 +100,11 @@ parameters:
     type: boolean
     default: false
 
+  - name: securityScanEnabled
+    displayName: Run Security Scans
+    type: boolean
+    default: false
+
 trigger:
   branches:
     include:
@@ -133,17 +138,20 @@ variables:
     int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
     int.tests.run.native.ios: ${{ parameters.intTestsRuniOSNative }}
     native.xamarin.distribute: ${{ parameters.xamarinDistributeApps }}
+    security.scan.enabled: ${{ parameters.securityScanEnabled }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
       int.tests.run.native.android: true
       int.tests.run.native.ios: true
       native.xamarin.distribute: false
+      security.scan.enabled: false
     ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       int.tests.run.native.xamarin: false
       int.tests.run.native.android: false
       int.tests.run.native.ios: false
       native.xamarin.distribute: false
+      security.scan.enabled: false
 
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: true
@@ -218,14 +226,14 @@ stages:
     jobs:
       - template: .azuredevops/templates/generate-coverage-report-job.yml
 
-  - stage: security
-    displayName: Security Scans
-    dependsOn:
-      - web
-      - backend
-    condition: false
-    jobs:
-      - template: .azuredevops/templates/run-security-scan-job.yml
+  - ${{ if eq(variables['security.scan.enabled'], 'true') }}:
+    - stage: security
+      displayName: Security Scans
+      dependsOn:
+        - web
+        - backend
+      jobs:
+        - template: .azuredevops/templates/run-security-scan-job.yml
 
   - stage: integration_tests
     displayName: Integration Tests
