@@ -261,7 +261,7 @@ namespace Nhs.App.Api.Integration.Tests
             var communicationRequest = new CommunicationRequest
             {
                 Status = RequestStatus.Active,
-                Requester = new ResourceReference
+                Sender = new ResourceReference
                 {
                     Display = "NHS App"
                 },
