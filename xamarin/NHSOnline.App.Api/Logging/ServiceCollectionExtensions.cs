@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.App.Api.Client;
+using NHSOnline.App.Api.Client.Logging;
 using NHSOnline.App.Logging;
 
 namespace NHSOnline.App.Api.Logging

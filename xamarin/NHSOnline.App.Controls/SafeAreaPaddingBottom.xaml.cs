@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Controls

@@ -1,13 +1,11 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.App.Api.Client;
-using NHSOnline.App.Api.Client.Errors;
+using NHSOnline.App.Api.Logging;
 using NHSOnline.App.Threading;
 
-namespace NHSOnline.App.Api.Logging
+namespace NHSOnline.App.Api.Client.Logging
 {
     internal sealed class CreateLoggingResponseParser: IApiClientResponseParser<ApiCreateLogResult>
     {
