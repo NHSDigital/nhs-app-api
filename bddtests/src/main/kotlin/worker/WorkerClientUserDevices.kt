@@ -8,6 +8,12 @@ import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
 
+// Azure Notification Hubs (ANH) do not instantly create searchable records. This delay is used to ensure that tests
+// which setup data using these will always give ANH time to create the records that will be searched for later.
+// Polling would be preferable but due to the way the users GET endpoint works this approach causes more failures
+// when it cleans orphaned records.
+private const val WAIT_FOR_HUB_UPDATE = 500L
+
 class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
     fun post(registration: RegisterUserDevicesRequest,
@@ -15,7 +21,9 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         val httpPost = RequestBuilder.post(uri("me"))
                 .addBody(registration, gson)
                 .addAuthorizationIfNotNull(authToken)
-        return httpPost.sendAndGetResult(sender, gson, RegisterUserDevicesResponse::class.java)
+        val result = httpPost.sendAndGetResult(sender, gson, RegisterUserDevicesResponse::class.java)
+        Thread.sleep(WAIT_FOR_HUB_UPDATE)
+        return result
     }
 
     fun get(devicePns: String, authToken: String?): HttpResponse? {
@@ -31,7 +39,9 @@ class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender
         uriBuilder.setParameter("devicePns", devicePns)
         val httpDelete = RequestBuilder.delete(uriBuilder.build().toString())
                 .addAuthorizationIfNotNull(authToken)
-        return httpDelete.send(sender)
+        val result = httpDelete.send(sender)
+        Thread.sleep(WAIT_FOR_HUB_UPDATE)
+        return result
     }
 
     fun getRegistrations(nhsLoginId: String, includeApiKey: Boolean): Array<String>? {

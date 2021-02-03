@@ -13,9 +13,6 @@ import utils.set
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
 
-private const val WAIT_FOR_HUB_UPDATE = 200L
-private const val HUB_UPDATE_CHECK_LIMIT = 10
-
 class PushNotificationsStepDefinitionsBackend {
 
     @Given("^I am an api user wishing to register their device for push notifications$")
@@ -64,14 +61,6 @@ class PushNotificationsStepDefinitionsBackend {
         factory.setUpDeletionAfterTest(PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail(), user2.accessToken)
         factory.setUpExistingRegistration(user1)
         factory.setUpExistingRegistration(user2)
-
-        var conditionCheckLimit = 0
-        while ((!factory.checkUserRegistered(user2.accessToken) ||
-                factory.checkUserRegistered(user1.accessToken)) &&
-                conditionCheckLimit < HUB_UPDATE_CHECK_LIMIT) {
-            Thread.sleep(WAIT_FOR_HUB_UPDATE)
-            conditionCheckLimit++
-        }
 
         if (!factory.checkUserRegistered(user2.accessToken) ||
                 factory.checkUserRegistered(user1.accessToken)) {
