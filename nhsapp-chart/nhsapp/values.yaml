@@ -201,13 +201,6 @@ postcodeLookupSearchRadiusKm: 10
 nhsSearchProtocol: https
 nhsSearchHostname: api.nhs.uk
 
-# Brothermailer Endpoint
-brotherMailerAddressBookID: 6113
-brotherMailerUserID: 233847
-brotherMailerSIG: "SIG340c7799670a244e283c2d568d8b9031f7cdee374315bb20c1e8c109c535c4c7"
-brotherMailerProtocol: https
-brotherMailerHostname: r1.brothermailer1.com
-
 # eConsult Endpoint
 econsultEnabled: false
 eConsult:

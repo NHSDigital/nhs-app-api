@@ -127,10 +127,6 @@ STUBBED_OVERRIDES=""
 	info "Overriding organDonationStubbed to be $STUBBED_ORGANDONATION"
 	STUBBED_OVERRIDES=$STUBBED_OVERRIDES" --set environmentStubbed.organDonationStubbed=$STUBBED_ORGANDONATION"
 }
-[ -n "$STUBBED_BROTHERMAILER" ] && {
-	info "Overriding organDonationStubbed to be $STUBBED_BROTHERMAILER"
-	STUBBED_OVERRIDES=$STUBBED_OVERRIDES" --set environmentStubbed.brothermailerStubbed=$STUBBED_BROTHERMAILER"
-}
 [ -n "$STUBBED_CDSS" ] && {
 	info "Overriding cdssStubbed to be $STUBBED_CDSS"
 	STUBBED_OVERRIDES=$STUBBED_OVERRIDES" --set environmentStubbed.cdssStubbed=$STUBBED_CDSS"

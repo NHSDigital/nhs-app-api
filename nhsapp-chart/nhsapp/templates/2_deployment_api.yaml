@@ -110,19 +110,6 @@ spec:
             secretKeyRef:
               name: gp-lookup-api-key-{{ .Chart.AppVersion }}
               key: apikey
-        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.brothermailerStubbed)) }}
-        - name: BROTHER_MAILER_URL
-          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/brothermailer/"
-        {{- else }}
-        - name: BROTHER_MAILER_URL
-          value: "https://iproxy-brothermailer-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
-        {{- end }}
-        - name: BROTHER_MAILER_ADDRESSBOOK_ID
-          value: "{{ $.Values.brotherMailerAddressBookID }}"
-        - name: BROTHER_MAILER_USER_ID
-          value: "{{ $.Values.brotherMailerUserID }}"
-        - name: BROTHER_MAILER_SIG
-          value: "{{ $.Values.brotherMailerSIG }}"
         - name: GP_PROVIDER_ENABLED_FAKE
           value: "{{ $.Values.fakeGpSystemEnabled }}"
         - name: ODS_REMAP_ENABLED
@@ -396,7 +383,7 @@ spec:
           timeoutSeconds: 2
       - name: proxy
         image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
-        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }} 
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
         lifecycle:
           {{- include "nhsapp.preStopHook" . | indent 12 }}
         ports:
