@@ -5,9 +5,11 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
+import pages.MILLISECONDS_IN_A_SECOND
 import pages.PageLeavingWarning
 import pages.onlineConsultations.OnlineConsultationsPage
 import pages.onlineConsultations.OnlineConsultationsUnavailablePage
+import pages.ServerError
 import utils.SerenityHelpers
 
 open class OnlineConsultationsStepDefinitions {
@@ -15,6 +17,7 @@ open class OnlineConsultationsStepDefinitions {
     private lateinit var onlineConsultationsPage: OnlineConsultationsPage
     private lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
     private lateinit var pageLeaveWarning: PageLeavingWarning
+    private lateinit var serverError: ServerError
 
     private val onlineConsultationsFactory = OnlineConsultationsFactory()
 
@@ -31,6 +34,12 @@ open class OnlineConsultationsStepDefinitions {
     @Given("^I have access to online consultations gp advice journey and it is not an emergency$")
     fun iHaveAccessToOnlineConsultationsNonEmergency() {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency()
+    }
+
+    @Given("^I have access to online consultations gp advice journey and the response is delayed by (.*) seconds$")
+    fun iHaveAccessToOnlineConsultationsNonEmergencyDelayedResponse(seconds: Int) {
+        val timeOut = seconds * MILLISECONDS_IN_A_SECOND
+        onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency(timeOut = timeOut.toInt())
     }
 
     @Given("^I have access to online consultations gp advice journey and it is not an emergency with no GP session$")
@@ -98,11 +107,6 @@ open class OnlineConsultationsStepDefinitions {
         answerQuestionAndContinue(elementId=OnlineConsultationConstants.ALCOHOL_CHOICE)
     }
 
-    @When("^I click the origin of the pain on the image$")
-    fun iClickAPointOnTheImage(){
-        answerQuestionAndContinue("img", OnlineConsultationConstants.IMAGE)
-    }
-
     @When("^I insert how long I have felt the pain$")
     fun iInsertHowLongIHaveFeltThePain() {
         onlineConsultationsPage.insertText(id=OnlineConsultationConstants.QUANTITY_NUMBER_INPUT, text="5")
@@ -138,6 +142,11 @@ open class OnlineConsultationsStepDefinitions {
     @Then("^I click leave the page on the popup$")
     fun iClickLeavePage() {
         pageLeaveWarning.clickLeave()
+    }
+
+    @Then("^I see the appropriate error message for an online consultation timeout$")
+    fun iSeeTheAppropriateErrorMessageForAnOnlineConsultationsTimeout() {
+        serverError.assert()
     }
 
     private fun answerQuestionAndContinue(elementType: String = "input", elementId: String){

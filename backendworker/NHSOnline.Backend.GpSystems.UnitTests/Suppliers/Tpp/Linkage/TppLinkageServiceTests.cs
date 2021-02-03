@@ -49,8 +49,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
 
-            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds,
-                DefaultSessionExpiryMinutes, MinimumAppAge, MinimumLinkageAge);
+            _settings = new ConfigurationSettings(CookieDomain,
+                PrescriptionsDefaultLastNumberMonthsToDisplay,
+                DefaultHttpTimeoutSeconds,
+                DefaultSessionExpiryMinutes,
+                MinimumAppAge,
+                MinimumLinkageAge);
 
             _fixture.Inject(_settings);
 

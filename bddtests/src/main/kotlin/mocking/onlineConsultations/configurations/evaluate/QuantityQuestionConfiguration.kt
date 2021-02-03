@@ -3,31 +3,33 @@ package mocking.onlineConsultations.configurations.evaluate
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class QuantityQuestionConfiguration: IQuestionConfiguration {
-    override val request = """{
+    override val request  = """{
        "resourceType":"Parameters",
        "parameter":[
           {
              "name":"sessionId",
-             "valueString":"1"
+             "valueString":"0d7036ed-3c5a-48a8-9927-81dbcf50e6a6"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
-                "questionnaire":{
-                   "reference":"Questionnaire/NHS_ADMIN_AD_REFERRALPAINORIGIN"
-                },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"NHS_ADMIN_AD_REFERRALPAINORIGIN",
+                      "linkId":"Q_GEC_ADM_AD_80",
                       "answer":[
                          {
-                            "valueString":"Point:155,81"
+                            "valueCoding":{
+                               "code":"A_GEC_ADM_AD_140"
+                            }
                          }
                       ]
                    }
-                ]
+                ],
+                "questionnaire":{
+                   "reference":"Questionnaire/Q_GEC_ADM_AD_80"
+                }
              }
           }
        ]

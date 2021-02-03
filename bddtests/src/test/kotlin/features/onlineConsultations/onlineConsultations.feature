@@ -59,7 +59,6 @@ Scenario: A user can go through the online consultations gp advice journey and i
   And I insert my symptoms and click continue
   And I insert my date of birth
   And I select how much alcohol I drink weekly
-  And I click the origin of the pain on the image
   And I insert how long I have felt the pain
   Then I see a care plan
 
@@ -78,9 +77,42 @@ Scenario: A user can go through the online consultations gp advice journey and i
     And I insert my symptoms and click continue
     And I insert my date of birth
     And I select how much alcohol I drink weekly
-    And I click the origin of the pain on the image
     And I insert how long I have felt the pain
     Then I see a care plan
+
+  Scenario: A user can go through the online consultations gp advice journey and there is a delayed response
+    Given I am logged in as a EMIS user with no linked profiles
+    And I have access to online consultations gp advice journey and the response is delayed by 29 seconds
+    When I navigate to Advice
+    Then the Advice page is displayed
+    When I click Ask your GP for Advice
+    And I accept demographics and terms and conditions question
+    And I click on a condition
+    And I select my gender and click continue
+    And I am submitting the questionnaire for myself
+    And I am not in an emergency
+    And I insert my symptoms and click continue
+    And I insert my date of birth
+    And I select how much alcohol I drink weekly
+    And I insert how long I have felt the pain
+    Then I see a care plan
+
+  Scenario: A user can go through the online consultations gp advice journey and there is a timeout
+    Given I am logged in as a EMIS user with no linked profiles
+    And I have access to online consultations gp advice journey and the response is delayed by 31 seconds
+    When I navigate to Advice
+    Then the Advice page is displayed
+    When I click Ask your GP for Advice
+    And I accept demographics and terms and conditions question
+    And I click on a condition
+    And I select my gender and click continue
+    And I am submitting the questionnaire for myself
+    And I am not in an emergency
+    And I insert my symptoms and click continue
+    And I insert my date of birth
+    And I select how much alcohol I drink weekly
+    And I insert how long I have felt the pain
+    Then I see the appropriate error message for an online consultation timeout
 
 Scenario: A user can end their online consultation journey and go back to the home page
   Given I am logged in as a EMIS user with no linked profiles

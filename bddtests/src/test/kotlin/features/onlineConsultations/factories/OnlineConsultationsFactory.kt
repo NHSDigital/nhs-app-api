@@ -34,7 +34,7 @@ class OnlineConsultationsFactory {
         }
     }
 
-    fun setupOnlineConsultationsDataNonEmergency(hasGpSession: Boolean = true) {
+    fun setupOnlineConsultationsDataNonEmergency(hasGpSession: Boolean = true, timeOut: Int = 0) {
         mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
         }
@@ -63,13 +63,10 @@ class OnlineConsultationsFactory {
             onlineConsultationsMappingBuilder.alcoholQuestion().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.imageQuestion().respondWithSuccess()
-        }
-        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.quantityQuestion().respondWithSuccess()
         }
         mockingClient.forOnlineConsultations.mock {
-            onlineConsultationsMappingBuilder.carePlan().respondWithSuccess()
+            onlineConsultationsMappingBuilder.carePlan().delayedResponse(timeOut)
         }
     }
 

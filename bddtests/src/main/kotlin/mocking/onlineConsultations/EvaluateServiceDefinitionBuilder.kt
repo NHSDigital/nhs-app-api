@@ -43,4 +43,11 @@ class EvaluateServiceDefinitionBuilder(hasGpSession: Boolean, serviceDefinitionI
                     .build()
         }
     }
+
+    fun delayedResponse(timeout: Int): Mapping {
+        return respondWith(HttpStatus.SC_OK, milliSecondDelay = timeout) {
+            andJsonBody(_configuration.response.replace("{{address}}", address))
+                    .build()
+        }
+    }
 }

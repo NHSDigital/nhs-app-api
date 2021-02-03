@@ -42,24 +42,24 @@ namespace NHSOnline.Backend.Support.Settings
                 throw new ConfigurationNotFoundException(nameof(PrescriptionsDefaultLastNumberMonthsToDisplay));
             }
 
-            if (DefaultSessionExpiryMinutes == default)
+            if (DefaultSessionExpiryMinutes < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(DefaultSessionExpiryMinutes));
+                throw new ConfigurationNotValidException(nameof(DefaultSessionExpiryMinutes));
             }
 
-            if (DefaultHttpTimeoutSeconds == default)
+            if (DefaultHttpTimeoutSeconds < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
+                throw new ConfigurationNotValidException(nameof(DefaultHttpTimeoutSeconds));
             }
 
-            if (MinimumAppAge == default)
+            if (MinimumAppAge < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(MinimumAppAge));
+                throw new ConfigurationNotValidException(nameof(MinimumAppAge));
             }
 
-            if (MinimumLinkageAge == default)
+            if (MinimumLinkageAge < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(MinimumLinkageAge));
+                throw new ConfigurationNotValidException(nameof(MinimumLinkageAge));
             }
         }
 

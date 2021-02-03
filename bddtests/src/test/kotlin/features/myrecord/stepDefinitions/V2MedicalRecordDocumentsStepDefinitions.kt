@@ -8,7 +8,7 @@ import features.myrecord.factories.DocumentStatus
 import features.myrecord.factories.DocumentsFactory
 import models.ExpectedDocument
 import org.junit.Assert
-import pages.ErrorPage
+import pages.ServerError
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.myrecord.MyRecordDocumentInformationPage
@@ -22,7 +22,7 @@ open class V2MedicalRecordDocumentsStepDefinitions {
     private lateinit var myRecordDocumentInformationPage: MyRecordDocumentInformationPage
     private lateinit var myRecordDocumentsPage: MyRecordDocumentsPage
     private lateinit var myRecordDocumentPage: MyRecordDocumentPage
-    private lateinit var errorPage: ErrorPage
+    private lateinit var serverError: ServerError
 
     enum class SerenityVariable {
         EXPECTED_DOCUMENTS,
@@ -211,10 +211,7 @@ open class V2MedicalRecordDocumentsStepDefinitions {
 
     @Then("^I see the appropriate error message for a document server error$")
     fun iSeeTheAppropriateErrorMessageForADocumentServerError() {
-        errorPage.assertPageHeader(myRecordDocumentPage.serverErrorPageHeader)
-                .assertHeaderText(myRecordDocumentPage.serverErrorHeader)
-                .assertMessageText(myRecordDocumentPage.serverErrorMessage)
-                .assertNoRetryButton()
+        serverError.assert()
     }
 
     @Then("^I can see my document$")

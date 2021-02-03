@@ -22,12 +22,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public bool SupportsLinkedAccounts { get; set; }
 
         public TppConfigurationSettings() {}
-        
+
         public TppConfigurationSettings(
             Uri baseUrl,
             string apiVersion,
             string applicationName,
-            string applicationVersion, 
+            string applicationVersion,
             string applicationProviderId,
             string applicationDeviceType,
             string certificatePath,
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             int? prescriptionsMaxCoursesSoftLimit,
             int? coursesMaxCoursesLimit,
             string supportsLinkedAccounts)
-        {           
+        {
             ApiUrl = baseUrl;
             ApiVersion = apiVersion;
             ApplicationName = applicationName;
@@ -53,14 +53,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public void Validate()
         {
 
-            if (PrescriptionsMaxCoursesSoftLimit == default(int))
+            if (PrescriptionsMaxCoursesSoftLimit < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(PrescriptionsMaxCoursesSoftLimit));
+                throw new ConfigurationNotValidException(nameof(PrescriptionsMaxCoursesSoftLimit));
             }
 
-            if (CoursesMaxCoursesLimit == default(int))
+            if (CoursesMaxCoursesLimit < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(CoursesMaxCoursesLimit));
+                throw new ConfigurationNotValidException(nameof(CoursesMaxCoursesLimit));
             }
 
             if (ApiUrl == null)

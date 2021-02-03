@@ -130,6 +130,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton(MicrotestConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(VisionConfigurationSettings.CreateAndValidate(Configuration, _logger));
             services.AddSingleton(SessionConfigurationSettings.CreateAndValidate(Configuration, _logger));
+            services.AddSingleton(OnlineConsultationsConfigurationSettings.CreateAndValidate(Configuration, _logger));
 
             services.AddSingleton(AppointmentsConfigurationSettings.CreateAndValidate(Configuration, _logger));
 

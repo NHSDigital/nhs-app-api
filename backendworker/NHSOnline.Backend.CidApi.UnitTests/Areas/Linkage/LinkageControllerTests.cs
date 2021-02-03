@@ -55,8 +55,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes,
-                DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge);
+            _settings = new ConfigurationSettings(
+                CookieDomain,
+                PrescriptionsDefaultLastNumberMonthsToDisplay,
+                DefaultSessionExpiryMinutes,
+                DefaultHttpTimeoutSeconds,
+                MinimumAppAge,
+                MinimumLinkageAge);
 
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);

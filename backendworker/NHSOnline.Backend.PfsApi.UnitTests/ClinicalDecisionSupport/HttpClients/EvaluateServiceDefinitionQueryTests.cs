@@ -11,6 +11,7 @@
  using Moq.Protected;
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
  using NHSOnline.Backend.Support;
+ using NHSOnline.Backend.Support.Settings;
 
  namespace NHSOnline.Backend.PfsApi.UnitTests.ClinicalDecisionSupport.HttpClients
  {
@@ -21,8 +22,8 @@
          public async Task EvaluateServiceDefinitionQuery__ProxiesRequestToProvider()
          {
              // Arrange
-             //
              var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+             var olcConfigSettings = new OnlineConsultationsConfigurationSettings(30);
 
              handlerMock
                  .Protected()
@@ -52,10 +53,9 @@
                  .Returns(httpClient);
 
              var sut = new EvaluateServiceDefinitionQuery(mockLogger.Object,
-                 mockHttpClientFactory.Object);
+                 mockHttpClientFactory.Object, olcConfigSettings);
 
              // Act
-             //
              var result = await sut.EvaluateServiceDefinition(Provider,
                  ServiceDefinitionId,
                  RequestBody,
@@ -63,14 +63,13 @@
                  "1");
 
              // Assert
-             //
              result.Should().NotBeNull();
 
              handlerMock.Protected().Verify(
                  "SendAsync",
                  Times.Once(),
                  ItExpr.Is<HttpRequestMessage>(req =>
-                     req.Properties.Count == 0
+                     req.Properties.Count == 1
                      && req.Headers.All(a => !string.Equals(a.Key, Constants.HttpHeaders.JavascriptDisabled, StringComparison.Ordinal))
                  ),
                  ItExpr.IsAny<CancellationToken>()
@@ -81,8 +80,8 @@
          public async Task EvaluateServiceDefinitionQuery__Adds_A_JavaScriptDisabledHeader()
          {
              // Arrange
-             //
              var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+             var olcConfigSettings = new OnlineConsultationsConfigurationSettings(30);
 
              handlerMock
                  .Protected()
@@ -112,10 +111,9 @@
                  .Returns(httpClient);
 
              var sut = new EvaluateServiceDefinitionQuery(mockLogger.Object,
-                 mockHttpClientFactory.Object);
+                 mockHttpClientFactory.Object, olcConfigSettings);
 
              // Act
-             //
              var result = await sut.EvaluateServiceDefinition(Provider,
                  ServiceDefinitionId,
                  RequestBody,
@@ -123,14 +121,13 @@
                  "1");
 
              // Assert
-             //
              result.Should().NotBeNull();
 
              handlerMock.Protected().Verify(
                  "SendAsync",
                  Times.Once(),
                  ItExpr.Is<HttpRequestMessage>(req =>
-                     req.Properties.Count == 0
+                     req.Properties.Count == 1
                      && req.Headers.Contains(Constants.HttpHeaders.JavascriptDisabled)
                      && req.Headers.Contains(Constants.OnlineConsultationConstants.ProviderIdentifierHeader)
                  ),
@@ -142,8 +139,8 @@
          public async Task EvaluateServiceDefinitionQuery__AddsOlcSessionIdHeader()
          {
              // Arrange
-             //
              var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+             var olcConfigSettings = new OnlineConsultationsConfigurationSettings(30);
 
              handlerMock
                  .Protected()
@@ -174,10 +171,9 @@
                  .Returns(httpClient);
 
              var sut = new EvaluateServiceDefinitionQuery(mockLogger.Object,
-                 mockHttpClientFactory.Object);
+                 mockHttpClientFactory.Object, olcConfigSettings);
 
              // Act
-             //
              var result = await sut.EvaluateServiceDefinition(Provider,
                  ServiceDefinitionId,
                  RequestBody,
@@ -186,14 +182,13 @@
                  sessionId);
 
              // Assert
-             //
              result.Should().NotBeNull();
 
              handlerMock.Protected().Verify(
                  "SendAsync",
                  Times.Once(),
                  ItExpr.Is<HttpRequestMessage>(req =>
-                     req.Properties.Count == 0
+                     req.Properties.Count == 1
                      && req.Headers.Contains(Constants.OnlineConsultationConstants.SessionIdentifierHeader)
                      && req.Headers.Contains(Constants.OnlineConsultationConstants.ProviderIdentifierHeader)
                  ),

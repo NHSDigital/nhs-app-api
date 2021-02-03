@@ -4,7 +4,9 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
 {
@@ -12,12 +14,15 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
     {
         private readonly ILogger<EvaluateServiceDefinitionQuery> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly OnlineConsultationsConfigurationSettings _settings;
 
         public EvaluateServiceDefinitionQuery(ILogger<EvaluateServiceDefinitionQuery> logger,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            OnlineConsultationsConfigurationSettings settings)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
+            _settings = settings;
         }
 
         public async Task<HttpResponseMessage> EvaluateServiceDefinition(
@@ -46,6 +51,11 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                 {
                     requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader,
                         providerKey);
+
+                    // Extend our timeout to allow eConsult to process the questionnaire
+                    _logger.LogInformation($"Http timeout set to {_settings.OnlineConsultationsHttpTimeoutSeconds}");
+
+                    requestMessage.Properties.Add(HttpRequestConstants.CustomTimeout, _settings.OnlineConsultationsHttpTimeoutSeconds);
 
                     if (!string.IsNullOrWhiteSpace(sessionId))
                     {

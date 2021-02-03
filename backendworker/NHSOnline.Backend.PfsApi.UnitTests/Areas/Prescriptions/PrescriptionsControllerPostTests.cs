@@ -70,8 +70,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockAuditor = new Mock<IAuditor>();
 
-            _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes,
-                MinimumAppAge, MinimumLinkageAge);
+            _options = new ConfigurationSettings(
+                CookieDomain,
+                PrescriptionsDefaultLastNumberMonthsToDisplay,
+                DefaultHttpTimeoutSeconds,
+                DefaultSessionExpiryMinutes,
+                MinimumAppAge,
+                MinimumLinkageAge);
 
             _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem

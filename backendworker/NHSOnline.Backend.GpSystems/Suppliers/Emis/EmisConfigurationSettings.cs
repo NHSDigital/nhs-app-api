@@ -43,11 +43,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         public void Validate()
         {
-            if(BaseUrl == null) 
+            if(BaseUrl == null)
             {
                 throw new ConfigurationNotFoundException(nameof(BaseUrl));
             }
-            
+
             if(string.IsNullOrEmpty(ApplicationId))
             {
                 throw new ConfigurationNotFoundException($"{nameof(ApplicationId)} cannot be null or empty");
@@ -58,24 +58,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 throw new ConfigurationNotFoundException($"{nameof(Version)} cannot be null or empty");
             }
 
-            if (EmisExtendedHttpTimeoutSeconds == default)
+            if (EmisExtendedHttpTimeoutSeconds < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(EmisExtendedHttpTimeoutSeconds));
+                throw new ConfigurationNotValidException(nameof(EmisExtendedHttpTimeoutSeconds));
             }
 
-            if (DefaultHttpTimeoutSeconds == default)
+            if (DefaultHttpTimeoutSeconds < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
+                throw new ConfigurationNotValidException(nameof(DefaultHttpTimeoutSeconds));
             }
 
-            if (PrescriptionsMaxCoursesSoftLimit == default(int))
+            if (PrescriptionsMaxCoursesSoftLimit < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(PrescriptionsMaxCoursesSoftLimit));
+                throw new ConfigurationNotValidException(nameof(PrescriptionsMaxCoursesSoftLimit));
             }
 
-            if (CoursesMaxCoursesLimit == default(int))
+            if (CoursesMaxCoursesLimit < 1)
             {
-                throw new ConfigurationNotFoundException(nameof(CoursesMaxCoursesLimit));
+                throw new ConfigurationNotValidException(nameof(CoursesMaxCoursesLimit));
             }
 
         }

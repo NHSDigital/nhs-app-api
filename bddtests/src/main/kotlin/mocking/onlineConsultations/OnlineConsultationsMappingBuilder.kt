@@ -6,7 +6,6 @@ import mocking.onlineConsultations.configurations.evaluate.DOBQuestionConfigurat
 import mocking.onlineConsultations.configurations.evaluate.EmergencyConfiguration
 import mocking.onlineConsultations.configurations.evaluate.EmergencyCarePlanConfiguration
 import mocking.onlineConsultations.configurations.evaluate.HowWeCanHelpQuestionConfiguration
-import mocking.onlineConsultations.configurations.evaluate.PainOriginQuestionConfiguration
 import mocking.onlineConsultations.configurations.evaluate.GenderQuestionConfiguration
 import mocking.onlineConsultations.configurations.evaluate.SelfOrChildConfiguration
 import mocking.onlineConsultations.configurations.evaluate.AlcoholQuestionConfiguration
@@ -48,8 +47,6 @@ open class OnlineConsultationsMappingBuilder(method: String="POST", relativePath
     fun dobQuestion() = setUpRequest( configuration = DOBQuestionConfiguration())
 
     fun alcoholQuestion() = setUpRequest(configuration = AlcoholQuestionConfiguration())
-
-    fun imageQuestion() = setUpRequest(configuration = PainOriginQuestionConfiguration())
 
     fun quantityQuestion() = setUpRequest(configuration = QuantityQuestionConfiguration())
 
