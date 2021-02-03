@@ -41,7 +41,6 @@ nhsSearchHostname: nhsuk-apim-int-uks.azure-api.net
 users:
   notificationHubPath: nhsapp-nonlive
   notificationHubConnectionString: Endpoint=sb://nhsapp-nonlive.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-  mongoDatabaseUserDeviceCollection: devices
 
 splunk:
   pidIndex: apppid_nhsapp_dev
