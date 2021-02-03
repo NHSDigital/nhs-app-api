@@ -1,8 +1,0 @@
----
-users:
-  notificationHubPath: nhsapp-nonlive-preview
-
-secrets:
-  notificationHub:
-    notificationHubSecretName: "notificationHubSharedAccessKeyPreview"
-    notificationHubSecretVersion: "570a20e0acf6446f9646f8aaeb52f233"

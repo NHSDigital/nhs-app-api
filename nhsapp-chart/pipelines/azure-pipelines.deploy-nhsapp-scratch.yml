@@ -32,7 +32,6 @@ parameters:
     - scratch19
     - scratch20
     - scratch21
-    - dev
     - onboardingsandpit
     - onboardingaos
     - logindevelopment
@@ -55,7 +54,7 @@ parameters:
   default: "None"
 
 variables:
-- name: region 
+- name: region
   value: uksouth
 - name: environment
   value: dev
@@ -109,7 +108,7 @@ stages:
       inputs:
         workingDirectory: $(System.DefaultWorkingDirectory)/nhsapp-chart/nhsapp/
         targetType: 'inline'
-        script: sed -i -e "s|1.0.0|$chartVersion|g" Chart.yaml && sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml        
+        script: sed -i -e "s|1.0.0|$chartVersion|g" Chart.yaml && sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml
       env:
         chartVersion: $(Build.SourceBranchName)
         appImageTag: $(version)
@@ -121,7 +120,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           PUBLIC_IP_ADDRESS=`az network public-ip show --name nhsapp-$(AKS_SHORTNAME)_PIP --resource-group nhsapp-$(AKS_SHORTNAME)_PIP | jq '.ipAddress' | tr -d '"'`/32
-          echo $PUBLIC_IP_ADDRESS              
+          echo $PUBLIC_IP_ADDRESS
           echo "##vso[task.setvariable variable=clusterIP;]$PUBLIC_IP_ADDRESS"
     - task: HelmInstaller@1
       displayName: 'Install Helm'
@@ -138,7 +137,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          if [[ $(helm ls -n ${{ parameters.namespace }} --short) ]]; then 
+          if [[ $(helm ls -n ${{ parameters.namespace }} --short) ]]; then
             helm ls -n ${{ parameters.namespace }} --short | xargs helm delete $old_releases -n ${{ parameters.namespace }} && sleep 10
           else
             echo "No releases to uninstall."
@@ -155,9 +154,9 @@ stages:
         releaseName: ${{ parameters.namespace }}-$(Build.SourceBranchName)
         valueFile: $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/cluster/vars-$(AKS_SHORTNAME).yaml
         arguments: --set global.environment="${{ parameters.namespace }}"
-                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml 
+                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/vars-$(environment).yaml
                    -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/namespace/vars-$(environment)-${{ parameters.namespace }}.yaml
-                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml 
+                   -f $(System.DefaultWorkingDirectory)/nhsapp-chart/vars/zone/$(environment)/environment_overrides/vars-nhslogin-${{ parameters.loginEnv }}.yaml
                    --set appImageTag=$(version)
                    --set cid.image_tag=$(version)
                    --set api.image_tag=$(version)
