@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Vision.Models
 {
-    public sealed class AppointmentsConfiguration
+    internal sealed class AppointmentsConfiguration
     {
         [XmlElement(ElementName = "enabled", Namespace = "urn:vision")]
         public bool BookingEnabled { get; set; } = true;

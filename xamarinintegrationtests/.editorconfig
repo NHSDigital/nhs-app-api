@@ -412,7 +412,7 @@ dotnet_diagnostic.CA1820.severity = error
 dotnet_diagnostic.CA1821.severity = error
 
 # CA1822: Mark members as static
-dotnet_diagnostic.CA1822.severity = error
+dotnet_diagnostic.CA1822.severity = suggestion
 
 # CA1823: Avoid unused private fields
 dotnet_diagnostic.CA1823.severity = error

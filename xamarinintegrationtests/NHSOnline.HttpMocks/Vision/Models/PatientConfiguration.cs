@@ -2,7 +2,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Vision.Models
 {
-    public sealed class PatientConfiguration
+    internal sealed class PatientConfiguration
     {
         [XmlElement(ElementName = "account", Namespace = "urn:vision")]
         public Account? Account { get; set; }

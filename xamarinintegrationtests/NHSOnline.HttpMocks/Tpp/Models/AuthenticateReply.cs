@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.HttpMocks.Tpp.Models
 {
-    public class AuthenticateReply
+    internal class AuthenticateReply
     {
         [XmlAttribute("patientId")]
         public string? PatientId { get; set; }
