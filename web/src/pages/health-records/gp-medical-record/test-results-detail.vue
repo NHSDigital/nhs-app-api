@@ -52,9 +52,7 @@ export default {
     },
   },
   async mounted() {
-    if (!this.$store.state.myRecord.record.testResults) {
-      await this.$store.dispatch('myRecord/loadTestResults');
-    }
+    await this.$store.dispatch('myRecord/loadTestResults');
 
     this.markup = get('markup', this.$store.state.myRecord.testResults);
     this.testResults = get('testResults', this.$store.state.myRecord.record) || {};
