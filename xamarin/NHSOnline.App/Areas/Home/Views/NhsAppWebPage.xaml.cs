@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
@@ -24,10 +25,15 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
 
+        public Func<Task>? GetNotificationsStatusRequested { get; set; }
+
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
+
+        public AsyncCommand GetNotificationsStatusCommand
+            => new AsyncCommand(() => GetNotificationsStatusRequested);
 
         private AsyncCommand AppearingCommand => new AsyncCommand(() => ((INhsAppWebView)this).Appearing);
 
@@ -77,11 +83,18 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
-        // This will be changed in NHSO-10645 when we update with web native changes
         public async Task NavigateWithinApp(string spaPath)
-            => await WebView.EvaluateJavaScriptAsync($"window.$nuxt.$store.dispatch('navigation/goTo', '{spaPath}')").PreserveThreadContext();
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoTo({ConvertToJsonString(spaPath)})").PreserveThreadContext();
+
+        public async Task SendNotificationsStatus(string status)
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
 
         public async Task ResetAndShowError()
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
+
+        private static string ConvertToJsonString(string arg)
+        {
+            return JsonConvert.SerializeObject(arg);
+        }
     }
 }

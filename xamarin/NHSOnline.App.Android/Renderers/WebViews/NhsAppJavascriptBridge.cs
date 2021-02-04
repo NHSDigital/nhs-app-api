@@ -28,5 +28,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
                 _nhsAppWebView.OpenWebIntegrationCommand.Execute(argument);
             });
         }
+
+        [JavascriptInterface]
+        [Export("getNotificationsStatus")]
+        public void GetNotificationsStatus()
+        {
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                _nhsAppWebView.GetNotificationsStatusCommand.Execute(null);
+            });
+        }
     }
 }

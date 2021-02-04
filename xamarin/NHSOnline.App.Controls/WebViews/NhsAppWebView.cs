@@ -10,12 +10,21 @@ namespace NHSOnline.App.Controls.WebViews
         public static readonly BindableProperty OpenWebIntegrationCommandProperty =
             BindableProperty.Create(nameof(OpenWebIntegrationCommand), typeof(AsyncCommand<OpenWebIntegrationRequest>), typeof(NhsAppWebView));
 
+        public static readonly BindableProperty GetNotificationsStatusCommandProperty =
+            BindableProperty.Create(nameof(GetNotificationsStatusCommand), typeof(AsyncCommand), typeof(NhsAppWebView));
+
         public Func<Cookie, Task>? SetCookie { get; set; }
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
         {
             get => (AsyncCommand<OpenWebIntegrationRequest>) GetValue(OpenWebIntegrationCommandProperty);
             set => SetValue(OpenWebIntegrationCommandProperty, value);
+        }
+
+        public AsyncCommand GetNotificationsStatusCommand
+        {
+            get => (AsyncCommand) GetValue(GetNotificationsStatusCommandProperty);
+            set => SetValue(GetNotificationsStatusCommandProperty, value);
         }
     }
 }

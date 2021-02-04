@@ -1,3 +1,4 @@
+using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Components.Web;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -20,6 +21,8 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         internal void AssertOnPage()
         {
+            using var timeout = ExtendedTimeout.FromSeconds(5);
+
             Title.AssertVisible();
         }
 

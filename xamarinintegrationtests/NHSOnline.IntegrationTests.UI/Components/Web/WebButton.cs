@@ -1,6 +1,7 @@
 using System;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Web
 {
@@ -19,7 +20,13 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => new WebButton(interactor, text);
 
         public void Click()
-            => ActOnElement(e => e.Click());
+            => _interactor.ActOnElementContext(
+                FindBy,
+                c =>
+                {
+                    new Actions(c.Driver).MoveToElement(c.Element);
+                    c.Element.Click();
+                });
 
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);

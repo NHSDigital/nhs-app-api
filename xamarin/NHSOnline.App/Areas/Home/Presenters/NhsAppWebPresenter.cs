@@ -54,6 +54,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.HelpRequested = HelpRequested;
             _view.OpenWebIntegrationRequested = OpenWebIntegrationRequested;
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
+            _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
 
             _view.SettingsRequested = _navigationHandler.SettingsRequested;
             _view.HomeRequested = _navigationHandler.HomeRequested;
@@ -113,6 +114,11 @@ namespace NHSOnline.App.Areas.Home.Presenters
             await DisplayNhsAppWeb().PreserveThreadContext();
             //TODO ShowError
             _logger.LogInformation($"Showing unexpected error");
+        }
+
+        private async Task GetNotificationsStatusRequested()
+        {
+            await _view.SendNotificationsStatus("notDetermined").PreserveThreadContext();
         }
 
         private async Task HelpRequested()

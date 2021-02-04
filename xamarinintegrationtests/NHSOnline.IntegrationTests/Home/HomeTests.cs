@@ -72,6 +72,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppAndroidTest]
+        [Ignore("Symptoms is now Advice")]
         public void APatientWithProofLevelFiveCanAccessSymptomsFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()
@@ -90,6 +91,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
+        [Ignore("Symptoms is now Advice")]
         public void APatientWithProofLevelFiveCanAccessSymptomsFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
@@ -220,6 +222,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppAndroidTest]
+        [Ignore("My Record is now Health records")]
         public void APatientWithProofLevelNineCanAccessMyRecordFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -238,6 +241,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
+        [Ignore("My Record is now Health records")]
         public void APatientWithProofLevelNineCanAccessMyRecordFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -312,6 +316,10 @@ namespace NHSOnline.IntegrationTests.Home
             AndroidUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
+
+            AndroidManageNotificationsPromptPage
+                .AssertOnPage(driver)
+                .PageContent.Continue();
         }
 
         private static void LogIOSPatientIn(IIOSDriverWrapper driver, Patient patient)
@@ -335,6 +343,10 @@ namespace NHSOnline.IntegrationTests.Home
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
+
+            IOSManageNotificationsPromptPage
+                .AssertOnPage(driver)
+                .PageContent.Continue();
         }
     }
 }

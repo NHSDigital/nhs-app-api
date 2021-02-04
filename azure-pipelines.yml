@@ -141,7 +141,7 @@ variables:
     security.scan.enabled: ${{ parameters.securityScanEnabled }}
   ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
     ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-      int.tests.run.native.xamarin: false
+      int.tests.run.native.xamarin: true
       int.tests.run.native.android: true
       int.tests.run.native.ios: true
       native.xamarin.distribute: false

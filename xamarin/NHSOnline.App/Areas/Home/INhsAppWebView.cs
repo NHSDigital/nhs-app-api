@@ -25,10 +25,13 @@ namespace NHSOnline.App.Areas.Home
 
         Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
 
+        Func<Task>? GetNotificationsStatusRequested { get; set; }
+
         INavigation Navigation { get; }
 
         void GoToUri(Uri uri);
         Task NavigateWithinApp(string spaPath);
+        Task SendNotificationsStatus(string status);
         Task AddCookie(Cookie cookie);
     }
 }
