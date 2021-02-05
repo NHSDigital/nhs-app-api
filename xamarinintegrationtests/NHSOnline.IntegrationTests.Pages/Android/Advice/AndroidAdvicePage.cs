@@ -1,23 +1,23 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.Symptoms
+namespace NHSOnline.IntegrationTests.Pages.Android.Advice
 {
-    public sealed class AndroidSymptomsPage
+    public sealed class AndroidAdvicePage
     {
-        private AndroidSymptomsPage(IAndroidDriverWrapper driver)
+        private AndroidAdvicePage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new SymptomsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new AdvicePageContent(driver.Web(WebViewContext.NhsApp));
         }
 
         public AndroidFullNavigation Navigation { get; }
 
-        private SymptomsPageContent PageContent { get; }
+        private AdvicePageContent PageContent { get; }
 
-        public static AndroidSymptomsPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidAdvicePage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidSymptomsPage(driver);
+            var page = new AndroidAdvicePage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

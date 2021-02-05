@@ -3,23 +3,23 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    public class SymptomsPageContent
+    public class YourHealthPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        internal SymptomsPageContent(IWebInteractor interactor)
+        internal YourHealthPageContent(IWebInteractor interactor)
         {
             _interactor = interactor;
         }
 
-        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Symptoms");
+        private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Your health");
 
         internal void AssertOnPage()
         {
             Title.AssertVisible();
         }
 
-        public SymptomsPageContent AssertPageElements()
+        public YourHealthPageContent AssertPageElements()
         {
             Title.AssertVisible();
             return this;

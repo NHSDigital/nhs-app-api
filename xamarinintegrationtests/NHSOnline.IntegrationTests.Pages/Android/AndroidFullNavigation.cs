@@ -23,13 +23,13 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidIcon SettingsIcon => AndroidIcon.WithDescription(_driver, "NHS App settings icon");
 
-        private AndroidNavigationMenuItem SymptomsMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
+        private AndroidNavigationMenuItem AdviceMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
 
         private AndroidNavigationMenuItem AppointmentsMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App appointments icon", "Appointments");
 
         private AndroidNavigationMenuItem PrescriptionsMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App prescriptions icon", "Prescriptions");
 
-        private AndroidNavigationMenuItem MyRecordMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App records icon", "My Record");
+        private AndroidNavigationMenuItem YourHealthMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App records icon", "My Record");
 
         private AndroidNavigationMenuItem MoreMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App more icon", "More");
 
@@ -49,9 +49,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             SettingsIcon.Click();
         }
 
-        public void Symptoms()
+        public void Advice()
         {
-            SymptomsMenuItem.Click();
+            AdviceMenuItem.Click();
         }
 
         public void Appointments()
@@ -64,9 +64,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             PrescriptionsMenuItem.Click();
         }
 
-        public void MyRecord()
+        public void YourHealth()
         {
-            MyRecordMenuItem.Click();
+            YourHealthMenuItem.Click();
         }
 
         public void More()

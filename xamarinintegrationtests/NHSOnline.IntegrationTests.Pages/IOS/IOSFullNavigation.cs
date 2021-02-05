@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSFullNavigationFooter FullNavigationFooter => IOSFullNavigationFooter.Create(_driver);
 
-        private IOSNavigationMenuItem SymptomsMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
+        private IOSNavigationMenuItem AdviceMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
 
         private IOSNavigationMenuItem AppointmentsMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App appointments icon", "Appointments");
 
@@ -48,9 +48,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             SettingsIcon.Click();
         }
 
-        public void Symptoms()
+        public void Advice()
         {
-            SymptomsMenuItem.Click();
+            AdviceMenuItem.Click();
         }
 
         public void Appointments()

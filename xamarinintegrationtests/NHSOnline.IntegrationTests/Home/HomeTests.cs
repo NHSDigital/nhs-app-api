@@ -5,19 +5,19 @@ using NHSOnline.IntegrationTests.Pages.Android.Appointments;
 using NHSOnline.IntegrationTests.Pages.Android.Home;
 using NHSOnline.IntegrationTests.Pages.Android.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.Android.More;
-using NHSOnline.IntegrationTests.Pages.Android.MyRecord;
 using NHSOnline.IntegrationTests.Pages.Android.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.Android.Settings;
-using NHSOnline.IntegrationTests.Pages.Android.Symptoms;
+using NHSOnline.IntegrationTests.Pages.Android.Advice;
+using NHSOnline.IntegrationTests.Pages.Android.YourHealth;
 using NHSOnline.IntegrationTests.Pages.IOS;
 using NHSOnline.IntegrationTests.Pages.IOS.Appointments;
 using NHSOnline.IntegrationTests.Pages.IOS.Home;
 using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.Pages.IOS.More;
-using NHSOnline.IntegrationTests.Pages.IOS.MyRecord;
 using NHSOnline.IntegrationTests.Pages.IOS.Prescriptions;
 using NHSOnline.IntegrationTests.Pages.IOS.Settings;
-using NHSOnline.IntegrationTests.Pages.IOS.Symptoms;
+using NHSOnline.IntegrationTests.Pages.IOS.Advice;
+using NHSOnline.IntegrationTests.Pages.IOS.YourHealth;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -73,7 +73,7 @@ namespace NHSOnline.IntegrationTests.Home
 
         [NhsAppAndroidTest]
         [Ignore("Symptoms is now Advice")]
-        public void APatientWithProofLevelFiveCanAccessSymptomsFromHomeScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -83,16 +83,16 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Symptoms();
+                .Navigation.Advice();
 
-            AndroidSymptomsPage
+            AndroidAdvicePage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
 
         [NhsAppIOSTest]
         [Ignore("Symptoms is now Advice")]
-        public void APatientWithProofLevelFiveCanAccessSymptomsFromHomeScreenIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelFiveCanAccessAdviceFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -102,9 +102,9 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.Symptoms();
+                .Navigation.Advice();
 
-            IOSSymptomsPage
+            IOSAdvicePage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
@@ -222,8 +222,7 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppAndroidTest]
-        [Ignore("My Record is now Health records")]
-        public void APatientWithProofLevelNineCanAccessMyRecordFromHomeScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -233,16 +232,15 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MyRecord();
+                .Navigation.YourHealth();
 
-            AndroidMyRecordPage
+            AndroidYourHealthPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
 
         [NhsAppIOSTest]
-        [Ignore("My Record is now Health records")]
-        public void APatientWithProofLevelNineCanAccessMyRecordFromHomeScreenIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
                 .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
@@ -254,7 +252,7 @@ namespace NHSOnline.IntegrationTests.Home
                 .AssertOnPage(driver)
                 .Navigation.MyRecord();
 
-            IOSMyRecordPage
+            IOSYourHealthPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }

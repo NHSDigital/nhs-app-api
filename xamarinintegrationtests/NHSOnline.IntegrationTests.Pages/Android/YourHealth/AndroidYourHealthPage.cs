@@ -1,23 +1,23 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.Android.MyRecord
+namespace NHSOnline.IntegrationTests.Pages.Android.YourHealth
 {
-    public sealed class AndroidMyRecordPage
+    public sealed class AndroidYourHealthPage
     {
-        private AndroidMyRecordPage(IAndroidDriverWrapper driver)
+        private AndroidYourHealthPage(IAndroidDriverWrapper driver)
         {
             Navigation = new AndroidFullNavigation(driver);
-            PageContent = new MyRecordPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
         public AndroidFullNavigation Navigation { get; }
 
-        private MyRecordPageContent PageContent { get; }
+        private YourHealthPageContent PageContent { get; }
 
-        public static AndroidMyRecordPage AssertOnPage(IAndroidDriverWrapper driver)
+        public static AndroidYourHealthPage AssertOnPage(IAndroidDriverWrapper driver)
         {
-            var page = new AndroidMyRecordPage(driver);
+            var page = new AndroidYourHealthPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }

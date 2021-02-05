@@ -1,23 +1,23 @@
 using NHSOnline.IntegrationTests.Pages.WebPageContent;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Pages.IOS.Symptoms
+namespace NHSOnline.IntegrationTests.Pages.IOS.YourHealth
 {
-    public sealed class IOSSymptomsPage
+    public sealed class IOSYourHealthPage
     {
-        private IOSSymptomsPage(IIOSDriverWrapper driver)
+        private IOSYourHealthPage(IIOSDriverWrapper driver)
         {
             Navigation = new IOSFullNavigation(driver);
-            PageContent = new SymptomsPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new YourHealthPageContent(driver.Web(WebViewContext.NhsApp));
         }
 
         public IOSFullNavigation Navigation { get; }
 
-        private SymptomsPageContent PageContent { get; }
+        private YourHealthPageContent PageContent { get; }
 
-        public static IOSSymptomsPage AssertOnPage(IIOSDriverWrapper driver)
+        public static IOSYourHealthPage AssertOnPage(IIOSDriverWrapper driver)
         {
-            var page = new IOSSymptomsPage(driver);
+            var page = new IOSYourHealthPage(driver);
             page.PageContent.AssertOnPage();
             return page;
         }
