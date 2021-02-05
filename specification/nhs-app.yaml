@@ -17,8 +17,8 @@ info:
     This API can only be accessed by organisations that deliver functionality to citizens through the NHS App.
 
     ## API status and roadmap
-    This API is in [alpha](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
-    - we are in the early stages of prototyping and may make extensive breaking changes based on developer feedback
+    This API is in [private beta](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#api-status), meaning:
+    - we might make breaking changes, but only if we can't avoid it, and we'll give advance notice
     - we can't guarantee availability or performance
 
     To see our roadmap, or to suggest, comment or vote on features for this API, see our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/?order=popular&filter=allexceptdone&tag=nhs-app-api).
