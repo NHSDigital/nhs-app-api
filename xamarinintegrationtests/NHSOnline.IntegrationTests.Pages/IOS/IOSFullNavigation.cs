@@ -32,6 +32,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         private IOSNavigationMenuItem MoreMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App more icon", "More");
 
+        private IOSNavigationMenuItem MessagesMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App messages icon", "Messages");
+
         internal void AssertNavigationPresent()
         {
             FullNavigationHeader.AssertVisible();

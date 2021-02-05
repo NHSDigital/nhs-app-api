@@ -33,6 +33,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         private AndroidNavigationMenuItem MoreMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App more icon", "More");
 
+        private AndroidNavigationMenuItem MessagesMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App messages icon", "Messages");
+
         public void AssertNavigationPresent()
         {
             FullNavigationHeader.AssertVisible();

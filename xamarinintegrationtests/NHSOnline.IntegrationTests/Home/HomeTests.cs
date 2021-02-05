@@ -256,7 +256,6 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppAndroidTest]
-        [Ignore("More nav item has become messages and will be resolved in another PR")]
         public void APatientWithProofLevelNineCanAccessMoreFromHomeScreenAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -275,7 +274,6 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
-        [Ignore("More nav item has become messages and will be resolved in another PR")]
         public void APatientWithProofLevelNineCanAccessMoreFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()

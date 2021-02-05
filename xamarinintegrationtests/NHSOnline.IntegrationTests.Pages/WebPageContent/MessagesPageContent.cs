@@ -3,11 +3,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 
 namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 {
-    public class MorePageContent
+    public class MessagesPageContent
     {
         private readonly IWebInteractor _interactor;
 
-        internal MorePageContent(IWebInteractor interactor)
+        internal MessagesPageContent(IWebInteractor interactor)
         {
             _interactor = interactor;
         }
@@ -19,7 +19,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             Title.AssertVisible();
         }
 
-        public MorePageContent AssertPageElements()
+        public MessagesPageContent AssertPageElements()
         {
             Title.AssertVisible();
             return this;
