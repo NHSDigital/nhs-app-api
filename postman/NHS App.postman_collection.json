@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "744b5607-f60a-4df4-91c1-843e2b64dd4d",
+		"name": "NHS App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "_ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => { \r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/_ping",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"_ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "_status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => { \r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					},
+					{
+						"key": "apikey",
+						"value": "{{statusEndpointApiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/_status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Communication In-App Message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id\", pm.response.json().id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					},
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional Campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional Request Reference\"\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentString\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        }\n    ],\n    \"sender\": {\n        \"display\": \"Onboarded Third Party\"\n    },\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/communication/in-app/FHIR/R4/CommunicationRequest",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"communication",
+						"in-app",
+						"FHIR",
+						"R4",
+						"CommunicationRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Communication Push Notification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id\", pm.response.json().id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					},
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional Campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional Request Reference\"\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentReference\": {\n                \"display\": \"You have a new message. The message may contain something important.\",\n                \"reference\": \"https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging\"\n            }\n        }\n    ],\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/communication/in-app/FHIR/R4/CommunicationRequest",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"communication",
+						"in-app",
+						"FHIR",
+						"R4",
+						"CommunicationRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Communication In-App With Notification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id\", pm.response.json().id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apiKey}}"
+					},
+					{
+						"key": "X-Correlation-ID",
+						"type": "text",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"CommunicationRequest\",\n    \"status\": \"active\",\n    \"identifier\": [\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/campaign-id\",\n            \"value\": \"Optional campaign ID\"\n        },\n        {\n            \"system\": \"https://fhir.nhs.uk/NHSApp/request-id\",\n            \"value\": \"Optional request reference\"\n        }\n    ],\n    \"payload\": [\n        {\n            \"contentString\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        }\n    ],\n    \"sender\": {\n        \"display\": \"Onboarded Third Party\"\n    },\n    \"recipient\": [\n        {\n            \"type\": \"Patient\",\n            \"identifier\": {\n                \"system\": \"https://fhir.nhs.uk/Id/nhs-number\",\n                \"value\": \"9903002157\"\n            }\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/communication/in-app-with-notification/FHIR/R4/CommunicationRequest",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"communication",
+						"in-app-with-notification",
+						"FHIR",
+						"R4",
+						"CommunicationRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Communication - deprecated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id\", pm.response.json().id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", () => { \r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{apiKey}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Correlation-ID",
+						"value": "60fac112-2d2a-432d-87f7-7424235fb31b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"campaignId\": \"optional campaign id\",\n    \"requestReference\": \"optional requestReference\",\n    \"channels\": {\n        \"appMessage\": {\n            \"sender\": \"Onboarded Third Party\",\n            \"body\": \"You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment [here](https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments)\"\n        },\n        \"pushNotification\": {\n            \"title\": \"You have a new message.\",\n            \"body\": \"The message may contain something important.\",\n            \"url\": \"https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging\"\n        }\n    },\n    \"recipients\": \n    {\n        \"nhsNumbers\": [\"9903002157\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/communication",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"communication"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
