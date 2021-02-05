@@ -15,7 +15,7 @@ export default {
   name: 'defaultMixin',
   computed: {
     showTemplate() {
-      return !this.$store.getters['errors/showApiError'] && !this.hasConnectionProblem();
+      return !this.hasConnectionProblem();
     },
   },
   methods: {
@@ -48,9 +48,10 @@ export default {
         : url;
     },
     hasConnectionProblem() {
-      const hasConnectionError = !navigator.onLine;
-      this.$store.dispatch('errors/setConnectionProblem', hasConnectionError);
-      return hasConnectionError;
+      const hasInternetConnectionError = !navigator.onLine;
+      this.$store.dispatch('errors/setConnectionProblem', hasInternetConnectionError);
+
+      return hasInternetConnectionError || this.$store.getters['errors/showApiError'];
     },
     getMedicationCourseStatus(medicationStatusId) {
       // eslint-disable-next-line no-restricted-syntax

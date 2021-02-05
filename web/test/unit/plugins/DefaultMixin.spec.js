@@ -131,5 +131,33 @@ describe('mixins', () => {
         expect(redirectTo).toBeCalledWith(wrapper.vm, '/foo');
       });
     });
+
+    describe('hasConnectionProblem', () => {
+      let hasConnectionErrorBool;
+
+      describe('when online and no Api error', () => {
+        beforeEach(() => {
+          getters['errors/showApiError'] = false;
+          jest.spyOn(navigator, 'onLine', 'get').mockReturnValueOnce(true);
+          hasConnectionErrorBool = wrapper.vm.hasConnectionProblem();
+        });
+
+        it('will return a value of false', () => {
+          expect(hasConnectionErrorBool).toEqual(false);
+        });
+      });
+
+      describe('when offline and no Api error', () => {
+        beforeEach(() => {
+          getters['errors/showApiError'] = false;
+          jest.spyOn(navigator, 'onLine', 'get').mockReturnValueOnce(false);
+          hasConnectionErrorBool = wrapper.vm.hasConnectionProblem();
+        });
+
+        it('will return a value of true', () => {
+          expect(hasConnectionErrorBool).toEqual(true);
+        });
+      });
+    });
   });
 });
