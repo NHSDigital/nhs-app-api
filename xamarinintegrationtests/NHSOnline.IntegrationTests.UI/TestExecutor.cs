@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
@@ -21,24 +22,35 @@ namespace NHSOnline.IntegrationTests.UI
             _createDriverWrapper = driverWrapper;
         }
 
-        internal TestResult Execute()
+        internal TestResult[] Execute()
         {
-            var logs = new TestLogs();
-            logs.Info(_displayName);
+            List<TestResult> results = new List<TestResult>();
 
-            // Include driver setup/teardown in test duration
-            var timer = Stopwatch.StartNew();
+            do
+            {
+                var logs = new TestLogs();
+                logs.Info(_displayName);
 
-            var testResult = ExecuteInternal(logs);
+                // Include driver setup/teardown in test duration
+                var timer = Stopwatch.StartNew();
 
-            logs.Info("{0} => {1}", _displayName, testResult.Outcome);
-            logs.UpdateResult(testResult);
+                var testResult = ExecuteInternal(logs);
 
-            timer.Stop();
-            testResult.DisplayName = _displayName;
-            testResult.Duration = timer.Elapsed;
+                logs.Info("{0} => {1}", _displayName, testResult.Outcome);
+                logs.UpdateResult(testResult);
 
-            return testResult;
+                timer.Stop();
+                testResult.DisplayName = _displayName;
+                testResult.Duration = timer.Elapsed;
+                if (testResult.ShouldRetry())
+                {
+                    testResult.Outcome = UnitTestOutcome.Inconclusive;
+                }
+
+                results.Add(testResult);
+            } while (results.Count < 5 && results[^1].ShouldRetry());
+
+            return results.ToArray();
         }
 
         private TestResult ExecuteInternal(TestLogs logs)
@@ -54,7 +66,7 @@ namespace NHSOnline.IntegrationTests.UI
                 using var driver = _createDriverWrapper(logs, tempDirectory);
                 using var context = new TestContext(_testMethod, logs, tempDirectory, driver);
 
-                var testResult = _testMethod.Invoke(new object[] { driver });
+                var testResult = _testMethod.Invoke(new object[] {driver});
 
                 context.Cleanup(testResult);
 
