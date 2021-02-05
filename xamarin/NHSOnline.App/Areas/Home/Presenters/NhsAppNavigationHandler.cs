@@ -14,50 +14,50 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         public Task SettingsRequested()
         {
-            _view.NavigateWithinApp("account");
+            _view.NavigateToSettings();
             return Task.CompletedTask;
         }
 
         public Task HomeRequested()
         {
-            _view.NavigateWithinApp("/");
+            _view.NavigateToHome();
             return Task.CompletedTask;
         }
 
         public Task SymptomsRequested()
         {
-            _view.NavigateWithinApp("symptoms");
+            _view.NavigateToAdvice();
             return Task.CompletedTask;
         }
 
         public Task AppointmentsRequested()
         {
-            _view.NavigateWithinApp("appointments");
+            _view.NavigateToAppointments();
             return Task.CompletedTask;
         }
 
         public Task PrescriptionsRequested()
         {
-            _view.NavigateWithinApp("prescriptions");
+            _view.NavigateToPrescriptions();
             return Task.CompletedTask;
         }
 
         public Task RecordRequested()
         {
-            _view.NavigateWithinApp("health-records");
+            _view.NavigateToYourHealth();
             return Task.CompletedTask;
         }
 
         public Task MoreRequested()
         {
-            _view.NavigateWithinApp("more");
+            _view.NavigateToMessages();
             return Task.CompletedTask;
         }
 
         public Task RedirectToNhsAppPageRequested(string page)
         {
             // TODO deal with homepage mapping to route as part of NHSO-10645
-            _view.NavigateWithinApp(page == "homePage" ? "/": page);
+            _view.NavigateToRedirectedPathWithinApp(page == "homePage" ? "/": page);
             return Task.CompletedTask;
         }
     }

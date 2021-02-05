@@ -30,7 +30,14 @@ namespace NHSOnline.App.Areas.Home
         INavigation Navigation { get; }
 
         void GoToUri(Uri uri);
-        Task NavigateWithinApp(string spaPath);
+        Task NavigateToRedirectedPathWithinApp(string spaPath);
+        Task NavigateToAdvice();
+        Task NavigateToAppointments();
+        Task NavigateToPrescriptions();
+        Task NavigateToYourHealth();
+        Task NavigateToMessages();
+        Task NavigateToSettings();
+        Task NavigateToHome();
         Task SendNotificationsStatus(string status);
         Task AddCookie(Cookie cookie);
     }

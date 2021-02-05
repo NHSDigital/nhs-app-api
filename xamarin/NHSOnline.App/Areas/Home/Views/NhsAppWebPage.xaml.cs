@@ -83,11 +83,32 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public void GoToUri(Uri uri) => WebView.GoToUri(uri);
 
-        public async Task NavigateWithinApp(string spaPath)
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoTo({ConvertToJsonString(spaPath)})").PreserveThreadContext();
+        public async Task NavigateToAdvice()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToAdvice()").PreserveThreadContext();
 
-        public async Task SendNotificationsStatus(string status)
-            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
+        public async Task NavigateToAppointments()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToAppointments()").PreserveThreadContext();
+
+        public async Task NavigateToPrescriptions()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToPrescriptions()").PreserveThreadContext();
+
+        public async Task NavigateToYourHealth()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToYourHealth()").PreserveThreadContext();
+
+        public async Task NavigateToMessages()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToMessages()").PreserveThreadContext();
+
+         public async Task NavigateToSettings()
+            => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToSettings()").PreserveThreadContext();
+
+         public async Task NavigateToHome()
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoToHome()").PreserveThreadContext();
+
+         public async Task NavigateToRedirectedPathWithinApp(string spaPath)
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.navigationGoTo({ConvertToJsonString(spaPath)})").PreserveThreadContext();
+
+         public async Task SendNotificationsStatus(string status)
+             => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
 
         public async Task ResetAndShowError()
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();

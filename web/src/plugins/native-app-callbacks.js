@@ -36,6 +36,27 @@ const NativeAppCallbacksPlugin = {
       navigationGoTo(path) {
         store.dispatch('navigation/goTo', path);
       },
+      navigationGoToAdvice() {
+        store.dispatch('navigation/goToAdvicePage');
+      },
+      navigationGoToAppointments() {
+        store.dispatch('navigation/goToAppointmentsPage');
+      },
+      navigationGoToPrescriptions() {
+        store.dispatch('navigation/goToPrescriptionsPage');
+      },
+      navigationGoToYourHealth() {
+        store.dispatch('navigation/goToYourHealthPage');
+      },
+      navigationGoToMessages() {
+        store.dispatch('navigation/goToMessagesPage');
+      },
+      navigationGoToSettings() {
+        store.dispatch('navigation/goToSettingsPage');
+      },
+      navigationGoToHome() {
+        store.dispatch('navigation/goToHomePage');
+      },
       appVersionUpdateNativeVersion(versionNumber) {
         store.dispatch('appVersion/updateNativeVersion', versionNumber);
       },
