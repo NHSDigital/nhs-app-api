@@ -60,44 +60,43 @@ jobs:
           pathToPublish: '$(Build.SourcesDirectory)/$(code.coverage.report.path)'
           artifactName: Android Client Code Coverage Report
 
-      - task: Bash@3
-        displayName: Build $(native.android.target)
-        env:
-          TARGET: $(native.android.target)
-          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
-          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Feature branch build and release
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: $(native.android.target)
+          buildCondition: "succeeded()"
+          releaseCondition: "and(succeeded(), eq(variables['native.android.upload'], 'True'))"
+          target: $(native.android.target)
+          keyStoreLocation: $(android_debug_key_store.secureFilePath)
+          keyStorePassword: $(android.debug.key.store.password)
 
-      - task: Bash@3
-        displayName: Build Preview Release
-        condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['native.android.target'], 'previewRelease'))
-        env:
-          TARGET: previewRelease
-          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
-          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Tagged build - Preview Release
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: 'Preview Release'
+          buildCondition: "and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['native.android.target'], 'previewRelease'))"
+          releaseCondition: "false"
+          target: previewRelease
+          keyStoreLocation: $(android_debug_key_store.secureFilePath)
+          keyStorePassword: $(android.debug.key.store.password)
 
-      - task: Bash@3
-        displayName: Build Onboarding Sandpit
-        condition: and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingsandpit'))
-        env:
-          TARGET: onboardingsandpit
-          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
-          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Tagged build - Sandpit
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: 'Onboarding Sandpit'
+          buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingsandpit'))"
+          target: onboardingsandpit
+          keyStoreLocation: $(android_debug_key_store.secureFilePath)
+          keyStorePassword: $(android.debug.key.store.password)
 
-      - task: Bash@3
-        displayName: Build Onboarding AOS
-        condition: and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingaos'))
-        env:
-          TARGET: onboardingaos
-          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
-          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Tagged build - AOS
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: 'Onboarding AOS'
+          buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingaos'))"
+          target: onboardingaos
+          keyStoreLocation: $(android_debug_key_store.secureFilePath)
+          keyStorePassword: $(android.debug.key.store.password)
 
       - task: DownloadSecureFile@1
         name: android_key_store
@@ -105,25 +104,24 @@ jobs:
         inputs:
           secureFile: 'AndroidSigningKeyStore'
 
-      - task: Bash@3
-        displayName: Build Demo (Staging)
-        condition: and(succeeded(), eq(variables['source.tag'], 'True'))
-        env:
-          TARGET: demo
-          ANDROID_KEY_STORE_LOCATION: $(android_key_store.secureFilePath)
-          ANDROID_KEY_STORE_PASSWORD: $(android.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Tagged build - Demo
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: 'Demo (Staging)'
+          buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'))"
+          target: demo
+          keyStoreLocation: $(android_key_store.secureFilePath)
+          keyStorePassword: $(android.key.store.password)
 
-      - task: Bash@3
-        displayName: Build Release
-        condition: and(succeeded(), eq(variables['source.tag'], 'True'))
-        env:
-          TARGET: release
-          ANDROID_KEY_STORE_LOCATION: $(android_key_store.secureFilePath)
-          ANDROID_KEY_STORE_PASSWORD: $(android.key.store.password)
-        inputs:
-          filePath: android/buildscripts/02_build.sh
+      # Tagged build - Release
+      - template: android-client-build-and-release-job.yml
+        parameters:
+          displayName: Release
+          buildCondition: "and(succeeded(), eq(variables['source.tag'], 'True'))"
+          target: release
+          keyStoreLocation: $(android_key_store.secureFilePath)
+          keyStorePassword: $(android.key.store.password)
+          track: production
 
       - task: PublishBuildArtifacts@1
         displayName: Publish android package files

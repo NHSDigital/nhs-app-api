@@ -109,6 +109,11 @@ parameters:
     type: boolean
     default: false
 
+  - name: uploadToGooglePlayConsole
+    displayName: Upload Android Client to Google Play Console
+    type: boolean
+    default: false
+
   - name: securityScanEnabled
     displayName: Run Security Scans
     type: boolean
@@ -146,7 +151,7 @@ variables:
   native.android.build.number: $[counter('android.build.counter', 100)]
   sjr.config.image.name: 'nhsonline-service-journey-prod-config'
   sjr.image.tag: $[variables['Build.SourceVersion']]
-
+  native.android.upload: ${{ parameters.uploadToGooglePlayConsole }}
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
@@ -211,6 +216,8 @@ stages:
       condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.android'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
     jobs:
       - template: .azuredevops/templates/build-and-test-android-client-job.yml
+        parameters:
+          uploadToGooglePlayConsole: ${{ parameters.uploadToGooglePlayConsole }}
 
   - stage: ios
     displayName: iOS Client
