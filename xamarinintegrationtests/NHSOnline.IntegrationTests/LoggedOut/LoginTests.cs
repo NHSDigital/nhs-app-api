@@ -15,7 +15,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
     public class LoginTests
     {
         [NhsAppAndroidTest]
-        [Ignore("Logged in home page is less friendly")]
         public void APatientWithProofLevelFiveCanLoginAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()
@@ -52,7 +51,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        [Ignore("Logged in home page is less friendly")]
         public void APatientWithProofLevelFiveCanLoginIos(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
@@ -89,7 +87,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        [Ignore("Logged in home page is less friendly")]
         public void APatientWithProofLevelNineCanLoginAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -116,13 +113,16 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
 
+            AndroidManageNotificationsPromptPage
+                .AssertOnPage(driver)
+                .PageContent.Continue();
+
             AndroidLoggedInHomePage
                 .AssertOnPage(driver)
                 .AssertPageDisplayedFor("Jack Flash");
         }
 
         [NhsAppIOSTest]
-        [Ignore("Logged in home page is less friendly")]
         public void APatientWithProofLevelNineCanLoginIos(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
@@ -149,6 +149,10 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
                 .PageContent.OptInToUserResearch();
+
+            IOSManageNotificationsPromptPage
+                .AssertOnPage(driver)
+                .PageContent.Continue();
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
@@ -230,7 +234,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSStubbedLoginPage
                 .AssertOnPage(driver)
                 .PageContent.Covid();
-            
+
             IOSAppTab
                 .AssertOnCovidPage(driver)
                 .ReturnToApp();

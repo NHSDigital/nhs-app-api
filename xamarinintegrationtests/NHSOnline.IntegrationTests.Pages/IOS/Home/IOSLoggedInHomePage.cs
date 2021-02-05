@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
     {
 
         public IOSFullNavigation Navigation { get; }
-        public LoggedInHomePageContent PageContent { get; }
+        private LoggedInHomePageContent PageContent { get; }
 
         private IOSLoggedInHomePage(IIOSDriverWrapper driver)
         {
@@ -25,7 +25,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
         public void AssertPageDisplayedFor(string name)
         {
             Navigation.AssertNavigationPresent();
-            PageContent.AssertWelcomeMessageDisplayedFor(name);
+            PageContent.AssertNameDisplayedFor(name);
         }
     }
 }

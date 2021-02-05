@@ -14,14 +14,16 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Home");
 
+        private WebDefinitionTerm Name => WebDefinitionTerm.WithTerm(_interactor, "Name:");
+
         internal void AssertOnPage()
         {
             Title.AssertVisible();
         }
 
-        public LoggedInHomePageContent AssertWelcomeMessageDisplayedFor(string patientName)
+        public LoggedInHomePageContent AssertNameDisplayedFor(string patientName)
         {
-            WebText.WithTagAndText(_interactor, "h2", $"Welcome, {patientName}").AssertVisible();
+            Name.AssertValue(patientName);
             return this;
         }
     }
