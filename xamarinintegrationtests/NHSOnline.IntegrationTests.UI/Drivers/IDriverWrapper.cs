@@ -7,5 +7,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         internal void AttachDebugInfo(IDriverCleanupContext context);
         internal void Cleanup(IDriverCleanupContext context);
         internal void UpdateBrowserStackStatusToFailed(IDriverCleanupContext context);
+        internal void UpdateBrowserStackStatusToPassed(IDriverCleanupContext context);
     }
 }

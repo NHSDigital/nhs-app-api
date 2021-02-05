@@ -64,5 +64,17 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                 browserStackClient.UpdateStatus(driver.SessionId, "Failed", "Integration Test Failed");
             });
         }
+
+        internal static void UpdateBrowserStackStatusToPassed(
+            this IDriverCleanupContext context,
+            IHasSessionId driver,
+            BrowserStackConfig browserStackConfig)
+        {
+            context.TryCleanUp("Update BrowserStack status", () =>
+            {
+                var browserStackClient = new BrowerStackApiClient(browserStackConfig);
+                browserStackClient.UpdateStatus(driver.SessionId, "Passed", "Integration Test Passed");
+            });
+        }
     }
 }

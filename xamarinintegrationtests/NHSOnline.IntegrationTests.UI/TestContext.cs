@@ -46,6 +46,10 @@ namespace NHSOnline.IntegrationTests.UI
                 _mocksLogs.AttachMocksLogs(testResultContext);
                 _driver.UpdateBrowserStackStatusToFailed(testResultContext);
             }
+            else
+            {
+                _driver.UpdateBrowserStackStatusToPassed(testResultContext);
+            }
 
             _driver.Cleanup(testResultContext);
         }
