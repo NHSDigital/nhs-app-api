@@ -1,5 +1,7 @@
 # syntax=docker/dockerfile:experimental
-FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1 as dependencies
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} as dependencies
 
 RUN apt-get update && \
     apt-get install -y wget gnupg docker.io

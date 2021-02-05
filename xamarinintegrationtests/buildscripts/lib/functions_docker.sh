@@ -48,13 +48,37 @@ function pull_docker_images () {
   info "Configured images:
   $DOCKER_IMAGES"
 
-  if [ -z "$TF_BUILD" ] && [ -z "$NO_PULL" ]; then
-    for IMAGE_TO_PULL in $DOCKER_IMAGES; do
-      case "$IMAGE_TO_PULL" in
-        local/*) echo "Skipping pull on local image $IMAGE_TO_PULL";;
-        *) docker pull "$IMAGE_TO_PULL";;
-      esac
-    done
+  for IMAGE_TO_PULL in $DOCKER_IMAGES; do
+    pull_docker_image "$IMAGE_TO_PULL"
+  done
+}
+
+function pull_docker_image () {
+  local IMAGE_TO_PULL=$1
+  local MAX_RETRIES
+
+  if [ -z "$TF_BUILD" ]; then
+    MAX_RETRIES=0
+  else
+    MAX_RETRIES=3
+  fi
+
+  if [ -z "$NO_PULL" ]; then
+    case "$IMAGE_TO_PULL" in
+      local/*) echo "Skipping pull on local image $IMAGE_TO_PULL";;
+      *)
+        info "Pulling docker image $IMAGE_TO_PULL"
+        RETRIES=0
+        while ! docker pull "$IMAGE_TO_PULL"; do
+          info "Failed to pull docker image $IMAGE_TO_PULL"
+          if [[ $RETRIES -ge $MAX_RETRIES ]]; then
+            break;
+          fi
+          RETRIES=$((RETRIES+1))
+          info "Retrying $RETRIES/$MAX_RETRIES"
+        done
+        ;;
+    esac
   fi
 }
 

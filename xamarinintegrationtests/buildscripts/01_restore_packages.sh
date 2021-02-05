@@ -10,16 +10,13 @@ source "../buildscripts/lib/set_env.sh"
 # shellcheck source=lib/set_env.sh
 source "buildscripts/lib/set_env.sh"
 
-# shellcheck source=../../buildscripts/lib/functions_logging.sh
-source "../buildscripts/lib/functions_logging.sh"
-
-# shellcheck source=../../buildscripts/lib/functions_validation.sh
-source "../buildscripts/lib/functions_validation.sh"
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
 
 NUGET_CFG_PATH=""
 
 function pull_images() {
-  docker pull "${DOCKER_IMAGE_DOTNET_BUILD}" || die "Failed to pull ${DOCKER_IMAGE_DOTNET_BUILD}"
+  pull_docker_image "$DOCKER_IMAGE_DOTNET_BUILD"
 }
 
 function validate_nuget_config() {
@@ -36,6 +33,7 @@ function restore_packages() {
   docker build \
   --target=dependencies \
   --secret "id=nuget,src=${NUGET_CFG_PATH}" \
+  --build-arg BASE_IMAGE="${DOCKER_IMAGE_DOTNET_BUILD}" \
   . || die "Failed to restore packages"
 }
 
