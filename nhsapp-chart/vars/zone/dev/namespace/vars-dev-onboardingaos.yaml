@@ -37,5 +37,5 @@ api:
     services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
     services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com
     services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
-    services__pkb__url: https://rc.pkb.io
-    services__pkb_alt__url: http://rc.pkb.io:443
+    services__pkb__url: https://sandbox.patientsknowbest.com
+    services__pkb_alt__url: http://sandbox.patientsknowbest.com:443
