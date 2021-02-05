@@ -58,6 +58,13 @@
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
+        <a class="nhsuk-header__navigation-link" :href="helpAndSupportUrl"
+           data-sid="help-and-support-menu-item" target="_blank" rel="noopener noreferrer"
+           @click="closeMiniMenu">
+          {{ $t('navigation.helpAndSupport') }}
+        </a>
+      </li>
+      <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
         <a class="nhsuk-header__navigation-link" :href="accountPath"
            data-sid="account-menu-item"
            @click.prevent="setMenuitemState(accountPath)">
@@ -110,6 +117,9 @@ export default {
   computed: {
     miniMenuExpanded() {
       return this.$store.state.header.miniMenuExpanded;
+    },
+    helpAndSupportUrl() {
+      return this.$route.meta.helpUrl;
     },
   },
   methods: {

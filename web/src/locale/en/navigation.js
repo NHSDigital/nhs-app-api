@@ -38,6 +38,7 @@ export default {
   },
   header: {
     cookiesPolicy: 'cookies policy',
+    helpAndSupport: 'Help and support',
     logout: 'Log out',
     menu: 'Menu',
     nhsAppOnline: 'NHS App online',

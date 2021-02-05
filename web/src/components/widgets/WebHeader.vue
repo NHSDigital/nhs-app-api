@@ -40,9 +40,6 @@ import {
   executeHomeNavigationRule,
 } from '@/router/paths';
 import { createRoutePathObject } from '@/lib/utils';
-import {
-  HELP_AND_SUPPORT_URL,
-} from '@/router/externalLinks';
 
 export default {
   name: 'WebHeader',
@@ -72,23 +69,15 @@ export default {
     },
   },
   data() {
-    const accountPath = createRoutePathObject({
-      path: ACCOUNT_PATH,
-      store: this.$store,
-    });
-
-    const logoutPath = createRoutePathObject({
-      path: LOGOUT_PATH,
-      store: this.$store,
-    });
-
     return {
-      helpAndSupportURL: HELP_AND_SUPPORT_URL,
-      links: [
-        { name: this.$t('navigation.header.settings'), value: accountPath, id: 'account-link' },
-        { name: this.$t('navigation.header.logout'), value: logoutPath, id: 'account-logout' },
-      ],
-      showMenuButton: false,
+      accountPath: createRoutePathObject({
+        path: ACCOUNT_PATH,
+        store: this.$store,
+      }),
+      logoutPath: createRoutePathObject({
+        path: LOGOUT_PATH,
+        store: this.$store,
+      }),
     };
   },
   computed: {
@@ -97,6 +86,13 @@ export default {
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
+    },
+    links() {
+      return [
+        { name: this.$t('navigation.header.helpAndSupport'), value: this.$route.meta.helpUrl, id: 'help-and-support-link' },
+        { name: this.$t('navigation.header.settings'), value: this.accountPath, id: 'account-link', internal: true },
+        { name: this.$t('navigation.header.logout'), value: this.logoutPath, id: 'account-logout', internal: true },
+      ];
     },
   },
   methods: {

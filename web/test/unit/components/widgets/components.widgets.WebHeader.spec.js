@@ -24,6 +24,7 @@ describe('WebHeader.vue', () => {
       stubs: {
         'router-link': '<a></a>',
       },
+      $route: { meta: { helpUrl: 'https://help.url' } },
     });
   };
 

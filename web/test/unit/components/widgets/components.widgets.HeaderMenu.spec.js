@@ -18,7 +18,7 @@ describe('HeaderMenu.vue', () => {
       },
     });
 
-    return mount(HeaderMenu, { $store, $router });
+    return mount(HeaderMenu, { $store, $router, $route: { meta: { helpUrl: 'https://help.url' } } });
   };
 
   beforeEach(() => {
@@ -26,6 +26,6 @@ describe('HeaderMenu.vue', () => {
   });
 
   it('will show desktop view shows correct number of menu items', () => {
-    expect(wrapper.findAll('li').length).toEqual(7);
+    expect(wrapper.findAll('li').length).toEqual(8);
   });
 });

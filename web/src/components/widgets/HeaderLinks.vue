@@ -1,12 +1,17 @@
 <template>
-  <div v-if="anchorLinks.length>0" :class="$style['header-links']">
+  <div v-if="anchorLinks.length > 0" :class="$style['header-links']">
     <span v-for="(anchorLink, index) in anchorLinks" :key="index">
-      <router-link :id="anchorLink.id"
+      <router-link v-if="anchorLink.internal"
+                   :id="anchorLink.id"
                    :to="anchorLink.value"
                    tabindex="0">
         {{ anchorLink.name }}
       </router-link>
-      <strong v-if="index<anchorLinks.length-1" aria-hidden="true">
+      <a v-else :id="anchorLink.id" :href="anchorLink.value" target="_blank"
+         rel="noopener noreferrer">
+        {{ anchorLink.name }}
+      </a>
+      <strong v-if="index < anchorLinks.length - 1" aria-hidden="true">
         &nbsp;|&nbsp;
       </strong>
     </span>
