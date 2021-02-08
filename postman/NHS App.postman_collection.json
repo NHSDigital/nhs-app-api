@@ -179,13 +179,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/communication/in-app/FHIR/R4/CommunicationRequest",
+					"raw": "{{base_url}}/communication/notification/FHIR/R4/CommunicationRequest",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"communication",
-						"in-app",
+						"notification",
 						"FHIR",
 						"R4",
 						"CommunicationRequest"
