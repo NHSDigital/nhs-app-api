@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.AspNet\NHSOnline.Backend.AspNet.csproj" />
-    <ProjectReference Include="..\NHSOnline.Backend.HealthChecks\NHSOnline.Backend.HealthChecks.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
   </ItemGroup>
