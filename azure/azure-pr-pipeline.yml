@@ -48,6 +48,4 @@ extends:
               test_folder_path: $(Pipeline.Workspace)/s/${{ variables.service_name }}/$(SERVICE_ARTIFACT_NAME)/tests
               target_url: https://$(APIGEE_ENVIRONMENT).api.service.nhs.uk/$(SERVICE_BASE_PATH)/
         make_spec_visible: true
-      - environment: internal-dev-sandbox
-        proxy_path: sandbox
         
