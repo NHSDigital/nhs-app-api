@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient message read status successfully updated");
+                await _auditor.PostOperationAudit(AuditType, "Patient message read status successfully updated");
             }
             catch (Exception e)
             {
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Bad Request");
+                await _auditor.PostOperationAudit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Bad Request");
             }
             catch (Exception e)
             {
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Forbidden");
+                await _auditor.PostOperationAudit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Forbidden");
             }
             catch (Exception e)
             {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Bad Gateway");
             }
             catch (Exception e)
             {
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, $"Error updating unread status for message with id {_request.MessageId}: Internal Server Error");
             }
             catch (Exception e)
             {

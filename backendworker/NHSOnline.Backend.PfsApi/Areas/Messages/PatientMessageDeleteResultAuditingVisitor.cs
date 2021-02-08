@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient message successfully deleted");
+                await _auditor.PostOperationAudit(AuditType, "Patient message successfully deleted");
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error deleting patient message: Bad Request");
+                await _auditor.PostOperationAudit(AuditType, "Error deleting patient message: Bad Request");
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error deleting patient message: Forbidden");
+                await _auditor.PostOperationAudit(AuditType, "Error deleting patient message: Forbidden");
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error deleting patient message: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error deleting patient message: Bad Gateway");
             }
             catch (Exception e)
             {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error deleting patient message: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, "Error deleting patient message: Internal Server Error");
             }
             catch (Exception e)
             {

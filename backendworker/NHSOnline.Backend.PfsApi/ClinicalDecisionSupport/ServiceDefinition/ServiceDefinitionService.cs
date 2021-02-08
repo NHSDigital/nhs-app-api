@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                             parameters.Add("patient",
                                 _fhirParameterHelpers.CreateFhirPatient(userSession, demographicsResult.Response.Address ??= ""));
-                            await _auditor.Audit(
+                            await _auditor.PreOperationAudit(
                                 AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
                                 "User has agreed to share their name, age, NHS number and postal address.");
                         }
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 }
                 else
                 {
-                    await _auditor.Audit(
+                    await _auditor.PreOperationAudit(
                         AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
                         "User has not agreed to share their name, age, NHS number and postal address.");
                 }

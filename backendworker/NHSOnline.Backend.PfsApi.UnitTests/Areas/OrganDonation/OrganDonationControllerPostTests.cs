@@ -77,9 +77,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             }
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "The organ donation decision has been successfully registered"));
+                x.PostOperationAudit(ResponseAuditType, "The organ donation decision has been successfully registered"));
         }
 
         [TestMethod]
@@ -97,9 +97,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             result.Should().BeOfType<BadRequestResult>();
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession), Times.Never);
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "The organ donation registration request failed validation"));
+                x.PostOperationAudit(ResponseAuditType, "The organ donation registration request failed validation"));
         }
 
         [TestMethod]
@@ -120,8 +120,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation registration system took too long to respond"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "The organ donation registration system took too long to respond"));
         }
 
         [TestMethod]
@@ -147,9 +147,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             }
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "There was an upstream error when registering the organ donation decision"));
+                x.PostOperationAudit(ResponseAuditType, "There was an upstream error when registering the organ donation decision"));
         }
 
         [TestMethod]
@@ -170,9 +170,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "There was an issue registering the organ donation decision"));
+                x => x.PostOperationAudit(ResponseAuditType, "There was an issue registering the organ donation decision"));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

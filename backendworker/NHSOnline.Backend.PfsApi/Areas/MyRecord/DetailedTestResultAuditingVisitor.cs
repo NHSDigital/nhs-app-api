@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly IAuditor _auditor;
         private readonly ILogger<DetailedTestResultController> _logger;
         private const string AuditType = AuditingOperations.GetTestResultAuditTypeResponse;
-        
+
         public DetailedTestResultAuditingVisitor(IAuditor auditor, ILogger<DetailedTestResultController> logger)
         {
             _auditor = auditor;
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Test result successfully viewed");
+                await _auditor.PostOperationAudit(AuditType, "Test result successfully viewed");
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing test result: bad gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error viewing test result: bad gateway");
             }
             catch (Exception e)
             {

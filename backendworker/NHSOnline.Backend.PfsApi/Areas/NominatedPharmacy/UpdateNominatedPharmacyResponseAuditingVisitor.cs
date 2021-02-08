@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 await _metricLogger.NominatedPharmacyUpdate(new NominatedPharmacyData(_userSession.Key));
 
-                await _auditor.Audit(AuditType,
+                await _auditor.PostOperationAudit(AuditType,
                     $"Successfully updated nominated pharmacy from { result.OldOdsCode } to { result.NewOdsCode }");
             }
             catch (Exception e)
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 await _metricLogger.NominatedPharmacyCreate(new NominatedPharmacyData(_userSession.Key));
 
-                await _auditor.Audit(AuditType,
+                await _auditor.PostOperationAudit(AuditType,
                     $"Successfully created new nominated pharmacy registration to { result.NewOdsCode }");
             }
             catch (Exception e)
@@ -62,58 +62,58 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Failed to retrieve Nominated Pharmacy step prior to Updating Nominated Pharmacy"); 
+                await _auditor.PostOperationAudit(AuditType, "Failed to retrieve Nominated Pharmacy step prior to Updating Nominated Pharmacy");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.GetNominatedPharmacyFailure)}");
-            }         
+            }
         }
 
         public async Task Visit(UpdateNominatedPharmacyResponse.InternalServerError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.StatusCode }");
+                await _auditor.PostOperationAudit(AuditType, $"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.StatusCode }");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.InternalServerError)}");
-            }         
+            }
         }
 
         public async Task Visit(UpdateNominatedPharmacyResponse.BadGateway result)
         {
             try
             {
-                await _auditor.Audit(AuditType, 
+                await _auditor.PostOperationAudit(AuditType,
                     $"Error updating nominated pharmacy from { result.OldOdsCode } to { result.NewOdsCode }");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.BadGateway)}");
-            }         
+            }
         }
 
         public async Task Visit(UpdateNominatedPharmacyResponse.UpdatedButStillOldCode result)
         {
             try
             {
-                await _auditor.Audit(AuditType, 
+                await _auditor.PostOperationAudit(AuditType,
                     $"Nominated pharmacy update of ods code from { result.OldOdsCode } to { result.NewOdsCode } " +
                     "was accepted  but call to get nominated pharmacy still returns the old ods code.");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(UpdateNominatedPharmacyResponse.UpdatedButStillOldCode)}");
-            }         
+            }
         }
 
         public async Task Visit(UpdateNominatedPharmacyResponse.NominatedPharmacyIsDisabled result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Nominated pharmacy feature is disabled");
+                await _auditor.PostOperationAudit(AuditType, "Nominated pharmacy feature is disabled");
             }
             catch (Exception e)
             {
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error updating nominated pharamcy : Bad Request");
+                await _auditor.PostOperationAudit(AuditType, "Error updating nominated pharamcy : Bad Request");
             }
             catch (Exception e)
             {

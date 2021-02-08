@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
+                await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
                 var result = await GetPrescriptions(fromDate, gpUserSession, patientId);
 
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
                 var courseIds = FormatCourseIds(repeatPrescriptionRequest?.CourseIds ?? new List<string>());
 
-                await _auditor.Audit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
+                await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
 
                 var result = await OrderPrescription(repeatPrescriptionRequest, gpUserSession, patientId);
 

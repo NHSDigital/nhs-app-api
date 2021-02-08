@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             try
             {
-                await _auditor.Audit(
+                await _auditor.PostOperationAudit(
                     AuditType,
                     $"Successfully switched profile to NhsNumber {result.ToNhsNumber}");
             }
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             try
             {
-                await _auditor.Audit(AuditType,
+                await _auditor.PostOperationAudit(AuditType,
                     $"Profile with id {result.AuthenticatedId} already authenticated");
             }
             catch (Exception e)
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Couldn't find profile with id {result.AttemptedIdToSwitchTo} to switch to");
+                await _auditor.PostOperationAudit(AuditType, $"Couldn't find profile with id {result.AttemptedIdToSwitchTo} to switch to");
             }
             catch (Exception e)
             {
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             try
             {
-                await _auditor.Audit(AuditType,
+                await _auditor.PostOperationAudit(AuditType,
                     $"Error: Failed to switch to profile {result.AttemptedIdToSwitchTo}");
             }
             catch (Exception e)

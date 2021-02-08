@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             [GpSession] GpUserSession gpUserSession,
             [UserSession] P9UserSession userSession)
         {
-            await _auditor.Audit(AuditingOperations.GetLinkedAccountsRequest, "Retrieving linked accounts");
+            await _auditor.PreOperationAudit(AuditingOperations.GetLinkedAccountsRequest, "Retrieving linked accounts");
             _logger.LogInformation($"Fetching linked accounts supplier {gpUserSession.Supplier}");
 
             var linkedAccountsService = _gpSystemFactory
@@ -72,14 +72,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id,
             [GpSession] GpUserSession gpUserSession)
         {
-            await _auditor.Audit(AuditingOperations.LinkedAccountsAccessSummaryRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.LinkedAccountsAccessSummaryRequest,
                 $"Retrieving linked account summary detail for Id {id}");
 
             var auditResponse = AuditingOperations.LinkedAccountsAccessSummaryResponse;
 
             if (!ModelState.IsValid)
             {
-                await _auditor.Audit(auditResponse, "ModelState is not valid.");
+                await _auditor.PostOperationAudit(auditResponse, "ModelState is not valid.");
                 return new BadRequestObjectResult(ModelState);
             }
 
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             {
                 var errorMessage = $"{nameof(linkedAccountSummaryTask)} did not complete successfully";
                 _logger.LogError(errorMessage);
-                await _auditor.Audit(auditResponse, errorMessage);
+                await _auditor.PostOperationAudit(auditResponse, errorMessage);
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
@@ -127,12 +127,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                     GpPracticeName = gpPracticeName,
                 };
 
-                await _auditor.Audit(auditResponse,
+                await _auditor.PostOperationAudit(auditResponse,
                     $"Successfully returned linked account summary detail for id {id}");
                 return new OkObjectResult(response);
             }
 
-            await _auditor.Audit(auditResponse,
+            await _auditor.PostOperationAudit(auditResponse,
                 "Error retrieving linked account summary details: bad gateway");
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             _logger.LogInformation($"Attempt to switch to profile id {id}");
 
-            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.LinkedAccountsSwitchRequest,
                 $"Request to switch to linked account {id}");
 
             var linkedAccountsService = _gpSystemFactory

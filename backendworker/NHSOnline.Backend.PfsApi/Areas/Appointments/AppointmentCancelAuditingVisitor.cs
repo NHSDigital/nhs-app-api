@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Appointment successfully cancelled for appointment with id: {0}",
+                await _auditor.PostOperationAudit(AuditType, "Appointment successfully cancelled for appointment with id: {0}",
                     _appointmentId);
                 await _metricLogger.AppointmentCancel(new AppointmentData(_userSession.Key));
             }
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                     _appointmentId);
             }
             catch (Exception e)
@@ -58,8 +58,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to it not being cancellable appointment " +
-                                          "with id: {0}", _appointmentId);
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to it not being cancellable appointment " +
+                                                      "with id: {0}", _appointmentId);
             }
             catch (Exception e)
             {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to it being too late to cancel with id: {0}",
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to it being too late to cancel with id: {0}",
                     _appointmentId);
             }
             catch (Exception e)
@@ -84,8 +84,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficient permissions for appointment " +
-                                          "with id: {0}", _appointmentId);
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to insufficient permissions for appointment " +
+                                                      "with id: {0}", _appointmentId);
             }
             catch (Exception e)
             {
@@ -97,8 +97,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
-                                          "with id: {0}", _appointmentId);
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
+                                                      "with id: {0}", _appointmentId);
             }
             catch (Exception e)
             {
@@ -110,8 +110,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to internal server error for appointment " +
-                                                "with id: {0}", _appointmentId);
+                await _auditor.PostOperationAudit(AuditType, "Unable to cancel appointment due to internal server error for appointment " +
+                                                      "with id: {0}", _appointmentId);
             }
             catch (Exception e)
             {

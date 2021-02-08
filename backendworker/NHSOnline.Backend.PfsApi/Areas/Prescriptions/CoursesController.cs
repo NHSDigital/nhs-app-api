@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpSession, patientId);
 
-            await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
+            await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {gpSession.Supplier}");
 
             var courseService = _gpSystemFactory

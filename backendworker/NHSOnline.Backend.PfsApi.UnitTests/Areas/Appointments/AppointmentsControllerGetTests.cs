@@ -105,11 +105,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(_appointmentsResponse);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
                 _appointmentsResponse.UpcomingAppointments.Count(),
                 _appointmentsResponse.PastAppointments.Count());
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedResponseAuditMessage));
         }
 
         [TestMethod]
@@ -178,8 +178,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.StatusCode.Should().Be(expectedStatusCode);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedAuditResponseMessageFormat));
         }
 
         [TestMethod]
@@ -192,12 +192,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
 
             var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
                 _appointmentsResponse.UpcomingAppointments.Count(),
                 _appointmentsResponse.PastAppointments.Count());
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedResponseAuditMessage));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

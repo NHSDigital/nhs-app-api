@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient practice message successfully sent");
+                await _auditor.PostOperationAudit(AuditType, "Patient practice message successfully sent");
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error sending patient practice message: Bad Request");
+                await _auditor.PostOperationAudit(AuditType, "Error sending patient practice message: Bad Request");
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error sending patient practice message: Forbidden");
+                await _auditor.PostOperationAudit(AuditType, "Error sending patient practice message: Forbidden");
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error sending patient practice message: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error sending patient practice message: Bad Gateway");
             }
             catch (Exception e)
             {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error sending patient practice message: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, "Error sending patient practice message: Internal Server Error");
             }
             catch (Exception e)
             {

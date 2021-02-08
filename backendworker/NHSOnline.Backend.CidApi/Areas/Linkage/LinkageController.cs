@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
             _settings = settings;
             _odsCodeMassager = odsCodeMassager;
             _gpSystemResolver = gpSystemResolver ?? throw new ArgumentNullException(nameof(gpSystemResolver));
-            
+
             _settings.Validate();
         }
 
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                     _logger.LogInformation(
                         $"Retrieve LinkageKey for NhsNumber={nhsNumber?.RemoveWhiteSpace() ?? "None"}");
 
-                    await _auditor.AuditRegistrationEvent(nhsNumber, gpSystem.Supplier,
+                    await _auditor.PreOperationAuditRegistrationEvent(nhsNumber, gpSystem.Supplier,
                         AuditingOperations.GetLinkageDetailsAuditTypeRequest,
                         "Attempting to get linkage details.");
 
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                         _logger.LogInformation(
                             $"Create LinkageKey for NhsNumber={createLinkageRequest.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
 
-                        await _auditor.AuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
+                        await _auditor.PreOperationAuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
                             AuditingOperations.CreateLinkageKeyAuditTypeRequest,
                             "Attempting to create linkage key.");
 
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                 _logger.LogExit();
             }
         }
-        
+
         private async Task<IActionResult> PerformOperationOnGpSystem(bool isValidCheck, string odsCode,
             Func<IGpSystem, Task<IActionResult>> operation)
         {

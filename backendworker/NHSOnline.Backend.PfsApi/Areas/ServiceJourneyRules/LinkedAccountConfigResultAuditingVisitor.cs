@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                     auditMessage.Append("Proxy disabled");
                 }
 
-                await _auditor.Audit(AuditingOperations.GetPatientConfigResponse, auditMessage.ToString());
+                await _auditor.PostOperationAudit(AuditingOperations.GetPatientConfigResponse, auditMessage.ToString());
             }
             catch (Exception e)
             {

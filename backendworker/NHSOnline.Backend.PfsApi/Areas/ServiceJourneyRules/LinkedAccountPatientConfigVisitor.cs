@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 _sessionSettings,
                 Enumerable.Empty<LinkedAccount>());
 
-            await _auditor.Audit(AuditingOperations.GetPatientConfigRequest, "Attempting to get config for patient");
+            await _auditor.PreOperationAudit(AuditingOperations.GetPatientConfigRequest, "Attempting to get config for patient");
 
             var validAccounts = Enumerable.Empty<LinkedAccount>();
 

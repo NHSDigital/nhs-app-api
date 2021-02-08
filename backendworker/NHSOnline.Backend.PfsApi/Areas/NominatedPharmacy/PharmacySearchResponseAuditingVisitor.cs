@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<NominatedPharmacyController> _logger;
-        
+
         private const string AuditType = AuditingOperations.SearchNominatedPharmacyAuditTypeResponse;
 
         public PharmacySearchResponseAuditingVisitor(IAuditor auditor, ILogger<NominatedPharmacyController> logger)
@@ -19,12 +19,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(PharmacySearchResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Returning { result.Response.Pharmacies.Count() } pharmacies");
+                await _auditor.PostOperationAudit(AuditType, $"Returning { result.Response.Pharmacies.Count() } pharmacies");
             }
             catch (Exception e)
             {
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Didn't recognise as valid postcode");
+                await _auditor.PostOperationAudit(AuditType, "Didn't recognise as valid postcode");
             }
             catch (Exception e)
             {
@@ -49,55 +49,55 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unsuccessful or no postcode search data returned");
+                await _auditor.PostOperationAudit(AuditType, "Unsuccessful or no postcode search data returned");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.PostcodeResultFailure)}");
             }
         }
-        
+
         public async Task Visit(PharmacySearchResult.BadRequest result)
         {
             try
             {
-                await _auditor.Audit(AuditType, " Null or all whitespace Postcode");
+                await _auditor.PostOperationAudit(AuditType, " Null or all whitespace Postcode");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.BadRequest)}");
             }
-        } 
-        
+        }
+
         public async Task Visit(PharmacySearchResult.InternalServerError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Search for Nhs pharmacies Failed");
+                await _auditor.PostOperationAudit(AuditType, "Search for Nhs pharmacies Failed");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.InternalServerError)}");
             }
-        } 
-        
+        }
+
         public async Task Visit(PharmacySearchResult.ModelValidationError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error, Model State is invalid : bad request");
+                await _auditor.PostOperationAudit(AuditType, "Error, Model State is invalid : bad request");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.ModelValidationError)}");
             }
         }
-        
+
         public async Task Visit(PharmacySearchResult.UnsafeSearchTerm result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unsafe search term detected");
+                await _auditor.PostOperationAudit(AuditType, "Unsafe search term detected");
             }
             catch (Exception e)
             {

@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
-        
+
         private const string AuditType = AuditingOperations.GetSlotsAuditTypeResponse;
 
         public AppointmentSlotsAuditingVisitor(IAuditor auditor, ILogger<AppointmentSlotsController> logger)
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
             try
             {
-                await _auditor.Audit(AuditType, $"Available appointment slots successfully viewed - { slotCount } slots");
+                await _auditor.PostOperationAudit(AuditType, $"Available appointment slots successfully viewed - { slotCount } slots");
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to supplier unavailable");
+                await _auditor.PostOperationAudit(AuditType, "Available appointment slots view unsuccessful due to supplier unavailable");
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to internal server error");
+                await _auditor.PostOperationAudit(AuditType, "Available appointment slots view unsuccessful due to internal server error");
             }
             catch (Exception e)
             {
@@ -61,8 +61,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType,  "Available appointment slots view unsuccessful due to not having permissions " +
-                                                 "to book appointments");
+                await _auditor.PostOperationAudit(AuditType,  "Available appointment slots view unsuccessful due to not having permissions " +
+                                                       "to book appointments");
             }
             catch (Exception e)
             {

@@ -17,12 +17,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(DemographicsResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: patient does not have access to data");
+                await _auditor.PostOperationAudit(AuditType, "Error viewing Demographics: patient does not have access to data");
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         {
             try
             {
-                await _auditor.Audit(AuditType, "Demographics successfully viewed");
+                await _auditor.PostOperationAudit(AuditType, "Demographics successfully viewed");
             }
             catch (Exception e)
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: bad gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error viewing Demographics: bad gateway");
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: internal server error");
+                await _auditor.PostOperationAudit(AuditType, "Error viewing Demographics: internal server error");
             }
             catch (Exception e)
             {

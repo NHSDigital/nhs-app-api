@@ -92,8 +92,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Setup(s => s.GetMessages(
                     It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessagesResult) successResult));
-            MockAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
-            MockAuditor(GetMessagesResponseAuditType, "Patient messages successfully retrieved");
+            MockPreOpAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
+            MockPostOpAuditor(GetMessagesResponseAuditType, "Patient messages successfully retrieved");
 
             // Act
             var result = await _systemUnderTest.GetMessages(_userSession);
@@ -118,8 +118,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Setup(s => s.GetMessageDetails("1",
                     It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessageResult) successResult));
-            MockAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
-            MockAuditor(GetMessageResponseAuditType, "Patient message details successfully retrieved");
+            MockPreOpAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
+            MockPostOpAuditor(GetMessageResponseAuditType, "Patient message details successfully retrieved");
 
             // Act
             var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
@@ -145,8 +145,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Setup(s => s.GetMessageRecipients(
                     It.Is<GpUserSession>(g => g == _userSession)))
                 .Returns(Task.FromResult((GetPatientMessageRecipientsResult) successResult));
-            MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
-            MockAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved");
+            MockPreOpAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
+            MockPostOpAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved");
 
             // Act
             var result = await _systemUnderTest.GetMessageRecipients(_userSession);
@@ -178,8 +178,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     It.Is<UpdateMessageReadStatusRequestBody>(p => p.MessageId == requestBody.MessageId &&
                                                                    p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
                 .Returns(Task.FromResult((PutPatientMessageReadStatusResult) successResult));
-            MockAuditor(UpdateMessageUnreadStatusRequestAuditType, "Updating unread status for message with id 1 to Read");
-            MockAuditor(UpdateMessageUnreadStatusResponseAuditType, "Patient message read status successfully updated");
+            MockPreOpAuditor(UpdateMessageUnreadStatusRequestAuditType, "Updating unread status for message with id 1 to Read");
+            MockPostOpAuditor(UpdateMessageUnreadStatusResponseAuditType, "Patient message read status successfully updated");
 
             // Act
             var result = await _systemUnderTest.PostUpdateMessageReadStatus(requestBody, _userSession);
@@ -202,8 +202,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Setup(s => s.DeleteMessage(
                     It.Is<GpUserSession>(g => g == _userSession),"1"))
                 .Returns(Task.FromResult((DeletePatientMessageResult) successResult));
-            MockAuditor(DeletePatientPracticeMessageRequest, "Deleting a patient to practice message with id 1");
-            MockAuditor(DeletePatientPracticeMessageResponse, "Patient message successfully deleted");
+            MockPreOpAuditor(DeletePatientPracticeMessageRequest, "Deleting a patient to practice message with id 1");
+            MockPostOpAuditor(DeletePatientPracticeMessageResponse, "Patient message successfully deleted");
 
             // Act
             var result = await _systemUnderTest.DeleteMessage("1", _userSession);
@@ -233,8 +233,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     It.Is<GpUserSession>(g => g == _userSession),
                     message))
                 .Returns(Task.FromResult((PostPatientMessageResult) successResult));
-            MockAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
-            MockAuditor(CreateMessageResponseAuditType, "Patient practice message successfully sent");
+            MockPreOpAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
+            MockPostOpAuditor(CreateMessageResponseAuditType, "Patient practice message successfully sent");
 
             // Act
             var result = await _systemUnderTest.SendMessage(message, _userSession);
@@ -271,8 +271,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Verifiable();
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(DeletePatientPracticeMessageRequest, "Deleting a patient to practice message with id 1");
-            MockAuditor(DeletePatientPracticeMessageResponse, expectedAuditResponseMessage);
+            MockPreOpAuditor(DeletePatientPracticeMessageRequest, "Deleting a patient to practice message with id 1");
+            MockPostOpAuditor(DeletePatientPracticeMessageResponse, expectedAuditResponseMessage);
 
             var expectedValue = new PfsErrorResponse
             {
@@ -316,8 +316,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Verifiable();
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
-            MockAuditor(GetMessagesResponseAuditType, expectedAuditResponseMessage);
+            MockPreOpAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
+            MockPostOpAuditor(GetMessagesResponseAuditType, expectedAuditResponseMessage);
 
             var expectedValue = new PfsErrorResponse
             {
@@ -361,8 +361,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Verifiable();
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
-            MockAuditor(GetMessageResponseAuditType, expectedAuditResponseMessage);
+            MockPreOpAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
+            MockPostOpAuditor(GetMessageResponseAuditType, expectedAuditResponseMessage);
 
             var expectedValue = new PfsErrorResponse
             {
@@ -406,8 +406,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Verifiable();
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
-            MockAuditor(GetMessageRecipientsResponseAuditType, expectedAuditResponseMessage);
+            MockPreOpAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
+            MockPostOpAuditor(GetMessageRecipientsResponseAuditType, expectedAuditResponseMessage);
 
             var expectedValue = new PfsErrorResponse
             {
@@ -459,9 +459,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Verifiable();
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(UpdateMessageUnreadStatusRequestAuditType,
+            MockPreOpAuditor(UpdateMessageUnreadStatusRequestAuditType,
                 "Updating unread status for message with id 1 to Read");
-            MockAuditor(UpdateMessageUnreadStatusResponseAuditType,
+            MockPostOpAuditor(UpdateMessageUnreadStatusResponseAuditType,
                 string.Format(CultureInfo.InvariantCulture,
                     expectedAuditResponseMessageFormat,
                     1));
@@ -508,8 +508,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             var serviceResult = (PostPatientMessageResult) Activator.CreateInstance(serviceResultType);
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
-            MockAuditor(CreateMessageResponseAuditType, expectedAuditResponseMessage);
+            MockPreOpAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
+            MockPostOpAuditor(CreateMessageResponseAuditType, expectedAuditResponseMessage);
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(
@@ -535,10 +535,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             objectResult.Value.Should().BeEquivalentTo(expectedValue);
         }
 
-        private void MockAuditor(string operation, string details)
+        private void MockPreOpAuditor(string operation, string details)
         {
             _mockAuditor
-                .Setup(x => x.Audit(operation, details))
+                .Setup(x => x.PreOperationAudit(operation, details))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+        }
+        private void MockPostOpAuditor(string operation, string details)
+        {
+            _mockAuditor
+                .Setup(x => x.PostOperationAudit(operation, details))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
         }
@@ -556,10 +563,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         {
             _mockAuditor.Verify();
             _mockAuditor.Verify(
-                a => a.Audit(
+                a => a.PreOperationAudit(
                     It.IsAny<string>(),
                     It.IsAny<string>()),
-                Times.Exactly(2));
+                Times.Exactly(1));
+            _mockAuditor.Verify(
+                a => a.PostOperationAudit(
+                    It.IsAny<string>(),
+                    It.IsAny<string>()),
+                Times.Exactly(1));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

@@ -165,8 +165,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage()));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType,
                 "Unable to book appointment due to bad request for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
@@ -217,8 +217,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage()));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
@@ -232,8 +232,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage()));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType,
                 "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }

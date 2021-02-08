@@ -12,9 +12,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private readonly IAuditor _auditor;
         private readonly ILogger<CoursesController> _logger;
         private readonly FilteringCounts _coursesCount;
-        
+
         private const string AuditType = AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsResponse;
-        
+
         public CourseResultAuditingVisitor(IAuditor auditor, ILogger<CoursesController> logger, FilteringCounts coursesCount)
         {
             _auditor = auditor;
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, 
+                await _auditor.PostOperationAudit(AuditType,
                     "Courses successfully retrieved. " +
                     $"Total courses before filtering: {_coursesCount.ReceivedCount}, " +
                     $"Total courses returned after filtering: {_coursesCount.ReturnedCount}");
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving courses: Supplier Unavailable");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving courses: Supplier Unavailable");
             }
             catch (Exception e)
             {
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving courses: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving courses: Internal Server Error");
             }
             catch (Exception e)
             {
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving courses: Insufficient permissions");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving courses: Insufficient permissions");
             }
             catch (Exception e)
             {

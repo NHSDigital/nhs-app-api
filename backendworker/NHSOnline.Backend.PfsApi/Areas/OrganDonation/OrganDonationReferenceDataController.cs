@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
     [ApiVersionRoute("patient/organdonation/referencedata")]
     public class OrganDonationReferenceDataController : Controller
     {
-        
+
         private readonly ILogger<OrganDonationReferenceDataController> _logger;
         private readonly IAuditor _auditor;
         private readonly IOrganDonationService _organDonationService;
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.GetOrganDonationReferenceDataAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.GetOrganDonationReferenceDataAuditTypeRequest,
                     "Attempting to get organ donation reference data");
 
                 _logger.LogDebug("Fetching organ donation reference data");

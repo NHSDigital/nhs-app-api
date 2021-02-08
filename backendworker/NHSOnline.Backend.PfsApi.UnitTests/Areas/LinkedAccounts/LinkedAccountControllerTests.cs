@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_gpUserSession.Supplier));
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
-            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
 
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_gpUserSession.Supplier));
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
-            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_gpUserSession.Supplier));
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
-            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
         [TestMethod]

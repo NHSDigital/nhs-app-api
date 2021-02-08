@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient messages successfully retrieved");
+                await _auditor.PostOperationAudit(AuditType, "Patient messages successfully retrieved");
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Bad Request");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient messages: Bad Request");
             }
             catch (Exception e)
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Forbidden");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient messages: Forbidden");
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient messages: Bad Gateway");
             }
             catch (Exception e)
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient messages: Internal Server Error");
             }
             catch (Exception e)
             {

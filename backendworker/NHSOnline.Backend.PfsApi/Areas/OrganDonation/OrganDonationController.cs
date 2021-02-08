@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             ILogger<OrganDonationController> logger,
             IGpSystemFactory gpSystemFactory,
             IOrganDonationService organDonationService,
-            IAuditor auditor, 
+            IAuditor auditor,
             IOrganDonationValidationService validator,
             IMetricLogger metricLogger
         )
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.GetOrganDonationAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.GetOrganDonationAuditTypeRequest,
                     "Attempting to get organ donation record");
 
                 _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 _logger.LogExit();
             }
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Post(
             [FromBody]OrganDonationRegistrationRequest model,
@@ -81,13 +81,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 _logger.LogEnter();
-                
+
                 if (!ModelState.IsValid)
                 {
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                await _auditor.Audit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
+                await _auditor.PreOperationAudit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
 
                 var result = await Register(model, userSession);
 
@@ -108,14 +108,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             try
             {
                 _logger.LogEnter();
-                
+
                 if (!ModelState.IsValid)
                 {
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                await _auditor.Audit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
-                
+                await _auditor.PreOperationAudit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
+
                 var result = await Update(model, userSession);
 
                 await result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor, _metricLogger, userSession));
@@ -136,8 +136,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
-                
+                await _auditor.PreOperationAudit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
+
                 var result = await Withdraw(model, userSession);
 
                 await result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor, _metricLogger, userSession));
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 _logger.LogExit();
             }
         }
-        
+
         private async Task<OrganDonationRegistrationResult> Update(
             OrganDonationRegistrationRequest model,
             P9UserSession userSession)
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
             return await _organDonationService.Update(model, userSession);
         }
-        
+
         private async Task<OrganDonationRegistrationResult> Register(
             OrganDonationRegistrationRequest model,
             P9UserSession userSession)
@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 _logger.LogModelStateValidationFailure(ModelState);
                 return new OrganDonationWithdrawResult.BadRequest();
             }
-            
+
             if (!_validator.IsDeleteValid(model))
             {
                 _logger.LogError("Invalid request body supplied to withdraw request");

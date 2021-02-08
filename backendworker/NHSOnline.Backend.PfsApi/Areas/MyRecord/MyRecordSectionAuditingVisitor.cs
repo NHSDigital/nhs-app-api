@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<MyRecordSectionController> _logger;
-        
+
         private const string AuditType = AuditingOperations.ViewPatientRecordSectionAuditTypeResponse;
 
         public MyRecordSectionAuditingVisitor(IAuditor auditor, ILogger<MyRecordSectionController> logger)
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             {
                 var section = result.Response.SectionName;
 
-                await _auditor.Audit(AuditType,
+                await _auditor.PostOperationAudit(AuditType,
                     $"Patient record {section} successfully retrieved.");
             }
             catch (Exception e)
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+                await _auditor.PostOperationAudit(AuditType, "Error: Unsuccessful");
             }
             catch (Exception e)
             {
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Invalid request");
+                await _auditor.PostOperationAudit(AuditType, "Error: Invalid request");
             }
             catch (Exception e)
             {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Internal server error");
+                await _auditor.PostOperationAudit(AuditType, "Error: Internal server error");
             }
             catch (Exception e)
             {

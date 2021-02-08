@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             try
             {
                 await _metricLogger.RepeatPrescriptionOrder(new RepeatPrescriptionData(_userSession.Key));
-                await _auditor.Audit(AuditType, "Repeat prescription request successfully created with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Repeat prescription request successfully created with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Supplier Unavailable with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error creating prescription request: Supplier Unavailable with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Insufficient permissions with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error creating prescription request: Insufficient permissions with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Internal Server Error with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error creating prescription request: Internal Server Error with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Bad Request with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error creating prescription request: Bad Request with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Cannot Reorder Prescription with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error creating prescription request: Cannot Reorder Prescription with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error ordering prescription: Medication already ordered within last 30 days with course ids: {0}", _courseIds);
+                await _auditor.PostOperationAudit(AuditType, "Error ordering prescription: Medication already ordered within last 30 days with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         {
             try
             {
-                await _auditor.Audit(
+                await _auditor.PostOperationAudit(
                     AuditType,
                     "Partial Success ordering prescription: Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}",
                     _courseIds,

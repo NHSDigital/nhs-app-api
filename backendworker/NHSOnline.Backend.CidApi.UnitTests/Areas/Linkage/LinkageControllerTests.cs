@@ -160,8 +160,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
-            _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetRequestAuditType, It.IsAny<string>()));
-            _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetResponseAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.PreOperationAuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetRequestAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.PostOperationAuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), GetResponseAuditType, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -341,8 +341,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             result.Should().BeAssignableTo<CreatedResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
-            _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
-            _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.PreOperationAuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.PostOperationAuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
 
         [TestMethod]

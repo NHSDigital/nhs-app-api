@@ -128,8 +128,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             result.Should().BeAssignableTo<OkObjectResult>().Subject
                 .Value.Should().BeEquivalentTo(response);
 
-            _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
+            _mockAuditor.Verify(x => x.PreOperationAudit(GetRequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
                                                                    $"Total prescriptions before filtering: {filteringCounts.ReceivedCount}, " +
                                                                    $"Total prescriptions returned after filtering: {filteringCounts.ReturnedCount}"));
         }
@@ -169,8 +169,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var xMonthsAgo = DateTimeOffset.Now.AddMonths(-PrescriptionsDefaultLastNumberMonthsToDisplay);
             fromDateGenerated.Value.Date.Should().Be(xMonthsAgo.Date);
 
-            _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage ));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
+            _mockAuditor.Verify(x => x.PreOperationAudit(GetRequestAuditType, RequestAuditMessage ));
+            _mockAuditor.Verify(x => x.PostOperationAudit(GetResponseAuditType, "Prescriptions successfully retrieved. " +
                                                                    $"Total prescriptions before filtering: {filteringCounts.ReceivedCount}, " +
                                                                    $"Total prescriptions returned after filtering: {filteringCounts.ReturnedCount}"));
         }
@@ -220,8 +220,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, expectedAuditResponseMessageFormat));
+            _mockAuditor.Verify(x => x.PreOperationAudit(GetRequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(GetResponseAuditType, expectedAuditResponseMessageFormat));
         }
 
         [TestMethod]

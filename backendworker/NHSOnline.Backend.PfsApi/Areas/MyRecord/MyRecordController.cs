@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
         public MyRecordController(
             ILogger<MyRecordController> logger,
-            IGpSystemFactory gpSystemFactory, 
+            IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
             IMyRecordMetadataLogger myRecordMetadataLogger,
             IMetricLogger metricLogger)
@@ -42,20 +42,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         public async Task<IActionResult> GetMyRecord(
             [FromHeader(Name=PatientId)] Guid patientId,
             [UserSession] P9UserSession userSession)
-        {   
+        {
             _logger.LogEnter();
-            
+
             if (!ModelState.IsValid)
             {
                 return new BadRequestObjectResult(ModelState);
             }
-            
+
             _logger.LogDebug($"{nameof(GetMyRecord)} with patientId {patientId}");
-   
+
             // Audit attempt made to view patient record
-            await _auditor.Audit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
- 
-            _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession.Supplier}");           
+            await _auditor.PreOperationAudit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
+
+            _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession.Supplier}");
             var patientRecordService = _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetPatientRecordService();
@@ -65,12 +65,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             );
             _logger.LogInformation("Fetching patient record");
             var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
-            
+
             // Audit result of attempt to view patient record
             await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger, _metricLogger, userSession));
 
             LogMetadata(userSession, result);
-            
+
             _logger.LogExit();
             return result.Accept(new MyRecordResultVisitor());
         }

@@ -75,8 +75,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetDetailedTestResult.Success>();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Test result successfully viewed" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Test result successfully viewed" ));
         }
 
         [TestMethod]
@@ -97,8 +97,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockPatientRecordService.Verify();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing test result: bad gateway" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Error viewing test result: bad gateway" ));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
 
-                await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
+                await _auditor.PreOperationAudit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{gpUserSession.Supplier}'.");
                 var appointmentService = _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier)

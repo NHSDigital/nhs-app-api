@@ -117,8 +117,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 It.IsAny<AppointmentSlotsDateRange>()));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<AppointmentSlotsResponse>();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count} slots"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count} slots"));
         }
 
         [TestMethod]
@@ -219,8 +219,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.StatusCode.Should().Be(expectedStatusCode);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedAuditResponseMessage));
         }
 
         public void Dispose()

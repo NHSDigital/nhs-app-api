@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
 
-                await _auditor.Audit(AuditingOperations.GetDemographicsAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.GetDemographicsAuditTypeRequest,
                     "Attempting to view Demographics");
                 _logger.LogDebug($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier}");
                     var demographicsService = _gpSystemFactory

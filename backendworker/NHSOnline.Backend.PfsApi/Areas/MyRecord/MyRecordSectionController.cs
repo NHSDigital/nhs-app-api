@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     return BadRequest("The Section endpoint only works with Vision");
                 }
 
-                await _auditor.Audit(AuditingOperations.ViewPatientRecordSectionAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.ViewPatientRecordSectionAuditTypeRequest,
                     $"Viewing Patient Record {section}");
 
                 var patientRecordService = GetVisionRecordService();

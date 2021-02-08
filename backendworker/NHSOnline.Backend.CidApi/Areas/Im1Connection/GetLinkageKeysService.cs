@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
     {
         private readonly ILogger<GetLinkageKeysService> _logger;
         private readonly IAuditor _auditor;
-        
+
         public GetLinkageKeysService(
             ILogger<GetLinkageKeysService> logger,
             IAuditor auditor)
@@ -20,14 +20,14 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _logger = logger;
             _auditor = auditor;
         }
-        
+
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest request, IGpSystem gpSystem)
         {
             try
             {
                 var linkageService = gpSystem.GetLinkageService();
 
-                await _auditor.AuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
+                await _auditor.PreOperationAuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
                     AuditingOperations.GetLinkageDetailsAuditTypeRequest, "Attempting to get linkage details.");
 
                 var result = await linkageService.GetLinkageKey(request);

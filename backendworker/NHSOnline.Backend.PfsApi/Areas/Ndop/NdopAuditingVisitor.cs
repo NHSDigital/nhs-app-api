@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<NdopController> _logger;
-        
+
         private const string AuditType = AuditingOperations.ViewPatientRecordAuditTypeResponse;
 
         public NdopAuditingVisitor(IAuditor auditor, ILogger<NdopController> logger)
@@ -18,12 +18,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(GetNdopResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Ndop Token successfully retrieved");
+                await _auditor.PostOperationAudit(AuditType, "Ndop Token successfully retrieved");
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+                await _auditor.PostOperationAudit(AuditType, "Error: Unsuccessful");
             }
             catch (Exception e)
             {

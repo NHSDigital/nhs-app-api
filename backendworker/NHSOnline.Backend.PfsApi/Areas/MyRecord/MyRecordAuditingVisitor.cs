@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _metricLogger = metricLogger;
             _userSession = userSession;
         }
-        
+
         public async Task Visit(GetMyRecordResult.Success result)
         {
             try
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
                 await _metricLogger.MedicalRecordView(new MedicalRecordData(_userSession.Key, hasSummaryRecordAccess, hasDetailedRecordAccess));
 
-                await _auditor.Audit(AuditType, 
+                await _auditor.PostOperationAudit(AuditType,
                     $"Patient record successfully retrieved. {nameof(hasSummaryRecordAccess)}={hasSummaryRecordAccess}," +
                     $" {nameof(hasDetailedRecordAccess)}={hasDetailedRecordAccess}");
             }
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+                await _auditor.PostOperationAudit(AuditType, "Error: Unsuccessful");
             }
             catch (Exception e)
             {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error: Internal server error");
+                await _auditor.PostOperationAudit(AuditType, "Error: Internal server error");
             }
             catch (Exception e)
             {

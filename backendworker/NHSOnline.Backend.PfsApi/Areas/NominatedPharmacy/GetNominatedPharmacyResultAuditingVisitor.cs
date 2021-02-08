@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<NominatedPharmacyController> _logger;
-        
+
         private const string AuditType = AuditingOperations.GetNominatedPharmacyResponse;
 
         public GetNominatedPharmacyResultAuditingVisitor(IAuditor auditor, ILogger<NominatedPharmacyController> logger)
@@ -18,41 +18,41 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(GetNominatedPharmacyResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Successfully retrieved nominated pharmacy");
+                await _auditor.PostOperationAudit(AuditType, "Successfully retrieved nominated pharmacy");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNominatedPharmacyResult.Success)}");
-            }        
+            }
         }
 
         public async Task Visit(GetNominatedPharmacyResult.PersonalChecksFailed result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Personal Details checks failed on the retrieved Nominated Pharmacy");
+                await _auditor.PostOperationAudit(AuditType, "Personal Details checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNominatedPharmacyResult.PersonalChecksFailed)}");
-            }          
+            }
         }
 
         public async Task Visit(GetNominatedPharmacyResult.PharmacyChecksFailed result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Pharmacy checks failed on the retrieved Nominated Pharmacy");
+                await _auditor.PostOperationAudit(AuditType, "Pharmacy checks failed on the retrieved Nominated Pharmacy");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNominatedPharmacyResult.PharmacyChecksFailed)}");
-            }         
+            }
         }
 
         public async Task Visit(GetNominatedPharmacyResult.PharmacyRetrievalFailure result)
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             try
             {
                 _logger.LogError("Error retrieving nominated pharmacy");
-                await _auditor.Audit(AuditType, "Failed to retrieve nominated pharmacy");
+                await _auditor.PostOperationAudit(AuditType, "Failed to retrieve nominated pharmacy");
             }
             catch (Exception e)
             {
@@ -74,9 +74,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 _logger.LogInformation("The sent nhsNumber has been superseded - " +
                     $"old NhsNumber={result.SentNhsNumber}, new NhsNumber={result.ReturnedNhsNumber}");
-                
-                await _auditor.Audit(AuditType, "The sent nhsNumber has been superseded - " +
-                    $"old NhsNumber={result.SentNhsNumber}, new NhsNumber={result.ReturnedNhsNumber}");
+
+                await _auditor.PostOperationAudit(AuditType, "The sent nhsNumber has been superseded - " +
+                                                      $"old NhsNumber={result.SentNhsNumber}, new NhsNumber={result.ReturnedNhsNumber}");
             }
             catch (Exception e)
             {
@@ -85,34 +85,34 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         }
 
         public async Task Visit(GetNominatedPharmacyResult.ConfidentialAccount result)
-        {   
+        {
             try
             {
-                await _auditor.Audit(AuditType, "Account is marked as confidential");
+                await _auditor.PostOperationAudit(AuditType, "Account is marked as confidential");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNominatedPharmacyResult.ConfidentialAccount)}");
-            }        
+            }
         }
 
         public async Task Visit(GetNominatedPharmacyResult.InternalServerError result)
-        {      
+        {
             try
             {
-                await _auditor.Audit(AuditType, "An error occurred while trying to get the patient's nominated pharmacy");
+                await _auditor.PostOperationAudit(AuditType, "An error occurred while trying to get the patient's nominated pharmacy");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNominatedPharmacyResult.InternalServerError)}");
-            }         
+            }
         }
 
         public async Task Visit(GetNominatedPharmacyResult.ConfigNotEnabled result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Nominated pharmacy feature is disabled");
+                await _auditor.PostOperationAudit(AuditType, "Nominated pharmacy feature is disabled");
             }
             catch (Exception e)
             {
@@ -124,8 +124,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"GP practice with ods code { result.OdsCode } " +
-                                                "not enabled for electronic prescription service");
+                await _auditor.PostOperationAudit(AuditType, $"GP practice with ods code { result.OdsCode } " +
+                                                      "not enabled for electronic prescription service");
             }
             catch (Exception e)
             {
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Error retrieving GP practice with ods code {result.OdsCode}");
+                await _auditor.PostOperationAudit(AuditType, $"Error retrieving GP practice with ods code {result.OdsCode}");
             }
             catch (Exception e)
             {
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "No nominated pharmacy. Returning Success.");
+                await _auditor.PostOperationAudit(AuditType, "No nominated pharmacy. Returning Success.");
             }
             catch (Exception e)
             {
@@ -161,8 +161,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving pharmacy using pharmacy OdsCde " +
-                                                $"{result.OdsCode} with status code {result.StatusCode}");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving pharmacy using pharmacy OdsCde " +
+                                                      $"{result.OdsCode} with status code {result.StatusCode}");
             }
             catch (Exception e)
             {
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, "Nominated pharmacy is disabled as user has invalid pharmacy subtype");
+                await _auditor.PostOperationAudit(AuditType, "Nominated pharmacy is disabled as user has invalid pharmacy subtype");
             }
             catch (Exception e)
             {

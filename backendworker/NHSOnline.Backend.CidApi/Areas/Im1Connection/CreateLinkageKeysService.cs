@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         private readonly IAuditor _auditor;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
-        
+
         public CreateLinkageKeysService(
             ILogger<CreateLinkageKeysService> logger,
             IAuditor auditor,
@@ -30,21 +30,21 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
         }
-        
+
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest request, IGpSystem gpSystem)
-        {   
+        {
             try
             {
                 if (!HasValidDateOfBirthForLinkage(request.DateOfBirth))
                 {
                     _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
-                    
+
                     return new LinkageResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);
                 }
 
                 var linkageService = gpSystem.GetLinkageService();
 
-                await _auditor.AuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
+                await _auditor.PreOperationAuditRegistrationEvent(request.NhsNumber, gpSystem.Supplier,
                     AuditingOperations.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
 
                 return await linkageService.CreateLinkageKey(request);
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                 _logger.LogExit();
             }
         }
-        
+
         private bool HasValidDateOfBirthForLinkage(DateTime? dateOfBirth)
         {
             if (!dateOfBirth.HasValue)

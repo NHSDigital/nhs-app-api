@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.Auditing
 {
     public interface IAuditSink
     {
-        Task WriteAudit(AuditRecord auditRecord);
+        Task WritePreOperationAudit(AuditRecord auditRecord);
+
+        Task WritePostOperationAudit(AuditRecord auditRecord);
     }
 }

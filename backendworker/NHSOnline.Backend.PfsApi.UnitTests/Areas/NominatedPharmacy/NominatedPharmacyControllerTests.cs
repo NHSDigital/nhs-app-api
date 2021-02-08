@@ -423,8 +423,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -452,8 +452,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
 
@@ -482,8 +482,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.BadGateway);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -511,8 +511,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.BadGateway);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -540,8 +540,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
 
@@ -572,8 +572,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int)statusCode);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -648,8 +648,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 
 
@@ -674,8 +674,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.Value.Should().BeEquivalentTo(new PharmacySearchResultResponse());
 
             _mockPharmacySearchService.Verify();
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PreOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -704,11 +704,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             _mockPharmacySearchService.Verify();
 
-            _auditor.Verify(x => x.Audit(
+            _auditor.Verify(x => x.PreOperationAudit(
                 AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 "Attempting to fetch a random list of Online Pharmacies"));
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 
 
@@ -742,11 +742,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             _mockPharmacySearchService.Verify();
 
-            _auditor.Verify(x => x.Audit(
+            _auditor.Verify(x => x.PreOperationAudit(
                 AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}"));
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -765,7 +765,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             _mockPharmacySearchService.Verify(x => x.SearchOnlineOnlyPharmacies(It.IsAny<string>()), Times.Never);
 
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.PostOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

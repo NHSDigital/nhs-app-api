@@ -39,7 +39,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                     .Execute(() => Task.FromResult(new AuditedResultStub { Details = "ResultDetails" }));
             }
 
-            mockAuditSink.Verify(x => x.WriteAudit(It.IsAny<AuditRecord>()), Times.Exactly(2));
+            mockAuditSink.Verify(x => x.WritePreOperationAudit(It.IsAny<AuditRecord>()), Times.Exactly(1));
+            mockAuditSink.Verify(x => x.WritePostOperationAudit(It.IsAny<AuditRecord>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -66,8 +67,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -94,8 +98,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -118,8 +125,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsLoginSubject == subject)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -166,8 +176,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -190,8 +203,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -215,8 +231,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == nhsNumber)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -238,8 +257,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == proxyNhsNumber)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == proxyNhsNumber)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.NhsNumber == proxyNhsNumber)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -262,8 +284,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -285,8 +310,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Supplier == expectedSupplier)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -310,8 +338,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == false)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == false)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == false)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -333,8 +364,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == isProxy)),
-                Times.Exactly(2));
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == isProxy)),
+                Times.Exactly(1));
+            mockAuditSink.Verify(
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.IsActingOnBehalfOfAnother == isProxy)),
+                Times.Exactly(1));
         }
 
         [TestMethod]
@@ -357,7 +391,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Operation == expectedOperation)),
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == expectedOperation)),
                 Times.Once);
         }
 
@@ -381,7 +415,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Operation == expectedOperation)),
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == expectedOperation)),
                 Times.Once);
         }
 
@@ -405,7 +439,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Request" && ar.Details == details)),
+                x => x.WritePreOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Request" && ar.Details == details)),
                 Times.Once);
         }
 
@@ -429,7 +463,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == details)),
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == details)),
                 Times.Once);
         }
 
@@ -479,7 +513,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             mockAuditSink.Verify(
-                x => x.WriteAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == exceptionMessage)),
+                x => x.WritePostOperationAudit(It.Is<AuditRecord>(ar => ar.Operation == "Operation_Response" && ar.Details == exceptionMessage)),
                 Times.Once);
         }
 

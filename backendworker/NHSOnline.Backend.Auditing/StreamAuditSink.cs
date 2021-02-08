@@ -10,13 +10,23 @@ namespace NHSOnline.Backend.Auditing
     {
         private readonly StreamWriter _streamWriter;
         private bool _disposed;
-        
+
         public StreamAuditSink(Stream stream)
         {
             _streamWriter = new StreamWriter(stream);
         }
 
-        public Task WriteAudit(AuditRecord auditRecord)
+        public Task WritePreOperationAudit(AuditRecord auditRecord)
+        {
+            return WriteAudit(auditRecord);
+        }
+
+        public Task WritePostOperationAudit(AuditRecord auditRecord)
+        {
+            return WriteAudit(auditRecord);
+        }
+
+        private Task WriteAudit(AuditRecord auditRecord)
         {
             if (_disposed)
             {
@@ -45,7 +55,7 @@ namespace NHSOnline.Backend.Auditing
             if (!string.IsNullOrEmpty(auditRecord.NativeVersion))
             {
                 auditStringBuilder.Append($" Native Version: {auditRecord.NativeVersion} |");
-            }                
+            }
 
             _streamWriter.WriteLine(auditStringBuilder.ToString());
             _streamWriter.Flush();

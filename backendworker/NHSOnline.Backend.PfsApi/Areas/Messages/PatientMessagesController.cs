@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.ViewPatientPracticeMessagesRequest, "Viewing Patient to Practice Messages");
+            await _auditor.PreOperationAudit(AuditingOperations.ViewPatientPracticeMessagesRequest, "Viewing Patient to Practice Messages");
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.GetPatientPracticeMessageDetailsRequest, "Getting Patient to Practice Message Details");
+            await _auditor.PreOperationAudit(AuditingOperations.GetPatientPracticeMessageDetailsRequest, "Getting Patient to Practice Message Details");
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(
+            await _auditor.PreOperationAudit(
                 AuditingOperations.UpdatePatientPracticeMessageUnreadStatusRequest,
                 $"Updating unread status for message with id {updateMessageReadStatusRequest.MessageId} to " +
                 $"{updateMessageReadStatusRequest.MessageReadState}");
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.GetPatientPracticeMessageRecipientsRequest, "Getting Patient to Practice Message Recipients");
+            await _auditor.PreOperationAudit(AuditingOperations.GetPatientPracticeMessageRecipientsRequest, "Getting Patient to Practice Message Recipients");
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
 
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.CreatePatientPracticeMessageRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.CreatePatientPracticeMessageRequest,
                 "Creating a patient to practice message");
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
@@ -178,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.DeletePatientPracticeMessageRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.DeletePatientPracticeMessageRequest,
                 $"Deleting a patient to practice message with id {messageId}");
 
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");

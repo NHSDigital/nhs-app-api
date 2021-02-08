@@ -17,12 +17,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(LinkedAccountsResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Linked Accounts retrieved successfully");
+                await _auditor.PostOperationAudit(AuditType, "Linked Accounts retrieved successfully");
             }
             catch (Exception e)
             {

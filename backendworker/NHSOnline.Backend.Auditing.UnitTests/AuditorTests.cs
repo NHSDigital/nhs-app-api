@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 {
                     Thread.Sleep(10);
                 }
-                _auditor.Audit("Testing", "TaskedMethod");
+                _auditor.PreOperationAudit("Testing", "TaskedMethod");
                 return Task.FromResult(1);
             }
         }
@@ -84,14 +84,14 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
             public async Task BasicAudit()
             {
-                await _auditor.Audit("Testing", "woke up.");
+                await _auditor.PreOperationAudit("Testing", "woke up.");
             }
 
             public async Task ClearTextAudit()
             {
                 const string param0 = "eggs";
                 const int param1 = 5;
-                await _auditor.Audit("Testing", "Had breakfast of {0} and {1} sausages.", param0, param1);
+                await _auditor.PreOperationAudit("Testing", "Had breakfast of {0} and {1} sausages.", param0, param1);
             }
 
             public async Task NestedControllerMethod()
@@ -111,11 +111,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.Audit("Testing", "Message with rubbish scope 1");
+                    await _auditor.PreOperationAudit("Testing", "Message with rubbish scope 1");
                     _nestedClass.PauseNestedExecution = false;
                     await awaiter;
 
-                    await _auditor.Audit("Testing", "Message with rubbish scope 2");
+                    await _auditor.PreOperationAudit("Testing", "Message with rubbish scope 2");
                 }
             }
 
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.Audit(operation, details, parameters);
+                    await _auditor.PreOperationAudit(operation, details, parameters);
                 }
             }
 
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.AuditRegistrationEvent(nhsNumber, supplier, operation, details, parameters);
+                    await _auditor.PreOperationAuditRegistrationEvent(nhsNumber, supplier, operation, details, parameters);
                 }
             }
 
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
                 using (_auditor.BeginScope(dummyContext))
                 {
-                    await _auditor.AuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, parameters);
+                    await _auditor.PostOperationAuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, parameters);
                 }
             }
         }

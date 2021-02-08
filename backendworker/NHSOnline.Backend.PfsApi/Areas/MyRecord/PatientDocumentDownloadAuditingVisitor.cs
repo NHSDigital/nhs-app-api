@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly IAuditor _auditor;
         private readonly ILogger<PatientDocumentController> _logger;
         private const string AuditType = AuditingOperations.DownloadDocumentAuditTypeResponse;
-        
+
         public PatientDocumentDownloadAuditingVisitor(IAuditor auditor, ILogger<PatientDocumentController> logger)
         {
             _auditor = auditor;
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Successfully retrieved patient document for downloading");
+                await _auditor.PostOperationAudit(AuditType, "Successfully retrieved patient document for downloading");
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient document for downloading: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient document for downloading: Bad Gateway");
             }
             catch (Exception e)
             {

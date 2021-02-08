@@ -12,6 +12,12 @@ namespace NHSOnline.Backend.Auditing
 {
     internal sealed class Auditor : IAuditor
     {
+        private enum AuditType
+        {
+            PreOperationAudit,
+            PostOperationAudit,
+        }
+
         private readonly AsyncLocal<HttpContextAuditorScope> _scopeProvider;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
@@ -26,7 +32,37 @@ namespace NHSOnline.Backend.Auditing
             _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
         }
 
-        public async Task Audit(string operation, string details, params object[] parameters)
+        public async Task PreOperationAudit(string operation, string details, params object[] parameters)
+        {
+            await Audit(AuditType.PreOperationAudit, operation, details, parameters);
+        }
+
+        public async Task PostOperationAudit(string operation, string details, params object[] parameters)
+        {
+            await Audit(AuditType.PostOperationAudit, operation, details, parameters);
+        }
+
+        public async Task PreOperationAuditRegistrationEvent(string nhsNumber, Supplier supplier, string operation, string details,
+            params object[] parameters)
+        {
+            await AuditRegistrationEvent(AuditType.PreOperationAudit, nhsNumber, supplier, operation, details, parameters);
+        }
+
+        public async Task PostOperationAuditRegistrationEvent(string nhsNumber, Supplier supplier, string operation, string details,
+            params object[] parameters)
+        {
+            await AuditRegistrationEvent(AuditType.PostOperationAudit, nhsNumber, supplier, operation, details, parameters);
+        }
+
+        public async Task PostOperationAuditSessionEvent(string accessToken, string nhsNumber, Supplier supplier, string operation, string details,
+            params object[] parameters)
+        {
+            await AuditSessionEvent(AuditType.PostOperationAudit, accessToken, nhsNumber, supplier, operation, details,
+                parameters);
+        }
+
+
+        private async Task Audit(AuditType auditType, string operation, string details,  params object[] parameters)
         {
             var auditUserContext = _scopeProvider.Value?.UserContext()
                                    ?? throw new NoAuditKeyException("Cannot audit outside of HttpContextAuditorScope");
@@ -43,10 +79,11 @@ namespace NHSOnline.Backend.Auditing
                 nhsNumber = auditUserContext.LinkedAccountNhsNumber;
             }
 
-            await AuditInternal(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
         }
 
-        public async Task AuditRegistrationEvent(
+        private async Task AuditRegistrationEvent(
+            AuditType auditType,
             string nhsNumber,
             Supplier supplier,
             string operation,
@@ -54,10 +91,11 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             const string nhsLoginSubject = "";
-            await AuditInternal(nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
         }
 
-        public async Task AuditSessionEvent(
+        private async Task AuditSessionEvent(
+            AuditType auditType,
             string accessToken,
             string nhsNumber,
             Supplier supplier,
@@ -66,7 +104,7 @@ namespace NHSOnline.Backend.Auditing
             params object[] parameters)
         {
             var nhsLoginSubject = DeriveNhsLoginSubject(accessToken);
-            await AuditInternal(nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
+            await AuditInternal(auditType, nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
@@ -88,6 +126,7 @@ namespace NHSOnline.Backend.Auditing
         }
 
         private async Task AuditInternal(
+            AuditType auditType,
             string nhsLoginSubject,
             string nhsNumber,
             bool isProxying,
@@ -103,14 +142,35 @@ namespace NHSOnline.Backend.Auditing
 
             var auditRecord = BuildAuditRecord(nhsLoginSubject, nhsNumber, isProxying, supplier, operation, details, parameters);
 
-            await AuditInternal(auditRecord);
+            switch (auditType)
+            {
+                case AuditType.PreOperationAudit:
+                    await PreOpAuditInternal(auditRecord);
+                    break;
+                case AuditType.PostOperationAudit:
+                    await PostOpAuditInternal(auditRecord);
+                    break;
+            }
         }
 
-        private async Task AuditInternal(AuditRecord auditRecord)
+        private async Task PreOpAuditInternal(AuditRecord auditRecord)
         {
             try
             {
-                await _auditSink.WriteAudit(auditRecord);
+                await _auditSink.WritePreOperationAudit(auditRecord);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Failed to write audit '{auditRecord.Operation}'");
+                throw;
+            }
+        }
+
+        private async Task PostOpAuditInternal(AuditRecord auditRecord)
+        {
+            try
+            {
+                await _auditSink.WritePostOperationAudit(auditRecord);
             }
             catch (Exception e)
             {
@@ -320,7 +380,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 try
                 {
-                    await Audit("Request", State.RequestDetails);
+                    await AuditRequest(State.RequestDetails);
                 }
                 catch (Exception e)
                 {
@@ -333,7 +393,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 try
                 {
-                    await Audit("Response", details);
+                    await AuditResponse(details);
                 }
                 catch (Exception e)
                 {
@@ -341,10 +401,16 @@ namespace NHSOnline.Backend.Auditing
                 }
             }
 
-            private async Task Audit(string operationSuffix, string details)
+            private async Task AuditRequest(string details)
             {
-                var record = State.BuildAuditRecord(operationSuffix, details);
-                await State.AuditSink.WriteAudit(record);
+                var record = State.BuildAuditRecord("Request", details);
+                await State.AuditSink.WritePreOperationAudit(record);
+            }
+
+            private async Task AuditResponse(string details)
+            {
+                var record = State.BuildAuditRecord("Response", details);
+                await State.AuditSink.WritePostOperationAudit(record);
             }
         }
     }

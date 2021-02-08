@@ -128,8 +128,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.VerifyAll();
             result.Should().BeAssignableTo<CreatedResult>();
 
-            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
-            _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Repeat prescription request successfully created with course ids: {0}", "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PostOperationAudit(PostResponseAuditType, "Repeat prescription request successfully created with course ids: {0}", "Course 1,Course 2"));
         }
 
         [TestMethod]
@@ -167,9 +167,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 acceptedResult.Value.Should().BeEquivalentTo(response);
             }
 
-            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
             _mockAuditor.Verify(
-                x => x.Audit(
+                x => x.PostOperationAudit(
                     PostResponseAuditType,
                     "Partial Success ordering prescription: Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}",
                     "Course 1,Course 2",
@@ -205,8 +205,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
-            _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PostOperationAudit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", "Course 1,Course 2"));
         }
 
         [DataTestMethod]
@@ -259,8 +259,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
-            _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, expectedAuditResponseMessageFormat, "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(PostRequestAuditType, RequestAuditMessageFormat, "Course 1,Course 2"));
+            _mockAuditor.Verify(x => x.PostOperationAudit(PostResponseAuditType, expectedAuditResponseMessageFormat, "Course 1,Course 2"));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

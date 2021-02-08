@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "A default organ donation registration has been generated");
+                await _auditor.PostOperationAudit(AuditType, "A default organ donation registration has been generated");
                 await _metricLogger.OrganDonationGetRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "An existing organ donation registration been found");
+                await _auditor.PostOperationAudit(AuditType, "An existing organ donation registration been found");
                 await _metricLogger.OrganDonationGetRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
+                await _auditor.PostOperationAudit(AuditType, "There was an issue retrieving the demographics record");
             }
             catch (Exception e)
             {
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "Access to demographics was forbidden");
+                await _auditor.PostOperationAudit(AuditType, "Access to demographics was forbidden");
             }
             catch (Exception e)
             {
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error received from demographics");
+                await _auditor.PostOperationAudit(AuditType, "Error received from demographics");
             }
             catch (Exception e)
             {
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
+                await _auditor.PostOperationAudit(AuditType, "There was an issue retrieving the demographics record");
             }
             catch (Exception e)
             {
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation system took too long to respond");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation system took too long to respond");
             }
             catch (Exception e)
             {
@@ -117,19 +117,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an issue searching for an organ donation record");
+                await _auditor.PostOperationAudit(AuditType, "There was an issue searching for an organ donation record");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchError)}");
             }
         }
-        
+
         public async Task Visit(OrganDonationResult.SearchUpstreamError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an upstream error when searching for an organ donation record");
+                await _auditor.PostOperationAudit(AuditType, "There was an upstream error when searching for an organ donation record");
             }
             catch (Exception e)
             {

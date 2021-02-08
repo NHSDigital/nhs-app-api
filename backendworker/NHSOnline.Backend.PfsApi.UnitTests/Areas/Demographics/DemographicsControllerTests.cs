@@ -84,8 +84,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<SuccessfulDemographicsResult>();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Demographics successfully viewed" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Demographics successfully viewed" ));
         }
 
         [TestMethod]
@@ -108,8 +108,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockDemographicsService.Verify();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: patient does not have access to data" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Error viewing Demographics: patient does not have access to data" ));
         }
 
         [TestMethod]
@@ -130,8 +130,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockDemographicsService.Verify();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: bad gateway" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Error viewing Demographics: bad gateway" ));
         }
 
         [TestMethod]
@@ -153,8 +153,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockDemographicsService.Verify();
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

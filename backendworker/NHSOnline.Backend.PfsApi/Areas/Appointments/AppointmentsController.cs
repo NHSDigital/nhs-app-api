@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Delete)} with patientId {patientId}");
 
-                await _auditor.Audit(
+                await _auditor.PreOperationAudit(
                     AuditingOperations.CancelAppointmentAuditTypeRequest,
                     $"Attempting to cancel appointment with id: {request.AppointmentId}");
 
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
 
-                await _auditor.Audit(
+                await _auditor.PreOperationAudit(
                     AuditingOperations.ViewAppointmentAuditTypeRequest,
                     "Attempting to view booked appointments");
 
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Post)} with patientId {patientId}");
 
-                await _auditor.Audit(
+                await _auditor.PreOperationAudit(
                     AuditingOperations.BookAppointmentAuditTypeRequest,
                     $"Attempting to book appointment with id: {request.SlotId} and " +
                     $"startTime: {request.StartTime:O}");

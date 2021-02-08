@@ -19,11 +19,20 @@ namespace NHSOnline.Backend.Auditing
             _logger = logger;
         }
 
-        public async Task WriteAudit(AuditRecord auditRecord)
+        public async Task WritePreOperationAudit(AuditRecord auditRecord)
+        {
+            _logger.LogEnter();
+            var result = await _repository.Create(auditRecord, nameof(AuditRecord));
+
+            //make sure any pre-operation exceptions are thrown
+            await result.Accept(new RepositoryCreateResultVisitor(auditRecord));
+            _logger.LogExit();
+        }
+
+        public async Task WritePostOperationAudit(AuditRecord auditRecord)
         {
             _logger.LogEnter();
             await _repository.Create(auditRecord, nameof(AuditRecord));
-
             _logger.LogExit();
         }
     }

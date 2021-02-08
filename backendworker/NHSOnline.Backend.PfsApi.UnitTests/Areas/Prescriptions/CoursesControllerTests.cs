@@ -98,9 +98,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(_courseListResponse);
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage, It.IsAny<object[]>()));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "Courses successfully retrieved. " +
+                x.PostOperationAudit(ResponseAuditType, "Courses successfully retrieved. " +
                                            $"Total courses before filtering: {MockNumberOfCourses}, " +
                                            $"Total courses returned after filtering: {MockNumberOfCourses}"));
         }
@@ -145,8 +145,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
 
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, expectedAuditResponseMessageFormat));
         }
 
         [TestMethod]

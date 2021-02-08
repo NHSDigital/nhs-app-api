@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             // Arrange
             var organDonationReferenceDataResponse = new OrganDonationReferenceDataResponse();
             var newResult = new OrganDonationReferenceDataResult.SuccessfullyRetrieved(organDonationReferenceDataResponse);
-            
+
             _mockOrganDonationService
                 .Setup(x => x.GetReferenceData())
                 .Returns(Task.FromResult((OrganDonationReferenceDataResult) newResult));
@@ -56,10 +56,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(organDonationReferenceDataResponse);
-            
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "The organ donation reference data has been retrieved successfully"));
+                x.PostOperationAudit(ResponseAuditType, "The organ donation reference data has been retrieved successfully"));
         }
 
         [TestMethod]
@@ -80,8 +80,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
 
             _mockOrganDonationService.Verify(x => x.GetReferenceData());
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation reference data system took too long to respond"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "The organ donation reference data system took too long to respond"));
         }
 
         [TestMethod]
@@ -107,11 +107,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             }
 
             _mockOrganDonationService.Verify(x => x.GetReferenceData());
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => 
-                x.Audit(ResponseAuditType, "There was an upstream error when getting the organ donation reference data"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x =>
+                x.PostOperationAudit(ResponseAuditType, "There was an upstream error when getting the organ donation reference data"));
         }
-        
+
         [TestMethod]
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnSystemErrorResult()
         {
@@ -130,9 +130,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.GetReferenceData());
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "There was an issue getting the organ donation reference data"));
+                x => x.PostOperationAudit(ResponseAuditType, "There was an issue getting the organ donation reference data"));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

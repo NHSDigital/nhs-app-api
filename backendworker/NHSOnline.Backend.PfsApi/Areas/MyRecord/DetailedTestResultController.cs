@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<DetailedTestResultController> _logger;
         private readonly IAuditor _auditor;
-        
+
         public DetailedTestResultController(
             ILogger<DetailedTestResultController> logger,
             IGpSystemFactory gpSystemFactory,
@@ -39,8 +39,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             try
             {
                 _logger.LogEnter();
-                
-                await _auditor.Audit(AuditingOperations.GetTestResultAuditTypeRequest,
+
+                await _auditor.PreOperationAudit(AuditingOperations.GetTestResultAuditTypeRequest,
                     "Attempting to view test result");
 
                 _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession}");

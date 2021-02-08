@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             _logger.LogEnter();
 
-            await _auditor.Audit(AuditingOperations.GetNominatedPharmacyRequest, "Attempting to get Nominated Pharmacy");
+            await _auditor.PreOperationAudit(AuditingOperations.GetNominatedPharmacyRequest, "Attempting to get Nominated Pharmacy");
 
             var getNominatedPharmacyResult = await GetNominatedPharmacy(userSession);
 
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             _logger.LogEnter();
 
-            await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.UpdatedNominatedPharmacyRequest,
                 $"Attempting to update Nominated Pharmacy for OdsCode { model.OdsCode }");
 
             var result = await UpdateNominatedPharmacy(model, userSession);
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         public async Task<IActionResult> Search([FromQuery] string searchTerm)
         {
             _logger.LogEnter();
-            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for nominated pharmacy with search term { searchTerm } ");
 
             var pharmacySearchResult = await SearchForCommunityPharmacies(ModelState, searchTerm);
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                     "Attempting to fetch a random list of Online Pharmacies");
 
                 _logger.LogInformation("Fetching random list of online pharmacies");
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 return new PharmacySearchResult.UnsafeSearchTerm();
             }
 
-            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+            await _auditor.PreOperationAudit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}");
             if (!modelState.IsValid)
             {

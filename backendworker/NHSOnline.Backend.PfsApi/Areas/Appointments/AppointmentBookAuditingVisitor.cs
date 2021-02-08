@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
+                await _auditor.PostOperationAudit(AuditType, "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                     _slotId, _slotStartTime);
                 await _metricLogger.AppointmentBook(new AppointmentData(_userSession.Key));
             }
@@ -48,8 +48,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to insufficient permissions for appointment " +
-                                          "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to insufficient permissions for appointment " +
+                                                      "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -61,8 +61,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to appointment being unavailable for appointment with " +
-                                          "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to appointment being unavailable for appointment with " +
+                                                      "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -74,8 +74,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to unavailable supplier for appointment with " +
-                                          "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to unavailable supplier for appointment with " +
+                                                      "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -87,8 +87,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to bad request for appointment with id: {0}" +
-                                          " and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to bad request for appointment with id: {0}" +
+                                                      " and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -100,8 +100,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to appointment limit reached for appointment " +
-                                          "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to appointment limit reached for appointment " +
+                                                      "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
@@ -113,8 +113,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to internal server error for appointment " +
-                                                "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+                await _auditor.PostOperationAudit(AuditType, "Unable to book appointment due to internal server error for appointment " +
+                                                      "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {

@@ -25,12 +25,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             _metricLogger = metricLogger;
             _userSession = userSession;
         }
-        
+
         public async Task Visit(OrganDonationRegistrationResult.SuccessfullyRegistered result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation decision has been successfully registered");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation decision has been successfully registered");
                 await _metricLogger.OrganDonationCreateRegistration(new OrganDonationData(_userSession.Key));
             }
             catch (Exception e)
@@ -38,12 +38,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationRegistrationResult.SuccessfullyRegistered)}");
             }
         }
-        
+
         public async Task Visit(OrganDonationRegistrationResult.SystemError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an issue registering the organ donation decision");
+                await _auditor.PostOperationAudit(AuditType, "There was an issue registering the organ donation decision");
             }
             catch (Exception e)
             {
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an upstream error when registering the organ donation decision");
+                await _auditor.PostOperationAudit(AuditType, "There was an upstream error when registering the organ donation decision");
             }
             catch (Exception e)
             {
@@ -67,19 +67,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation registration system took too long to respond");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation registration system took too long to respond");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationRegistrationResult.Timeout)}");
             }
         }
-        
+
         public async Task Visit(OrganDonationRegistrationResult.BadRequest result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation registration request failed validation");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation registration request failed validation");
             }
             catch (Exception e)
             {

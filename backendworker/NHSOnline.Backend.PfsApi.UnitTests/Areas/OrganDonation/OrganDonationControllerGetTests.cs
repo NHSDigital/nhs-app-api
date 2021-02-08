@@ -91,9 +91,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(organDonationRegistration);
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "A default organ donation registration has been generated"));
+                x.PostOperationAudit(ResponseAuditType, "A default organ donation registration has been generated"));
         }
 
         [TestMethod]
@@ -114,8 +114,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(organDonationRegistration);
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "An existing organ donation registration been found"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "An existing organ donation registration been found"));
         }
 
         [TestMethod]
@@ -136,9 +136,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "There was an issue searching for an organ donation record"));
+                x.PostOperationAudit(ResponseAuditType, "There was an issue searching for an organ donation record"));
         }
 
         [TestMethod]
@@ -164,8 +164,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             }
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "There was an upstream error when searching for an organ donation record"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "There was an upstream error when searching for an organ donation record"));
         }
 
         [TestMethod]
@@ -186,8 +186,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation system took too long to respond"));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PostOperationAudit(ResponseAuditType, "The organ donation system took too long to respond"));
         }
 
         [TestMethod]
@@ -208,9 +208,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "Error received from demographics"));
+                x => x.PostOperationAudit(ResponseAuditType, "Error received from demographics"));
         }
 
         [TestMethod]
@@ -231,9 +231,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "There was an issue retrieving the demographics record"));
+                x => x.PostOperationAudit(ResponseAuditType, "There was an issue retrieving the demographics record"));
         }
 
         [TestMethod]
@@ -254,9 +254,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "Access to demographics was forbidden"));
+                x => x.PostOperationAudit(ResponseAuditType, "Access to demographics was forbidden"));
         }
 
         [TestMethod]
@@ -277,9 +277,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.PreOperationAudit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(
-                x => x.Audit(ResponseAuditType, "There was an issue retrieving the demographics record"));
+                x => x.PostOperationAudit(ResponseAuditType, "There was an issue retrieving the demographics record"));
         }
 
         [TestMethod]

@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Repository
             catch (MongoException exception)
             {
                 _logger.LogError(exception, $"Mongo Failure. Create {recordName}.");
-                return new RepositoryCreateResult<TRecord>.RepositoryError();
+                return new RepositoryCreateResult<TRecord>.RepositoryError(exception);
             }
         }
 

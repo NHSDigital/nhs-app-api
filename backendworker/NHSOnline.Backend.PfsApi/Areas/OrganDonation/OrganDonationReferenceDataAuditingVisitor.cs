@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<OrganDonationReferenceDataController> _logger;
-        
+
         private const string AuditType = AuditingOperations.GetOrganDonationReferenceDataAuditTypeResponse;
 
         public OrganDonationReferenceDataAuditingVisitor(IAuditor auditor, ILogger<OrganDonationReferenceDataController> logger)
@@ -23,19 +23,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation reference data has been retrieved successfully");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation reference data has been retrieved successfully");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationReferenceDataResult.SuccessfullyRetrieved)}");
             }
         }
-        
+
         public async Task Visit(OrganDonationReferenceDataResult.SystemError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an issue getting the organ donation reference data");
+                await _auditor.PostOperationAudit(AuditType, "There was an issue getting the organ donation reference data");
             }
             catch (Exception e)
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "There was an upstream error when getting the organ donation reference data");
+                await _auditor.PostOperationAudit(AuditType, "There was an upstream error when getting the organ donation reference data");
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         {
             try
             {
-                await _auditor.Audit(AuditType, "The organ donation reference data system took too long to respond");
+                await _auditor.PostOperationAudit(AuditType, "The organ donation reference data system took too long to respond");
             }
             catch (Exception e)
             {

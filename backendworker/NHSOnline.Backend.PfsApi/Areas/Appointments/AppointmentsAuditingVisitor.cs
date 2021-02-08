@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AppointmentsController> _logger;
-        
+
         private const string AuditType = AuditingOperations.ViewAppointmentAuditTypeResponse;
 
         public AppointmentsAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger)
@@ -28,13 +28,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 var upcomingAppointmentsCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
                 var pastAppointmentsCount = result.Response?.PastAppointments?.Count() ?? 0;
 
-                const string messageFormat = "Booked appointments successfully viewed - {0} upcoming appointments" + 
+                const string messageFormat = "Booked appointments successfully viewed - {0} upcoming appointments" +
                                              " and {1} historical appointments";
 
-                var auditMessage = string.Format(CultureInfo.InvariantCulture, messageFormat, 
+                var auditMessage = string.Format(CultureInfo.InvariantCulture, messageFormat,
                     upcomingAppointmentsCount, pastAppointmentsCount);
-                
-                await _auditor.Audit(AuditType, auditMessage);
+
+                await _auditor.PostOperationAudit(AuditType, auditMessage);
             }
             catch (Exception e)
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to bad request");
+                await _auditor.PostOperationAudit(AuditType, "Booked appointments view unsuccessful due to bad request");
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to supplier being unavailable");
+                await _auditor.PostOperationAudit(AuditType, "Booked appointments view unsuccessful due to supplier being unavailable");
             }
             catch (Exception e)
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to internal server error");
+                await _auditor.PostOperationAudit(AuditType, "Booked appointments view unsuccessful due to internal server error");
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             try
             {
-                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to insufficient permissions");
+                await _auditor.PostOperationAudit(AuditType, "Booked appointments view unsuccessful due to insufficient permissions");
             }
             catch (Exception e)
             {

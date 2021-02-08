@@ -17,12 +17,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             _auditor = auditor;
             _logger = logger;
         }
-        
+
         public async Task Visit(GetPatientMessageResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient message details successfully retrieved");
+                await _auditor.PostOperationAudit(AuditType, "Patient message details successfully retrieved");
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient message details: Bad Request");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient message details: Bad Request");
             }
             catch (Exception e)
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient message details: Forbidden");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient message details: Forbidden");
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient message details: Bad Gateway");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient message details: Bad Gateway");
             }
             catch (Exception e)
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient message details: Internal Server Error");
+                await _auditor.PostOperationAudit(AuditType, "Error retrieving patient message details: Internal Server Error");
             }
             catch (Exception e)
             {

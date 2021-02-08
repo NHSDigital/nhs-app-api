@@ -93,8 +93,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                     It.Is<GpLinkedAccountModel>(d => check(d)), DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(successResult)
                 .Verifiable();
-            MockAuditor(ViewDocumentAuditTypeRequest, ViewDocumentAuditMessageRequest);
-            MockAuditor(ViewDocumentAuditTypeResponse, "Successfully retrieved patient document for viewing");
+            MockPreOpAuditor(ViewDocumentAuditTypeRequest, ViewDocumentAuditMessageRequest);
+            MockPostOpAuditor(ViewDocumentAuditTypeResponse, "Successfully retrieved patient document for viewing");
 
             var documentInfo = new DocumentInfo
             {
@@ -126,8 +126,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                         DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(badResult)
                 .Verifiable();
-            MockAuditor(ViewDocumentAuditTypeRequest, ViewDocumentAuditMessageRequest);
-            MockAuditor(ViewDocumentAuditTypeResponse, "Error retrieving patient document for viewing: Bad Gateway");
+            MockPreOpAuditor(ViewDocumentAuditTypeRequest, ViewDocumentAuditMessageRequest);
+            MockPostOpAuditor(ViewDocumentAuditTypeResponse, "Error retrieving patient document for viewing: Bad Gateway");
 
             var documentInfo = new DocumentInfo
             {
@@ -166,8 +166,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                     DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(successResult)
                 .Verifiable();
-            MockAuditor(DownloadDocumentAuditTypeRequest, DownloadDocumentAuditMessageRequest);
-            MockAuditor(DownloadDocumentAuditTypeResponse, "Successfully retrieved patient document for downloading");
+            MockPreOpAuditor(DownloadDocumentAuditTypeRequest, DownloadDocumentAuditMessageRequest);
+            MockPostOpAuditor(DownloadDocumentAuditTypeResponse, "Successfully retrieved patient document for downloading");
 
             var documentInfo = new DocumentInfo
             {
@@ -199,8 +199,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                     DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(badResult)
                 .Verifiable();
-            MockAuditor(DownloadDocumentAuditTypeRequest, DownloadDocumentAuditMessageRequest);
-            MockAuditor(DownloadDocumentAuditTypeResponse, "Error retrieving patient document for downloading: Bad Gateway");
+            MockPreOpAuditor(DownloadDocumentAuditTypeRequest, DownloadDocumentAuditMessageRequest);
+            MockPostOpAuditor(DownloadDocumentAuditTypeResponse, "Error retrieving patient document for downloading: Bad Gateway");
 
             var documentInfo = new DocumentInfo
             {
@@ -220,10 +220,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
 
-        private void MockAuditor(string operation, string details)
+        private void MockPreOpAuditor(string operation, string details)
         {
             _mockAuditor
-                .Setup(x => x.Audit(operation, details))
+                .Setup(x => x.PreOperationAudit(operation, details))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+        }
+
+        private void MockPostOpAuditor(string operation, string details)
+        {
+            _mockAuditor
+                .Setup(x => x.PostOperationAudit(operation, details))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
         }
@@ -232,10 +240,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             _mockAuditor.Verify();
             _mockAuditor.Verify(
-                a => a.Audit(
+                a => a.PreOperationAudit(
                     It.IsAny<string>(),
                     It.IsAny<string>()),
-                Times.Exactly(2));
+                Times.Exactly(1));
+            _mockAuditor.Verify(
+                a => a.PostOperationAudit(
+                    It.IsAny<string>(),
+                    It.IsAny<string>()),
+                Times.Exactly(1));
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

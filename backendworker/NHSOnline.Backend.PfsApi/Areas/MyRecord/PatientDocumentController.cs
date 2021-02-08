@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                await _auditor.Audit(AuditingOperations.ViewDocumentAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.ViewDocumentAuditTypeRequest,
                     "Viewing patient document");
 
                 _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession}");
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                await _auditor.Audit(AuditingOperations.DownloadDocumentAuditTypeRequest,
+                await _auditor.PreOperationAudit(AuditingOperations.DownloadDocumentAuditTypeRequest,
                     "Downloading patient document");
 
                 var gpLinkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
