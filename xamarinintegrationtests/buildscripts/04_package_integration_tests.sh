@@ -12,6 +12,7 @@ source "buildscripts/lib/functions.sh"
 
 docker build \
   --target=integrationtests \
-  --build-arg BASE_IMAGE="${DOCKER_IMAGE_DOTNET_BUILD}" \
+  --build-arg DOCKER_IMAGE_INTTESTS_BUILD="${DOCKER_IMAGE_INTTESTS_BUILD}" \
+  --build-arg DOCKER_IMAGE_HTTPMOCKS_RUNTIME="${DOCKER_IMAGE_HTTPMOCKS_RUNTIME}" \
   --tag="${DOCKER_REGISTRY:-local}/nhsonline-integration-tests:${DOCKER_TAG:-latest}" \
   . || die "Failed to build ${DOCKER_REGISTRY:-local}/nhsonline-integration-tests:${DOCKER_TAG:-latest}"

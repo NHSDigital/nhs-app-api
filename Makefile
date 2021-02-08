@@ -46,6 +46,11 @@ $(call expand_run_options_docker_image,run-dev-stubs,STUBS)
 run-dev-stubs:	## Run in docker with dev stubs
 	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml
 
+$(eval $(call expand_run_options_docker_images,run-http-mocks))
+$(call expand_run_options_docker_image,run-http-mocks,STUBS)
+run-http-mocks:	## Run in docker with HTTP mocks (depends on: "make -C xamarinintegrationtests build")
+	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.http-mocks.yml
+
 $(eval $(call expand_run_options_docker_images,run-perf-stubs))
 $(call expand_run_options_docker_image,run-perf-stubs,STUBS)
 run-perf-stubs:	 ## Run performance stubs in docker

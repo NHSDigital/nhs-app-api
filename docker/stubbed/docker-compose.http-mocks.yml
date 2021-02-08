@@ -1,0 +1,6 @@
+version: "3.4"
+
+services:
+
+  stubs.local.bitraft.io:
+    image: ${HTTP_MOCKS_DOCKER_REGISTRY:-local}/nhsonline-http-mocks:${HTTP_MOCKS_DOCKER_TAG:-latest}

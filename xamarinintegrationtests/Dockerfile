@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE} as dependencies
+ARG DOCKER_IMAGE_INTTESTS_BUILD=nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1
+ARG DOCKER_IMAGE_HTTPMOCKS_RUNTIME=nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1
+
+FROM ${DOCKER_IMAGE_INTTESTS_BUILD} as dependencies
 
 RUN apt-get update && \
     apt-get install -y wget gnupg docker.io
@@ -24,6 +26,19 @@ RUN dotnet build --no-restore -c Release
 
 FROM built AS published
 RUN dotnet publish --no-build -c Release -p:PublishDir=_published_artifacts
+
+FROM ${DOCKER_IMAGE_HTTPMOCKS_RUNTIME} AS httpmocks
+WORKDIR /app
+
+COPY --chown=aspnetcore:aspnetcore --from=published /src/NHSOnline.HttpMocks.Dev/_published_artifacts .
+
+ENV PORT=8080
+ENV ASPNETCORE_ENVIRONMENT Production
+ENV TIMEZONE Europe/London
+
+USER aspnetcore
+EXPOSE $PORT
+CMD exec dotnet NHSOnline.HttpMocks.Dev.dll
 
 FROM built AS integrationtests
 ENV PORT=8080

@@ -10,8 +10,11 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
+pull_docker_image "${DOCKER_IMAGE_HTTPMOCKS_RUNTIME}"
+
 docker build \
-  --target=built \
+  --target=httpmocks \
   --build-arg DOCKER_IMAGE_INTTESTS_BUILD="${DOCKER_IMAGE_INTTESTS_BUILD}" \
   --build-arg DOCKER_IMAGE_HTTPMOCKS_RUNTIME="${DOCKER_IMAGE_HTTPMOCKS_RUNTIME}" \
-  . || die "Failed to build integration tests"
+  --tag="${DOCKER_REGISTRY:-local}/nhsonline-http-mocks:${DOCKER_TAG:-latest}" \
+  . || die "Failed to build ${DOCKER_REGISTRY:-local}/nhsonline-http-mocks:${DOCKER_TAG:-latest}"

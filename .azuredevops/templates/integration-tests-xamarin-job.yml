@@ -45,7 +45,7 @@ jobs:
       - task: ShellScript@2
         displayName: Package Integration Tests
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/03_package_integration_tests.sh
+          scriptPath: xamarinintegrationtests/buildscripts/04_package_integration_tests.sh
 
       - task: ShellScript@2
         displayName: Run Integration Tests
@@ -55,7 +55,7 @@ jobs:
           NATIVE_APP_PATH_ANDROID: "$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.browserstack.apk"
           NATIVE_APP_PATH_IOS: "$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.BrowserStack.ipa"
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/04_run_integration_tests.sh
+          scriptPath: xamarinintegrationtests/buildscripts/05_run_integration_tests.sh
 
       - template: check-for-output-steps.yml
         parameters:

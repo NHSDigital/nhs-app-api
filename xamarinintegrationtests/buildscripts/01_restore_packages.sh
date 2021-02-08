@@ -13,7 +13,7 @@ source "buildscripts/lib/functions.sh"
 NUGET_CFG_PATH=""
 
 function pull_images() {
-  pull_docker_image "$DOCKER_IMAGE_DOTNET_BUILD"
+  pull_docker_image "$DOCKER_IMAGE_INTTESTS_BUILD"
 }
 
 function validate_nuget_config() {
@@ -30,7 +30,8 @@ function restore_packages() {
   docker build \
   --target=dependencies \
   --secret "id=nuget,src=${NUGET_CFG_PATH}" \
-  --build-arg BASE_IMAGE="${DOCKER_IMAGE_DOTNET_BUILD}" \
+  --build-arg DOCKER_IMAGE_INTTESTS_BUILD="${DOCKER_IMAGE_INTTESTS_BUILD}" \
+  --build-arg DOCKER_IMAGE_HTTPMOCKS_RUNTIME="${DOCKER_IMAGE_HTTPMOCKS_RUNTIME}" \
   . || die "Failed to restore packages"
 }
 
