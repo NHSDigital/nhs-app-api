@@ -4,16 +4,20 @@ set -e
 # Change current working directory to be the root of web, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
-# shellcheck source=../../buildscripts/lib/set_env.sh
-source "../buildscripts/lib/set_env.sh"
+# shellcheck source=lib/set_env.sh
+source "buildscripts/lib/set_env.sh"
 
-# shellcheck source=../../buildscripts/lib/functions_logging.sh
-source "../buildscripts/lib/functions_logging.sh"
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
+
+pull_docker_image "nhsapp.azurecr.io/nhsonline-nginx:v1.18.0"
 
 docker build \
   --target=release \
   --cache-from=local/nhsonline-web-production-dependencies \
   --cache-from=local/nhsonline-web-build \
+  --build-arg "DOCKER_IMAGE_WEB_BUILD=${DOCKER_IMAGE_WEB_BUILD}" \
+  --build-arg "DOCKER_IMAGE_WEB_RUNTIME=${DOCKER_IMAGE_WEB_RUNTIME}" \
   --build-arg COMMIT_ID="$(git rev-parse --short HEAD)" \
   --build-arg APP_VERSION_TAG="${BRANCH_TAG}" \
   --tag="${DOCKER_REGISTRY:-local}/nhsonline-web:${DOCKER_TAG:-latest}" \

@@ -1,5 +1,9 @@
 # syntax=docker/dockerfile:experimental
-FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1 as dependencies
+
+ARG DOCKER_IMAGE_BACKEND_BUILD=nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1
+ARG DOCKER_IMAGE_BACKEND_RUNTIME=nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1
+
+FROM ${DOCKER_IMAGE_BACKEND_BUILD} as dependencies
 WORKDIR /src
 
 COPY . .
@@ -35,7 +39,7 @@ RUN dotnet build --no-restore -c Release
 FROM built AS published
 RUN dotnet publish --no-build -c Release -p:PublishDir=_published_artifacts
 
-FROM nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1 AS final
+FROM ${DOCKER_IMAGE_BACKEND_RUNTIME} AS final
 ARG PROJECT_NAME
 RUN : "${PROJECT_NAME:?PROJECT_NAME argument needs to be set and non-empty.}"
 ENV PORT=8080

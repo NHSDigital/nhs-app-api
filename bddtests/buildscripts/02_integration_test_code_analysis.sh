@@ -29,6 +29,8 @@ run_analysis() {
 
   configure_env
 
+  pull_docker_image "${DOCKER_IMAGE_GRADLE}"
+
   rebuild_image_with_user "${DOCKER_IMAGE_GRADLE}"
 
   configure_npmrc_and_m2_volumes

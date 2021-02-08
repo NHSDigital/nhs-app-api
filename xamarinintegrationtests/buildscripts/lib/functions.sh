@@ -1,10 +1,7 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
 
-# shellcheck source=../../../buildscripts/lib/functions_logging.sh
-source "../buildscripts/lib/functions_logging.sh"
-
-# shellcheck source=../../../buildscripts/lib/functions_validation.sh
-source "../buildscripts/lib/functions_validation.sh"
+# shellcheck source=../../../buildscripts/lib/functions.sh
+source "../buildscripts/lib/functions.sh"
 
 # shellcheck source=functions_browserstack.sh
 source "buildscripts/lib/functions_browserstack.sh"

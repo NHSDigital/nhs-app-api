@@ -14,6 +14,8 @@ pull_docker_images
 
 start_services_under_test
 
+pull_docker_image "${DOCKER_IMAGE}"
+
 rebuild_image_with_user "${DOCKER_IMAGE}"
 
 configure_npmrc_and_m2_volumes

@@ -1,4 +1,7 @@
-#! /usr/bin/bash
+#! /usr/bin/env bash
+
+# shellcheck source=../../../buildscripts/lib/set_env.sh
+source "../buildscripts/lib/set_env.sh"
 
 export DOCKER_COMPOSE_FILES_TRANCHE=()
 

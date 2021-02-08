@@ -1,13 +1,16 @@
 # syntax=docker/dockerfile:experimental
 
+ARG DOCKER_IMAGE_WEB_BUILD=nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0
+ARG DOCKER_IMAGE_WEB_RUNTIME=nhsapp.azurecr.io/nhsonline-nginx:v1.18.0
+
 # run for hot reload of files while developing
-FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 as dev-serve
+FROM ${DOCKER_IMAGE_WEB_BUILD} as dev-serve
 RUN mkdir -p /data/web/node_modules
 WORKDIR /data/web
 CMD ["npm", "run", "dev"]
 
 # Security Audit
-FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 as security_audit
+FROM ${DOCKER_IMAGE_WEB_BUILD} as security_audit
 
 COPY .npmrc .
 COPY package.json .
@@ -25,7 +28,7 @@ RUN --mount=type=secret,id=npmrc,dst=/root/.npmrc \
       && npm run audit
 
 # Production Dependencies
-FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 AS production_dependencies
+FROM ${DOCKER_IMAGE_WEB_BUILD} AS production_dependencies
 
 WORKDIR /app
 
@@ -86,13 +89,13 @@ RUN DASHED_VERSION=$(cat /app/dashed_version); \
 RUN npm run build
 
 # production stage
-FROM nhsapp.azurecr.io/nhsonline-nginx:v1.18.0 as release
+FROM ${DOCKER_IMAGE_WEB_RUNTIME} as release
 
 # any scripts needing run at runtime must be saved with executable permissions
 # - chmod +x <script name>
 COPY --chown=www-data:www-data --from=build /app/build/docker-runtime/. /app/build/
 COPY --chown=www-data:www-data --from=build /app/dist /app
-COPY --chown=www-data:www-data --from=build /app/dashed_version /app/build/dashed_version 
+COPY --chown=www-data:www-data --from=build /app/dashed_version /app/build/dashed_version
 COPY --chown=www-data:www-data nginx/nginx.conf.template /etc/nginx/nginx.conf.template
 
 USER root
@@ -104,7 +107,7 @@ RUN apt-get update && \
 
 RUN chown www-data:www-data /etc/nginx/nginx.conf
 RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/www-data && \
-    chmod 400 /etc/sudoers.d/www-data; 
+    chmod 400 /etc/sudoers.d/www-data;
 
 USER www-data
 
