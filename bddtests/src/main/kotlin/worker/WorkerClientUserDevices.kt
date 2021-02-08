@@ -12,7 +12,7 @@ import worker.models.userDevices.RegisterUserDevicesResponse
 // which setup data using these will always give ANH time to create the records that will be searched for later.
 // Polling would be preferable but due to the way the users GET endpoint works this approach causes more failures
 // when it cleans orphaned records.
-private const val WAIT_FOR_HUB_UPDATE = 500L
+private const val WAIT_FOR_HUB_UPDATE = 750L
 
 class WorkerClientUserDevices(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
