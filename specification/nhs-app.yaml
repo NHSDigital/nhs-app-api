@@ -208,12 +208,7 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                resourceType: OperationOutcome
-                issue:
-                  - severity: error
-                    code: forbidden
-                    diagnostics: Not authorised
-                    expression: [Invalid API keys]
+                $ref: components/examples/responses/communication/403permissionsMissing.json
         "429":
           description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
           content:
@@ -346,12 +341,7 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                resourceType: OperationOutcome
-                issue:
-                  - severity: error
-                    code: forbidden
-                    diagnostics: Not authorised
-                    expression: [Invalid API keys]
+                $ref: components/examples/responses/communication/403permissionsMissing.json
         "429":
           description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
           content:
@@ -480,12 +470,7 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               example:
-                resourceType: OperationOutcome
-                issue:
-                  - severity: error
-                    code: forbidden
-                    diagnostics: Not authorised
-                    expression: [Invalid API keys]
+                $ref: components/examples/responses/communication/403permissionsMissing.json
         "429":
           description: You have exceeded your application's [rate limit](https://digital.nhs.uk/developer/guides-and-documentation/reference-guide#rate-limits).
           content:
