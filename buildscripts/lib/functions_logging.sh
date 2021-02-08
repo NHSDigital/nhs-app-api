@@ -22,6 +22,14 @@ function error () {
   fi
 }
 
+function warn () {
+  if [ -n "$TF_BUILD" ]; then
+    echo "##vso[task.logissue type=warning]$*"
+  else
+    echo >&2 "===]> Warning: $*"
+  fi
+}
+
 function info () {
   echo >&2 "===]> Info: $*";
 }

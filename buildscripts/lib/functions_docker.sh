@@ -52,7 +52,7 @@ function pull_docker_image () {
         if [[ $RETRIES -ge $MAX_RETRIES ]]; then
           die "Failed to pull docker image $IMAGE_TO_PULL"
         else
-          info "Failed to pull docker image $IMAGE_TO_PULL"
+          warn "Failed to pull docker image $IMAGE_TO_PULL"
         fi
         RETRIES=$((RETRIES+1))
         info "Retrying $RETRIES/$MAX_RETRIES"
