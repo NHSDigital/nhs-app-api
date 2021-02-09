@@ -160,7 +160,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        [Ignore("Link appears to be focused but isn't clicked")]
         public void APatientCanFollowInternalAndExternalLinksFromNhsLoginAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()

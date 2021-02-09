@@ -20,14 +20,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             _extensions = new List<IWebViewRendererExtension>
             {
                 new UserAgentWebViewRendererExtension(this),
-                new WebIntegrationJavascriptBridgeWebViewRendererExtension(this)
+                new WebIntegrationJavascriptBridgeWebViewRendererExtension(this),
+                new EnableTargetBlankLinksRendererExtension(this)
             };
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
-
+            
             foreach (var extension in _extensions)
             {
                 extension.OnElementChanged(e);

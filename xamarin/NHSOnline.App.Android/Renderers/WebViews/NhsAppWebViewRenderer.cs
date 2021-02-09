@@ -22,14 +22,15 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             {
                 new UserAgentWebViewRendererExtension(this),
                 new NhsAppSetCookieWebViewRendererExtension(),
-                new NhsAppJavascriptBridgeWebViewRendererExtension(this)
+                new NhsAppJavascriptBridgeWebViewRendererExtension(this),
+                new EnableTargetBlankLinksRendererExtension(this)
             };
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
-
+            
             foreach (var extension in _extensions)
             {
                 extension.OnElementChanged(e);
