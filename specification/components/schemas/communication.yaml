@@ -15,7 +15,7 @@ properties:
     example: "optional request reference"
   channels:
     type: object
-    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we support sending in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications by 08 December 2020.
+    description: The channels by which the communication will be sent, and the content for each communication channel. We support sending in-app messages that appear within the NHS App, and native Apple and Android push notifications.
     properties:
       appMessage:
         type: object
