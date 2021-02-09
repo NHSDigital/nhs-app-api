@@ -16,6 +16,7 @@ import { get, isEmpty } from 'lodash/fp';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import sjrIf from '@/lib/sjrIf';
 import SilverIntegrationPanel from '@/components/redirector/SilverIntegrationPanel';
+import NativeApp from '@/services/native-app';
 import {
   REDIRECT_PARAMETER,
   REDIRECT_PAGE_PARAMETER,
@@ -110,7 +111,7 @@ export default {
           );
         })
         .catch((error) => {
-          this.$store.dispatch('log/onError', `Failed to get AssertedLoginIdentity: ${error.response.status}`);
+          this.$store.dispatch('log/onError', `Failed to get AssertedLoginIdentity: ${JSON.stringify(error)}`);
           redirectTo(this, INDEX_PATH);
         });
     },
@@ -124,7 +125,11 @@ export default {
       return this.$te(key) ? this.$t(key) : '';
     },
     navigateToExternalPath(url) {
-      window.location = url;
+      if (NativeApp.supportsNativeWebIntegration()) {
+        NativeApp.openWebIntegration(url);
+      } else {
+        window.location = url;
+      }
     },
     canAccessSilverIntegration(store, { provider, serviceType }) {
       return sjrIf({

@@ -19,7 +19,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
     public class WebIntegrationTests
     {
         [NhsAppAndroidTest]
-        [Ignore("Loads in browser instead of App")]
         public void APatientCanFollowLinksInAWebIntegrationAndReturnUsingJsApiAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new TppPatient()
@@ -83,7 +82,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        [Ignore("Loads in browser instead of App")]
         public void APatientCanFollowLinksInAWebIntegrationIos(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
@@ -138,7 +136,6 @@ namespace NHSOnline.IntegrationTests.WebIntegration
         }
 
         [NhsAppIOSTest]
-        [Ignore("Loads in browser instead of App")]
         public void APatientCanAccessAWebIntegrationAndReturnUsingJsApiIos(IIOSDriverWrapper driver)
         {
             var patient = new TppPatient()
