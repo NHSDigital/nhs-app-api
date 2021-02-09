@@ -12,11 +12,11 @@ $(ALL_SCRIPTS):
 
 $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run the integration tests
-	./buildscripts/04_run_integration_tests.sh
+	./buildscripts/05_run_integration_tests.sh
 
 $(eval $(call expand_run_options_docker_images,run-local))
 run-local: run-deps	## Start the app so the integration tests can be run locally
-	RUN_LOCAL=1 ./buildscripts/04_run_integration_tests.sh
+	RUN_LOCAL=1 ./buildscripts/05_run_integration_tests.sh
 
 run-deps:
 	$(MAKE) -C .. run-deps
