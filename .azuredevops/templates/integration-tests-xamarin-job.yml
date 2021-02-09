@@ -49,7 +49,7 @@ jobs:
 
       - task: ShellScript@2
         displayName: Run Integration Tests
-        continueOnError: or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'))
+        continueOnError: ${{ or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')) }}
         env:
           BrowserStack__Key: $(browserstack.access.key)
           BrowserStack__Build: $(Build.BuildNumber)
