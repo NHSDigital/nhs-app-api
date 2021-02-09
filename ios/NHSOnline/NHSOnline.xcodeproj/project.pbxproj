@@ -91,6 +91,8 @@
 		7992275824212AF70057D406 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7992275724212AF70057D406 /* SplashScreenView.swift */; };
 		79B916E5240D1BCA008CD587 /* ProgressSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B916E2240D1BCA008CD587 /* ProgressSpinnerView.swift */; };
 		7D7F451E25B2114500F0FD75 /* NHSOnline.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7D7F451D25B2114500F0FD75 /* NHSOnline.sh */; };
+		7DCEEB0225D5A8D4009A88BD /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCEEB0125D5A8D4009A88BD /* NotificationServiceTests.swift */; };
+		7DCEEB0425D5B216009A88BD /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCEEB0325D5B216009A88BD /* Compatibility.swift */; };
 		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
 		8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */; };
 		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
@@ -440,6 +442,8 @@
 		7AE2649CA379AD6260106346 /* Pods-NHSOnlinePaycasso.scratch18.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlinePaycasso.scratch18.xcconfig"; path = "Target Support Files/Pods-NHSOnlinePaycasso/Pods-NHSOnlinePaycasso.scratch18.xcconfig"; sourceTree = "<group>"; };
 		7B067342A89688F101646C21 /* Pods-NHSOnlineTests.scratch12.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch12.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch12.xcconfig"; sourceTree = "<group>"; };
 		7D7F451D25B2114500F0FD75 /* NHSOnline.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = NHSOnline.sh; sourceTree = "<group>"; };
+		7DCEEB0125D5A8D4009A88BD /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
+		7DCEEB0325D5B216009A88BD /* Compatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compatibility.swift; sourceTree = "<group>"; };
 		7EB00BFC273B621D0B251911 /* Pods-NHSOnline.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstack.xcconfig"; sourceTree = "<group>"; };
 		7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch4.xcconfig"; sourceTree = "<group>"; };
 		8A55006C23D6158600795739 /* NHSOnlineScratch1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnlineScratch1.entitlements; sourceTree = "<group>"; };
@@ -1289,6 +1293,7 @@
 				4AB36C762514F80500204E08 /* DeviceServiceTests.swift */,
 				F381C32BC0511A0BF493AFD7 /* KnownServicesTests.swift */,
 				F975F4952481082E00D3957F /* BiometricServiceTests.swift */,
+				7DCEEB0125D5A8D4009A88BD /* NotificationServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1529,8 +1534,9 @@
 		F9BAFC52247FD17100BF1CAE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C20578092028B94800CDBDC5 /* Assets.xcassets */,
 				F9BAFC4F247FCA9A00BF1CAE /* Strings */,
+				C20578092028B94800CDBDC5 /* Assets.xcassets */,
+				7DCEEB0325D5B216009A88BD /* Compatibility.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1900,6 +1906,7 @@
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				F96B65CD24F7CD35000F6175 /* PaycassoTransactionTypes.swift in Sources */,
 				F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */,
+				7DCEEB0425D5B216009A88BD /* Compatibility.swift in Sources */,
 				ED6A4515244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift in Sources */,
 				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
 				4AF26120252339F9002123B1 /* CompatibilityService.swift in Sources */,
@@ -1958,6 +1965,7 @@
 				F9BAFC3E247FBA4900BF1CAE /* ProgressSpinnerViewMocks.swift in Sources */,
 				F975F49E2481224F00D3957F /* FidoClientMocks.swift in Sources */,
 				F98EB0BF2486AAE100BD06A8 /* WebViewDelegateMocks.swift in Sources */,
+				7DCEEB0225D5A8D4009A88BD /* NotificationServiceTests.swift in Sources */,
 				F975F4A124813C6B00D3957F /* AppWebInterfaceMocks.swift in Sources */,
 				4AB36C772514F80500204E08 /* DeviceServiceTests.swift in Sources */,
 				10B3A67A25B034E1005FAE14 /* DataDownloadAlertStringHandlerMock.swift in Sources */,

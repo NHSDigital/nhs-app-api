@@ -70,30 +70,42 @@ class AppWebInterfacesTests: XCTestCase {
         assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.loginHandleBiometricLoginFailure();")
     }
     
-    func test_whenGetNotificationsStatusIsTriggered_AndStatusIsEnabled_thenSettingsStatusIsDispatchedWithEnabled(){
+    func test_whenGetNotificationsStatusIsTriggered_AndStatusIsAuthorised_thenSettingsStatusIsDispatchedWithAuthorised(){
         let expectation = self.expectation(description: "dispatched to main queue")
-        appWebInterface!.getNotificationsStatus(status: "Enabled")
+        appWebInterface!.getNotificationsStatus(status: "authorised")
         
         DispatchQueue.main.async{
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'Enabled\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'authorised\');")
     }
     
-    func test_whenGetNotificationsStatusIsTriggered_AndStatusIsDisabled_thenSettingsStatusIsDispatchedWithDisabled(){
+    func test_whenGetNotificationsStatusIsTriggered_AndStatusIsDenied_thenSettingsStatusIsDispatchedWithDenied(){
         let expectation = self.expectation(description: "dispatched to main queue")
-        appWebInterface!.getNotificationsStatus(status: "Disabled")
+        appWebInterface!.getNotificationsStatus(status: "denied")
         
         DispatchQueue.main.async{
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10.0)
         assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
-        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'Disabled\');")
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'denied\');")
     }
     
+    func test_whenGetNotificationsStatusIsTriggered_AndStatusIsNotDetermined_thenSettingsStatusIsDispatchedWithNotDetermined(){
+        let expectation = self.expectation(description: "dispatched to main queue")
+        appWebInterface!.getNotificationsStatus(status: "notDetermined")
+        
+        DispatchQueue.main.async{
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
+        assert(mockWKWebView?.attemptedEvaluateJavaScript == true)
+        assert(mockWKWebView?.attemptedJSString == "window.nativeAppCallbacks.notificationsSettingsStatus(\'notDetermined\');")
+    }
+
     func test_whenExtendSessionIsTriggered_thenSessionExtendIsDispatched(){
         let expectation = self.expectation(description: "dispatched to main queue")
         appWebInterface!.extendSession()

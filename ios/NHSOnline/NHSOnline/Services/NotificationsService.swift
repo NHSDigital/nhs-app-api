@@ -7,7 +7,7 @@ class NotificationsService {
     private let appWebInterface: AppWebInterface
     private var trigger: String = ""
     private let cookieHandler: CookieHandler
-
+    
     init(appWebInterface: AppWebInterface, cookieHandler: CookieHandler) {
         self.appWebInterface = appWebInterface
         self.cookieHandler = cookieHandler
@@ -17,54 +17,90 @@ class NotificationsService {
         if #available(iOS 10.0, *) {
             self.trigger = trigger
             UNUserNotificationCenter.current()
-                    .requestAuthorization(options: [.alert, .sound, .badge]) {
-                        [weak self] granted, error in
-                        guard granted else {
-                            self?.unauthorised()
-                            return
-                        }
-
-                        DispatchQueue.main.async {
-                            UIApplication.shared.registerForRemoteNotifications()
-                        }
+                .requestAuthorization(options: [.alert, .sound, .badge]) {
+                    [weak self] granted, error in
+                    guard granted else {
+                        self?.unauthorised()
+                        return
                     }
+
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
         } else {
             logNotSupported()
         }
     }
-
+    
     func getNotificationsStatus() {
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
-                var status: AuthorisationStatus;
-                
-                status = AuthorisationStatus.notDetermined
-                
-                if (settings.authorizationStatus == .notDetermined) {
-                    Logger.logInfo(message: "Authorisation request has not been made yet")
-                }
-                
-                if (settings.authorizationStatus == .denied) {
-                    Logger.logInfo(message: "Authorisation request has not been made yet")
-                }
-                
-                if (settings.authorizationStatus == .authorized) {
-                    status = AuthorisationStatus.authorised
-                    Logger.logInfo(message: "Allow notifications is enabled")
-                }
+                let status: String
                 
                 if #available(iOS 12.0, *) {
-                    if (settings.authorizationStatus == .provisional) {
-                        status = AuthorisationStatus.authorised
-                        Logger.logInfo(message: "Allow notifications is enabled")
-                    }
+                    status = self.getNotificationsStatus(with: compatibility.iOS12(), authorizationStatus: settings.authorizationStatus)
+                } else {
+                    status = self.getNotificationsStatus(with: compatibility.iOS10(), authorizationStatus: settings.authorizationStatus)
                 }
                 
-                // when everyone is on xcode 12 and azure fixes app problem with xcode 12, here we can add the check for status .ephemeral
-
-                self.appWebInterface.getNotificationsStatus(status: status.rawValue)
+                self.appWebInterface.getNotificationsStatus(status: status)
             }
         }
+    }
+    
+    @available(iOS 10, *)
+    func getNotificationsStatus(with _: compatibility.iOS10, authorizationStatus: UNAuthorizationStatus) -> String {
+        var status: ExhaustiveAuthorisationStatus;
+        
+        switch authorizationStatus {
+        case .authorized:
+            status = .authorised
+        case .notDetermined:
+            status = .notDetermined
+        case .denied:
+            status = .denied
+        default:
+            status = .unknown
+        }
+        return self.mapAuthorisationStatus(status: status)
+    }
+    
+    @available(iOS 12, *)
+    func getNotificationsStatus(with _: compatibility.iOS12, authorizationStatus: UNAuthorizationStatus) -> String {
+        var status: ExhaustiveAuthorisationStatus;
+        
+        switch authorizationStatus {
+        case .authorized:
+            status = .authorised
+        case .provisional:
+            status = .provisional
+        case .notDetermined:
+            status = .notDetermined
+        case .denied:
+            status = .denied
+        @unknown default:
+            status = .unknown
+        }
+        return self.mapAuthorisationStatus(status: status)
+    }
+    
+    private func mapAuthorisationStatus(status: ExhaustiveAuthorisationStatus) -> String {
+        var outgoingStatus: OutgoingAuthorisationStatus;
+        
+        switch status {
+        case .authorised, .provisional:
+            Logger.logInfo(message: "Allow notifications is enabled")
+           outgoingStatus = .authorised
+        case .notDetermined:
+            Logger.logInfo(message: "Authorisation request has not been made yet")
+            outgoingStatus = .notDetermined
+        case .denied, .unknown:
+            Logger.logInfo(message: "Allow notifications is disabled")
+            outgoingStatus = .denied
+        }
+
+        return outgoingStatus.rawValue
     }
 
     func authorised(deviceToken: Data) {
@@ -95,7 +131,15 @@ class NotificationsService {
         trigger = "load"
     }
 
-    private enum AuthorisationStatus: String {
+    private enum ExhaustiveAuthorisationStatus: String {
+        case notDetermined
+        case denied
+        case authorised
+        case provisional
+        case unknown
+    }
+        
+    private enum OutgoingAuthorisationStatus: String {
         case notDetermined
         case denied
         case authorised
