@@ -45,11 +45,9 @@ info:
 
     ## Authorisation
     This API is [application-restricted](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation#application-restricted-apis),
-    meaning that the calling application is authenticated, but the end user is not authenticated and may not be present.
+    meaning we authenticate the calling application but not the end user. In particular, the three FHIR `CommunicationRequest` endpoints use signed JWT authentication - you authenticate your application by sending a signed JSON web token (JWT) to our OAuth 2.0 authorisation server. For more details see [Application-restricted RESTful APIs - signed JWT authentication](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication).
 
-    The API currently uses an [API key pattern](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-api-key-authentication) to authorise the calling system.
-
-    We plan to transition to using the [OAuth 2.0 signed JWT authentication pattern](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation/application-restricted-restful-apis-signed-jwt-authentication) to authorise the calling system for the three FHIR `CommunicationRequest` endpoints by the end of February 2021.
+    The non-FHIR `communication` endpoint used an API key pattern to authorise the calling system. This endpoint has been deprecated and will soon be removed from the API. It should no longer be used.
 
     ## Environments and testing
     | API Environment      | NHS Login Environment | Base URL                                    |
@@ -93,7 +91,7 @@ tags:
 paths:
   /communication/in-app/FHIR/R4/CommunicationRequest:
     parameters:
-      - $ref: "#/components/parameters/ApiKey"
+      - $ref: '#/components/parameters/BearerAuthorization'
       - $ref: "#/components/parameters/CorrelationId"
     post:
       summary: Send an in-app message
@@ -177,7 +175,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400multipleIssues.json
         "401":
-          description: Authorisation issue, for example a missing or invalid X-Api-Key header.
+          description: Authorisation issue, for example a missing or invalid bearer token.
           headers:
             X-Correlation-ID:
               schema:
@@ -188,14 +186,10 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               examples:
-                invalid-api-key:
-                  summary: Invalid API key
+                invalid-access-token:
+                  summary: Invalid Access Token
                   value:
-                    $ref: components/examples/responses/communication/401invalidApiKey.json
-                invalid-api-key-for-resource:
-                  summary: Invalid API key for given resource (valid API key, but not enabled for this API)
-                  value:
-                    $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
+                    $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
           headers:
@@ -223,7 +217,7 @@ paths:
 
   /communication/notification/FHIR/R4/CommunicationRequest:
     parameters:
-      - $ref: "#/components/parameters/ApiKey"
+      - $ref: '#/components/parameters/BearerAuthorization'
       - $ref: "#/components/parameters/CorrelationId"
     post:
       summary: Send a push notification
@@ -326,14 +320,10 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               examples:
-                invalid-api-key:
-                  summary: Invalid API key
+                invalid-access-token:
+                  summary: Invalid Access Token
                   value:
-                    $ref: components/examples/responses/communication/401invalidApiKey.json
-                invalid-api-key-for-resource:
-                  summary: Invalid API key for given resource (valid API key, but not enabled for this API)
-                  value:
-                    $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
+                    $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
           headers:
@@ -361,7 +351,7 @@ paths:
 
   /communication/in-app-with-notification/FHIR/R4/CommunicationRequest:
     parameters:
-      - $ref: "#/components/parameters/ApiKey"
+      - $ref: '#/components/parameters/BearerAuthorization'
       - $ref: "#/components/parameters/CorrelationId"
     post:
       summary: Send an in-app message with an associated push notification
@@ -460,14 +450,10 @@ paths:
               schema:
                 $ref: components/schemas/OperationOutcome.yaml
               examples:
-                invalid-api-key:
-                  summary: Invalid API key
+                invalid-access-token:
+                  summary: Invalid Access Token
                   value:
-                    $ref: components/examples/responses/communication/401invalidApiKey.json
-                invalid-api-key-for-resource:
-                  summary: Invalid API key for given resource (valid API key, but not enabled for this API)
-                  value:
-                    $ref: components/examples/responses/communication/401invalidApiKeyForResource.json
+                    $ref: components/examples/responses/communication/401invalidAccessToken.json
         "403":
           description: You are not authorised to perform this operation. For example, some onboarded client Apps may be permitted to send Push Notifications but not In-App Messages, or vice versa.
           headers:
@@ -657,3 +643,13 @@ components:
       schema:
         type: string
         example: AHkYeqh8N1yrnKGb108puMFUdmxnATkS
+    BearerAuthorization:
+      in: header
+      name: Authorization
+      description: |
+        An [OAuth 2.0 bearer token](https://digital.nhs.uk/developer/guides-and-documentation/security-and-authorisation#user-restricted-apis).
+      required: true
+      schema:
+        type: string
+        format: '^Bearer\ [[:ascii:]]+$'
+        example: 'Bearer g1112R_ccQ1Ebbb4gtHBP1aaaNM'
