@@ -115,11 +115,11 @@ ARG COMMIT_ID
 ENV COMMIT_ID=${COMMIT_ID}
 
 EXPOSE $PORT
-CMD sudo update-ca-certificates; \
-    /app/build/env-wrapper.sh; \
-    /app/build/configureDeepLinking.sh; \
-    envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf; \
-    nginx;
+CMD sudo update-ca-certificates && \
+    /app/build/env-wrapper.sh && \
+    /app/build/configureDeepLinking.sh && \
+    envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && \
+    nginx
 
 # 1. trust wildcard cert (mounted in helm)to allow communication between pods
 # 2. run env-wrapper.sh script to create env.json for config endpoint and place in versioned assets folder

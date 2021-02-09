@@ -1,4 +1,6 @@
-#!/bin/bash
+#! /usr/bin/env bash
+set -e
 
-DASHED_VERSION=$(cat /app/build/dashed_version);
-/app/build/env.sh ./app/$DASHED_VERSION/config.json;
+DASHED_VERSION=$(cat /app/build/dashed_version)
+
+/app/build/env.sh "./app/${DASHED_VERSION}/config.json"

@@ -1,9 +1,27 @@
-#!/bin/bash
+#! /usr/bin/env bash
+set -e
 
-envsubst '${WELL_KNOWN_ANDROID_PACKAGE_NAME},${WELL_KNOWN_ANDROID_FINGERPRINT}' < /app/.well-known/assetlinks.json.template > /app/.well-known/assetlinks.json;
-rm /app/.well-known/assetlinks.json.template;
-echo "Completed defining Universal Links";
+populateLinksTemplate() {
+  name="$1"
+  envSubCsv="$2"
+  templateFile="$3"
 
-envsubst '${WELL_KNOWN_IOS_APP_ID}' < /app/.well-known/apple-app-site-association.template > /app/.well-known/apple-app-site-association;
-rm /app/.well-known/apple-app-site-association.template; 
-echo "Completed defining App Links";
+  envsubst "${envSubCsv}" < "/app/.well-known/${templateFile}.template" > "/app/.well-known/${templateFile}";
+  rm -f "/app/.well-known/${templateFile}.template";
+
+  echo "Completed defining ${name} Links";
+}
+
+main() {
+  echo "Begin Generating deep link configs"
+
+  populateLinksTemplate "Universal" \
+    '${WELL_KNOWN_ANDROID_PACKAGE_NAME},${WELL_KNOWN_ANDROID_FINGERPRINT}' \
+    "assetlinks.json"
+
+  populateLinksTemplate "App" '${WELL_KNOWN_IOS_APP_ID}' "apple-app-site-association"
+
+  echo "Deep link configs generated"
+}
+
+main
