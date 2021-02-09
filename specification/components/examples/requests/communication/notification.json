@@ -1,0 +1,31 @@
+{
+    "resourceType": "CommunicationRequest",
+    "identifier": [
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/campaign-id",
+            "value": "optional campaign id"
+        },
+        {
+            "system": "https://fhir.nhs.uk/NHSApp/request-id",
+            "value": "optional request reference"
+        }
+    ],
+    "status": "active",
+    "payload": [
+        {
+            "contentReference": {
+                "reference": "https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging",
+                "display": "You have a new message. The message may contain something important."
+            }
+        }
+    ],
+    "recipient": [
+        {
+            "type": "Patient",
+            "identifier": {
+                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                "value": "9903002157"
+            }
+        }
+    ]
+}

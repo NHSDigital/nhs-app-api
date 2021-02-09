@@ -1,0 +1,38 @@
+type: object
+description: Operation outcome
+properties:
+  resourceType:
+    type: string
+    description: FHIR Resource Type.
+    default: OperationOutcome
+    readOnly: true
+  issue:
+    type: array
+    description: List of issues that have occurred.
+    minItems: 1
+    items:
+      type: object
+      required:
+        - severity
+        - code
+      properties:
+        severity:
+          type: string
+          enum: [fatal, error, warning, information]
+          description: Severity of the error.
+          example: error
+        code:
+          type: string
+          description: FHIR error code.
+          example: invalid
+          enum: [invalid, security, processing]
+        diagnostics:
+          type: string
+          description: Additional diagnostic information about the issue.
+          example: Not specified
+        expression:
+          type: array
+          description: FHIRPath of element(s) related to the error.
+          items:
+            type: string
+            example: sender.display

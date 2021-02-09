@@ -4,10 +4,7 @@
         {
             "severity": "error",
             "code": "invalid",
-            "diagnostics": "Not specified",
-            "expression": [
-                "recipient"
-            ]
+            "diagnostics": "type (at Cannot locate type information for type 'communicationrequest')"
         }
     ]
 }

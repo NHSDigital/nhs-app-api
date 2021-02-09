@@ -1,5 +1,5 @@
 type: object
-required: 
+required:
   - channels
   - recipients
 properties:
@@ -69,7 +69,7 @@ properties:
           The communication content to appear as a native Apple or Android push notification. 
 
           Notifications must use unicode characters. 
-          
+
           They must not contain:
 
           * personally identifiable information (for example: the name of a user's doctor)
