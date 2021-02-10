@@ -108,7 +108,7 @@ stages:
       inputs:
         workingDirectory: $(System.DefaultWorkingDirectory)/nhsapp-chart/nhsapp/
         targetType: 'inline'
-        script: sed -i -e "s|1.0.0|$chartVersion|g" Chart.yaml && sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml
+        script: sed -i -e "s|APPVERSION|$appImageTag|g" Chart.yaml
       env:
         chartVersion: $(Build.SourceBranchName)
         appImageTag: $(version)
