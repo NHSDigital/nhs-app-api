@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
@@ -32,6 +34,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+            DateTime
+                .Parse(_driver.DeviceTime, CultureInfo.InvariantCulture)
+                .Should()
+                .BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1), TestResultRetryExtensions.DeviceTimeSkewMessage);
 
             _nativeDriverContext = new NativeDriverContext(_driver, _driver, new IOSWebViewLocatorStrategy(_driver));
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,6 +7,8 @@ namespace NHSOnline.IntegrationTests.UI
 {
     internal static class TestResultRetryExtensions
     {
+        internal const string DeviceTimeSkewMessage = "device time should be close to the current time";
+
         // 308536-Invalid Service com.apple.webinspector
         private static readonly Regex InvalidServiceWebInspectorMessage = new Regex(
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Unexpected data: {""Error"":""InvalidService"",""Request"":""StartService"",""Service"":""com.apple.webinspector""}",
@@ -23,11 +24,17 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Error executing adbExec\. .* Stderr: 'adb: error: listener 'tcp:9222' not found'",
             RegexOptions.Compiled);
 
+        // 390309-Device time in the future
+        private static readonly Regex DeviceTimeSkew = new Regex(
+            Regex.Escape(DeviceTimeSkewMessage),
+            RegexOptions.Compiled);
+
         private static readonly List<Regex> RetryExceptionMessageRegexes = new List<Regex>
         {
             InvalidServiceWebInspectorMessage,
             UnableToConnectToRenderer,
-            AdbErrorListenerNotFound
+            AdbErrorListenerNotFound,
+            DeviceTimeSkew
         };
 
         internal static bool ShouldRetry(this TestResult result, TestLogs logs)
