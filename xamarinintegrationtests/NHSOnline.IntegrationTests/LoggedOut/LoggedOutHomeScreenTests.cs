@@ -20,7 +20,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        [Ignore("Covid banner missing from iOS page source")]
         public void APatientSeesTheLoggedOutHomeScreenWhenStartingTheAppIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage
@@ -45,7 +44,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        [Ignore("Covid banner missing from iOS page source")]
         public void APatientCanClickToViewCovidConditionsIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage

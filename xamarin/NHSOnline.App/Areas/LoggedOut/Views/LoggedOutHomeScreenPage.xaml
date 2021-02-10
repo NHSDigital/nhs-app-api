@@ -27,8 +27,7 @@
             <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                          AbsoluteLayout.LayoutFlags="All">
                 <StackLayout HorizontalOptions="FillAndExpand"
-                             BackgroundColor="{ StaticResource NhsUkYellow}"
-                             AutomationProperties.IsInAccessibleTree="true">
+                             BackgroundColor="{ StaticResource NhsUkYellow}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
