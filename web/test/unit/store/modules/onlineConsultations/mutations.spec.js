@@ -29,7 +29,7 @@ describe('online consultations store mutations', () => {
     }, {
       mutation: 'SET_PREVIOUS_ROUTE',
       stateProp: 'previousRoute',
-      parameter: '/more',
+      parameter: '/health-records',
     }, {
       mutation: 'SET_CARE_PLANS',
       stateProp: 'carePlans',

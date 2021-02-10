@@ -232,22 +232,6 @@ Feature: Login with proxy access
     When I select "Cancel appointment" button
     Then The appointment cancellation success page is shown
 
-  Scenario Outline: A <Gp System> user proxying on behalf of another will not be able to see any options on the more page
-    Given I am a <Gp System> user with linked profiles
-    And I am logged in
-    And I have switched to a linked profile
-    Then I see the proxy home page
-    When I navigate to the More page
-    Then I am on the More page
-    And the More page explains that it is not possible to access it while acting on behalf of someone else
-    When I click the Switch to my profile button for the main user
-    And I see the home page
-    And I do not see the yellow banner
-    Examples:
-      | Gp System |
-      | EMIS      |
-      | TPP       |
-
   Scenario: An TPP user with proxy accounts can see proxy details and switch back to their own account
     Given I am logged in as a TPP user with linked profiles and appointments provider IM1
     When I can see and follow the Linked profiles link

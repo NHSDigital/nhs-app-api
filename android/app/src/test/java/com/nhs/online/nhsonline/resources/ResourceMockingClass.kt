@@ -41,7 +41,6 @@ open class ResourceMockingClass {
             on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
             on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"
             on { getString(R.string.myAccountPath) } doReturn "/account"
-            on { getString(R.string.morePath) } doReturn "/more"
             on { getString(R.string.checkYourSymptoms) } doReturn "check-your-symptoms"
 
             on { getString(R.string.my_account_header) } doReturn "My account"
@@ -55,7 +54,6 @@ open class ResourceMockingClass {
             on { getString(R.string.symptoms_header) } doReturn "Check my symptoms"
             on { getString(R.string.appointments_header) } doReturn "My appointments"
             on { getString(R.string.prescriptions_header) } doReturn "My repeat prescriptions"
-            on { getString(R.string.more_header) } doReturn "More"
             on { getString(R.string.home_header) } doReturn "Home"
             on { getString(R.string.nhs_login_header) } doReturn "Log in to the NHS App"
             on { getString(R.string.nhs_login_accessibility_label) } doReturn "Log in using Patient ID"

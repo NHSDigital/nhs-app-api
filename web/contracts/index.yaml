@@ -90,11 +90,11 @@
                             type: "string"
                             enum: 
                               - "None"
-                              - "Symptoms"
+                              - "Advice"
                               - "Appointments"
                               - "Prescriptions"
                               - "MyRecord"
-                              - "More"
+                              - "Messages"
                           integrationLevel: 
                             type: "string"
                             enum: 
@@ -132,11 +132,11 @@
                                   type: "string"
                                   enum: 
                                     - "None"
-                                    - "Symptoms"
+                                    - "Advice"
                                     - "Appointments"
                                     - "Prescriptions"
                                     - "MyRecord"
-                                    - "More"
+                                    - "Messages"
                                 integrationLevel: 
                                   type: "string"
                                   enum: 

@@ -4,7 +4,7 @@ Feature: Engage Messages
 
   # P5 notes - P5 users are able to access the messaging hub page directly, but should not see any silver integration messaging jump offs
 
-  Scenario: A user with proof level 5 cannot see the menu item 'Messages and online consultations' on the more page
+  Scenario: A user with proof level 5 cannot see the menu item 'Messages and online consultations' on the messages hub
     Given I am a user with proof level 5 who can view Messages and Online Consultations from Engage
     And I am logged in
     And I navigate to the Messages hub page
@@ -15,15 +15,13 @@ Feature: Engage Messages
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Engage
     And I am logged in
-    When I navigate to the More page
-    Then I am on the More page
-    And I click the Messages link on the More page
-    And the Messages Hub page is displayed
-    And I click the Engage Messages link on the Messages Hub page
-    And I am redirected to the redirector page with the header 'Messages'
+    When I navigate to the Messages Hub page
+    Then the Messages Hub page is displayed
+    When I click the Engage Messages link on the Messages Hub page
+    Then I am redirected to the redirector page with the header 'Messages'
     And the messages warning message on the Redirector page explains the service is from Engage
 
-  Scenario: A user without access to Engage cannot see the menu item 'Messages and online consultations' on the more page
+  Scenario: A user without access to Engage cannot see the menu item 'Messages and online consultations' on the messages hub
     Given I am a user who cannot view Messages and Online Consultations from Engage
     And I am logged in
     And I navigate to the Messages hub page

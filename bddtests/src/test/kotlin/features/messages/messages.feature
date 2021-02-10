@@ -18,8 +18,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -55,14 +54,6 @@ Feature: Messages
     And I am logged in
     Then I can see I have unread messages on the home page
 
-  Scenario: A user can see they have unread messages on the More page
-    Given I am using the native app user agent
-    And I am a user wishing to view my messages and GP surgery messages
-    And I am logged in
-    Then I can see I have unread messages on the home page
-    When I navigate to the More page
-    Then I see the unread indicator on the More page
-
   Scenario: A user can see they have unread messages on the Messages Hub
     Given I am using the native app user agent
     And I am a user wishing to view my messages and GP surgery messages
@@ -77,8 +68,7 @@ Feature: Messages
       | /account  |
       | /appointments/gp-appointments/booking  |
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -86,8 +76,7 @@ Feature: Messages
     Then the Messages page is displayed
     When I click on the '/account' link in the message
     Then the Account page for mobile devices is displayed
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -120,8 +109,7 @@ Feature: Messages
     And I am a user wishing to view my messages with content
       | email@address.com  |
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -192,8 +180,7 @@ Feature: Messages
     And I am a user wishing to view my messages with content
       | /appointments/sausages  |
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -208,8 +195,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages, but I have no messages
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
@@ -220,7 +206,7 @@ Feature: Messages
       | Journey       | Value    |
       | messages      | disabled |
     And I am logged in
-    When I navigate to the More page
+    When I navigate to the Messages Hub page
     Then the link to NHS App Messages is not available on the Messages Hub page
     When I browse to the pages at the following urls I see the home page
       | /messages/app-messaging  |
@@ -234,8 +220,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And an error with a retry button is displayed indicating that there was a problem getting messages
     And the messages in the repository can be retrieved successfully
@@ -246,8 +231,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the senders and latest messages are displayed on the Messages Inbox page
     And retrieving the messages from the repository will cause an internal server error
@@ -261,8 +245,7 @@ Feature: Messages
   Scenario: A desktop user can see back links on the app messages journey
     Given I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the Back link on the Messages Inbox page is displayed
@@ -278,8 +261,7 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
     And the Back link is not shown on the Messages Inbox page

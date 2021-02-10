@@ -114,14 +114,6 @@ Feature: Patient to practice messaging
     When I follow the unread messages link from the home page
     Then the Messages Hub page is displayed with the unread indicator for GP messaging
 
-  Scenario: A patient can see they have an unread message on the more page
-    Given I am an EMIS user who can access patient practice messaging
-    And I have patient practice messages in my inbox, some of which are unread
-    And I am logged in
-    And I can see I have unread messages on the home page
-    When I navigate to the More page
-    Then I see the unread indicator on the More page
-
   Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
     Given I am a TPP user who can access patient practice messaging
     And I want to send a message to a <Recipient Type> recipient and have unread messages in my inbox

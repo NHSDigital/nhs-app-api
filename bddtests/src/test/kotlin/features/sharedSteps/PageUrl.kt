@@ -21,7 +21,6 @@ open class PageUrl {
                         "partial success" to "/prescriptions/repeat-partial-success",
                         "prescriptions success" to "/prescriptions/order-success",
                         "organ donation" to "/organ-donation",
-                        "more" to "/more",
                         "account" to "/account",
                         "manage cookies" to "/account/cookies",
                         "notifications settings" to "/account/notifications",

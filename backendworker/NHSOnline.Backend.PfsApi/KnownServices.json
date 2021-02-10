@@ -286,30 +286,6 @@
           "validateSession": true
         },
         {
-          "path": "/patient/more",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
-          "path": "/patient/*/more",
-          "queryString": null,
-          "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
-          "viewMode": "WebView",
-          "integrationLevel": "Gold",
-          "showSpinner": false,
-          "showThirdPartyWarning": false,
-          "requiresAssertedLoginIdentity": false,
-          "validateSession": true
-        },
-        {
           "path": "/patient/health-records/gp-medical-record/documents/detail/*",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
@@ -361,7 +337,7 @@
           "path": "/patient/organ-donation",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
+          "menuTab": "MyRecord",
           "viewMode": "WebView",
           "integrationLevel": "Gold",
           "showSpinner": false,
@@ -373,7 +349,7 @@
           "path": "/patient/*/organ-donation",
           "queryString": null,
           "javaScriptInteractionMode": "NhsApp",
-          "menuTab": "More",
+          "menuTab": "MyRecord",
           "viewMode": "WebView",
           "integrationLevel": "Gold",
           "showSpinner": false,

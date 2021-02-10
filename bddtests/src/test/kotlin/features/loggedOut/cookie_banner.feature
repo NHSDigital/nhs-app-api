@@ -40,7 +40,6 @@ Feature: Cookie Banner
       | /appointments/confirmation                  |
       | /data-sharing                               |
       | /                                           |
-      | /more                                       |
       | /my-record                                  |
       | /my-record/noaccess                         |
       | /prescriptions                              |

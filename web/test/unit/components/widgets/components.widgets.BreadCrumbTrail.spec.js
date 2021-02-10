@@ -101,7 +101,7 @@ describe('BreadCrumbTrail.vue', () => {
       backLink.trigger('click');
 
       expect(wrapper.vm.$route.name).toBe('organ-donation');
-      expect(goToUrl).toHaveBeenCalledWith('more');
+      expect(goToUrl).toHaveBeenCalledWith('health-records');
     });
 
     it('will go to the store override path if set ' +

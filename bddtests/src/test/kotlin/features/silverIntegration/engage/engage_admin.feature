@@ -3,7 +3,7 @@
 
 Feature: Engage Admin
 
-  # P5 notes - the more page is not available to P5 users, preventing them from accessing the silver integration admin jumpoff.
+  # P5 notes - the appointments hub page is not available to P5 users, preventing them from accessing the silver integration admin jumpoff.
 
   Scenario: A user navigates to Engage Admin and sees the warning message
     Given I am using the native app user agent

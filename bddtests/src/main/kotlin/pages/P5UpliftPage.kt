@@ -13,7 +13,6 @@ open class P5UpliftPage : HybridPageObject() {
             "appointment hub" to "You'll need to prove who you are before you can book appointments in the NHS App.",
             "gp medical record"
                     to healthRecordsDescription,
-            "more" to genericDescription,
             "organ donation" to healthRecordsDescription,
             "your prescriptions" to "You'll need to prove who you are before you can order repeat prescriptions " +
                     "in the NHS App.",

@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertSingleElementPresent
 
-@DefaultUrl("http://web.local.bitraft.io:3000/more/messaging/messages")
+@DefaultUrl("http://web.local.bitraft.io:3000/messaging/messages")
 class MessagesPage : HybridPageObject() {
 
     val messages = MessageBlockElements(this)

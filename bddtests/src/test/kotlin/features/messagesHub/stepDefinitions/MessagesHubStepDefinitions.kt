@@ -33,7 +33,7 @@ class MessagesHubStepDefinitions {
     }
 
     @When("^I click the App Messages link on the messages hub page")
-    fun iClickTheAppMessagesLinkOnTheMorePage() {
+    fun iClickTheAppMessagesLinkOnTheMessagesHubPage() {
         messagesHubPage.clickOnMenuItem("btn_appMessaging")
     }
 

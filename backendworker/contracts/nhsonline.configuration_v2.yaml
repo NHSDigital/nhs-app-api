@@ -91,11 +91,11 @@ components:
       type: string
       enum:
         - None
-        - Symptoms
+        - Advice
         - Appointments
         - Prescriptions
         - MyRecord
-        - More
+        - Messages
     IntegrationLevel:
       type: string
       enum:

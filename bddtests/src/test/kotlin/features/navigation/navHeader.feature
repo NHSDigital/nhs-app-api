@@ -76,4 +76,4 @@ Feature: Use the navigation header bar
     Then the Organ Donation Your Choice page is displayed
     When I click the 'Back' breadcrumb
     And I click the 'Back' breadcrumb
-    Then I am on the More page
+    Then I see the health records hub page

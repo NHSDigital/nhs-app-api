@@ -2,7 +2,7 @@ import {
   ACCOUNT_PATH,
   APPOINTMENTS_PATH,
   INDEX_PATH,
-  MORE_PATH,
+  HEALTH_RECORDS_PATH,
   MESSAGES_PATH,
   GP_MESSAGES_PATH,
   PRESCRIPTIONS_PATH,
@@ -61,10 +61,10 @@ export default {
     defaultPath: INDEX_PATH,
   },
   [ORGAN_DONATION_NAME]: {
-    defaultPath: MORE_PATH,
+    defaultPath: HEALTH_RECORDS_PATH,
   },
   [ORGAN_DONATION_VIEW_DECISION_NAME]: {
-    defaultPath: MORE_PATH,
+    defaultPath: HEALTH_RECORDS_PATH,
   },
   [PRESCRIPTION_REPEAT_COURSES_NAME]: {
     ignoreStore: true,

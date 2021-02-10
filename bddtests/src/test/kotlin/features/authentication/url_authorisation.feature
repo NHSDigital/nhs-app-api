@@ -13,7 +13,6 @@ Feature: Authorisation occurs during each URL visit
       | /appointments/confirmation                  |
       | /                                           |
       | /logout                                     |
-      | /more                                       |
       | /my-record                                  |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |
@@ -36,7 +35,6 @@ Feature: Authorisation occurs during each URL visit
       | /data-sharing                               |
       | /                                           |
       | /logout                                     |
-      | /more                                       |
       | /my-record                                  |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |
@@ -59,7 +57,6 @@ Feature: Authorisation occurs during each URL visit
       | /data-sharing                               |
       | /                                           |
       | /logout                                     |
-      | /more                                       |
       | /my-record                                  |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |

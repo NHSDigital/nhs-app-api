@@ -10,7 +10,6 @@ open class WebHeader : HybridPageObject() {
             Pair("Appointments", "Your appointments"),
             Pair("Prescriptions", "Prescriptions"),
             Pair("Your medical record", "Your medical record"),
-            Pair("More", "More"),
             Pair("Account", "My account"),
             Pair("Home", "Home")
     )
@@ -34,12 +33,6 @@ open class WebHeader : HybridPageObject() {
 
     val prescriptionsPageLink = HybridPageElement(
             webDesktopLocator = "//a[@data-purpose='prescriptionsPageLink']",
-            page = this
-    )
-
-
-    val morePageLink = HybridPageElement(
-            webDesktopLocator = "//a[@data-purpose='morePageLink']",
             page = this
     )
 
@@ -86,10 +79,6 @@ open class WebHeader : HybridPageObject() {
 
     fun clickPrescriptionsPageLink() {
         prescriptionsPageLink.click()
-    }
-
-    fun clickMorePageLink() {
-        morePageLink.click()
     }
 
     fun clickLogout() {

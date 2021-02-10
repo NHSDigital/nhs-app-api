@@ -3,7 +3,6 @@ import NativeCallbacks from '@/services/native-app';
 import { ADVICE } from '@/router/routes/advice';
 import { INDEX } from '@/router/routes/general';
 import { LOGIN } from '@/router/routes/login';
-import { MORE } from '@/router/routes/more';
 import {
   APPOINTMENTS,
   BOOKING,
@@ -111,7 +110,6 @@ describe('NhsUkLayout', () => {
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
       [HEALTH_RECORDS.name, HEALTH_RECORDS],
-      [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         $store = createLayoutStore(isNative);
@@ -177,7 +175,6 @@ describe('NhsUkLayout', () => {
       [ADVICE.name, ADVICE],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
-      [MORE.name, MORE],
       [DOCUMENT_DETAIL.name, DOCUMENT_DETAIL],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
@@ -208,7 +205,6 @@ describe('NhsUkLayout', () => {
       [ADVICE.name, ADVICE],
       [APPOINTMENTS.name, APPOINTMENTS],
       [PRESCRIPTIONS.name, PRESCRIPTIONS],
-      [MORE.name, MORE],
     ])('for `%s`', (_, page) => {
       beforeEach(() => {
         wrapper = createPage($store, page);
