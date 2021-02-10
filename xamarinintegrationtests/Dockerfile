@@ -1,12 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
-ARG DOCKER_IMAGE_INTTESTS_BUILD=nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1
-ARG DOCKER_IMAGE_HTTPMOCKS_RUNTIME=nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1
+ARG DOCKER_IMAGE_INTTESTS_BUILD=nhsapp.azurecr.io/nhsonline-int-tests-dotnet-build:5.0
+ARG DOCKER_IMAGE_HTTPMOCKS_RUNTIME=nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:5.0
 
 FROM ${DOCKER_IMAGE_INTTESTS_BUILD} as dependencies
-
-RUN apt-get update && \
-    apt-get install -y wget gnupg docker.io
 
 WORKDIR /src
 

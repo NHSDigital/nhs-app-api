@@ -70,8 +70,20 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            find xamarinintegrationtests/TestResults -name '*.trx' -exec sed -ir -e 's#storage="/src/#storage="xamarinintegrationtests/#' -e 's#codeBase="/src/#codeBase="xamarinintegrationtests/#' \{\} \;
+            find xamarinintegrationtests/TestResults -name '*.trx' -exec \
+              sed \
+                -ir \
+                -e 's#storage="/src/#storage="xamarinintegrationtests/#' \
+                -e 's#codeBase="/src/#codeBase="xamarinintegrationtests/#' \
+                -e 's# in /src/# in xamarinintegrationtests/#' \
+                \{\} \;
             find xamarinintegrationtests/TestResults -name '*.trx' -exec cat \{\} \;
+
+      - task: ShellScript@2
+        displayName: Generate Report
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
+        inputs:
+          scriptPath: xamarinintegrationtests/buildscripts/06_generate_integration_tests_report.sh
 
       - task: PublishTestResults@2
         displayName: Publish Test Results
