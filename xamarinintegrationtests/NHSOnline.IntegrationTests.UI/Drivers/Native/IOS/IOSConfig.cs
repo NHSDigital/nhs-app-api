@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
     {
         public string? App { get; set; } = $"{Dns.GetHostName()}-ios";
         public string? Device { get; set; } = "iPhone 8";
-        public string? OperatingSystemVersion { get; set; } = "12.1";
+        public string? OperatingSystemVersion { get; set; } = "13.0";
 
         internal void SetCapabilities(AppiumOptions options)
         {

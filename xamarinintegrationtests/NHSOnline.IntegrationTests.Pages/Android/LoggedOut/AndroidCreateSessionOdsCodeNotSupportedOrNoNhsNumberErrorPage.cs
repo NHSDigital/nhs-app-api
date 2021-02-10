@@ -67,7 +67,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
                 " For urgent medical advice, call 111.")
             .ScrollIntoView();
 
-        private AndroidLabel ErrorCodeText => AndroidLabel.WhichMatches(_driver, "Reference: 3f[0-9a-z]{4}");
+        private AndroidLabel ErrorCodeText => AndroidLabel
+            .WhichMatches(_driver, "Reference: 3f[0-9a-z]{4}")
+            .ScrollIntoView();
 
         public static AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage AssertOnPage(IAndroidDriverWrapper driver)
         {

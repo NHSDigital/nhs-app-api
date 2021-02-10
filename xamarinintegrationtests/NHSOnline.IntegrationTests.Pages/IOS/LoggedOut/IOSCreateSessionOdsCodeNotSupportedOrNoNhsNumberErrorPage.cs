@@ -67,7 +67,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
                 " For urgent medical advice, call 111.")
             .ScrollIntoView();
 
-        private IOSLabel ErrorCodeText => IOSLabel.WhichMatches(_driver, "Reference: 3f[0-9a-z]{4}");
+        private IOSLabel ErrorCodeText => IOSLabel
+            .WhichMatches(_driver, "Reference: 3f[0-9a-z]{4}")
+            .ScrollIntoView();
 
         public static IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage AssertOnPage(IIOSDriverWrapper driver)
         {
