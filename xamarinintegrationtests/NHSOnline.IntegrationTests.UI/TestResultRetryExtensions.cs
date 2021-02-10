@@ -29,12 +29,18 @@ namespace NHSOnline.IntegrationTests.UI
             Regex.Escape(DeviceTimeSkewMessage),
             RegexOptions.Compiled);
 
+        // 390078-Incorrect Chrome Version
+        private static readonly Regex IncorrectChromeVersion = new Regex(
+            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: A new session could not be created\. Details: session not created: This version of ChromeDriver only supports Chrome version",
+            RegexOptions.Compiled);
+
         private static readonly List<Regex> RetryExceptionMessageRegexes = new List<Regex>
         {
             InvalidServiceWebInspectorMessage,
             UnableToConnectToRenderer,
             AdbErrorListenerNotFound,
-            DeviceTimeSkew
+            DeviceTimeSkew,
+            IncorrectChromeVersion
         };
 
         internal static bool ShouldRetry(this TestResult result, TestLogs logs)
