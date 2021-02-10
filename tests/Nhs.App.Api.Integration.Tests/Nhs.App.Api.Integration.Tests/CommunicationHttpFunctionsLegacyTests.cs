@@ -24,18 +24,16 @@ namespace Nhs.App.Api.Integration.Tests
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
-            TestClassSetup(context);
+            var testConfiguration = new TestConfiguration(context);
+            TestClassSetup(testConfiguration);
 
-            var sendToNhsNumbers= context!.Properties["SendToNhsNumbers"]?.ToString()
-                .Split(',')
-                .Select( x => $"\"{x.Trim()}\"")
+            var sendToNhsNumbers= testConfiguration.SendToNhsNumbers
+                .Select( x => $"\"{x}\"")
                 .ToArray();
 
-            _sendToNhsNumbers = $"[{string.Join(',', sendToNhsNumbers ?? Array.Empty<string>())}]";
+            _sendToNhsNumbers = $"[{string.Join(',', sendToNhsNumbers)}]";
 
-            var sendToOdsCode = context!.Properties["SendToOdsCode"]?.ToString();
-
-            _sendToOdsCode = sendToOdsCode == null ? "null" : $"\"{sendToOdsCode}\"";
+            _sendToOdsCode = testConfiguration.SendToOdsCode == null ? "null" : $"\"{testConfiguration.SendToOdsCode}\"";
         }
 
         [TestMethod]
@@ -82,7 +80,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_WithInvalidPayload_Returns400BadRequest(string invalidJson)
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateApiKeyHttpClient();
 
             var httpContent = new StringContent(invalidJson, Encoding.UTF8, "application/json");
 
@@ -97,15 +95,13 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_InvalidApiKey_Returns401Unauthorized()
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
-            httpClient.DefaultRequestHeaders.Remove("x-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
+            using var httpClient = CreateApiKeyHttpClient();
 
             var stringPayload = BuildValidCommunicationPostBody(_sendToNhsNumbers, "null", ValidAppMessageJson);
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await httpClient.PostAsync("communication", httpContent);
+            var response = await httpClient.PostAsync("communication", httpContent, "invalid-key");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -113,7 +109,7 @@ namespace Nhs.App.Api.Integration.Tests
 
         private static async Task CommunicationPost_ValidTest(string validPayload)
         {
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateApiKeyHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
 
