@@ -17,9 +17,7 @@ namespace Nhs.App.Api.Integration.Tests
     [TestClass]
     public class CommunicationHttpFunctionsFhirR4Tests : CommunicationHttpFunctionBase
     {
-        private static string[] _sendToNhsNumbers;
-        private static string _sendToOdsCode;
-
+        private static TestConfiguration _testConfiguration;
         private enum PayloadContentKind
         {
             ContentString,
@@ -68,76 +66,78 @@ namespace Nhs.App.Api.Integration.Tests
         [ClassInitialize]
         public static void ClassInitialise(TestContext context)
         {
-            TestClassSetup(context);
-
-            _sendToNhsNumbers = context!.Properties["SendToNhsNumbers"]?.ToString()
-                .Split(',')
-                .Select(x => x.Trim())
-                .ToArray();
-
-            _sendToOdsCode = context!.Properties["SendToOdsCode"]?.ToString();
+            _testConfiguration = new TestConfiguration(context);
+            TestClassSetup(_testConfiguration);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
             var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
 
-            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
+            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
         public async Task
-            CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+            CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
             var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
 
-            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
+            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
             var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
 
-            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
+            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationFhirR4Post_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
             var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
 
-            await CommunicationFhirR4Post_ValidTest(validPayload, endpoint.Path);
+            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationFhirR4Post_InvalidApiKey_Returns401Unauthorized(EndpointInfo endpoint)
+        public async Task CommunicationPost_InvalidBearerToken_Returns401Unauthorized(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
-            httpClient.DefaultRequestHeaders.Remove("x-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-api-key", "invalid-key");
+            using var httpClient = CreateJwtHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, "invalidAccessToken");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
-            // TODO - NHSO-11327 - enhance this test to check that the output is an OperationOutcome with appropriate properties.
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Forbidden);
+
+            var coding = issue.Details.Coding.Single();
+
+            coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
+            coding.Code.Should().Be("ACCESS_DENIED");
+            coding.Display.ToLowerInvariant().Should().Be("invalid access token");
         }
 
         [TestMethod]
@@ -145,7 +145,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_UnparseablePayload_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent("{ bad Json", Encoding.UTF8, "application/json");
 
@@ -169,7 +169,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidJsonInvalidFhirResourceUnknownResourceType_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateJwtHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             stringPayload = stringPayload.Replace("\"CommunicationRequest\"", "\"UnknownType\"", StringComparison.OrdinalIgnoreCase);
@@ -196,7 +196,7 @@ namespace Nhs.App.Api.Integration.Tests
         public async Task CommunicationPost_ValidJsonInvalidFhirResourceMissingResourceType_Returns400BadRequest(EndpointInfo endpoint)
         {
             // Arrange
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateJwtHttpClient();
 
             var stringPayload = BuildValidRequestBody();
             stringPayload = stringPayload.Replace("\"ResourceType\":", "", StringComparison.OrdinalIgnoreCase);
@@ -219,10 +219,10 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Diagnostics.Should().Contain("Root object has no type indication (resourceType)");
         }
 
-        private static async Task CommunicationFhirR4Post_ValidTest(string validPayload, string endpointPath)
+        private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
         {
             // Arrange, continued.
-            using var httpClient = CreateHttpClient();
+            using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
 
@@ -306,13 +306,13 @@ namespace Nhs.App.Api.Integration.Tests
             {
                 recipients.Add(new ResourceReference
                 {
-                    Identifier = new Identifier(FhirR4IdentifierSystem.PatientsAtOdsCode, _sendToOdsCode),
+                    Identifier = new Identifier(FhirR4IdentifierSystem.PatientsAtOdsCode, _testConfiguration.SendToOdsCode),
                     Type = "group"
                 });
             }
             else
             {
-                recipients.AddRange(_sendToNhsNumbers.Select(nhsNumber => new ResourceReference
+                recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
                 {
                     Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
                     Type = "patient"
