@@ -11,6 +11,7 @@ COPY *.sln Directory.Build.props nuget.config ./
 COPY ./NHSOnline.HttpMocks/NHSOnline.HttpMocks.csproj NHSOnline.HttpMocks/
 COPY ./NHSOnline.HttpMocks.Dev/NHSOnline.HttpMocks.Dev.csproj NHSOnline.HttpMocks.Dev/
 COPY ./NHSOnline.IntegrationTests/NHSOnline.IntegrationTests.csproj NHSOnline.IntegrationTests/
+COPY ./NHSOnline.IntegrationTests.Mongo/NHSOnline.IntegrationTests.Mongo.csproj NHSOnline.IntegrationTests.Mongo/
 COPY ./NHSOnline.IntegrationTests.UI/NHSOnline.IntegrationTests.UI.csproj NHSOnline.IntegrationTests.UI/
 COPY ./NHSOnline.IntegrationTests.Pages/NHSOnline.IntegrationTests.Pages.csproj NHSOnline.IntegrationTests.Pages/
 

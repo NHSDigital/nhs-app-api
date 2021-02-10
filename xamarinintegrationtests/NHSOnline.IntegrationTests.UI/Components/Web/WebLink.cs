@@ -9,15 +9,20 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
     {
         private readonly IWebInteractor _interactor;
         private readonly string _text;
+        private readonly string _searchPrefix;
 
-        private WebLink(IWebInteractor interactor, string text)
+        private WebLink(IWebInteractor interactor, string text, string searchPrefix)
         {
             _interactor = interactor;
             _text = text;
+            _searchPrefix = searchPrefix;
         }
 
         public static WebLink WithText(IWebInteractor interactor, string text)
-            => new WebLink(interactor, text);
+            => new (interactor, text, string.Empty);
+
+        internal static WebLink WithText(IWebInteractor interactor, string text, string searchPrefix)
+            => new (interactor, text, searchPrefix);
 
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _text));
@@ -29,6 +34,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"//a[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+            => By.XPath($"{_searchPrefix}//a[normalize-space(text())={_text.QuoteXPathLiteral()}]");
     }
 }

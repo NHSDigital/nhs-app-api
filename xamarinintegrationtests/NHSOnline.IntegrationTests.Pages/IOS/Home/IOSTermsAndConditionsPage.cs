@@ -18,5 +18,10 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
             page.PageContent.AssertOnPage();
             return page;
         }
+
+        public void AssertPageContent()
+        {
+            PageContent.AssertPageContent();
+        }
     }
 }

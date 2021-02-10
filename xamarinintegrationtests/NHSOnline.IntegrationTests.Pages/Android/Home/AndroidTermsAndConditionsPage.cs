@@ -18,5 +18,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
             page.PageContent.AssertOnPage();
             return page;
         }
+
+        public void AssertPageContent()
+        {
+            PageContent.AssertPageContent();
+        }
+
     }
 }

@@ -6,20 +6,21 @@
 
   <ItemGroup>
     <PackageReference Include="Appium.WebDriver" Version="4.3.1" />
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
     <PackageReference Include="coverlet.collector" Version="3.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageReference Include="WebDriverManager" Version="2.11.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.HttpMocks\NHSOnline.HttpMocks.csproj" />
+    <ProjectReference Include="..\NHSOnline.IntegrationTests.Mongo\NHSOnline.IntegrationTests.Mongo.csproj" />
     <ProjectReference Include="..\NHSOnline.IntegrationTests.Pages\NHSOnline.IntegrationTests.Pages.csproj" />
     <ProjectReference Include="..\NHSOnline.IntegrationTests.UI\NHSOnline.IntegrationTests.UI.csproj" />
   </ItemGroup>

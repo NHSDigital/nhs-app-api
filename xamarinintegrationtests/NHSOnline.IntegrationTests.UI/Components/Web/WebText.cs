@@ -24,10 +24,15 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _tag, _text));
 
+        public WebLink WithChildLink(string linkText)
+            => WebLink.WithText(_interactor, linkText, WholeElementSelector );
+
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"//{_tag}[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+            => By.XPath(WholeElementSelector);
+
+        private string WholeElementSelector => $"//{ _tag}[normalize-space()={_text.QuoteXPathLiteral()}]";
     }
 }
