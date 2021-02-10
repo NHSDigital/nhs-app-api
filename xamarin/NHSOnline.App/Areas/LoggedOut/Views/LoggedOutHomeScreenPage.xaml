@@ -85,18 +85,6 @@
 
                     <BoxView HeightRequest="1" Color="{ StaticResource NhsUkWhite }" />
                 </StackLayout>
-                <StackLayout StyleClass="SymptomsPanel">
-                    <Label Text="How are you feeling today?"
-                           StyleClass="Heading2"
-                           HorizontalOptions="Center"
-                           VerticalOptions="End"
-                           TextColor="{ StaticResource NhsUkWhite }"/>
-                    <controls:Button Text="Check symptoms"
-                                     ButtonColour = "{StaticResource NhsUkWhite}"
-                                     ColourGradient="{ StaticResource NhsUkDarkGrey }"
-                                     TextColour = "Black"
-                                     HorizontalOptions="FillAndExpand"/>
-                </StackLayout>
 
             </StackLayout>
         </AbsoluteLayout>
@@ -120,10 +108,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="StackLayout" Class="SymptomsPanel">
-                <Setter Property="Padding" Value="20, 0, 20, 20" />
-            </Style>
-
             <Style TargetType="StackLayout" Class="LoginPanel">
                 <Setter Property="Margin" Value="0, 0, 0, 40" />
                 <Setter Property="Padding" Value="16,0,16,0" />

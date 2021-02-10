@@ -11,11 +11,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSBanner CovidConditions => IOSBanner.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
 
-        private IOSLabel HowAreYouFeelingText => IOSLabel.WithText(_driver, "How are you feeling today?");
         private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "To access your NHS services");
 
         private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue with NHS login");
-        private IOSButton CheckYourSymptoms => IOSButton.WithText(_driver, "Check symptoms");
 
         private IOSIcon HelpIcon => IOSIcon.WithDescription(_driver, "NHS App help icon");
 
@@ -23,7 +21,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
         public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
         {
             var page = new IOSLoggedOutHomePage(driver);
-            page.HowAreYouFeelingText.AssertVisible();
+            page.AccessServicesText.AssertVisible();
             return page;
         }
 
@@ -32,7 +30,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             CovidConditions.AssertVisible();
             AccessServicesText.AssertVisible();
             ContinueButton.AssertVisible();
-            CheckYourSymptoms.AssertVisible();
             HelpIcon.AssertVisible();
         }
 
