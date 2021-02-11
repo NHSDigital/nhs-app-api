@@ -13,6 +13,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public event EventHandler<EventArgs>? LoginRequested;
         public event EventHandler<EventArgs>? NhsUkCovidConditionsServicePageRequested;
         public event EventHandler<EventArgs>? NhsUkLoginHelpServicePageRequested;
+        public event EventHandler<EventArgs>? BackRequested;
 
         public Func<Task>? ResetAndShowErrorRequested { get; set; }
 
@@ -29,6 +30,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public async Task ResetAndShowError()
         {
             await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequested?.Invoke(this, EventArgs.Empty);
+            return true;
         }
     }
 }

@@ -13,6 +13,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
     {
         private readonly ILogger _logger;
 
+        public event EventHandler<EventArgs>? BackRequested;
+
         public Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         private AsyncCommand<WebNavigatingEventArgs> NavigatingCommand => new AsyncCommand<WebNavigatingEventArgs>(() => Navigating);
 
@@ -86,6 +88,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
 
             WebView.Navigating += OnWebViewOnNavigating;
             WebView.GoToUri(uri);
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequested?.Invoke(this, EventArgs.Empty);
+            return true;
         }
     }
 }

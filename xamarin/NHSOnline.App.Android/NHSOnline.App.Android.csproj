@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyServices\AndroidLifecycle.cs" />
     <Compile Include="DependencyServices\AndroidCookies.cs" />
     <Compile Include="DependencyServices\AndroidHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
@@ -127,6 +128,5 @@
     <AndroidResource Include="Resources\xml\network_security_config.xml" Condition="'$(NhsAppEnableStubs)' != 'true'" />
     <AndroidResource Include="Resources\xml\network_security_config_stubs.xml" Condition="'$(NhsAppEnableStubs)' == 'true'" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

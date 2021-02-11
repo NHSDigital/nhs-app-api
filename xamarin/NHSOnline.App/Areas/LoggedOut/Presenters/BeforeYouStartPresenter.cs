@@ -40,6 +40,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             view.NhsUkCovidServicePageRequested += LoadCovidUrl;
             view.NhsUkConditionsServicePageRequested += LoadConditionsUrl;
             view.NhsUkOneOneOneServicePageRequested += LoadOneOneOneUrl;
+            view.BackRequested += BackRequested;
         }
 
         private async void ViewOnLoginRequested(object sender, EventArgs e)
@@ -72,6 +73,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger.LogInformation("Accessing 111 url");
             await _appBrowserTab.OpenAppBrowserTab(_nhsExternalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
+        }
+
+        private async void BackRequested(object sender, EventArgs e)
+        {
+            _logger.LogInformation("Back Requested");
+            await _view.Navigation.PopAsync().PreserveThreadContext();
         }
     }
 }

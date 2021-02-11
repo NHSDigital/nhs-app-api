@@ -12,6 +12,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public event EventHandler<EventArgs>? NhsUkCovidServicePageRequested;
         public event EventHandler<EventArgs>? NhsUkConditionsServicePageRequested;
         public event EventHandler<EventArgs>? NhsUkOneOneOneServicePageRequested;
+        public event EventHandler<EventArgs>? BackRequested;
 
         public BeforeYouStartPage()
         {
@@ -22,5 +23,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public ICommand NhsUkCovidServiceCommand => new Command(() => NhsUkCovidServicePageRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkConditionsCommand => new Command(() => NhsUkConditionsServicePageRequested?.Invoke(this, EventArgs.Empty));
         public ICommand NhsUkOneOneOneServiceCommand => new Command(() => NhsUkOneOneOneServicePageRequested?.Invoke(this, EventArgs.Empty));
+
+        protected override bool OnBackButtonPressed()
+        {
+            BackRequested?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
     }
 }

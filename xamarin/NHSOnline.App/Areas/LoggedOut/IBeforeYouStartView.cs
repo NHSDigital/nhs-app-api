@@ -9,6 +9,7 @@ namespace NHSOnline.App.Areas.LoggedOut
         event EventHandler<EventArgs> NhsUkCovidServicePageRequested;
         event EventHandler<EventArgs> NhsUkConditionsServicePageRequested;
         event EventHandler<EventArgs> NhsUkOneOneOneServicePageRequested;
+        event EventHandler<EventArgs> BackRequested;
 
         INavigation Navigation { get; }
     }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.LoggedOut.Models;
 using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
+using NHSOnline.App.DependencyServices;
 using NHSOnline.App.NhsLogin;
 using NHSOnline.App.Services;
 using Xamarin.Essentials;
@@ -19,6 +20,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
+        private readonly ILifecycle _lifecycle;
 
         public LoggedOutHomeScreenPresenter(
             ILoggedOutHomeScreenView view,
@@ -26,7 +28,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
-            INhsExternalServicesConfiguration nhsExternalServicesConfiguration)
+            INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
+            ILifecycle lifecycle)
         {
             _view = view;
             _logger = logger;
@@ -34,10 +37,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
+            _lifecycle = lifecycle;
 
             view.LoginRequested += ViewOnLoginRequested;
             view.NhsUkCovidConditionsServicePageRequested += LoadCovidConditionsUrl;
             view.NhsUkLoginHelpServicePageRequested += LoadLoginHelpUrl;
+            view.BackRequested += BackRequested;
 
             view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
         }
@@ -54,6 +59,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             {
                 await ShowNhsLoginPage().PreserveThreadContext();
             }
+        }
+
+        private void BackRequested(object sender, EventArgs e)
+        {
+            _logger.LogInformation("Back Requested");
+            _lifecycle.CloseApplication();
         }
 
         private async Task ShowBeforeYouStartPage()

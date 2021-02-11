@@ -45,11 +45,13 @@
   <ItemGroup>
     <Compile Include="DependencyServices\IosHttpMessageHandlerFactory.cs" />
     <Compile Include="DependencyServices\IosCookies.cs" />
+    <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\BeforeYouStartPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />

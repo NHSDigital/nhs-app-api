@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
 using OpenQA.Selenium;
@@ -63,6 +64,18 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         }
 
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
+
+        public void SwipeBack()
+        {
+            _driver.ExecuteScript("mobile: dragFromToForDuration", new Dictionary<string, string>
+            {
+                { "duration", "3" },
+                { "fromX", "0" },
+                { "fromY", "50" },
+                { "toX", "101" },
+                { "toY", "50" }
+            });
+        }
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

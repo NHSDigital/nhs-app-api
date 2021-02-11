@@ -6,6 +6,8 @@ namespace NHSOnline.App.Areas.LoggedOut
 {
     internal interface INhsLoginView
     {
+        event EventHandler<EventArgs> BackRequested;
+
         Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         Func<Task>? NavigationFailed { get; set; }
 

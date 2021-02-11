@@ -12,7 +12,8 @@ namespace NHSOnline.App.DependencyServices
             return services
                 .AddTransient(_ => DependencyService.Get<ICookies>())
                 .AddTransient(_ => DependencyService.Get<IPrimaryHttpMessageHandlerFactory>())
-                .AddTransient(_ => DependencyService.Get<INativeLog>());
+                .AddTransient(_ => DependencyService.Get<INativeLog>())
+                .AddTransient(_ => DependencyService.Get<ILifecycle>());
         }
     }
 }

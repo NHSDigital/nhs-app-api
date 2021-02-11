@@ -87,6 +87,46 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
+        public void APatientCanUseTheBackButtonToGoBackToTheHomePageFromNhsLoginAndroid(IAndroidDriverWrapper driver)
+        {
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver);
+
+            driver.PressBackButton();
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppIOSTest]
+        public void APatientCanUseTheBackButtonToGoBackToTheHomePageFromNhsLoginIos(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
         public void APatientWithProofLevelNineCanLoginAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new EmisPatient()

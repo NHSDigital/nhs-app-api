@@ -46,6 +46,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _loginState = nhsLoginService.BeginLogin(_model.PkceCodes);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
+            _view.BackRequested += BackRequested;
         }
 
         private void AttachEventHandlers()
@@ -138,6 +139,12 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             webNavigatingEventArgs.Cancel = true;
             await _appBrowserTab.OpenAppBrowserTab(url).PreserveThreadContext();
+        }
+
+        private async void BackRequested(object sender, EventArgs e)
+        {
+            _logger.LogInformation("Back Requested");
+            await _view.Navigation.PopAsync().PreserveThreadContext();
         }
     }
 }
