@@ -22,7 +22,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             _webViewLocatorStrategy = webViewLocatorStrategy;
 
             var contexts = contextAwareDriver.Contexts;
-            _nativeContextName = contexts.FirstOrDefault(context => context.Contains("native", StringComparison.OrdinalIgnoreCase));
+            _nativeContextName = contexts
+                .FirstOrDefault(context => context.Contains("native", StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException("No native context found");
             _currentDriverContext = CurrentDriverContext.Create(this);
         }
 

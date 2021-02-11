@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         private readonly WebViewContextsCache _contextsCache = new WebViewContextsCache();
 
         private readonly AndroidDriver<AndroidElement> _driver;
-        private string? _webContextName = null;
+        private string? _webContextName;
 
         public AndroidWebViewLocatorStrategy(AndroidDriver<AndroidElement> driver) => _driver = driver;
 

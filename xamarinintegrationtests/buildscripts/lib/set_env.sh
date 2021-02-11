@@ -11,8 +11,8 @@ export DOCKER_NETWORK="${DOCKER_PROJECT_NAME}_default"
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
 export DOCKER_TAG=${DOCKER_TAG:-latest}
 
-export DOCKER_IMAGE_INTTESTS_BUILD="nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1"
-export DOCKER_IMAGE_HTTPMOCKS_RUNTIME="nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1"
+export DOCKER_IMAGE_INTTESTS_BUILD="nhsapp.azurecr.io/nhsonline-dotnetcore-build:5.0"
+export DOCKER_IMAGE_HTTPMOCKS_RUNTIME="nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:5.0"
 export DOCKER_IMAGE_BROWSERSTACK_LOCAL=${DOCKER_IMAGE_BROWSERSTACK_LOCAL:-nhsapp.azurecr.io/nhsonline-browserstack-local:latest}
 
 export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-com.nhs.online.nhsonline.browserstack.apk}

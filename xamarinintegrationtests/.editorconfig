@@ -598,5 +598,8 @@ dotnet_diagnostic.CA2246.severity = error
 # CA2248: Provide correct enum argument to Enum.HasFlag
 dotnet_diagnostic.CA2248.severity = error
 
+# CA5403: Do not hard-code certificate
+dotnet_diagnostic.CA5403.severity = none
+
 # CA5369: Use XmlReader for Deserialize
 dotnet_diagnostic.CA5369.severity = error

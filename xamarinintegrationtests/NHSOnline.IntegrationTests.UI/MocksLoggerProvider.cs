@@ -57,11 +57,11 @@ namespace NHSOnline.IntegrationTests.UI
                 var logBuilder = new StringBuilder();
 
                 logBuilder.Append(DateTime.UtcNow.ToString("s", CultureInfo.InvariantCulture));
-                logBuilder.Append(" ");
+                logBuilder.Append(' ');
                 logBuilder.Append(name);
-                logBuilder.Append(" ");
+                logBuilder.Append(' ');
                 logBuilder.Append(logLevel.ToString());
-                logBuilder.Append(" ");
+                logBuilder.Append(' ');
 
                 if (!string.IsNullOrEmpty(message))
                 {

@@ -13,7 +13,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
         public string AppiumVersion { get; set; } = "1.19.1";
         public string Project { get; set; } = "NHSApp";
         public string Build { get; set; } = $"{Dns.GetHostName()}-local";
-        public bool EnableNetworkLogs { get; set; } = false;
+        public bool EnableNetworkLogs { get; set; }
 
         internal void SetCapabilities(AppiumOptions options)
         {
