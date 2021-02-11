@@ -34,13 +34,19 @@ namespace NHSOnline.IntegrationTests.UI
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: A new session could not be created\. Details: session not created: This version of ChromeDriver only supports Chrome version",
             RegexOptions.Compiled);
 
+        // NHSO-13172-Javascript failed to load
+        private static readonly Regex JavascriptLoadFailure = new Regex(
+            @"Assert\.IsTrue failed\. window\.nhsAppPageLoadComplete was not found to be true",
+            RegexOptions.Compiled);
+
         private static readonly List<Regex> RetryExceptionMessageRegexes = new List<Regex>
         {
             InvalidServiceWebInspectorMessage,
             UnableToConnectToRenderer,
             AdbErrorListenerNotFound,
             DeviceTimeSkew,
-            IncorrectChromeVersion
+            IncorrectChromeVersion,
+            JavascriptLoadFailure
         };
 
         internal static bool ShouldRetry(this TestResult result, TestLogs logs)
@@ -53,7 +59,7 @@ namespace NHSOnline.IntegrationTests.UI
 
             var exceptionType = exception.GetType();
             logs.Info("TestFailureException type={0}; Message={1}", exceptionType.FullName ?? exceptionType.Name, exception.Message);
-            
+
             return RetryExceptionMessageRegexes.Any(IsMatch);
 
             bool IsMatch(Regex regex) => regex.IsMatch(exception.Message);
