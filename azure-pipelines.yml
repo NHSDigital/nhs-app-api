@@ -179,13 +179,14 @@ stages:
     jobs:
       - template: .azuredevops/templates/xamarin-android-client-build-job.yml
 
-      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
-        parameters:
-          configuration: 'Staging - Release'
-          apkFilename: 'com.nhs.online.nhsonline.staging.apk'
-          keyStoreFile: AndroidSigningKeyStore
-          apksignerKeystorePassword: '$(android.key.store.password)'
-          keystoreAlias: 'playconsoleuploadkey'
+      - ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+        - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+          parameters:
+            configuration: 'Staging - Release'
+            apkFilename: 'com.nhs.online.nhsonline.staging.apk'
+            keyStoreFile: AndroidSigningKeyStore
+            apksignerKeystorePassword: '$(android.key.store.password)'
+            keystoreAlias: 'playconsoleuploadkey'
 
   - stage: xamarin_ios
     displayName: Xamarin iOS Client
@@ -193,12 +194,13 @@ stages:
     jobs:
       - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
 
-      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
-        parameters:
-          configuration: 'Staging - Release'
-          certSecureFile: iOSProductionCertificate.p12
-          certPwd: '$(ios.production.certificate.password)'
-          provProfileSecureFile: iOSDemo.mobileprovision
+      - ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+        - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+          parameters:
+            configuration: 'Staging - Release'
+            certSecureFile: iOSProductionCertificate.p12
+            certPwd: '$(ios.production.certificate.password)'
+            provProfileSecureFile: iOSDemo.mobileprovision
 
   - stage: android
     displayName: Android Client
