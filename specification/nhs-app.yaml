@@ -102,7 +102,7 @@ paths:
 
         Recipients are specified by NHS Number. A single request to this endpoint can send an identical message to between 1 and 100 distinct NHS Numbers.
 
-        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is currently limited to 1000 characters, including any markdown characters and embedded hyperlinks. We are considering increasing this limit - this feature request can be tracked on our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/suggestions/158046/nhs-app-api-allow-sending-inapp-messages-larger-than-1000-characters-in-length).
+        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
       requestBody:
@@ -366,7 +366,7 @@ paths:
 
         This endpoint allows you to specify the content that will appear in the in-app message. It does not allow you to specify the content that will appear in the associated push notification. The content of the push notification will always default to standardised text that currently reads "You have a new message. This may contain important information". When a recipient taps the native notification, the NHS App will open on the in-app messaging inbox page.
 
-        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is currently limited to 1000 characters, including any markdown characters and embedded hyperlinks. We are considering increasing this limit - this feature request can be tracked on our [interactive product backlog](https://nhs-digital-api-management.featureupvote.com/suggestions/158046/nhs-app-api-allow-sending-inapp-messages-larger-than-1000-characters-in-length).
+        We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
         The body of requests made to this endpoint are instances of [HL7 FHIR R4 CommunicationRequest](https://www.hl7.org/fhir/communicationrequest.html) resources. This schema documentation describes which fields on that resource we require and support. The API is tolerant of (but will silently ignore) any additionally supplied optional fields. For example, we do not currently honour the [doNotPerform](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.doNotPerform) or [priority](https://www.hl7.org/fhir/communicationrequest-definitions.html#CommunicationRequest.priority) fields.
       requestBody:
