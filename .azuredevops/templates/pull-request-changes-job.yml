@@ -1,0 +1,33 @@
+jobs:
+  - job: pr_changes
+    displayName: Determine PR Changes
+    steps:
+      - task: Bash@3
+        name: pr_changes
+        displayName: Determine Changes
+        inputs:
+          targetType: 'inline'
+          script: |
+            set -e
+
+            COMMIT_IDS=$(
+              az repos pr show --id ${SYSTEM_PULLREQUEST_PULLREQUESTID} | \
+              jq '{ "source": .lastMergeSourceCommit.commitId, "target": .lastMergeTargetCommit.commitId }')
+            SOURCE_COMMIT_ID=$(echo "$COMMIT_IDS" | jq -r '.source')
+            TARGET_COMMIT_ID=$(echo "$COMMIT_IDS" | jq -r '.target')
+
+            CHANGED_FILES=$(git diff --name-only "${SOURCE_COMMIT_ID}" "${TARGET_COMMIT_ID}")
+
+            echo "Changed Files:"
+            echo "$CHANGED_FILES"
+            echo
+
+            XAMARIN_CHANGES=False
+            if [[ "$CHANGED_FILES" =~ xamarin ]]; then
+              XAMARIN_CHANGES=True
+            fi
+            echo "Xamarin changes: $XAMARIN_CHANGES"
+            echo "##vso[task.setvariable variable=xamarin;isOutput=true]$XAMARIN_CHANGES"
+
+        env:
+          AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)

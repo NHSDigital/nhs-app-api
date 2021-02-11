@@ -161,6 +161,13 @@ variables:
     int.tests.run.native.ios.long-running: ${{ parameters.intTestsRuniOSNativeLongRunning }}
 
 stages:
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - stage: pr_changes
+      displayName: Determine PR Changes
+      dependsOn:
+      jobs:
+        - template: .azuredevops/templates/pull-request-changes-job.yml
+
   - stage: backend
     displayName: Backend
     dependsOn:
@@ -258,14 +265,18 @@ stages:
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
 
-  - ${{ if eq(variables['int.tests.run.native.xamarin'], 'true') }}:
+  - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
     - stage: xamarin_integration_tests
       displayName: Xamarin Integration Tests
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
       dependsOn:
         - web
         - backend
         - xamarin_android
         - xamarin_ios
+        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+          - pr_changes
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
