@@ -19,7 +19,7 @@
         </div>
 
         <div v-if="showRepeatCourses" class="break">
-          <h2 class="nhsuk-u-padding-bottom-3">
+          <h2 ref="repeatPrescriptions" class="nhsuk-u-padding-bottom-3">
             {{ $t('prescriptions.repeatCourses.currentlyAvailableToOrder') }}</h2>
           <div :class="selectMedicationErrorStyle">
             <error-message v-if="error && !courseSelectionValid" id="error-type">
@@ -58,6 +58,7 @@
               {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
             </error-message>
             <generic-text-area id="specialRequest"
+                               ref="specialRequest"
                                v-model="specialRequest"
                                :required="(specialRequestNecessity === 'Mandatory')"
                                :error.sync="showMandatoryReasonError"
@@ -131,6 +132,7 @@ import { CLINICAL_ABBREVIATIONS_URL } from '@/router/externalLinks';
 import { EventBus, UPDATE_HEADER, UPDATE_TITLE, FOCUS_ERROR_ELEMENT } from '@/services/event-bus';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import showShutterPage from '@/lib/proxy/shutter';
+import vueScrollTo from 'vue-scrollto';
 
 const loadData = async (store) => {
   if (!store.state.repeatPrescriptionCourses.hasLoaded) {
@@ -275,8 +277,16 @@ export default {
     if (this.$route.query.hr) {
       this.$store.dispatch('session/setRetry', true);
     }
-
     await loadData(this.$store, this.$t);
+  },
+  mounted() {
+    if (this.$route.hash) {
+      const ref = this.$refs[this.$route.hash.substring(1)];
+      if (ref) {
+        const element = ref.$el || ref;
+        vueScrollTo.scrollTo(element, 250, { easing: vueScrollTo['ease-in'] });
+      }
+    }
   },
   methods: {
     validate() {

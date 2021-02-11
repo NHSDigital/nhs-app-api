@@ -22,8 +22,7 @@
       {{ displayUrl }}</p>
     <p v-if="pharmacy.telephoneNumber" id="pharmacy-telephone-number"
        class="nhsuk-u-margin-bottom-3">
-      {{ $t('nominatedPharmacy.telephoneLabel') +
-        pharmacy.telephoneNumber }}</p>
+      {{ pharmacy.telephoneNumber }}</p>
     <p v-if="pharmacy.distance !== null" id="pharmacy-distance-away">
       {{ $t('nominatedPharmacy.searchResults.distanceAway').
         replace('{distance}', pharmacy.distance) }}

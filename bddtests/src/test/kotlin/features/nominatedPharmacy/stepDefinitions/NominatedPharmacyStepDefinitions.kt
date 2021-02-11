@@ -167,7 +167,7 @@ class NominatedPharmacyStepDefinitions {
         if (phoneNumber != null) {
             Assert.assertEquals(
                     "Phone number is not correct",
-                    "Telephone: " + phoneNumber, nominatedPharmacyChangeSuccessPage.pharmacyPhoneNumber.text)
+                    phoneNumber, nominatedPharmacyChangeSuccessPage.pharmacyPhoneNumber.text)
         }
     }
 
@@ -240,7 +240,7 @@ class NominatedPharmacyStepDefinitions {
                     dataItem.Address1, searchResults[index].address)
 
             val phoneNumberData = dataItem.primaryPhone()
-            val phoneNumber = "Telephone: $phoneNumberData"
+            val phoneNumber = "$phoneNumberData"
             if (phoneNumberData != null) {
                 Assert.assertEquals(
                         "Phone number is not correct",
@@ -289,7 +289,7 @@ class NominatedPharmacyStepDefinitions {
         if (phoneNumber != null) {
             Assert.assertEquals(
                     "Phone number is not correct",
-                    "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
+                    phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
     }
 

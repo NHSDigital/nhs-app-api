@@ -1,44 +1,49 @@
 <template>
   <div v-if="showTemplate">
-    <div data-purpose="info">
-      <p class="nhsuk-body nhsuk-u-padding-bottom-3">
-        {{ $t('prescriptions.confirmDetails.checkYourDetails') }}
+    <p class="nhsuk-u-margin-bottom-2"><strong>
+      {{ $t('prescriptions.confirmDetails.medicines') }}</strong></p>
+    <div v-for="selectedPrescription in selectedPrescriptions"
+         :key="selectedPrescription.courseId"
+         data-purpose="selected-prescription">
+      <p class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
+        {{ selectedPrescription.name }}</p>
+      <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
+    </div>
+    <p><a id="changeRepeatPrescription"
+          :aria-label="$t('prescriptions.confirmDetails.changeMedicines')"
+          :href="coursesPageRepeatPrescription"
+          @click.prevent="changePrescriptions">
+      {{ $t('prescriptions.confirmDetails.change') }}
+    </a>
+    </p>
+    <hr>
+    <div v-if="specialRequestNecessity !== 'NotAllowed'">
+      <p class="nhsuk-u-margin-bottom-2"><strong>
+        {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong></p>
+      <p v-if="specialRequest"
+         id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
+      </p>
+      <p v-else id="specialRequestText">
+        {{ $t('prescriptions.confirmDetails.specialRequestsNone') }}
       </p>
     </div>
-    <CardGroup role="list" class="nhsuk-grid-row">
-      <CardGroupItem class="nhsuk-grid-column-full">
-        <Card>
-          <div v-for="selectedPrescription in selectedPrescriptions"
-               :key="selectedPrescription.courseId"
-               data-purpose="selected-prescription">
-            <p><strong class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
-              {{ selectedPrescription.name }}</strong></p>
-            <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
-          </div>
-          <hr>
-          <div v-if="specialRequestNecessity !== 'NotAllowed'">
-            <p><strong class="nhsuk-u-margin-bottom-0">
-              {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong></p>
-            <p v-if="specialRequest"
-               id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
-            </p>
-            <p v-else id="specialRequestText">
-              {{ $t('prescriptions.confirmDetails.specialRequestsNone') }}
-            </p>
-          </div>
-          <sjr-if journey="nominatedPharmacy">
-            <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
-              <hr>
-              <p class="nhsuk-u-margin-bottom-0">
-                <strong>{{ pharmacyHeader }}</strong>
-              </p>
-              <pharmacy-summary id="pharmacy-summary"
-                                :pharmacy="nominatedPharmacy"/>
-            </div>
-          </sjr-if>
-        </Card>
-      </CardGroupItem>
-    </CardGroup>
+    <p><a id="changeSpecialRequest"
+          :aria-label="$t('prescriptions.confirmDetails.changeNotes')"
+          :href="coursesPageSpecialRequest"
+          @click.prevent="changeSpecialRequest">
+      {{ $t('prescriptions.confirmDetails.change') }}
+    </a>
+    </p>
+    <sjr-if journey="nominatedPharmacy">
+      <div v-if="!hasNoNominatedPharmacy && !isProxying" id="my-nominated-pharmacy">
+        <hr>
+        <p class="nhsuk-u-margin-bottom-0">
+          <strong>{{ pharmacyHeader }}</strong>
+        </p>
+        <pharmacy-summary id="pharmacy-summary"
+                          :pharmacy="nominatedPharmacy"/>
+      </div>
+    </sjr-if>
     <generic-button id="btn_confirm_and_order_prescription"
                     class="nhsuk-button"
                     click-delay="medium"
@@ -48,7 +53,7 @@
     <div class="nhsuk-body-m">
       <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                               :path="prescriptionRepeatCoursesPath"
-                              :button-text="'prescriptions.confirmDetails.changeThisPrescription'"
+                              :button-text="'prescriptions.confirmDetails.back'"
                               @clickAndPrevent="backToPrescriptionsClicked"/>
     </div>
   </div>
@@ -68,9 +73,6 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH,
   PRESCRIPTIONS_ORDER_SUCCESS_PATH,
 } from '@/router/paths';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import Card from '@/components/widgets/card/Card';
 
 const onSubmit = async (store, selectedCourseIds, specialRequest) => {
   const repeatPrescriptionOrder = {
@@ -88,9 +90,6 @@ export default {
     GenericButton,
     PharmacySummary,
     SjrIf,
-    Card,
-    CardGroupItem,
-    CardGroup,
   },
   data() {
     return {
@@ -98,6 +97,9 @@ export default {
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
       nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
+      coursesPageRepeatPrescription: `${PRESCRIPTION_REPEAT_COURSES_PATH}#repeatPrescriptions`,
+      coursesPageSpecialRequest: `${PRESCRIPTION_REPEAT_COURSES_PATH}#specialRequest`,
+      isProxying: this.$store.getters['session/isProxying'],
     };
   },
   computed: {
@@ -148,6 +150,12 @@ export default {
     },
     backToPrescriptionsClicked() {
       redirectTo(this, this.prescriptionRepeatCoursesPath);
+    },
+    changePrescriptions() {
+      redirectTo(this, this.coursesPageRepeatPrescription);
+    },
+    changeSpecialRequest() {
+      redirectTo(this, this.coursesPageSpecialRequest);
     },
   },
 };

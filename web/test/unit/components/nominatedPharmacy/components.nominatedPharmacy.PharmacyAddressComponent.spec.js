@@ -134,7 +134,7 @@ describe('pharmacy address component', () => {
         expect(city.text()).toEqual('city');
         expect(county.text()).toEqual('county');
         expect(postcode.text()).toEqual('postcode');
-        expect(telephoneNumber.text()).toEqual('Telephone: 666668');
+        expect(telephoneNumber.text()).toEqual('666668');
         expect(distanceAway.text()).toEqual('50 miles away');
       });
     });
@@ -184,7 +184,7 @@ describe('pharmacy address component', () => {
       });
 
       it('will have the correct values', () => {
-        expect(telephoneNumber.text()).toEqual('Telephone: 666668');
+        expect(telephoneNumber.text()).toEqual('666668');
         expect(url.text()).toEqual('www.testurl.com');
       });
     });

@@ -413,7 +413,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         if (myNominatedPharmacy.primaryPhone() != null) {
             Assert.assertEquals(
                     "Nominated Pharmacy phone number is not correct",
-                    "Telephone: " + myNominatedPharmacy.primaryPhone(), component.pharmacyPhoneNumber.text)
+                    myNominatedPharmacy.primaryPhone(), component.pharmacyPhoneNumber.text)
         }
     }
 

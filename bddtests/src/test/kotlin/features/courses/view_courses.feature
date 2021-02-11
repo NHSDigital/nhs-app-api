@@ -15,6 +15,8 @@ Feature: View Courses Frontend
     And I navigate to prescriptions
     When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
+    And I click 'Help with medical abbreviations'
+    And I see the medical abbreviations help link
     Examples:
       | GP System |
       | EMIS      |
@@ -166,7 +168,7 @@ Feature: View Courses Frontend
     And I navigate to prescriptions
     And I select 5 repeatable prescriptions out of 5 available
     And I click Continue on the Order a repeat prescription page
-    When I click 'Change this repeat prescription' on the Prescription confirmation page
+    When I click the Back link
     Then I see my previously selected repeat prescriptions selected
     Examples:
       | GP System |
@@ -187,8 +189,10 @@ Feature: View Courses Frontend
     And I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     And I see the entered special request text
-    When I click 'Change this repeat prescription' on the Prescription confirmation page
+    When I click 'Change' for the prescriptions on the Prescription confirmation page
     And I select 1 additional repeat prescriptions
+    And I click Continue on the Order a repeat prescription page
+    And I click 'Change' for the special request on the Prescription confirmation page
     And I enter text "Note I'm allergic to paracetamol." for special request
     And I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
@@ -424,13 +428,3 @@ Feature: View Courses Frontend
       | VISION    |
       | MICROTEST |
 
-  Scenario: A user can get help with medical abbreviations from the order a repeat prescription page
-    Given I am a EMIS patient
-    And special request text has been enabled and is 'Optional'
-    And I have historic prescriptions
-    And there are 5 repeatable prescriptions available
-    And I am logged in
-    And I navigate to prescriptions
-    When I click 'Order a new repeat prescription'
-    And I click 'Help with medical abbreviations'
-    Then I see the medical abbreviations help link

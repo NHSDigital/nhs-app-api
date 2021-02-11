@@ -4,20 +4,18 @@ import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
-import org.openqa.selenium.Keys
-import pages.nominatedPharmacy.PharmacyDetailComponent
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.asciiText
-import pages.sendKeys
+import pages.nominatedPharmacy.PharmacyDetailComponent
 
 const val HEADER_RETRIES = 20
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val title by lazy {
         HybridPageElement(
-                "//h1[normalize-space(text())='Confirm prescription']",
-                "//h1[normalize-space(text())='Confirm prescription']",
+                "//h1[normalize-space(text())='Check your prescription details before you order']",
+                "//h1[normalize-space(text())='Check your prescription details before you order']",
                 null,
                 null,
                 this,
@@ -34,9 +32,12 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     )
 
     val changeThisPrescriptionButton = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(), 'Change this prescription')]",
-            androidLocator = "//button[contains(text(), 'Change this prescription')]",
-            iOSLocator = "//button[contains(text(), 'Change this prescription')]",
+            webDesktopLocator = "//a[@id='changeRepeatPrescription']",
+            page = this
+    )
+
+    val changeThisSpecialRequest = HybridPageElement(
+            webDesktopLocator = "//a[@id='changeSpecialRequest']",
             page = this
     )
 
@@ -84,7 +85,11 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     }
 
     fun clickChangeThisPrescriptionButton() {
-        changeThisPrescriptionButton.sendKeys(Keys.ENTER)
+        changeThisPrescriptionButton.click()
+    }
+
+    fun clickChangeThisSpecialRequest() {
+        changeThisPrescriptionButton.click()
     }
 
     fun errorSendingOrderErrorIsVisible(): Boolean {

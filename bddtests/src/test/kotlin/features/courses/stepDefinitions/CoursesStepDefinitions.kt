@@ -197,9 +197,14 @@ open class CoursesStepDefinitions {
         repeatPrescriptions.clickMedicalAbbreviationsLabel()
     }
 
-    @When("^I click 'Change this repeat prescription' on the Prescription confirmation page$")
+    @When("^I click 'Change' for the prescriptions on the Prescription confirmation page$")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionsOrderPage.clickChangeThisPrescriptionButton()
+    }
+
+    @When("^I click 'Change' for the special request on the Prescription confirmation page$")
+    fun iClickChangeThisSpecialRequestOnThePrescriptionConfirmationPage() {
+        confirmRepeatPrescriptionsOrderPage.clickChangeThisSpecialRequest()
     }
 
     @When("^I select (\\d+) additional repeat prescriptions$")
@@ -255,7 +260,7 @@ open class CoursesStepDefinitions {
     @Then("^I see the default special request text$")
     fun iSeeTheDefaultSpecialRequestText() {
         confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
-        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(), containsString("None"))
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(), containsString("No notes added"))
     }
 
     @Then("^I see the special request text area$")
