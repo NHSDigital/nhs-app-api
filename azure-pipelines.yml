@@ -183,6 +183,10 @@ stages:
   - stage: xamarin_android
     displayName: Xamarin Android Client
     dependsOn:
+      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        - pr_changes
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
     jobs:
       - template: .azuredevops/templates/xamarin-android-client-build-job.yml
 
@@ -198,6 +202,10 @@ stages:
   - stage: xamarin_ios
     displayName: Xamarin iOS Client
     dependsOn:
+      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        - pr_changes
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
     jobs:
       - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
 
@@ -212,12 +220,20 @@ stages:
   - stage: android
     displayName: Android Client
     dependsOn:
+      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        - pr_changes
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.android'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
     jobs:
       - template: .azuredevops/templates/build-and-test-android-client-job.yml
 
   - stage: ios
     displayName: iOS Client
     dependsOn:
+      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        - pr_changes
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.ios'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
     jobs:
       - template: .azuredevops/templates/ios-client-test-job.yml
       - template: .azuredevops/templates/ios-client-build-setup.yml

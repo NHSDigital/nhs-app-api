@@ -12,22 +12,53 @@ jobs:
 
             COMMIT_IDS=$(
               az repos pr show --id ${SYSTEM_PULLREQUEST_PULLREQUESTID} | \
-              jq '{ "source": .lastMergeSourceCommit.commitId, "target": .lastMergeTargetCommit.commitId }')
-            SOURCE_COMMIT_ID=$(echo "$COMMIT_IDS" | jq -r '.source')
+              jq '{ "merge": .lastMergeCommit.commitId, "target": .lastMergeTargetCommit.commitId }')
+            MERGE_COMMIT_ID=$(echo "$COMMIT_IDS" | jq -r '.merge')
             TARGET_COMMIT_ID=$(echo "$COMMIT_IDS" | jq -r '.target')
 
-            CHANGED_FILES=$(git diff --name-only "${SOURCE_COMMIT_ID}" "${TARGET_COMMIT_ID}")
+            CHANGED_FILES=$(git diff --name-only "${TARGET_COMMIT_ID}" "${MERGE_COMMIT_ID}")
 
             echo "Changed Files:"
             echo "$CHANGED_FILES"
             echo
 
-            XAMARIN_CHANGES=False
-            if [[ "$CHANGED_FILES" =~ xamarin ]]; then
-              XAMARIN_CHANGES=True
-            fi
-            echo "Xamarin changes: $XAMARIN_CHANGES"
-            echo "##vso[task.setvariable variable=xamarin;isOutput=true]$XAMARIN_CHANGES"
+            function set_variable_if_changes_match() {
+              local VAR_NAME="${1}"
+              local CHANGES=False
+
+              shift
+
+              while (( "$#" )); do
+                if [[ "${CHANGED_FILES}" =~ ${1} ]]; then
+                  CHANGES=True
+                fi
+                shift
+              done
+
+              echo "${VAR_NAME} changes: ${CHANGES}"
+              echo "##vso[task.setvariable variable=${VAR_NAME};isOutput=true]${CHANGES}"
+
+              if [[ "$CHANGES" == "True" ]]; then
+                echo "##vso[build.addbuildtag]${VAR_NAME}"
+              fi
+            }
+
+            # Bash regular expressions match ^ as start of string, this matches up to the start of line
+            START_OF_LINE_RE='^(.+[
+            ])?'
+
+            PIPELINE_RE="${START_OF_LINE_RE}"'azure-pipelines\.yml'
+            PIPELINE_TEMPLATES_RE="${START_OF_LINE_RE}"'.azuredevops/templates/'
+            set_variable_if_changes_match 'pipeline' "${PIPELINE_RE}" "${PIPELINE_TEMPLATES_RE}"
+
+            XAMARIN_RE='xamarin'
+            set_variable_if_changes_match 'xamarin' "${XAMARIN_RE}"
+
+            IOS_RE="${START_OF_LINE_RE}"'ios/'
+            set_variable_if_changes_match 'ios' "${IOS_RE}"
+
+            ANDROID_RE="${START_OF_LINE_RE}"'android/'
+            set_variable_if_changes_match 'android' "${ANDROID_RE}"
 
         env:
           AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
