@@ -65,3 +65,11 @@ You will be prompted for parameters when needed. Alternatively you can follow th
 ## Secrets
 
 Secrets required for running the app locally are stored in Keybase (`team/nhsonline/development_secrets`). These are automatically copied to your home directory (`~/.nhsonline/secrets`) when the app is run using make if the keybase filesystem integration is working. If it is not an error will be reported and the files should be manually copied across.
+
+## Docker
+
+Locate the following file in Keybase: `team/nhsonline/docker-login.sh`.
+
+Copy the file to the root of your local repository and then run the script. 
+
+This will need to be done only once at the beginning of your set up to prevent an "Authentification Required" error when building.
