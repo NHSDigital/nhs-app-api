@@ -51,8 +51,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             _settings = new ConfigurationSettings(CookieDomain,
                 PrescriptionsDefaultLastNumberMonthsToDisplay,
-                DefaultHttpTimeoutSeconds,
                 DefaultSessionExpiryMinutes,
+                DefaultHttpTimeoutSeconds,
                 MinimumAppAge,
                 MinimumLinkageAge);
 

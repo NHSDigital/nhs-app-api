@@ -174,8 +174,7 @@ namespace NHSOnline.Backend.CidApi
 
 
             var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
-                defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds,
-                minimumAppAge, minimumLinkageAge);
+                defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge);
 
             config.Validate();
             return config;

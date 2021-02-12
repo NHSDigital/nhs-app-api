@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Moq;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
@@ -18,7 +19,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 {
     internal class SessionExpiryCookieCreatorTestContext
     {
-        private const int SessionExpiryMinutes = 10;
         internal const string JwtToken = "Jwt.To.Ken";
 
         private TestMocks Mocks { get; }
@@ -62,16 +62,37 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 .Throws<IOException>();
         }
 
+        internal void ArrangeSigningExceptionOnDecode()
+        {
+            Mocks.Signing
+                .SetupSequence(s => s.GetRsaParameters(Data.AuthSigningConfig))
+                .Returns(Data.RsaParameters)
+                .Throws<IOException>();
+        }
+
         internal void ArrangeJwtTokenGenerator(string token = JwtToken)
         {
             Mocks.JwtTokenGenerator
                 .Setup(j => j.GenerateJwtSecurityToken(
                     Data.RsaParameters,
                     It.Is<Dictionary<string, object>>(d =>
-                        d.ContainsKey("exp") &&
-                        (DateTime) d["exp"] == Data.UtcNow.AddMinutes(Data.ConfigurationSettings.DefaultSessionExpiryMinutes) &&
+                        d.ContainsKey(JwtRegisteredClaimNames.Iat) &&
+                        (DateTime) d[JwtRegisteredClaimNames.Iat] == Data.UtcNow &&
                         d.Keys.Count == 1)))
                 .Returns(token);
+
+            Mocks.JwtTokenGenerator
+                .Setup(j => j.DecodeJwtSecurityToken(
+                    Data.RsaParameters, token))
+                .Returns("{\"iat\":\"2021-02-12T18:23:25.5280658Z\"}");
+        }
+
+        internal void ArrangeJwtTokenGeneratorDecodeReturnsNull(string token = JwtToken)
+        {
+            Mocks.JwtTokenGenerator
+                .Setup(j => j.DecodeJwtSecurityToken(
+                    Data.RsaParameters, token))
+                .Returns((string)null);
         }
 
         internal void ArrangeDateTimeUtcNow()
@@ -100,10 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
                 RsaParameters = new RSAParameters();
 
-                ConfigurationSettings = new ConfigurationSettings
-                {
-                    DefaultSessionExpiryMinutes = SessionExpiryMinutes
-                };
+                ConfigurationSettings = new ConfigurationSettings();
 
                 AuthSigningConfig = new AuthSigningConfig(configuration, new Mock<ILogger<AuthSigningConfig>>().Object);
             }

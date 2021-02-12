@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,23 @@ namespace NHSOnline.Backend.PfsApi.Session
             return token;
         }
 
+        public string DecodeSessionExpiryToken(string encryptedCookie)
+        {
+            RSAParameters rsaParameters;
+
+            try
+            {
+                rsaParameters = _signing.GetRsaParameters(_authSigningConfig);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to generate RSA parameters from Auth certificate config");
+                return null;
+            }
+
+            return _jwtTokenGenerator.DecodeJwtSecurityToken(rsaParameters, encryptedCookie);
+        }
+
         private string GenerateToken()
         {
             RSAParameters rsaParameters;
@@ -74,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             var payload = new Dictionary<string, object>
             {
-                { JwtRegisteredClaimNames.Exp, _currentDateTimeProvider.UtcNow.AddMinutes(_settings.DefaultSessionExpiryMinutes) }
+                { JwtRegisteredClaimNames.Iat, _currentDateTimeProvider.UtcNow }
             };
 
             return _jwtTokenGenerator.GenerateJwtSecurityToken(rsaParameters, payload);

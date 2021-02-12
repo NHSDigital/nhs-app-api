@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.PfsApi.Session
     {
         string CreateSessionExpiryToken();
         void AppendSessionExpiryCookie(HttpContext context, string token);
+        string DecodeSessionExpiryToken(string encryptedCookie);
     }
 }

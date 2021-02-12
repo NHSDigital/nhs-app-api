@@ -11,6 +11,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken);
 
+        Task<RetrieveSessionResult> UpdateAndRetrieveSession(string sessionId, StringValues csrfToken);
+
         Task<RecreateSessionResult> RecreateSession(string patientId);
 
         Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession);

@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
         Task<Option<UserSession>> GetUserSession(string sessionId);
         Task<bool> DeleteUserSession(string sessionId);
         Task UpdateUserSession(UserSession userSession);
+        Task<Option<UserSession>> GetAndUpdateUserSession(string sessionId);
     }
 }

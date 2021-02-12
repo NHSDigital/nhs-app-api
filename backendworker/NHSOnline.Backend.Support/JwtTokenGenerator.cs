@@ -35,5 +35,14 @@ namespace NHSOnline.Backend.Support
 
             return JWT.Encode(payload, rsa, JwsAlgorithm.RS512);
         }
+
+        public string DecodeJwtSecurityToken(RSAParameters parameters, string cookie)
+        {
+            using var rsa = new RSACryptoServiceProvider();
+
+            rsa.ImportParameters(parameters);
+
+            return JWT.Decode(cookie, rsa, JwsAlgorithm.RS512);
+        }
     }
 }

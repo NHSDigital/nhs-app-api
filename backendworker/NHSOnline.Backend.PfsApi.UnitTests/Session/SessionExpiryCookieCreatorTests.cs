@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Session
@@ -58,6 +59,62 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 
             // Assert
             actualToken.Should().BeEquivalentTo(SessionExpiryCookieCreatorTestContext.JwtToken);
+        }
+
+
+        [TestMethod]
+        public void DecodeSessionExpiryToken_CanBeDecoded()
+        {
+            //Arrange
+            Context.ArrangeDateTimeUtcNow();
+            Context.ArrangeSigning();
+            Context.ArrangeJwtTokenGenerator();
+            var sut = Context.CreateSystemUnderTest();
+
+            //Act
+            var actualToken = sut.CreateSessionExpiryToken();
+            var unencryptedToken = sut.DecodeSessionExpiryToken(actualToken);
+
+            //Assert
+            unencryptedToken.Should().Contain(JwtRegisteredClaimNames.Iat);
+        }
+
+
+        [TestMethod]
+        public void DecodeSessionExpiryToken_FailsToDecode_WhenSigningThrowsException()
+        {
+            //Arrange
+            Context.ArrangeDateTimeUtcNow();
+            Context.ArrangeSigningExceptionOnDecode();
+            Context.ArrangeJwtTokenGenerator();
+
+            var sut = Context.CreateSystemUnderTest();
+
+            //Act
+            var actualToken = sut.CreateSessionExpiryToken();
+            var unencryptedToken = sut.DecodeSessionExpiryToken(actualToken);
+
+            //Assert
+            unencryptedToken.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void DecodeSessionExpiryToken_Fails_WhenDecodeReturnsNull()
+        {
+            //Arrange
+            Context.ArrangeDateTimeUtcNow();
+            Context.ArrangeSigning();
+            Context.ArrangeJwtTokenGenerator();
+            Context.ArrangeJwtTokenGeneratorDecodeReturnsNull();
+
+            var sut = Context.CreateSystemUnderTest();
+
+            //Act
+            var actualToken = sut.CreateSessionExpiryToken();
+            var unencryptedToken = sut.DecodeSessionExpiryToken(actualToken);
+
+            //Assert
+            unencryptedToken.Should().BeNull();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         private Mock<IMongoDatabase> _mockMongoDatabase;
         private Mock<IMongoCollection<BsonDocument>> _mockMongoCollection;
         private Mock<IMongoSessionCacheServiceConfig> _mockConfig;
+        private Mock<IAsyncCursor<BsonDocument>> _mockCursor;
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,6 +39,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             _mockMongoDatabase = new Mock<IMongoDatabase>();
             _mockMongoCollection = new Mock<IMongoCollection<BsonDocument>>();
             _mockConfig = new Mock<IMongoSessionCacheServiceConfig>();
+            _mockCursor = new Mock<IAsyncCursor<BsonDocument>>();
 
             _mockMongoClient
                 .Setup(x => x.GetDatabase(It.IsAny<string>(), It.IsAny<MongoDatabaseSettings>()))
@@ -50,17 +52,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task CreateUserSession_P9UserSession_SetsTypeNameAsP9UserSession()
         {
+            // Arrange
             var userSession = new P9UserSession(
-            string.Empty,
-            string.Empty,
-            new CitizenIdUserSession(),
-            new TppUserSession(),
-            string.Empty);
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new TppUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
 
+            // Act
             var json = await CreateSessionAndCaptureJson(userSession);
 
+            // Assert
             JObject
                 .Parse(json)
                 .SelectToken("$type")
@@ -73,12 +78,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task CreateUserSession_P5UserSession_SetsTypeNameAsP5UserSession()
         {
+            // Arrange
             var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession());
 
             ArrangeNoEncryption();
 
+            // Act
             var json = await CreateSessionAndCaptureJson(userSession);
 
+            // Assert
             JObject
                 .Parse(json)
                 .SelectToken("$type")
@@ -91,19 +99,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithTppGpSession_ReturnsTppGpSession()
         {
+            // Arrange
             var userSession = new P9UserSession(
-            string.Empty,
-            string.Empty,
-             new CitizenIdUserSession(),
-             new TppUserSession(),
-             string.Empty);
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new TppUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<TppUserSession>($"{nameof(TppUserSession)} should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithTppGpSession_ReturnsTppGpSession()
+        {
+            // Arrange
+            var userSession = new P9UserSession(
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new TppUserSession(),
+                string.Empty);
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -114,19 +174,71 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithEmisGpSession_ReturnsEmisGpSession()
         {
+            // Arrange
             var userSession = new P9UserSession(
-            string.Empty,
-            string.Empty,
-            new CitizenIdUserSession(),
-            new EmisUserSession(),
-            string.Empty);
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new EmisUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<EmisUserSession>($"{nameof(EmisUserSession)} should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithEmisGpSession_ReturnsEmisGpSession()
+        {
+            // Arrange
+            var userSession = new P9UserSession(
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new EmisUserSession(),
+                string.Empty);
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
@@ -137,59 +249,213 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
         {
+            // Arrange
             var userSession = new P9UserSession(string.Empty,
-            string.Empty,
-            new CitizenIdUserSession(),
-            new MicrotestUserSession(),
-            string.Empty);
+                string.Empty,
+                new CitizenIdUserSession(),
+                new MicrotestUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
                 .Should().BeOfType<P9UserSession>().Subject
-                .GpUserSession.Should().BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
+                .GpUserSession.Should()
+                .BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
+        {
+            // Arrange
+            var userSession = new P9UserSession(string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new MicrotestUserSession(),
+                string.Empty);
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should()
+                .BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
         }
 
         [TestMethod]
         public async Task GetUserSession_CreatedWithVisionGpSession_ReturnsVisionGpSession()
         {
+            // Arrange
             var userSession = new P9UserSession(
-            string.Empty,
-            string.Empty,
-            new CitizenIdUserSession(),
-            new VisionUserSession(),
-            string.Empty);
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new VisionUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure()
                 .Should().BeOfType<P9UserSession>().Subject
-                .GpUserSession.Should().BeOfType<VisionUserSession>($"{nameof(VisionUserSession)} should be deserialised");
+                .GpUserSession.Should()
+                .BeOfType<VisionUserSession>($"{nameof(VisionUserSession)} should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithVisionGpSession_ReturnsVisionGpSession()
+        {
+            // Arrange
+            var userSession = new P9UserSession(
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession(),
+                new VisionUserSession(),
+                string.Empty);
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should()
+                .BeOfType<VisionUserSession>($"{nameof(VisionUserSession)} should be deserialised");
         }
 
         [TestMethod]
         public async Task GetUserSession_CreatedWithP5Session_ReturnsP5Session()
         {
+            // Arrange
             var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession { ProofLevel = ProofLevel.P5 });
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            var actual = session.ValueOrFailure().Should().BeOfType<P5UserSession>().Subject;
+            actual.CitizenIdUserSession.Should().NotBeNull();
+            actual.CitizenIdUserSession.ProofLevel.Should().Be(ProofLevel.P5);
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithP5Session_ReturnsP5Session()
+        {
+            // Arrange
+            var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession { ProofLevel = ProofLevel.P5 });
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P5UserSession>().Subject;
@@ -200,6 +466,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithP9Session_ReturnsP9Session()
         {
+            // Arrange
             var userSession = new P9UserSession(
                 string.Empty,
                 string.Empty,
@@ -207,13 +474,63 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 new EmisUserSession(),
                 string.Empty);
 
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            var actual = session.ValueOrFailure().Should().BeOfType<P9UserSession>().Subject;
+            actual.CitizenIdUserSession.Should().NotBeNull();
+            actual.CitizenIdUserSession.ProofLevel.Should().Be(ProofLevel.P9);
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_CreatedWithP9Session_ReturnsP9Session()
+        {
+            // Arrange
+            var userSession = new P9UserSession(
+                string.Empty,
+                string.Empty,
+                new CitizenIdUserSession { ProofLevel = ProofLevel.P9 },
+                new EmisUserSession(),
+                string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.InsertOneAsync(
+                It.IsAny<BsonDocument>(),
+                It.IsAny<InsertOneOptions>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             var actual = session.ValueOrFailure().Should().BeOfType<P9UserSession>().Subject;
@@ -224,13 +541,47 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_StoredP9UserSessionBasedOnName_ReturnsP9UserSession()
         {
+            // Arrange
             var json = CreateSessionJsonWithTypeName("P9UserSession");
 
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_StoredP9UserSessionBasedOnName_ReturnsP9UserSession()
+        {
+            // Arrange
+            var json = CreateSessionJsonWithTypeName("P9UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -239,13 +590,47 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_StoredP9UserSessionBasedOnFullName_ReturnsP9UserSession()
         {
+            // Arrange
             var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P9UserSession");
 
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_StoredP9UserSessionBasedOnFullName_ReturnsP9UserSession()
+        {
+            // Arrange
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P9UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x=> x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
@@ -254,13 +639,47 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_StoredP5UserSessionBasedOnName_ReturnsP5UserSession()
         {
+            // Arrange
             var json = CreateSessionJsonWithTypeName("P5UserSession");
 
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_StoredP5UserSessionBasedOnName_ReturnsP5UserSession()
+        {
+            // Arrange
+            var json = CreateSessionJsonWithTypeName("P5UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -269,13 +688,47 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_StoredP5UserSessionBasedOnFullName_ReturnsP5UserSession()
         {
+            // Arrange
             var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P5UserSession");
 
             ArrangeNoEncryption();
             ArrangeSessionData(json);
 
-            var sut = CreateMongoSessionCacheService();
-            var session = await sut.GetUserSession("");
+            // Act
+            var session = await CreateMongoSessionCacheService().GetUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<FindOptions<BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetAndUpdateUserSession_StoredP5UserSessionBasedOnFullName_ReturnsP5UserSession()
+        {
+            // Arrange
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P5UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            // Act
+            var session = await CreateMongoSessionCacheService().GetAndUpdateUserSession("");
+
+            // Assert
+            _mockMongoCollection.Verify(x => x.FindOneAndUpdateAsync(
+                It.IsAny<FilterDefinition<BsonDocument>>(),
+                It.IsAny<UpdateDefinition<BsonDocument>>(),
+                It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
+                It.IsAny<CancellationToken>()));
+
+            _mockMongoCollection.VerifyNoOtherCalls();
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
@@ -285,7 +738,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         {
             var serialiserService = new UserSessionSerialiserService();
             var encryptionService = new UserSessionEncryptionService(serialiserService, _mockCipherService.Object);
-            var mongoSessionCache = new MongoSessionCacheAccessor(new Mock<ILogger<MongoSessionCacheAccessor>>().Object, _mockMongoClient.Object, _mockConfig.Object);
+            var mongoSessionCache = new MongoSessionCacheAccessor(
+                new Mock<ILogger<MongoSessionCacheAccessor>>().Object, _mockMongoClient.Object, _mockConfig.Object);
             return new MongoSessionCacheService(_mockLogger.Object, encryptionService, mongoSessionCache);
         }
 
@@ -347,7 +801,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
         private void ArrangeSessionData(string json)
         {
-            var document = new BsonDocument(new Dictionary<string, object> { {"session", json}});
+            var document = new BsonDocument(new Dictionary<string, object> { { "session", json } });
 
             _mockMongoCollection
                 .Setup(x => x.FindOneAndUpdateAsync(
@@ -356,6 +810,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                     It.IsAny<FindOneAndUpdateOptions<BsonDocument, BsonDocument>>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(document);
+
+            _mockCursor
+                .Setup(c => c.Current)
+                .Returns(new List<BsonDocument> { document });
+
+            _mockCursor
+                .SetupSequence(c => c.MoveNextAsync(
+                    It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(true))
+                .Returns(Task.FromResult(false));
+
+            _mockMongoCollection
+                .Setup(x => x.FindAsync(
+                             It.IsAny<FilterDefinition<BsonDocument>>(),
+                             It.IsAny<FindOptions<BsonDocument>>(),
+                             It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_mockCursor.Object);
         }
     }
 }

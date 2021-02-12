@@ -78,6 +78,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 .Returns(Task.FromResult(Option.Some<UserSession>(_userSession)))
                 .Verifiable();
 
+            _mockSessionCacheService
+                .Setup(x => x.GetAndUpdateUserSession(_sessionId))
+                .Returns(Task.FromResult(Option.Some<UserSession>(_userSession)))
+                .Verifiable();
+
             _mockSessionCacheService.Setup(x => x.CreateUserSession(_userSession))
                 .ReturnsAsync(_sessionId)
                 .Verifiable();
@@ -203,6 +208,66 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             _mockLogger.VerifyLogger(LogLevel.Warning, Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
             _mockSessionCacheService.Verify(x => x.GetUserSession(_sessionId));
+        }
+
+        [TestMethod]
+        public async Task UpdateAndRetrieveSession_ReturnsSuccess_WhenSessionIdAndTokenAreValid()
+        {
+            //Act
+            var retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(_sessionId, _csrfToken);
+
+            //Assert
+            var result = retrieveSessionResult.Should().BeAssignableTo<RetrieveSessionResult.Success>();
+            result.Subject.UserSession.Should().BeEquivalentTo(_userSession);
+            _mockLogger.VerifyLogger(LogLevel.Warning, Times.Never());
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
+            _mockSessionCacheService.Verify(x => x.GetAndUpdateUserSession(_sessionId));
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task UpdateAndRetrieveSession_ReturnsFailure_WhenSessionIdIsMissing(string sessionId)
+        {
+            //Act
+            var retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(sessionId, _csrfToken);
+
+            //Assert
+            retrieveSessionResult.Should().BeAssignableTo<RetrieveSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Warning, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+        }
+
+        [TestMethod]
+        public async Task UpdateAndRetrieveSession_ReturnsFailure_WhenNoSessionIsReturnedFromCacheService()
+        {
+            //Arrange
+            _mockSessionCacheService
+                .Setup(x => x.GetAndUpdateUserSession(_sessionId))
+                .Returns(Task.FromResult(Option.None<UserSession>()))
+                .Verifiable();
+
+            //Act
+            var retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(_sessionId, _csrfToken);
+
+            //Assert
+            retrieveSessionResult.Should().BeAssignableTo<RetrieveSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Warning, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+            _mockSessionCacheService.Verify(x => x.GetAndUpdateUserSession(_sessionId));
+        }
+
+        [TestMethod]
+        public async Task UpdateAndRetrieveSession_ReturnsFailure_WhenCsrfTokenDoesNotMatch()
+        {
+            //Act
+            var retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(_sessionId, new StringValues("badToken"));
+
+            //Assert
+            retrieveSessionResult.Should().BeAssignableTo<RetrieveSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Warning, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+            _mockSessionCacheService.Verify(x => x.GetAndUpdateUserSession(_sessionId));
         }
 
         [TestMethod]

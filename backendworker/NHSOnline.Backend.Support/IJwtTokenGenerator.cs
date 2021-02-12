@@ -12,5 +12,8 @@ namespace NHSOnline.Backend.Support
             string claimAudience = null, string claimIssuer = null, IEnumerable<Claim> claims = null);
 
         string GenerateJwtSecurityToken(RSAParameters parameters, Dictionary<string, object> payload);
+
+        string DecodeJwtSecurityToken(RSAParameters parameters, string cookie);
+
     }
 }

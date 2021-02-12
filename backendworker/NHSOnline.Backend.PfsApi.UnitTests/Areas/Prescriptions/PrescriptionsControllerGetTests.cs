@@ -68,8 +68,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _options = new ConfigurationSettings(CookieDomain,
                 PrescriptionsDefaultLastNumberMonthsToDisplay,
-                DefaultHttpTimeoutSeconds,
                 DefaultSessionExpiryMinutes,
+                DefaultHttpTimeoutSeconds,
                 MinimumAppAge,
                 MinimumLinkageAge);
 

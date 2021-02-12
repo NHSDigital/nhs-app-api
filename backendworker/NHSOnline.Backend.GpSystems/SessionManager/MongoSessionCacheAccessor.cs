@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
-        public async Task<Option<string>> Get(string sessionId)
+        public async Task<Option<string>> GetAndUpdate(string sessionId)
         {
             try
             {
@@ -77,6 +77,32 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 _logger.LogExit();
             }
         }
+
+        public async Task<Option<string>> Get(string sessionId)
+        {
+            try
+            {
+                _logger.LogEnter();
+                var filter = new BsonDocument(Id(sessionId));
+                BsonDocument sessionValue;
+                using (_logger.WithTimer("Get session from Mongo"))
+                {
+                    sessionValue = await GetCollection().Find(filter).FirstOrDefaultAsync();
+                }
+
+                if (sessionValue == null)
+                {
+                    _logger.LogDebug("No Mongo value Found");
+                    return Option.None<string>();
+                }
+                return Option.Some(sessionValue["session"].ToString());
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
 
         public async Task<bool> Delete(string sessionId)
         {

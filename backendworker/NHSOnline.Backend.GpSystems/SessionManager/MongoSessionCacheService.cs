@@ -43,6 +43,21 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
+        public async Task<Option<UserSession>> GetAndUpdateUserSession(string sessionId)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var encodedUserSession = await _mongoSessionCache.GetAndUpdate(sessionId);
+                return encodedUserSession.Select(x =>  RecreateUserSession(x, sessionId));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<Option<UserSession>> GetUserSession(string sessionId)
         {
             try
@@ -50,18 +65,11 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 _logger.LogEnter();
 
                 var encodedUserSession = await _mongoSessionCache.Get(sessionId);
-                return encodedUserSession.Select(RecreateUserSession);
+                return encodedUserSession.Select(x =>  RecreateUserSession(x, sessionId));
             }
             finally
             {
                 _logger.LogExit();
-            }
-
-            UserSession RecreateUserSession(string encodedUserSession)
-            {
-                var userSession = _encryptionService.Decode(encodedUserSession);
-                userSession.Key = sessionId;
-                return userSession;
             }
         }
 
@@ -92,6 +100,13 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             {
                 _logger.LogExit();
             }
+        }
+
+        private UserSession RecreateUserSession(string encodedUserSession, string sessionId)
+        {
+            var userSession = _encryptionService.Decode(encodedUserSession);
+            userSession.Key = sessionId;
+            return userSession;
         }
     }
 }

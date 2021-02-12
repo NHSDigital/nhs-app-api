@@ -34,6 +34,19 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             return await sessionService.Create(args.Im1ConnectionToken, args.OdsCode, args.NhsNumber);
         }
 
+        public async Task<RetrieveSessionResult> UpdateAndRetrieveSession(string sessionId, StringValues csrfToken)
+        {
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                _logger.LogWarning("Empty or null SessionId. Signing out.");
+                return new RetrieveSessionResult.Failure();
+            }
+
+            var userSessionOption = await _sessionCacheService.GetAndUpdateUserSession(sessionId);
+
+            return CompleteSessionRetrievalChecks(userSessionOption, csrfToken);
+        }
+
         public async Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken)
         {
             if (string.IsNullOrEmpty(sessionId))
@@ -44,6 +57,11 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
             var userSessionOption = await _sessionCacheService.GetUserSession(sessionId);
 
+            return CompleteSessionRetrievalChecks(userSessionOption, csrfToken);
+        }
+
+        private RetrieveSessionResult CompleteSessionRetrievalChecks(Option<UserSession> userSessionOption, StringValues csrfToken)
+        {
             if (!userSessionOption.HasValue)
             {
                 _logger.LogWarning("No user session found. Signing out.");

@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -17,15 +21,21 @@ namespace NHSOnline.Backend.PfsApi
         private readonly ILogger<CustomCookieAuthenticationEvents> _logger;
         private readonly IGpSessionManager _gpSessionManager;
         private readonly ISessionExpiryCookieCreator _sessionExpiryCookieCreator;
+        private readonly ICurrentDateTimeProvider _currentDateTimeProvider;
+        private readonly ConfigurationSettings _settings;
 
         public CustomCookieAuthenticationEvents(
             ILogger<CustomCookieAuthenticationEvents> logger,
             IGpSessionManager gpSessionManager,
-            ISessionExpiryCookieCreator sessionExpiryCookieCreator)
+            ISessionExpiryCookieCreator sessionExpiryCookieCreator,
+            ICurrentDateTimeProvider currentDateTimeProvider,
+            ConfigurationSettings settings)
         {
             _logger = logger;
             _gpSessionManager = gpSessionManager;
             _sessionExpiryCookieCreator = sessionExpiryCookieCreator;
+            _currentDateTimeProvider = currentDateTimeProvider;
+            _settings = settings;
         }
 
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
@@ -36,23 +46,70 @@ namespace NHSOnline.Backend.PfsApi
                 return;
             }
 
-            var retrieveSessionResult = await RetrieveSession(context);
-            var sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
+            var (sessionExpiryToken, issuedAtTime) = GetSessionCookieAndIssuedAtTime(context);
 
-            if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
+            if (_currentDateTimeProvider.UtcNow < issuedAtTime.AddMinutes(_settings.DefaultSessionExpiryMinutes))
             {
-                context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
+                RetrieveSessionResult retrieveSessionResult;
+                var (sessionId, token) = GetSessionIdAndToken(context);
 
-                _sessionExpiryCookieCreator.AppendSessionExpiryCookie(context.HttpContext, sessionExpiryToken);
+                if (_currentDateTimeProvider.UtcNow < issuedAtTime.AddMinutes(_settings.DefaultSessionExpiryMinutes / 2d))
+                {
+                    // Less than half the session time has elapsed since the JWT was created and the cosmos session updated
+                    // No need to recreate the JWT or update the Cosmos session object
+                    retrieveSessionResult = await _gpSessionManager.RetrieveSession(sessionId, token);
+                }
+                else
+                {
+                    // More than half the time has elapsed since the JWT was created and the cosmos session updated
+                    // Recreate the JWT and update Cosmos session object
+                    retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(sessionId, token);
+                    sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
+                }
 
-                _logger.LogDebug("Finish: Validate Principal");
-                return;
+                if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
+                {
+                    context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
+
+                    _sessionExpiryCookieCreator.AppendSessionExpiryCookie(context.HttpContext, sessionExpiryToken);
+
+                    _logger.LogDebug("Finish: Validate Principal");
+                    return;
+                }
             }
 
             await RejectPrincipalAndSignOut(context);
         }
 
-        private async Task<RetrieveSessionResult> RetrieveSession(CookieValidatePrincipalContext context)
+        private DateTime GetIssuedAtTimeFromCookie(string sessionExpiryToken)
+        {
+            if (!string.IsNullOrEmpty(sessionExpiryToken))
+            {
+                var unencryptedCookie = _sessionExpiryCookieCreator.DecodeSessionExpiryToken(sessionExpiryToken);
+                if (!string.IsNullOrEmpty(unencryptedCookie))
+                {
+                    var tokenObject = JObject.Parse(unencryptedCookie);
+
+                    if (tokenObject.TryGetValue(JwtRegisteredClaimNames.Iat, StringComparison.Ordinal, out var iat))
+                    {
+                        return iat.ToObject<DateTime>();
+                    }
+                }
+            }
+
+            _logger.LogError("Could not extract Jwt claim 'Iat' from SessionExpiryToken");
+            return default;
+        }
+
+        private (string sessionExpiryToken, DateTime issuedAtTime) GetSessionCookieAndIssuedAtTime(CookieValidatePrincipalContext context)
+        {
+            var sessionExpiryToken = context.Request.Cookies[Constants.CookieNames.SessionExpiry];
+            var issuedAtTime = GetIssuedAtTimeFromCookie(sessionExpiryToken);
+
+            return (sessionExpiryToken, issuedAtTime);
+        }
+
+        private (string sessionId, string token) GetSessionIdAndToken(CookieValidatePrincipalContext context)
         {
             var sessionId = context.Principal.Claims
                 .FirstOrDefault(x => Constants.ClaimTypes.SessionId.Equals(x.Type, StringComparison.Ordinal))?.Value;
@@ -61,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi
 
             var token = context.Request.Headers["X-CSRF-TOKEN"];
 
-            return await _gpSessionManager.RetrieveSession(sessionId, token);
+            return (sessionId, token);
         }
 
         private static async Task RejectPrincipalAndSignOut(CookieValidatePrincipalContext context)
