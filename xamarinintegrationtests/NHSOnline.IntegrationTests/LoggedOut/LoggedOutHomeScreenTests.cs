@@ -9,6 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
+    [BusinessRule("Test_Id", "This is a title")]
     public sealed class LoggedOutHomeScreenTests
     {
         [NhsAppAndroidTest]

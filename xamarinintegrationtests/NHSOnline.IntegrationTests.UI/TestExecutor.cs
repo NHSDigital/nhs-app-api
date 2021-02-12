@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using NHSOnline.IntegrationTests.UI.Reporting;
 
 namespace NHSOnline.IntegrationTests.UI
 {
@@ -24,7 +25,7 @@ namespace NHSOnline.IntegrationTests.UI
 
         internal TestResult[] Execute()
         {
-            List<TestResult> results = new List<TestResult>();
+            var results = new List<TestResult>();
             var shouldRetry = false;
 
             do
@@ -34,7 +35,7 @@ namespace NHSOnline.IntegrationTests.UI
                     results[^1].Outcome = UnitTestOutcome.Inconclusive;
                 }
 
-                var logs = new TestLogs();
+                var logs = new TestLogs(new TestReport(_testMethod));
                 logs.Info(_displayName);
 
                 // Include driver setup/teardown in test duration
