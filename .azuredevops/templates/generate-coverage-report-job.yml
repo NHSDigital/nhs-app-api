@@ -14,7 +14,7 @@ jobs:
           targetType: 'inline'
           script: |
             set -e
-            find coverage -name 'backend-*.xml' -exec sed -ir -e 's#<source>.*</source>#<source>backendworker</source>#' \{\} \;
+            find coverage -name 'backend-*.xml' -exec sed -ir -e 's#<source>.*</source>#<source>backendworker</source>#' -e 's#filename="src/#filename="#' \{\} \;
             find coverage -name 'ios-*.xml' -exec sed -ir -e 's#<source>.*</source>#<source>ios/NHSOnline</source>#' \{\} \;
             find coverage -name 'web-*.xml' -exec sed -ir -e 's#<source>.*</source>#<source>web</source>#' \{\} \;
 
