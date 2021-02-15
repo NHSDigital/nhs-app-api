@@ -4,9 +4,9 @@
         {
             "severity": "error",
             "code": "invalid",
-            "diagnostics": "Not specified",
+            "diagnostics": "Exceeds maximum length",
             "expression": [
-                "recipient"
+                "payload[0].contentString"
             ]
         }
     ]

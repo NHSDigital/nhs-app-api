@@ -14,9 +14,15 @@
 		<Request>
 			<Step>
 				<Name>VerifyApiKey.XApiKey</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/communication")</Condition>
 			</Step>
 			<Step>
 				<Name>AssignMessage.RenameQuotaVarsFromVerifyAPIKeyPolicyClientId</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/communication")</Condition>
+			</Step>
+			<Step>
+				<Name>OauthV2.VerifyAccessToken</Name>
+				<Condition>(proxy.pathsuffix MatchesPath "**/CommunicationRequest")</Condition>
 			</Step>
 			<Step>
 				<Name>Quota</Name>
@@ -25,13 +31,10 @@
 				<Name>SpikeArrest</Name>   
 			</Step>
 			<Step>
-				<Name>AssignMessage.RemoveApiKeyHeader</Name>
-			</Step>
-			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
 			</Step>
 			<Step>
-				<Name>AssignMessage.AddUpstreamApiKeyHeader</Name>
+				<Name>AssignMessage.SetHeader.XApiKey</Name>
 			</Step>
 			<Step>
 				<Name>AssignMessage.SetHeader.NhsdCorrelationId</Name>

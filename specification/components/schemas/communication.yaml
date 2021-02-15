@@ -1,5 +1,5 @@
 type: object
-required: 
+required:
   - channels
   - recipients
 properties:
@@ -15,7 +15,7 @@ properties:
     example: "optional request reference"
   channels:
     type: object
-    description: The channels by which the communication will be sent, and the content for each communication channel. Currently we support sending in-app messages that appear within the NHS App. We intend to allow you to send native Apple and Android push notifications by 08 December 2020.
+    description: The channels by which the communication will be sent, and the content for each communication channel. We support sending in-app messages that appear within the NHS App, and native Apple and Android push notifications.
     properties:
       appMessage:
         type: object
@@ -53,14 +53,14 @@ properties:
 
                 1\. Item1
 
-                1\. Item2
+                2\. Item2
 
-                1\. Item3
+                3\. Item3
 
-              * Link with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
-              * Link with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
-              * Images ![NHS Logo](https://assets.nhs.uk/images/nhs-logo.png)
-            maxLength: 1000
+              * Links with text \[Link text](https://en.wikipedia.org/wiki/Markdown)
+              * Links with title \[Link text](https://en.wikipedia.org/wiki/Markdown\, "Title text")
+              * Images \!\[NHS Logo](https://assets.nhs.uk/images/nhs-logo.png)
+            maxLength: 5000
             pattern: must not match <(.|\n)*?>
             example: You have a new appointment, please confirm you can attend. Open the Onboarded Third Party appointment here https://www.nhsapp.service.nhs.uk/appointments/hospital-appointments
       pushNotification:
@@ -69,7 +69,7 @@ properties:
           The communication content to appear as a native Apple or Android push notification. 
 
           Notifications must use unicode characters. 
-          
+
           They must not contain:
 
           * personally identifiable information (for example: the name of a user's doctor)

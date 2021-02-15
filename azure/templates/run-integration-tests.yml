@@ -3,7 +3,11 @@ parameters:
     type: string
   - name: target_url
     type: string
+  - name: token_url
+    type: string
   - name: test_folder_path
+    type: string
+  - name: private_key_file_path
     type: string
 
 steps:
@@ -11,7 +15,7 @@ steps:
     displayName: 'Use .NET Core sdk'
     inputs:
       packageType: sdk
-      version: 3.1.x
+      version: 5.0.x
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - task: DotNetCoreCLI@2
@@ -27,7 +31,7 @@ steps:
     displayName: Publish Integration Tests
     inputs:
       command: 'publish'
-      version: '3.1.x'
+      version: '5.0.x'
       projects: '${{ parameters.test_folder_path }}/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.csproj'
       publishWebProjects: false
       zipAfterPublish: false
@@ -42,8 +46,12 @@ steps:
         ${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/Nhs.App.Api.Integration.Tests.dll
         --logger:"trx;LogFileName=${{ parameters.working_directory }}/IntegrationTests/Tests.trx"
         --settings:${{ parameters.working_directory }}/Publish/Nhs.App.Api.Integration.Tests/test.runsettings
-        -- TestRunParameters.Parameter(name="\""ApplicationUrl"\"",value="\""${{ parameters.target_url }}"\"")
         -- TestRunParameters.Parameter(name="\""ApigeeApiKey"\"",value="\""$(CLIENT_ID)"\"")
+        -- TestRunParameters.Parameter(name="\""ApplicationUrl"\"",value="\""${{ parameters.target_url }}"\"")
+        -- TestRunParameters.Parameter(name="\""TokenEndpoint"\"",value="\""${{ parameters.token_url }}"\"")
+        -- TestRunParameters.Parameter(name="\""IssuerKey"\"",value="\""$(JWT_TESTING_API_KEY)"\"")
+        -- TestRunParameters.Parameter(name="\""PrivateKeyFilePath"\"",value="\""${{ parameters.private_key_file_path }}"\"")
+        -- TestRunParameters.Parameter(name="\""KidValue"\"",value="\"test-1\"")
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results ${{ parameters.working_directory }}/IntegrationTests/Tests.trx'
