@@ -22,7 +22,7 @@
     <ContentView.Content>
         <StackLayout StyleClass="ListItem"
                      Orientation="Horizontal">
-            <Label StyleClass="Bullet" AutomationProperties.IsInAccessibleTree="true" Text="&#x2022; " TextColor="{StaticResource NhsUkPrimaryText}" />
+            <Label StyleClass="Bullet" Text="&#x2022; " TextColor="{StaticResource NhsUkPrimaryText}" />
             <ContentView Content="{Binding ListItemContent, Source={x:Reference Name=Root}}" />
         </StackLayout>
     </ContentView.Content>

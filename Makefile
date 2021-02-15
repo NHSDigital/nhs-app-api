@@ -69,6 +69,11 @@ $(call expand_run_options_docker_image,run-android-stubs,STUBS)
 run-android-stubs:	## Run in docker with dev stubs for android
 	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml docker/android/docker-compose.yml
 
+$(eval $(call expand_run_options_docker_images,run-android-http-mocks))
+$(call expand_run_options_docker_image,run-android-http-mocks,STUBS)
+run-android-http-mocks:	## Run in docker with HTTP mocks for android
+	LOGINENV=stubbed ./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.http-mocks.yml docker/android/docker-compose.yml
+
 $(eval $(call expand_run_options_docker_images,run-android-https))
 run-android-https: $(SSL_CERT)	## Run in docker with https for android
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml docker/android/docker-compose.yml docker/android/docker-compose.https.yml

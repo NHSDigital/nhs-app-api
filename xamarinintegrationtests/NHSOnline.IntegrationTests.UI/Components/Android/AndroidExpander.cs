@@ -60,8 +60,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         private By FindHeaderBy => By.XPath(HeaderSelector);
         private By FindContainerBy => By.XPath(ContainerSelector);
 
-        // The common parent of the header and body is two ancestors up from the header text
-        private string ContainerSelector => $"{HeaderSelector}/../..";
+        // The common parent of the header and body is three ancestors up from the header text
+        private string ContainerSelector => $"{HeaderSelector}/../../..";
         private string HeaderSelector => $"//android.widget.TextView[normalize-space(@text)={_headerText.QuoteXPathLiteral()}]";
     }
 }

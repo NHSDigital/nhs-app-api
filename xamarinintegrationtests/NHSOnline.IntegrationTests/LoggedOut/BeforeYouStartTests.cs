@@ -126,6 +126,47 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertCanShowAndHideGuidanceForAges13To15();
         }
 
+        [NhsAppAndroidTest]
+        public void APatientCanUseTheKeyboardToNavigateToAndFollowTheLinksOnTheBeforeYouStartScreenPageAndroid(IAndroidDriverWrapper driver)
+        {
+            NavigateToBeforeYouStartPage(driver)
+                .Tab()
+                .Enter();
+
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
+                .ChooseChrome()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnCovidPage(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Tab()
+                .Tab()
+                .Enter();
+
+            AndroidAppTab
+                .AssertOnConditionsPage(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Tab()
+                .Tab()
+                .Tab()
+                .Enter();
+
+            AndroidAppTab
+                .AssertOn111Page(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver);
+        }
+
         private static AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage

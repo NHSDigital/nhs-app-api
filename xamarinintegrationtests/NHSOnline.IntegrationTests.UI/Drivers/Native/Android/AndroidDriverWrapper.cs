@@ -69,6 +69,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.nhsonline.browserstack");
 
+        void IAndroidDriverWrapper.PressTabKey() => _driver.PressKeyCode(AndroidKeyCode.Keycode_TAB);
+        void IAndroidDriverWrapper.PressEnterKey() => _driver.PressKeyCode(AndroidKeyCode.Keycode_ENTER);
+
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {
             context.TryAttachScreenshot(_driver);

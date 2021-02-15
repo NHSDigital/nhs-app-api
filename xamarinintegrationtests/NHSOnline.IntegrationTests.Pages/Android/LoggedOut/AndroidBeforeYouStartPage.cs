@@ -65,5 +65,17 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         {
             ContinueButton.Click();
         }
+
+        public AndroidBeforeYouStartPage Tab()
+        {
+            _driver.PressTabKey();
+            return this;
+        }
+
+        public AndroidBeforeYouStartPage Enter()
+        {
+            _driver.PressEnterKey();
+            return this;
+        }
     }
 }

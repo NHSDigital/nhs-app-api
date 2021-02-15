@@ -35,7 +35,6 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
             {
                 extension.OnElementChanged(e);
             }
-
         }
 
         protected override void Dispose(bool disposing)
