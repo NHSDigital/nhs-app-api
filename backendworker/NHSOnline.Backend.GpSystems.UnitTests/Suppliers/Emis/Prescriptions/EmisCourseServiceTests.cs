@@ -29,8 +29,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
         private EmisConfigurationSettings _settings;
         private EmisUserSession _emisUserSession;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         private IFixture _fixture;
-        private Guid _patientId;
         private Mock<ILogger<EmisCourseService>> _mockLogger;
         private const string DefaultEmisVersion = "2.1.0.0";
         private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
@@ -46,12 +46,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _emisUserSession = _fixture.Build<EmisUserSession>()
-                .With(x => x.Id, _patientId)
-                .Create();
+            _emisUserSession = _fixture.Create<EmisUserSession>();
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<EmisCourseService>>>();
 
@@ -87,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses( new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet((It.Is<EmisRequestParameters>(
@@ -155,7 +153,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet((It.Is<EmisRequestParameters>(
@@ -217,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet((It.Is<EmisRequestParameters>(
@@ -290,7 +288,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(
@@ -381,7 +379,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
 
@@ -417,7 +415,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -440,7 +438,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
@@ -465,7 +463,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
@@ -489,7 +487,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+            var result = await _systemUnderTest.GetCourses(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();

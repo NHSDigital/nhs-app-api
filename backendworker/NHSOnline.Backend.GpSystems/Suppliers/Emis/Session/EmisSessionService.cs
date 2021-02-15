@@ -99,7 +99,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                 await UpdateSessionWithPracticeSettings(session, practiceSettingsTask, patientName);
 
-                return new GpSessionCreateResult.Success(session);
+                return new GpSessionCreateResult.Success(
+                    session,
+                    session.PatientActivityContextGuid,
+                    session.ProxyPatients.Select(x => x.PatientActivityContextGuid));
             }
             catch (EmisSessionResponseErrorException responseError)
             {
@@ -134,7 +137,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
         {
             var session = new EmisUserSession
             {
-                Id = Guid.NewGuid(), // To be removed - jira 13005
                 EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                 NhsNumber = nhsNumber,
                 OdsCode = odsCode,
@@ -192,10 +194,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
                     .Select(x => new EmisProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
                         OdsCode = x.NationalPracticeCode,
                         UserPatientLinkToken = x.UserPatientLinkToken,
-                        PatientActivityContextGuid = x.PatientActivityContextGuid,
+                        PatientActivityContextGuid = x.PatientActivityContextGuid
                     })
                     .ToList();
 
@@ -295,7 +296,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 if (!string.Equals(emisUserSession.OdsCode,proxyPatient.OdsCode, StringComparison.Ordinal))
                 {
                     _logger.LogInformation(
-                        $"Proxy Patient with Guid {proxyPatient.Id} has different " +
+                        $"Proxy Patient has different " +
                         $"OdsCode {proxyPatient.OdsCode} from main user {emisUserSession.OdsCode}");
                 }
             }

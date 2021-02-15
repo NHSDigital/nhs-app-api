@@ -30,7 +30,13 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         {
             _logger.LogInformation("Invalid GP session detected, attempting to recreate GP user session");
 
-            return await _gpSessionCreator.RecreateGpSession(_p9UserSession, nullGpSession.SessionSupplier);
+            var patientIdHeader = _httpContextAccessor.HttpContext.Request.Headers[Constants.HttpHeaders.PatientId];
+
+            var patientSessionId = Guid.TryParse(patientIdHeader.ToString(), out var result)
+                ? result
+                : _p9UserSession.PatientSessionId;
+
+            return await _gpSessionCreator.RecreateGpSession(_p9UserSession, nullGpSession.SessionSupplier, patientSessionId);
         }
 
         public Task<GpSessionRecreateResult> Visit(GpUserSession gpSession)

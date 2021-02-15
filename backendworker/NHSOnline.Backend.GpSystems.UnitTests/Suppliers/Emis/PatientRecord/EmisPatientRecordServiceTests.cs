@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         private Mock<IEmisClient> _emisClient;
         private Mock<IGetPatientDocumentTaskChecker> _getPatientDocumentTaskChecker;
         private EmisUserSession _emisUserSession;
-        private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private IFixture _fixture;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
@@ -40,8 +39,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            _patientId = _emisUserSession.Id;
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _getPatientDocumentTaskChecker = _fixture.Freeze<Mock<IGetPatientDocumentTaskChecker>>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>
@@ -156,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(new GpLinkedAccountModel(_emisUserSession));
+            var result = await _systemUnderTest.GetMyRecord(_gpLinkedAccountModel);
 
             // Assert
             _emisClient.Verify(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(

@@ -72,6 +72,8 @@
          private const string AuditType = AuditingOperations.OnlineConsultationsSubmitted;
 
          private readonly Guid _requestId = Guid.NewGuid();
+         private readonly Guid _patientId = Guid.NewGuid();
+         private const string _patientGpIdentifier = "main-patient-gp-identifier";
          private FhirJsonSerializer _serializer;
          private HttpResponseMessage _httpResponse;
          private DemographicsResult _demographicsResult;
@@ -101,7 +103,12 @@
                  new Claim(JwtRegisteredClaimNames.Sub, NhsLoginId),
                  new Claim("nhs_number", "NHS Number")
              })};
-             _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, "im1ConnectionToken", new EmisUserSession());
+             _userSession = new P9UserSession("csrfToken", "nhsNumber", _cidUserSession, "im1ConnectionToken",
+                 new EmisUserSession())
+             {
+                 PatientSessionId = _patientId,
+                 PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } },
+             };
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
 
              _mockDemographicsService = new Mock<IDemographicsService>();
@@ -109,7 +116,7 @@
                  .Setup(x => x.GetDemographics(
                      It.Is<GpLinkedAccountModel>(
                          d => d.GpUserSession == _userSession.GpUserSession
-                              && d.PatientId == _userSession.GpUserSession.Id)))
+                              && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                  .Returns(Task.FromResult(_demographicsResult));
 
              _mockGpSystem = new Mock<IGpSystem>();

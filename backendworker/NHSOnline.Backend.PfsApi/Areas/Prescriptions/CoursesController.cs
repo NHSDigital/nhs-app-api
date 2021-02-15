@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             [UserSession] P9UserSession userSession,
             [GpSession] GpUserSession gpSession)
         {
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpSession, patientId);
+            var gpLinkedAccountUserSession = userSession.BuildGpLinkedAccountModel(patientId);
 
             await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {gpSession.Supplier}");

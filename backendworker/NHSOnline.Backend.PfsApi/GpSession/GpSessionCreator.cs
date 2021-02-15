@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -37,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         }
 
         public async Task CreateGpSession(
-            CitizenIdSessionResult citizenIdUserSession, Supplier supplier, P9UserSession p9UserSession)
+                CitizenIdSessionResult citizenIdUserSession, Supplier supplier, P9UserSession p9UserSession)
         {
             var gpSessionCreateArgs = new GpSessionCreateArgs(citizenIdUserSession);
 
@@ -53,7 +55,8 @@ namespace NHSOnline.Backend.PfsApi.GpSession
 
         public async Task<GpSessionRecreateResult> RecreateGpSession(
             P9UserSession userSession,
-            Supplier supplier)
+            Supplier supplier,
+            Guid patientSessionId)
         {
             return await _auditor.Audit()
                 .AccessToken(userSession.CitizenIdUserSession.AccessToken)
@@ -61,12 +64,13 @@ namespace NHSOnline.Backend.PfsApi.GpSession
                 .Supplier(userSession.GpUserSession.Supplier)
                 .Operation(AuditingOperations.GpSessionRecreate)
                 .Details("Attempting to recreate P9 User GP Session")
-                .Execute(() => DoRecreateGpSession(userSession, supplier));
+                .Execute(() => DoRecreateGpSession(userSession, supplier, patientSessionId));
         }
 
         private async Task<GpSessionRecreateResult> DoRecreateGpSession(
             P9UserSession userSession,
-            Supplier supplier)
+            Supplier supplier,
+            Guid patientSessionId)
         {
             _logger.LogInformation("Attempting to recreate GP user session for P9 user");
 
@@ -80,6 +84,17 @@ namespace NHSOnline.Backend.PfsApi.GpSession
             await gpSession.Accept(new GpUserSessionCreateResultVisitor(
                 _logger, supplier, userSession, _errorReferenceGenerator));
 
+            if (patientSessionId != userSession.PatientSessionId)
+            {
+                var patientGpIdentifier = userSession.PatientLookup[patientSessionId];
+                var result = await SwitchUser(userSession.GpUserSession, patientGpIdentifier);
+
+                if (result is SwitchAccountResult.Success)
+                {
+                    _logger.LogInformation("Successful switch to proxy after session recreate");
+                }
+            }
+
             await _sessionCacheService.UpdateUserSession(userSession);
 
             return gpSession.Accept(new GpUserSessionRecreateResultVisitor(_logger, supplier, userSession.OdsCode));
@@ -91,6 +106,13 @@ namespace NHSOnline.Backend.PfsApi.GpSession
             var gpSystem = FetchGpSystem(supplier);
 
             return await _gpSessionManager.CreateSession(gpSystem, gpSessionCreateArgs);
+        }
+
+        private async Task<SwitchAccountResult> SwitchUser(GpUserSession gpUserSession, string patientGpIdentifier)
+        {
+            var gpSystem = FetchGpSystem(gpUserSession.Supplier);
+
+            return await gpSystem.GetLinkedAccountsService().SwitchAccount(gpUserSession, patientGpIdentifier);
         }
 
         private IGpSystem FetchGpSystem(Supplier supplier)

@@ -1,21 +1,21 @@
-using System;
-
 namespace NHSOnline.Backend.Support
 {
     public class GpLinkedAccountModel
     {
-        public GpLinkedAccountModel(GpUserSession gpUserSession)
+        public GpLinkedAccountModel(
+            GpUserSession gpUserSession) : this(gpUserSession, string.Empty)
         {
-            GpUserSession = gpUserSession;
-            PatientId = gpUserSession.Id;
         }
-        public GpLinkedAccountModel(GpUserSession gpUserSession, Guid id)
+
+        public GpLinkedAccountModel(
+            GpUserSession gpUserSession,
+            string requestedPatientId)
         {
             GpUserSession = gpUserSession;
-            PatientId = id;
+            RequestingPatientGpIdentifier = requestedPatientId ?? string.Empty;
         }
 
         public GpUserSession GpUserSession { get; }
-        public Guid PatientId { get; set; }
+        public string RequestingPatientGpIdentifier { get; }
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems;
@@ -54,7 +55,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         private GpSessionRecreateResult _sessionRecreateErrorResult;
 
         private List<LinkedAccount> _linkedAccounts;
-        private HttpContextAccessor _httpContextAccessor;
+        private Mock<IHttpContextAccessor> _httpContextAccessor;
+        private HeaderDictionary _headers;
 
         public static void MethodWithCorrectGpSessionTypeAndAttribute([GpSession] GpUserSession gpUserSession)
         {
@@ -70,36 +72,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
         }
 
-        public static void MethodWithNoPatientIdAttributes([GpSession] GpUserSession gpUserSession, Guid patientId)
-        {
-        }
-
-        public static void MethodWithPatientIdAttribute(
-            [GpSession] GpUserSession gpUserSession,
-            [FromHeader(Name = Constants.HttpHeaders.PatientId)]
-            Guid patientId)
-        {
-        }
-
         public static void MethodWithIgnoreP5UserAttribute(
             [GpSession(IgnoreP5Users = true)] GpUserSession gpUserSession,
             Guid patientId)
-        {
-        }
-
-        public static void MethodWithMultiplePatientIdAttributes(
-            [GpSession] GpUserSession gpUserSession,
-            [FromHeader(Name = Constants.HttpHeaders.PatientId)]
-            Guid patientId1,
-            [FromHeader(Name = Constants.HttpHeaders.PatientId)]
-            Guid patientId2)
-        {
-        }
-
-        public static void MethodWithPatientIdAttributeAndIncorrectType(
-            [GpSession] GpUserSession gpUserSession,
-            [FromHeader(Name = Constants.HttpHeaders.PatientId)]
-            string patientId)
         {
         }
 
@@ -131,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _linkedAccountsService = Mock.Of<ILinkedAccountsService>();
 
             Mock.Get(_linkedAccountsService)
-                .Setup(s => s.GetLinkedAccounts(It.IsAny<GpUserSession>()))
+                .Setup(s => s.GetLinkedAccounts(It.IsAny<GpUserSession>(), It.IsAny<Dictionary<Guid,string>>()))
                 .Returns(() =>
                     Task.FromResult<LinkedAccountsResult>(
                         new LinkedAccountsResult.Success(_linkedAccounts, false)));
@@ -151,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _gpSessionCreator = Mock.Of<IGpSessionCreator>();
 
             Mock.Get(_gpSessionCreator)
-                .Setup(r => r.RecreateGpSession(It.IsAny<P9UserSession>(), It.IsAny<Supplier>()))
+                .Setup(r => r.RecreateGpSession(It.IsAny<P9UserSession>(), It.IsAny<Supplier>(), It.IsAny<Guid>()))
                 .Returns(() =>
                 {
                     SetupGpSession(); // mock recreating the session
@@ -177,6 +152,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             _sessionRecreateErrorResult = new GpSessionRecreateResult.ErrorResult(new ErrorTypes.UnhandledError(), "error");
 
+            _headers = new HeaderDictionary();
+
             // mock return values
             _p5UserSession = new P5UserSession(Guid.NewGuid().ToString(), new CitizenIdUserSession());
 
@@ -185,9 +162,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // method params
             _actionArguments = new Dictionary<string, Object>();
 
+            var requestMock = new Mock<HttpRequest>();
+            requestMock
+                .SetupGet(x => x.Headers)
+                .Returns(_headers);
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock
+                .SetupGet(x => x.Request)
+                .Returns(requestMock.Object);
+
+            _httpContextAccessor = new Mock<IHttpContextAccessor>();
+            _httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
+
             _context = new ActionExecutingContext(
                 new ActionContext(
-                    Mock.Of<HttpContext>(),
+                    httpContextMock.Object,
                     Mock.Of<RouteData>(),
                     Mock.Of<ActionDescriptor>()
                 ),
@@ -204,16 +194,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 return Task.FromResult<ActionExecutedContext>(null);
             };
 
-            _httpContextAccessor = Mock.Of<HttpContextAccessor>();
-
             // system under test
             _gpSessionFilter = new GpSessionFilter(
                 _logger,
                 _userSessionService,
                 _gpSessionCreator,
-                gpSystemFactory,
                 _errorResultBuilder,
-                _httpContextAccessor);
+                _httpContextAccessor.Object);
         }
 
         [TestMethod]
@@ -364,7 +351,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
 
             Mock.Get(_gpSessionCreator)
-                .Verify(v => v.RecreateGpSession(It.IsAny<P9UserSession>(), It.IsAny<Supplier>()));
+                .Verify(v => v.RecreateGpSession(It.IsAny<P9UserSession>(), It.IsAny<Supplier>(), It.IsAny<Guid>()));
         }
 
         [DataTestMethod]
@@ -375,7 +362,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 bool hasGpSupplier, Supplier supplier)
         {
             UseP9Session(hasGpSupplier, supplier);
-
             await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
 
             Assert.IsTrue(_actionArguments.ContainsKey("gpUserSession"));
@@ -403,118 +389,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
 
             Assert.IsTrue(_nextCalled);
-        }
-
-        [TestMethod]
-        public async Task WhenFilterInvoked_WithInvalidGpSession_ThenPatientIdIsInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttribute));
-            SetupLinkedProfiles();
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.IsTrue(_actionArguments.ContainsKey("patientId"));
-            Assert.AreEqual(_actionArguments["patientId"], _gpUserSession.Id);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithInvalidGpSession_AndLinkedPatientIdPresentInArguments_ThenPatientIdIsNotInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttribute));
-            SetupLinkedProfiles();
-
-            var expectedId = _linkedAccounts.First().Id;
-
-            _actionArguments["patientId"] = expectedId;
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.AreEqual(_actionArguments["patientId"], expectedId);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithInvalidGpSession_AndLinkedPatientIdNotPresentInArguments_ThenPatientIdIsInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttribute));
-            SetupLinkedProfiles();
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.IsTrue(_actionArguments.ContainsKey("patientId"));
-            Assert.AreEqual(_actionArguments["patientId"], _gpUserSession.Id);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithInvalidGpSession_AndNonLinkedPatientIdPresentInArguments_ThenPatientIdIsInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttribute));
-            SetupLinkedProfiles();
-
-            _actionArguments["patientId"] = Guid.NewGuid();
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.AreEqual(_actionArguments["patientId"], _gpUserSession.Id);
-        }
-
-        [TestMethod]
-        public async Task WhenFilterInvoked_WithInvalidGpSession_ThenMultiplePatientIdsAreInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithMultiplePatientIdAttributes));
-            SetupLinkedProfiles();
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.IsTrue(_actionArguments.ContainsKey("patientId1"));
-            Assert.AreEqual(_actionArguments["patientId1"], _gpUserSession.Id);
-
-            Assert.IsTrue(_actionArguments.ContainsKey("patientId2"));
-            Assert.AreEqual(_actionArguments["patientId2"], _gpUserSession.Id);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithInvalidGpSession_AndEndpointHasNoPatientIdAttribute_ThenPatientIdIsNotInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithNoPatientIdAttributes));
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.AreEqual(1, _actionArguments.Count);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithInvalidGpSession_AndEndpointHasIncorrectTypeForPatientIdAttribute_ThenPatientIdIsNotInjected()
-        {
-            UseP9Session(false);
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttributeAndIncorrectType));
-            SetupLinkedProfiles();
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.AreEqual(1, _actionArguments.Count);
-        }
-
-        [TestMethod]
-        public async Task
-            WhenFilterInvoked_WithValidGpSession_AndEndpointHasPatientIdAttribute_ThenPatientIdIsNotInjected()
-        {
-            UseP9Session();
-            BuildPatientIdEndpointParameters(nameof(MethodWithPatientIdAttribute));
-
-            await _gpSessionFilter.OnActionExecutionAsync(_context, _next);
-
-            Assert.AreEqual(1, _actionArguments.Count);
         }
 
         private void BuildEndpointParameters(string testMethodName)
@@ -558,7 +432,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 "1234567890",
                 new CitizenIdUserSession(),
                 Guid.NewGuid().ToString(), _gpUserSession);
-
+            _headers[Constants.HttpHeaders.PatientId] = new StringValues(_p9UserSession.PatientSessionId.ToString());
             _userSession = _p9UserSession;
         }
 
@@ -567,7 +441,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _gpUserSession = new MockGpUserSession
             {
                 HasLinkedAccountsValue = _linkedAccounts.Any(),
-                Id = Guid.NewGuid(),
                 SupplierValue = supplier
             };
         }

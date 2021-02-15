@@ -80,6 +80,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         [ApiVersionRoute("patient/linked-account-journey-configuration")]
         public async Task<IActionResult> GetLinkedAccountConfiguration(
             [FromHeader(Name = PatientId)] Guid patientId,
+            [UserSession] P9UserSession p9UserSession,
             [GpSession] GpUserSession gpUserSession)
         {
             try
@@ -89,7 +90,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 var linkedAccountsService =
                     _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier).GetLinkedAccountsService();
 
-                var odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(gpUserSession, patientId);
+                var gpLinkedAccountModel = p9UserSession.BuildGpLinkedAccountModel(patientId);
+                var odsCode = linkedAccountsService.GetOdsCodeForLinkedAccount(
+                    gpUserSession,
+                    gpLinkedAccountModel.RequestingPatientGpIdentifier);
 
                 _logger.LogInformation("Fetching Service Journey Rules for linked account");
 

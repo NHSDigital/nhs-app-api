@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.Id);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.PatientId);
             _tppRequestParameters = new TppRequestParameters(_tppUserSession);
 
             _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply>>>();

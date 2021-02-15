@@ -92,12 +92,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task VisitP9WithGpSessionSuccessfulReturnsLinkedAccounts()
         {
             // Arrange
+            var mainPatientId = Guid.NewGuid();
+            var mainPatientGpIdentifier = "main-patient-gp-identifier";
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
 
             var userSession = new P9UserSession("csrfToken",
                 "nhsNumber",
                 It.IsAny<CitizenIdUserSession>(),
-                "im1ConnectionToken", _gpUserSession.Object);
+                "im1ConnectionToken", _gpUserSession.Object)
+            {
+                PatientLookup = new Dictionary<Guid, string> { { mainPatientId, mainPatientGpIdentifier } }
+            };
 
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
                 new List<LinkedAccount>
@@ -114,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 true);
 
             _mockLinkedAccountsService = new Mock<ILinkedAccountsService>();
-            _mockLinkedAccountsService.Setup(x => x.GetLinkedAccounts(userSession.GpUserSession))
+            _mockLinkedAccountsService.Setup(x => x.GetLinkedAccounts(userSession.GpUserSession, userSession.PatientLookup))
                 .ReturnsAsync(linkedAccountResult);
 
             _mockGpSystem = new Mock<IGpSystem>();

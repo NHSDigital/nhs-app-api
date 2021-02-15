@@ -39,23 +39,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private ViewAppointmentsReply _tppViewUpcomingAppointmentsReply;
         private TppApiObjectResponse<ViewAppointmentsReply> _tppErrorResponse;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
-        private Guid _patientId;
+        private string _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _patientId = _fixture.Create<string>();
 
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _tppUserSession.Id = _patientId;
+            _tppUserSession.PatientId = _patientId;
             _tppUserSession.HasSelfAccess = true;
-
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
 
             _mockViewAppointments = _fixture.Freeze<Mock<ITppClientRequest

@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private TppConfigurationSettings _settings;
         private TppUserSession _tppUserSession;
         private IFixture _fixture;
-        private Guid _patientId;
+        private string _patientId;
         private const string ApplicationName = "appName";
         private const string ApplicationVersion = "13";
         private const string ApplicationProviderId = "providerId";
@@ -45,14 +45,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
-
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _tppUserSession.Id = _patientId;
-            _tppUserSession.HasSelfAccess = true;
 
+            _patientId = _tppUserSession.PatientId;
+            _tppUserSession.HasSelfAccess = true;
             _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply>>>();
 
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();

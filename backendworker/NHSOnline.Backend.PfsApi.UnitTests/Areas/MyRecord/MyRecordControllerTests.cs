@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +25,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private MyRecordController _systemUnderTest;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
-       private EmisUserSession _gpSession;
-        private Guid _patientGuid;
+        private EmisUserSession _gpSession;
+        private Guid _patientId;
+        private string _patientGpIdentifier;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientGuid = Guid.NewGuid();
+            _patientId = Guid.NewGuid();
             _gpSession = new EmisUserSession();
+            _patientGpIdentifier = "main-patient-identifier-1";
 
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                _gpSession)
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } }
+            };
 
             _systemUnderTest = new MyRecordController(
                 new Mock<ILogger<MyRecordController>>().Object,
@@ -60,18 +68,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(x => x.GetMyRecord(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((GetMyRecordResult)getAllergiesResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession, _gpSession);
+            var result = await _systemUnderTest.GetMyRecord(_patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(
                 It.Is<GpLinkedAccountModel>(
-                    m => m.GpUserSession == _userSession.GpUserSession && m.PatientId == _patientGuid)));
+                    m => m.GpUserSession == _userSession.GpUserSession && m.RequestingPatientGpIdentifier == _patientGpIdentifier)));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
@@ -92,17 +100,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(x => x.GetMyRecord(It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((GetMyRecordResult)getMedicationsResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession, _gpSession);
+            var result = await _systemUnderTest.GetMyRecord(_patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)));
+                d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
@@ -123,17 +131,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(patientRecordService.Object);
 
             patientRecordService.Setup(x => x.GetMyRecord(It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((GetMyRecordResult)getProblemsRequestResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession, _gpSession);
+            var result = await _systemUnderTest.GetMyRecord(_patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)));
+                d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }

@@ -29,25 +29,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private AppointmentsGetResponse _emisClientGetResponse;
         private Mock<IAppointmentsResponseMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
-        private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _emisUserSession = _fixture.Build<EmisUserSession>()
-                .With(x => x.Id, _patientId)
-                .Create();
+            _emisUserSession = _fixture.Create<EmisUserSession>();
 
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK
             };
-            
+
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
             var response = new EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
@@ -55,15 +51,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Body = _emisClientGetResponse
             };
             MockEmisClientAppointmentsGetMethod(response);
-                
+
             _mappedResponse = _fixture.Create<AppointmentsResponse>();
 
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentsResponseMapper>>();
             _mockResponseMapper.Setup(x => x.Map(_emisClientGetResponse))
                 .Returns(_mappedResponse);
-            
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
-            
+
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
+
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
         }
 

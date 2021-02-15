@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
@@ -32,49 +29,17 @@ namespace NHSOnline.Backend.PfsApi.GpSession
         public override Task Visit(GpSessionCreateResult.Success result)
         {
             _p9UserSession.GpUserSession = result.UserSession;
-            _p9UserSession.PatientSessionId = result.UserSession.Id;
-            _p9UserSession.PatientLookup ??= new Dictionary<Guid, string>();
 
-            // The following checks are temporary be replaced as part of jira 13005
-            if (result.UserSession is EmisUserSession emisUserSession)
+            if (!_p9UserSession.PatientLookup.ContainsValue(result.MainPatientGpIdentifier))
             {
-                if (!_p9UserSession.PatientLookup.ContainsValue(emisUserSession.PatientActivityContextGuid))
-                {
-                    _p9UserSession.PatientLookup.Add(_p9UserSession.PatientSessionId, emisUserSession.PatientActivityContextGuid);
-                }
-
-                foreach (var emisProxyUserSession in emisUserSession.ProxyPatients)
-                {
-                    // ID will be created here.
-                    // Using EmisProxyUserSession.Id for now for backwards compatibility.
-                    _p9UserSession.PatientLookup.Add(
-                        emisProxyUserSession.Id,
-                        emisProxyUserSession.PatientActivityContextGuid);
-                }
+                _p9UserSession.PatientLookup.Add(_p9UserSession.PatientSessionId, result.MainPatientGpIdentifier);
             }
-            else if (result.UserSession is TppUserSession tppUserSession)
-            {
-                if (!_p9UserSession.PatientLookup.ContainsValue(tppUserSession.PatientId))
-                {
-                    _p9UserSession.PatientLookup.Add(_p9UserSession.PatientSessionId, tppUserSession.PatientId);
-                }
 
-                foreach (var tppProxyUserSession in tppUserSession.ProxyPatients)
-                {
-                    // ID will be created here.
-                    // Using TppProxyUserSession.Id for now for backwards compatibility.
-                    _p9UserSession.PatientLookup.Add(
-                        tppProxyUserSession.Id,
-                        tppProxyUserSession.PatientId);
-                }
-            }
-            else
+            foreach (var patientIdentifier in result.ProxyPatientGpIdentifiers)
             {
-                // Other providers just have to have the main PatientSessionId in the dictionary.
-                // The actual value doesn't matter as there is no proxy potential.
-                if (!_p9UserSession.PatientLookup.ContainsKey(_p9UserSession.PatientSessionId))
+                if (!_p9UserSession.PatientLookup.ContainsValue(patientIdentifier))
                 {
-                    _p9UserSession.PatientLookup.Add(_p9UserSession.PatientSessionId, string.Empty);
+                    _p9UserSession.PatientLookup.Add(Guid.NewGuid(), patientIdentifier);
                 }
             }
 

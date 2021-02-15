@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         private P9UserSession _userSession;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Guid _patientId;
+        private const string _patientGpIdentifier = "main-patient-gp-identifier";
         private Mock<ILinkedAccountsService> _mockLinkedAccountService;
         private Mock<ISessionCacheService> _mockSessionCacheService;
         private Mock<IGpSystem> _mockGpSystem;
@@ -53,6 +54,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
             _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpUserSession.Object)
             {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } },
                 GpUserSession = { NhsNumber = "Nhs number", OdsCode = "ODS Code" }
             };
 
@@ -145,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = false,
                 LinkedAccounts = Enumerable.Empty<LinkedAccount>(),
             };
@@ -157,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = value.Should().BeAssignableTo<LinkedAccountsConfigResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-            _mockLinkedAccountService.Verify(x => x.GetLinkedAccounts(It.IsAny<GpUserSession>()), Times.Never());
+            _mockLinkedAccountService.Verify(x => x.GetLinkedAccounts(It.IsAny<GpUserSession>(), It.IsAny<Dictionary<Guid,string>>()), Times.Never());
         }
 
         [TestMethod]
@@ -168,13 +171,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
+            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession, _userSession.PatientLookup))
                 .ReturnsAsync(new LinkedAccountsResult.Success(new List<LinkedAccount>(), false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = false,
                 LinkedAccounts = Enumerable.Empty<LinkedAccount>(),
             };
@@ -199,13 +202,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
             var linkedAccounts = new List<LinkedAccount> { new LinkedAccount() };
 
-            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
+            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession, _userSession.PatientLookup))
                 .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = true,
                 LinkedAccounts = linkedAccounts,
             };
@@ -228,13 +231,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
+            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession, _userSession.PatientLookup))
                 .ReturnsAsync(new LinkedAccountsResult.Success(new List<LinkedAccount>(), false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = false,
                 LinkedAccounts = Enumerable.Empty<LinkedAccount>(),
             };
@@ -259,13 +262,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
             var linkedAccounts = new[] { new LinkedAccount() };
 
-            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
+            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession, _userSession.PatientLookup))
                 .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, true))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = true,
                 LinkedAccounts = linkedAccounts,
             };
@@ -291,13 +294,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
             var linkedAccounts = new[] { new LinkedAccount() };
 
-            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
+            _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession, _userSession.PatientLookup))
                 .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
-                Id = _userSession.GpUserSession.Id,
+                Id = _userSession.PatientSessionId,
                 HasLinkedAccounts = true,
                 LinkedAccounts = linkedAccounts,
             };
@@ -317,7 +320,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task GetLinkedAccountConfiguration_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult()
         {
             // Arrange
-            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientId))
+            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientGpIdentifier))
                 .Returns(_defaultOdsCode);
 
             var expectedResponse = new ServiceJourneyRulesResponse
@@ -329,7 +332,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _gpUserSession.Object);
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _userSession, _gpUserSession.Object);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -344,14 +347,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         public async Task GetLinkedAccountConfiguration_WhenServiceDoesNotFindConfiguration_ReturnsNotFound()
         {
             // Arrange
-            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientId))
+            _mockLinkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, _patientGpIdentifier))
                 .Returns(_defaultOdsCode);
 
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForLinkedAccount(_defaultOdsCode))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _gpUserSession.Object);
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _userSession, _gpUserSession.Object);
 
             // Assert
             _mockGpSystemFactory.Verify();

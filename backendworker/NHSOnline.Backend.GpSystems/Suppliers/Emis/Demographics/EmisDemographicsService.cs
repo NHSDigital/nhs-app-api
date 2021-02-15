@@ -29,7 +29,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
 
             try
             {
-                _logger.LogInformation($"Trying to find UserPatientLinkToken using Id {gpLinkedAccountModel.PatientId}");
                 var emisHttpRequestData = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
                 var demographicsResponse = await _emisClient.DemographicsGet(emisHttpRequestData);

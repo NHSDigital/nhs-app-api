@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
@@ -19,52 +20,52 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
             _logger = logger;
         }
 
-        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             _logger.LogEnter();
 
-            var fakeUser = FindUser(gpUserSession.NhsNumber).Result;
-            return fakeUser.LinkedAccountsAreaBehaviour.GetOdsCodeForLinkedAccount(gpUserSession, id);
+            var fakeUser = FindUser(gpUserSession).Result;
+            return fakeUser.LinkedAccountsAreaBehaviour.GetOdsCodeForLinkedAccount(gpUserSession, patientGpIdentifier);
         }
 
-        public async Task<SwitchAccountResult> SwitchAccount(GpLinkedAccountModel gpLinkedAccountModel)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             _logger.LogEnter();
 
-            var fakeUser = await FindUser(gpLinkedAccountModel);
-            return await fakeUser.LinkedAccountsAreaBehaviour.SwitchAccount(gpLinkedAccountModel);
+            var fakeUser = await FindUser(gpUserSession);
+            return await fakeUser.LinkedAccountsAreaBehaviour.SwitchAccount(gpUserSession, patientGpIdentifier);
         }
 
-        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
+        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession, Dictionary<Guid, string> gpIdentifierMapping)
         {
             _logger.LogEnter();
 
-            var fakeUser = await FindUser(gpUserSession.NhsNumber);
-            return await fakeUser.LinkedAccountsAreaBehaviour.GetLinkedAccounts(gpUserSession);
+            var fakeUser = await FindUser(gpUserSession);
+            return await fakeUser.LinkedAccountsAreaBehaviour.GetLinkedAccounts(gpUserSession, gpIdentifierMapping);
         }
 
-        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             _logger.LogEnter();
 
-            var fakeUser = await FindUser(gpUserSession.NhsNumber);
-            return await fakeUser.LinkedAccountsAreaBehaviour.GetLinkedAccount(gpUserSession, id);
+            var fakeUser = await FindUser(gpUserSession);
+            return await fakeUser.LinkedAccountsAreaBehaviour.GetLinkedAccount(gpUserSession, patientGpIdentifier);
         }
 
         public LinkedAccountAuditInfo GetProxyAuditData(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
 
-            var fakeUser = FindUser(gpLinkedAccountModel).Result;
+            var fakeUser = FindUser(gpLinkedAccountModel.GpUserSession).Result;
             return fakeUser.LinkedAccountsAreaBehaviour.GetProxyAuditData(gpLinkedAccountModel);
         }
 
-        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
+        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             _logger.LogEnter();
 
-            var fakeUser = FindUser(gpUserSession.NhsNumber).Result;
-            return fakeUser.LinkedAccountsAreaBehaviour.GetNhsNumberForProxyUser(gpUserSession, id);
+            var fakeUser = FindUser(gpUserSession).Result;
+            return fakeUser.LinkedAccountsAreaBehaviour.GetNhsNumberForProxyUser(gpUserSession, patientGpIdentifier);
         }
     }
 }

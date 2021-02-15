@@ -43,7 +43,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
             return Option.Some(new TppUserSession
             {
-                Id = Guid.NewGuid(),
                 Suid = suidHeader?.Value,
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
                 PatientId = patientId ?? authenticateResponse.Body.User.Person.PatientId,
@@ -53,7 +52,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 HasSelfAccess = selfAccess != null,
                 ProxyPatients = linkedPatients.Select(x => new TppProxyUserSession
                 {
-                    Id = Guid.NewGuid(),
                     FullName = x.PersonName?.Name,
                     DateOfBirth = x.DateOfBirth,
                     NhsNumber = x.NationalId.Value,

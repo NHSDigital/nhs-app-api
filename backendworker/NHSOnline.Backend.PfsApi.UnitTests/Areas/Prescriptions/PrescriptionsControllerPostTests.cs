@@ -37,6 +37,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
         private P9UserSession _userSession;
         private Guid _patientId;
+        private const string _patientGpIdentifier = "main-patient-gp-identifier";
+
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
 
         private const string CookieDomain = "CookieDomain";
@@ -63,7 +65,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _gpSession = new EmisUserSession { PrescriptionSpecialRequestNecessity = Necessity.Optional };
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession)
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } }
+            };
 
             _mockPrescriptionsService = new Mock<IPrescriptionService>();
             _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();
@@ -110,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _repeatPrescriptionRequest.CourseIds = new List<string> { "Course 1", "Course 2" };
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                 It.Is<GpLinkedAccountModel>(
-                d => d.GpUserSession == _gpSession && d.PatientId == _patientId),
+                d => d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                 _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.Success()));
 
@@ -144,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _gpSession && d.PatientId == _patientId),
+                        d => d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.PartialSuccess(response)));
 
@@ -232,7 +238,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var serviceResult = (OrderPrescriptionResult) Activator.CreateInstance(serviceResultType);
             _mockPrescriptionsService.Setup(x => x.OrderPrescription(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession ==  _gpSession && d.PatientId == _patientId),
+                        d => d.GpUserSession ==  _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockPrescriptionValidationService

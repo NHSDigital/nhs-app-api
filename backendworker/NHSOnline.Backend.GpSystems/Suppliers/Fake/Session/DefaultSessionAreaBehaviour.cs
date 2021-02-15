@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
         {
             var gpUserSession = new FakeUserSession
             {
-                Id = user.UserUuid,
                 NhsNumber = user.NhsNumber,
                 OdsCode = user.OdsCode,
                 Name = user.Name,
@@ -38,13 +37,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.Session
                 var proxyUser = await _userRepository.Find(proxyNhsNumber);
                 gpUserSession.ProxyPatients.Add(new FakeProxyUserSession
                 {
-                    Id = proxyUser.UserUuid,
                     NhsNumber = proxyUser.NhsNumber,
                     OdsCode = proxyUser.OdsCode
                 });
             }
 
-            return await Task.FromResult<GpSessionCreateResult>(new GpSessionCreateResult.Success(gpUserSession));
+            return await Task.FromResult<GpSessionCreateResult>(
+                new GpSessionCreateResult.Success(gpUserSession, user.NhsNumber, user.LinkedAccountsNhsNumbers));
         }
 
         public async Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -27,6 +28,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
         private Guid _patientId;
+        private const string _patientGpIdentifier = "main-patient-gp-identifier";
         private Mock<IAuditor> _mockAuditor;
         private Mock<ICourseService> _mockCourseService;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
@@ -45,8 +47,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                new EmisUserSession())
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } }
+            };
 
             _mockCourseService = new Mock<ICourseService>();
             _mockAuditor = new Mock<IAuditor>();
@@ -63,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockCourseService.Setup(x => x.GetCourses(
                     It.Is<GpLinkedAccountModel>(d =>
-                        d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                        d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((GetCoursesResult) result));
 
             _mockGpSystem = new Mock<IGpSystem>();
@@ -121,7 +127,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var serviceResult = (GetCoursesResult) Activator.CreateInstance(serviceResultType);
             _mockCourseService.Setup(x => x.GetCourses(
                     It.Is<GpLinkedAccountModel>(d =>
-                    d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                    d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
@@ -177,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             });
             _mockCourseService.Setup(x => x.GetCourses(
                     It.Is<GpLinkedAccountModel>(d =>
-                        d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
+                        d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((GetCoursesResult) result));
 
             // Act

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -14,7 +13,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     public class TppLinkedAccountModelExtensionTests
     {
         private TppUserSession _tppUserSession;
-        private GpLinkedAccountModel _linkedAccountModel;
         private IFixture _fixture;
         private static Mock<ILogger> _logger;
 
@@ -32,7 +30,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             {
                 tppProxyUserSession.Suid = null;
             }
-            _linkedAccountModel = new GpLinkedAccountModel(_tppUserSession);
         }
 
         [TestMethod]
@@ -40,7 +37,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             // Act
             _tppUserSession.Suid = _fixture.Create<string>();
-            var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object);
+            var linkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.PatientId);
+
+            var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(linkedAccountModel, _logger.Object);
 
             // Assert
             Assert.AreEqual(tppRequestParameters.PatientId, _tppUserSession.PatientId);
@@ -52,9 +51,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [TestMethod]
         public void BuildTppRequestParameters_IdMatchedAgainstMainUserButUserNotAuthenticated_ThrowsInvalidPatientIdException()
         {
+            // Arrange
+            var linkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.PatientId);
+
             // Assert
             Assert.ThrowsException<InvalidPatientIdException>(() =>
-                TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object));
+                TppLinkedAccountModelExtensions.BuildTppRequestParameters(linkedAccountModel, _logger.Object));
         }
 
         [TestMethod]
@@ -63,10 +65,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var proxyPatient = _tppUserSession.ProxyPatients.ElementAt(0);
             proxyPatient.Suid = _fixture.Create<string>();
-            _linkedAccountModel.PatientId = proxyPatient.Id;
+            var linkedAccountModel = new GpLinkedAccountModel(_tppUserSession, proxyPatient.PatientId);
 
             // Act
-            var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object);
+            var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(linkedAccountModel, _logger.Object);
 
             // Assert
             Assert.AreEqual(tppRequestParameters.PatientId, proxyPatient.PatientId);
@@ -80,21 +82,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             // Arrange
             var proxyPatient = _tppUserSession.ProxyPatients.ElementAt(0);
-            _linkedAccountModel.PatientId = proxyPatient.Id;
+            var linkedAccountModel = new GpLinkedAccountModel(_tppUserSession, proxyPatient.PatientId);
 
             // Act
             Assert.ThrowsException<InvalidPatientIdException>(() =>
-                TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object));
+                TppLinkedAccountModelExtensions.BuildTppRequestParameters(linkedAccountModel, _logger.Object));
         }
 
         [TestMethod, ExpectedException(typeof(InvalidPatientIdException))]
         public void BuildTppRequestParameters_IdNotFound_ThrowsInvalidPatientIdException()
         {
             // Arrange
-            _linkedAccountModel.PatientId = Guid.Empty;
+            var linkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _fixture.Create<string>());
 
             // Act
-            TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object);
+            TppLinkedAccountModelExtensions.BuildTppRequestParameters(linkedAccountModel, _logger.Object);
         }
     }
 }

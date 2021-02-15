@@ -20,7 +20,6 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
-using GpSessionRecreateResult = NHSOnline.Backend.PfsApi.GpSession.GpSessionRecreateResult;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Session
 {
@@ -207,6 +206,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
 
                 expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
+                expectedUserSession.PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId;
 
                 successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
                 successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
@@ -266,6 +266,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
 
                 expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
+                expectedUserSession.PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId;
 
                 successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
                 successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
@@ -294,7 +295,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 Context.Data.CitizenIdSessionResult.Session,
                 Context.Data.CitizenIdSessionResult.Im1ConnectionToken, new NullGpSession(Supplier.Disconnected, SessionCreatorTestContext.ServiceDeskReference))
             {
-                Key = SessionCreatorTestContext.ApiSessionId
+                Key = SessionCreatorTestContext.ApiSessionId,
             };
 
             Context.ArrangeAntiforgery();
@@ -325,7 +326,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 var successResult = result.Should().BeAssignableTo<CreateSessionResult.Success>().Subject;
 
                 expectedUserSession.OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId;
-
+                expectedUserSession.PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId;
                 successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
                 successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
 
@@ -461,12 +462,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             {
                 new EmisProxyUserSession
                 {
-                    Id = Guid.NewGuid(),
                     PatientActivityContextGuid = "proxy-patient-gp-identifier-1"
                 }
             };
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(
+                Context.Data.EmisUserSession,
+                Context.Data.EmisUserSession.PatientActivityContextGuid,
+                Context.Data.EmisUserSession.ProxyPatients.Select(x => x.PatientActivityContextGuid)));
 
             // Act
             var result = await CreateSystemUnderTest().CreateSession(Context.Data.CreateSessionRequest);
@@ -480,11 +483,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 {
                     { ((P9UserSession) successResult.UserSession).PatientSessionId, Context.Data.EmisUserSession.PatientActivityContextGuid },
                 };
+
                 Context.Data.EmisUserSession.ProxyPatients.ForEach(proxy =>
                 {
                     var createdGuidKey = ((P9UserSession) successResult.UserSession)
                         .PatientLookup.First(x =>
                             x.Value == proxy.PatientActivityContextGuid).Key;
+
                     expectedPatientLookup.Add(createdGuidKey, proxy.PatientActivityContextGuid);
                 });
 
@@ -540,10 +545,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     SessionCreatorTestContext.CsrfRequestToken,
                     Context.Data.UserInfo.NhsNumber,
                     Context.Data.CitizenIdSessionResult.Session,
-                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken, new OnDemandGpSession(Supplier.Disconnected))
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken,
+                    new OnDemandGpSession(Supplier.Disconnected))
                 {
                     Key = SessionCreatorTestContext.ApiSessionId,
-                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId,
+                    PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId
                 };
 
                 successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
@@ -596,7 +603,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     Context.Data.CitizenIdSessionResult.Im1ConnectionToken, new NullGpSession(Supplier.Disconnected, expectedServiceDeskReference))
                 {
                     Key = SessionCreatorTestContext.ApiSessionId,
-                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId,
+                    PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId,
                 };
 
                 successResult.ServiceJourneyRules.Should().Be(Context.Data.ServiceJourneyRulesResponse);
@@ -629,12 +637,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             {
                 new EmisProxyUserSession
                 {
-                    Id = Guid.NewGuid(),
                     PatientActivityContextGuid = "proxy-patient-gp-identifier-1"
                 }
             };
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.Data.EmisUserSession));
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(
+                Context.Data.EmisUserSession,
+                Context.Data.EmisUserSession.PatientActivityContextGuid,
+                Context.Data.EmisUserSession.ProxyPatients.Select(x => x.PatientActivityContextGuid)));
 
             ArrangeMatchingNhsLoginIds();
 
@@ -666,10 +676,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     SessionCreatorTestContext.CsrfRequestToken,
                     Context.Data.UserInfo.NhsNumber,
                     Context.Data.CitizenIdSessionResult.Session,
-                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken, Context.Data.UserSession.GpUserSession)
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken,
+                    Context.Data.UserSession.GpUserSession)
                 {
-                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId,
                     PatientSessionId = ((P9UserSession) successResult.UserSession).PatientSessionId,
+                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId,
                     PatientLookup = expectedPatientLookup
                 };
 
@@ -818,11 +829,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             Context.Data.SessionConfigSettings.ProxyEnabled = true;
             Context.Data.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
             {
-                new EmisProxyUserSession
-                {
-                    Id = Guid.NewGuid(),
-                    PatientActivityContextGuid = "proxy-patient-gp-identifier-1"
-                }
+                new EmisProxyUserSession { PatientActivityContextGuid = "proxy-patient-gp-identifier-1" }
             };
 
             Context.Mocks.Im1CacheService
@@ -896,9 +903,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     SessionCreatorTestContext.CsrfRequestToken,
                     Context.Data.UserInfo.NhsNumber,
                     Context.Data.CitizenIdSessionResult.Session,
-                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken, Context.Data.UserSession.GpUserSession)
+                    Context.Data.CitizenIdSessionResult.Im1ConnectionToken,
+                    Context.Data.UserSession.GpUserSession)
                 {
-                    OrganDonationSessionId = ((P9UserSession) successResult.UserSession).OrganDonationSessionId
+                    PatientSessionId = request.UserSession.PatientSessionId,
+                    OrganDonationSessionId = request.UserSession.OrganDonationSessionId
                 };
 
                 successResult.UserSession.Should().BeEquivalentTo(expectedUserSession);
@@ -926,17 +935,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
         {
             var accessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "123456");
             Context.Data.CitizenIdSessionResult.Session.AccessToken = accessToken.ToString();
-        }
-
-        private void ArrangeDifferentNhsLoginIds()
-        {
-            Context.Data.UserSession.CitizenIdUserSession.AccessToken =
-                AccessTokenMock.Generate(nhsNumber: "123", subject: "123456").ToString();
-
-            Context.Data.CitizenIdSessionResult.Session = new CitizenIdUserSession
-            {
-                AccessToken = AccessTokenMock.Generate(nhsNumber: "123", subject: "987654").ToString()
-            };
         }
     }
 }

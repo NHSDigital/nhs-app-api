@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Session
@@ -14,9 +16,21 @@ namespace NHSOnline.Backend.GpSystems.Session
         {
             public GpUserSession UserSession { get; }
 
-            public Success(GpUserSession userSession)
+            public string MainPatientGpIdentifier { get; }
+            public IEnumerable<string> ProxyPatientGpIdentifiers { get; }
+
+            public Success(
+                GpUserSession userSession,
+                string mainPatientGpIdentifier,
+                IEnumerable<string> proxyPatientGpIdentifiers)
             {
                 UserSession = userSession;
+                MainPatientGpIdentifier = mainPatientGpIdentifier;
+                ProxyPatientGpIdentifiers = proxyPatientGpIdentifiers;
+            }
+
+            public Success(GpUserSession userSession) : this(userSession, string.Empty, Enumerable.Empty<string>())
+            {
             }
 
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)

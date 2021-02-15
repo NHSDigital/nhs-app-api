@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NHSOnline.Backend.GpSystems
+namespace NHSOnline.Backend.Support
 {
     [Serializable]
     public class InvalidPatientIdException : Exception
     {
-        public InvalidPatientIdException(Guid patientIdHeader)
-            : base($"Patient id ({patientIdHeader}) did not match logged in user's id or id of any of their proxies.")
-        {
-        }
-
         public InvalidPatientIdException()
+            : base($"Patient id did not match logged in user's id or id of any of their proxies.")
         {
         }
-
         public InvalidPatientIdException(string message) : base(message)
         {
         }

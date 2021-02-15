@@ -20,9 +20,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake
 
         protected Task<FakeUser> FindUser(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var session = gpLinkedAccountModel.GpUserSession as FakeUserSession;
+            return FindUser(gpLinkedAccountModel.GpUserSession);
+        }
 
-            return FindUser(session?.NhsNumber);
+        protected Task<FakeUser> FindUser(GpUserSession gpUserSession)
+        {
+            return FindUser(gpUserSession?.NhsNumber);
         }
 
         protected Task<FakeUser> FindUser(string nhsNumber)

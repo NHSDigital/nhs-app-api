@@ -32,29 +32,29 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             _calculateAge = calculateAge;
         }
 
-        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var tppUserSession = (TppUserSession)gpUserSession;
             return tppUserSession.OdsCode;
         }
 
-        public async Task<SwitchAccountResult> SwitchAccount(GpLinkedAccountModel gpLinkedAccountModel)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
-            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+            var tppUserSession = (TppUserSession) gpUserSession;
 
-            if (tppUserSession.GetCurrentlyAuthenticatedId() == gpLinkedAccountModel.PatientId)
+            if (tppUserSession.GetCurrentlyAuthenticatedId() == patientGpIdentifier)
             {
                 _logger.LogInformation("TPP user already authenticated");
-                return new SwitchAccountResult.AlreadyAuthenticated(gpLinkedAccountModel.PatientId);
+                return new SwitchAccountResult.AlreadyAuthenticated(patientGpIdentifier);
             }
 
-            var proxy = GetProxyPatient(gpLinkedAccountModel);
-            var validId = proxy != null || tppUserSession.Id == gpLinkedAccountModel.PatientId;
+            var proxy = GetProxyPatient(gpUserSession, patientGpIdentifier);
+            var validId = proxy != null || tppUserSession.PatientId == patientGpIdentifier;
 
             if (!validId)
             {
-                _logger.LogInformation("Unknown patient guid - could not find match on TppUserSession");
-                return new SwitchAccountResult.NotFound(gpLinkedAccountModel.PatientId);
+                _logger.LogInformation("Unknown patient identifier - could not find match on TppUserSession");
+                return new SwitchAccountResult.NotFound(patientGpIdentifier);
             }
 
             // The TppUserSession instance gets amended as part of re-creating a session, but
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             if (result is RecreateSessionResult.Failure)
             {
                 _logger.LogInformation("Recreate TPP User Session failed");
-                return new SwitchAccountResult.Failure(gpLinkedAccountModel.PatientId);
+                return new SwitchAccountResult.Failure(patientGpIdentifier);
             }
 
             _fireAndForgetService.Run(
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             return JsonConvert.DeserializeObject<TppUserSession>(JsonConvert.SerializeObject(tppUserSession));
         }
 
-        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
+        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession, Dictionary<Guid, string> gpIdentifierMapping)
         {
             var tppUserSession = (TppUserSession)gpUserSession;
 
@@ -97,9 +97,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 {
                     var dateOfBirth = proxyPatient.DateOfBirth;
                     var ageInMonthsAndYears = _calculateAge.CalculateAgeInMonthsAndYears(dateOfBirth);
+                    var proxyPatientIdInSession =
+                        gpIdentifierMapping.First(x => x.Value == proxyPatient.PatientId).Key;
+
                     linkedAccounts.Add(new LinkedAccount
                     {
-                        Id = proxyPatient.Id,
+                        Id = proxyPatientIdInSession,
                         GivenName = proxyPatient.FullName,
                         FullName = proxyPatient.FullName,
                         AgeMonths = ageInMonthsAndYears.AgeMonths,
@@ -112,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             return await Task.FromResult(new LinkedAccountsResult.Success(linkedAccounts, false));
         }
 
-        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var response = new GetAccountAccessSummaryResponse
             {
@@ -131,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 
                 linkedAccountAuditResult.IsProxyMode = true;
                 linkedAccountAuditResult.ProxyNhsNumber = tppUserSession.ProxyPatients
-                    .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.NhsNumber;
+                    .FirstOrDefault(x => x.PatientId == gpLinkedAccountModel.RequestingPatientGpIdentifier)?.NhsNumber;
             }
 
             return linkedAccountAuditResult;
@@ -253,20 +256,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 if (!unitNameMatch && !addressMatch)
                 {
                     _logger.LogInformation(
-                        $"Proxy Patient with Guid {proxyPatient.Id} has different unit name and address " +
+                        "Proxy Patient has different unit name and address " +
                         $"{proxyUserSiteDetails.UnitName}, {proxyUserSiteDetails.Address?.Address} from main user" +
                         $" {mainUserSiteDetails.UnitName}, {mainUserSiteDetails.Address?.Address}");
                 }
                 else if (!unitNameMatch)
                 {
                     _logger.LogInformation(
-                        $"Proxy Patient with Guid {proxyPatient.Id} has different unit name " +
+                        $"Proxy Patient has different unit name " +
                         $"{proxyUserSiteDetails.UnitName} from main user {mainUserSiteDetails.UnitName}");
                 }
                 else if (!addressMatch)
                 {
                     _logger.LogInformation(
-                        $"Proxy Patient with Guid {proxyPatient.Id} has different address " +
+                        $"Proxy Patient has different address " +
                         $"{proxyUserSiteDetails.Address?.Address} from main user {mainUserSiteDetails.Address?.Address}");
                 }
             }
@@ -284,16 +287,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             return unitNameMatch && addressMatch;
         }
 
-        private bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
+        private static bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            return GetProxyPatient(gpLinkedAccountModel) != null;
+            return GetProxyPatient(gpLinkedAccountModel.GpUserSession, gpLinkedAccountModel.RequestingPatientGpIdentifier) != null;
         }
 
-        private TppProxyUserSession GetProxyPatient(GpLinkedAccountModel gpLinkedAccountModel)
+        private static TppProxyUserSession GetProxyPatient(GpUserSession gpUserSession, string patientGpIdentifier)
         {
-            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+            var tppUserSession = (TppUserSession) gpUserSession;
             return tppUserSession.ProxyPatients
-                .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId);
+                .FirstOrDefault(x => x.PatientId == patientGpIdentifier);
         }
 
         private async Task CloseTppSession(IServiceProvider serviceProvider, TppUserSession tppUserSession)
@@ -308,10 +311,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             }
         }
 
-        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
+        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var tppUserSession = (TppUserSession)gpUserSession;
-            var proxy = tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+            var proxy = tppUserSession.ProxyPatients.FirstOrDefault(
+                x => x.PatientId == patientGpIdentifier);
 
             return proxy?.NhsNumber;
         }

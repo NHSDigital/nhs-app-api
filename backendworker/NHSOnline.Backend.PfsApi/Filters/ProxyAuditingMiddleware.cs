@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -51,7 +52,12 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))
                 {
                     var linkedAccountsService = gpSystem.GetLinkedAccountsService();
-                    var gpSessionDetails = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+                    userSession.TryGetPatientGpIdentifierFromSessionIdentifier(
+                        patientId,
+                        out string patientGpIdentifier);
+
+                    var gpSessionDetails = new GpLinkedAccountModel(userSession.GpUserSession, patientGpIdentifier);
+
                     var result = new LinkedAccountAuditInfo
                     {
                         IsProxyMode = false,
@@ -61,8 +67,8 @@ namespace NHSOnline.Backend.PfsApi.Filters
                     try
                     {
                         result = linkedAccountsService.GetProxyAuditData(gpSessionDetails);
-                    } 
-                    catch (UnauthorisedGpSystemHttpRequestException) 
+                    }
+                    catch (UnauthorisedGpSystemHttpRequestException)
                     {
                         _logger.LogError("Unable to get linked account information: GP service has returned an unauthorised response, the GP session for the current user is probably invalid/expired");
                     }
@@ -76,8 +82,8 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
         private bool TryParsePatientId(HttpContext context, out Guid patientId)
         {
-            string patientIdHeader = context.Request.Headers[PatientId];
-            if (patientIdHeader == null)
+            var patientIdHeader = context.Request.Headers[PatientId];
+            if (patientIdHeader == StringValues.Empty)
             {
                 // These two requests path are being called in the Startup before the patient id has been set
                 if (!_patientIdHeaderNotExpectedForPaths.Contains(context.Request.Path))

@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
             _emisRequestParameters = new EmisRequestParameters(_emisUserSession);
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();

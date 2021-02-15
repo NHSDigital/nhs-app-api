@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             var supplier = ((OnDemandGpSession) request.UserSession.GpUserSession).SessionSupplier;
 
-            var createGpSessionResult = await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier);
+            var createGpSessionResult = await _gpSessionCreator.RecreateGpSession(request.UserSession, supplier, request.UserSession.PatientSessionId);
 
             switch (createGpSessionResult)
             {

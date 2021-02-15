@@ -1,5 +1,3 @@
-using System;
-
 namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 {
     public abstract class SwitchAccountResult
@@ -18,9 +16,9 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class AlreadyAuthenticated : SwitchAccountResult
         {
-            public Guid AuthenticatedId { get; }
+            public string AuthenticatedId { get; }
 
-            public AlreadyAuthenticated(Guid authenticatedId)
+            public AlreadyAuthenticated(string authenticatedId)
             {
                 AuthenticatedId = authenticatedId;
             }
@@ -33,9 +31,9 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class NotFound : SwitchAccountResult
         {
-            public Guid AttemptedIdToSwitchTo { get; }
+            public string AttemptedIdToSwitchTo { get; }
 
-            public NotFound(Guid attemptedIdToSwitchTo)
+            public NotFound(string attemptedIdToSwitchTo)
             {
                 AttemptedIdToSwitchTo = attemptedIdToSwitchTo;
             }
@@ -48,9 +46,9 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class Failure : SwitchAccountResult
         {
-            public Guid AttemptedIdToSwitchTo { get; }
+            public string AttemptedIdToSwitchTo { get; }
 
-            public Failure(Guid attemptedIdToSwitchTo)
+            public Failure(string attemptedIdToSwitchTo)
             {
                 AttemptedIdToSwitchTo = attemptedIdToSwitchTo;
             }

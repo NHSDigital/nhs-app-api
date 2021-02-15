@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.Support;
@@ -9,6 +10,6 @@ namespace NHSOnline.Backend.PfsApi.GpSession
     {
         Task CreateGpSession(CitizenIdSessionResult citizenIdUserSession, Supplier supplier, P9UserSession p9UserSession);
 
-        Task<GpSessionRecreateResult> RecreateGpSession(P9UserSession userSession, Supplier supplier);
+        Task<GpSessionRecreateResult> RecreateGpSession(P9UserSession userSession, Supplier supplier, Guid patientSessionId);
     }
 }

@@ -62,7 +62,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 .CreateGpSystem(gpUserSession.Supplier)
                 .GetPatientRecordService();
 
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpUserSession, patientId);
+            var gpLinkedAccountUserSession = userSession.BuildGpLinkedAccountModel(patientId);
+
             _logger.LogInformation("Fetching patient record");
             var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
 

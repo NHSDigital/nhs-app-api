@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
         private Guid _patientId;
+        private string _patientGpIdentifier;
         private Mock<IAnonymousMetricLogger> _mockAnonymousMetricLogger;
 
         private const string RequestAuditType = "Appointments_Book_Request";
@@ -51,10 +52,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-
+            _patientGpIdentifier = "main-patient-gp-identifier";
             _gpSession = new EmisUserSession();
-
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession);
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpSession)
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } }
+            };
 
             _appointmentBookRequest = new AppointmentBookRequest()
             {
@@ -74,7 +78,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAppointmentsService.Setup(x => x.Book(
                     It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Success()));
 
@@ -193,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var serviceResult = (AppointmentBookResult) Activator.CreateInstance(serviceResultType);
             _mockAppointmentsService.Setup(x => x.Book(
                 It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     _appointmentBookRequest))
                 .Returns(Task.FromResult(serviceResult));
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Appointments,

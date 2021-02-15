@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.Support.Session
             NhsNumber = nhsNumber;
             Im1ConnectionToken = im1ConnectionToken;
             OrganDonationSessionId = Guid.NewGuid();
+            PatientSessionId = Guid.NewGuid();
         }
 
         public GpUserSession GpUserSession { get; set; }

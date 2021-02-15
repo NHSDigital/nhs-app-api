@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
                         .CreateGpSystem(gpUserSession.Supplier)
                         .GetDemographicsService();
 
-                    var gpLinkedAccountUserSession = new GpLinkedAccountModel(gpUserSession, patientId);
+                    var gpLinkedAccountUserSession = userSession.BuildGpLinkedAccountModel(patientId);
 
                     _logger.LogDebug("Fetching Demographics");
                     var result = await demographicsService.GetDemographics(gpLinkedAccountUserSession);

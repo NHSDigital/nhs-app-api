@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.Id);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.PatientId);
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();

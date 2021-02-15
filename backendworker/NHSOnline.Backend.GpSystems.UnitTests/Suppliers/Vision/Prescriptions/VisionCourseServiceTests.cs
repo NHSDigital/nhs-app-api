@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionConfigurationSettings _settings;
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
-        private Guid _patientId;
+        private string _patientId;
         private VisionResponse<EligibleRepeatsResponse> _eligibleRepeatsResponse;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
@@ -48,12 +48,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _patientId = Guid.NewGuid();
+            _patientId = _fixture.Create<string>();
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
-
             _visionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
 
             _settings = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl,

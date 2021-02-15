@@ -57,9 +57,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetPatientRecordService();
 
-                var gpLinkedAccountModel = new GpLinkedAccountModel(
-                    userSession.GpUserSession, patientId
-                );
+                var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
 
                 _logger.LogInformation("Fetching patient document");
                 var result = await patientRecordService.GetPatientDocument(
@@ -97,7 +95,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 await _auditor.PreOperationAudit(AuditingOperations.DownloadDocumentAuditTypeRequest,
                     "Downloading patient document");
 
-                var gpLinkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+                var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
 
                 _logger.LogInformation("Fetching PatientRecordService for supplier");
 

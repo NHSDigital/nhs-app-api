@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -25,6 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         private IFixture _fixture;
         private P9UserSession _userSession;
         private Guid _patientId;
+        private string _patientGpIdentifier = "main-patient-gp-identifier";
         private RequestDelegate _next;
         private DefaultHttpContext _context;
         private Mock<ILogger<ProxyAuditingMiddleware>> _mockLogger;
@@ -44,7 +46,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<ProxyAuditingMiddleware>>>();
 
-            _userSession = _fixture.Create<P9UserSession>();
+            _userSession = _fixture.Build<P9UserSession>()
+                .With(x => x.PatientSessionId, _patientId)
+                .With(x => x.PatientLookup, new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } })
+                .Create();
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -81,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _mockLinkedAccountService.Setup(x => x.GetProxyAuditData(
                     It.Is<GpLinkedAccountModel>(m =>
                         m.GpUserSession == _userSession.GpUserSession
-                        && m.PatientId == _patientId)))
+                        && m.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(result).Verifiable();
 
             var subject = new ProxyAuditingMiddleware(_next, _mockLogger.Object);
@@ -224,7 +229,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _mockLinkedAccountService.Setup(las => las.GetProxyAuditData(
                     It.Is<GpLinkedAccountModel>(m =>
                         m.GpUserSession == _userSession.GpUserSession
-                        && m.PatientId == _patientId)))
+                        && m.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Throws<UnauthorisedGpSystemHttpRequestException>();
             _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, _patientId.ToString());
 

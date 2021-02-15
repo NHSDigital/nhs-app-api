@@ -76,7 +76,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             foreach (var proxy in proxies)
             {
                 var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
-                proxy.Id.Should().NotBeEmpty();
                 proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
                 proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
                 proxy.PatientId.Should().Be(associatedPerson.PatientId);
@@ -140,7 +139,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             foreach (var proxy in proxies)
             {
                 var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
-                proxy.Id.Should().NotBeEmpty();
                 proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
                 proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
                 proxy.PatientId.Should().Be(associatedPerson.PatientId);
@@ -224,7 +222,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             foreach (var proxy in proxies)
             {
                 var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
-                proxy.Id.Should().NotBeEmpty();
+                proxy.PatientId.Should().NotBeEmpty();
                 proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
                 proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
                 proxy.PatientId.Should().Be(associatedPerson.PatientId);
@@ -349,6 +347,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             value.NhsNumber.Should().Be(_nhsNumber);
             value.HasSelfAccess.Should().BeTrue();
             value.ProxyPatients.Count.Should().Be(0); // ignore proxy mapping when mapping a specific patient
+
+            var proxies = value.ProxyPatients;
+
+            foreach (var proxy in proxies)
+            {
+                var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
+                proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
+                proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
+                proxy.PatientId.Should().Be(associatedPerson.PatientId);
+                proxy.DateOfBirth.Should().Be(associatedPerson.DateOfBirth);
+                proxy.Suid.Should().BeNull();
+            }
         }
 
         [TestMethod]

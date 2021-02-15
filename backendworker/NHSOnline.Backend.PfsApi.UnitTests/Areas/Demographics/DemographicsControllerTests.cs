@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -34,17 +35,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
         private const string RequestAuditMessage = "Attempting to view Demographics";
 
-        private  Guid _patientGuid;
-
+        private readonly Guid _patientSessionId = Guid.NewGuid();
+        private string _patientGpIdentifier = "main-patient-gp-identifier";
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientGuid = Guid.NewGuid();
-            _gpUserSession = new EmisUserSession();
             _mockAuditor = new Mock<IAuditor>();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpUserSession);
+            _gpUserSession = new EmisUserSession();
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpUserSession)
+            {
+                PatientSessionId = _patientSessionId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientSessionId, _patientGpIdentifier } }
+            };
 
             _mockDemographicsService = new Mock<IDemographicsService>();
 
@@ -74,11 +78,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
             _mockDemographicsService.Setup(x => x.GetDemographics(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                        d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid, _userSession, _gpUserSession);
+            var result = await _systemUnderTest.Get(_patientSessionId, _userSession, _gpUserSession);
 
             // Assert
             _mockDemographicsService.Verify();
@@ -98,11 +102,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             _mockDemographicsService
                 .Setup(x => x.GetDemographics(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                        d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid, _userSession, _gpUserSession);
+            var result = await _systemUnderTest.Get(_patientSessionId, _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -120,11 +124,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             var demographicsResult = new DemographicsResult.BadGateway();
             _mockDemographicsService.Setup(x => x.GetDemographics(
                 It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid, _userSession, _gpUserSession);
+            var result = await _systemUnderTest.Get(_patientSessionId, _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -143,11 +147,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
             _mockDemographicsService.Setup(x => x.GetDemographics(
                 It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid, _userSession, _gpUserSession);
+            var result = await _systemUnderTest.Get(_patientSessionId, _userSession, _gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

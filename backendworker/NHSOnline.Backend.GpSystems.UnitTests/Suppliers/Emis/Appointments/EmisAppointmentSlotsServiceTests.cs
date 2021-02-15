@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
 
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.Id);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 _mockEmisClient.Object,
                 new LoggerFactory().CreateLogger<EmisAppointmentSlotsService>(),
                 _mockResponseMapper.Object);
-            
+
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK

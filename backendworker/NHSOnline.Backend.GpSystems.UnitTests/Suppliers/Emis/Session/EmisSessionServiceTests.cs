@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
             _nhsNumber = _fixture.Create<string>();
-            
+
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK
@@ -281,7 +281,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
             createdResult.UserSession.Name.Should().Be(expected);
-            createdResult.UserSession.Id.Should().NotBeEmpty();
             createdResult.UserSession.NhsNumber.Should().Be(_nhsNumber);
             createdResult.UserSession.OdsCode.Should().Be(_odsCode);
         }
@@ -398,16 +397,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData_IsProxySetToFalseWhenProxyPatientsIsEmpty()
         {
             // Arrange
-            var expectedName =  $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
+            var expectedName = $"{_sessionsResponse.Title} {_sessionsResponse.FirstName} {_sessionsResponse.Surname}";
 
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
             var systemUnderTest = CreateEmisSessionService(enumMapper);
 
-            _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.None;
-            _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
-            _sessionsResponse.UserPatientLinks.ToList()[2].AssociationType = AssociationType.None;
+            var userPatientLinksInSessionResponse = _sessionsResponse.UserPatientLinks.ToList();
+
+            var firstLinkedPatient = userPatientLinksInSessionResponse[0];
+            var selfPatient = userPatientLinksInSessionResponse[1];
+            var secondLinkedPatient = userPatientLinksInSessionResponse[2];
+
+            firstLinkedPatient.AssociationType = AssociationType.Proxy;
+            selfPatient.AssociationType = AssociationType.Self;
+            secondLinkedPatient.AssociationType = AssociationType.Proxy;
 
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
@@ -419,8 +424,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
             {
                 Name = expectedName,
-                Id = createdResult.UserSession.Id, NhsNumber = _nhsNumber, OdsCode = _odsCode
-            });
+                NhsNumber = _nhsNumber,
+                OdsCode = _odsCode,
+                UserPatientLinkToken = selfPatient.UserPatientLinkToken,
+                ProxyPatients = new List<EmisProxyUserSession>
+                {
+                    new EmisProxyUserSession
+                    {
+                        OdsCode = firstLinkedPatient.NationalPracticeCode,
+                        UserPatientLinkToken = firstLinkedPatient.UserPatientLinkToken
+                    },
+                    new EmisProxyUserSession
+                    {
+                        OdsCode = secondLinkedPatient.NationalPracticeCode,
+                        UserPatientLinkToken = secondLinkedPatient.UserPatientLinkToken
+                    }
+                }
+            }, selfPatient.PatientActivityContextGuid,
+                new [] {
+                    firstLinkedPatient.PatientActivityContextGuid,
+                    secondLinkedPatient.PatientActivityContextGuid });
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }
@@ -446,14 +469,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Assert
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
-            
+
             createdResult.UserSession.Name.Should().Be(expectedName);
-            createdResult.UserSession.Id.Should().NotBeEmpty();
             createdResult.UserSession.NhsNumber.Should().Be(_nhsNumber);
             createdResult.UserSession.OdsCode.Should().Be(_odsCode);
             createdResult.UserSession.HasLinkedAccounts.Should().BeTrue();
         }
-
 
         [TestMethod]
         public async Task Create_HappyPath_ReturnsAUserSessionInTheResult()

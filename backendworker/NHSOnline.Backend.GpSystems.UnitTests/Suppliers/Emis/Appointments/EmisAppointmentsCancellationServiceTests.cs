@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _cancellationReasonService = _fixture.Freeze<Mock<ICancellationReasonService>>();
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.Id);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
             _request = new AppointmentCancelRequest
             {
                 AppointmentId = _fixture.Create<int>().ToString(CultureInfo.InvariantCulture),
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .Verifiable();
 
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
-            
+
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK

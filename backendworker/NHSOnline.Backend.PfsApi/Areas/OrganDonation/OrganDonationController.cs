@@ -63,8 +63,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
                     .CreateGpSystem(gpUserSession.Supplier).GetDemographicsService();
 
                 _logger.LogDebug("Fetching Demographics");
+
+                var patientGpIdentifier = userSession.PatientLookup[userSession.PatientSessionId];
                 var demographicsResult = await demographicsService
-                    .GetDemographics(new GpLinkedAccountModel(gpUserSession));
+                    .GetDemographics(new GpLinkedAccountModel(gpUserSession, patientGpIdentifier));
 
                 var result = await _organDonationService.GetOrganDonation(demographicsResult, userSession);
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
         private P9UserSession _userSession;
         private Guid _patientId;
+        private string _patientGpIdentifier;
 
         private const string DocumentId = "1";
         private const string DocumentType = "jpg";
@@ -51,8 +53,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var mockGpSystem = new Mock<IGpSystem>();
             var mockGpSystemFactory = new Mock<IGpSystemFactory>();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
             _patientId = Guid.NewGuid();
+            _patientGpIdentifier = "main-patient-gp-identifier";
+
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                new EmisUserSession())
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string>
+                {
+                    { _patientId, _patientGpIdentifier },
+                }
+            };
 
             var httpContextResponse = new Mock<HttpResponse>();
             httpContextResponse.Setup(x => x.Headers).Returns(new HeaderDictionary());
@@ -94,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             Func<GpLinkedAccountModel, bool> check = d =>
             {
-                return d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId;
+                return d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier;
             };
 
             _mockPatientRecordService
@@ -136,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockPatientRecordService
                 .Setup(x => x.GetPatientDocument(It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                        d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                         DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(badResult)
                 .Verifiable();
@@ -176,7 +188,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockPatientRecordService
                 .Setup(x => x.GetPatientDocumentForDownload(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(successResult)
                 .Verifiable();
@@ -209,7 +221,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockPatientRecordService
                 .Setup(x => x.GetPatientDocumentForDownload(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier),
                     DocumentId, DocumentType, DocumentName))
                 .ReturnsAsync(badResult)
                 .Verifiable();

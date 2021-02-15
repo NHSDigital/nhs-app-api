@@ -28,19 +28,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private VisionUserSession _visionUserSession;
         private VisionResponse<BookAppointmentResponse> _visionClientGetResponse;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-            
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
             _visionUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
-             
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, Guid.NewGuid());
-            
+
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, _fixture.Create<string>());
+
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookAppointmentResponse>>();
 
@@ -48,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             _request = _fixture.Create<AppointmentBookRequest>();
         }
-        
+
         [TestMethod]
         public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
@@ -65,22 +64,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             };
 
             MockVisionClientAppointmentPostMethod(response);
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsForbidden()
         {
             // Arrange
             _visionUserSession.IsAppointmentsEnabled = false;
-            
-            // Act            
+
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -98,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 ))
                 .Throws<HttpRequestException>()
                 .Verifiable();
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
@@ -114,15 +113,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var response = VisionApiObjectResponseBuilder
                 .BuildUnsuccessfulResponseWithErrorCode<BookAppointmentResponse>("-100");
             MockVisionClientAppointmentPostMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-        
+
         [TestMethod]
         public async Task Book_VisionClientReturnsSlotNotFound_ReturnsSlotNotAvailable()
         {
@@ -130,15 +129,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var response = VisionApiObjectResponseBuilder
                 .BuildUnsuccessfulResponseWithErrorCode<BookAppointmentResponse>("-21");
             MockVisionClientAppointmentPostMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-        
+
         [TestMethod]
         public async Task Book_VisionClientReturnsAppointmentBookingLimitReached_ReturnsAppointmentLimitReached()
         {
@@ -146,15 +145,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var response = VisionApiObjectResponseBuilder
                 .BuildUnsuccessfulResponseWithErrorCode<BookAppointmentResponse>("-25");
             MockVisionClientAppointmentPostMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.AppointmentLimitReached>();
         }
-        
+
         [TestMethod]
         public async Task Book_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
@@ -162,15 +161,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var response = VisionApiObjectResponseBuilder
                 .BuildUnsuccessfulResponseWithErrorCode<BookAppointmentResponse>("-35");
             MockVisionClientAppointmentPostMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
-        
+
         [TestMethod]
         public async Task Book_VisionClientReturnsUnexpectedErrorCode_ReturnsBadGateway()
         {
@@ -179,10 +178,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var response = VisionApiObjectResponseBuilder
                 .BuildUnsuccessfulResponseWithErrorCode<BookAppointmentResponse>(unexpectedErrorCode);
             MockVisionClientAppointmentPostMethod(response);
-            
+
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
@@ -225,7 +224,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
-        
+
         private void MockVisionClientAppointmentPostMethod(VisionPfsApiObjectResponse<BookAppointmentResponse> response)
         {
             _mockVisionClient.Setup(x => x.BookAppointment(

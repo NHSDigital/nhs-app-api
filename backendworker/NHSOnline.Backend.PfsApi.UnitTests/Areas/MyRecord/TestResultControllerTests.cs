@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -31,14 +32,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private const string ResponseAuditType = "TestResult_Get_Response";
         private const string RequestAuditMessage = "Attempting to view test result";
         private const string TestResultId = "testId";
-        private readonly Guid _patientGuid = Guid.NewGuid();
+        private readonly Guid _patientId = Guid.NewGuid();
+        private readonly string _patientGpIdentifier = "main-patient-gp-identifier";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mockAuditor = new Mock<IAuditor>();
-
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                new EmisUserSession())
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string>
+                {
+                    { _patientId, _patientGpIdentifier },
+                }
+            };
 
             _mockPatientRecordService = new Mock<IPatientRecordService>();
 
@@ -64,11 +73,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var testResult = new GetDetailedTestResult.Success(testResultResponse);
 
             _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid), TestResultId))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId, _userSession);
+            var result = await _systemUnderTest.GetTestResult(_patientId, TestResultId, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -86,11 +95,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var testResult = new GetDetailedTestResult.BadGateway();
 
             _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid), TestResultId))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId, _userSession);
+            var result = await _systemUnderTest.GetTestResult(_patientId, TestResultId, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

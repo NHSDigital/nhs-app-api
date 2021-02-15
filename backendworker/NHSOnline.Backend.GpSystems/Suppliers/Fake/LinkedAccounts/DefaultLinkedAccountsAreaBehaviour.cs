@@ -27,31 +27,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
             _calculateAge = calculateAge;
         }
 
-        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var fakeUserSession = (FakeUserSession) gpUserSession;
-            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+
+            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.NhsNumber == patientGpIdentifier);
             return proxy?.OdsCode;
         }
 
-        public async Task<SwitchAccountResult> SwitchAccount(GpLinkedAccountModel gpLinkedAccountModel)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
-            if (IsValidLinkedAccount(gpLinkedAccountModel)
-                || gpLinkedAccountModel.GpUserSession.Id == gpLinkedAccountModel.PatientId)
+            var fakeUserSession = (FakeUserSession)gpUserSession;
+
+            if (IsValidLinkedAccount(gpUserSession, patientGpIdentifier)
+                || fakeUserSession.NhsNumber == patientGpIdentifier)
             {
                 return await Task.FromResult(new SwitchAccountResult.Success());
             }
 
-            return await Task.FromResult(new SwitchAccountResult.NotFound(gpLinkedAccountModel.PatientId));
+            return await Task.FromResult(new SwitchAccountResult.NotFound(patientGpIdentifier));
         }
 
-        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
+        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession, Dictionary<Guid, string> gpIdentifierMapping)
         {
             var fakeUserSession = (FakeUserSession) gpUserSession;
 
             var linkedAccounts = new List<LinkedAccount>();
 
-            if (gpUserSession.HasLinkedAccounts)
+            if (fakeUserSession.HasLinkedAccounts)
             {
                 foreach (var proxyPatient in fakeUserSession.ProxyPatients)
                 {
@@ -59,9 +62,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
 
                     var ageData = _calculateAge.CalculateAgeInMonthsAndYears(proxyUser.DateOfBirth);
 
+                    var sessionKey = gpIdentifierMapping.First(x => x.Value == proxyPatient.NhsNumber).Key;
                     linkedAccounts.Add(new LinkedAccount
                     {
-                        Id = proxyUser.UserUuid,
+                        Id = sessionKey,
                         AgeMonths = ageData.AgeMonths,
                         AgeYears = ageData.AgeYears,
                         FullName = proxyUser.Name,
@@ -74,14 +78,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
             return await Task.FromResult(new LinkedAccountsResult.Success(linkedAccounts, false));
         }
 
-        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var fakeUserSession = (FakeUserSession) gpUserSession;
-            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.NhsNumber == patientGpIdentifier);
 
             if (proxy == null)
             {
-                _logger.LogError($"Proxy patient with id {id} not found in {nameof(fakeUserSession.ProxyPatients)}");
+                _logger.LogError($"Proxy patient not found in {nameof(fakeUserSession.ProxyPatients)}");
                 return await Task.FromResult(new LinkedAccountAccessSummaryResult.NotFound());
             }
 
@@ -106,25 +110,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Fake.LinkedAccounts
 
                 linkedAccountAuditResult.IsProxyMode = true;
                 var proxyPatient = fakeUserSession.ProxyPatients
-                    .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId);
+                    .FirstOrDefault(x => x.NhsNumber == gpLinkedAccountModel.RequestingPatientGpIdentifier);
                 linkedAccountAuditResult.ProxyNhsNumber = proxyPatient.NhsNumber;
             }
 
             return linkedAccountAuditResult;
         }
 
-        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
+        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var fakeUserSession = (FakeUserSession) gpUserSession;
-            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+            var proxy = fakeUserSession.ProxyPatients.FirstOrDefault(x => x.NhsNumber == patientGpIdentifier);
             return proxy?.NhsNumber;
         }
 
         private static bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var fakeUserSession = (FakeUserSession) gpLinkedAccountModel.GpUserSession;
+            return IsValidLinkedAccount(
+                gpLinkedAccountModel.GpUserSession,
+                gpLinkedAccountModel.RequestingPatientGpIdentifier);
+        }
+
+        private static bool IsValidLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
+        {
+            var fakeUserSession = (FakeUserSession) gpUserSession;
             return fakeUserSession.ProxyPatients.Any(x =>
-                x.Id == gpLinkedAccountModel.PatientId);
+                x.NhsNumber == patientGpIdentifier);
         }
     }
 }

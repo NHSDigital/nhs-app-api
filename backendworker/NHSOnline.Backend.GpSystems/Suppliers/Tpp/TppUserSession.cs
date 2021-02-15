@@ -19,9 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public ICollection<TppProxyUserSession> ProxyPatients { get; set; }
 
-        public Guid? GetCurrentlyAuthenticatedId()
+        public string GetCurrentlyAuthenticatedId()
         {
-            return Suid != null ? Id : ProxyPatients?.FirstOrDefault(x => x.Suid != null)?.Id;
+            return Suid != null ? PatientId : ProxyPatients?.FirstOrDefault(x => x.Suid != null)?.PatientId;
         }
 
         public override T Accept<T>(IGpUserSessionVisitor<T> visitor)

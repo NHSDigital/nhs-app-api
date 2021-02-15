@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             // Arrange
             var userSession = ArrangeP9UserSession();
-            _httpContext.Request.Headers.Add(Constants.HttpHeaders.PatientId, userSession.GpUserSession.Id.ToString());
+            _httpContext.Request.Headers.Add(Constants.HttpHeaders.PatientId, userSession.PatientSessionId.ToString());
 
             // Act
             _systemUnderTest.OnAuthorization(_context);
@@ -119,8 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 new CitizenIdUserSession(),
                 string.Empty, new EmisUserSession
                 {
-                    OdsCode = "X10000",
-                    Id = Guid.NewGuid(),
+                    OdsCode = "X10000"
                 });
 
             _mockUserSessionService

@@ -26,16 +26,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private TppAppointmentsService _systemUnderTest;
         private AppointmentCancelRequest _request;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-        private Guid _patientId;
+        private string _patientId;
         private Mock<ITppClientRequest<(TppRequestParameters, AppointmentCancelRequest), CancelAppointmentReply>> _cancelAppointment;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _patientId = _fixture.Create<string>();
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _tppUserSession.Id = _patientId;
+            _tppUserSession.PatientId = _patientId;
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
 
             _cancelAppointment =

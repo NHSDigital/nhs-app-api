@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -21,16 +22,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private SessionExtendController _systemUnderTest;
         private Mock<IGpSystem> _mockGpSystem;
         private P9UserSession _userSession;
-        private Guid _patientGuid;
+        private readonly Guid _patientId = Guid.NewGuid();
+        private const string _patientGpIdentifier = "main-patient-gp-identifier";
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ISessionExtendService> _mockSessionExtendService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
-
-            _patientGuid = Guid.NewGuid();
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token",
+                new EmisUserSession())
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } },
+            };
 
             _mockSessionExtendService = new Mock<ISessionExtendService>();
 
@@ -57,12 +62,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockSessionExtendService
                 .Setup(x => x.Extend(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_patientGuid, _userSession);
+            var result = await _systemUnderTest.Post(_patientId, _userSession);
 
             // Assert
             result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));
@@ -77,12 +82,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockSessionExtendService
                 .Setup(x => x.Extend(It.Is<GpLinkedAccountModel>(
-                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
+                    d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier)))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_patientGuid, _userSession);
+            var result = await _systemUnderTest.Post(_patientId, _userSession);
 
             // Arrange
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -97,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var userSession = new P5UserSession("csrf", new CitizenIdUserSession());
 
             // Act
-            var result = await _systemUnderTest.Post(_patientGuid, userSession);
+            var result = await _systemUnderTest.Post(_patientId, userSession);
 
             // Assert
             result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));

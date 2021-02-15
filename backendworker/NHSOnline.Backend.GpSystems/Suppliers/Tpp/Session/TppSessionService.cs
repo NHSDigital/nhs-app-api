@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -68,12 +69,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 LogMismatchingPractices(authenticateReply, tppUserSession);
 
-                await SelectPatientIfMoreThanOne(authenticateReply, tppUserSession);
+                await SelectMainPatientIfHasAccessToMoreThanOne(authenticateReply, tppUserSession);
 
                 await UpdateSessionIfIm1MessagingIsEnabled(tppUserSession);
 
+                var patientIdentifiers = GetPatientIdentifiers(tppUserSession);
+
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
-                return new GpSessionCreateResult.Success(tppUserSession);
+                return new GpSessionCreateResult.Success(
+                    tppUserSession,
+                    patientIdentifiers.mainPatientGpIdentifier,
+                    patientIdentifiers.proxyPatientGpIdentifiers);
             }
             catch (HttpRequestException e)
             {
@@ -117,13 +123,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             return authenticateReply;
         }
 
-        private async Task SelectPatientIfMoreThanOne(TppApiObjectResponse<AuthenticateReply> authenticateReply, TppUserSession tppUserSession)
+        private async Task SelectMainPatientIfHasAccessToMoreThanOne(TppApiObjectResponse<AuthenticateReply> authenticateReply, TppUserSession tppUserSession)
         {
             // The PatientSelected call is only required if
             // more than 1 person is found in the response.
             if (authenticateReply.Body.ExtractLinkedPatients().Any() && tppUserSession.HasSelfAccess)
             {
-                var tppRequestParameters = new GpLinkedAccountModel(tppUserSession).BuildTppRequestParameters(_logger);
+                var tppRequestParameters = new GpLinkedAccountModel(tppUserSession, tppUserSession.PatientId)
+                    .BuildTppRequestParameters(_logger);
 
                 await _patientSelected.Post(tppRequestParameters);
             }
@@ -183,6 +190,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             _tppLinkedAccountsService.LogMismatchingPractices(authenticateReply.Body, tppUserSession.ProxyPatients);
         }
 
+        private static (string mainPatientGpIdentifier, IEnumerable<string> proxyPatientGpIdentifiers) GetPatientIdentifiers(TppUserSession tppUserSession)
+        {
+            return (tppUserSession.PatientId, tppUserSession.ProxyPatients.Select(x => x.PatientId));
+        }
+
         public async Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
             try
@@ -193,9 +205,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 var authenticatedId = tppUserSession.GetCurrentlyAuthenticatedId();
 
-                if (authenticatedId.HasValue)
+                if (!string.IsNullOrEmpty(authenticatedId))
                 {
-                    var linkedAccountModel = new GpLinkedAccountModel(tppUserSession, authenticatedId.Value);
+                    var linkedAccountModel = new GpLinkedAccountModel(tppUserSession, authenticatedId);
                     var tppRequestParameters = linkedAccountModel.BuildTppRequestParameters(_logger);
 
                     var logoffReply = await _logoff.Post(tppRequestParameters);
@@ -247,11 +259,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 var tppUserSession = userSession.ValueOrFailure();
 
-                if (tppUserSession.HasSelfAccess)
+                if (patientId == tppUserSession.PatientId)
                 {
-                    var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
+                    await SelectMainPatientIfHasAccessToMoreThanOne(authenticateReply, tppUserSession);
+                }
+                else
+                {
+                    var tppRequestParameters = new GpLinkedAccountModel(tppUserSession, patientId)
                         .BuildTppRequestParameters(_logger);
-
                     await _patientSelected.Post(tppRequestParameters);
                 }
 

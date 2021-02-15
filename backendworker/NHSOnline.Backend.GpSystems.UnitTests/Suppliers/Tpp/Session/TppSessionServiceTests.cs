@@ -513,8 +513,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _tppUserSession.Suid = suid;
             _tppUserSession.ProxyPatients = new List<TppProxyUserSession>
             {
-                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null },
-                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null }
+                new TppProxyUserSession { PatientId = "00001", Suid = null },
+                new TppProxyUserSession { PatientId = "00002", Suid = null }
             };
 
             _mockLogOff.Setup(x => x
@@ -538,8 +538,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _tppUserSession.Suid = null;
             _tppUserSession.ProxyPatients = new List<TppProxyUserSession>
             {
-                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null },
-                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = suid }
+                new TppProxyUserSession { PatientId = "00001", Suid = null },
+                new TppProxyUserSession { PatientId = "00002", Suid = suid }
             };
 
             _mockLogOff.Setup(x => x
@@ -728,7 +728,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             const string odsCode = "1234";
             var reply = CreateReply(expectedName);
 
-            var userSession = CreateUserSession(expectedName, odsCode, _nhsNumber);
+            var userSession = CreateUserSession(expectedName, odsCode, nhsNumber: _nhsNumber, patientId: _patientId);
 
             _mockAuthenticate
                 .Setup(x => x.Post(It.IsAny<Authenticate>()))
@@ -736,7 +736,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber, Enumerable.Empty<string>(), _patientId))
-                .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber)));
+                .Returns(Option.Some(userSession));
 
             // Act
             var result = await _systemUnderTest.Recreate(CreateConnectionTokenJson(), odsCode, _nhsNumber, _patientId);
@@ -809,7 +809,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             {
                 tppUserSession.ProxyPatients = proxyPatientIds.Select(x => new TppProxyUserSession
                 {
-                    Id = Guid.NewGuid(),
                     PatientId = x,
                 }).ToList();
             }

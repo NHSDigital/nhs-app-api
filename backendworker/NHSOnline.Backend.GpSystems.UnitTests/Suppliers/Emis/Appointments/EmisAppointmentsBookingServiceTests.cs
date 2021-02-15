@@ -38,23 +38,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private EmisUserSession _emisUserSession;
-        private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _emisUserSession = _fixture.Build<EmisUserSession>()
-                .With(x => x.Id, _patientId)
-                .Create();
+            _emisUserSession = _fixture.Create<EmisUserSession>();
 
             _emisUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
 
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _emisUserSession.PatientActivityContextGuid);
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _logger = _fixture.Freeze<Mock<ILogger<EmisAppointmentsBookingService>>>();
@@ -65,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 SlotId = SlotId,
                 TelephoneNumber = TelephoneNumber
             };
-            
+
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK
@@ -91,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var expectedLogMessage =
                 $"Appointments Booking Reason Info: More than one character in booking reason={moreThanOneCharacter} " +
                 $"Characters entered in booking reason={_request.BookingReason.Length}";
-            
+
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Success>();

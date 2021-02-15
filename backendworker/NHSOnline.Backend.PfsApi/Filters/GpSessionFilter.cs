@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.GpSession;
 using NHSOnline.Backend.Support;
@@ -23,7 +22,6 @@ namespace NHSOnline.Backend.PfsApi.Filters
         private readonly ILogger<GpSessionFilter> _logger;
         private readonly IUserSessionService _userSessionService;
         private readonly IGpSessionCreator _gpSessionCreator;
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionErrorResultBuilder _errorResultBuilder;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -31,14 +29,12 @@ namespace NHSOnline.Backend.PfsApi.Filters
             ILogger<GpSessionFilter> logger,
             IUserSessionService userSessionService,
             IGpSessionCreator gpSessionCreator,
-            IGpSystemFactory gpSystemFactory,
             ISessionErrorResultBuilder errorResultBuilder,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _userSessionService = userSessionService;
             _gpSessionCreator = gpSessionCreator;
-            _gpSystemFactory = gpSystemFactory;
             _errorResultBuilder = errorResultBuilder;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -148,6 +144,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
         private async Task<bool> EnsureGpSessionIsValid(ActionExecutingContext context, P9UserSession session)
         {
             var recreateVisitor = new GpSessionRecreateVisitor(_logger, _gpSessionCreator, session, _httpContextAccessor);
+
             var recreateResult = await session.GpUserSession.Accept(recreateVisitor);
 
             var filterRecreateRulesVisitor = new FilterSessionRecreateResultVisitor(this, context, session);
@@ -171,14 +168,14 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 _p9UserSession = p9UserSession;
             }
 
-            public async Task<bool> Visit(GpSessionRecreateResult.RecreatedResult createRecreatedResult)
+            public Task<bool> Visit(GpSessionRecreateResult.RecreatedResult createRecreatedResult)
             {
                 _gpSessionFilter._logger.LogInformation(
                     $"Successfully recreated gp session for user from odsCode={_p9UserSession.OdsCode}");
 
-                await InjectPatientIdParameterValues();
+                InjectPatientIdParameterValues();
 
-                return true;
+                return Task.FromResult(true);
             }
 
             public Task<bool> Visit(GpSessionRecreateResult.SessionStillValidResult createRecreatedResult)
@@ -212,40 +209,29 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 return Task.FromResult(false);
             }
 
-            private async Task InjectPatientIdParameterValues()
+            /// <summary>
+            /// The only case where this should be needed is if the GP session failed to be established at the first
+            /// attempt and the second attempt was successful. In this case, no header PatientId has been passed up
+            /// from the client, but the GP session has been established as part of the request.
+            /// </summary>
+            private void InjectPatientIdParameterValues()
             {
-                var gpSession = _p9UserSession.GpUserSession;
-                var gpSessionPatientId = gpSession.Id;
-
                 var patientIdParameters = _context.ActionDescriptor
                     .GetParametersWithAttributeAndType<FromHeaderAttribute, Guid>()
                     .Where(kvp => kvp.Value.Name == Constants.HttpHeaders.PatientId)
                     .Select(kvp => kvp.Key)
                     .ToList();
 
-                if (!_p9UserSession.GpUserSession.HasLinkedAccounts)
-                {
-                    // no linked accounts, so just inject the current patient ID
-                    patientIdParameters.ForEach(p => _context.ActionArguments[p] = gpSessionPatientId);
-                    return;
-                }
-
-                // inject current patient ID for parameters which are not set to the ID of a known linked account
-                var linkedAccounts = await _gpSessionFilter._gpSystemFactory.CreateGpSystem(gpSession.Supplier)
-                    .GetLinkedAccountsService()
-                    .GetLinkedAccounts(gpSession);
-                var linkedAccountIds = linkedAccounts.Accept(new LinkedAccountsGetIdsVisitor());
-
                 foreach (var parameterName in patientIdParameters)
                 {
-                    if (!_context.ActionArguments.ContainsKey(parameterName))
+                    if (!_context.ActionArguments.ContainsKey(parameterName)
+                        || _context.ActionArguments[parameterName] is Guid patientIdGuid && patientIdGuid == Guid.Empty)
                     {
-                        _context.ActionArguments[parameterName] = gpSessionPatientId;
-                    }
-                    else if (_context.ActionArguments[parameterName] is Guid patientIdGuid
-                             && !linkedAccountIds.Contains(patientIdGuid))
-                    {
-                        _context.ActionArguments[parameterName] = gpSessionPatientId;
+                        _gpSessionFilter._logger.LogInformation(
+                            $"Overriding empty {Constants.HttpHeaders.PatientId} header " +
+                            $"of key {nameof(P9UserSession.PatientSessionId)} " +
+                            $"with value {_p9UserSession.PatientSessionId}");
+                        _context.ActionArguments[parameterName] = _p9UserSession.PatientSessionId;
                     }
                 }
             }

@@ -57,11 +57,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
 
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, Guid.NewGuid());
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_visionUserSession, _fixture.Create<string>());
 
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientSlotsResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
-
             _visionClientConfigResponse = _fixture.Create<PatientConfigurationResponse>();
 
             _dateRange = _fixture.Create<AppointmentSlotsDateRange>();

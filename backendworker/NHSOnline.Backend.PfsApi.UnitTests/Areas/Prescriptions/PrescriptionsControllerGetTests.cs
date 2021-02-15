@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -46,6 +47,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
         private string _serviceDeskReference;
         private Guid _patientId;
+        private const string _patientGpIdentifier = "main-patient-gp-identifier";
 
         private const string GetRequestAuditType = "RepeatPrescriptions_ViewHistory_Request";
         private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";
@@ -58,13 +60,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             _patientId = Guid.NewGuid();
 
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession());
             _mockPrescriptionsService = new Mock<IPrescriptionService>();
             _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();
 
             _mockAuditor = new Mock<IAuditor>();
             _mockLogger = new Mock<ILogger<PrescriptionsController>>();
             _gpSession = new EmisUserSession();
+            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", new EmisUserSession())
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string> { { _patientId, _patientGpIdentifier } },
+                GpUserSession = _gpSession,
+            };
 
             _options = new ConfigurationSettings(CookieDomain,
                 PrescriptionsDefaultLastNumberMonthsToDisplay,
@@ -111,13 +118,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                     It.Is<GpLinkedAccountModel>(d =>
-                        d.GpUserSession == _gpSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+                        d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, filteringCounts)));
             _mockPrescriptionValidationService.Setup(x =>
                 x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
 
             // Act
-            var result = await _systemUnderTest.Get(fromDate, _patientId, _gpSession);
+            var result = await _systemUnderTest.Get(fromDate, _patientId, _userSession, _gpSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -147,14 +154,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                 It.Is<GpLinkedAccountModel>(d =>
-                    d.GpUserSession == _gpSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+                    d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, filteringCounts)))
                 .Callback((GpLinkedAccountModel s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
             _mockPrescriptionValidationService.Setup(x =>
                 x.IsGetValid(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>())).Returns(false);
 
             // Act
-            var result = await _systemUnderTest.Get(null, _patientId, _gpSession);
+            var result = await _systemUnderTest.Get(null, _patientId,_userSession, _gpSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -194,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var serviceResult = (GetPrescriptionsResult) Activator.CreateInstance(serviceResultType);
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                     It.Is<GpLinkedAccountModel>(d =>
-                        d.GpUserSession == _gpSession && d.PatientId == _patientId), fromDate, It.IsAny<DateTimeOffset?>()))
+                        d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), fromDate, It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.FromResult(serviceResult));
             _mockPrescriptionValidationService
                 .Setup(x => x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>()))
@@ -209,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Get(fromDate, _patientId, _gpSession);
+            var result = await _systemUnderTest.Get(fromDate, _patientId, _userSession, _gpSession);
 
             // Assert
             _mockPrescriptionsService.Verify();
@@ -232,7 +239,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var response = new PrescriptionListResponse();
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                     It.Is<GpLinkedAccountModel>(d =>
-                        d.GpUserSession == _gpSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+                        d.GpUserSession == _gpSession && d.RequestingPatientGpIdentifier == _patientGpIdentifier), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, new FilteringCounts
                 {
                     ReceivedCount = MockNumberOfCourses,
@@ -244,7 +251,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
 
             // Act
-            await _systemUnderTest.Get(fromDate, _patientId, _gpSession);
+            await _systemUnderTest.Get(fromDate, _patientId, _userSession, _gpSession);
 
             // Assert
             var expectedLogMessage =

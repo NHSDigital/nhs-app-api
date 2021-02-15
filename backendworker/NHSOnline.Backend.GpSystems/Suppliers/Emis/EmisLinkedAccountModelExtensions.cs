@@ -11,20 +11,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             string userPatientLinkToken = null;
             var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
 
-            if (gpLinkedAccountModel.PatientId == emisUserSession.Id)
+            if (gpLinkedAccountModel.RequestingPatientGpIdentifier == emisUserSession.PatientActivityContextGuid)
             {
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
             }
             else if (emisUserSession.HasLinkedAccounts)
             {
-                userPatientLinkToken = emisUserSession.ProxyPatients
-                    .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.UserPatientLinkToken;
+                // just double check is valid before using
+                var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x =>
+                    x.PatientActivityContextGuid == gpLinkedAccountModel.RequestingPatientGpIdentifier);
+
+                if (proxy != null)
+                {
+                    userPatientLinkToken = proxy.UserPatientLinkToken;
+                }
             }
 
             if (string.IsNullOrEmpty(userPatientLinkToken))
             {
-                logger.LogInformation($"Patient Id {gpLinkedAccountModel.PatientId} not matched. Main user id {emisUserSession.Id} and user had linkedAccounts: {emisUserSession.HasLinkedAccounts}");
-                throw new InvalidPatientIdException(gpLinkedAccountModel.PatientId);
+                logger.LogInformation("Patient Id not matched.");
+                throw new InvalidPatientIdException();
             }
 
             return new EmisRequestParameters(emisUserSession)

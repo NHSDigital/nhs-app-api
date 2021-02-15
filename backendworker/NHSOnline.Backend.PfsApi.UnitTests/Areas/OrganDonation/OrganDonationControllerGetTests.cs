@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -35,14 +36,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
         private const string RequestAuditType = "OrganDonation_Get_Request";
         private const string ResponseAuditType = "OrganDonation_Get_Response";
-
         private const string RequestAuditMessage = "Attempting to get organ donation record";
+
+        private readonly Guid _patientId = Guid.NewGuid();
+        private const string _patientGpIdentifier = "main-gp-identifier-1";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _gpUserSession = new EmisUserSession();
-            _userSession = new P9UserSession("csrfToken", "nhsNumber", new CitizenIdUserSession(), "im1token", _gpUserSession);
+            _userSession = new P9UserSession(
+                    "csrfToken", "nhsNumber", new CitizenIdUserSession(),"im1token", _gpUserSession)
+            {
+                PatientSessionId = _patientId,
+                PatientLookup = new Dictionary<Guid, string>
+                {
+                    { _patientId, _patientGpIdentifier },
+                }
+            };
             _mockOrganDonationService = new Mock<IOrganDonationService>();
             _mockAuditor = new Mock<IAuditor>();
 
@@ -52,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockDemographicsService
                 .Setup(x => x.GetDemographics(
                     It.Is<GpLinkedAccountModel>(
-                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == Guid.Empty)))
+                        d => d.GpUserSession == _userSession.GpUserSession && d.RequestingPatientGpIdentifier == string.Empty)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             _mockGpSystem = new Mock<IGpSystem>();

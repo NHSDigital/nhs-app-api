@@ -69,7 +69,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _patientId = patientId;
             }
 
-
             public Task<SessionExtendResultVisitorOutput> Visit(P5UserSession userSession)
                 => Task.FromResult(new SessionExtendResultVisitorOutput { SessionWasExtended = true, StatusCode = StatusCodes.Status200OK });
 
@@ -80,9 +79,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetSessionExtendService();
 
-                var gpLinkedAccountModel = new GpLinkedAccountModel(
-                    userSession.GpUserSession, _patientId);
-
+                var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(_patientId);
                 var extendResult = await sessionService.Extend(gpLinkedAccountModel);
 
                 return extendResult.Accept(new SessionExtendResultVisitor());

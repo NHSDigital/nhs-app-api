@@ -148,8 +148,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                             .GetDemographicsService();
 
                         _logger.LogDebug("Fetching Demographics Address from GP system");
+                        var patientGpIdentifier = userSession.PatientLookup[userSession.PatientSessionId];
                         var result = await demographicsService.GetDemographics(
-                            new GpLinkedAccountModel(userSession.GpUserSession));
+                            new GpLinkedAccountModel(userSession.GpUserSession, patientGpIdentifier));
 
                         if (result is DemographicsResult.Success demographicsResult)
                         {

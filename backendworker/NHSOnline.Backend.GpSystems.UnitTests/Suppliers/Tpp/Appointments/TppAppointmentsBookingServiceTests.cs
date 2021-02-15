@@ -33,21 +33,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private TppUserSession _tppUserSession;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
-        private Guid _patientId;
+        private string _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>> _mockBookAppointmentSlot;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _mockBookAppointmentSlot = new Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>();
- 
+
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _patientId = _fixture.Create<string>();
             _mockBookAppointmentSlot = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<TppAppointmentsBookingService>>>();
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _tppUserSession.Id = _patientId;
+            _tppUserSession.PatientId = _patientId;
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
             _request = new AppointmentBookRequest
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
-            
+
             var moreThanOneCharacter = _request.BookingReason.Length >= 1;
             var expectedLogMessage =
                 $"Appointments Booking Reason Info: More than one character in booking reason={moreThanOneCharacter} " +

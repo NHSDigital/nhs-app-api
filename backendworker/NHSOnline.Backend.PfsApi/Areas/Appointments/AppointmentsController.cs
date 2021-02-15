@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                     AuditingOperations.CancelAppointmentAuditTypeRequest,
                     $"Attempting to cancel appointment with id: {request.AppointmentId}");
 
-                var result = await Cancel(request, gpUserSession, patientId);
+                var result = await Cancel(request, p9UserSession, gpUserSession, patientId);
 
                 await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId, _metricLogger, p9UserSession));
 
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                     AuditingOperations.ViewAppointmentAuditTypeRequest,
                     "Attempting to view booked appointments");
 
-                var gpLinkedAccountModel = new GpLinkedAccountModel(gpUserSession, patientId);
+                var gpLinkedAccountModel = p9UserSession.BuildGpLinkedAccountModel(patientId);
 
                 var result = await GetAppointmentsService(gpUserSession).GetAppointments(gpLinkedAccountModel);
 
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                     $"Attempting to book appointment with id: {request.SlotId} and " +
                     $"startTime: {request.StartTime:O}");
 
-                var result = await Book(request, gpUserSession, patientId);
+                var result = await Book(request, p9UserSession, gpUserSession, patientId);
 
                 await result.Accept(
                     new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime, _metricLogger, p9UserSession));
@@ -144,10 +144,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         private async Task<AppointmentCancelResult> Cancel(
             AppointmentCancelRequest request,
-            GpUserSession userSession,
+            P9UserSession userSession,
+            GpUserSession gpUserSession,
             Guid patientId)
         {
-            var appointmentValidator = GetAppointmentsValidationService(userSession);
+            var appointmentValidator = GetAppointmentsValidationService(gpUserSession);
 
             if (!appointmentValidator.IsDeleteValid(request))
             {
@@ -155,18 +156,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 return new AppointmentCancelResult.BadRequest();
             }
 
-            var appointmentsService = GetAppointmentsService(userSession);
-            var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession, patientId);
+            var gpLinkedAccountsModel = userSession.BuildGpLinkedAccountModel(patientId);
+            var appointmentsService = GetAppointmentsService(gpUserSession);
 
             return await appointmentsService.Cancel(gpLinkedAccountsModel, request);
         }
 
         private async Task<AppointmentBookResult> Book(
             AppointmentBookRequest request,
-            GpUserSession userSession,
+            P9UserSession userSession,
+            GpUserSession gpUserSession,
             Guid patientId)
         {
-            var appointmentValidator = GetAppointmentsValidationService(userSession);
+            var appointmentValidator = GetAppointmentsValidationService(gpUserSession);
 
             if (!appointmentValidator.IsPostValid(request))
             {
@@ -175,8 +177,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 return new AppointmentBookResult.BadRequest();
             }
 
-            var appointmentsService = GetAppointmentsService(userSession);
-            var gpLinkedAccountModel = new GpLinkedAccountModel(userSession, patientId);
+            var appointmentsService = GetAppointmentsService(gpUserSession);
+            var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
 
             return await appointmentsService.Book(gpLinkedAccountModel, request);
         }

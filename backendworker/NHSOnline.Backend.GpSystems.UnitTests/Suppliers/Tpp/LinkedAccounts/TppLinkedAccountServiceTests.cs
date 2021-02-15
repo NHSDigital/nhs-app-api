@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         public void GetOdsCodeForLinkedAccount_ReturnsOdsCodeOfMainUserInSession()
         {
             // Arrange
-            var proxyId = Guid.NewGuid();
+            var proxyPatientId = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
@@ -57,42 +57,40 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 {
                     new TppProxyUserSession()
                     {
-                        Id = proxyId,
+                        PatientId = proxyPatientId,
                     },
                 }
             };
             var mainUserOdsCode = _tppUserSession.OdsCode;
 
             // Act
-            var resultOdsCode = _systemUnderTest.GetOdsCodeForLinkedAccount(_tppUserSession, proxyId);
+            var resultOdsCode = _systemUnderTest.GetOdsCodeForLinkedAccount(_tppUserSession, proxyPatientId);
 
             // Assert
             resultOdsCode.Should().Be(mainUserOdsCode);
         }
 
         [TestMethod]
-        public async Task SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
+        public async Task SwitchAccount_ReturnsSuccess_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
             // Arrange
-            var proxyId = Guid.NewGuid();
+            var proxyPatientId = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
-                Id = Guid.NewGuid(),
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                     },
                     new TppProxyUserSession
                     {
-                        Id = proxyId,
+                        PatientId = proxyPatientId,
                     },
                 }
             };
-
-            var request = new GpLinkedAccountModel(_tppUserSession, proxyId);
 
             _gpSessionManager.Setup(x => x.CloseSession(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(new CloseSessionResult.Success())
@@ -107,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 .BuildServiceProvider();
 
             // Act
-            var result = await _systemUnderTest.SwitchAccount(request);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, proxyPatientId);
             await action(serviceProvider);
 
             // Assert
@@ -116,23 +114,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         }
 
         [TestMethod]
-        public async Task SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
+        public async Task SwitchAccount_ReturnsSuccess_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
             // Arrange
-            var mainUserGuid = Guid.NewGuid();
+            var mainUserPatientId = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
-                Id = mainUserGuid,
+                PatientId = mainUserPatientId,
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = mainUserGuid,
+                        PatientId = mainUserPatientId,
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>()
                     },
                 }
             };
@@ -140,8 +138,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             _gpSessionManager.Setup(x => x.CloseSession(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(new CloseSessionResult.Success())
                 .Verifiable();
-
-            var request = new GpLinkedAccountModel(_tppUserSession, mainUserGuid);
 
             Func<IServiceProvider, Task> action = null;
             _fireAndForgetService.Setup(x => x.Run(It.IsAny<Func<IServiceProvider, Task>>(), It.IsAny<string>()))
@@ -152,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 .BuildServiceProvider();
 
             // Act
-            var result = await _systemUnderTest.SwitchAccount(request);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, mainUserPatientId);
             await action(serviceProvider);
 
             // Assert
@@ -161,30 +157,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         }
 
         [TestMethod]
-        public async Task SwitchAccount_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
+        public async Task SwitchAccount_ReturnsNotFound_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
         {
             // Arrange
-            var randomGuidWhichWontBeFound = Guid.NewGuid();
+            var randomIdentifierWhichWontBeFound = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                     },
                 }
             };
 
-            var request = new GpLinkedAccountModel(_tppUserSession, randomGuidWhichWontBeFound);
-
             // Act
-            var result = await _systemUnderTest.SwitchAccount(request);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, randomIdentifierWhichWontBeFound);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.NotFound>();
@@ -194,33 +189,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInProxyUser()
         {
-            //Arrange
-            var patientId = Guid.NewGuid();
+            // Arrange
+            var patientId = _fixture.Create<string>();
             var proxyNhsNumber = _fixture.Create<string>();
 
-            _tppUserSession = new TppUserSession()
+            _tppUserSession = new TppUserSession
             {
-                Id = Guid.NewGuid(),
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
-                    new TppProxyUserSession()
+                    new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
-                    new TppProxyUserSession()
+                    new TppProxyUserSession
                     {
-                        Id = patientId,
+                        PatientId = patientId,
                         NhsNumber = proxyNhsNumber
                     },
                 }
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.GetProxyAuditData(
                 new GpLinkedAccountModel(_tppUserSession, patientId));
 
-            //Assert
+            // Assert
             result.IsProxyMode.Should().Be(true);
             result.ProxyNhsNumber.Should().Be(proxyNhsNumber);
         }
@@ -229,32 +224,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInMainUser()
         {
-            //Arrange
-            var patientId = Guid.NewGuid();
+            // Arrange
+            var patientId = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
-                Id = patientId,
+                PatientId = patientId,
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
-                    new TppProxyUserSession()
+                    new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
                 }
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.GetProxyAuditData(
                 new GpLinkedAccountModel(_tppUserSession, patientId));
 
-            //Assert
+            // Assert
             result.IsProxyMode.Should().Be(false);
             result.ProxyNhsNumber.Should().Be(null);
         }
@@ -262,32 +257,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdNotFound()
         {
-            //Arrange
-            var patientId = Guid.NewGuid();
+            // Arrange
+            var patientIdWhichWontBeFound = _fixture.Create<string>();
 
             _tppUserSession = new TppUserSession
             {
-                Id = Guid.NewGuid(),
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
                 }
             };
 
-            //Act
+            // Act
             var result = _systemUnderTest.GetProxyAuditData(
-                new GpLinkedAccountModel(_tppUserSession, patientId));
+                new GpLinkedAccountModel(_tppUserSession, patientIdWhichWontBeFound));
 
-            //Assert
+            // Assert
             result.IsProxyMode.Should().Be(false);
             result.ProxyNhsNumber.Should().Be(null);
         }
@@ -298,7 +293,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             _tppUserSession.ProxyPatients = new List<TppProxyUserSession>();
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
+            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession, new Dictionary<Guid, string>());
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
@@ -312,26 +307,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             // Arrange
             _tppUserSession = new TppUserSession
             {
-                Id = Guid.NewGuid(),
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         FullName = _fixture.Create<string>(),
                         DateOfBirth = new DateTime(1972, 04, 11, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         FullName = _fixture.Create<string>(),
                         DateOfBirth = new DateTime(1972, 04, 12, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         FullName = _fixture.Create<string>(),
                         DateOfBirth = new DateTime(1972, 04, 13, 0, 0, 0, DateTimeKind.Utc),
                         NhsNumber = _fixture.Create<string>()
@@ -340,9 +335,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             _timeProvider.Setup(x => x.LocalNow).Returns(new DateTime(2021, 04, 12, 4, 32, 0, DateTimeKind.Utc));
+            var guidToPatientIdMapping = CreateGuidToPatientIdMapping(_tppUserSession);
 
-            //Act
-            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession, guidToPatientIdMapping);
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
@@ -355,8 +351,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             {
                 var tppProxyPatient = _tppUserSession.ProxyPatients.ElementAt(i);
                 var linkedAccountDetail = successResult.ValidAccounts.ElementAt(i);
+                var patientSessionId = guidToPatientIdMapping
+                    .First(x => x.Value == tppProxyPatient.PatientId).Key;
 
-                linkedAccountDetail.Id.Should().Be(tppProxyPatient.Id);
+                linkedAccountDetail.Id.Should().Be(patientSessionId);
                 linkedAccountDetail.FullName.Should().Be(tppProxyPatient.FullName);
                 switch (i)
                 {
@@ -385,24 +383,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             // Arrange
             _tppUserSession = new TppUserSession
             {
-                Id = Guid.NewGuid(),
+                PatientId = _fixture.Create<string>(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
                     new TppProxyUserSession
                     {
-                        Id = Guid.NewGuid(),
+                        PatientId = _fixture.Create<string>(),
                         NhsNumber = _fixture.Create<string>()
                     },
                 }
             };
 
-            //Act
-            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
+            var guidToPatientIdMapping = CreateGuidToPatientIdMapping(_tppUserSession);
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession, guidToPatientIdMapping);
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
@@ -410,9 +410,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         }
 
         [TestMethod]
-        public async Task GetLinkedAccount_returns_InValidData()
+        public async Task GetLinkedAccount_ReturnsResponseIndicatingInvalidData_WhenLinkedAccountNotFound()
         {
-            var result = await _systemUnderTest.GetLinkedAccount(_tppUserSession, Guid.NewGuid());
+            var result = await _systemUnderTest.GetLinkedAccount(_tppUserSession, _fixture.Create<string>());
 
             var successResult = result.Should().BeOfType<LinkedAccountAccessSummaryResult.Success>().Subject;
             successResult.Response.IsValidData.Should().BeFalse();
@@ -622,6 +622,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             var expectedValidPeople = new List<Person> { proxyPatient };
             result.Count.Should().Be(1);
             result.Should().BeEquivalentTo(expectedValidPeople);
+        }
+
+        private static Dictionary<Guid, string> CreateGuidToPatientIdMapping(TppUserSession tppUserSession)
+        {
+            var guidToPatientIdMapping = new Dictionary<Guid, string>();
+
+            foreach (var patientId in new [] { tppUserSession.PatientId }.Concat(
+                tppUserSession.ProxyPatients.Select(x => x.PatientId)))
+            {
+                guidToPatientIdMapping.Add(Guid.NewGuid(), patientId);
+            }
+
+            return guidToPatientIdMapping;
         }
     }
 }

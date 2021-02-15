@@ -51,6 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         public async Task<IActionResult> Get(
             [FromQuery] DateTimeOffset? fromDate,
             [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession,
             [GpSession] GpUserSession gpUserSession)
         {
             try
@@ -59,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
                 await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
-                var result = await GetPrescriptions(fromDate, gpUserSession, patientId);
+                var result = await GetPrescriptions(fromDate, userSession, gpUserSession, patientId);
 
                 var prescriptionCount = new FilteringCounts();
                 if (result is GetPrescriptionsResult.Success successResult)
@@ -92,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
                 await _auditor.PreOperationAudit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
 
-                var result = await OrderPrescription(repeatPrescriptionRequest, gpUserSession, patientId);
+                var result = await OrderPrescription(repeatPrescriptionRequest, userSession, gpUserSession, patientId);
 
                 await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds, _metricLogger, userSession));
                 return result.Accept(new OrderPrescriptionResultVisitor(_errorReferenceGenerator, userSession));
@@ -103,12 +104,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
         }
 
-        private async Task<GetPrescriptionsResult> GetPrescriptions(DateTimeOffset? fromDate, GpUserSession userSession, Guid patientId)
+        private async Task<GetPrescriptionsResult> GetPrescriptions(DateTimeOffset? fromDate, P9UserSession userSession, GpUserSession gpUserSession, Guid patientId)
         {
             var gpSystem = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier);
+                .CreateGpSystem(gpUserSession.Supplier);
 
-            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {gpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionValidationService();
 
             var defaultFromDate = GetDefaultFromDate();
@@ -125,24 +126,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 fromDate = defaultFromDate;
             }
 
-            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {gpUserSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
             _logger.LogInformation("Calling prescription service to get prescriptions");
 
-            var gpLinkedAccountModel = new GpLinkedAccountModel(
-                userSession, patientId
-            );
+            var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
             return await prescriptionService.GetPrescriptions(gpLinkedAccountModel, fromDate, DateTimeOffset.Now);
         }
 
         private async Task<OrderPrescriptionResult> OrderPrescription(
-            RepeatPrescriptionRequest repeatPrescriptionRequest, GpUserSession userSession, Guid patientId)
+            RepeatPrescriptionRequest repeatPrescriptionRequest, P9UserSession userSession, GpUserSession gpUserSession, Guid patientId)
         {
             var gpSystem = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier);
+                .CreateGpSystem(gpUserSession.Supplier);
 
-            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {gpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionValidationService();
 
             if (!ModelState.IsValid)
@@ -154,18 +153,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             repeatPrescriptionRequest.SpecialRequest =
                 prescriptionRequestValidationService.MassageSpecialRequest(repeatPrescriptionRequest.SpecialRequest);
 
-            if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest, userSession))
+            if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest, gpUserSession))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
                 return new OrderPrescriptionResult.BadRequest();
             }
 
-            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {gpUserSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
-
-            var gpLinkedAccountModel = new GpLinkedAccountModel(
-                userSession, patientId
-            );
+            var gpLinkedAccountModel = userSession.BuildGpLinkedAccountModel(patientId);
 
             _logger.LogInformation("Calling prescription service to order prescriptions");
             return await prescriptionService.OrderPrescription(gpLinkedAccountModel, repeatPrescriptionRequest);

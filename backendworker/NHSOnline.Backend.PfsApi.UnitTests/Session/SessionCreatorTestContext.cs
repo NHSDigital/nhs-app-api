@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                     OdsCode = UserProfile.OdsCode,
                     NhsNumber = UserProfile.NhsNumber,
                     Name = $"{UserProfile.GivenName} {UserProfile.FamilyName}",
-                    ProxyPatients = new List<EmisProxyUserSession>(),
+                    PatientActivityContextGuid = "patient-gp-identifier",
                 };
 
                 OnDemandGpSession = new OnDemandGpSession(Supplier.Emis);

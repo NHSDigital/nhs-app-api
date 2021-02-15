@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 return false;
             }
 
-            var loggedInPatientIdFromSession = userSession.GpUserSession.Id;
+            var loggedInPatientIdFromSession = userSession.PatientSessionId;
             var patientIdInRequestHeader = httpContext.Request.Headers[Constants.HttpHeaders.PatientId];
 
             if (string.IsNullOrEmpty(patientIdInRequestHeader))

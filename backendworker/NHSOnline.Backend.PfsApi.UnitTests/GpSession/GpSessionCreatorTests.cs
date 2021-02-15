@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -80,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_ThenGpSystemIsFetchedForSupplier()
         {
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Mock.Get(_gpSystemFactory)
                 .Verify(s => s.CreateGpSystem(Supplier.Emis));
@@ -89,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_ThenGpSessionManagerIsCalled()
         {
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Mock.Get(_sessionManager)
                 .Verify(s => s.CreateSession(It.IsAny<IGpSystem>(), It.IsAny<IGpSessionCreateArgs>()));
@@ -98,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_ThenGpSessionCreateArgsAreCorrect()
         {
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             var createArgsCaptor = new ArgumentCaptor<IGpSessionCreateArgs>();
 
@@ -113,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsSuccess_ThenUserSessionObjectIsUpdated()
         {
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Assert.AreEqual(_gpSession, _p9UserSession.GpUserSession);
         }
@@ -121,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsSuccess_ThenUserSessionCacheIsUpdated()
         {
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Mock.Get(_sessionCacheService)
                 .Verify(s => s.UpdateUserSession(_p9UserSession));
@@ -130,7 +131,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateGpSessionCalled_AndGpSystemReturnsSuccess_ThenSuccessResultIsReturned()
         {
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Assert.AreEqual(
                 typeof(GpSessionRecreateResult.RecreatedResult),
@@ -142,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         {
             _sessionCreateResult = new GpSessionCreateResult.BadGateway("42");
 
-            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             var errorCaptor = new ArgumentCaptor<ErrorTypes>();
 
@@ -157,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         {
             _sessionCreateResult = new GpSessionCreateResult.Timeout("downstream system is asleep");
 
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Assert.AreEqual(
                 typeof(GpSessionRecreateResult.ErrorResult),
@@ -169,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         {
             _sessionCreateResult = new GpSessionCreateResult.Unparseable("the error due to parsing");
 
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
             var errorResult = result as GpSessionRecreateResult.ErrorResult;
 
             Assert.AreEqual(
@@ -182,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         {
             _sessionCreateResult = new GpSessionCreateResult.InternalServerError("this should come back");
 
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
             var errorResult = result as GpSessionRecreateResult.ErrorResult;
 
             Assert.AreEqual(
@@ -193,7 +194,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSession
         [TestMethod]
         public async Task WhenRecreateSessionCalled_ThenRecreateResultIsReturned()
         {
-            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis);
+            var result = await _sessionCreator.RecreateGpSession(_p9UserSession, Supplier.Emis, _p9UserSession.PatientSessionId);
 
             Assert.AreEqual(
                 typeof(GpSessionRecreateResult.RecreatedResult),

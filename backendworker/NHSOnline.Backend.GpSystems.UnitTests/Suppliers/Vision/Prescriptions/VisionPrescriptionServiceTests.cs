@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         private VisionConfigurationSettings _settings;
         private VisionUserSession _visionUserSession;
         private IFixture _fixture;
-        private Guid _patientId;
+        private string _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private const string ApplicationProviderId = "ApplicationProviderId";
         private const string RequestUserName = "username";
@@ -47,9 +47,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
+            _patientId = _fixture.Create<string>();
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
             _visionUserSession.AllowFreeTextPrescriptions = true;
@@ -95,8 +94,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                             ServiceContent = new PrescriptionHistoryResponse
                             {
                                 PrescriptionHistory = new PrescriptionHistory()
-                                {
-                                }
                             }
                         }
                     }));

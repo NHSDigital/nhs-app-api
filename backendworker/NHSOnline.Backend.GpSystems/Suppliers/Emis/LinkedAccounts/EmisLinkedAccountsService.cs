@@ -32,32 +32,48 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             _calculateAge = calculateAge;
         }
 
-        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, string patientGpIdentifier)
         {
-            var emisUserSession = (EmisUserSession) gpUserSession;
-            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients
+                .FirstOrDefault(x => x.PatientActivityContextGuid == patientGpIdentifier);
+
+            return proxy?.NhsNumber;
+        }
+
+        public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
+        {
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients
+                .FirstOrDefault(x => x.PatientActivityContextGuid == patientGpIdentifier);
 
             return proxy?.OdsCode;
         }
 
-        public async Task<SwitchAccountResult> SwitchAccount(GpLinkedAccountModel gpLinkedAccountModel)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
-            if (IsValidLinkedAccount(gpLinkedAccountModel)
-                || gpLinkedAccountModel.GpUserSession.Id == gpLinkedAccountModel.PatientId)
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            if (patientGpIdentifier == emisUserSession.PatientActivityContextGuid)
             {
                 return await Task.FromResult(new SwitchAccountResult.Success());
             }
-            return await Task.FromResult(new SwitchAccountResult.NotFound(gpLinkedAccountModel.PatientId));
+
+            if (IsValidLinkedAccount(emisUserSession, patientGpIdentifier))
+            {
+                return await EnsureNhsNumberPopulated(emisUserSession, patientGpIdentifier);
+            }
+
+            return await Task.FromResult(new SwitchAccountResult.NotFound(patientGpIdentifier));
         }
 
-        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, string patientGpIdentifier)
         {
             var emisUserSession = (EmisUserSession)gpUserSession;
-            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
+            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.PatientActivityContextGuid == patientGpIdentifier);
 
             if (proxy == null)
             {
-                _logger.LogError($"Proxy patient with id {id} not found in {nameof(emisUserSession.ProxyPatients)}");
+                _logger.LogError($"Proxy patient not found in {nameof(emisUserSession.ProxyPatients)}");
                 return await Task.FromResult(new LinkedAccountAccessSummaryResult.NotFound());
             }
 
@@ -68,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                 UserPatientLinkToken = proxy.UserPatientLinkToken,
             };
 
-            _logger.LogInformation("Creating tasks to get linked account summary");
+            _logger.LogInformation("Getting linked account summary");
 
             try
             {
@@ -111,33 +127,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             if (IsValidLinkedAccount(gpLinkedAccountModel))
             {
                 var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
-
                 linkedAccountAuditResult.IsProxyMode = true;
                 linkedAccountAuditResult.ProxyNhsNumber = emisUserSession.ProxyPatients
-                    .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.NhsNumber;
+                    .FirstOrDefault(x => x.PatientActivityContextGuid == gpLinkedAccountModel.RequestingPatientGpIdentifier)?.NhsNumber;
             }
 
             return linkedAccountAuditResult;
         }
 
-        public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
-        {
-            var emisUserSession = (EmisUserSession)gpUserSession;
-            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
-
-            return proxy?.NhsNumber;
-        }
-
-        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
+        public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession, Dictionary<Guid, string> gpIdentifierMapping)
         {
             var emisUserSession = (EmisUserSession)gpUserSession;
             bool hasAnyNhsNumberBeenUpdatedInSession = false;
 
             var linkedAccounts = Enumerable.Empty<LinkedAccount>();
 
-            if (gpUserSession.HasLinkedAccounts)
+            if (emisUserSession.HasLinkedAccounts)
             {
-                var tasks = new Dictionary<Guid, Task<DemographicsResult>>();
+                var tasks = new Dictionary<string, Task<DemographicsResult>>();
 
                 foreach (var user in emisUserSession.ProxyPatients)
                 {
@@ -151,11 +158,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                                 SessionId = emisUserSession.SessionId,
                                 EndUserSessionId = emisUserSession.EndUserSessionId,
                                 UserPatientLinkToken = user.UserPatientLinkToken,
-                                Id = user.Id
+                                PatientActivityContextGuid = user.PatientActivityContextGuid,
                             },
-                            user.Id));
+                            user.PatientActivityContextGuid));
 
-                    tasks.Add(user.Id, demographicsTask);
+                    tasks.Add(user.PatientActivityContextGuid, demographicsTask);
                 }
 
                 await Task.WhenAll(tasks.Select(x => x.Value));
@@ -177,7 +184,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     var ageInMonthsAndYears = _calculateAge.CalculateAgeInMonthsAndYears(dateOfBirth);
                     return new LinkedAccount
                     {
-                        Id = x.Key,
+                        Id = gpIdentifierMapping.First(gim => gim.Value == x.Key).Key,
                         GivenName = demographics.Response.NameParts.Given,
                         FullName = demographics.Response.PatientName,
                         AgeMonths = ageInMonthsAndYears.AgeMonths,
@@ -188,12 +195,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                 foreach (var proxy in emisUserSession.ProxyPatients)
                 {
-                    if (!successResults.ContainsKey(proxy.Id))
+                    if (!successResults.ContainsKey(proxy.PatientActivityContextGuid))
                     {
                         continue;
                     }
 
-                    var nhsNumberFromDemographics = ((DemographicsResult.Success)successResults[proxy.Id].Result).Response.NhsNumber;
+                    var nhsNumberFromDemographics = ((DemographicsResult.Success)successResults[proxy.PatientActivityContextGuid].Result).Response.NhsNumber;
 
                     if (string.IsNullOrEmpty(nhsNumberFromDemographics))
                     {
@@ -207,25 +214,59 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                 }
             }
 
-            var linkedAccountsGrouped = GroupLinkedAccounts(emisUserSession, linkedAccounts);
+            var linkedAccountsGrouped = GroupLinkedAccounts(emisUserSession, linkedAccounts, gpIdentifierMapping);
 
             return new LinkedAccountsResult.Success(linkedAccountsGrouped.ValidAccounts, hasAnyNhsNumberBeenUpdatedInSession);
         }
-        private bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
+
+        private static bool IsValidLinkedAccount(EmisUserSession emisUserSession, string patientGpIdentifier)
         {
-            var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
-            return  emisUserSession.ProxyPatients
-                .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId) != null;
+            return emisUserSession.ProxyPatients
+                .Any(x => x.PatientActivityContextGuid == patientGpIdentifier);
         }
 
-        private static EmisProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)
+        private static bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var emisUserSession = (EmisUserSession)gpUserSession;
-            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == linkedAccountId);
-            return proxy;
+            var emisUserSession = (EmisUserSession) gpLinkedAccountModel.GpUserSession;
+            return IsValidLinkedAccount(emisUserSession, gpLinkedAccountModel.RequestingPatientGpIdentifier);
         }
 
-        private LinkedAccountsBreakdownSummary GroupLinkedAccounts(EmisUserSession emisUserSession, IEnumerable<LinkedAccount> linkedAccounts)
+        private async Task<SwitchAccountResult> EnsureNhsNumberPopulated(EmisUserSession emisUserSession, string patientGpIdentifier)
+        {
+            var patient = emisUserSession.ProxyPatients.First(
+                x => x.PatientActivityContextGuid == patientGpIdentifier);
+
+            if (string.IsNullOrEmpty(patient.NhsNumber))
+            {
+                // Using SessionId and EndUserSessionId of the logged in user
+                // but the UserPatientLinkToken of the user they are acting
+                // on behalf of.
+                var demographics = await _demographicsService.GetDemographics(
+                    new GpLinkedAccountModel(
+                        new EmisUserSession
+                        {
+                            SessionId = emisUserSession.SessionId,
+                            EndUserSessionId = emisUserSession.EndUserSessionId,
+                            UserPatientLinkToken = patient.UserPatientLinkToken,
+                            PatientActivityContextGuid = patient.PatientActivityContextGuid,
+                        },
+                        patient.PatientActivityContextGuid));
+
+                if (demographics is DemographicsResult.Success success)
+                {
+                    patient.NhsNumber = success.Response.NhsNumber;
+                }
+                else
+                {
+                    _logger.LogError("Couldn't get patient's NHS no to switch to");
+                    return await Task.FromResult(new SwitchAccountResult.Failure(patientGpIdentifier));
+                }
+            }
+
+            return await Task.FromResult(new SwitchAccountResult.Success());
+        }
+
+        private LinkedAccountsBreakdownSummary GroupLinkedAccounts(EmisUserSession emisUserSession, IEnumerable<LinkedAccount> linkedAccounts, Dictionary<Guid, string> gpIdentifierMapping)
         {
             var withNhsNumbers = new List<LinkedAccount>();
             var withoutNhsNumbers = new List<LinkedAccount>();
@@ -234,7 +275,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
             foreach (var account in linkedAccounts)
             {
-                var accountInSession = emisUserSession.ProxyPatients.FirstOrDefault(pp => pp.Id == account.Id);
+                var proxyPatientGpIdentifier = gpIdentifierMapping[account.Id];
+                var accountInSession = emisUserSession.ProxyPatients.FirstOrDefault(pp => pp.PatientActivityContextGuid == proxyPatientGpIdentifier);
 
                 if (!string.IsNullOrEmpty(accountInSession?.NhsNumber))
                 {
@@ -248,7 +290,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
             foreach (var item in withNhsNumbers)
             {
-                var proxyUserInSession = GetLinkedAccountFromGpUserSession(emisUserSession, item.Id);
+                var proxyPatientGpIdentifier = gpIdentifierMapping[item.Id];
+                var proxyUserInSession = emisUserSession.ProxyPatients.FirstOrDefault(x => x.PatientActivityContextGuid == proxyPatientGpIdentifier);
 
                 if (proxyUserInSession != null)
                 {
