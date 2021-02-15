@@ -103,8 +103,7 @@ class NotificationsFactory {
 
     private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {
         return """requestPnsToken : function(trigger){
-                    window.${'$'}nuxt.${'$'}store.dispatch(
-                        'notifications/authorised',
+                    window.nativeAppCallbacks.notificationsAuthorised(
                         {
                             devicePns:'$pns',
                             deviceType:'$deviceType', 
@@ -116,8 +115,7 @@ class NotificationsFactory {
 
     private fun mockNotificationsUnauthorised(): String {
         return "requestPnsToken : " +
-                "function(trigger){window.\$nuxt.\$store.dispatch(" +
-                "'notifications/unauthorised')}"
+                "function(trigger){window.nativeAppCallbacks.notificationsUnauthorised()}"
     }
 
     private fun createInvalidDevice(patient: Patient): InvalidUserDevice {

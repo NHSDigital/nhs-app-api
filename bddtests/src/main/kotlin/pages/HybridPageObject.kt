@@ -29,12 +29,6 @@ open class HybridPageObject : PageObject() {
 
     val pageLogging by lazy { PageLogging(driver) }
 
-    val spinner = getElement(
-            webDesktopLocator = "//*[@id='loading-spinner']",
-            androidLocator = "//ProgressBar",
-            iOSLocator = "//*[@class='nuxt-progress']"
-    )
-
     fun findAllByXpath(xpath: String): List<WebElementFacade> {
         switchWebview()
         pageLogging.logSelectorAndSource(xpath)

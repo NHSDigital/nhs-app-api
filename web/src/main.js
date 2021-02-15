@@ -81,13 +81,4 @@ const defineErrorHandling = () => {
   // global functions for native app callback
   window.appEvent = ({ event, payload }) => store.dispatch(event, payload);
   window.appRoute = path => redirectTo(app, path);
-
-  // Backwards compatibility for native apps to call dispatch (pre-nuxt removal).
-  window.$nuxt = Object.assign({}, {
-    $store: {
-      dispatch: (event, payload) => {
-        store.dispatch.call(app, event, payload);
-      },
-    },
-  });
 })();
