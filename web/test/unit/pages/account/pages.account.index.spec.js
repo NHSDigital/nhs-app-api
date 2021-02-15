@@ -70,6 +70,11 @@ describe('Account Page', () => {
       isProofLevel9,
     });
 
+    $store.app.$http = {
+      postV1PatientAssertedLoginIdentity: jest.fn()
+        .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
+    };
+
     $state.device.isNativeApp = isNativeApp;
     $state.serviceJourneyRules.rules.supportsLinkedProfiles = supportsLinkedProfiles;
     return mount(AccountPage, {

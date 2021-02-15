@@ -8,10 +8,10 @@
                :click-func="goToLoginOptions"/>
     <menu-item id="btn_nhsLogin"
                :header-tag="headerTag"
-               target="_blank"
+               :target="(isNativeApp ? '_parent' : '_blank')"
                :text="$t('account.nhsLogin')"
                :aria-label="$t('account.nhsLogin')"
-               :click-func="goToNHSSettings"/>
+               :href="settingsUrl"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
                :header-tag="headerTag"
@@ -58,6 +58,7 @@ export default {
     return {
       cidSettingsUrl: this.$store.$env.CID_SETTINGS_URL,
       isNativeApp: this.$store.state.device.isNativeApp,
+      settingsUrl: undefined,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       hasGncrAccountAdmin: sjrIf({
         $store: this.$store,
@@ -84,6 +85,9 @@ export default {
       return this.$store.getters['session/isProofLevel9'];
     },
   },
+  mounted() {
+    this.goToNHSSettings();
+  },
   methods: {
     goToLoginOptions() {
       redirectTo(this, LOGIN_SETTINGS_PATH);
@@ -98,13 +102,7 @@ export default {
             IntendedRelyingPartyUrl: window.location.hostname,
           },
         });
-      const settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
-
-      if (this.isNativeApp) {
-        window.location = settingsUrl;
-      } else {
-        window.open(settingsUrl, '_blank', 'noopener,noreferrer');
-      }
+      this.settingsUrl = `${this.cidSettingsUrl}?asserted_login_identity=${token}`;
     },
   },
 };

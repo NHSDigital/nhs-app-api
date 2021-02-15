@@ -44,6 +44,11 @@ describe('Settings', () => {
         'session/isProofLevel9': isProofLevel9,
       },
     });
+
+    $store.app.$http = {
+      postV1PatientAssertedLoginIdentity: jest.fn()
+        .mockImplementation(() => Promise.resolve({ token: 'jwtToken' })),
+    };
     return mount(Settings, {
       methods: {
         configureWebContext(url) {
