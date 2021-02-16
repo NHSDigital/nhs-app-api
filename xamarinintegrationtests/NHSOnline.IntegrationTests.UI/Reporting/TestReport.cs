@@ -28,6 +28,8 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public string? Description { get; }
 
+        public bool? ShouldRetry { get; set; }
+
         public List<BusinessRule> BusinessRules { get; }
     }
 }

@@ -35,7 +35,8 @@ namespace NHSOnline.IntegrationTests.UI
                     results[^1].Outcome = UnitTestOutcome.Inconclusive;
                 }
 
-                var logs = new TestLogs(new TestReport(_testMethod));
+                var testReport = new TestReport(_testMethod);
+                var logs = new TestLogs(testReport);
                 logs.Info(_displayName);
 
                 // Include driver setup/teardown in test duration
@@ -46,6 +47,7 @@ namespace NHSOnline.IntegrationTests.UI
                 timer.Stop();
 
                 shouldRetry = testResult.ShouldRetry(logs);
+                testReport.ShouldRetry = shouldRetry;
 
                 logs.Info("{0} => {1}{2}", _displayName, testResult.Outcome, shouldRetry ? " - Should Retry" : string.Empty);
 
