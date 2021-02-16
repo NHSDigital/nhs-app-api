@@ -90,10 +90,9 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             ContinueButton.Click();
         }
 
-        public AndroidBeforeYouStartPage Enter()
+        public void PressEnterKey()
         {
-            _driver.PressEnterKey();
-            return this;
+            KeyboardNavigation.PressEnterKey();
         }
 
         public void AssertTabFocusOrder()

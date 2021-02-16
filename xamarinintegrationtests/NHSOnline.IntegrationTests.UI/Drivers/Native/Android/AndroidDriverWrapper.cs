@@ -62,6 +62,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IAndroidInteractor.PressTabKey()
             => _interactor.PressTabKey();
 
+        void IAndroidInteractor.PressEnterKey()
+            => _interactor.PressEnterKey();
+
         void IAndroidDriverWrapper.PressBackButton() =>_driver.PressKeyCode(AndroidKeyCode.Back);
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()
@@ -70,8 +73,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         void IAndroidDriverWrapper.AssertRunningInForeground() => RetrieveAppState().Should().Be(AppState.RunningInForeground);
 
         private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.nhsonline.browserstack");
-
-        void IAndroidDriverWrapper.PressEnterKey() => _driver.PressKeyCode(AndroidKeyCode.Keycode_ENTER);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
         {

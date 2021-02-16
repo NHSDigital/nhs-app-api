@@ -67,6 +67,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             actualDescriptions.Should().BeEquivalentTo(expectedDescriptions, opts => opts.WithStrictOrdering());
         }
 
+        public void PressEnterKey() => _interactor.PressEnterKey();
+
         private List<string> GetDescriptionsOfElementsInTabOrder()
         {
             var descriptions = new List<string>();

@@ -8,5 +8,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         internal IAndroidInteractor CreateContainedInteractor(By findContainerBy);
 
         internal void PressTabKey();
+        internal void PressEnterKey();
     }
 }
