@@ -27,8 +27,8 @@
 			<Step>
 				<Name>Quota</Name>
 			</Step>
-			<Step> 
-				<Name>SpikeArrest</Name>   
+			<Step>
+				<Name>SpikeArrest</Name>
 			</Step>
 			<Step>
 				<Name>KeyValueMap.GetUpstreamApiKey</Name>
@@ -47,8 +47,8 @@
 			</Step>
 		</Request>
 	</PreFlow>
-  <Flows>
-    <Flow name="RewriteLocationHeader">
+	<Flows>
+		<Flow name="RewriteLocationHeader">
 			<Description/>
 			<Request/>
 			<Response>
@@ -58,14 +58,14 @@
 			</Response>
 			<Condition>(response.header.Location != null)</Condition>
 		</Flow>
-  </Flows>
+	</Flows>
 	<HTTPTargetConnection>
-    <Properties>
-      <!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
+		<Properties>
+			<!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
                  Anything unexpected will be sanitsed by the DefaultFaultRule -
                  https://docs.apigee.com/api-platform/fundamentals/fault-handling#customhandlingofhttperrorcodesfromthetargetserver -->
-      <Property name="success.codes">1xx,2xx,3xx,400,401,403</Property>
-    </Properties>
+			<Property name="success.codes">1xx,2xx,3xx,400,401,403</Property>
+		</Properties>
 		<SSLInfo>
 			<Enabled>true</Enabled>
 		</SSLInfo>
@@ -73,9 +73,13 @@
 			<Server name="nhs-app"/>
 		</LoadBalancer>
 	</HTTPTargetConnection>
-  <DefaultFaultRule>
-    <Step>
-      <Name>AssignMessage.CatchallErrorMessage</Name>
-    </Step>
-  </DefaultFaultRule>
+	<DefaultFaultRule>
+		<Step>
+			<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+		</Step>
+		<Step>
+			<Name>AssignMessage.CatchallErrorMessage</Name>
+		</Step>
+	</DefaultFaultRule>
 </TargetEndpoint>
