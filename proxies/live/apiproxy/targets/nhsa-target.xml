@@ -60,6 +60,12 @@
 		</Flow>
   </Flows>
 	<HTTPTargetConnection>
+    <Properties>
+      <!-- Whitelist the 'expected' error code responses so the responses pass unhindered to caller
+                 Anything unexpected will be sanitsed by the DefaultFaultRule -
+                 https://docs.apigee.com/api-platform/fundamentals/fault-handling#customhandlingofhttperrorcodesfromthetargetserver -->
+      <Property name="success.codes">1xx,2xx,3xx,400,401,403</Property>
+    </Properties>
 		<SSLInfo>
 			<Enabled>true</Enabled>
 		</SSLInfo>
@@ -67,4 +73,9 @@
 			<Server name="nhs-app"/>
 		</LoadBalancer>
 	</HTTPTargetConnection>
+  <DefaultFaultRule>
+    <Step>
+      <Name>AssignMessage.CatchallErrorMessage</Name>
+    </Step>
+  </DefaultFaultRule>
 </TargetEndpoint>
