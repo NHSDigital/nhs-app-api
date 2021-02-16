@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             SanitizeGuidanceResponseResults(guidanceResponse, htmlSanitizer);
             SanitizeQuestionnaires(guidanceResponse, guidanceResponse.DataRequirement, htmlSanitizer);
         }
-        
+
         public void SanitizeServiceDefinition(Hl7.Fhir.Model.ServiceDefinition serviceDefinition, IHtmlSanitizer htmlSanitizer)
         {
             if (serviceDefinition == null)
@@ -33,7 +33,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         public void SanitizeServiceDefinitionSearchBundle(Bundle bundle, IHtmlSanitizer htmlSanitizer)
         {
             var serviceDefinitionEntries = bundle.Entry
-                .Where(e => e.Resource.ResourceType == ResourceType.ServiceDefinition)
+                .Where(e => e.Resource.TryDeriveResourceType(out var resourceType)
+                            && resourceType == ResourceType.ServiceDefinition)
                 .Select(e => e.Resource as Hl7.Fhir.Model.ServiceDefinition).ToList();
 
             foreach (var serviceDefinition in serviceDefinitionEntries)
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 SanitizeServiceDefinition(serviceDefinition, htmlSanitizer);
             }
         }
-        
+
         private static void SanitizeGuidanceResponseResults(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
             var resultId = guidanceResponse.Result?.Reference?.Substring(1);
@@ -52,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             }
 
             var referralRequestAndCarePlanIds = GetReferralRequestAndCarePlanIds(guidanceResponse, resultId).ToList();
-            
+
             if (referralRequestAndCarePlanIds.Count == 0)
             {
                 return;
@@ -72,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 SanitizeCarePlan(carePlan, htmlSanitizer);
             }
         }
-        
+
         private static IEnumerable<string> GetReferralRequestAndCarePlanIds(DomainResource domainResource, string resultId)
         {
             var result = new List<string>();
@@ -130,14 +131,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 activityComponent.Detail.Description = SanitizeAndDecodeHtml(activityComponent.Detail?.Description, htmlSanitizer);
             }
         }
-        
+
         private static void SanitizeQuestionnaires(DomainResource domainResource, IReadOnlyCollection<DataRequirement> dataRequirements, IHtmlSanitizer htmlSanitizer)
         {
             var questionnaireIds = GetQuestionnaireIdsFromDataRequirements(dataRequirements).ToList();
 
             SanitizeQuestionnaires(domainResource, questionnaireIds, htmlSanitizer);
         }
-        
+
         private static IEnumerable<string> GetQuestionnaireIdsFromDataRequirements(IReadOnlyCollection<DataRequirement> dataRequirements)
         {
             var result = new List<string>();
@@ -208,7 +209,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 });
             });
         }
-        
+
         private static string SanitizeAndDecodeHtml(string html, IHtmlSanitizer htmlSanitizer)
         {
             html = htmlSanitizer.SanitizeHtml(html);

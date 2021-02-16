@@ -17,7 +17,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions
             }
 
             foreach (var container in guidanceResponse.Contained
-                .Where(a => a.ResourceType == ResourceType.OperationOutcome))
+                .Where(a => a.TryDeriveResourceType(out var resourceType)
+                            && resourceType == ResourceType.OperationOutcome))
             {
                 operationOutcomes.Add((OperationOutcome)container);
             }
@@ -37,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Extensions
             return notFoundOutcomes;
         }
 
-        public static Boolean IsSessionEnded(this List<Coding> codings) => 
+        public static Boolean IsSessionEnded(this List<Coding> codings) =>
             codings.Any(code => string.Equals(code.Code, Constants.IssueCodes.SessionEnd, StringComparison.Ordinal));
     }
 }

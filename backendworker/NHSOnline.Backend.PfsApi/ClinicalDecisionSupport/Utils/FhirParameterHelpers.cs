@@ -16,7 +16,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
         private const string OdsCodeParameter = "ODSCode";
         private const string OrganizationName = "organization";
-        private const string OrganizationResourceType = "Organization";
         private const string RequestIdParameter = "requestId";
         private const string NhsAppServiceDefinitionIdParameter = "nhsAppServiceDefinitionId";
         private const string NhsAppServiceDefinitionTypeParameter = "nhsAppServiceDefinitionType";
@@ -112,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                         Name = OrganizationName,
                         Resource = new NhsAppFhir.Resource
                         {
-                            ResourceType = OrganizationResourceType,
+                            ResourceType = ResourceType.Organization.ToString(),
                             Identifier = new NhsAppFhir.Identifier
                             {
                                 Value = odsCode

@@ -50,8 +50,6 @@ case "$CHANGE" in
     NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Http')
     NUKEEPER_EXCLUDES+=('Microsoft.Extensions.Logging')
 
-    # NHSO-12995
-    NUKEEPER_EXCLUDES+=('Hl7.Fhir.STU3')
     ;;
 
   *)

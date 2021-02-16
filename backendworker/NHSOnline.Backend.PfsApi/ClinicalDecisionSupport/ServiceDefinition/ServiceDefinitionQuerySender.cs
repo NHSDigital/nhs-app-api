@@ -182,7 +182,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             if (string.IsNullOrEmpty(sessionId))
             {
                 var responseSessionId = _fhirParameterHelpers.GetSessionIdFromParameters(guidanceResponse.Contained?
-                    .Where(c => c.ResourceType == ResourceType.Parameters)
+                    .Where(c => c.TryDeriveResourceType(out var resourceType)
+                                && resourceType == ResourceType.Parameters)
                     .Cast<Parameters>()
                     .FirstOrDefault());
 
