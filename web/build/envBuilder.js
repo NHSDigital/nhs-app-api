@@ -60,62 +60,55 @@ const populateEnvFile = (filePaths, total) => {
   })
 };
 
-const AddNumericConfig = (variable, value) => {
+const addNumericConfig = (variable, value) => {
   if (!isNumberString(value)) {
-    errorAndExit(`Failed AddNumericConfig for ${variable}=${value}`);
+    errorAndExit(`Failed addNumericConfig for ${variable}=${value}`);
   }
 
   return parseInt(value, 10);
 };
 
-const AddBoolConfig = (variable, value) => {
+const addBoolConfig = (variable, value) => {
   if (!isBooleanString(value)) {
-    errorAndExit(`Failed AddBoolConfig for ${variable}=${value}`);
+    errorAndExit(`Failed addBoolConfig for ${variable}=${value}`);
   }
 
   return (value.toLowerCase().trim() === 'true');
 };
 
-const AddStringConfig = (variable, value) => {
+const addStringConfig = (variable, value) => {
   if (!isNonBlankString(value)) {
-    errorAndExit(`Failed AddStringConfig for ${variable}=${value}`);
+    errorAndExit(`Failed addStringConfig for ${variable}=${value}`);
   }
 
   return value;
 };
 
-const determineEnvType = (envSh, config, formattedConfig) => {
-  const lines = readFileSync(envSh).toString().split('\n');
-  let foundStart = false;
-  let finished = false;
+const addConfigCommands =
+{
+  addNumericConfig,
+  addBoolConfig,
+  addStringConfig
+}
+
+const determineEnvType = (envVarsSh, config, formattedConfig) => {
+  const lines = readFileSync(envVarsSh)
+    .toString()
+    .split('\n');
 
   lines.forEach(rawLine => {
-    if (finished) {
+    const envVarMatch = rawLine.trim().match(/^(add.+Config)\s+["'](.+)['"]$/);
+
+    if (envVarMatch == null) {
       return;
     }
 
-    const line = rawLine.trim();
+    const [ _, commandName, envVarName ] = envVarMatch;
 
-    if (line[0] === '#') {
-      return;
-    } else if (line === 'echo "Begin Generating web config json"') {
-      foundStart = true;
-    } else if (line === 'echo "Completed Generating web config json"') {
-      finished = true;
+    const command = addConfigCommands[commandName];
+    const rawValue = config[envVarName];
 
-      return;
-    } else if (foundStart) {
-      const [ command, envVar ] = (line.split(';')[0]).split(' ');
-      const rawValue = config[envVar];
-
-      if (command === 'AddNumericConfig') {
-        formattedConfig[envVar] = AddNumericConfig(envVar, rawValue);
-      } else if (command === 'AddBoolConfig') {
-        formattedConfig[envVar] = AddBoolConfig(envVar, rawValue);
-      } else {
-        formattedConfig[envVar] = AddStringConfig(envVar, rawValue);
-      }
-    }
+    formattedConfig[envVarName] = command(envVarName, rawValue);
   });
 };
 
@@ -195,7 +188,7 @@ const main = () => {
   populateEnvFile(envFiles, envFile);
 
   var typedEnvFile = {};
-  determineEnvType('build/docker-runtime/env.sh', envFile, typedEnvFile);
+  determineEnvType('build/docker-runtime/env-vars.sh', envFile, typedEnvFile);
 
   writeEnvFileAndExit(typedEnvFile);
 }
