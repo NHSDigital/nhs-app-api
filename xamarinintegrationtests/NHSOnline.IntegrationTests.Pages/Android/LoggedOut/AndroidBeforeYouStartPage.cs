@@ -19,8 +19,14 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             "What to do if you're aged 13 to 15",
             "You'll need to contact your GP surgery first and request access to GP online services.");
 
-
         private AndroidButton ContinueButton => AndroidButton.WithText(_driver, "Continue");
+
+        private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+            _driver,
+            CovidLink,
+            ConditionsLink,
+            OneOneOneLink,
+            ContinueButton);
 
         public static AndroidBeforeYouStartPage AssertOnPage(IAndroidDriverWrapper driver)
         {
@@ -42,14 +48,32 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             CovidLink.Touch();
         }
 
+        public AndroidBeforeYouStartPage TabToCheckCoronavirusSymptoms()
+        {
+            KeyboardNavigation.TabTo(CovidLink);
+            return this;
+        }
+
         public void SearchConditionsAndTreatments()
         {
             ConditionsLink.Touch();
         }
 
+        public AndroidBeforeYouStartPage TabToSearchConditionsAndTreatments()
+        {
+            KeyboardNavigation.TabTo(ConditionsLink);
+            return this;
+        }
+
         public void UseNhs111Online()
         {
             OneOneOneLink.Touch();
+        }
+
+        public AndroidBeforeYouStartPage TabToUseNhs111Online()
+        {
+            KeyboardNavigation.TabTo(OneOneOneLink);
+            return this;
         }
 
         public void AssertCanShowAndHideGuidanceForAges13To15()
@@ -66,16 +90,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             ContinueButton.Click();
         }
 
-        public AndroidBeforeYouStartPage Tab()
-        {
-            _driver.PressTabKey();
-            return this;
-        }
-
         public AndroidBeforeYouStartPage Enter()
         {
             _driver.PressEnterKey();
             return this;
+        }
+
+        public void AssertTabFocusOrder()
+        {
+            KeyboardNavigation.AssertFocusOrder();
         }
     }
 }

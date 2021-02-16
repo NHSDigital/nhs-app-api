@@ -6,5 +6,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
     public interface IAndroidInteractor: IInteractor<AndroidDriver<AndroidElement>, AndroidElement>
     {
         internal IAndroidInteractor CreateContainedInteractor(By findContainerBy);
+
+        internal void PressTabKey();
     }
 }

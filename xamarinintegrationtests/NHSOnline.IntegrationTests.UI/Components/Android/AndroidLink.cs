@@ -7,7 +7,7 @@ using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class AndroidLink
+    public sealed class AndroidLink : IFocusable
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _text;
@@ -35,5 +35,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         private By FindBy
             => MobileBy.AndroidUIAutomator($"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder {Tag = "android.widget.TextView", Text = _text}.Description;
     }
 }

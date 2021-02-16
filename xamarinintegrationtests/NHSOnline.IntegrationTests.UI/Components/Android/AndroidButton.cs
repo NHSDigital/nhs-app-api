@@ -6,7 +6,7 @@ using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class AndroidButton
+    public sealed class AndroidButton : IFocusable
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _text;
@@ -31,5 +31,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         private By FindBy
             => By.XPath($"//android.widget.Button[normalize-space(@text)={_text.QuoteXPathLiteral()}]");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder { Tag = "android.widget.Button", Text = _text }.Description;
     }
 }

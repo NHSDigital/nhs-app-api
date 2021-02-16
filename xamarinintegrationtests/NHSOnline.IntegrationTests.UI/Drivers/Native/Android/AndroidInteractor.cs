@@ -29,5 +29,10 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         {
             return new AndroidInteractor(_nativeDriverContext, _interactor.CreateContainedInteractor(findContainerBy));
         }
+
+        void IAndroidInteractor.PressTabKey()
+        {
+            _interactor.ActOnDriver(driver => driver.PressKeyCode(AndroidKeyCode.Keycode_TAB));
+        }
     }
 }

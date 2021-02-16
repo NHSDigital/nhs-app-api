@@ -55,9 +55,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             }
         }
 
-        public Interactor<TDriver, TElement> CreateContainedInteractor(By findContainerBy)
+        internal void ActOnDriver(Action<TDriver> action) => action(_driver);
+
+        internal Interactor<TDriver, TElement> CreateContainedInteractor(By findContainerBy)
         {
-            return new Interactor<TDriver, TElement>(
+            return new(
                 _logs,
                 _driver,
                 findBy => (TElement) _findElement(findContainerBy).FindElement(findBy));

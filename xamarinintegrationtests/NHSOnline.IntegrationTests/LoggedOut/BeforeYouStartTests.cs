@@ -51,7 +51,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         public void APatientCanClickTheLinksAndIsTakenToTheCorrectPagesAndroid(IAndroidDriverWrapper driver)
         {
             NavigateToBeforeYouStartPage(driver)
-                .SearchConditionsAndTreatments();
+                .CheckCoronavirusSymptoms();
 
             AndroidAppTabBrowserChoice
                 .AssertDisplayed(driver)
@@ -59,15 +59,15 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .Always();
 
             AndroidAppTab
-                .AssertOnConditionsPage(driver)
+                .AssertOnCovidPage(driver)
                 .ReturnToApp();
 
             AndroidBeforeYouStartPage
                 .AssertOnPage(driver)
-                .CheckCoronavirusSymptoms();
+                .SearchConditionsAndTreatments();
 
             AndroidAppTab
-                .AssertOnCovidPage(driver)
+                .AssertOnConditionsPage(driver)
                 .ReturnToApp();
 
             AndroidBeforeYouStartPage
@@ -113,6 +113,44 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
+        public void APatientCanUseTheKeyboardToActivateTheLinksAndBeTakenToTheCorrectPagesAndroid(IAndroidDriverWrapper driver)
+        {
+            NavigateToBeforeYouStartPage(driver)
+                .TabToCheckCoronavirusSymptoms()
+                .Enter();
+
+            AndroidAppTabBrowserChoice
+                .AssertDisplayed(driver)
+                .ChooseChrome()
+                .Always();
+
+            AndroidAppTab
+                .AssertOnCovidPage(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .TabToSearchConditionsAndTreatments()
+                .Enter();
+
+            AndroidAppTab
+                .AssertOnConditionsPage(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .TabToUseNhs111Online()
+                .Enter();
+
+            AndroidAppTab
+                .AssertOn111Page(driver)
+                .ReturnToApp();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver);
+        }
+
+        [NhsAppAndroidTest]
         public void APatientCanViewTheGuidanceForAges13To15Android(IAndroidDriverWrapper driver)
         {
             NavigateToBeforeYouStartPage(driver)
@@ -127,44 +165,10 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        public void APatientCanUseTheKeyboardToNavigateToAndFollowTheLinksOnTheBeforeYouStartScreenPageAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanUseTheKeyboardToTabThroughTheControlsOnTheBeforeYouStartScreenPageAndroid(IAndroidDriverWrapper driver)
         {
             NavigateToBeforeYouStartPage(driver)
-                .Tab()
-                .Enter();
-
-            AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
-
-            AndroidAppTab
-                .AssertOnCovidPage(driver)
-                .ReturnToApp();
-
-            AndroidBeforeYouStartPage
-                .AssertOnPage(driver)
-                .Tab()
-                .Tab()
-                .Enter();
-
-            AndroidAppTab
-                .AssertOnConditionsPage(driver)
-                .ReturnToApp();
-
-            AndroidBeforeYouStartPage
-                .AssertOnPage(driver)
-                .Tab()
-                .Tab()
-                .Tab()
-                .Enter();
-
-            AndroidAppTab
-                .AssertOn111Page(driver)
-                .ReturnToApp();
-
-            AndroidBeforeYouStartPage
-                .AssertOnPage(driver);
+                .AssertTabFocusOrder();
         }
 
         private static AndroidBeforeYouStartPage NavigateToBeforeYouStartPage(IAndroidDriverWrapper driver)

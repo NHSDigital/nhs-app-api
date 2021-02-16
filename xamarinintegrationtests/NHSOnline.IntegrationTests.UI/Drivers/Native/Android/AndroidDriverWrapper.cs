@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
@@ -60,6 +59,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
         IAndroidInteractor IAndroidInteractor.CreateContainedInteractor(By findContainerBy)
             => _interactor.CreateContainedInteractor(findContainerBy);
 
+        void IAndroidInteractor.PressTabKey()
+            => _interactor.PressTabKey();
+
         void IAndroidDriverWrapper.PressBackButton() =>_driver.PressKeyCode(AndroidKeyCode.Back);
 
         void IAndroidDriverWrapper.AssertNotRunningInForeground()
@@ -69,7 +71,6 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
         private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.nhsonline.browserstack");
 
-        void IAndroidDriverWrapper.PressTabKey() => _driver.PressKeyCode(AndroidKeyCode.Keycode_TAB);
         void IAndroidDriverWrapper.PressEnterKey() => _driver.PressKeyCode(AndroidKeyCode.Keycode_ENTER);
 
         void IDriverWrapper.AttachDebugInfo(IDriverCleanupContext context)
