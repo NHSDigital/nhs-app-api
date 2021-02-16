@@ -137,12 +137,17 @@ open class HybridPageObject : PageObject() {
         val charValToRemove = ("\u200B")
         return this.text.removeSuffix(charValToRemove)
     }
+    
+    fun assertLinkExists(url: String, selector: String): HybridPageElement {
+        val link = getElement(selector)
+        link.actOnTheElement { l -> Assert.assertEquals("link", url, l.getAttribute("href")) }
+        return link
+    }
 
     fun assertLinkExists(linkTitle: String, url: String, internal: Boolean): HybridPageElement {
-        val link = getElement("//a[contains(.,'$linkTitle')]")
+        val selector = "//a[contains(.,'$linkTitle')]"
         val expectedLink = if(internal) { Config.instance.url + url} else {url}
-        link.actOnTheElement { l -> Assert.assertEquals("link", expectedLink, l.getAttribute("href")) }
-        return link
+        return assertLinkExists(expectedLink, selector)
     }
 
     fun attachJavascriptFunctionsToNativeAppWindow(scripts: ArrayList<String>){

@@ -39,45 +39,20 @@ Feature: View My Account Page
     When I click the NHS login link on the settings page
     Then the nhs login account settings page has opened in a new tab
 
-  Scenario: A patient can navigate to the Terms of use page
+  Scenario Outline: A patient can navigate to the <Link> page
     Given I am a EMIS patient
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
-    When I click the link called 'Terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/'
+    When I click the link called <Link> on the Account page
     Then a new tab has been opened by the link
-
-  Scenario: A patient can navigate to the Privacy policy page
-    Given I am a EMIS patient
-    And I am logged in
-    And I click the settings icon
-    Then the Account page is displayed
-    When I click the link called 'Privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
-    Then a new tab has been opened by the link
-
-  Scenario: A patient can navigate to the Open source licences page
-    Given I am a EMIS patient
-    And I am logged in
-    And I click the settings icon
-    Then the Account page is displayed
-    When I click the link called 'Open source licences' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/'
-    Then a new tab has been opened by the link
-
-  Scenario: A patient can navigate to the Help and support page
-    Given I am a EMIS patient
-    And I am logged in
-    And I click the settings icon
-    Then the Account page is displayed
-    When I click the link called 'Help and support' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/'
-    Then a new tab has been opened by the link
-
-  Scenario: A patient can navigate to the Accessibility statement page
-    Given I am a EMIS patient
-    And I am logged in
-    And I click the settings icon
-    Then the Account page is displayed
-    When I click the link called 'Accessibility statement' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/'
-    Then a new tab has been opened by the link
+    Examples:
+    | Link                    |
+    | Terms of use            |
+    | Privacy policy          |
+    | Open source licences    |
+    | Help and support        |
+    | Accessibility statement |
 
   Scenario Outline: A patient can navigate to Settings page and can not see the linked account link
     Given I am logged in as a <Gp System> user
