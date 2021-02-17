@@ -1,5 +1,19 @@
 #! /usr/bin/env bash
 
+function set_int_test_config_from_environment () {
+  local CONFIG_VAR
+  local DOCKER_ENV_VAR_NAME
+  local DOCKER_ENV_VAR_VALUE
+
+  for CONFIG_VAR in "${!INT_TEST_CFG_@}"; do
+    DOCKER_ENV_VAR_NAME=${CONFIG_VAR#INT_TEST_CFG_}
+    DOCKER_ENV_VAR_VALUE=${!CONFIG_VAR}
+
+    info "Setting Integration Tests Config: ${DOCKER_ENV_VAR_NAME}=${DOCKER_ENV_VAR_VALUE}"
+    DOCKER_ARGS+=(--env "${DOCKER_ENV_VAR_NAME}=${DOCKER_ENV_VAR_VALUE}")
+  done
+}
+
 function set_docker_compose_files_args () {
   local DOCKER_COMPOSE_FILES PORT_FILE
 

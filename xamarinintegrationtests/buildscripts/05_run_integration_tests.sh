@@ -16,6 +16,8 @@ DOCKER_ARGS+=(--network "${DOCKER_NETWORK}")
 DOCKER_ARGS+=(--env "Chrome__Arguments__headless=true")
 DOCKER_ARGS+=(-v "//var/run/docker.sock:/var/run/docker.sock")
 
+set_int_test_config_from_environment
+
 setup_browserstack_environment
 
 cleanup_docker_containers
