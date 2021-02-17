@@ -17,19 +17,19 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         }
 
         public static AndroidLabel WithText(IAndroidInteractor interactor, string text)
-            => new AndroidLabel(interactor, new TextLocatorStrategy(text));
+            => new(interactor, new TextLocatorStrategy(text));
 
         public static AndroidLabel WhichMatches(IAndroidInteractor interactor, string pattern)
-            => new AndroidLabel(interactor, new MatchesLocatorStrategy(pattern));
+            => new(interactor, new MatchesLocatorStrategy(pattern));
 
         public AndroidLabel ScrollIntoView()
-            => new AndroidLabel(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
+            => new(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
 
         public void AssertVisible()
         {
             _interactor.ActOnElement(
                 FindBy,
-                e => e.Displayed.Should().BeTrue("a label {1} should be displayed", Description));
+                e => e.Displayed.Should().BeTrue("a label {0} should be displayed", Description));
         }
 
         public void Click()
