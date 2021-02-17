@@ -9,6 +9,7 @@ const createStore = ({
   hasNoNominatedPharmacy = false,
   pharmacyName = undefined,
   sjrEnabled = true,
+  pharmacyEnabled = false,
   isProxying = false,
 }) => ({
   dispatch: jest.fn(),
@@ -31,6 +32,7 @@ const createStore = ({
     'repeatPrescriptionCourses/selectedPrescriptions': [{ id: 1 }],
     'nominatedPharmacy/hasNoNominatedPharmacy': hasNoNominatedPharmacy,
     'serviceJourneyRules/nominatedPharmacyEnabled': sjrEnabled,
+    'nominatedPharmacy/nominatedPharmacyEnabled': pharmacyEnabled,
     'session/isProxying': isProxying,
   },
 });
@@ -109,6 +111,7 @@ describe('confirm prescriptions', () => {
   describe('nominated pharmacy summary', () => {
     const pharmacyBlockId = '#my-nominated-pharmacy';
 
+
     describe('SJR disabled', () => {
       beforeEach(() => {
         $store = createStore({ hasNoNominatedPharmacy: true, pharmacyName: 'boots', sjrEnabled: false });
@@ -122,26 +125,39 @@ describe('confirm prescriptions', () => {
 
     describe('SJR enabled', () => {
       const sjrEnabled = true;
+      const pharmacyEnabled = true;
+      const hasNoNominatedPharmacy = true;
 
       describe('has no nominated pharmacy', () => {
         beforeEach(() => {
-          $store = createStore({ hasNoNominatedPharmacy: true, sjrEnabled });
+          $store = createStore({ hasNoNominatedPharmacy: true, sjrEnabled, pharmacyEnabled });
           wrapper = mountPage($store);
         });
 
-        it('will not exist', () => {
-          expect(wrapper.find(pharmacyBlockId).exists()).toBe(false);
+        it('will show no nominated pharmacy message', () => {
+          expect(wrapper.find(pharmacyBlockId).exists()).toBe(true);
         });
       });
 
       describe('has nominated pharmacy', () => {
         beforeEach(() => {
-          $store = createStore({ hasNoNominatedPharmacy: false, pharmacyName: 'Boots', sjrEnabled });
+          $store = createStore({ hasNoNominatedPharmacy: false, pharmacyName: 'Boots', sjrEnabled, pharmacyEnabled });
           wrapper = mountPage($store);
         });
 
         it('will exist', () => {
           expect(wrapper.find(pharmacyBlockId).exists()).toBe(true);
+        });
+      });
+
+      describe('has no nominated pharmacy and nominated pharmacy is disabled', () => {
+        beforeEach(() => {
+          $store = createStore({ hasNoNominatedPharmacy, sjrEnabled, pharmacyEnabled: false });
+          wrapper = mountPage($store);
+        });
+
+        it('will not exist', () => {
+          expect(wrapper.find(pharmacyBlockId).exists()).toBe(false);
         });
       });
     });

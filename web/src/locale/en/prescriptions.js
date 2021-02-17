@@ -7,6 +7,10 @@ export default {
     specialRequestsRelating: 'Notes for your GP surgery',
     yourDispensingPractice: 'Your dispensing practice',
     yourNominatedPharmacy: 'Your nominated pharmacy',
+    nominatedPharmacy: {
+      line1: 'You do not have a nominated pharmacy.',
+      line2: 'Collect your paper prescription from your GP surgery when it\'s ready.',
+    },
     medicines: 'Medicines',
     changeMedicines: 'Change medicines',
     changeNotes: 'Change notes for your GP surgery',

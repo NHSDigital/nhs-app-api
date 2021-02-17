@@ -23,6 +23,8 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     }
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
 
+    val nominatedPharmacyTextXPath = "//*[@id='my-nominated-pharmacy']"
+
     val pharmacyDetailComponent = PharmacyDetailComponent()
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
@@ -78,6 +80,14 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
 
     fun getSpecialRequest(): String {
         return findByXpath(specialRequestTextXPath).text
+    }
+
+    fun getNominatedPharmacy(): String {
+        return findByXpath(nominatedPharmacyTextXPath).text
+    }
+
+    fun nominatedPharmacyIsVisible(): Boolean {
+        return findByXpath(nominatedPharmacyTextXPath).isVisible
     }
 
     fun clickConfirmAndOrderRepeatPrescriptionButton() {

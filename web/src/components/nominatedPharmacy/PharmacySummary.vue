@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <p id="pharmacyName" class="nhsuk-u-margin-bottom-1"> {{ pharmacy.pharmacyName }} </p>
+      <p id="pharmacyName" class="nhsuk-u-margin-bottom-0"> {{ pharmacy.pharmacyName }} </p>
       <p v-if="!isInternetPharmacy" id="pharmacyAddress" class="nhsuk-u-margin-bottom-1">
         <pharmacy-address-component id="pharmacy-address-component" :pharmacy="pharmacy"/>
       </p>

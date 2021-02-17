@@ -112,7 +112,3 @@ export default {
 };
 
 </script>
-
-<style module lang="scss" scoped>
-  @import "@/style/custom/pharmacy-detail";
-</style>

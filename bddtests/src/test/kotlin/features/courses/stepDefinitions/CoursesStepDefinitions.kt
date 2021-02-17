@@ -260,7 +260,8 @@ open class CoursesStepDefinitions {
     @Then("^I see the default special request text$")
     fun iSeeTheDefaultSpecialRequestText() {
         confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
-        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(), containsString("No notes added"))
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(),
+                containsString("No notes added"))
     }
 
     @Then("^I see the special request text area$")

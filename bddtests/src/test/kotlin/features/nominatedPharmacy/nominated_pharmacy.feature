@@ -282,6 +282,49 @@ Feature: nominated pharmacy journey
     Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
+  Scenario Outline: Patient with no nominated pharmacy sees relevant text in prescriptions confirmation Page
+    Given I am a <GP System> patient
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And my GP Practice is EPS enabled
+    And I don't have a nominated pharmacy of any type
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then I see the default nominated pharmacy text
+      Examples:
+        | GP System |
+        | EMIS      |
+
+  Scenario: Patient does not see nominated pharmacy when SJR is disabled
+    Given I am a EMIS user where the journey configurations are:
+      | Journey            | Value    |
+      | nominated pharmacy | disabled |
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then I do not see a nominated pharmacy
+
+  Scenario Outline: Pateint can see nominated pharmacy when nominated pharmacy is enabled
+    Given I am patient using the <GP System> GP System
+    And I have a P1 typed nominated pharmacy with SW11XR OdsCode
+    And I have historic prescriptions
+    And there are 5 repeatable prescriptions available
+    And my GP Practice is EPS enabled
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then I see my nominated pharmacy details
+      Examples:
+        | GP System |
+        | EMIS      |
+
   Scenario Outline: If patient has a P3 typed nominated pharmacy then Patient does not see nominated pharmacy
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions

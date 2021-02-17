@@ -207,7 +207,7 @@ Feature: View Courses Frontend
       | GP System |
       | TPP       |
 
-  Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
+  Scenario Outline: The <GP System> special request text is optional and 'No notes added' is displayed if they don't enter a value
     Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 1 repeatable prescriptions available

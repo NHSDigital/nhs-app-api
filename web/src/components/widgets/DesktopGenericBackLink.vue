@@ -1,6 +1,6 @@
 <template>
   <p :class="clazz">
-    <a :class="[$style['nhsuk-back-link__link']]"
+    <a :class="[$style['inline-link']]"
        :href="path"
        :target="target"
        data-purpose="main-back-button"
@@ -37,5 +37,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import "@/style/custom/desktop-generic-back-link";
+  @import "@/style/custom/inline-link";
 </style>

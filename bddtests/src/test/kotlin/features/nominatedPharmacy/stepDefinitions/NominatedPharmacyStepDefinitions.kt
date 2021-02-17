@@ -10,6 +10,7 @@ import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import models.nominatedPharmacy.Postcode
 import net.thucydides.core.annotations.Steps
+import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import pages.PrescriptionsHubPage
 import pages.assertIsVisible
@@ -18,6 +19,7 @@ import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
 import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.nominatedPharmacy.NominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -39,6 +41,8 @@ class NominatedPharmacyStepDefinitions {
     private lateinit var nominatedPharmacyChangeSuccessPage: NominatedPharmacyChangeSuccessPage
 
     private lateinit var nominatedPharmacyChooseTypePage: NominatedPharmacyChooseTypePage
+
+    private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
 
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
@@ -247,6 +251,27 @@ class NominatedPharmacyStepDefinitions {
                         phoneNumber, searchResults[index].phoneNumber)
             }
         }
+    }
+
+    @Then("^I see the default nominated pharmacy text$")
+    fun iSeeTheDefaultNominatedPharmacyText() {
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getNominatedPharmacy(),
+                CoreMatchers.containsString("You do not have a nominated pharmacy. " +
+                        "Collect your paper prescription from your GP surgery when it's ready."))
+    }
+
+    @Then("^I do not see a nominated pharmacy$")
+    fun iDoNotSeeNominatedPharmacyText() {
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertFalse(confirmRepeatPrescriptionsOrderPage.nominatedPharmacyIsVisible())
+    }
+
+    @Then("^I see my nominated pharmacy details$")
+    fun iSeeNominatedPharmacyText() {
+        confirmRepeatPrescriptionsOrderPage.shouldBeDisplayed()
+        Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getNominatedPharmacy(),
+                CoreMatchers.containsString("My Pharmacy 1"))
     }
 
     @Then("^I see confirm nominated page with selected pharmacy details$")

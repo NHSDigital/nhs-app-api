@@ -1,49 +1,73 @@
 <template>
   <div v-if="showTemplate">
-    <p class="nhsuk-u-margin-bottom-2"><strong>
-      {{ $t('prescriptions.confirmDetails.medicines') }}</strong></p>
-    <div v-for="selectedPrescription in selectedPrescriptions"
-         :key="selectedPrescription.courseId"
-         data-purpose="selected-prescription">
-      <p class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
-        {{ selectedPrescription.name }}</p>
-      <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
-    </div>
-    <p><a id="changeRepeatPrescription"
-          :aria-label="$t('prescriptions.confirmDetails.changeMedicines')"
-          :href="coursesPageRepeatPrescription"
-          @click.prevent="changePrescriptions">
-      {{ $t('prescriptions.confirmDetails.change') }}
-    </a>
-    </p>
-    <hr>
-    <div v-if="specialRequestNecessity !== 'NotAllowed'">
-      <p class="nhsuk-u-margin-bottom-2"><strong>
-        {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}</strong></p>
-      <p v-if="specialRequest"
-         id="specialRequestText" :class="$style.wrapContent">{{ specialRequest }}
-      </p>
-      <p v-else id="specialRequestText">
-        {{ $t('prescriptions.confirmDetails.specialRequestsNone') }}
-      </p>
-    </div>
-    <p><a id="changeSpecialRequest"
-          :aria-label="$t('prescriptions.confirmDetails.changeNotes')"
-          :href="coursesPageSpecialRequest"
-          @click.prevent="changeSpecialRequest">
-      {{ $t('prescriptions.confirmDetails.change') }}
-    </a>
-    </p>
-    <sjr-if journey="nominatedPharmacy">
-      <div v-if="!hasNoNominatedPharmacy && !isProxying" id="my-nominated-pharmacy">
-        <hr>
-        <p class="nhsuk-u-margin-bottom-0">
-          <strong>{{ pharmacyHeader }}</strong>
-        </p>
-        <pharmacy-summary id="pharmacy-summary"
-                          :pharmacy="nominatedPharmacy"/>
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ $t('prescriptions.confirmDetails.medicines') }}
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          <div v-for="selectedPrescription in selectedPrescriptions"
+               :key="selectedPrescription.courseId"
+               data-purpose="selected-prescription">
+            <p class="nhsuk-u-margin-bottom-0" data-purpose="prescription-name">
+              {{ selectedPrescription.name }}</p>
+            <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
+          </div>
+        </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a id="changeRepeatPrescription"
+             :class="[$style['inline-link']]"
+             :aria-label="$t('prescriptions.confirmDetails.changeMedicines')"
+             :href="coursesPageRepeatPrescription"
+             @click.prevent="changePrescriptions">
+            {{ $t('prescriptions.confirmDetails.change') }}
+          </a>
+        </dd>
       </div>
-    </sjr-if>
+      <div v-if="specialRequestNecessity !== 'NotAllowed'" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ $t('prescriptions.confirmDetails.specialRequestsRelating') }}
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          <template v-if="specialRequest"
+                    :class="$style.wrapContent">
+            <p id="specialRequestText">
+              {{ specialRequest }}
+            </p>
+          </template>
+          <template v-else>
+            <p id="specialRequestText">
+              {{ $t('prescriptions.confirmDetails.specialRequestsNone') }}
+            </p>
+          </template>
+        </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a id="changeSpecialRequest"
+             :class="[$style['inline-link']]"
+             :aria-label="$t('prescriptions.confirmDetails.changeNotes')"
+             :href="coursesPageSpecialRequest"
+             @click.prevent="changeSpecialRequest">
+            {{ $t('prescriptions.confirmDetails.change') }}
+          </a>
+        </dd>
+      </div>
+      <div v-if="epsAvailable" id="my-nominated-pharmacy" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          {{ pharmacyHeader }}
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          <template v-if="!hasNoNominatedPharmacy">
+            <pharmacy-summary id="pharmacy-summary"
+                              :pharmacy="nominatedPharmacy"/>
+          </template>
+          <template v-else>
+            {{ $t('prescriptions.confirmDetails.nominatedPharmacy.line1') }}
+            {{ $t('prescriptions.confirmDetails.nominatedPharmacy.line2') }}
+          </template>
+        </dd>
+        <dd class="nhsuk-summary-list__actions"/>
+      </div>
+    </dl>
     <generic-button id="btn_confirm_and_order_prescription"
                     class="nhsuk-button"
                     click-delay="medium"
@@ -63,7 +87,6 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
-import SjrIf from '@/components/SjrIf';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { redirectTo } from '@/lib/utils';
 import {
@@ -73,6 +96,7 @@ import {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS_PATH,
   PRESCRIPTIONS_ORDER_SUCCESS_PATH,
 } from '@/router/paths';
+import sjrIf from '@/lib/sjrIf';
 
 const onSubmit = async (store, selectedCourseIds, specialRequest) => {
   const repeatPrescriptionOrder = {
@@ -89,9 +113,10 @@ export default {
     DesktopGenericBackLink,
     GenericButton,
     PharmacySummary,
-    SjrIf,
   },
   data() {
+    const nominatedPharmacyEnabled = this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
+    const sjrNominatedPharmacyEnabled = sjrIf({ $store: this.$store, journey: 'nominatedPharmacy' });
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
@@ -100,6 +125,7 @@ export default {
       coursesPageRepeatPrescription: `${PRESCRIPTION_REPEAT_COURSES_PATH}#repeatPrescriptions`,
       coursesPageSpecialRequest: `${PRESCRIPTION_REPEAT_COURSES_PATH}#specialRequest`,
       isProxying: this.$store.getters['session/isProxying'],
+      epsAvailable: nominatedPharmacyEnabled && sjrNominatedPharmacyEnabled,
     };
   },
   computed: {
@@ -163,4 +189,5 @@ export default {
 
 <style module lang="scss" scoped>
   @import "@/style/custom/prescriptions-confirm-prescription-details";
+  @import "@/style/custom/inline-link";
 </style>

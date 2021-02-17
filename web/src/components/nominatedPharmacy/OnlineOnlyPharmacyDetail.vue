@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="nhsuk-body">
-      <p id="pharmacyName" class="nhsuk-u-margin-bottom-1">{{ pharmacy.pharmacyName }}</p>
+      <p id="pharmacyName" class="nhsuk-u-margin-bottom-0">{{ pharmacy.pharmacyName }}</p>
       <p v-if="pharmacy.url" class="nhsuk-u-margin-bottom-1">
         <analytics-tracked-tag id="url"
                                :href="hrefForUrl"
