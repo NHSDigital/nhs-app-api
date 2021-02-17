@@ -10,7 +10,6 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-HAWKEYE_IMAGE="hawkeyesec/scanner-cli:latest"
 HAWKEYE_CONTAINER_NAME="nhsonline-web-hawkeye"
 HAWKEYE_RESULTS_FILE="hawkeye-results.json"
 HAWKEYE_RESULTS_FILE_PATH="${DOCKER_ROOT}${HAWKEYE_RESULTS_FILE}"
@@ -19,14 +18,14 @@ if [ -n "$(docker container ls -a -q --filter="name=${HAWKEYE_CONTAINER_NAME}")"
   docker rm "${HAWKEYE_CONTAINER_NAME}"
 fi
 
-docker pull "${HAWKEYE_IMAGE}"
+pull_docker_image "${DOCKER_IMAGE_HAWKEYE}"
 
 set +e
 
 docker run \
   --name "${HAWKEYE_CONTAINER_NAME}" \
   -v "${REPO_ROOT}/web:${DOCKER_ROOT}target:ro" \
-  "${HAWKEYE_IMAGE}" \
+  "${DOCKER_IMAGE_HAWKEYE}" \
   scan -f critical \
         -j "${HAWKEYE_RESULTS_FILE_PATH}"
 

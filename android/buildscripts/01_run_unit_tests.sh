@@ -15,5 +15,7 @@ validate_maven_settings
 SCRIPT_NAME="unit tests"
 GRADLE_ARGS+=("testDebugUnitTest")
 
+pull_docker_image "${DOCKER_IMAGE_ANDROID_BUILD}"
+
 # shellcheck source=lib/run_gradle.sh
 source "buildscripts/lib/run_gradle.sh"

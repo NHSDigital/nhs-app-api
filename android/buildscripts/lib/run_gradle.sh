@@ -3,7 +3,7 @@ set -x
 
 docker run \
   "${DOCKER_ARGS[@]}" \
-  nhsapp.azurecr.io/nhsonline-android-build:jdk11-gradle6-android_sdk_latest-1.0 \
+  "${DOCKER_IMAGE_ANDROID_BUILD}" \
   bash -c "\
     if [ -f 'local.properties' ]; then \
       rm -f 'local.properties'; \

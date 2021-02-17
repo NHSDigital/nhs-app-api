@@ -3,6 +3,8 @@
 # shellcheck source=../../../buildscripts/lib/set_env.sh
 source "../buildscripts/lib/set_env.sh"
 
+export DOCKER_IMAGE_ANDROID_BUILD="nhsapp.azurecr.io/nhsonline-android-build:jdk11-gradle6-android_sdk_latest-1.0"
+
 GRADLE_PATH="${HOME}/.gradle"
 
 if [[ $(uname -s) =~ ^MING.* ]]; then
