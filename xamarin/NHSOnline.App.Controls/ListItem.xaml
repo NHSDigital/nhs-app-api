@@ -14,7 +14,7 @@
                 <Setter Property="FontSize" Value="15" />
             </Style>
             <Style TargetType="StackLayout" Class="ListItem">
-                <Setter Property="Margin" Value="10, 2, 10, 2" />
+                <Setter Property="Margin" Value="10, 0, 10, 5" />
             </Style>
         </ResourceDictionary>
     </View.Resources>
