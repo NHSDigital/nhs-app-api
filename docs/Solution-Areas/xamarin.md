@@ -15,8 +15,6 @@ There are a few general principles to adhere to when working in the Xamarin app 
 
 The theme here is making it easy for future developers to pick up the code and understand it to make changes.
 
-
-
 ## Xamarin patterns
 
 It is essential to understand, or at least be aware of, the [fundamentals of Xamarin](https://docs.microsoft.com/en-us/xamarin/get-started/what-is-xamarin) before getting started.
@@ -27,3 +25,6 @@ Using these fundamentals there are many ways that any given feature can be imple
 * [Model View Presenter](xamarin/model-view-presenter.md)
 * [Data Binding](xamarin/data-binding.md)
 
+## Setup
+
+* [Environment Setup](xamarin/environment-setup.md)
