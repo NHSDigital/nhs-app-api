@@ -24,12 +24,6 @@ namespace Nhs.App.Api.Integration.Tests
             ContentReference
         }
 
-        private enum RecipientKind
-        {
-            NhsNumbers,
-            OdsCode
-        }
-
         public class EndpointInfo
         {
             public string Path { get; set; }
@@ -72,41 +66,20 @@ namespace Nhs.App.Api.Integration.Tests
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task
-            CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
-
-            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
-        {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
-
-            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
-        {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
@@ -231,17 +204,21 @@ namespace Nhs.App.Api.Integration.Tests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-            var responseObject = await DeserializeResponseAsync<CommunicationPostResponse>(response);
-            Guid.TryParse(responseObject.Id, out var communicationId).Should().BeTrue();
+
+            var responseObject = await DeserializeFhirResponseAsync(response);
+            var identifier = responseObject.Identifier
+                .Should().ContainSingle(x => x.System == FhirR4IdentifierSystem.UniformResourceIdentifier)
+                .Subject;
+
+            Guid.TryParse(identifier.Value, out var communicationId).Should().BeTrue();
 
             response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{communicationId}");
         }
 
         private static string BuildValidRequestBody(
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
-            RecipientKind recipientKind = RecipientKind.NhsNumbers)
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
         {
-            var communicationRequest = BuildValidCommunicationRequest(payloadContentKind, recipientKind);
+            var communicationRequest = BuildValidCommunicationRequest(payloadContentKind);
 
             return BuildRequestBody(communicationRequest);
         }
@@ -255,8 +232,7 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         private static CommunicationRequest BuildValidCommunicationRequest(
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
-            RecipientKind recipientKind = RecipientKind.NhsNumbers)
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
         {
             var communicationRequest = new CommunicationRequest
             {
@@ -267,10 +243,10 @@ namespace Nhs.App.Api.Integration.Tests
                 },
                 Identifier = new List<Identifier>
                 {
-                    new Identifier(FhirR4IdentifierSystem.CampaignId, "Campaign ID 1"),
-                    new Identifier(FhirR4IdentifierSystem.RequestReference, "Request Reference 1")
+                    new(FhirR4IdentifierSystem.CampaignId, "Campaign ID 1"),
+                    new(FhirR4IdentifierSystem.RequestReference, "Request Reference 1")
                 },
-                Recipient = BuildValidRecipient(recipientKind),
+                Recipient = BuildValidRecipient(),
                 Payload = BuildValidPayload(payloadContentKind)
             };
 
@@ -294,30 +270,19 @@ namespace Nhs.App.Api.Integration.Tests
 
             return new List<CommunicationRequest.PayloadComponent>
             {
-                new CommunicationRequest.PayloadComponent { Content = content }
+                new() { Content = content }
             };
         }
 
-        private static List<ResourceReference> BuildValidRecipient(RecipientKind recipientKind)
+        private static List<ResourceReference> BuildValidRecipient()
         {
             var recipients = new List<ResourceReference>();
 
-            if (recipientKind == RecipientKind.OdsCode)
+            recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
             {
-                recipients.Add(new ResourceReference
-                {
-                    Identifier = new Identifier(FhirR4IdentifierSystem.PatientsAtOdsCode, _testConfiguration.SendToOdsCode),
-                    Type = "group"
-                });
-            }
-            else
-            {
-                recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
-                {
-                    Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
-                    Type = "patient"
-                }));
-            }
+                Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
+                Type = ResourceType.Patient.ToString()
+            }));
 
             return recipients;
         }
@@ -329,6 +294,14 @@ namespace Nhs.App.Api.Integration.Tests
             var operationOutcome = new FhirJsonParser().Parse<OperationOutcome>(responseString);
 
             return operationOutcome;
+        }
+
+        private static async Task<CommunicationRequest> DeserializeFhirResponseAsync(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseObject = new FhirJsonParser().Parse(responseString) as CommunicationRequest;
+
+            return responseObject;
         }
     }
 }
