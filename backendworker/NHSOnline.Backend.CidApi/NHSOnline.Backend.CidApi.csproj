@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="CorrelationId" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.12" />
     <PackageReference Include="Yisoft.AspNetCore.Configuration.Yaml" Version="2.0.0" />
   </ItemGroup>
 
