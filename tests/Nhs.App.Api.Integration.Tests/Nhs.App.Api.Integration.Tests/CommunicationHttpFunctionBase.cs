@@ -19,12 +19,12 @@ namespace Nhs.App.Api.Integration.Tests
 
         protected static NhsAppApiJwtWrapperClient CreateJwtHttpClient()
         {
-            return new NhsAppApiJwtWrapperClient(_testConfiguration, _accessTokenCacheService);
+            return new(_testConfiguration, _accessTokenCacheService);
         }
 
         protected static NhsAppApiApiKeyWrapperClient CreateApiKeyHttpClient()
         {
-            return new NhsAppApiApiKeyWrapperClient(_testConfiguration);
+            return new(_testConfiguration);
         }
 
         protected static async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
