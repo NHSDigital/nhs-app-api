@@ -24,6 +24,7 @@ Using these fundamentals there are many ways that any given feature can be imple
 * [Threading](xamarin/threading-pattern.md)
 * [Model View Presenter](xamarin/model-view-presenter.md)
 * [Data Binding](xamarin/data-binding.md)
+* [Integration Tests](xamarin/integration-tests.md)
 
 ## Setup
 
