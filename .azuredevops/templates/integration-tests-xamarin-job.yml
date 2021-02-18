@@ -83,7 +83,7 @@ jobs:
         displayName: Generate Report
         condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
         inputs:
-          scriptPath: xamarinintegrationtests/buildscripts/06_generate_integration_tests_report.sh
+          scriptPath: xamarinintegrationtests/buildscripts/06_generate_integration_test_run_report.sh
 
       - task: PublishTestResults@2
         displayName: Publish Test Results

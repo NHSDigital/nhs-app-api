@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.IntegrationTests.UI.Reporting;
 
 namespace NHSOnline.IntegrationTests.UI
 {
     internal sealed class TestLogs
     {
+        private static readonly JsonSerializerSettings TestReportSerializerSettings = CreateTestReportSerializerSettings();
+
         private readonly List<string> _info = new();
         private readonly List<string> _error = new();
 
@@ -27,6 +31,18 @@ namespace NHSOnline.IntegrationTests.UI
             => Error(string.Format(CultureInfo.InvariantCulture, format, args));
         internal void Error(string message) => Log(_error, message);
 
+
+        internal void UpdateResult(TestResult testResult)
+        {
+            _testReport.SetResult(testResult);
+
+            var testReportJson = JsonConvert.SerializeObject(_testReport, TestReportSerializerSettings);
+            Info("TestReport:{0}", testReportJson);
+
+            testResult.LogOutput += string.Join(Environment.NewLine, _info);
+            testResult.LogError += string.Join(Environment.NewLine, _error);
+        }
+
         private static void Log(List<string> logs, string message)
         {
             var logLine = $"{DateTime.UtcNow:s} {message}";
@@ -34,11 +50,15 @@ namespace NHSOnline.IntegrationTests.UI
             logs.Add(logLine);
         }
 
-        internal void UpdateResult(TestResult testResult)
+        private static JsonSerializerSettings CreateTestReportSerializerSettings()
         {
-            Info("TestReport:{0}", JsonConvert.SerializeObject(_testReport));
-            testResult.LogOutput += string.Join(Environment.NewLine, _info);
-            testResult.LogError += string.Join(Environment.NewLine, _error);
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            settings.Converters.Add(new StringEnumConverter());
+            return settings;
         }
     }
 }
