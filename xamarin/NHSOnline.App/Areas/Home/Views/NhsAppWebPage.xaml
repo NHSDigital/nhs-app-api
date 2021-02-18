@@ -11,6 +11,6 @@
     <webViews:NhsAppWebView x:Name="WebView"
                             VerticalOptions="FillAndExpand"
                             OpenWebIntegrationCommand="{Binding OpenWebIntegrationCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"
-                            GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"/>
+                            GetNotificationsStatusCommand="{Binding GetNotificationsStatusCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}" />
     
 </pages:NhsAppFullHeaderPage>

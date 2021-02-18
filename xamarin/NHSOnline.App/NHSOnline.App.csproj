@@ -106,5 +106,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Fonts\FrutigerLTW01-55Roman.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\FrutigerLTW01-65Bold.ttf" />
   </ItemGroup>
 </Project>

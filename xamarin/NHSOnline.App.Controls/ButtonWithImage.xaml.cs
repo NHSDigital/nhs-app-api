@@ -6,22 +6,25 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Button
+    public partial class ButtonWithImage
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(Button));
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(ButtonWithImage));
 
         public static readonly BindableProperty ButtonColourProperty =
-            BindableProperty.Create(nameof(ButtonColour), typeof(Color), typeof(Button));
+            BindableProperty.Create(nameof(ButtonColour), typeof(Color), typeof(ButtonWithImage));
 
         public static readonly BindableProperty TextColourProperty =
-            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(Button));
+            BindableProperty.Create(nameof(TextColour), typeof(Color), typeof(ButtonWithImage));
 
         public static readonly BindableProperty ColourGradientProperty =
-            BindableProperty.Create(nameof(ColourGradient), typeof(Color), typeof(Button));
+            BindableProperty.Create(nameof(ColourGradient), typeof(Color), typeof(ButtonWithImage));
 
         public static readonly BindableProperty CommandProperty =
-            BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Button));
+            BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ButtonWithImage));
+
+        public static readonly BindableProperty ImageSourceProperty =
+            BindableProperty.Create(nameof(ImageSource), typeof(ImageSource), typeof(ButtonWithImage));
 
         public string Text
         {
@@ -47,13 +50,19 @@ namespace NHSOnline.App.Controls
             set => SetValue(ColourGradientProperty, value);
         }
 
+        public ImageSource ImageSource
+        {
+            get => (ImageSource) GetValue(ImageSourceProperty);
+            set => SetValue(ImageSourceProperty, value);
+        }
+
         public ICommand Command
         {
             get => (ICommand) GetValue(CommandProperty);
             set => SetValue(CommandProperty, value);
         }
 
-        public Button()
+        public ButtonWithImage()
         {
             InitializeComponent();
         }

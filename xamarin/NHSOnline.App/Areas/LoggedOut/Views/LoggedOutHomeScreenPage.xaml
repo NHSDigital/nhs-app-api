@@ -11,51 +11,43 @@
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
              x:Name="Root">
     
-    <ContentView BackgroundColor="{ StaticResource NhsUkBlue}">
+    <controls:GradientBackground BackgroundColor="{ StaticResource HomeBlueInnerGradient }"
+                                 InnerColour="{ StaticResource HomeBlueInnerGradient }"
+                                 OuterColour="{ StaticResource HomeBlueOuterGradient }"
+                                 Radius="Max" >
         <ContentView.Effects>
-            <controls:SafeAreaPaddingTop/>
+            <controls:SafeAreaPaddingTop />
         </ContentView.Effects>
 
-        <StackLayout BackgroundColor="{ StaticResource NhsUkWhite}">
+        <StackLayout BackgroundColor="Transparent">
         <AbsoluteLayout VerticalOptions="FillAndExpand" Margin="0,0,0,0">
-            <controls:GradientBackground AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                                      AbsoluteLayout.LayoutFlags="All"
-                                      InnerColour="{ StaticResource HomeBlueInnerGradient }"
-                                      OuterColour="{ StaticResource HomeBlueOuterGradient }"
-                                      Radius="Max" />
-
             <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                          AbsoluteLayout.LayoutFlags="All">
                 <StackLayout HorizontalOptions="FillAndExpand"
                              BackgroundColor="{ StaticResource NhsUkYellow}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="9*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="40" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Label 
-                            Grid.Row="1" 
-                            Grid.Column="0" 
-                            AutomationProperties.IsInAccessibleTree="true" 
-                            Padding="20,0,0,0"> 
+                        <Label Padding="20,10,10,10" Grid.Column="0">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Coronavirus (COVID-19) " 
+                                    <Span Text="Coronavirus (COVID-19)&#10;" 
                                           FontAttributes="Bold"
-                                          FontSize="12"/>
+                                          FontSize="12" LineHeight="1" />
                                     <Span Text="Get information about coronavirus on NHS.UK"
-                                          FontSize="12"/>
+                                          FontSize="12" LineHeight="1.5" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
-                        <icons:IconArrowRight 
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Padding="6,10,10,10"/>
+                        <icons:IconArrowRight Grid.Column="1" 
+                            HeightRequest="20"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center" />
                     </Grid>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer 
@@ -65,44 +57,63 @@
                 <StackLayout StyleClass="LogoPanel"
                              VerticalOptions="FillAndExpand">
                     
-                    <icons:IconHelp HorizontalOptions="End"
-                                    HeightRequest="20"
-                                    Padding="0,5,10,0"
-                                    AutomationProperties.IsInAccessibleTree="true">
-                        <icons:IconHelp.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Root}}" />
-                        </icons:IconHelp.GestureRecognizers>
-                    </icons:IconHelp>
+                    <StackLayout HorizontalOptions="End"
+                                 Padding="0,10,10,0">
+                        <icons:IconHelp HeightRequest="30"
+                                        Padding="0,0,10,0"
+                                        AutomationProperties.IsInAccessibleTree="true">
+                            <icons:IconHelp.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Root}}" />
+                            </icons:IconHelp.GestureRecognizers>
+                        </icons:IconHelp>
+                        <Label Text="Help"
+                               TextColor="{ StaticResource NhsUkWhite }"
+                               FontSize="14" />
+                    </StackLayout>
 
                     <BoxView VerticalOptions="FillAndExpand" />
 
-                   <controls:NhsLogo HorizontalOptions="Center"
-                                   HeightRequest="48" />
+                    <controls:NhsLogo HorizontalOptions="Center"
+                                      HeightRequest="48" />
 
                     <BoxView VerticalOptions="FillAndExpand" />
-
-                    <BoxView HeightRequest="1" Color="{ StaticResource NhsUkWhite }" />
                 </StackLayout>
 
             </StackLayout>
         </AbsoluteLayout>
 
         <StackLayout StyleClass="LoginPanel">
-            <Label Text="To access your NHS services"
+            <Label Text="Access your NHS services"
                    StyleClass="Heading2"
-                   HorizontalOptions="Center"/>
-            <controls:Button Text="Continue with NHS login"
-                             ButtonColour = "{StaticResource NhsUkBlue}"
-                             TextColour = "{ StaticResource NhsUkWhite }"
-                             ColourGradient="{ StaticResource NhsUkDarkGrey }"
-                             Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
-                             HorizontalOptions="FillAndExpand" />
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold"
+                   TextColor="{ StaticResource NhsUkWhite }" />
+            <controls:ButtonWithImage Text="Continue with NHS login"
+                                      ButtonColour = "{StaticResource NhsUkWhite}"
+                                      TextColour = "{ StaticResource NhsUkBlue }"
+                                      ColourGradient="{ StaticResource NhsUkDarkBlue }"
+                                      Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
+                                      ImageSource="NHSLoginLogo"
+                                      HeightRequest="40" />
+            <Label Text="Get advice without logging in"
+                   HorizontalOptions="Center"
+                   TextColor="{ StaticResource NhsUkWhite }"
+                   TextDecorations="Underline"
+                   FontAttributes="Bold"
+                   FontFamily="Frutiger"
+                   Margin="0,5,0,0"
+                   FontSize="15" />
             <Label Text="Version 2.Xamarin"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold"
+                   FontFamily="Frutiger"
+                   TextColor="{ StaticResource NhsUkWhite }"
+                   FontSize="12"
+                   Margin="0,5,0,0" />
         </StackLayout>
     </StackLayout>
-    </ContentView>  
+    </controls:GradientBackground>  
 
 
     <ContentPage.Resources>

@@ -12,8 +12,9 @@
     </Style>
     
     <Style TargetType="Label" ApplyToDerivedTypes="True" Class="Heading2">
-        <Setter Property="FontSize" Value="19" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="Frutiger" />
         <Setter Property="TextColor" Value="#212B32" />
         <Setter Property="Padding" Value="0, 12" />
         <Setter Property="Margin" Value="0, 0, 0, 8" />

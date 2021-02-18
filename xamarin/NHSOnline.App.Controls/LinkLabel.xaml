@@ -9,6 +9,6 @@
        TextColor="{StaticResource NhsUkPrimaryLinkBlue}">
     
     <Label.GestureRecognizers>
-        <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}"/>
+        <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />
     </Label.GestureRecognizers>
 </Label>

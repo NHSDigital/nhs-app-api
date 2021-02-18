@@ -8,6 +8,7 @@
     <Color x:Key="HomeBlueOuterGradient">#0053a3</Color>
     <Color x:Key="ButtonGreenLowerGradient">#00401e</Color>
     <Color x:Key="NhsUkBlue">#005EB8</Color>
+    <Color x:Key="NhsUkDarkBlue">#222F6B</Color>
     <Color x:Key="NhsUkWhite">#FFFFFF</Color>
     <Color x:Key="NhsUkGreen">#007f3b</Color>
     <Color x:Key="NhsUkDarkGrey">#425563</Color>

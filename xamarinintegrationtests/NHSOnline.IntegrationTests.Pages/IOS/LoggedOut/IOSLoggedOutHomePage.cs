@@ -11,7 +11,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSBanner CovidConditions => IOSBanner.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
 
-        private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "To access your NHS services");
+        private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "Access your NHS services");
 
         private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue with NHS login");
 

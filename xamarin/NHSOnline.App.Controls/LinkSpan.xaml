@@ -5,6 +5,6 @@
              x:Class="NHSOnline.App.Controls.LinkSpan"
              x:Name="Root">
     <Span.GestureRecognizers>
-        <TapGestureRecognizer Command="{Binding Tapped, Source={x:Reference Name=Root}}"/>
+        <TapGestureRecognizer Command="{Binding Tapped, Source={x:Reference Name=Root}}" />
     </Span.GestureRecognizers>
 </Span>

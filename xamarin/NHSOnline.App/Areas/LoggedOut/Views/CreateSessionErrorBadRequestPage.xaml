@@ -19,8 +19,8 @@
                 <controls:Paragraph>
                     <FormattedString>
                         <Span Text="If you keep seeing this message, contact us. Quote the error code " />
-                        <Span Text="{Binding ServiceDeskReference}" FontAttributes="Bold"/>
-                        <Span Text=" to help us resolve the problem more quickly."/>
+                        <Span Text="{Binding ServiceDeskReference}" FontAttributes="Bold" />
+                        <Span Text=" to help us resolve the problem more quickly." />
                     </FormattedString>
                 </controls:Paragraph>
                 <controls:Paragraph>

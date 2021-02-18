@@ -9,7 +9,7 @@
     <ContentPage.Content>
         <ContentView>
             <ContentView.Effects>
-                <controls:SafeAreaPaddingTop/>
+                <controls:SafeAreaPaddingTop />
             </ContentView.Effects>
             <StackLayout BackgroundColor="{StaticResource NhsUkBlue }" Spacing="0" Padding="0,5,0,0">
                 <controls:SlimCloseNavigationHeader 
@@ -17,7 +17,7 @@
                 </controls:SlimCloseNavigationHeader>
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
-                    VerticalOptions = "FillAndExpand"/>
+                    VerticalOptions = "FillAndExpand" />
             </StackLayout>
         </ContentView>
     </ContentPage.Content>

@@ -23,8 +23,13 @@
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\$(Platform)\$(DebugMode)</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhoneSimulator' ">
+    <MtouchExtraArgs></MtouchExtraArgs>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Debug|iPhone' ">
+    <MtouchExtraArgs></MtouchExtraArgs>
+    <MtouchLink>None</MtouchLink>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhone' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local - Release|iPhoneSimulator' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging - Debug|iPhoneSimulator' " />
@@ -142,9 +147,6 @@
     <ImageAsset Include="Resources\Assets.xcassets\AppIcon.appiconset\Icon-Small@3x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -155,6 +157,12 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSLoginLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\NHSLoginLogo.imageset\NHSLoginLogo.png">
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>

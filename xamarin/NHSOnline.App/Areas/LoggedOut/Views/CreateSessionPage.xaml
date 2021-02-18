@@ -10,7 +10,7 @@
         <Label Text="Creating Session"
                HorizontalOptions="Center"
                VerticalOptions="CenterAndExpand" />
-        <ActivityIndicator IsRunning="True"/>
+        <ActivityIndicator IsRunning="True" />
     </StackLayout>
 
 </ContentPage>

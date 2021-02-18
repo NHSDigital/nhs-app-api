@@ -29,8 +29,6 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrutigerLTW01-55Roman.ttf" />
-    <EmbeddedResource Include="FrutigerLTW01-65Bold.ttf" />
     <EmbeddedResource Include="Icons\icon-appointment.svg" />
     <EmbeddedResource Include="Icons\icon-help.svg" />
     <EmbeddedResource Include="Icons\icon-home.svg" />
@@ -45,6 +43,7 @@
     <EmbeddedResource Include="Icons\icon-arrow-left.svg" />
     <EmbeddedResource Include="Icons\icon-close.svg" />
     <EmbeddedResource Include="NhsLogo.svg" />
+    <EmbeddedResource Include="NhsLogoBlue.svg" />
     <ProjectReference Include="..\NHSOnline.App.Logging\NHSOnline.App.Logging.csproj" />
     <EmbeddedResource Update="NhsUkStyles.xaml">
       <SubType>Designer</SubType>
@@ -175,6 +174,10 @@
     </Compile>
     <Compile Update="SlimCloseNavigationHeader.xaml.cs">
       <DependentUpon>SlimCloseNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ButtonWithImage.xaml.cs">
+      <DependentUpon>ButtonWithimage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

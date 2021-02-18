@@ -13,7 +13,7 @@
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="24" />
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="FontFamily" Value="Fruitiger W01" />
+                <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="TextColor" Value="{Binding TextColour, Source={x:Reference Name=Root}}" />
             </Style>
         </ResourceDictionary>

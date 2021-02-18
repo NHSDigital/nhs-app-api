@@ -22,7 +22,7 @@
                 
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
-                    VerticalOptions = "FillAndExpand"/>
+                    VerticalOptions = "FillAndExpand" />
                 
                 <controls:FullNavigationFooter SymptomsCommand="{Binding SymptomsClicked, Source={x:Reference Name=Root}}"
                                          AppointmentsCommand="{Binding AppointmentsClicked, Source={x:Reference Name=Root}}"

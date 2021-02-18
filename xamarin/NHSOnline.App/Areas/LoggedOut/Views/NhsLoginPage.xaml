@@ -4,11 +4,10 @@
                     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:webViews="clr-namespace:NHSOnline.App.Controls.WebViews;assembly=NHSOnline.App.Controls"
-                    xmlns:app="clr-namespace:NHSOnline.App;assembly=NHSOnline.App"
                     xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
                     mc:Ignorable="d"
                     x:Class="NHSOnline.App.Areas.LoggedOut.Views.NhsLoginPage">
             
-    <webViews:NhsLoginWebView x:Name="WebView" VerticalOptions = "FillAndExpand"/>
+    <webViews:NhsLoginWebView x:Name="WebView" VerticalOptions = "FillAndExpand" />
 
 </pages:NhsAppCloseSlimHeaderPage>

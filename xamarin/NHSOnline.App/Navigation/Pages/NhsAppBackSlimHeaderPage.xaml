@@ -17,7 +17,7 @@
                 </controls:SlimBackNavigationHeader>
                 <ContentView 
                     Content="{Binding PageContent, Source={x:Reference Name=Root}}" 
-                    VerticalOptions = "FillAndExpand"/>
+                    VerticalOptions = "FillAndExpand" />
             </StackLayout>
         </ContentView>
     </ContentPage.Content>

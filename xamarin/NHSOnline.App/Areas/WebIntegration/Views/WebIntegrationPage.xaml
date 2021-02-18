@@ -10,7 +10,7 @@
 
     <webViews:WebIntegrationWebView x:Name="WebView"
                                     VerticalOptions="FillAndExpand"
-                                    RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}"/>
+                                    RedirectToNhsAppPageCommand="{Binding RedirectToNhsAppPageCommand, Source={RelativeSource AncestorType={x:Type pages:NhsAppFullHeaderPage}}}" />
 
 
 </pages:NhsAppFullHeaderPage>
