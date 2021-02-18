@@ -219,8 +219,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -281,8 +279,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -343,8 +339,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -405,8 +399,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
