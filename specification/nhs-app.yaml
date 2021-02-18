@@ -132,7 +132,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -141,7 +141,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successInApp.json
         "400":
           description: There is an error in your request.
           headers:
@@ -242,7 +242,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/fhir+json:
             examples:
               push-notification:
                 summary: Sending a push notification
@@ -266,7 +266,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -275,7 +275,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successNotification.json
         "400":
           description: There is an error in your request.
           headers:
@@ -396,7 +396,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -405,7 +405,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successInAppWithNotification.json
         "400":
           description: There is an error in your request.
           headers:
@@ -539,7 +539,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/legacy_201success.json
         "400":
           description: There is an error in your request.
           headers:
