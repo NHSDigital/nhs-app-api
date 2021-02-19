@@ -37,6 +37,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             options.AddAdditionalCapability("ensureWebviewsHavePages", true);
 
             _driver = new AndroidDriver<AndroidElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+            logs.BrowserStackSessionId(_driver.SessionId);
+
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             _nativeDriverContext = new NativeDriverContext(_driver, _driver, new AndroidWebViewLocatorStrategy(_driver));

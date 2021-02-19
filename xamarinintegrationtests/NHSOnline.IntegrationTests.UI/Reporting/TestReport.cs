@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.HttpMocks.Vision.Models;
 
 namespace NHSOnline.IntegrationTests.UI.Reporting
 {
@@ -29,7 +28,10 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public string? Description { get; }
 
+        public string? BrowserStackSessionId { get; set; }
+
         public bool? ShouldRetry { get; set; }
+        public string? RetryCategory { get; set; }
 
         public UnitTestOutcome? Outcome { get; set; }
 
@@ -37,10 +39,13 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public List<BusinessRule> BusinessRules { get; }
 
-        internal void SetResult(TestResult testResult)
+        internal void SetResult(TestResult testResult, RetryStatus retryStatus)
         {
             Outcome = testResult.Outcome;
             TestFailureMessage = testResult.TestFailureException?.Message;
+
+            ShouldRetry = retryStatus.ShouldRetry;
+            RetryCategory = retryStatus.Category;
         }
     }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.IntegrationTests.UI.Reporting;
+using OpenQA.Selenium.Remote;
 
 namespace NHSOnline.IntegrationTests.UI
 {
@@ -23,6 +24,8 @@ namespace NHSOnline.IntegrationTests.UI
             _testReport = testReport;
         }
 
+        internal void BrowserStackSessionId(SessionId sessionId) => _testReport.BrowserStackSessionId = sessionId.ToString();
+
         internal void Info(string format, params object[] args)
             => Info(string.Format(CultureInfo.InvariantCulture, format, args));
         internal void Info(string message) => Log(_info, message);
@@ -32,9 +35,9 @@ namespace NHSOnline.IntegrationTests.UI
         internal void Error(string message) => Log(_error, message);
 
 
-        internal void UpdateResult(TestResult testResult)
+        internal void UpdateResult(TestResult testResult, RetryStatus retryStatus)
         {
-            _testReport.SetResult(testResult);
+            _testReport.SetResult(testResult, retryStatus);
 
             var testReportJson = JsonConvert.SerializeObject(_testReport, TestReportSerializerSettings);
             Info("TestReport:{0}", testReportJson);

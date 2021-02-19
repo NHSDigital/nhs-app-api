@@ -26,11 +26,11 @@ namespace NHSOnline.IntegrationTests.UI
         internal TestResult[] Execute()
         {
             var results = new List<TestResult>();
-            var shouldRetry = false;
+            var retryStatus = RetryStatus.NoRetry;
 
             do
             {
-                if (shouldRetry)
+                if (retryStatus.ShouldRetry)
                 {
                     results[^1].Outcome = UnitTestOutcome.Inconclusive;
                 }
@@ -46,18 +46,17 @@ namespace NHSOnline.IntegrationTests.UI
 
                 timer.Stop();
 
-                shouldRetry = testResult.ShouldRetry(logs);
-                testReport.ShouldRetry = shouldRetry;
+                retryStatus = testResult.ShouldRetry(logs);
 
-                logs.Info("{0} => {1}{2}", _displayName, testResult.Outcome, shouldRetry ? " - Should Retry" : string.Empty);
+                logs.Info("{0} => {1} - {2}", _displayName, testResult.Outcome, retryStatus);
 
-                logs.UpdateResult(testResult);
+                logs.UpdateResult(testResult, retryStatus);
 
                 testResult.DisplayName = _displayName;
                 testResult.Duration = timer.Elapsed;
 
                 results.Add(testResult);
-            } while (results.Count < 5 && shouldRetry);
+            } while (results.Count < 5 && retryStatus.ShouldRetry);
 
             return results.ToArray();
         }

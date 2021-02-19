@@ -34,6 +34,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             options.AddAdditionalCapability("name", testName);
 
             _driver = new IOSDriver<IOSElement>(new Uri("http://hub-cloud.browserstack.com/wd/hub"), options);
+            logs.BrowserStackSessionId(_driver.SessionId);
+
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             DateTime
