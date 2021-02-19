@@ -94,3 +94,9 @@ jobs:
           testResultsFiles: xamarinintegrationtests/TestResults/*.trx
           failTaskOnFailedTests: false
           mergeTestResults: true
+
+      - task: PublishHtmlReport@1
+        displayName: 'Publish HTML Report'
+        condition: and(succeededOrFailed(), eq(variables['integration.tests.results.exists'], 'True'))
+        inputs:
+          reportDir: 'xamarinintegrationtests/$(test_report_html_path)'

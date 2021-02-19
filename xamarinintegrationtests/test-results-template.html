@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Results</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+<script id="TestResultJson">
+    // Test Results JSON gets injected in this script tag, uncomment the below and supply some JSON for local testing
+    // const TestResults = [];
+</script>
+
+<script>
+    'use strict';
+
+    function makeImmutable(objectToFreeze) {
+        for (const propertyName in objectToFreeze) {
+            const propertyValue = objectToFreeze[propertyName];
+            if (propertyValue && typeof propertyValue === 'object') {
+                makeImmutable(propertyValue);
+            }
+        }
+        
+        Object.freeze(objectToFreeze);
+    }
+</script>
+
+<script type="module">
+    'use strict';
+    
+    import { html, render, Component } from 'https://unpkg.com/htm/preact/index.mjs?module'
+
+    makeImmutable(TestResults);
+    
+    
+    const getTestBusinessRules = (testResult) => testResult.businessRules.length == 0 ? [{ id: '', title: 'No Business Rule Specified'}] : testResult.businessRules;
+    
+    const businessRules = TestResults.reduce((map, testResult) => {
+        const declaredRules = getTestBusinessRules(testResult);
+        declaredRules.forEach(declaredRule => {
+            (map[declaredRule.id] = map[declaredRule.id] || {
+                id: declaredRule.id,
+                title: declaredRule.title,
+                tests: []
+            }).tests.push(testResult)
+        });
+        return map;
+    }, {});
+    
+    
+    
+    const renderPage = () => render(html`
+        <${businessRuleList} businessRules="${businessRules}" />
+    `, document.body);
+    
+    
+    const businessRuleList = ({businessRules}) => html`
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Business Rules</div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Business Rule</th>
+                                <th>Test Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(businessRules).map(br => html`
+                                <tr>
+                                    <td>${br.id}</td>
+                                    <td>${br.title}</td>
+                                    <td>${br.tests.length}</td>
+                                </tr>
+                            `)}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    renderPage();
+</script>
+
+</body>
+</html>

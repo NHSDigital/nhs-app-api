@@ -20,6 +20,7 @@ while IFS= read -r -d '' file
 do
   REPORT_JSON=TestResults/$(basename "${file}" .trx).json
   REPORT_MD=TestResults/$(basename "${file}" .trx).md
+  REPORT_HTML=TestResults/$(basename "${file}" .trx).html
   echo "Transforming ${file} => ${REPORT_JSON}"
   docker run \
     "${DOCKER_ARGS[@]}" \
@@ -43,6 +44,26 @@ do
     else
       cat "${REPORT_MD}"
     fi
+  fi
+
+
+  echo "Creating patch to inject ${REPORT_JSON} into ${REPORT_HTML}"
+  cat > "${REPORT_HTML}.patch" <<EOF
+--- test-result-template.html	2021-02-22 16:58:58.000000000 +0000
++++ test-results.html	        2021-02-22 17:04:16.000000000 +0000
+@@ -10,4 +10,3 @@
+ <script id="TestResultJson">
+-    // Test Results JSON gets injected in this script tag, uncomment the below and supply some JSON for local testing
+-    // const TestResults = [];
++    const TestResults = $(<"${REPORT_JSON}");
+ </script>
+EOF
+
+  echo "Patching ${REPORT_HTML}"
+  patch test-results-template.html "${REPORT_HTML}.patch" --output="${REPORT_HTML}"
+
+  if [ -n "$TF_BUILD" ]; then
+    echo "##vso[task.setvariable variable=test_report_html_path]${REPORT_HTML}"
   fi
 
 done < <(find TestResults -name '*.trx' -print0)
