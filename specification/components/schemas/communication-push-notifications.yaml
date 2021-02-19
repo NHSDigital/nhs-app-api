@@ -23,6 +23,8 @@ properties:
       No more than one campaign ID and one request reference can be supplied with each request.
 
       The API will not reject requests that contain other identifier systems, but these values will be ignored and not recorded against the request.
+
+      When a `CommunicationRequest` resource is returned in the response body to a successful request, this array will also include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`. This is the same logical ID contained within the `Location` header of the successful response.
     items:
       type: object
       properties:
