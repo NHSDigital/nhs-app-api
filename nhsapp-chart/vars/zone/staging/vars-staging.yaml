@@ -65,7 +65,7 @@ web:
   publicURL: www-staging.nhsapp.service.nhs.uk
   minAvailable: 6
   minReplicas: 8
-  maxReplicas: 100
+  maxReplicas: 32
   memoryRequest: "256Mi"
   memoryLimit: "512Mi"
   cpuRequest: "1"
@@ -111,7 +111,7 @@ api:
 cid:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 100
+  maxReplicas: 4
   memoryRequest: "256Mi"
   memoryLimit: "512Mi"
   cpuRequest: "100m"
@@ -121,11 +121,11 @@ cid:
 sjr:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 100
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
+  maxReplicas: 4
+  memoryRequest: "150Mi"
+  memoryLimit: "256Mi"
   cpuRequest: "100m"
-  cpuLimit: "200m"
+  cpuLimit: "700m"
   imagePullPolicy: Always
 
 wiremock:
@@ -143,7 +143,7 @@ wiremock:
 iproxy:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 100
+  maxReplicas: 5
   memoryRequest: "20Mi"
   memoryLimit: "40Mi"
   cpuRequest: "100m"
@@ -151,26 +151,51 @@ iproxy:
   imagePullPolicy: IfNotPresent
   n3enabled: false
 
-logger:
+messagesEnabled: true
+
+users:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 100
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  notificationHubPath: nhsapp-staging
+  notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+
+messages:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
   memoryRequest: "64Mi"
   memoryLimit: "128Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
 
-messagesEnabled: true
-
-users:
-  notificationHubPath: nhsapp-staging
-  notificationHubConnectionString: Endpoint=sb://nhsapp-staging.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
+info:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
 
 metrics:
   memoryRequest: "12Mi"
   memoryLimit: "120Mi"
   cpuRequest: "3m"
   cpuLimit: "30m"
+
+logger:
+  minAvailable: 1
+  minReplicas: 2
+  maxReplicas: 4
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
 
 splunk:
   pidIndex: apppid_nhsapp_staging
