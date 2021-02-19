@@ -223,6 +223,44 @@ namespace Nhs.App.Api.Integration.Tests
             response.Headers.ShouldNotContainHeader("X-Correlation-ID");
         }
 
+        /// <summary>
+        /// This test exists to check that any unanticipated errors are shown the default catch-all error content defined in the AssignMessage.CatchallErrorMessage policy.
+        ///
+        /// It does this by making a call to a non-existent path, in the expectation of receiving a 404 response.
+        ///
+        /// In practice, this test is receiving a 429 (too many request) or 500 (internal server error) response status code, but as those also cause the default
+        /// catch-all error content to be shown, the effect is the same.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod]
+        public async Task CommunicationPost_UnhandledError_ReturnsCatchAllErrorContent()
+        {
+            // Arrange
+            using var httpClient = CreateJwtHttpClient();
+            var correlationId = Guid.NewGuid().ToString();
+
+            // Act
+            var response = await httpClient.PostAsync("unknown_path", new StringContent(""), correlationId);
+
+            // Assert
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Unknown);
+
+            var coding = issue.Details.Coding.Single();
+            coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
+            coding.Version.Should().Be("1");
+            coding.Code.Should().Be("UNKNOWN_ERROR");
+            coding.Display.Should()
+                .StartWith(
+                    "An unknown error occurred processing this request. Contact us for assistance diagnosing this issue: https://digital.nhs.uk/developer/help-and-support. (Message ID:");
+
+           response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
+        }
+
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
         {
             // Arrange, continued.
