@@ -79,6 +79,16 @@ jobs:
         inputs:
           filePath: android/buildscripts/02_build.sh
 
+      - task: Bash@3
+        displayName: Build Onboarding AOS
+        condition: and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingaos'))
+        env:
+          TARGET: onboardingaos
+          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
+          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
       - task: DownloadSecureFile@1
         name: android_key_store
         condition: and(succeeded(), eq(variables['source.tag'], 'True'))
