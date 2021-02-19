@@ -13,7 +13,6 @@ namespace Nhs.App.Api.Integration.Tests.Services
         private readonly IAccessTokenCacheService _accessTokenService;
 
         public Uri BaseAddress => _httpClient.BaseAddress;
-        public HttpRequestHeaders DefaultRequestHeaders => _httpClient.DefaultRequestHeaders;
 
         public NhsAppApiJwtWrapperClient(TestConfiguration testConfiguration, IAccessTokenCacheService accessTokenService)
         {
@@ -43,7 +42,7 @@ namespace Nhs.App.Api.Integration.Tests.Services
             }
         }
 
-        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, string accessToken = null)
+        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, string correlationId = null, string accessToken = null)
         {
             accessToken ??= await GetAccessToken();
 
@@ -51,7 +50,11 @@ namespace Nhs.App.Api.Integration.Tests.Services
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.Add("X-Correlation-ID", Guid.NewGuid().ToString());
+
+            if (correlationId != null)
+            {
+                request.Headers.Add("X-Correlation-ID", correlationId);
+            }
 
             return await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
         }

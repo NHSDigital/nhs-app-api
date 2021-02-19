@@ -7,6 +7,10 @@
 			<Step>
 				<Name>AssignMessage.OAuthPolicyErrorResponse</Name>
 			</Step>
+			<Step>
+				<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+				<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+			</Step>
 			<Condition>oauthV2.OauthV2.VerifyAccessToken.failed</Condition>
 		</FaultRule>
 	</FaultRules>

@@ -10,6 +10,7 @@ using FluentAssertions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nhs.App.Api.Integration.Tests.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Nhs.App.Api.Integration.Tests
@@ -93,9 +94,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var stringPayload = BuildValidRequestBody();
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent, "invalidAccessToken");
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId, "invalidAccessToken");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -111,6 +113,8 @@ namespace Nhs.App.Api.Integration.Tests
             coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
             coding.Code.Should().Be("ACCESS_DENIED");
             coding.Display.ToLowerInvariant().Should().Be("invalid access token");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -121,9 +125,10 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent("{ bad Json", Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -135,6 +140,8 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Invalid Json encountered.");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -149,8 +156,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
+            var correlationId = Guid.NewGuid().ToString();
+
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -162,6 +171,8 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Cannot locate type information for type 'UnknownType'");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -177,8 +188,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
+            var correlationId = Guid.NewGuid().ToString();
+
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -190,6 +203,24 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Root object has no type indication (resourceType)");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationPost_NoCorrelationIdPassed_NoCorrelationIdHeaderInTheResponse(EndpointInfo endpoint)
+        {
+            // Arrange
+            using var httpClient = CreateJwtHttpClient();
+            var stringPayload = BuildValidRequestBody();
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+
+            // Assert
+            response.Headers.ShouldNotContainHeader("X-Correlation-ID");
         }
 
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
@@ -198,9 +229,10 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpointPath, httpContent);
+            var response = await httpClient.PostAsync(endpointPath, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -213,6 +245,7 @@ namespace Nhs.App.Api.Integration.Tests
             Guid.TryParse(identifier.Value, out var communicationId).Should().BeTrue();
 
             response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{communicationId}");
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         private static string BuildValidRequestBody(
