@@ -179,6 +179,19 @@ export default {
         { featureName: featureJumpOffContent.jumpOffContent.headerText },
       );
     },
+    updateTitle({ jumpOffConfig, featureJumpOffContent }, next) {
+      if (!isEmpty(featureJumpOffContent)) {
+        const { jumpOffContent, thirdPartyWarning } = featureJumpOffContent;
+
+        if (!isEmpty(thirdPartyWarning)) {
+          this.$route.meta.titleKey = featureJumpOffContent.thirdPartyWarning.featureName;
+        } else if (!isEmpty(jumpOffContent)) {
+          this.$route.meta.titleKey = featureJumpOffContent.jumpOffContent.headerText;
+        }
+      }
+
+      next({ jumpOffConfig, featureJumpOffContent });
+    },
     getJumpOffConfig({ thirdPartyConfig }, next) {
       this.redirectParameterAndQuery = getPathAndQuery(this.redirectParameter);
       const jumpOffConfig = getThirdPartyJumpOff(
@@ -228,6 +241,7 @@ export default {
       const steps = [
         this.getThirdPartyConfig,
         this.getJumpOffConfig,
+        this.updateTitle,
         this.checkIsProofLevel9,
         this.checkCanAccessSilverIntegration,
         this.navigateToThirdParty,

@@ -76,6 +76,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: {},
+        meta: {},
       };
 
       wrapper = mountRedirector();
@@ -91,6 +92,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: '' },
+        meta: {},
       };
 
       wrapper = mountRedirector();
@@ -106,6 +108,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: APPOINTMENTS_NAME },
+        meta: {},
       };
       wrapper = mountRedirector();
     });
@@ -120,6 +123,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: GP_MEDICAL_RECORD_PATH },
+        meta: {},
       };
       wrapper = mountRedirector({ isNhsAppPath: true });
     });
@@ -135,6 +139,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: `${GP_MEDICAL_RECORD_PATH}xyz` },
+        meta: {},
       };
 
       wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
@@ -150,6 +155,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.google.com' },
+        meta: {},
       };
 
       wrapper = mountRedirector({ hasKnownService: false, isNhsAppPath: false });
@@ -165,6 +171,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -192,6 +199,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
+        meta: {},
       };
 
       delete global.location;
@@ -226,6 +234,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -240,6 +249,10 @@ describe('redirector page', () => {
 
     it('warning section should be shown', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(true);
+    });
+
+    it('will set tab title to be the name of the feature', () => {
+      expect($route.meta.titleKey).toBe('Messages and online consultations');
     });
 
     describe('on continue button click', () => {
@@ -273,6 +286,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/abc?def=ghi' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -301,6 +315,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'something else' },
+        meta: {},
       };
       wrapper = mountRedirector({ isNhsAppPath: false });
     });
@@ -315,6 +330,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -338,6 +354,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -361,6 +378,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -389,6 +407,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+        meta: {},
       };
 
       wrapper = mountRedirector({
@@ -407,6 +426,10 @@ describe('redirector page', () => {
 
     it('session storage should be correctly named', () => {
       expect(wrapper.vm.sessionStorageName).toEqual('agreedThirdPartyWarning_pkb');
+    });
+
+    it('will set tab title to be the name of the feature', () => {
+      expect($route.meta.titleKey).toBe('Messages and online consultations');
     });
 
     it('will generate an asserted login identity for the matching service', () => {
@@ -437,6 +460,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: AppPage.APPOINTMENTS },
+        meta: {},
       };
       wrapper = mountRedirector();
     });
@@ -451,6 +475,7 @@ describe('redirector page', () => {
       $route = {
         name: INTERSTITIAL_REDIRECTOR_NAME,
         query: { [REDIRECT_PAGE_PARAMETER]: 'foo' },
+        meta: {},
       };
       wrapper = mountRedirector();
     });
