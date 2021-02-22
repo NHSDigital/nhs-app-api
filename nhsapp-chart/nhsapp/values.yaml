@@ -314,7 +314,7 @@ api:
   memoryLimit: "512Mi"
   cpuRequest: "100m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   emisExtendedTimeout: 10
   mongoDatabaseAuditCollection: audit_info
   environmentVariables:
@@ -344,7 +344,7 @@ cid:
   memoryLimit: "400Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   mongoDatabaseAuditCollection: audit
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -364,11 +364,11 @@ logger:
   minAvailable: 0
   minReplicas: 1
   maxReplicas: 1
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "125m"
-  cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  memoryRequest: "64Mi"
+  memoryLimit: "128Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
+  targetCPUUtilizationPercentage: 60
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -387,7 +387,7 @@ cdsswiremock:
   memoryLimit: "512Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -405,7 +405,7 @@ iproxy:
   memoryLimit: "40Mi"
   cpuRequest: "100m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   environmentVariables:
   n3enabled: false
 
@@ -423,7 +423,7 @@ iproxy_microtest:
   memoryLimit: "250Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   environmentVariables:
 
 wiremock:
@@ -439,7 +439,7 @@ wiremock:
   memoryLimit: "4096Mi"
   cpuRequest: "500m"
   cpuLimit: "2"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   environmentVariables:
     - name: WAIT_FOR_TIMEOUT
       value: "60"
@@ -458,7 +458,7 @@ users:
   memoryLimit: "128Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   mongoDatabaseUserDeviceCollection: devices
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -478,7 +478,7 @@ messages:
   memoryLimit: "128Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   mongoDatabaseMessagesCollection: messages
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -498,7 +498,7 @@ info:
   memoryLimit: "128Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:
@@ -520,7 +520,7 @@ sjr:
   memoryLimit: "256Mi"
   cpuRequest: "100m"
   cpuLimit: "200m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 80
   inputPath: /configurations  # From mounted image
   environmentVariables:
@@ -540,7 +540,7 @@ sjrconfig:
   memoryLimit: "512Mi"
   cpuRequest: "125m"
   cpuLimit: "250m"
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 80
 
 global:
