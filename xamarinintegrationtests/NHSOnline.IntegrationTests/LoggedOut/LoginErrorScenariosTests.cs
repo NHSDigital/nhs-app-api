@@ -172,10 +172,10 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        public void AnErrorIsDisplayedWhenCreateSessionReturnsFailedAgeRequirementAndroid(IAndroidDriverWrapper driver)
+        public void AnErrorIsDisplayedWhenPatientHasNoNhsNumberAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient()
-                .WithAge(12, 300);
+                .WithNhsNumber(NhsNumber.None);
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -190,16 +190,16 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            AndroidCreateSessionFailedAgeRequirementErrorPage
+            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
 
         [NhsAppIOSTest]
-        public void AnErrorIsDisplayedWhenCreateSessionReturnsFailedAgeRequirementIos(IIOSDriverWrapper driver)
+        public void AnErrorIsDisplayedWhenPatientHasNoNhsNumberIos(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient()
-                .WithAge(12, 300);
+                .WithNhsNumber(NhsNumber.None);
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
@@ -214,7 +214,103 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .PageContent.Login(patient);
 
-            IOSCreateSessionFailedAgeRequirementErrorPage
+            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenPatientHasUnknownOdsCodeAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new P9Patient()
+                .WithUnknownOdsCode();
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenPatientHasUnknownOdsCodeIos(IIOSDriverWrapper driver)
+        {
+            var patient = new P9Patient()
+                .WithUnknownOdsCode();
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppAndroidTest]
+        public void AnErrorIsDisplayedWhenPatientHasUnknownSupplierAndroid(IAndroidDriverWrapper driver)
+        {
+            var patient = new P9Patient()
+                .WithUnknownSupplierOdsCode();
+            using var patients = Mocks.Patients.Add(patient);
+
+            AndroidLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            AndroidBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            AndroidCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
+                .AssertOnPage(driver)
+                .AssertPageElements();
+        }
+
+        [NhsAppIOSTest]
+        public void AnErrorIsDisplayedWhenPatientHasUnknownSupplierIos(IIOSDriverWrapper driver)
+        {
+            var patient = new P9Patient()
+                .WithUnknownSupplierOdsCode();
+            using var patients = Mocks.Patients.Add(patient);
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSBeforeYouStartPage
+                .AssertOnPage(driver)
+                .Continue();
+
+            IOSStubbedLoginPage
+                .AssertOnPage(driver)
+                .PageContent.Login(patient);
+
+            IOSCreateSessionOdsCodeNotSupportedOrNoNhsNumberErrorPage
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
