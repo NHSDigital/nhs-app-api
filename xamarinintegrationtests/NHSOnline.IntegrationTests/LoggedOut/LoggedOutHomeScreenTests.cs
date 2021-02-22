@@ -20,19 +20,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertPageElements();
         }
 
-        [NhsAppAndroidTest]
-        public void APatientCanUseTheBackButtonToCloseTheAppOnTheLoggedOutHomeScreenAndroid(IAndroidDriverWrapper driver)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver);
-
-            driver.AssertRunningInForeground();
-
-            driver.PressBackButton();
-
-            driver.AssertNotRunningInForeground();
-        }
-
         [NhsAppIOSTest]
         public void APatientSeesTheLoggedOutHomeScreenWhenStartingTheAppIos(IIOSDriverWrapper driver)
         {
