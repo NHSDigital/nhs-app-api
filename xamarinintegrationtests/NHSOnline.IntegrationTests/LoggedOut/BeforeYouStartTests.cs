@@ -26,28 +26,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppAndroidTest]
-        public void APatientIsShownTheLoggedOutHomeScreenWhenNavigatingBackFromBeforeYouStartAndroid(IAndroidDriverWrapper driver)
-        {
-            NavigateToBeforeYouStartPage(driver);
-
-            driver.PressBackButton();
-
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientIsShownTheLoggedOutHomeScreenWhenNavigatingBackFromBeforeYouStartIos(IIOSDriverWrapper driver)
-        {
-            NavigateToBeforeYouStartPage(driver);
-
-            driver.SwipeBack();
-
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver);
-        }
-
-        [NhsAppAndroidTest]
         public void APatientCanClickTheLinksAndIsTakenToTheCorrectPagesAndroid(IAndroidDriverWrapper driver)
         {
             NavigateToBeforeYouStartPage(driver)
