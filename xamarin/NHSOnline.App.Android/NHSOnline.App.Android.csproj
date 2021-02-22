@@ -52,7 +52,7 @@
     <Compile Include="DependencyServices\AndroidNativeLog.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
-    <Compile Include="Renderers\LinkSpanLabelRenderer.cs" />
+    <Compile Include="Renderers\LinkLabelRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\EnableTargetBlankLinksRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />

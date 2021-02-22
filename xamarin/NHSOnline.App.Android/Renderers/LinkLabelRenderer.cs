@@ -1,42 +1,33 @@
-using System.Linq;
 using Android.Content;
-using Microsoft.Extensions.Logging;
 using NHSOnline.App.Controls;
 using NHSOnline.App.Droid.Renderers;
-using NHSOnline.App.Logging;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Label), typeof(LinkSpanLabelRenderer))]
+[assembly: ExportRenderer(typeof(LinkLabel), typeof(LinkLabelRenderer))]
 namespace NHSOnline.App.Droid.Renderers
 {
-    internal sealed class LinkSpanLabelRenderer: LabelRenderer
+    internal sealed class LinkLabelRenderer: LabelRenderer
     {
-        private static ILogger Logger => NhsAppLogging.CreateLogger(typeof(LinkSpanLabelRenderer));
-
-        public LinkSpanLabelRenderer(Context context) : base(context)
+        public LinkLabelRenderer(Context context) : base(context)
         {
         }
-
         protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
         {
             base.OnElementChanged(e);
-
-            if (Control is not null)
+            if (Control != null)
             {
                 Control.KeyPress -= ControlOnKeyPress;
                 Control.KeyPress += ControlOnKeyPress;
             }
         }
-
         private void ControlOnKeyPress(object sender, KeyEventArgs e)
         {
             e.Handled = false;
-
             if (e.IsEnterKeyReleaseEvent() &&
-                Element.FormattedText.Spans.OfType<LinkSpan>().FirstOrDefault() is { } linkSpan)
+                Element is LinkLabel linkLabel)
             {
-                linkSpan.Tapped.Execute(null);
+                linkLabel.Command.Execute(null);
                 e.Handled = true;
             }
         }

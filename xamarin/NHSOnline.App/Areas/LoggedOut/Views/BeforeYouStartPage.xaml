@@ -26,7 +26,7 @@
                 </controls:ListItem>
                 
                 <controls:Expander HeaderText="What to do if you're aged 13 to 15"
-                                   BodyText="You'll need to contact your GP surgery first and request access to GP online services."/>
+                                   BodyText="You'll need to contact your GP surgery first and request access to GP online services." />
                 
                 <controls:Paragraph Text="Other services you can use without logging in:"
                                     Margin="0,0,0,5"/>
