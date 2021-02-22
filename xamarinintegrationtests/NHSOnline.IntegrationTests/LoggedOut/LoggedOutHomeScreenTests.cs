@@ -9,7 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("Test_Id", "This is a title")]
+    [BusinessRule("BR-LOG-1.1", "Launching the app displays the logged out home screen")]
     public sealed class LoggedOutHomeScreenTests
     {
         [NhsAppAndroidTest]
@@ -51,60 +51,6 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)
                 .AssertPageElements();
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientCanClickToViewCovidConditionsAndroid(IAndroidDriverWrapper driver)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .GetInformationAboutCoronavirus();
-
-            AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
-
-            AndroidAppTab
-                .AssertOnCovidConditionsPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanClickToViewCovidConditionsIos(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .GetInformationAboutCoronavirus();
-
-            IOSAppTab
-                .AssertOnCovidConditionsPage(driver);
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientCanClickToGetHelpWithLoggingInAndroid(IAndroidDriverWrapper driver)
-        {
-            AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .GetHelp();
-
-            AndroidAppTabBrowserChoice
-                .AssertDisplayed(driver)
-                .ChooseChrome()
-                .Always();
-
-            AndroidAppTab
-                .AssertOnLoginHelpPage(driver);
-        }
-
-        [NhsAppIOSTest]
-        public void APatientCanClickToGetHelpWithLoggingInIos(IIOSDriverWrapper driver)
-        {
-            IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .GetHelp();
-
-            IOSAppTab
-                .AssertOnLoginHelpPage(driver);
         }
     }
 }
