@@ -28,6 +28,7 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public string? Description { get; }
 
+        public TestDevice? Device { get; set; }
         public string? BrowserStackSessionId { get; set; }
 
         public bool? ShouldRetry { get; set; }
@@ -47,5 +48,8 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
             ShouldRetry = retryStatus.ShouldRetry;
             RetryCategory = retryStatus.Category;
         }
+
+        internal void TestDevice(string name, string operatingSystemVersion)
+            => Device = new TestDevice(name, operatingSystemVersion);
     }
 }

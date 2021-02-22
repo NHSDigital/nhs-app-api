@@ -34,6 +34,8 @@ namespace NHSOnline.IntegrationTests.UI
             => Error(string.Format(CultureInfo.InvariantCulture, format, args));
         internal void Error(string message) => Log(_error, message);
 
+        internal void TestDevice(string name, string operatingSystemVersion)
+            => _testReport.TestDevice(name, operatingSystemVersion);
 
         internal void UpdateResult(TestResult testResult, RetryStatus retryStatus)
         {

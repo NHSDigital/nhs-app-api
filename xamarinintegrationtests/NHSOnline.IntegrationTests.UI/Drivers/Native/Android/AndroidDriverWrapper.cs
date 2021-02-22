@@ -29,6 +29,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
 
             _browserStackConfig.SetCapabilities(options);
             androidConfig.SetCapabilities(options);
+            logs.TestDevice(androidConfig.Device, androidConfig.OperatingSystemVersion);
 
             options.AddAdditionalCapability("name", testName);
 

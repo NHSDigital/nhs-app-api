@@ -30,6 +30,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
             _browserStackConfig.SetCapabilities(options);
             iosConfig.SetCapabilities(options);
+            logs.TestDevice(iosConfig.Device, iosConfig.OperatingSystemVersion);
 
             options.AddAdditionalCapability("name", testName);
 
