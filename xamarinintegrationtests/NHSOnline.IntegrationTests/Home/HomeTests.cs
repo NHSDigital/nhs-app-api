@@ -202,42 +202,6 @@ namespace NHSOnline.IntegrationTests.Home
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanAccessPrescriptionsFromHomeScreenIOS(IIOSDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LogIOSPatientIn(driver, patient);
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.Prescriptions();
-
-            IOSPrescriptionsPage
-                .AssertOnPage(driver)
-                .AssertPageElements();
-        }
-
-        [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenAndroid(IAndroidDriverWrapper driver)
-        {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
-            using var patients = Mocks.Patients.Add(patient);
-
-            LogAndroidPatientIn(driver, patient);
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .Navigation.YourHealth();
-
-            AndroidYourHealthPage
-                .AssertOnPage(driver)
-                .AssertPageElements();
-        }
-
-        [NhsAppIOSTest]
         public void APatientWithProofLevelNineCanAccessYourHealthFromHomeScreenIOS(IIOSDriverWrapper driver)
         {
             var patient = new EmisPatient()
