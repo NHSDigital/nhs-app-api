@@ -22,9 +22,9 @@ class NavHeaderStepDefinitions {
     fun iAmOnTheRecordWarningPage() {
         nav.select(NavBarNative.NavBarType.YOUR_HEALTH)
     }
-    @When("^I click the settings icon$")
-    fun iClickTheMyAccountIcon() {
-        navHeader.clickMyAccount()
+    @When("^I click the more icon$")
+    fun iClickTheMoreIcon() {
+        navHeader.clickMore()
     }
 
     @When("^I click the help icon$")

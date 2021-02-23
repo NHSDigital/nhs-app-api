@@ -101,11 +101,11 @@
 
     <!-- Icon Content description texts-->
 
-    <string name="header_icon_settings">Settings icon</string>
+    <string name="header_icon_settings">More icon</string>
     <string name="header_icon_help">Help icon</string>
     <string name="header_icon_help_label">Help</string>
-
-    <string name="header_icon_settings_label">Settings</string>
+    
+    <string name="header_icon_more_label">More</string>
 
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 

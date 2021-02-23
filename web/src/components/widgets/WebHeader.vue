@@ -35,8 +35,8 @@ import HeaderMenu from '@/components/widgets/HeaderMenu';
 import NhsHeaderLogo from '@/components/widgets/NhsHeaderLogo';
 import SkipLink from '@/components/widgets/SkipLink';
 import {
-  ACCOUNT_PATH,
   LOGOUT_PATH,
+  MORE_PATH,
   executeHomeNavigationRule,
 } from '@/router/paths';
 import { createRoutePathObject } from '@/lib/utils';
@@ -70,8 +70,8 @@ export default {
   },
   data() {
     return {
-      accountPath: createRoutePathObject({
-        path: ACCOUNT_PATH,
+      morePath: createRoutePathObject({
+        path: MORE_PATH,
         store: this.$store,
       }),
       logoutPath: createRoutePathObject({
@@ -90,7 +90,7 @@ export default {
     links() {
       return [
         { name: this.$t('navigation.header.helpAndSupport'), value: this.$route.meta.helpUrl, id: 'help-and-support-link' },
-        { name: this.$t('navigation.header.settings'), value: this.accountPath, id: 'account-link', internal: true },
+        { name: this.$t('navigation.header.more'), value: this.morePath, id: 'more-link', internal: true },
         { name: this.$t('navigation.header.logout'), value: this.logoutPath, id: 'account-logout', internal: true },
       ];
     },

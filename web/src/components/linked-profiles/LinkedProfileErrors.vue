@@ -48,7 +48,7 @@ import ErrorTitle from '@/components/errors/ErrorTitle';
 
 import {
   LINKED_PROFILES_PATH,
-  ACCOUNT_PATH,
+  MORE_PATH,
 } from '@/router/paths';
 import { redirectTo, gpSessionErrorHasRetried, GP_SESSION_ERROR_STATUS } from '@/lib/utils';
 import { LINKED_PROFILES_FIND_OUT_MORE_URL } from '@/router/externalLinks';
@@ -67,7 +67,7 @@ export default {
   mixins: [ErrorPageMixin],
   data() {
     return {
-      backUrl: this.$store.state.navigation.backLinkOverride || ACCOUNT_PATH,
+      backUrl: this.$store.state.navigation.backLinkOverride || MORE_PATH,
       contactUsUrl: this.$store.$env.CONTACT_US_URL,
       findOutMoreUrl: LINKED_PROFILES_FIND_OUT_MORE_URL,
       gpSessionErrorStatus: GP_SESSION_ERROR_STATUS,

@@ -7,4 +7,5 @@ export const AppPage = {
   ADVICE: 'advice',
   MESSAGES: 'messages',
   SETTINGS: 'settings',
+  MORE: 'more',
 };

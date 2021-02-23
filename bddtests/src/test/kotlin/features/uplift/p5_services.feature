@@ -3,8 +3,8 @@ Feature: Services available with P5 Access
   Scenario: P5 User can access their account settings
     Given I am a patient with proof level 5
     And I am logged in
-    When I navigate to the account page
-    Then the Account page is displayed
+    When I navigate to the More page
+    Then the More page is displayed
 
   Scenario: P5 user can access 111 Online
     Given I am a patient with proof level 5 who wishes to view 111 online

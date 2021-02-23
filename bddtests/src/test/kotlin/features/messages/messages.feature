@@ -75,7 +75,7 @@ Feature: Messages
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click on the '/account' link in the message
-    Then the Account page for mobile devices is displayed
+    Then the More page for mobile devices is displayed
     When I navigate to the Messages Hub page
     And I click the App Messages link on the messages hub page
     And the Messages Inbox page is displayed
@@ -160,7 +160,7 @@ Feature: Messages
     And I click on a sender in the Messages Inbox
     Then the Messages page is displayed
     When I click the internal link called 'Account' with a url of '/account'
-    Then the Account page for mobile devices is displayed
+    Then the More page for mobile devices is displayed
 
   Scenario: A user can see their markdown messages and see a mailto link
     Given I am using the native app user agent

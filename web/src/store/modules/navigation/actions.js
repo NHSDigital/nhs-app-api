@@ -5,7 +5,8 @@ import { ADVICE_PATH,
   HEALTH_RECORDS_PATH,
   MESSAGES_PATH,
   ACCOUNT_PATH,
-  INDEX_PATH } from '@/router/paths';
+  INDEX_PATH,
+  MORE_PATH } from '@/router/paths';
 import {
   CLEAR_SELECTED_MENUITEM,
   INIT_NAVIGATION,
@@ -41,6 +42,9 @@ export default {
   },
   goToSettingsPage() {
     redirectTo({ $router: this.app.$router, $store: this }, ACCOUNT_PATH);
+  },
+  goToMorePage() {
+    redirectTo({ $router: this.app.$router, $store: this }, MORE_PATH);
   },
   goToHomePage() {
     redirectTo({ $router: this.app.$router, $store: this }, INDEX_PATH);

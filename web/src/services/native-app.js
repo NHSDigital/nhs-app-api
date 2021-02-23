@@ -224,6 +224,15 @@ export default {
     return false;
   },
 
+  openAppMore() {
+    const app = window.nativeApp;
+    if (app && app.openAppMore) {
+      app.openAppMore();
+      return true;
+    }
+    return false;
+  },
+
   openAppSettings() {
     const app = window.nativeApp;
     if (app && app.openAppSettings) {

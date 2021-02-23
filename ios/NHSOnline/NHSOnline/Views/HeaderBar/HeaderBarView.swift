@@ -5,7 +5,7 @@ class HeaderBar: UIView {
     @IBOutlet var headerBarView: UIView!
     @IBOutlet weak var NHSHomeLogo: UIImageView!
     @IBOutlet weak var helpIcon: UIButton!
-    @IBOutlet weak var myAccountIcon: UIButton!
+    @IBOutlet weak var moreIcon: UIButton!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,14 +20,14 @@ class HeaderBar: UIView {
         Bundle.main.loadNibNamed("HeaderBar", owner: self, options: nil)
         headerBarView.bounds = self.bounds
         headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        myAccountIcon.accessibilityLabel = NSLocalizedString("MyAccountTitle", comment: "")
-        myAccountIcon.accessibilityHint = NSLocalizedString("MyAccountHint", comment: "")
+        moreIcon.accessibilityLabel = NSLocalizedString("MoreTitle", comment: "")
+        moreIcon.accessibilityHint = NSLocalizedString("MoreHint", comment: "")
         helpIcon.accessibilityLabel = NSLocalizedString("HelpTitle", comment: "")
         helpIcon.accessibilityHint = NSLocalizedString("HelpHint", comment: "")
         NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
         NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [NHSHomeLogo!, helpIcon!, myAccountIcon!]
+        headerBarView.accessibilityElements = [NHSHomeLogo!, helpIcon!, moreIcon!]
         addSubview(headerBarView)
     }
     

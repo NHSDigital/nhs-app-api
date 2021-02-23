@@ -1,4 +1,4 @@
-package pages.account
+package pages.more
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -6,10 +6,10 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 
-@DefaultUrl("http://web.local.bitraft.io:3000/account")
-class MyAccountPage : HybridPageObject() {
+@DefaultUrl("http://web.local.bitraft.io:3000/more")
+class MorePage : HybridPageObject() {
 
-    private val listMenuPath = "//ul[@data-purpose='settings-menu']//li//a/div/h2"
+    private val listMenuPath = "//ul[@data-purpose='more-menu']//li//a/div/h2"
 
     val signOutButton = HybridPageElement(
             webDesktopLocator = "//a[@id='account-logout']",

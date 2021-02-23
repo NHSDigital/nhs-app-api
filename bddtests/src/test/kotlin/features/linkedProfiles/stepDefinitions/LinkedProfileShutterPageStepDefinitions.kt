@@ -6,7 +6,7 @@ import mockingFacade.linkedProfiles.LinkedProfileFacade
 import pages.linkedProfiles.shutterPages.AppointmentsShutterPage
 import pages.linkedProfiles.shutterPages.MedicalRecordShutterComponent
 import pages.linkedProfiles.shutterPages.PrescriptionsShutterPage
-import pages.linkedProfiles.shutterPages.SettingsShutterPage
+import pages.linkedProfiles.shutterPages.MoreShutterPage
 import pages.linkedProfiles.shutterPages.AdviceShutterPage
 import pages.linkedProfiles.shutterPages.MessagesShutterPage
 import utils.LinkedProfilesSerenityHelpers
@@ -17,7 +17,7 @@ class LinkedProfileShutterPageStepDefinitions {
 
     private lateinit var prescriptionsShutterPage: PrescriptionsShutterPage
     private lateinit var appointmentsShutterPage: AppointmentsShutterPage
-    private lateinit var settingsShutterPage: SettingsShutterPage
+    private lateinit var moreShutterPage: MoreShutterPage
     private lateinit var adviceShutterPage: AdviceShutterPage
     private lateinit var messagesShutterPage: MessagesShutterPage
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
@@ -34,10 +34,16 @@ class LinkedProfileShutterPageStepDefinitions {
         }
     }
 
-    @Then("^the settings shutter page is displayed$")
-    fun theSettingsShutterPageIsDisplayed() {
-        settingsShutterPage.isLoaded()
-        settingsShutterPage.assertText()
+    @Then("^the more shutter page is displayed$")
+    fun theMoreShutterPageIsDisplayed() {
+        moreShutterPage.isLoaded()
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            moreShutterPage.assertText(selectedProfile.profile.formattedFullName())
+        } else {
+            moreShutterPage.assertText(selectedProfile.profile.name.firstName)
+        }
     }
 
     @Then("^the prescriptions shutter page is displayed$")

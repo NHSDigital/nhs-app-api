@@ -14,6 +14,10 @@ export const AUTH_RETURN_PATH = '/auth-return';
 export const TERMSANDCONDITIONS_PATH = '/terms-and-conditions';
 export const LOGOUT_PATH = 'logout';
 export const MORE_PATH = 'more';
+export const MORE_COOKIES_PATH = 'more/cookies';
+export const MORE_NOTIFICATIONS_PATH = 'more/notifications';
+export const MORE_LOGIN_SETTINGS_PATH = 'more/login-settings';
+export const MORE_LOGIN_SETTINGS_ERROR_PATH = 'more/login-settings/error';
 export const ADVICE_PATH = 'advice';
 export const GET_HEALTH_ADVICE_PATH = '/get-health-advice';
 export const CHECKYOURSYMPTOMS_PATH = '/check-your-symptoms';
@@ -137,6 +141,10 @@ export default {
   TERMSANDCONDITIONS_PATH,
   LOGOUT_PATH,
   MORE_PATH,
+  MORE_COOKIES_PATH,
+  MORE_NOTIFICATIONS_PATH,
+  MORE_LOGIN_SETTINGS_PATH,
+  MORE_LOGIN_SETTINGS_ERROR_PATH,
   ADVICE_PATH,
   GET_HEALTH_ADVICE_PATH,
   CHECKYOURSYMPTOMS_PATH,

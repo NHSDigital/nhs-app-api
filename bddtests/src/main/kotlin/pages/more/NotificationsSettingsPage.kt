@@ -1,4 +1,4 @@
-package pages.account
+package pages.more
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -6,7 +6,7 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.sharedElements.ToggleElement
 
-@DefaultUrl("http://web.local.bitraft.io:3000/account/notifications")
+@DefaultUrl("http://web.local.bitraft.io:3000/more/notifications")
 class NotificationsSettingsPage : HybridPageObject() {
 
     val notificationsToggle = ToggleElement(this, "Allow notifications", "allow_notifications")

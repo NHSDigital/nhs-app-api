@@ -54,6 +54,9 @@ const NativeAppCallbacksPlugin = {
       navigationGoToSettings() {
         store.dispatch('navigation/goToSettingsPage');
       },
+      navigationGoToMore() {
+        store.dispatch('navigation/goToMorePage');
+      },
       navigationGoToHome() {
         store.dispatch('navigation/goToHomePage');
       },

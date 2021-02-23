@@ -26,9 +26,9 @@ open class NativeHeaderHelper {
          webHeaderCheck("Your medical record", webHeader)
       }
 
-      fun followAccountHeaderLink(webHeader: WebHeader) {
-         webHeader.clickAccount()
-         webHeaderCheck("Account", webHeader)
+      fun followMoreHeaderLink(webHeader: WebHeader) {
+         webHeader.clickMore()
+         webHeaderCheck("More", webHeader)
       }
 
       private fun webHeaderCheck(title: String, webHeader: WebHeader) {

@@ -12,7 +12,7 @@
                 <outlet property="NHSHomeLogo" destination="kyn-vf-7A4" id="CSR-a4-p3k"/>
                 <outlet property="headerBarView" destination="iN0-l3-epB" id="9Wq-mY-ysG"/>
                 <outlet property="helpIcon" destination="8JB-cx-FgP" id="UTN-4B-3dF"/>
-                <outlet property="myAccountIcon" destination="1uG-Rr-7gl" id="ZIz-GL-iCZ"/>
+                <outlet property="moreIcon" destination="1uG-Rr-7gl" id="ZIz-GL-iCZ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -26,7 +26,7 @@
                         <constraint firstAttribute="width" constant="26" id="3zf-Hg-PrS"/>
                         <constraint firstAttribute="width" secondItem="1uG-Rr-7gl" secondAttribute="height" multiplier="1:1" id="pAd-Hh-yvQ"/>
                     </constraints>
-                    <state key="normal" image="Settings"/>
+                    <state key="normal" image="More"/>
                 </button>
                 <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="vtS-qf-fCF">
                     <rect key="frame" x="157.5" y="18.5" width="60" height="24"/>
@@ -62,8 +62,8 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Sr-cg-zih">
-                    <rect key="frame" x="324" y="38.5" width="44" height="14"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="More" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Sr-cg-zih">
+                    <rect key="frame" x="332.5" y="38.5" width="27" height="14"/>
                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -102,8 +102,8 @@
     </objects>
     <resources>
         <image name="Home" width="81" height="81"/>
+        <image name="More" width="24" height="6"/>
         <image name="NHS Online - Logo" width="59" height="24"/>
-        <image name="Settings" width="81" height="81"/>
         <image name="icon_header_help" width="25.5" height="25"/>
     </resources>
 </document>

@@ -23,7 +23,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.NhsLoginTermsAndConditionsError
 import pages.ServiceUnavailablePage
-import pages.account.MyAccountPage
+import pages.more.MorePage
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.loggedOut.CIDAccountCreationPage
@@ -51,7 +51,7 @@ class AuthenticationStepDefinitions {
     @Steps
     lateinit var webHeader: WebHeader
     lateinit var breadcrumbs: BreadcrumbHeader
-    lateinit var myAccount: MyAccountPage
+    lateinit var more: MorePage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
     lateinit var accountCreationpage: CIDAccountCreationPage
     lateinit var nhsLoginTermsAndConditionsError: NhsLoginTermsAndConditionsError
@@ -67,8 +67,8 @@ class AuthenticationStepDefinitions {
                 .enableForPatientProxyAccounts(patient)
         browser.goToApp()
         login.using(patient)
-        navHeader.clickMyAccount()
-        myAccount.signOutButton.click()
+        navHeader.clickMore()
+        more.signOutButton.click()
     }
 
 
@@ -106,8 +106,8 @@ class AuthenticationStepDefinitions {
 
     @When("^I log out$")
     fun iLogOut() {
-        navHeader.clickMyAccount()
-        myAccount.signOutButton.click()
+        navHeader.clickMore()
+        more.signOutButton.click()
     }
 
     @When("^I use the header link to log out of the website$")
@@ -181,8 +181,8 @@ class AuthenticationStepDefinitions {
 
     @When("^I sign out")
     fun iClickTheSignOutButton() {
-        navHeader.clickMyAccount()
-        myAccount.signOutButton.click()
+        navHeader.clickMore()
+        more.signOutButton.click()
         cookies.waitUntilSignoutCompletes()
     }
 
@@ -193,7 +193,7 @@ class AuthenticationStepDefinitions {
                 { NativeHeaderHelper.followAppointmentHeaderLink(webHeader) },
                 { NativeHeaderHelper.followPrescriptionsHeaderLink(webHeader) },
                 { NativeHeaderHelper.followYourHealthHeaderLink(webHeader) },
-                { NativeHeaderHelper.followAccountHeaderLink(webHeader) }
+                { NativeHeaderHelper.followMoreHeaderLink(webHeader) }
         )
 
         linksToFollow.forEachIndexed { index, link ->

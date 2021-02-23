@@ -54,7 +54,7 @@ describe('linked profiles error component', () => {
   });
 
   each([
-    [undefined, 'account'],
+    [undefined, 'more'],
     ['overridePath', 'overridePath'],
   ])
     .it('will set the appropriate backUrl', (backLinkOverride, expectedBackUrl) => {

@@ -15,8 +15,8 @@ open class NavHeaderSteps {
     lateinit var webHeader: WebHeader
 
     @Step
-    fun clickMyAccount() {
-        header.clickMyAccount()
+    fun clickMore() {
+        header.clickMore()
     }
 
     @Step

@@ -155,8 +155,8 @@
 	<integer>10</integer>
 	<key>MessagesUrlPath</key>
 	<string>$(MESSAGES_URL)</string>
-	<key>MyAccountUrlPath</key>
-	<string>$(MY_ACCOUNT_URL_PATH)</string>
+	<key>MoreUrlPath</key>
+	<string>$(MORE_URL_PATH)</string>
 	<key>MyRecordGpAtHandUrlPath</key>
 	<string>$(MY_RECORD_GP_AT_HAND_URL_PATH)</string>
 	<key>MyRecordUrlPath</key>

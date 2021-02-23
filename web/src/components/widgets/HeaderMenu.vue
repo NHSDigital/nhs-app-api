@@ -65,10 +65,10 @@
         </a>
       </li>
       <li class="nhsuk-header__navigation-item" :class="$style.additionalMenuItem">
-        <a class="nhsuk-header__navigation-link" :href="accountPath"
-           data-sid="account-menu-item"
-           @click.prevent="setMenuitemState(accountPath)">
-          {{ $t('navigation.account') }}
+        <a class="nhsuk-header__navigation-link" :href="morePath"
+           data-sid="more-menu-item"
+           @click.prevent="setMenuitemState(morePath)">
+          {{ $t('navigation.more') }}
         </a>
       </li>
       <li :class="[$style.additionalMenuItem, 'nhsuk-header__navigation-item']">
@@ -89,8 +89,8 @@ import {
   ADVICE_PATH,
   PRESCRIPTIONS_PATH,
   HEALTH_RECORDS_PATH,
-  ACCOUNT_PATH,
   LOGOUT_PATH,
+  MORE_PATH,
 } from '@/router/paths';
 import { redirectTo } from '@/lib/utils';
 
@@ -110,8 +110,8 @@ export default {
       yourHealthPath: HEALTH_RECORDS_PATH,
       messagesPath: MESSAGES_PATH,
       shouldShowMiniMenu: true,
-      accountPath: ACCOUNT_PATH,
       logoutPath: LOGOUT_PATH,
+      morePath: MORE_PATH,
     };
   },
   computed: {

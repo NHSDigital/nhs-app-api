@@ -6,6 +6,7 @@ import {
   MESSAGES_PATH,
   GP_MESSAGES_PATH,
   PRESCRIPTIONS_PATH,
+  MORE_PATH,
 } from '@/router/paths';
 import {
   ACCOUNT_COOKIES_NAME,
@@ -23,6 +24,7 @@ import {
   GP_MESSAGES_VIEW_MESSAGE_NAME,
   SWITCH_PROFILE_NAME,
   LINKED_PROFILES_NAME,
+  MORE_COOKIES_NAME,
 } from '@/router/names';
 
 /**
@@ -37,6 +39,10 @@ export default {
     ignoreStore: true,
     defaultPath: ACCOUNT_PATH,
   },
+  [MORE_COOKIES_NAME]: {
+    ignoreStore: true,
+    defaultPath: MORE_PATH,
+  },
   [APPOINTMENT_BOOKING_SUCCESS_NAME]: {
     ignoreStore: true,
     defaultPath: APPOINTMENTS_PATH,
@@ -50,7 +56,7 @@ export default {
     defaultPath: APPOINTMENTS_PATH,
   },
   [LINKED_PROFILES_NAME]: {
-    defaultPath: ACCOUNT_PATH,
+    defaultPath: MORE_PATH,
   },
   [LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME]: {
     ignoreStore: true,

@@ -21,6 +21,7 @@
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
     <string name="myAccountPath">account</string>
+    <string name="morePath">more</string>
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
     <string name="nhsLoginSuffix">https://signin.nhs.uk</string>

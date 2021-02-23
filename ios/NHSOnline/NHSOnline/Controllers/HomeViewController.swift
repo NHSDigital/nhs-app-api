@@ -38,7 +38,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
     var currentNativeViewController: UIViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
-    var myAccountUrl = config().MyAccountUrlPath
+    var moreUrl = config().MoreUrlPath
     var appVersionCheckError: Bool = false
     var apiConfigCallError: Bool = false
     var biometricsHasBeenAttempted: Bool = false
@@ -88,7 +88,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         setupNhsLogo()
         setupBackArrow()
         setupCloseIcon()
-        setupMyAccountIcon()
+        setupMoreIcon()
         setupHelpIcon()
     
         webAppInterface = WebAppInterface(controller: self)
@@ -241,8 +241,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         self.webViewController?.loadPage(url: config().HomeUrl)
     }
     
-    func backToAccountPage() {
-        self.webViewController?.loadPage(url: myAccountUrl)
+    func backToMorePage() {
+        self.webViewController?.loadPage(url: moreUrl)
     }
     
     func setUpControllers() {
@@ -296,10 +296,10 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         self.headerBarSlim.closeIcon.addGestureRecognizer(tapGesture)
     }
     
-    func setupMyAccountIcon() {
-        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.selectMyAccount))
-        self.headerBar.myAccountIcon.isUserInteractionEnabled = true
-        self.headerBar.myAccountIcon.addGestureRecognizer(tapGesture)
+    func setupMoreIcon() {
+        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.selectMore))
+        self.headerBar.moreIcon.isUserInteractionEnabled = true
+        self.headerBar.moreIcon.addGestureRecognizer(tapGesture)
         
     }
     
@@ -460,8 +460,8 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate, PaycassoFl
         return url!
     }
     
-    @objc func selectMyAccount(sender : UITapGestureRecognizer) {
-        let urlToLoad = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
+    @objc func selectMore(sender : UITapGestureRecognizer) {
+        let urlToLoad = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
         webViewController?.loadPage(url: urlToLoad)
         self.clearSelectedTab()
     }

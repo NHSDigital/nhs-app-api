@@ -4,10 +4,10 @@ Feature: Biometric status update
   Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device and register their face id
     Given I am a EMIS patient using the native app
     And I am logged in
-    When I retrieve the 'account' page directly
-    Then the Account page for mobile devices is displayed
-    And the <Biometric Type> settings link is displayed
-    And I click the <Biometric Type> link on the settings page
+    When I retrieve the 'more' page directly
+    Then the More page for mobile devices is displayed
+    And the <Biometric Type> more link is displayed
+    And I click the <Biometric Type> link on the more page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> registration was successful
     Examples:
@@ -20,10 +20,10 @@ Feature: Biometric status update
     Given I am a EMIS patient using the native app
     And I am logged in
     And I have already registered for biometrics
-    When I retrieve the 'account' page directly
-    Then the Account page for mobile devices is displayed
-    And the <Biometric Type> settings link is displayed
-    And I click the <Biometric Type> link on the settings page
+    When I retrieve the 'more' page directly
+    Then the More page for mobile devices is displayed
+    And the <Biometric Type> more link is displayed
+    And I click the <Biometric Type> link on the more page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was successful
     Examples:
@@ -36,10 +36,10 @@ Feature: Biometric status update
     Given I am a EMIS patient using the native app
     And I am logged in
     And I have already registered for biometrics
-    When I retrieve the 'account' page directly
-    Then the Account page for mobile devices is displayed
-    And the <Biometric Type> settings link is displayed
-    And I click the <Biometric Type> link on the settings page
+    When I retrieve the 'more' page directly
+    Then the More page for mobile devices is displayed
+    And the <Biometric Type> more link is displayed
+    And I click the <Biometric Type> link on the more page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be found
     Examples:
@@ -52,10 +52,10 @@ Feature: Biometric status update
     Given I am a EMIS patient using the native app
     And I am logged in
     And I have already registered for biometrics
-    When I retrieve the 'account' page directly
-    Then the Account page for mobile devices is displayed
-    And the <Biometric Type> settings link is displayed
-    And I click the <Biometric Type> link on the settings page
+    When I retrieve the 'more' page directly
+    Then the More page for mobile devices is displayed
+    And the <Biometric Type> more link is displayed
+    And I click the <Biometric Type> link on the more page
     When I click the Login with <Biometric Type> toggle
     Then I see my <Biometric Type> deregistration was unsuccessful as it could not be changed
     Examples:

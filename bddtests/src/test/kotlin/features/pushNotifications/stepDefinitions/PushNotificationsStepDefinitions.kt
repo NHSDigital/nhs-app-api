@@ -12,7 +12,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
-import pages.account.NotificationsSettingsPage
+import pages.more.NotificationsSettingsPage
 import utils.GlobalSerenityHelpers
 import utils.clearList
 import utils.getOrFail

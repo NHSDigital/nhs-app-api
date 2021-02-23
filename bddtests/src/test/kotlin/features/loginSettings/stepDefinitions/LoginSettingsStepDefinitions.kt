@@ -5,8 +5,8 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import features.sharedSteps.BiometricSteps
 import net.thucydides.core.annotations.Steps
-import pages.account.LoginSettingsErrorPage
-import pages.account.LoginSettingsPage
+import pages.more.LoginSettingsErrorPage
+import pages.more.LoginSettingsPage
 
 class LoginSettingsStepDefinitions {
 
@@ -16,7 +16,7 @@ class LoginSettingsStepDefinitions {
     @Steps
     lateinit var biometricSteps: BiometricSteps
 
-    @Then("^I see the (.*) settings page$")
+    @Then("^I see the (.*) login settings page$")
     fun iSeeTheLoginAndPasswordOptionsPage(biometricType: String) {
         loginSettings.assertTitleDisplayed(biometricType)
     }

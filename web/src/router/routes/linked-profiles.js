@@ -2,6 +2,7 @@ import LinkedProfilesPage from '@/pages/linked-profiles/index';
 import LinkedProfilesSummaryPage from '@/pages/linked-profiles/summary';
 import LinkedProfilesAdviceShutterPage from '@/pages/linked-profiles/shutter/advice';
 import LinkedProfilesSettingsShutterPage from '@/pages/linked-profiles/shutter/settings';
+import LinkedProfilesMoreShutterPage from '@/pages/linked-profiles/shutter/more';
 import LinkedProfilesAppointmentsShutterPage from '@/pages/linked-profiles/shutter/appointments';
 import LinkedProfilesPrescriptionsShutterPage from '@/pages/linked-profiles/shutter/prescriptions';
 import LinkedProfilesMessagesShutterPage from '@/pages/linked-profiles/shutter/messages';
@@ -15,6 +16,7 @@ import {
   LINKED_PROFILES_SUMMARY_PATH,
   LINKED_PROFILES_SHUTTER_MESSAGES_PATH,
   LINKED_PROFILES_SHUTTER_ADVICE_PATH,
+  LINKED_PROFILES_SHUTTER_MORE_PATH,
   LINKED_PROFILES_SHUTTER_SETTINGS_PATH,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_PATH,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_PATH,
@@ -26,6 +28,7 @@ import {
   LINKED_PROFILES_SHUTTER_MESSAGES_NAME,
   LINKED_PROFILES_SHUTTER_ADVICE_NAME,
   LINKED_PROFILES_SHUTTER_SETTINGS_NAME,
+  LINKED_PROFILES_SHUTTER_MORE_NAME,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS_NAME,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS_NAME,
   SWITCH_PROFILE_NAME,
@@ -94,6 +97,20 @@ export const LINKED_PROFILES_SHUTTER_SETTINGS = {
     headerKey: 'profiles.shutter.settings.header',
     titleKey: 'profiles.shutter.settings.header',
     crumb: breadcrumbs.LINKED_PROFILES_SETTINGS_SHUTTER_CRUMB,
+    proofLevel: proofLevel.P5,
+    helpUrl: proxyHelpUrl,
+    nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
+  },
+};
+
+export const LINKED_PROFILES_SHUTTER_MORE = {
+  path: LINKED_PROFILES_SHUTTER_MORE_PATH,
+  name: LINKED_PROFILES_SHUTTER_MORE_NAME,
+  component: LinkedProfilesMoreShutterPage,
+  meta: {
+    headerKey: 'profiles.shutter.more.header',
+    titleKey: 'profiles.shutter.more.header',
+    crumb: breadcrumbs.LINKED_PROFILES_MORE_SHUTTER_CRUMB,
     proofLevel: proofLevel.P5,
     helpUrl: proxyHelpUrl,
     nativeNavigation: CLEAR_SELECTED_MENU_ITEM,
@@ -172,6 +189,7 @@ export default [
   LINKED_PROFILES_SUMMARY,
   LINKED_PROFILES_SHUTTER_MESSAGES,
   LINKED_PROFILES_SHUTTER_SETTINGS,
+  LINKED_PROFILES_SHUTTER_MORE,
   LINKED_PROFILES_SHUTTER_ADVICE,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,

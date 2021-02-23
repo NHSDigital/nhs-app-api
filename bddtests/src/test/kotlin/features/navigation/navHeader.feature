@@ -14,8 +14,8 @@ Feature: Use the navigation header bar
     Given I am a EMIS patient
     And I am logged in
     And I see the header
-    When I click the settings icon
-    Then the Account page is displayed
+    When I click the more icon
+    Then the More page is displayed
 
   @nativesmoketest
   Scenario: A patient can access the home page by clicking the home icon

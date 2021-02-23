@@ -30,19 +30,19 @@ class HeaderNative : NativePageObject() {
             iOSAccessID = "Help and support",
             page = this
     )
-    private val accountIcon = NativePageElement(
-            androidLocator = getAndroidIconLocator("myAccountIcon"),
-            webDesktopLocator = "//a[@href='account']",
-            webMobileLocator = "//a[@href='account']",
-            iOSAccessID = "My account",
+    private val moreIcon = NativePageElement(
+            androidLocator = getAndroidIconLocator("moreIcon"),
+            webDesktopLocator = "//a[@href='more']",
+            webMobileLocator = "//a[@href='more']",
+            iOSAccessID = "More",
             page = this
     )
 
-    private val accountLink = NativePageElement(
-            androidLocator = getAndroidIconLocator("myAccountIcon"),
-            webDesktopLocator = "//a[@id='account-link']",
-            webMobileLocator = "//a[@id='account-link']",
-            iOSAccessID = "My account",
+    private val moreLink = NativePageElement(
+            androidLocator = getAndroidIconLocator("moreIcon"),
+            webDesktopLocator = "//a[@id='more-link']",
+            webMobileLocator = "//a[@id='more-link']",
+            iOSAccessID = "More",
             page = this
     )
 
@@ -60,7 +60,7 @@ class HeaderNative : NativePageObject() {
         homeIcon.assertIsDisplayed("Expected logo to be visible")
 
         Assert.assertTrue("Expected account icon to be visible",
-                accountIcon.elements.count() == 1 || accountLink.elements.count() == 1)
+                moreIcon.elements.count() == 1 || moreLink.elements.count() == 1)
 
         val optionManager = OptionManager.instance()
         when {
@@ -71,12 +71,12 @@ class HeaderNative : NativePageObject() {
         waitForPageHeaderText(title)
     }
 
-    fun clickMyAccount() {
-        if ( accountIcon.isDisplayed() ) {
-            accountIcon.click()
+    fun clickMore() {
+        if ( moreIcon.isDisplayed() ) {
+            moreIcon.click()
         }
         else {
-            accountLink.click()
+            moreLink.click()
         }
     }
 

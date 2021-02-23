@@ -10,7 +10,7 @@ open class WebHeader : HybridPageObject() {
             Pair("Appointments", "Your appointments"),
             Pair("Prescriptions", "Prescriptions"),
             Pair("Your medical record", "Your medical record"),
-            Pair("Account", "My account"),
+            Pair("More", "More"),
             Pair("Home", "Home")
     )
 
@@ -42,8 +42,8 @@ open class WebHeader : HybridPageObject() {
             page = this
     )
 
-    val accountLink = HybridPageElement(
-            webDesktopLocator = "//a[normalize-space(text())='Settings']",
+    val moreLink = HybridPageElement(
+            webDesktopLocator = "//a[normalize-space(text())='More']",
             page = this
     )
 
@@ -85,8 +85,8 @@ open class WebHeader : HybridPageObject() {
         logoutLink.click()
     }
 
-    fun clickAccount() {
-        accountLink.click()
+    fun clickMore() {
+        moreLink.click()
     }
 
     fun isPageTitleCorrect(page: String) {

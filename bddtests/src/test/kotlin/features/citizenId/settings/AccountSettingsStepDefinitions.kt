@@ -19,7 +19,7 @@ class AccountSettingsStepDefinitions {
         accountSettings.assertTitleVisible()
     }
 
-    @When("^I click the link called (.*) on the Account page$")
+    @When("^I click the link called (.*) on the More page$")
     fun iClickTheLinkCalledOnTheAccountPage(linkText: String) {
         browser.storeCurrentTabCount()
         accountSettings.assertLinkExists(linkText)?.click()

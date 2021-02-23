@@ -120,8 +120,8 @@ Feature: Login with proxy access
     And details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
     Then I see the proxy home page
-    When I click the settings icon
-    Then the settings shutter page is displayed
+    When I click the more icon
+    Then the more shutter page is displayed
     When I navigate to Advice
     Then the advice shutter page is displayed
     When I navigate to Messages
@@ -281,8 +281,8 @@ Feature: Login with proxy access
     And the GP Practice has disabled proxy access to dcr events functionality for TPP
     And TPP user is not allowed to view appointments
     Then I see the proxy home page
-    When I click the settings icon
-    Then the settings shutter page is displayed
+    When I click the more icon
+    Then the more shutter page is displayed
     When I navigate to Advice
     Then the advice shutter page is displayed
     When I navigate to Messages
@@ -305,7 +305,7 @@ Feature: Login with proxy access
   Scenario Outline: An <GP System> user can recover their session when in linked profiles on try again
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
-    When I navigate to linked profiles from the home page
+    When I navigate to linked profiles from the home page via more
     Then I see appropriate linked profiles try again error message when there is no GP session
     When The <GP System> GP system becomes available
     And I click the 'Try again' button
@@ -318,12 +318,12 @@ Feature: Login with proxy access
   Scenario Outline: An <GP System> user cannot recover their session when in linked profiles and sees a permanent error on try again
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
-    When I navigate to linked profiles from the home page
+    When I navigate to linked profiles from the home page via more
     And I see appropriate linked profiles try again error message when there is no GP session
     And I click the 'Try again' button
     Then I see what I can do next with a linked accounts error message and reference code '<Code>'
     And I click the session error back link
-    When I click the Linked profiles link on the settings page
+    When I click the Linked profiles link on the more page
     Then I see what I can do next with a linked accounts error message and reference code '<Code>'
     Examples:
       | GP System | Code   |
@@ -333,11 +333,11 @@ Feature: Login with proxy access
   Scenario Outline: An <GP System> user recovers their session when navigating in the app
     Given I am an <GP System> patient with linked profiles whose GP system is unavailable
     And I am logged in
-    When I navigate to linked profiles from the home page
+    When I navigate to linked profiles from the home page via more
     And I see appropriate linked profiles try again error message when there is no GP session
     And I click the error 'Back' link
     And The <GP System> GP system becomes available
-    And I click the Linked profiles link on the settings page
+    And I click the Linked profiles link on the more page
     Then linked profiles are displayed
     Examples:
       | GP System |

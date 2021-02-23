@@ -1,4 +1,4 @@
-package pages.account
+package pages.more
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -6,7 +6,7 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.sharedElements.ToggleElement
 
-@DefaultUrl("http://web.local.bitraft.io:3000/account/login-settings")
+@DefaultUrl("http://web.local.bitraft.io:3000/more/login-settings")
 class LoginSettingsPage : HybridPageObject() {
 
     val faceIDToggle = ToggleElement(this, "Log in with Face ID", "updateBiometricReg")

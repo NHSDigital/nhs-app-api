@@ -29,7 +29,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
 import pages.text
-import pages.account.MyAccountPage
+import pages.more.MorePage
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
 import pages.linkedProfiles.shutterPages.NoLinkedProfilesShutterPage
@@ -51,7 +51,7 @@ class LinkedProfilesStepDefinitions {
     lateinit var navHeader: NavHeaderSteps
 
     private lateinit var homePage: HomePage
-    private lateinit var myAccountPage: MyAccountPage
+    private lateinit var morePage: MorePage
     private lateinit var linkedProfilesPage: LinkedProfilesPage
     private lateinit var linkedProfileSummaryPage: LinkedProfileSummaryPage
     private lateinit var noLinkedProfilesShutterPage: NoLinkedProfilesShutterPage
@@ -112,7 +112,8 @@ class LinkedProfilesStepDefinitions {
 
     @Given("^I have switched to a linked profile$")
     fun iHaveSwitchedToALinkedProfile(){
-        iNavigateToLinkedProfilesViaSettings()
+        iNavigateToLinkedProfilesViaMore()
+        linkedProfilesPage.isLoaded()
         iSelectALinkedProfile()
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
     }
@@ -147,12 +148,9 @@ class LinkedProfilesStepDefinitions {
         linkedProfilesPage.isLoaded()
     }
     
-    @When("^I navigate to linked profiles from the home page")
+    @When("^I navigate to linked profiles from the home page via more")
     fun iNavigateToLinkedProfiles() {
-        navHeader.clickMyAccount()
-        myAccountPage.assertDisplayed()
-        myAccountPage.assertLinkedProfilesLinkIsPresent()
-        myAccountPage.linkedProfilesLink.click()
+        this.iNavigateToLinkedProfilesViaMore()
     }
 
     @Then("^linked profiles are displayed$")
@@ -299,11 +297,10 @@ class LinkedProfilesStepDefinitions {
         }
     }
 
-    private fun iNavigateToLinkedProfilesViaSettings() {
-        navHeader.clickMyAccount()
-        myAccountPage.assertDisplayed()
-        myAccountPage.assertLinkedProfilesLinkIsPresent()
-        myAccountPage.linkedProfilesLink.click()
-        linkedProfilesPage.isLoaded()
+    private fun iNavigateToLinkedProfilesViaMore() {
+        navHeader.clickMore()
+        morePage.assertDisplayed()
+        morePage.assertLinkedProfilesLinkIsPresent()
+        morePage.linkedProfilesLink.click()
     }
 }

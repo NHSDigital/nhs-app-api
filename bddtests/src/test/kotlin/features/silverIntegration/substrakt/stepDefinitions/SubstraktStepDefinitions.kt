@@ -9,7 +9,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.IdentityProofingLevel
 import pages.HybridPageObject
 import pages.RedirectorPage
-import pages.account.MyAccountPage
+import pages.more.MorePage
 import pages.assertElementNotPresent
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
@@ -17,7 +17,7 @@ import utils.SerenityHelpers
 class SubstraktStepDefinitions : HybridPageObject() {
     private lateinit var redirector: RedirectorPage
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
-    private lateinit var myAccountPage: MyAccountPage
+    private lateinit var morePage: MorePage
 
     @Given("^I am a user who can view Ask Your Gp Surgery a Question from Substrakt$")
     fun iAmAUserWhoCanViewAskYourGpSurgeryAQuestionFromSubstrakt(){
@@ -66,7 +66,7 @@ class SubstraktStepDefinitions : HybridPageObject() {
 
     @Then("^the link to Substrakt 'Patient participation groups' is not available on the Account page$")
     fun theLinkToSubstraktPatientParticipationGroupsIsNotAvailableMedicalRecordHubPage() {
-        myAccountPage.getHeaderElement("Patient participation groups").assertElementNotPresent()
+        morePage.getHeaderElement("Patient participation groups").assertElementNotPresent()
     }
 
     @Then("the question warning message on the Redirector page explains the service is from Substrakt$")
