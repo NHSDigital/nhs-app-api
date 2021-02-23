@@ -12,10 +12,62 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Help improve the NHS App");
 
+        private WebText TakingPart => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "We would like to contact you about taking part in user " +
+            "research to improve the NHS App and connected services.");
+
+        private WebLinkExpander WhatsInvolvedExpander => WebLinkExpander.WithText(_interactor, "What's involved?");
+
+        private WebText WhatsInvolved => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "We'll add you to our user research panel and email you " +
+            "a short survey to fill in about you and your health. " +
+            "Your answers will help make sure you get invited to user research that's relevant to you.");
+
+        private WebText OnceYourSignedUp => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Once you're signed up, you might be asked to:");
+
+        private WebText TryOutNewFeatures => WebText.WithTagAndText(
+            _interactor,
+            "li",
+            "try out new features");
+
+        private WebText AnswerQuestionsByEmail => WebText.WithTagAndText(
+            _interactor,
+            "li",
+            "answer more questions by email");
+
+        private WebText TalkToResearchers => WebText.WithTagAndText(
+            _interactor,
+            "li",
+            "talk to our researchers about your experience of using the app");
+
+        private WebText LeaveResearchPanel => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "You can always say no to an invite and you can leave the user research panel at any time.");
+
+        private WebText HowYourInformationWillBeUsed => WebText.WithTagAndText(
+            _interactor,
+            "p",
+            "Your information will only be used to contact you about the NHS App user " +
+            "research panel. It will not be shared with anyone else and you can unsubscribe " +
+            "at any time. Read our privacy policy to find out how we use and protect your data.");
+
         private WebRadioOption OptIn => WebRadioOption.InFieldsetLegendWithLabel(
             _interactor,
             "Can we contact you to take part in NHS App user research?",
             "Yes, you can contact me about taking part in user research");
+
+        private WebRadioOption OptOut => WebRadioOption.InFieldsetLegendWithLabel(
+            _interactor,
+            "Can we contact you to take part in NHS App user research?",
+            "No, do not contact me");
 
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
@@ -26,10 +78,53 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             Title.AssertVisible();
         }
 
+        public void AssertPageContent()
+        {
+            TakingPart.AssertVisible();
+            WhatsInvolvedExpander.AssertVisible();
+            AssertExpanderContentNotVisible();
+            WhatsInvolvedExpander.Toggle();
+            AssertExpanderContentVisible();
+            AssertExpanderContent();
+            HowYourInformationWillBeUsed.AssertVisible();
+            OptIn.AssertVisible();
+            OptOut.AssertVisible();
+        }
+
         public void OptInToUserResearch()
         {
             OptIn.Click();
             ContinueButton.Click();
+        }
+
+        private void AssertExpanderContent()
+        {
+            WhatsInvolved.AssertVisible();
+            OnceYourSignedUp.AssertVisible();
+            TryOutNewFeatures.AssertVisible();
+            AnswerQuestionsByEmail.AssertVisible();
+            TalkToResearchers.AssertVisible();
+            LeaveResearchPanel.AssertVisible();
+        }
+
+        private void AssertExpanderContentNotVisible()
+        {
+            WhatsInvolved.AssertExpanderCollapsedByHeight();
+            OnceYourSignedUp.AssertExpanderCollapsedByHeight();
+            TryOutNewFeatures.AssertExpanderCollapsedByHeight();
+            AnswerQuestionsByEmail.AssertExpanderCollapsedByHeight();
+            TalkToResearchers.AssertExpanderCollapsedByHeight();
+            LeaveResearchPanel.AssertExpanderCollapsedByHeight();
+        }
+
+        private void AssertExpanderContentVisible()
+        {
+            WhatsInvolved.AssertExpanderExpandedByHeight();
+            OnceYourSignedUp.AssertExpanderExpandedByHeight();
+            TryOutNewFeatures.AssertExpanderExpandedByHeight();
+            AnswerQuestionsByEmail.AssertExpanderExpandedByHeight();
+            TalkToResearchers.AssertExpanderExpandedByHeight();
+            LeaveResearchPanel.AssertExpanderExpandedByHeight();
         }
     }
 }

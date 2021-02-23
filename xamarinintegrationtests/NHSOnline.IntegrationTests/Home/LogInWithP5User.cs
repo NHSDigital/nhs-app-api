@@ -10,7 +10,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.Home
 {
     [TestClass]
-    [BusinessRule("BR-LOG-5.1", "Log in for a P5 user logs them into the app")]
+    [BusinessRule("BR-LOG-05.1", "Log in for a P5 user logs them into the app")]
     public class LogInWithP5User
     {
         [NhsAppAndroidTest]

@@ -7,7 +7,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-9.3", "Invoking native back on the before you start screen displays the logged out home screen")]
+    [BusinessRule("BR-LOG-09.3", "Invoking native back on the before you start screen displays the logged out home screen")]
     public class BeforeYouStartBackTests
     {
         [NhsAppAndroidTest]

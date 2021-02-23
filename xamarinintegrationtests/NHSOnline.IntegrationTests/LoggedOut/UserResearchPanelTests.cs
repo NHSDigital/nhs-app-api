@@ -7,17 +7,18 @@ using NHSOnline.IntegrationTests.Pages.IOS.LoggedOut;
 using NHSOnline.IntegrationTests.UI;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
-namespace NHSOnline.IntegrationTests.Home
+namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-05.2", "Log in for a P9 user logs them into the app")]
-    public class LogInWithP9
+    [BusinessRule("BR-LOG-06.1", "First time P5 login when the research panel is enabled displays a research panel prompt")]
+    public class UserResearchPanelTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelNineCanSuccessfullyLogInAndroid(IAndroidDriverWrapper driver)
+        public void APatientWithProofLevelFiveAccessSeesTheUserResearchPanelTheFirstTimeTheyLogInAndroid(
+            IAndroidDriverWrapper driver)
         {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            var patient = new P5Patient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             AndroidLoggedOutHomePage
@@ -38,22 +39,15 @@ namespace NHSOnline.IntegrationTests.Home
 
             AndroidUserResearchOptInPage
                 .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            AndroidManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
-
-            AndroidLoggedInHomePage
-                .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Wendy House");
+                .PageContent.AssertPageContent();
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelNineCanSuccessfullyLogInIOS(IIOSDriverWrapper driver)
+        public void APatientWithProofLevelFiveAccessSeesTheUserResearchPanelTheFirstTimeTheyLogInIos(
+            IIOSDriverWrapper driver)
         {
-            var patient = new EmisPatient()
-                .WithName(b => b.GivenName("Wendy").FamilyName("House"));
+            var patient = new P5Patient()
+                .WithName(b => b.GivenName("Terry").FamilyName("Tibbs"));
             using var patients = Mocks.Patients.Add(patient);
 
             IOSLoggedOutHomePage
@@ -74,15 +68,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSUserResearchOptInPage
                 .AssertOnPage(driver)
-                .PageContent.OptInToUserResearch();
-
-            IOSManageNotificationsPromptPage
-                .AssertOnPage(driver)
-                .PageContent.Continue();
-
-            IOSLoggedInHomePage
-                .AssertOnPage(driver)
-                .AssertPageDisplayedFor("Wendy House");
+                .PageContent.AssertPageContent();
         }
     }
 }

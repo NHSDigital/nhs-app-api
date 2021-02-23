@@ -9,7 +9,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-2.1", "Continuing with NHS login displays the Before you start screen")]
+    [BusinessRule("BR-LOG-02.1", "Continuing with NHS login displays the Before you start screen")]
     public sealed class BeforeYouStartTests
     {
         [NhsAppAndroidTest]

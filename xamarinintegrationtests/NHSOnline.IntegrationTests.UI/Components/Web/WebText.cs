@@ -30,6 +30,10 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
         private void ActOnElement(Action<IWebElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
+        public void AssertExpanderCollapsedByHeight() => ActOnElement(e => e.Size.Height.Should().Be(0));
+
+        public void AssertExpanderExpandedByHeight() => ActOnElement(e => e.Size.Height.Should().NotBe(0));
+
         private By FindBy
             => By.XPath(WholeElementSelector);
 

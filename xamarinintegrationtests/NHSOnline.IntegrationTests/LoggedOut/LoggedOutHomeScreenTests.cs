@@ -7,7 +7,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-1.1", "Launching the app displays the logged out home screen")]
+    [BusinessRule("BR-LOG-01.1", "Launching the app displays the logged out home screen")]
     public sealed class LoggedOutHomeScreenTests
     {
         [NhsAppAndroidTest]

@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NHSOnline.IntegrationTests.UI.Drivers;
 using OpenQA.Selenium;
 
@@ -25,6 +26,9 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
 
         private void ActOnLabelElement(Action<IWebElement> action)
             => _interactor.ActOnElement(LabelFindBy, action);
+
+        public void AssertVisible()
+            => ActOnLabelElement(e => e.Displayed.Should().BeTrue("A {0} tag with text {1} should be displayed", _legend, _option));
 
         private By LabelFindBy
             => By.XPath($"//fieldset[legend[normalize-space(text()) = {_legend.QuoteXPathLiteral()}]]//label[normalize-space(text()) = {_option.QuoteXPathLiteral()}]");
