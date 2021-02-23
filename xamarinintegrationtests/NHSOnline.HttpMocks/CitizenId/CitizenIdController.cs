@@ -36,204 +36,37 @@ namespace NHSOnline.HttpMocks.CitizenId
             [FromQuery(Name = "redirect_uri")] string redirect,
             string state)
         {
-            var patientsList =
-                _patients
-                    .All()
-                    .OrderBy(p => p.Login)
-                    .ToLookup(p => p switch
-                        {
-                            _ when p.Login.StartsWith("P5", StringComparison.InvariantCultureIgnoreCase) => "P5",
-                            P5Patient _ => "P5",
-                            EmisPatient _ => "Emis",
-                            TppPatient _ => "Tpp",
-                            VisionPatient _ => "Vision",
-                            MicrotestPatient _ => "Microtest",
-                            _ => "Other"
-                        },
-                        p => $@"<div class='p-2'><button type='button' class='btn btn-info' onclick='Login(""{p.Login}"");'>{p.Login}</button></div>");
-
-            return Content($@"
-                <html>
-                    <head>
-                        <meta charset='utf-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                        <title>NHS Login Stubbed</title>
-                        <script>
-                            function Login(patientId) {{
-                              document.getElementById('PatientId').value = patientId;
-                              document.getElementById('Login').click();
-                            }}
-                        </script>
-                    </head>
-                    <body>
-                        <div class='container'>
-                            <h1 class='display-4'>NHS Login</h1>
-                            <ul>
-                                <li><a href='javascript: window.history.back();'>Back</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html' target='_blank'>Internal Page (New Window)</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/NotFound.html'>Not Found</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/InternalServerError.html'>Internal Server Error</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/FailFast.html'>Boom</a></li>
-                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
-                            </ul>
-                            <hr>
-                            <form action='complete-login' method='get'>
-                                <input value='{redirect}' type='hidden' name='redirect_uri'>
-                                <input value='{state}' type='hidden' name='state'>
-                                <div class='form-group'>
-                                    <label for='PatientId'>Patient ID</label>
-                                    <input class='form-control placeholder='Patient ID' type='text' name='patientId' id='PatientId'>
-                                </div>
-                                <input type='submit' id='Login' value='Login'>
-                            </form>
-                            <h2>Patients</h2>
-                            <h3>P5</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["P5"])}
-                            </div>
-                            <h3>Emis</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["Emis"])}
-                            </div>
-                            <h3>Tpp</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["Tpp"])}
-                            </div>
-                            <h3>Vision</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["Vision"])}
-                            </div>
-                            <h3>Microtest</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["Microtest"])}
-                            </div>
-                            <h3>Other</h3>
-                            <div class='d-flex flex-row flex-wrap' style='flex-basis: 0'>
-                                {string.Join(string.Empty, patientsList["Other"])}
-                            </div>
-                        </div>
-                    </body>
-                </html>",
-                "text/html");
+            (string AuthHostName, string Redirect, string State) model = (AuthHostName, redirect, state);
+            return View(model);
         }
 
         [Host(AuthHostName)]
         [HttpGet("Page/Internal.html")]
-        public IActionResult InternalPage()
-        {
-            return Content($@"
-                <html>
-                    <head>
-                        <meta charset='utf-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                        <title>NHS Login Stubbed - Internal Page</title>
-                    </head>
-                    <body>
-                        <div class='container'>
-                            <h1 class='display-4'>NHS Login - Internal Page</h1>
-                            <ul>
-                                <li><a href='javascript: window.history.back();'>Back</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html' target='_blank'>Other Page (New Window)</a></li>
-                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
-                            </ul>
-                        </div>
-                    </body>
-                </html>",
-                "text/html");
-        }
+        public IActionResult InternalPage() => View(model: AuthHostName);
 
         [Host(AuthHostName)]
         [HttpGet("Page/Other.html")]
-        public IActionResult OtherPage()
-        {
-            return Content($@"
-                <html>
-                    <head>
-                        <meta charset='utf-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                        <title>NHS Login Stubbed - Other Page</title>
-                    </head>
-                    <body>
-                        <div class='container'>
-                            <h1 class='display-4'>NHS Login - Other Page</h1>
-                            <ul>
-                                <li><a href='javascript: window.history.back();'>Back</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
-                                <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html' target='_blank'>Internal Page (New Window)</a></li>
-                                <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
-                            </ul>
-                        </div>
-                    </body>
-                </html>",
-                "text/html");
-        }
+        public IActionResult OtherPage() => View(model: AuthHostName);
 
         [Host(AuthHostName)]
         [HttpGet("Page/InternalServerError.html")]
         public IActionResult InternalServerError()
         {
-            return new ContentResult
-            {
-                Content = $@"
-                    <html>
-                        <head>
-                            <meta charset='utf-8'>
-                            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                            <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                            <title>NHS Login Stubbed - Internal Server Error</title>
-                        </head>
-                        <body>
-                            <div class='container'>
-                                <h1 class='display-4'>NHS Login - Internal Server Error</h1>
-                                <ul>
-                                    <li><a href='javascript: window.history.back();'>Back</a></li>
-                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
-                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
-                                    <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
-                                </ul>
-                            </div>
-                        </body>
-                    </html>",
-                ContentType = "text/html",
-                StatusCode = (int)HttpStatusCode.InternalServerError
-            };
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            return View(model: AuthHostName);
         }
 
         [Host(AuthHostName)]
         [HttpGet("Page/NotFound.html")]
         public IActionResult NotFoundPage()
         {
-            return new ContentResult
-            {
-                Content = $@"
-                    <html>
-                        <head>
-                            <meta charset='utf-8'>
-                            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-                            <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous'>
-                            <title>NHS Login Stubbed - Not Found</title>
-                        </head>
-                        <body>
-                            <div class='container'>
-                                <h1 class='display-4'>NHS Login - Not Found</h1>
-                                <ul>
-                                    <li><a href='javascript: window.history.back();'>Back</a></li>
-                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Internal.html'>Internal Page</a></li>
-                                    <li><a href='http://{AuthHostName}:8080/citizenid/Page/Other.html'>Other Page</a></li>
-                                    <li><a href='http://stubs.local.bitraft.io:8080/nhsuk/covid'>Covid</a></li>
-                                </ul>
-                            </div>
-                        </body>
-                    </html>",
-                ContentType = "text/html",
-                StatusCode = (int)HttpStatusCode.NotFound
-            };
+            Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return View(model: AuthHostName);
         }
+
+        [Host(AuthHostName)]
+        [HttpGet("Page/Paycasso.html")]
+        public IActionResult PaycassoPage() => View(model: AuthHostName);
 
         [Host(AuthHostName)]
         [HttpGet("Page/FailFast.html")]
@@ -307,7 +140,6 @@ namespace NHSOnline.HttpMocks.CitizenId
             var behaviour = patient.Behaviours.Get<INhsLoginGetUserProfileBehaviour>(() => new NhsLoginGetUserProfileDefaultBehaviour());
 
             return behaviour.Behave(patient);
-
         }
 
         [Host(AuthHostName)]

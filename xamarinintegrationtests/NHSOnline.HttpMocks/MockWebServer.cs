@@ -40,7 +40,7 @@ namespace NHSOnline.HttpMocks
                     .ConfigureServices(services => services
                         .PostConfigure<HostFilteringOptions>(options => options.AllowedHosts = new[] {"*"})
                         .AddRouting()
-                        .AddControllers()
+                        .AddControllersWithViews()
                         .AddXmlSerializerFormatters())
                     .ConfigureServices(services => services
                         .AddSingleton(patients)
