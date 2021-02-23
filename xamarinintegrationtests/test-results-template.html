@@ -5,11 +5,12 @@
     <title>Test Results</title>
 </head>
 <body>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.6.0/dist/solar/bootstrap.min.css" integrity="sha256-aKfNGoGr6HA55RatkDPygiK15Ty6R9t9pTwC+BKaGyA=" crossorigin="anonymous">
 
 <script id="TestResultJson">
-    // Test Results JSON gets injected in this script tag, uncomment the below and supply some JSON for local testing
-    // const TestResults = [];
+    // Test Results JSON gets injected in this script tag
+    // If this tag is modified also update 06_generate_integration_test_run_report.sh
+    const RealTestResults = null;
 </script>
 
 <script>
@@ -25,14 +26,74 @@
         
         Object.freeze(objectToFreeze);
     }
+    
+    const TestResults = RealTestResults || Array.from({length: 40}, (_, i) => ({
+        "className": "NHSOnline.IntegrationTests.LoggedOut.NhsLoginBackToLoggedOutHomeScreenTests",
+        "methodName": "APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenAndroid",
+        "displayName": "A Patient Navigating Back From The Nhs Login Journey Is Shown The Logged Out Home Screen Android",
+        "device": (i % 2 === 0) ? {"name":"Google Pixel 2","operatingSystemVersion":"8.0"} : {"name":"iPhone 8","operatingSystemVersion":"13.0"},
+        "browserStackSessionId": null, // Don't fill this in as we don't want to request random videos from BrowserStack
+        "shouldRetry": false,
+        "outcome": "Passed",
+        "businessRules": Array.from({length: i % 3}, (_, j) => ({
+            "id": `BR-LOG-${i % 30}.${j}`,
+            "title": "Doing something on the somewhere screen displays something else"
+        }))
+    }));
+
+    makeImmutable(TestResults);
 </script>
+
+<style>
+    .slideover {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        right: 0;
+        top: 0;
+        /*background-color: #ccc;*/
+        opacity: 1;
+        overflow-x: hidden;
+        transition: 0.5s;
+    }
+    .slideover.is-visible {
+        width: 100%;
+    }
+    
+    .panel {
+        background-color: rgb(0, 43, 54);
+    }
+
+
+    .glyphicon {
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .glyphicon-chevron-left:before {
+        content: "<";
+    }
+    .glyphicon-chevron-right:before {
+        content: ">";
+    }
+    
+    .pull-right {
+        float: right;
+    }
+</style>
 
 <script type="module">
     'use strict';
     
     import { html, render, Component } from 'https://unpkg.com/htm/preact/index.mjs?module'
 
-    makeImmutable(TestResults);
     
     
     const getTestBusinessRules = (testResult) => testResult.businessRules.length == 0 ? [{ id: '', title: 'No Business Rule Specified'}] : testResult.businessRules;
@@ -52,37 +113,176 @@
     
     
     const renderPage = () => render(html`
-        <${businessRuleList} businessRules="${businessRules}" />
+        <${App} businessRules="${businessRules}" />
     `, document.body);
     
-    
-    const businessRuleList = ({businessRules}) => html`
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Business Rules</div>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Business Rule</th>
-                                <th>Test Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${Object.values(businessRules).map(br => html`
-                                <tr>
-                                    <td>${br.id}</td>
-                                    <td>${br.title}</td>
-                                    <td>${br.tests.length}</td>
-                                </tr>
-                            `)}
-                        </tbody>
-                    </table>
+    class App extends Component {
+        constructor() {
+            super();
+            this.setState({
+                selectedBusinessRule: null,
+                selectedTest: null,
+            })
+        }
+        
+        businessRuleClicked = (businessRule) => {
+            this.setState({
+                selectedBusinessRule: businessRule,
+                selectedTest: null,
+            })
+        }
+        
+        testClicked = (test) => {
+            this.setState({
+                selectedTest: test,
+            })
+        }
+        
+        render = ({businessRules}, {selectedBusinessRule, selectedTest}) => html`
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        <${businessRuleList} businessRules="${businessRules}" onclick="${(br) => this.businessRuleClicked(br)}" />
+                    </div>
                 </div>
             </div>
+            
+            ${ selectedBusinessRule && html`
+                <${Page} onclose="${() => this.businessRuleClicked(null)}">
+                    ${selectedBusinessRule && html`
+                        <${testList} tests="${selectedBusinessRule.tests}" onclick="${(test) => this.testClicked(test)}" />
+                    `}
+                </Page>
+            `}
+            
+            ${ selectedTest && html`
+                <${Page} onclose="${() => this.testClicked(null)}">
+                    <${testDetails} test="${selectedTest}" />
+                </Page>
+            `}
+        `;
+    }
+    
+    
+    const businessRuleList = ({businessRules, onclick}) => html`
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Business Rule</th>
+                    <th>Test Count</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                ${Object.values(businessRules).map(br => html`
+                    <tr onclick="${() => onclick(br)}">
+                        <td>${br.id}</td>
+                        <td>${br.title}</td>
+                        <td>${br.tests.length}</td>
+                        <td><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></td>
+                    </tr>
+                `)}
+            </tbody>
+        </table>
+    `;
+    
+    const testList = ({tests, onclick}) => html`
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Test</th>
+                <th>Device</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            ${tests.map(test => html`
+                <tr onclick="${() => onclick(test)}">
+                    <td>${test.displayName}</td>
+                    <td>${test.device.name}</td>
+                    <td>${test.device.operatingSystemVersion}</td>
+                    <td><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></td>
+                </tr>
+            `)}
+            </tbody>
+        </table>
+    `;
+    
+    const testDetails = ({test}) => html`
+        <div class="list-group">
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Name</h4>
+                <p class="list-group-item-text">${test.displayName}</p>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Test Class</h4>
+                <p class="list-group-item-text">${test.className}</p>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Test Method</h4>
+                <p class="list-group-item-text">${test.methodName}</p>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Device</h4>
+                <p class="list-group-item-text">${test.device.name} - ${test.device.operatingSystemVersion}</p>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Business Rules Tested</h4>
+                <div class="list-group">
+                    ${test.businessRules.map(br => html`
+                        <a href="https://nhsd-confluence.digital.nhs.uk/dosearchsite.action?cql=siteSearch+~+%22%5C%22${br.id}%5C%22%22+and+space+%3D+%22NO%22+and+type+%3D+%22page%22+and+ancestor+%3D+%22164300849%22"
+                           target="_blank"
+                           class="list-group-item">
+                            ${br.id} - ${br.title}
+                            <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                        </a>
+                    `)}
+                </div>
+            </div>
+            <a href="https://app-automate.browserstack.com/dashboard/v2/search?query=${test.browserStackSessionId}&type=sessions"
+               target="_blank"
+               class="list-group-item">
+                <h4 class="list-group-item-heading">BrowserStack Session
+                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                </h4>
+            </a>
         </div>
     `;
+    
+    class Page extends Component {
+        constructor() {
+            super();
+            this.setState({
+                visible: false,
+            })
+        }
+        
+        componentDidMount() {
+            setTimeout(()=>{
+                this.setState({
+                    visible: true,
+                })
+            }, 0);
+        }
+        
+        render = ({children, onclose}, {visible}) => html`
+            <div class="panel panel-default slideover ${visible ? 'is-visible' : ''}">
+                <div class="panel-header">
+                    <button type="button" class="btn btn-default btn-lg"
+                            onclick="${() => onclose()}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        Back
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        ${children}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
     
     renderPage();
 </script>

@@ -51,11 +51,12 @@ do
   cat > "${REPORT_HTML}.patch" <<EOF
 --- test-result-template.html	2021-02-22 16:58:58.000000000 +0000
 +++ test-results.html	        2021-02-22 17:04:16.000000000 +0000
-@@ -10,4 +10,3 @@
+@@ -10,5 +10,3 @@
  <script id="TestResultJson">
--    // Test Results JSON gets injected in this script tag, uncomment the below and supply some JSON for local testing
--    // const TestResults = [];
-+    const TestResults = $(<"${REPORT_JSON}");
+-    // Test Results JSON gets injected in this script tag
+-    // If this tag is modified also update 06_generate_integration_test_run_report.sh
+-    const RealTestResults = null;
++    const RealTestResults = $(<"${REPORT_JSON}");
  </script>
 EOF
 
