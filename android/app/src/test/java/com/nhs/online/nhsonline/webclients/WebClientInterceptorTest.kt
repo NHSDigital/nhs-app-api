@@ -45,24 +45,11 @@ class WebClientInterceptorTest {
     @Test
     fun shouldInterceptRequest_NullRequest_returnNull() {
         val webClientInterceptor: WebClientInterceptor
-        val connectionStateMonitor: ConnectionStateMonitor
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
-        val network: Network = mock()
-        connectionStateMonitor = ConnectionStateMonitor(contextMock)
-        connectionStateMonitor.onAvailable(network)
-
-        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
-                connectionStateMonitor)
+        webClientInterceptor = getWebClientInterceptor(contextMock)
 
         val request: WebResourceRequest? = null
         val response = webClientInterceptor.shouldInterceptRequest(webViewMock, request)
@@ -74,24 +61,11 @@ class WebClientInterceptorTest {
     fun shouldInterceptRequest_nonWOFF2Request_returnNull() {
         val webClientInterceptor: WebClientInterceptor
         var requestMock: WebResourceRequest
-        val connectionStateMonitor: ConnectionStateMonitor
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
-        val network: Network = mock()
-        connectionStateMonitor = ConnectionStateMonitor(contextMock)
-        connectionStateMonitor.onAvailable(network)
-
-        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
-                connectionStateMonitor)
+        webClientInterceptor = getWebClientInterceptor(contextMock)
 
         val testRequestPaths = arrayOf(
                 "/",
@@ -117,24 +91,11 @@ class WebClientInterceptorTest {
     @Test
     fun shouldInterceptRequest_WOFF2Request_notAppFont_returnNull() {
         val webClientInterceptor: WebClientInterceptor
-        val connectionStateMonitor: ConnectionStateMonitor
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
-        val network: Network = mock()
-        connectionStateMonitor = ConnectionStateMonitor(contextMock)
-        connectionStateMonitor.onAvailable(network)
-
-        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
-                connectionStateMonitor)
+        webClientInterceptor = getWebClientInterceptor(contextMock)
 
         val requestMock: WebResourceRequest = mock {
             on { url } doReturn Uri.parse("https://www.bazz.com/file.woff2")
@@ -158,25 +119,11 @@ class WebClientInterceptorTest {
     @Test
     fun shouldInterceptRequest_WOFF2Request_AppFont_returnBundle() {
         val webClientInterceptor: WebClientInterceptor
-        val connectionStateMonitor: ConnectionStateMonitor
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
-        val network: Network = mock()
-        connectionStateMonitor = ConnectionStateMonitor(contextMock)
-        connectionStateMonitor.onAvailable(network)
-
-        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
-                connectionStateMonitor)
-
+        webClientInterceptor = getWebClientInterceptor(contextMock)
         val requestMock: WebResourceRequest = mock {
             on { url } doReturn Uri.parse("https://www.bazz.com/bazz.woff2")
         }
@@ -209,24 +156,11 @@ class WebClientInterceptorTest {
     @Test
     fun shouldInterceptRequest_WOFF2Request_AppFont_CaseInsensitive_returnBundle() {
         val webClientInterceptor: WebClientInterceptor
-        val connectionStateMonitor: ConnectionStateMonitor
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
-        val network: Network = mock()
-        connectionStateMonitor = ConnectionStateMonitor(contextMock)
-        connectionStateMonitor.onAvailable(network)
-
-        webClientInterceptor = WebClientInterceptor(resources, uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock,
-                connectionStateMonitor)
+        webClientInterceptor = getWebClientInterceptor(contextMock)
 
         val requestMock: WebResourceRequest = mock {
             on { url } doReturn Uri.parse("https://www.bazz.com/bazz.woFF2")
@@ -261,15 +195,8 @@ class WebClientInterceptorTest {
     @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad() {
         val connectionStateMonitor: ConnectionStateMonitor
-        val resourceMock = ResourceMockingClass()
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
-        val resources: Resources = mock()
-
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
@@ -277,16 +204,7 @@ class WebClientInterceptorTest {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
-        val webInterceptor = WebClientInterceptor(
-                resources,
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockContext(),
-                knownServicesMock,
-                schemeHandlersMock,
-                loggingServiceMock,
-                connectionStateMonitor
-        )
+        val webInterceptor = getWebClientInterceptor(contextMock, nhsWeb = nhsWebMock)
 
         val tmpWebView = createWebView(activity)
 
@@ -304,34 +222,18 @@ class WebClientInterceptorTest {
     @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad_returnsTrueForHandledScheme() {
         val connectionStateMonitor: ConnectionStateMonitor
-        val resourceMock = ResourceMockingClass()
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val loggingServiceMock: LoggingService = mock()
-        val resources: Resources = mock()
-
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
         val url = "handled:"
-        //schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
         val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
-        val webInterceptor = WebClientInterceptor(
-                resources,
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockContext(),
-                knownServicesMock,
-                schemeHandlersMock,
-                loggingServiceMock,
-                connectionStateMonitor
-        )
+        val webInterceptor = getWebClientInterceptor(contextMock, nhsWeb = nhsWebMock)
 
         val tmpWebView = createWebView(activity)
 
@@ -346,15 +248,8 @@ class WebClientInterceptorTest {
     @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad_returnsFalseForMalformedURLException() {
         val connectionStateMonitor: ConnectionStateMonitor
-        val resourceMock = ResourceMockingClass()
 
-        val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
-        val resources: Resources = mock()
-
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
@@ -362,16 +257,7 @@ class WebClientInterceptorTest {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock(),
                 connectionStateMonitor, mock())
-        val webInterceptor = WebClientInterceptor(
-                resources,
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockContext(),
-                knownServicesMock,
-                schemeHandlersMock,
-                loggingServiceMock,
-                connectionStateMonitor
-        )
+        val webInterceptor = getWebClientInterceptor(contextMock, nhsWeb = nhsWebMock)
 
         val tmpWebView = createWebView(activity)
         val response = webInterceptor.shouldOverrideUrlLoading(tmpWebView, "")
@@ -910,32 +796,17 @@ class WebClientInterceptorTest {
     fun receivedErrorNonKnownURL() {
         val errorMessageHandler: ErrorMessageHandler
         val connectionStateMonitor: ConnectionStateMonitor
-        val resourceMock = ResourceMockingClass()
 
         val uiInteractorMock: IInteractor = mock()
-        val knownServicesMock: KnownServices = mock()
         val contextMock: Context = ResourceMockingClass().mockContext()
         errorMessageHandler = ErrorMessageHandler(contextMock.resources)
-        val nhsWebMock: NhsWeb = mock()
-        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
-        val loggingServiceMock: LoggingService = mock()
         val webViewMock: WebView = mock()
-        val resources: Resources = mock()
 
         val network: Network = mock()
         connectionStateMonitor = ConnectionStateMonitor(contextMock)
         connectionStateMonitor.onAvailable(network)
 
-        val webInterceptor = WebClientInterceptor(
-                resources,
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockDisconnectedContext(),
-                knownServicesMock,
-                schemeHandlersMock,
-                loggingServiceMock,
-                connectionStateMonitor
-        )
+        val webInterceptor = getWebClientInterceptor(contextMock, uiInteractorMock)
 
         webInterceptor.onReceivedError(webViewMock, 404,
                 "Error", "https://google.com")
@@ -1032,6 +903,111 @@ class WebClientInterceptorTest {
         webClientInterceptor.onReceivedHttpError(webViewMock, requestMock, resourceResponseMock)
 
         verify(loggingServiceMock).logError("Failed HTTP Call from webview. url:https://www.example.com/ httpResponseCode:1234")
+    }
+
+    @Test
+    fun onReceivedHttpError_HotjarRequest_doesNotDisplayError() {
+        val webClientInterceptor: WebClientInterceptor
+
+        val uiInteractorMock: IInteractor = mock()
+        val contextMock: Context = ResourceMockingClass().mockContext()
+        val errorMessageHandler = ErrorMessageHandler(contextMock.resources)
+        val webViewMock: WebView = mock {
+            on { url } doReturn "https://www.baseurl.com/"
+        }
+
+        webClientInterceptor = getWebClientInterceptor(contextMock, uiInteractorMock)
+
+        val requestMock: WebResourceRequest = mock {
+            on { url } doReturn Uri.parse("https://in.hotjar.com/api/v1/tracking/metrics")
+        }
+
+        val resourceResponseMock: WebResourceResponse = mock {
+            on { statusCode } doReturn 429
+        }
+
+        webClientInterceptor.onReceivedHttpError(webViewMock, requestMock, resourceResponseMock)
+        val unavailableErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+
+        verify(uiInteractorMock, never()).showUnavailabilityError(unavailableErrorMessage)
+    }
+
+    @Test
+    fun onReceivedHttpError_AppAPIRequest_doesNotDisplayError() {
+        val webClientInterceptor: WebClientInterceptor
+        val uiInteractorMock: IInteractor = mock()
+        val contextMock: Context = ResourceMockingClass().mockContext()
+        val errorMessageHandler = ErrorMessageHandler(contextMock.resources)
+        val webViewMock: WebView = mock {
+            on { url } doReturn "https://www.baseurl.com/"
+        }
+
+        webClientInterceptor = getWebClientInterceptor(contextMock, uiInteractorMock)
+
+        val requestMock: WebResourceRequest = mock {
+            on { url } doReturn Uri.parse("https://www.baseapiurl.com/v1/session")
+        }
+
+        val resourceResponseMock: WebResourceResponse = mock {
+            on { statusCode } doReturn 502
+        }
+
+        webClientInterceptor.onReceivedHttpError(webViewMock, requestMock, resourceResponseMock)
+        val unavailableErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+        verify(uiInteractorMock, never()).showUnavailabilityError(unavailableErrorMessage)
+    }
+
+    @Test
+    fun onReceivedHttpError_notIgnoredRequest_displaysError() {
+        val webClientInterceptor: WebClientInterceptor
+
+        val uiInteractorMock: IInteractor = mock()
+        val contextMock: Context = ResourceMockingClass().mockContext()
+        val errorMessageHandler = ErrorMessageHandler(contextMock.resources)
+        val webViewMock: WebView = mock {
+            on { url } doReturn "https://www.baseurl.com/"
+        }
+
+        webClientInterceptor = getWebClientInterceptor(contextMock, uiInteractorMock)
+
+        val requestMock: WebResourceRequest = mock {
+            on { url } doReturn Uri.parse("https://unknown.com")
+        }
+
+        val resourceResponseMock: WebResourceResponse = mock {
+            on { statusCode } doReturn 502
+        }
+
+        webClientInterceptor.onReceivedHttpError(webViewMock, requestMock, resourceResponseMock)
+        val unavailableErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+        verify(uiInteractorMock, times(1)).showUnavailabilityError(unavailableErrorMessage)
+    }
+
+    @Test
+    fun onReceivedHttpError_notAppPage_doesNotDisplayError() {
+        val webClientInterceptor: WebClientInterceptor
+
+        val uiInteractorMock: IInteractor = mock()
+        val contextMock: Context = ResourceMockingClass().mockContext()
+        val errorMessageHandler = ErrorMessageHandler(contextMock.resources)
+
+        val webViewMock: WebView = mock {
+            on { url } doReturn "https://www.unknown.com/"
+        }
+
+        webClientInterceptor = getWebClientInterceptor(contextMock, uiInteractorMock)
+
+        val requestMock: WebResourceRequest = mock {
+            on { url } doReturn Uri.parse("https://unknown.com")
+        }
+
+        val resourceResponseMock: WebResourceResponse = mock {
+            on { statusCode } doReturn 502
+        }
+
+        webClientInterceptor.onReceivedHttpError(webViewMock, requestMock, resourceResponseMock)
+        val unavailableErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+        verify(uiInteractorMock, never()).showUnavailabilityError(unavailableErrorMessage)
     }
 
     @Test
@@ -1135,5 +1111,22 @@ class WebClientInterceptorTest {
         webInterceptor.onPageFinished(webViewMock, url)
 
         return webViewMock
+    }
+
+    private fun getWebClientInterceptor(context: Context, uiInteractor: IInteractor = mock(),
+                                        nhsWeb: NhsWeb = mock()): WebClientInterceptor {
+
+        val knownServicesMock: KnownServices = mock()
+        val schemeHandlersMock: SchemeHandlers = mock { on { handleUrl(any()) } doReturn false }
+        val loggingServiceMock: LoggingService = mock()
+        val resources: Resources = mock()
+
+        val network: Network = mock()
+        val connectionStateMonitor = ConnectionStateMonitor(context)
+        connectionStateMonitor.onAvailable(network)
+
+        return WebClientInterceptor(resources, uiInteractor,
+                nhsWeb, context, knownServicesMock, schemeHandlersMock, loggingServiceMock,
+                connectionStateMonitor)
     }
 }

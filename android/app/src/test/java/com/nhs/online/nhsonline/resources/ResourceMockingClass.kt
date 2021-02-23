@@ -66,6 +66,8 @@ open class ResourceMockingClass {
             on { getString(R.string.login_auth_code_path) } doReturn "/authcode"
             on { getString(R.string.redirectorPath) } doReturn "redirector"
             on { getString(R.string.loggerApiPath) } doReturn "logging"
+            on { getString(R.string.hotjarHost) } doReturn "in.hotjar.com"
+            on { getString(R.string.baseHost) } doReturn "www.baseurl.com"
         }
 
         return mock {

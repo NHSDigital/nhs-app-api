@@ -164,7 +164,7 @@ class WebClientInterceptor(
         Log.d(TAG, "Entering onReceivedHttpError")
         loggingService.logError("Failed HTTP Call from webview. url:${request?.url} httpResponseCode:${errorResponse?.statusCode}")
 
-        if (canHandleUnavailability(view) && !isNHSApi(request)) {
+        if (canHandleUnavailability(view) && !isNHSApi(request) && !isHotjarApi(request)) {
             cancelTrackingWebRequestResponse()
             handleUnavailability(view?.url, ERROR_CONNECT)
         }
@@ -320,6 +320,10 @@ class WebClientInterceptor(
 
     private fun canHandleUnavailability(view: WebView?): Boolean {
         return view?.url === null || isNHSAppPage(view)
+    }
+
+    private fun isHotjarApi(request: WebResourceRequest?): Boolean {
+        return request?.url?.host == context.getString(R.string.hotjarHost)
     }
 
     private fun isNHSAppDomain(value: String?): Boolean {

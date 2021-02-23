@@ -46,4 +46,5 @@
     </string-array>
     <string name="versionRegex">^([\\d]+)[.](\\d+)([.](\\d+))?$</string>
     <string name="nhsDigitalAnalyticsHost">nhsdigital.d3.sc.omtrdc.net</string>
+    <string name="hotjarHost">in.hotjar.com</string>
 </resources>
