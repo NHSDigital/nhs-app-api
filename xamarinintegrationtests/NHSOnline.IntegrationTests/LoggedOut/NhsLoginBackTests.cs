@@ -7,11 +7,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-2.3", "Navigating back from before you start screen displays the Logged out home screen")]
-    public class NhsLoginBackToLoggedOutHomeScreenTests
+    [BusinessRule("BR-LOG-9.4", "Invoking native back on the NHS login journey displays the logged out home screen")]
+    public class NhsLoginBackTests
     {
         [NhsAppAndroidTest]
-        public void APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenAndroid(IAndroidDriverWrapper driver)
+        public void APatientCanUseTheBackButtonToGoBackToTheHomePageFromNhsLoginAndroid(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver)
@@ -21,15 +21,17 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
+            AndroidStubbedLoginPage
+                .AssertOnPage(driver);
+
             driver.PressBackButton();
 
             AndroidLoggedOutHomePage
-                .AssertOnPage(driver)
-                .AssertPageElements();
+                .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
-        public void APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
+        public void APatientCanUseTheBackButtonToGoBackToTheHomePageFromNhsLoginIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)
@@ -39,11 +41,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .Continue();
 
+            IOSStubbedLoginPage
+                .AssertOnPage(driver);
+
             driver.SwipeBack();
 
             IOSLoggedOutHomePage
-                .AssertOnPage(driver)
-                .AssertPageElements();
+                .AssertOnPage(driver);
         }
     }
 }
