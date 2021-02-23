@@ -38,6 +38,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             CovidConditions.AssertVisible();
         }
 
+        public void AssertHelpIconPresent()
+        {
+            HelpIcon.AssertVisible();
+        }
+
         public void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
         public void GetHelp() => HelpIcon.Click();

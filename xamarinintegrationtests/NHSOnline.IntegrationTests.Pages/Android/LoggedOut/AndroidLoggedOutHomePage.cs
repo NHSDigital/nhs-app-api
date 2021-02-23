@@ -35,6 +35,11 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             CovidConditions.AssertVisible();
         }
 
+        public void AssertHelpIconPresent()
+        {
+            HelpIcon.AssertVisible();
+        }
+
         public void GetInformationAboutCoronavirus() => CovidConditions.Click();
 
         public void GetHelp() => HelpIcon.Click();
