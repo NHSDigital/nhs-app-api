@@ -54,24 +54,31 @@ namespace NHSOnline.App.Droid
         ///
         /// https://github.com/xamarin/Xamarin.Forms/issues/12631
         /// </summary>
-        private static void MakeNotFocusableIfViewGroup(View? view)
+        private const int ExpectedDepthOfPlatformCreatedViewGroupsToMakeNotFocusable = 4;
+
+        private static void MakeNotFocusableIfViewGroup(View? view, int depth = 0)
         {
             if (view is ViewGroup viewGroup)
             {
-                MakeNotFocusable(viewGroup);
+                MakeNotFocusable(viewGroup, depth);
             }
         }
 
-        private static void MakeNotFocusable(ViewGroup viewGroup)
+        private static void MakeNotFocusable(ViewGroup viewGroup, int depth)
         {
             viewGroup.Focusable = false;
-            
+
+            if (depth == ExpectedDepthOfPlatformCreatedViewGroupsToMakeNotFocusable)
+            {
+                return;
+            }
+
             for (var i = 0; i < viewGroup.ChildCount; i++)
             {
-                MakeNotFocusableIfViewGroup(viewGroup.GetChildAt(i));
+                MakeNotFocusableIfViewGroup(viewGroup.GetChildAt(i), depth + 1);
             }
-            
-            viewGroup.ChildViewAdded += (_, args) => MakeNotFocusableIfViewGroup(args.Child);
+
+            viewGroup.ChildViewAdded += (_, args) => MakeNotFocusableIfViewGroup(args.Child, depth + 1);
         }
     }
 }
