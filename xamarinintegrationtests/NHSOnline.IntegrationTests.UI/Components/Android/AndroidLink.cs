@@ -10,19 +10,19 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
     public sealed class AndroidLink : IFocusable
     {
         private readonly IAndroidInteractor _interactor;
-        private readonly string _text;
+        private readonly IAndroidLocatorStrategy _locatorStrategy;
 
-        private AndroidLink(IAndroidInteractor interactor, string text)
+        private AndroidLink(IAndroidInteractor interactor, IAndroidLocatorStrategy locatorStrategy)
         {
             _interactor = interactor;
-            _text = text;
+            _locatorStrategy = locatorStrategy;
         }
 
         public static AndroidLink WithText(IAndroidInteractor interactor, string text)
-            => new AndroidLink(interactor, text);
+            => new (interactor, new TextLocatorStrategy(text));
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _text));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a link with text {1} should be displayed", _locatorStrategy.Description));
 
         public void Touch()
             => ActOnElementContext(context => context.Tap());
@@ -33,10 +33,23 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);
 
-        private By FindBy
-            => MobileBy.AndroidUIAutomator($"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})");
+        private By FindBy => MobileBy.AndroidUIAutomator(_locatorStrategy.Selector);
+
+        public AndroidLink ScrollIntoView()
+            => new(_interactor, new AndroidScrollLocatorStrategy(_locatorStrategy));
 
         string IFocusable.ElementDescription
-            => new FocusableDescriptionBuilder {Tag = "android.widget.TextView", Text = _text}.Description;
+            => new FocusableDescriptionBuilder {Tag = "android.widget.TextView", Text = _locatorStrategy.Description}.Description;
+
+        private sealed class TextLocatorStrategy : IAndroidLocatorStrategy
+        {
+            private readonly string _text;
+
+            public TextLocatorStrategy(string text)
+                => _text = text;
+
+            public string Selector => $"new UiSelector().className(\"android.widget.TextView\").text({_text.QuoteUiAutomatorLiteral()})";
+            public string Description => $"{_text}";
+        }
     }
 }

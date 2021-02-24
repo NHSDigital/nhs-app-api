@@ -176,7 +176,7 @@
       <DependentUpon>SlimCloseNavigationHeader.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ButtonWithImage.xaml.cs">
+    <Compile Update="NhsLoginButton.xaml.cs">
       <DependentUpon>ButtonWithimage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

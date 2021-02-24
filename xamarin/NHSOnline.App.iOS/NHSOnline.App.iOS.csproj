@@ -159,11 +159,5 @@
     <ImageAsset Include="Resources\Assets.xcassets\NHSAppLogo.imageset\NHSAppLogo@3x.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\NHSLoginLogo.imageset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\NHSLoginLogo.imageset\NHSLoginLogo.png">
-      <Visible>false</Visible>
-    </ImageAsset>
   </ItemGroup>
 </Project>

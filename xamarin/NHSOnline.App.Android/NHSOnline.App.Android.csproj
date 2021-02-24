@@ -79,7 +79,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\app_icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
-    <AndroidResource Include="Resources\drawable\NHSLoginLogo.xml" />
     <AndroidResource Include="Resources\drawable\nhs_logo.xml" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
     <AndroidResource Include="Resources\layout\Tabbar.xml" />

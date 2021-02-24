@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+             x:Class="NHSOnline.App.Controls.NhsLoginButton"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Name="Root">
+    <View.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="NhsUkColours.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </View.Resources>
+    <Frame
+        BorderColor="Transparent"
+        Padding="0,0,0,0"
+        BackgroundColor="Transparent"
+        HorizontalOptions="Center"
+        MinimumHeightRequest="{Binding HeightRequest, Source={x:Reference Name=Root}}"
+        IsClippedToBounds="True"
+        HasShadow="False"
+        CornerRadius="4">
+        <StackLayout Orientation="Horizontal"
+                     xct:TouchEffect.NormalBackgroundColor="{Binding ButtonColour, Source={x:Reference Name=Root}}"
+                     xct:TouchEffect.PressedBackgroundColor="{Binding PressedButtonColour, Source={x:Reference Name=Root}}"
+                     HorizontalOptions="Center"
+                     MinimumHeightRequest="{Binding HeightRequest, Source={x:Reference Name=Root}}">
+        <BoxView HorizontalOptions="Start" />
+        <controls:NhsLogoBlue Padding="0,5,10,5" VerticalOptions="Center" HeightRequest="27" WidthRequest="67"/>
+        <Label Text="{Binding Text, Source={Reference Name=Root}}"
+               VerticalOptions="Center"
+               TextColor="{Binding TextColour, Source={x:Reference Name=Root}}"
+               FontFamily="Frutiger"
+               FontAttributes="Bold"
+               FontSize="Medium"
+               Padding="0,10,0,10"/>
+        <BoxView HorizontalOptions="End" />
+        <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={Reference Name=Root}}"></TapGestureRecognizer>
+        </StackLayout.GestureRecognizers>
+    </StackLayout>
+    </Frame>
+</ContentView>

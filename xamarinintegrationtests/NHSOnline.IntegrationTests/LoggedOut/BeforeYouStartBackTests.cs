@@ -26,9 +26,8 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .AssertPageElements();
         }
-
         [NhsAppIOSTest]
-        public void APatientNavigatingBackFromBeforeYouStartIsShownTheLoggedOutHomePageIos(IIOSDriverWrapper driver)
+        public void APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)

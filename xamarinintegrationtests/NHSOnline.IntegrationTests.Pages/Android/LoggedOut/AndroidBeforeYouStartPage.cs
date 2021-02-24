@@ -10,16 +10,24 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         private AndroidBeforeYouStartPage(IAndroidDriverWrapper driver) => _driver = driver;
 
         private AndroidLabel Title => AndroidLabel.WithText(_driver, "Before You Start");
-        private AndroidLink CovidLink => AndroidLink.WithText(_driver, "Check if you have coronavirus symptoms");
-        private AndroidLink ConditionsLink => AndroidLink.WithText(_driver, "Search conditions and treatments");
-        private AndroidLink OneOneOneLink => AndroidLink.WithText(_driver, "Use NHS 111 online to check if you need urgent help");
+        private AndroidLink CovidLink => AndroidLink
+            .WithText(_driver, "Check if you have coronavirus symptoms")
+            .ScrollIntoView();
+        private AndroidLink ConditionsLink => AndroidLink
+            .WithText(_driver, "Search conditions and treatments")
+            .ScrollIntoView();
+        private AndroidLink OneOneOneLink => AndroidLink.
+            WithText(_driver, "Use NHS 111 online to check if you need urgent help")
+            .ScrollIntoView();
 
         private AndroidExpander GuidanceForAges13To15Expander => AndroidExpander.WithHeaderAndBodyText(
             _driver,
             "What to do if you're aged 13 to 15",
             "You'll need to contact your GP surgery first and request access to GP online services.");
 
-        private AndroidButton ContinueButton => AndroidButton.WithText(_driver, "Continue");
+        private AndroidButton ContinueButton => AndroidButton
+            .WithText(_driver, "Continue")
+            .ScrollIntoView();
 
         private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
             _driver,
