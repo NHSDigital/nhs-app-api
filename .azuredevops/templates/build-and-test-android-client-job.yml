@@ -80,6 +80,16 @@ jobs:
           filePath: android/buildscripts/02_build.sh
 
       - task: Bash@3
+        displayName: Build Onboarding Sandpit
+        condition: and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingsandpit'))
+        env:
+          TARGET: onboardingsandpit
+          ANDROID_DEBUG_KEY_STORE_LOCATION: $(android_debug_key_store.secureFilePath)
+          ANDROID_DEBUG_KEY_STORE_PASSWORD: $(android.debug.key.store.password)
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
+      - task: Bash@3
         displayName: Build Onboarding AOS
         condition: and(succeeded(), eq(variables['source.tag'], 'True'), ne(variables['native.android.target'], 'onboardingaos'))
         env:
