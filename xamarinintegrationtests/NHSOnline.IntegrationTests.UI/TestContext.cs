@@ -51,6 +51,8 @@ namespace NHSOnline.IntegrationTests.UI
                 _driver.UpdateBrowserStackStatusToPassed(testResultContext);
             }
 
+            _driver.AddBrowserStackSessionDetailsToLogs(testResultContext, Logs);
+
             _driver.Cleanup(testResultContext);
         }
 

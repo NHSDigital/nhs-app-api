@@ -30,6 +30,8 @@ namespace NHSOnline.IntegrationTests.UI.Reporting
 
         public TestDevice? Device { get; set; }
         public string? BrowserStackSessionId { get; set; }
+        public string? BrowserStackSessionUrl { get; set; }
+        public string? BrowserStackVideoUrl { get; set; }
 
         public bool? ShouldRetry { get; set; }
         public string? RetryCategory { get; set; }

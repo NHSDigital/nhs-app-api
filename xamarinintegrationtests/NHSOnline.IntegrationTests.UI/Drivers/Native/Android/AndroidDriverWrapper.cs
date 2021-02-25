@@ -98,6 +98,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             context.UpdateBrowserStackStatusToPassed(_driver, _browserStackConfig);
         }
 
+        void IDriverWrapper.AddBrowserStackSessionDetailsToLogs(
+            IDriverCleanupContext context, TestLogs testLogs)
+        {
+            context.AddBrowserStackSessionDetailsToLogs(_driver, _browserStackConfig, testLogs);
+        }
+
         public void Dispose() => _driver.Dispose();
     }
 }

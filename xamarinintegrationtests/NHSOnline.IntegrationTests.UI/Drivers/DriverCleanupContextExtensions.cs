@@ -60,7 +60,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             context.TryCleanUp("Update BrowserStack status", () =>
             {
-                var browserStackClient = new BrowerStackApiClient(browserStackConfig);
+                var browserStackClient = new BrowserStackApiClient(browserStackConfig);
                 browserStackClient.UpdateStatus(driver.SessionId, "Failed", "Integration Test Failed");
             });
         }
@@ -72,8 +72,26 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         {
             context.TryCleanUp("Update BrowserStack status", () =>
             {
-                var browserStackClient = new BrowerStackApiClient(browserStackConfig);
+                var browserStackClient = new BrowserStackApiClient(browserStackConfig);
                 browserStackClient.UpdateStatus(driver.SessionId, "Passed", "Integration Test Passed");
+            });
+        }
+
+        internal static void AddBrowserStackSessionDetailsToLogs(
+            this IDriverCleanupContext context,
+            IHasSessionId driver,
+            BrowserStackConfig browserStackConfig,
+            TestLogs testLogs)
+        {
+            context.TryCleanUp("Add BrowserStack session details to logs", () =>
+            {
+                var browserStackClient = new BrowserStackApiClient(browserStackConfig);
+                var sessionDetails = browserStackClient.GetSessionDetails(driver.SessionId);
+
+                if (sessionDetails != null)
+                {
+                    testLogs.BrowserStackSessionDetails(sessionDetails.BrowserUrl, sessionDetails.VideoUrl);
+                }
             });
         }
     }

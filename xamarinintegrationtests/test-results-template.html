@@ -32,7 +32,8 @@
         "methodName": "APatientNavigatingBackFromTheNhsLoginJourneyIsShownTheLoggedOutHomeScreenAndroid",
         "displayName": "A Patient Navigating Back From The Nhs Login Journey Is Shown The Logged Out Home Screen Android",
         "device": (i % 2 === 0) ? {"name":"Google Pixel 2","operatingSystemVersion":"8.0"} : {"name":"iPhone 8","operatingSystemVersion":"13.0"},
-        "browserStackSessionId": null, // Don't fill this in as we don't want to request random videos from BrowserStack
+        "browserStackSessionId": null, // Don't fill this in as we don't want to request random things from BrowserStack
+        "browserStackSessionUrl": null, // Don't fill this in as we don't want to request random things from BrowserStack
         "shouldRetry": false,
         "outcome": "Passed",
         "businessRules": Array.from({length: i % 3}, (_, j) => ({
@@ -93,8 +94,6 @@
     'use strict';
     
     import { html, render, Component } from 'https://unpkg.com/htm/preact/index.mjs?module'
-
-    
     
     const getTestBusinessRules = (testResult) => testResult.businessRules.length == 0 ? [{ id: '', title: 'No Business Rule Specified'}] : testResult.businessRules;
     
@@ -240,7 +239,7 @@
                     `)}
                 </div>
             </div>
-            <a href="https://app-automate.browserstack.com/dashboard/v2/search?query=${test.browserStackSessionId}&type=sessions"
+            <a href="${BrowserStackUrl(test)}"
                target="_blank"
                class="list-group-item">
                 <h4 class="list-group-item-heading">BrowserStack Session
@@ -249,6 +248,14 @@
             </a>
         </div>
     `;
+    
+    const BrowserStackUrl = (test) => {
+        if (test.browserStackSessionUrl) {
+            return test.browserStackSessionUrl;
+        } else {
+            return `https://app-automate.browserstack.com/dashboard/v2/search?query=${test.browserStackSessionId}&type=session`
+        }
+    }
     
     class Page extends Component {
         constructor() {

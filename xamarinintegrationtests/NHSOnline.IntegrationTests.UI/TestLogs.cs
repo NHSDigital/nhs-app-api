@@ -26,6 +26,12 @@ namespace NHSOnline.IntegrationTests.UI
 
         internal void BrowserStackSessionId(SessionId sessionId) => _testReport.BrowserStackSessionId = sessionId.ToString();
 
+        internal void BrowserStackSessionDetails(string? sessionUrl, string? videoUrl)
+        {
+            _testReport.BrowserStackSessionUrl = sessionUrl;
+            _testReport.BrowserStackVideoUrl = videoUrl;
+        }
+
         internal void Info(string format, params object[] args)
             => Info(string.Format(CultureInfo.InvariantCulture, format, args));
         internal void Info(string message) => Log(_info, message);
