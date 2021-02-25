@@ -7,6 +7,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 # shellcheck source=lib/set_env.sh
 source "buildscripts/lib/set_env.sh"
 
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
+
 MSBUILD_ARGS=()
 
 function configure_key_store () {

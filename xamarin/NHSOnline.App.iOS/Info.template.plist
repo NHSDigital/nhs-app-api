@@ -22,6 +22,8 @@
     <string>So you can take a photo of your I.D.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>So you can record your video</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need to know where you are so we can find services near you to help.</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>

@@ -55,13 +55,25 @@
     <Compile Include="DependencyServices\IosCookies.cs" />
     <Compile Include="DependencyServices\IosLifecycle.cs" />
     <Compile Include="DependencyServices\IosNativeLog.cs" />
+    <Compile Include="DependencyServices\IosPaycassoSimulator.cs" />
+    <Compile Include="DependencyServices\IosPaycasso.cs" />
+    <Compile Include="DependencyServices\IPaycasso.cs" />
+    <Compile Include="DependencyServices\PaycassoTransactionType.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
+    <Compile Include="DependencyServices\PaycassoCallbackResponse.cs" />
+    <Compile Include="DependencyServices\PaycassoCredentials.cs" />
+    <Compile Include="DependencyServices\PaycassoData.cs" />
+    <Compile Include="DependencyServices\PaycassoDocumentType.cs" />
+    <Compile Include="DependencyServices\PaycassoError.cs" />
+    <Compile Include="DependencyServices\PaycassoExternalReferences.cs" />
+    <Compile Include="DependencyServices\PaycassoTransactionDetails.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />
@@ -76,9 +88,6 @@
       <DependentUpon>Info.template.plist</DependentUpon>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="iProov.iOS" Version="8.1.1" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

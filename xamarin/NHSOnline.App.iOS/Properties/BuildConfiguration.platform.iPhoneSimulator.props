@@ -3,5 +3,6 @@
   <PropertyGroup>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
+    <DefineConstants>SIMULATOR;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 </Project>
