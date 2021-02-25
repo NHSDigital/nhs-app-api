@@ -2,6 +2,49 @@
 
 [[_TOC_]]
 
+## Mac Prerequisites
+
+* [XCode](https://developer.apple.com/xcode/)
+
+  Install from the link, an Apple Id is required to do so.
+
+* [XCode Command Line Tools](https://developer.apple.com/library/archive/technotes/tn2339/_index.html)
+
+  ```bash
+  xcode-select --install
+  ```
+
+* [HomeBrew](https://brew.sh)
+
+  ```bash
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  ```
+
+* [DevTools](http://phase2.github.io/devtools/)
+
+  ```bash
+  brew install devtools
+  ```
+
+* [Visual Studio Code](https://code.visualstudio.com)
+
+  ```bash
+  brew install visual-studio-code
+  ```
+
+* [Ruby](https://code.visualstudio.com)
+
+  ```bash
+  curl -L https://get.rvm.io | bash -s stable
+  rvm install ruby-2.7.2
+  ```
+
+* [Cocoapods](https://cocoapods.org)
+
+  ```bash
+  sudo gem install cocoapods
+  ```
+
 ## Configure Git
 
 ```bash
