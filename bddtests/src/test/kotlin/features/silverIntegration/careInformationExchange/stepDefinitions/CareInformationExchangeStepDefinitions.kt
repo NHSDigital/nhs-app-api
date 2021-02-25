@@ -128,7 +128,7 @@ class CareInformationExchangeStepDefinitions : HybridPageObject() {
     fun assertHospitalAndOtherMedicinesWarningMessageContent() {
         redirector.interruptionCard.assertContent(
                 "Hospital and other medicines\n" +
-                        "This service is provided by Care Information Exchange (Patients Know Best)",
+                        "This service is provided by Care Information Exchange powered by Patients Know Best",
                 "Your GP surgery or hospital has chosen this personal health record service provider.",
                 "Find out more about personal health record services")
     }

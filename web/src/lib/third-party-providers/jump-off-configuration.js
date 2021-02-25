@@ -94,6 +94,18 @@ const thirdPartyProvider = {
       provider: 'pkbCie',
       serviceType: 'testResults',
     },
+    medicinesPkbSecondaryCare: {
+      jumpOffId: 'medicinesPkbSecondaryCare',
+      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=pkbSecondaryCare',
+      provider: 'pkbSecondaryCare',
+      serviceType: 'medicines',
+    },
+    medicinesPkbMyCareView: {
+      jumpOffId: 'medicinesPkbMyCareView',
+      redirectPath: '/nhs-login/login?phrPath=/auth/manageMedications.action?tab=treatments&brand=myCareView',
+      provider: 'pkbMyCareView',
+      serviceType: 'medicines',
+    },
   },
   substraktPatientPack: {
     messages: {

@@ -1,0 +1,14 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A21410"
+journeys:
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines:
+      - pkbSecondaryCare
+    messages: []
+    secondaryAppointments: []
+    testResults: []

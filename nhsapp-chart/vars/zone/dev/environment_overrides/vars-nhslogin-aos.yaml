@@ -16,3 +16,9 @@ api:
     services__cid_uaf__javaScriptInteractionMode: NhsLogin
     services__cid_access__url: https://access.aos.signin.nhs.uk
     services__cid_access__javaScriptInteractionMode: NhsLogin
+    services__ers__url: https://pat.sa.refer.nhs.uk
+    services__substraktPatientPack__url: https://jump-point.aoc.substrakthealth.com
+    services__substraktPatientPack_admin__url: https://admin-request.aoc.substrakthealth.com
+    services__substraktPatientPack_auth__url: https://auth.aoc.substrakthealth.com
+    services__pkb__url: https://sandbox.patientsknowbest.com
+    services__pkb_alt__url: http://sandbox.patientsknowbest.com:443

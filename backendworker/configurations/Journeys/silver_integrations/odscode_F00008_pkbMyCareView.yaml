@@ -1,0 +1,20 @@
+#
+#
+#   Sandpit users in ODS code F00008 are used by MyCareView (Secondary Care branded)
+#   DO NOT enable any third-party silver integrations other than MyCareView Secondary Care for this ODS code.
+#
+#
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "F00008"
+journeys:
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines:
+      - pkbMyCareView
+    messages: []
+    secondaryAppointments: []
+    testResults: []

@@ -329,6 +329,42 @@ defaultUsers:
       dateOfBirth: "1925-11-02T00:00:00"
       sex: Male
 
+    9692236552:
+      userId: f82672af-afbc-4d3c-b6a2-0d7f3c076d7f
+      emailAddress: onboarding.nhsapp+pkb.user11@gmail.com
+      odsCode: F00007
+      givenName: Kevin
+      familyName: Wilcox
+      dateOfBirth: "1972-04-02T00:00:00"
+      sex: Male
+
+    9692236579:
+      userId: 618b7dd4-a267-42d5-96d4-9a31d31ccbf9
+      emailAddress: onboarding.nhsapp+pkb.user15@gmail.com
+      odsCode: F00007
+      givenName: Antony
+      familyName: KEENAN
+      dateOfBirth: "1968-09-27T00:00:00"
+      sex: Male
+
+    9692236595:
+      userId: 8693bb27-a931-4743-9373-c35bab9fd6f1
+      emailAddress: onboarding.nhsapp+pkb.user13@gmail.com
+      odsCode: F00008
+      givenName: Tom
+      familyName: Morgan
+      dateOfBirth: "1962-03-19T00:00:00"
+      sex: Male
+
+    9692236617:
+      userId: d383ad97-5970-45d8-af66-b2f4f971035e
+      emailAddress: onboarding.nhsapp+pkb.user14@gmail.com
+      odsCode: F00008
+      givenName: Luke
+      familyName: Keen
+      dateOfBirth: "1969-09-05T00:00:00"
+      sex: Male
+
     9692237664:
       userId: af975093-16c9-461f-8161-c5acbd037aeb
       emailAddress: nhsapp.aos+pkb.user1@gmail.com
@@ -382,6 +418,42 @@ defaultUsers:
       familyName: ELLIOT
       dateOfBirth: 2004-01-30T00:00:00
       sex: male
+
+    9692236560:
+      userId: c9fa287b-cec1-4914-a304-82cf706b5690
+      emailAddress: nhsapp.aos+pkb.user7@gmail.com
+      odsCode: F00007
+      givenName: Harry
+      familyName: Olley
+      dateOfBirth: "1978-09-09T00:00:00"
+      sex: Male
+
+    9692236587:
+      userId: 292f5cd9-3adf-428d-8faf-c86c52d77fbd
+      emailAddress: nhsapp.aos+pkb.user8@gmail.com
+      odsCode: F00007
+      givenName: Stan
+      familyName: Denman
+      dateOfBirth: "1960-10-03T00:00:00"
+      sex: Male
+
+    9692236609:
+      userId: 57497071-762a-4d76-a6e3-b1ce85524d1a
+      emailAddress: nhsapp.aos+pkb.user9@gmail.com
+      odsCode: F00008
+      givenName: Gerard
+      familyName: Ingham
+      dateOfBirth: "1977-09-03T00:00:00"
+      sex: Male
+
+    9692236625:
+      userId: b60a4fdd-5d2b-475b-ab31-19d83b814b6c
+      emailAddress: nhsapp.aos+pkb.user10@gmail.com
+      odsCode: F00008
+      givenName: Edwin
+      familyName: Barley
+      dateOfBirth: "1968-01-10T00:00:00"
+      sex: Male
 
     # This user is for testing NHS Login Settings integration / account deletion and therefore has no corresponding account created with PKB
     # It is used to test NHS login behaviour when redirected from a third party for SSO.
