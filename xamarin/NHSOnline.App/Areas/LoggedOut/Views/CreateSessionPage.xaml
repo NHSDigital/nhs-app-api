@@ -4,13 +4,16 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionPage">
-
-    <StackLayout>
-        <Label Text="Creating Session"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
-        <ActivityIndicator IsRunning="True" />
-    </StackLayout>
+             x:Class="NHSOnline.App.Areas.LoggedOut.Views.CreateSessionPage"
+             BackgroundColor="{StaticResource NhsUkBlue}">
+    <ContentView HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 WidthRequest="70"
+                 HeightRequest="70">
+        <ActivityIndicator IsRunning="True"
+                           Color="{StaticResource NhsUkWhite}"
+                           WidthRequest="70"
+                           HeightRequest="70"/>
+    </ContentView>
 
 </ContentPage>

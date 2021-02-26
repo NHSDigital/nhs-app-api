@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.LoggedOut.Views
 {
@@ -8,6 +9,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Views
         public CreateSessionPage()
         {
             InitializeComponent();
+            NavigationPage.SetHasNavigationBar(this, false);
         }
     }
 }

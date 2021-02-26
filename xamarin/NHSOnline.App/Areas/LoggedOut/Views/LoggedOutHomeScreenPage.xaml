@@ -36,8 +36,8 @@
             </Grid.RowDefinitions>
             
             <BoxView HorizontalOptions="FillAndExpand"
-                     BackgroundColor="{ StaticResource NhsUkYellow}"
-                     Grid.ColumnSpan="3" >
+                     BackgroundColor="{StaticResource NhsUkYellow}"
+                     Grid.ColumnSpan="3">
                 <BoxView.GestureRecognizers>
                     <TapGestureRecognizer 
                         Command="{Binding NhsUkCovidConditionsServiceCommand, Source={x:Reference Name=Root}}" />
@@ -91,7 +91,7 @@
                 </icons:IconHelp>
                 
                 <Label Text="Help"
-                       TextColor="{ StaticResource NhsUkWhite }"
+                       TextColor="{StaticResource NhsUkWhite}"
                        FontSize="Small"
                        HorizontalOptions="Center"
                        AutomationProperties.IsInAccessibleTree="false"/>
@@ -111,12 +111,14 @@
                    TextColor="{ StaticResource NhsUkWhite }" 
                    Padding="0,10,0,0"/>
 
-            <controls:NhsLoginButton Grid.Row="3" Grid.Column="1" Text="Continue with NHS login"
-                                      ButtonColour = "{StaticResource NhsUkWhite}"
-                                      PressedButtonColour="{StaticResource NhsUkSecondaryGrey4}"
-                                      TextColour = "{ StaticResource NhsUkBlue }"
-                                      Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
-                                      Padding="0,10,0,10"/>
+            <controls:NhsLoginButton Grid.Row="3"
+                                     Grid.Column="1"
+                                     Text="Continue with NHS login"
+                                     ButtonColour = "{StaticResource NhsUkWhite}"
+                                     PressedButtonColour="{StaticResource NhsUkSecondaryGrey4}"
+                                     TextColour = "{ StaticResource NhsUkBlue }"
+                                     Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
+                                     Padding="0,10,0,10"/>
             
             <Label Grid.Row="4" 
                    Grid.Column="1"
@@ -140,5 +142,4 @@
                    Margin="0,10,0,10" />
         </Grid>
     </controls:GradientBackground>
-
 </ContentPage>
