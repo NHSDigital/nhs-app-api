@@ -10,11 +10,10 @@
             </ResourceDictionary.MergedDictionaries>
             <x:Int16 x:Key="CornerRadius">4</x:Int16>
             <Style TargetType="Button">
-                <Setter Property="Padding" Value="16, 12" />
+                <Setter Property="Padding" Value="46, 12" />
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
-                <Setter Property="FontFamily" Value="Frutiger" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontFamily" Value="Frutiger-Bold" />
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
             <Style TargetType="BoxView" Class="BorderBackground">
                 <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />

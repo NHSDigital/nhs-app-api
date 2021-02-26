@@ -19,6 +19,7 @@
                                     LabelBackgroundColour="{StaticResource NhsUkRed}"
                                     LabelTextColour="{StaticResource NhsUkWhite}"
                                     PanelBackgroundColour="{StaticResource NhsUkWhite}"
-                                    PanelHighlightColour="{StaticResource NhsUkRed}" />
+                                    PanelHighlightColour="{StaticResource NhsUkRed}" 
+                                    Padding="10,0,0,0"/>
     </ContentView.Content>
 </ContentView>

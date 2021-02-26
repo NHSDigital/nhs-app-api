@@ -11,9 +11,11 @@
 
     <StackLayout>
 
-        <controls:Heading1 Text="Login failed" />
+        <controls:Heading1 Text="Login failed" 
+                           Padding="10,0,0,0" />
 
-        <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" LabelText="Error">
+        <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
+                                  LabelText="Error">
             <StackLayout BindingContext="{x:Reference Name=Root}">
                 <controls:Paragraph Text="We cannot log you in to the NHS App." />
                 <controls:Paragraph Text="Go back to the home screen and try logging in again." />

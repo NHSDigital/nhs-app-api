@@ -9,19 +9,19 @@ using NHSOnline.App.Services;
 
 namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
-    internal sealed class BeforeYouStartPresenter
+    internal sealed class GettingStartedPresenter
     {
-        private readonly IBeforeYouStartView _view;
-        private readonly ILogger<BeforeYouStartPresenter> _logger;
+        private readonly IGettingStartedView _view;
+        private readonly ILogger<GettingStartedPresenter> _logger;
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
 
-        public BeforeYouStartPresenter(
-            IBeforeYouStartView view,
-            ILogger<BeforeYouStartPresenter> logger,
+        public GettingStartedPresenter(
+            IGettingStartedView view,
+            ILogger<GettingStartedPresenter> logger,
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
@@ -38,8 +38,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             view.LoginRequested += ViewOnLoginRequested;
             view.NhsUkCovidServicePageRequested += LoadCovidUrl;
-            view.NhsUkConditionsServicePageRequested += LoadConditionsUrl;
-            view.NhsUkOneOneOneServicePageRequested += LoadOneOneOneUrl;
             view.BackRequested += BackRequested;
         }
 
@@ -47,7 +45,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Login Requested");
 
-            _userPreferencesService.ShowBeforeYouStart = false;
+            _userPreferencesService.ShowGettingStarted = false;
 
             var pkceCodes = _nhsLoginService.GeneratePkceCodes();
             var loginModel = new NhsLoginModel(pkceCodes);
@@ -60,18 +58,6 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Accessing covid url");
             await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidUrl)
-                .PreserveThreadContext();
-        }
-        private async void LoadConditionsUrl(object sender, EventArgs e)
-        {
-            _logger.LogInformation("Accessing conditions url");
-            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkConditionsUrl)
-                .PreserveThreadContext();
-        }
-        private async void LoadOneOneOneUrl(object sender, EventArgs e)
-        {
-            _logger.LogInformation("Accessing 111 url");
-            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 

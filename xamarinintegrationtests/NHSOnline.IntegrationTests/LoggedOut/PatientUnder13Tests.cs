@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidBeforeYouStartPage
+            AndroidGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 
@@ -46,7 +46,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            IOSBeforeYouStartPage
+            IOSGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 

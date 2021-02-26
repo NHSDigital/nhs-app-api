@@ -5,7 +5,7 @@ namespace NHSOnline.App.Services
 {
     internal sealed class UserPreferencesService: IUserPreferencesService
     {
-        public bool ShowBeforeYouStart
+        public bool ShowGettingStarted
         {
             get => GetPreference().ValueOr(true);
             set => GetPreference().Set(value);

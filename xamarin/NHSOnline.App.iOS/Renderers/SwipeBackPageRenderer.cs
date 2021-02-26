@@ -5,7 +5,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly:ExportRenderer (typeof(BeforeYouStartPage), typeof(SwipeBackPageRenderer))]
+[assembly:ExportRenderer (typeof(GettingStartedPage), typeof(SwipeBackPageRenderer))]
 [assembly:ExportRenderer (typeof(NhsLoginUpliftPage), typeof(SwipeBackPageRenderer))]
 namespace NHSOnline.App.iOS.Renderers
 {

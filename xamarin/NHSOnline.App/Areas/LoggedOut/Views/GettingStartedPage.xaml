@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:NhsAppCloseSlimHeaderPage xmlns="http://xamarin.com/schemas/2014/forms"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
+                             xmlns:pages="clr-namespace:NHSOnline.App.Navigation.Pages;assembly=NHSOnline.App"
+                             mc:Ignorable="d"
+                             x:Class="NHSOnline.App.Areas.LoggedOut.Views.GettingStartedPage"
+                             x:Name="GettingStarted">
+
+    <ScrollView BackgroundColor="{ StaticResource NhsUkPageBackgroundGrey }">
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            
+            <controls:Heading1 Grid.Column="1" 
+                               Grid.Row="0"
+                               Text="Getting started" />
+            
+            <controls:NhsYellowWarningCard Grid.Column="1" Grid.Row="1"
+                                           Text="This is not the NHS COVID-19 app">
+                <StackLayout>
+                    <controls:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
+                                          Margin="0,5,0,10" />
+                
+                    <controls:MediumLabel>
+                        <controls:MediumLabel.FormattedText>
+                            <FormattedString>
+                                <Span Text="Go to " />
+                                <Span Text="covid19.nhs.uk" 
+                                      TextDecorations="Underline"
+                                      TextColor="{ StaticResource NhsUkPrimaryLinkBlue }" />    
+                            </FormattedString>
+                        </controls:MediumLabel.FormattedText>
+                        <controls:MediumLabel.GestureRecognizers>
+                            <TapGestureRecognizer Command="{ Binding NhsUkCovidServiceCommand, Source={ x:Reference Name=GettingStarted }}" />
+                        </controls:MediumLabel.GestureRecognizers>
+                    </controls:MediumLabel>
+                </StackLayout>
+            </controls:NhsYellowWarningCard> 
+            
+            <StackLayout Grid.Column="1" 
+                         Grid.Row="2" >
+            
+                <controls:Paragraph Text="Use the NHS App to:" />
+                
+                <controls:ListItem>
+                    <controls:MediumLabel Text="order repeat prescriptions" />
+                </controls:ListItem>
+                
+                <controls:ListItem>
+                    <controls:MediumLabel Text="book and manage appointments" />
+                </controls:ListItem>
+                
+                <controls:ListItem>
+                    <controls:MediumLabel Text="get health information and advice" />
+                </controls:ListItem>
+                
+                <controls:ListItem>
+                    <controls:MediumLabel Text="manage your organ donation decision" />
+                </controls:ListItem>
+                
+                <controls:ListItem>
+                    <controls:MediumLabel Text="view your NHS number" />
+                </controls:ListItem>
+                
+                <controls:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England."
+                                    Margin="0,10,0,0" />
+                
+                <controls:Paragraph Text="To get started you'll need to create your NHS login." 
+                                    Margin="0,10,0,0" />
+            </StackLayout>
+            
+            <controls:Button Grid.Column="1" 
+                             Grid.Row="3"
+                             Text="Continue"
+                             ButtonColour = "{ StaticResource NhsUkGreen }"
+                             ColourGradient="{ StaticResource ButtonGreenLowerGradient }"
+                             TextColour = "{ StaticResource NhsUkWhite }"
+                             Margin="0,20,0,0"
+                             Command="{ Binding LoginCommand, Source={ x:Reference Name=GettingStarted }}"
+                             HorizontalOptions="Start" />
+        </Grid>
+    </ScrollView>
+</pages:NhsAppCloseSlimHeaderPage>

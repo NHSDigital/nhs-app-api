@@ -11,7 +11,7 @@
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Label">
-                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontSize" Value="Medium" />
                 <Setter Property="FontFamily" Value="Frutiger" />
                 <Setter Property="Margin" Value="0, 5, 0, 5" />
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />

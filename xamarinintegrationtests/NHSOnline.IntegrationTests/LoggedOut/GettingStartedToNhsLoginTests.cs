@@ -8,16 +8,16 @@ namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
     [BusinessRule("BR-LOG-02.2","Acknowledging the before you start screen displays NHS Login")]
-    public class BeforeYouStartToNhsLoginTests
+    public class GettingStartedToNhsLoginTests
     {
         [NhsAppAndroidTest]
-        public void APatientSeesTheNhsLoginJourneyAfterContinuingFromBeforeYouStartAndroid(IAndroidDriverWrapper driver)
+        public void APatientSeesTheNhsLoginJourneyAfterContinuingFromGettingStartedAndroid(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidBeforeYouStartPage
+            AndroidGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 
@@ -26,13 +26,13 @@ namespace NHSOnline.IntegrationTests.LoggedOut
         }
 
         [NhsAppIOSTest]
-        public void APatientSeesTheNhsLoginJourneyAfterContinuingFromBeforeYouStartIos(IIOSDriverWrapper driver)
+        public void APatientSeesTheNhsLoginJourneyAfterContinuingFromGettingStartedIos(IIOSDriverWrapper driver)
         {
             IOSLoggedOutHomePage
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            IOSBeforeYouStartPage
+            IOSGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 

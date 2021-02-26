@@ -1,6 +1,6 @@
 namespace NHSOnline.App.Areas.LoggedOut.Models
 {
-    internal sealed class BeforeYouStartModel
+    internal sealed class GettingStartedModel
     {
     }
 }

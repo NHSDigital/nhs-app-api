@@ -24,7 +24,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidBeforeYouStartPage
+            AndroidGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 
@@ -48,7 +48,7 @@ namespace NHSOnline.IntegrationTests.TermsAndConditions
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            IOSBeforeYouStartPage
+            IOSGettingStartedPage
                 .AssertOnPage(driver)
                 .Continue();
 

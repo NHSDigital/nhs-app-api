@@ -51,9 +51,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         {
             _logger.LogInformation("Login Requested");
 
-            if (_userPreferencesService.ShowBeforeYouStart)
+            if (_userPreferencesService.ShowGettingStarted)
             {
-                await ShowBeforeYouStartPage().PreserveThreadContext();
+                await ShowGettingStartedPage().PreserveThreadContext();
             }
             else
             {
@@ -67,11 +67,11 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _lifecycle.CloseApplication();
         }
 
-        private async Task ShowBeforeYouStartPage()
+        private async Task ShowGettingStartedPage()
         {
-            var beforeYouStart = new BeforeYouStartModel();
-            var beforeYouStartPage = _pageFactory.CreatePageFor(beforeYouStart);
-            await _view.Navigation.PushAsync(beforeYouStartPage).PreserveThreadContext();
+            var gettingStartedModel = new GettingStartedModel();
+            var gettingStartedPage = _pageFactory.CreatePageFor(gettingStartedModel);
+            await _view.Navigation.PushAsync(gettingStartedPage).PreserveThreadContext();
         }
 
         private async Task ShowNhsLoginPage()

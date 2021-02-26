@@ -81,6 +81,14 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="MediumLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="LargeLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="SafeAreaPaddingTop.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
@@ -179,6 +187,18 @@
     </Compile>
     <Compile Update="NhsLoginButton.xaml.cs">
       <DependentUpon>ButtonWithimage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MediumLabel.xaml.cs">
+      <DependentUpon>MediumLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LargeLabel.xaml.cs">
+      <DependentUpon>LargeLabel.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NhsYellowWarningCard.xaml.cs">
+      <DependentUpon>NhsYellowWarningCard.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

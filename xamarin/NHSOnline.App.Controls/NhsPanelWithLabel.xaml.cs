@@ -20,6 +20,10 @@ namespace NHSOnline.App.Controls
             nameof(LabelTextColour), typeof(Color), typeof(NhsPanelWithLabel),
             NhsUkColours.NhsUkWhite);
 
+        public static readonly BindableProperty FrameColourProperty = BindableProperty.Create(
+            nameof(FrameColour), typeof(Color), typeof(NhsPanelWithLabel),
+            Color.Transparent);
+
         public static readonly BindableProperty PanelBackgroundColourProperty =
             BindableProperty.Create(nameof(PanelBackgroundColour), typeof(Color), typeof(NhsPanelWithLabel),
                 NhsUkColours.NhsUkWhite);
@@ -56,6 +60,12 @@ namespace NHSOnline.App.Controls
         {
             get => (Color) GetValue(LabelTextColourProperty);
             set => SetValue(LabelTextColourProperty, value);
+        }
+
+        public Color FrameColour
+        {
+            get => (Color) GetValue(FrameColourProperty);
+            set => SetValue(FrameColourProperty, value);
         }
 
         public Color PanelBackgroundColour

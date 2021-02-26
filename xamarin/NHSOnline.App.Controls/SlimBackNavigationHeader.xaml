@@ -25,10 +25,20 @@
     </View.Resources>
 
     <StackLayout>
-        <icons:IconArrowLeft>
-            <icons:IconArrowLeft.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}"  />
-            </icons:IconArrowLeft.GestureRecognizers>
-        </icons:IconArrowLeft>
+        <icons:IconArrowLeft AutomationProperties.IsInAccessibleTree="True"
+                             AutomationProperties.HelpText="Back button"
+                             HeightRequest="30"
+                             WidthRequest="30" />
+        
+        <Label Text="Back"
+               FontFamily="Frutiger"
+               FontSize="Medium"
+               VerticalOptions="CenterAndExpand"
+               TextColor="{StaticResource NhsUkWhite}"
+               Margin="0,0,0,10" />
+        
+        <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}"  />
+        </StackLayout.GestureRecognizers>
     </StackLayout>
 </ContentView>

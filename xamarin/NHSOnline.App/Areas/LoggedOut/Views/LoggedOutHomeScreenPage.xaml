@@ -28,11 +28,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             
             <BoxView HorizontalOptions="FillAndExpand"
@@ -94,7 +94,7 @@
                        TextColor="{StaticResource NhsUkWhite}"
                        FontSize="Small"
                        HorizontalOptions="Center"
-                       AutomationProperties.IsInAccessibleTree="false"/>
+                       AutomationProperties.IsInAccessibleTree="false" />
             </StackLayout>
             
             <controls:NhsLogo Grid.Row="1" 
@@ -109,7 +109,7 @@
                    StyleClass="Heading2"
                    HorizontalOptions="Center"
                    TextColor="{ StaticResource NhsUkWhite }" 
-                   Padding="0,10,0,0"/>
+                   Padding="0,10,0,0" />
 
             <controls:NhsLoginButton Grid.Row="3"
                                      Grid.Column="1"
@@ -118,7 +118,7 @@
                                      PressedButtonColour="{StaticResource NhsUkSecondaryGrey4}"
                                      TextColour = "{ StaticResource NhsUkBlue }"
                                      Command="{Binding LoginCommand, Source={x:Reference Name=Root} }"
-                                     Padding="0,10,0,10"/>
+                                     Padding="0,10,0,10" />
             
             <Label Grid.Row="4" 
                    Grid.Column="1"

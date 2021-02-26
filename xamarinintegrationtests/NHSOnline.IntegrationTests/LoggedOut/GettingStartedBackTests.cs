@@ -7,17 +7,17 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-09.3", "Invoking native back on the before you start screen displays the logged out home screen")]
-    public class BeforeYouStartBackTests
+    [BusinessRule("BR-LOG-09.3", "Invoking native back on the getting started screen displays the logged out home screen")]
+    public class GettingStartedBackTests
     {
         [NhsAppAndroidTest]
-        public void APatientNavigatingBackFromBeforeYouStartIsShownTheLoggedOutHomePageAndroid(IAndroidDriverWrapper driver)
+        public void APatientNavigatingBackFromGettingStartedIsShownTheLoggedOutHomePageAndroid(IAndroidDriverWrapper driver)
         {
             AndroidLoggedOutHomePage
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            AndroidBeforeYouStartPage
+            AndroidGettingStartedPage
                 .AssertOnPage(driver);
 
             driver.PressBackButton();
@@ -33,7 +33,7 @@ namespace NHSOnline.IntegrationTests.LoggedOut
                 .AssertOnPage(driver)
                 .ContinueWithNhsLogin();
 
-            IOSBeforeYouStartPage
+            IOSGettingStartedPage
                 .AssertOnPage(driver);
 
             driver.SwipeBack();

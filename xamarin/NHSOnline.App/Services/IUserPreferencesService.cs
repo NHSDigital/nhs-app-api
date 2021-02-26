@@ -2,6 +2,6 @@
 {
     internal interface IUserPreferencesService
     {
-        bool ShowBeforeYouStart { get; set; }
+        bool ShowGettingStarted { get; set; }
     }
 }

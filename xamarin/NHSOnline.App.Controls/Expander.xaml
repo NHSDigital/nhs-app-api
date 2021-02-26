@@ -14,12 +14,12 @@
             <Style TargetType="Label" Class="ExpanderHeader">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryLinkBlue}" />
                 <Setter Property="TextDecorations" Value="Underline" />
-                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontSize" Value="Medium" />
                 <Setter Property="Padding" Value="0,10,0,0" />
             </Style>
             <Style TargetType="Label" Class="ExpanderBody">
                 <Setter Property="TextColor" Value="{StaticResource NhsUkPrimaryText}" />
-                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
             <Style TargetType="views:Expander">
                 <Setter Property="Margin" Value="0, 20, 0, 20" />

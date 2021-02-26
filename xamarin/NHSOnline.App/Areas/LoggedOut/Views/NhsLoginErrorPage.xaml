@@ -10,9 +10,11 @@
 
     <StackLayout BackgroundColor="{StaticResource NhsUkPageBackgroundGrey}">
         
-        <controls:Heading1 Text="Login failed" />
+        <controls:Heading1 Text="Login failed"
+                           Padding="10,0,0,0" />
         
-        <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" LabelText="Error">
+        <controls:NhsErrorCallout HorizontalOptions="CenterAndExpand" 
+                                  LabelText="Error">
             <StackLayout  BindingContext="{x:Reference Name=Root}">
                 <controls:Paragraph Text="We cannot get your details from your GP surgery." />
                 <controls:Paragraph Text="Go back to the home screen and try logging in again." />
