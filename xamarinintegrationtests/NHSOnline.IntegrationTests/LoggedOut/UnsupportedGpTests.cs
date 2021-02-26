@@ -8,7 +8,7 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.LoggedOut
 {
     [TestClass]
-    [BusinessRule("BR-LOG-08.9", "Log in for a user with a problem with their ODS, GPSS or NHS number displays a shutter screen")]
+    [BusinessRule("BR-LOG-08.3", "Log in for a user with a problem with their ODS, GPSS or NHS number displays a shutter screen")]
     public class UnsupportedGpTests
     {
         [NhsAppAndroidTest]
