@@ -30,7 +30,6 @@ NUKEEPER_EXCLUDES=('Microsoft.CodeAnalysis.CSharp.CodeStyle')
 NUKEEPER_ARGS+=(--change "$CHANGE")
 case "$CHANGE" in
   minor)
-    NUKEEPER_ARGS+=(--consolidate)
     NUKEEPER_ARGS+=(--age 3d)
     NUKEEPER_ARGS+=(--branchnametemplate 'feature/nhso-10482-update-{Count}-packages-{Hash}')
     ;;
