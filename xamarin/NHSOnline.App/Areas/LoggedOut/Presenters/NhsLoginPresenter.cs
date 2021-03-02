@@ -46,19 +46,20 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
             _loginState = nhsLoginService.BeginLogin(_model.PkceCodes);
             _view.LoadUrlAndNotifyOnRedirect(_loginState.AuthoriseUri, IsRedirect, OnRedirect);
-            _view.BackRequested += BackRequested;
         }
 
         private void AttachEventHandlers()
         {
             _view.Navigating = ViewOnNavigating;
             _view.NavigationFailed = ViewOnNavigationFailed;
+            _view.BackRequested += BackRequested;
         }
 
         private void DetachEventHandlers()
         {
             _view.Navigating = null;
             _view.NavigationFailed = null;
+            _view.BackRequested -= BackRequested;
         }
 
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)

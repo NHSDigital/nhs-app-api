@@ -114,8 +114,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         {
             _logger.LogInformation("Starting Uplift - {Url}", request.Url);
 
-            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation);
-            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url);
+            var model = new NhsLoginUpliftModel(request.Url);
 
             var page = _pageFactory.CreatePageFor(model);
             await _view.Navigation

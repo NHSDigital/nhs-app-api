@@ -64,6 +64,9 @@
     <Compile Update="Areas\LoggedOut\Views\LoggedOutHomeScreenPage.xaml.cs">
       <DependentUpon>LoggedOutHomeScreenPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\WebIntegration\Views\NhsLoginUpliftPage.xaml.cs">
+      <DependentUpon>NhsLoginUpliftPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="NhsApp.xaml.cs">
       <DependentUpon>NhsApp.xaml</DependentUpon>
     </Compile>

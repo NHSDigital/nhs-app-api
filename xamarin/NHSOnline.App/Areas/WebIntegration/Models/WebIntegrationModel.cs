@@ -6,10 +6,10 @@ namespace NHSOnline.App.Areas.WebIntegration.Models
     internal sealed class WebIntegrationModel
     {
         internal WebIntegrationModel(
-            INhsAppNavigationHandler nhsAppPopToRootNavigationHandler,
+            INhsAppNavigationHandler navigationHandler,
             Uri url)
         {
-            NavigationHandler = nhsAppPopToRootNavigationHandler;
+            NavigationHandler = navigationHandler;
             Url = url;
         }
 

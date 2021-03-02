@@ -11,6 +11,7 @@ namespace NHSOnline.App.Areas.WebIntegration
         internal static IServiceCollection AddWebIntegrationArea(this IServiceCollection services)
         {
             return services
+                .AddModelViewPresenter<NhsLoginUpliftModel, NhsLoginUpliftPage, NhsLoginUpliftPresenter>()
                 .AddModelViewPresenter<WebIntegrationModel, WebIntegrationPage, WebIntegrationPresenter>();
         }
     }
