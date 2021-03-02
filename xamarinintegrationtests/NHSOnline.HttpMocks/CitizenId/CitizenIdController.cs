@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,15 @@ namespace NHSOnline.HttpMocks.CitizenId
         {
             _logger = logger;
             _patients = patients;
+        }
+
+        [Host(AuthHostName)]
+        [HttpGet("authorize")]
+        public IActionResult UpliftScreen(
+            [RequiredFromQuery(Name = "asserted_login_identity")] string token)
+        {
+            (string AuthHostName, string Token, HttpRequest Request) model = (AuthHostName, token, Request);
+            return View(model);
         }
 
         [Host(AuthHostName)]

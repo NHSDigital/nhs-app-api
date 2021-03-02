@@ -52,7 +52,8 @@
                             VisionPatient _ => "Vision",
                             MicrotestPatient _ => "Microtest",
                             _ => "Other"
-                        });
+                        },
+                        p => p.Login);
         }
         @foreach (var grouping in new[] {"P5", "Emis", "Tpp", "Vision", "Microtest", "Other"})
         {

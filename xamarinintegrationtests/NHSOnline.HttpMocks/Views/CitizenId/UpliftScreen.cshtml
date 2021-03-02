@@ -1,0 +1,41 @@
+﻿@using NHSOnline.HttpMocks.Domain
+@inject IPatients Patients
+@model (string AuthHostName, string Token, Microsoft.AspNetCore.Http.HttpRequest Request)
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>NHS Login Stubbed - Uplift</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="display-4">NHS Login - Uplift</h1>
+        <ul>
+            <li><a href="javascript: window.history.back();">Back</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/Internal.html">Internal Page</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/Internal.html" target="_blank">Internal Page (New Window)</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/NotFound.html">Not Found</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/InternalServerError.html">Internal Server Error</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/FailFast.html">Boom</a></li>
+            <li><a href="http://@Model.AuthHostName:8080/citizenid/Page/Paycasso.html">Paycasso</a></li>
+            <li><a href="http://stubs.local.bitraft.io:8080/nhsuk/covid">Covid</a></li>
+        </ul>
+        <hr>
+        <h2 class="display-5">Query String</h2>
+        <ul class="list-group">
+            @foreach(var (key, value) in Model.Request.Query.SelectMany(q => q.Value.Select(v => (q.Key, v))))
+            {
+                <li class="list-group-item">@key: @value</li>
+            }
+        </ul>
+        <h2 class="display-5">Headers</h2>
+        <ul class="list-group">
+            @foreach(var (key, value) in Model.Request.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))))
+            {
+                <li class="list-group-item">@key: @value</li>
+            }
+        </ul>
+    </div>
+</body>
+</html>
