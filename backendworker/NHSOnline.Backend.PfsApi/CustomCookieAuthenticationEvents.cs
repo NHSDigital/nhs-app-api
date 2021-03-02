@@ -46,25 +46,23 @@ namespace NHSOnline.Backend.PfsApi
                 return;
             }
 
-            var (sessionExpiryToken, issuedAtTime) = GetSessionCookieAndIssuedAtTime(context);
+            var (sessionExpiryToken, expiryTime) = GetSessionCookieAndExpiryTime(context);
 
-            if (_currentDateTimeProvider.UtcNow < issuedAtTime.AddMinutes(_settings.DefaultSessionExpiryMinutes))
+            if (_currentDateTimeProvider.UtcNow < expiryTime)
             {
                 RetrieveSessionResult retrieveSessionResult;
                 var (sessionId, token) = GetSessionIdAndToken(context);
 
-                if (_currentDateTimeProvider.UtcNow < issuedAtTime.AddMinutes(_settings.DefaultSessionExpiryMinutes / 2d))
+                if (IsUserMoreThanHalfWayIntoSession(expiryTime))
                 {
-                    // Less than half the session time has elapsed since the JWT was created and the cosmos session updated
-                    // No need to recreate the JWT or update the Cosmos session object
-                    retrieveSessionResult = await _gpSessionManager.RetrieveSession(sessionId, token);
-                }
-                else
-                {
-                    // More than half the time has elapsed since the JWT was created and the cosmos session updated
                     // Recreate the JWT and update Cosmos session object
                     retrieveSessionResult = await _gpSessionManager.UpdateAndRetrieveSession(sessionId, token);
                     sessionExpiryToken = _sessionExpiryCookieCreator.CreateSessionExpiryToken();
+                }
+                else
+                {
+                    // No need to recreate the JWT or update the Cosmos session object
+                    retrieveSessionResult = await _gpSessionManager.RetrieveSession(sessionId, token);
                 }
 
                 if (retrieveSessionResult is RetrieveSessionResult.Success success && !(sessionExpiryToken is null))
@@ -81,7 +79,13 @@ namespace NHSOnline.Backend.PfsApi
             await RejectPrincipalAndSignOut(context);
         }
 
-        private DateTime GetIssuedAtTimeFromCookie(string sessionExpiryToken)
+        private bool IsUserMoreThanHalfWayIntoSession(DateTime expiryTime)
+        {
+            var sessionExpiryHalfWayPoint = expiryTime.AddMinutes(-_settings.DefaultSessionExpiryMinutes / 2d);
+            return _currentDateTimeProvider.UtcNow > sessionExpiryHalfWayPoint;
+        }
+
+        private DateTime GetExpiryTimeFromCookie(string sessionExpiryToken)
         {
             if (!string.IsNullOrEmpty(sessionExpiryToken))
             {
@@ -90,23 +94,23 @@ namespace NHSOnline.Backend.PfsApi
                 {
                     var tokenObject = JObject.Parse(unencryptedCookie);
 
-                    if (tokenObject.TryGetValue(JwtRegisteredClaimNames.Iat, StringComparison.Ordinal, out var iat))
+                    if (tokenObject.TryGetValue(JwtRegisteredClaimNames.Exp, StringComparison.Ordinal, out var exp))
                     {
-                        return iat.ToObject<DateTime>();
+                        return exp.ToObject<DateTime>();
                     }
                 }
             }
 
-            _logger.LogError("Could not extract Jwt claim 'Iat' from SessionExpiryToken");
+            _logger.LogError("Could not extract Jwt claim 'Exp' from SessionExpiryToken");
             return default;
         }
 
-        private (string sessionExpiryToken, DateTime issuedAtTime) GetSessionCookieAndIssuedAtTime(CookieValidatePrincipalContext context)
+        private (string sessionExpiryToken, DateTime expiryTime) GetSessionCookieAndExpiryTime(CookieValidatePrincipalContext context)
         {
             var sessionExpiryToken = context.Request.Cookies[Constants.CookieNames.SessionExpiry];
-            var issuedAtTime = GetIssuedAtTimeFromCookie(sessionExpiryToken);
+            var expiryTime = GetExpiryTimeFromCookie(sessionExpiryToken);
 
-            return (sessionExpiryToken, issuedAtTime);
+            return (sessionExpiryToken, expiryTime);
         }
 
         private (string sessionId, string token) GetSessionIdAndToken(CookieValidatePrincipalContext context)

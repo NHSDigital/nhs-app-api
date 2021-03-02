@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             var payload = new Dictionary<string, object>
             {
-                { JwtRegisteredClaimNames.Iat, _currentDateTimeProvider.UtcNow }
+                { JwtRegisteredClaimNames.Exp, _currentDateTimeProvider.UtcNow.AddMinutes(_settings.DefaultSessionExpiryMinutes) }
             };
 
             return _jwtTokenGenerator.GenerateJwtSecurityToken(rsaParameters, payload);

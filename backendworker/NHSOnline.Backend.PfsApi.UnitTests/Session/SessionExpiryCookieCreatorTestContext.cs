@@ -76,15 +76,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
                 .Setup(j => j.GenerateJwtSecurityToken(
                     Data.RsaParameters,
                     It.Is<Dictionary<string, object>>(d =>
-                        d.ContainsKey(JwtRegisteredClaimNames.Iat) &&
-                        (DateTime) d[JwtRegisteredClaimNames.Iat] == Data.UtcNow &&
+                        d.ContainsKey(JwtRegisteredClaimNames.Exp) &&
+                        (DateTime) d[JwtRegisteredClaimNames.Exp] == Data.UtcNow.AddMinutes(Data.ConfigurationSettings.DefaultSessionExpiryMinutes) &&
                         d.Keys.Count == 1)))
                 .Returns(token);
 
             Mocks.JwtTokenGenerator
                 .Setup(j => j.DecodeJwtSecurityToken(
                     Data.RsaParameters, token))
-                .Returns("{\"iat\":\"2021-02-12T18:23:25.5280658Z\"}");
+                .Returns("{\"exp\":\"2021-02-12T18:23:25.5280658Z\"}");
         }
 
         internal void ArrangeJwtTokenGeneratorDecodeReturnsNull(string token = JwtToken)

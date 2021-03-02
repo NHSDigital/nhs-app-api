@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Session
             var unencryptedToken = sut.DecodeSessionExpiryToken(actualToken);
 
             //Assert
-            unencryptedToken.Should().Contain(JwtRegisteredClaimNames.Iat);
+            unencryptedToken.Should().Contain(JwtRegisteredClaimNames.Exp);
         }
 
 
