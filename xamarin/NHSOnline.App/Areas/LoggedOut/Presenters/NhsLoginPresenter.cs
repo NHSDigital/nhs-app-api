@@ -19,7 +19,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly ILogger<NhsLoginPresenter> _logger;
         private readonly IPageFactory _pageFactory;
         private readonly INhsLoginConfiguration _nhsLoginConfiguration;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly LoginState _loginState;
 
         public NhsLoginPresenter(
@@ -29,7 +29,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ICookies cookies,
             IPageFactory pageFactory,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsLoginService nhsLoginService)
         {
             _model = model;
@@ -37,7 +37,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _logger = logger;
             _pageFactory = pageFactory;
             _nhsLoginConfiguration = nhsLoginConfiguration;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
 
             AttachEventHandlers();
 
@@ -64,9 +64,9 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
-            if (ShouldOpenInAppBrowserTab(url))
+            if (ShouldOpenInBrowserOverlay(url))
             {
-                await OpenInAppBrowserTab(webNavigatingEventArgs, url).PreserveThreadContext();
+                await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
             }
         }
 
@@ -120,7 +120,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             await _view.Navigation.ReplaceCurrentPage(nhsLoginErrorPage).PreserveThreadContext();
         }
 
-        private bool ShouldOpenInAppBrowserTab(Uri url)
+        private bool ShouldOpenInBrowserOverlay(Uri url)
         {
             if (IsNhsLoginHost(url))
             {
@@ -135,10 +135,10 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             return url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task OpenInAppBrowserTab(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
+        private async Task OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
         {
             webNavigatingEventArgs.Cancel = true;
-            await _appBrowserTab.OpenAppBrowserTab(url).PreserveThreadContext();
+            await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
         }
 
         private async void BackRequested(object sender, EventArgs e)

@@ -23,6 +23,7 @@ namespace NHSOnline.App.iOS.Renderers.WebViews
             _javascriptBridge = JavascriptBridge
                     .ForWebView(() => (NhsAppWebView)Element, "nativeApp")
                     .AddFunction("openWebIntegration", webView => webView.OpenWebIntegrationCommand)
+                    .AddFunction("startNhsLoginUplift", webView => webView.StartNhsLoginUpliftCommand)
                     .AddFunction("getNotificationsStatus", webView => webView.GetNotificationsStatusCommand)
                     .Apply(config.UserContentController);
         }

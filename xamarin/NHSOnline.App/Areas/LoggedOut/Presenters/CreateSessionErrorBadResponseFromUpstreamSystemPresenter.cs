@@ -9,18 +9,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorBadResponseFromUpstreamSystemView _view;
         private readonly CreateSessionErrorBadResponseFromUpstreamSystemModel _model;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorBadResponseFromUpstreamSystemPresenter(
             ICreateSessionErrorBadResponseFromUpstreamSystemView view,
             CreateSessionErrorBadResponseFromUpstreamSystemModel model,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
@@ -32,16 +32,16 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void ViewOnOneOneOneRequested(object sender, EventArgs e)
         {
-            await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.OneOneOneUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 
         private async void ViewOnContactUsRequested(object sender, EventArgs e)
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _appBrowserTab
-                .OpenAppBrowserTab(contactUsUri)
+            await _browserOverlay
+                .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }
 

@@ -16,7 +16,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private readonly IPageFactory _pageFactory;
         private readonly IUserPreferencesService _userPreferencesService;
         private readonly INhsLoginService _nhsLoginService;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
 
         public BeforeYouStartPresenter(
@@ -25,7 +25,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             IPageFactory pageFactory,
             IUserPreferencesService userPreferencesService,
             INhsLoginService nhsLoginService,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration)
         {
             _view = view;
@@ -33,7 +33,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _userPreferencesService = userPreferencesService;
             _nhsLoginService = nhsLoginService;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
             view.LoginRequested += ViewOnLoginRequested;
@@ -59,19 +59,19 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async void LoadCovidUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing covid url");
-            await _appBrowserTab.OpenAppBrowserTab(_nhsExternalServicesConfiguration.NhsUkCovidUrl)
+            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidUrl)
                 .PreserveThreadContext();
         }
         private async void LoadConditionsUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing conditions url");
-            await _appBrowserTab.OpenAppBrowserTab(_nhsExternalServicesConfiguration.NhsUkConditionsUrl)
+            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkConditionsUrl)
                 .PreserveThreadContext();
         }
         private async void LoadOneOneOneUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing 111 url");
-            await _appBrowserTab.OpenAppBrowserTab(_nhsExternalServicesConfiguration.OneOneOneUrl)
+            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 

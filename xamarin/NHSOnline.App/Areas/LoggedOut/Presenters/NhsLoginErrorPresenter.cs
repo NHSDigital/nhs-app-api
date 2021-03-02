@@ -9,18 +9,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly INhsLoginErrorView _view;
         private readonly NhsLoginErrorModel _model;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public NhsLoginErrorPresenter(
             INhsLoginErrorView view,
             NhsLoginErrorModel model,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.BackHomeRequested += ViewOnBackHomeRequested;
@@ -38,8 +38,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async void ViewOnContactUsRequested(object sender, EventArgs e)
         {
             var contactUsUri = _externalServicesConfiguration.NhsUkContactUsUrlWithErrorCode(_model.ServiceDeskReference);
-            await _appBrowserTab
-                .OpenAppBrowserTab(contactUsUri)
+            await _browserOverlay
+                .OpenBrowserOverlay(contactUsUri)
                 .PreserveThreadContext();
         }
     }

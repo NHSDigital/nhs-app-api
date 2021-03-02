@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace NHSOnline.App.Services
 {
-    internal interface IAppBrowserTab
+    internal interface IBrowserOverlay
     {
-        public Task OpenAppBrowserTab(Uri uri);
+        public Task OpenBrowserOverlay(Uri uri);
     }
 }

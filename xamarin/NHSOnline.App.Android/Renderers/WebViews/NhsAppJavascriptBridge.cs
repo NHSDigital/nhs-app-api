@@ -30,6 +30,17 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         }
 
         [JavascriptInterface]
+        [Export("startNhsLoginUplift")]
+        public void StartNhsLoginUplift(string argumentJson)
+        {
+            NhsAppResilience.ExecuteOnMainThread(() =>
+            {
+                var argument = JsonConvert.DeserializeObject<StartNhsLoginUpliftRequest>(argumentJson);
+                _nhsAppWebView.StartNhsLoginUpliftCommand.Execute(argument);
+            });
+        }
+
+        [JavascriptInterface]
         [Export("getNotificationsStatus")]
         public void GetNotificationsStatus()
         {

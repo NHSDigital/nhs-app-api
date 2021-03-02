@@ -26,7 +26,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
         private readonly INhsAppWebConfiguration _config;
         private readonly ILogger _logger;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly IPageFactory _pageFactory;
         private readonly INhsAppNavigationHandler _navigationHandler;
 
@@ -36,7 +36,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             INhsAppWebConfiguration config,
             ILogger<NhsAppWebPresenter> logger,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             IPageFactory pageFactory)
         {
             _view = view;
@@ -44,7 +44,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _config = config;
             _logger = logger;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _pageFactory = pageFactory;
             _navigationHandler = new NhsAppNavigationHandler(view);
 
@@ -53,6 +53,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
             _view.Navigated = ViewOnNavigated;
             _view.HelpRequested = HelpRequested;
             _view.OpenWebIntegrationRequested = OpenWebIntegrationRequested;
+            _view.StartNhsLoginUpliftRequested = StartNhsLoginUpliftRequested;
             _view.ResetAndShowErrorRequested = ResetAndShowErrorRequested;
             _view.GetNotificationsStatusRequested = GetNotificationsStatusRequested;
 
@@ -79,8 +80,8 @@ namespace NHSOnline.App.Areas.Home.Presenters
             if (! IsNhsAppWeb(uri))
             {
                 args.Cancel = true;
-                await _appBrowserTab
-                    .OpenAppBrowserTab(uri)
+                await _browserOverlay
+                    .OpenBrowserOverlay(uri)
                     .PreserveThreadContext();
             }
         }
@@ -109,6 +110,19 @@ namespace NHSOnline.App.Areas.Home.Presenters
                 .PreserveThreadContext();
         }
 
+        private async Task StartNhsLoginUpliftRequested(StartNhsLoginUpliftRequest request)
+        {
+            _logger.LogInformation("Starting Uplift - {Url}", request.Url);
+
+            var popToRootNavigationHandler = new NhsAppPopToRootNavigationHandler(_navigationHandler, _view.Navigation);
+            var model = new WebIntegrationModel(popToRootNavigationHandler, request.Url);
+
+            var page = _pageFactory.CreatePageFor(model);
+            await _view.Navigation
+                .PushAsync(page)
+                .PreserveThreadContext();
+        }
+
         private async Task ResetAndShowErrorRequested()
         {
             await DisplayNhsAppWeb().PreserveThreadContext();
@@ -123,7 +137,7 @@ namespace NHSOnline.App.Areas.Home.Presenters
 
         private async Task HelpRequested()
         {
-            await _appBrowserTab.OpenAppBrowserTab(
+            await _browserOverlay.OpenBrowserOverlay(
                 _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
         }

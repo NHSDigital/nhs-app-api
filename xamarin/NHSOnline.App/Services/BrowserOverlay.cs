@@ -6,9 +6,9 @@ using Xamarin.Essentials;
 
 namespace NHSOnline.App.Services
 {
-    internal class AppBrowserTab : IAppBrowserTab
+    internal class BrowserOverlay : IBrowserOverlay
     {
-        public async Task OpenAppBrowserTab(Uri uri)
+        public async Task OpenBrowserOverlay(Uri uri)
         {
             await Browser.OpenAsync(uri, new BrowserLaunchOptions
             {

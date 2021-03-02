@@ -9,18 +9,18 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     {
         private readonly ICreateSessionErrorFallbackView _view;
         private readonly CreateSessionErrorFallbackModel _model;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorFallbackPresenter(
             ICreateSessionErrorFallbackView view,
             CreateSessionErrorFallbackModel model,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
             _model = model;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.OneOneOneRequested += ViewOnOneOneOneRequested;
@@ -30,15 +30,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void ViewOnOneOneOneRequested(object sender, EventArgs e)
         {
-            await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.OneOneOneUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
 
         private async void ViewOnContactUsRequested(object sender, EventArgs e)
         {
-            await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.NhsUkContactUsUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.NhsUkContactUsUrl)
                 .PreserveThreadContext();
         }
 

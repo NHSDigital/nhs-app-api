@@ -8,17 +8,17 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
     internal sealed class CreateSessionErrorFailedAgeRequirementPresenter
     {
         private readonly ICreateSessionErrorFailedAgeRequirementView _view;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly INhsExternalServicesConfiguration _externalServicesConfiguration;
 
         public CreateSessionErrorFailedAgeRequirementPresenter(
             ICreateSessionErrorFailedAgeRequirementView view,
             CreateSessionErrorFailedAgeRequirementModel model,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             INhsExternalServicesConfiguration externalServicesConfiguration)
         {
             _view = view;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _externalServicesConfiguration = externalServicesConfiguration;
 
             _view.ServiceDeskReference = model.ServiceDeskReference;
@@ -28,8 +28,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 
         private async void ViewOnOneOneOneRequested(object sender, EventArgs e)
         {
-            await _appBrowserTab
-                .OpenAppBrowserTab(_externalServicesConfiguration.OneOneOneUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_externalServicesConfiguration.OneOneOneUrl)
                 .PreserveThreadContext();
         }
     }

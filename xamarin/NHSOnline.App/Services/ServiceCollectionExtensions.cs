@@ -7,7 +7,7 @@ namespace NHSOnline.App.Services
         internal static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
-                .AddTransient<IAppBrowserTab, AppBrowserTab>()
+                .AddTransient<IBrowserOverlay, BrowserOverlay>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>();
         }
     }

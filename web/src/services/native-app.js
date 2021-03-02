@@ -37,6 +37,17 @@ export default {
     app.openWebIntegration(request);
   },
 
+  supportsNativeNhsLoginUplift() {
+    const app = window.nativeApp;
+    return app && app.startNhsLoginUplift;
+  },
+
+  startNhsLoginUplift(url) {
+    const app = window.nativeApp;
+    const request = JSON.stringify({ url });
+    app.startNhsLoginUplift(request);
+  },
+
   clearMenuBarItem() {
     const app = window.nativeApp;
     if (app && app.clearMenuBarItem) {

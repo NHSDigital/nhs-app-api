@@ -24,6 +24,7 @@ namespace NHSOnline.App.Areas.Home.Views
         Func<Task>? INhsAppWebView.Appearing { get; set; }
 
         public Func<OpenWebIntegrationRequest, Task>? OpenWebIntegrationRequested { get; set; }
+        public Func<StartNhsLoginUpliftRequest, Task>? StartNhsLoginUpliftRequested { get; set; }
 
         public Func<Task>? GetNotificationsStatusRequested { get; set; }
 
@@ -31,6 +32,8 @@ namespace NHSOnline.App.Areas.Home.Views
 
         public AsyncCommand<OpenWebIntegrationRequest> OpenWebIntegrationCommand
             => new AsyncCommand<OpenWebIntegrationRequest>(() => OpenWebIntegrationRequested);
+        public AsyncCommand<StartNhsLoginUpliftRequest> StartNhsLoginUpliftCommand
+            => new AsyncCommand<StartNhsLoginUpliftRequest>(() => StartNhsLoginUpliftRequested);
 
         public AsyncCommand GetNotificationsStatusCommand
             => new AsyncCommand(() => GetNotificationsStatusRequested);

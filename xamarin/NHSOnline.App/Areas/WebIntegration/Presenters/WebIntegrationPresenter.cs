@@ -12,25 +12,26 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
     {
         private readonly IWebIntegrationView _view;
         private readonly WebIntegrationModel _model;
-        private readonly INhsLoginConfiguration _nhsLoginConfiguration;
         private readonly INhsExternalServicesConfiguration _nhsExternalServicesConfiguration;
-        private readonly IAppBrowserTab _appBrowserTab;
+        private readonly IBrowserOverlay _browserOverlay;
         private readonly ILogger _logger;
+        private readonly WebIntegrationUriDestination _uriDestination;
 
         public WebIntegrationPresenter(
             IWebIntegrationView view,
             WebIntegrationModel model,
             INhsLoginConfiguration nhsLoginConfiguration,
             INhsExternalServicesConfiguration nhsExternalServicesConfiguration,
-            IAppBrowserTab appBrowserTab,
+            IBrowserOverlay browserOverlay,
             ILogger<WebIntegrationPresenter> logger)
         {
             _view = view;
             _model = model;
-            _nhsLoginConfiguration = nhsLoginConfiguration;
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
-            _appBrowserTab = appBrowserTab;
+            _browserOverlay = browserOverlay;
             _logger = logger;
+
+            _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
 
             _view.Appearing = ViewOnAppearing;
             _view.HelpRequested = HelpRequested;
@@ -64,49 +65,24 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
 
         private async Task HelpRequested()
         {
-            await _appBrowserTab.OpenAppBrowserTab(
-                _nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
+            await _browserOverlay
+                .OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkBaseHelpUrl)
                 .PreserveThreadContext();
         }
 
         private async Task ViewOnNavigating(WebNavigatingEventArgs webNavigatingEventArgs)
         {
             var url = new Uri(webNavigatingEventArgs.Url);
-            if (ShouldOpenInAppBrowserTab(url))
+            if (_uriDestination.ShouldOpenInBrowserOverlay(url))
             {
-                await OpenInAppBrowserTab(webNavigatingEventArgs, url).PreserveThreadContext();
+                await OpenInBrowserOverlay(webNavigatingEventArgs, url).PreserveThreadContext();
             }
         }
 
-        private bool ShouldOpenInAppBrowserTab(Uri url)
-        {
-            if (IsSameHost(url))
-            {
-                return false;
-            }
-
-            if (IsNhsLoginHost(url))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool IsSameHost(Uri url)
-        {
-            return url.Host == _model.Url.Host;
-        }
-
-        private bool IsNhsLoginHost(Uri url)
-        {
-            return url.Host.EndsWith(_nhsLoginConfiguration.BaseHost, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private async Task OpenInAppBrowserTab(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
+        private async Task OpenInBrowserOverlay(WebNavigatingEventArgs webNavigatingEventArgs, Uri url)
         {
             webNavigatingEventArgs.Cancel = true;
-            await _appBrowserTab.OpenAppBrowserTab(url).PreserveThreadContext();
+            await _browserOverlay.OpenBrowserOverlay(url).PreserveThreadContext();
         }
     }
 }

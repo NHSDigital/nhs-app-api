@@ -12,6 +12,7 @@
 <script>
 import AuthorisationService from '@/services/authorisation-service';
 import GenericButton from '@/components/widgets/GenericButton';
+import NativeApp from '@/services/native-app';
 
 export default {
   name: 'ProofLevelUpliftBanner',
@@ -43,8 +44,13 @@ export default {
           },
         })
         .then(({ token }) => {
-          this.$store.dispatch('http/isLoadingExternalSite');
-          window.location = `${this.upliftUrl}&asserted_login_identity=${token}`;
+          const fullUpliftUrl = `${this.upliftUrl}&asserted_login_identity=${token}`;
+          if (NativeApp.supportsNativeNhsLoginUplift()) {
+            NativeApp.startNhsLoginUplift(fullUpliftUrl);
+          } else {
+            this.$store.dispatch('http/isLoadingExternalSite');
+            window.location = fullUpliftUrl;
+          }
         });
     },
   },
