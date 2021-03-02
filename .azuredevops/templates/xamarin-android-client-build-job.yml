@@ -18,6 +18,7 @@ parameters:
 jobs:
   - job:
     displayName: Build Xamarin Android - ${{ parameters.configuration }}
+    dependsOn:
     pool:
       vmImage: 'windows-latest'
 

@@ -65,6 +65,15 @@ parameters:
       - Scratch20
       - Scratch21
 
+  - name: xamarinTarget
+    displayName: Xamarin native app target
+    type: string
+    default: None
+    values:
+      - None
+      - Preview
+      - Staging
+
   - name: xamarinDistributeApps
     displayName: Distribute Xamarin Apps
     type: boolean
@@ -131,6 +140,7 @@ variables:
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
+  native.xamarin.target: ${{ parameters.xamarinTarget }}
 
   # Build.Reason is blank when specifying parameters but Manual when running the pipeline
   ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
@@ -179,43 +189,6 @@ stages:
     dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-web-job.yml
-
-  - stage: xamarin_android
-    displayName: Xamarin Android Client
-    dependsOn:
-      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        - pr_changes
-    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
-    jobs:
-      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
-
-      - ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-        - template: .azuredevops/templates/xamarin-android-client-build-job.yml
-          parameters:
-            configuration: 'Staging - Release'
-            apkFilename: 'com.nhs.online.nhsonline.staging.apk'
-            keyStoreFile: AndroidSigningKeyStore
-            apksignerKeystorePassword: '$(android.key.store.password)'
-            keystoreAlias: 'playconsoleuploadkey'
-
-  - stage: xamarin_ios
-    displayName: Xamarin iOS Client
-    dependsOn:
-      - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        - pr_changes
-    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-      condition: and(succeeded(), or(eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.pipeline'], 'True')))
-    jobs:
-      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
-
-      - ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-        - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
-          parameters:
-            configuration: 'Staging - Release'
-            certSecureFile: iOSProductionCertificate.p12
-            certPwd: '$(ios.production.certificate.password)'
-            provProfileSecureFile: iOSDemo.mobileprovision
 
   - stage: android
     displayName: Android Client
@@ -281,21 +254,6 @@ stages:
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
 
-  - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
-    - stage: xamarin_integration_tests
-      displayName: Xamarin Integration Tests
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
-      dependsOn:
-        - web
-        - backend
-        - xamarin_android
-        - xamarin_ios
-        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          - pr_changes
-      jobs:
-        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
-
   - ${{ if or(eq(variables['int.tests.run.native.android'], 'true'), eq(variables['int.tests.run.native.android.long-running'], 'true')) }}:
     - stage: android_integration_tests
       displayName: Android Integration Tests
@@ -331,6 +289,67 @@ stages:
             parameters:
               job.name: Long Running
               tranche.tag: long-running
+
+  - ${{ if eq(variables['native.xamarin.target'], 'Preview') }}:
+    - stage: xamarin_preview
+      displayName: Build Xamarin Preview Apps
+      dependsOn:
+      jobs:
+        - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+          parameters:
+            configuration: 'Preview - Release'
+            apkFileName: 'com.nhs.online.nhsonline.preview.apk'
+            keyStoreFile: AndroidSigningKeyStore
+            apksignerKeystorePassword: '$(android.key.store.password)'
+            keystoreAlias: 'playconsoleuploadkey'
+        - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+          parameters:
+            configuration: 'Preview - Release'
+            provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
+
+  - ${{ if or(eq(variables['native.xamarin.target'], 'Staging'), eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')) }}:
+    - stage: xamarin_staging
+      displayName: Build Xamarin Staging Apps
+      dependsOn:
+      jobs:
+      - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        parameters:
+          configuration: 'Staging - Release'
+          apkFilename: 'com.nhs.online.nhsonline.staging.apk'
+          keyStoreFile: AndroidSigningKeyStore
+          apksignerKeystorePassword: '$(android.key.store.password)'
+          keystoreAlias: 'playconsoleuploadkey'
+      - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+        parameters:
+          configuration: 'Staging - Release'
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
+          provProfileSecureFile: iOSDemo.mobileprovision
+
+  - ${{ if or(eq(variables['int.tests.run.native.xamarin'], 'true'), eq(variables['Build.Reason'], 'PullRequest')) }}:
+    - stage: xamarin_browserstack
+      displayName: Build Xamarin Browserstack Apps
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+      dependsOn:
+        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+          - pr_changes
+      jobs:
+        - template: .azuredevops/templates/xamarin-android-client-build-job.yml
+        - template: .azuredevops/templates/xamarin-ios-client-build-job.yml
+
+    - stage: xamarin_integration_tests
+      displayName: Xamarin Integration Tests
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        condition: and(succeeded(), eq(dependencies.pr_changes.outputs['pr_changes.pr_changes.xamarin'], 'True'))
+      dependsOn:
+        - web
+        - backend
+        - xamarin_browserstack
+        - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+          - pr_changes
+      jobs:
+        - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
   - ${{ if eq(variables['native.xamarin.distribute'], 'true') }}:
     - stage: xamarin_distribute_apps

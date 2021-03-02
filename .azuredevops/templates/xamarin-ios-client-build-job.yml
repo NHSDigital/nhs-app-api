@@ -15,6 +15,7 @@ parameters:
 jobs:
   - job:
     displayName: Build Xamarin iOS - ${{ parameters.configuration }}
+    dependsOn:
     pool:
       vmImage: 'macos-latest'
 
