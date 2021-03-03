@@ -84,13 +84,13 @@ qualtricsMailingListId: "CG_3nxFnDUpfzZsDpI"
 web:
   publicURL: www.nhsapp.service.nhs.uk
   hyphenatedHostname: false
-  minAvailable: 6
-  minReplicas: 8
-  maxReplicas: 32
-  memoryRequest: "256Mi"
-  memoryLimit: "512Mi"
-  cpuRequest: "1"
-  cpuLimit: "1.25"
+  minAvailable: 3
+  minReplicas: 4
+  maxReplicas: 30
+  memoryRequest: "20Mi"
+  memoryLimit: "40Mi"
+  cpuRequest: "100m"
+  cpuLimit: "200m"
   analyticsEnvironment: "production"
   analyticsURL: "//assets.adobedtm.com/launch-EN1b745c3f3db648ea9f254bf5795fa1fa.min.js"
   dataPreferencesUrl: https://app.your-data-matters.service.nhs.uk/createsession
@@ -101,14 +101,13 @@ web:
 
 api:
   publicURL: api.nhsapp.service.nhs.uk
-  hyphenatedHostname: false
   minAvailable: 2
-  minReplicas: 3
+  minReplicas: 4
   maxReplicas: 100
   memoryRequest: "512Mi"
   memoryLimit: "512Mi"
   cpuRequest: "200m"
-  cpuLimit: "4"
+  cpuLimit: "400m"
   imagePullPolicy: IfNotPresent
   knownServicesOverrides:
     services__ndop__url: https://app.your-data-matters.service.nhs.uk
@@ -126,23 +125,23 @@ api:
     services__engage__url: https://nhs.engage.gp
 
 cid:
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 4
+  minAvailable: 2
+  minReplicas: 4
+  maxReplicas: 30
   memoryRequest: "256Mi"
   memoryLimit: "512Mi"
   cpuRequest: "100m"
-  cpuLimit: "4"
+  cpuLimit: "200m"
   imagePullPolicy: IfNotPresent
 
 sjr:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 4
+  maxReplicas: 30
   memoryRequest: "150Mi"
   memoryLimit: "256Mi"
   cpuRequest: "100m"
-  cpuLimit: "700m"
+  cpuLimit: "200m"
   imagePullPolicy: IfNotPresent
 
 sjrconfig:
@@ -153,7 +152,7 @@ sjrconfig:
 iproxy:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 30
   memoryRequest: "20Mi"
   memoryLimit: "40Mi"
   cpuRequest: "100m"
@@ -165,18 +164,18 @@ messagesEnabled: true
 users:
   notificationHubPath: nhsapp-production
   notificationHubConnectionString: Endpoint=sb://nhsapp-production.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=
-  minAvailable: 1
-  minReplicas: 2
-  maxReplicas: 4
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
+  minAvailable: 3
+  minReplicas: 4
+  maxReplicas: 100
+  memoryRequest: "512Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "200m"
+  cpuLimit: "400m"
 
 messages:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 4
+  maxReplicas: 30
   memoryRequest: "64Mi"
   memoryLimit: "128Mi"
   cpuRequest: "100m"
@@ -185,7 +184,7 @@ messages:
 info:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 4
+  maxReplicas: 30
   memoryRequest: "64Mi"
   memoryLimit: "128Mi"
   cpuRequest: "100m"
@@ -200,10 +199,6 @@ metrics:
 logger:
   minAvailable: 1
   minReplicas: 2
-  maxReplicas: 4
-  memoryRequest: "64Mi"
-  memoryLimit: "128Mi"
-  cpuRequest: "100m"
-  cpuLimit: "200m"
+  maxReplicas: 30
 
 # NIET_LOAD_END_FLAG
