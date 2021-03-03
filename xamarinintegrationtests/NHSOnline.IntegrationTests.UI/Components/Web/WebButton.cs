@@ -32,6 +32,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Web
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"//button[normalize-space(text())={_text.QuoteXPathLiteral()}]");
+            => By.XPath($".//button[normalize-space(text())={_text.QuoteXPathLiteral()}]");
     }
 }

@@ -7,7 +7,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
     {
 
         public IOSFullNavigation Navigation { get; }
-        private LoggedInHomePageContent PageContent { get; }
+        public LoggedInHomePageContent PageContent { get; }
 
         private IOSLoggedInHomePage(IIOSDriverWrapper driver)
         {

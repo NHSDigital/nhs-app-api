@@ -12,6 +12,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         private readonly IAndroidInteractor _interactor;
         private readonly string _headerText;
         private readonly string _bodyText;
+
         private AndroidExpander(IAndroidInteractor interactor, string headerText, string bodyText)
         {
             _interactor = interactor;

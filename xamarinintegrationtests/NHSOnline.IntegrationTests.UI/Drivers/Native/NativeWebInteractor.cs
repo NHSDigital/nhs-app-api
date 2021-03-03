@@ -15,11 +15,19 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             TestLogs logs,
             IWebDriver driver,
             WebViewContext webViewContext)
+            : this(nativeDriverContext, driver, webViewContext, new Interactor<IWebDriver, IWebElement>(logs, driver, driver.FindElement))
+        {
+        }
+
+        private NativeWebInteractor(
+            NativeDriverContext nativeDriverContext, IWebDriver driver,
+            WebViewContext webViewContext,
+            Interactor<IWebDriver, IWebElement> interactor)
         {
             _nativeDriverContext = nativeDriverContext;
             _driver = driver;
             _webViewContext = webViewContext;
-            _interactor = new Interactor<IWebDriver, IWebElement>(logs, _driver, driver.FindElement);
+            _interactor = interactor;
         }
 
         void IInteractor<IWebDriver, IWebElement>.ActOnElementContext(
@@ -29,6 +37,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native
             ChangeContext();
             _interactor.ActOnElementContext(by, action);
         }
+
+        public IWebInteractor CreateContainedInteractor(By findBy)
+                => new NativeWebInteractor(_nativeDriverContext, _driver, _webViewContext, _interactor.CreateContainedInteractor(findBy));
 
         private void ChangeContext()
         {

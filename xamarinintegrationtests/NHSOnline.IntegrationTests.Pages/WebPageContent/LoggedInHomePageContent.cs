@@ -16,6 +16,10 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         private WebDefinitionTerm Name => WebDefinitionTerm.WithTerm(_interactor, "Name:");
 
+
+        private WebPanel UpliftPanel => WebPanel.WithTitle(_interactor, "Prove your identity to get full access");
+        private WebButton Continue => UpliftPanel.ContainingButtonWithText("Continue");
+
         internal void AssertOnPage()
         {
             Title.AssertVisible();
@@ -26,5 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
             Name.AssertValue(patientName);
             return this;
         }
+
+        public void ProveYourIdentityContinue() => Continue.Click();
     }
 }
