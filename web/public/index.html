@@ -38,7 +38,6 @@
       -webkit-border-radius: 40px;
       -moz-border-radius: 40px;
     }
-
     .loading-spinner {
       border-radius: 40px;
       -webkit-border-radius: 40px;
@@ -62,12 +61,43 @@
         transform: rotate(360deg);
       }
     }
+    @font-face {
+      font-family: "FrutigerLTW01-45Light";
+      font-display: optional;
+      src: local("FrutigerLTW01-45Light"),
+          url("/fonts/FrutigerLTW01-45Light.eot"),
+          url("/fonts/FrutigerLTW01-45Light.eot") format("embedded-opentype"),
+          url("/fonts/FrutigerLTW01-45Light.woff2") format("woff2"),
+          url("/fonts/FrutigerLTW01-45Light.woff") format("woff"),
+          url("/fonts/FrutigerLTW01-45Light.ttf") format("truetype"),
+          url("/fonts/FrutigerLTW01-45Light.svg") format("svg");
+    }  
+    .warning-nojs-content-panel {
+      position: fixed; 
+      text-align: center;
+      font-family:'FrutigerLTW01-45Light',Arial,sans-serif; 
+      font-size: 0.9em;
+      color: white;
+      width: 250px;
+      height: 10em;
+      top: 20em;
+      right: 0em;
+      left: 0em;
+      bottom: 5em;
+      margin: auto;
+    }
+    .inline-nojs-link{
+      color: white; 
+      outline-color: white;
+      text-decoration: underline;
+      display: inline;
+    }
   </style>
 </head>
 <body>
   <div id="app">
     <div class="blue-body">
-    <!--  <svg class="logo"
+      <!--  <svg class="logo"
               xmlns="http://www.w3.org/2000/svg"
               focusable="false"
               viewBox="0 0 40 16">
@@ -84,6 +114,15 @@
         </svg> -->
       <div class="loading-spinner-background" tabindex="-1" focusable="false">
         <div class="loading-spinner" tabindex="-1" focusable="false"></div>
+      </div>
+      <div class="warning-nojs-content-panel">
+        <noscript>
+          <p>
+            <div tabindex ="1" aria-label="You need to enable JavaScript to access the NHS App on your browser, link">
+              You need to <a class="inline-nojs-link" href="https://www.nhs.uk/nhs-services/online-services/nhs-app/nhs-app-help-and-support/technical-issues-with-the-nhs-app/"target="_blank" rel="noopener noreferrer">enable JavaScript to access the NHS App on your browser</a>
+            </div>
+          </p>
+        </noscript>
       </div>
     </div>
   </div>
