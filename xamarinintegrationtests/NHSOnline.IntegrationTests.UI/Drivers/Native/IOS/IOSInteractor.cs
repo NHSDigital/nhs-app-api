@@ -28,6 +28,9 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
             By by,
             Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
-            => _interactor.ActOnElementContext(by, action);
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.ActOnElementContext(@by, action);
+        }
     }
 }

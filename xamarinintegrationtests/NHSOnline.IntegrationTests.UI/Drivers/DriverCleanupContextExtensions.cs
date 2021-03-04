@@ -38,7 +38,11 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             context.TryAttach(
                 "App page source",
                 "PageSourceNative.xml",
-                file => File.WriteAllText(file.FullName, driver.PageSource));
+                file =>
+                {
+                    nativeDriverContext.SwitchToNativeContext();
+                    File.WriteAllText(file.FullName, driver.PageSource);
+                });
 
             context.TryCleanUp(
                 "Web page sources",

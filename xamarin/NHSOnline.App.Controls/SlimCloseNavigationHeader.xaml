@@ -24,9 +24,8 @@
         </ResourceDictionary>
     </View.Resources>
 
-    <StackLayout>
+    <StackLayout AutomationId="NHS App Slim Close Navigation Header">
         <icons:IconClose AutomationProperties.IsInAccessibleTree="True"
-                         AutomationProperties.HelpText="Close button"
                          HeightRequest="30"
                          WidthRequest="30" />
         

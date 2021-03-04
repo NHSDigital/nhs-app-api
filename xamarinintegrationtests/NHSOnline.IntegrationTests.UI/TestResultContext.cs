@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Drivers;
 
@@ -43,7 +45,9 @@ namespace NHSOnline.IntegrationTests.UI
         {
             try
             {
-                cleanUp();
+                using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                var cleanUpTask = Task.Run(cleanUp, cancellationTokenSource.Token);
+                cleanUpTask.Wait(cancellationTokenSource.Token);
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)

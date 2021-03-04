@@ -30,6 +30,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             => _interactor.ActOnElement(FindBy, action);
 
         private By FindBy
-            => By.XPath($"//android.view.ViewGroup[normalize-space(@content-desc)={_description.QuoteXPathLiteral()}]");
+            => By.XPath($".//android.view.ViewGroup[normalize-space(@content-desc)={_description.QuoteXPathLiteral()}]");
     }
 }

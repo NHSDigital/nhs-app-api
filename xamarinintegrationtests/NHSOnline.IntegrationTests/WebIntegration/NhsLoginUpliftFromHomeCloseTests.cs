@@ -12,11 +12,11 @@ using NHSOnline.IntegrationTests.UI.Drivers;
 namespace NHSOnline.IntegrationTests.WebIntegration
 {
     [TestClass]
-    [BusinessRule("BR-LOG-12.1", "Navigating to the uplift journey displays NHS login uplift journey")]
-    public class NhsLoginUpliftTests
+    [BusinessRule("BR-LOG-12.2", "Closing the slim blue header when the user has navigated to the NHS login uplift journey from the logged in home screen displays the logged in home screen")]
+    public class NhsLoginUpliftFromHomeCloseTests
     {
         [NhsAppAndroidTest]
-        public void APatientWithProofLevelFiveCanStartTheUpliftJourneyFromTheHomepageAndroid(IAndroidDriverWrapper driver)
+        public void ClosingTheUpliftJourneyLaunchedFromTheHomepageShowsTheHomepageAndroid(IAndroidDriverWrapper driver)
         {
             var patient = new P5Patient();
             using var patients = Mocks.Patients.Add(patient);
@@ -50,11 +50,15 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.ProveYourIdentityContinue();
 
             AndroidStubbedLoginUpliftPage
+                .AssertOnPage(driver)
+                .Navigation.Close();
+
+            AndroidLoggedInHomePage
                 .AssertOnPage(driver);
         }
 
         [NhsAppIOSTest]
-        public void APatientWithProofLevelFiveCanStartTheUpliftJourneyFromTheHomepageIos(IIOSDriverWrapper driver)
+        public void ClosingTheUpliftJourneyLaunchedFromTheHomepageShowsTheHomepageIos(IIOSDriverWrapper driver)
         {
             var patient = new P5Patient();
             using var patients = Mocks.Patients.Add(patient);
@@ -88,6 +92,10 @@ namespace NHSOnline.IntegrationTests.WebIntegration
                 .PageContent.ProveYourIdentityContinue();
 
             IOSStubbedLoginUpliftPage
+                .AssertOnPage(driver)
+                .Navigation.Close();
+
+            IOSLoggedInHomePage
                 .AssertOnPage(driver);
         }
     }
