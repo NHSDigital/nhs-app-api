@@ -166,16 +166,13 @@ open class SharedStepDefinitions {
         browser.executeScripts()
     }
 
-    @Given("^I am logged in with notifications enabled skipping the notifications prompt$")
+    @Given("^I am logged in skipping the notifications prompt$")
     fun iAmLoggedInSkippingNotificationsPrompt() {
         val patient = handleLogin()
         login.using(patient)
         login.skipNotificationPromptCookie()
 
         home.waitForLoginToCompleteSuccessfully(true)
-
-        val factory = initialSetup(SettingStatus.Authorised, true)
-        factory.setUpExistingRegistration()
 
         browser.executeScripts()
     }
@@ -277,8 +274,8 @@ open class SharedStepDefinitions {
 
     private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.mockNativeNotificationFunctions(status, authorised)
 
         return factory

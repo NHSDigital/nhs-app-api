@@ -3,7 +3,6 @@ package features.pushNotifications.stepDefinitions
 import constants.Supplier
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.AccessTokenBuilder
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -14,11 +13,11 @@ import utils.addToList
 import utils.set
 import utils.getOrFail
 import worker.models.userDevices.InvalidUserDevice
-import java.util.*
 
 class NotificationsFactory {
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
-        val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
+        var patientToUse = patient ?: SerenityHelpers.getPatientOrNull()
+        patientToUse = patientToUse ?: ServiceJourneyRulesMapper.findUniquePatientForConfiguration(supplier,
                 SJRJourneyType.NOTIFICATIONS_ENABLED)
 
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
@@ -33,11 +32,10 @@ class NotificationsFactory {
     fun setUpAlternativeUser(supplier: Supplier? = null): Patient {
         // Use SJR generated patient, but then change subject and access token based on that,
         // to create a new nhsLoginId and differentiate from the primary patient
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+        val patient = ServiceJourneyRulesMapper.findUniquePatientForConfiguration(
                 supplier,
-                SJRJourneyType.NOTIFICATIONS_ENABLED)
-        patient.subject = UUID.randomUUID().toString()
-        patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
+                SJRJourneyType.NOTIFICATIONS_ENABLED,
+                setSerenityVariable = false)
         CitizenIdSessionCreateJourney()
                 .createFor(patient, alternativeUser = true)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
@@ -46,12 +44,12 @@ class NotificationsFactory {
         return patient
     }
 
-    fun setUpDeviceValues() {
+    fun setUpDeviceValues(accessToken: String) {
         val devicePns = PnsTokenGenerator.generate()
         val deviceType = "Android"
         PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
-        setUpDeletionAfterTest(devicePns)
+        setUpDeletionAfterTest(devicePns, accessToken)
     }
 
     fun setUpDeletionAfterTest(pnsToken:String, accessToken :String? = null) {

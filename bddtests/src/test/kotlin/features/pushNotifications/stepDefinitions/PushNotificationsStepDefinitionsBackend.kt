@@ -6,6 +6,7 @@ import io.cucumber.java.en.When
 import features.sharedSteps.InvalidAccessTokenTester
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
+import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -13,13 +14,16 @@ import utils.set
 import worker.models.userDevices.NotificationSendRequest
 import worker.models.userDevices.RegisterUserDevicesResponse
 
+private const val WAIT_FOR_HUB_UPDATE = 1000L
+private const val HUB_UPDATE_CHECK_LIMIT = 10
+
 class PushNotificationsStepDefinitionsBackend {
 
     @Given("^I am an api user wishing to register their device for push notifications$")
     fun iAmAnApiUserWishingToRegisterTheirDeviceForPushNotifications() {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
     }
 
     @Given("^I am an api user who has registered their device for notifications," +
@@ -27,7 +31,7 @@ class PushNotificationsStepDefinitionsBackend {
     fun iAmAnApiUserWhoHasRegisteredTheirDeviceForNotificationsAndIHaveAnotherDeviceToRegister() {
         val factory = NotificationsFactory()
         val patient = factory.setUpUser()
-        factory.setUpDeviceValues()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.setUpExistingRegistration()
 
         val originalPnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
@@ -40,23 +44,23 @@ class PushNotificationsStepDefinitionsBackend {
     @Given("^I am an api user who has not registered their device for push notifications$")
     fun iAmAnApiUserWhoHasNotRegisteredTheirDeviceForPushNotifications() {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
     }
 
     @Given("^I am an api user who has registered their device for push notifications$")
     fun iAmAnApiUserWhoHasRegisteredTheirDeviceForPushNotifications() {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.setUpExistingRegistration()
     }
 
     @Given("^I am an api user whose notification registration in azure has been overridden by another user$")
     fun iAmAnApiUserWhoseRegistrationInAzureHasBeenOverriddenByAnotherUser() {
         val factory = NotificationsFactory()
-        factory.setUpDeviceValues()
         val user1 = factory.setUpUser()
+        factory.setUpDeviceValues(user1.accessToken)
         val user2 = factory.setUpAlternativeUser(SerenityHelpers.getGpSupplier())
         factory.setUpDeletionAfterTest(PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail(), user2.accessToken)
         factory.setUpExistingRegistration(user1)
@@ -71,25 +75,23 @@ class PushNotificationsStepDefinitionsBackend {
     @Given("^I am an api user wishing to delete their registration for push notifications$")
     fun iAmAnApiUserWishingToDeleteTheirRegistrationForPushNotifications() {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.setUpExistingRegistration()
     }
 
     @Given("^I am an api user wishing to get a list of RegistrationIds that are linked to a given Nhs Login Id$")
     fun iAmAnApiUserWishingToGetAListOfRegistrationsForPushNotifications() {
         val factory = NotificationsFactory()
-        val patient = factory.setUpAlternativeUser()
-        SerenityHelpers.setPatient(patient)
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.setUpExistingRegistration()
     }
 
     @Given("^I am an api user wishing to get a list of RegistrationIds for a Nhs Login Id that has no registrations$")
     fun iAmAnApiUserWishingToGetAListOfRegistrationIdsForANhsLoginIdThatHasNoRegistrations() {
         val factory = NotificationsFactory()
-        val patient = factory.setUpAlternativeUser()
-        SerenityHelpers.setPatient(patient)
+        factory.setUpUser()
     }
 
     @Given("^I am an api user wishing to send a notification to a given Nhs Login Id$")
@@ -238,6 +240,14 @@ class PushNotificationsStepDefinitionsBackend {
     fun iGetRegistrationsBasedOnAnNhsLoginId() {
         val nhsLoginId = SerenityHelpers.getPatient().subject
         NotificationsApi.getRegistrationIds(nhsLoginId)
+
+        var conditionCheckLimit = 0
+        while (SerenityHelpers.getHttpResponse()!!.statusLine.statusCode != HttpStatus.SC_OK &&
+                conditionCheckLimit < HUB_UPDATE_CHECK_LIMIT) {
+            Thread.sleep(WAIT_FOR_HUB_UPDATE)
+            NotificationsApi.getRegistrationIds(nhsLoginId)
+            conditionCheckLimit++
+        }
     }
 
     @Then("^I send the notification$")

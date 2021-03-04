@@ -73,7 +73,7 @@ class PushNotificationsStepDefinitions {
         notificationsSettingsPage.notificationsToggle.click()
     }
 
-    @When("^the push notification can no longer be found in the repository$")
+    @When("^the push notification registration record can no longer be found in the repository$")
     fun thePushNotificationCanNoLongerBeFoundInTheRepository() {
         MongoDBConnection.UserDevicesCollection.clearCache()
     }
@@ -183,8 +183,8 @@ class PushNotificationsStepDefinitions {
 
     private fun initialSetup(status: SettingStatus, authorised: Boolean): NotificationsFactory {
         val factory = NotificationsFactory()
-        factory.setUpUser()
-        factory.setUpDeviceValues()
+        val patient = factory.setUpUser()
+        factory.setUpDeviceValues(patient.accessToken)
         factory.mockNativeNotificationFunctions(status, authorised)
 
         return factory

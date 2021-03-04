@@ -75,7 +75,7 @@ Feature: Push Notifications
   Scenario: A user can disable push notifications for their device
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in with notifications enabled skipping the notifications prompt
+    And I am logged in skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed
@@ -129,12 +129,12 @@ Feature: Push Notifications
   Scenario: A user attempting to disable a non-existing registration is shown an error message
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in with notifications enabled skipping the notifications prompt
+    And I am logged in skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed
     And the notifications toggle is displayed as on
-    When the push notification can no longer be found in the repository
+    When the push notification registration record can no longer be found in the repository
     And I change the notifications toggle to off
     Then an error is displayed indicating that the notifications service is not available
     When I click the 'Back to settings' button
@@ -157,7 +157,7 @@ Feature: Push Notifications
   Scenario: A user attempting to disable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I am logged in with notifications enabled skipping the notifications prompt
+    And I am logged in skipping the notifications prompt
     When I navigate to the Account page
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed

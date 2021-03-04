@@ -133,6 +133,16 @@ class ServiceJourneyRulesMapper {
             return findPatientForConfiguration(gpSystem, arrayListOf(journeyType), proofLevel)
         }
 
+        fun findUniquePatientForConfiguration(gpSystem: Supplier?,
+                                              journeyType: SJRJourneyType,
+                                              proofLevel: IdentityProofingLevel? = null,
+                                              setSerenityVariable: Boolean = true): Patient {
+            return findUniquePatientForConfiguration(gpSystem,
+                    arrayListOf(journeyType),
+                    proofLevel,
+                    setSerenityVariable)
+        }
+
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyTypes: Collection<SJRJourneyType>,
                                         proofLevel: IdentityProofingLevel? = null): Patient {
@@ -141,8 +151,28 @@ class ServiceJourneyRulesMapper {
             if (proofLevel != null) {
                 patient = patient.copy(identityProofingLevel = proofLevel)
             }
+
             SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
             SerenityHelpers.setPatient(patient)
+
+            return patient
+        }
+
+        private fun findUniquePatientForConfiguration(gpSystem: Supplier?,
+                                              journeyTypes: Collection<SJRJourneyType>,
+                                              proofLevel: IdentityProofingLevel? = null,
+                                              setSerenityVariable: Boolean = true): Patient {
+            val gpInformation = journeysToGpInformationMap.find(gpSystem, journeyTypes)
+            var patient = Patient.getDefault(gpInformation.gpSupplier).copy(odsCode = gpInformation.odsCode,
+            subject = UUID.randomUUID().toString()
+            )
+            if (proofLevel != null) {
+                patient = patient.copy(identityProofingLevel = proofLevel)
+            }
+            if(setSerenityVariable) {
+                SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
+                SerenityHelpers.setPatient(patient)
+            }
             return patient
         }
 
