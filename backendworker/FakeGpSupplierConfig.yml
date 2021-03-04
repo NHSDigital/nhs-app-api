@@ -758,3 +758,34 @@ defaultUsers:
       familyName: DEAN
       dateOfBirth: 1942-03-21T00:00:00
       sex: male
+
+    9692236633:
+      userId: 3c3a0de7-15bb-4369-a1d5-63ff7cd3884e
+      emailAddress: onboarding.nhsapp+engage.user4@gmail.com
+      odsCode: F00006
+      givenName: Eli
+      familyName: TOFT
+      dateOfBirth: 1968-08-13T00:00:00
+      sex: male
+
+    9692236641:
+      userId: e8faac0a-a340-4109-a280-04a9a8bd0e76
+      emailAddress: onboarding.nhsapp+engage.user5@gmail.com
+      odsCode: F00006
+      givenName: Matt
+      familyName: LOWDAY
+      dateOfBirth: 1960-06-03T00:00:00
+      sex: male
+
+    9692236668:
+      userId: 5e791ae3-eeb0-456f-ac45-414241010ebb
+      emailAddress: onboarding.nhsapp+engage.user6@gmail.com
+      odsCode: F00006
+      givenName: Karl
+      familyName: DEVLIN
+      dateOfBirth: 1959-08-08T00:00:00
+      sex: male
+
+
+
+
