@@ -1,7 +1,7 @@
 export default {
   coronavirus: {
     coronavirusCovid19: 'Coronavirus (COVID-19)',
-    getInformationAboutCoronvirus: 'Get information about coronavirus on NHS.UK',
+    getInformationAboutCoronvirus: 'Get information about coronavirus on the NHS website',
   },
   survey: {
     helpUsMakeThisServiceBetter: 'Help us make this service better.',
