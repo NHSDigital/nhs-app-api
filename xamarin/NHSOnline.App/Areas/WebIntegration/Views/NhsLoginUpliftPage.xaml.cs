@@ -31,6 +31,9 @@ namespace NHSOnline.App.Areas.WebIntegration.Views
         Func<Task>? INhsLoginUpliftView.BackRequested { get; set; }
         private AsyncCommand BackRequestedCommand => new AsyncCommand(() => View.BackRequested);
 
+        Func<ISelectMediaRequest, Task>? INhsLoginUpliftView.SelectMediaRequested { get; set; }
+        public AsyncCommand<ISelectMediaRequest> SelectMediaCommand => new AsyncCommand<ISelectMediaRequest>(() => View.SelectMediaRequested);
+
         private INhsLoginUpliftView View => this;
 
         protected override void OnAppearing()

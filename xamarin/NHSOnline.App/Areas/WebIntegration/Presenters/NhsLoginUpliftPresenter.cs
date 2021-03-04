@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.App.Areas.WebIntegration.Models;
 using NHSOnline.App.Config;
+using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Services;
+using NHSOnline.App.Services.Media;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration.Presenters
@@ -15,24 +17,33 @@ namespace NHSOnline.App.Areas.WebIntegration.Presenters
         private readonly NhsLoginUpliftModel _model;
         private readonly IBrowserOverlay _browserOverlay;
         private readonly WebIntegrationUriDestination _uriDestination;
+        private readonly ISelectMediaService _selectMediaService;
 
         public NhsLoginUpliftPresenter(
             ILogger<NhsLoginUpliftPresenter> logger,
             INhsLoginUpliftView view,
             NhsLoginUpliftModel model,
             INhsLoginConfiguration nhsLoginConfiguration,
-            IBrowserOverlay browserOverlay)
+            IBrowserOverlay browserOverlay,
+            ISelectMediaService selectMediaService)
         {
             _logger = logger;
             _view = view;
             _model = model;
             _browserOverlay = browserOverlay;
+            _selectMediaService = selectMediaService;
 
             _uriDestination = new WebIntegrationUriDestination(nhsLoginConfiguration, model.Url);
 
             _view.Appearing = ViewOnAppearing;
             _view.Navigating = ViewOnNavigating;
             _view.BackRequested = BackRequested;
+            _view.SelectMediaRequested = SelectMediaRequested;
+        }
+
+        private async Task SelectMediaRequested(ISelectMediaRequest request)
+        {
+            await _selectMediaService.SelectMedia(request).PreserveThreadContext();
         }
 
         private Task ViewOnAppearing()

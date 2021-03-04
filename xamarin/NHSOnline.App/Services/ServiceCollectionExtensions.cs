@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.App.Services.Media;
 
 namespace NHSOnline.App.Services
 {
@@ -8,6 +9,7 @@ namespace NHSOnline.App.Services
         {
             return services
                 .AddTransient<IBrowserOverlay, BrowserOverlay>()
+                .AddTransient<ISelectMediaService, SelectMediaService>()
                 .AddTransient<IUserPreferencesService, UserPreferencesService>();
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.WebIntegration
@@ -9,6 +10,8 @@ namespace NHSOnline.App.Areas.WebIntegration
         Func<Task>? Appearing { get; set; }
         Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
         Func<Task>? BackRequested { get; set; }
+
+        Func<ISelectMediaRequest, Task>? SelectMediaRequested { get; set; }
 
         INavigation Navigation { get; }
 
