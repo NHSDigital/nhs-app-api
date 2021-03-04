@@ -243,7 +243,7 @@ spec:
           value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
         {{- end }}
         - name: NDOP_CERT_PATH
-          value: "/mnt/secrets-store/ndopPfx"
+          value: "/mnt/secrets-store/ndopSigningKey"
         - name: NDOP_CLAIM_AUDIENCE
           value: "{{ $.Values.ndopClaimAudience }}"
         - name: NDOP_CLAIM_ISSUER
