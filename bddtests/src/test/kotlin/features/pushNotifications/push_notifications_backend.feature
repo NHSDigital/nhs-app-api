@@ -64,7 +64,7 @@ Feature: Push Notifications Backend
     When I get the registration for push notifications without a pns token
     Then I receive a "Bad Request" error
 
-  @smoketest
+  @bug @NHSO-13533
   Scenario: An api user getting their notifications registration where azure record has been removed will receive a 404
     # This scenario handles multiple users registering on the same device.
     # User 1 registers, and a record is made in azure and cosmos
