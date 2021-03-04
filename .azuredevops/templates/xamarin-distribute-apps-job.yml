@@ -1,47 +1,54 @@
+parameters:
+    - name: target
+      type: string
+
 jobs:
   - job:
     displayName: Xamarin Distribute Apps
     pool:
-      vmImage: 'macos-latest'
+      vmImage: 'ubuntu-latest'
 
     variables:
-      output.directory: '$(build.binariesDirectory)/$(build.configuration)'
+      apk.itemPattern: 'Xamarin Android Clients/com.nhs.online.nhsonline.${{ lower(parameters.target) }}.apk'
+      ipa.itemPattern: 'Xamarin iOS Clients/NHSOnline.App.${{ parameters.target }}.ipa'
+      apk.name: 'com.nhs.online.nhsonline.${{ lower(parameters.target) }}.apk'
+      ipa.name: 'NHSOnline.App.${{ parameters.target }}.ipa'
 
     steps:
-      - task: DownloadBuildArtifacts@0
-        displayName: Download Android Apps
-        inputs:
-          downloadType: single
-          artifactName: Xamarin Android Clients
-          itemPattern: |
-            Xamarin Android Clients/com.nhs.online.nhsonline.staging.apk
+    - task: DownloadBuildArtifacts@0
+      displayName: Download Android Apps
+      inputs:
+        downloadType: single
+        artifactName: Xamarin Android Clients
+        itemPattern: |
+          $(apk.itemPattern)
 
-      - task: DownloadBuildArtifacts@0
-        displayName: Download iOS Apps
-        inputs:
-          downloadType: single
-          artifactName: Xamarin iOS Clients
-          itemPattern: |
-            Xamarin iOS Clients/NHSOnline.App.Staging.ipa
+    - task: DownloadBuildArtifacts@0
+      displayName: Download iOS Apps
+      inputs:
+        downloadType: single
+        artifactName: Xamarin iOS Clients
+        itemPattern: |
+          $(ipa.itemPattern)
 
-      - task: AppCenterDistribute@3
-        displayName: Distribute Android Staging
-        inputs:
-          serverEndpoint: 'appcenter'
-          appSlug: 'nhsapp/NhsAppStaging'
-          appFile: '$(System.ArtifactsDirectory)/Xamarin Android Clients/com.nhs.online.nhsonline.staging.apk'
-          symbolsOption: 'Android'
-          releaseNotesOption: 'input'
-          releaseNotesInput: 'Dummy release notes'
-          destinationType: 'groups'
+    - task: AppCenterDistribute@3
+      displayName: Distribute Android
+      inputs:
+        serverEndpoint: 'appcenter'
+        appSlug: 'nhsapp/NhsApp${{ parameters.target }}'
+        appFile: '$(System.ArtifactsDirectory)/Xamarin Android Clients/$(apk.name)'
+        symbolsOption: 'Android'
+        releaseNotesOption: 'input'
+        releaseNotesInput: '$(build.buildNumber)'
+        destinationType: 'groups'
 
-      - task: AppCenterDistribute@3
-        displayName: Distribute iOS
-        inputs:
-          serverEndpoint: 'appcenter'
-          appSlug: 'nhsapp/NhsAppStaging-1'
-          appFile: '$(System.ArtifactsDirectory)/Xamarin iOS Clients/NHSOnline.App.Staging.ipa'
-          symbolsOption: 'Apple'
-          releaseNotesOption: 'input'
-          releaseNotesInput: 'Dummy release notes'
-          destinationType: 'groups'
+    - task: AppCenterDistribute@3
+      displayName: Distribute iOS
+      inputs:
+        serverEndpoint: 'appcenter'
+        appSlug: 'nhsapp/NhsApp${{ parameters.target }}-1'
+        appFile: '$(System.ArtifactsDirectory)/Xamarin iOS Clients/$(ipa.name)'
+        symbolsOption: 'Apple'
+        releaseNotesOption: 'input'
+        releaseNotesInput: '$(build.buildNumber)'
+        destinationType: 'groups'

@@ -351,10 +351,24 @@ stages:
       jobs:
         - template: .azuredevops/templates/integration-tests-xamarin-job.yml
 
-  - ${{ if eq(variables['native.xamarin.distribute'], 'true') }}:
+  - ${{ if and(eq(variables['native.xamarin.target'], 'Preview'), eq(variables['native.xamarin.distribute'], 'true'), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
     - stage: xamarin_distribute_apps
-      displayName: Xamarin Distribute Apps
+      displayName: Xamarin Distribute Preview Apps
       dependsOn:
+        - xamarin_preview
         - xamarin_integration_tests
       jobs:
         - template: .azuredevops/templates/xamarin-distribute-apps-job.yml
+          parameters:
+            target: 'Preview'
+
+  - ${{ if and(or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), eq(variables['int.tests.run.native.xamarin'], 'true')) }}:
+    - stage: xamarin_distribute_apps
+      displayName: Xamarin Distribute Staging Apps
+      dependsOn:
+        - xamarin_staging
+        - xamarin_integration_tests
+      jobs:
+        - template: .azuredevops/templates/xamarin-distribute-apps-job.yml
+          parameters:
+            target: 'Staging'
