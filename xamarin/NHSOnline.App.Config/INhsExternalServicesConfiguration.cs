@@ -5,6 +5,7 @@ namespace NHSOnline.App.Config
     public interface INhsExternalServicesConfiguration
     {
         Uri NhsUkCovidUrl { get; }
+        Uri NhsUkCovidAppUrl { get; }
         Uri NhsUkCovidConditionsUrl { get; }
         Uri NhsUkBaseHelpUrl { get; }
         Uri NhsUkLoginHelpUrl { get; }

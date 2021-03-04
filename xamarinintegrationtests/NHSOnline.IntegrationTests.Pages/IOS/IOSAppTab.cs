@@ -23,6 +23,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public static IOSAppTab AssertOnConditionsPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Conditions");
 
+        public static IOSAppTab AssertOnCovidAppPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "CovidApp");
+
         public static IOSAppTab AssertOnCovidPage(IIOSDriverWrapper driver) => AssertOnPage(driver, "Covid");
 
         public static IOSAppTab AssertOn111Page(IIOSDriverWrapper driver) => AssertOnPage(driver, "111");

@@ -37,7 +37,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _nhsExternalServicesConfiguration = nhsExternalServicesConfiguration;
 
             view.LoginRequested += ViewOnLoginRequested;
-            view.NhsUkCovidServicePageRequested += LoadCovidUrl;
+            view.NhsUkCovidAppPageRequested += LoadCovidUrl;
             view.BackRequested += BackRequested;
         }
 
@@ -57,7 +57,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         private async void LoadCovidUrl(object sender, EventArgs e)
         {
             _logger.LogInformation("Accessing covid url");
-            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidUrl)
+            await _browserOverlay.OpenBrowserOverlay(_nhsExternalServicesConfiguration.NhsUkCovidAppUrl)
                 .PreserveThreadContext();
         }
 

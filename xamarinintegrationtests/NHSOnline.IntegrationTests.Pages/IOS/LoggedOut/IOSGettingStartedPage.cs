@@ -19,9 +19,8 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             .WithText(_driver, "To download the NHS COVID-19 contact tracing app.")
             .ScrollIntoView();
 
-        private IOSLabel GoToCovidLabel => IOSLabel
-            .WithText(_driver, "Go to covid19.nhs.uk")
-            .ScrollIntoView();
+        private IOSLink GoToCovidLabel => IOSLink
+            .WithText(_driver, "Go to covid19.nhs.uk");
 
         private IOSLabel UseTheNhsAppToLabel => IOSLabel
             .WithText(_driver, "Use the NHS App to:")
@@ -73,6 +72,11 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             LegalAgeLabel.AssertVisible();
             GetStartedLabel.AssertVisible();
             ContinueButton.AssertVisible();
+        }
+
+        public void GoToCovidApp()
+        {
+            GoToCovidLabel.Touch();
         }
 
         public void Continue()

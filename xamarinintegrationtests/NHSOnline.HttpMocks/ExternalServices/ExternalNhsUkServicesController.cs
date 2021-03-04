@@ -13,6 +13,12 @@ namespace NHSOnline.HttpMocks.ExternalServices
             return CreatePage("Covid");
         }
 
+        [HttpGet("covidApp")]
+        public IActionResult CovidApp()
+        {
+            return CreatePage("CovidApp");
+        }
+
         [HttpGet("covid/conditions")]
         public IActionResult CovidConditions()
         {

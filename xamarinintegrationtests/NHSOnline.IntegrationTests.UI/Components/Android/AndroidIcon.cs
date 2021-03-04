@@ -6,7 +6,7 @@ using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public class AndroidIcon
+    public sealed class AndroidIcon: IFocusable
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _description;
@@ -22,7 +22,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public void AssertVisible()
             => ActOnElement(e => e.Displayed.Should().BeTrue("an icon with description {1} should be displayed", _description));
-        
+
         public void Click()
             => ActOnElement(e => e.Click());
 
@@ -31,5 +31,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         private By FindBy
             => By.XPath($".//android.view.ViewGroup[normalize-space(@content-desc)={_description.QuoteXPathLiteral()}]");
+
+        string IFocusable.ElementDescription
+            => new FocusableDescriptionBuilder {Tag = "android.view.ViewGroup", ContentDesc = _description}.ViewGroupDescription;
     }
 }

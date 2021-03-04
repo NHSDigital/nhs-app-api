@@ -18,7 +18,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             .WithText(_driver, "To download the NHS COVID-19 contact tracing app.")
             .ScrollIntoView();
 
-        private AndroidLabel GoToCovidLabel => AndroidLabel
+        private AndroidLink GoToCovidLabel => AndroidLink
             .WithText(_driver, "Go to covid19.nhs.uk")
             .ScrollIntoView();
 
@@ -58,6 +58,15 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
             .WithText(_driver, "Continue")
             .ScrollIntoView();
 
+        private AndroidIcon CloseIcon => AndroidIcon
+            .WithDescription(_driver,"NHS App close icon");
+
+        private AndroidKeyboardNavigation KeyboardNavigation => AndroidKeyboardNavigation.WithExpectedFocusableElements(
+            _driver,
+            CloseIcon,
+            GoToCovidLabel,
+            ContinueButton);
+
         public static AndroidGettingStartedPage AssertOnPage(IAndroidDriverWrapper driver)
         {
             var page = new AndroidGettingStartedPage(driver);
@@ -83,6 +92,27 @@ namespace NHSOnline.IntegrationTests.Pages.Android.LoggedOut
         public void Continue()
         {
             ContinueButton.Click();
+        }
+
+        public void GoToCovidApp()
+        {
+            GoToCovidLabel.Touch();
+        }
+
+        public AndroidGettingStartedPage TabToGetCovidApp()
+        {
+            KeyboardNavigation.TabTo(GoToCovidLabel);
+            return this;
+        }
+
+        public void PressEnterKey()
+        {
+            KeyboardNavigation.PressEnterKey();
+        }
+
+        public void AssertTabFocusOrder()
+        {
+            KeyboardNavigation.AssertFocusOrder();
         }
     }
 }

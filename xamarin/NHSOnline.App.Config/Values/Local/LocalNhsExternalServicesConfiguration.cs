@@ -5,6 +5,7 @@ namespace NHSOnline.App.Config.Values.Local
     public class LocalNhsExternalServicesConfiguration: INhsExternalServicesConfiguration
     {
         public Uri NhsUkCovidUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/covid");
+        public Uri NhsUkCovidAppUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/covidApp");
         public Uri NhsUkCovidConditionsUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/covid/conditions");
         public Uri NhsUkBaseHelpUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/help/home");
         public Uri NhsUkLoginHelpUrl { get; } = new Uri("http://stubs.local.bitraft.io:8080/nhsuk/help/login");

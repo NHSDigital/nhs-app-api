@@ -28,7 +28,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
             IAndroidInteractor interactor,
             params IFocusable[] focusableElements)
             => new(interactor, focusableElements);
-        
+
         public void TabTo(IFocusable focusable)
         {
             _expectedFocusableElements
@@ -84,7 +84,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
                     element =>
                     {
                         var description = GetDescription(element);
-                        
+
                         if (string.Equals(firstElementDescription, description, StringComparison.Ordinal))
                         {
                             returnedToFirstElement = true;
@@ -101,6 +101,15 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
         }
 
         private string GetDescription(AndroidElement element)
-            => new FocusableDescriptionBuilder {Tag = element.GetAttribute("className"), Text = element.Text}.Description;
+        {
+            if (element.GetAttribute("className") == "android.view.ViewGroup")
+            {
+                return new FocusableDescriptionBuilder {Tag = element.GetAttribute("className"), ContentDesc = element.GetAttribute("content-desc")}
+                .ViewGroupDescription;
+            }
+
+            return new FocusableDescriptionBuilder {Tag = element.GetAttribute("className"), Text = element.Text}
+                .Description;
+        }
     }
 }

@@ -5,8 +5,8 @@
        x:Class="NHSOnline.App.Controls.LinkLabel"
        x:Name="Root"
        AutomationProperties.IsInAccessibleTree="true"
-       TextDecorations="Underline"
-       TextColor="{StaticResource NhsUkPrimaryLinkBlue}">
+       TextDecorations="{Binding LabelTextDecoration, Source={x:Reference Name=Root}}"
+       TextColor="{Binding LabelTextColour, Source={x:Reference Name=Root}}">
     
     <Label.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}" />

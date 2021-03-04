@@ -22,6 +22,8 @@ namespace NHSOnline.IntegrationTests.Pages.Android
 
         public static AndroidAppTab AssertOnCovidPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Covid");
 
+        public static AndroidAppTab AssertOnCovidAppPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "CovidApp");
+
         public static AndroidAppTab AssertOnCovidConditionsPage(IAndroidDriverWrapper driver) => AssertOnPage(driver, "Covid Conditions");
 
         public static AndroidAppTab AssertOn111Page(IAndroidDriverWrapper driver) => AssertOnPage(driver, "111");

@@ -34,20 +34,20 @@
                 <StackLayout>
                     <controls:MediumLabel Text="To download the NHS COVID-19 contact tracing app."
                                           Margin="0,5,0,10" />
-                
-                    <controls:MediumLabel>
-                        <controls:MediumLabel.FormattedText>
+                    
+                    <controls:LinkLabel LabelTextColour="{ StaticResource NhsUkPrimaryText }"
+                                        LabelTextDecoration="None"
+                                        Command="{ Binding NhsUkCovidAppCommand, Source={ x:Reference Name=GettingStarted }}">
+                        <controls:LinkLabel.FormattedText>
                             <FormattedString>
                                 <Span Text="Go to " />
                                 <Span Text="covid19.nhs.uk" 
                                       TextDecorations="Underline"
                                       TextColor="{ StaticResource NhsUkPrimaryLinkBlue }" />    
                             </FormattedString>
-                        </controls:MediumLabel.FormattedText>
-                        <controls:MediumLabel.GestureRecognizers>
-                            <TapGestureRecognizer Command="{ Binding NhsUkCovidServiceCommand, Source={ x:Reference Name=GettingStarted }}" />
-                        </controls:MediumLabel.GestureRecognizers>
-                    </controls:MediumLabel>
+                        </controls:LinkLabel.FormattedText>
+                    </controls:LinkLabel>
+                    
                 </StackLayout>
             </controls:NhsYellowWarningCard> 
             
@@ -56,25 +56,15 @@
             
                 <controls:Paragraph Text="Use the NHS App to:" />
                 
-                <controls:ListItem>
-                    <controls:MediumLabel Text="order repeat prescriptions" />
-                </controls:ListItem>
+                <controls:LabelListItem LabelText="order repeat prescriptions" />
                 
-                <controls:ListItem>
-                    <controls:MediumLabel Text="book and manage appointments" />
-                </controls:ListItem>
+                <controls:LabelListItem LabelText="book and manage appointments" />
                 
-                <controls:ListItem>
-                    <controls:MediumLabel Text="get health information and advice" />
-                </controls:ListItem>
+                <controls:LabelListItem LabelText="get health information and advice" />
                 
-                <controls:ListItem>
-                    <controls:MediumLabel Text="manage your organ donation decision" />
-                </controls:ListItem>
+                <controls:LabelListItem LabelText="manage your organ donation decision" />
                 
-                <controls:ListItem>
-                    <controls:MediumLabel Text="view your NHS number" />
-                </controls:ListItem>
+                <controls:LabelListItem LabelText="view your NHS number" />
                 
                 <controls:Paragraph Text="You must be aged 13 and over to use the app, and registered at a GP surgery in England."
                                     Margin="0,10,0,0" />
