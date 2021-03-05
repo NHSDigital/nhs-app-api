@@ -30,6 +30,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent.WebIntegration
 
         public void Start()
         {
+            StartButton.ScrollTo();
             StartButton.Click();
         }
     }

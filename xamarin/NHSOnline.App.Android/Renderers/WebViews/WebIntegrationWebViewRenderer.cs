@@ -5,6 +5,7 @@ using Android.Content;
 using NHSOnline.App.Controls.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews;
 using NHSOnline.App.Droid.Renderers.WebViews.Extensions;
+using NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -28,7 +29,7 @@ namespace NHSOnline.App.Droid.Renderers.WebViews
         protected override void OnElementChanged(ElementChangedEventArgs<WebView> e)
         {
             base.OnElementChanged(e);
-            
+
             foreach (var extension in _extensions)
             {
                 extension.OnElementChanged(e);

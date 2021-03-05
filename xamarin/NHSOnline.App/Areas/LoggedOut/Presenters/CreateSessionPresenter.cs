@@ -2,9 +2,12 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.App.Api.Session;
-using NHSOnline.App.Areas.Home.Models;
 using NHSOnline.App.Areas.LoggedOut.Models;
+using NHSOnline.App.Areas.PreHome.Models;
+using NHSOnline.App.Config;
 using NHSOnline.App.DependencyInjection;
 using NHSOnline.App.Navigation;
 using NHSOnline.App.Threading;
@@ -13,12 +16,15 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
 {
     internal sealed class CreateSessionPresenter: ICreateSessionResultVisitor<Task>
     {
+        private const string NhsOnlineSessionCookieName = "nhso.session";
+
         private readonly ICreateSessionView _view;
         private readonly CreateSessionModel _model;
         private readonly ILogger<CreateSessionPresenter> _logger;
         private readonly IPageFactory _pageFactory;
         private readonly ISessionService _sessionService;
         private readonly IBackgroundExecutionService _backgroundExecutionService;
+        private readonly INhsAppWebConfiguration _config;
 
         public CreateSessionPresenter(
             ICreateSessionView view,
@@ -26,7 +32,8 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             ILogger<CreateSessionPresenter> logger,
             IPageFactory pageFactory,
             ISessionService sessionService,
-            IBackgroundExecutionService backgroundExecutionService)
+            IBackgroundExecutionService backgroundExecutionService,
+            INhsAppWebConfiguration config)
         {
             _view = view;
             _model = model;
@@ -34,6 +41,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             _pageFactory = pageFactory;
             _sessionService = sessionService;
             _backgroundExecutionService = backgroundExecutionService;
+            _config = config;
 
             CreateSession();
         }
@@ -61,7 +69,7 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         }
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Created created)
-            => await NavigateToLoggedInHomePage(created.UserSession, created.Cookies).PreserveThreadContext();
+            => await NavigateToPreHomeScreenPages(created.UserSession, created.Cookies).PreserveThreadContext();
 
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.Failed failed)
             => await NavigateToFailedPage().PreserveThreadContext();
@@ -81,12 +89,13 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
         async Task ICreateSessionResultVisitor<Task>.Visit(CreateSessionResult.UpstreamSystemTimeout upstreamSystemTimeout)
             => await NavigateToUpstreamSystemTimeoutPage(upstreamSystemTimeout.ServiceDeskReference).PreserveThreadContext();
 
-        private async Task NavigateToLoggedInHomePage(UserSession userSession, CookieContainer cookies)
+        private async Task NavigateToPreHomeScreenPages(UserSession userSession, CookieContainer cookies)
         {
-            var homePageModel = new NhsAppWebModel(userSession, cookies);
-            var homePage = _pageFactory.CreatePageFor(homePageModel);
+            var sessionCookies = BuildSessionCookieContainer(userSession, cookies);
+            var preHomeScreenModel = new NhsAppPreHomeScreenWebModel(sessionCookies);
+            var preHomeScreenPage = _pageFactory.CreatePageFor(preHomeScreenModel);
 
-            await _view.Navigation.PopToNewRoot(homePage).PreserveThreadContext();
+            await _view.Navigation.PopToNewRoot(preHomeScreenPage).PreserveThreadContext();
         }
 
         private async Task NavigateToFailedPage()
@@ -135,6 +144,52 @@ namespace NHSOnline.App.Areas.LoggedOut.Presenters
             var errorPage = _pageFactory.CreatePageFor(errorModel);
 
             await _view.Navigation.ReplaceCurrentPage(errorPage).PreserveThreadContext();
+        }
+
+        private CookieContainer BuildSessionCookieContainer(UserSession userSession, CookieContainer cookies)
+        {
+            cookies.Add(CreateNhsOnlineSessionCookie(_config.BaseAddress, userSession));
+            return cookies;
+        }
+
+        private Cookie CreateNhsOnlineSessionCookie(Uri homeUri, UserSession userSession)
+        {
+            var sessionCookieJson = JsonConvert.SerializeObject(
+                new NhsOnlineSessionCookie(userSession),
+                new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+
+            var sessionCookieEscaped = Uri.EscapeDataString(sessionCookieJson);
+
+            _logger.LogTrace("Creating cookie {CookieName}: {CookieValue}", NhsOnlineSessionCookieName, sessionCookieEscaped);
+
+            return new Cookie(NhsOnlineSessionCookieName, sessionCookieEscaped, "/", homeUri.Host)
+            {
+
+                Secure = _config.NhsOnlineSessionCookieSecure,
+                HttpOnly = false
+            };
+        }
+
+        // Shim to convert the user session object from the API to the slightly
+        // different structure the Web stores the same information in its cookie
+        private sealed class NhsOnlineSessionCookie
+        {
+            private readonly UserSession _userSession;
+
+            public NhsOnlineSessionCookie(UserSession userSession)
+            {
+                _userSession = userSession;
+            }
+
+            public string? Name => _userSession.Name;
+            public int DurationSeconds => _userSession.SessionTimeout;
+            public string? GpOdsCode => _userSession.OdsCode;
+            public string? Token => _userSession.Token;
+            public string LastCalledAt => _userSession.LastCalledAt;
+            public string? NhsNumber => _userSession.NhsNumber;
+            public string? DateOfBirth => _userSession.DateOfBirth;
+            public string? AccessToken => _userSession.AccessToken;
+            public string? ProofLevel => _userSession.ProofLevel;
         }
     }
 }

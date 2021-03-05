@@ -109,6 +109,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
 
         public void OptInToUserResearch()
         {
+            ContinueButton.ScrollTo();
             OptIn.Click();
             ContinueButton.Click();
         }

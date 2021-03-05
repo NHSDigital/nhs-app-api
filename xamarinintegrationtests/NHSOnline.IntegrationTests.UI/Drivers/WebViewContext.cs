@@ -10,6 +10,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
         // but the web view may persist and should not be reused.
         public static WebViewContext OneOff { get; } = new OneOffWebViewContext();
         public static WebViewContext NhsLogin { get; } = new NhsLoginWebViewContext();
+        public static WebViewContext NhsAppPreHome { get; } = new NhsAppPreHomeWebViewContext();
         public static WebViewContext NhsLoginUplift { get; } = new NhsLoginUpliftWebViewContext();
         public static WebViewContext NhsApp { get; } = new NhsAppWebViewContext();
         public static WebViewContext ErsWebIntegration { get; } = new ErsWebIntegrationWebViewContext();
@@ -43,6 +44,16 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             {
                 Assert.IsTrue(driver.ExecuteJavaScript<bool>(
                     "return window.nhsAppPageLoadComplete === true;"),
+                    "window.nhsAppPageLoadComplete was not found to be true");
+            }
+        }
+
+        private class NhsAppPreHomeWebViewContext : WebViewContext
+        {
+            internal override void AssertContextReady(IWebDriver driver)
+            {
+                Assert.IsTrue(driver.ExecuteJavaScript<bool>(
+                        "return window.nhsAppPageLoadComplete === true;"),
                     "window.nhsAppPageLoadComplete was not found to be true");
             }
         }

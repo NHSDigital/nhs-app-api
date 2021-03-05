@@ -14,6 +14,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             options.AddAdditionalCapability("app", App);
             options.AddAdditionalCapability("device", Device);
             options.AddAdditionalCapability("os_version", OperatingSystemVersion);
+            options.AddAdditionalCapability("disableAnimations", true);
         }
     }
 }

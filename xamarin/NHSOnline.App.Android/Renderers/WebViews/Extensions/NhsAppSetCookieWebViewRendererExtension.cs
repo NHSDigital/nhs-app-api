@@ -21,6 +21,16 @@ namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
             {
                 newNhsAppWebView.SetCookie = SetCookie;
             }
+
+            if (e.OldElement is NhsAppPreHomeScreenWebview oldNhsAppPreHomeScreenWebview)
+            {
+                oldNhsAppPreHomeScreenWebview.SetCookie = null;
+            }
+
+            if (e.NewElement is NhsAppPreHomeScreenWebview newNhsAppPreHomeScreenWebview)
+            {
+                newNhsAppPreHomeScreenWebview.SetCookie = SetCookie;
+            }
         }
 
         private static Task SetCookie(Cookie cookie)

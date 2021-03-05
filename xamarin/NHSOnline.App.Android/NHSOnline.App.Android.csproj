@@ -56,9 +56,12 @@
     <Compile Include="Renderers\LinkLabelRenderer.cs" />
     <Compile Include="Renderers\WebViews\Extensions\EnableTargetBlankLinksRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\IWebViewRendererExtension.cs" />
-    <Compile Include="Renderers\WebViews\Extensions\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\Javascript\NhsAppJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\Javascript\PreHomeScreenJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\Extensions\Javascript\WebIntegrationJavascriptBridgeWebViewRendererExtension.cs" />
     <Compile Include="Renderers\WebViews\Extensions\NhsAppSetCookieWebViewRendererExtension.cs" />
-    <Compile Include="Renderers\WebViews\Extensions\WebIntegrationJavascriptBridgeWebViewRendererExtension.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeJavascriptBridge.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\NhsAppJavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftChromeClient.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />

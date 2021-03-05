@@ -10,7 +10,7 @@ namespace NHSOnline.IntegrationTests.Pages.WebPageContent
         internal ManageNotificationsPromptPageContent(IWebInteractor webInteractor) => _interactor = webInteractor;
 
         private WebText Title => WebText.WithTagAndText(_interactor, "h1", "Manage notifications");
-        
+
         private WebButton ContinueButton => WebButton.WithText(_interactor, "Continue");
 
         internal void AssertOnPage()

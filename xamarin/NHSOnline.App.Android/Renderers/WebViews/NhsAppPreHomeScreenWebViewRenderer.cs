@@ -10,20 +10,20 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using WebView = Xamarin.Forms.WebView;
 
-[assembly: ExportRenderer(typeof(NhsAppWebView), typeof(NhsAppWebViewRenderer))]
+[assembly: ExportRenderer(typeof(NhsAppPreHomeScreenWebview), typeof(NhsAppPreHomeScreenWebViewRenderer))]
 namespace NHSOnline.App.Droid.Renderers.WebViews
 {
-    public sealed class NhsAppWebViewRenderer: WebViewRenderer
+    public sealed class NhsAppPreHomeScreenWebViewRenderer: WebViewRenderer
     {
         private readonly List<IWebViewRendererExtension> _extensions;
 
-        public NhsAppWebViewRenderer(Context context) : base(context)
+        public NhsAppPreHomeScreenWebViewRenderer(Context context) : base(context)
         {
             _extensions = new List<IWebViewRendererExtension>
             {
                 new UserAgentWebViewRendererExtension(this),
                 new NhsAppSetCookieWebViewRendererExtension(),
-                new NhsAppJavascriptBridgeWebViewRendererExtension(this),
+                new PreHomeScreenJavascriptBridgeWebViewRendererExtension(this),
                 new EnableTargetBlankLinksRendererExtension(this)
             };
         }

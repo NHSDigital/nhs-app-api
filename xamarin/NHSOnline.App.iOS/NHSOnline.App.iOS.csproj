@@ -67,6 +67,7 @@
     <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\IProovExtensions.cs" />
     <Compile Include="Renderers\WebViews\NhsLoginUpliftWebViewRenderer.cs" />
+    <Compile Include="Renderers\WebViews\NhsAppPreHomeScreenWebViewRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />

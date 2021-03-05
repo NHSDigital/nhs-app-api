@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         private AndroidManageNotificationsPromptPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new ManageNotificationsPromptPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new ManageNotificationsPromptPageContent(driver.Web(WebViewContext.NhsAppPreHome));
         }
 
         public static AndroidManageNotificationsPromptPage AssertOnPage(IAndroidDriverWrapper driver)

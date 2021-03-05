@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.Android.Home
 
         private AndroidUserResearchOptInPage(IAndroidDriverWrapper driver)
         {
-            PageContent = new UserResearchOptInPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new UserResearchOptInPageContent(driver.Web(WebViewContext.NhsAppPreHome));
         }
 
         public static AndroidUserResearchOptInPage AssertOnPage(IAndroidDriverWrapper driver)

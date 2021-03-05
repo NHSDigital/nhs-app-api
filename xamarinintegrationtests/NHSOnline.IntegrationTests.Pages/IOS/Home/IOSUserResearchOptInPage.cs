@@ -9,7 +9,7 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.Home
 
         private IOSUserResearchOptInPage(IIOSDriverWrapper driver)
         {
-            PageContent = new UserResearchOptInPageContent(driver.Web(WebViewContext.NhsApp));
+            PageContent = new UserResearchOptInPageContent(driver.Web(WebViewContext.NhsAppPreHome));
         }
 
         public static IOSUserResearchOptInPage AssertOnPage(IIOSDriverWrapper driver)

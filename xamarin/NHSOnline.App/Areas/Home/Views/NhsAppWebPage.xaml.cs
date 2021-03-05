@@ -114,7 +114,7 @@ namespace NHSOnline.App.Areas.Home.Views
          public async Task SendNotificationsStatus(string status)
              => await WebView.EvaluateJavaScriptAsync($"window.nativeAppCallbacks.notificationsSettingsStatus({ConvertToJsonString(status)})").PreserveThreadContext();
 
-        public async Task ResetAndShowError()
+         public async Task ResetAndShowError()
             => await (ResetAndShowErrorRequested?.Invoke() ?? Task.CompletedTask).PreserveThreadContext();
 
         private static string ConvertToJsonString(string arg)

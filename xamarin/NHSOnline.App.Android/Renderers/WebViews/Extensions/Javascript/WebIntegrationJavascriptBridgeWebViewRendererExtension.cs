@@ -3,7 +3,7 @@ using NHSOnline.App.Controls.WebViews;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions
+namespace NHSOnline.App.Droid.Renderers.WebViews.Extensions.Javascript
 {
     internal sealed class WebIntegrationJavascriptBridgeWebViewRendererExtension : IWebViewRendererExtension, IDisposable
     {

@@ -15,10 +15,10 @@ namespace NHSOnline.App.Navigation
             navigation.RemovePage(currentPage);
         }
 
-        internal static async Task PopToNewRoot(this INavigation navigation, Page newRootPage)
+        internal static async Task PopToNewRoot(this INavigation navigation, Page newRootPage, bool isAnimated = true)
         {
             navigation.InsertPageBefore(newRootPage, navigation.NavigationStack[0]);
-            await navigation.PopToRootAsync().PreserveThreadContext();
+            await navigation.PopToRootAsync(isAnimated).PreserveThreadContext();
         }
     }
 }

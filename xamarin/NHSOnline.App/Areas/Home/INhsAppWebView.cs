@@ -1,12 +1,12 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using NHSOnline.App.Controls.WebViews.Payloads;
+using NHSOnline.App.Areas.Cookies;
 using Xamarin.Forms;
 
 namespace NHSOnline.App.Areas.Home
 {
-    internal interface INhsAppWebView
+    internal interface INhsAppWebView: ICookieView
     {
         Func<Task>? Appearing { get; set; }
         Func<WebNavigatingEventArgs, Task>? Navigating { get; set; }
@@ -40,6 +40,5 @@ namespace NHSOnline.App.Areas.Home
         Task NavigateToSettings();
         Task NavigateToHome();
         Task SendNotificationsStatus(string status);
-        Task AddCookie(Cookie cookie);
     }
 }

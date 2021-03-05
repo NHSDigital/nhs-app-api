@@ -14,6 +14,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             options.AddAdditionalCapability("app", App);
             options.AddAdditionalCapability("device", Device);
             options.AddAdditionalCapability("os_version", OperatingSystemVersion);
+            options.AddAdditionalCapability("disableAnimations", true);
+            options.AddAdditionalCapability("nativeWebTap", true);
         }
     }
 }

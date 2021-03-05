@@ -1,5 +1,9 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.IntegrationTests.UI.Components.IOS;
 using NHSOnline.IntegrationTests.UI.Drivers;
+using OpenQA.Selenium;
 
 namespace NHSOnline.IntegrationTests.Pages.IOS
 {
@@ -35,14 +39,14 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
 
         public IOSFileChooser ChoosePhoto()
         {
+            Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
             Photo.Click();
             return this;
         }
 
-        public IOSFileChooser ConfirmSelection()
+        public void ConfirmSelection()
         {
             Done.Click();
-            return this;
         }
     }
 }

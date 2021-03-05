@@ -28,6 +28,9 @@
     <Compile Update="Areas\Home\Views\NhsAppWebPage.xaml.cs">
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Areas\PreHome\Views\NhsAppPreHomeScreenWebPage.xaml.cs">
+      <DependentUpon>NhsAppPreHomeScreenWebPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Areas\LoggedOut\Views\CreateSessionErrorUpstreamSystemTimeoutPage.xaml.cs">
       <DependentUpon>CreateSessionErrorUpstreamSystemTimeoutPage.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
     </Compile>
     <Compile Update="Navigation\Pages\NhsAppLogoHeaderPage.xaml.cs">
       <DependentUpon>NhsAppLogoHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Navigation\Pages\NhsAppPreHomeHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppPreHomeHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Areas\LoggedOut\Views\NhsLoginTermsAndConditionsDeclinedPage.xaml.cs">
