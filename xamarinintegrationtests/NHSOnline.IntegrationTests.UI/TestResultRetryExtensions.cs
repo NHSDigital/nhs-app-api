@@ -38,6 +38,11 @@ namespace NHSOnline.IntegrationTests.UI
             @"Assert\.IsTrue failed\. window\.nhsAppPageLoadComplete was not found to be true",
             RegexOptions.Compiled);
 
+        // 308524-Encountered internal error running command: Error: Did not get any response for atom execution after 120047ms
+        private static readonly Regex AtomExecutionTimeout = new(
+            @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Did not get any response for atom execution after \d+ms",
+            RegexOptions.Compiled);
+
         private static readonly List<(Regex pattern, RetryStatus result)> RetryExceptionMessageRegexes = new()
         {
             (InvalidServiceWebInspectorMessage, RetryStatus.Retry(nameof(InvalidServiceWebInspectorMessage))),
@@ -45,7 +50,8 @@ namespace NHSOnline.IntegrationTests.UI
             (AdbErrorListenerNotFound, RetryStatus.Retry(nameof(AdbErrorListenerNotFound))),
             (DeviceTimeSkew, RetryStatus.Retry(nameof(DeviceTimeSkew))),
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),
-            (JavascriptLoadFailure, RetryStatus.Retry(nameof(JavascriptLoadFailure)))
+            (JavascriptLoadFailure, RetryStatus.Retry(nameof(JavascriptLoadFailure))),
+            (AtomExecutionTimeout, RetryStatus.Retry(nameof(AtomExecutionTimeout)))
         };
 
         internal static RetryStatus ShouldRetry(this TestResult result, TestLogs logs)
