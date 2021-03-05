@@ -1,0 +1,71 @@
+## Manifest template ##
+# To view the expanded version of this template locally, clone api-management-utils
+#
+#   $ cd /path/to/local/api-management-utils/ansible
+#   $ DIST_DIR=/path/to/this/repo make template-manifest
+#
+#
+APIGEE_ENVIRONMENTS:
+- display_name: Internal Development
+  make_spec_visible: true
+  name: internal-dev
+- display_name: Internal QA
+  make_spec_visible: true
+  name: internal-qa
+- display_name: Integration Testing
+  make_spec_visible: true
+  name: int
+- approval_type: manual
+  display_name: Production
+  make_spec_visible: true
+  name: prod
+---
+meta:
+  api:
+    name: nhs-app
+    guid: 7541eb6b-3416-4aee-bd66-8766c1f90cfb
+    spec_guids: ['f5b9779e-d343-4a0a-8410-6dcae48bc55e']
+  schema_version: 1
+apigee:
+  environments:
+
+{% for ENV in APIGEE_ENVIRONMENTS %}
+{% set TITLE = 'NHS App (' + ENV.display_name + ')' %}
+{% set DESCRIPTION = 'NHS App - ' + ENV.display_name | lower + ' environment' %}
+{% set NAME = 'nhs-app-' + ENV.name %}
+  - name: {{ ENV.name }}
+    products:
+      - name: {{ NAME }}
+        approvalType: {{ ENV.approval_type | default('auto') }}
+        attributes:
+          - name: access
+            value: public
+          - name: ratelimit
+            value: 5ps
+        description: {{ DESCRIPTION }}
+        displayName: {{ TITLE }}
+        environments: [ {{ ENV.name }} ]
+        proxies:
+          - nhs-app-{{ ENV.name }}
+          - identity-service-{{ ENV.name }}
+{% if ENV.name == 'int' %}
+          - identity-service-int-no-smartcard
+{% endif %}
+        scopes:
+          - 'urn:nhsd:apim:app:level3:nhs-app'
+          - 'urn:nhsd:apim:user-nhs-id:aal3:nhs-app'
+        quota: '300'
+        quotaInterval: '1'
+        quotaTimeUnit: minute
+    specs:
+      - name: {{ NAME }}
+        path: nhs-app.json
+    api_catalog:
+      - edgeAPIProductName: {{ NAME }}
+        anonAllowed: true
+        description: {{ DESCRIPTION }}
+        requireCallbackUrl: {{ ENV.require_callback_url | default(false) }}
+        title: {{ TITLE }}
+        visibility: {{ ENV.make_spec_visible | default(false) }}
+        specId: {{ NAME }}
+{% endfor %}
