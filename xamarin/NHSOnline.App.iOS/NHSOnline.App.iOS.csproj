@@ -62,6 +62,7 @@
     <Compile Include="DependencyServices\Notifications\IosGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\IosNotifications.cs" />
     <Compile Include="DependencyServices\Notifications\RemoteNotificationRegistrationHandler.cs" />
+    <Compile Include="Effects\IosAccessibilityEffect.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectTop.cs" />
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Effects\UIDeviceExtensions.cs" />

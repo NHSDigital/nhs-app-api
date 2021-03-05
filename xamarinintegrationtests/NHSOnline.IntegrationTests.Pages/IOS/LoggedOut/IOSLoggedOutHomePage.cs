@@ -9,13 +9,13 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         private IOSLoggedOutHomePage(IIOSDriverWrapper driver) => _driver = driver;
 
-        private IOSBanner CovidConditions => IOSBanner.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
+        private IOSButton CovidConditions => IOSButton.WithText(_driver, "Coronavirus (COVID-19) Get information about coronavirus on NHS.UK");
 
         private IOSLabel AccessServicesText => IOSLabel.WithText(_driver, "Access your NHS services");
 
-        private IOSLink ContinueButton => IOSLink.WithText(_driver, "Continue with NHS login");
+        private IOSButton ContinueButton => IOSButton.WithText(_driver, "Continue with NHS login");
 
-        private IOSIcon HelpIcon => IOSIcon.WithDescription(_driver, "NHS App help icon");
+        private IOSButton HelpIcon => IOSButton.WithText(_driver, "Help");
 
 
         public static IOSLoggedOutHomePage AssertOnPage(IIOSDriverWrapper driver)
@@ -53,6 +53,6 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
 
         public void GetHelp() => HelpIcon.Click();
 
-        public void ContinueWithNhsLogin() => ContinueButton.Touch();
+        public void ContinueWithNhsLogin() => ContinueButton.Click();
     }
 }

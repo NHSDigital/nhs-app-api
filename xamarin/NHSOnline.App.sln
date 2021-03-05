@@ -599,14 +599,12 @@ Global
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Release|iPhoneSimulator.ActiveCfg = Staging - Release|iPhoneSimulator
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Release|iPhoneSimulator.Build.0 = Staging - Release|iPhoneSimulator
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|Any CPU.ActiveCfg = Staging - Debug|iPhoneSimulator
-		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|Any CPU.Build.0 = Staging - Debug|iPhoneSimulator
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|iPhone.ActiveCfg = Staging - Debug|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|iPhone.Build.0 = Staging - Debug|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|iPhone.Deploy.0 = Staging - Debug|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|iPhoneSimulator.ActiveCfg = Staging - Debug|iPhoneSimulator
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Debug|iPhoneSimulator.Build.0 = Staging - Debug|iPhoneSimulator
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Release|Any CPU.ActiveCfg = Staging - Release|iPhone
-		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Release|Any CPU.Build.0 = Staging - Release|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Release|iPhone.ActiveCfg = Staging - Release|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Release|iPhone.Build.0 = Staging - Release|iPhone
 		{F135886A-E596-49E8-A3D9-BF4AD1C587B9}.Staging - Release|iPhone.Deploy.0 = Staging - Release|iPhone

@@ -9,7 +9,8 @@
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
              mc:Ignorable="d"
              x:Class="NHSOnline.App.Areas.LoggedOut.Views.LoggedOutHomeScreenPage"
-             x:Name="Page">
+             x:Name="Page"
+             xmlns:effects="clr-namespace:NHSOnline.App.Controls.Effects;assembly=NHSOnline.App.Controls">
     
     <controls:GradientBackground BackgroundColor="{StaticResource HomeBlueInnerGradient}"
                                  InnerColour="{StaticResource HomeBlueInnerGradient}"
@@ -47,7 +48,7 @@
             <Label Grid.Column="1"
                    Grid.Row="0" 
                    Padding="0,10,0,10"
-                   AutomationProperties.IsInAccessibleTree="True">
+                   effects:AccessibilityEffect.AccessibilityControlType="Button">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Coronavirus (COVID-19)&#10;" 
@@ -78,30 +79,33 @@
             <StackLayout Grid.Row="1" 
                          Grid.Column="1" 
                          HorizontalOptions="End"
-                         VerticalOptions="Start">
-                
-                <icons:IconHelp
-                    HeightRequest="37"
-                    AutomationProperties.IsInAccessibleTree="true"
-                    AutomationProperties.HelpText="NHS App help icon">
-                    <icons:IconHelp.GestureRecognizers>
-                        <TapGestureRecognizer 
-                            Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
-                    </icons:IconHelp.GestureRecognizers>
-                </icons:IconHelp>
+                         VerticalOptions="Start"
+                         effects:AccessibilityEffect.AccessibilityControlType="Button"
+                         AutomationProperties.HelpText="Help"
+                         AutomationProperties.Name="Help">
+
+                <icons:IconHelp HeightRequest="37"
+                                AutomationProperties.IsInAccessibleTree="False" />
                 
                 <Label Text="Help"
                        TextColor="{StaticResource NhsUkWhite}"
                        FontSize="Small"
-                       HorizontalOptions="Center"
-                       AutomationProperties.IsInAccessibleTree="false" />
+                       HorizontalOptions="Center" />
+
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer 
+                        Command="{Binding NhsUkLoginHelpServiceCommand, Source={x:Reference Name=Page}}" />
+                </StackLayout.GestureRecognizers>
             </StackLayout>
             
             <controls:NhsLogo Grid.Row="1" 
                               Grid.Column="1"
                               HorizontalOptions="Center"
                               VerticalOptions="Center"
-                              HeightRequest="48" />
+                              HeightRequest="48"
+                              AutomationProperties.IsInAccessibleTree="true"
+                              AutomationProperties.HelpText="NHS Logo"
+                              IsTabStop="False" />
             
             <Label Grid.Row="2" 
                    Grid.Column="1"
@@ -109,7 +113,9 @@
                    StyleClass="Heading2"
                    HorizontalOptions="Center"
                    TextColor="{StaticResource NhsUkWhite}" 
-                   Padding="0,10,0,0" />
+                   Padding="0,10,0,0"
+                   AutomationProperties.IsInAccessibleTree="True"
+                   IsTabStop="False" />
 
             <controls:NhsLoginButton Grid.Row="3"
                                      Grid.Column="1"
@@ -129,7 +135,8 @@
                    FontAttributes="Bold"
                    FontFamily="Frutiger"
                    Margin="0,10,0,10"
-                   FontSize="Medium" />
+                   FontSize="Medium"
+                   effects:AccessibilityEffect.AccessibilityControlType="Link" />
             
             <Label Grid.Row="5" 
                    Grid.Column="1" 
@@ -139,7 +146,9 @@
                    FontFamily="Frutiger"
                    TextColor="{StaticResource NhsUkWhite}"
                    FontSize="Small"
-                   Margin="0,10,0,10" />
+                   Margin="0,10,0,10" 
+                   AutomationProperties.IsInAccessibleTree="True"
+                   IsTabStop="False" />
         </Grid>
     </controls:GradientBackground>
 </ContentPage>

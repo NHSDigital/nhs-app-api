@@ -61,6 +61,7 @@
     <Compile Include="DependencyServices\Biometrics\Extensions.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidGetPnsTokenResponse.cs" />
     <Compile Include="DependencyServices\Notifications\AndroidNotifications.cs" />
+    <Compile Include="Effects\AndroidAccessibilityEffect.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\KeyEventArgsExtensions.cs" />
     <Compile Include="Renderers\LinkLabelRenderer.cs" />

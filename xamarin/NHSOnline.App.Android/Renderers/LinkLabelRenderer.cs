@@ -12,6 +12,7 @@ namespace NHSOnline.App.Droid.Renderers
         public LinkLabelRenderer(Context context) : base(context)
         {
         }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
         {
             base.OnElementChanged(e);
@@ -21,6 +22,7 @@ namespace NHSOnline.App.Droid.Renderers
                 Control.KeyPress += ControlOnKeyPress;
             }
         }
+
         private void ControlOnKeyPress(object sender, KeyEventArgs e)
         {
             e.Handled = false;
