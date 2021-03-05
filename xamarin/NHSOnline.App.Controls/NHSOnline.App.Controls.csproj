@@ -105,15 +105,15 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="SlimBackNavigationHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="SafeAreaPaddingBottom.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="SlimCloseNavigationHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SlimCloseAndLogoNavigationHeader.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
@@ -173,10 +173,6 @@
     <Compile Update="FullNavigationFooterItem.xaml.cs">
       <DependentUpon>MenuBarItem.xaml</DependentUpon>
     </Compile>
-    <Compile Update="SlimBackNavigationHeader.xaml.cs">
-      <DependentUpon>LoggedInHeaderSlim.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="SafeAreaPaddingBottom.xaml.cs">
       <DependentUpon>SafeAreaPaddingBottom.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -203,6 +199,10 @@
     </Compile>
     <Compile Update="LabelListItem.xaml.cs">
       <DependentUpon>LabelListItem.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SlimCloseAndLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimCloseAndLogoNavigationHeader.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

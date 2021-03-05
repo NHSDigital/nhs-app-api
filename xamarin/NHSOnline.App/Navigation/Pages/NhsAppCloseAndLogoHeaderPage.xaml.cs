@@ -7,13 +7,12 @@ namespace NHSOnline.App.Navigation.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(PageContent))]
-    public partial class NhsAppBackSlimHeaderPage : ContentPage
+    public partial class NhsAppCloseAndLogoHeaderPage
     {
-
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
 
-        public NhsAppBackSlimHeaderPage()
+        public NhsAppCloseAndLogoHeaderPage()
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
@@ -25,6 +24,6 @@ namespace NHSOnline.App.Navigation.Pages
             set => SetValue(PageContentProperty, value);
         }
 
-        public ICommand BackArrowClicked => new Command(async () => await Navigation.PopAsync().PreserveThreadContext());
+        public ICommand CloseClicked => new Command(async () => await Navigation.PopAsync().PreserveThreadContext());
     }
 }

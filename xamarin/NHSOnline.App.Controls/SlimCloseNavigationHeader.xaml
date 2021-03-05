@@ -3,6 +3,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:icons="clr-namespace:NHSOnline.App.Controls.Icons;assembly=NHSOnline.App.Controls"
+             xmlns:controls="clr-namespace:NHSOnline.App.Controls;assembly=NHSOnline.App.Controls"
              x:Class="NHSOnline.App.Controls.SlimCloseNavigationHeader"
              x:Name="Root">
 
@@ -29,15 +30,13 @@
                          HeightRequest="30"
                          WidthRequest="30" />
         
-        <Label Text="Close"
-               FontFamily="Frutiger"
-               FontSize="Medium"
-               VerticalOptions="CenterAndExpand"
-               TextColor="{StaticResource NhsUkWhite}"
-               Margin="0,0,0,10" />
+        <controls:MediumLabel Text="Close"
+                              VerticalOptions="CenterAndExpand"
+                              TextColor="{StaticResource NhsUkWhite}"
+                              Margin="0,0,0,10" />
         
         <StackLayout.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference Name=Root}}"  />
+            <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
         </StackLayout.GestureRecognizers>
     </StackLayout>
 </ContentView>

@@ -7,9 +7,8 @@ namespace NHSOnline.App.Navigation.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ContentProperty(nameof(PageContent))]
-    public partial class NhsAppCloseSlimHeaderPage : ContentPage
+    public partial class NhsAppCloseSlimHeaderPage
     {
-
         public static readonly BindableProperty PageContentProperty =
             BindableProperty.Create(nameof(PageContent), typeof(View), typeof(NhsAppFullHeaderPage));
 

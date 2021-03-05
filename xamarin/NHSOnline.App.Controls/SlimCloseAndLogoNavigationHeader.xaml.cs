@@ -5,12 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace NHSOnline.App.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SlimCloseNavigationHeader
+    public partial class SlimCloseAndLogoNavigationHeader
     {
         public static readonly BindableProperty CloseCommandProperty =
             BindableProperty.Create(nameof(CloseCommand), typeof(ICommand), typeof(SlimCloseAndLogoNavigationHeader));
 
-        public SlimCloseNavigationHeader()
+        public SlimCloseAndLogoNavigationHeader()
         {
             InitializeComponent();
         }

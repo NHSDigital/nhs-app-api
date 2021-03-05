@@ -74,10 +74,6 @@
       <DependentUpon>NhsUkPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Navigation\Pages\NhsAppBackSlimHeaderPage.xaml.cs">
-      <DependentUpon>NhsAppBackSlimHeaderPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml.cs">
       <DependentUpon>NhsAppCloseSlimHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -90,6 +86,10 @@
       <DependentUpon>NhsAppWebPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Navigation\Pages\NhsAppCloseAndLogoHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppCloseAndLogoHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -97,11 +97,11 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Navigation\Pages\NhsAppBackSlimHeaderPage.xaml">
+    <EmbeddedResource Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Navigation\Pages\NhsAppCloseSlimHeaderPage.xaml">
+    <EmbeddedResource Update="Navigation\Pages\NhsAppCloseAndLogoHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
