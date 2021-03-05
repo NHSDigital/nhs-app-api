@@ -24,6 +24,8 @@ properties:
       No more than one campaign ID and one request reference can be supplied with each request.
 
       The API will not reject requests that contain other identifier systems, but these values will be ignored and not recorded against the request.
+
+      When a `CommunicationRequest` resource is returned in the response body to a successful request, this array will also include a globally unique identifier assigned by the API, with the system `urn:ietf:rfc:3986`. This is the same logical ID contained within the `Location` header of the successful response.
     items:
       type: object
       properties:
@@ -97,7 +99,7 @@ properties:
   recipient:
     type: array
     description:
-      An array of NHS numbers corresponding to the patient(s) to whom this in-app message should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
+      An array of NHS numbers corresponding to the patient(s) to whom this in-app message should be sent. Each communication may be sent to between 1 and 100 distinct NHS numbers. The communication request will be rejected if any duplicated values exist in this array.
     minItems: 1
     maxItems: 100
     items:
@@ -109,7 +111,7 @@ properties:
           example: Patient
         identifier:
           type: object
-          description: Identifier of a recipient. This should be an NHS Number.
+          description: Identifier of a recipient. This should be an NHS number.
           required:
             - system
             - value
@@ -122,5 +124,5 @@ properties:
             value:
               type: string
               pattern: "^\\d{10}$"
-              description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
+              description: The patient's NHS number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
               example: "9903002157"

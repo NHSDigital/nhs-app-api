@@ -100,7 +100,7 @@ paths:
         ## Overview
         Use this endpoint to send an in-app message to one or more NHS App users.
 
-        Recipients are specified by NHS Number. A single request to this endpoint can send an identical message to between 1 and 100 distinct NHS Numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send an identical message to between 1 and 100 distinct NHS numbers.
 
         We support a subset of [Markdown](https://en.wikipedia.org/wiki/Markdown) for describing the body text of in-app messages. The length of each in-app message is limited to 5000 characters, including any markdown characters and embedded hyperlinks.
 
@@ -132,7 +132,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -141,7 +141,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successInApp.json
         "400":
           description: There is an error in your request.
           headers:
@@ -167,7 +167,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
-                  summary: A recipient has an invalid NHS Number
+                  summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
                 sender-missing-and-campaign-id-too-long:
@@ -226,7 +226,7 @@ paths:
         ## Overview
         Use this endpoint to send a native Apple or Android push notifications to mobile devices registered by specific users of the NHS App.
 
-        Recipients are specified by NHS Number. A single request to this endpoint can send an identical push notification to between 1 and 100 distinct NHS Numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send an identical push notification to between 1 and 100 distinct NHS numbers.
 
         The body text of notifications can be up to 200 characters in length.
 
@@ -242,7 +242,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/fhir+json:
             examples:
               push-notification:
                 summary: Sending a push notification
@@ -266,7 +266,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -275,7 +275,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successNotification.json
         "400":
           description: There is an error in your request.
           headers:
@@ -301,7 +301,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
-                  summary: A recipient has an invalid NHS Number
+                  summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
                 sender-missing-and-campaign-id-too-long:
@@ -360,7 +360,7 @@ paths:
         ## Overview
         Use this endpoint to send an in-app message followed immediately by an associated native Apple or Android push notification to one or more NHS App users.
 
-        Recipients are specified by NHS Number. A single request to this endpoint can send an identical message and push notification to between 1 and 100 distinct NHS Numbers.
+        Recipients are specified by NHS number. A single request to this endpoint can send an identical message and push notification to between 1 and 100 distinct NHS numbers.
 
         If a recipient is an active NHS App user but has not registered a device to receive native push notifications, they will still receive the in-app message.
 
@@ -396,7 +396,7 @@ paths:
                 type: string
               description: If an X-Correlation-ID was specified in the request, this is mirrored in the response.
           content:
-            application/json:
+            application/fhir+json:
               schema:
                 type: object
                 properties:
@@ -405,7 +405,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/201successInAppWithNotification.json
         "400":
           description: There is an error in your request.
           headers:
@@ -431,7 +431,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/400noRecipients.json
                 invalid-recipient:
-                  summary: A recipient has an invalid NHS Number
+                  summary: A recipient has an invalid NHS number
                   value:
                     $ref: components/examples/responses/communication/400invalidNhsNumber.json
                 sender-missing-and-campaign-id-too-long:
@@ -494,7 +494,7 @@ paths:
           * in-app messages to specific users of the NHS App
           * native Apple or Android push notifications to mobile devices registered by specific users of the NHS App
 
-        Recipients are specified by NHS Number. A single communication request can be sent to between 1 and 100 distinct NHS Numbers.
+        Recipients are specified by NHS number. A single communication request can be sent to between 1 and 100 distinct NHS numbers.
       requestBody:
         required: true
         content:
@@ -539,7 +539,7 @@ paths:
                     description: An identifier for the newly-created communication resource within the destination system.
                     example: a2d10720-9e72-4ae4-be72-8cbe1be292d1
               example:
-                $ref: components/examples/responses/communication/201success.json
+                $ref: components/examples/responses/communication/legacy_201success.json
         "400":
           description: There is an error in your request.
           headers:
@@ -572,7 +572,7 @@ paths:
                   value:
                     $ref: components/examples/responses/communication/legacy_400noRecipients.json
                 invalid-nhs-numbers:
-                  summary: Some recipient NHS Numbers are invalid
+                  summary: Some recipient NHS numbers are invalid
                   value:
                     $ref: components/examples/responses/communication/legacy_400invalidNhsNumbers.json
                 sender-missing-and-campaign-id-too-long:

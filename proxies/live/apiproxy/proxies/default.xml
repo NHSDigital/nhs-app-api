@@ -64,13 +64,13 @@
 			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
 		</Flow>
 	</Flows>
-  	<PostClientFlow name="PostClientFlow">
-    	<Response>
-      		<Step>
-        		<Name>FlowCallout.LogToSplunk</Name>
-      		</Step>
-    	</Response>
-  	</PostClientFlow>
+	<PostClientFlow name="PostClientFlow">
+		<Response>
+			<Step>
+				<Name>FlowCallout.LogToSplunk</Name>
+			</Step>
+		</Response>
+	</PostClientFlow>
 	<HTTPProxyConnection>
 		<BasePath>{{ SERVICE_BASE_PATH }}</BasePath>
 		<VirtualHost>secure</VirtualHost>
@@ -87,4 +87,13 @@
 	<RouteRule name="nhs-app-target">
 		<TargetEndpoint>nhs-app-target</TargetEndpoint>
 	</RouteRule>
+	<DefaultFaultRule>
+		<Step>
+			<Name>AssignMessage.AddHeader.MirrorXCorrelationId</Name>
+			<Condition>(request-correlation-id != "NoCorrelationId")</Condition>
+		</Step>
+		<Step>
+			<Name>AssignMessage.CatchallErrorMessage</Name>
+		</Step>
+	</DefaultFaultRule>
 </ProxyEndpoint>

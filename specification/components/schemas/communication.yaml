@@ -99,13 +99,13 @@ properties:
             example: https://www.nhsapp.service.nhs.uk/patient/messages/app-messaging
   recipients:
     type: object
-    description: The intended recipients of this communication. Currently we support only sending communications by NHS Number.
+    description: The intended recipients of this communication. Currently we support only sending communications by NHS number.
     properties:
       nhsNumbers:
         type: array
-        description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS Numbers. The communication request will be rejected if any duplicated values exist in this array.
+        description: An array of NHS numbers corresponding to the patient(s) to whom this communication should be sent. Each communication may be sent to between 1 and 100 distinct NHS numbers. The communication request will be rejected if any duplicated values exist in this array.
         example: ["9903002157", "9678304287"]
         items:
           type: string
           pattern: "^\\d{10}$"
-          description: The patient's NHS Number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS Number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).
+          description: The patient's NHS number. The primary identifier of a patient, unique within NHS England and Wales. Always 10 digits and must be a [valid NHS number](https://www.datadictionary.nhs.uk/data_dictionary/attributes/n/nhs/nhs_number_de.asp).

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "744b5607-f60a-4df4-91c1-843e2b64dd4d",
+		"_postman_id": "04dbb4a2-f8c3-4fc8-8b5b-5b2b59a43a7a",
 		"name": "NHS App",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -30,11 +30,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/_ping",
+					"raw": "{{base_url}}/nhs-app/_ping",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"_ping"
 					]
 				}
@@ -71,12 +72,141 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/_status",
+					"raw": "{{base_url}}/nhs-app/_status",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load Crypto Library for RS512",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"postman.setGlobalVariable(\"jsrsasign-js\", responseBody);",
+							"if (postman.getEnvironmentVariable(\"DEBUG\") == \"true\") { tests[\"[INFO] Request: \" + JSON.stringify(request)] = true; }",
+							"pm.test(\"response is Ok\", function(){ pm.response.to.have.status(200); });",
+							"pm.test(\"response has body\", function(){ pm.response.to.be.withBody; });",
+							"pm.test(\"response has body\", function(){ pm.response.to.be.withBody; });",
+							"pm.test(\"global variable contains response\", function(){ pm.expect(postman.getGlobalVariable(\"jsrsasign-js\")).to.equal(responseBody) });",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://raw.githubusercontent.com/kjur/jsrsasign/master/jsrsasign-all-min.js",
+					"protocol": "https",
+					"host": [
+						"raw",
+						"githubusercontent",
+						"com"
+					],
+					"path": [
+						"kjur",
+						"jsrsasign",
+						"master",
+						"jsrsasign-all-min.js"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Access Token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var navigator = {}; //fake a navigator object for the lib",
+							"var window = {}; //fake a window object for the lib",
+							"var uniqueId = pm.variables.replaceIn('{{$guid}}');",
+							"eval(postman.getGlobalVariable(\"jsrsasign-js\")); //import jsrsasign lib",
+							"",
+							"var header = {",
+							"    \"typ\": \"JWT\",",
+							"    \"alg\": \"RS512\",",
+							"    \"kid\": postman.getEnvironmentVariable(\"kid\")",
+							"}",
+							"",
+							"var data = {",
+							"    \"iss\": postman.getEnvironmentVariable(\"apiKey\"),",
+							"    \"sub\": postman.getEnvironmentVariable(\"apiKey\"),",
+							"    \"exp\": Math.floor(Date.now() / 1000) + 300,",
+							"    \"aud\": pm.variables.replaceIn(pm.request.url.getRaw()),",
+							"    \"jti\": uniqueId",
+							"};",
+							"",
+							"var key = postman.getEnvironmentVariable(\"RSAKEY\");",
+							"",
+							"var secret = KEYUTIL.getKey(key);",
+							"var sHeader = JSON.stringify(header);",
+							"var sPayload = JSON.stringify(data);",
+							"var sJWT = KJUR.jws.JWS.sign(\"RS512\", sHeader, sPayload, secret);",
+							"postman.setEnvironmentVariable(\"jwt_token\", sJWT);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (postman.getEnvironmentVariable(\"DEBUG\") == \"true\") { tests[\"[INFO] Request: \" + JSON.stringify(request)] = true; tests[\"[INFO] Response: \" + responseBody] = true; }",
+							"var data = JSON.parse(responseBody);",
+							"pm.test(\"response is Ok\", function(){ pm.response.to.have.status(200); });",
+							"pm.test(\"response has JSON body\", function(){ pm.response.to.be.withBody; pm.response.to.be.json; });",
+							"pm.test(\"response JSON has access_token\", function(){ pm.expect(data).to.have.property('access_token'); });",
+							"postman.setEnvironmentVariable(\"ACCESS_TOKEN\", data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{jwt_token}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/oauth2/token",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"oauth2",
+						"token"
 					]
 				}
 			},
@@ -89,8 +219,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -100,13 +228,18 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
-					{
-						"key": "x-api-key",
-						"type": "text",
-						"value": "{{apiKey}}"
-					},
 					{
 						"key": "X-Correlation-ID",
 						"type": "text",
@@ -123,11 +256,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/communication/in-app/FHIR/R4/CommunicationRequest",
+					"raw": "{{base_url}}/nhs-app/communication/in-app/FHIR/R4/CommunicationRequest",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"communication",
 						"in-app",
 						"FHIR",
@@ -145,8 +279,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -156,13 +288,18 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
-					{
-						"key": "x-api-key",
-						"type": "text",
-						"value": "{{apiKey}}"
-					},
 					{
 						"key": "X-Correlation-ID",
 						"type": "text",
@@ -179,11 +316,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/communication/notification/FHIR/R4/CommunicationRequest",
+					"raw": "{{base_url}}/nhs-app/communication/notification/FHIR/R4/CommunicationRequest",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"communication",
 						"notification",
 						"FHIR",
@@ -201,8 +339,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -212,13 +348,18 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
-					{
-						"key": "x-api-key",
-						"type": "text",
-						"value": "{{apiKey}}"
-					},
 					{
 						"key": "X-Correlation-ID",
 						"type": "text",
@@ -235,11 +376,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/communication/in-app-with-notification/FHIR/R4/CommunicationRequest",
+					"raw": "{{base_url}}/nhs-app/communication/in-app-with-notification/FHIR/R4/CommunicationRequest",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"communication",
 						"in-app-with-notification",
 						"FHIR",
@@ -257,8 +399,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"id\", pm.response.json().id);\r",
-							"\r",
 							"pm.test(\"Status code is 201\", () => { \r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -291,11 +431,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/communication",
+					"raw": "{{base_url}}/nhs-app/communication",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"nhs-app",
 						"communication"
 					]
 				}

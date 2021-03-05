@@ -10,6 +10,7 @@ using FluentAssertions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nhs.App.Api.Integration.Tests.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Nhs.App.Api.Integration.Tests
@@ -22,12 +23,6 @@ namespace Nhs.App.Api.Integration.Tests
         {
             ContentString,
             ContentReference
-        }
-
-        private enum RecipientKind
-        {
-            NhsNumbers,
-            OdsCode
         }
 
         public class EndpointInfo
@@ -72,41 +67,20 @@ namespace Nhs.App.Api.Integration.Tests
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.NhsNumbers);
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
 
         [TestMethod]
         [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task
-            CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentString_ReturnsCreatedStatusCode(EndpointInfo endpoint)
+        public async Task CommunicationPost_ValidCommunicationRequestWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
         {
             // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentString, RecipientKind.OdsCode);
-
-            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByNhsNumbersWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
-        {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.NhsNumbers);
-
-            await CommunicationPost_ValidTest(validPayload, endpoint.Path);
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
-        public async Task CommunicationPost_ValidCommunicationRequestByOdsCodeWithContentReference_ReturnsCreatedStatusCode(EndpointInfo endpoint)
-        {
-            // Arrange
-            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference, RecipientKind.OdsCode);
+            var validPayload = BuildValidRequestBody(PayloadContentKind.ContentReference);
 
             await CommunicationPost_ValidTest(validPayload, endpoint.Path);
         }
@@ -120,9 +94,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var stringPayload = BuildValidRequestBody();
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent, "invalidAccessToken");
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId, "invalidAccessToken");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -138,6 +113,8 @@ namespace Nhs.App.Api.Integration.Tests
             coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
             coding.Code.Should().Be("ACCESS_DENIED");
             coding.Display.ToLowerInvariant().Should().Be("invalid access token");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -148,9 +125,10 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent("{ bad Json", Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -162,6 +140,8 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Invalid Json encountered.");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -176,8 +156,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
+            var correlationId = Guid.NewGuid().ToString();
+
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -189,6 +171,8 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Cannot locate type information for type 'UnknownType'");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         [TestMethod]
@@ -204,8 +188,10 @@ namespace Nhs.App.Api.Integration.Tests
 
             var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
 
+            var correlationId = Guid.NewGuid().ToString();
+
             // Act
-            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -217,6 +203,62 @@ namespace Nhs.App.Api.Integration.Tests
             issue.Code.Should().Be(OperationOutcome.IssueType.Invalid);
 
             issue.Diagnostics.Should().Contain("Root object has no type indication (resourceType)");
+
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(Endpoints), DynamicDataDisplayName = nameof(EndpointInfoDisplayName))]
+        public async Task CommunicationPost_NoCorrelationIdPassed_NoCorrelationIdHeaderInTheResponse(EndpointInfo endpoint)
+        {
+            // Arrange
+            using var httpClient = CreateJwtHttpClient();
+            var stringPayload = BuildValidRequestBody();
+            var httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await httpClient.PostAsync(endpoint.Path, httpContent);
+
+            // Assert
+            response.Headers.ShouldNotContainHeader("X-Correlation-ID");
+        }
+
+        /// <summary>
+        /// This test exists to check that any unanticipated errors are shown the default catch-all error content defined in the AssignMessage.CatchallErrorMessage policy.
+        ///
+        /// It does this by making a call to a non-existent path, in the expectation of receiving a 404 response.
+        ///
+        /// In practice, this test is receiving a 429 (too many request) or 500 (internal server error) response status code, but as those also cause the default
+        /// catch-all error content to be shown, the effect is the same.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod]
+        public async Task CommunicationPost_UnhandledError_ReturnsCatchAllErrorContent()
+        {
+            // Arrange
+            using var httpClient = CreateJwtHttpClient();
+            var correlationId = Guid.NewGuid().ToString();
+
+            // Act
+            var response = await httpClient.PostAsync("unknown_path", new StringContent(""), correlationId);
+
+            // Assert
+            var operationOutcome = await ParseOperationOutcome(response);
+
+            var issue = operationOutcome.Issue.Single();
+            issue.Severity.Should().Be(OperationOutcome.IssueSeverity.Error);
+            issue.Code.Should().Be(OperationOutcome.IssueType.Unknown);
+
+            var coding = issue.Details.Coding.Single();
+            coding.System.Should().Be("https://fhir.nhs.uk/R4/CodeSystem/Spine-ErrorOrWarningCode");
+            coding.Version.Should().Be("1");
+            coding.Code.Should().Be("UNKNOWN_ERROR");
+            coding.Display.Should()
+                .StartWith(
+                    "An unknown error occurred processing this request. Contact us for assistance diagnosing this issue: https://digital.nhs.uk/developer/help-and-support. (Message ID:");
+
+           response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         private static async Task CommunicationPost_ValidTest(string validPayload, string endpointPath)
@@ -225,23 +267,33 @@ namespace Nhs.App.Api.Integration.Tests
             using var httpClient = CreateJwtHttpClient();
 
             var httpContent = new StringContent(validPayload, Encoding.UTF8, "application/json");
+            var correlationId = Guid.NewGuid().ToString();
 
             // Act
-            var response = await httpClient.PostAsync(endpointPath, httpContent);
+            var response = await httpClient.PostAsync(endpointPath, httpContent, correlationId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-            var responseObject = await DeserializeResponseAsync<CommunicationPostResponse>(response);
-            Guid.TryParse(responseObject.Id, out var communicationId).Should().BeTrue();
 
-            response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{communicationId}");
+            var responseObject = await DeserializeFhirResponseAsync(response);
+            var identifier = responseObject.Identifier
+                .Should().ContainSingle(x => x.System == FhirR4IdentifierSystem.UniformResourceIdentifier)
+                .Subject;
+
+            if (!Guid.TryParse(identifier.Value, out _))
+            {
+                Assert.Fail(
+                    $"Expected the value of the identifier with system {FhirR4IdentifierSystem.UniformResourceIdentifier} to be parseable as a GUID, but '{identifier.Value}' is not.");
+            }
+
+            response.Headers.Location.Should().Be($"{httpClient.BaseAddress}{endpointPath}/{identifier.Value}");
+            response.Headers.ShouldContainHeader("X-Correlation-ID", correlationId);
         }
 
         private static string BuildValidRequestBody(
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
-            RecipientKind recipientKind = RecipientKind.NhsNumbers)
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
         {
-            var communicationRequest = BuildValidCommunicationRequest(payloadContentKind, recipientKind);
+            var communicationRequest = BuildValidCommunicationRequest(payloadContentKind);
 
             return BuildRequestBody(communicationRequest);
         }
@@ -255,8 +307,7 @@ namespace Nhs.App.Api.Integration.Tests
         }
 
         private static CommunicationRequest BuildValidCommunicationRequest(
-            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString,
-            RecipientKind recipientKind = RecipientKind.NhsNumbers)
+            PayloadContentKind payloadContentKind = PayloadContentKind.ContentString)
         {
             var communicationRequest = new CommunicationRequest
             {
@@ -267,10 +318,10 @@ namespace Nhs.App.Api.Integration.Tests
                 },
                 Identifier = new List<Identifier>
                 {
-                    new Identifier(FhirR4IdentifierSystem.CampaignId, "Campaign ID 1"),
-                    new Identifier(FhirR4IdentifierSystem.RequestReference, "Request Reference 1")
+                    new(FhirR4IdentifierSystem.CampaignId, "Campaign ID 1"),
+                    new(FhirR4IdentifierSystem.RequestReference, "Request Reference 1")
                 },
-                Recipient = BuildValidRecipient(recipientKind),
+                Recipient = BuildValidRecipient(),
                 Payload = BuildValidPayload(payloadContentKind)
             };
 
@@ -294,30 +345,19 @@ namespace Nhs.App.Api.Integration.Tests
 
             return new List<CommunicationRequest.PayloadComponent>
             {
-                new CommunicationRequest.PayloadComponent { Content = content }
+                new() { Content = content }
             };
         }
 
-        private static List<ResourceReference> BuildValidRecipient(RecipientKind recipientKind)
+        private static List<ResourceReference> BuildValidRecipient()
         {
             var recipients = new List<ResourceReference>();
 
-            if (recipientKind == RecipientKind.OdsCode)
+            recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
             {
-                recipients.Add(new ResourceReference
-                {
-                    Identifier = new Identifier(FhirR4IdentifierSystem.PatientsAtOdsCode, _testConfiguration.SendToOdsCode),
-                    Type = "group"
-                });
-            }
-            else
-            {
-                recipients.AddRange(_testConfiguration.SendToNhsNumbers.Select(nhsNumber => new ResourceReference
-                {
-                    Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
-                    Type = "patient"
-                }));
-            }
+                Identifier = new Identifier(FhirR4IdentifierSystem.NhsNumber, nhsNumber),
+                Type = ResourceType.Patient.ToString()
+            }));
 
             return recipients;
         }
@@ -329,6 +369,14 @@ namespace Nhs.App.Api.Integration.Tests
             var operationOutcome = new FhirJsonParser().Parse<OperationOutcome>(responseString);
 
             return operationOutcome;
+        }
+
+        private static async Task<CommunicationRequest> DeserializeFhirResponseAsync(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseObject = new FhirJsonParser().Parse(responseString) as CommunicationRequest;
+
+            return responseObject;
         }
     }
 }
