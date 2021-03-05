@@ -7,5 +7,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.Android
 
         public static AndroidIcon ContainingIconWithDescription(this IAndroidContainer container, string description)
             => AndroidIcon.WithDescription(container.ContainerInteractor, description);
+
+        public static AndroidNavigationMenuItem ContainingMenuItemWithDescriptionAndText(this IAndroidContainer container, string description, string text)
+            => AndroidNavigationMenuItem.WithIconDescriptionAndText(container.ContainerInteractor, description, text);
     }
 }

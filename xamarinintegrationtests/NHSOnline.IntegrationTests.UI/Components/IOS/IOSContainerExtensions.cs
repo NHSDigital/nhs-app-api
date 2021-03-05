@@ -7,5 +7,8 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
 
         public static IOSIcon ContainingIconWithDescription(this IIOSContainer container, string description)
             => IOSIcon.WithDescription(container.ContainerInteractor, description);
+
+        public static IOSNavigationMenuItem ContainingMenuItemWithDescriptionAndText(this IIOSContainer container, string description, string text)
+            => IOSNavigationMenuItem.WithIconDescriptionAndText(container.ContainerInteractor, description, text);
     }
 }

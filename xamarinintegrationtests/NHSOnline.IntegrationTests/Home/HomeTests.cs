@@ -212,7 +212,7 @@ namespace NHSOnline.IntegrationTests.Home
 
             IOSLoggedInHomePage
                 .AssertOnPage(driver)
-                .Navigation.MyRecord();
+                .Navigation.YourHealth();
 
             IOSYourHealthPage
                 .AssertOnPage(driver)

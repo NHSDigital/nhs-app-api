@@ -6,22 +6,22 @@ using OpenQA.Selenium.Appium.Android;
 
 namespace NHSOnline.IntegrationTests.UI.Components.Android
 {
-    public sealed class AndroidNavigationHeader: IAndroidContainer
+    public sealed class AndroidNavigationBar: IAndroidContainer
     {
         private readonly IAndroidInteractor _interactor;
         private readonly string _name;
 
-        private AndroidNavigationHeader(IAndroidInteractor interactor, string name)
+        private AndroidNavigationBar(IAndroidInteractor interactor, string name)
         {
             _interactor = interactor;
             _name = name;
         }
 
-        public static AndroidNavigationHeader WithName(IAndroidInteractor interactor, string name)
+        public static AndroidNavigationBar WithName(IAndroidInteractor interactor, string name)
             => new (interactor, name);
 
         public void AssertVisible()
-            => ActOnElement(e => e.Displayed.Should().BeTrue("a navigation bar should be displayed"));
+            => ActOnElement(e => e.Displayed.Should().BeTrue("a {0} should be displayed", _name));
 
         private void ActOnElement(Action<AndroidElement> action)
             => _interactor.ActOnElement(FindBy, action);

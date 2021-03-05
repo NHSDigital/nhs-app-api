@@ -7,20 +7,20 @@ using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Components.IOS
 {
-    public sealed class IOSNavigationHeader: IIOSContainer
+    public sealed class IOSNavigationBar: IIOSContainer
     {
         private readonly IIOSInteractor _interactor;
         private readonly string _name;
         private readonly IIOSInteractor _containerInteractor;
 
-        private IOSNavigationHeader(IIOSInteractor interactor, string name)
+        private IOSNavigationBar(IIOSInteractor interactor, string name)
         {
             _interactor = interactor;
             _name = name;
             _containerInteractor = _interactor.CreateContainedInteractor(FindBy);
         }
 
-        public static IOSNavigationHeader WithName(IIOSInteractor interactor, string name)
+        public static IOSNavigationBar WithName(IIOSInteractor interactor, string name)
             => new (interactor, name);
 
         public void AssertVisible()

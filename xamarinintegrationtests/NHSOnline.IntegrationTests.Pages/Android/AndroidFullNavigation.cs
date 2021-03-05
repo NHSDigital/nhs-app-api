@@ -12,28 +12,28 @@ namespace NHSOnline.IntegrationTests.Pages.Android
             _driver = driver;
         }
 
-        private AndroidFullNavigationHeader FullNavigationHeader => AndroidFullNavigationHeader.Create(_driver);
+        private AndroidNavigationBar FullNavigationHeader => AndroidNavigationBar.WithName(_driver, "NHS App Full Navigation Header");
 
-        private AndroidFullNavigationFooter FullNavigationFooter => AndroidFullNavigationFooter.Create(_driver);
+        private AndroidNavigationBar FullNavigationFooter => AndroidNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
 
-        private AndroidIcon HomeIcon => AndroidIcon.WithDescription(_driver, "NHS App home icon");
+        private AndroidIcon HomeIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App home icon");
 
-        private AndroidIcon HelpIcon => AndroidIcon.WithDescription(_driver, "NHS App help icon");
+        private AndroidIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
 
-        private AndroidIcon SettingsIcon => AndroidIcon.WithDescription(_driver, "NHS App settings icon");
+        private AndroidIcon SettingsIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App settings icon");
 
-        private AndroidNavigationMenuItem AdviceMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
+        private AndroidNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
 
-        private AndroidNavigationMenuItem AppointmentsMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App appointments icon", "Appointments");
+        private AndroidNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
 
-        private AndroidNavigationMenuItem PrescriptionsMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App prescriptions icon", "Prescriptions");
+        private AndroidNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
-        private AndroidNavigationMenuItem YourHealthMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App records icon", "My Record");
+        private AndroidNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
 
-        private AndroidNavigationMenuItem MoreMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App more icon", "More");
+        private AndroidNavigationMenuItem MoreMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App more icon", "More");
 
-        private AndroidNavigationMenuItem MessagesMenuItem => AndroidNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App messages icon", "Messages");
+        private AndroidNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         public void AssertNavigationPresent()
         {

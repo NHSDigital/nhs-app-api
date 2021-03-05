@@ -12,27 +12,28 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             _driver = driver;
         }
 
-        private IOSIcon HomeIcon => IOSIcon.WithDescription(_driver, "NHS App home icon");
+        private IOSNavigationBar FullNavigationHeader => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Header");
 
-        private IOSIcon HelpIcon => IOSIcon.WithDescription(_driver, "NHS App help icon");
+        private IOSNavigationBar FullNavigationFooter => IOSNavigationBar.WithName(_driver, "NHS App Full Navigation Footer");
 
-        private IOSIcon SettingsIcon => IOSIcon.WithDescription(_driver, "NHS App settings icon");
 
-        private IOSFullNavigationHeader FullNavigationHeader => IOSFullNavigationHeader.Create(_driver);
+        private IOSIcon HomeIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App home icon");
 
-        private IOSFullNavigationFooter FullNavigationFooter => IOSFullNavigationFooter.Create(_driver);
+        private IOSIcon HelpIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App help icon");
 
-        private IOSNavigationMenuItem AdviceMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App symptoms icon", "Symptoms");
+        private IOSIcon SettingsIcon => FullNavigationHeader.ContainingIconWithDescription("NHS App settings icon");
 
-        private IOSNavigationMenuItem AppointmentsMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App appointments icon", "Appointments");
+        private IOSNavigationMenuItem AdviceMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App symptoms icon", "Symptoms");
 
-        private IOSNavigationMenuItem PrescriptionsMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App prescriptions icon", "Prescriptions");
+        private IOSNavigationMenuItem AppointmentsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App appointments icon", "Appointments");
 
-        private IOSNavigationMenuItem MyRecordMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App records icon", "My Record");
+        private IOSNavigationMenuItem PrescriptionsMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App prescriptions icon", "Prescriptions");
 
-        private IOSNavigationMenuItem MoreMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App more icon", "More");
+        private IOSNavigationMenuItem YourHealthMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App records icon", "My Record");
 
-        private IOSNavigationMenuItem MessagesMenuItem => IOSNavigationMenuItem.WithIconDescriptionAndText(_driver, "NHS App messages icon", "Messages");
+        private IOSNavigationMenuItem MoreMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App more icon", "More");
+
+        private IOSNavigationMenuItem MessagesMenuItem => FullNavigationFooter.ContainingMenuItemWithDescriptionAndText("NHS App messages icon", "Messages");
 
         internal void AssertNavigationPresent()
         {
@@ -65,9 +66,9 @@ namespace NHSOnline.IntegrationTests.Pages.IOS
             PrescriptionsMenuItem.Click();
         }
 
-        public void MyRecord()
+        public void YourHealth()
         {
-            MyRecordMenuItem.Click();
+            YourHealthMenuItem.Click();
         }
 
         public void More()
