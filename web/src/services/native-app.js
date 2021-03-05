@@ -48,6 +48,15 @@ export default {
     app.startNhsLoginUplift(request);
   },
 
+  goToLoggedInHomeScreen() {
+    const app = window.nativeApp;
+    if (app && app.goToLoggedInHomeScreen) {
+      app.goToLoggedInHomeScreen();
+      return true;
+    }
+    return false;
+  },
+
   clearMenuBarItem() {
     const app = window.nativeApp;
     if (app && app.clearMenuBarItem) {

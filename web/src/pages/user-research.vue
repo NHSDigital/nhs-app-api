@@ -59,7 +59,6 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
-import RedirectMixin from '@/components/RedirectMixin';
 import TermsAndConditionsLayout from '@/layouts/termsAndConditions';
 import isUndefined from 'lodash/fp/isUndefined';
 import {
@@ -78,7 +77,6 @@ export default {
     RadioGroup,
     TermsAndConditionsLayout,
   },
-  mixins: [RedirectMixin],
   data() {
     return {
       choices: [

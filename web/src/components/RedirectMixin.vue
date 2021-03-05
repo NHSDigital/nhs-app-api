@@ -9,10 +9,14 @@ import {
   INDEX_PATH,
 } from '@/router/paths';
 import { redirectTo, redirectByName } from '@/lib/utils';
+import NativeApp from '@/services/native-app';
 
 export default {
   methods: {
     conditionalRedirect() {
+      if (NativeApp.goToLoggedInHomeScreen()) {
+        return;
+      }
       const redirectName = get(REDIRECT_PARAMETER)(this.$route.query);
       if (redirectName) {
         if (isNhsAppRouteName(redirectName)) {

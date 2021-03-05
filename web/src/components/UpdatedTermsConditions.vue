@@ -81,7 +81,6 @@ import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
-import RedirectMixin from '@/components/RedirectMixin';
 import {
   TERMS_AND_CONDITIONS_URL,
   PRIVACY_POLICY_URL,
@@ -100,7 +99,6 @@ export default {
     MessageList,
     MessageText,
   },
-  mixins: [RedirectMixin],
   data() {
     return {
       termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,

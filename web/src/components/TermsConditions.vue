@@ -104,7 +104,6 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
-import RedirectMixin from '@/components/RedirectMixin';
 import { USER_RESEARCH_PATH, NOTIFICATIONS_PATH } from '@/router/paths';
 import { isFalsy } from '@/lib/utils';
 import {
@@ -124,7 +123,6 @@ export default {
     MessageText,
     GenericCheckbox,
   },
-  mixins: [RedirectMixin],
   data() {
     return {
       termsAndConditionsURL: TERMS_AND_CONDITIONS_URL,

@@ -2,6 +2,8 @@
 users:
     notificationHubPath: nhsapp-nonlive-scratch5
 
+userResearchEnabled: true
+
 # well known
 wellKnownAndroidPackageName: com.nhs.online.nhsonline.scratch5
 wellKnownIOSAppId: 5Y58TN94AP.com.nhs.online.dev.scratch5
