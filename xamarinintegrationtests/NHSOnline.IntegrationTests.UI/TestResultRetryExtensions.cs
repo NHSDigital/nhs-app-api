@@ -8,6 +8,8 @@ namespace NHSOnline.IntegrationTests.UI
     {
         internal const string DeviceTimeSkewMessage = "device time should be close to the current time";
 
+        internal const string AppNotRunningMessage = "application should have been automatically started on test device";
+
         // 308536-Invalid Service com.apple.webinspector
         private static readonly Regex InvalidServiceWebInspectorMessage = new(
             @"Appium error: An unknown server-side error occurred while processing the command\. Original error: Unexpected data: {""Error"":""InvalidService"",""Request"":""StartService"",""Service"":""com.apple.webinspector""}",
@@ -26,6 +28,11 @@ namespace NHSOnline.IntegrationTests.UI
         // 390309-Device time in the future
         private static readonly Regex DeviceTimeSkew = new(
             Regex.Escape(DeviceTimeSkewMessage),
+            RegexOptions.Compiled);
+
+        // 401785-Failed to start remote service "com.apple.instruments.remoteserver.DVTSecureSocketProxy" on device.
+        private static readonly Regex AppNotRunning = new(
+            Regex.Escape(AppNotRunningMessage),
             RegexOptions.Compiled);
 
         // 390078-Incorrect Chrome Version
@@ -49,6 +56,7 @@ namespace NHSOnline.IntegrationTests.UI
             (UnableToConnectToRenderer, RetryStatus.Retry(nameof(UnableToConnectToRenderer))),
             (AdbErrorListenerNotFound, RetryStatus.Retry(nameof(AdbErrorListenerNotFound))),
             (DeviceTimeSkew, RetryStatus.Retry(nameof(DeviceTimeSkew))),
+            (AppNotRunning, RetryStatus.Retry(nameof(AppNotRunning))),
             (IncorrectChromeVersion, RetryStatus.Retry(nameof(IncorrectChromeVersion))),
             (JavascriptLoadFailure, RetryStatus.Retry(nameof(JavascriptLoadFailure))),
             (AtomExecutionTimeout, RetryStatus.Retry(nameof(AtomExecutionTimeout)))

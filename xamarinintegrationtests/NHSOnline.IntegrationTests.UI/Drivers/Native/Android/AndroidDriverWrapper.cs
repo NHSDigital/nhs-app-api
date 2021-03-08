@@ -47,6 +47,8 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.Android
             _interactor = new AndroidInteractor(
                 _nativeDriverContext,
                 new Interactor<AndroidDriver<AndroidElement>, AndroidElement>(Logs, _driver, _driver.FindElement));
+
+            RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
         }
 
         private TestLogs Logs { get; }

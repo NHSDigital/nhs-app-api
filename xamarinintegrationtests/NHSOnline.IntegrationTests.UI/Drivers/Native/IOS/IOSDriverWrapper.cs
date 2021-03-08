@@ -4,6 +4,7 @@ using System.Globalization;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Enums;
 using OpenQA.Selenium.Appium.iOS;
 
 namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
@@ -50,11 +51,15 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
                 _driver,
                 _nativeDriverContext,
                 new Interactor<IOSDriver<IOSElement>, IOSElement>(Logs, _driver, _driver.FindElement));
+
+            RetrieveAppState().Should().Be(AppState.RunningInForeground, TestResultRetryExtensions.AppNotRunningMessage);
         }
 
         private TestLogs Logs { get; }
-
-        public IWebInteractor Web(WebViewContext webViewContext)
+        
+        private AppState RetrieveAppState() => _driver.GetAppState("com.nhs.online.dev.browserstack");
+        
+        IWebInteractor INativeDriverWrapper.Web(WebViewContext webViewContext)
             => new NativeWebInteractor(_nativeDriverContext, Logs, _driver, webViewContext);
 
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
@@ -68,7 +73,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
 
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
 
-        public void SwipeBack()
+        void IIOSDriverWrapper.SwipeBack()
         {
             _driver.ExecuteScript("mobile: dragFromToForDuration", new Dictionary<string, string>
             {
