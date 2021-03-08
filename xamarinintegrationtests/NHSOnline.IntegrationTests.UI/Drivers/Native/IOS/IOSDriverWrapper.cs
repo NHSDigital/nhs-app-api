@@ -65,13 +65,13 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
             By by,
             Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
-
         {
             _nativeDriverContext.SwitchToNativeContext();
             _interactor.ActOnElementContext(by, action);
         }
 
         IIOSInteractor IIOSInteractor.CreateContainedInteractor(By findContainerBy) => _interactor.CreateContainedInteractor(findContainerBy);
+        void IIOSInteractor.AssertElementCannotBeFound(By by, string because) => _interactor.AssertElementCannotBeFound(by, because);
 
         void IIOSDriverWrapper.SwipeBack()
         {

@@ -37,5 +37,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
                     action(context);
                 });
         }
+
+        void IIOSLocatorStrategy.AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(_wrappedStrategy.FindBy, because);
     }
 }

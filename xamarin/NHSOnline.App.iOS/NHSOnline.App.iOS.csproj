@@ -59,7 +59,7 @@
     <Compile Include="Effects\SafeAreaPaddingEffectBottom.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Renderers\SwipeBackPageRenderer.cs" />
+    <Compile Include="Renderers\SwipeBackNavigationPageRenderer.cs" />
     <Compile Include="Renderers\WebViews\WebViewNavigationDelegate.cs" />
     <Compile Include="Renderers\WebViews\JavascriptBridge.cs" />
     <Compile Include="Renderers\WebViews\NhsAppWebViewRenderer.cs" />

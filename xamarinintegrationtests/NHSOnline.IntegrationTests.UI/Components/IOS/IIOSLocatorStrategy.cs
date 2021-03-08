@@ -10,5 +10,6 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
         string Description { get; }
         By FindBy { get; }
         void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action);
+        void AssertCannotBeFound(string because);
     }
 }

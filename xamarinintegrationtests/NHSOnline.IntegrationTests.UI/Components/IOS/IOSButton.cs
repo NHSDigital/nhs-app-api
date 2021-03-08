@@ -52,6 +52,7 @@ namespace NHSOnline.IntegrationTests.UI.Components.IOS
             public By FindBy => MobileBy.IosNSPredicate($"type == 'XCUIElementTypeButton' AND label == {_text.QuotePredicateLiteral()}");
 
             public void ActOnElementContext(Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action) => _interactor.ActOnElementContext(FindBy, action);
+            public void AssertCannotBeFound(string because) => _interactor.AssertElementCannotBeFound(FindBy, because);
         }
     }
 }

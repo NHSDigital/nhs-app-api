@@ -21,5 +21,35 @@ namespace NHSOnline.IntegrationTests.LoggedOut
             IOSLoggedOutHomePage
                 .AssertOnPage(driver);
         }
+        
+        [NhsAppIOSTest]
+        public void APatientCanContinueToLoginAfterSwipingBackOnTheLoggedOutHomeScreenIos(IIOSDriverWrapper driver)
+        {
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver);
+
+            driver.SwipeBack();
+            
+            IOSLoggedOutHomePage
+                .AssertOnPage(driver)
+                .ContinueWithNhsLogin();
+
+            IOSGettingStartedPage
+                .AssertOnPage(driver);
+
+            // NHSO-13528: Swiping back on the Xamarin logged out home screen breaks the navigation stack
+            // The logged out home screen is displayed over the getting started page, check this hasn't happened.
+            IOSLoggedOutHomePage
+                .AssertNotOnPage(driver);
+        }
     }
 }

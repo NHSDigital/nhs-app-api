@@ -25,6 +25,12 @@ namespace NHSOnline.IntegrationTests.Pages.IOS.LoggedOut
             return page;
         }
 
+        public static void AssertNotOnPage(IIOSDriverWrapper driver)
+        {
+            var page = new IOSLoggedOutHomePage(driver);
+            page.AccessServicesText.AssertNotPresent();
+        }
+
         public void AssertPageElements()
         {
             CovidConditions.AssertVisible();

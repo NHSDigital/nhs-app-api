@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 
@@ -20,7 +21,7 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
             _findElement = findElement;
         }
 
-        internal void ActOnElementContext(By @by, Action<ElementContext<TDriver, TElement>> action)
+        internal void ActOnElementContext(By by, Action<ElementContext<TDriver, TElement>> action)
         {
             var retryUntil = DateTime.UtcNow.Add(ExtendedTimeout.Value);
 
@@ -45,6 +46,38 @@ namespace NHSOnline.IntegrationTests.UI.Drivers
                     var message = $"No {typeof(TElement).Name} found matching {@by}\n{e.Message}";
                     _logs.Error($"{message}\n{e.StackTrace}");
                     throw new AssertFailedException(message, e);
+                }
+                catch (WebDriverException e)
+                {
+                    var message = $"Failed to act on {typeof(TElement).Name} matching {by}\n{e.Message}";
+                    _logs.Error($"{message}\n{e.StackTrace}");
+                    throw new AssertFailedException(message, e);
+                }
+            }
+        }
+
+        internal void AssertElementCannotBeFound(By by, string because)
+        {
+            var retryUntil = DateTime.UtcNow.Add(ExtendedTimeout.Value);
+
+            while (true)
+            {
+                try
+                {
+                    var element = _findElement(by);
+                    element.Should().BeNull(because);
+                }
+                catch (StaleElementReferenceException e)
+                {
+                    _logs.Info("{0}: Retrying", e.Message);
+                }
+                catch (WebDriverException e) when (DateTime.UtcNow < retryUntil)
+                {
+                    _logs.Info("{0}: Retrying", e.Message);
+                }
+                catch (NoSuchElementException)
+                {
+                    return;
                 }
                 catch (WebDriverException e)
                 {

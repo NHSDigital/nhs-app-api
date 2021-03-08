@@ -25,6 +25,12 @@ namespace NHSOnline.IntegrationTests.UI.Drivers.Native.IOS
             return new IOSInteractor(_driver, _nativeDriverContext, _interactor.CreateContainedInteractor(findContainerBy));
         }
 
+        void IIOSInteractor.AssertElementCannotBeFound(By by, string because)
+        {
+            _nativeDriverContext.SwitchToNativeContext();
+            _interactor.AssertElementCannotBeFound(@by, because);
+        }
+
         void IInteractor<IOSDriver<IOSElement>, IOSElement>.ActOnElementContext(
             By by,
             Action<ElementContext<IOSDriver<IOSElement>, IOSElement>> action)
