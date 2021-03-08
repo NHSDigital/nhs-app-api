@@ -14,6 +14,7 @@
                :name="name"
                :accept="accepts"
                :required="required"
+               :aria-describedby="ariaDescribed"
                @change="onSelectedFileChange($event)">
       </div>
     </div>
@@ -45,6 +46,10 @@ export default {
       type: String,
       default: undefined,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
     accept: {
       type: Array,
       default: () => [],
@@ -56,6 +61,13 @@ export default {
     },
     accepts() {
       return this.accept.join(', ');
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+        this.error ? `${this.errorId}` : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   methods: {

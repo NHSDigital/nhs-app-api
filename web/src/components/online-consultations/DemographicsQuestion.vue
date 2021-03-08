@@ -21,8 +21,9 @@
         <generic-checkbox :key="code"
                           checkbox-id="demographics-checkbox"
                           :name="name"
-                          :required="false"
+                          :required="required"
                           :value="code"
+                          :a-described-by="required ? '' : 'optional-label '"
                           @input="selectValueChanged()">
           <span>
             {{ $t('onlineConsultations.demographics.checkboxLabel') }}
@@ -90,6 +91,10 @@ export default {
     providerName: {
       type: String,
       required: true,
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

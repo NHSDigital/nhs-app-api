@@ -69,4 +69,21 @@ describe('GenericTextArea.vue', () => {
 
     expect(wrapper.emitted('focus').length).toBe(1);
   });
+
+  it('should appropriately set aria described-by based on error state and property', () => {
+    wrapper = mountConfirmation({
+      propsData: {
+        id: 'anId',
+        error: true,
+        required: false,
+        errorText: 'errorMessage',
+        aDescribedBy: 'testAriaLabel',
+      },
+    });
+
+    genericTextArea = wrapper.find('textarea#anId');
+    const inputAttributes = genericTextArea.attributes();
+
+    expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel anId-error-message');
+  });
 });

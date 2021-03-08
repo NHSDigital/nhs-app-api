@@ -12,6 +12,7 @@
                          :source="source"
                          :required="required"
                          :error="error"
+                         :aria-describedby="error && errorText ? `${id}error` : undefined"
                          @input="onImageClicked($event)"/>
   </div>
 </template>

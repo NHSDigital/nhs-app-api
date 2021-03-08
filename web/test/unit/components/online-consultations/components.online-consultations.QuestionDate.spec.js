@@ -65,5 +65,23 @@ describe('QuestionDate.vue', () => {
       expect(emittedInputs[0].length).toBe(1);
       expect(emittedInputs[0][0]).toEqual(emittedValue);
     });
+
+    it('will have an aria described of optional-label if not required', () => {
+      // Arrange
+      wrapper = mountQuestion({
+        propsData: {
+          name: 'id',
+          required: false,
+          error: true,
+          errorText: ['Error'],
+        },
+      });
+
+      // Act
+      const inputAttributes = wrapper.find('input').attributes();
+
+      // Assert
+      expect(inputAttributes['aria-describedby']).toBe('test-iderror optional-label');
+    });
   });
 });

@@ -18,7 +18,8 @@
                     :checkboxes="options"
                     :required="allOptionsRequired"
                     :render-as-html="renderAsHtml"
-                    @select="selectedValuesChanged" />
+                    :a-described-by="ariaDescribed"
+                    @select="selectedValuesChanged"/>
   </fieldset>
 </template>
 
@@ -77,6 +78,13 @@ export default {
   computed: {
     validValues() {
       return this.options.map(o => o.code);
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.required ? '' : 'optional-label ',
+        (this.error && this.errorText) ? `${this.name}error ` : '',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   watch: {

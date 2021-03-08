@@ -13,6 +13,7 @@
                           :name="name"
                           :value="'true'"
                           :required="required"
+                          :a-described-by="ariaDescribed"
                           @select="selected"/>
     <generic-radio-button :key="`${name}-false`"
                           :selected-value="selectedValue"
@@ -20,6 +21,7 @@
                           :name="name"
                           :value="'false'"
                           :required="required"
+                          :a-described-by="ariaDescribed"
                           @select="selected"/>
   </fieldset>
 </template>
@@ -64,6 +66,15 @@ export default {
     return {
       selectedValue: this.value,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.name}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   watch: {
     selectedValue(to) {

@@ -49,7 +49,9 @@
                                 v-model="searchQuery"
                                 class="nhsuk-input--width-20 nhsuk-u-padding-bottom-3"
                                 type="text"
-                                name="searchQuery"/>
+                                name="searchQuery"
+                                :a-described-by="showErrorMessage ?
+                                  'invalid-search-term-error' : undefined"/>
           </error-group>
           <generic-button id="search-button"
                           :button-classes="['nhsuk-button']">

@@ -14,6 +14,7 @@
       <slot name="question-slot" />
     </div>
     <p v-if="showOptional"
+       id="optional-label"
        class="nhsuk-hint optionalLabel marginBottom">
       ({{ this.$t('onlineConsultations.question.optionalLabel') }})
     </p>

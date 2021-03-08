@@ -46,7 +46,7 @@
                               maxlength="64"
                               :error-text="
                                 $t('messages.enterASubject')"
-                              aria-describedby="text-must-be-shorter-than-64"
+                              :a-described-by="'text-must-be-shorter-than-64'"
                               :error="subjectError"
                               :required="false"/>
         </div>
@@ -65,7 +65,7 @@
                            maxlength="450"
                            :rows="5"
                            :error="messageTextError"
-                           aria-describedby="text-must-be-shorter-than-450"
+                           :a-described-by="'text-must-be-shorter-than-450'"
                            :error-text="
                              $t('messages.enterAMessage')"
                            :required="true"/>

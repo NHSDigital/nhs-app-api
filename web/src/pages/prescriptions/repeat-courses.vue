@@ -25,7 +25,9 @@
             <error-message v-if="error && !courseSelectionValid" id="error-type">
               {{ $t('prescriptions.repeatCourses.errors.selectAtLeastOne') }}
             </error-message>
-            <repeat-prescription v-model="selected"/>
+            <repeat-prescription v-model="selected"
+                                 :a-described-by="error && !courseSelectionValid ?
+                                   'error-type' : undefined"/>
           </div>
           <div v-if="specialRequestNecessity !== 'NotAllowed'"
                role="form"
@@ -54,7 +56,7 @@
                  class="nhsuk-body-m" >
                 {{ $t('prescriptions.repeatCourses.specialRequestsMandatoryMessage') }}</p>
             </div>
-            <error-message v-if="showMandatoryReasonError" id="error-type">
+            <error-message v-if="showMandatoryReasonError" id="special-request-error">
               {{ $t('prescriptions.repeatCourses.errors.enterSpecialRequests') }}
             </error-message>
             <generic-text-area id="specialRequest"
@@ -65,7 +67,9 @@
                                :text-area-classes="['nhsuk-u-margin-bottom-0']"
                                text-area-ref="specialRequest"
                                :data-maxlength="`${specialRequestCharacterLimit}`"
-                               aria-describedby="specialRequestCharactersRemaining"
+                               :a-described-by="showMandatoryReasonError ?
+                                 'specialRequestCharactersRemaining special-request-error'
+                                 : 'specialRequestCharactersRemaining'"
                                @focus.once="onFocusSpecialRequest"/>
             <p id="specialRequestCharactersRemaining"
                class="nhsuk-u-padding-bottom-4"

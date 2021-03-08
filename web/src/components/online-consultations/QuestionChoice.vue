@@ -15,6 +15,7 @@
                  :current-value="selectedValue"
                  :required="required"
                  :render-as-html="renderAsHtml"
+                 :a-described-by="ariaDescribed"
                  @select="selected"/>
   </fieldset>
 </template>
@@ -74,6 +75,13 @@ export default {
   computed: {
     validValues() {
       return this.options.map(o => o.code);
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.name}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   watch: {

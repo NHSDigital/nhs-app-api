@@ -7,7 +7,7 @@
            :value="value"
            :name="name"
            type="radio"
-           :aria-describedby="hintId"
+           :aria-describedby="ariaDescribed"
            :required="required"
            @click.stop="selected">
     <label class="nhsuk-label nhsuk-radios__label"
@@ -51,6 +51,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -60,6 +64,13 @@ export default {
   computed: {
     hintId() {
       return this.hint ? `${this.inputId}-hint` : undefined;
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.hintId,
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   methods: {

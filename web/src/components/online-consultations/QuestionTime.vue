@@ -12,7 +12,8 @@
                         v-model="timeValue"
                         :required="required"
                         :name="name"
-                        :error="error"/>
+                        :error="error"
+                        :a-described-by="ariaDescribed"/>
   </div>
 </template>
 
@@ -60,6 +61,15 @@ export default {
     return {
       timeValue: this.value,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   watch: {
     timeValue(to) {

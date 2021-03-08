@@ -54,6 +54,12 @@ describe('Radio group', () => {
       it('will display error message', () => {
         expect(wrapper.find(ErrorMessage).exists()).toBe(true);
       });
+
+      it('should appropriately set aria described-by based on error state and property', () => {
+        const inputAttributes = wrapper.find('input').attributes();
+
+        expect(inputAttributes['aria-describedby']).toEqual('error_txt');
+      });
     });
 
     describe('when not showing error', () => {

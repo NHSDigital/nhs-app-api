@@ -32,6 +32,7 @@ describe('GenericTextInput.vue', () => {
       expect(inputsEmitted.length).toEqual(1);
       expect(inputsEmitted[0][0]).toEqual('this is a new value');
     });
+
     it('should appropriately set aria label based on error state and property', () => {
       wrapper = mountComponent({
         propsData: {
@@ -45,6 +46,22 @@ describe('GenericTextInput.vue', () => {
 
       expect(inputAttributes['aria-labelledby']).toEqual('testAriaLabel question-error-message');
     });
+
+    it('should appropriately set aria described-by based on error state and property', () => {
+      wrapper = mountComponent({
+        propsData: {
+          error: true,
+          required: false,
+          id: 'question',
+          errorText: 'errorMessage',
+          aDescribedBy: 'testAriaLabel',
+        },
+      });
+      const inputAttributes = wrapper.find('input').attributes();
+
+      expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel question-error-message');
+    });
+
     it('should allow text limit', () => {
       wrapper = mountComponent({
         propsData: {
@@ -55,6 +72,7 @@ describe('GenericTextInput.vue', () => {
 
       expect(inputAttributes.maxlength).toEqual('25');
     });
+
     it('should allow type to be number', () => {
       wrapper = mountComponent({
         propsData: {
@@ -72,6 +90,7 @@ describe('GenericTextInput.vue', () => {
       expect(inputAttributes.max).toEqual('20');
       expect(inputAttributes.step).toEqual('any');
     });
+
     it('should allow pattern matching validation', () => {
       wrapper = mountComponent({
         propsData: {
@@ -82,6 +101,7 @@ describe('GenericTextInput.vue', () => {
 
       expect(inputAttributes.pattern).toEqual('testPattern');
     });
+
     it('should disable autocorrect', () => {
       wrapper = mountComponent();
 
@@ -92,6 +112,7 @@ describe('GenericTextInput.vue', () => {
       expect(inputAttributes.autocomplete).toEqual('off');
       expect(inputAttributes.spellcheck).toEqual('false');
     });
+
     it('should have error style if there is an error', () => {
       wrapper = mountComponent({
         propsData: {
@@ -103,6 +124,7 @@ describe('GenericTextInput.vue', () => {
 
       expect(inputWithErrorStyle).toBeDefined();
     });
+
     each([true, false])
       .it('should only show an error if error is true', (error) => {
         wrapper = mountComponent({

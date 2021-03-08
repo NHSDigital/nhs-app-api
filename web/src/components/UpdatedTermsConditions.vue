@@ -42,6 +42,8 @@
       <fieldset class="nhsuk-fieldset">
         <legend>
           <generic-checkbox :value="termsAcceptedValue"
+                            :a-described-by="hasTriedToContinue && !areTermsAccepted ?
+                              'error_txt' : undefined"
                             checkbox-id="termsAndConditions-agree_checkbox"
                             @input="termsSelectionChanged">
             <span :class="$style.termsAndConditionsCaption">

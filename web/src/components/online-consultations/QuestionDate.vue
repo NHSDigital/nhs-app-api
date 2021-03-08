@@ -11,7 +11,9 @@
                         v-model="dateValue"
                         :required="required"
                         :name="name"
-                        :error="error"/>
+                        :error="error"
+                        :a-described-by="ariaDescribedBy"
+    />
   </div>
 </template>
 
@@ -60,6 +62,15 @@ export default {
     return {
       dateValue: this.value,
     };
+  },
+  computed: {
+    ariaDescribedBy() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   watch: {
     dateValue(to) {

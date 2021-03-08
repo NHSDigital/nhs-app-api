@@ -51,6 +51,7 @@
 
             <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
                              :class="[$style.reason, showError && $style.errorBorder]"
+                             :a-described-by="showError ? 'error-label' : undefined"
                              select-id="txt_reason" select-name="reason">
               <option disabled="" selected="" value="">
                 {{ $t('appointments.cancel.selectReason') }}

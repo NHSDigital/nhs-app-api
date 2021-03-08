@@ -9,6 +9,8 @@
                         value="accuracy-checkbox"
                         name="name"
                         :required="true"
+                        :a-described-by="showAccuracyError ?
+                          'accuracy-checkbox-error' : undefined"
                         checkbox-id="accuracy-checkbox"
                         @input="selectedValueChanged('accuracy-checkbox')">
         {{ $t('organDonation.confirmation.iConfirmTheInformation') }}
@@ -22,6 +24,7 @@
                         value="privacy-checkbox"
                         name="name"
                         :required="true"
+                        :a-described-by="showPrivacyError ? 'privacy-checkbox-error' : undefined"
                         checkbox-id="privacy-checkbox"
                         @input="selectedValueChanged('privacy-checkbox')">
         {{ $t('organDonation.confirmation.iHaveReadThe') }}

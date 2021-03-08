@@ -23,7 +23,8 @@
              pattern="[0-9]+"
              :min="min"
              :max="maxValue"
-             :required="required">
+             :required="required"
+             :aria-describedby="error && errorText ? `${name}error` : undefined">
     </div>
 
     <div class="nhsuk-input__item">

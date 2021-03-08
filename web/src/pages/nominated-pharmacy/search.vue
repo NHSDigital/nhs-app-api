@@ -24,7 +24,7 @@
       <div class="nhsuk-grid-column-full">
         <form @submit.prevent="searchFormSubmitted">
           <error-group :show-error="showErrors">
-            <error-message v-if="showInvalidSearchError">
+            <error-message v-if="showInvalidSearchError" id="invalid-search-term-error">
               {{ $t('nominatedPharmacy.search.emptySearchError') }}
             </error-message>
             <label id="pharmacy-search-label"
@@ -42,7 +42,10 @@
                                 type="text"
                                 a-labelled-by="pharmacy-search-label"
                                 name="searchQuery"
-                                :maxlength="searchQueryMaxLengthAsString"/>
+                                :maxlength="searchQueryMaxLengthAsString"
+                                :a-described-by="showInvalidSearchError ?
+                                  'pharmacy-search-hint invalid-search-term-error'
+                                  : 'pharmacy-search-hint'"/>
           </error-group>
           <generic-button id="search-button"
                           :button-classes="['nhsuk-button']">

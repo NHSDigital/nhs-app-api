@@ -29,7 +29,8 @@
         <div v-for="item in items" :key="`${name}-${item.value}`"
              class="nhsuk-radios__item">
           <input :id="`${name}-${item.value}`" v-model="choice" class="nhsuk-radios__input"
-                 :name="name" type="radio" :value="item.value" :required="required">
+                 :name="name" type="radio" :value="item.value" :required="required"
+                 :aria-describedby="error ? `${name}-error` : undefined">
           <label class="nhsuk-label nhsuk-radios__label" :for="`${name}-${item.value}`">
             {{ item.label || item.value }}
           </label>

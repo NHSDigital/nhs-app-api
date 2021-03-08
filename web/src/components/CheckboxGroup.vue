@@ -9,6 +9,7 @@
                         :required="getRequired(checkbox)"
                         :checkbox-id="`checkbox-${checkbox.code}`"
                         :is-selected="selectedValues.includes(checkbox.code)"
+                        :a-described-by="aDescribedBy"
                         @input="selectedValueChanged(checkbox)">
         <template v-if="renderAsHtml"><span v-html="checkbox.label"/></template>
         <template v-else>{{ checkbox.label }}</template>
@@ -45,6 +46,10 @@ export default {
     renderAsHtml: {
       type: Boolean,
       default: false,
+    },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
     },
   },
   data() {

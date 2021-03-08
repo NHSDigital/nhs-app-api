@@ -6,7 +6,7 @@
               :class="['nhsuk-fieldset__legend', `nhsuk-fieldset__legend--${headerSize}`]">
         {{ header }}
       </legend>
-      <error-message v-if="errorMessage && showError">
+      <error-message v-if="errorMessage && showError" id="error_txt">
         {{ errorMessage }}
       </error-message>
       <div class="nhsuk-radios">
@@ -19,6 +19,7 @@
                               :value="getValue(radio)"
                               :required="required"
                               :render-as-html="renderAsHtml"
+                              :a-described-by="ariaDescribed"
                               class="nhsuk-radios__item"
                               @select="selected"/>
       </div>
@@ -80,12 +81,25 @@ export default {
       type: Boolean,
       default: false,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
       container: this.header ? 'fieldset' : 'div',
       selectedValue: this.currentValue,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+        this.errorMessage && this.showError ? 'error_txt' : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   methods: {
     selected(value) {

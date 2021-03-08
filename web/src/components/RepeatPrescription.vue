@@ -12,6 +12,7 @@
           :value="repeatPrescription.id"
           :is-selected="value.includes(repeatPrescription.id)"
           :required="false"
+          :a-described-by="aDescribedBy"
           name="nojs.repeatPrescriptionCourses.selectedCoursesNoJs"
           @input="selectedValueChanged(repeatPrescription)">
           <span data-label="prescription-name"
@@ -39,6 +40,10 @@ export default {
     value: {
       type: Array,
       default: () => [],
+    },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

@@ -43,11 +43,12 @@
             <label class="nhsuk-label" for="reason">
               {{ $t('organDonation.withdrawReason.reasonForWithdrawing') }}
             </label>
-            <error-message v-if="showErrors">
+            <error-message v-if="showErrors" id="reason-dropdown-error">
               {{ $t('organDonation.withdrawReason.giveAReasonForWithdrawing') }}
             </error-message>
             <select-dropdown v-model="reasonId"
                              :required="true"
+                             :a-described-by="showErrors ? 'reason-dropdown-error' : undefined"
                              select-id="reason">
               <option v-for="option in reasons"
                       :key="option.id"

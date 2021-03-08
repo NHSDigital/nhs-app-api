@@ -35,6 +35,24 @@ describe('QuestionString.vue', () => {
       expect(inputWrapper.exists()).toBe(true);
     });
 
+    it('will have an aria described of optional-label if not required', () => {
+      // Arrange
+      wrapper = mountQuestion({
+        propsData: {
+          id: 'id',
+          required: false,
+          error: true,
+          errorText: ['Error'],
+        },
+      });
+
+      // Act
+      const inputAttributes = wrapper.find('input').attributes();
+
+      // Assert
+      expect(inputAttributes['aria-describedby']).toBe('iderror optional-label id-error-message');
+    });
+
     it('should emit an input event', () => {
       const input = wrapper.find('input');
       input.element.value = 'test';

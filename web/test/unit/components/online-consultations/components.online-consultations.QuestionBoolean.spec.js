@@ -49,6 +49,24 @@ describe('radio buttons', () => {
     expect(wrapper.find("[for='name-false']").element.innerHTML).toEqual('No');
   });
 
+  it('will have an aria described of optional-label if not required', () => {
+    // Arrange
+    wrapper = mountQuestion({
+      propsData: {
+        id: 'id',
+        required: false,
+        error: true,
+        errorText: ['Error'],
+      },
+    });
+
+    // Act
+    const inputAttributes = wrapper.find('input').attributes();
+
+    // Assert
+    expect(inputAttributes['aria-describedby']).toBe('nameerror optional-label');
+  });
+
   it('will emit true value when true clicked', () => {
     wrapper = mountQuestion();
     expect(wrapper.vm).toBeDefined();

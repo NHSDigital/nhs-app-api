@@ -17,7 +17,8 @@
                :class="['ios-accessibility', inputClasses(2)]"
                :name="`${name}-day`" type="number"
                :required="required"
-               pattern="[0-9]*" max="31" >
+               pattern="[0-9]*" max="31"
+               :aria-describedby="ariaDescribed">
       </div>
     </div>
     <div class="nhsuk-date-input__item">
@@ -33,7 +34,8 @@
                :name="`${name}-month`"
                :required="required"
                type="number"
-               pattern="[0-9]*" max="12">
+               pattern="[0-9]*" max="12"
+               :aria-describedby="ariaDescribed">
       </div>
     </div>
     <div class="nhsuk-date-input__item">
@@ -50,7 +52,8 @@
                :name="`${name}-year`"
                :required="required"
                type="number"
-               pattern="[0-9]*">
+               pattern="[0-9]*"
+               :aria-describedby="ariaDescribed">
       </div>
     </div>
   </div>
@@ -89,6 +92,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     dayValue: {
@@ -126,6 +133,13 @@ export default {
     },
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+        this.error && this.errorText ? `${this.errorId}` : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   methods: {

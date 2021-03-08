@@ -49,6 +49,24 @@ describe('QuestionAttachment.vue', () => {
     expect(input.exists()).toBe(true);
   });
 
+  it('will have an aria described of optional-label if not required', () => {
+    // Arrange
+    wrapper = mountQuestion({
+      propsData: {
+        id: 'id',
+        required: false,
+        error: true,
+        errorText: ['Error'],
+      },
+    });
+
+    // Act
+    const inputAttributes = wrapper.find('input').attributes();
+
+    // Assert
+    expect(inputAttributes['aria-describedby']).toBe('iderror optional-label id-error-message');
+  });
+
   describe('Initial values', () => {
     beforeEach(() => {
       questionAttachmentAnswerValid.mockClear();

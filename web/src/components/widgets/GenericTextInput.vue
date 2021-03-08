@@ -17,6 +17,7 @@
            :pattern="pattern"
            :step="step"
            :class="['ios-accessibility', inputClasses]"
+           :aria-describedby="ariaDescribed"
            autocomplete="off"
            autocorrect="off"
            autocapitalize="off"
@@ -80,6 +81,10 @@ export default {
       type: String,
       default: undefined,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     textValue: {
@@ -105,6 +110,13 @@ export default {
         this.error ? this.errorId : undefined,
       ].join(' ').trim();
       return ariaLabels || undefined;
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+        this.error ? `${this.errorId}` : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   methods: {

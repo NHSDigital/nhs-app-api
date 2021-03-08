@@ -93,6 +93,24 @@ describe('QuestionMultipleChoice.vue', () => {
         expect(wrapper.emitted().input[0].length).toEqual(1);
         expect(wrapper.emitted().input[0][0]).toEqual([1]);
       });
+
+      it('will have an aria described of optional-label if not required', () => {
+        // Arrange
+        wrapper = mountQuestion({
+          propsData: {
+            name: 'id',
+            required: false,
+            error: true,
+            errorText: ['Error'],
+          },
+        });
+
+        // Act
+        const inputAttributes = wrapper.find('input').attributes();
+
+        // Assert
+        expect(inputAttributes['aria-describedby']).toBe('optional-label  iderror');
+      });
     });
   });
 });

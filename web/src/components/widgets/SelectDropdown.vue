@@ -4,6 +4,7 @@
             v-model="selectedValue"
             :name="selectName"
             :aria-labelledby="aLabelledBy"
+            :aria-describedby="aDescribedBy"
             :class="[$style['custom-dropdown__select'],
                      $style['custom-dropdown__select_element'],
                      $style['custom-dropdown__select--white'],
@@ -43,6 +44,10 @@ export default {
     required: {
       type: Boolean,
       default: true,
+    },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

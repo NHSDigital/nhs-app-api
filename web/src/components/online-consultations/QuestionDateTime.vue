@@ -14,7 +14,8 @@
                             v-model="dateTimeValue"
                             :name="name"
                             :error="error"
-                            :required="required"/>
+                            :required="required"
+                            :a-described-by="ariaDescribed"/>
       </form>
       <br>
       <form>
@@ -22,7 +23,8 @@
                             v-model="dateTimeValue"
                             :name="name"
                             :error="error"
-                            :required="required"/>
+                            :required="required"
+                            :a-described-by="ariaDescribed"/>
       </form>
     </div>
   </div>
@@ -80,6 +82,13 @@ export default {
   computed: {
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   watch: {

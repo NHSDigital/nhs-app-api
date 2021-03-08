@@ -7,6 +7,7 @@
            :name="name"
            :required="required"
            :value="value"
+           :aria-describedby="ariaDescribed"
            @change="onChange">
     <label :id="`${checkboxId}-label`"
            class="nhsuk-label nhsuk-checkboxes__label"
@@ -44,12 +45,21 @@ export default {
       type: Boolean,
       default: true,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
       labelId: `${this.checkboxId}-label`,
       selectedCheckbox: this.isSelected,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      return this.aDescribedBy ? this.aDescribedBy : undefined;
+    },
   },
   mounted() {
     this.$emit('onCheckedChanged', this.selectedCheckbox);

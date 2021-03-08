@@ -12,7 +12,8 @@
                        :required="required"
                        :name="name"
                        :error="error"
-                       :maxlength="maxLength"/>
+                       :maxlength="maxLength"
+                       :a-described-by="ariaDescribed"/>
   </div>
 </template>
 
@@ -59,6 +60,15 @@ export default {
     return {
       textValue: this.value,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   watch: {
     textValue(to) {

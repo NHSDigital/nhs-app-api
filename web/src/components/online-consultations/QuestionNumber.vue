@@ -16,7 +16,8 @@
                         :required="required"
                         :error="error"
                         step="any"
-                        type="tel"/>
+                        type="tel"
+                        :a-described-by="ariaDescribed"/>
   </div>
 </template>
 
@@ -77,6 +78,13 @@ export default {
   computed: {
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
   watch: {

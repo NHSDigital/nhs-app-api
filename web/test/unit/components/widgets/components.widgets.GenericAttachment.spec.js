@@ -47,6 +47,21 @@ describe('GenericAttachment.vue', () => {
       expect(onSelectedFileChange).toHaveBeenCalledTimes(1);
     });
 
+    it('should appropriately set aria described-by based on error state and property', () => {
+      wrapper = mountConfirmation({
+        propsData: {
+          error: true,
+          required: false,
+          id: 'question',
+          errorText: 'errorMessage',
+          aDescribedBy: 'testAriaLabel',
+        },
+      });
+      const inputAttributes = wrapper.find('input').attributes();
+
+      expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel question-error-message');
+    });
+
     each([{
       id: 'testId',
       errorId: 'testId-error-message',

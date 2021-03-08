@@ -55,6 +55,7 @@
                 <input :id="patientTelephoneNumber.telephoneNumber"
                        v-model="telephoneNumber"
                        :value="patientTelephoneNumber.telephoneNumber"
+                       :aria-describedby="showTelephoneError ? 'telephone-error-label' : undefined"
                        type="radio"
                        name="radio"
                        class="nhsuk-radios__input"
@@ -124,7 +125,8 @@
                                :a-labelled-by="reasonBoxAriaLabelledBy"
                                :text-area-classes="defaultClasses"
                                :required="!bookingReasonOptional"
-                               aria-describedby="max-reason-desc"
+                               :a-described-by="showReasonError ?
+                                 'max-reason-desc reason-error-label' : 'max-reason-desc'"
                                :error.sync="showReasonError"
                                name="bookingReason"
                                maxlength="150"/>

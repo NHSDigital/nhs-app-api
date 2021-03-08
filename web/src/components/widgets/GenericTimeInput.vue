@@ -21,7 +21,8 @@
                :name="`${name}-hour`"
                type="number"
                step="any"
-               :class="['ios-accessibility', inputClasses]">
+               :class="['ios-accessibility', inputClasses]"
+               :aria-describedby="ariaDescribed">
       </div>
 
       <div class="nhsuk-date-input__item">
@@ -40,7 +41,8 @@
                :name="`${name}-minute`"
                type="number"
                step="any"
-               :class="['ios-accessibility', inputClasses]">
+               :class="['ios-accessibility', inputClasses]"
+               :aria-describedby="ariaDescribed">
       </div>
     </div>
   </div>
@@ -79,6 +81,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    aDescribedBy: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     hourValue: {
@@ -113,6 +119,13 @@ export default {
     },
     errorId() {
       return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.aDescribedBy ? this.aDescribedBy : undefined,
+        this.error ? `${this.errorId}` : undefined,
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
     },
   },
 };

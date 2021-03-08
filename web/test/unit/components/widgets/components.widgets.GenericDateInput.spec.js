@@ -104,5 +104,32 @@ describe('GenericDateInput.vue', () => {
       expect(wrapper.emitted().input[0].length).toEqual(1);
       expect(wrapper.emitted().input[0][0]).toEqual({ day: 15, month: 12, year: 2020 });
     });
+
+    it('should appropriately set aria described-by based on error state and property', () => {
+      const mountConfirmation = ({ propsData } = {}) =>
+        mount(GenericDateInput, {
+          propsData,
+          state,
+        });
+      wrapper = mountConfirmation({
+        propsData: {
+          error: true,
+          required: false,
+          errorText: 'errorMessage',
+          aDescribedBy: 'testAriaLabel',
+          id: 'test-id',
+          name: 'test-name',
+          value:
+            {
+              day: 15,
+              month: 12,
+              year: 2019,
+            },
+        },
+      });
+      const inputAttributes = wrapper.find('input').attributes();
+
+      expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel test-id-error-message');
+    });
   });
 });

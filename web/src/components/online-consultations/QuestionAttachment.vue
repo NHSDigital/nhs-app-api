@@ -12,6 +12,7 @@
                         :error="error"
                         :required="required"
                         :accept="accept"
+                        :a-described-by="ariaDescribed"
                         @change="onSelectedFileChanged($event)"/>
   </div>
 </template>
@@ -60,6 +61,15 @@ export default {
       file: undefined,
       attachmentValue: undefined,
     };
+  },
+  computed: {
+    ariaDescribed() {
+      const ariaDescribedContent = [
+        this.error && this.errorText ? `${this.id}error` : undefined,
+        this.required ? undefined : 'optional-label',
+      ].join(' ').trim();
+      return ariaDescribedContent || undefined;
+    },
   },
   watch: {
     attachmentValue(to) {

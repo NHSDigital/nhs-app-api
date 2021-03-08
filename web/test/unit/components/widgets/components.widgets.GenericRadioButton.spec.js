@@ -36,4 +36,19 @@ describe('generic radio button', () => {
     expect(label).toBeDefined();
     expect(label.element.innerHTML).toEqual('One');
   });
+
+  it('should appropriately set aria described-by based on error state and property', () => {
+    mountRadioButton({
+      propsData: {
+        error: true,
+        required: false,
+        id: 'question',
+        errorText: 'errorMessage',
+        aDescribedBy: 'testAriaLabel',
+      },
+    });
+    const inputAttributes = radioButton.find('input').attributes();
+
+    expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel');
+  });
 });

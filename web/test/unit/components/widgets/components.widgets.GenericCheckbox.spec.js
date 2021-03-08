@@ -13,6 +13,10 @@ describe('GenericCheckbox.vue', () => {
     wrapper = mountConfirmation({
       propsData: {
         checkboxId: 'checkboxId',
+        error: true,
+        required: false,
+        errorText: 'errorMessage',
+        aDescribedBy: 'testAriaLabel',
       },
     });
   });
@@ -23,5 +27,11 @@ describe('GenericCheckbox.vue', () => {
 
     expect(wrapper.find("label[for='checkboxId']")
       .exists()).toEqual(true);
+  });
+
+  it('should appropriately set aria described-by based on error state and property', () => {
+    const inputAttributes = wrapper.find('input').attributes();
+
+    expect(inputAttributes['aria-describedby']).toEqual('testAriaLabel');
   });
 });
