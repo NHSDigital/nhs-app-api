@@ -9,18 +9,35 @@
 
     <View.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="NhsUkColours.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <Style TargetType="StackLayout">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="BackgroundColor" Value="{StaticResource NhsUkBlue}" />
             </Style>
+            
             <Style TargetType="icons:IconClose">
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="WidthRequest" Value="30" />
             </Style>
+            
+            <Style TargetType="controls:MediumLabel">
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="TextColor" Value="{StaticResource NhsUkWhite}" />
+            </Style>
+            
+            <Style TargetType="controls:NhsLogo">
+                <Setter Property="HeightRequest" Value="25" />
+                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="Padding" Value="0,0,10,10" />
+            </Style>
+            
         </ResourceDictionary>
     </View.Resources>
 
@@ -28,9 +45,8 @@
                  Orientation="Vertical">
         <StackLayout Orientation="Horizontal"
                      Margin="0,0,0,5">
-            <icons:IconClose AutomationProperties.IsInAccessibleTree="True"
-                             HeightRequest="30"
-                             WidthRequest="30">
+            
+            <icons:IconClose AutomationProperties.IsInAccessibleTree="True">
                 
                 <icons:IconClose.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding CloseCommand, Source={x:Reference Name=Root}}"  />
@@ -38,21 +54,15 @@
                 
             </icons:IconClose>
             
-            <controls:MediumLabel Text="Close"
-                                  VerticalOptions="CenterAndExpand"
-                                  TextColor="{StaticResource NhsUkWhite}" />
+            <controls:MediumLabel Text="Close" />
         </StackLayout>
         
         <StackLayout Orientation="Horizontal"
                      Margin="15,0,0,10">
             
-            <controls:NhsLogo HeightRequest="25"
-                              WidthRequest="60"
-                              Padding="0,0,10,10" />
+            <controls:NhsLogo />
             
             <controls:MediumLabel Text="NHS App"
-                                  VerticalOptions="CenterAndExpand"
-                                  TextColor="{StaticResource NhsUkWhite}"
                                   Margin="0,0,0,10" />
             
         </StackLayout>

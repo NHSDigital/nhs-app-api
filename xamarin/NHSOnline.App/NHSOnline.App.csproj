@@ -90,6 +90,10 @@
       <DependentUpon>NhsAppCloseAndLogoHeaderPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Navigation\Pages\NhsAppLogoHeaderPage.xaml.cs">
+      <DependentUpon>NhsAppLogoHeaderPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -102,6 +106,10 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Navigation\Pages\NhsAppCloseAndLogoHeaderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Navigation\Pages\NhsAppLogoHeaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

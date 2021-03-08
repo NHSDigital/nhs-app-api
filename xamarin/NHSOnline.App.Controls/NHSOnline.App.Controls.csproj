@@ -113,6 +113,10 @@
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="SlimLogoNavigationHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="SlimCloseAndLogoNavigationHeader.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
@@ -203,6 +207,10 @@
     </Compile>
     <Compile Update="SlimCloseAndLogoNavigationHeader.xaml.cs">
       <DependentUpon>SlimCloseAndLogoNavigationHeader.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SlimLogoNavigationHeader.xaml.cs">
+      <DependentUpon>SlimLogoNavigationHeader.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
